@@ -127,7 +127,7 @@ describe('DefaultGovernmentInsurancePlanRepository', () => {
     const repository = new DefaultGovernmentInsurancePlanRepository(serverConfigMock, httpClientMock);
     const actual = await repository.findGovernmentInsurancePlanById('0');
 
-    expect(actual).toEqual(responseDataMock.value[0]);
+    expect(actual.unwrap()).toEqual(responseDataMock.value[0]);
 
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.government-insurance-plans.gets',
@@ -204,7 +204,7 @@ describe('MockGovernmentInsurancePlanRepository', () => {
 
     const governmentInsurancePlan = await repository.findGovernmentInsurancePlanById('3');
 
-    expect(governmentInsurancePlan).toEqual({
+    expect(governmentInsurancePlan.unwrap()).toEqual({
       esdc_governmentinsuranceplanid: '3',
       esdc_nameenglish: 'First Insurance Plan Federal',
       esdc_namefrench: "Premier plan d'assurance fédéral",
@@ -217,6 +217,6 @@ describe('MockGovernmentInsurancePlanRepository', () => {
 
     const governmentInsurancePlan = await repository.findGovernmentInsurancePlanById('non-existent-id');
 
-    expect(governmentInsurancePlan).toBeNull();
+    expect(governmentInsurancePlan.isNone()).toBe(true);
   });
 });

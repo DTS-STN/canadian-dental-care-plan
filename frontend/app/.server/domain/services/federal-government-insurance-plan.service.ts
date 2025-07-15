@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
+import { None, Option, Some } from 'oxide.ts';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -21,7 +22,7 @@ export interface FederalGovernmentInsurancePlanService {
    * @param id - The ID of the federal government insurance plan to retrieve.
    * @returns The FederalGovernmentInsurancePlan DTO corresponding to the specified ID or null if not found.
    */
-  findFederalGovernmentInsurancePlanById(id: string): Promise<FederalGovernmentInsurancePlanDto | null>;
+  findFederalGovernmentInsurancePlanById(id: string): Promise<Option<FederalGovernmentInsurancePlanDto>>;
 
   /**
    * Retrieves a specific federal government insurance plan by its ID.
@@ -47,7 +48,7 @@ export interface FederalGovernmentInsurancePlanService {
    * @param locale - The desired locale (e.g., 'en' or 'fr').
    * @returns The FederalGovernmentInsurancePlan DTO corresponding to the specified ID and locale or null if not found.
    */
-  findLocalizedFederalGovernmentInsurancePlanById(id: string, locale: AppLocale): Promise<FederalGovernmentInsurancePlanLocalizedDto | null>;
+  findLocalizedFederalGovernmentInsurancePlanById(id: string, locale: AppLocale): Promise<Option<FederalGovernmentInsurancePlanLocalizedDto>>;
 
   /**
    * Retrieves a specific federal government insurance plan by its ID in the specified locale.
@@ -122,28 +123,30 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
     return federalGovernmentInsurancePlanDtos;
   }
 
-  async findFederalGovernmentInsurancePlanById(id: string): Promise<FederalGovernmentInsurancePlanDto | null> {
+  async findFederalGovernmentInsurancePlanById(id: string): Promise<Option<FederalGovernmentInsurancePlanDto>> {
     this.log.debug('Finding federal government insurance plan with id: [%s]', id);
     const federalGovernmentInsurancePlans = await this.listFederalGovernmentInsurancePlans();
     const federalGovernmentInsurancePlanDto = federalGovernmentInsurancePlans.find((plan) => plan.id === id);
 
     if (!federalGovernmentInsurancePlanDto) {
       this.log.trace('Federal government insurance plan with id: [%s] not found. Returning null', id);
-      return null;
+      return None;
     }
 
     this.log.trace('Returning federal government insurance plan: [%j]', federalGovernmentInsurancePlanDto);
-    return federalGovernmentInsurancePlanDto;
+    return Some(federalGovernmentInsurancePlanDto);
   }
 
   async getFederalGovernmentInsurancePlanById(id: string): Promise<FederalGovernmentInsurancePlanDto> {
     this.log.debug('Get federal government insurance plan with id: [%s]', id);
-    const federalGovernmentInsurancePlanDto = await this.findFederalGovernmentInsurancePlanById(id);
+    const federalGovernmentInsurancePlanDtoOption = await this.findFederalGovernmentInsurancePlanById(id);
 
-    if (!federalGovernmentInsurancePlanDto) {
+    if (federalGovernmentInsurancePlanDtoOption.isNone()) {
       this.log.error('Federal government insurance plan with id: [%s] not found', id);
       throw new FederalGovernmentInsurancePlanNotFoundException(`Federal government insurance plan with id: [${id}] not found`);
     }
+
+    const federalGovernmentInsurancePlanDto = federalGovernmentInsurancePlanDtoOption.unwrap();
 
     this.log.trace('Returning federal government insurance plan: [%j]', federalGovernmentInsurancePlanDto);
     return federalGovernmentInsurancePlanDto;
@@ -158,19 +161,19 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
     return sortedFederalGovernmentInsurancePlanLocalizedDtos;
   }
 
-  async findLocalizedFederalGovernmentInsurancePlanById(id: string, locale: AppLocale): Promise<FederalGovernmentInsurancePlanLocalizedDto | null> {
+  async findLocalizedFederalGovernmentInsurancePlanById(id: string, locale: AppLocale): Promise<Option<FederalGovernmentInsurancePlanLocalizedDto>> {
     this.log.debug('Finding federal government insurance plan with id [%s] and locale [%s]', id, locale);
     const federalGovernmentInsurancePlanDto = await this.findFederalGovernmentInsurancePlanById(id);
 
-    if (!federalGovernmentInsurancePlanDto) {
+    if (federalGovernmentInsurancePlanDto.isNone()) {
       this.log.trace('Federal government insurance plan with id [%s] not found. Returning null', id);
-      return null;
+      return None;
     }
 
-    const federalGovernmentInsurancePlanLocalizedDto = this.federalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanDtoToFederalGovernmentInsurancePlanLocalizedDto(federalGovernmentInsurancePlanDto, locale);
+    const federalGovernmentInsurancePlanLocalizedDto = this.federalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanDtoToFederalGovernmentInsurancePlanLocalizedDto(federalGovernmentInsurancePlanDto.unwrap(), locale);
 
     this.log.trace('Returning federal government insurance plan: [%j]', federalGovernmentInsurancePlanLocalizedDto);
-    return federalGovernmentInsurancePlanLocalizedDto;
+    return Some(federalGovernmentInsurancePlanLocalizedDto);
   }
 
   async getLocalizedFederalGovernmentInsurancePlanById(id: string, locale: AppLocale): Promise<FederalGovernmentInsurancePlanLocalizedDto> {

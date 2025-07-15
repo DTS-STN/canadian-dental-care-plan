@@ -82,7 +82,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     const benefits = await benefitsPromise;
 
     const federalProgram = await federalGovernmentInsurancePlanService.findFederalGovernmentInsurancePlanById(id);
-    if (federalProgram) {
+    if (federalProgram.isSome()) {
       return {
         ...benefits,
         hasFederalBenefits: true,
@@ -91,12 +91,12 @@ export async function loader({ context: { appContainer, session }, params, reque
     }
 
     const provincialProgram = await provincialGovernmentInsurancePlanService.findProvincialGovernmentInsurancePlanById(id);
-    if (provincialProgram) {
+    if (provincialProgram.isSome()) {
       return {
         ...benefits,
         hasProvincialTerritorialBenefits: true,
         provincialTerritorialSocialProgram: id,
-        province: provincialProgram.provinceTerritoryStateId,
+        province: provincialProgram.unwrap().provinceTerritoryStateId,
       };
     }
 
