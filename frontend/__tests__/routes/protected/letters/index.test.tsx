@@ -1,6 +1,6 @@
 import type { AppLoadContext } from 'react-router';
 
-import { None } from 'oxide.ts';
+import { None, Some } from 'oxide.ts';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock, mockDeep } from 'vitest-mock-extended';
 
@@ -34,7 +34,7 @@ describe('Letters Page', () => {
         createAudit: vi.fn(),
       } satisfies Partial<AuditService>);
       mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.ApplicantService).mockReturnValue({
-        findClientNumberBySin: async () => await Promise.resolve('some-client-number'),
+        findClientNumberBySin: async () => await Promise.resolve(Some('some-client-number')),
       } satisfies Partial<ApplicantService>);
       mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.LetterService).mockReturnValue({
         findLettersByClientId: async () =>
@@ -81,7 +81,7 @@ describe('Letters Page', () => {
       createAudit: vi.fn(),
     } satisfies Partial<AuditService>);
     mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.ApplicantService).mockReturnValue({
-      findClientNumberBySin: async () => await Promise.resolve('some-client-number'),
+      findClientNumberBySin: async () => await Promise.resolve(Some('some-client-number')),
     } satisfies Partial<ApplicantService>);
     mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.LetterService).mockReturnValue({
       findLettersByClientId: async () =>

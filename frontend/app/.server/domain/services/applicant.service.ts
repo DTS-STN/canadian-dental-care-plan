@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import { None, Option, Some } from 'oxide.ts';
 
 import { TYPES } from '~/.server/constants';
 import type { ApplicantRequestDto } from '~/.server/domain/dtos';
@@ -18,7 +19,7 @@ export interface ApplicantService {
    * @param applicantRequestDto The applicant request dto that includes SIN and userId for auditing
    * @returns A Promise that resolves to the client number if found, or `null` otherwise.
    */
-  findClientNumberBySin(applicantRequestDto: ApplicantRequestDto): Promise<string | null>;
+  findClientNumberBySin(applicantRequestDto: ApplicantRequestDto): Promise<Option<string>>;
 }
 
 @injectable()
@@ -44,21 +45,21 @@ export class DefaultApplicantService implements ApplicantService {
     this.log.debug('DefaultApplicantService initiated.');
   }
 
-  async findClientNumberBySin({ sin, userId }: ApplicantRequestDto): Promise<string | null> {
+  async findClientNumberBySin({ sin, userId }: ApplicantRequestDto): Promise<Option<string>> {
     this.log.trace('Finding client number with sin [%s] and userId [%s]', sin, userId);
 
     this.auditService.createAudit('personal-information.get', { userId });
 
     const applicantRequestEntity = this.applicantDtoMapper.mapSinToApplicantRequestEntity(sin);
     const applicantResponseEntity = await this.applicantRepository.findApplicantBySin(applicantRequestEntity);
-    if (applicantResponseEntity === null) {
+    if (applicantResponseEntity.isNone()) {
       this.log.trace('No applicant found for sin [%s]; Returning null', sin);
-      return null;
+      return None;
     }
 
-    const clientNumber = this.applicantDtoMapper.mapApplicantResponseEntityToClientNumber(applicantResponseEntity);
+    const clientNumber = this.applicantDtoMapper.mapApplicantResponseEntityToClientNumber(applicantResponseEntity.unwrap());
     this.log.trace('Returning client number [%s] for sin [%s]', clientNumber, sin);
 
-    return clientNumber;
+    return clientNumber ? Some(clientNumber) : None;
   }
 }
