@@ -21,6 +21,8 @@ jobs:
           node-version: 22.x
       - run: npm clean-install
         working-directory: frontend/
+      - run: npm run build
+        working-directory: frontend/
       - run: npx playwright install chromium --with-deps
         working-directory: frontend/
       - run: npm run test:e2e
