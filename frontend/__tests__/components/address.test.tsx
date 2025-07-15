@@ -46,10 +46,4 @@ describe('Address', () => {
     const actual = screen.getByTestId('address-id');
     expect(actual.textContent).toBe('123-123 Fake Street\nOttawa ON  K2K 2K2\nCanada');
   });
-
-  it('should render apartment number if supplied and not render country when address is Canadian', () => {
-    render(<Address data-testid="address-id" address={{ address: '123 Fake Street', city: 'Ottawa', provinceState: 'ON', postalZipCode: 'K2K 2K2', country: 'Canada', apartment: '123' }} />);
-    const actual = screen.getByTestId('address-id');
-    expect(actual.textContent).toBe('123-123 Fake Street\nOttawa ON  K2K 2K2\nCanada');
-  });
 });

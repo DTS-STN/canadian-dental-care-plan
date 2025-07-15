@@ -23,7 +23,9 @@ describe('SkipNavigationLinks', () => {
         path: '/',
       },
     ]);
-    render(<RoutesStub />);
+
+    const { container } = render(<RoutesStub />);
+    expect(container.querySelector('div#skip-to-content')).not.toBeNull();
   });
 
   it('renders skip links', () => {

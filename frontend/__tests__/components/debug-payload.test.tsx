@@ -47,12 +47,4 @@ describe('DebugPayload', () => {
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(JSON.stringify(data, null, 2));
   });
-
-  it('resets hasCopied state after 2 seconds', () => {
-    render(<DebugPayload data={{ key: 'value' }} enableCopy={true} />);
-
-    fireEvent.click(screen.getByText('Copy'));
-
-    vi.advanceTimersByTime(2000);
-  });
 });

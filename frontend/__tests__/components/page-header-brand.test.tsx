@@ -34,7 +34,8 @@ describe('PageHeaderBrand', () => {
         path: '/',
       },
     ]);
-    render(<RoutesStub />);
+    const { container } = render(<RoutesStub />);
+    expect(container.querySelector('div#wb-bnr')).not.toBeNull();
   });
 
   it('displays the Government of Canada logo', () => {

@@ -106,7 +106,7 @@ describe('pushPageviewEvent', () => {
   });
 });
 
-describe('pushPageviewEvent', () => {
+describe('pushValidationErrorEvent', () => {
   const originalAdobeDataLayer = window.adobeDataLayer;
 
   afterEach(() => {

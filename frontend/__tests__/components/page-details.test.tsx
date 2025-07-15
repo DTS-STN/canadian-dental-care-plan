@@ -22,7 +22,8 @@ describe('PageDetails', () => {
   });
 
   it('renders without crashing', () => {
-    render(<PageDetails />);
+    const { container } = render(<PageDetails />);
+    expect(container.querySelector('section')).not.toBeNull();
   });
 
   it('displays page identifier if available', () => {
