@@ -3,6 +3,7 @@ import type { ChangeEvent } from 'react';
 import { redirect, useSearchParams } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
+import { Option } from 'oxide.ts';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -45,17 +46,18 @@ export async function loader({ context: { appContainer, session }, params, reque
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  const clientNumber =
-    session.find('clientNumber').unwrapUnchecked() ??
-    (await appContainer.get(TYPES.domain.services.ApplicantService).findClientNumberBySin({
-      sin: userInfoToken.sin,
-      userId: userInfoToken.sub,
-    }));
+  const clientNumberOption: Option<string> = session.has('clientNumber')
+    ? session.find('clientNumber')
+    : await appContainer.get(TYPES.domain.services.ApplicantService).findClientNumberBySin({
+        sin: userInfoToken.sin,
+        userId: userInfoToken.sub,
+      });
 
-  if (!clientNumber) {
+  if (clientNumberOption.isNone()) {
     throw redirect(getPathById('protected/data-unavailable', params));
   }
 
+  const clientNumber = clientNumberOption.unwrap();
   const allLetters = await appContainer.get(TYPES.domain.services.LetterService).findLettersByClientId({ clientId: clientNumber, userId: userInfoToken.sub, sortOrder });
   const letterTypes = await appContainer.get(TYPES.domain.services.LetterTypeService).listLetterTypes();
   const letters = allLetters.filter(({ letterTypeId }) => letterTypes.some(({ id }) => letterTypeId === id));

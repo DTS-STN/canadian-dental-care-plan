@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import { None, Option, Some } from 'oxide.ts';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -20,7 +21,7 @@ export interface ApplicantRepository {
    * @param applicantRequestEntity The SIN request entity.
    * @returns A Promise that resolves to the applicant entity if found, or `null` otherwise.
    */
-  findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<ApplicantResponseEntity | null>;
+  findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<Option<ApplicantResponseEntity>>;
 
   /**
    * Retrieves metadata associated with the applicant repository.
@@ -62,7 +63,7 @@ export class DefaultApplicantRepository implements ApplicantRepository {
     this.baseUrl = `${this.serverConfig.INTEROP_APPLICANT_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1`;
   }
 
-  async findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<ApplicantResponseEntity | null> {
+  async findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<Option<ApplicantResponseEntity>> {
     this.log.trace('Fetching applicant for sin [%j]', applicantRequestEntity);
 
     const url = `${this.baseUrl}/applicant`;
@@ -86,12 +87,12 @@ export class DefaultApplicantRepository implements ApplicantRepository {
     if (response.status === 200) {
       const applicantResponseEntity: ApplicantResponseEntity = await response.json();
       this.log.trace('Returning applicant [%j]', applicantResponseEntity);
-      return applicantResponseEntity;
+      return Some(applicantResponseEntity);
     }
 
     if (response.status === 204) {
       this.log.trace('No applicant found; Returning null');
-      return null;
+      return None;
     }
 
     this.log.error('%j', {
@@ -199,7 +200,7 @@ export class MockApplicantRepository implements ApplicantRepository {
     this.log = createLogger('MockApplicantRepository');
   }
 
-  async findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<ApplicantResponseEntity | null> {
+  async findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<Option<ApplicantResponseEntity>> {
     this.log.debug('Fetching applicant for sin [%j]', applicantRequestEntity);
 
     const personSinIdentification = applicantRequestEntity.Applicant.PersonSINIdentification.IdentificationID;
@@ -207,7 +208,7 @@ export class MockApplicantRepository implements ApplicantRepository {
 
     if (!peronalInformationEntity) {
       this.log.debug('No applicant found; Returning null');
-      return await Promise.resolve(null);
+      return await Promise.resolve(None);
     }
 
     const clientIdentification: { IdentificationID?: string; IdentificationCategoryText?: string }[] = [];
@@ -231,7 +232,7 @@ export class MockApplicantRepository implements ApplicantRepository {
     };
 
     this.log.debug('Returning applicant [%j]', applicantResponseEntity);
-    return await Promise.resolve(applicantResponseEntity);
+    return await Promise.resolve(Some(applicantResponseEntity));
   }
 
   getMetadata(): Record<string, string> {
