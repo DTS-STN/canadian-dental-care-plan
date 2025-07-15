@@ -15,7 +15,7 @@ import type { Route } from './+types/review-and-submit';
 import { TYPES } from '~/.server/constants';
 import { clearProtectedRenewState, isPrimaryApplicantStateComplete, loadProtectedRenewState, loadProtectedRenewStateForReview, saveProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
-import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DebugPayload } from '~/components/debug-payload';
@@ -65,7 +65,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   copiedState.children = children;
 
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
-  const userInfoToken = session.get<UserinfoToken>('userInfoToken');
+  const userInfoToken = session.get('userInfoToken');
 
   // prettier-ignore
   const payload =
@@ -108,7 +108,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/renew/$id/review-child-information', params));
   }
 
-  const userInfoToken = session.get<UserinfoToken>('userInfoToken');
+  const userInfoToken = session.get('userInfoToken');
   const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub, primaryApplicantStateCompleted);
   await appContainer.get(TYPES.domain.services.BenefitRenewalService).createProtectedBenefitRenewal(benefitRenewalDto);
 

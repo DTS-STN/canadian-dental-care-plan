@@ -1,3 +1,4 @@
+import { None, Some } from 'oxide.ts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { MockProxy } from 'vitest-mock-extended';
 import { mock } from 'vitest-mock-extended';
@@ -38,7 +39,7 @@ describe('DefaultRaoidcSessionValidator', () => {
 
   describe('validateRaoidcSession', () => {
     it('should return isValid: false if idToken is not found in session', async () => {
-      mockSession.has.calledWith('idToken').mockReturnValueOnce(false);
+      mockSession.find.calledWith('idToken').mockReturnValueOnce(None);
 
       const result = await validator.validateRaoidcSession({ session: mockSession });
 
@@ -47,9 +48,8 @@ describe('DefaultRaoidcSessionValidator', () => {
     });
 
     it('should return isValid: false if userInfoToken is not found in session', async () => {
-      mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
-      mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'session-id' } satisfies Pick<IdToken, 'sid'>);
-      mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(true);
+      mockSession.find.calledWith('idToken').mockReturnValueOnce(Some({ sid: 'session-id' } as IdToken));
+      mockSession.find.calledWith('userInfoToken').mockReturnValueOnce(None);
 
       const result = await validator.validateRaoidcSession({ session: mockSession });
 
@@ -58,10 +58,8 @@ describe('DefaultRaoidcSessionValidator', () => {
     });
 
     it('should return isValid: true if session is mocked', async () => {
-      mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
-      mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'session-id' } satisfies Pick<IdToken, 'sid'>);
-      mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(true);
-      mockSession.get.calledWith('userInfoToken').mockReturnValueOnce({ mocked: true } satisfies Pick<UserinfoToken, 'mocked'>);
+      mockSession.find.calledWith('idToken').mockReturnValueOnce(Some({ sid: 'session-id' } as IdToken));
+      mockSession.find.calledWith('userInfoToken').mockReturnValueOnce(Some({ mocked: true } as UserinfoToken));
 
       const result = await validator.validateRaoidcSession({ session: mockSession });
 
@@ -70,10 +68,8 @@ describe('DefaultRaoidcSessionValidator', () => {
     });
 
     it('should return isValid: false if session is expired', async () => {
-      mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
-      mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'session-id' } satisfies Pick<IdToken, 'sid'>);
-      mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(true);
-      mockSession.get.calledWith('userInfoToken').mockReturnValueOnce({ mocked: false } satisfies Pick<UserinfoToken, 'mocked'>);
+      mockSession.find.calledWith('idToken').mockReturnValueOnce(Some({ sid: 'session-id' } as IdToken));
+      mockSession.find.calledWith('userInfoToken').mockReturnValueOnce(Some({ mocked: false } as UserinfoToken));
       vi.mocked(validateSession).mockResolvedValueOnce(false);
 
       const result = await validator.validateRaoidcSession({ session: mockSession });
@@ -83,37 +79,14 @@ describe('DefaultRaoidcSessionValidator', () => {
     });
 
     it('should return isValid: true if session is valid', async () => {
-      mockSession.has.calledWith('idToken').mockReturnValueOnce(true);
-      mockSession.get.calledWith('idToken').mockReturnValueOnce({ sid: 'session-id' } satisfies Pick<IdToken, 'sid'>);
-      mockSession.has.calledWith('userInfoToken').mockReturnValueOnce(true);
-      mockSession.get.calledWith('userInfoToken').mockReturnValueOnce({ mocked: false } satisfies Pick<UserinfoToken, 'mocked'>);
+      mockSession.find.calledWith('idToken').mockReturnValueOnce(Some({ sid: 'session-id' } as IdToken));
+      mockSession.find.calledWith('userInfoToken').mockReturnValueOnce(Some({ mocked: false } as UserinfoToken));
       vi.mocked(validateSession).mockResolvedValueOnce(true);
 
       const result = await validator.validateRaoidcSession({ session: mockSession });
 
       expect(result).toEqual({ isValid: true });
       expect(mockLogger.debug).toHaveBeenCalledWith('Authentication check passed for RAOIDC session [%s]', 'test-session-id');
-    });
-  });
-
-  describe('extractValueFromSession', () => {
-    it('should return value from session when it exists', () => {
-      mockSession.has.mockReturnValueOnce(true);
-      mockSession.get.mockReturnValueOnce('mocked-value');
-
-      const value = validator['extractValueFromSession'](mockSession, 'idToken');
-
-      expect(value).toBe('mocked-value');
-      expect(mockLogger.trace).toHaveBeenCalledWith('Extracted value for name [%s] from session [%s]', 'idToken', 'test-session-id');
-    });
-
-    it('should return null when value does not exist in session', () => {
-      mockSession.has.mockReturnValueOnce(false);
-
-      const value = validator['extractValueFromSession'](mockSession, 'idToken');
-
-      expect(value).toBeNull();
-      expect(mockLogger.debug).toHaveBeenCalledWith('Value not found for name [%s] in session [%s]', 'idToken', 'test-session-id');
     });
   });
 });

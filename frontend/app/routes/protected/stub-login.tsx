@@ -35,8 +35,8 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('stub-login:index.page-title') }) };
 
-  const idTokenOption = session.find<IdToken>('idToken');
-  const userInfoTokenOption = session.find<UserinfoToken>('userInfoToken');
+  const idTokenOption = session.find('idToken');
+  const userInfoTokenOption = session.find('userInfoToken');
 
   const defaultValues = {
     sin: userInfoTokenOption.mapOr<string>('', (userInfoToken) => userInfoToken.sin ?? ''),
@@ -79,22 +79,27 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const currentDateInSeconds = Math.floor(UTCDate.now() / 1000);
 
-  const idToken = {
+  const idToken: IdToken = {
     iss: 'GC-ECAS',
     jti: '71b080e9-2524-4572-a085-a53e63a98116',
     nbf: currentDateInSeconds - 30,
     exp: currentDateInSeconds + 300, //five minutes TTL for the token
     iat: currentDateInSeconds,
     aud: 'CDCP',
+    sid,
     sub,
     nonce: 'hqwVxGbvJ5g7NSWoOv1BvrA9avVAY7CL',
     locale: 'en-CA',
   };
 
-  const userInfoTokenPayload = {
+  const userInfoTokenPayload: UserinfoToken = {
     aud: 'CDCP',
     birthdate: '2000-01-01',
     iss: 'GC-ECAS-MOCK',
+    jti: '71b080e9-2524-4572-a085-a53e63a98116',
+    nbf: currentDateInSeconds - 30,
+    exp: currentDateInSeconds + 300, //five minutes TTL for the token
+    iat: currentDateInSeconds,
     locale: 'en-CA',
     sid,
     sin,
@@ -103,7 +108,7 @@ export async function action({ context: { appContainer, session }, params, reque
   };
 
   if (session.has('userInfoToken')) {
-    const userInfoToken: UserinfoToken = session.get('userInfoToken');
+    const userInfoToken = session.get('userInfoToken');
     userInfoToken.sin = sin;
     userInfoToken.sub = sub;
 

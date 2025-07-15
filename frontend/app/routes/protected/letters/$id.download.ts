@@ -6,7 +6,6 @@ import { sanitize } from 'sanitize-filename-ts';
 import type { Route } from './+types/$id.download';
 
 import { TYPES } from '~/.server/constants';
-import type { LetterDto } from '~/.server/domain/dtos';
 import { getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 
@@ -19,7 +18,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     throw data(null, { status: 400 });
   }
 
-  const lettersOption = session.find<ReadonlyArray<LetterDto>>('letters');
+  const lettersOption = session.find('letters');
 
   // Optional TODO: add a check to see if the letter belongs to the user. (Done with LetterService call)
   if (lettersOption.isNone()) {

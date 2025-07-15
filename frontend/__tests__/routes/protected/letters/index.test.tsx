@@ -8,6 +8,7 @@ import type { ClientConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicantService, AuditService, LetterService, LetterTypeService } from '~/.server/domain/services';
 import type { SecurityHandler } from '~/.server/routes/security';
+import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { loader } from '~/routes/protected/letters/index';
 
 vi.mock('~/.server/utils/locale.utils');
@@ -21,8 +22,8 @@ describe('Letters Page', () => {
     it('should return sorted letters', async () => {
       const mockAppLoadContext = mockDeep<AppLoadContext>();
 
-      mockAppLoadContext.session.get.calledWith('idToken').mockReturnValueOnce({ sub: '00000000-0000-0000-0000-000000000000' });
-      mockAppLoadContext.session.get.calledWith('userInfoToken').mockReturnValueOnce({ sin: '999999999', sub: '1111111' });
+      mockAppLoadContext.session.get.calledWith('idToken').mockReturnValueOnce({ sub: '00000000-0000-0000-0000-000000000000' } as IdToken);
+      mockAppLoadContext.session.get.calledWith('userInfoToken').mockReturnValueOnce({ sin: '999999999', sub: '1111111' } as UserinfoToken);
       mockAppLoadContext.session.find.calledWith('clientNumber').mockReturnValueOnce(None);
 
       mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
@@ -68,8 +69,8 @@ describe('Letters Page', () => {
   it('retrieves letter types', async () => {
     const mockAppLoadContext = mockDeep<AppLoadContext>();
 
-    mockAppLoadContext.session.get.calledWith('idToken').mockReturnValueOnce({ sub: '00000000-0000-0000-0000-000000000000' });
-    mockAppLoadContext.session.get.calledWith('userInfoToken').mockReturnValueOnce({ sin: '999999999' });
+    mockAppLoadContext.session.get.calledWith('idToken').mockReturnValueOnce({ sub: '00000000-0000-0000-0000-000000000000' } as IdToken);
+    mockAppLoadContext.session.get.calledWith('userInfoToken').mockReturnValueOnce({ sin: '999999999' } as UserinfoToken);
     mockAppLoadContext.session.find.calledWith('clientNumber').mockReturnValueOnce(None);
 
     mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());

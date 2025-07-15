@@ -114,9 +114,9 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
   const { authUrl, codeVerifier, state } = await raoidcService.generateSigninRequest(redirectUri);
 
   log.debug('Storing [codeVerifier] and [state] in session for future validation');
-  session.set('codeVerifier', codeVerifier);
-  session.set('returnUrl', returnUrl ?? '/');
-  session.set('state', state);
+  session.set('authCodeVerifier', codeVerifier);
+  session.set('authReturnUrl', returnUrl ?? '/');
+  session.set('authState', state);
 
   log.debug('Redirecting to RAOIDC signin URL [%s]', authUrl.href);
   return redirectDocument(authUrl.href);
@@ -132,9 +132,9 @@ async function handleRaoidcCallbackRequest({ context: { appContainer, session },
   instrumentationService.createCounter('auth.callback.raoidc.requests').add(1);
 
   const raoidcService = appContainer.get(TYPES.auth.RaoidcService);
-  const codeVerifier = session.get<string>('codeVerifier');
-  const returnUrl = session.find<string>('returnUrl').unwrapOr('/');
-  const state = session.get<string>('state');
+  const codeVerifier = session.get('authCodeVerifier');
+  const returnUrl = session.find('authReturnUrl').unwrapOr('/');
+  const state = session.get('authState');
 
   const redirectUri = generateCallbackUri(new URL(request.url).origin, 'raoidc');
 

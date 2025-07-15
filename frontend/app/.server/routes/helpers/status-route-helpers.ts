@@ -6,6 +6,8 @@ import { createLogger } from '~/.server/logging';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
+export type StatusStateSessionKey = `status-flow-${string}`;
+
 export interface StatusState {
   readonly id: string;
   readonly statusCheckResult: {
@@ -19,11 +21,11 @@ export interface StatusState {
 const idSchema = z.string().uuid();
 
 /**
- * Gets the session name.
- * @param id - The ID.
- * @returns The session name.
+ * Gets the status flow session key.
+ * @param id - The status flow ID.
+ * @returns The status flow session key.
  */
-function getSessionName(id: string) {
+function getSessionKey(id: string): StatusStateSessionKey {
   return `status-flow-${idSchema.parse(id)}`;
 }
 
@@ -47,7 +49,7 @@ interface LoadStateArgs {
  * @param args - The arguments.
  * @returns The loaded state.
  */
-export function loadStatusState({ id, params, session }: LoadStateArgs) {
+export function loadStatusState({ id, params, session }: LoadStateArgs): StatusState {
   const log = createLogger('status-route-helpers.server/loadStatusState');
   const statusIndexUrl = getPathById('public/status/index', params);
 
@@ -58,15 +60,14 @@ export function loadStatusState({ id, params, session }: LoadStateArgs) {
     throw redirectDocument(statusIndexUrl);
   }
 
-  const sessionName = getSessionName(parsedId.data);
+  const sessionKey = getSessionKey(parsedId.data);
 
-  if (!session.has(sessionName)) {
-    log.warn('Status session state has not been found; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', statusIndexUrl, sessionName, session.id);
+  if (!session.has(sessionKey)) {
+    log.warn('Status session state has not been found; redirecting to [%s]; sessionKey: [%s], sessionId: [%s]', statusIndexUrl, sessionKey, session.id);
     throw redirectDocument(statusIndexUrl);
   }
 
-  const state: StatusState = session.get(sessionName);
-  return state;
+  return session.get(sessionKey);
 }
 
 interface SaveStateArgs {
@@ -91,9 +92,9 @@ export function saveStatusState({ id, params, session, state }: SaveStateArgs) {
     ...state,
   } satisfies StatusState;
 
-  const sessionName = getSessionName(currentState.id);
-  session.set(sessionName, newState);
-  log.info('Status session state saved; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  const sessionKey = getSessionKey(currentState.id);
+  session.set(sessionKey, newState);
+  log.info('Status session state saved; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
   return newState;
 }
 
@@ -110,9 +111,9 @@ interface ClearStateArgs {
 export function clearStatusState({ id, params, session }: ClearStateArgs) {
   const log = createLogger('status-route-helpers.server/clearStatusState');
   const state = loadStatusState({ id, params, session });
-  const sessionName = getSessionName(state.id);
-  session.unset(sessionName);
-  log.info('Status session state cleared; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  const sessionKey = getSessionKey(state.id);
+  session.unset(sessionKey);
+  log.info('Status session state cleared; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
 }
 
 interface StartArgs {
@@ -134,9 +135,9 @@ export function startStatusState({ id, session }: StartArgs) {
     statusCheckResult: {},
   };
 
-  const sessionName = getSessionName(parsedId);
-  session.set(sessionName, initialState);
-  log.info('Status session state started; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  const sessionKey = getSessionKey(parsedId);
+  session.set(sessionKey, initialState);
+  log.info('Status session state started; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
   return initialState;
 }
 
