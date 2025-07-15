@@ -3,7 +3,7 @@ import type { ChangeEvent } from 'react';
 import { redirect, useSearchParams } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import { Option } from 'oxide.ts';
+import type { Option } from 'oxide.ts';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
