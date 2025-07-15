@@ -4,10 +4,52 @@ import type { Option } from 'oxide.ts';
 import { None, Some } from 'oxide.ts';
 import validator from 'validator';
 
+import type { LetterDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
+import type { ApplyState, ApplyStateSessionKey } from '~/.server/routes/helpers/apply-route-helpers';
+import type { ProtectedApplyState, ProtectedApplyStateSessionKey } from '~/.server/routes/helpers/protected-apply-route-helpers';
+import type { ProtectedRenewState, ProtectedRenewStateSessionKey } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import type { RenewState, RenewStateSessionKey } from '~/.server/routes/helpers/renew-route-helpers';
+import type { StatusState, StatusStateSessionKey } from '~/.server/routes/helpers/status-route-helpers';
+import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 
 type RequestSession = Request['session'];
+
+/**
+ * Defines the mapping of valid session keys to their corresponding value types.
+ * Each property represents a key that can be stored in the session, and its value type.
+ *
+ * Extend this interface to add more session keys and their types as needed.
+ */
+type SessionTypeMap = {
+  [K in ApplyStateSessionKey]: ApplyState;
+} & {
+  [K in ProtectedApplyStateSessionKey]: ProtectedApplyState;
+} & {
+  [K in ProtectedRenewStateSessionKey]: ProtectedRenewState;
+} & {
+  [K in RenewStateSessionKey]: RenewState;
+} & {
+  [K in StatusStateSessionKey]: StatusState;
+} & {
+  authCodeVerifier: string;
+  authReturnUrl: string;
+  authState: string;
+  clientNumber: string;
+  csrfToken: string;
+  idToken: IdToken;
+  lastAccessTime: string;
+  letters: ReadonlyArray<LetterDto>;
+  userInfoToken: UserinfoToken;
+};
+
+/**
+ * Represents the set of valid keys for session data.
+ * This type is derived from the keys of SessionTypeMap and is used to constrain
+ * session operations to only valid, type-safe keys.
+ */
+export type SessionKey = keyof SessionTypeMap;
 
 /**
  * Interface representing a session management system.
@@ -32,7 +74,7 @@ export interface Session {
    * @param key The session key to check.
    * @returns True if the key exists in the session, false otherwise.
    */
-  has(key: string): boolean;
+  has(key: SessionKey): boolean;
 
   /**
    * Finds a value in the session by its key.
@@ -44,7 +86,7 @@ export interface Session {
    * @param key The session key to look up.
    * @returns An Option containing the value if present, or None if not found.
    */
-  find<T>(key: string): Option<T>;
+  find<K extends SessionKey>(key: K): Option<SessionTypeMap[K]>;
 
   /**
    * Retrieves a value from the session by its key.
@@ -55,7 +97,7 @@ export interface Session {
    * @returns The value associated with the session key.
    * @throws Throws an error if the key is not found in the session.
    */
-  get<T>(key: string): T;
+  get<K extends SessionKey>(key: K): SessionTypeMap[K];
 
   /**
    * Sets a value in the session for a given key.
@@ -65,7 +107,7 @@ export interface Session {
    * @param key The session key to set.
    * @param value The value to set for the session key.
    */
-  set<T = unknown>(key: string, value: T): void;
+  set<K extends SessionKey>(key: K, value: SessionTypeMap[K]): void;
 
   /**
    * Removes a key-value pair from the session.
@@ -75,7 +117,7 @@ export interface Session {
    * @param key The session key to remove.
    * @returns {boolean} Returns true if the key was removed successfully, false if the key doesn't exist.
    */
-  unset(key: string): boolean;
+  unset(key: SessionKey): boolean;
 
   /**
    * Destroys the current session.
@@ -107,7 +149,7 @@ export class ExpressSession implements Session {
     return this.session.id;
   }
 
-  has(key: string): boolean {
+  has(key: SessionKey): boolean {
     const sanitizedKey = this.sanitizeKey(key);
     if (this.isReservedKey(sanitizedKey)) return false;
     const exists = sanitizedKey in this.session;
@@ -115,16 +157,16 @@ export class ExpressSession implements Session {
     return exists;
   }
 
-  find<T>(key: string): Option<T> {
+  find<K extends SessionKey>(key: K): Option<SessionTypeMap[K]> {
     if (!this.has(key)) return None;
     const sanitizedKey = this.sanitizeKey(key);
-    const value = Some(this.session[sanitizedKey] as T);
+    const value = Some(this.session[sanitizedKey] as SessionTypeMap[K]);
     this.log.trace('Found value for session key: %s, value: %s', sanitizedKey, value);
     return value;
   }
 
-  get<T>(key: string): T {
-    const value = this.find<T>(key);
+  get<K extends SessionKey>(key: K): SessionTypeMap[K] {
+    const value = this.find(key);
     if (value.isNone()) {
       this.log.error('Session key not found: %s, sessionId: %s', key, this.id);
       throw new Error(`Key '${key}' not found in session [${this.id}]`);
@@ -133,7 +175,7 @@ export class ExpressSession implements Session {
     return value.unwrap();
   }
 
-  set<T = unknown>(key: string, value: T): void {
+  set<K extends SessionKey>(key: K, value: SessionTypeMap[K]): void {
     const sanitizedKey = this.sanitizeKey(key);
     this.assertNotReservedKey(sanitizedKey);
     this.session[sanitizedKey] = value;
@@ -146,9 +188,9 @@ export class ExpressSession implements Session {
     });
   }
 
-  unset(key: string): boolean {
+  unset(key: SessionKey): boolean {
+    if (!this.has(key)) return false;
     const sanitizedKey = this.sanitizeKey(key);
-    if (!this.has(sanitizedKey)) return false;
     this.assertNotReservedKey(sanitizedKey);
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete this.session[sanitizedKey];
@@ -201,23 +243,23 @@ export class NoopSession implements Session {
     throw new Error('No session available in stateless context');
   }
 
-  has(key: string): boolean {
+  has(key: SessionKey): boolean {
     return false;
   }
 
-  find<T>(key: string): Option<T> {
+  find<K extends SessionKey>(key: K): Option<SessionTypeMap[K]> {
     return None;
   }
 
-  get<T>(key: string): T {
+  get<K extends SessionKey>(key: K): SessionTypeMap[K] {
     throw new Error('No session available in stateless context');
   }
 
-  set<T = unknown>(key: string, value: T): void {
+  set<K extends SessionKey>(key: K, value: SessionTypeMap[K]): void {
     throw new Error('No session available in stateless context');
   }
 
-  unset(key: string): boolean {
+  unset(key: SessionKey): boolean {
     return false;
   }
 

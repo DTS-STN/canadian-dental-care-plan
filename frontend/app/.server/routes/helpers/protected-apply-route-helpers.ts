@@ -12,6 +12,8 @@ import type { Session } from '~/.server/web/session';
 import { getAgeFromDateString } from '~/utils/date-utils';
 import { getPathById } from '~/utils/route-utils';
 
+export type ProtectedApplyStateSessionKey = `protected-apply-flow-${string}`;
+
 export type ProtectedApplyState = ReadonlyDeep<{
   id: string;
   editMode: boolean;
@@ -158,11 +160,11 @@ export type TypeOfApplicationState = NonNullable<ProtectedApplyState['typeOfAppl
 const idSchema = z.string().uuid();
 
 /**
- * Gets the session name.
- * @param id - The ID.
- * @returns The session name.
+ * Gets the protected apply flow session key.
+ * @param id - The protected apply flow ID.
+ * @returns The protected apply flow session key.
  */
-function getSessionName(id: string) {
+function getSessionName(id: string): ProtectedApplyStateSessionKey {
   return `protected-apply-flow-${idSchema.parse(id)}`;
 }
 
@@ -187,7 +189,7 @@ interface LoadStateArgs {
  * @param args - The arguments.
  * @returns The loaded state.
  */
-export function loadProtectedApplyState({ params, session }: LoadStateArgs) {
+export function loadProtectedApplyState({ params, session }: LoadStateArgs): ProtectedApplyState {
   const log = createLogger('apply-route-helpers.server/loadProtectedApplyState');
 
   const parsedId = idSchema.safeParse(params.id);
@@ -197,14 +199,14 @@ export function loadProtectedApplyState({ params, session }: LoadStateArgs) {
     throw redirect(getPathById('protected/apply/index', params));
   }
 
-  const sessionName = getSessionName(parsedId.data);
+  const sessionKey = getSessionName(parsedId.data);
 
-  if (!session.has(sessionName)) {
-    log.warn('Apply session state has not been found; redirecting to protected/apply; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  if (!session.has(sessionKey)) {
+    log.warn('Apply session state has not been found; redirecting to protected/apply; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
     throw redirect(getPathById('protected/apply/index', params));
   }
 
-  const state: ProtectedApplyState = session.get(sessionName);
+  const state = session.get(sessionKey);
 
   // Checks if the elapsed time since the last update exceeds 20 minutes,
   // and performs necessary actions if it does.
@@ -212,8 +214,8 @@ export function loadProtectedApplyState({ params, session }: LoadStateArgs) {
   const now = new UTCDate();
 
   if (differenceInMinutes(now, lastUpdatedOn) >= 20) {
-    session.unset(sessionName);
-    log.warn('Protected apply session state has expired; redirecting to protected/apply; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+    session.unset(sessionKey);
+    log.warn('Protected apply session state has expired; redirecting to protected/apply; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
     throw redirect(getPathById('protected/apply/index', params));
   }
 
@@ -228,7 +230,7 @@ export function loadProtectedApplyState({ params, session }: LoadStateArgs) {
 export function startProtectedApplyState({ applicationYear, id, session }: StartArgs) {
   const log = createLogger('protected-apply-route-helpers.server/startProtectedApplyState');
   const parsedId = idSchema.parse(id);
-  const sessionName = getSessionName(parsedId);
+  const sessionKey = getSessionName(parsedId);
 
   const initialState: ProtectedApplyState = {
     id: parsedId,
@@ -238,8 +240,8 @@ export function startProtectedApplyState({ applicationYear, id, session }: Start
     children: [],
   };
 
-  session.set(sessionName, initialState);
-  log.info('Protected apply session state started; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  session.set(sessionKey, initialState);
+  log.info('Protected apply session state started; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
   return initialState;
 }
 
@@ -269,9 +271,9 @@ export function saveProtectedApplyState({ params, session, state, remove }: Save
     newState = omit(newState, [remove]);
   }
 
-  const sessionName = getSessionName(currentState.id);
-  session.set(sessionName, newState);
-  log.info('Protected apply session state saved; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  const sessionKey = getSessionName(currentState.id);
+  session.set(sessionKey, newState);
+  log.info('Protected apply session state saved; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
   return newState;
 }
 
@@ -288,9 +290,9 @@ export function clearProtectedApplyState({ params, session }: ClearStateArgs) {
   const log = createLogger('protected-apply-route-helpers.server/clearProtectedApplyState');
   const { id } = loadProtectedApplyState({ params, session });
 
-  const sessionName = getSessionName(id);
-  session.unset(sessionName);
-  log.info('Protected apply session state cleared; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  const sessionKey = getSessionName(id);
+  session.unset(sessionKey);
+  log.info('Protected apply session state cleared; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
 }
 
 export function applicantInformationStateHasPartner(maritalStatus?: string) {

@@ -10,6 +10,8 @@ import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getCdcpWebsiteRenewUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
 
+export type RenewStateSessionKey = `renew-flow-${string}`;
+
 export interface RenewState {
   readonly id: string;
   readonly editMode: boolean;
@@ -149,11 +151,11 @@ export type CommunicationPreferencesState = NonNullable<RenewState['communicatio
 const idSchema = z.string().uuid();
 
 /**
- * Gets the session name.
- * @param id - The ID.
- * @returns The session name.
+ * Gets the renew flow session key.
+ * @param id - The renew flow ID.
+ * @returns The renew flow session key.
  */
-function getSessionName(id: string) {
+function getSessionName(id: string): RenewStateSessionKey {
   return `renew-flow-${idSchema.parse(id)}`;
 }
 
@@ -184,14 +186,14 @@ export function loadRenewState({ params, session }: LoadStateArgs) {
     throw redirectDocument(cdcpWebsiteRenewUrl);
   }
 
-  const sessionName = getSessionName(parsedId.data);
+  const sessionKey = getSessionName(parsedId.data);
 
-  if (!session.has(sessionName)) {
-    log.warn('Renew session state has not been found; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteRenewUrl, sessionName, session.id);
+  if (!session.has(sessionKey)) {
+    log.warn('Renew session state has not been found; redirecting to [%s]; sessionKey: [%s], sessionId: [%s]', cdcpWebsiteRenewUrl, sessionKey, session.id);
     throw redirectDocument(cdcpWebsiteRenewUrl);
   }
 
-  const state: RenewState = session.get(sessionName);
+  const state: RenewState = session.get(sessionKey);
 
   // Checks if the elapsed time since the last update exceeds 20 minutes,
   // and performs necessary actions if it does.
@@ -199,8 +201,8 @@ export function loadRenewState({ params, session }: LoadStateArgs) {
   const now = new UTCDate();
 
   if (differenceInMinutes(now, lastUpdatedOn) >= 20) {
-    session.unset(sessionName);
-    log.warn('Renew session state has expired; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteRenewUrl, sessionName, session.id);
+    session.unset(sessionKey);
+    log.warn('Renew session state has expired; redirecting to [%s]; sessionKey: [%s], sessionId: [%s]', cdcpWebsiteRenewUrl, sessionKey, session.id);
     throw redirectDocument(cdcpWebsiteRenewUrl);
   }
 
@@ -229,9 +231,9 @@ export function saveRenewState({ params, session, state }: SaveStateArgs) {
     lastUpdatedOn: new UTCDate().toISOString(),
   } satisfies RenewState;
 
-  const sessionName = getSessionName(currentState.id);
-  session.set(sessionName, newState);
-  log.info('Renew session state saved; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  const sessionKey = getSessionName(currentState.id);
+  session.set(sessionKey, newState);
+  log.info('Renew session state saved; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
   return newState;
 }
 
@@ -247,9 +249,9 @@ interface ClearStateArgs {
 export function clearRenewState({ params, session }: ClearStateArgs) {
   const log = createLogger('renew-route-helpers.server/clearRenewState');
   const state = loadRenewState({ params, session });
-  const sessionName = getSessionName(state.id);
-  session.unset(sessionName);
-  log.info('Renew session state cleared; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  const sessionKey = getSessionName(state.id);
+  session.unset(sessionKey);
+  log.info('Renew session state cleared; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
 }
 
 interface StartArgs {
@@ -275,9 +277,9 @@ export function startRenewState({ applicationYear, id, session }: StartArgs) {
     children: [],
   };
 
-  const sessionName = getSessionName(parsedId);
-  session.set(sessionName, initialState);
-  log.info('Renew session state started; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  const sessionKey = getSessionName(parsedId);
+  session.set(sessionKey, initialState);
+  log.info('Renew session state started; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
   return initialState;
 }
 

@@ -13,6 +13,8 @@ import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
 import { getAgeFromDateString } from '~/utils/date-utils';
 
+export type ApplyStateSessionKey = `apply-flow-${string}`;
+
 export type ApplyState = ReadonlyDeep<{
   id: string;
   editMode: boolean;
@@ -159,11 +161,11 @@ export type TypeOfApplicationState = NonNullable<ApplyState['typeOfApplication']
 const idSchema = z.string().uuid();
 
 /**
- * Gets the session name.
- * @param id - The ID.
- * @returns The session name.
+ * Gets the apply flow session key.
+ * @param id - The apply flow ID.
+ * @returns The apply flow session key.
  */
-function getSessionName(id: string) {
+function getApplyFlowSessionKey(id: string): ApplyStateSessionKey {
   return `apply-flow-${idSchema.parse(id)}`;
 }
 
@@ -182,7 +184,7 @@ interface LoadStateArgs {
  * @param args - The arguments.
  * @returns The loaded state.
  */
-export function loadApplyState({ params, session }: LoadStateArgs) {
+export function loadApplyState({ params, session }: LoadStateArgs): ApplyState {
   const log = createLogger('apply-route-helpers.server/loadApplyState');
   const locale = getLocaleFromParams(params);
   const cdcpWebsiteApplyUrl = getCdcpWebsiteApplyUrl(locale);
@@ -194,14 +196,14 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
     throw redirectDocument(cdcpWebsiteApplyUrl);
   }
 
-  const sessionName = getSessionName(parsedId.data);
+  const sessionKey = getApplyFlowSessionKey(parsedId.data);
 
-  if (!session.has(sessionName)) {
-    log.warn('Apply session state has not been found; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
+  if (!session.has(sessionKey)) {
+    log.warn('Apply session state has not been found; redirecting to [%s]; sessionKey: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionKey, session.id);
     throw redirectDocument(cdcpWebsiteApplyUrl);
   }
 
-  const state: ApplyState = session.get(sessionName);
+  const state = session.get(sessionKey);
 
   // Checks if the elapsed time since the last update exceeds 20 minutes,
   // and performs necessary actions if it does.
@@ -209,8 +211,8 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
   const now = new UTCDate();
 
   if (differenceInMinutes(now, lastUpdatedOn) >= 20) {
-    session.unset(sessionName);
-    log.warn('Apply session state has expired; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
+    session.unset(sessionKey);
+    log.warn('Apply session state has expired; redirecting to [%s]; sessionKey: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionKey, session.id);
     throw redirectDocument(cdcpWebsiteApplyUrl);
   }
 
@@ -243,9 +245,9 @@ export function saveApplyState({ params, session, state, remove }: SaveStateArgs
     newState = omit(newState, [remove]);
   }
 
-  const sessionName = getSessionName(currentState.id);
-  session.set(sessionName, newState);
-  log.info('Apply session state saved; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  const sessionkey = getApplyFlowSessionKey(currentState.id);
+  session.set(sessionkey, newState);
+  log.info('Apply session state saved; sessionKey: [%s], sessionId: [%s]', sessionkey, session.id);
   return newState;
 }
 
@@ -262,9 +264,9 @@ export function clearApplyState({ params, session }: ClearStateArgs) {
   const log = createLogger('apply-route-helpers.server/clearApplyState');
   const { id } = loadApplyState({ params, session });
 
-  const sessionName = getSessionName(id);
-  session.unset(sessionName);
-  log.info('Apply session state cleared; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  const sessionKey = getApplyFlowSessionKey(id);
+  session.unset(sessionKey);
+  log.info('Apply session state cleared; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
 }
 
 interface StartArgs {
@@ -290,9 +292,9 @@ export function startApplyState({ applicationYear, id, session }: StartArgs) {
     children: [],
   };
 
-  const sessionName = getSessionName(parsedId);
-  session.set(sessionName, initialState);
-  log.info('Apply session state started; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  const sessionKey = getApplyFlowSessionKey(parsedId);
+  session.set(sessionKey, initialState);
+  log.info('Apply session state started; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
   return initialState;
 }
 

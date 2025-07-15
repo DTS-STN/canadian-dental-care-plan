@@ -5,7 +5,6 @@ import { TYPES } from '~/.server/constants';
 import type { FetchFn, HttpClient } from '~/.server/http';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
-import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { validateSession } from '~/.server/utils/raoidc.utils';
 import type { Session } from '~/.server/web/session';
 
@@ -53,17 +52,20 @@ export class DefaultRaoidcSessionValidator implements RaoidcSessionValidator {
     this.log.debug('Performing RAOIDC session [%s] validation', session.id);
     const { AUTH_RAOIDC_BASE_URL, AUTH_RAOIDC_CLIENT_ID } = this.serverConfig;
 
-    const idToken = this.extractValueFromSession<IdToken>(session, 'idToken');
-    if (!idToken) {
+    const idTokenOption = session.find('idToken');
+    if (idTokenOption.isNone()) {
       this.log.debug('idToken not found in session [%s]', session.id);
       return { isValid: false, errorMessage: `RAOIDC session validation failed; idToken not found in session [${session.id}]` };
     }
 
-    const userInfoToken = this.extractValueFromSession<UserinfoToken>(session, 'userInfoToken');
-    if (!userInfoToken) {
+    const userInfoTokenOption = session.find('userInfoToken');
+    if (userInfoTokenOption.isNone()) {
       this.log.debug('userInfoToken not found in session [%s]', session.id);
       return { isValid: false, errorMessage: `RAOIDC session validation failed; userInfoToken not found in session [${session.id}]` };
     }
+
+    const idToken = idTokenOption.unwrap();
+    const userInfoToken = userInfoTokenOption.unwrap();
 
     if (userInfoToken.mocked) {
       this.log.debug('Mocked user; skipping RAOIDC session [%s] validation', session.id);
@@ -80,25 +82,5 @@ export class DefaultRaoidcSessionValidator implements RaoidcSessionValidator {
 
     this.log.debug('Authentication check passed for RAOIDC session [%s]', session.id);
     return { isValid: true };
-  }
-
-  /**
-   * Extracts a value from the session.
-   *
-   * @param session - The session object to extract the value from.
-   * @param name - The name of the value to extract.
-   * @returns The extracted value or null if not found.
-   */
-  protected extractValueFromSession<T>(session: Session, name: string): T | null {
-    this.log.trace('Attempting to extract value from session [%s]; name: %s', session.id, name);
-
-    if (!session.has(name)) {
-      this.log.debug('Value not found for name [%s] in session [%s]', name, session.id);
-      return null;
-    }
-
-    const value = session.get<T>(name);
-    this.log.trace('Extracted value for name [%s] from session [%s]', name, session.id);
-    return value;
   }
 }

@@ -10,7 +10,7 @@ import type { Route } from './+types/index';
 import { TYPES } from '~/.server/constants';
 import { startProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
-import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { pageIds } from '~/page-ids';
 import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -34,7 +34,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const userInfoToken = session.get<UserinfoToken>('userInfoToken');
+  const userInfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
   const id = randomUUID().toString();

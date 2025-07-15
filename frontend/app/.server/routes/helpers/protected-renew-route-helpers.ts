@@ -10,6 +10,8 @@ import type { Session } from '~/.server/web/session';
 import { getAgeFromDateString } from '~/utils/date-utils';
 import { getPathById } from '~/utils/route-utils';
 
+export type ProtectedRenewStateSessionKey = `protected-renew-flow-${string}`;
+
 export interface ProtectedRenewState {
   readonly id: string;
   readonly editMode: boolean;
@@ -140,11 +142,11 @@ export type ProtectedConmmunicationPreferenceState = NonNullable<ProtectedRenewS
 const idSchema = z.string().uuid();
 
 /**
- * Gets the session name.
- * @param id - The ID.
- * @returns The session name.
+ * Gets the protected renew flow session key.
+ * @param id - The protected renew flow ID.
+ * @returns The protected renew flow session key.
  */
-function getSessionName(id: string) {
+function getSessionKey(id: string): ProtectedRenewStateSessionKey {
   return `protected-renew-flow-${idSchema.parse(id)}`;
 }
 
@@ -164,7 +166,7 @@ interface LoadStateArgs {
  * @param args - The arguments.
  * @returns The loaded state.
  */
-export function loadProtectedRenewState({ params, request, session }: LoadStateArgs) {
+export function loadProtectedRenewState({ params, request, session }: LoadStateArgs): ProtectedRenewState {
   const log = createLogger('protected-renew-route-helpers.server/loadProtectedRenewState');
   const { pathname } = new URL(request.url);
 
@@ -175,14 +177,14 @@ export function loadProtectedRenewState({ params, request, session }: LoadStateA
     throw redirect(getPathById('protected/renew/index', params));
   }
 
-  const sessionName = getSessionName(parsedId.data);
+  const sessionKey = getSessionKey(parsedId.data);
 
-  if (!session.has(sessionName)) {
-    log.warn('Protected renew session state has not been found; redirecting to protected/renew; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  if (!session.has(sessionKey)) {
+    log.warn('Protected renew session state has not been found; redirecting to protected/renew; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
     throw redirect(getPathById('protected/renew/index', params));
   }
 
-  const state: ProtectedRenewState = session.get(sessionName);
+  const state = session.get(sessionKey);
 
   // Redirect to the confirmation page if the application has been submitted and
   // the current route is not the confirmation page.
@@ -217,9 +219,9 @@ export function saveProtectedRenewState({ params, request, session, state }: Sav
     ...state,
   } satisfies ProtectedRenewState;
 
-  const sessionName = getSessionName(currentState.id);
-  session.set(sessionName, newState);
-  log.info('Renew session state saved; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  const sessionKey = getSessionKey(currentState.id);
+  session.set(sessionKey, newState);
+  log.info('Renew session state saved; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
   return newState;
 }
 
@@ -236,9 +238,9 @@ interface ClearStateArgs {
 export function clearProtectedRenewState({ params, request, session }: ClearStateArgs) {
   const log = createLogger('protected-renew-route-helpers.server/clearProtectedRenewState');
   const state = loadProtectedRenewState({ params, request, session });
-  const sessionName = getSessionName(state.id);
-  session.unset(sessionName);
-  log.info('Renew session state cleared; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  const sessionKey = getSessionKey(state.id);
+  session.unset(sessionKey);
+  log.info('Renew session state cleared; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
 }
 
 interface StartArgs {
@@ -256,7 +258,7 @@ interface StartArgs {
 export function startProtectedRenewState({ applicationYear, clientApplication, id, session }: StartArgs) {
   const log = createLogger('protected-renew-route-helpers.server/startProtectedRenewState');
   const parsedId = idSchema.parse(id);
-  const sessionName = getSessionName(parsedId);
+  const sessionKey = getSessionKey(parsedId);
 
   const initialState: ProtectedRenewState = {
     id: parsedId,
@@ -280,8 +282,8 @@ export function startProtectedRenewState({ applicationYear, clientApplication, i
       }),
   };
 
-  session.set(sessionName, initialState);
-  log.info('Protected renew session state started; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+  session.set(sessionKey, initialState);
+  log.info('Protected renew session state started; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
   return initialState;
 }
 
