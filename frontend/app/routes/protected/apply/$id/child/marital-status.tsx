@@ -83,7 +83,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadProtectedApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.cancel) {
     return redirect(getPathById('protected/apply/$id/child/review-adult-information', params));
   }
@@ -91,7 +91,7 @@ export async function action({ context: { appContainer, session }, params, reque
   // state validation schema
   const maritalStatusSchema = z.object({
     maritalStatus: z
-      .string({ errorMap: () => ({ message: t('protected-apply-child:marital-status.error-message.marital-status-required') }) })
+      .string({ error: t('protected-apply-child:marital-status.error-message.marital-status-required') })
       .trim()
       .min(1, t('protected-apply-child:marital-status.error-message.marital-status-required')),
   });
@@ -109,16 +109,17 @@ export async function action({ context: { appContainer, session }, params, reque
       .string()
       .trim()
       .min(1, t('protected-apply-child:marital-status.error-message.sin-required'))
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-apply-child:marital-status.error-message.sin-valid') });
+          ctx.addIssue({ code: 'custom', message: t('protected-apply-child:marital-status.error-message.sin-valid') });
         } else if (
           [state.applicantInformation?.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
             .filter((sin) => sin !== undefined)
             .map((sin) => formatSin(sin))
             .includes(formatSin(sin))
         ) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-apply-child:marital-status.error-message.sin-unique') });
+          ctx.addIssue({ code: 'custom', message: t('protected-apply-child:marital-status.error-message.sin-unique') });
         }
       }),
   }) satisfies z.ZodType<PartnerInformationState>;
@@ -139,8 +140,8 @@ export async function action({ context: { appContainer, session }, params, reque
     return data(
       {
         errors: {
-          ...(parsedMaritalStatus.error ? transformFlattenedError(parsedMaritalStatus.error.flatten()) : {}),
-          ...(parsedMaritalStatus.success && applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(parsedPartnerInformation.error.flatten()) : {}),
+          ...(parsedMaritalStatus.error ? transformFlattenedError(z.flattenError(parsedMaritalStatus.error)) : {}),
+          ...(parsedMaritalStatus.success && applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(z.flattenError(parsedPartnerInformation.error)) : {}),
         },
       },
       { status: 400 },

@@ -128,7 +128,7 @@ export async function action({ context: { appContainer, session }, params, reque
   invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
   const backToEmail = state.communicationPreferences.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email || state.communicationPreferences.preferredNotificationMethod !== PREFERRED_NOTIFICATION_METHOD.mail;
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     saveProtectedApplyState({ params, session, state: { editMode: false } });
     return backToEmail ? redirect(getPathById('protected/apply/$id/child/email', params)) : redirect(getPathById('protected/apply/$id/child/communication-preference', params));

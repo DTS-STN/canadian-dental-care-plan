@@ -66,7 +66,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const confirmAddressSchema = z.object({
-    isHomeAddressSameAsMailingAddress: z.nativeEnum(ADDRESS_RADIO_OPTIONS, { errorMap: () => ({ message: t('protected-renew:confirm-address.error-message.is-home-address-same-as-mailing-address-required') }) }),
+    isHomeAddressSameAsMailingAddress: z.enum(ADDRESS_RADIO_OPTIONS, { errorMap: () => ({ message: t('protected-renew:confirm-address.error-message.is-home-address-same-as-mailing-address-required') }) }),
   });
 
   const parsedDataResult = confirmAddressSchema.safeParse({

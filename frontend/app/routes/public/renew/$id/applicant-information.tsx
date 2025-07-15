@@ -64,15 +64,13 @@ export async function action({ context: { appContainer, session }, params, reque
   const applicantInformationSchema = z
     .object({
       dateOfBirthYear: z.number({
-        required_error: t('renew:applicant-information.error-message.date-of-birth-year-required'),
-        invalid_type_error: t('renew:applicant-information.error-message.date-of-birth-year-number'),
+        error: (issue) => (issue.input === undefined ? t('renew:applicant-information.error-message.date-of-birth-year-required') : t('renew:applicant-information.error-message.date-of-birth-year-number')),
       }),
       dateOfBirthMonth: z.number({
-        required_error: t('renew:applicant-information.error-message.date-of-birth-month-required'),
+        error: (issue) => (issue.input === undefined ? t('renew:applicant-information.error-message.date-of-birth-month-required') : undefined),
       }),
       dateOfBirthDay: z.number({
-        required_error: t('renew:applicant-information.error-message.date-of-birth-day-required'),
-        invalid_type_error: t('renew:applicant-information.error-message.date-of-birth-day-number'),
+        error: (issue) => (issue.input === undefined ? t('renew:applicant-information.error-message.date-of-birth-day-required') : t('renew:applicant-information.error-message.date-of-birth-day-number')),
       }),
       dateOfBirth: z.string(),
       firstName: z
@@ -96,17 +94,18 @@ export async function action({ context: { appContainer, session }, params, reque
         .refine(isValidClientNumberRenewal, t('renew:applicant-information.error-message.client-number-valid'))
         .transform((code) => extractDigits(code)),
     })
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
       const dateOfBirth = `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`;
 
       if (!isValidDateString(dateOfBirth)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew:applicant-information.error-message.date-of-birth-valid'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: 'custom', message: t('renew:applicant-information.error-message.date-of-birth-valid'), path: ['dateOfBirth'] });
       } else if (!isPastDateString(dateOfBirth)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew:applicant-information.error-message.date-of-birth-is-past'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: 'custom', message: t('renew:applicant-information.error-message.date-of-birth-is-past'), path: ['dateOfBirth'] });
       } else if (getAgeFromDateString(dateOfBirth) > 150) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew:applicant-information.error-message.date-of-birth-is-past-valid'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: 'custom', message: t('renew:applicant-information.error-message.date-of-birth-is-past-valid'), path: ['dateOfBirth'] });
       }
     })
     .transform((val) => {
@@ -130,7 +129,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   // Fetch client application data using ClientApplicationService

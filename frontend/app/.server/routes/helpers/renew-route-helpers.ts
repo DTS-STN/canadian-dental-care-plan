@@ -148,7 +148,7 @@ export type CommunicationPreferencesState = NonNullable<RenewState['communicatio
 /**
  * Schema for validating UUID.
  */
-const idSchema = z.string().uuid();
+const idSchema = z.uuid();
 
 /**
  * Gets the renew flow session key.

@@ -79,7 +79,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const formData = await request.formData();
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   const locale = getLocale(request);
 
   const clientConfig = appContainer.get(TYPES.ClientConfig);

@@ -62,7 +62,7 @@ export async function action({ context: { appContainer, session }, params, reque
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
   const dentalBenefitsChangedSchema = z.object({
-    hasFederalProvincialTerritorialBenefits: z.boolean({ errorMap: () => ({ message: t('apply-adult-child:confirm-dental-benefits.error-message.federal-provincial-territorial-benefit-required') }) }),
+    hasFederalProvincialTerritorialBenefits: z.boolean({ error: t('apply-adult-child:confirm-dental-benefits.error-message.federal-provincial-territorial-benefit-required') }),
   });
 
   const dentalBenefits = {
@@ -75,7 +75,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return data(
       {
         errors: {
-          ...transformFlattenedError(parsedDentalBenefitsResult.error.flatten()),
+          ...transformFlattenedError(z.flattenError(parsedDentalBenefitsResult.error)),
         },
       },
       { status: 400 },

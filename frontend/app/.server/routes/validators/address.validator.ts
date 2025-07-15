@@ -129,7 +129,7 @@ export class DefaultAddressValidator {
         // Province/State validation for Canada and USA
         if ((isCanada || isUSA) && (!provinceState || validator.isEmpty(provinceState))) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             message: this.errorMessages.provinceState.required,
             path: ['provinceStateId'],
           });
@@ -138,26 +138,26 @@ export class DefaultAddressValidator {
         // Postal/Zip Code validation for Canada and USA
         if ((isCanada || isUSA) && (!postalZipCode || validator.isEmpty(postalZipCode))) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             message: this.errorMessages.postalZipCode.required,
             path: ['postalZipCode'],
           });
         } else if (isUSA && postalZipCode && !isValidPostalCode(country, postalZipCode)) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             message: this.errorMessages.postalZipCode.invalidZipCode,
             path: ['postalZipCode'],
           });
         } else if (isCanada && postalZipCode) {
           if (!isValidPostalCode(CANADA_COUNTRY_ID, postalZipCode)) {
             ctx.addIssue({
-              code: z.ZodIssueCode.custom,
+              code: 'custom',
               message: this.errorMessages.postalZipCode.invalidPostalCode,
               path: ['postalZipCode'],
             });
           } else if (provinceState && !isValidCanadianPostalCode(provinceState, postalZipCode)) {
             ctx.addIssue({
-              code: z.ZodIssueCode.custom,
+              code: 'custom',
               message: this.errorMessages.postalZipCode.invalidPostalCodeForProvince,
               path: ['postalZipCode'],
             });
@@ -167,7 +167,7 @@ export class DefaultAddressValidator {
         // Ensure postal code does not match Canadian format for non-Canadian addresses
         if (!isCanada && postalZipCode && isValidPostalCode(CANADA_COUNTRY_ID, postalZipCode)) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             message: this.errorMessages.postalZipCode.invalidPostalZipCodeForCountry,
             path: ['countryId'],
           });

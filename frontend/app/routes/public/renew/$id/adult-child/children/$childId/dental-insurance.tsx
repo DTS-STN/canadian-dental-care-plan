@@ -65,14 +65,14 @@ export async function action({ context: { appContainer, session }, params, reque
 
   // state validation schema
   const dentalInsuranceSchema = z.object({
-    dentalInsurance: z.boolean({ errorMap: () => ({ message: t('renew-adult-child:children.dental-insurance.error-message.dental-insurance-required') }) }),
+    dentalInsurance: z.boolean({ error: t('renew-adult-child:children.dental-insurance.error-message.dental-insurance-required') }),
   });
 
   const dentalInsurance = { dentalInsurance: formData.get('dentalInsurance') ? formData.get('dentalInsurance') === 'yes' : undefined };
   const parsedDataResult = dentalInsuranceSchema.safeParse(dentalInsurance);
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveRenewState({

@@ -75,7 +75,7 @@ export async function action({ context: { appContainer, session }, params, reque
     })
     .superRefine((val, ctx) => {
       if (!validator.isEmail(val.email)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:confirm-email.error-message.email-valid'), path: ['email'] });
+        ctx.addIssue({ code: 'custom', message: t('protected-renew:confirm-email.error-message.email-valid'), path: ['email'] });
       }
     });
 

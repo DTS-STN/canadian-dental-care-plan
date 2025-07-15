@@ -64,7 +64,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   // state validation schema
   const dentalInsuranceSchema = z.object({
-    dentalInsurance: z.boolean({ errorMap: () => ({ message: t('protected-apply-adult:dental-insurance.error-message.dental-insurance-required') }) }),
+    dentalInsurance: z.boolean({ error: t('protected-apply-adult:dental-insurance.error-message.dental-insurance-required') }),
   });
 
   const parsedDataResult = dentalInsuranceSchema.safeParse({
@@ -72,7 +72,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveProtectedApplyState({ params, session, state: { dentalInsurance: parsedDataResult.data.dentalInsurance } });

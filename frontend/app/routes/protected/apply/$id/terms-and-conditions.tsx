@@ -65,7 +65,7 @@ export async function action({ context: { appContainer, session }, request, para
 
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.back) {
     return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
@@ -78,18 +78,19 @@ export async function action({ context: { appContainer, session }, request, para
       shareData: z.string().trim().optional(),
       doNotConsent: z.string().trim().optional(),
     })
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     .superRefine((val, ctx) => {
       if (val.doNotConsent) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-apply:terms-and-conditions.checkboxes.error-message.consent-required'), path: ['doNotConsent'] });
+        ctx.addIssue({ code: 'custom', message: t('protected-apply:terms-and-conditions.checkboxes.error-message.consent-required'), path: ['doNotConsent'] });
       }
       if (!val.doNotConsent && !val.acknowledgeTerms) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-apply:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required'), path: ['acknowledgeTerms'] });
+        ctx.addIssue({ code: 'custom', message: t('protected-apply:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required'), path: ['acknowledgeTerms'] });
       }
       if (!val.doNotConsent && !val.acknowledgePrivacy) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-apply:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required'), path: ['acknowledgePrivacy'] });
+        ctx.addIssue({ code: 'custom', message: t('protected-apply:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required'), path: ['acknowledgePrivacy'] });
       }
       if (!val.doNotConsent && !val.shareData) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-apply:terms-and-conditions.checkboxes.error-message.share-data-required'), path: ['shareData'] });
+        ctx.addIssue({ code: 'custom', message: t('protected-apply:terms-and-conditions.checkboxes.error-message.share-data-required'), path: ['shareData'] });
       }
     })
     .transform((val) => ({
@@ -106,7 +107,7 @@ export async function action({ context: { appContainer, session }, request, para
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveProtectedApplyState({

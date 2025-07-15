@@ -109,7 +109,7 @@ export function phoneSchema(
         : message.invalid_phone_international_error;
 
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: expandTemplate(issueMessage, { received: phoneNumber }),
         fatal: true,
       });

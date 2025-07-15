@@ -60,8 +60,8 @@ export async function action({ context: { appContainer, session }, params, reque
    * Schema for application delegate.
    */
   const typeOfRenewalSchema = z.object({
-    typeOfRenewal: z.nativeEnum(RENEWAL_TYPE, {
-      errorMap: () => ({ message: t('renew:type-of-renewal.error-message.type-of-renewal-required') }),
+    typeOfRenewal: z.enum(RENEWAL_TYPE, {
+      error: t('renew:type-of-renewal.error-message.type-of-renewal-required'),
     }),
   });
 
@@ -70,7 +70,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveRenewState({

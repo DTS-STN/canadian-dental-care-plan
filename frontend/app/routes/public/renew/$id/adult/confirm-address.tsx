@@ -65,8 +65,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const confirmAddressSchema = z.object({
-    hasAddressChanged: z.nativeEnum(ADDRESS_RADIO_OPTIONS, {
-      errorMap: () => ({ message: t('renew-adult:confirm-address.error-message.has-address-changed-required') }),
+    hasAddressChanged: z.enum(ADDRESS_RADIO_OPTIONS, {
+      error: t('renew-adult:confirm-address.error-message.has-address-changed-required'),
     }),
   });
 
@@ -75,7 +75,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveRenewState({
