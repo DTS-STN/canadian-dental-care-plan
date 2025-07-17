@@ -68,11 +68,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const emailSchema = z
     .object({
       email: z
-        .string({ errorMap: () => ({ message: t('protected-renew:confirm-email.error-message.email-required') }) })
+        .string({ error: t('protected-renew:confirm-email.error-message.email-required') })
         .trim()
         .min(1)
         .max(64),
     })
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     .superRefine((val, ctx) => {
       if (!validator.isEmail(val.email)) {
         ctx.addIssue({ code: 'custom', message: t('protected-renew:confirm-email.error-message.email-valid'), path: ['email'] });
@@ -84,7 +85,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   const isNewEmail = state.email !== parsedDataResult.data.email;

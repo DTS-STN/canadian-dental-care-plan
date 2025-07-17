@@ -101,7 +101,7 @@ export async function action({ context: { appContainer, session }, params, reque
   // state validation schema
   const maritalStatusSchema = z.object({
     maritalStatus: z
-      .string({ errorMap: () => ({ message: t('protected-renew:marital-status.error-message.marital-status-required') }) })
+      .string({ error: t('protected-renew:marital-status.error-message.marital-status-required') })
       .trim()
       .min(1, t('protected-renew:marital-status.error-message.marital-status-required')),
   });
@@ -119,6 +119,7 @@ export async function action({ context: { appContainer, session }, params, reque
       .string()
       .trim()
       .min(1, t('protected-renew:marital-status.error-message.sin-required'))
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
           ctx.addIssue({ code: 'custom', message: t('protected-renew:marital-status.error-message.sin-valid') });
@@ -149,8 +150,8 @@ export async function action({ context: { appContainer, session }, params, reque
     return data(
       {
         errors: {
-          ...(parsedMaritalStatus.error ? transformFlattenedError(parsedMaritalStatus.error.flatten()) : {}),
-          ...(parsedMaritalStatus.success && renewStateHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(parsedPartnerInformation.error.flatten()) : {}),
+          ...(parsedMaritalStatus.error ? transformFlattenedError(z.flattenError(parsedMaritalStatus.error)) : {}),
+          ...(parsedMaritalStatus.success && renewStateHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(z.flattenError(parsedPartnerInformation.error)) : {}),
         },
       },
       { status: 400 },

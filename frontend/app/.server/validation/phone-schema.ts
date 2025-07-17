@@ -54,68 +54,50 @@ const DEFAULT_ERROR_MESSAGES = {
  */
 export function phoneSchema(
   errorMessage: PhoneSchemaErrorMessage = {}, //
-): z.ZodEffects<z.ZodEffects<z.ZodString, string, string>, string, string> {
+): z.ZodType<string> {
   const message: Required<PhoneSchemaErrorMessage> = {
     ...DEFAULT_ERROR_MESSAGES,
     ...errorMessage,
   };
 
-  return z
-    .string({
-      errorMap: (issue, ctx) => {
-        const inputData = String(ctx.data);
+  return (
+    z
+      .string({
+        error: (issue) => (issue.input === undefined ? message.required_error : expandTemplate(message.invalid_type_error, { received: JSON.stringify(issue.input) })),
+      })
+      .trim()
+      .nonempty(message.required_error)
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
+      .superRefine((phoneNumber, ctx) => {
+        if (!phoneNumber) return;
 
-        // Handle undefined input data
-        if (inputData === 'undefined') {
-          return {
-            message: message.required_error,
-          };
-        }
+        const phoneDigits = extractDigits(phoneNumber);
 
-        // Handle invalid phone number type
-        if (issue.code === 'invalid_type') {
-          return {
-            message: expandTemplate(message.invalid_type_error, { received: inputData }),
-          };
-        }
+        // Determine validation type based on digit length
+        const requiresCanadianValidation = phoneDigits.length <= 11;
 
-        // Handle other
-        return {
-          message: ctx.defaultError,
-        };
-      },
-    })
-    .trim()
-    .nonempty(message.required_error)
-    .superRefine((phoneNumber, ctx) => {
-      if (!phoneNumber) return;
+        // Validate based on number format
+        const isValid = requiresCanadianValidation //
+          ? isValidPhoneNumber(phoneNumber, 'CA')
+          : isValidPhoneNumber(phoneNumber);
 
-      const phoneDigits = extractDigits(phoneNumber);
+        // Return early if valid
+        if (isValid) return;
 
-      // Determine validation type based on digit length
-      const requiresCanadianValidation = phoneDigits.length <= 11;
+        // Add appropriate error message based on validation type
+        const issueMessage = requiresCanadianValidation //
+          ? message.invalid_phone_canadian_error
+          : message.invalid_phone_international_error;
 
-      // Validate based on number format
-      const isValid = requiresCanadianValidation //
-        ? isValidPhoneNumber(phoneNumber, 'CA')
-        : isValidPhoneNumber(phoneNumber);
-
-      // Return early if valid
-      if (isValid) return;
-
-      // Add appropriate error message based on validation type
-      const issueMessage = requiresCanadianValidation //
-        ? message.invalid_phone_canadian_error
-        : message.invalid_phone_international_error;
-
-      ctx.addIssue({
-        code: 'custom',
-        message: expandTemplate(issueMessage, { received: phoneNumber }),
-        fatal: true,
-      });
-    })
-    .transform((phoneNumber) => {
-      // Format valid phone number to international format
-      return parsePhoneNumberWithError(phoneNumber, 'CA').formatInternational();
-    });
+        ctx.addIssue({
+          code: 'custom',
+          message: expandTemplate(issueMessage, { received: phoneNumber }),
+          fatal: true,
+        });
+      })
+      .transform((phoneNumber) => {
+        // Format valid phone number to international format
+        return parsePhoneNumberWithError(phoneNumber, 'CA').formatInternational();
+      })
+  );
 }
