@@ -62,7 +62,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const taxFilingSchema = z.object({
     taxFiling: z.enum(TAX_FILING_OPTION, {
-      errorMap: () => ({ message: t('protected-renew:tax-filing.error-message.tax-filing-required') }),
+      error: t('protected-renew:tax-filing.error-message.tax-filing-required'),
     }),
   });
 
@@ -71,7 +71,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveProtectedRenewState({

@@ -97,6 +97,7 @@ export async function action({ context: { appContainer, session }, request, para
       acknowledgeTerms: val.acknowledgeTerms === CHECKBOX_VALUE.yes,
       acknowledgePrivacy: val.acknowledgePrivacy === CHECKBOX_VALUE.yes,
       shareData: val.shareData === CHECKBOX_VALUE.yes,
+      doNotConsent: val.doNotConsent === CHECKBOX_VALUE.yes,
     }));
 
   const parsedDataResult = consentSchema.safeParse({

@@ -129,9 +129,10 @@ export async function action({ context: { appContainer, session }, params, reque
   // both question first before the superRefine can be executed
   const federalBenefitsSchema = z
     .object({
-      hasFederalBenefits: z.boolean({ errorMap: () => ({ message: t('protected-renew:update-dental-benefits.error-message.federal-benefit-required') }) }),
+      hasFederalBenefits: z.boolean({ error: t('protected-renew:update-dental-benefits.error-message.federal-benefit-required') }),
       federalSocialProgram: z.string().trim().optional(),
     })
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     .superRefine((val, ctx) => {
       if (val.hasFederalBenefits && (!val.federalSocialProgram || validator.isEmpty(val.federalSocialProgram))) {
         ctx.addIssue({ code: 'custom', message: t('protected-renew:update-dental-benefits.error-message.federal-benefit-program-required'), path: ['federalSocialProgram'] });
@@ -146,10 +147,11 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const provincialTerritorialBenefitsSchema = z
     .object({
-      hasProvincialTerritorialBenefits: z.boolean({ errorMap: () => ({ message: t('protected-renew:update-dental-benefits.error-message.provincial-benefit-required') }) }),
+      hasProvincialTerritorialBenefits: z.boolean({ error: t('protected-renew:update-dental-benefits.error-message.provincial-benefit-required') }),
       provincialTerritorialSocialProgram: z.string().trim().optional(),
       province: z.string().trim().optional(),
     })
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     .superRefine((val, ctx) => {
       if (val.hasProvincialTerritorialBenefits) {
         if (!val.province || validator.isEmpty(val.province)) {
@@ -185,8 +187,8 @@ export async function action({ context: { appContainer, session }, params, reque
     return data(
       {
         errors: {
-          ...(parsedFederalBenefitsResult.success ? {} : transformFlattenedError(parsedFederalBenefitsResult.error.flatten())),
-          ...(parsedProvincialTerritorialBenefitsResult.success ? {} : transformFlattenedError(parsedProvincialTerritorialBenefitsResult.error.flatten())),
+          ...(parsedFederalBenefitsResult.success ? {} : transformFlattenedError(z.flattenError(parsedFederalBenefitsResult.error))),
+          ...(parsedProvincialTerritorialBenefitsResult.success ? {} : transformFlattenedError(z.flattenError(parsedProvincialTerritorialBenefitsResult.error))),
         },
       },
       { status: 400 },

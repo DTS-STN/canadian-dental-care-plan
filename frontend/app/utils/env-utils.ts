@@ -19,20 +19,20 @@ const toBoolean = (val?: string) => val === 'true';
 // prettier-ignore
 export const clientEnvSchema = z.object({
   // Adobe Analytics scripts
-  ADOBE_ANALYTICS_SRC: z.string().url().optional(),
-  ADOBE_ANALYTICS_JQUERY_SRC: z.string().url().default('https://code.jquery.com/jquery-3.7.1.min.js'),
+  ADOBE_ANALYTICS_SRC: z.url().optional(),
+  ADOBE_ANALYTICS_JQUERY_SRC: z.url().default('https://code.jquery.com/jquery-3.7.1.min.js'),
 
-  ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default(""),
+  ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default([""]),
 
-  I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
+  I18NEXT_DEBUG: z.string().transform(toBoolean).default(false),
 
   // base URIs for My Service Canada Account variations
-  ECAS_BASE_URI: z.string().url().default('https://srv136.services.gc.ca/ecas-seca/rascl/SCL'),
-  SCCH_BASE_URI: z.string().url().default('https://service.canada.ca'),
+  ECAS_BASE_URI: z.url().default('https://srv136.services.gc.ca/ecas-seca/rascl/SCL'),
+  SCCH_BASE_URI: z.url().default('https://service.canada.ca'),
 
   // Header Logo URLs
-  HEADER_LOGO_URL_EN: z.string().url().default('https://canada.ca/en'),
-  HEADER_LOGO_URL_FR: z.string().url().default('https://canada.ca/fr'),
+  HEADER_LOGO_URL_EN: z.url().default('https://canada.ca/en'),
+  HEADER_LOGO_URL_FR: z.url().default('https://canada.ca/fr'),
 
   // hCaptcha settings (@see https://docs.hcaptcha.com/#test-key-set-enterprise-account-safe-end-user)
   HCAPTCHA_SITE_KEY: z.string().trim().min(1).default('20000000-ffff-ffff-ffff-000000000002'),
@@ -58,7 +58,7 @@ export const clientEnvSchema = z.object({
   COMMUNICATION_METHOD_GC_MAIL_ID: z.string().trim().min(1).default('775170002'),
   CLIENT_STATUS_SUCCESS_ID: z.string().trim().min(1).default('51af5170-614e-ee11-be6f-000d3a09d640'),
   INVALID_CLIENT_FRIENDLY_STATUS: z.string().trim().min(1).default('504fba6e-604e-ee11-be6f-000d3a09d640'),
-  INVALID_LETTER_TYPE_IDS: z.string().trim().transform(csvToArray).default('775170000')
+  INVALID_LETTER_TYPE_IDS: z.string().trim().transform(csvToArray).default(['775170000'])
 });
 
 export type ClientEnv = z.infer<typeof clientEnvSchema>;
