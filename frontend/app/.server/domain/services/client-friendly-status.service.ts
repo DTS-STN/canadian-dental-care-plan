@@ -59,9 +59,9 @@ export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusS
    * @param serverConfig - The server configuration containing necessary constants and cache TTL values.
    */
   constructor(
-    @inject(TYPES.domain.mappers.ClientFriendlyStatusDtoMapper) clientFriendlyStatusDtoMapper: ClientFriendlyStatusDtoMapper,
-    @inject(TYPES.domain.repositories.ClientFriendlyStatusRepository) clientFriendlyStatusRepository: ClientFriendlyStatusRepository,
-    @inject(TYPES.configs.ServerConfig) serverConfig: ClientFriendlyStatusServiceImpl_ServerConfig,
+    @inject(TYPES.ClientFriendlyStatusDtoMapper) clientFriendlyStatusDtoMapper: ClientFriendlyStatusDtoMapper,
+    @inject(TYPES.ClientFriendlyStatusRepository) clientFriendlyStatusRepository: ClientFriendlyStatusRepository,
+    @inject(TYPES.ServerConfig) serverConfig: ClientFriendlyStatusServiceImpl_ServerConfig,
   ) {
     this.log = createLogger('DefaultClientFriendlyStatusService');
     this.clientFriendlyStatusDtoMapper = clientFriendlyStatusDtoMapper;

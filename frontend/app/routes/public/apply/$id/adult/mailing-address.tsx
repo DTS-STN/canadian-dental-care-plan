@@ -53,8 +53,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const countryList = await appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
-  const regionList = await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
+  const countryList = await appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
+  const regionList = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:address.mailing-address.page-title') }) };
 
@@ -71,11 +71,11 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
   const locale = getLocale(request);
 
-  const clientConfig = appContainer.get(TYPES.configs.ClientConfig);
-  const addressValidationService = appContainer.get(TYPES.domain.services.AddressValidationService);
-  const countryService = appContainer.get(TYPES.domain.services.CountryService);
-  const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const clientConfig = appContainer.get(TYPES.ClientConfig);
+  const addressValidationService = appContainer.get(TYPES.AddressValidationService);
+  const countryService = appContainer.get(TYPES.CountryService);
+  const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
 
   securityHandler.validateCsrfToken({ formData, session });
   const state = loadApplyAdultState({ params, request, session });
@@ -86,7 +86,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/adult/review-information', params));
   }
 
-  const mailingAddressValidator = appContainer.get(TYPES.routes.validators.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
+  const mailingAddressValidator = appContainer.get(TYPES.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
     address: String(formData.get('address')),
     countryId: String(formData.get('countryId')),

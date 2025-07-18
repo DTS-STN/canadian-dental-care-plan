@@ -34,7 +34,7 @@ export class DefaultLetterService implements LetterService {
   private readonly letterRepository: LetterRepository;
   private readonly auditService: AuditService;
 
-  constructor(@inject(TYPES.domain.mappers.LetterDtoMapper) letterDtoMapper: LetterDtoMapper, @inject(TYPES.domain.repositories.LetterRepository) letterRepository: LetterRepository, @inject(TYPES.domain.services.AuditService) auditService: AuditService) {
+  constructor(@inject(TYPES.LetterDtoMapper) letterDtoMapper: LetterDtoMapper, @inject(TYPES.LetterRepository) letterRepository: LetterRepository, @inject(TYPES.AuditService) auditService: AuditService) {
     this.log = createLogger('DefaultLetterService');
     this.letterDtoMapper = letterDtoMapper;
     this.letterRepository = letterRepository;

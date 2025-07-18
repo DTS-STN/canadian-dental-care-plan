@@ -50,7 +50,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedApplyAdultChildStateForReview({ params, request, session });
@@ -67,17 +67,17 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:review-child-information.page-title') }) };
 
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
-  const benefitApplicationStateMapper = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper);
-  const benefitApplicationDtoMapper = appContainer.get(TYPES.domain.mappers.BenefitApplicationDtoMapper);
+  const benefitApplicationStateMapper = appContainer.get(TYPES.BenefitApplicationStateMapper);
+  const benefitApplicationDtoMapper = appContainer.get(TYPES.BenefitApplicationDtoMapper);
   const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplyAdultChildStateToBenefitApplicationDto(state));
 
-  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
-  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
 
   const children = await Promise.all(
     state.children.map(async (child) => {
@@ -115,13 +115,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   );
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.review-child-information', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.apply.adult-child.review-child-information', { userId: idToken.sub });
 
   return { children, meta, payload };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const formData = await request.formData();
@@ -138,14 +138,14 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const state = loadProtectedApplyAdultChildStateForReview({ params, request, session });
-  const benefitApplicationDto = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper).mapApplyAdultChildStateToBenefitApplicationDto(state);
-  const confirmationCode = await appContainer.get(TYPES.domain.services.BenefitApplicationService).createProtectedBenefitApplication(benefitApplicationDto);
+  const benefitApplicationDto = appContainer.get(TYPES.BenefitApplicationStateMapper).mapApplyAdultChildStateToBenefitApplicationDto(state);
+  const confirmationCode = await appContainer.get(TYPES.BenefitApplicationService).createProtectedBenefitApplication(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
 
   saveProtectedApplyState({ params, session, state: { submissionInfo } });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.review-child-information', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.apply.adult-child.review-child-information', { userId: idToken.sub });
 
   return redirect(getPathById('protected/apply/$id/adult-child/confirmation', params));
 }

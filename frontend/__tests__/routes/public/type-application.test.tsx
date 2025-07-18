@@ -28,7 +28,7 @@ describe('_public.apply.id.type-of-application', () => {
   describe('action()', () => {
     it('should validate missing applcation type selection', async () => {
       const mockContext = mockDeep<AppLoadContext>();
-      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
+      mockContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({ request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: new FormData() }), context: mockContext, params: { id: '123', lang: 'en' } });
 
@@ -40,7 +40,7 @@ describe('_public.apply.id.type-of-application', () => {
       formData.append('typeOfApplication', 'delegate');
 
       const mockContext = mockDeep<AppLoadContext>();
-      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
+      mockContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({ request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }), context: mockContext, params: { lang: 'en', id: '123' } });
 
@@ -54,7 +54,7 @@ describe('_public.apply.id.type-of-application', () => {
       formData.append('typeOfApplication', 'adult');
 
       const mockContext = mockDeep<AppLoadContext>();
-      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
+      mockContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({ request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }), context: mockContext, params: { lang: 'en', id: '123' } });
 

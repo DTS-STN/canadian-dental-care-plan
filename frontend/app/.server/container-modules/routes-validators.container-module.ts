@@ -10,8 +10,8 @@ import { DefaultMailingAddressValidatorFactory } from '~/.server/routes/validato
  */
 export function createRoutesValidatorsContainerModule(): ContainerModule {
   return new ContainerModule((options) => {
-    options.bind(TYPES.routes.validators.AddressValidatorFactory).to(DefaultAddressValidatorFactory);
-    options.bind(TYPES.routes.validators.MailingAddressValidatorFactory).to(DefaultMailingAddressValidatorFactory);
-    options.bind(TYPES.routes.validators.HomeAddressValidatorFactory).to(DefaultHomeAddressValidatorFactory);
+    options.bind(TYPES.AddressValidatorFactory).to(DefaultAddressValidatorFactory);
+    options.bind(TYPES.MailingAddressValidatorFactory).to(DefaultMailingAddressValidatorFactory);
+    options.bind(TYPES.HomeAddressValidatorFactory).to(DefaultHomeAddressValidatorFactory);
   });
 }

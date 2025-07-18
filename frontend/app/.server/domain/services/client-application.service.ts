@@ -38,9 +38,9 @@ export class DefaultClientApplicationService implements ClientApplicationService
   private readonly auditService: AuditService;
 
   constructor(
-    @inject(TYPES.domain.mappers.ClientApplicationDtoMapper) clientApplicationDtoMapper: ClientApplicationDtoMapper,
-    @inject(TYPES.domain.repositories.ClientApplicationRepository) clientApplicationRepository: ClientApplicationRepository,
-    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
+    @inject(TYPES.ClientApplicationDtoMapper) clientApplicationDtoMapper: ClientApplicationDtoMapper,
+    @inject(TYPES.ClientApplicationRepository) clientApplicationRepository: ClientApplicationRepository,
+    @inject(TYPES.AuditService) auditService: AuditService,
   ) {
     this.log = createLogger('DefaultClientApplicationService');
     this.clientApplicationDtoMapper = clientApplicationDtoMapper;

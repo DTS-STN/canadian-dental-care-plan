@@ -17,9 +17,9 @@ export class HCaptchaHealthCheck implements HealthCheck {
   readonly metadata?: Record<string, string>;
 
   constructor(
-    @inject(TYPES.configs.ServerConfig)
+    @inject(TYPES.ServerConfig)
     serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL'>,
-    @inject(TYPES.web.repositories.HCaptchaRepository) hCaptchaRepository: HCaptchaRepository,
+    @inject(TYPES.HCaptchaRepository) hCaptchaRepository: HCaptchaRepository,
   ) {
     this.log = createLogger('HCaptchaHealthCheck');
     this.serverConfig = serverConfig;

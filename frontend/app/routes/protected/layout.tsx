@@ -23,7 +23,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
-  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(TYPES.configs.ClientConfig);
+  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(TYPES.ClientConfig);
   return { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
 

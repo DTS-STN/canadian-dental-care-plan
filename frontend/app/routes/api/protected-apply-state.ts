@@ -14,7 +14,7 @@ const API_PROTECTED_APPLY_STATE_ACTIONS = ['extend'] as const;
 export type ApiProtectedApplyStateAction = (typeof API_PROTECTED_APPLY_STATE_ACTIONS)[number];
 
 export async function action({ context: { appContainer, session }, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
 
   const log = createLogger('routes/api/protected-apply-state');

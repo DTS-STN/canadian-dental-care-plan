@@ -94,7 +94,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
   >;
 
   constructor(
-    @inject(TYPES.configs.ServerConfig)
+    @inject(TYPES.ServerConfig)
     serverConfig: Pick<
       ServerConfig,
       | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'

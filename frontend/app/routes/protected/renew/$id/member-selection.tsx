@@ -46,7 +46,7 @@ type Member = {
 };
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewState({ params, request, session });
@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:member-selection.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.member-selection', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.renew.member-selection', { userId: idToken.sub });
 
   const members: Member[] = [
     // primary member
@@ -80,16 +80,16 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
   const state = loadProtectedRenewState({ params, request, session });
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.member-selection', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.renew.member-selection', { userId: idToken.sub });
 
   if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled) && !isChildrenStateComplete(state, demographicSurveyEnabled)) {
     return { status: 'select-member' };

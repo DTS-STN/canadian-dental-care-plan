@@ -26,17 +26,17 @@ describe('Letters Page', () => {
       mockAppLoadContext.session.get.calledWith('userInfoToken').mockReturnValueOnce({ sin: '999999999', sub: '1111111' } as UserinfoToken);
       mockAppLoadContext.session.find.calledWith('clientNumber').mockReturnValueOnce(None);
 
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValueOnce({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.ClientConfig).mockReturnValueOnce({
         SCCH_BASE_URI: 'https://api.example.com',
       } satisfies Partial<ClientConfig>);
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.AuditService).mockReturnValue({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.AuditService).mockReturnValue({
         createAudit: vi.fn(),
       } satisfies Partial<AuditService>);
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.ApplicantService).mockReturnValue({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.ApplicantService).mockReturnValue({
         findClientNumberBySin: async () => await Promise.resolve(Some('some-client-number')),
       } satisfies Partial<ApplicantService>);
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.LetterService).mockReturnValue({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.LetterService).mockReturnValue({
         findLettersByClientId: async () =>
           await Promise.resolve([
             { id: '1', date: '2024-12-25', letterTypeId: 'ACC' },
@@ -44,7 +44,7 @@ describe('Letters Page', () => {
             { id: '3', date: '2004-02-29', letterTypeId: 'DEN' },
           ]),
       } satisfies Partial<LetterService>);
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.LetterTypeService).mockReturnValue({
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.LetterTypeService).mockReturnValue({
         listLetterTypes: async () =>
           await Promise.resolve([
             { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
@@ -73,17 +73,17 @@ describe('Letters Page', () => {
     mockAppLoadContext.session.get.calledWith('userInfoToken').mockReturnValueOnce({ sin: '999999999' } as UserinfoToken);
     mockAppLoadContext.session.find.calledWith('clientNumber').mockReturnValueOnce(None);
 
-    mockAppLoadContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
-    mockAppLoadContext.appContainer.get.calledWith(TYPES.configs.ClientConfig).mockReturnValue({
+    mockAppLoadContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
+    mockAppLoadContext.appContainer.get.calledWith(TYPES.ClientConfig).mockReturnValue({
       SCCH_BASE_URI: 'https://api.example.com',
     } satisfies Partial<ClientConfig>);
-    mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.AuditService).mockReturnValue({
+    mockAppLoadContext.appContainer.get.calledWith(TYPES.AuditService).mockReturnValue({
       createAudit: vi.fn(),
     } satisfies Partial<AuditService>);
-    mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.ApplicantService).mockReturnValue({
+    mockAppLoadContext.appContainer.get.calledWith(TYPES.ApplicantService).mockReturnValue({
       findClientNumberBySin: async () => await Promise.resolve(Some('some-client-number')),
     } satisfies Partial<ApplicantService>);
-    mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.LetterService).mockReturnValue({
+    mockAppLoadContext.appContainer.get.calledWith(TYPES.LetterService).mockReturnValue({
       findLettersByClientId: async () =>
         await Promise.resolve([
           { id: '1', date: '2024-12-25', letterTypeId: 'ACC' },
@@ -91,7 +91,7 @@ describe('Letters Page', () => {
           { id: '3', date: '2004-02-29', letterTypeId: 'DEN' },
         ]),
     } satisfies Partial<LetterService>);
-    mockAppLoadContext.appContainer.get.calledWith(TYPES.domain.services.LetterTypeService).mockReturnValue({
+    mockAppLoadContext.appContainer.get.calledWith(TYPES.LetterTypeService).mockReturnValue({
       listLetterTypes: async () =>
         await Promise.resolve([
           { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },

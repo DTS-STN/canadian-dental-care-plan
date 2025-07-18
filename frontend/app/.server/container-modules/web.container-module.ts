@@ -8,8 +8,8 @@ import { DefaultCsrfTokenValidator, DefaultHCaptchaValidator, DefaultRaoidcSessi
  */
 export function createWebContainerModule(): ContainerModule {
   return new ContainerModule((options) => {
-    options.bind(TYPES.web.validators.CsrfTokenValidator).to(DefaultCsrfTokenValidator);
-    options.bind(TYPES.web.validators.HCaptchaValidator).to(DefaultHCaptchaValidator);
-    options.bind(TYPES.web.validators.RaoidcSessionValidator).to(DefaultRaoidcSessionValidator);
+    options.bind(TYPES.CsrfTokenValidator).to(DefaultCsrfTokenValidator);
+    options.bind(TYPES.HCaptchaValidator).to(DefaultHCaptchaValidator);
+    options.bind(TYPES.RaoidcSessionValidator).to(DefaultRaoidcSessionValidator);
   });
 }

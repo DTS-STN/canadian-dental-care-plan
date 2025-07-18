@@ -52,8 +52,8 @@ import { DefaultDynatraceRepository, DefaultHCaptchaRepository } from '~/.server
  * @example
  * // Binds AddressValidationRepository to a mock if the mock is enabled in server config,
  * // otherwise binds to the actual implementation.
- * options.bind(TYPES.domain.repositories.AddressValidationRepository).to(DefaultAddressValidationRepository).when(isMockEnabled(serverConfig, 'wsaddress', false));
- * options.bind(TYPES.domain.repositories.AddressValidationRepository).to(MockAddressValidationRepository).when(isMockEnabled(serverConfig, 'wsaddress', true));
+ * options.bind(TYPES.AddressValidationRepository).to(DefaultAddressValidationRepository).when(isMockEnabled(serverConfig, 'wsaddress', false));
+ * options.bind(TYPES.AddressValidationRepository).to(MockAddressValidationRepository).when(isMockEnabled(serverConfig, 'wsaddress', true));
  */
 function isMockEnabled(serverConfig: Pick<ServerConfig, 'ENABLED_MOCKS'>, mockName: MockName, shouldEnable: boolean) {
   return (metadata: BindingConstraints) => {
@@ -68,51 +68,51 @@ function isMockEnabled(serverConfig: Pick<ServerConfig, 'ENABLED_MOCKS'>, mockNa
 export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfig, 'ENABLED_MOCKS'>): ContainerModule {
   // prettier-ignore
   return new ContainerModule((options) => {
-    options.bind(TYPES.domain.repositories.AddressValidationRepository).to(DefaultAddressValidationRepository).when(isMockEnabled(serverConfig, 'wsaddress', false));
-    options.bind(TYPES.domain.repositories.AddressValidationRepository).to(MockAddressValidationRepository).when(isMockEnabled(serverConfig, 'wsaddress', true));
+    options.bind(TYPES.AddressValidationRepository).to(DefaultAddressValidationRepository).when(isMockEnabled(serverConfig, 'wsaddress', false));
+    options.bind(TYPES.AddressValidationRepository).to(MockAddressValidationRepository).when(isMockEnabled(serverConfig, 'wsaddress', true));
 
-    options.bind(TYPES.domain.repositories.ApplicantRepository).to(DefaultApplicantRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
-    options.bind(TYPES.domain.repositories.ApplicantRepository).to(MockApplicantRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
+    options.bind(TYPES.ApplicantRepository).to(DefaultApplicantRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
+    options.bind(TYPES.ApplicantRepository).to(MockApplicantRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
 
-    options.bind(TYPES.domain.repositories.ApplicationStatusRepository).to(DefaultApplicationStatusRepository).when(isMockEnabled(serverConfig, 'status-check', false));
-    options.bind(TYPES.domain.repositories.ApplicationStatusRepository).to(MockApplicationStatusRepository).when(isMockEnabled(serverConfig, 'status-check', true));
+    options.bind(TYPES.ApplicationStatusRepository).to(DefaultApplicationStatusRepository).when(isMockEnabled(serverConfig, 'status-check', false));
+    options.bind(TYPES.ApplicationStatusRepository).to(MockApplicationStatusRepository).when(isMockEnabled(serverConfig, 'status-check', true));
 
-    options.bind(TYPES.domain.repositories.ApplicationYearRepository).to(DefaultApplicationYearRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
-    options.bind(TYPES.domain.repositories.ApplicationYearRepository).to(MockApplicationYearRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
+    options.bind(TYPES.ApplicationYearRepository).to(DefaultApplicationYearRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
+    options.bind(TYPES.ApplicationYearRepository).to(MockApplicationYearRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
 
-    options.bind(TYPES.domain.repositories.BenefitApplicationRepository).to(DefaultBenefitApplicationRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
-    options.bind(TYPES.domain.repositories.BenefitApplicationRepository).to(MockBenefitApplicationRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
+    options.bind(TYPES.BenefitApplicationRepository).to(DefaultBenefitApplicationRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
+    options.bind(TYPES.BenefitApplicationRepository).to(MockBenefitApplicationRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
 
-    options.bind(TYPES.domain.repositories.BenefitRenewalRepository).to(DefaultBenefitRenewalRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
-    options.bind(TYPES.domain.repositories.BenefitRenewalRepository).to(MockBenefitRenewalRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
+    options.bind(TYPES.BenefitRenewalRepository).to(DefaultBenefitRenewalRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
+    options.bind(TYPES.BenefitRenewalRepository).to(MockBenefitRenewalRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
 
-    options.bind(TYPES.domain.repositories.ClientApplicationRepository).to(DefaultClientApplicationRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
-    options.bind(TYPES.domain.repositories.ClientApplicationRepository).to(MockClientApplicationRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
+    options.bind(TYPES.ClientApplicationRepository).to(DefaultClientApplicationRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
+    options.bind(TYPES.ClientApplicationRepository).to(MockClientApplicationRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
 
-    options.bind(TYPES.domain.repositories.ClientFriendlyStatusRepository).to(DefaultClientFriendlyStatusRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
-    options.bind(TYPES.domain.repositories.ClientFriendlyStatusRepository).to(MockClientFriendlyStatusRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
+    options.bind(TYPES.ClientFriendlyStatusRepository).to(DefaultClientFriendlyStatusRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.ClientFriendlyStatusRepository).to(MockClientFriendlyStatusRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
 
-    options.bind(TYPES.domain.repositories.CountryRepository).to(DefaultCountryRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
-    options.bind(TYPES.domain.repositories.CountryRepository).to(MockCountryRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
+    options.bind(TYPES.CountryRepository).to(DefaultCountryRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.CountryRepository).to(MockCountryRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
 
-    options.bind(TYPES.domain.repositories.DemographicSurveyRepository).to(DefaultDemographicSurveyRepository);
+    options.bind(TYPES.DemographicSurveyRepository).to(DefaultDemographicSurveyRepository);
 
-    options.bind(TYPES.domain.repositories.GovernmentInsurancePlanRepository).to(DefaultGovernmentInsurancePlanRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
-    options.bind(TYPES.domain.repositories.GovernmentInsurancePlanRepository).to(MockGovernmentInsurancePlanRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
-    
-    options.bind(TYPES.domain.repositories.LetterRepository).to(DefaultLetterRepository).when(isMockEnabled(serverConfig, 'cct', false));
-    options.bind(TYPES.domain.repositories.LetterRepository).to(MockLetterRepository).when(isMockEnabled(serverConfig, 'cct', true));
+    options.bind(TYPES.GovernmentInsurancePlanRepository).to(DefaultGovernmentInsurancePlanRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.GovernmentInsurancePlanRepository).to(MockGovernmentInsurancePlanRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
 
-    options.bind(TYPES.domain.repositories.LetterTypeRepository).to(DefaultLetterTypeRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
-    options.bind(TYPES.domain.repositories.LetterTypeRepository).to(MockLetterTypeRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
+    options.bind(TYPES.LetterRepository).to(DefaultLetterRepository).when(isMockEnabled(serverConfig, 'cct', false));
+    options.bind(TYPES.LetterRepository).to(MockLetterRepository).when(isMockEnabled(serverConfig, 'cct', true));
 
-    options.bind(TYPES.domain.repositories.VerificationCodeRepository).to(DefaultVerificationCodeRepository).when(isMockEnabled(serverConfig, 'gc-notify', false));
-    options.bind(TYPES.domain.repositories.VerificationCodeRepository).to(MockVerificationCodeRepository).when(isMockEnabled(serverConfig, 'gc-notify', true));
+    options.bind(TYPES.LetterTypeRepository).to(DefaultLetterTypeRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.LetterTypeRepository).to(MockLetterTypeRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
 
-    options.bind(TYPES.domain.repositories.ProvinceTerritoryStateRepository).to(DefaultProvinceTerritoryStateRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
-    options.bind(TYPES.domain.repositories.ProvinceTerritoryStateRepository).to(MockProvinceTerritoryStateRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
+    options.bind(TYPES.VerificationCodeRepository).to(DefaultVerificationCodeRepository).when(isMockEnabled(serverConfig, 'gc-notify', false));
+    options.bind(TYPES.VerificationCodeRepository).to(MockVerificationCodeRepository).when(isMockEnabled(serverConfig, 'gc-notify', true));
 
-    options.bind(TYPES.web.repositories.DynatraceRepository).to(DefaultDynatraceRepository);
-    options.bind(TYPES.web.repositories.HCaptchaRepository).to(DefaultHCaptchaRepository);
+    options.bind(TYPES.ProvinceTerritoryStateRepository).to(DefaultProvinceTerritoryStateRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
+    options.bind(TYPES.ProvinceTerritoryStateRepository).to(MockProvinceTerritoryStateRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
+
+    options.bind(TYPES.DynatraceRepository).to(DefaultDynatraceRepository);
+    options.bind(TYPES.HCaptchaRepository).to(DefaultHCaptchaRepository);
   });
 }

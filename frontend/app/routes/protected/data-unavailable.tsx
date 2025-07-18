@@ -23,16 +23,16 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('data-unavailable:page-title') }) };
 
-  const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.data-unavailable', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.renew.data-unavailable', { userId: idToken.sub });
 
   return { meta, SCCH_BASE_URI };
 }

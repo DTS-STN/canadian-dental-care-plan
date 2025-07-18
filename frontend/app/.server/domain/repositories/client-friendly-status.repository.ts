@@ -50,7 +50,7 @@ export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStat
   private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DefaultClientFriendlyStatusRepositoryServerConfig, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
+  constructor(@inject(TYPES.ServerConfig) serverConfig: DefaultClientFriendlyStatusRepositoryServerConfig, @inject(TYPES.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultClientFriendlyStatusRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;

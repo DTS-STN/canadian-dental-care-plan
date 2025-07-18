@@ -10,7 +10,7 @@ import { getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('view-letters');
   await securityHandler.validateAuthSession({ request, session });
 
@@ -32,15 +32,15 @@ export async function loader({ context: { appContainer, session }, params, reque
   }
 
   const locale = getLocale(request);
-  const letterType = await appContainer.get(TYPES.domain.services.LetterTypeService).getLocalizedLetterTypeById(letter.letterTypeId, locale);
+  const letterType = await appContainer.get(TYPES.LetterTypeService).getLocalizedLetterTypeById(letter.letterTypeId, locale);
   const documentName = sanitize(letterType.name);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
 
-  const pdfBytes = await appContainer.get(TYPES.domain.services.LetterService).getPdfByLetterId({ letterId: params.id, userId: userInfoToken.sub });
+  const pdfBytes = await appContainer.get(TYPES.LetterService).getPdfByLetterId({ letterId: params.id, userId: userInfoToken.sub });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('download.letter', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('download.letter', { userId: idToken.sub });
 
   const decodedPdfBytes = Buffer.from(pdfBytes, 'base64');
   return new Response(decodedPdfBytes, {

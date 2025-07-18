@@ -43,11 +43,11 @@ export class DefaultBenefitApplicationService implements BenefitApplicationServi
   private readonly redisService?: RedisService;
 
   constructor(
-    @inject(TYPES.domain.mappers.BenefitApplicationDtoMapper) benefitApplicationDtoMapper: BenefitApplicationDtoMapper,
-    @inject(TYPES.domain.repositories.BenefitApplicationRepository) benefitApplicationRepository: BenefitApplicationRepository,
-    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
-    @inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig,
-    @inject(TYPES.data.services.RedisService) @optional() redisService?: RedisService,
+    @inject(TYPES.BenefitApplicationDtoMapper) benefitApplicationDtoMapper: BenefitApplicationDtoMapper,
+    @inject(TYPES.BenefitApplicationRepository) benefitApplicationRepository: BenefitApplicationRepository,
+    @inject(TYPES.AuditService) auditService: AuditService,
+    @inject(TYPES.ServerConfig) serverConfig: ServerConfig,
+    @inject(TYPES.RedisService) @optional() redisService?: RedisService,
   ) {
     this.log = createLogger('DefaultBenefitApplicationService');
     this.benefitApplicationDtoMapper = benefitApplicationDtoMapper;

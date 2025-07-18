@@ -11,14 +11,14 @@ import { HttpStatusCodes } from '~/constants/http-status-codes';
 export async function loader({ context, params, request }: Route.LoaderArgs) {
   const log = createLogger('killswitch/loader');
 
-  const serverConfig = context.appContainer.get(TYPES.configs.ServerConfig);
+  const serverConfig = context.appContainer.get(TYPES.ServerConfig);
 
   if (!serverConfig.ENABLED_FEATURES.includes('killswitch-api')) {
     log.warn('killswitch-api is not enabled; returning 404 response');
     throw Response.json(null, { status: HttpStatusCodes.NOT_FOUND });
   }
 
-  const redisService = context.appContainer.find(TYPES.data.services.RedisService);
+  const redisService = context.appContainer.find(TYPES.RedisService);
   const currentRemainingTime = await redisService?.ttl(KILLSWITCH_KEY);
 
   if (currentRemainingTime && currentRemainingTime >= 0) {

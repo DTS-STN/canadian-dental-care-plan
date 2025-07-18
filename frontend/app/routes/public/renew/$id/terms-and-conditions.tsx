@@ -40,7 +40,7 @@ export async function loader({ context: { appContainer, session }, request, para
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
   saveRenewState({ params, session, state: {} });

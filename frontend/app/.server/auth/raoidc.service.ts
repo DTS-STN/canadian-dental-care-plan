@@ -103,8 +103,8 @@ export class DefaultRaoidcService implements RaoidcService {
   private readonly fetchFn: FetchFn;
 
   constructor(
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'AUTH_RAOIDC_BASE_URL' | 'AUTH_RAOIDC_CLIENT_ID' | 'AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS' | 'AUTH_JWT_PRIVATE_KEY' | 'AUTH_LOGOUT_REDIRECT_URL' | 'HTTP_PROXY_URL'>,
-    @inject(TYPES.http.HttpClient) httpClient: HttpClient,
+    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'AUTH_RAOIDC_BASE_URL' | 'AUTH_RAOIDC_CLIENT_ID' | 'AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS' | 'AUTH_JWT_PRIVATE_KEY' | 'AUTH_LOGOUT_REDIRECT_URL' | 'HTTP_PROXY_URL'>,
+    @inject(TYPES.HttpClient) httpClient: HttpClient,
   ) {
     this.log = createLogger('DefaultRaoidcService');
     this.serverConfig = serverConfig;

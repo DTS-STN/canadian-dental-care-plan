@@ -26,7 +26,7 @@ export async function routeRequestCounter(viteDevServer?: ViteDevServer): Promis
   const routes = createAgnosticRoutes(serverRoutes);
 
   const appContainer = getAppContainerProvider();
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  const instrumentationService = appContainer.get(TYPES.InstrumentationService);
 
   // Cache to store: normalizedPath -> routeId (or null/undefined if no match)
   // This Map persists across requests for this middleware instance.

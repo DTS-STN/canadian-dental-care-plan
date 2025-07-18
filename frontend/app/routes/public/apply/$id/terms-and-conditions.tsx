@@ -47,7 +47,7 @@ export async function action({ context: { appContainer, session }, request, para
   const formData = await request.formData();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
   const consentSchema = z

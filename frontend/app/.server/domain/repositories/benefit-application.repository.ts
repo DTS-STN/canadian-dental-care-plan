@@ -30,12 +30,12 @@ export class DefaultBenefitApplicationRepository implements BenefitApplicationRe
   private readonly httpClient: HttpClient;
 
   constructor(
-    @inject(TYPES.configs.ServerConfig)
+    @inject(TYPES.ServerConfig)
     serverConfig: Pick<
       ServerConfig,
       'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_BENEFIT_APPLICATION_API_BASE_URI' | 'INTEROP_BENEFIT_APPLICATION_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'
     >,
-    @inject(TYPES.http.HttpClient) httpClient: HttpClient,
+    @inject(TYPES.HttpClient) httpClient: HttpClient,
   ) {
     this.log = createLogger('DefaultBenefitApplicationRepository');
     this.serverConfig = serverConfig;

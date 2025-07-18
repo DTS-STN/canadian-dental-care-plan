@@ -50,14 +50,14 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
   const state = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.configs.ServerConfig);
+  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.ServerConfig);
 
-  const verificationCodeService = appContainer.get(TYPES.domain.services.VerificationCodeService);
+  const verificationCodeService = appContainer.get(TYPES.VerificationCodeService);
 
   const emailSchema = z
     .object({

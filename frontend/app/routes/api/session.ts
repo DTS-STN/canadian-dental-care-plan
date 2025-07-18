@@ -19,7 +19,7 @@ const API_SESSION_REDIRECT_TO_OPTIONS = ['cdcp-website', 'cdcp-website-apply', '
 export type ApiSessionRedirectTo = (typeof API_SESSION_REDIRECT_TO_OPTIONS)[number];
 
 export async function action({ context: { appContainer, session }, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
 
   const log = createLogger('routes/api/session');

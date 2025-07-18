@@ -42,7 +42,7 @@ export class DefaultRaoidcSessionValidator implements RaoidcSessionValidator {
   private readonly serverConfig: Pick<ServerConfig, 'AUTH_RAOIDC_BASE_URL' | 'AUTH_RAOIDC_CLIENT_ID' | 'HTTP_PROXY_URL'>;
   private readonly fetchFn: FetchFn;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'AUTH_RAOIDC_BASE_URL' | 'AUTH_RAOIDC_CLIENT_ID' | 'HTTP_PROXY_URL'>, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
+  constructor(@inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'AUTH_RAOIDC_BASE_URL' | 'AUTH_RAOIDC_CLIENT_ID' | 'HTTP_PROXY_URL'>, @inject(TYPES.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultRaoidcSessionValidator');
     this.serverConfig = serverConfig;
     this.fetchFn = httpClient.getFetchFn({ proxyUrl: serverConfig.HTTP_PROXY_URL });

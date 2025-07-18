@@ -25,7 +25,7 @@ export class DefaultHomeAddressValidatorFactory implements HomeAddressValidatorF
   private readonly log: Logger;
   private readonly addressValidatorFactory: AddressValidatorFactory;
 
-  constructor(@inject(TYPES.routes.validators.AddressValidatorFactory) addressValidatorFactory: AddressValidatorFactory) {
+  constructor(@inject(TYPES.AddressValidatorFactory) addressValidatorFactory: AddressValidatorFactory) {
     this.log = createLogger('DefaultHomeAddressValidatorFactory');
     this.addressValidatorFactory = addressValidatorFactory;
     this.init();

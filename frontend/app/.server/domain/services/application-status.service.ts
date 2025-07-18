@@ -38,9 +38,9 @@ export class DefaultApplicationStatusService implements ApplicationStatusService
   private readonly auditService: AuditService;
 
   constructor(
-    @inject(TYPES.domain.mappers.ApplicationStatusDtoMapper) applicationStatusDtoMapper: ApplicationStatusDtoMapper,
-    @inject(TYPES.domain.repositories.ApplicationStatusRepository) applicationStatusRepository: ApplicationStatusRepository,
-    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
+    @inject(TYPES.ApplicationStatusDtoMapper) applicationStatusDtoMapper: ApplicationStatusDtoMapper,
+    @inject(TYPES.ApplicationStatusRepository) applicationStatusRepository: ApplicationStatusRepository,
+    @inject(TYPES.AuditService) auditService: AuditService,
   ) {
     this.log = createLogger('DefaultApplicationStatusService');
     this.applicationStatusDtoMapper = applicationStatusDtoMapper;

@@ -36,9 +36,9 @@ export class DefaultVerificationCodeService implements VerificationCodeService {
   private readonly auditService: AuditService;
 
   constructor(
-    @inject(TYPES.domain.mappers.VerificationCodeDtoMapper) verificationCodeDtoMapper: VerificationCodeDtoMapper,
-    @inject(TYPES.domain.repositories.VerificationCodeRepository) verificationCodeRepository: VerificationCodeRepository,
-    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
+    @inject(TYPES.VerificationCodeDtoMapper) verificationCodeDtoMapper: VerificationCodeDtoMapper,
+    @inject(TYPES.VerificationCodeRepository) verificationCodeRepository: VerificationCodeRepository,
+    @inject(TYPES.AuditService) auditService: AuditService,
   ) {
     this.log = createLogger('DefaultVerificationCodeService');
     this.verificationCodeDtoMapper = verificationCodeDtoMapper;
@@ -76,9 +76,9 @@ export class DefaultVerificationCodeService implements VerificationCodeService {
 @injectable()
 export class StubVerificationCodeService extends DefaultVerificationCodeService {
   constructor(
-    @inject(TYPES.domain.mappers.VerificationCodeDtoMapper) verificationCodeDtoMapper: VerificationCodeDtoMapper,
-    @inject(TYPES.domain.repositories.VerificationCodeRepository) verificationCodeRepository: VerificationCodeRepository,
-    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
+    @inject(TYPES.VerificationCodeDtoMapper) verificationCodeDtoMapper: VerificationCodeDtoMapper,
+    @inject(TYPES.VerificationCodeRepository) verificationCodeRepository: VerificationCodeRepository,
+    @inject(TYPES.AuditService) auditService: AuditService,
   ) {
     super(verificationCodeDtoMapper, verificationCodeRepository, auditService);
   }

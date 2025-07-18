@@ -32,7 +32,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const id = randomUUID().toString();
 
   const currentDate = getCurrentDateString(locale);
-  const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
+  const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
   const applicationYear = applicationYearService.getRenewalApplicationYear(currentDate);
 
   const state = startRenewState({

@@ -58,9 +58,9 @@ export class DefaultLetterTypeService implements LetterTypeService {
   private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS' | 'INVALID_LETTER_TYPE_IDS'>;
 
   constructor(
-    @inject(TYPES.domain.mappers.LetterTypeDtoMapper) letterTypeDtoMapper: LetterTypeDtoMapper,
-    @inject(TYPES.domain.repositories.LetterTypeRepository) letterTypeRepository: LetterTypeRepository,
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS' | 'INVALID_LETTER_TYPE_IDS'>,
+    @inject(TYPES.LetterTypeDtoMapper) letterTypeDtoMapper: LetterTypeDtoMapper,
+    @inject(TYPES.LetterTypeRepository) letterTypeRepository: LetterTypeRepository,
+    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS' | 'INVALID_LETTER_TYPE_IDS'>,
   ) {
     this.log = createLogger('DefaultLetterTypeService');
     this.letterTypeDtoMapper = letterTypeDtoMapper;

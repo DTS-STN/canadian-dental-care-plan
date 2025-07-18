@@ -84,9 +84,9 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
   private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>;
 
   constructor(
-    @inject(TYPES.domain.mappers.ProvinceTerritoryStateDtoMapper) provinceTerritoryStateDtoMapper: ProvinceTerritoryStateDtoMapper,
-    @inject(TYPES.domain.repositories.ProvinceTerritoryStateRepository) provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.ProvinceTerritoryStateDtoMapper) provinceTerritoryStateDtoMapper: ProvinceTerritoryStateDtoMapper,
+    @inject(TYPES.ProvinceTerritoryStateRepository) provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
+    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>,
   ) {
     this.log = createLogger('DefaultProvinceTerritoryStateService');
     this.provinceTerritoryStateDtoMapper = provinceTerritoryStateDtoMapper;

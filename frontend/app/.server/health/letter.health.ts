@@ -17,9 +17,9 @@ export class LetterHealthCheck implements HealthCheck {
   readonly metadata?: Record<string, string>;
 
   constructor(
-    @inject(TYPES.configs.ServerConfig)
+    @inject(TYPES.ServerConfig)
     serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL'>,
-    @inject(TYPES.domain.repositories.LetterRepository) letterRepository: LetterRepository,
+    @inject(TYPES.LetterRepository) letterRepository: LetterRepository,
   ) {
     this.log = createLogger('LetterHealthCheck');
     this.serverConfig = serverConfig;

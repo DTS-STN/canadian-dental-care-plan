@@ -38,7 +38,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('status');
 
   const statusStateId = getStatusStateIdFromUrl(request.url);
@@ -51,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const statusId = statusCheckResult.statusId ?? null;
   const alertType = getContextualAlertType(statusId);
-  const clientFriendlyStatus = statusId ? await appContainer.get(TYPES.domain.services.ClientFriendlyStatusService).getLocalizedClientFriendlyStatusById(statusId, locale) : null;
+  const clientFriendlyStatus = statusId ? await appContainer.get(TYPES.ClientFriendlyStatusService).getLocalizedClientFriendlyStatusById(statusId, locale) : null;
 
   return {
     statusResult: { alertType, clientFriendlyStatus },
@@ -62,7 +62,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('status');
   securityHandler.validateCsrfToken({ formData, session });
 

@@ -49,7 +49,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewState({ params, request, session });
@@ -61,13 +61,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const countryList = await appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
-  const regionList = await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
+  const countryList = await appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
+  const regionList = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-address.home-address.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirm-home-address', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.renew.confirm-home-address', { userId: idToken.sub });
 
   return {
     meta,
@@ -83,18 +83,18 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   const locale = getLocale(request);
 
-  const addressValidationService = appContainer.get(TYPES.domain.services.AddressValidationService);
-  const countryService = appContainer.get(TYPES.domain.services.CountryService);
-  const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
-  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
+  const addressValidationService = appContainer.get(TYPES.AddressValidationService);
+  const countryService = appContainer.get(TYPES.CountryService);
+  const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
+  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
   const idToken: IdToken = session.get('idToken');
   const state = loadProtectedRenewState({ params, request, session });
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const homeAddressValidator = appContainer.get(TYPES.routes.validators.HomeAddressValidatorFactory).createHomeAddressValidator(locale);
+  const homeAddressValidator = appContainer.get(TYPES.HomeAddressValidatorFactory).createHomeAddressValidator(locale);
 
   const parsedDataResult = await homeAddressValidator.validateHomeAddress({
     address: String(formData.get('address')),
@@ -184,7 +184,7 @@ export async function action({ context: { appContainer, session }, params, reque
     state: { homeAddress, isHomeAddressSameAsMailingAddress: false },
   });
 
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-home-address', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.renew.confirm-home-address', { userId: idToken.sub });
 
   if (state.editMode === false && isInvitationToApplyClient(state.clientApplication)) {
     return redirect(getPathById('protected/renew/$id/communication-preference', params));

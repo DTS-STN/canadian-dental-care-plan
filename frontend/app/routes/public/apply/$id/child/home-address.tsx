@@ -53,8 +53,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const countryList = await appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
-  const regionList = await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
+  const countryList = await appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
+  const regionList = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:address.home-address.page-title') }) };
 
@@ -72,11 +72,11 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   const locale = getLocale(request);
 
-  const clientConfig = appContainer.get(TYPES.configs.ClientConfig);
-  const addressValidationService = appContainer.get(TYPES.domain.services.AddressValidationService);
-  const countryService = appContainer.get(TYPES.domain.services.CountryService);
-  const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const clientConfig = appContainer.get(TYPES.ClientConfig);
+  const addressValidationService = appContainer.get(TYPES.AddressValidationService);
+  const countryService = appContainer.get(TYPES.CountryService);
+  const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
 
   securityHandler.validateCsrfToken({ formData, session });
   const state = loadApplyChildState({ params, request, session });
@@ -85,7 +85,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/apply/$id/child/review-adult-information', params));
   }
 
-  const homeAddressValidator = appContainer.get(TYPES.routes.validators.HomeAddressValidatorFactory).createHomeAddressValidator(locale);
+  const homeAddressValidator = appContainer.get(TYPES.HomeAddressValidatorFactory).createHomeAddressValidator(locale);
 
   const parsedDataResult = await homeAddressValidator.validateHomeAddress({
     address: String(formData.get('address')),

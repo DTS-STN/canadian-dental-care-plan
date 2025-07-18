@@ -30,7 +30,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const { applicationYear } = loadProtectedRenewState({ params, request, session });
@@ -39,7 +39,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:file-your-taxes.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.file-taxes', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.renew.file-taxes', { userId: idToken.sub });
 
   return { meta, taxYear: applicationYear.taxYear };
 }
@@ -47,17 +47,17 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   clearProtectedRenewState({ params, request, session });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.file-taxes', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.renew.file-taxes', { userId: idToken.sub });
 
   return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
 }

@@ -9,8 +9,8 @@ import { TYPES } from '~/.server/constants';
 export async function loader({ context, request }: Route.LoaderArgs) {
   const { include, exclude, timeout } = Object.fromEntries(new URL(request.url).searchParams);
 
-  const allHealthChecks = context.appContainer.findAll(TYPES.health.HealthCheck);
-  const buildInfoService = context.appContainer.get(TYPES.core.BuildInfoService);
+  const allHealthChecks = context.appContainer.findAll(TYPES.HealthCheck);
+  const buildInfoService = context.appContainer.get(TYPES.BuildInfoService);
 
   const { buildRevision: buildId, buildVersion: version } = buildInfoService.getBuildInfo();
 
@@ -35,9 +35,9 @@ export async function loader({ context, request }: Route.LoaderArgs) {
  * Returns true if the incoming request is authorized to view detailed responses.
  */
 async function isAuthorized({ context, request }: Omit<Route.LoaderArgs, 'params'>): Promise<boolean> {
-  const bearerTokenResolver = context.appContainer.get(TYPES.auth.BearerTokenResolver);
-  const serverConfig = context.appContainer.get(TYPES.configs.ServerConfig);
-  const tokenRolesExtractor = context.appContainer.get(TYPES.auth.HealthTokenRolesExtractor);
+  const bearerTokenResolver = context.appContainer.get(TYPES.BearerTokenResolver);
+  const serverConfig = context.appContainer.get(TYPES.ServerConfig);
+  const tokenRolesExtractor = context.appContainer.get(TYPES.HealthTokenRolesExtractor);
 
   const token = bearerTokenResolver.resolve(request);
   const roles = await tokenRolesExtractor.extract(token);

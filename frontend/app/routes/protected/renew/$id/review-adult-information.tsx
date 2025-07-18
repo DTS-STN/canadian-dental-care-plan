@@ -54,10 +54,10 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
   const state = loadProtectedRenewStateForReview({ params, request, session, demographicSurveyEnabled });
   const primaryApplicantStateCompleted = isPrimaryApplicantStateComplete(loadProtectedRenewState({ params, request, session }), demographicSurveyEnabled);
@@ -73,10 +73,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
-  const countryService = appContainer.get(TYPES.domain.services.CountryService);
-  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
-  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
+  const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
+  const countryService = appContainer.get(TYPES.CountryService);
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
   const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? await provinceTerritoryStateService.getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
   const clientApplicationMailingProvinceTerritoryStateAbbr = state.clientApplication.contactInformation.mailingProvince
     ? await provinceTerritoryStateService.getProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingProvince)
@@ -184,7 +184,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:review-adult-information.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.review-adult-information', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.renew.review-adult-information', { userId: idToken.sub });
 
   return {
     userInfo,
@@ -202,7 +202,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
@@ -210,7 +210,7 @@ export async function action({ context: { appContainer, session }, params, reque
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   const state = loadProtectedRenewState({ params, request, session });
@@ -230,7 +230,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.review-adult-information', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.renew.review-adult-information', { userId: idToken.sub });
 
   if (!isPrimaryApplicantStateComplete(state, demographicSurveyEnabled) || validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled).length === 0) {
     return redirect(getPathById('protected/renew/$id/review-and-submit', params));

@@ -40,7 +40,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedApplySingleChildState({ params, request, session });
@@ -55,13 +55,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.children.dental-insurance', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.apply.child.children.dental-insurance', { userId: idToken.sub });
 
   return { meta, defaultState: state.dentalInsurance, childName, editMode: state.editMode, i18nOptions: { childName } };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const formData = await request.formData();
@@ -96,7 +96,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.children.dental-insurance', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.apply.child.children.dental-insurance', { userId: idToken.sub });
 
   if (state.editMode) {
     return redirect(getPathById('protected/apply/$id/child/review-child-information', params));

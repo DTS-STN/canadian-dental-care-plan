@@ -56,14 +56,14 @@ export async function loader({ context: { appContainer, session }, params, reque
   // renew state is valid then edit mode can be set to true
   saveRenewState({ params, session, state: { editMode: true } });
 
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
-  const countryMailing = state.mailingAddress?.country ? await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale) : undefined;
-  const countryHome = state.homeAddress?.country ? await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
+  const countryMailing = state.mailingAddress?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale) : undefined;
+  const countryHome = state.homeAddress?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -107,11 +107,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const dentalInsurance = state.dentalInsurance;
 
   const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram
-    ? await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
+    ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
     : undefined;
 
   const selectedProvincialBenefit = state.dentalBenefits?.provincialTerritorialSocialProgram
-    ? await appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+    ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
   const dentalBenefit = {
@@ -131,8 +131,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult:review-adult-information.page-title') }) };
 
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
-  const benefitRenewalDtoMapper = appContainer.get(TYPES.domain.mappers.BenefitRenewalDtoMapper);
-  const benefitRenewalStateMapper = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper);
+  const benefitRenewalDtoMapper = appContainer.get(TYPES.BenefitRenewalDtoMapper);
+  const benefitRenewalStateMapper = appContainer.get(TYPES.BenefitRenewalStateMapper);
   const payload = viewPayloadEnabled && benefitRenewalDtoMapper.mapAdultBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalStateMapper.mapRenewAdultStateToAdultBenefitRenewalDto(state));
 
   return {
@@ -151,7 +151,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearRenewState({ params, session });
@@ -165,8 +165,8 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const state = loadRenewAdultStateForReview({ params, request, session });
-  const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapRenewAdultStateToAdultBenefitRenewalDto(state);
-  await appContainer.get(TYPES.domain.services.BenefitRenewalService).createAdultBenefitRenewal(benefitRenewalDto);
+  const benefitRenewalDto = appContainer.get(TYPES.BenefitRenewalStateMapper).mapRenewAdultStateToAdultBenefitRenewalDto(state);
+  await appContainer.get(TYPES.BenefitRenewalService).createAdultBenefitRenewal(benefitRenewalDto);
 
   const submissionInfo = { submittedOn: new UTCDate().toISOString() };
   saveRenewState({ params, session, state: { submissionInfo } });

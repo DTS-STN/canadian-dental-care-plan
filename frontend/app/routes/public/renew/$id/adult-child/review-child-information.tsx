@@ -53,18 +53,18 @@ export async function loader({ context: { appContainer, session }, params, reque
   // renew state is valid then edit mode can be set to true
   saveRenewState({ params, session, state: { editMode: true } });
 
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:review-child-information.page-title') }) };
 
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
-  const benefitRenewalDtoMapper = appContainer.get(TYPES.domain.mappers.BenefitRenewalDtoMapper);
-  const benefitRenewalStateMapper = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper);
+  const benefitRenewalDtoMapper = appContainer.get(TYPES.BenefitRenewalDtoMapper);
+  const benefitRenewalStateMapper = appContainer.get(TYPES.BenefitRenewalStateMapper);
   const payload = viewPayloadEnabled && benefitRenewalDtoMapper.mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalStateMapper.mapRenewAdultChildStateToAdultChildBenefitRenewalDto(state));
 
-  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
-  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
 
   const children = await Promise.all(
     getChildrenState(state).map(async (child) => {
@@ -108,7 +108,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
     clearRenewState({ params, session });
@@ -122,8 +122,8 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const state = loadRenewAdultChildStateForReview({ params, request, session });
-  const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapRenewAdultChildStateToAdultChildBenefitRenewalDto(state);
-  await appContainer.get(TYPES.domain.services.BenefitRenewalService).createAdultChildBenefitRenewal(benefitRenewalDto);
+  const benefitRenewalDto = appContainer.get(TYPES.BenefitRenewalStateMapper).mapRenewAdultChildStateToAdultChildBenefitRenewalDto(state);
+  await appContainer.get(TYPES.BenefitRenewalService).createAdultChildBenefitRenewal(benefitRenewalDto);
 
   const submissionInfo = { submittedOn: new UTCDate().toISOString() };
   saveRenewState({ params, session, state: { submissionInfo } });

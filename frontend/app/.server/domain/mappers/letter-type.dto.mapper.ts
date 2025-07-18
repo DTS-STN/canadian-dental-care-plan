@@ -18,7 +18,7 @@ export type LetterTypeDtoMapperImpl_ServerConfig = Pick<ServerConfig, 'ENGLISH_L
 export class DefaultLetterTypeDtoMapper implements LetterTypeDtoMapper {
   private readonly serverConfig: LetterTypeDtoMapperImpl_ServerConfig;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: LetterTypeDtoMapperImpl_ServerConfig) {
+  constructor(@inject(TYPES.ServerConfig) serverConfig: LetterTypeDtoMapperImpl_ServerConfig) {
     this.serverConfig = serverConfig;
   }
 

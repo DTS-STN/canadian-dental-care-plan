@@ -14,7 +14,7 @@ const API_APPLY_STATE_ACTIONS = ['extend'] as const;
 export type ApiApplyStateAction = (typeof API_APPLY_STATE_ACTIONS)[number];
 
 export async function action({ context: { appContainer, session }, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
 
   const log = createLogger('routes/api/apply-state');

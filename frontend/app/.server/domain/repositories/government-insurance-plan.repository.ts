@@ -49,7 +49,7 @@ export class DefaultGovernmentInsurancePlanRepository implements GovernmentInsur
   private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DefaultGovernmentInsurancePlanRepositoryServerConfig, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
+  constructor(@inject(TYPES.ServerConfig) serverConfig: DefaultGovernmentInsurancePlanRepositoryServerConfig, @inject(TYPES.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultGovernmentInsurancePlanRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;

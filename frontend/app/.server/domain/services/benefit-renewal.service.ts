@@ -62,11 +62,11 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
   private readonly redisService?: RedisService;
 
   constructor(
-    @inject(TYPES.domain.mappers.BenefitRenewalDtoMapper) benefitRenewalDtoMapper: BenefitRenewalDtoMapper,
-    @inject(TYPES.domain.repositories.BenefitRenewalRepository) benefitRenewalRepository: BenefitRenewalRepository,
-    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
-    @inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig,
-    @inject(TYPES.data.services.RedisService) @optional() redisService?: RedisService,
+    @inject(TYPES.BenefitRenewalDtoMapper) benefitRenewalDtoMapper: BenefitRenewalDtoMapper,
+    @inject(TYPES.BenefitRenewalRepository) benefitRenewalRepository: BenefitRenewalRepository,
+    @inject(TYPES.AuditService) auditService: AuditService,
+    @inject(TYPES.ServerConfig) serverConfig: ServerConfig,
+    @inject(TYPES.RedisService) @optional() redisService?: RedisService,
   ) {
     this.log = createLogger('DefaultBenefitRenewalService');
     this.benefitRenewalDtoMapper = benefitRenewalDtoMapper;
