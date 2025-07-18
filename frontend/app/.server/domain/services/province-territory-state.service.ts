@@ -133,11 +133,11 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
     this.log.debug('Get province territory state with id: [%s]', id);
     const provinceTerritoryStateEntity = await this.provinceTerritoryStateRepository.findProvinceTerritoryStateById(id);
 
-    if (!provinceTerritoryStateEntity) {
+    if (provinceTerritoryStateEntity.isNone()) {
       throw new ProvinceTerritoryStateNotFoundException(`Province territory state: [${id}] not found`);
     }
 
-    const provinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity);
+    const provinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity.unwrap());
     this.log.trace('Returning province territory state: [%j]', provinceTerritoryStateDto);
     return provinceTerritoryStateDto;
   }
@@ -146,11 +146,11 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
     this.log.debug('Get province territory state with code: [%s]', code);
     const provinceTerritoryStateEntity = await this.provinceTerritoryStateRepository.findProvinceTerritoryStateByCode(code);
 
-    if (!provinceTerritoryStateEntity) {
+    if (provinceTerritoryStateEntity.isNone()) {
       throw new ProvinceTerritoryStateNotFoundException(`Province territory state with code [${code}] not found`);
     }
 
-    const provinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity);
+    const provinceTerritoryStateDto = this.provinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto(provinceTerritoryStateEntity.unwrap());
     this.log.trace('Returning province territory state: [%j]', provinceTerritoryStateDto);
     return provinceTerritoryStateDto;
   }

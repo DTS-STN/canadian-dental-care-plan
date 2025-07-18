@@ -1,4 +1,5 @@
 import type { Moized } from 'moize';
+import { None, Some } from 'oxide.ts';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
@@ -71,13 +72,15 @@ describe('DefaultProvinceTerritoryStateService', () => {
     it('fetches province territory state by id', async () => {
       const id = '1';
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
-      mockProvinceTerritoryStateRepository.findProvinceTerritoryStateById.mockResolvedValueOnce({
-        esdc_provinceterritorystateid: '1',
-        _esdc_countryid_value: '1',
-        esdc_nameenglish: 'English',
-        esdc_namefrench: 'Français',
-        esdc_internationalalphacode: 'EN',
-      });
+      mockProvinceTerritoryStateRepository.findProvinceTerritoryStateById.mockResolvedValueOnce(
+        Some({
+          esdc_provinceterritorystateid: '1',
+          _esdc_countryid_value: '1',
+          esdc_nameenglish: 'English',
+          esdc_namefrench: 'Français',
+          esdc_internationalalphacode: 'EN',
+        }),
+      );
 
       const mockDto: ProvinceTerritoryStateDto = { id: '1', countryId: '1', nameEn: 'English', nameFr: 'Français', abbr: 'EN' };
 
@@ -96,7 +99,7 @@ describe('DefaultProvinceTerritoryStateService', () => {
     it('fetches province territory state by id and throws exception if not found', async () => {
       const id = '1033';
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
-      mockProvinceTerritoryStateRepository.findProvinceTerritoryStateById.mockResolvedValueOnce(null);
+      mockProvinceTerritoryStateRepository.findProvinceTerritoryStateById.mockResolvedValueOnce(None);
 
       const mockProvinceTerritoryStateDtoMapper = mock<ProvinceTerritoryStateDtoMapper>();
 
@@ -214,13 +217,15 @@ describe('DefaultProvinceTerritoryStateService', () => {
       const id = '1';
       const locale = 'en';
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
-      mockProvinceTerritoryStateRepository.findProvinceTerritoryStateById.mockResolvedValueOnce({
-        esdc_provinceterritorystateid: '1',
-        _esdc_countryid_value: '1',
-        esdc_nameenglish: 'English',
-        esdc_namefrench: 'Français',
-        esdc_internationalalphacode: 'EN',
-      });
+      mockProvinceTerritoryStateRepository.findProvinceTerritoryStateById.mockResolvedValueOnce(
+        Some({
+          esdc_provinceterritorystateid: '1',
+          _esdc_countryid_value: '1',
+          esdc_nameenglish: 'English',
+          esdc_namefrench: 'Français',
+          esdc_internationalalphacode: 'EN',
+        }),
+      );
 
       const mockDto: ProvinceTerritoryStateDto = { id: '1', countryId: '1', nameEn: 'English', nameFr: 'Français', abbr: 'EN' };
       const mockLocalizedDto: ProvinceTerritoryStateLocalizedDto = { id: '1', countryId: '1', name: 'English', abbr: 'EN' };

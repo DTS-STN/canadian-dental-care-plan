@@ -134,7 +134,7 @@ describe('DefaultProvinceTerritoryStateRepository', () => {
     const repository = new DefaultProvinceTerritoryStateRepository(serverConfigMock, httpClientMock);
     const actual = await repository.findProvinceTerritoryStateById('1');
 
-    expect(actual).toEqual(responseDataMock.value[0].esdc_ProvinceTerritoryState_Countryid_esd[0]);
+    expect(actual.unwrap()).toEqual(responseDataMock.value[0].esdc_ProvinceTerritoryState_Countryid_esd[0]);
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.province-territory-states.gets',
       new URL(
@@ -202,7 +202,7 @@ describe('MockProvinceTerritoryStateRepository', () => {
 
     const provinceTerritoryState = await repository.findProvinceTerritoryStateById('1');
 
-    expect(provinceTerritoryState).toEqual({
+    expect(provinceTerritoryState.unwrap()).toEqual({
       esdc_provinceterritorystateid: '1',
       _esdc_countryid_value: '10',
       esdc_nameenglish: 'Alabama',
@@ -216,6 +216,6 @@ describe('MockProvinceTerritoryStateRepository', () => {
 
     const provinceTerritoryState = await repository.findProvinceTerritoryStateById('non-existent-id');
 
-    expect(provinceTerritoryState).toBeNull();
+    expect(provinceTerritoryState.isNone()).toBe(true);
   });
 });
