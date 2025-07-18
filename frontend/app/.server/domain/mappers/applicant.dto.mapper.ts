@@ -1,10 +1,11 @@
 import { injectable } from 'inversify';
+import { Option } from 'oxide.ts';
 
 import type { ApplicantRequestEntity, ApplicantResponseEntity } from '~/.server/domain/entities';
 
 export interface ApplicantDtoMapper {
   mapSinToApplicantRequestEntity(sin: string): ApplicantRequestEntity;
-  mapApplicantResponseEntityToClientNumber(applicantResponseEntity: ApplicantResponseEntity): string | null;
+  mapApplicantResponseEntityToClientNumber(applicantResponseEntity: ApplicantResponseEntity): Option<string>;
 }
 
 @injectable()
@@ -19,8 +20,7 @@ export class DefaultApplicantDtoMapper implements ApplicantDtoMapper {
     };
   }
 
-  mapApplicantResponseEntityToClientNumber(applicantResponseEntity: ApplicantResponseEntity): string | null {
-    const clientNumber = applicantResponseEntity.BenefitApplication?.Applicant?.ClientIdentification?.find(({ IdentificationCategoryText }) => IdentificationCategoryText === 'Client Number')?.IdentificationID;
-    return clientNumber ?? null;
+  mapApplicantResponseEntityToClientNumber(applicantResponseEntity: ApplicantResponseEntity): Option<string> {
+    return Option.from(applicantResponseEntity.BenefitApplication?.Applicant?.ClientIdentification?.find(({ IdentificationCategoryText }) => IdentificationCategoryText === 'Client Number')?.IdentificationID);
   }
 }
