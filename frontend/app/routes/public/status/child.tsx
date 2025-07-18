@@ -6,6 +6,7 @@ import { redirect } from 'react-router';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { randomUUID } from 'node:crypto';
+import type { Option } from 'oxide.ts';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -176,13 +177,14 @@ export async function action({ context: { appContainer, session }, params, reque
     };
   }
 
-  const statusId = parsedSinResult
-    ? await appContainer.get(TYPES.domain.services.ApplicationStatusService).findApplicationStatusIdBySin({
+  const applicationStatusService = appContainer.get(TYPES.domain.services.ApplicationStatusService);
+  const statusId: Option<string> = parsedSinResult
+    ? await applicationStatusService.findApplicationStatusIdBySin({
         sin: parsedSinResult.data.sin,
         applicationCode: parsedCodeResult.data.code,
         userId: 'anonymous',
       })
-    : await appContainer.get(TYPES.domain.services.ApplicationStatusService).findApplicationStatusIdByBasicInfo({
+    : await applicationStatusService.findApplicationStatusIdByBasicInfo({
         applicationCode: parsedCodeResult.data.code,
         firstName: parsedChildInfoResult?.data.firstName ?? '',
         lastName: parsedChildInfoResult?.data.lastName ?? '',
@@ -198,7 +200,7 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       statusCheckResult: {
-        statusId,
+        statusId: statusId.unwrapUnchecked(),
       },
     },
   });

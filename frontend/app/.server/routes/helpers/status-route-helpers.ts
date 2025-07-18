@@ -11,7 +11,7 @@ export type StatusStateSessionKey = `status-flow-${string}`;
 export interface StatusState {
   readonly id: string;
   readonly statusCheckResult: {
-    statusId?: string | null;
+    statusId?: string;
   };
 }
 
@@ -74,8 +74,8 @@ interface SaveStateArgs {
   id: string;
   params: StatusStateParams;
   session: Session;
-  state: Partial<OmitStrict<StatusState, 'id' | 'statusCheckResult'>>;
-  remove?: keyof OmitStrict<StatusState, 'id' | 'statusCheckResult'>;
+  state: Partial<OmitStrict<StatusState, 'id'>>;
+  remove?: keyof OmitStrict<StatusState, 'id'>;
 }
 
 /**
