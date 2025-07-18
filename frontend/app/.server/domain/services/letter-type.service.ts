@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
+import { None, match } from 'oxide.ts';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -100,14 +101,18 @@ export class DefaultLetterTypeService implements LetterTypeService {
 
   async getLetterTypeById(id: string): Promise<LetterTypeDto> {
     this.log.trace('Getting letter type with id: [%s]', id);
-    const letterTypeEntity = this.serverConfig.INVALID_LETTER_TYPE_IDS.includes(id) ? null : await this.letterTypeRepository.findLetterTypeById(id);
 
-    if (!letterTypeEntity) {
+    const letterTypeEntityOption = match(this.serverConfig.INVALID_LETTER_TYPE_IDS.includes(id), [
+      [true, None],
+      [false, await this.letterTypeRepository.findLetterTypeById(id)],
+    ]);
+
+    if (letterTypeEntityOption.isNone()) {
       this.log.error('Letter type with id: [%s] not found', id);
       throw new LetterTypeNotFoundException(`Letter type with id: [${id}] not found`);
     }
 
-    const letterTypeDto = this.letterTypeDtoMapper.mapLetterTypeEntityToLetterTypeDto(letterTypeEntity);
+    const letterTypeDto = this.letterTypeDtoMapper.mapLetterTypeEntityToLetterTypeDto(letterTypeEntityOption.unwrap());
     this.log.trace('Returning letter type: [%j]', letterTypeDto);
     return letterTypeDto;
   }
