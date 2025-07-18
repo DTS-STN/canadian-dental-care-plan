@@ -84,7 +84,12 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const { sin, code } = parsedDataResult.data;
-  const statusId = await appContainer.get(TYPES.domain.services.ApplicationStatusService).findApplicationStatusIdBySin({ sin, applicationCode: code, userId: 'anonymous' });
+  const applicationStatusService = appContainer.get(TYPES.domain.services.ApplicationStatusService);
+  const statusId = await applicationStatusService.findApplicationStatusIdBySin({
+    sin,
+    applicationCode: code,
+    userId: 'anonymous',
+  });
 
   const id = randomUUID().toString();
   startStatusState({ id, session });
@@ -94,7 +99,7 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       statusCheckResult: {
-        statusId,
+        statusId: statusId.unwrapUnchecked(),
       },
     },
   });

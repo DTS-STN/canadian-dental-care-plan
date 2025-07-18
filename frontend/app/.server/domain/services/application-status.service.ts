@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import type { Option } from 'oxide.ts';
 
 import { TYPES } from '~/.server/constants';
 import type { ApplicationStatusBasicInfoRequestDto, ApplicationStatusSinRequestDto } from '~/.server/domain/dtos';
@@ -18,7 +19,7 @@ export interface ApplicationStatusService {
    * @param applicationStatusBasicInfoRequestDto The basic info request dto.
    * @returns A Promise that resolves to the application status id if found, or `null` otherwise.
    */
-  findApplicationStatusIdByBasicInfo(applicationStatusBasicInfoRequestDto: ApplicationStatusBasicInfoRequestDto): Promise<string | null>;
+  findApplicationStatusIdByBasicInfo(applicationStatusBasicInfoRequestDto: ApplicationStatusBasicInfoRequestDto): Promise<Option<string>>;
 
   /**
    * Finds the application status id for an applicant by SIN.
@@ -26,7 +27,7 @@ export interface ApplicationStatusService {
    * @param applicationStatusSinRequestDto The SIN request dto.
    * @returns A Promise that resolves to the application status id if found, or `null` otherwise.
    */
-  findApplicationStatusIdBySin(applicationStatusSinRequestDto: ApplicationStatusSinRequestDto): Promise<string | null>;
+  findApplicationStatusIdBySin(applicationStatusSinRequestDto: ApplicationStatusSinRequestDto): Promise<Option<string>>;
 }
 
 @injectable()
@@ -52,7 +53,7 @@ export class DefaultApplicationStatusService implements ApplicationStatusService
     this.log.debug('DefaultApplicationStatusService initiated.');
   }
 
-  async findApplicationStatusIdByBasicInfo(applicationStatusBasicInfoRequestDto: ApplicationStatusBasicInfoRequestDto): Promise<string | null> {
+  async findApplicationStatusIdByBasicInfo(applicationStatusBasicInfoRequestDto: ApplicationStatusBasicInfoRequestDto): Promise<Option<string>> {
     this.log.trace('Finding application status id by basic info: [%j]', applicationStatusBasicInfoRequestDto);
 
     this.auditService.createAudit('application-status.post', { userId: applicationStatusBasicInfoRequestDto.userId });
@@ -61,11 +62,11 @@ export class DefaultApplicationStatusService implements ApplicationStatusService
     const applicationStatusEntity = await this.applicationStatusRepository.getApplicationStatusByBasicInfo(applicationStatusBasicInfoRequestEntity);
     const applicationStatusId = this.applicationStatusDtoMapper.mapApplicationStatusEntityToApplicationStatusId(applicationStatusEntity);
 
-    this.log.trace('Returning application status id: [%s]', applicationStatusId);
+    this.log.trace('Returning application status id: [%s]', applicationStatusId.unwrapUnchecked());
     return applicationStatusId;
   }
 
-  async findApplicationStatusIdBySin(applicationStatusSinRequestDto: ApplicationStatusSinRequestDto): Promise<string | null> {
+  async findApplicationStatusIdBySin(applicationStatusSinRequestDto: ApplicationStatusSinRequestDto): Promise<Option<string>> {
     this.log.trace('Finding application status id by sin: [%j]', applicationStatusSinRequestDto);
 
     this.auditService.createAudit('application-status.post', { userId: applicationStatusSinRequestDto.userId });
@@ -74,7 +75,7 @@ export class DefaultApplicationStatusService implements ApplicationStatusService
     const applicationStatusEntity = await this.applicationStatusRepository.getApplicationStatusBySin(applicationStatusSinRequestEntity);
     const applicationStatusId = this.applicationStatusDtoMapper.mapApplicationStatusEntityToApplicationStatusId(applicationStatusEntity);
 
-    this.log.trace('Returning application status id: [%s]', applicationStatusId);
+    this.log.trace('Returning application status id: [%s]', applicationStatusId.unwrapUnchecked());
     return applicationStatusId;
   }
 }
