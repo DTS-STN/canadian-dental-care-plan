@@ -29,10 +29,10 @@ export class DefaultDynatraceService implements DynatraceService {
   private readonly serverConfig: Pick<ServerConfig, 'DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS'>;
 
   constructor(
-    @inject(TYPES.web.mappers.DynatraceDtoMapper) dynatraceDtoMapper: DynatraceDtoMapper,
-    @inject(TYPES.web.repositories.DynatraceRepository) dynatraceRepository: DynatraceRepository,
-    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.DynatraceDtoMapper) dynatraceDtoMapper: DynatraceDtoMapper,
+    @inject(TYPES.DynatraceRepository) dynatraceRepository: DynatraceRepository,
+    @inject(TYPES.AuditService) auditService: AuditService,
+    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS'>,
   ) {
     this.log = createLogger('DefaultDynatraceService');
     this.dynatraceDtoMapper = dynatraceDtoMapper;

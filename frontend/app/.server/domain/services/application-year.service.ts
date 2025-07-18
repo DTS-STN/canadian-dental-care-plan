@@ -36,9 +36,9 @@ export class DefaultApplicationYearService implements ApplicationYearService {
   private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS'>;
 
   constructor(
-    @inject(TYPES.domain.mappers.ApplicationYearDtoMapper) applicationYearDtoMapper: ApplicationYearDtoMapper,
-    @inject(TYPES.domain.repositories.ApplicationYearRepository) applicationYearRepository: ApplicationYearRepository,
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.ApplicationYearDtoMapper) applicationYearDtoMapper: ApplicationYearDtoMapper,
+    @inject(TYPES.ApplicationYearRepository) applicationYearRepository: ApplicationYearRepository,
+    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS'>,
   ) {
     this.log = createLogger('DefaultApplicationYearService');
     this.applicationYearDtoMapper = applicationYearDtoMapper;

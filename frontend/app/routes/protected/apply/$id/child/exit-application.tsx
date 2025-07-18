@@ -27,22 +27,22 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-child:exit-application.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.exit-application', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.apply.child.exit-application', { userId: idToken.sub });
 
   return { meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-  const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   const formData = await request.formData();
 
@@ -53,7 +53,7 @@ export async function action({ context: { appContainer, session }, params, reque
   clearProtectedApplyState({ params, session });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.exit-application', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.apply.child.exit-application', { userId: idToken.sub });
 
   return redirect(t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }));
 }

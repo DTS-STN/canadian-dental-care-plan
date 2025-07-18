@@ -16,7 +16,7 @@ const defaultProviderId = 'raoidc';
 export async function loader({ context, params, request }: Route.LoaderArgs) {
   const log = createLogger('auth.$/loader');
   const { '*': slug } = params;
-  const instrumentationService = context.appContainer.get(TYPES.observability.InstrumentationService);
+  const instrumentationService = context.appContainer.get(TYPES.InstrumentationService);
 
   switch (slug) {
     case 'login': {
@@ -46,7 +46,7 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
 function handleLoginRequest({ context: { appContainer }, request }: Route.LoaderArgs) {
   const log = createLogger('auth.$/handleLoginRequest');
   log.debug('Handling login request');
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  const instrumentationService = appContainer.get(TYPES.InstrumentationService);
   instrumentationService.createCounter('auth.login.requests').add(1);
 
   const url = new URL(`/auth/login/${defaultProviderId}`, request.url);
@@ -62,10 +62,10 @@ function handleLoginRequest({ context: { appContainer }, request }: Route.Loader
 function handleLogoutRequest({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const log = createLogger('auth.$/handleLogoutRequest');
   log.debug('Handling RAOIDC logout request');
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  const instrumentationService = appContainer.get(TYPES.InstrumentationService);
   instrumentationService.createCounter('auth.logout.requests').add(1);
 
-  const { AUTH_RASCL_LOGOUT_URL } = appContainer.get(TYPES.configs.ServerConfig);
+  const { AUTH_RASCL_LOGOUT_URL } = appContainer.get(TYPES.ServerConfig);
 
   if (!session.has('idToken')) {
     log.debug(`User has not authenticated; bypassing RAOIDC logout and redirecting to RASCL logout`);
@@ -76,11 +76,11 @@ function handleLogoutRequest({ context: { appContainer, session }, request }: Ro
   const idToken: IdToken = session.get('idToken');
   const locale = getLocale(request);
 
-  const raoidcService = appContainer.get(TYPES.auth.RaoidcService);
+  const raoidcService = appContainer.get(TYPES.RaoidcService);
   const signoutUrl = raoidcService.generateSignoutRequest({ sessionId: idToken.sid, locale });
 
   log.debug('Destroying CDCP application session session and redirecting to downstream logout handler: [%s]', signoutUrl);
-  const auditService = appContainer.get(TYPES.domain.services.AuditService);
+  const auditService = appContainer.get(TYPES.AuditService);
   auditService.createAudit('auth.session-destroyed', { userId: idToken.sub });
 
   session.destroy();
@@ -93,7 +93,7 @@ function handleLogoutRequest({ context: { appContainer, session }, request }: Ro
 async function handleRaoidcLoginRequest({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const log = createLogger('auth.$/handleRaoidcLoginRequest');
   log.debug('Handling RAOIDC login request');
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  const instrumentationService = appContainer.get(TYPES.InstrumentationService);
   instrumentationService.createCounter('auth.login.raoidc.requests').add(1);
 
   session.destroy();
@@ -110,7 +110,7 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
 
   const redirectUri = generateCallbackUri(origin, 'raoidc');
 
-  const raoidcService = appContainer.get(TYPES.auth.RaoidcService);
+  const raoidcService = appContainer.get(TYPES.RaoidcService);
   const { authUrl, codeVerifier, state } = await raoidcService.generateSigninRequest(redirectUri);
 
   log.debug('Storing [codeVerifier] and [state] in session for future validation');
@@ -128,10 +128,10 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
 async function handleRaoidcCallbackRequest({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const log = createLogger('auth.$/handleRaoidcCallbackRequest');
   log.debug('Handling RAOIDC callback request');
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  const instrumentationService = appContainer.get(TYPES.InstrumentationService);
   instrumentationService.createCounter('auth.callback.raoidc.requests').add(1);
 
-  const raoidcService = appContainer.get(TYPES.auth.RaoidcService);
+  const raoidcService = appContainer.get(TYPES.RaoidcService);
   const codeVerifier = session.get('authCodeVerifier');
   const returnUrl = session.find('authReturnUrl').unwrapOr('/');
   const state = session.get('authState');
@@ -144,7 +144,7 @@ async function handleRaoidcCallbackRequest({ context: { appContainer, session },
   session.set('userInfoToken', userInfoToken);
 
   log.debug('RAOIDC login successful; redirecting to [%s]', returnUrl);
-  const auditService = appContainer.get(TYPES.domain.services.AuditService);
+  const auditService = appContainer.get(TYPES.AuditService);
   auditService.createAudit('auth.session-created', { userId: idToken.sub });
 
   return redirectDocument(returnUrl);

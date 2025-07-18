@@ -50,7 +50,7 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
 export async function action({ context, params, request }: Route.ActionArgs) {
   validateRaoidcMockEnabled({ context });
 
-  const securityHandler = context.appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = context.appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateRequestMethod({ request, allowedMethods: ['POST'] });
 
   const log = createLogger('oidc.$/action');
@@ -69,7 +69,7 @@ export async function action({ context, params, request }: Route.ActionArgs) {
 }
 
 function validateRaoidcMockEnabled({ context }: Pick<Route.LoaderArgs, 'context'>): void {
-  const { ENABLED_MOCKS } = context.appContainer.get(TYPES.configs.ServerConfig);
+  const { ENABLED_MOCKS } = context.appContainer.get(TYPES.ServerConfig);
   const mockName = 'raoidc' satisfies MockName;
 
   if (!ENABLED_MOCKS.includes(mockName)) {
@@ -83,7 +83,7 @@ function validateRaoidcMockEnabled({ context }: Pick<Route.LoaderArgs, 'context'
 // OIDC `/.well-known/openid-configuration` endpoint mock
 //
 function handleOpenidConfigurationRequest({ context, params, request }: Route.LoaderArgs): Response {
-  const { AUTH_RAOIDC_BASE_URL } = context.appContainer.get(TYPES.configs.ServerConfig);
+  const { AUTH_RAOIDC_BASE_URL } = context.appContainer.get(TYPES.ServerConfig);
   const ServerMetadata: ServerMetadata = {
     issuer: 'GC-ECAS-MOCK',
     authorization_endpoint: `${AUTH_RAOIDC_BASE_URL}/authorize`,
@@ -111,7 +111,7 @@ function handleOpenidConfigurationRequest({ context, params, request }: Route.Lo
 // OIDC `/jwks` endpoint mock
 //
 async function handleJwksRequest({ context, params, request }: Route.LoaderArgs): Promise<Response> {
-  const { AUTH_JWT_PUBLIC_KEY } = context.appContainer.get(TYPES.configs.ServerConfig);
+  const { AUTH_JWT_PUBLIC_KEY } = context.appContainer.get(TYPES.ServerConfig);
 
   const serverVerificationKey = await generateCryptoKey(AUTH_JWT_PUBLIC_KEY, 'verify');
   const publicJwk = await subtle.exportKey('jwk', serverVerificationKey);
@@ -125,7 +125,7 @@ async function handleJwksRequest({ context, params, request }: Route.LoaderArgs)
 // OIDC `/token` endpoint mock
 //
 async function handleTokenRequest({ context, params, request }: Route.LoaderArgs): Promise<Response> {
-  const { AUTH_JWT_PRIVATE_KEY, AUTH_JWT_PUBLIC_KEY } = context.appContainer.get(TYPES.configs.ServerConfig);
+  const { AUTH_JWT_PRIVATE_KEY, AUTH_JWT_PUBLIC_KEY } = context.appContainer.get(TYPES.ServerConfig);
 
   // RAOIDC returns an access token that is encrypted using its private key
   const encryptedAccessToken = await generateAccessToken(AUTH_JWT_PUBLIC_KEY, AUTH_JWT_PRIVATE_KEY);
@@ -147,7 +147,7 @@ async function handleTokenRequest({ context, params, request }: Route.LoaderArgs
 // OIDC `/userinfo` endpoint mock
 //
 async function handleUserInfoRequest({ context, params, request }: Route.LoaderArgs): Promise<Response> {
-  const { AUTH_JWT_PRIVATE_KEY, AUTH_JWT_PUBLIC_KEY } = context.appContainer.get(TYPES.configs.ServerConfig);
+  const { AUTH_JWT_PRIVATE_KEY, AUTH_JWT_PUBLIC_KEY } = context.appContainer.get(TYPES.ServerConfig);
 
   const encryptedUserinfoToken = await generateUserInfoToken(AUTH_JWT_PUBLIC_KEY, AUTH_JWT_PRIVATE_KEY);
 
@@ -172,10 +172,10 @@ function handleValidateSessionRequest({ context, params, request }: Route.Loader
 function handleMockAuthorizeRequest({ context: { appContainer }, request }: Route.LoaderArgs) {
   const log = createLogger('oidc.$/handleMockAuthorizeRequest');
   log.debug('Handling (mock) RAOIDC authorize request');
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  const instrumentationService = appContainer.get(TYPES.InstrumentationService);
   instrumentationService.createCounter('auth.authorize.requests').add(1);
 
-  const { MOCK_AUTH_ALLOWED_REDIRECTS } = appContainer.get(TYPES.configs.ServerConfig);
+  const { MOCK_AUTH_ALLOWED_REDIRECTS } = appContainer.get(TYPES.ServerConfig);
   const isValidRedirectUri = (val: string): boolean => MOCK_AUTH_ALLOWED_REDIRECTS.includes(val);
 
   const searchParamsSchema = z.object({

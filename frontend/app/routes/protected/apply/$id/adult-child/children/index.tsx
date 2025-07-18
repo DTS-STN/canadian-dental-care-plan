@@ -49,7 +49,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedApplyAdultChildState({ params, request, session });
@@ -58,8 +58,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:children.index.page-title') }) };
 
-  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
-  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
 
   const children = await Promise.all(
     getChildrenState(state).map(async (child) => {
@@ -72,7 +72,7 @@ export async function loader({ context: { appContainer, session }, params, reque
           : undefined;
 
       const idToken: IdToken = session.get('idToken');
-      appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.children.index', { userId: idToken.sub });
+      appContainer.get(TYPES.AuditService).createAudit('page-view.apply.adult-child.children.index', { userId: idToken.sub });
 
       return {
         ...child,
@@ -89,7 +89,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const formData = await request.formData();
@@ -100,7 +100,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.children.index', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.apply.adult-child.children.index', { userId: idToken.sub });
 
   if (formAction === FORM_ACTION.add) {
     const childId = randomUUID();

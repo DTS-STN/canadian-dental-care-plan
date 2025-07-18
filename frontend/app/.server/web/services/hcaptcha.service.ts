@@ -25,11 +25,7 @@ export class DefaultHCaptchaService implements HCaptchaService {
   private readonly hCaptchaRepository: HCaptchaRepository;
   private readonly auditService: AuditService;
 
-  constructor(
-    @inject(TYPES.web.mappers.HCaptchaDtoMapper) hCaptchaDtoMapper: HCaptchaDtoMapper,
-    @inject(TYPES.web.repositories.HCaptchaRepository) hCaptchaRepository: HCaptchaRepository,
-    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
-  ) {
+  constructor(@inject(TYPES.HCaptchaDtoMapper) hCaptchaDtoMapper: HCaptchaDtoMapper, @inject(TYPES.HCaptchaRepository) hCaptchaRepository: HCaptchaRepository, @inject(TYPES.AuditService) auditService: AuditService) {
     this.log = createLogger('DefaultHCaptchaService');
     this.hCaptchaDtoMapper = hCaptchaDtoMapper;
     this.hCaptchaRepository = hCaptchaRepository;

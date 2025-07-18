@@ -42,7 +42,7 @@ export class DefaultAddressValidationRepository implements AddressValidationRepo
   private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DefaultAddressValidationRepositoryServerConfig, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
+  constructor(@inject(TYPES.ServerConfig) serverConfig: DefaultAddressValidationRepositoryServerConfig, @inject(TYPES.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultAddressValidationRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;

@@ -25,7 +25,7 @@ export class DefaultMailingAddressValidatorFactory implements MailingAddressVali
   private readonly log: Logger;
   private readonly addressValidatorFactory: AddressValidatorFactory;
 
-  constructor(@inject(TYPES.routes.validators.AddressValidatorFactory) addressValidatorFactory: AddressValidatorFactory) {
+  constructor(@inject(TYPES.AddressValidatorFactory) addressValidatorFactory: AddressValidatorFactory) {
     this.log = createLogger('DefaultMailingAddressValidatorFactory');
     this.addressValidatorFactory = addressValidatorFactory;
     this.init();

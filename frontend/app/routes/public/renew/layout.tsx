@@ -25,10 +25,10 @@ export const handle = {
 export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const locale = getLocale(request);
 
-  const redisService = appContainer.find(TYPES.data.services.RedisService);
+  const redisService = appContainer.find(TYPES.RedisService);
   const killswitchTimeout = (await redisService?.ttl(KILLSWITCH_KEY)) ?? 0;
 
-  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(TYPES.configs.ClientConfig);
+  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(TYPES.ClientConfig);
   return { killswitchTimeout, locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
 

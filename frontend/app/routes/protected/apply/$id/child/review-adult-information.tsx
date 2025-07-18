@@ -52,7 +52,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedApplyChildStateForReview({ params, request, session });
@@ -62,14 +62,14 @@ export async function loader({ context: { appContainer, session }, params, reque
   // apply state is valid then edit mode can be set to true
   saveProtectedApplyState({ params, session, state: { editMode: true } });
 
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress.province ? await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
-  const countryMailing = await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale);
-  const countryHome = state.homeAddress?.country ? await appContainer.get(TYPES.domain.services.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
+  const countryMailing = await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale);
+  const countryHome = state.homeAddress?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -112,12 +112,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-child:review-adult-information.page-title') }) };
 
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
-  const benefitApplicationDtoMapper = appContainer.get(TYPES.domain.mappers.BenefitApplicationDtoMapper);
-  const benefitApplicationStateMapper = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper);
+  const benefitApplicationDtoMapper = appContainer.get(TYPES.BenefitApplicationDtoMapper);
+  const benefitApplicationStateMapper = appContainer.get(TYPES.BenefitApplicationStateMapper);
   const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplyChildStateToBenefitApplicationDto(state));
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.child.review-adult-information', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.apply.child.review-adult-information', { userId: idToken.sub });
 
   return {
     userInfo,
@@ -130,7 +130,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const formData = await request.formData();
@@ -146,14 +146,14 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const state = loadProtectedApplyChildStateForReview({ params, request, session });
-  const benefitApplicationDto = appContainer.get(TYPES.routes.mappers.BenefitApplicationStateMapper).mapApplyChildStateToBenefitApplicationDto(state);
-  const confirmationCode = await appContainer.get(TYPES.domain.services.BenefitApplicationService).createProtectedBenefitApplication(benefitApplicationDto);
+  const benefitApplicationDto = appContainer.get(TYPES.BenefitApplicationStateMapper).mapApplyChildStateToBenefitApplicationDto(state);
+  const confirmationCode = await appContainer.get(TYPES.BenefitApplicationService).createProtectedBenefitApplication(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
 
   saveProtectedApplyState({ params, session, state: { submissionInfo } });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.child.review-adult-information', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.apply.child.review-adult-information', { userId: idToken.sub });
 
   return redirect(getPathById('protected/apply/$id/child/confirmation', params));
 }

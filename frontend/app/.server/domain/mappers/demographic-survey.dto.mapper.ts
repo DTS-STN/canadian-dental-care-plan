@@ -56,7 +56,7 @@ export type DemographicSurveyDtoMapperImpl_ServerConfig = Pick<ServerConfig, 'EN
 export class DefaultDemographicSurveyDtoMapper implements DemographicSurveyDtoMapper {
   private readonly serverConfig: DemographicSurveyDtoMapperImpl_ServerConfig;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DemographicSurveyDtoMapperImpl_ServerConfig) {
+  constructor(@inject(TYPES.ServerConfig) serverConfig: DemographicSurveyDtoMapperImpl_ServerConfig) {
     this.serverConfig = serverConfig;
   }
 

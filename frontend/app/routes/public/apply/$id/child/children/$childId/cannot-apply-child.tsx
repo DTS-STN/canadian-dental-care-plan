@@ -38,7 +38,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
   return redirect(getPathById('public/apply/$id/child/children/index', params));

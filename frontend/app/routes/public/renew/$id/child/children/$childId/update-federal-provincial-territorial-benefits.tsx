@@ -60,7 +60,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
+  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
 
   const state = loadRenewSingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -69,9 +69,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const childNumber = t('renew-child:children.child-number', { childNumber: state.childNumber });
   const childName = state.information?.firstName ?? childNumber;
 
-  const federalSocialPrograms = await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
-  const provinceTerritoryStates = await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
-  const provincialTerritorialSocialPrograms = await appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
+  const federalSocialPrograms = await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
+  const provinceTerritoryStates = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
+  const provincialTerritorialSocialPrograms = await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
   const meta = {
     title: t('gcweb:meta.title.template', { title: t('renew-child:children.update-dental-benefits.title', { childName }) }),
@@ -93,13 +93,13 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
   const state = loadRenewSingleChildState({ params, request, session });
   const renewState = loadRenewChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));

@@ -28,7 +28,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -38,10 +38,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
   const currentDate = getCurrentDateString(locale);
-  const applicationYearService = appContainer.get(TYPES.domain.services.ApplicationYearService);
+  const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
   const applicationYear = applicationYearService.getRenewalApplicationYear(currentDate);
 
-  const clientApplicationService = appContainer.get(TYPES.domain.services.ClientApplicationService);
+  const clientApplicationService = appContainer.get(TYPES.ClientApplicationService);
   const clientApplication = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.applicationYearId, userId: userInfoToken.sub });
   if (clientApplication.isNone()) {
     throw redirect(getPathById('protected/data-unavailable', params));
@@ -62,7 +62,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:index.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.index', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.renew.index', { userId: idToken.sub });
 
   return { id: state.id, locale, meta };
 }

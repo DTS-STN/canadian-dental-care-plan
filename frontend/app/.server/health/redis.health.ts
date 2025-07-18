@@ -17,9 +17,9 @@ export class RedisHealthCheck implements HealthCheck {
   readonly metadata?: Record<string, string>;
 
   constructor(
-    @inject(TYPES.configs.ServerConfig)
+    @inject(TYPES.ServerConfig)
     serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL' | 'REDIS_USERNAME' | 'REDIS_STANDALONE_HOST' | 'REDIS_STANDALONE_PORT' | 'REDIS_SENTINEL_NAME' | 'REDIS_SENTINEL_HOST' | 'REDIS_SENTINEL_PORT' | 'REDIS_COMMAND_TIMEOUT_SECONDS'>,
-    @inject(TYPES.data.services.RedisService) redisService: RedisService,
+    @inject(TYPES.RedisService) redisService: RedisService,
   ) {
     this.log = createLogger('RedisHealthCheck');
     this.serverConfig = serverConfig;

@@ -50,7 +50,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewState({ params, request, session });
@@ -59,15 +59,15 @@ export async function loader({ context: { appContainer, session }, params, reque
     throw new Response('Not Found', { status: 404 });
   }
 
-  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
+  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
-  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
 
   const federalSocialPrograms = await federalGovernmentInsurancePlanService.listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
-  const provinceTerritoryStates = await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
+  const provinceTerritoryStates = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
   const provincialTerritorialSocialPrograms = await provincialGovernmentInsurancePlanService.listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-dental-benefits.title') }) };
@@ -100,7 +100,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const dentalBenefits = state.dentalBenefits ?? (isInvitationToApplyClient(state.clientApplication) ? undefined : clientDentalBenefits);
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.renew.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
 
   return {
     defaultState: dentalBenefits,
@@ -115,11 +115,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   const state = loadProtectedRenewState({ params, request, session });
@@ -207,7 +207,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.renew.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
 
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));

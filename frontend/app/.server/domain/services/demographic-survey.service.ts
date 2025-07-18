@@ -249,9 +249,9 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
   private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS'>;
 
   constructor(
-    @inject(TYPES.domain.mappers.DemographicSurveyDtoMapper) DemographicSurveyDtoMapper: DemographicSurveyDtoMapper,
-    @inject(TYPES.domain.repositories.DemographicSurveyRepository) DemographicSurveyRepository: DemographicSurveyRepository,
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS'>,
+    @inject(TYPES.DemographicSurveyDtoMapper) DemographicSurveyDtoMapper: DemographicSurveyDtoMapper,
+    @inject(TYPES.DemographicSurveyRepository) DemographicSurveyRepository: DemographicSurveyRepository,
+    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS'>,
   ) {
     this.log = createLogger('DefaultDemographicSurveyServiceService');
     this.DemographicSurveyDtoMapper = DemographicSurveyDtoMapper;

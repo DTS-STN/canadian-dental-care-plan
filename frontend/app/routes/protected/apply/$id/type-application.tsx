@@ -35,7 +35,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedApplyState({ params, session });
@@ -44,7 +44,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply:type-of-application.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.type-application', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.apply.type-application', { userId: idToken.sub });
 
   return { meta, defaultState: state.typeOfApplication };
 }
@@ -52,7 +52,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
@@ -73,7 +73,7 @@ export async function action({ context: { appContainer, session }, params, reque
   saveProtectedApplyState({ params, session, state: { editMode: false, typeOfApplication: parsedDataResult.data.typeOfApplication } });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.type-application', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.apply.type-application', { userId: idToken.sub });
 
   if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.adult) {
     return redirect(getPathById('protected/apply/$id/adult/applicant-information', params));

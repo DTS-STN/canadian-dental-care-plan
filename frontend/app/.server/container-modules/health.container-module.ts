@@ -35,17 +35,17 @@ function sessionTypeIs(serverConfig: Pick<ServerConfig, 'SESSION_STORAGE_TYPE'>,
  */
 export function createHealthContainerModule(serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES' | 'SESSION_STORAGE_TYPE'>): ContainerModule {
   return new ContainerModule((options) => {
-    options.bind(TYPES.health.HealthCheck).to(AddressValidationHealthCheck);
-    options.bind(TYPES.health.HealthCheck).to(ApplicantHealthCheck);
-    options.bind(TYPES.health.HealthCheck).to(ApplicationStatusHealthCheck);
-    options.bind(TYPES.health.HealthCheck).to(CountryHealthCheck);
-    options.bind(TYPES.health.HealthCheck).to(ClientFriendlyStatusHealthCheck);
-    options.bind(TYPES.health.HealthCheck).to(ProvinceTerritoryStateHealthCheck);
-    options.bind(TYPES.health.HealthCheck).to(LetterTypeHealthCheck);
-    options.bind(TYPES.health.HealthCheck).to(GovernmentInsurancePlanHealthCheck);
-    options.bind(TYPES.health.HealthCheck).to(HCaptchaHealthCheck).when(featureEnabled(serverConfig, 'hcaptcha'));
-    options.bind(TYPES.health.HealthCheck).to(LetterHealthCheck);
-    options.bind(TYPES.health.HealthCheck).to(NotificationHealthCheck);
-    options.bind(TYPES.health.HealthCheck).to(RedisHealthCheck).when(sessionTypeIs(serverConfig, 'redis'));
+    options.bind(TYPES.HealthCheck).to(AddressValidationHealthCheck);
+    options.bind(TYPES.HealthCheck).to(ApplicantHealthCheck);
+    options.bind(TYPES.HealthCheck).to(ApplicationStatusHealthCheck);
+    options.bind(TYPES.HealthCheck).to(CountryHealthCheck);
+    options.bind(TYPES.HealthCheck).to(ClientFriendlyStatusHealthCheck);
+    options.bind(TYPES.HealthCheck).to(ProvinceTerritoryStateHealthCheck);
+    options.bind(TYPES.HealthCheck).to(LetterTypeHealthCheck);
+    options.bind(TYPES.HealthCheck).to(GovernmentInsurancePlanHealthCheck);
+    options.bind(TYPES.HealthCheck).to(HCaptchaHealthCheck).when(featureEnabled(serverConfig, 'hcaptcha'));
+    options.bind(TYPES.HealthCheck).to(LetterHealthCheck);
+    options.bind(TYPES.HealthCheck).to(NotificationHealthCheck);
+    options.bind(TYPES.HealthCheck).to(RedisHealthCheck).when(sessionTypeIs(serverConfig, 'redis'));
   });
 }

@@ -29,11 +29,7 @@ export class DefaultApplicantService implements ApplicantService {
   private readonly applicantRepository: ApplicantRepository;
   private readonly auditService: AuditService;
 
-  constructor(
-    @inject(TYPES.domain.mappers.ApplicantDtoMapper) applicantDtoMapper: ApplicantDtoMapper,
-    @inject(TYPES.domain.repositories.ApplicantRepository) applicantRepository: ApplicantRepository,
-    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
-  ) {
+  constructor(@inject(TYPES.ApplicantDtoMapper) applicantDtoMapper: ApplicantDtoMapper, @inject(TYPES.ApplicantRepository) applicantRepository: ApplicantRepository, @inject(TYPES.AuditService) auditService: AuditService) {
     this.log = createLogger('DefaultApplicantService');
     this.applicantDtoMapper = applicantDtoMapper;
     this.applicantRepository = applicantRepository;

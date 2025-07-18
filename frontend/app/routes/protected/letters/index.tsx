@@ -36,7 +36,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitle
 const orderEnumSchema = z.enum(['asc', 'desc']);
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('view-letters');
   await securityHandler.validateAuthSession({ request, session });
 
@@ -48,7 +48,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const clientNumberOption: Option<string> = session.has('clientNumber')
     ? session.find('clientNumber')
-    : await appContainer.get(TYPES.domain.services.ApplicantService).findClientNumberBySin({
+    : await appContainer.get(TYPES.ApplicantService).findClientNumberBySin({
         sin: userInfoToken.sin,
         userId: userInfoToken.sub,
       });
@@ -58,8 +58,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   }
 
   const clientNumber = clientNumberOption.unwrap();
-  const allLetters = await appContainer.get(TYPES.domain.services.LetterService).findLettersByClientId({ clientId: clientNumber, userId: userInfoToken.sub, sortOrder });
-  const letterTypes = await appContainer.get(TYPES.domain.services.LetterTypeService).listLetterTypes();
+  const allLetters = await appContainer.get(TYPES.LetterService).findLettersByClientId({ clientId: clientNumber, userId: userInfoToken.sub, sortOrder });
+  const letterTypes = await appContainer.get(TYPES.LetterTypeService).listLetterTypes();
   const letters = allLetters.filter(({ letterTypeId }) => letterTypes.some(({ id }) => letterTypeId === id));
 
   session.set('clientNumber', clientNumber);
@@ -67,10 +67,10 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('letters:index.page-title') }) };
-  const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.letters', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.letters', { userId: idToken.sub });
 
   return { letters, letterTypes, meta, sortOrder, SCCH_BASE_URI };
 }

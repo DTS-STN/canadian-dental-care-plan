@@ -40,7 +40,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedApplyAdultState({ params, request, session });
@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult:confirm-dental-benefits.title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.apply.adult.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
 
   return {
     defaultState: state.hasFederalProvincialTerritorialBenefits,
@@ -61,7 +61,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
@@ -102,7 +102,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.apply.adult.confirm-federal-provincial-territorial-benefits', { userId: idToken.sub });
 
   if (dentalBenefits.hasFederalProvincialTerritorialBenefits) {
     return redirect(getPathById('protected/apply/$id/adult/federal-provincial-territorial-benefits', params));

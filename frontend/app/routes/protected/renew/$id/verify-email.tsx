@@ -46,7 +46,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewState({ params, request, session });
@@ -64,19 +64,19 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
   const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.configs.ServerConfig);
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.ServerConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
   const idToken: IdToken = session.get('idToken');
 
   // Fetch verification code service
-  const verificationCodeService = appContainer.get(TYPES.domain.services.VerificationCodeService);
+  const verificationCodeService = appContainer.get(TYPES.VerificationCodeService);
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 

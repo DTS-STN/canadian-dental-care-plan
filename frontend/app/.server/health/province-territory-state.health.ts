@@ -17,9 +17,9 @@ export class ProvinceTerritoryStateHealthCheck implements HealthCheck {
   readonly metadata?: Record<string, string>;
 
   constructor(
-    @inject(TYPES.configs.ServerConfig)
+    @inject(TYPES.ServerConfig)
     serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL'>,
-    @inject(TYPES.domain.repositories.ProvinceTerritoryStateRepository) provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
+    @inject(TYPES.ProvinceTerritoryStateRepository) provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
   ) {
     this.log = createLogger('ProvinceTerritoryStateHealthCheck');
     this.serverConfig = serverConfig;

@@ -106,7 +106,7 @@ export class DefaultHttpClient implements HttpClient {
   private readonly log: Logger;
   private readonly instrumentationService: InstrumentationService;
 
-  constructor(@inject(TYPES.observability.InstrumentationService) instrumentationService: InstrumentationService) {
+  constructor(@inject(TYPES.InstrumentationService) instrumentationService: InstrumentationService) {
     this.log = createLogger('DefaultHttpClient');
     this.instrumentationService = instrumentationService;
   }

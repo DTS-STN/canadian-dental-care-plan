@@ -29,7 +29,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('stub-login');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -48,7 +48,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('stub-login');
 
   const t = await getFixedT(request, handle.i18nNamespaces);

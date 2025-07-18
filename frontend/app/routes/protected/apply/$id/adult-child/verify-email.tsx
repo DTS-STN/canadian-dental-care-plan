@@ -48,7 +48,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedApplyAdultChildState({ params, request, session });
@@ -57,7 +57,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:verify-email.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.verify-email', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.apply.adult-child.verify-email', { userId: idToken.sub });
 
   return {
     meta,
@@ -67,7 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const formData = await request.formData();
@@ -77,10 +77,10 @@ export async function action({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   const state = loadProtectedApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.configs.ServerConfig);
+  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.ServerConfig);
 
   // Fetch verification code service
-  const verificationCodeService = appContainer.get(TYPES.domain.services.VerificationCodeService);
+  const verificationCodeService = appContainer.get(TYPES.VerificationCodeService);
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
@@ -157,7 +157,7 @@ export async function action({ context: { appContainer, session }, params, reque
         },
       });
 
-      appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.verify-email', { userId: idToken.sub });
+      appContainer.get(TYPES.AuditService).createAudit('update-data.apply.adult-child.verify-email', { userId: idToken.sub });
       return { status: 'verification-code-mismatch' } as const;
     }
 

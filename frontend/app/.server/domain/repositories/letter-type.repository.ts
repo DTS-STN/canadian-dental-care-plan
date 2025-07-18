@@ -49,7 +49,7 @@ export class DefaultLetterTypeRepository implements LetterTypeRepository {
   private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DefaultLetterTypeRepositoryServerConfig, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
+  constructor(@inject(TYPES.ServerConfig) serverConfig: DefaultLetterTypeRepositoryServerConfig, @inject(TYPES.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultLetterTypeRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;

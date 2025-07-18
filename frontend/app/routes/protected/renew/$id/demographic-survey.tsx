@@ -50,7 +50,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateFeatureEnabled('demographic-survey');
 
@@ -65,7 +65,7 @@ export async function loader({ context: { appContainer, session }, request, para
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-renew:demographic-survey.page-title', { memberName: t('protected-renew:demographic-survey.member') }) }),
   };
 
-  const demographicSurveyService = appContainer.get(TYPES.domain.services.DemographicSurveyService);
+  const demographicSurveyService = appContainer.get(TYPES.DemographicSurveyService);
   const indigenousStatuses = demographicSurveyService.listLocalizedIndigenousStatuses(locale);
   const firstNations = demographicSurveyService.listLocalizedFirstNations(locale);
   const disabilityStatuses = demographicSurveyService.listLocalizedDisabilityStatuses(locale);
@@ -74,7 +74,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const genderStatuses = demographicSurveyService.listLocalizedGenderStatuses(locale);
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.demographic-survey', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.renew.demographic-survey', { userId: idToken.sub });
 
   return {
     meta,
@@ -93,7 +93,7 @@ export async function loader({ context: { appContainer, session }, request, para
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
@@ -105,7 +105,7 @@ export async function action({ context: { appContainer, session }, params, reque
     ETHNIC_GROUP_PREFER_NOT_TO_ANSWER,
     LOCATION_BORN_STATUS_PREFER_NOT_TO_ANSWER,
     GENDER_STATUS_PREFER_NOT_TO_ANSWER,
-  } = appContainer.get(TYPES.configs.ClientConfig);
+  } = appContainer.get(TYPES.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const state = loadProtectedRenewState({ params, request, session });
@@ -158,7 +158,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.demographic-survey', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.renew.demographic-survey', { userId: idToken.sub });
 
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));

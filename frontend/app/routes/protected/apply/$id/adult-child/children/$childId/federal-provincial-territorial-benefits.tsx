@@ -60,7 +60,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedApplyAdultSingleChildState({ params, request, session });
@@ -68,11 +68,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.configs.ClientConfig);
+  const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
 
-  const federalSocialPrograms = await appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
-  const provinceTerritoryStates = await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
-  const provincialTerritorialSocialPrograms = await appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
+  const federalSocialPrograms = await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
+  const provinceTerritoryStates = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
+  const provincialTerritorialSocialPrograms = await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
   const childNumber = t('protected-apply-adult-child:children.child-number', { childNumber: state.childNumber });
   const childName = state.information?.firstName ?? childNumber;
@@ -83,7 +83,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.children.federal-provincial-territorial-benefits', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.apply.adult-child.children.federal-provincial-territorial-benefits', { userId: idToken.sub });
 
   return {
     defaultState: state.dentalBenefits,
@@ -98,7 +98,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const formData = await request.formData();
@@ -213,7 +213,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.children.federal-provincial-territorial-benefits', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.apply.adult-child.children.federal-provincial-territorial-benefits', { userId: idToken.sub });
 
   if (state.editMode) {
     return redirect(getPathById('protected/apply/$id/adult-child/review-child-information', params));

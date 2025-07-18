@@ -26,9 +26,9 @@ export class DefaultAddressValidationService implements AddressValidationService
   private readonly auditService: AuditService;
 
   constructor(
-    @inject(TYPES.domain.mappers.AddressValidationDtoMapper) addressValidationDtoMapper: AddressValidationDtoMapper,
-    @inject(TYPES.domain.repositories.AddressValidationRepository) addressValidationRepository: AddressValidationRepository,
-    @inject(TYPES.domain.services.AuditService) auditService: AuditService,
+    @inject(TYPES.AddressValidationDtoMapper) addressValidationDtoMapper: AddressValidationDtoMapper,
+    @inject(TYPES.AddressValidationRepository) addressValidationRepository: AddressValidationRepository,
+    @inject(TYPES.AuditService) auditService: AuditService,
   ) {
     this.log = createLogger('DefaultAddressValidationService');
     this.addressValidationDtoMapper = addressValidationDtoMapper;

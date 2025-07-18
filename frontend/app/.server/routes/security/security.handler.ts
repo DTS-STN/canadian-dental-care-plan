@@ -125,10 +125,10 @@ export class DefaultSecurityHandler implements SecurityHandler {
   private readonly raoidcSessionValidator: RaoidcSessionValidator;
 
   constructor(
-    @inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>,
-    @inject(TYPES.web.validators.CsrfTokenValidator) csrfTokenValidator: CsrfTokenValidator,
-    @inject(TYPES.web.validators.HCaptchaValidator) hCaptchaValidator: HCaptchaValidator,
-    @inject(TYPES.web.validators.RaoidcSessionValidator) raoidcSessionValidator: RaoidcSessionValidator,
+    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>,
+    @inject(TYPES.CsrfTokenValidator) csrfTokenValidator: CsrfTokenValidator,
+    @inject(TYPES.HCaptchaValidator) hCaptchaValidator: HCaptchaValidator,
+    @inject(TYPES.RaoidcSessionValidator) raoidcSessionValidator: RaoidcSessionValidator,
   ) {
     this.log = createLogger('DefaultSecurityHandler');
     this.serverConfig = serverConfig;

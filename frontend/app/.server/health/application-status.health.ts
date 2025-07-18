@@ -17,9 +17,9 @@ export class ApplicationStatusHealthCheck implements HealthCheck {
   readonly metadata?: Record<string, string>;
 
   constructor(
-    @inject(TYPES.configs.ServerConfig)
+    @inject(TYPES.ServerConfig)
     serverConfig: Pick<ServerConfig, 'HEALTH_CACHE_TTL'>,
-    @inject(TYPES.domain.repositories.ApplicationStatusRepository) applicationStatusRepository: ApplicationStatusRepository,
+    @inject(TYPES.ApplicationStatusRepository) applicationStatusRepository: ApplicationStatusRepository,
   ) {
     this.log = createLogger('ApplicationStatusHealthCheck');
     this.serverConfig = serverConfig;

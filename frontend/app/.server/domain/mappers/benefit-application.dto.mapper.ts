@@ -52,7 +52,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
   >;
 
   constructor(
-    @inject(TYPES.configs.ServerConfig)
+    @inject(TYPES.ServerConfig)
     serverConfig: Pick<
       ServerConfig,
       | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'

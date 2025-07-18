@@ -46,7 +46,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewState({ params, request, session });
@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.dental-insurance', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.renew.dental-insurance', { userId: idToken.sub });
 
   return { id: state, meta, defaultState: state.dentalInsurance, editMode: state.editMode, i18nOptions: { memberName } };
 }
@@ -68,13 +68,13 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
   const state = loadProtectedRenewState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
@@ -113,7 +113,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.dental-insurance', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.renew.dental-insurance', { userId: idToken.sub });
 
   if (state.editMode) {
     return redirect(getPathById('protected/renew/$id/review-adult-information', params));

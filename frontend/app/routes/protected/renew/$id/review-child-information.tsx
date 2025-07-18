@@ -39,11 +39,11 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedRenewState({ params, request, session });
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
   const validatedChildren = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
 
@@ -63,8 +63,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const copiedState = JSON.parse(JSON.stringify(state));
   copiedState.children = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
 
-  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.FederalGovernmentInsurancePlanService);
-  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.domain.services.ProvincialGovernmentInsurancePlanService);
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
 
   const children = await Promise.all(
     validatedChildren.map(async (child) => {
@@ -91,7 +91,7 @@ export async function loader({ context: { appContainer, session }, params, reque
         : clientDentalBenefits;
 
       const idToken: IdToken = session.get('idToken');
-      appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.review-child-information', { userId: idToken.sub });
+      appContainer.get(TYPES.AuditService).createAudit('page-view.renew.review-child-information', { userId: idToken.sub });
 
       return {
         id: child.id,
@@ -113,7 +113,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
@@ -123,11 +123,11 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const state = loadProtectedRenewState({ params, request, session });
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.review-child-information', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.renew.review-child-information', { userId: idToken.sub });
 
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {

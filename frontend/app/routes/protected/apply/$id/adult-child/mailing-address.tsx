@@ -51,19 +51,19 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const countryList = await appContainer.get(TYPES.domain.services.CountryService).listAndSortLocalizedCountries(locale);
-  const regionList = await appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
+  const countryList = await appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
+  const regionList = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:address.mailing-address.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.adult-child.mailing-address', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.apply.adult-child.mailing-address', { userId: idToken.sub });
 
   return {
     meta,
@@ -75,16 +75,16 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const formData = await request.formData();
   const locale = getLocale(request);
 
-  const clientConfig = appContainer.get(TYPES.configs.ClientConfig);
-  const addressValidationService = appContainer.get(TYPES.domain.services.AddressValidationService);
-  const countryService = appContainer.get(TYPES.domain.services.CountryService);
-  const provinceTerritoryStateService = appContainer.get(TYPES.domain.services.ProvinceTerritoryStateService);
+  const clientConfig = appContainer.get(TYPES.ClientConfig);
+  const addressValidationService = appContainer.get(TYPES.AddressValidationService);
+  const countryService = appContainer.get(TYPES.CountryService);
+  const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
 
   securityHandler.validateCsrfToken({ formData, session });
 
@@ -97,7 +97,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/apply/$id/adult-child/review-adult-information', params));
   }
 
-  const mailingAddressValidator = appContainer.get(TYPES.routes.validators.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
+  const mailingAddressValidator = appContainer.get(TYPES.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
     address: String(formData.get('address')),
     countryId: String(formData.get('countryId')),
@@ -203,7 +203,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.adult-child.mailing-address', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.apply.adult-child.mailing-address', { userId: idToken.sub });
 
   if (state.editMode) {
     return redirect(getPathById('protected/apply/$id/adult-child/review-adult-information', params));

@@ -75,11 +75,7 @@ export class DefaultCountryService implements CountryService {
    * @param countryRepository - The repository for accessing country data.
    * @param serverConfig - The server configuration containing necessary constants and cache TTL values.
    */
-  constructor(
-    @inject(TYPES.domain.mappers.CountryDtoMapper) countryDtoMapper: CountryDtoMapper,
-    @inject(TYPES.domain.repositories.CountryRepository) countryRepository: CountryRepository,
-    @inject(TYPES.configs.ServerConfig) serverConfig: CountryServiceImpl_ServiceConfig,
-  ) {
+  constructor(@inject(TYPES.CountryDtoMapper) countryDtoMapper: CountryDtoMapper, @inject(TYPES.CountryRepository) countryRepository: CountryRepository, @inject(TYPES.ServerConfig) serverConfig: CountryServiceImpl_ServiceConfig) {
     this.log = createLogger('DefaultCountryService');
     this.countryDtoMapper = countryDtoMapper;
     this.countryRepository = countryRepository;

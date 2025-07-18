@@ -52,13 +52,13 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
   const state = loadRenewState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const clientApplicationService = appContainer.get(TYPES.domain.services.ClientApplicationService);
+  const clientApplicationService = appContainer.get(TYPES.ClientApplicationService);
 
   // state validation schema
   const applicantInformationSchema = z

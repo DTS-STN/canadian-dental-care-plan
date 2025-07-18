@@ -42,10 +42,10 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = appContainer.get(TYPES.ClientConfig);
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:review-submit.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.renew.review-and-submit', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.renew.review-and-submit', { userId: idToken.sub });
 
   const primaryApplicantName = isPrimaryApplicantStateComplete(state, demographicSurveyEnabled) ? `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}` : undefined;
   const children = validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled);
@@ -71,8 +71,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const payload =
       viewPayloadEnabled &&
       appContainer
-        .get(TYPES.domain.mappers.BenefitRenewalDtoMapper)
-        .mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(copiedState, userInfoToken.sub, isPrimaryApplicantStateComplete(state,demographicSurveyEnabled)));
+        .get(TYPES.BenefitRenewalDtoMapper)
+        .mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(appContainer.get(TYPES.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(copiedState, userInfoToken.sub, isPrimaryApplicantStateComplete(state,demographicSurveyEnabled)));
 
   return {
     meta,
@@ -85,7 +85,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
@@ -94,7 +94,7 @@ export async function action({ context: { appContainer, session }, params, reque
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
-  const { ENABLED_FEATURES } = appContainer.get(TYPES.configs.ClientConfig);
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   const state = loadProtectedRenewStateForReview({ params, request, session, demographicSurveyEnabled });
@@ -109,8 +109,8 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const userInfoToken = session.get('userInfoToken');
-  const benefitRenewalDto = appContainer.get(TYPES.routes.mappers.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub, primaryApplicantStateCompleted);
-  await appContainer.get(TYPES.domain.services.BenefitRenewalService).createProtectedBenefitRenewal(benefitRenewalDto);
+  const benefitRenewalDto = appContainer.get(TYPES.BenefitRenewalStateMapper).mapProtectedRenewStateToProtectedBenefitRenewalDto(state, userInfoToken.sub, primaryApplicantStateCompleted);
+  await appContainer.get(TYPES.BenefitRenewalService).createProtectedBenefitRenewal(benefitRenewalDto);
 
   const submissionInfo = { submittedOn: new UTCDate().toISOString() };
   saveProtectedRenewState({
@@ -121,7 +121,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.renew.review-and-submit', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.renew.review-and-submit', { userId: idToken.sub });
 
   return redirect(getPathById('protected/renew/$id/confirmation', params));
 }

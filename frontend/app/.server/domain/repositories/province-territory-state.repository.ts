@@ -56,7 +56,7 @@ export class DefaultProvinceTerritoryStateRepository implements ProvinceTerritor
   private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DefaultProvinceTerritoryStateRepositoryServerConfig, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
+  constructor(@inject(TYPES.ServerConfig) serverConfig: DefaultProvinceTerritoryStateRepositoryServerConfig, @inject(TYPES.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultProvinceTerritoryStateRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;

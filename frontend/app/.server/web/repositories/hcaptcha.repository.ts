@@ -40,7 +40,7 @@ export class DefaultHCaptchaRepository implements HCaptchaRepository {
   private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HCAPTCHA_SECRET_KEY' | 'HCAPTCHA_VERIFY_URL' | 'HEALTH_PLACEHOLDER_REQUEST_VALUE'>, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
+  constructor(@inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'HCAPTCHA_SECRET_KEY' | 'HCAPTCHA_VERIFY_URL' | 'HEALTH_PLACEHOLDER_REQUEST_VALUE'>, @inject(TYPES.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultHCaptchaRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;

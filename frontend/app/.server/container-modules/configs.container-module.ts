@@ -10,7 +10,7 @@ import { getClientEnv } from '~/utils/env-utils';
  */
 export function createConfigsContainerModule(): ContainerModule {
   return new ContainerModule((options) => {
-    options.bind(TYPES.configs.ClientConfig).toDynamicValue(() => getClientEnv());
-    options.bind(TYPES.configs.ServerConfig).toDynamicValue(() => getEnv());
+    options.bind(TYPES.ClientConfig).toDynamicValue(() => getClientEnv());
+    options.bind(TYPES.ServerConfig).toDynamicValue(() => getEnv());
   });
 }

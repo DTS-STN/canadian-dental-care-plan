@@ -13,7 +13,7 @@ export interface VerificationCodeDtoMapper {
 export class DefaultVerificationCodeDtoMapper implements VerificationCodeDtoMapper {
   private readonly serverConfig: Pick<ServerConfig, 'GC_NOTIFY_ENGLISH_TEMPLATE_ID' | 'GC_NOTIFY_FRENCH_TEMPLATE_ID'>;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'GC_NOTIFY_ENGLISH_TEMPLATE_ID' | 'GC_NOTIFY_FRENCH_TEMPLATE_ID'>) {
+  constructor(@inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'GC_NOTIFY_ENGLISH_TEMPLATE_ID' | 'GC_NOTIFY_FRENCH_TEMPLATE_ID'>) {
     this.serverConfig = serverConfig;
   }
 

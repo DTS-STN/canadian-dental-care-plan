@@ -51,7 +51,7 @@ export class DefaultHCaptchaValidator implements HCaptchaValidator {
   private readonly serverConfig: Pick<ServerConfig, 'HCAPTCHA_MAX_SCORE'>;
   private readonly hCaptchaService: HCaptchaService;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'HCAPTCHA_MAX_SCORE'>, @inject(TYPES.web.services.HCaptchaService) hCaptchaService: HCaptchaService) {
+  constructor(@inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'HCAPTCHA_MAX_SCORE'>, @inject(TYPES.HCaptchaService) hCaptchaService: HCaptchaService) {
     this.log = createLogger('DefaultHCaptchaValidator');
     this.serverConfig = serverConfig;
     this.hCaptchaService = hCaptchaService;

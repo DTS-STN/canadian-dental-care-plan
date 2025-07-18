@@ -49,7 +49,7 @@ export class DefaultCountryRepository implements CountryRepository {
   private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: DefaultCountryRepositoryServerConfig, @inject(TYPES.http.HttpClient) httpClient: HttpClient) {
+  constructor(@inject(TYPES.ServerConfig) serverConfig: DefaultCountryRepositoryServerConfig, @inject(TYPES.HttpClient) httpClient: HttpClient) {
     this.log = createLogger('DefaultCountryRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;

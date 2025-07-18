@@ -15,7 +15,7 @@ export interface AddressValidationDtoMapper {
 export class DefaultAddressValidationDtoMapper implements AddressValidationDtoMapper {
   private readonly serverConfig: Pick<ServerConfig, 'CANADA_COUNTRY_ID'>;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: Pick<ServerConfig, 'CANADA_COUNTRY_ID'>) {
+  constructor(@inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'CANADA_COUNTRY_ID'>) {
     this.serverConfig = serverConfig;
   }
 

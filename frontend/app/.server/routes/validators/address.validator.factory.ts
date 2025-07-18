@@ -22,7 +22,7 @@ export interface AddressValidatorFactory {
 export class DefaultAddressValidatorFactory {
   private readonly serverConfig: ServerConfig;
 
-  constructor(@inject(TYPES.configs.ServerConfig) serverConfig: ServerConfig) {
+  constructor(@inject(TYPES.ServerConfig) serverConfig: ServerConfig) {
     this.serverConfig = serverConfig;
   }
 

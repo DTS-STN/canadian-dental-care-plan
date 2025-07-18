@@ -45,7 +45,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('demographic-survey');
 
   const state = loadRenewAdultChildState({ params, request, session });
@@ -56,7 +56,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const locale = getLocale(request);
   const meta = { title: t('gcweb:meta.title.template', { title: t('renew-adult-child:demographic-survey.page-title', { memberName }) }) };
 
-  const demographicSurveyService = appContainer.get(TYPES.domain.services.DemographicSurveyService);
+  const demographicSurveyService = appContainer.get(TYPES.DemographicSurveyService);
   const indigenousStatuses = demographicSurveyService.listLocalizedIndigenousStatuses(locale);
   const firstNations = demographicSurveyService.listLocalizedFirstNations(locale);
   const disabilityStatuses = demographicSurveyService.listLocalizedDisabilityStatuses(locale);
@@ -81,7 +81,7 @@ export async function loader({ context: { appContainer, session }, request, para
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
   const state = loadRenewAdultChildState({ params, request, session });
@@ -103,7 +103,7 @@ export async function action({ context: { appContainer, session }, params, reque
     ETHNIC_GROUP_PREFER_NOT_TO_ANSWER,
     LOCATION_BORN_STATUS_PREFER_NOT_TO_ANSWER,
     GENDER_STATUS_PREFER_NOT_TO_ANSWER,
-  } = appContainer.get(TYPES.configs.ClientConfig);
+  } = appContainer.get(TYPES.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const demographicSurveySchema = z

@@ -1,7 +1,7 @@
 import { flatKeys, set } from 'moderndash';
 import assert from 'node:assert';
 
-import type { ServiceIdentifier, TypesContant } from '~/.server/constants';
+import type { ServiceIdentifier, ServiceTypesMap } from '~/.server/constants';
 
 /**
  * Generates a unique `ServiceIdentifier` for dependency injection, using a string identifier.
@@ -48,7 +48,7 @@ export function serviceIdentifier<T>(identifier: string = 'unknown'): ServiceIde
  * console.log(serviceIdentifiers.web.validators.CsrfTokenValidator); // Symbol(web.validators.CsrfTokenValidator)
  * ```
  */
-export function assignServiceIdentifiers<T extends TypesContant>(types: T): T {
+export function assignServiceIdentifiers<T extends ServiceTypesMap>(types: T): T {
   const newTypes = { ...types }; // Shallow copy of the original types structure.
   const flattenedKeys = flatKeys(types); // Get all nested key paths as an object.
 

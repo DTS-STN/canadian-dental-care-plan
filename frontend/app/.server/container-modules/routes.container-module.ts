@@ -8,6 +8,6 @@ import { DefaultSecurityHandler } from '~/.server/routes/security';
  */
 export function createRoutesContainerModule(): ContainerModule {
   return new ContainerModule((options) => {
-    options.bind(TYPES.routes.security.SecurityHandler).to(DefaultSecurityHandler);
+    options.bind(TYPES.SecurityHandler).to(DefaultSecurityHandler);
   });
 }

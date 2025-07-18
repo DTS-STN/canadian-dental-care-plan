@@ -38,7 +38,7 @@ async function getJwks(serverConfig: Pick<ServerConfig, 'AUTH_JWT_PUBLIC_KEY'>) 
  * can be used by an auth provider to verify private key JWTs.
  */
 export async function loader({ context: { appContainer } }: Route.LoaderArgs) {
-  const { AUTH_JWT_PUBLIC_KEY } = appContainer.get(TYPES.configs.ServerConfig);
+  const { AUTH_JWT_PUBLIC_KEY } = appContainer.get(TYPES.ServerConfig);
   const keys = await getJwks({ AUTH_JWT_PUBLIC_KEY });
   const headers = { 'Content-Type': 'application/json' };
 

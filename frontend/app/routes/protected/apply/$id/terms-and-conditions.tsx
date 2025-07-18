@@ -43,7 +43,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
   const state = loadProtectedApplyState({ params, session });
@@ -51,7 +51,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply:terms-and-conditions.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('page-view.apply.terms-and-conditions', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('page-view.apply.terms-and-conditions', { userId: idToken.sub });
 
   return { defaultState: state.termsAndConditions, meta };
 }
@@ -59,11 +59,11 @@ export async function loader({ context: { appContainer, session }, request, para
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const securityHandler = appContainer.get(TYPES.routes.security.SecurityHandler);
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const { SCCH_BASE_URI } = appContainer.get(TYPES.configs.ClientConfig);
+  const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
 
@@ -118,7 +118,7 @@ export async function action({ context: { appContainer, session }, request, para
   });
 
   const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.domain.services.AuditService).createAudit('update-data.apply.terms-and-conditions', { userId: idToken.sub });
+  appContainer.get(TYPES.AuditService).createAudit('update-data.apply.terms-and-conditions', { userId: idToken.sub });
 
   return redirect(getPathById('protected/apply/$id/tax-filing', params));
 }

@@ -37,7 +37,7 @@ describe('_public.apply.id.tax-filing', () => {
   describe('action()', () => {
     it('should validate missing tax filing selection', async () => {
       const mockContext = mockDeep<AppLoadContext>();
-      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
+      mockContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({ request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: new FormData() }), context: mockContext, params: { id: '123', lang: 'en' } });
 
@@ -49,7 +49,7 @@ describe('_public.apply.id.tax-filing', () => {
       formData.append('hasFiledTaxes', 'yes');
 
       const mockContext = mockDeep<AppLoadContext>();
-      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
+      mockContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({ request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }), context: mockContext, params: { lang: 'en', id: '123' } });
 
@@ -63,7 +63,7 @@ describe('_public.apply.id.tax-filing', () => {
       formData.append('hasFiledTaxes', 'no');
 
       const mockContext = mockDeep<AppLoadContext>();
-      mockContext.appContainer.get.calledWith(TYPES.routes.security.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
+      mockContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({ request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }), context: mockContext, params: { lang: 'en', id: '123' } });
 

@@ -66,7 +66,7 @@ export class DefaultLetterRepository implements LetterRepository {
   private readonly baseUrl: string;
 
   constructor(
-    @inject(TYPES.configs.ServerConfig)
+    @inject(TYPES.ServerConfig)
     serverConfig: Pick<
       ServerConfig,
       | 'HEALTH_PLACEHOLDER_REQUEST_VALUE'
@@ -79,7 +79,7 @@ export class DefaultLetterRepository implements LetterRepository {
       | 'INTEROP_API_MAX_RETRIES'
       | 'INTEROP_API_BACKOFF_MS'
     >,
-    @inject(TYPES.http.HttpClient) httpClient: HttpClient,
+    @inject(TYPES.HttpClient) httpClient: HttpClient,
   ) {
     this.log = createLogger('DefaultLetterRepository');
     this.serverConfig = serverConfig;

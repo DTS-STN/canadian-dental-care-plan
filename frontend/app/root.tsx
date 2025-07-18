@@ -58,15 +58,15 @@ export const headers: Route.HeadersFunction = () => {
 };
 
 export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
-  const buildInfoService = appContainer.get(TYPES.core.BuildInfoService);
-  const dynatraceService = appContainer.get(TYPES.web.services.DynatraceService);
+  const buildInfoService = appContainer.get(TYPES.BuildInfoService);
+  const dynatraceService = appContainer.get(TYPES.DynatraceService);
   const requestUrl = new URL(request.url);
   const locale = getLocale(request);
   const t = await getFixedT(request, ['gcweb']);
 
   const buildInfo = buildInfoService.getBuildInfo();
   const dynatraceRumScript = await dynatraceService.findDynatraceRumScript();
-  const env = appContainer.get(TYPES.configs.ClientConfig);
+  const env = appContainer.get(TYPES.ClientConfig);
   const meta = {
     author: t('gcweb:meta.author'),
     description: t('gcweb:meta.description'),

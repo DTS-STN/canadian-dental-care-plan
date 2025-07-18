@@ -32,7 +32,7 @@ import { randomHexString } from '~/utils/string-utils';
 export async function handleDataRequest(response: Response, { context: { appContainer }, request }: LoaderFunctionArgs | ActionFunctionArgs) {
   const log = createLogger('entry.server/handleDataRequest');
   log.debug('Touching session to extend its lifetime');
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  const instrumentationService = appContainer.get(TYPES.InstrumentationService);
   instrumentationService.createCounter('http.server.requests').add(1);
 
   return response;
@@ -54,7 +54,7 @@ export function handleError(error: unknown, { context: { appContainer }, request
       log.error('Unexpected server error: [%j]', error);
     }
 
-    const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+    const instrumentationService = appContainer.get(TYPES.InstrumentationService);
     instrumentationService.createCounter('http.server.requests.failed').add(1);
   }
 }
@@ -63,7 +63,7 @@ export default async function handleRequest(request: Request, responseStatusCode
   const log = createLogger('entry.server/handleRequest');
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
-  const instrumentationService = appContainer.get(TYPES.observability.InstrumentationService);
+  const instrumentationService = appContainer.get(TYPES.InstrumentationService);
   instrumentationService.createCounter('http.server.requests').add(1);
 
   const locale = getLocale(request);
