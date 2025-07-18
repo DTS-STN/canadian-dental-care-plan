@@ -347,12 +347,12 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     this.log.debug('Get inidigenous status with id: [%s]', id);
     const indigenousStatusEntity = this.DemographicSurveyRepository.findIndigenousStatusById(id);
 
-    if (!indigenousStatusEntity) {
+    if (indigenousStatusEntity.isNone()) {
       this.log.error('inidigenous status with id: [%s] not found', id);
       throw new IndigenousStatusNotFoundException(`inidigenous status with id: [${id}] not found`);
     }
 
-    const indigenousStatusDto = this.DemographicSurveyDtoMapper.mapIndigenousStatusEntityToIndigenousStatusDto(indigenousStatusEntity);
+    const indigenousStatusDto = this.DemographicSurveyDtoMapper.mapIndigenousStatusEntityToIndigenousStatusDto(indigenousStatusEntity.unwrap());
     this.log.trace('Returning inidigenous status: [%j]', indigenousStatusDto);
     return indigenousStatusDto;
   }
@@ -386,12 +386,12 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     this.log.debug('Get First Nation with id: [%s]', id);
     const firstNationsEntity = this.DemographicSurveyRepository.findFirstNationsById(id);
 
-    if (!firstNationsEntity) {
+    if (firstNationsEntity.isNone()) {
       this.log.error('First Nation with id: [%s] not found', id);
       throw new FirstNationsNotFoundException(`First Nation with id: [${id}] not found`);
     }
 
-    const firstNationsDto = this.DemographicSurveyDtoMapper.mapFirstNationsEntityToFirstNationsDto(firstNationsEntity);
+    const firstNationsDto = this.DemographicSurveyDtoMapper.mapFirstNationsEntityToFirstNationsDto(firstNationsEntity.unwrap());
     this.log.trace('Returning First Nation: [%j]', firstNationsDto);
     return firstNationsDto;
   }
@@ -425,12 +425,12 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     this.log.debug('Get disability status with id: [%s]', id);
     const disabilityStatusEntity = this.DemographicSurveyRepository.findDisabilityStatusById(id);
 
-    if (!disabilityStatusEntity) {
+    if (disabilityStatusEntity.isNone()) {
       this.log.error('disability status with id: [%s] not found', id);
       throw new DisabilityStatusNotFoundException(`disability status with id: [${id}] not found`);
     }
 
-    const disabilityStatusDto = this.DemographicSurveyDtoMapper.mapDisabilityStatusEntityToDisabilityStatusDto(disabilityStatusEntity);
+    const disabilityStatusDto = this.DemographicSurveyDtoMapper.mapDisabilityStatusEntityToDisabilityStatusDto(disabilityStatusEntity.unwrap());
     this.log.trace('Returning disability status: [%j]', disabilityStatusDto);
     return disabilityStatusDto;
   }
@@ -464,12 +464,12 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     this.log.debug('Get ethnic group with id: [%s]', id);
     const ethnicGroupEntity = this.DemographicSurveyRepository.findEthnicGroupById(id);
 
-    if (!ethnicGroupEntity) {
+    if (ethnicGroupEntity.isNone()) {
       this.log.error('ethnic group with id: [%s] not found', id);
       throw new EthnicGroupNotFoundException(`ethnic group with id: [${id}] not found`);
     }
 
-    const ethnicGroupDto = this.DemographicSurveyDtoMapper.mapEthnicGroupEntityToEthnicGroupDto(ethnicGroupEntity);
+    const ethnicGroupDto = this.DemographicSurveyDtoMapper.mapEthnicGroupEntityToEthnicGroupDto(ethnicGroupEntity.unwrap());
     this.log.trace('Returning ethnic group: [%j]', ethnicGroupDto);
     return ethnicGroupDto;
   }
@@ -503,12 +503,12 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     this.log.debug('Get location born status with id: [%s]', id);
     const locationBornStatusEntity = this.DemographicSurveyRepository.findLocationBornStatusById(id);
 
-    if (!locationBornStatusEntity) {
+    if (locationBornStatusEntity.isNone()) {
       this.log.error('location born status with id: [%s] not found', id);
       throw new LocationBornStatusNotFoundException(`location born status with id: [${id}] not found`);
     }
 
-    const locationBornStatusDto = this.DemographicSurveyDtoMapper.mapLocationBornStatusEntityToLocationBornStatusDto(locationBornStatusEntity);
+    const locationBornStatusDto = this.DemographicSurveyDtoMapper.mapLocationBornStatusEntityToLocationBornStatusDto(locationBornStatusEntity.unwrap());
     this.log.trace('Returning location born status: [%j]', locationBornStatusDto);
     return locationBornStatusDto;
   }
@@ -542,12 +542,12 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
     this.log.debug('Get gender status with id: [%s]', id);
     const genderStatusEntity = this.DemographicSurveyRepository.findGenderStatusById(id);
 
-    if (!genderStatusEntity) {
+    if (genderStatusEntity.isNone()) {
       this.log.error('gender status with id: [%s] not found', id);
       throw new GenderStatusNotFoundException(`gender status with id: [${id}] not found`);
     }
 
-    const genderStatusDto = this.DemographicSurveyDtoMapper.mapGenderStatusEntityToGenderStatusDto(genderStatusEntity);
+    const genderStatusDto = this.DemographicSurveyDtoMapper.mapGenderStatusEntityToGenderStatusDto(genderStatusEntity.unwrap());
     this.log.trace('Returning gender status: [%j]', genderStatusDto);
     return genderStatusDto;
   }

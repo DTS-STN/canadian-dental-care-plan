@@ -1,4 +1,5 @@
 import { injectable } from 'inversify';
+import { None, Option, Some } from 'oxide.ts';
 
 import type { DisabilityStatusEntity, EthnicGroupEntity, FirstNationsEntity, GenderStatusEntity, IndigenousStatusEntity, LocationBornStatusEntity } from '~/.server/domain/entities';
 import { createLogger } from '~/.server/logging';
@@ -22,7 +23,7 @@ export interface DemographicSurveyRepository {
    * @param id The id of the indigenous status entity.
    * @returns The indigenous status entity or null if not found.
    */
-  findIndigenousStatusById(id: string): IndigenousStatusEntity | null;
+  findIndigenousStatusById(id: string): Option<IndigenousStatusEntity>;
 
   /**
    * Fetch all First Nations entities.
@@ -35,7 +36,7 @@ export interface DemographicSurveyRepository {
    * @param id The id of the First Nations entity.
    * @returns The First Nations entity or null if not found.
    */
-  findFirstNationsById(id: string): FirstNationsEntity | null;
+  findFirstNationsById(id: string): Option<FirstNationsEntity>;
 
   /**
    * Fetch all disability status entities.
@@ -48,7 +49,7 @@ export interface DemographicSurveyRepository {
    * @param id The id of the disability status entity.
    * @returns The disability status entity or null if not found.
    */
-  findDisabilityStatusById(id: string): DisabilityStatusEntity | null;
+  findDisabilityStatusById(id: string): Option<DisabilityStatusEntity>;
 
   /**
    * Fetch all location born status entities.
@@ -61,7 +62,7 @@ export interface DemographicSurveyRepository {
    * @param id The id of the location born status entity.
    * @returns The location born status entity or null if not found.
    */
-  findEthnicGroupById(id: string): EthnicGroupEntity | null;
+  findEthnicGroupById(id: string): Option<EthnicGroupEntity>;
 
   /**
    * Fetch all location born status entities.
@@ -74,7 +75,7 @@ export interface DemographicSurveyRepository {
    * @param id The id of the location born status entity.
    * @returns The location born status entity or null if not found.
    */
-  findLocationBornStatusById(id: string): LocationBornStatusEntity | null;
+  findLocationBornStatusById(id: string): Option<LocationBornStatusEntity>;
 
   /**
    * Fetch all gender status entities.
@@ -87,7 +88,7 @@ export interface DemographicSurveyRepository {
    * @param id The id of the gender status entity.
    * @returns The gender status entity or null if not found.
    */
-  findGenderStatusById(id: string): GenderStatusEntity | null;
+  findGenderStatusById(id: string): Option<GenderStatusEntity>;
 }
 
 @injectable()
@@ -111,7 +112,7 @@ export class DefaultDemographicSurveyRepository implements DemographicSurveyRepo
     return indigenousStatusEntities;
   }
 
-  findIndigenousStatusById(id: string): IndigenousStatusEntity | null {
+  findIndigenousStatusById(id: string): Option<IndigenousStatusEntity> {
     this.log.debug('Fetching indigenous status with id: [%s]', id);
 
     const indigenousStatusEntities = IndigenousStatusJsonDataSource.value.at(0)?.OptionSet.Options;
@@ -119,10 +120,10 @@ export class DefaultDemographicSurveyRepository implements DemographicSurveyRepo
 
     if (!indigenousStatusEntity) {
       this.log.warn('indigenous status not found; id: [%s]', id);
-      return null;
+      return None;
     }
 
-    return indigenousStatusEntity;
+    return Some(indigenousStatusEntity);
   }
 
   listAllFirstNations(): FirstNationsEntity[] {
@@ -138,7 +139,7 @@ export class DefaultDemographicSurveyRepository implements DemographicSurveyRepo
     return firstNationsEntities;
   }
 
-  findFirstNationsById(id: string): FirstNationsEntity | null {
+  findFirstNationsById(id: string): Option<FirstNationsEntity> {
     this.log.debug('Fetching First Nations with id: [%s]', id);
 
     const firstNationsEntities = FirstNationsJsonDataSource.value.at(0)?.OptionSet.Options;
@@ -146,10 +147,10 @@ export class DefaultDemographicSurveyRepository implements DemographicSurveyRepo
 
     if (!firstNationsEntity) {
       this.log.warn('First Nations not found; id: [%s]', id);
-      return null;
+      return None;
     }
 
-    return firstNationsEntity;
+    return Some(firstNationsEntity);
   }
 
   listAllDisabilityStatuses(): DisabilityStatusEntity[] {
@@ -165,7 +166,7 @@ export class DefaultDemographicSurveyRepository implements DemographicSurveyRepo
     return disabilityStatusEntities;
   }
 
-  findDisabilityStatusById(id: string): DisabilityStatusEntity | null {
+  findDisabilityStatusById(id: string): Option<DisabilityStatusEntity> {
     this.log.debug('Fetching disability status with id: [%s]', id);
 
     const disabilityStatusEntities = DisabilityStatusJsonDataSource.value.at(0)?.OptionSet.Options;
@@ -173,10 +174,10 @@ export class DefaultDemographicSurveyRepository implements DemographicSurveyRepo
 
     if (!disabilityStatusEntity) {
       this.log.warn('disability status not found; id: [%s]', id);
-      return null;
+      return None;
     }
 
-    return disabilityStatusEntity;
+    return Some(disabilityStatusEntity);
   }
 
   listAllEthnicGroups(): EthnicGroupEntity[] {
@@ -192,7 +193,7 @@ export class DefaultDemographicSurveyRepository implements DemographicSurveyRepo
     return ethnicGroupEntities;
   }
 
-  findEthnicGroupById(id: string): EthnicGroupEntity | null {
+  findEthnicGroupById(id: string): Option<EthnicGroupEntity> {
     this.log.debug('Fetching location born status with id: [%s]', id);
 
     const ethnicGroupEntities = EthnicGroupJsonDataSource.value.at(0)?.OptionSet.Options;
@@ -200,10 +201,10 @@ export class DefaultDemographicSurveyRepository implements DemographicSurveyRepo
 
     if (!ethnicGroupEntity) {
       this.log.warn('location born status not found; id: [%s]', id);
-      return null;
+      return None;
     }
 
-    return ethnicGroupEntity;
+    return Some(ethnicGroupEntity);
   }
 
   listAllLocationBornStatuses(): LocationBornStatusEntity[] {
@@ -219,7 +220,7 @@ export class DefaultDemographicSurveyRepository implements DemographicSurveyRepo
     return locationBornStatusEntities;
   }
 
-  findLocationBornStatusById(id: string): LocationBornStatusEntity | null {
+  findLocationBornStatusById(id: string): Option<LocationBornStatusEntity> {
     this.log.debug('Fetching location born status with id: [%s]', id);
 
     const locationBornStatusEntities = LocationBornStatusJsonDataSource.value.at(0)?.OptionSet.Options;
@@ -227,10 +228,10 @@ export class DefaultDemographicSurveyRepository implements DemographicSurveyRepo
 
     if (!locationBornStatusEntity) {
       this.log.warn('location born status not found; id: [%s]', id);
-      return null;
+      return None;
     }
 
-    return locationBornStatusEntity;
+    return Some(locationBornStatusEntity);
   }
 
   listAllGenderStatuses(): GenderStatusEntity[] {
@@ -246,7 +247,7 @@ export class DefaultDemographicSurveyRepository implements DemographicSurveyRepo
     return genderStatusEntities;
   }
 
-  findGenderStatusById(id: string): GenderStatusEntity | null {
+  findGenderStatusById(id: string): Option<GenderStatusEntity> {
     this.log.debug('Fetching gender status with id: [%s]', id);
 
     const genderStatusEntities = GenderStatusJsonDataSource.value.at(0)?.OptionSet.Options;
@@ -254,9 +255,9 @@ export class DefaultDemographicSurveyRepository implements DemographicSurveyRepo
 
     if (!genderStatusEntity) {
       this.log.warn('gender status not found; id: [%s]', id);
-      return null;
+      return None;
     }
 
-    return genderStatusEntity;
+    return Some(genderStatusEntity);
   }
 }
