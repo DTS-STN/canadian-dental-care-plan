@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { None, Option, Some } from 'oxide.ts';
+import { None, Option } from 'oxide.ts';
 
 import { TYPES } from '~/.server/constants';
 import type { ApplicantRequestDto } from '~/.server/domain/dtos';
@@ -58,8 +58,7 @@ export class DefaultApplicantService implements ApplicantService {
     }
 
     const clientNumber = this.applicantDtoMapper.mapApplicantResponseEntityToClientNumber(applicantResponseEntity.unwrap());
-    this.log.trace('Returning client number [%s] for sin [%s]', clientNumber, sin);
-
-    return clientNumber ? Some(clientNumber) : None;
+    this.log.trace('Returning client number [%s] for sin [%s]', clientNumber.unwrapUnchecked(), sin);
+    return clientNumber;
   }
 }
