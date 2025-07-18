@@ -58,7 +58,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.cancel) {
     return redirect(getPathById('public/apply/$id/adult/review-information', params));
@@ -68,8 +68,8 @@ export async function action({ context: { appContainer, session }, params, reque
    * Schema for living independently.
    */
   const livingIndependentlySchema = z.object({
-    livingIndependently: z.nativeEnum(LIVING_INDEPENDENTLY_OPTION, {
-      errorMap: () => ({ message: t('apply-adult:living-independently.error-message.living-independently-required') }),
+    livingIndependently: z.enum(LIVING_INDEPENDENTLY_OPTION, {
+      error: t('apply-adult:living-independently.error-message.living-independently-required'),
     }),
   });
 
@@ -78,7 +78,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   const isLivingindependently = parsedDataResult.data.livingIndependently === LIVING_INDEPENDENTLY_OPTION.yes;

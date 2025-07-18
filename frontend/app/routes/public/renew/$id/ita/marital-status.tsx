@@ -75,7 +75,7 @@ export async function action({ context: { appContainer, session }, params, reque
   // state validation schema
   const maritalStatusSchema = z.object({
     maritalStatus: z
-      .string({ errorMap: () => ({ message: t('renew-ita:marital-status.error-message.marital-status-required') }) })
+      .string({ error: t('renew-ita:marital-status.error-message.marital-status-required') })
       .trim()
       .min(1, t('renew-ita:marital-status.error-message.marital-status-required')),
   });
@@ -93,16 +93,17 @@ export async function action({ context: { appContainer, session }, params, reque
       .string()
       .trim()
       .min(1, t('renew-ita:marital-status.error-message.sin-required'))
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:marital-status.error-message.sin-valid') });
+          ctx.addIssue({ code: 'custom', message: t('renew-ita:marital-status.error-message.sin-valid') });
         } else if (
           [state.clientApplication?.applicantInformation.socialInsuranceNumber, ...(state.clientApplication?.children ? state.clientApplication.children.map((child) => child.information.socialInsuranceNumber) : [])]
             .filter((sin) => sin !== undefined)
             .map((sin) => formatSin(sin))
             .includes(formatSin(sin))
         ) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:marital-status.error-message.sin-unique') });
+          ctx.addIssue({ code: 'custom', message: t('renew-ita:marital-status.error-message.sin-unique') });
         }
       }),
   }) satisfies z.ZodType<PartnerInformationState>;
@@ -122,8 +123,8 @@ export async function action({ context: { appContainer, session }, params, reque
   if (!parsedMaritalStatus.success || (renewStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success)) {
     return {
       errors: {
-        ...(parsedMaritalStatus.error ? transformFlattenedError(parsedMaritalStatus.error.flatten()) : {}),
-        ...(parsedMaritalStatus.success && renewStateHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(parsedPartnerInformation.error.flatten()) : {}),
+        ...(parsedMaritalStatus.error ? transformFlattenedError(z.flattenError(parsedMaritalStatus.error)) : {}),
+        ...(parsedMaritalStatus.success && renewStateHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(z.flattenError(parsedPartnerInformation.error)) : {}),
       },
     };
   }

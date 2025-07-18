@@ -76,8 +76,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const phoneNumberSchema = z
     .object({
-      isNewOrUpdatedPhoneNumber: z.nativeEnum(ADD_OR_UPDATE_PHONE_OPTION, {
-        errorMap: () => ({ message: t('renew-adult-child:confirm-phone.error-message.add-or-update-required') }),
+      isNewOrUpdatedPhoneNumber: z.enum(ADD_OR_UPDATE_PHONE_OPTION, {
+        error: t('renew-adult-child:confirm-phone.error-message.add-or-update-required'),
       }),
       phoneNumber: phoneSchema({
         invalid_phone_canadian_error: t('renew-adult-child:confirm-phone.error-message.phone-number-valid'),
@@ -88,9 +88,10 @@ export async function action({ context: { appContainer, session }, params, reque
         invalid_phone_international_error: t('renew-adult-child:confirm-phone.error-message.phone-number-alt-valid-international'),
       }).optional(),
     })
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     .superRefine((val, ctx) => {
       if (val.isNewOrUpdatedPhoneNumber === ADD_OR_UPDATE_PHONE_OPTION.yes && !val.phoneNumber) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:confirm-phone.error-message.phone-required'), path: ['phoneNumber'] });
+        ctx.addIssue({ code: 'custom', message: t('renew-adult-child:confirm-phone.error-message.phone-required'), path: ['phoneNumber'] });
       }
     })
     .transform((val) => ({
@@ -105,7 +106,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveRenewState({ params, session, state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } } });

@@ -54,15 +54,15 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const taxFilingSchema = z.object({
-    taxFiling: z.nativeEnum(TAX_FILING_OPTION, {
-      errorMap: () => ({ message: t('renew:tax-filing.error-message.tax-filing-required') }),
+    taxFiling: z.enum(TAX_FILING_OPTION, {
+      error: t('renew:tax-filing.error-message.tax-filing-required'),
     }),
   });
 
   const parsedDataResult = taxFilingSchema.safeParse({ taxFiling: formData.get('taxFiling') });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveRenewState({ params, session, state: { taxFiling: parsedDataResult.data.taxFiling === TAX_FILING_OPTION.yes } });

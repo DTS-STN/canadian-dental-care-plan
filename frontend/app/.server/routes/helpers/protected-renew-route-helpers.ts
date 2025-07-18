@@ -139,7 +139,7 @@ export type ProtectedConmmunicationPreferenceState = NonNullable<ProtectedRenewS
 /**
  * Schema for validating UUID.
  */
-const idSchema = z.string().uuid();
+const idSchema = z.uuid();
 
 /**
  * Gets the protected renew flow session key.
@@ -318,7 +318,7 @@ export function loadProtectedRenewSingleChildState({ params, request, session }:
   const log = createLogger('protected-renew-route-helpers.server/loadProtectedRenewSingleChildState');
   const protectedRenewState = loadProtectedRenewState({ params, request, session });
 
-  const parsedChildId = z.string().uuid().safeParse(params.childId);
+  const parsedChildId = z.uuid().safeParse(params.childId);
 
   if (!parsedChildId.success) {
     log.warn('Invalid "childId" param format; childId: [%s]', params.childId);

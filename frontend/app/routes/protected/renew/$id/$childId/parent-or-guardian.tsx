@@ -77,8 +77,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const parentOrGuardianSchema = z.object({
-    parentOrGuardian: z.nativeEnum(PARENT_OR_GUARDIAN_OPTION, {
-      errorMap: () => ({ message: t('protected-renew:children.parent-or-guardian.error-message.parent-or-guardian-required') }),
+    parentOrGuardian: z.enum(PARENT_OR_GUARDIAN_OPTION, {
+      error: t('protected-renew:children.parent-or-guardian.error-message.parent-or-guardian-required'),
     }),
   });
 
@@ -87,7 +87,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveProtectedRenewState({

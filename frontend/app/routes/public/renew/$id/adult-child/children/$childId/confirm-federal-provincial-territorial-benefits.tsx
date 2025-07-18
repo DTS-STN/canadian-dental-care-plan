@@ -79,7 +79,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
   const dentalBenefitsChangedSchema = z.object({
-    hasFederalProvincialTerritorialBenefitsChanged: z.boolean({ errorMap: () => ({ message: t('renew-adult-child:children.confirm-dental-benefits.error-message.federal-provincial-territorial-benefit-required') }) }),
+    hasFederalProvincialTerritorialBenefitsChanged: z.boolean({ error: t('renew-adult-child:children.confirm-dental-benefits.error-message.federal-provincial-territorial-benefit-required') }),
   });
 
   const dentalBenefits = {
@@ -91,7 +91,7 @@ export async function action({ context: { appContainer, session }, params, reque
   if (!parsedDentalBenefitsResult.success) {
     return {
       errors: {
-        ...transformFlattenedError(parsedDentalBenefitsResult.error.flatten()),
+        ...transformFlattenedError(z.flattenError(parsedDentalBenefitsResult.error)),
       },
     };
   }

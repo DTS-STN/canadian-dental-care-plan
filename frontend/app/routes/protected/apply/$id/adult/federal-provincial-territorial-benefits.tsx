@@ -92,7 +92,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const state = loadProtectedApplyAdultState({ params, request, session });
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.cancel) {
     if (state.hasFederalProvincialTerritorialBenefits) {
       saveProtectedApplyState({
@@ -110,12 +110,13 @@ export async function action({ context: { appContainer, session }, params, reque
   // both question first before the superRefine can be executed
   const federalBenefitsSchema = z
     .object({
-      hasFederalBenefits: z.boolean({ errorMap: () => ({ message: t('protected-apply-adult:dental-benefits.error-message.federal-benefit-required') }) }),
+      hasFederalBenefits: z.boolean({ error: t('protected-apply-adult:dental-benefits.error-message.federal-benefit-required') }),
       federalSocialProgram: z.string().trim().optional(),
     })
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     .superRefine((val, ctx) => {
       if (val.hasFederalBenefits && (!val.federalSocialProgram || validator.isEmpty(val.federalSocialProgram))) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-apply-adult:dental-benefits.error-message.federal-benefit-program-required'), path: ['federalSocialProgram'] });
+        ctx.addIssue({ code: 'custom', message: t('protected-apply-adult:dental-benefits.error-message.federal-benefit-program-required'), path: ['federalSocialProgram'] });
       }
     })
     .transform((val) => {
@@ -127,16 +128,17 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const provincialTerritorialBenefitsSchema = z
     .object({
-      hasProvincialTerritorialBenefits: z.boolean({ errorMap: () => ({ message: t('protected-apply-adult:dental-benefits.error-message.provincial-benefit-required') }) }),
+      hasProvincialTerritorialBenefits: z.boolean({ error: t('protected-apply-adult:dental-benefits.error-message.provincial-benefit-required') }),
       provincialTerritorialSocialProgram: z.string().trim().optional(),
       province: z.string().trim().optional(),
     })
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     .superRefine((val, ctx) => {
       if (val.hasProvincialTerritorialBenefits) {
         if (!val.province || validator.isEmpty(val.province)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-apply-adult:dental-benefits.error-message.provincial-territorial-required'), path: ['province'] });
+          ctx.addIssue({ code: 'custom', message: t('protected-apply-adult:dental-benefits.error-message.provincial-territorial-required'), path: ['province'] });
         } else if (!val.provincialTerritorialSocialProgram || validator.isEmpty(val.provincialTerritorialSocialProgram)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-apply-adult:dental-benefits.error-message.provincial-benefit-program-required'), path: ['provincialTerritorialSocialProgram'] });
+          ctx.addIssue({ code: 'custom', message: t('protected-apply-adult:dental-benefits.error-message.provincial-benefit-program-required'), path: ['provincialTerritorialSocialProgram'] });
         }
       }
     })
@@ -163,8 +165,8 @@ export async function action({ context: { appContainer, session }, params, reque
     return data(
       {
         errors: {
-          ...(parsedFederalBenefitsResult.success ? {} : transformFlattenedError(parsedFederalBenefitsResult.error.flatten())),
-          ...(parsedProvincialTerritorialBenefitsResult.success ? {} : transformFlattenedError(parsedProvincialTerritorialBenefitsResult.error.flatten())),
+          ...(parsedFederalBenefitsResult.success ? {} : transformFlattenedError(z.flattenError(parsedFederalBenefitsResult.error))),
+          ...(parsedProvincialTerritorialBenefitsResult.success ? {} : transformFlattenedError(z.flattenError(parsedProvincialTerritorialBenefitsResult.error))),
         },
       },
       { status: 400 },
