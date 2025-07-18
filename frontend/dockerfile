@@ -24,7 +24,7 @@
 
 
 # Base image used for all future stages
-ARG BASE_IMAGE=docker.io/node:22.17.0-bookworm-slim
+ARG BASE_IMAGE=docker.io/node:22.17.1-bookworm-slim
 FROM $BASE_IMAGE AS base
 ENV NODE_ENV production
 
