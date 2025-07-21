@@ -81,7 +81,7 @@ export class DefaultBenefitApplicationRepository implements BenefitApplicationRe
       throw new Error(`Failed to 'POST' for benefit application. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const benefitApplicationResponseEntity: BenefitApplicationResponseEntity = await response.json();
+    const benefitApplicationResponseEntity = (await response.json()) as BenefitApplicationResponseEntity;
     this.log.trace('Returning benefit application response [%j]', benefitApplicationResponseEntity);
     return benefitApplicationResponseEntity;
   }

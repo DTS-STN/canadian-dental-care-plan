@@ -88,7 +88,7 @@ export class DefaultLetterTypeRepository implements LetterTypeRepository {
       throw new Error(`Failed to fetch letter types. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const letterTypeResponseEntity: LetterTypeResponseEntity = await response.json();
+    const letterTypeResponseEntity = (await response.json()) as LetterTypeResponseEntity;
     const letterTypeEntities = letterTypeResponseEntity.value;
 
     this.log.trace('Letter types: [%j]', letterTypeEntities);

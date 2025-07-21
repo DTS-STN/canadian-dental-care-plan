@@ -80,7 +80,7 @@ export class DefaultAddressValidationRepository implements AddressValidationRepo
       throw new Error(`Failed to correct address. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const addressCorrectionResults: AddressCorrectionResultEntity = await response.json();
+    const addressCorrectionResults = (await response.json()) as AddressCorrectionResultEntity;
     this.log.trace('Address correction results: [%j]', addressCorrectionResults);
 
     return addressCorrectionResults;

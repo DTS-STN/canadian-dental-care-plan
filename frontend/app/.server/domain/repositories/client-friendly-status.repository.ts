@@ -88,7 +88,7 @@ export class DefaultClientFriendlyStatusRepository implements ClientFriendlyStat
       throw new Error(`Failed to fetch client friendly statuses. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const clientFriendlyStatusResponseEntity: ClientFriendlyStatusResponseEntity = await response.json();
+    const clientFriendlyStatusResponseEntity = (await response.json()) as ClientFriendlyStatusResponseEntity;
     const clientFriendlyStatusEntities = clientFriendlyStatusResponseEntity.value;
 
     this.log.trace('Client friendly statuses: [%j]', clientFriendlyStatusEntities);

@@ -1,10 +1,7 @@
-import { HttpResponse, http } from 'msw';
-import { setupServer } from 'msw/node';
-import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import { MockAgent, fetch } from 'undici';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { fetchServerMetadata, generateAuthorizationRequest, generateCallbackUri, generateCodeChallenge, generateRandomNonce, generateRandomState, generateRandomString, validateSession } from '~/.server/utils/raoidc.utils';
-
-const server = setupServer();
 
 vi.mock('~/utils/logging.server', () => ({
   createLogger: () => ({
@@ -15,16 +12,7 @@ vi.mock('~/utils/logging.server', () => ({
 }));
 
 describe('raoidc.utils', () => {
-  beforeAll(() => {
-    server.listen({ onUnhandledRequest: 'bypass' });
-  });
-
-  afterAll(() => {
-    server.close();
-  });
-
   afterEach(() => {
-    server.resetHandlers();
     vi.clearAllMocks();
   });
 
@@ -72,23 +60,24 @@ describe('raoidc.utils', () => {
     });
 
     it('should fetch server metadata', async () => {
-      server.use(
-        http.get('https://auth.example.com/.well-known/openid-configuration', () => {
-          return HttpResponse.json({
-            authorization_endpoint: 'https://auth.example.com/authorize',
-            issuer: 'https://auth.example.com',
-            jwks_uri: 'https://auth.example.com/jwks',
-            token_endpoint: 'https://auth.example.com/token',
-            userinfo_endpoint: 'https://auth.example.com/userinfo',
-          });
-        }),
+      const mockAgent = new MockAgent();
+      const mockPool = mockAgent.get('https://auth.example.com');
+      mockPool
+        .intercept({ path: '/.well-known/openid-configuration' }) //
+        .reply(200, {
+          authorization_endpoint: 'https://auth.example.com/authorize',
+          issuer: 'https://auth.example.com',
+          jwks_uri: 'https://auth.example.com/jwks',
+          token_endpoint: 'https://auth.example.com/token',
+          userinfo_endpoint: 'https://auth.example.com/userinfo',
+        });
+      mockPool
+        .intercept({ path: '/jwks' }) //
+        .reply(200, { keys: [{ kid: 'key-id', kty: 'RSA', n: 'AQAB', e: 'AQAB' }] });
 
-        http.get('https://auth.example.com/jwks', () => {
-          return HttpResponse.json({ keys: [{ kid: 'key-id', kty: 'RSA', n: 'AQAB', e: 'AQAB' }] });
-        }),
-      );
+      const fetchFn: typeof fetch = async (input, init) => await fetch(input, { ...init, dispatcher: mockPool });
 
-      const { jwkSet, serverMetadata } = await fetchServerMetadata('https://auth.example.com');
+      const { jwkSet, serverMetadata } = await fetchServerMetadata('https://auth.example.com', fetchFn);
 
       expect(jwkSet.keys[0].kid).toEqual('key-id');
       expect(jwkSet.keys[0].kty).toEqual('RSA');
@@ -103,13 +92,21 @@ describe('raoidc.utils', () => {
     });
 
     it('should validate session', async () => {
-      server.use(
-        http.get('https://auth.example.com/validatesession', () => {
-          return HttpResponse.json(true);
-        }),
-      );
+      const mockAgent = new MockAgent();
+      const mockPool = mockAgent.get('https://auth.example.com');
+      mockPool
+        .intercept({
+          path: '/validatesession',
+          query: {
+            client_id: 'client-id',
+            shared_session_id: 'session-id',
+          },
+        })
+        .reply(200, 'true');
 
-      const result = await validateSession('https://auth.example.com', 'client-id', 'session-id');
+      const fetchFn: typeof fetch = async (input, init) => await fetch(input, { ...init, dispatcher: mockPool });
+
+      const result = await validateSession('https://auth.example.com', 'client-id', 'session-id', fetchFn);
 
       expect(result).toEqual(true);
     });

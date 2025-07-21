@@ -1,6 +1,7 @@
 import { inject } from 'inversify';
 import { retry } from 'moderndash';
-import { ProxyAgent } from 'undici';
+import { ProxyAgent, fetch } from 'undici';
+import type { RequestInfo, RequestInit, Response } from 'undici';
 
 import { TYPES } from '~/.server/constants';
 import { createLogger } from '~/.server/logging';
@@ -64,7 +65,7 @@ export interface RetryOptions {
  */
 interface FetchRetryOptions {
   fetchFn: typeof fetch;
-  input: RequestInfo | URL;
+  input: RequestInfo;
   init: RequestInit;
   metricPrefix: string;
   retryConditions: Record<number, (string | RegExp)[]>;
@@ -121,8 +122,6 @@ export class DefaultHttpClient implements HttpClient {
       this.log.debug('A proxy [%s] has been configured with timeout [%d] ms; using custom fetch', proxyUrl, proxyTlsTimeout);
 
       return async (input, init) => {
-        // @ts-expect-error since remix v2.9.x, the server fetch() polyfill is provided by undici,
-        //                  which accepts a dispatcher object to facilitate request proxying
         return await fetch(input, { ...init, dispatcher });
       };
     }

@@ -109,7 +109,7 @@ export class DefaultApplicationStatusRepository implements ApplicationStatusRepo
       throw new Error(`Failed to 'POST' for application status by basic info. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const applicationStatusEntity: ApplicationStatusEntity = await response.json();
+    const applicationStatusEntity = (await response.json()) as ApplicationStatusEntity;
     this.log.trace('Returning application status [%j]', applicationStatusEntity);
     return applicationStatusEntity;
   }
@@ -152,7 +152,7 @@ export class DefaultApplicationStatusRepository implements ApplicationStatusRepo
       throw new Error(`Failed to 'POST' for application status by sin. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const applicationStatusEntity: ApplicationStatusEntity = await response.json();
+    const applicationStatusEntity = (await response.json()) as ApplicationStatusEntity;
     this.log.trace('Returning application status [%j]', applicationStatusEntity);
     return applicationStatusEntity;
   }

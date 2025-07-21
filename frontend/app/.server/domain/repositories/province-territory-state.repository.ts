@@ -95,7 +95,7 @@ export class DefaultProvinceTerritoryStateRepository implements ProvinceTerritor
       throw new Error(`Failed to fetch provinces, territories, and states. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const countriesWithprovinceTerritoryStates: CountriesWithProvinceTerritoryStates = await response.json();
+    const countriesWithprovinceTerritoryStates = (await response.json()) as CountriesWithProvinceTerritoryStates;
     const provinceTerritoryStateEntities: ProvinceTerritoryStateEntity[] = countriesWithprovinceTerritoryStates.value.flatMap((e) => e.esdc_ProvinceTerritoryState_Countryid_esd);
     this.log.trace('Provinces, territories, and states: [%j]', provinceTerritoryStateEntities);
 
