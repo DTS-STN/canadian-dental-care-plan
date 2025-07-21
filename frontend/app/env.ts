@@ -41,4 +41,5 @@ declare module 'react-router' {
   interface RouteModules extends Record<string, RouteModule | undefined> {}
 }
 
+// eslint-disable-next-line unicorn/require-module-specifiers
 export {}; // necessary for TS to treat this as a module
