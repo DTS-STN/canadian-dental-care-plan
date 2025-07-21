@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import moize from 'moize';
-import { None, Option, Some } from 'oxide.ts';
+import { None, Some } from 'oxide.ts';
+import type { Option } from 'oxide.ts';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
