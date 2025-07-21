@@ -1,4 +1,5 @@
 import { None } from 'oxide.ts';
+import { Response } from 'undici';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 

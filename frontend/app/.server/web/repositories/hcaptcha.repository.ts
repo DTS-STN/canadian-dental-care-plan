@@ -71,7 +71,7 @@ export class DefaultHCaptchaRepository implements HCaptchaRepository {
       throw new Error(`Failed to verify hCaptcha: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const hCaptchaVerifyResponseEntity: HCaptchaVerifyResponseEntity = await response.json();
+    const hCaptchaVerifyResponseEntity = (await response.json()) as HCaptchaVerifyResponseEntity;
 
     if (hCaptchaVerifyResponseEntity.success) {
       this.log.trace('hCaptcha verification successful with site verify response: [%j]', hCaptchaVerifyResponseEntity);

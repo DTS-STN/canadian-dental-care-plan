@@ -85,7 +85,7 @@ export class DefaultApplicantRepository implements ApplicantRepository {
     });
 
     if (response.status === 200) {
-      const applicantResponseEntity: ApplicantResponseEntity = await response.json();
+      const applicantResponseEntity = (await response.json()) as ApplicantResponseEntity;
       this.log.trace('Returning applicant [%j]', applicantResponseEntity);
       return Some(applicantResponseEntity);
     }

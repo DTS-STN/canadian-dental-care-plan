@@ -126,7 +126,7 @@ export class DefaultLetterRepository implements LetterRepository {
       throw new Error(`Failed to find letters. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const letterEntities: ReadonlyArray<LetterEntity> = await response.json();
+    const letterEntities = (await response.json()) as ReadonlyArray<LetterEntity>;
     this.log.trace('Returning letters [%j]', letterEntities);
     return letterEntities;
   }
@@ -170,7 +170,7 @@ export class DefaultLetterRepository implements LetterRepository {
       throw new Error(`Failed to get PDF. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const pdfEntity: PdfEntity = await response.json();
+    const pdfEntity = (await response.json()) as PdfEntity;
     this.log.trace('Returning PDF [%j]', pdfEntity);
     return pdfEntity;
   }

@@ -6,6 +6,7 @@ import { invariant } from '@dts-stn/invariant';
 import type { JWK, JWTPayload, JWTVerifyResult } from 'jose';
 import { SignJWT, compactDecrypt, decodeProtectedHeader, importJWK, jwtVerify } from 'jose';
 import { createHash, subtle } from 'node:crypto';
+import { fetch } from 'undici';
 
 import type { FetchFn } from '~/.server/http';
 import { createLogger } from '~/.server/logging';
@@ -245,7 +246,7 @@ export async function fetchAccessToken(serverMetadata: ServerMetadata, serverJwk
     throw new Error('Error fetching server metadata: non-200 status');
   }
 
-  const tokenEndpointResponse: TokenEndpointResponse = await response.json();
+  const tokenEndpointResponse = (await response.json()) as TokenEndpointResponse;
   validateAuthorizationToken(tokenEndpointResponse);
 
   const accessToken = tokenEndpointResponse.access_token;
@@ -280,7 +281,7 @@ export async function fetchUserInfo(userinfoUri: string, serverJwks: JWKSet, acc
     throw new Error('Error fetching user info: non-200 status');
   }
 
-  const userInfoResponse: UserinfoResponse = await response.json();
+  const userInfoResponse = (await response.json()) as UserinfoResponse;
   validateUserInfoTokenResponse(userInfoResponse);
 
   const decryptedUserinfoToken = await decryptJwe(userInfoResponse.userinfo_token, client.privateDecryptionKey);

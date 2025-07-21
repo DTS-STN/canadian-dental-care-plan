@@ -87,7 +87,7 @@ export class DefaultCountryRepository implements CountryRepository {
       throw new Error(`Failed to fetch countries. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const countryResponseEntity: CountryResponseEntity = await response.json();
+    const countryResponseEntity = (await response.json()) as CountryResponseEntity;
     const countryEntities = countryResponseEntity.value;
 
     this.log.trace('Countries: [%j]', countryEntities);

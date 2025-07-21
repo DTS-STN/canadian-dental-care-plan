@@ -87,7 +87,7 @@ export class DefaultGovernmentInsurancePlanRepository implements GovernmentInsur
       throw new Error(`Failed to fetch government insurance plans. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const governmentInsurancePlanResponseEntity: GovernmentInsurancePlanResponseEntity = await response.json();
+    const governmentInsurancePlanResponseEntity = (await response.json()) as GovernmentInsurancePlanResponseEntity;
     const governmentInsurancePlanEntities = governmentInsurancePlanResponseEntity.value;
 
     this.log.trace('Government insurance plans: [%j]', governmentInsurancePlanEntities);

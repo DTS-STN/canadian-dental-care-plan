@@ -82,7 +82,7 @@ export class DefaultVerificationCodeRepository implements VerificationCodeReposi
       throw new Error(`Failed to 'POST' email notification. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const verificationCodeEmailResponseEntity: VerificationCodeEmailResponseEntity = await response.json();
+    const verificationCodeEmailResponseEntity = (await response.json()) as VerificationCodeEmailResponseEntity;
     this.log.trace('Returning verification code email response [%j]', verificationCodeEmailResponseEntity);
     return verificationCodeEmailResponseEntity;
   }

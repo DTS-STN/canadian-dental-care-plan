@@ -76,7 +76,7 @@ export class DefaultBenefitRenewalRepository implements BenefitRenewalRepository
       throw new Error(`Failed to 'POST' for benefit renewal data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as BenefitRenewalResponseEntity;
     this.log.trace('Benefit renewal: [%j]', data);
 
     return data;

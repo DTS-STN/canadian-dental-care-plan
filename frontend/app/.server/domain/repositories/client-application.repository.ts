@@ -61,7 +61,7 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
     });
 
     if (response.status === 200) {
-      const data = await response.json();
+      const data = (await response.json()) as ClientApplicationEntity;
       this.log.trace('Client application [%j]', data);
       return Some(data);
     }
@@ -102,7 +102,7 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
     });
 
     if (response.status === 200) {
-      const data = await response.json();
+      const data = (await response.json()) as ClientApplicationEntity;
       this.log.trace('Client application [%j]', data);
       return Some(data);
     }
