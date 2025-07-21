@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import { None, Option } from 'oxide.ts';
+import type { Option } from 'oxide.ts';
+import { None } from 'oxide.ts';
 
 import { TYPES } from '~/.server/constants';
 import type { ApplicantRequestDto } from '~/.server/domain/dtos';
