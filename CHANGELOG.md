@@ -1,6 +1,11 @@
 # Canadian Dental Care Plan Releases
 
-All notable changes to this project will be documented in this file.
+## 5.4.0
+
+- Add digital communications to renewal
+- Leverage Interop for code tables
+- Incompatible browser mitigation
+- Fixes communications preference and missing spouse info
 
 ## v5.3.0
 
