@@ -69,7 +69,6 @@ describe('phoneSchema', () => {
         expected: 'string',
         message: 'Phone number is required',
         path: ['phone'],
-        received: 'undefined',
       },
     ]);
   });
@@ -89,7 +88,6 @@ describe('phoneSchema', () => {
         expected: 'string',
         message: 'Invalid phone number type. Expected string, received null',
         path: ['phone'],
-        received: 'null',
       },
     ]);
   });
@@ -100,12 +98,11 @@ describe('phoneSchema', () => {
     expect(result.error.issues).toStrictEqual([
       {
         code: 'too_small',
-        exact: false,
         inclusive: true,
         message: 'Phone number is required',
         minimum: 1,
+        origin: 'string',
         path: ['phone'],
-        type: 'string',
       },
     ]);
   });
@@ -116,12 +113,11 @@ describe('phoneSchema', () => {
     expect(result.error.issues).toStrictEqual([
       {
         code: 'too_small',
-        exact: false,
         inclusive: true,
         message: 'Phone number is required',
         minimum: 1,
+        origin: 'string',
         path: ['phone'],
-        type: 'string',
       },
     ]);
   });

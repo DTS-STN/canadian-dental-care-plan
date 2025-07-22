@@ -96,6 +96,7 @@ export function phoneSchema(
         });
       })
       .transform((phoneNumber) => {
+        if (!phoneNumber) return '';
         // Format valid phone number to international format
         return parsePhoneNumberWithError(phoneNumber, 'CA').formatInternational();
       })
