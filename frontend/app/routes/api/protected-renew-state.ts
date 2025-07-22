@@ -31,7 +31,7 @@ export async function action({ context: { appContainer, session }, request }: Ro
 
   if (!parsedBody.success) {
     log.debug('Invalid request body [%j]; sessionId: [%s]', requestBody, sessionId);
-    return Response.json({ errors: parsedBody.error.flatten().fieldErrors }, { status: 400 });
+    return Response.json({ errors: z.flattenError(parsedBody.error).fieldErrors }, { status: 400 });
   }
 
   const params = {

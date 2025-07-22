@@ -203,10 +203,10 @@ function handleMockAuthorizeRequest({ context: { appContainer }, request }: Rout
   });
 
   if (!result.success) {
-    log.warn('Invalid authorize request [%j]', result.error.flatten().fieldErrors);
+    log.warn('Invalid authorize request [%j]', z.flattenError(result.error).fieldErrors);
     instrumentationService.createCounter('auth.authorize.requests.invalid').add(1);
 
-    return Response.json(JSON.stringify(result.error.flatten().fieldErrors), { status: 400 });
+    return Response.json(JSON.stringify(z.flattenError(result.error).fieldErrors), { status: 400 });
   }
 
   const redirectUri = new URL(result.data.redirectUri);
