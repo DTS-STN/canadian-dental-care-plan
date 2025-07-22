@@ -124,7 +124,7 @@ export function isPastDate(utcDate: UTCDate) {
  * ```
  */
 export function isValidDateString(date: string) {
-  return z.date().safeParse(date).success;
+  return z.iso.date().safeParse(date).success;
 }
 
 /**
@@ -147,8 +147,7 @@ export function isValidDateString(date: string) {
  * ```
  */
 export function isValidDateTimeString(dateTime: string) {
-  // eslint-disable-next-line @typescript-eslint/no-deprecated
-  return z.string().datetime().safeParse(dateTime).success;
+  return z.iso.datetime().safeParse(dateTime).success;
 }
 
 /**
