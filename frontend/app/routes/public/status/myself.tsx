@@ -61,13 +61,13 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formDataSchema = z.object({
     sin: z
-      .string({ required_error: t('status:myself.form.error-message.sin-required') })
+      .string({ error: (issue) => (issue.input === undefined ? t('status:myself.form.error-message.sin-required') : undefined) })
       .trim()
       .min(1)
       .refine(isValidSin, t('status:myself.form.error-message.sin-valid'))
       .transform((sin) => formatSin(sin, '')),
     code: z
-      .string({ required_error: t('status:myself.form.error-message.application-code-required') })
+      .string({ error: (issue) => (issue.input === undefined ? t('status:myself.form.error-message.application-code-required') : undefined) })
       .trim()
       .min(1)
       .refine(isValidCodeOrNumber, t('status:myself.form.error-message.application-code-valid'))
@@ -80,7 +80,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   const { sin, code } = parsedDataResult.data;

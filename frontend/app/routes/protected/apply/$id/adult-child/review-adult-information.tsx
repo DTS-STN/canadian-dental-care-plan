@@ -157,7 +157,7 @@ export async function action({ context: { appContainer, session }, params, reque
     throw redirect(getPathById('protected/unable-to-process-request', params));
   });
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.back) {
     saveProtectedApplyState({ params, session, state: { editMode: false } });

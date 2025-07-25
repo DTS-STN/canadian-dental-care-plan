@@ -81,7 +81,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const childHasSinSchema = z.object({
-    childHasSin: z.boolean({ errorMap: () => ({ message: t('status:child.form.error-message.radio-required') }) }),
+    childHasSin: z.boolean({ error: t('status:child.form.error-message.radio-required') }),
   });
 
   const sinSchema = z.object({
@@ -98,18 +98,17 @@ export async function action({ context: { appContainer, session }, params, reque
       firstName: z.string().trim().max(100, t('status:child.form.error-message.first-name-too-long')).refine(isAllValidInputCharacters, t('status:child.form.error-message.characters-valid')).optional(),
       lastName: z.string().trim().min(1, t('status:child.form.error-message.last-name-required')).max(100).refine(isAllValidInputCharacters, t('status:child.form.error-message.characters-valid')),
       dateOfBirthYear: z.number({
-        required_error: t('status:child.form.error-message.date-of-birth-year-required'),
-        invalid_type_error: t('status:child.form.error-message.date-of-birth-year-number'),
+        error: (issue) => (issue.input === undefined ? t('status:child.form.error-message.date-of-birth-year-required') : t('status:child.form.error-message.date-of-birth-year-number')),
       }),
       dateOfBirthMonth: z.number({
-        required_error: t('status:child.form.error-message.date-of-birth-month-required'),
+        error: (issue) => (issue.input === undefined ? t('status:child.form.error-message.date-of-birth-month-required') : undefined),
       }),
       dateOfBirthDay: z.number({
-        required_error: t('status:child.form.error-message.date-of-birth-day-required'),
-        invalid_type_error: t('status:child.form.error-message.date-of-birth-day-number'),
+        error: (issue) => (issue.input === undefined ? t('status:child.form.error-message.date-of-birth-day-required') : t('status:child.form.error-message.date-of-birth-day-number')),
       }),
       dateOfBirth: z.string(),
     })
+
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
@@ -117,19 +116,19 @@ export async function action({ context: { appContainer, session }, params, reque
 
       if (!isValidDateString(dateOfBirth)) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t('status:child.form.error-message.date-of-birth-valid'),
           path: ['dateOfBirth'],
         });
       } else if (!isPastDateString(dateOfBirth)) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t('status:child.form.error-message.date-of-birth-is-past'),
           path: ['dateOfBirth'],
         });
       } else if (getAgeFromDateString(dateOfBirth) > 150) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t('status:child.form.error-message.date-of-birth-is-past-valid'),
           path: ['dateOfBirth'],
         });
@@ -169,10 +168,10 @@ export async function action({ context: { appContainer, session }, params, reque
   if (!parsedCodeResult.success || !parsedChildHasSinResult.success || parsedSinResult?.success === false || parsedChildInfoResult?.success === false) {
     return {
       errors: {
-        ...(parsedCodeResult.success === false ? transformFlattenedError(parsedCodeResult.error.flatten()) : {}),
-        ...(parsedChildHasSinResult.success === false ? transformFlattenedError(parsedChildHasSinResult.error.flatten()) : {}),
-        ...(parsedSinResult?.success === false ? transformFlattenedError(parsedSinResult.error.flatten()) : {}),
-        ...(parsedChildInfoResult?.success === false ? transformFlattenedError(parsedChildInfoResult.error.flatten()) : {}),
+        ...(parsedCodeResult.success === false ? transformFlattenedError(z.flattenError(parsedCodeResult.error)) : {}),
+        ...(parsedChildHasSinResult.success === false ? transformFlattenedError(z.flattenError(parsedChildHasSinResult.error)) : {}),
+        ...(parsedSinResult?.success === false ? transformFlattenedError(z.flattenError(parsedSinResult.error)) : {}),
+        ...(parsedChildInfoResult?.success === false ? transformFlattenedError(z.flattenError(parsedChildInfoResult.error)) : {}),
       },
     };
   }

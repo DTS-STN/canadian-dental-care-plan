@@ -102,15 +102,13 @@ export async function action({ context: { appContainer, session }, params, reque
         .refine(isAllValidInputCharacters, t('renew-child:children.information.error-message.characters-valid'))
         .refine((lastName) => !hasDigits(lastName), t('renew-child:children.information.error-message.last-name-no-digits')),
       dateOfBirthYear: z.number({
-        required_error: t('renew-child:children.information.error-message.date-of-birth-year-required'),
-        invalid_type_error: t('renew-child:children.information.error-message.date-of-birth-year-number'),
+        error: (issue) => (issue.input === undefined ? t('renew-child:children.information.error-message.date-of-birth-year-required') : t('renew-child:children.information.error-message.date-of-birth-year-number')),
       }),
       dateOfBirthMonth: z.number({
-        required_error: t('renew-child:children.information.error-message.date-of-birth-month-required'),
+        error: (issue) => (issue.input === undefined ? t('renew-child:children.information.error-message.date-of-birth-month-required') : undefined),
       }),
       dateOfBirthDay: z.number({
-        required_error: t('renew-child:children.information.error-message.date-of-birth-day-required'),
-        invalid_type_error: t('renew-child:children.information.error-message.date-of-birth-day-number'),
+        error: (issue) => (issue.input === undefined ? t('renew-child:children.information.error-message.date-of-birth-day-required') : t('renew-child:children.information.error-message.date-of-birth-day-number')),
       }),
       dateOfBirth: z.string(),
       clientNumber: z
@@ -119,8 +117,9 @@ export async function action({ context: { appContainer, session }, params, reque
         .min(1, t('renew-child:children.information.error-message.client-number-required'))
         .refine(isValidClientNumberRenewal, t('renew-child:children.information.error-message.client-number-valid'))
         .transform((code) => extractDigits(code)),
-      isParent: z.boolean({ errorMap: () => ({ message: t('renew-child:children.information.error-message.is-parent') }) }),
+      isParent: z.boolean({ error: t('renew-child:children.information.error-message.is-parent') }),
     })
+
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
@@ -130,25 +129,25 @@ export async function action({ context: { appContainer, session }, params, reque
 
       if (!isValidDateString(dateOfBirth)) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t('renew-child:children.information.error-message.date-of-birth-valid'),
           path: ['dateOfBirth'],
         });
       } else if (!isPastDateString(dateOfBirth)) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t('renew-child:children.information.error-message.date-of-birth-is-past'),
           path: ['dateOfBirth'],
         });
       } else if (getAgeFromDateString(dateOfBirth) > 150) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t('renew-child:children.information.error-message.date-of-birth-is-past-valid'),
           path: ['dateOfBirth'],
         });
       } else if (getAgeFromDateString(dateOfBirth, coverageEndDate) >= 18) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t('renew-child:children.information.error-message.date-of-birth-ineligible', { coverageEndDate: toLocaleDateString(parseDateString(coverageEndDate), locale) }),
           path: ['dateOfBirth'],
         });
@@ -175,7 +174,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   const matches = renewState.clientApplication?.children.map(

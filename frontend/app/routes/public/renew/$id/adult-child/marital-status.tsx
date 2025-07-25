@@ -77,7 +77,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadRenewAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.cancel) {
     if (state.hasMaritalStatusChanged) {
       saveRenewState({
@@ -94,7 +94,7 @@ export async function action({ context: { appContainer, session }, params, reque
   // state validation schema
   const maritalStatusSchema = z.object({
     maritalStatus: z
-      .string({ errorMap: () => ({ message: t('renew-adult-child:marital-status.error-message.marital-status-required') }) })
+      .string({ error: t('renew-adult-child:marital-status.error-message.marital-status-required') })
       .trim()
       .min(1, t('renew-adult-child:marital-status.error-message.marital-status-required')),
   });
@@ -112,16 +112,17 @@ export async function action({ context: { appContainer, session }, params, reque
       .string()
       .trim()
       .min(1, t('renew-adult-child:marital-status.error-message.sin-required'))
+
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:marital-status.error-message.sin-valid') });
+          ctx.addIssue({ code: 'custom', message: t('renew-adult-child:marital-status.error-message.sin-valid') });
         } else if (
           [state.clientApplication?.applicantInformation.socialInsuranceNumber, ...(state.clientApplication?.children ? state.clientApplication.children.map((child) => child.information.socialInsuranceNumber) : [])]
             .filter((sin) => sin !== undefined)
             .map((sin) => formatSin(sin))
             .includes(formatSin(sin))
         ) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:marital-status.error-message.sin-unique') });
+          ctx.addIssue({ code: 'custom', message: t('renew-adult-child:marital-status.error-message.sin-unique') });
         }
       }),
   }) satisfies z.ZodType<PartnerInformationState>;
@@ -141,8 +142,8 @@ export async function action({ context: { appContainer, session }, params, reque
   if (!parsedMaritalStatus.success || (renewStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success)) {
     return {
       errors: {
-        ...(parsedMaritalStatus.error ? transformFlattenedError(parsedMaritalStatus.error.flatten()) : {}),
-        ...(parsedMaritalStatus.success && renewStateHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(parsedPartnerInformation.error.flatten()) : {}),
+        ...(parsedMaritalStatus.error ? transformFlattenedError(z.flattenError(parsedMaritalStatus.error)) : {}),
+        ...(parsedMaritalStatus.success && renewStateHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(z.flattenError(parsedPartnerInformation.error)) : {}),
       },
     };
   }

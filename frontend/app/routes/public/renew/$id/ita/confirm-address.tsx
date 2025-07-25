@@ -66,12 +66,13 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const confirmAddressSchema = z
     .object({
-      hasAddressChanged: z.boolean({ errorMap: () => ({ message: t('renew-ita:confirm-address.error-message.has-address-changed-required') }) }),
+      hasAddressChanged: z.boolean({ error: t('renew-ita:confirm-address.error-message.has-address-changed-required') }),
       isHomeAddressSameAsMailingAddress: z.boolean().optional(),
     })
+
     .superRefine((val, ctx) => {
       if (!val.hasAddressChanged && val.isHomeAddressSameAsMailingAddress === undefined) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-ita:confirm-address.error-message.is-home-address-same-as-mailing-address-required'), path: ['isHomeAddressSameAsMailingAddress'] });
+        ctx.addIssue({ code: 'custom', message: t('renew-ita:confirm-address.error-message.is-home-address-same-as-mailing-address-required'), path: ['isHomeAddressSameAsMailingAddress'] });
       }
     });
 
@@ -81,7 +82,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveRenewState({

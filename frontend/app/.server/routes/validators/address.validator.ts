@@ -77,7 +77,7 @@ export class DefaultAddressValidator {
     }
     return {
       success: false,
-      errors: transformFlattenedError(parsedDataResult.error.flatten()),
+      errors: transformFlattenedError(z.flattenError(parsedDataResult.error)),
     };
   }
 
@@ -92,7 +92,7 @@ export class DefaultAddressValidator {
       .object({
         address: z
           .string({
-            required_error: this.errorMessages.address.required,
+            error: (issue) => (issue.input === undefined ? this.errorMessages.address.required : undefined),
           })
           .trim()
           .min(1, this.errorMessages.address.required)
@@ -100,20 +100,20 @@ export class DefaultAddressValidator {
           .refine(isAllValidInputCharacters, this.errorMessages.address.invalidCharacters),
         countryId: z
           .string({
-            required_error: this.errorMessages.country.required,
+            error: (issue) => (issue.input === undefined ? this.errorMessages.country.required : undefined),
           })
           .trim()
           .min(1, this.errorMessages.country.required),
         provinceStateId: z
           .string({
-            required_error: this.errorMessages.provinceState.required,
+            error: (issue) => (issue.input === undefined ? this.errorMessages.provinceState.required : undefined),
           })
           .trim()
           .min(1, this.errorMessages.provinceState.required)
           .optional(),
         city: z
           .string({
-            required_error: this.errorMessages.city.required,
+            error: (issue) => (issue.input === undefined ? this.errorMessages.city.required : undefined),
           })
           .trim()
           .min(1, this.errorMessages.city.required)
@@ -121,6 +121,7 @@ export class DefaultAddressValidator {
           .refine(isAllValidInputCharacters, this.errorMessages.city.invalidCharacters),
         postalZipCode: z.string().trim().max(100).refine(isAllValidInputCharacters, this.errorMessages.postalZipCode.invalidCharacters).optional(),
       })
+
       .superRefine((val, ctx) => {
         const { countryId: country, provinceStateId: provinceState, postalZipCode } = val;
         const isCanada = country === CANADA_COUNTRY_ID;
@@ -129,7 +130,7 @@ export class DefaultAddressValidator {
         // Province/State validation for Canada and USA
         if ((isCanada || isUSA) && (!provinceState || validator.isEmpty(provinceState))) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             message: this.errorMessages.provinceState.required,
             path: ['provinceStateId'],
           });
@@ -138,26 +139,26 @@ export class DefaultAddressValidator {
         // Postal/Zip Code validation for Canada and USA
         if ((isCanada || isUSA) && (!postalZipCode || validator.isEmpty(postalZipCode))) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             message: this.errorMessages.postalZipCode.required,
             path: ['postalZipCode'],
           });
         } else if (isUSA && postalZipCode && !isValidPostalCode(country, postalZipCode)) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             message: this.errorMessages.postalZipCode.invalidZipCode,
             path: ['postalZipCode'],
           });
         } else if (isCanada && postalZipCode) {
           if (!isValidPostalCode(CANADA_COUNTRY_ID, postalZipCode)) {
             ctx.addIssue({
-              code: z.ZodIssueCode.custom,
+              code: 'custom',
               message: this.errorMessages.postalZipCode.invalidPostalCode,
               path: ['postalZipCode'],
             });
           } else if (provinceState && !isValidCanadianPostalCode(provinceState, postalZipCode)) {
             ctx.addIssue({
-              code: z.ZodIssueCode.custom,
+              code: 'custom',
               message: this.errorMessages.postalZipCode.invalidPostalCodeForProvince,
               path: ['postalZipCode'],
             });
@@ -167,7 +168,7 @@ export class DefaultAddressValidator {
         // Ensure postal code does not match Canadian format for non-Canadian addresses
         if (!isCanada && postalZipCode && isValidPostalCode(CANADA_COUNTRY_ID, postalZipCode)) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             message: this.errorMessages.postalZipCode.invalidPostalZipCodeForCountry,
             path: ['countryId'],
           });

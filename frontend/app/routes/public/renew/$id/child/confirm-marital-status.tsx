@@ -57,7 +57,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const confirmMaritalStatusSchema = z.object({
     hasMaritalStatusChanged: z.boolean({
-      errorMap: () => ({ message: t('renew-child:confirm-marital-status.error-message.has-marital-status-changed-required') }),
+      error: t('renew-child:confirm-marital-status.error-message.has-marital-status-changed-required'),
     }),
   });
 
@@ -66,7 +66,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveRenewState({

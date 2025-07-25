@@ -57,24 +57,26 @@ export async function action({ context: { appContainer, session }, request, para
       shareData: z.string().trim().optional(),
       doNotConsent: z.string().trim().optional(),
     })
+
     .superRefine((val, ctx) => {
       if (val.doNotConsent) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:terms-and-conditions.checkboxes.error-message.consent-required'), path: ['doNotConsent'] });
+        ctx.addIssue({ code: 'custom', message: t('apply:terms-and-conditions.checkboxes.error-message.consent-required'), path: ['doNotConsent'] });
       }
       if (!val.doNotConsent && !val.acknowledgeTerms) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required'), path: ['acknowledgeTerms'] });
+        ctx.addIssue({ code: 'custom', message: t('apply:terms-and-conditions.checkboxes.error-message.acknowledge-terms-required'), path: ['acknowledgeTerms'] });
       }
       if (!val.doNotConsent && !val.acknowledgePrivacy) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required'), path: ['acknowledgePrivacy'] });
+        ctx.addIssue({ code: 'custom', message: t('apply:terms-and-conditions.checkboxes.error-message.acknowledge-privacy-required'), path: ['acknowledgePrivacy'] });
       }
       if (!val.doNotConsent && !val.shareData) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:terms-and-conditions.checkboxes.error-message.share-data-required'), path: ['shareData'] });
+        ctx.addIssue({ code: 'custom', message: t('apply:terms-and-conditions.checkboxes.error-message.share-data-required'), path: ['shareData'] });
       }
     })
     .transform((val) => ({
       acknowledgeTerms: val.acknowledgeTerms === CHECKBOX_VALUE.yes,
       acknowledgePrivacy: val.acknowledgePrivacy === CHECKBOX_VALUE.yes,
       shareData: val.shareData === CHECKBOX_VALUE.yes,
+      doNotConsent: val.doNotConsent === CHECKBOX_VALUE.yes,
     }));
 
   const parsedDataResult = consentSchema.safeParse({
@@ -85,7 +87,7 @@ export async function action({ context: { appContainer, session }, request, para
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveApplyState({

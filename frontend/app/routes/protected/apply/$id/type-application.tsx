@@ -62,12 +62,12 @@ export async function action({ context: { appContainer, session }, params, reque
   /**
    * Schema for application delegate.
    */
-  const typeOfApplicationSchema = z.object({ typeOfApplication: z.nativeEnum(APPLICANT_TYPE, { errorMap: () => ({ message: t('protected-apply:type-of-application.error-message.type-of-application-required') }) }) });
+  const typeOfApplicationSchema = z.object({ typeOfApplication: z.enum(APPLICANT_TYPE, { error: t('protected-apply:type-of-application.error-message.type-of-application-required') }) });
 
   const parsedDataResult = typeOfApplicationSchema.safeParse({ typeOfApplication: String(formData.get('typeOfApplication') ?? '') });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveProtectedApplyState({ params, session, state: { editMode: false, typeOfApplication: parsedDataResult.data.typeOfApplication } });

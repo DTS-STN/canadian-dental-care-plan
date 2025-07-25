@@ -78,7 +78,7 @@ export async function action({ context: { appContainer, session }, params, reque
   // Fetch verification code service
   const verificationCodeService = appContainer.get(TYPES.VerificationCodeService);
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.request) {
     // Create a new verification code and store the code in session
@@ -124,9 +124,10 @@ export async function action({ context: { appContainer, session }, params, reque
         .trim()
         .min(1, t('protected-renew:verify-email.error-message.verification-code-required'))
         .transform(extractDigits)
+
         .superRefine((val, ctx) => {
           if (state.verifyEmail && state.verifyEmail.verificationAttempts >= MAX_ATTEMPTS) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('protected-renew:verify-email.error-message.verification-code-max-attempts'), path: ['verificationCode'] });
+            ctx.addIssue({ code: 'custom', message: t('protected-renew:verify-email.error-message.verification-code-max-attempts'), path: ['verificationCode'] });
           }
         }),
     });
@@ -136,7 +137,7 @@ export async function action({ context: { appContainer, session }, params, reque
     });
 
     if (!parsedDataResult.success) {
-      return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+      return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
     }
 
     // Check if the verification code matches

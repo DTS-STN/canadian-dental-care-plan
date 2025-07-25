@@ -54,7 +54,7 @@ const DEFAULT_ERROR_MESSAGES = {
  */
 export function phoneSchema(
   errorMessage: PhoneSchemaErrorMessage = {}, //
-): z.ZodEffects<z.ZodEffects<z.ZodString, string, string>, string, string> {
+): z.ZodType<string> {
   const message: Required<PhoneSchemaErrorMessage> = {
     ...DEFAULT_ERROR_MESSAGES,
     ...errorMessage,
@@ -62,31 +62,11 @@ export function phoneSchema(
 
   return z
     .string({
-      errorMap: (issue, ctx) => {
-        const inputData = String(ctx.data);
-
-        // Handle undefined input data
-        if (inputData === 'undefined') {
-          return {
-            message: message.required_error,
-          };
-        }
-
-        // Handle invalid phone number type
-        if (issue.code === 'invalid_type') {
-          return {
-            message: expandTemplate(message.invalid_type_error, { received: inputData }),
-          };
-        }
-
-        // Handle other
-        return {
-          message: ctx.defaultError,
-        };
-      },
+      error: (issue) => (issue.input === undefined ? message.required_error : expandTemplate(message.invalid_type_error, { received: JSON.stringify(issue.input) })),
     })
     .trim()
     .nonempty(message.required_error)
+
     .superRefine((phoneNumber, ctx) => {
       if (!phoneNumber) return;
 
@@ -109,12 +89,13 @@ export function phoneSchema(
         : message.invalid_phone_international_error;
 
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: expandTemplate(issueMessage, { received: phoneNumber }),
         fatal: true,
       });
     })
     .transform((phoneNumber) => {
+      if (!phoneNumber) return '';
       // Format valid phone number to international format
       return parsePhoneNumberWithError(phoneNumber, 'CA').formatInternational();
     });

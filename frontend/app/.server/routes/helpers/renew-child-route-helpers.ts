@@ -88,7 +88,7 @@ export function loadRenewSingleChildState({ params, request, session }: LoadRene
   const log = createLogger('renew-child-route-helpers.server/loadRenewSingleChildState');
   const renewState = loadRenewChildState({ params, request, session });
 
-  const parsedChildId = z.string().uuid().safeParse(params.childId);
+  const parsedChildId = z.uuid().safeParse(params.childId);
 
   if (!parsedChildId.success) {
     log.warn('Invalid "childId" param format; childId: [%s]', params.childId);

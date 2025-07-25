@@ -31,7 +31,7 @@ describe('phoneSchema', () => {
   it('should fail validation for an invalid Canadian phone number', () => {
     const result = z.object({ phone: phoneSchema() }).safeParse({ phone: '123-4567' });
     assert(!result.success);
-    expect(result.error.errors).toStrictEqual([
+    expect(result.error.issues).toStrictEqual([
       {
         code: 'custom',
         fatal: true,
@@ -44,7 +44,7 @@ describe('phoneSchema', () => {
   it('should fail validation for an invalid international phone number', () => {
     const result = z.object({ phone: phoneSchema() }).safeParse({ phone: '+12 345 555 1212' });
     assert(!result.success);
-    expect(result.error.errors).toStrictEqual([
+    expect(result.error.issues).toStrictEqual([
       {
         code: 'custom',
         fatal: true,
@@ -63,13 +63,12 @@ describe('phoneSchema', () => {
   it('should fail validation for undefined phone number', () => {
     const result = z.object({ phone: phoneSchema() }).safeParse({});
     assert(!result.success);
-    expect(result.error.errors).toStrictEqual([
+    expect(result.error.issues).toStrictEqual([
       {
         code: 'invalid_type',
         expected: 'string',
         message: 'Phone number is required',
         path: ['phone'],
-        received: 'undefined',
       },
     ]);
   });
@@ -83,13 +82,12 @@ describe('phoneSchema', () => {
   it('should fail validation for null phone number', () => {
     const result = z.object({ phone: phoneSchema() }).safeParse({ phone: null });
     assert(!result.success);
-    expect(result.error.errors).toStrictEqual([
+    expect(result.error.issues).toStrictEqual([
       {
         code: 'invalid_type',
         expected: 'string',
         message: 'Invalid phone number type. Expected string, received null',
         path: ['phone'],
-        received: 'null',
       },
     ]);
   });
@@ -97,15 +95,14 @@ describe('phoneSchema', () => {
   it('should fail validation for an empty phone number', () => {
     const result = z.object({ phone: phoneSchema() }).safeParse({ phone: '' });
     assert(!result.success);
-    expect(result.error.errors).toStrictEqual([
+    expect(result.error.issues).toStrictEqual([
       {
         code: 'too_small',
-        exact: false,
         inclusive: true,
         message: 'Phone number is required',
         minimum: 1,
+        origin: 'string',
         path: ['phone'],
-        type: 'string',
       },
     ]);
   });
@@ -113,15 +110,14 @@ describe('phoneSchema', () => {
   it('should fail validation for a phone number with only spaces', () => {
     const result = z.object({ phone: phoneSchema() }).safeParse({ phone: '   ' });
     assert(!result.success);
-    expect(result.error.errors).toStrictEqual([
+    expect(result.error.issues).toStrictEqual([
       {
         code: 'too_small',
-        exact: false,
         inclusive: true,
         message: 'Phone number is required',
         minimum: 1,
+        origin: 'string',
         path: ['phone'],
-        type: 'string',
       },
     ]);
   });
@@ -141,7 +137,7 @@ describe('phoneSchema', () => {
   it('should handle phone number with invalid characters', () => {
     const result = z.object({ phone: phoneSchema() }).safeParse({ phone: '613-555-1212!' });
     assert(!result.success);
-    expect(result.error.errors).toStrictEqual([
+    expect(result.error.issues).toStrictEqual([
       {
         code: 'custom',
         fatal: true,

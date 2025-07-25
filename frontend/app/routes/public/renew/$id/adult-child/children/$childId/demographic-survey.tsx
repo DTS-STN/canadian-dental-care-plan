@@ -119,17 +119,18 @@ export async function action({ context: { appContainer, session }, params, reque
       locationBornStatus: z.string().trim().optional(),
       genderStatus: z.string().trim().optional(),
     })
+
     .superRefine((val, ctx) => {
       if (val.indigenousStatus === IS_APPLICANT_FIRST_NATIONS_YES_OPTION.toString() && !val.firstNations) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:children.demographic-survey.error-message.first-nations-required'), path: ['firstNations'] });
+        ctx.addIssue({ code: 'custom', message: t('renew-adult-child:children.demographic-survey.error-message.first-nations-required'), path: ['firstNations'] });
       }
 
       if (val.ethnicGroups.includes(ANOTHER_ETHNIC_GROUP_OPTION.toString()) && !val.anotherEthnicGroup) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('renew-adult-child:children.demographic-survey.error-message.another-ethnic-group-required'), path: ['anotherEthnicGroup'] });
+        ctx.addIssue({ code: 'custom', message: t('renew-adult-child:children.demographic-survey.error-message.another-ethnic-group-required'), path: ['anotherEthnicGroup'] });
       }
     });
 
-  const preferNotToAnswer = z.nativeEnum(FORM_ACTION).parse(formData.get('_action')) === FORM_ACTION.save;
+  const preferNotToAnswer = z.enum(FORM_ACTION).parse(formData.get('_action')) === FORM_ACTION.save;
 
   const parsedDataResult = demographicSurveySchema.safeParse({
     indigenousStatus: preferNotToAnswer ? INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER.toString() : String(formData.get('indigenousStatus') ?? ''),
@@ -142,7 +143,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveRenewState({

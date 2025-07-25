@@ -77,7 +77,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const demographicSurveyEnabled = ENABLED_FEATURES.includes('demographic-survey');
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     if (isInvitationToApplyClient(state.clientApplication)) {
       invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
@@ -91,7 +91,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   // state validation schema
   const dentalInsuranceSchema = z.object({
-    dentalInsurance: z.boolean({ errorMap: () => ({ message: t('protected-renew:dental-insurance.error-message.dental-insurance-required') }) }),
+    dentalInsurance: z.boolean({ error: t('protected-renew:dental-insurance.error-message.dental-insurance-required') }),
   });
 
   const parsedDataResult = dentalInsuranceSchema.safeParse({
@@ -99,7 +99,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   saveProtectedRenewState({

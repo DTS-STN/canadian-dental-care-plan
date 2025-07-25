@@ -18,7 +18,7 @@ export interface StatusState {
 /**
  * Schema for validating UUID.
  */
-const idSchema = z.string().uuid();
+const idSchema = z.uuid();
 
 /**
  * Gets the status flow session key.

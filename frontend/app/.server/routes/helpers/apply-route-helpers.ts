@@ -158,7 +158,7 @@ export type TypeOfApplicationState = NonNullable<ApplyState['typeOfApplication']
 /**
  * Schema for validating UUID.
  */
-const idSchema = z.string().uuid();
+const idSchema = z.uuid();
 
 /**
  * Gets the apply flow session key.

@@ -100,7 +100,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadProtectedRenewStateForReview({ params, request, session, demographicSurveyEnabled });
   const primaryApplicantStateCompleted = isPrimaryApplicantStateComplete(loadProtectedRenewState({ params, request, session }), demographicSurveyEnabled);
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.back) {
     if (!primaryApplicantStateCompleted || validateProtectedChildrenStateForReview(state.children, demographicSurveyEnabled).length === 0) {
       return redirect(getPathById('protected/renew/$id/review-adult-information', params));

@@ -87,7 +87,7 @@ const serverEnv = clientEnvSchema.extend({
   MARITAL_STATUS_CODE_WIDOWED: z.string().trim().min(1).default("775170005"),
 
   // interop api settings
-  INTEROP_API_BASE_URI: z.string().url(),
+  INTEROP_API_BASE_URI: z.url(),
   INTEROP_API_SUBSCRIPTION_KEY: z.string().trim().min(1),
   INTEROP_API_MAX_RETRIES: z.coerce.number().default(3),
   INTEROP_API_BACKOFF_MS: z.coerce.number().default(100),
@@ -108,7 +108,7 @@ const serverEnv = clientEnvSchema.extend({
   // auth/oidc settings
   AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey),
   AUTH_JWT_PUBLIC_KEY: z.string().refine(isValidPublicKey),
-  AUTH_LOGOUT_REDIRECT_URL: z.string().url(),
+  AUTH_LOGOUT_REDIRECT_URL: z.url(),
   AUTH_RAOIDC_BASE_URL: z.string().trim().min(1),
   AUTH_RAOIDC_CLIENT_ID: z.string().trim().min(1),
   AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
@@ -122,7 +122,7 @@ const serverEnv = clientEnvSchema.extend({
   // hCaptcha settings (@see https://docs.hcaptcha.com)
   HCAPTCHA_MAX_SCORE: z.coerce.number().default(0.79),
   HCAPTCHA_SECRET_KEY: z.string().trim().min(1).default('0x0000000000000000000000000000000000000000'),
-  HCAPTCHA_VERIFY_URL: z.string().url().default('https://api.hcaptcha.com/siteverify'),
+  HCAPTCHA_VERIFY_URL: z.url().default('https://api.hcaptcha.com/siteverify'),
 
   // http proxy settings
   HTTP_PROXY_URL: z.string().trim().transform(emptyToUndefined).optional(),
@@ -136,8 +136,8 @@ const serverEnv = clientEnvSchema.extend({
   SESSION_COOKIE_PATH: z.string().trim().min(1).default('/'),
   SESSION_COOKIE_SAME_SITE: z.enum(['lax', 'strict', 'none']).default('lax'),
   SESSION_COOKIE_SECRET: z.string().trim().min(16).default(randomUUID()),
-  SESSION_COOKIE_HTTP_ONLY: z.string().transform(toBoolean).default('true'),
-  SESSION_COOKIE_SECURE: z.string().transform(toBoolean).default('true'),
+  SESSION_COOKIE_HTTP_ONLY: z.string().transform(toBoolean).default(true),
+  SESSION_COOKIE_SECURE: z.string().transform(toBoolean).default(true),
   SESSION_KEY_PREFIX: z.string().trim().min(1).default('SESSION:'),
 
 
@@ -153,11 +153,11 @@ const serverEnv = clientEnvSchema.extend({
   REDIS_STANDALONE_PORT: z.coerce.number().default(6379),
   REDIS_USERNAME: z.string().trim().min(1).optional(),
   REDIS_PASSWORD: z.string().trim().min(1).optional(),
-  REDIS_COMMAND_TIMEOUT_SECONDS: z.string().transform(toNumber).default('1'),
+  REDIS_COMMAND_TIMEOUT_SECONDS: z.string().transform(toNumber).default(1),
 
   // mocks settings
-  ENABLED_MOCKS: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidMockNames).default(''),
-  MOCK_AUTH_ALLOWED_REDIRECTS: z.string().transform(emptyToUndefined).transform(csvToArray).default('http://localhost:3000/auth/callback/raoidc'),
+  ENABLED_MOCKS: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidMockNames).default(['']),
+  MOCK_AUTH_ALLOWED_REDIRECTS: z.string().transform(emptyToUndefined).transform(csvToArray).default(['http://localhost:3000/auth/callback/raoidc']),
 
   // cache duration settings
   LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
@@ -184,7 +184,7 @@ const serverEnv = clientEnvSchema.extend({
   OTEL_SERVICE_NAME: z.string().trim().min(1).default('canadian-dental-care-plan'),
   OTEL_SERVICE_VERSION: z.string().trim().min(1).default('0.0.0'),
   OTEL_TRACES_ENDPOINT: z.string().trim().transform(emptyToUndefined).optional(),
-  OTEL_USE_CONSOLE_EXPORTERS: z.string().transform(toBoolean).default('false'),
+  OTEL_USE_CONSOLE_EXPORTERS: z.string().transform(toBoolean).default(false),
 
   // Dynatrace OneAgent (RUM) - Manual insertion - Retrieve via REST API - Use the Dynatrace API to insert the RUM JavaScript.
   // @see https://docs.dynatrace.com/docs/platform-modules/digital-experience/web-applications/initial-setup/rum-injection#retrieve-via-rest-api
@@ -193,18 +193,18 @@ const serverEnv = clientEnvSchema.extend({
   DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS: z.coerce.number().default(1 * 60 * 60),
 
   // CDCP Website URLs
-  CDCP_WEBSITE_APPLY_URL_EN: z.string().url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html'),
-  CDCP_WEBSITE_APPLY_URL_FR: z.string().url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html'),
-  CDCP_WEBSITE_RENEW_URL_EN: z.string().url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html'),
-  CDCP_WEBSITE_RENEW_URL_FR: z.string().url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html'),
-  CDCP_WEBSITE_STATUS_URL_EN: z.string().url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#status'),
-  CDCP_WEBSITE_STATUS_URL_FR: z.string().url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#etat'),
-  CDCP_WEBSITE_URL_EN: z.string().url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html'),
-  CDCP_WEBSITE_URL_FR: z.string().url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html'),
+  CDCP_WEBSITE_APPLY_URL_EN: z.url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html'),
+  CDCP_WEBSITE_APPLY_URL_FR: z.url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html'),
+  CDCP_WEBSITE_RENEW_URL_EN: z.url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html'),
+  CDCP_WEBSITE_RENEW_URL_FR: z.url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html'),
+  CDCP_WEBSITE_STATUS_URL_EN: z.url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#status'),
+  CDCP_WEBSITE_STATUS_URL_FR: z.url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#etat'),
+  CDCP_WEBSITE_URL_EN: z.url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html'),
+  CDCP_WEBSITE_URL_FR: z.url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html'),
 
   // health check configuration
   HEALTH_CACHE_TTL: z.coerce.number().default(10 * 1000),
-  HEALTH_AUTH_JWKS_URI: z.string().url().optional(),
+  HEALTH_AUTH_JWKS_URI: z.url().optional(),
   HEALTH_AUTH_ROLE: z.string().default('HealthCheck.ViewDetails'),
   HEALTH_AUTH_TOKEN_AUDIENCE: z.string().default('00000000-0000-0000-0000-000000000000'), // intentional default to enforce an audience check when verifying JWTs
   HEALTH_AUTH_TOKEN_ISSUER: z.string().default('https://auth.example.com/'), // intentional default to enforce an issuer check when verifying JWTs

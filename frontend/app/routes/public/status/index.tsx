@@ -60,7 +60,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const formDataSchema = z.object({
-    checkFor: z.nativeEnum(CHECK_FOR, { errorMap: () => ({ message: t('status:form.error-message.selection-required') }) }),
+    checkFor: z.enum(CHECK_FOR, { error: t('status:form.error-message.selection-required') }),
   });
 
   const parsedCheckFor = formDataSchema.safeParse({
@@ -69,7 +69,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (!parsedCheckFor.success) {
     return {
-      errors: transformFlattenedError(parsedCheckFor.error.flatten()),
+      errors: transformFlattenedError(z.flattenError(parsedCheckFor.error)),
     };
   }
 

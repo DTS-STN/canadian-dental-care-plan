@@ -75,7 +75,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = loadProtectedApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formAction = z.nativeEnum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.cancel) {
     return redirect(getPathById('protected/apply/$id/adult/review-information', params));
@@ -83,8 +83,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const newOrExistingMemberSchema = z
     .object({
-      newOrExistingMember: z.nativeEnum(NEW_OR_EXISTING_MEMBER_OPTION, {
-        errorMap: () => ({ message: t('protected-apply-adult:new-or-existing-member.error-message.is-new-or-existing-member-required') }),
+      newOrExistingMember: z.enum(NEW_OR_EXISTING_MEMBER_OPTION, {
+        error: t('protected-apply-adult:new-or-existing-member.error-message.is-new-or-existing-member-required'),
       }),
       clientNumber: z
         .string()
@@ -92,17 +92,18 @@ export async function action({ context: { appContainer, session }, params, reque
         .optional()
         .transform((code) => (code ? extractDigits(code) : undefined)),
     })
+
     .superRefine((val, ctx) => {
       if (val.newOrExistingMember === NEW_OR_EXISTING_MEMBER_OPTION.yes) {
         if (!val.clientNumber) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             message: t('protected-apply-adult:new-or-existing-member.error-message.client-number-required'),
             path: ['clientNumber'],
           });
         } else if (!isValidClientNumberRenewal(val.clientNumber)) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             message: t('protected-apply-adult:new-or-existing-member.error-message.client-number-valid'),
             path: ['clientNumber'],
           });
@@ -116,7 +117,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.success) {
-    return data({ errors: transformFlattenedError(parsedDataResult.error.flatten()) }, { status: 400 });
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
   const idToken: IdToken = session.get('idToken');

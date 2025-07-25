@@ -104,19 +104,18 @@ export async function action({ context: { appContainer, session }, params, reque
         .refine(isAllValidInputCharacters, t('apply-adult-child:children.information.error-message.characters-valid'))
         .refine((lastName) => !hasDigits(lastName), t('apply-adult-child:children.information.error-message.last-name-no-digits')),
       dateOfBirthYear: z.number({
-        required_error: t('apply-adult-child:children.information.error-message.date-of-birth-year-required'),
-        invalid_type_error: t('apply-adult-child:children.information.error-message.date-of-birth-year-number'),
+        error: (issue) => (issue.input === undefined ? t('apply-adult-child:children.information.error-message.date-of-birth-year-required') : t('apply-adult-child:children.information.error-message.date-of-birth-year-number')),
       }),
       dateOfBirthMonth: z.number({
-        required_error: t('apply-adult-child:children.information.error-message.date-of-birth-month-required'),
+        error: (issue) => (issue.input === undefined ? t('apply-adult-child:children.information.error-message.date-of-birth-month-required') : undefined),
       }),
       dateOfBirthDay: z.number({
-        required_error: t('apply-adult-child:children.information.error-message.date-of-birth-day-required'),
-        invalid_type_error: t('apply-adult-child:children.information.error-message.date-of-birth-day-number'),
+        error: (issue) => (issue.input === undefined ? t('apply-adult-child:children.information.error-message.date-of-birth-day-required') : t('apply-adult-child:children.information.error-message.date-of-birth-day-number')),
       }),
       dateOfBirth: z.string(),
-      isParent: z.boolean({ errorMap: () => ({ message: t('apply-adult-child:children.information.error-message.is-parent') }) }),
+      isParent: z.boolean({ error: t('apply-adult-child:children.information.error-message.is-parent') }),
     })
+
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
@@ -124,19 +123,19 @@ export async function action({ context: { appContainer, session }, params, reque
 
       if (!isValidDateString(dateOfBirth)) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t('apply-adult-child:children.information.error-message.date-of-birth-valid'),
           path: ['dateOfBirth'],
         });
       } else if (!isPastDateString(dateOfBirth)) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t('apply-adult-child:children.information.error-message.date-of-birth-is-past'),
           path: ['dateOfBirth'],
         });
       } else if (getAgeFromDateString(dateOfBirth) > 150) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t('apply-adult-child:children.information.error-message.date-of-birth-is-past-valid'),
           path: ['dateOfBirth'],
         });
@@ -153,15 +152,16 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const childSinSchema = z
     .object({
-      hasSocialInsuranceNumber: z.boolean({ errorMap: () => ({ message: t('apply-adult-child:children.information.error-message.has-social-insurance-number') }) }),
+      hasSocialInsuranceNumber: z.boolean({ error: t('apply-adult-child:children.information.error-message.has-social-insurance-number') }),
       socialInsuranceNumber: z.string().trim().optional(),
     })
+
     .superRefine((val, ctx) => {
       if (val.hasSocialInsuranceNumber) {
         if (!val.socialInsuranceNumber) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-required'), path: ['socialInsuranceNumber'] });
+          ctx.addIssue({ code: 'custom', message: t('apply-adult-child:children.information.error-message.sin-required'), path: ['socialInsuranceNumber'] });
         } else if (!isValidSin(val.socialInsuranceNumber)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-valid'), path: ['socialInsuranceNumber'] });
+          ctx.addIssue({ code: 'custom', message: t('apply-adult-child:children.information.error-message.sin-valid'), path: ['socialInsuranceNumber'] });
         } else if (
           val.socialInsuranceNumber &&
           [applyState.applicantInformation?.socialInsuranceNumber, applyState.partnerInformation?.socialInsuranceNumber, ...applyState.children.filter((child) => state.id !== child.id).map((child) => child.information?.socialInsuranceNumber)]
@@ -169,7 +169,7 @@ export async function action({ context: { appContainer, session }, params, reque
             .map((sin) => formatSin(sin))
             .includes(formatSin(val.socialInsuranceNumber))
         ) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-unique'), path: ['socialInsuranceNumber'] });
+          ctx.addIssue({ code: 'custom', message: t('apply-adult-child:children.information.error-message.sin-unique'), path: ['socialInsuranceNumber'] });
         }
       }
     }) satisfies z.ZodType<ChildSinState>;
@@ -193,8 +193,8 @@ export async function action({ context: { appContainer, session }, params, reque
     return data(
       {
         errors: {
-          ...(parsedDataResult.success ? {} : transformFlattenedError(parsedDataResult.error.flatten())),
-          ...(parsedSinDataResult.success ? {} : transformFlattenedError(parsedSinDataResult.error.flatten())),
+          ...(parsedDataResult.success ? {} : transformFlattenedError(z.flattenError(parsedDataResult.error))),
+          ...(parsedSinDataResult.success ? {} : transformFlattenedError(z.flattenError(parsedSinDataResult.error))),
         },
       },
       { status: 400 },
