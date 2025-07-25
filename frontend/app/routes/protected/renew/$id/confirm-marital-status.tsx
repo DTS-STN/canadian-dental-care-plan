@@ -119,7 +119,7 @@ export async function action({ context: { appContainer, session }, params, reque
       .string()
       .trim()
       .min(1, t('protected-renew:marital-status.error-message.sin-required'))
-      // eslint-disable-next-line @typescript-eslint/no-deprecated
+
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
           ctx.addIssue({ code: 'custom', message: t('protected-renew:marital-status.error-message.sin-valid') });

@@ -67,7 +67,7 @@ export async function action({ context: { appContainer, session }, params, reque
         .min(1)
         .max(64),
     })
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+
     .superRefine((val, ctx) => {
       if (!validator.isEmail(val.email)) {
         ctx.addIssue({ code: 'custom', message: t('renew-adult:confirm-email.error-message.email-valid'), path: ['email'] });

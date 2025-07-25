@@ -94,7 +94,7 @@ export async function action({ context: { appContainer, session }, params, reque
         .refine(isValidClientNumberRenewal, t('renew:applicant-information.error-message.client-number-valid'))
         .transform((code) => extractDigits(code)),
     })
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);

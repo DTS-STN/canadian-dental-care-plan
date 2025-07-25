@@ -124,7 +124,7 @@ export async function action({ context: { appContainer, session }, params, reque
       locationBornStatus: z.string().trim().optional(),
       genderStatus: z.string().trim().optional(),
     })
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+
     .superRefine((val, ctx) => {
       if (val.indigenousStatus === IS_APPLICANT_FIRST_NATIONS_YES_OPTION.toString() && !val.firstNations) {
         ctx.addIssue({ code: 'custom', message: t('protected-renew:children.demographic-survey.error-message.first-nations-required'), path: ['firstNations'] });

@@ -80,7 +80,7 @@ export async function action({ context: { appContainer, session }, params, reque
         .string()
         .trim()
         .min(1, t('apply-adult:applicant-information.error-message.sin-required'))
-        // eslint-disable-next-line @typescript-eslint/no-deprecated
+
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
             ctx.addIssue({ code: 'custom', message: t('apply-adult:applicant-information.error-message.sin-valid') });
@@ -107,7 +107,7 @@ export async function action({ context: { appContainer, session }, params, reque
       dateOfBirthDay: z.number({ error: (issue) => (issue.input === undefined ? t('applicant-information.error-message.date-of-birth-day-required') : t('applicant-information.error-message.date-of-birth-day-number')) }),
       dateOfBirth: z.string(),
     })
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+
     .superRefine((val, ctx) => {
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
       const dateOfBirth = `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`;

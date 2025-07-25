@@ -127,7 +127,7 @@ export async function action({ context: { appContainer, session }, params, reque
         .trim()
         .min(1, t('protected-apply-adult:verify-email.error-message.verification-code-required'))
         .transform(extractDigits)
-        // eslint-disable-next-line @typescript-eslint/no-deprecated
+
         .superRefine((val, ctx) => {
           if (state.verifyEmail && state.verifyEmail.verificationAttempts >= MAX_ATTEMPTS) {
             ctx.addIssue({ code: 'custom', message: t('protected-apply-adult:verify-email.error-message.verification-code-max-attempts'), path: ['verificationCode'] });

@@ -69,7 +69,7 @@ export async function action({ context: { appContainer, session }, params, reque
       hasAddressChanged: z.boolean({ error: t('renew-ita:confirm-address.error-message.has-address-changed-required') }),
       isHomeAddressSameAsMailingAddress: z.boolean().optional(),
     })
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+
     .superRefine((val, ctx) => {
       if (!val.hasAddressChanged && val.isHomeAddressSameAsMailingAddress === undefined) {
         ctx.addIssue({ code: 'custom', message: t('renew-ita:confirm-address.error-message.is-home-address-same-as-mailing-address-required'), path: ['isHomeAddressSameAsMailingAddress'] });

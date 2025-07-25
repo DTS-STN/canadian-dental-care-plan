@@ -88,7 +88,7 @@ export async function action({ context: { appContainer, session }, params, reque
         invalid_phone_international_error: t('renew-adult-child:confirm-phone.error-message.phone-number-alt-valid-international'),
       }).optional(),
     })
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+
     .superRefine((val, ctx) => {
       if (val.isNewOrUpdatedPhoneNumber === ADD_OR_UPDATE_PHONE_OPTION.yes && !val.phoneNumber) {
         ctx.addIssue({ code: 'custom', message: t('renew-adult-child:confirm-phone.error-message.phone-required'), path: ['phoneNumber'] });

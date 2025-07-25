@@ -119,7 +119,7 @@ export async function action({ context: { appContainer, session }, params, reque
         .transform((code) => extractDigits(code)),
       isParent: z.boolean({ error: t('renew-adult-child:children.information.error-message.is-parent') }),
     })
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);

@@ -60,45 +60,43 @@ export function phoneSchema(
     ...errorMessage,
   };
 
-  return (
-    z
-      .string({
-        error: (issue) => (issue.input === undefined ? message.required_error : expandTemplate(message.invalid_type_error, { received: JSON.stringify(issue.input) })),
-      })
-      .trim()
-      .nonempty(message.required_error)
-      // eslint-disable-next-line @typescript-eslint/no-deprecated
-      .superRefine((phoneNumber, ctx) => {
-        if (!phoneNumber) return;
+  return z
+    .string({
+      error: (issue) => (issue.input === undefined ? message.required_error : expandTemplate(message.invalid_type_error, { received: JSON.stringify(issue.input) })),
+    })
+    .trim()
+    .nonempty(message.required_error)
 
-        const phoneDigits = extractDigits(phoneNumber);
+    .superRefine((phoneNumber, ctx) => {
+      if (!phoneNumber) return;
 
-        // Determine validation type based on digit length
-        const requiresCanadianValidation = phoneDigits.length <= 11;
+      const phoneDigits = extractDigits(phoneNumber);
 
-        // Validate based on number format
-        const isValid = requiresCanadianValidation //
-          ? isValidPhoneNumber(phoneNumber, 'CA')
-          : isValidPhoneNumber(phoneNumber);
+      // Determine validation type based on digit length
+      const requiresCanadianValidation = phoneDigits.length <= 11;
 
-        // Return early if valid
-        if (isValid) return;
+      // Validate based on number format
+      const isValid = requiresCanadianValidation //
+        ? isValidPhoneNumber(phoneNumber, 'CA')
+        : isValidPhoneNumber(phoneNumber);
 
-        // Add appropriate error message based on validation type
-        const issueMessage = requiresCanadianValidation //
-          ? message.invalid_phone_canadian_error
-          : message.invalid_phone_international_error;
+      // Return early if valid
+      if (isValid) return;
 
-        ctx.addIssue({
-          code: 'custom',
-          message: expandTemplate(issueMessage, { received: phoneNumber }),
-          fatal: true,
-        });
-      })
-      .transform((phoneNumber) => {
-        if (!phoneNumber) return '';
-        // Format valid phone number to international format
-        return parsePhoneNumberWithError(phoneNumber, 'CA').formatInternational();
-      })
-  );
+      // Add appropriate error message based on validation type
+      const issueMessage = requiresCanadianValidation //
+        ? message.invalid_phone_canadian_error
+        : message.invalid_phone_international_error;
+
+      ctx.addIssue({
+        code: 'custom',
+        message: expandTemplate(issueMessage, { received: phoneNumber }),
+        fatal: true,
+      });
+    })
+    .transform((phoneNumber) => {
+      if (!phoneNumber) return '';
+      // Format valid phone number to international format
+      return parsePhoneNumberWithError(phoneNumber, 'CA').formatInternational();
+    });
 }

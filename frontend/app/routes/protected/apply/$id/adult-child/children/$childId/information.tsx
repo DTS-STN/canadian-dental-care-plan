@@ -124,7 +124,7 @@ export async function action({ context: { appContainer, session }, params, reque
       dateOfBirth: z.string(),
       isParent: z.boolean({ error: t('protected-apply-adult-child:children.information.error-message.is-parent') }),
     })
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
@@ -164,7 +164,7 @@ export async function action({ context: { appContainer, session }, params, reque
       hasSocialInsuranceNumber: z.boolean({ error: t('protected-apply-adult-child:children.information.error-message.has-social-insurance-number') }),
       socialInsuranceNumber: z.string().trim().optional(),
     })
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+
     .superRefine((val, ctx) => {
       if (val.hasSocialInsuranceNumber) {
         if (!val.socialInsuranceNumber) {

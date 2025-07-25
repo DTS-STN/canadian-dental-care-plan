@@ -78,7 +78,7 @@ export async function action({ context: { appContainer, session }, request, para
       shareData: z.string().trim().optional(),
       doNotConsent: z.string().trim().optional(),
     })
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+
     .superRefine((val, ctx) => {
       if (val.doNotConsent) {
         ctx.addIssue({ code: 'custom', message: t('protected-apply:terms-and-conditions.checkboxes.error-message.consent-required'), path: ['doNotConsent'] });

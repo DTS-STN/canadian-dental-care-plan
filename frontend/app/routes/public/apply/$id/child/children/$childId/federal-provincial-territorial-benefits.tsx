@@ -127,7 +127,7 @@ export async function action({ context: { appContainer, session }, params, reque
       hasFederalBenefits: z.boolean({ error: t('apply-child:children.dental-benefits.error-message.federal-benefit-required') }),
       federalSocialProgram: z.string().trim().optional(),
     })
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+
     .superRefine((val, ctx) => {
       if (val.hasFederalBenefits && (!val.federalSocialProgram || validator.isEmpty(val.federalSocialProgram))) {
         ctx.addIssue({ code: 'custom', message: t('apply-child:children.dental-benefits.error-message.federal-benefit-program-required'), path: ['federalSocialProgram'] });
@@ -146,7 +146,7 @@ export async function action({ context: { appContainer, session }, params, reque
       provincialTerritorialSocialProgram: z.string().trim().optional(),
       province: z.string().trim().optional(),
     })
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+
     .superRefine((val, ctx) => {
       if (val.hasProvincialTerritorialBenefits) {
         if (!val.province || validator.isEmpty(val.province)) {

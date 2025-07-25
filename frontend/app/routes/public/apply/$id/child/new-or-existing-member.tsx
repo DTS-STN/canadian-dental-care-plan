@@ -80,7 +80,7 @@ export async function action({ context: { appContainer, session }, params, reque
         .optional()
         .transform((code) => (code ? extractDigits(code) : undefined)),
     })
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+
     .superRefine((val, ctx) => {
       if (val.newOrExistingMember === NEW_OR_EXISTING_MEMBER_OPTION.yes) {
         if (!val.clientNumber) {
