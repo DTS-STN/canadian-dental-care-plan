@@ -9,6 +9,8 @@ import { TYPES } from '~/.server/constants';
 import { clearProtectedRenewState, isPrimaryApplicantStateComplete, loadProtectedRenewState, validateProtectedChildrenStateForReview } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
+import { ButtonLink } from '~/components/buttons';
+import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
@@ -44,6 +46,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   if (state.submissionInfo === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
+
+  const env = appContainer.get(TYPES.ClientConfig);
+  const surveyLink = params.lang === 'en' ? env.CDCP_SURVEY_LINK_EN : env.CDCP_SURVEY_LINK_FR;
 
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
@@ -106,6 +111,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     primaryApplicantInfo,
     children,
     meta,
+    surveyLink,
   };
 }
 
@@ -131,7 +137,7 @@ export default function ProtectedRenewConfirm({ loaderData, params }: Route.Comp
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const { primaryApplicantInfo, children } = loaderData;
+  const { primaryApplicantInfo, children, surveyLink } = loaderData;
 
   const cdcpLink = <InlineLink routeId="public/status/index" params={params} className="external-link" newTabIndicator target="_blank" />;
 
@@ -143,6 +149,20 @@ export default function ProtectedRenewConfirm({ loaderData, params }: Route.Comp
         <p className="mt-4">
           <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
         </p>
+      </section>
+
+      <section>
+        <ContextualAlert type="comment">
+          <div className="space-y-4">
+            <p className="text-2xl">
+              <strong>{t('confirm.survey.title')}</strong>
+            </p>
+            <p>{t('confirm.survey.info')}</p>
+            <ButtonLink id="survey-button" to={surveyLink} params={params} target="_blank" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Confirmation survey button - Take the survey click" variant="primary">
+              {t('confirm.survey.button')}
+            </ButtonLink>
+          </div>
+        </ContextualAlert>
       </section>
 
       <section className="space-y-8">
