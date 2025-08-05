@@ -72,10 +72,47 @@ log.info('  ✓ registering route request counter');
 app.use(await routeRequestCounter(viteDevServer));
 
 log.info('  ✓ registering react router request handler');
-// In Express v5, the path route matching syntax has changed.
-// The wildcard "*" must now have a name, similar to parameters ":".
-// Use "/*splat" instead of "/*" to match the updated behavior.
-// Reference: https://expressjs.com/en/guide/migrating-5.html#path-syntax
+
+/**
+ * Redirect Protected Renewals
+ *
+ * Catches all HTTP requests for protected renewal pages in both English and French
+ * and temporarily redirects them to the corresponding "apply" pages.
+ *
+ * This is intended as a temporary fix until the "renew" and "apply" user flows are merged.
+ *
+ * TODO: Remove this redirect on the next major release when the renewal and apply functionalities are merged.
+ */
+app.all(['/:lang/protected/renew{/*splat}', '/:lang/protege/renouveler{/*splat}'], (req, res) => {
+  if (req.params.lang === 'fr') {
+    // Redirect French protected renewal requests to the French protected application page.
+    res.redirect(`/${req.params.lang}/protege/demander`);
+    return;
+  }
+  // Redirect other protected renewal requests to the protected application page.
+  res.redirect(`/${req.params.lang}/protected/apply`);
+});
+
+/**
+ * Redirect Public Renewals
+ *
+ * Catches all HTTP requests for public renewal pages in both English and French
+ * and temporarily redirects them to the corresponding "apply" pages.
+ *
+ * This is a temporary measure to handle the transition of merging "renew" and "apply" functionalities.
+ *
+ * TODO: Remove this redirect on the next major release when the renewal and apply functionalities are merged.
+ */
+app.all(['/:lang/renew{/*splat}', '/:lang/renouveler{/*splat}'], (req, res) => {
+  if (req.params.lang === 'fr') {
+    // Redirect French public renewal requests to the French public application page.
+    res.redirect(`/${req.params.lang}/demander`);
+    return;
+  }
+  // Redirect other public renewal requests to the public application page.
+  res.redirect(`/${req.params.lang}/apply`);
+});
+
 app.all('*splat', rrRequestHandler(environment.NODE_ENV, viteDevServer));
 
 log.info('  ✓ registering global error handler');
