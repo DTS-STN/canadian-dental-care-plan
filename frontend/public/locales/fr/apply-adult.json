@@ -201,6 +201,11 @@
       "are-you-sure": "Êtes-vous sûr de vouloir fermer la demande?",
       "back-btn": "Retour",
       "close-btn": "Fermer la demande"
+    },
+    "survey": {
+      "title": "Faites-nous part de vos commentaires sur votre expérience concernant votre demande",
+      "info": "Vous pouvez nous aider à améliorer le Régime canadien de soins dentaires en participant à un court sondage. Cela ne vous prendra que 3 à 5 minutes. Le sondage s'ouvrira dans une nouvelle fenêtre.",
+      "button": "Participez au court sondage"
     }
   },
   "confirm-dental-benefits": {

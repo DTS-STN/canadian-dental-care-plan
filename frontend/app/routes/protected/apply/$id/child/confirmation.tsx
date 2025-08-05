@@ -12,7 +12,7 @@ import { clearProtectedApplyState, getChildrenState } from '~/.server/routes/hel
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Address } from '~/components/address';
-import { Button } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
@@ -56,6 +56,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     getChildrenState(state).length === 0) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
+
+  const env = appContainer.get(TYPES.ClientConfig);
+  const surveyLink = locale === 'en' ? env.CDCP_SURVEY_LINK_EN : env.CDCP_SURVEY_LINK_FR;
 
   const mailingProvinceTerritoryStateAbbr = state.mailingAddress.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
   const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
@@ -147,6 +150,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     spouseInfo,
     submissionInfo: state.submissionInfo,
+    surveyLink,
     userInfo,
   };
 }
@@ -174,7 +178,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplyFlowConfirm({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo } = loaderData;
+  const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo, surveyLink } = loaderData;
 
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('protected-apply-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
@@ -207,6 +211,25 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
           {t('confirm.print-btn')}
         </Button>
       </section>
+      <ContextualAlert type="comment">
+        <div className="space-y-4">
+          <p className="text-2xl">
+            <strong>{t('confirm.survey.title')}</strong>
+          </p>
+          <p>{t('confirm.survey.info')}</p>
+          <ButtonLink
+            id="survey-button"
+            to={surveyLink}
+            className="external-link"
+            newTabIndicator
+            target="_blank"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Confirmation survey button - Take the survey click"
+            variant="primary"
+          >
+            {t('confirm.survey.button')}
+          </ButtonLink>
+        </div>
+      </ContextualAlert>
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>
         <p className="mt-4">{t('confirm.begin-process')}</p>
@@ -409,7 +432,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
             </fetcher.Form>
           </DialogFooter>
         </DialogContent>
-      </Dialog>{' '}
+      </Dialog>
     </div>
   );
 }

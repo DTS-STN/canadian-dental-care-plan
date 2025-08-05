@@ -12,7 +12,7 @@ import { clearProtectedApplyState } from '~/.server/routes/helpers/protected-app
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Address } from '~/components/address';
-import { Button } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
@@ -57,6 +57,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
+
+  const env = appContainer.get(TYPES.ClientConfig);
+  const surveyLink = locale === 'en' ? env.CDCP_SURVEY_LINK_EN : env.CDCP_SURVEY_LINK_FR;
 
   const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram
     ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
@@ -125,6 +128,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     spouseInfo,
     submissionInfo: state.submissionInfo,
+    surveyLink,
     userInfo,
   };
 }
@@ -151,7 +155,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ProtectedApplyFlowConfirm({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo } = loaderData;
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink } = loaderData;
 
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('protected-apply-adult:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
@@ -188,6 +192,26 @@ export default function ProtectedApplyFlowConfirm({ loaderData, params }: Route.
           {t('confirm.print-btn')}
         </Button>
       </section>
+
+      <ContextualAlert type="comment">
+        <div className="space-y-4">
+          <p className="text-2xl">
+            <strong>{t('confirm.survey.title')}</strong>
+          </p>
+          <p>{t('confirm.survey.info')}</p>
+          <ButtonLink
+            id="survey-button"
+            to={surveyLink}
+            className="external-link"
+            newTabIndicator
+            target="_blank"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Confirmation survey button - Take the survey click"
+            variant="primary"
+          >
+            {t('confirm.survey.button')}
+          </ButtonLink>
+        </div>
+      </ContextualAlert>
 
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>
