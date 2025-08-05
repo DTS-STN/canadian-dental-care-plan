@@ -58,7 +58,11 @@ export const clientEnvSchema = z.object({
   COMMUNICATION_METHOD_GC_MAIL_ID: z.string().trim().min(1).default('775170002'),
   CLIENT_STATUS_SUCCESS_ID: z.string().trim().min(1).default('51af5170-614e-ee11-be6f-000d3a09d640'),
   INVALID_CLIENT_FRIENDLY_STATUS: z.string().trim().min(1).default('504fba6e-604e-ee11-be6f-000d3a09d640'),
-  INVALID_LETTER_TYPE_IDS: z.string().trim().transform(csvToArray).default(['775170000'])
+  INVALID_LETTER_TYPE_IDS: z.string().trim().transform(csvToArray).default(['775170000']),
+
+  // CDCP Survey URLs
+  CDCP_SURVEY_LINK_EN: z.url().default('https://canada-preview.adobecqms.net/en/services/benefits/dental/dental-care-plan/questionnaire-after-application.html'),
+  CDCP_SURVEY_LINK_FR: z.url().default('https://canada-preview.adobecqms.net/fr/services/prestations/dentaire/regime-soins-dentaires/questionnaire-apres-processus-demande.html')
 });
 
 export type ClientEnv = z.infer<typeof clientEnvSchema>;
