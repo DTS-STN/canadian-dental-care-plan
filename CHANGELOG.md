@@ -1,11 +1,11 @@
 # Canadian Dental Care Plan Releases
 
-## 5.5.0
+## v5.5.0
 
 - Redirect Renewals to Intake
 - Add CDCP Online Application Feedback Questionnaire Link
 
-## 5.4.0
+## v5.4.0
 
 - Add digital communications to renewal
 - Leverage Interop for code tables
