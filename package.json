@@ -1,7 +1,7 @@
 {
   "name": "@dts-stn/canadian-dental-care-plan",
   "private": true,
-  "version": "5.4.0",
+  "version": "5.5.0",
   "scripts": {
     "changeset": "changeset",
     "changeset:version": "changeset version"
