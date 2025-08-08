@@ -82,7 +82,6 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
   }
 
   mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity: ClientApplicationEntity): ClientApplicationDto {
-    const { ENGLISH_LANGUAGE_CODE } = this.serverConfig;
     const applicant = clientApplicationEntity.BenefitApplication.Applicant;
 
     const applicantInformation = {
@@ -131,7 +130,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
 
     const communicationPreferences = {
       email: applicant.PersonContactInformation[0].EmailAddress?.at(0)?.EmailAddressID,
-      preferredLanguage: applicant.PersonLanguage[0].CommunicationCategoryCode.ReferenceDataID === ENGLISH_LANGUAGE_CODE.toString() ? 'english' : 'french',
+      preferredLanguage: applicant.PersonLanguage[0].CommunicationCategoryCode.ReferenceDataID,
       preferredMethod: applicant.PreferredMethodCommunicationCode.ReferenceDataID,
     };
 
