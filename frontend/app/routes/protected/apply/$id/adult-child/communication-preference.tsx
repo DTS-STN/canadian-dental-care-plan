@@ -10,7 +10,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplyAdultChildState } from '~/.server/routes/helpers/protected-apply-adult-child-route-helpers';
 import { saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import type { CommunicationPreferencesState } from '~/.server/routes/helpers/protected-apply-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -18,6 +18,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
+import type { InputRadiosProps } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
@@ -29,7 +30,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const PREFERRED_SUN_LIFE_METHOD = { email: 'email', mail: 'mail' } as const;
 export const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
-export const PREFERRED_LANGUAGE = { english: 'english', french: 'french' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-apply-adult-child', 'protected-apply', 'gcweb'),
@@ -45,11 +45,14 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const state = loadProtectedApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:communication-preference.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.apply.adult-child.communication-preference', { userId: idToken.sub });
+
+  const languages = appContainer.get(TYPES.LanguageService).listAndSortLocalizedLanguages(locale);
 
   return {
     meta,
@@ -57,6 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       ...state.communicationPreferences,
     },
     editMode: state.editMode,
+    languages,
   };
 }
 
@@ -108,7 +112,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyFlowCommunicationPreferencePage({ loaderData, params }: Route.ComponentProps) {
-  const { t, i18n } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, editMode } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
@@ -123,6 +127,12 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
     preferredNotificationMethod: 'input-radio-preferred-notification-method-option-0',
   });
 
+  const preferredLanguageOptions: InputRadiosProps['options'] = loaderData.languages.map((language) => ({
+    value: language.id,
+    children: language.name,
+    defaultChecked: defaultState.preferredLanguage === language.id,
+  }));
+
   return (
     <>
       <div className="my-6 sm:my-8">
@@ -134,40 +144,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
-            <InputRadios
-              id="preferred-language"
-              name="preferredLanguage"
-              legend={t('protected-apply-adult-child:communication-preference.preferred-language')}
-              options={
-                i18n.language === 'fr'
-                  ? [
-                      {
-                        value: PREFERRED_LANGUAGE.french,
-                        children: t('protected-apply-adult-child:communication-preference.french'),
-                        defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.french,
-                      },
-                      {
-                        value: PREFERRED_LANGUAGE.english,
-                        children: t('protected-apply-adult-child:communication-preference.english'),
-                        defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.english,
-                      },
-                    ]
-                  : [
-                      {
-                        value: PREFERRED_LANGUAGE.english,
-                        children: t('protected-apply-adult-child:communication-preference.english'),
-                        defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.english,
-                      },
-                      {
-                        value: PREFERRED_LANGUAGE.french,
-                        children: t('protected-apply-adult-child:communication-preference.french'),
-                        defaultChecked: defaultState.preferredLanguage === PREFERRED_LANGUAGE.french,
-                      },
-                    ]
-              }
-              errorMessage={errors?.preferredLanguage}
-              required
-            />
+            <InputRadios id="preferred-language" name="preferredLanguage" legend={t('protected-apply-adult-child:communication-preference.preferred-language')} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
             <InputRadios
               id="preferred-methods"
               legend={t('protected-apply-adult-child:communication-preference.preferred-method')}
