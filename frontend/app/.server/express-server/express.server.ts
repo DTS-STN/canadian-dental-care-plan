@@ -76,41 +76,35 @@ log.info('  ✓ registering react router request handler');
 /**
  * Redirect Protected Renewals
  *
- * Catches all HTTP requests for protected renewal pages in both English and French
- * and temporarily redirects them to the corresponding "apply" pages.
- *
- * This is intended as a temporary fix until the "renew" and "apply" user flows are merged.
+ * Temporarily redirects all HTTP requests for protected renewal pages (English and French)
+ * to the corresponding "apply" pages, until the flows are merged.
  *
  * TODO: Remove this redirect on the next major release when the renewal and apply functionalities are merged.
  */
 app.all(['/:lang/protected/renew{/*splat}', '/:lang/protege/renouveler{/*splat}'], (req, res) => {
-  if (req.params.lang === 'fr') {
-    // Redirect French protected renewal requests to the French protected application page.
-    res.redirect(`/${req.params.lang}/protege/demander`);
-    return;
-  }
-  // Redirect other protected renewal requests to the protected application page.
-  res.redirect(`/${req.params.lang}/protected/apply`);
+  const { lang } = req.params;
+  const isFrench = lang === 'fr';
+  const basePath = isFrench ? 'protege/demander' : 'protected/apply';
+  const redirectUrl = `/${lang}/${basePath}`;
+  log.info('Redirecting protected renewal. request: [%s], redirectUrl: [%s]', req.originalUrl, redirectUrl);
+  res.redirect(302, redirectUrl);
 });
 
 /**
  * Redirect Public Renewals
  *
- * Catches all HTTP requests for public renewal pages in both English and French
- * and temporarily redirects them to the corresponding "apply" pages.
- *
- * This is a temporary measure to handle the transition of merging "renew" and "apply" functionalities.
+ * Temporarily redirects all HTTP requests for public renewal pages (English and French)
+ * to the corresponding "apply" pages, until the flows are merged.
  *
  * TODO: Remove this redirect on the next major release when the renewal and apply functionalities are merged.
  */
 app.all(['/:lang/renew{/*splat}', '/:lang/renouveler{/*splat}'], (req, res) => {
-  if (req.params.lang === 'fr') {
-    // Redirect French public renewal requests to the French public application page.
-    res.redirect(`/${req.params.lang}/demander`);
-    return;
-  }
-  // Redirect other public renewal requests to the public application page.
-  res.redirect(`/${req.params.lang}/apply`);
+  const { lang } = req.params;
+  const isFrench = lang === 'fr';
+  const basePath = isFrench ? 'demander' : 'apply';
+  const redirectUrl = `/${lang}/${basePath}`;
+  log.info('Redirecting public renewal. request: [%s], redirectUrl: [%s]', req.originalUrl, redirectUrl);
+  res.redirect(302, redirectUrl);
 });
 
 app.all('*splat', rrRequestHandler(environment.NODE_ENV, viteDevServer));
