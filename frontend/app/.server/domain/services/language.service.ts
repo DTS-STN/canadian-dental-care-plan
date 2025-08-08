@@ -7,6 +7,7 @@ import { LanguageNotFoundException } from '~/.server/domain/exceptions';
 import type { LanguageDtoMapper } from '~/.server/domain/mappers';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
+import { moveToTop } from '~/.server/utils/collection.utils';
 
 /**
  * Service interface for managing language data.
@@ -148,6 +149,7 @@ export class DefaultLanguageService implements LanguageService {
 
   private sortLocalizedLanguages(languages: ReadonlyArray<LanguageLocalizedDto>, locale: AppLocale): ReadonlyArray<LanguageLocalizedDto> {
     const sortByNamePredicate = (a: LanguageLocalizedDto, b: LanguageLocalizedDto) => a.name.localeCompare(b.name, locale);
-    return languages.toSorted(sortByNamePredicate);
+    const sortLocalizedLanguages = languages.toSorted(sortByNamePredicate);
+    return moveToTop(sortLocalizedLanguages, ({ code }) => code === locale);
   }
 }

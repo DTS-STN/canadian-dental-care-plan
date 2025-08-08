@@ -55,15 +55,15 @@ describe('DefaultLanguageService', () => {
   });
 
   describe('listAndSortLocalizedLanguages', () => {
-    it('fetches and sorts localized languages with Canada first', () => {
+    it('fetches and sorts localized languages with French first when locale is "fr"', () => {
       const mockMappedLanguageLocalizedDtos: LanguageLocalizedDto[] = [
-        { id: '1', code: 'en', name: 'English' },
         { id: '2', code: 'fr', name: 'French' },
+        { id: '1', code: 'en', name: 'English' },
       ];
 
       const expectedLanguageLocalizedDtos: LanguageLocalizedDto[] = [
-        { id: '1', code: 'en', name: 'English' },
         { id: '2', code: 'fr', name: 'French' },
+        { id: '1', code: 'en', name: 'English' },
       ];
 
       const mockLanguageDtoMapper = mock<LanguageDtoMapper>();
@@ -71,7 +71,7 @@ describe('DefaultLanguageService', () => {
 
       const service = new DefaultLanguageService(mockLanguageDtoMapper, mockServerConfig);
 
-      const dtos = service.listAndSortLocalizedLanguages('en');
+      const dtos = service.listAndSortLocalizedLanguages('fr');
 
       expect(dtos).toStrictEqual(expectedLanguageLocalizedDtos);
       expect(mockLanguageDtoMapper.mapLanguageDtosToLanguageLocalizedDtos).toHaveBeenCalledOnce();
