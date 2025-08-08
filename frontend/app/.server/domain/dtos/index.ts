@@ -10,6 +10,7 @@ export type * from './client-friendly-status.dto';
 export type * from './country.dto';
 export type * from './demographic-survey.dto';
 export type * from './federal-government-insurance-plan.dto';
+export type * from './language.dto';
 export type * from './letter-type.dto';
 export type * from './letter.dto';
 export type * from './province-territory-state.dto';
