@@ -81,7 +81,7 @@ export class DefaultLanguageService implements LanguageService {
 
     this.languageDtos = [
       { id: serverConfig.ENGLISH_LANGUAGE_CODE.toString(), code: 'en', nameEn: 'English', nameFr: 'Anglais' },
-      { id: serverConfig.FRENCH_LANGUAGE_CODE.toString(), code: 'en', nameEn: 'French', nameFr: 'Français' },
+      { id: serverConfig.FRENCH_LANGUAGE_CODE.toString(), code: 'fr', nameEn: 'French', nameFr: 'Français' },
     ];
   }
 
@@ -150,6 +150,10 @@ export class DefaultLanguageService implements LanguageService {
   private sortLocalizedLanguages(languages: ReadonlyArray<LanguageLocalizedDto>, locale: AppLocale): ReadonlyArray<LanguageLocalizedDto> {
     const sortByNamePredicate = (a: LanguageLocalizedDto, b: LanguageLocalizedDto) => a.name.localeCompare(b.name, locale);
     const sortLocalizedLanguages = languages.toSorted(sortByNamePredicate);
+    const test = moveToTop(sortLocalizedLanguages, ({ code }) => code === locale);
+
+    console.log({ test, locale });
+
     return moveToTop(sortLocalizedLanguages, ({ code }) => code === locale);
   }
 }

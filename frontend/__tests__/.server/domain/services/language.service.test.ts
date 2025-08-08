@@ -19,7 +19,7 @@ describe('DefaultLanguageService', () => {
     it('fetches all languages', () => {
       const mockDtos: LanguageDto[] = [
         { id: mockServerConfig.ENGLISH_LANGUAGE_CODE.toString(), code: 'en', nameEn: 'English', nameFr: 'Anglais' },
-        { id: mockServerConfig.FRENCH_LANGUAGE_CODE.toString(), code: 'en', nameEn: 'French', nameFr: 'Français' },
+        { id: mockServerConfig.FRENCH_LANGUAGE_CODE.toString(), code: 'fr', nameEn: 'French', nameFr: 'Français' },
       ];
 
       const mockLanguageDtoMapper = mock<LanguageDtoMapper>();

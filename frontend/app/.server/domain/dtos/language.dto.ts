@@ -6,7 +6,7 @@ export type LanguageDto = Readonly<{
   id: string;
 
   /** Unique code for the language. */
-  code: 'en' | 'fr';
+  code: string;
 
   /** Language name in English. */
   nameEn: string;
