@@ -18,6 +18,7 @@ import type {
   CountryDtoMapper,
   DemographicSurveyDtoMapper,
   FederalGovernmentInsurancePlanDtoMapper,
+  LanguageDtoMapper,
   LetterDtoMapper,
   LetterTypeDtoMapper,
   ProvinceTerritoryStateDtoMapper,
@@ -60,6 +61,7 @@ import type {
   ProvincialGovernmentInsurancePlanService,
   VerificationCodeService,
 } from '~/.server/domain/services';
+import type { LanguageService } from '~/.server/domain/services/language.service';
 import type { HttpClient } from '~/.server/http';
 import type { InstrumentationService } from '~/.server/observability';
 import type { BenefitApplicationStateMapper, BenefitRenewalStateMapper } from '~/.server/routes/mappers';
@@ -183,6 +185,8 @@ export const TYPES = assignServiceIdentifiers({
   HomeAddressValidatorFactory: serviceId<HomeAddressValidatorFactory>(),
   HttpClient: serviceId<HttpClient>(),
   InstrumentationService: serviceId<InstrumentationService>(),
+  LanguageDtoMapper: serviceId<LanguageDtoMapper>(),
+  LanguageService: serviceId<LanguageService>(),
   LetterDtoMapper: serviceId<LetterDtoMapper>(),
   LetterRepository: serviceId<LetterRepository>(),
   LetterService: serviceId<LetterService>(),
