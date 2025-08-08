@@ -10,6 +10,7 @@ export * from './client-friendly-status.service';
 export * from './country.service';
 export * from './demographic-survey.service';
 export * from './federal-government-insurance-plan.service';
+export * from './language.service';
 export * from './letter-type.service';
 export * from './letter.service';
 export * from './province-territory-state.service';
