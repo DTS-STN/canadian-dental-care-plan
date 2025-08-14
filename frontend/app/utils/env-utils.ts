@@ -61,8 +61,8 @@ export const clientEnvSchema = z.object({
   INVALID_LETTER_TYPE_IDS: z.string().trim().transform(csvToArray).default(['775170000']),
 
   // CDCP Survey URLs
-  CDCP_SURVEY_LINK_EN: z.url().default('https://canada-preview.adobecqms.net/en/services/benefits/dental/dental-care-plan/questionnaire-after-application.html'),
-  CDCP_SURVEY_LINK_FR: z.url().default('https://canada-preview.adobecqms.net/fr/services/prestations/dentaire/regime-soins-dentaires/questionnaire-apres-processus-demande.html')
+  CDCP_SURVEY_LINK_EN: z.url().default('https://forms-formulaires.alpha.canada.ca/en/id/cmdsycga6008qx701dw5x5n9c'),
+  CDCP_SURVEY_LINK_FR: z.url().default('https://forms-formulaires.alpha.canada.ca/fr/id/cmdsycga6008qx701dw5x5n9c')
 });
 
 export type ClientEnv = z.infer<typeof clientEnvSchema>;

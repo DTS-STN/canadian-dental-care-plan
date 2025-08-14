@@ -36,8 +36,8 @@ describe('<ClientEnv>', () => {
       SESSION_TIMEOUT_SECONDS: 120,
       USA_COUNTRY_ID: 'USA',
       INVALID_LETTER_TYPE_IDS: ['101010'],
-      CDCP_SURVEY_LINK_EN: 'https://canada-preview.adobecqms.net/en/services/benefits/dental/dental-care-plan/questionnaire-after-application.html',
-      CDCP_SURVEY_LINK_FR: 'https://canada-preview.adobecqms.net/fr/services/prestations/dentaire/regime-soins-dentaires/questionnaire-apres-processus-demande.html',
+      CDCP_SURVEY_LINK_EN: 'https://forms-formulaires.alpha.canada.ca/en/id/cmdsycga6008qx701dw5x5n9c',
+      CDCP_SURVEY_LINK_FR: 'https://forms-formulaires.alpha.canada.ca/fr/id/cmdsycga6008qx701dw5x5n9c',
     };
 
     const { container } = render(<ClientEnvComponent env={env} nonce={nonce} />);
