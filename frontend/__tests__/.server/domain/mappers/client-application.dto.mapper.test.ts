@@ -215,7 +215,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
         children: [],
         communicationPreferences: {
           email: 'email@example.com',
-          preferredLanguage: 'english',
+          preferredLanguage: '1',
           preferredMethod: 'EMAIL',
         },
         contactInformation: {

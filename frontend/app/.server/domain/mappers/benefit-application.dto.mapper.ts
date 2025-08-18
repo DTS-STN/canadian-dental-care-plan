@@ -91,8 +91,6 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     const {
       BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED,
       BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC,
-      ENGLISH_LANGUAGE_CODE,
-      FRENCH_LANGUAGE_CODE,
       MARITAL_STATUS_CODE_SINGLE,
       MARITAL_STATUS_CODE_MARRIED,
       MARITAL_STATUS_CODE_COMMON_LAW,
@@ -133,7 +131,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
           PersonLanguage: [
             {
               CommunicationCategoryCode: {
-                ReferenceDataID: (communicationPreferences.preferredLanguage === 'english' ? ENGLISH_LANGUAGE_CODE : FRENCH_LANGUAGE_CODE).toString(),
+                ReferenceDataID: communicationPreferences.preferredLanguage,
               },
               PreferredIndicator: true,
             },

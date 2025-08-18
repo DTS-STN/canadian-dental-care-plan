@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/confirmation';
-import { PREFERRED_LANGUAGE, PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
+import { PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultChildState } from '~/.server/routes/helpers/apply-adult-child-route-helpers';
@@ -74,7 +74,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.contactInformation?.phoneNumber,
     altPhoneNumber: state.contactInformation?.phoneNumberAlt,
-    preferredLanguage: state.communicationPreferences.preferredLanguage,
+    preferredLanguage: appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.preferredLanguage, locale),
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: state.maritalStatus,
@@ -364,7 +364,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-prefs')}</h3>
           <dl className="divide-y border-y">
-            <DescriptionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage === PREFERRED_LANGUAGE.english ? t('confirm.english') : t('confirm.french')}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage.name}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.sun-life-comm-pref-title')}>
               <p>{userInfo.communicationSunLifePreference === PREFERRED_SUN_LIFE_METHOD.email ? t('confirm.preferred-notification-method-email') : t('confirm.preferred-notification-method-mail')}</p>
             </DescriptionListItem>

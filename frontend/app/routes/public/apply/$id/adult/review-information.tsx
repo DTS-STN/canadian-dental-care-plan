@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/review-information';
-import { PREFERRED_LANGUAGE, PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
+import { PREFERRED_NOTIFICATION_METHOD, PREFERRED_SUN_LIFE_METHOD } from './communication-preference';
 
 import { TYPES } from '~/.server/constants';
 import { loadApplyAdultStateForReview } from '~/.server/routes/helpers/apply-adult-route-helpers';
@@ -85,7 +85,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
     previouslyEnrolled: state.newOrExistingMember,
     email: state.email,
-    preferredLanguage: state.communicationPreferences.preferredLanguage,
+    preferredLanguage: appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.preferredLanguage, locale),
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -368,7 +368,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
             <h2 className="font-lato text-2xl font-bold">{t('apply-adult:review-information.comm-title')}</h2>
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('apply-adult:review-information.lang-pref-title')}>
-                <p>{userInfo.preferredLanguage === PREFERRED_LANGUAGE.english ? t('apply-adult:review-information.english') : t('apply-adult:review-information.french')}</p>
+                <p>{userInfo.preferredLanguage.name}</p>
                 <div className="mt-4">
                   <InlineLink id="change-language-preference" routeId="public/apply/$id/adult/communication-preference" params={params}>
                     {t('apply-adult:review-information.lang-pref-change')}
