@@ -17,10 +17,12 @@ describe('mergeMeta', () => {
 
     const args: MetaArgs = {
       data: undefined,
+      loaderData: undefined,
       location: mock<MetaArgs['location']>({ pathname: '/leaf' }),
       matches: [
         {
           data: undefined,
+          loaderData: undefined,
           id: 'parent',
           meta: parentMeta,
           params: {},

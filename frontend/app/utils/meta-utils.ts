@@ -13,7 +13,7 @@ import type { GetAnnotations } from 'react-router/internal';
  *
  * import { mergeMeta } from '~/utils/meta-utils';
  *
- * export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
+ * export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
  *   return [
  *     { title: "My Leaf Route" },
  *   ];
@@ -22,7 +22,7 @@ import type { GetAnnotations } from 'react-router/internal';
  * // In a parent route:
  * import type { Route } from './+types/root';
  *
- * export const meta: Route.MetaFunction = ({ data }) => {
+ * export const meta: Route.MetaFunction = ({ loaderData }) => {
  *   return [
  *     { title: "My Parent Route" },
  *     { name: 'description', content: "This is the parent route" },

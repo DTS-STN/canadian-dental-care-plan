@@ -44,7 +44,7 @@ export const handle = {
   pageTitleI18nKey: 'renew-ita:dental-benefits.title',
 };
 
-export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
+export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
