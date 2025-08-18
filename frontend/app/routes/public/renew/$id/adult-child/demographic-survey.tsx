@@ -42,7 +42,7 @@ export const handle = {
   pageIdentifier: pageIds.public.renew.adultChild.demographicSurvey,
 } as const satisfies RouteHandleData;
 
-export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
+export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.SecurityHandler);

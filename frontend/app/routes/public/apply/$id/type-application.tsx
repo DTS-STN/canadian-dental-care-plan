@@ -27,7 +27,7 @@ const APPLICANT_TYPE = { adult: 'adult', adultChild: 'adult-child', child: 'chil
 
 export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'), pageIdentifier: pageIds.public.apply.typeOfApplication, pageTitleI18nKey: 'apply:type-of-application.page-title' } as const satisfies RouteHandleData;
 
-export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
+export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadApplyState({ params, session });

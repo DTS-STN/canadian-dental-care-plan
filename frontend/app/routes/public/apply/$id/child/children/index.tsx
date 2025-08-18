@@ -36,7 +36,7 @@ const FORM_ACTION = { add: 'add', continue: 'continue', remove: 'remove' } as co
 
 export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'), pageIdentifier: pageIds.public.apply.child.childSummary, pageTitleI18nKey: 'apply-child:children.index.page-title' } as const satisfies RouteHandleData;
 
-export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
+export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadApplyChildState({ params, request, session });

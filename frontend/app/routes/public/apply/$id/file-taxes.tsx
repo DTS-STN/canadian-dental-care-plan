@@ -22,7 +22,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'), pageIdentifier: pageIds.public.apply.fileYourTaxes, pageTitleI18nKey: 'apply:file-your-taxes.page-title' } as const satisfies RouteHandleData;
 
-export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
+export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const { applicationYear } = loadApplyState({ params, session });

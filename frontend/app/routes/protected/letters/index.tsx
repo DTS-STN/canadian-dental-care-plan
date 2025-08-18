@@ -31,7 +31,7 @@ export const handle = {
   pageTitleI18nKey: 'letters:index.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
+export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 const orderEnumSchema = z.enum(['asc', 'desc']);
 

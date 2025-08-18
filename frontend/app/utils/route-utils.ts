@@ -85,7 +85,7 @@ export function useBreadcrumbs() {
 
 export function useBuildInfo() {
   return useMatches()
-    .map(({ data }) => data as { buildInfo?: BuildInfo } | undefined)
+    .map(({ loaderData }) => loaderData as { buildInfo?: BuildInfo } | undefined)
     .map((data) => buildInfoSchema.safeParse(data?.buildInfo))
     .map((result) => (result.success ? result.data : undefined))
     .reduce(coalesce);
@@ -125,7 +125,7 @@ export function usePageTitleI18nKey() {
 
 export function usePageTitleI18nOptions() {
   return useMatches()
-    .map(({ data }) => data as { i18nOptions?: { [key: string]: string } } | undefined)
+    .map(({ loaderData }) => loaderData as { i18nOptions?: { [key: string]: string } } | undefined)
     .map((data) => data?.i18nOptions)
     .reduce(coalesce);
 }

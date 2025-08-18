@@ -13,11 +13,7 @@ export const handle = {
   i18nNamespaces: [...layoutI18nNamespaces],
 } as const satisfies RouteHandleData;
 
-export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
-  if (!data) {
-    return [];
-  }
-
+export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
   return [{ name: 'dcterms.accessRights', content: '1' }];
 });
 

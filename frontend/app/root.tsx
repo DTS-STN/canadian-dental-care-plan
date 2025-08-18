@@ -29,24 +29,24 @@ export const links: Route.LinksFunction = () => [
   { rel: 'stylesheet', href: tailwindStyleSheet },
 ];
 
-export const meta: Route.MetaFunction = ({ data }) => {
-  if (!data) {
+export const meta: Route.MetaFunction = ({ loaderData }) => {
+  if (!loaderData) {
     return [];
   }
 
   return [
-    ...getTitleMetaTags(data.meta.title),
-    ...getDescriptionMetaTags(data.meta.description),
-    { name: 'author', content: data.meta.author },
+    ...getTitleMetaTags(loaderData.meta.title),
+    ...getDescriptionMetaTags(loaderData.meta.description),
+    { name: 'author', content: loaderData.meta.author },
     { name: 'dcterms.accessRights', content: '2' },
-    { name: 'dcterms.creator', content: data.meta.author },
-    { name: 'dcterms.language', content: data.meta.language },
+    { name: 'dcterms.creator', content: loaderData.meta.author },
+    { name: 'dcterms.language', content: loaderData.meta.language },
     { name: 'dcterms.service', content: 'ESDC-EDSC_CDCP-RCSD' },
     { name: 'dcterms.spatial', content: 'Canada' },
-    { name: 'dcterms.subject', content: data.meta.subject },
+    { name: 'dcterms.subject', content: loaderData.meta.subject },
     { name: 'robots', content: 'noindex' },
-    { property: 'og:locale', content: data.meta.locale },
-    { property: 'og:site_name', content: data.meta.siteName },
+    { property: 'og:locale', content: loaderData.meta.locale },
+    { property: 'og:site_name', content: loaderData.meta.siteName },
     { property: 'og:type', content: 'website' },
   ];
 };

@@ -48,7 +48,7 @@ export const handle = {
   pageTitleI18nKey: 'renew-adult-child:review-adult-information.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: Route.MetaFunction = mergeMeta(({ data }) => (data ? getTitleMetaTags(data.meta.title) : []));
+export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadRenewAdultChildStateForReview({ params, request, session });

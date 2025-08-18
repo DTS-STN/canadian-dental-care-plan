@@ -34,12 +34,8 @@ export const handle = {
   pageTitleI18nKey: 'protected-renew:children.parent-or-guardian.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: Route.MetaFunction = mergeMeta(({ data }) => {
-  if (!data) {
-    return [];
-  }
-
-  return getTitleMetaTags(data.meta.title, data.meta.dcTermsTitle);
+export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
+  return getTitleMetaTags(loaderData.meta.title, loaderData.meta.dcTermsTitle);
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
