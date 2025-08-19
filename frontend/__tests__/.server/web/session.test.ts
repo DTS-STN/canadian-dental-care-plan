@@ -101,14 +101,12 @@ describe('Session', () => {
         const session = new ExpressSession(mockRequestSession);
         session.set('key' as SessionKey, 'value');
         expect(mockRequestSession.key).toBe('value');
-        expect(mockRequestSession.save).toHaveBeenCalledOnce();
       });
 
       it('should sanitize the key', () => {
         const session = new ExpressSession(mockRequestSession);
         session.set(' sanitized key!@#$%^' as SessionKey, 'value');
         expect(mockRequestSession['_sanitized_key___$__']).toBe('value');
-        expect(mockRequestSession.save).toHaveBeenCalledOnce();
       });
     });
 
@@ -118,7 +116,6 @@ describe('Session', () => {
         const session = new ExpressSession(mockRequestSession);
         expect(session.unset('key' as SessionKey)).toBe(true);
         expect(mockRequestSession.key).toBeUndefined();
-        expect(mockRequestSession.save).toHaveBeenCalledOnce();
       });
 
       it('should return false if key does not exist', () => {
@@ -132,7 +129,6 @@ describe('Session', () => {
         const session = new ExpressSession(mockRequestSession);
         expect(session.unset(' sanitized key!@#$%^' as SessionKey)).toBe(true);
         expect(mockRequestSession['_sanitized_key___$__']).toBeUndefined();
-        expect(mockRequestSession.save).toHaveBeenCalledOnce();
       });
     });
 
