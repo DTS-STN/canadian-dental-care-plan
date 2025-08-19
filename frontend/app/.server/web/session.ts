@@ -127,6 +127,17 @@ export interface Session {
    * @returns {void} This method does not return any value.
    */
   destroy(): void;
+
+  /**
+   * Saves the current session back to the store.
+   *
+   * This method will Save the session back to the store, replacing the contents on the store with
+   * the contents in memory (though a store may do something else--consult the store's documentation
+   * for exact behavior).
+   *
+   * @returns {void} This method does not return any value.
+   */
+  save(): void;
 }
 
 /**
@@ -211,6 +222,16 @@ export class ExpressSession implements Session {
     });
   }
 
+  save(): void {
+    this.session.save((err) => {
+      if (err) {
+        this.log.error('Failed to save session %s: %s', this.id, err.message);
+      } else {
+        this.log.info('Session %s saved successfully', this.id);
+      }
+    });
+  }
+
   protected sanitizeKey(key: string): string {
     assert.ok(!validator.isEmpty(key, { ignore_whitespace: true }), 'Session key cannot be empty');
     let sanitized = key.replaceAll(/[^a-zA-Z0-9_$]/g, '_');
@@ -269,5 +290,10 @@ export class NoopSession implements Session {
   destroy(): void {
     this.log.warn('Called "destroy" on NoopSession. No operation is performed.');
     // No operation; no session to destroy in a stateless context.
+  }
+
+  save(): void {
+    this.log.warn('Called "save" on NoopSession. No operation is performed.');
+    // No operation; no session to save in a stateless context.
   }
 }

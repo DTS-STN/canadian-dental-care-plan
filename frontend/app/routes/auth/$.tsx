@@ -118,6 +118,11 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
   session.set('authReturnUrl', returnUrl ?? '/');
   session.set('authState', state);
 
+  // Note: In this particular situation, calling session.save() here is necessary because save is
+  // automatically called at the end of the HTTP response, but if session.destroy() was called before,
+  // previous set operations would not be persisted.
+  session.save();
+
   log.debug('Redirecting to RAOIDC signin URL [%s]', authUrl.href);
   return redirectDocument(authUrl.href);
 }

@@ -133,10 +133,18 @@ describe('Session', () => {
     });
 
     describe('destroy', () => {
-      it('should destroy the session and call save', () => {
+      it('should destroy the session', () => {
         const session = new ExpressSession(mockRequestSession);
         session.destroy();
         expect(mockRequestSession.destroy).toHaveBeenCalledOnce();
+      });
+    });
+
+    describe('save', () => {
+      it('should save the session', () => {
+        const session = new ExpressSession(mockRequestSession);
+        session.save();
+        expect(mockRequestSession.save).toHaveBeenCalledOnce();
       });
     });
 
@@ -205,6 +213,10 @@ describe('Session', () => {
 
     it('should not throw error on destroy', () => {
       expect(() => session.destroy()).not.toThrowError();
+    });
+
+    it('should not throw error on save', () => {
+      expect(() => session.save()).not.toThrowError();
     });
   });
 });
