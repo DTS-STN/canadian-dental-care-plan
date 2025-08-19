@@ -139,8 +139,8 @@ export class ExpressSession implements Session {
   private readonly log: Logger;
 
   constructor(session: RequestSession) {
-    this.session = session;
     assert.ok(session, 'Session object is undefined. Ensure session middleware is properly configured.');
+    this.session = session;
     this.log = createLogger('~/.server/web/ExpressSession');
     this.log.trace('Session initialized with ID: %s', this.id);
   }
@@ -153,63 +153,60 @@ export class ExpressSession implements Session {
     const sanitizedKey = this.sanitizeKey(key);
     if (this.isReservedKey(sanitizedKey)) return false;
     const exists = sanitizedKey in this.session;
-    this.log.trace('Checking session key existence: %s, exists: %s', sanitizedKey, exists);
+    this.log.trace('Session [%s]: Checking for key "%s", exists: %s', this.id, key, exists);
     return exists;
   }
 
   find<K extends SessionKey>(key: K): Option<SessionTypeMap[K]> {
-    if (!this.has(key)) return None;
+    if (!this.has(key)) {
+      this.log.trace('Session [%s]: Key "%s" not found', this.id, key);
+      return None;
+    }
     const sanitizedKey = this.sanitizeKey(key);
-    const value = Some(this.session[sanitizedKey] as SessionTypeMap[K]);
-    this.log.trace('Found value for session key: %s, value: %s', sanitizedKey, value);
-    return value;
+    const value = this.session[sanitizedKey] as SessionTypeMap[K];
+    this.log.trace('Session [%s]: Found key "%s"', this.id, key);
+    return Some(value);
   }
 
   get<K extends SessionKey>(key: K): SessionTypeMap[K] {
     const value = this.find(key);
     if (value.isNone()) {
-      this.log.error('Session key not found: %s, sessionId: %s', key, this.id);
+      this.log.error('Session [%s]: Attempted to get non-existent key "%s"', this.id, key);
       throw new Error(`Key '${key}' not found in session [${this.id}]`);
     }
-    this.log.trace('Retrieved value for session key: %s, value: %s', key, value);
-    return value.unwrap();
+
+    const unwrappedValue = value.unwrap();
+    this.log.trace('Session [%s]: Retrieved value for key "%s": %j', this.id, key, unwrappedValue);
+    return unwrappedValue;
   }
 
   set<K extends SessionKey>(key: K, value: SessionTypeMap[K]): void {
     const sanitizedKey = this.sanitizeKey(key);
     this.assertNotReservedKey(sanitizedKey);
     this.session[sanitizedKey] = value;
-    this.session.save((err) => {
-      if (err) {
-        this.log.error('Failed to save session: %s', err.message);
-      } else {
-        this.log.trace('Session key set successfully: %s', sanitizedKey);
-      }
-    });
+    this.log.trace('Session [%s]: Set key "%s" to value: %j', this.id, key, value);
   }
 
   unset(key: SessionKey): boolean {
-    if (!this.has(key)) return false;
+    if (!this.has(key)) {
+      this.log.warn('Session [%s]: Attempted to unset non-existent key "%s"', this.id, key);
+      return false;
+    }
+
     const sanitizedKey = this.sanitizeKey(key);
     this.assertNotReservedKey(sanitizedKey);
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete this.session[sanitizedKey];
-    this.session.save((err) => {
-      if (err) {
-        this.log.error('Failed to save session after unsetting key: %s, error: %s', sanitizedKey, err.message);
-      } else {
-        this.log.trace('Session key unset successfully: %s', sanitizedKey);
-      }
-    });
+    this.log.trace('Session [%s]: Unset key "%s"', this.id, key);
     return true;
   }
 
   destroy(): void {
     this.session.destroy((err) => {
       if (err) {
-        this.log.error('Failed to destroy session: %s, error: %s', this.id, err.message);
+        this.log.error('Failed to destroy session %s: %s', this.id, err.message);
       } else {
-        this.log.trace('Session destroyed successfully: %s', this.id);
+        this.log.info('Session %s destroyed successfully', this.id);
       }
     });
   }
@@ -220,7 +217,6 @@ export class ExpressSession implements Session {
     if (!/^[a-zA-Z_$]/.test(sanitized)) {
       sanitized = '_' + sanitized;
     }
-    this.log.trace('Sanitized session key: original %s, sanitized %s', key, sanitized);
     return sanitized;
   }
 
@@ -235,35 +231,43 @@ export class ExpressSession implements Session {
 
 /**
  * A session implementation for stateless requests where session management is not needed.
- * This class throws errors when any session-related methods are called to prevent misuse
- * in routes where sessions are not available or required.
+ * This class logs warnings or errors when session-related methods are called to aid debugging.
  */
 export class NoopSession implements Session {
+  private readonly log = createLogger('~/.server/web/NoopSession');
+
   get id(): string {
+    this.log.error('Accessed "id" on NoopSession. This indicates a misuse of session in a stateless context.');
     throw new Error('No session available in stateless context');
   }
 
   has(key: SessionKey): boolean {
+    this.log.warn('Called "has" on NoopSession for key "%s". Returning false.', key);
     return false;
   }
 
   find<K extends SessionKey>(key: K): Option<SessionTypeMap[K]> {
+    this.log.warn('Called "find" on NoopSession for key "%s". Returning None.', key);
     return None;
   }
 
   get<K extends SessionKey>(key: K): SessionTypeMap[K] {
+    this.log.error('Called "get" on NoopSession for key "%s". This is a misuse of session in a stateless context.', key);
     throw new Error('No session available in stateless context');
   }
 
   set<K extends SessionKey>(key: K, value: SessionTypeMap[K]): void {
+    this.log.error('Called "set" on NoopSession for key "%s". This is a misuse of session in a stateless context.', key);
     throw new Error('No session available in stateless context');
   }
 
   unset(key: SessionKey): boolean {
+    this.log.warn('Called "unset" on NoopSession for key "%s". Returning false.', key);
     return false;
   }
 
   destroy(): void {
+    this.log.warn('Called "destroy" on NoopSession. No operation is performed.');
     // No operation; no session to destroy in a stateless context.
   }
 }
