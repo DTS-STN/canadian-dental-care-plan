@@ -4,7 +4,7 @@ metadata:
   name: frontend
   annotations:
     # reload the pod whenever the secrets change
-    secret.reloader.stakater.com/auto: "true"
+    secret.reloader.stakater.com/auto: 'true'
 spec:
   selector:
     matchLabels:
@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: canada-dental-care-plan-frontend
-          image: dtsrhpdevscedacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend:5.5.0-RC179
+          image: dtsrhpdevscedacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend:5.5.0-RC180
           envFrom:
             - configMapRef:
                 name: frontend
