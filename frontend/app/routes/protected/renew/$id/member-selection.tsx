@@ -182,7 +182,7 @@ function CardLink({ routeId, title, previouslyReviewed, ...props }: CardLinkProp
       </span>
       {previouslyReviewed && (
         <>
-          <FontAwesomeIcon fixedWidth icon={faCircleCheck} className="ml-4 size-10 self-center" style={{ color: 'green' }} />
+          <FontAwesomeIcon icon={faCircleCheck} className="ml-4 size-10 self-center" style={{ color: 'green' }} />
           <p className="ml-4 self-center">{t('protected-renew:member-selection.completed')}</p>
         </>
       )}
