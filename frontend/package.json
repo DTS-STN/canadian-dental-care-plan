@@ -27,7 +27,7 @@
     "@date-fns/utc": "^2.1.1",
     "@dts-stn/health-checks": "^2.0.0",
     "@dts-stn/invariant": "^1.0.0",
-    "@faker-js/faker": "^9.9.0",
+    "@faker-js/faker": "^10.0.0",
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
     "@fortawesome/free-brands-svg-icons": "^7.0.0",
     "@fortawesome/free-regular-svg-icons": "^7.0.0",
