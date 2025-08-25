@@ -1,6 +1,6 @@
 import { getEnv } from '~/.server/utils/env.utils';
 
-export const postalCodeRegex = /^[ABCEGHJKLMNPRSTVXY]\d[A-Z]\s?\d[A-Z]\d$/i;
+export const postalCodeRegex = /^(?!.*[DFIOQUdfioqu])[A-VXYa-vxy][0-9][A-Za-z] ?[0-9][A-Za-z][0-9]$/i;
 export const zipCodeRegex = /^\d{5}$|^\d{5}-?\d{4}$/;
 
 export const isValidPostalCode = (countryCode: string, postalCode: string) => {

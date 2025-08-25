@@ -30,11 +30,11 @@ describe('~/.server/utils/postal-zip-code.utils.ts', () => {
   describe('isValidPostalCode()', () => {
     // Canadian Postal Codes
     it('should return true for Canadian postal code without space', () => {
-      expect(isValidPostalCode('CA', 'H0H0H0')).toEqual(true);
+      expect(isValidPostalCode('CA', 'H0H0W0')).toEqual(true);
     });
 
     it('should return true Canadian postal code with space', () => {
-      expect(isValidPostalCode('CA', 'H0H 0H0')).toEqual(true);
+      expect(isValidPostalCode('CA', 'H0H 0Z0')).toEqual(true);
     });
 
     it('should return false for Canadian postal code with too many spaces', () => {
@@ -43,6 +43,14 @@ describe('~/.server/utils/postal-zip-code.utils.ts', () => {
 
     it('should return false for Canadian postal code of invalid format', () => {
       expect(isValidPostalCode('CA', 'H0H0')).toEqual(false);
+    });
+
+    it.each([...'DFIOQUdfioqu'].map((ch) => [ch]))('should return false when Canadian postal code contains invalid character "%s"', (ch) => {
+      expect(isValidPostalCode('CA', `H0${ch} 0W0`)).toEqual(false);
+    });
+
+    it.each([...'WZwz'].map((ch) => [ch]))('should return false when Canadian postal code starts with invalid character "%s"', (ch) => {
+      expect(isValidPostalCode('CA', `${ch}0H 0H0`)).toEqual(false);
     });
 
     // American Zip Code
