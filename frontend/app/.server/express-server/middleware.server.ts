@@ -16,7 +16,7 @@ import { createLogger } from '~/.server/logging';
  * @returns - True if the path should be ignored, false otherwise.
  */
 function shouldIgnore(ignorePatterns: string[], path: string): boolean {
-  return ignorePatterns.some((entry) => minimatch(path, entry));
+  return ignorePatterns.some((entry) => minimatch(path, entry, { dot: true }));
 }
 
 // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
@@ -79,7 +79,13 @@ export function logging(isProduction: boolean): RequestHandler {
 export async function session(isProduction: boolean, serverConfig: ServerConfig): Promise<RequestHandler> {
   const log = createLogger('express.server/sessionRequestHandler');
 
-  const ignorePatterns = ['/api/buildinfo', '/api/health', '/api/readyz', '/.well-known/jwks.json'];
+  const ignorePatterns = [
+    '/api/buildinfo', //
+    '/api/health',
+    '/api/readyz',
+    '/.well-known/jwks.json',
+    '/oidc/**',
+  ];
 
   const { SESSION_STORAGE_TYPE, SESSION_COOKIE_DOMAIN, SESSION_COOKIE_NAME, SESSION_COOKIE_PATH, SESSION_COOKIE_SAME_SITE, SESSION_COOKIE_SECRET, SESSION_COOKIE_SECURE } = serverConfig;
 
