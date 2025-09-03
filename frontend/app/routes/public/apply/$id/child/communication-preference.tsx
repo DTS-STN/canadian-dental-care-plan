@@ -50,7 +50,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     meta,
     defaultState: {
-      ...state.communicationPreferences,
+      preferredLanguage: state.communicationPreferences?.preferredLanguage,
+      preferredMethod: state.communicationPreferences?.preferredMethod ?? PREFERRED_SUN_LIFE_METHOD.email,
+      preferredNotificationMethod: state.communicationPreferences?.preferredNotificationMethod ?? PREFERRED_NOTIFICATION_METHOD.msca,
     },
     editMode: state.editMode,
     languages,
