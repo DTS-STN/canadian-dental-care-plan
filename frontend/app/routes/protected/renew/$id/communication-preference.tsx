@@ -45,7 +45,10 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     meta,
-    defaultState: { ...state.communicationPreferences },
+    defaultState: {
+      preferredMethod: state.communicationPreferences?.preferredMethod ?? PREFERRED_SUN_LIFE_METHOD.email,
+      preferredNotificationMethod: state.communicationPreferences?.preferredNotificationMethod ?? PREFERRED_NOTIFICATION_METHOD.msca,
+    },
     isInvitationToApplyClient: isInvitationToApplyClient(state.clientApplication),
     isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress,
     editMode: state.editMode,
