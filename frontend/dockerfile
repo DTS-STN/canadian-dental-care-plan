@@ -27,11 +27,11 @@
 FROM docker.io/node:22.18.0-trixie-slim AS base
 ENV NODE_ENV production
 
-
+# ---------------------------------------------------------------------------- #
 
 # Stage: Dependencies
-# This stage installs all project dependencies, including both runtime and development packages.
-# It sets up the environment needed for subsequent build stages.
+# This stage installs all project dependencies, including development packages.
+# These dependencies are used for building and testing the application in subsequent stages.
 FROM base as deps
 
 WORKDIR /home/node
@@ -41,11 +41,11 @@ COPY --chown=node:node package.json package-lock.json ./
 USER node
 RUN npm clean-install --include dev
 
+# ---------------------------------------------------------------------------- #
 
-
-# Stage: Runtime dependencies
-# This stage removes unnecessary development dependencies, retaining only runtime packages.
-# It creates a more streamlined environment, reducing the final image size and enhancing security.
+# Stage: Runtime Dependencies
+# This stage removes development dependencies, keeping only the runtime dependencies.
+# This minimizes the final image size and reduces the attack surface for production environments.
 FROM base as runtime-deps
 
 WORKDIR /home/node
@@ -55,14 +55,12 @@ COPY --chown=node:node package.json package-lock.json ./
 USER node
 RUN npm prune --omit dev
 
-
+# ---------------------------------------------------------------------------- #
 
 # Stage: Build
-# This stage compiles the application, generating the final build artifacts.
-# The compiled output can then be used in the final runtime image.
+# This stage compiles the application, generating production-ready build artifacts.
+# It includes metadata for build traceability and installs additional tools as needed.
 FROM base as build
-
-RUN apt-get update && apt-get install jq=1.6-2.1 --yes --no-install-recommends
 
 WORKDIR /home/node
 COPY --from=deps --chown=node:node /home/node/node_modules/ ./node_modules/
@@ -78,19 +76,11 @@ COPY --chown=node:node ./vite.server.config.ts ./vite.server.config.ts
 USER node
 RUN npm run build
 
-# Collect build metadata such as build date, ID, revision, and version for traceability
-ARG BUILD_DATE="1970-01-01T00:00:00.000Z"
-ARG BUILD_ID="0000"
-ARG BUILD_REVISION="00000000"
-ARG BUILD_VERSION="0.0.0"
-
-RUN jq --null-input '{ buildDate: env.BUILD_DATE, buildId: env.BUILD_ID, buildRevision: env.BUILD_REVISION, buildVersion: env.BUILD_VERSION }' > ./build-info.json
-
-
+# ---------------------------------------------------------------------------- #
 
 # Stage: Final Production Image
-# This stage creates the final, minimal image for running the application in production.
-# It includes only the necessary files and dependencies, optimized for runtime performance.
+# The final image is optimized for running the application in production.
+# It contains only the runtime dependencies and compiled application code.
 FROM base as final
 
 WORKDIR /home/node
@@ -99,32 +89,34 @@ WORKDIR /home/node
 COPY --from=runtime-deps --chown=node:node /home/node/node_modules/ ./node_modules/
 COPY --from=build --chown=node:node /home/node/build/ ./build/
 COPY --from=build --chown=node:node /home/node/public/ ./public/
-COPY --from=build --chown=node:node /home/node/build-info.json ./
 
-# Add labels for OCI compliance, describing the build details and image metadata
-# see: https://github.com/opencontainers/image-spec/blob/main/annotations.md
 ARG BUILD_DATE="1970-01-01T00:00:00.000Z"
-ARG BUILD_ID="0000"
+ARG BUILD_ID="000000"
 ARG BUILD_REVISION="00000000"
 ARG BUILD_VERSION="0.0.0"
-
-LABEL org.opencontainers.image.created=${BUILD_DATE}
-LABEL org.opencontainers.image.revision=${BUILD_REVISION}
-LABEL org.opencontainers.image.version=${BUILD_VERSION}
-
 ARG IMAGE_AUTHORS="Digital Technology Solutions"
 ARG IMAGE_DESCRIPTION="Canadian Dental Care Plan -- Frontend Application"
 ARG IMAGE_TITLE="Canadian Dental Care Plan"
 ARG IMAGE_URL="https://github.com/DTS-STN/canadian-dental-care-plan/"
 ARG IMAGE_VENDOR="Employment and Social Development Canada"
 
+ENV BUILD_DATE=${BUILD_DATE}
+ENV BUILD_ID=${BUILD_ID}
+ENV BUILD_REVISION=${BUILD_REVISION}
+ENV BUILD_VERSION=${BUILD_VERSION}
+ENV OTEL_SERVICE_VERSION=${BUILD_VERSION}
+
+# Add labels for OCI compliance, describing the build details and image metadata
+# see: https://github.com/opencontainers/image-spec/blob/main/annotations.md
 LABEL org.opencontainers.image.authors=${IMAGE_AUTHORS}
+LABEL org.opencontainers.image.created=${BUILD_DATE}
 LABEL org.opencontainers.image.description=${IMAGE_DESCRIPTION}
+LABEL org.opencontainers.image.revision=${BUILD_REVISION}
 LABEL org.opencontainers.image.title=${IMAGE_TITLE}
 LABEL org.opencontainers.image.url=${IMAGE_URL}
 LABEL org.opencontainers.image.vendor=${IMAGE_VENDOR}
+LABEL org.opencontainers.image.version=${BUILD_VERSION}
 
-ENV OTEL_SERVICE_VERSION=${BUILD_VERSION}
 ENV PORT=3000
 
 USER node

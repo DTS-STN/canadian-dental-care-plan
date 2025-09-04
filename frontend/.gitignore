@@ -177,7 +177,6 @@ node_modules
 playwright-report/
 test-results/
 
-build-info.json
 vite.config.ts.timestamp-*
 
 .react-router/

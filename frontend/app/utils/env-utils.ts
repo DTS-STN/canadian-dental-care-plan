@@ -22,6 +22,11 @@ export const clientEnvSchema = z.object({
   ADOBE_ANALYTICS_SRC: z.url().optional(),
   ADOBE_ANALYTICS_JQUERY_SRC: z.url().default('https://code.jquery.com/jquery-3.7.1.min.js'),
 
+  BUILD_DATE: z.string().default('1970-01-01T00:00:00.000Z'),
+  BUILD_ID: z.string().default('000000'),
+  BUILD_REVISION: z.string().default('00000000'),
+  BUILD_VERSION: z.string().default('0.0.0-000000-00000000'),
+
   ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default([""]),
 
   I18NEXT_DEBUG: z.string().transform(toBoolean).default(false),
