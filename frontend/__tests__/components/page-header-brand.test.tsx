@@ -27,16 +27,6 @@ describe('PageHeaderBrand', () => {
     vi.resetModules();
   });
 
-  it('renders without crashing', () => {
-    const RoutesStub = createRoutesStub([
-      {
-        Component: () => <PageHeaderBrand />,
-        path: '/',
-      },
-    ]);
-    render(<RoutesStub />);
-  });
-
   it('displays the Government of Canada logo', () => {
     const RoutesStub = createRoutesStub([
       {

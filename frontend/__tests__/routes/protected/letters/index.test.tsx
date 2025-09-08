@@ -105,7 +105,7 @@ describe('Letters Page', () => {
       params: { lang: 'en' },
     });
 
-    expect(response.letterTypes.includes({ id: 'DEN', nameEn: 'DENIED', nameFr: '(FR) DENIED' }));
-    expect(response.letterTypes.includes({ id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' }));
+    expect(response.letterTypes).toContainEqual({ id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' });
+    expect(response.letterTypes).toContainEqual({ id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' });
   });
 });

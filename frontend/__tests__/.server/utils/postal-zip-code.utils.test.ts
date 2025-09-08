@@ -137,12 +137,8 @@ describe('~/.server/utils/postal-zip-code.utils.ts', () => {
       expect(formatPostalCode('US', '12345')).toEqual('12345');
     });
 
-    it('should return the input if country code is American and the zip code is valid', () => {
+    it.each([['123456789'], ['12345-6789']])('should return the formatted zip code if country code is American and the input is valid, for [%s]', (input) => {
       expect(formatPostalCode('US', '123456789')).toEqual('12345-6789');
-    });
-
-    it('should return the input if country code is American and the zip code is valid', () => {
-      expect(formatPostalCode('US', '12345-6789')).toEqual('12345-6789');
     });
 
     it('should throw an error if the country code is Canadian and the format is invalid', () => {

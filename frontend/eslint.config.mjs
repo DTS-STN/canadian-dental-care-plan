@@ -1,4 +1,5 @@
 import eslint from '@eslint/js';
+import vitestPlugin from '@vitest/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import reactPlugin from 'eslint-plugin-react';
@@ -133,6 +134,29 @@ export default defineConfig(
       'unicorn/prefer-global-this': 'off',
       'unicorn/prefer-structured-clone': 'off',
       'unicorn/prevent-abbreviations': 'off',
+    },
+  },
+  //
+  // vitest plugin
+  // https://github.com/vitest-dev/eslint-plugin-vitest
+  //
+  {
+    files: ['__tests__/**'],
+    plugins: {
+      vitest: vitestPlugin,
+    },
+    rules: {
+      ...vitestPlugin.configs.recommended.rules,
+    },
+    settings: {
+      vitest: {
+        typecheck: true,
+      },
+    },
+    languageOptions: {
+      globals: {
+        ...vitestPlugin.environments.env.globals,
+      },
     },
   },
 );
