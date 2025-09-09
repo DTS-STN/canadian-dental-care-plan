@@ -26,7 +26,7 @@
       "invalid-postal-zip-code-for-country": "Un code postal canadien a été entré dans l'adresse postale mais le Canada n'a pas été choisi comme pays. Veuillez choisir Canada, et la bonne province, ou changer le code postal",
       "invalid-postal-zip-code-for-province": "Le code postal ne correspond pas à la province ou au territoire que vous avez sélectionné",
       "postal-zip-code-required": "Entrez un code postal ou un code postal américain pour votre adresse postale",
-      "postal-zip-code-valid": "Entrez un code postal pour l'adresse postale dans le bon format, par exemple A1A 1A1",
+      "postal-zip-code-valid": "Entrez un code postal pour l'adresse postale dans le bon format, par exemple A1A 1A1. Les lettres D, F, I, O, Q ou U ne peuvent pas être utilisées.",
       "province-state-required": "Sélectionnez une province, un territoire, un état ou une région pour votre adresse postale",
       "zip-code-valid": "Entrez un code postal américain pour l'adresse postale dans le bon format, par exemple 12345 ou 12345-6789"
     },
@@ -38,7 +38,7 @@
       "invalid-postal-zip-code-for-country": "Un code postal canadien a été saisi pour l'adresse du domicile, mais le Canada n'a pas été choisi comme pays. Veuillez choisir Canada, et la bonne province, ou changer le code postal",
       "invalid-postal-zip-code-for-province": "Le code postal ne correspond pas à la province ou au territoire que vous avez sélectionné",
       "postal-zip-code-required": "Entrez un code postal ou un code postal américain pour votre adresse du domicile",
-      "postal-zip-code-valid": "Entrez un code postal pour l'adresse du domicile dans le bon format, par exemple A1A 1A1",
+      "postal-zip-code-valid": "Entrez un code postal pour l'adresse du domicile dans le bon formatpar exemple A1A 1A1. Les lettres D, F, I, O, Q ou U ne peuvent pas être utilisées.",
       "province-state-required": "Sélectionnez une province, un territoire, un état ou une région pour votre adresse du domicile",
       "zip-code-valid": "Entrez un code postal américain pour l'adresse du domicile dans le bon format, par exemple 12345 ou 12345-6789"
     }
