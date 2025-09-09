@@ -16,16 +16,6 @@ describe('SkipNavigationLinks', () => {
     vi.clearAllMocks();
   });
 
-  it('renders without crashing', () => {
-    const RoutesStub = createRoutesStub([
-      {
-        Component: () => <SkipNavigationLinks />,
-        path: '/',
-      },
-    ]);
-    render(<RoutesStub />);
-  });
-
   it('renders skip links', () => {
     const RoutesStub = createRoutesStub([
       {

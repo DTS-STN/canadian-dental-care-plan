@@ -21,10 +21,6 @@ describe('PageDetails', () => {
     vi.clearAllMocks();
   });
 
-  it('renders without crashing', () => {
-    render(<PageDetails />);
-  });
-
   it('displays page identifier if available', () => {
     const { getByText } = render(<PageDetails />);
     expect(getByText('gcweb:page-details.screen-id')).toBeInTheDocument();
