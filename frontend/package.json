@@ -60,7 +60,7 @@
     "inversify": "^7.9.1",
     "isbot": "^5.1.30",
     "jose": "^6.1.0",
-    "libphonenumber-js": "^1.12.16",
+    "libphonenumber-js": "^1.12.17",
     "markdown-to-jsx": "^7.7.13",
     "minimatch": "^10.0.3",
     "moderndash": "^4.0.0",
