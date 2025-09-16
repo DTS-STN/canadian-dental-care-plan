@@ -1,6 +1,6 @@
 import { invariant } from '@dts-stn/invariant';
 import { inject, injectable } from 'inversify';
-import type { ReadonlyObjectDeep } from 'type-fest/source/readonly-deep';
+import type { ReadonlyDeep } from 'type-fest';
 import validator from 'validator';
 
 import type { ServerConfig } from '~/.server/configs';
@@ -151,13 +151,13 @@ export interface BenefitRenewalStateMapper {
 }
 
 interface ToApplicantInformationArgs {
-  existingApplicantInformation: ReadonlyObjectDeep<ClientApplicantInformationDto>;
+  existingApplicantInformation: ReadonlyDeep<ClientApplicantInformationDto>;
   hasMaritalStatusChanged: boolean;
   renewedMaritalStatus?: string;
 }
 
 interface ToChildrenArgs {
-  existingChildren: readonly ReadonlyObjectDeep<ClientChildDto>[];
+  existingChildren: readonly ReadonlyDeep<ClientChildDto>[];
   renewedChildren: ChildState[];
   isProtectedRenewal?: boolean;
 }
@@ -170,7 +170,7 @@ interface ToCommunicationPreferencesArgs {
 }
 
 interface ToContactInformationArgs {
-  existingContactInformation: ReadonlyObjectDeep<ClientContactInformationDto>;
+  existingContactInformation: ReadonlyDeep<ClientContactInformationDto>;
   hasAddressChanged: boolean;
   hasEmailChanged: boolean;
   hasPhoneChanged: boolean;
@@ -188,19 +188,19 @@ interface ToDentalBenefitsArgs {
 }
 
 interface ToHomeAddressArgs {
-  existingContactInformation: ReadonlyObjectDeep<ClientContactInformationDto>;
+  existingContactInformation: ReadonlyDeep<ClientContactInformationDto>;
   homeAddress?: ProtectedHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   mailingAddress?: ProtectedMailingAddressState;
 }
 
 interface ToMailingAddressArgs {
-  existingContactInformation: ReadonlyObjectDeep<ClientContactInformationDto>;
+  existingContactInformation: ReadonlyDeep<ClientContactInformationDto>;
   mailingAddress?: ProtectedMailingAddressState;
 }
 
 interface ToPartnerInformationArgs {
-  existingPartnerInformation?: ReadonlyObjectDeep<ClientPartnerInformationDto>;
+  existingPartnerInformation?: ReadonlyDeep<ClientPartnerInformationDto>;
   hasMaritalStatusChanged: boolean;
   renewedPartnerInformation?: PartnerInformationState;
 }
