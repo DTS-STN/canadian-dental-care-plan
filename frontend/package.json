@@ -127,7 +127,7 @@
     "jmespath": "^0.16.0",
     "jsdom": "^26.1.0",
     "nodemon": "^3.1.10",
-    "ora": "^8.2.0",
+    "ora": "^9.0.0",
     "patch-package": "^8.1.0-canary.1",
     "playwright-teamcity-reporter": "^1.0.5",
     "prettier": "^3.6.2",
