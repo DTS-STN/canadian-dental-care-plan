@@ -95,8 +95,8 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
         );
       })}
       <div className="mt-6 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Information:Return to dashboard - You have not applied for CDCP click">
-          {t('data-protected-profile:applicant-information.return-button')}
+        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Information:Return to dashboard - Applicant information return button click">
+          {t('protected-profile:applicant-information.return-button')}
         </ButtonLink>
       </div>
     </div>
