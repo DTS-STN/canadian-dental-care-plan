@@ -80,16 +80,16 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
       </dl>
       {children.map((child) => {
         return (
-          <dl className="divide-y border-y" key={child.information?.id}>
-            <h2 className="font-lato text-2xl font-bold">{`${child.information?.firstName} ${child.information?.lastName}`}</h2>
+          <dl className="divide-y border-y" key={child.information.id}>
+            <h2 className="font-lato text-2xl font-bold">{`${child.information.firstName} ${child.information.lastName}`}</h2>
             <DescriptionListItem term={t('protected-profile:applicant-information.member-id')}>
-              <p>{child.information?.id}</p>
+              <p>{child.information.id}</p>
             </DescriptionListItem>
             <DescriptionListItem term={t('protected-profile:applicant-information.dob')}>
-              <p>{child.information?.dob}</p>
+              <p>{child.information.dob}</p>
             </DescriptionListItem>
             <DescriptionListItem term={t('protected-profile:applicant-information.sin')}>
-              <p>{child.information?.sin}</p>
+              <p>{child.information.sin}</p>
             </DescriptionListItem>
           </dl>
         );
