@@ -35,6 +35,11 @@ export const routes = [
         paths: { en: '/:lang/protected/stub-login', fr: '/:lang/protege/stub-login' },
       },
       {
+        id: 'protected/profile/government-dental-benefits',
+        file: 'routes/protected/profile/government-dental-benefits.tsx',
+        paths: { en: '/:lang/protected/profile/government-dental-benefits', fr: '/:lang/protege/profil/government-dental-benefits' }, //TODO: update French path
+      },
+      {
         file: 'routes/protected/apply/layout.tsx',
         children: [
           { id: 'protected/apply/index', file: 'routes/protected/apply/index.tsx', paths: { en: '/:lang/protected/apply', fr: '/:lang/protege/demander' } },
