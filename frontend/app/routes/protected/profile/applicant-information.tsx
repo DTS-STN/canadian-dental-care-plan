@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import type { Route } from './+types/applicant-information';
 
 import { TYPES } from '~/.server/constants';
@@ -11,7 +13,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'profile', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.applicantInformation,
   pageTitleI18nKey: 'protected-profile:applicant-information.page-title',
 } as const satisfies RouteHandleData;
@@ -27,11 +29,31 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
+  const primaryApplicant = {
+    firstName: 'John', // This should be replaced with primary applicant data
+    lastName: 'Doe',
+    id: '123456789', 
+    dob: '1990-01-01', 
+    sin: '123-456-789',
+  }
+
+  const children = [
+    {
+      information: {
+        firstName: 'Jane', // This should be replaced with child data
+        lastName: 'Doe',
+        id: '987654321',
+        dob: '2015-05-05',
+        sin: '987-654-321',
+      },
+    },
+  ];
+
   return {
     meta,
     SCCH_BASE_URI,
-    primaryApplicant: undefined, // This should be replaced with primary applicant data
-    children: [undefined], // This should be replaced with children data
+    primaryApplicant,
+    children,
   };
 }
 
