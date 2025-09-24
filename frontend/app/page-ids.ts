@@ -107,6 +107,9 @@ export const pageIds = {
     },
     dataUnavailable: 'CDCP-PROT-0099',
     unableToProcessRequest: 'CDCP-PROT-0999',
+    profile: {
+      applicantInformation: 'CDCP-PROT-PROF-0001',
+    }
   },
   public: {
     apply: {

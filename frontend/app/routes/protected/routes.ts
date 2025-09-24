@@ -25,6 +25,11 @@ export const routes = [
         paths: { en: '/:lang/protected/letters/:id/download', fr: '/:lang/protege/lettres/:id/telecharger' },
       },
       {
+        id: 'protected/profile/applicant-information',
+        file: 'routes/protected/profile/applicant-information.tsx',
+        paths: { en: '/:lang/protected/profile/applicant-information', fr: '/:lang/protege/profil/applicant-information' },
+      },
+      {
         id: 'protected/stub-login',
         file: 'routes/protected/stub-login.tsx',
         paths: { en: '/:lang/protected/stub-login', fr: '/:lang/protege/stub-login' },
@@ -433,6 +438,49 @@ export const routes = [
             id: 'protected/renew/$id/communication-preference',
             file: 'routes/protected/renew/$id/communication-preference.tsx',
             paths: { en: '/:lang/protected/renew/:id/communication-preference', fr: '/:lang/protege/renouveler/:id/preference-communication' },
+          },
+        ],
+      },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      {
+        file: 'routes/protected/profile/layout.tsx',
+        children: [
+          {
+            id: 'protected/profile/index',
+            file: 'routes/protected/profile/index.tsx',
+            paths: { en: '/:lang/protected/profile', fr: '/:lang/protege/profil' },
+          },
+          {
+            id: 'protected/renew/$id/terms-and-conditions',
+            file: 'routes/protected/renew/$id/terms-and-conditions.tsx',
+            paths: { en: '/:lang/protected/renew/:id/terms-and-conditions', fr: '/:lang/protege/renouveler/:id/conditions-utilisation' },
           },
         ],
       },
