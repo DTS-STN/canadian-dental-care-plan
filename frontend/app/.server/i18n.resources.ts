@@ -10,8 +10,8 @@ import protectedApplyAdultChildEn from '~/../public/locales/en/protected-apply-a
 import protectedApplyAdultEn from '~/../public/locales/en/protected-apply-adult.json';
 import protectedApplyChildEn from '~/../public/locales/en/protected-apply-child.json';
 import protectedApplyEn from '~/../public/locales/en/protected-apply.json';
-import protectedRenewEn from '~/../public/locales/en/protected-renew.json';
 import protectedProfileEn from '~/../public/locales/en/protected-profile.json';
+import protectedRenewEn from '~/../public/locales/en/protected-renew.json';
 import renewAdultChildEn from '~/../public/locales/en/renew-adult-child.json';
 import renewAdultEn from '~/../public/locales/en/renew-adult.json';
 import renewChildEn from '~/../public/locales/en/renew-child.json';
@@ -32,8 +32,8 @@ import protectedApplyAdultChildFr from '~/../public/locales/fr/protected-apply-a
 import protectedApplyAdultFr from '~/../public/locales/fr/protected-apply-adult.json';
 import protectedApplyChildFr from '~/../public/locales/fr/protected-apply-child.json';
 import protectedApplyFr from '~/../public/locales/fr/protected-apply.json';
-import protectedRenewFr from '~/../public/locales/fr/protected-renew.json';
 import protectedProfileFr from '~/../public/locales/fr/protected-profile.json';
+import protectedRenewFr from '~/../public/locales/fr/protected-renew.json';
 import renewAdultChildFr from '~/../public/locales/fr/renew-adult-child.json';
 import renewAdultFr from '~/../public/locales/fr/renew-adult.json';
 import renewChildFr from '~/../public/locales/fr/renew-child.json';

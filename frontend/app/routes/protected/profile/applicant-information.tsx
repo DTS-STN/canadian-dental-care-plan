@@ -32,10 +32,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const primaryApplicant = {
     firstName: 'John', // This should be replaced with primary applicant data
     lastName: 'Doe',
-    id: '123456789', 
-    dob: '1990-01-01', 
+    id: '123456789',
+    dob: '1990-01-01',
     sin: '123-456-789',
-  }
+  };
 
   const children = [
     {
