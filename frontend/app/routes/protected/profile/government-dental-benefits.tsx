@@ -50,6 +50,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
 
+  // TODO: for now, clientAppplication service is used to display information on the page.
   const clientDentalBenefits = clientApplication.dentalBenefits.flatMap(async (id) => {
     const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(id, locale);
     if (federalProgram.isSome()) return [federalProgram.unwrap().name];
