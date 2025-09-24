@@ -441,22 +441,6 @@ export const routes = [
           },
         ],
       },
-
-      {
-        file: 'routes/protected/profile/layout.tsx',
-        children: [
-          {
-            id: 'protected/profile/index',
-            file: 'routes/protected/profile/index.tsx',
-            paths: { en: '/:lang/protected/profile', fr: '/:lang/protege/profil' },
-          },
-          {
-            id: 'protected/renew/$id/terms-and-conditions',
-            file: 'routes/protected/renew/$id/terms-and-conditions.tsx',
-            paths: { en: '/:lang/protected/renew/:id/terms-and-conditions', fr: '/:lang/protege/renouveler/:id/conditions-utilisation' },
-          },
-        ],
-      },
     ],
   },
 ] as const satisfies I18nRoute[];
