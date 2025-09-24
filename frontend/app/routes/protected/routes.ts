@@ -442,33 +442,6 @@ export const routes = [
         ],
       },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       {
         file: 'routes/protected/profile/layout.tsx',
         children: [
