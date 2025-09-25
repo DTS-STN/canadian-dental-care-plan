@@ -10,6 +10,7 @@ import protectedApplyAdultChildEn from '~/../public/locales/en/protected-apply-a
 import protectedApplyAdultEn from '~/../public/locales/en/protected-apply-adult.json';
 import protectedApplyChildEn from '~/../public/locales/en/protected-apply-child.json';
 import protectedApplyEn from '~/../public/locales/en/protected-apply.json';
+import protectedProfileEn from '~/../public/locales/en/protected-profile.json';
 import protectedRenewEn from '~/../public/locales/en/protected-renew.json';
 import renewAdultChildEn from '~/../public/locales/en/renew-adult-child.json';
 import renewAdultEn from '~/../public/locales/en/renew-adult.json';
@@ -31,6 +32,7 @@ import protectedApplyAdultChildFr from '~/../public/locales/fr/protected-apply-a
 import protectedApplyAdultFr from '~/../public/locales/fr/protected-apply-adult.json';
 import protectedApplyChildFr from '~/../public/locales/fr/protected-apply-child.json';
 import protectedApplyFr from '~/../public/locales/fr/protected-apply.json';
+import protectedProfileFr from '~/../public/locales/fr/protected-profile.json';
 import protectedRenewFr from '~/../public/locales/fr/protected-renew.json';
 import renewAdultChildFr from '~/../public/locales/fr/renew-adult-child.json';
 import renewAdultFr from '~/../public/locales/fr/renew-adult.json';
@@ -57,6 +59,7 @@ const i18nResourcesEn = {
   'protected-apply-adult-child': protectedApplyAdultChildEn,
   'protected-apply-child': protectedApplyChildEn,
   'protected-renew': protectedRenewEn,
+  'protected-profile': protectedProfileEn,
   'renew-adult-child': renewAdultChildEn,
   'renew-child': renewChildEn,
   'renew-ita': renewItaEn,
@@ -81,6 +84,7 @@ const i18nResourcesFr = {
   'protected-apply-adult-child': protectedApplyAdultChildFr,
   'protected-apply-child': protectedApplyChildFr,
   'protected-renew': protectedRenewFr,
+  'protected-profile': protectedProfileFr,
   'renew-adult-child': renewAdultChildFr,
   'renew-child': renewChildFr,
   'renew-ita': renewItaFr,
