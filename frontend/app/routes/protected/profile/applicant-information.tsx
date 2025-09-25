@@ -67,7 +67,7 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
     <div className="max-w-prose">
       <p className="mb-4">{t('protected-profile:applicant-information.form-instructions')}</p>
       <dl className="divide-y border-y">
-        <h2 className="font-lato text-2xl font-bold">{`${primaryApplicant.firstName} ${primaryApplicant.lastName}`}</h2>
+        <h2 className="font-lato py-4 text-2xl font-bold">{`${primaryApplicant.firstName} ${primaryApplicant.lastName}`}</h2>
         <DescriptionListItem term={t('protected-profile:applicant-information.member-id')}>
           <p>{primaryApplicant.id}</p>
         </DescriptionListItem>
@@ -81,7 +81,7 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
       {children.map((child) => {
         return (
           <dl className="divide-y border-y" key={child.information.id}>
-            <h2 className="font-lato text-2xl font-bold">{`${child.information.firstName} ${child.information.lastName}`}</h2>
+            <h2 className="font-lato py-4 text-2xl font-bold">{`${child.information.firstName} ${child.information.lastName}`}</h2>
             <DescriptionListItem term={t('protected-profile:applicant-information.member-id')}>
               <p>{child.information.id}</p>
             </DescriptionListItem>
@@ -95,7 +95,12 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
         );
       })}
       <div className="mt-6 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Information:Return to dashboard - Applicant information return button click">
+        <ButtonLink
+          variant="primary"
+          id="back-button"
+          to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Information:Return to dashboard - Applicant information return button click"
+        >
           {t('protected-profile:applicant-information.return-button')}
         </ButtonLink>
       </div>

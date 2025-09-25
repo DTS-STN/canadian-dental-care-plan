@@ -1,10 +1,10 @@
 {
   "applicant-information": {
-    "page-title": "(FR) Applicant(s) Information",
-    "form-instructions": "(FR) If you notice an error or need to update the name, date of birth or Social Insurance Number (SIN), contact Service Canada by calling 1-833-537-4342.",
-    "member-id": "(FR) Member ID",
-    "dob": "(FR) Date of birth",
-    "sin": "(FR) Social insurance number (SIN)",
-    "return-button": "(FR) Return to dashboard"
+    "page-title": "Informations des candidats",
+    "form-instructions": "Si vous remarquez une erreur ou si vous devez mettre à jour le nom, la date de naissance ou le numéro d'assurance sociale (NAS), contactez Service Canada en appelant le 1-833-537-4342",
+    "member-id": "No d'identification du membre",
+    "dob": "Date de naissance",
+    "sin": "Numéro d'assurance sociale (NAS)",
+    "return-button": "Retour au tableau de bord"
   }
 }
