@@ -109,6 +109,7 @@ export const pageIds = {
     unableToProcessRequest: 'CDCP-PROT-0999',
     profile: {
       applicantInformation: 'CDCP-PROT-PROF-0001',
+      governmentDentalBenefits: 'CDCP-PROT-PROF-0002',
     },
   },
   public: {

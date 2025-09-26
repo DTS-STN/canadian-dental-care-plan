@@ -6,5 +6,13 @@
     "dob": "Date of birth",
     "sin": "Social insurance number (SIN)",
     "return-button": "Return to dashboard"
+  },
+  "government-dental-benefits": {
+    "page-title": "Government dental benefits",
+    "have-access": "Access to other government dental benefits",
+    "yes": "Yes",
+    "no": "No",
+    "update-link-text": "Change access to other government dental benefits",
+    "return-button": "Return to dashboard"
   }
 }
