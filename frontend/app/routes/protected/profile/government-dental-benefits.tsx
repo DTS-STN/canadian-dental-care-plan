@@ -8,6 +8,7 @@ import type { Route } from './+types/government-dental-benefits';
 import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
+import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
 import { getCurrentDateString } from '~/utils/date-utils';
@@ -90,51 +91,55 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
   const { clientApplication, clientDentalBenefits, children, SCCH_BASE_URI } = loaderData;
 
   return (
-    <>
-      <section className="space-y-4">
-        <h2 className="font-lato text-2xl font-bold">{`${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`}</h2>
-        <h3 className="font-lato text-xl font-bold">{t('protected-profile:government-dental-benefits.have-access')}</h3>
-        <p>{clientApplication.dentalBenefits.length > 0 ? t('protected-profile:government-dental-benefits.yes') : t('protected-profile:government-dental-benefits.no')}</p>
-        <ul className="ml-8 list-disc">
-          {clientDentalBenefits.map((benefit, index) => (
-            <li key={index}>{benefit}</li>
-          ))}
-        </ul>
-        {/*TODO: Update routeId*/}
-        <InlineLink id="update-government-dental-benefits" routeId="protected/profile/government-dental-benefits" params={params}>
-          {t('protected-profile:government-dental-benefits.update-link-text')}
-        </InlineLink>
-      </section>
-      {children.length > 0 && (
-        <div className="mt-6 space-y-8">
-          {children.map((child, index) => {
-            const childName = `${child.information.firstName} ${child.information.lastName}`;
-            return (
-              <>
-                <section key={index} className="space-y-4">
-                  <h2 className="font-lato mb-4 text-2xl font-bold">{childName}</h2>
-                  <h3 className="font-lato text-xl font-bold">{t('protected-profile:government-dental-benefits.have-access')}</h3>
-                  <p>{child.dentalBenefits.length > 0 ? t('protected-profile:government-dental-benefits.yes') : t('protected-profile:government-dental-benefits.no')}</p>
-                  <ul className="ml-8 list-disc">
-                    {child.dentalBenefits.map((benefit, index) => (
-                      <li key={index}>{benefit}</li>
-                    ))}
-                  </ul>
-                  {/*TODO: Update routeId*/}
-                  <InlineLink id="update-government-dental-benefits" routeId="protected/profile/government-dental-benefits" params={params}>
-                    {t('protected-profile:government-dental-benefits.update-link-text')}
-                  </InlineLink>
-                </section>
-              </>
-            );
-          })}
-        </div>
-      )}
+    <div className="max-w-prose">
+      <dl className="divide-y border-y py-4">
+        <section className="space-y-4">
+          <h2 className="font-lato text-2xl font-bold">{`${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`}</h2>
+          <DescriptionListItem term={t('protected-profile:government-dental-benefits.have-access')}>
+            <p>{clientApplication.dentalBenefits.length > 0 ? t('protected-profile:government-dental-benefits.yes') : t('protected-profile:government-dental-benefits.no')}</p>
+            <ul className="ml-8 list-disc">
+              {clientDentalBenefits.map((benefit, index) => (
+                <li key={index}>{benefit}</li>
+              ))}
+            </ul>
+            {/*TODO: Update routeId*/}
+            <InlineLink id="update-government-dental-benefits" routeId="protected/profile/government-dental-benefits" params={params}>
+              {t('protected-profile:government-dental-benefits.update-link-text')}
+            </InlineLink>
+          </DescriptionListItem>
+        </section>
+        {children.length > 0 && (
+          <div className="mt-6 space-y-8">
+            {children.map((child, index) => {
+              const childName = `${child.information.firstName} ${child.information.lastName}`;
+              return (
+                <>
+                  <section key={index} className="space-y-4">
+                    <h2 className="font-lato mb-4 text-2xl font-bold">{childName}</h2>
+                    <DescriptionListItem term={t('protected-profile:government-dental-benefits.have-access')}>
+                      <p>{child.dentalBenefits.length > 0 ? t('protected-profile:government-dental-benefits.yes') : t('protected-profile:government-dental-benefits.no')}</p>
+                      <ul className="ml-8 list-disc">
+                        {child.dentalBenefits.map((benefit, index) => (
+                          <li key={index}>{benefit}</li>
+                        ))}
+                      </ul>
+                      {/*TODO: Update routeId*/}
+                      <InlineLink id="update-government-dental-benefits" routeId="protected/profile/government-dental-benefits" params={params}>
+                        {t('protected-profile:government-dental-benefits.update-link-text')}
+                      </InlineLink>
+                    </DescriptionListItem>
+                  </section>
+                </>
+              );
+            })}
+          </div>
+        )}
+      </dl>
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <ButtonLink variant="primary" id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
           {t('protected-profile:government-dental-benefits.return-button')}
         </ButtonLink>
       </div>
-    </>
+    </div>
   );
 }
