@@ -19,7 +19,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
-  pageIdentifier: pageIds.protected.apply.adult.dentalInsurance,
+  pageIdentifier: pageIds.protected.profile.governmentDentalBenefits,
   pageTitleI18nKey: 'protected-profile:government-dental-benefits.page-title',
 };
 
