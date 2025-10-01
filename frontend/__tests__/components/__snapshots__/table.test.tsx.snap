@@ -1,0 +1,284 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Table > should render the Table components > expected html 1`] = `
+<div>
+  <div
+    class="relative w-full overflow-x-auto"
+    data-slot="table-container"
+  >
+    <table
+      class="w-full"
+      data-slot="table"
+    >
+      <caption
+        class="p-5 text-left"
+        data-slot="table-caption"
+      >
+        A list of your recent invoices.
+      </caption>
+      <thead
+        class="bg-gray-50"
+        data-slot="table-header"
+      >
+        <tr
+          data-slot="table-row"
+        >
+          <th
+            class="px-6 py-3 text-left w-[100px]"
+            data-slot="table-head text-left"
+          >
+            Invoice
+          </th>
+          <th
+            class="px-6 py-3 text-left"
+            data-slot="table-head text-left"
+          >
+            Status
+          </th>
+          <th
+            class="px-6 py-3 text-left"
+            data-slot="table-head text-left"
+          >
+            Method
+          </th>
+          <th
+            class="px-6 py-3 text-right"
+            data-slot="table-head text-left"
+          >
+            Amount
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        data-slot="table-body"
+      >
+        <tr
+          class="odd:bg-white even:bg-gray-50"
+          data-slot="table-row"
+        >
+          <td
+            class="px-6 py-4 font-medium"
+            data-slot="table-cell"
+          >
+            INV001
+          </td>
+          <td
+            class="px-6 py-4"
+            data-slot="table-cell"
+          >
+            Paid
+          </td>
+          <td
+            class="px-6 py-4"
+            data-slot="table-cell"
+          >
+            Credit Card
+          </td>
+          <td
+            class="px-6 py-4 text-right"
+            data-slot="table-cell"
+          >
+            $250.00
+          </td>
+        </tr>
+        <tr
+          class="odd:bg-white even:bg-gray-50"
+          data-slot="table-row"
+        >
+          <td
+            class="px-6 py-4 font-medium"
+            data-slot="table-cell"
+          >
+            INV002
+          </td>
+          <td
+            class="px-6 py-4"
+            data-slot="table-cell"
+          >
+            Pending
+          </td>
+          <td
+            class="px-6 py-4"
+            data-slot="table-cell"
+          >
+            PayPal
+          </td>
+          <td
+            class="px-6 py-4 text-right"
+            data-slot="table-cell"
+          >
+            $150.00
+          </td>
+        </tr>
+        <tr
+          class="odd:bg-white even:bg-gray-50"
+          data-slot="table-row"
+        >
+          <td
+            class="px-6 py-4 font-medium"
+            data-slot="table-cell"
+          >
+            INV003
+          </td>
+          <td
+            class="px-6 py-4"
+            data-slot="table-cell"
+          >
+            Unpaid
+          </td>
+          <td
+            class="px-6 py-4"
+            data-slot="table-cell"
+          >
+            Bank Transfer
+          </td>
+          <td
+            class="px-6 py-4 text-right"
+            data-slot="table-cell"
+          >
+            $350.00
+          </td>
+        </tr>
+        <tr
+          class="odd:bg-white even:bg-gray-50"
+          data-slot="table-row"
+        >
+          <td
+            class="px-6 py-4 font-medium"
+            data-slot="table-cell"
+          >
+            INV004
+          </td>
+          <td
+            class="px-6 py-4"
+            data-slot="table-cell"
+          >
+            Paid
+          </td>
+          <td
+            class="px-6 py-4"
+            data-slot="table-cell"
+          >
+            Credit Card
+          </td>
+          <td
+            class="px-6 py-4 text-right"
+            data-slot="table-cell"
+          >
+            $450.00
+          </td>
+        </tr>
+        <tr
+          class="odd:bg-white even:bg-gray-50"
+          data-slot="table-row"
+        >
+          <td
+            class="px-6 py-4 font-medium"
+            data-slot="table-cell"
+          >
+            INV005
+          </td>
+          <td
+            class="px-6 py-4"
+            data-slot="table-cell"
+          >
+            Paid
+          </td>
+          <td
+            class="px-6 py-4"
+            data-slot="table-cell"
+          >
+            PayPal
+          </td>
+          <td
+            class="px-6 py-4 text-right"
+            data-slot="table-cell"
+          >
+            $550.00
+          </td>
+        </tr>
+        <tr
+          class="odd:bg-white even:bg-gray-50"
+          data-slot="table-row"
+        >
+          <td
+            class="px-6 py-4 font-medium"
+            data-slot="table-cell"
+          >
+            INV006
+          </td>
+          <td
+            class="px-6 py-4"
+            data-slot="table-cell"
+          >
+            Pending
+          </td>
+          <td
+            class="px-6 py-4"
+            data-slot="table-cell"
+          >
+            Bank Transfer
+          </td>
+          <td
+            class="px-6 py-4 text-right"
+            data-slot="table-cell"
+          >
+            $200.00
+          </td>
+        </tr>
+        <tr
+          class="odd:bg-white even:bg-gray-50"
+          data-slot="table-row"
+        >
+          <td
+            class="px-6 py-4 font-medium"
+            data-slot="table-cell"
+          >
+            INV007
+          </td>
+          <td
+            class="px-6 py-4"
+            data-slot="table-cell"
+          >
+            Unpaid
+          </td>
+          <td
+            class="px-6 py-4"
+            data-slot="table-cell"
+          >
+            Credit Card
+          </td>
+          <td
+            class="px-6 py-4 text-right"
+            data-slot="table-cell"
+          >
+            $300.00
+          </td>
+        </tr>
+      </tbody>
+      <tfoot
+        data-slot="table-footer"
+      >
+        <tr
+          class="font-semibold"
+          data-slot="table-row"
+        >
+          <td
+            class="px-6 py-4"
+            colspan="3"
+            data-slot="table-cell"
+          >
+            Total
+          </td>
+          <td
+            class="px-6 py-4 text-right"
+            data-slot="table-cell"
+          >
+            $2,500.00
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+`;
