@@ -4,6 +4,7 @@ import applyChildEn from '~/../public/locales/en/apply-child.json';
 import applyEn from '~/../public/locales/en/apply.json';
 import commonEn from '~/../public/locales/en/common.json';
 import dataUnavailableEn from '~/../public/locales/en/data-unavailable.json';
+import documentsEn from '~/../public/locales/en/documents.json';
 import gcwebEn from '~/../public/locales/en/gcweb.json';
 import lettersEn from '~/../public/locales/en/letters.json';
 import protectedApplyAdultChildEn from '~/../public/locales/en/protected-apply-adult-child.json';
@@ -26,6 +27,7 @@ import applyChildFr from '~/../public/locales/fr/apply-child.json';
 import applyFr from '~/../public/locales/fr/apply.json';
 import commonFr from '~/../public/locales/fr/common.json';
 import dataUnavailableFr from '~/../public/locales/fr/data-unavailable.json';
+import documentsFr from '~/../public/locales/fr/documents.json';
 import gcwebFr from '~/../public/locales/fr/gcweb.json';
 import lettersFr from '~/../public/locales/fr/letters.json';
 import protectedApplyAdultChildFr from '~/../public/locales/fr/protected-apply-adult-child.json';
@@ -53,6 +55,7 @@ const i18nResourcesEn = {
   apply: applyEn,
   common: commonEn,
   'data-unavailable': dataUnavailableEn,
+  documents: documentsEn,
   gcweb: gcwebEn,
   letters: lettersEn,
   'protected-apply': protectedApplyEn,
@@ -78,6 +81,7 @@ const i18nResourcesFr = {
   apply: applyFr,
   common: commonFr,
   'data-unavailable': dataUnavailableFr,
+  documents: documentsFr,
   gcweb: gcwebFr,
   letters: lettersFr,
   'protected-apply': protectedApplyFr,
