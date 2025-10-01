@@ -72,6 +72,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
     communicationPreferences: {
       preferredLanguage: 'English',
       preferredMethod: 'Mail',
+      preferredMethodGovernmentOfCanada: 'Email',
     },
     contactInformation: {
       copyMailingAddress: false,

@@ -169,6 +169,7 @@ describe('DefaultClientApplicationService', () => {
     communicationPreferences: {
       preferredLanguage: 'ENG',
       preferredMethod: 'EMAIL',
+      preferredMethodGovernmentOfCanada: 'EMAIL',
     },
     contactInformation: {
       copyMailingAddress: true,
