@@ -14,5 +14,18 @@
     "no": "No",
     "update-link-text": "Change access to other government dental benefits",
     "return-button": "Return to dashboard"
+  },
+  "communication-preferences": {
+    "page-title": "My communication preferences",
+    "language-preference": "Language preference",
+    "english": "English",
+    "french": "French",
+    "by-email": "By email",
+    "by-mail": "By mail",
+    "online": "Online through My Service Canada Account",
+    "sunlife-communication-preference": "Sun Life communication preference",
+    "goc-communication-preference": "Government of Canada communication preference",
+    "update-link-text": "Change communication preferences",
+    "return-button": "Return to dashboard"
   }
 }

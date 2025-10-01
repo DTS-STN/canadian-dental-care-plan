@@ -14,5 +14,18 @@
     "no": "Non",
     "update-link-text": "Modifier la réponse à «\u00a0Accès à des prestations dentaires gouvernementales\u00a0»",
     "return-button": "Retour au tableau de bord"
+  },
+  "communication-preferences": {
+    "page-title": "Mes préférences de communication",
+    "language-preference": "Langue de préférence",
+    "english": "Anglais",
+    "french": "Français",
+    "by-email": "Par courriel",
+    "by-mail": "Par la poste",
+    "online": "En ligne, sur Mon dossier Service Canada (MDSC)",
+    "sunlife-communication-preference": "Préférence de communication avec la Sun Life",
+    "goc-communication-preference": "Préférence de communication du gouvernement du Canada",
+    "update-link-text": "Modifier la préférences de communication",
+    "return-button": "Retour au tableau de bord"
   }
 }

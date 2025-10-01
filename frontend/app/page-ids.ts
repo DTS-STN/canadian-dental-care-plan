@@ -110,6 +110,7 @@ export const pageIds = {
     profile: {
       applicantInformation: 'CDCP-PROT-PROF-0001',
       governmentDentalBenefits: 'CDCP-PROT-PROF-0002',
+      communicationPreferences: 'CDCP-PROT-PROF-0003',
     },
   },
   public: {
