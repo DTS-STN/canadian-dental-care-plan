@@ -42,6 +42,7 @@ export type ClientCommunicationPreferencesDto = ReadonlyDeep<{
   email?: string;
   preferredLanguage: string;
   preferredMethod: string;
+  preferredMethodGovernmentOfCanada: string;
 }>;
 
 export type ClientContactInformationDto = ReadonlyDeep<{

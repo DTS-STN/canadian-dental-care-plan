@@ -217,6 +217,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
           email: 'email@example.com',
           preferredLanguage: '1',
           preferredMethod: 'EMAIL',
+          preferredMethodGovernmentOfCanada: 'EMAIL',
         },
         contactInformation: {
           copyMailingAddress: true,
