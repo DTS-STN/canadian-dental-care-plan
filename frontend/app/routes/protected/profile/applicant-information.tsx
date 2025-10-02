@@ -83,20 +83,22 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
   const { primaryApplicant, children, SCCH_BASE_URI } = loaderData;
 
   return (
-    <div className="max-w-prose">
+    <div className="max-w-prose space-y-10">
       <p className="mb-4">{t('protected-profile:applicant-information.form-instructions')}</p>
-      <dl className="divide-y border-y">
+      <section className="space-y-6">
         <h2 className="font-lato py-4 text-2xl font-bold">{`${primaryApplicant.firstName} ${primaryApplicant.lastName}`}</h2>
-        <DescriptionListItem term={t('protected-profile:applicant-information.member-id')}>
-          <p>{primaryApplicant.id}</p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('protected-profile:applicant-information.dob')}>
-          <p>{primaryApplicant.dob}</p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('protected-profile:applicant-information.sin')}>
-          <p>{primaryApplicant.sin}</p>
-        </DescriptionListItem>
-      </dl>
+        <dl className="divide-y border-y">
+          <DescriptionListItem term={t('protected-profile:applicant-information.member-id')}>
+            <p>{primaryApplicant.id}</p>
+          </DescriptionListItem>
+          <DescriptionListItem term={t('protected-profile:applicant-information.dob')}>
+            <p>{primaryApplicant.dob}</p>
+          </DescriptionListItem>
+          <DescriptionListItem term={t('protected-profile:applicant-information.sin')}>
+            <p>{primaryApplicant.sin}</p>
+          </DescriptionListItem>
+        </dl>
+      </section>
       {children.map((child) => {
         return (
           <section className="space-y-6" key={child.id}>
