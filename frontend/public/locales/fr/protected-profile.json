@@ -1,4 +1,5 @@
 {
+  "required-label": "Remplissez tous les champs.",
   "applicant-information": {
     "page-title": "Informations des candidats",
     "form-instructions": "Si vous remarquez une erreur ou si vous devez mettre à jour le nom, la date de naissance ou le numéro d'assurance sociale (NAS), contactez Service Canada en appelant le 1-833-537-4342",
@@ -27,5 +28,24 @@
     "goc-communication-preference": "Préférence de communication du gouvernement du Canada",
     "update-link-text": "Modifier la préférences de communication",
     "return-button": "Retour au tableau de bord"
+  },
+  "edit-communication-preferences": {
+    "page-title": "Préférences en matière de communication",
+    "preferred-method": "Comment aimeriez-vous que la Sun Life communique avec vous?",
+    "preferred-language": "Quelle langue de communication préférez-vous?",
+    "english": "Anglais",
+    "french": "Français",
+    "by-email": "Par courriel",
+    "by-mail": "Par la poste",
+    "preferred-notification-method": "Comment souhaitez-vous recevoir des mises à jour du gouvernement du Canada concernant le Plan canadien de soins dentaires?",
+    "preferred-notification-method-msca": "<span>En ligne, sur Mon dossier Service Canada (MDSC)</span><br>S'inscrire aux notifications en ligne est le moyen le plus rapide de recevoir des mises à jour.",
+    "preferred-notification-method-mail": "<span>Par la poste</span><br>Vous pouvez également consulter les renseignements figurant à votre dossier du Régime canadien de soins dentaires dans MDSC.",
+    "back": "Back",
+    "save": "Save",
+    "error-message": {
+      "preferred-language-required": "Sélectionnez la langue de communication préférée",
+      "preferred-method-required": "Sélectionnez votre moyen de communication préféré avec la Sun Life",
+      "preferred-notification-method-required": "Sélectionnez votre moyen de communication préféré avec le gouvernement du Canada"
+    }
   }
 }

@@ -84,8 +84,7 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
           <p>{gocComminicationPreference === PREFERRED_NOTIFICATION_METHOD.msca ? t('protected-profile:communication-preferences.online') : t('protected-profile:communication-preferences.by-mail')}</p>
         </DescriptionListItem>
       </dl>
-      {/*TODO: Update routeId*/}
-      <InlineLink id="update-communication-preferences" routeId="protected/profile/communication-preferences" params={params}>
+      <InlineLink id="update-communication-preferences" routeId="protected/profile/communication-preferences/edit" params={params}>
         {t('protected-profile:communication-preferences.update-link-text')}
       </InlineLink>
       <div className="mt-6 flex flex-wrap items-center gap-3">

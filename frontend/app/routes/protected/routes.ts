@@ -50,6 +50,11 @@ export const routes = [
         paths: { en: '/:lang/protected/profile/communication-preferences', fr: '/:lang/protege/profil/preferences-communication' },
       },
       {
+        id: 'protected/profile/communication-preferences/edit',
+        file: 'routes/protected/profile/edit-communication-preferences.tsx',
+        paths: { en: '/:lang/protected/profile/communication-preferences/edit', fr: '/:lang/protege/profil/preferences-de-communication/modifier' },
+      },
+      {
         file: 'routes/protected/apply/layout.tsx',
         children: [
           { id: 'protected/apply/index', file: 'routes/protected/apply/index.tsx', paths: { en: '/:lang/protected/apply', fr: '/:lang/protege/demander' } },
