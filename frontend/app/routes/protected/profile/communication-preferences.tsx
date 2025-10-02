@@ -54,28 +54,25 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:communication-preferences.page-title') }) };
 
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
-  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.ServerConfig);
 
-  // TODO update with correct values
   return {
     meta,
-    languagePreference: clientApplication.communicationPreferences.preferredLanguage,
-    sunlifeComminicationPreference: 'email',
-    gocComminicationPreference: 'msca',
+    preferredLanguage: appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(clientApplication.communicationPreferences.preferredLanguage, locale),
+    sunlifeComminicationPreference: clientApplication.communicationPreferences.preferredMethod,
+    gocComminicationPreference: clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada,
     SCCH_BASE_URI,
-    ENGLISH_LANGUAGE_CODE,
   };
 }
 
 export default function ViewCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { languagePreference, sunlifeComminicationPreference, gocComminicationPreference, SCCH_BASE_URI, ENGLISH_LANGUAGE_CODE } = loaderData;
+  const { preferredLanguage, sunlifeComminicationPreference, gocComminicationPreference, SCCH_BASE_URI } = loaderData;
 
   return (
     <div className="max-w-prose">
       <dl>
         <DescriptionListItem term={t('protected-profile:communication-preferences.language-preference')}>
-          <p>{languagePreference === ENGLISH_LANGUAGE_CODE.toString() ? t('protected-profile:communication-preferences.english') : 'protected-profile:communication-preferences.french'}</p>
+          <p>{preferredLanguage.name}</p>
         </DescriptionListItem>
         <DescriptionListItem term={t('protected-profile:communication-preferences.sunlife-communication-preference')}>
           <p>{sunlifeComminicationPreference === PREFERRED_SUN_LIFE_METHOD.email ? t('protected-profile:communication-preferences.by-email') : t('protected-profile:communication-preferences.by-mail')}</p>
