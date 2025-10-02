@@ -8,6 +8,7 @@ import { DefaultBuildInfoService } from '~/.server/core';
 import { DefaultRedisService } from '~/.server/data';
 import {
   DefaultAddressValidationService,
+  DefaultApplicantDocumentService,
   DefaultApplicantService,
   DefaultApplicationStatusService,
   DefaultApplicationYearService,
@@ -52,6 +53,7 @@ export function createServicesContainerModule(serverConfig: Pick<ServerConfig, '
   // prettier-ignore
   return new ContainerModule((options) => {
     options.bind(TYPES.AddressValidationService).to(DefaultAddressValidationService);
+    options.bind(TYPES.ApplicantDocumentService).to(DefaultApplicantDocumentService);
     options.bind(TYPES.ApplicantService).to(DefaultApplicantService);
     options.bind(TYPES.ApplicationStatusService).to(DefaultApplicationStatusService);
     options.bind(TYPES.ApplicationYearService).to(DefaultApplicationYearService);

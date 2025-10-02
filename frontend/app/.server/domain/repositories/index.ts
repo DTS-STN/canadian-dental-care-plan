@@ -1,4 +1,5 @@
 export * from './address-validation.repository';
+export * from './applicant-document.repository';
 export * from './applicant-repository';
 export * from './application-status.repository';
 export * from './benefit-application.repository';

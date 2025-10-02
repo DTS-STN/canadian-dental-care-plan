@@ -27,6 +27,7 @@ import type {
 } from '~/.server/domain/mappers';
 import type {
   AddressValidationRepository,
+  ApplicantDocumentRepository,
   ApplicantRepository,
   ApplicationStatusRepository,
   ApplicationYearRepository,
@@ -44,6 +45,7 @@ import type {
 } from '~/.server/domain/repositories';
 import type {
   AddressValidationService,
+  ApplicantDocumentService,
   ApplicantService,
   ApplicationStatusService,
   ApplicationYearService,
@@ -55,13 +57,13 @@ import type {
   CountryService,
   DemographicSurveyService,
   FederalGovernmentInsurancePlanService,
+  LanguageService,
   LetterService,
   LetterTypeService,
   ProvinceTerritoryStateService,
   ProvincialGovernmentInsurancePlanService,
   VerificationCodeService,
 } from '~/.server/domain/services';
-import type { LanguageService } from '~/.server/domain/services/language.service';
 import type { HttpClient } from '~/.server/http';
 import type { InstrumentationService } from '~/.server/observability';
 import type { BenefitApplicationStateMapper, BenefitRenewalStateMapper } from '~/.server/routes/mappers';
@@ -136,6 +138,8 @@ export const TYPES = assignServiceIdentifiers({
   AddressValidationRepository: serviceId<AddressValidationRepository>(),
   AddressValidationService: serviceId<AddressValidationService>(),
   AddressValidatorFactory: serviceId<AddressValidatorFactory>(),
+  ApplicantDocumentRepository: serviceId<ApplicantDocumentRepository>(),
+  ApplicantDocumentService: serviceId<ApplicantDocumentService>(),
   ApplicantDtoMapper: serviceId<ApplicantDtoMapper>(),
   ApplicantRepository: serviceId<ApplicantRepository>(),
   ApplicantService: serviceId<ApplicantService>(),

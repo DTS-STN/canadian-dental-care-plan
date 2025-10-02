@@ -21,6 +21,7 @@ import {
   DefaultProvinceTerritoryStateRepository,
   DefaultVerificationCodeRepository,
   MockAddressValidationRepository,
+  MockApplicantDocumentRepository,
   MockApplicantRepository,
   MockApplicationStatusRepository,
   MockApplicationYearRepository,
@@ -70,6 +71,8 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
   return new ContainerModule((options) => {
     options.bind(TYPES.AddressValidationRepository).to(DefaultAddressValidationRepository).when(isMockEnabled(serverConfig, 'wsaddress', false));
     options.bind(TYPES.AddressValidationRepository).to(MockAddressValidationRepository).when(isMockEnabled(serverConfig, 'wsaddress', true));
+
+    options.bind(TYPES.ApplicantDocumentRepository).to(MockApplicantDocumentRepository);
 
     options.bind(TYPES.ApplicantRepository).to(DefaultApplicantRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
     options.bind(TYPES.ApplicantRepository).to(MockApplicantRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
