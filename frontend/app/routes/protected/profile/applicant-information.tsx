@@ -99,18 +99,20 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
       </dl>
       {children.map((child) => {
         return (
-          <dl className="divide-y border-y" key={child.id}>
+          <section className="space-y-6" key={child.id}>
             <h2 className="font-lato py-4 text-2xl font-bold">{`${child.firstName} ${child.lastName}`}</h2>
-            <DescriptionListItem term={t('protected-profile:applicant-information.member-id')}>
-              <p>{child.id}</p>
-            </DescriptionListItem>
-            <DescriptionListItem term={t('protected-profile:applicant-information.dob')}>
-              <p>{child.dob}</p>
-            </DescriptionListItem>
-            <DescriptionListItem term={t('protected-profile:applicant-information.sin')}>
-              <p>{child.sin}</p>
-            </DescriptionListItem>
-          </dl>
+            <dl className="divide-y border-y">
+              <DescriptionListItem term={t('protected-profile:applicant-information.member-id')}>
+                <p>{child.id}</p>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('protected-profile:applicant-information.dob')}>
+                <p>{child.dob}</p>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('protected-profile:applicant-information.sin')}>
+                <p>{child.sin}</p>
+              </DescriptionListItem>
+            </dl>
+          </section>
         );
       })}
       <div className="mt-6 flex flex-wrap items-center gap-3">
