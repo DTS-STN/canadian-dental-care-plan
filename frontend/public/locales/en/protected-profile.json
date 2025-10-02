@@ -1,4 +1,5 @@
 {
+  "required-label": "Complete all fields.",
   "applicant-information": {
     "page-title": "Applicant(s) Information",
     "form-instructions": "If you notice an error or need to update the name, date of birth or Social Insurance Number (SIN), contact Service Canada by calling 1-833-537-4342.",
@@ -27,5 +28,24 @@
     "goc-communication-preference": "Government of Canada communication preference",
     "update-link-text": "Change communication preferences",
     "return-button": "Return to dashboard"
+  },
+  "edit-communication-preferences": {
+    "page-title": "Communication preferences",
+    "preferred-method": "How would you like Sun Life to communicate with you?",
+    "preferred-language": "What is your preferred official language of communication?",
+    "english": "English",
+    "french": "French",
+    "by-email": "By email",
+    "by-mail": "By mail",
+    "preferred-notification-method": "How would you like to receive updates from the Government of Canada about the Canadian Dental Care Plan?",
+    "preferred-notification-method-msca": "<span>Online through My Service Canada Account (MSCA)</span><br>Signing up online is the fastest way to receive updates.",
+    "preferred-notification-method-mail": "<span>By mail</span><br>You can also view your Canadian Dental Care Plan information in MSCA.",
+    "back": "Back",
+    "save": "Save",
+    "error-message": {
+      "preferred-language-required": "Select preferred language of communication",
+      "preferred-method-required": "Select preferred method of communication for Sun Life",
+      "preferred-notification-method-required": "Select preferred method of communication for the Government of Canada"
+    }
   }
 }
