@@ -103,7 +103,7 @@
     "@types/compression": "^1.8.1",
     "@types/express-session": "^1.18.2",
     "@types/jmespath": "^0.15.2",
-    "@types/jsdom": "^21.1.7",
+    "@types/jsdom": "^27.0.0",
     "@types/morgan": "^1.9.10",
     "@types/node": "^22.18.8",
     "@types/react": "^19.1.15",
