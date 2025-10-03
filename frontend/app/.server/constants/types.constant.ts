@@ -68,6 +68,7 @@ import type {
   ProvincialGovernmentInsurancePlanService,
   VerificationCodeService,
 } from '~/.server/domain/services';
+import type { EvidentiaryDocumentTypeService } from '~/.server/domain/services/evidentiary-document-type.service';
 import type { HttpClient } from '~/.server/http';
 import type { InstrumentationService } from '~/.server/observability';
 import type { BenefitApplicationStateMapper, BenefitRenewalStateMapper } from '~/.server/routes/mappers';
@@ -183,6 +184,7 @@ export const TYPES = assignServiceIdentifiers({
   DynatraceService: serviceId<DynatraceService>(),
   EvidentiaryDocumentTypeRepository: serviceId<EvidentiaryDocumentTypeRepository>(),
   EvidentiaryDocumentTypeDtoMapper: serviceId<EvidentiaryDocumentTypeDtoMapper>(),
+  EvidentiaryDocumentTypeService: serviceId<EvidentiaryDocumentTypeService>(),
   FederalGovernmentInsurancePlanDtoMapper: serviceId<FederalGovernmentInsurancePlanDtoMapper>(),
   FederalGovernmentInsurancePlanService: serviceId<FederalGovernmentInsurancePlanService>(),
   GovernmentInsurancePlanRepository: serviceId<GovernmentInsurancePlanRepository>(),
