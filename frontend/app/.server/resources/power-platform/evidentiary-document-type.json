@@ -1,0 +1,39 @@
+{
+  "value": [
+    {
+      "esdc_value": "002",
+      "esdc_nameenglish": "Record of Employment (ROE)",
+      "esdc_namefrench": "Relevé d'emploi (RE)"
+    },
+    {
+      "esdc_value": "003",
+      "esdc_nameenglish": "T4/T4A",
+      "esdc_namefrench": "T4/T4A"
+    },
+    {
+      "esdc_value": "004",
+      "esdc_nameenglish": "Employer Letter",
+      "esdc_namefrench": "Lettre de l'employeur"
+    },
+    {
+      "esdc_value": "005",
+      "esdc_nameenglish": "Benefit Provider Letter",
+      "esdc_namefrench": "Lettre du fournisseur de prestations"
+    },
+    {
+      "esdc_value": "006",
+      "esdc_nameenglish": "Employer/Benefit Provider Email",
+      "esdc_namefrench": "Courriel de l'employeur/fournisseur de prestations"
+    },
+    {
+      "esdc_value": "997",
+      "esdc_nameenglish": "Multiple evidence items",
+      "esdc_namefrench": "Éléments de preuve multiples"
+    },
+    {
+      "esdc_value": "998",
+      "esdc_nameenglish": "Other",
+      "esdc_namefrench": "Autre"
+    }
+  ]
+}

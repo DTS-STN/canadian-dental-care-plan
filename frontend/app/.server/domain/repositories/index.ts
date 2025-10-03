@@ -9,6 +9,7 @@ export * from './client-application.repository';
 export * from './client-friendly-status.repository';
 export * from './country.repository';
 export * from './demographic-survey.repository';
+export * from './evidentiary-document-type.repository';
 export * from './letter-type.repository';
 export * from './letter.repository';
 export * from './province-territory-state.repository';
