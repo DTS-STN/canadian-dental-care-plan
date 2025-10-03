@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import type { Route } from './+types/index';
 
 import { TYPES } from '~/.server/constants';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/table';
@@ -32,6 +32,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
+  const locale = getLocale(request);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
@@ -52,7 +53,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   session.set('clientNumber', clientNumber);
 
   const applicantDocumentService = appContainer.get(TYPES.ApplicantDocumentService);
+  const evidentiaryDocumentTypeService = appContainer.get(TYPES.EvidentiaryDocumentTypeService);
   const documents = await applicantDocumentService.listApplicantDocuments({ clientNumber, userId: userInfoToken.sub });
+  const documentTypes = await evidentiaryDocumentTypeService.listLocalizedEvidentiaryDocumentTypes(locale);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('documents:index.page-title') }) };
@@ -61,12 +64,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.documents', { userId: idToken.sub });
 
-  return { meta, documents, SCCH_BASE_URI };
+  return { meta, documents, documentTypes, SCCH_BASE_URI };
 }
 
 export default function LettersIndex({ loaderData }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { documents, SCCH_BASE_URI } = loaderData;
+  const { documents, documentTypes, SCCH_BASE_URI } = loaderData;
   const hasDocuments = documents.length > 0;
   return (
     <div className="space-y-6">
@@ -90,7 +93,7 @@ export default function LettersIndex({ loaderData }: Route.ComponentProps) {
                   <span className="block">{`${document.firstName} ${document.lastName}`.trim()}</span>
                   <span className="text-nowrap">{document.clientNumber}</span>
                 </TableCell>
-                <TableCell>{document.documentType}</TableCell>
+                <TableCell>{documentTypes.find(({ id }) => id === document.documentType)?.name ?? ''}</TableCell>
                 <TableCell className="text-nowrap">{new Date(document.uploadedAt).toLocaleDateString()}</TableCell>
                 <TableCell className="text-nowrap">{document.receivedAt ? new Date(document.receivedAt).toLocaleDateString() : t('documents:index.received-status-pending')}</TableCell>
               </TableRow>

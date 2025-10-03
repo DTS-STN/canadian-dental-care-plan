@@ -44,6 +44,7 @@ export class MockApplicantDocumentRepository implements ApplicantDocumentReposit
     this.log.debug('Fetch applicant documents');
     this.log.trace('Fetch applicant documents for request [%j]', findApplicantDocumentsRequest);
 
+    // documentType mock source: app/.server/resources\power-platform/evidentiary-document-type.json
     const mockApplicantDocumentEntities: ReadonlyArray<ApplicantDocumentEntity> = [
       {
         id: '1',
@@ -51,7 +52,7 @@ export class MockApplicantDocumentRepository implements ApplicantDocumentReposit
         clientNumber: '123456',
         firstName: 'Eloise',
         lastName: 'Grimes',
-        documentType: '1',
+        documentType: '004',
         uploadedAt: '2023-10-01T12:00:00Z', // ISO 8601 date string
       },
       {
@@ -60,7 +61,7 @@ export class MockApplicantDocumentRepository implements ApplicantDocumentReposit
         clientNumber: '123456',
         firstName: 'Eloise',
         lastName: 'Grimes',
-        documentType: '2',
+        documentType: '002',
         uploadedAt: '2023-11-01T12:00:00Z', // ISO 8601 date string
         receivedAt: '2023-11-02T12:00:00Z', // ISO 8601 date string
       },
@@ -70,7 +71,7 @@ export class MockApplicantDocumentRepository implements ApplicantDocumentReposit
         clientNumber: '112233',
         firstName: 'Ron',
         lastName: 'Grimes',
-        documentType: '3',
+        documentType: '003',
         uploadedAt: '2023-12-01T12:00:00Z', // ISO 8601 date string
         receivedAt: '2023-12-02T12:00:00Z', // ISO 8601 date string
       },
