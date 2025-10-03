@@ -14,3 +14,4 @@ export * from './letter.repository';
 export * from './province-territory-state.repository';
 export * from './government-insurance-plan.repository';
 export * from './verification-code.repository';
+export * from './profile.repository';

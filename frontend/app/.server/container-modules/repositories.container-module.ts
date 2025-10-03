@@ -33,6 +33,7 @@ import {
   MockGovernmentInsurancePlanRepository,
   MockLetterRepository,
   MockLetterTypeRepository,
+  MockProfileRepository,
   MockProvinceTerritoryStateRepository,
   MockVerificationCodeRepository,
 } from '~/.server/domain/repositories';
@@ -117,5 +118,7 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
 
     options.bind(TYPES.DynatraceRepository).to(DefaultDynatraceRepository);
     options.bind(TYPES.HCaptchaRepository).to(DefaultHCaptchaRepository);
+
+    options.bind(TYPES.ProfileRepository).to(MockProfileRepository);
   });
 }

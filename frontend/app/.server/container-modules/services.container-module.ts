@@ -23,6 +23,7 @@ import {
   DefaultLanguageService,
   DefaultLetterService,
   DefaultLetterTypeService,
+  DefaultProfileService,
   DefaultProvinceTerritoryStateService,
   DefaultProvincialGovernmentInsurancePlanService,
   DefaultVerificationCodeService,
@@ -73,6 +74,7 @@ export function createServicesContainerModule(serverConfig: Pick<ServerConfig, '
     options.bind(TYPES.LanguageService).to(DefaultLanguageService);
     options.bind(TYPES.LetterService).to(DefaultLetterService);
     options.bind(TYPES.LetterTypeService).to(DefaultLetterTypeService);
+    options.bind(TYPES.ProfileService).to(DefaultProfileService);
     options.bind(TYPES.ProvinceTerritoryStateService).to(DefaultProvinceTerritoryStateService);
     options.bind(TYPES.ProvincialGovernmentInsurancePlanService).to(DefaultProvincialGovernmentInsurancePlanService);
     options.bind(TYPES.RaoidcService).to(DefaultRaoidcService);

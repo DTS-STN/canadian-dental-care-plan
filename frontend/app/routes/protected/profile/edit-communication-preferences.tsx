@@ -67,7 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     defaultState: {
       preferredLanguage: clientApplication.communicationPreferences.preferredLanguage,
       preferredMethod: clientApplication.communicationPreferences.preferredMethod,
-      preferredNotificationMethod: clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada,
+      preferredMethodGovernmentOfCanada: clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada,
     },
     languages,
   };
@@ -85,20 +85,20 @@ export async function action({ context: { appContainer, session }, params, reque
   const formSchema = z.object({
     preferredLanguage: z.string().trim().min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-language-required')),
     preferredMethod: z.string().trim().min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-required')),
-    preferredNotificationMethod: z.string().trim().min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-notification-method-required')),
+    preferredMethodGovernmentOfCanada: z.string().trim().min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-notification-method-required')),
   });
 
   const parsedDataResult = formSchema.safeParse({
     preferredLanguage: String(formData.get('preferredLanguage') ?? ''),
     preferredMethod: String(formData.get('preferredMethod') ?? ''),
-    preferredNotificationMethod: String(formData.get('preferredNotificationMethod') ?? ''),
+    preferredMethodGovernmentOfCanada: String(formData.get('preferredMethodGovernmentOfCanada   ') ?? ''),
   });
 
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  // TODO send updated values in service call
+  await appContainer.get(TYPES.ProfileService).updateCommunicationPreferences(parsedDataResult.data);
 
   return redirect(getPathById('protected/profile/communication-preferences', params));
 }
@@ -114,7 +114,7 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
   const errorSummary = useErrorSummary(errors, {
     preferredLanguage: 'input-radio-preferred-language-option-0',
     preferredMethod: 'input-radio-preferred-methods-option-0',
-    preferredNotificationMethod: 'input-radio-preferred-notification-method-option-0',
+    preferredMethodGovernmentOfCanada: 'input-radio-preferred-notification-method-option-0',
   });
 
   const preferredLanguageOptions: InputRadiosProps['options'] = languages.map((language) => ({
@@ -153,22 +153,22 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
 
           <InputRadios
             id="preferred-notification-method"
-            name="preferredNotificationMethod"
+            name="preferredMethodGovernmentOfCanada   "
             legend={t('protected-profile:edit-communication-preferences.preferred-notification-method')}
             options={[
               {
                 value: PREFERRED_NOTIFICATION_METHOD.msca,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-communication-preferences.preferred-notification-method-msca" components={{ span: <span className="font-semibold" /> }} />,
-                defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.msca,
+                defaultChecked: defaultState.preferredMethodGovernmentOfCanada === PREFERRED_NOTIFICATION_METHOD.msca,
               },
               {
                 value: PREFERRED_NOTIFICATION_METHOD.mail,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-communication-preferences.preferred-notification-method-mail" components={{ span: <span className="font-semibold" /> }} />,
-                defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail,
+                defaultChecked: defaultState.preferredMethodGovernmentOfCanada === PREFERRED_NOTIFICATION_METHOD.mail,
               },
             ]}
             required
-            errorMessage={errors?.preferredNotificationMethod}
+            errorMessage={errors?.preferredMethodGovernmentOfCanada}
           />
         </div>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
