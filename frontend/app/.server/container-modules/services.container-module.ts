@@ -19,6 +19,7 @@ import {
   DefaultClientFriendlyStatusService,
   DefaultCountryService,
   DefaultDemographicSurveyServiceService,
+  DefaultEvidentiaryDocumentTypeService,
   DefaultFederalGovernmentInsurancePlanService,
   DefaultLanguageService,
   DefaultLetterService,
@@ -67,6 +68,7 @@ export function createServicesContainerModule(serverConfig: Pick<ServerConfig, '
     options.bind(TYPES.CountryService).to(DefaultCountryService);
     options.bind(TYPES.DemographicSurveyService).to(DefaultDemographicSurveyServiceService);
     options.bind(TYPES.DynatraceService).to(DefaultDynatraceService);
+    options.bind(TYPES.EvidentiaryDocumentTypeService).to(DefaultEvidentiaryDocumentTypeService);
     options.bind(TYPES.FederalGovernmentInsurancePlanService).to(DefaultFederalGovernmentInsurancePlanService);
     options.bind(TYPES.HCaptchaService).to(DefaultHCaptchaService);
     options.bind(TYPES.HttpClient).to(DefaultHttpClient);

@@ -10,14 +10,15 @@ export * from './client-application.service';
 export * from './client-friendly-status.service';
 export * from './country.service';
 export * from './demographic-survey.service';
+export * from './evidentiary-document-type.service';
 export * from './federal-government-insurance-plan.service';
 export * from './language.service';
 export * from './letter-type.service';
 export * from './letter.service';
+export * from './profile.service';
 export * from './province-territory-state.service';
 export * from './provincial-government-insurance-plan.service';
 export * from './verification-code.service';
-export * from './profile.service';
 
 /**
  * Key that holds the killswitch boolean value in redis.
