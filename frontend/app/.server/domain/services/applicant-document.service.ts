@@ -37,6 +37,6 @@ export class DefaultApplicantDocumentService implements ApplicantDocumentService
     const applicantDocumentEntities = await this.applicantDocumentsRepository.findApplicantDocuments(findApplicantDocumentsRequest);
 
     this.log.trace('Returning applicant documents: [%j]', applicantDocumentEntities);
-    return await this.applicantDocumentsRepository.findApplicantDocuments(findApplicantDocumentsRequest);
+    return applicantDocumentEntities;
   }
 }

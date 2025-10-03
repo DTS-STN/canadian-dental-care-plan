@@ -1,7 +1,7 @@
 export const pageIds = {
   protected: {
     documents: {
-      index: 'CDCP-PROT-DOCS-0005',
+      index: 'CDCP-PROT-DOCS-0001',
     },
     letters: {
       index: 'CDCP-PROT-0015',
