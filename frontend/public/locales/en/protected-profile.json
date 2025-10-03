@@ -63,5 +63,18 @@
       "phone-number-alt-valid-international": "Phone number does not exist. If it's an international phone number, add '+' in front",
       "phone-required": "Enter a phone number"
     }
+  },
+  "contact-information": {
+    "page-title": "My contact information",
+    "phone-number": "Phone number",
+    "alt-phone-number": "Alternate phone number",
+    "email": "Email address",
+    "mailing-address": "Mailing address",
+    "home-address": "Home address",
+    "update-phone-link-text": "Change or add phone number",
+    "update-email-link-text": "Change or add email address",
+    "update-mailing-address-link-text": "Change mailing address",
+    "update-home-address-link-text": "Change home address",
+    "return-button": "Return to dashboard"
   }
 }
