@@ -94,7 +94,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  //TODO: call profile-service
+  await appContainer.get(TYPES.ProfileService).updatePhoneNumbers(parsedDataResult.data);
 
   return redirect(getPathById('protected/profile/contact-information', params));
 }
