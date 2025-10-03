@@ -14,12 +14,9 @@ export type ApplicantDocumentEntity = ReadonlyDeep<{
   receivedAt?: string; // ISO 8601 date string
 }>;
 
-/*
- * Request object for finding applicant documents.
- */
 export type FindApplicantDocumentsRequest = Readonly<{
-  /** The SIN of the applicant. */
-  sin: string;
+  /** The client number of the applicant. */
+  clientNumber: string;
 
   /** A unique identifier for the applicant - used for auditing */
   userId: string;

@@ -3,6 +3,14 @@
     "page-title": "Documents soumis",
     "has-documents": "Vous avez soumis les documents suivants pour le Régime canadien de soins dentaires\u00a0:",
     "no-documents": "Vous n'avez soumis aucun document pour le Régime canadien de soins dentaires.",
-    "return-dashboard": "Return to dashboard"
+    "return-dashboard": "Revenir au tableau de bord",
+    "received-status-pending": "En attente",
+    "table-headers": {
+      "date-received": "Date de réception",
+      "date-uploaded": "Date de téléversement",
+      "file-name": "Nom du fichier",
+      "member-id": "Numéro d'identification du membre",
+      "type-of-document": "Type de document"
+    }
   }
 }

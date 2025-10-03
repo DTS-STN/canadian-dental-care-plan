@@ -16,11 +16,10 @@ export type ApplicantDocumentDto = ReadonlyDeep<{
 
 /*
  * Request object for listing applicant documents.
- * Contains the SIN and userId for auditing purposes.
  */
 export type ListApplicantDocumentsRequest = Readonly<{
-  /** The SIN of the applicant. */
-  sin: string;
+  /** The client number of the applicant. */
+  clientNumber: string;
 
   /** A unique identifier for the applicant - used for auditing */
   userId: string;

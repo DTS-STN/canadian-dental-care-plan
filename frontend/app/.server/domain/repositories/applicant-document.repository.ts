@@ -41,7 +41,7 @@ export class MockApplicantDocumentRepository implements ApplicantDocumentReposit
   }
 
   async findApplicantDocuments(findApplicantDocumentsRequest: FindApplicantDocumentsRequest): Promise<ReadonlyArray<ApplicantDocumentEntity>> {
-    this.log.debug('Fetch applicant documents', findApplicantDocumentsRequest);
+    this.log.debug('Fetch applicant documents');
     this.log.trace('Fetch applicant documents for request [%j]', findApplicantDocumentsRequest);
 
     const mockApplicantDocumentEntities: ReadonlyArray<ApplicantDocumentEntity> = [
@@ -53,7 +53,6 @@ export class MockApplicantDocumentRepository implements ApplicantDocumentReposit
         lastName: 'Grimes',
         documentType: '1',
         uploadedAt: '2023-10-01T12:00:00Z', // ISO 8601 date string
-        receivedAt: '2023-10-02T12:00:00Z', // ISO 8601 date string
       },
       {
         id: '2',
