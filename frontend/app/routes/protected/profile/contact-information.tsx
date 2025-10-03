@@ -69,49 +69,43 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
 
   return (
     <div className="max-w-prose">
-      <section className="space-y-6">
-        <dl>
-          <DescriptionListItem term={t('protected-profile:contact-information.phone-number')}>
-            <p>{phoneNumber}</p>
-          </DescriptionListItem>
-          <DescriptionListItem term={t('protected-profile:contact-information.alt-phone-number')}>
-            <p>{altPhoneNumber}</p>
-          </DescriptionListItem>
-        </dl>
-        <InlineLink id="update-contact-information-phone" routeId="protected/profile/contact-information/edit-phone" params={params}>
-          {t('protected-profile:contact-information.update-phone-link-text')}
-        </InlineLink>
-      </section>
-      <section className="space-y-6">
-        <dl>
-          <DescriptionListItem term={t('protected-profile:contact-information.email')}>
-            <p>{emailAddress}</p>
-          </DescriptionListItem>
-        </dl>
-        <InlineLink id="update-contact-information-email" routeId="protected/profile/contact-information/edit-email" params={params}>
-          {t('protected-profile:contact-information.update-email-link-text')}
-        </InlineLink>
-      </section>
-      <section className="space-y-6">
-        <dl>
-          <DescriptionListItem term={t('protected-profile:contact-information.mailing-address')}>
-            <p>{mailingAddress}</p>
-          </DescriptionListItem>
-        </dl>
-        <InlineLink id="update-contact-information-mailing-address" routeId="protected/profile/contact-information/edit-mailing-address" params={params}>
-          {t('protected-profile:contact-information.update-mailing-address-link-text')}
-        </InlineLink>
-      </section>
-      <section className="space-y-6">
-        <dl>
-          <DescriptionListItem term={t('protected-profile:contact-information.home-address')}>
-            <p>{homeAddress}</p>
-          </DescriptionListItem>
-        </dl>
-        <InlineLink id="update-contact-information-home-address" routeId="protected/profile/contact-information/edit-home-address" params={params}>
-          {t('protected-profile:contact-information.update-home-address-link-text')}
-        </InlineLink>
-      </section>
+      <dl className="divide-y border-y">
+        <DescriptionListItem term={t('protected-profile:contact-information.phone-number')} className="border-none pb-0 sm:pb-0">
+          <p>{phoneNumber}</p>
+        </DescriptionListItem>
+        <DescriptionListItem term={t('protected-profile:contact-information.alt-phone-number')}>
+          <p>{altPhoneNumber}</p>
+          <div className="mt-4 sm:mt-6">
+            <InlineLink id="update-contact-information-phone" routeId="protected/profile/contact-information" params={params}>
+              {t('protected-profile:contact-information.update-phone-link-text')}
+            </InlineLink>
+          </div>
+        </DescriptionListItem>
+        <DescriptionListItem term={t('protected-profile:contact-information.email')}>
+          <p>{emailAddress}</p>
+          <div className="mt-4 sm:mt-6">
+            <InlineLink id="update-contact-information-email" routeId="protected/profile/contact-information" params={params}>
+              {t('protected-profile:contact-information.update-email-link-text')}
+            </InlineLink>
+          </div>
+        </DescriptionListItem>
+        <DescriptionListItem term={t('protected-profile:contact-information.mailing-address')}>
+          <p>{mailingAddress}</p>
+          <div className="mt-4 sm:mt-6">
+            <InlineLink id="update-contact-information-mailing-address" routeId="protected/profile/contact-information" params={params}>
+              {t('protected-profile:contact-information.update-mailing-address-link-text')}
+            </InlineLink>
+          </div>
+        </DescriptionListItem>
+        <DescriptionListItem term={t('protected-profile:contact-information.home-address')}>
+          <p>{homeAddress}</p>
+          <div className="mt-4 sm:mt-6">
+            <InlineLink id="update-contact-information-home-address" routeId="protected/profile/contact-information" params={params}>
+              {t('protected-profile:contact-information.update-home-address-link-text')}
+            </InlineLink>
+          </div>
+        </DescriptionListItem>
+      </dl>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <ButtonLink variant="primary" id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
