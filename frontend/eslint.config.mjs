@@ -147,6 +147,7 @@ export default defineConfig(
     },
     rules: {
       ...vitestPlugin.configs.recommended.rules,
+      'vitest/prefer-called-exactly-once-with': 'off',
     },
     settings: {
       vitest: {
