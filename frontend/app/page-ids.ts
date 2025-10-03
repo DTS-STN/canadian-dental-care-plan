@@ -116,6 +116,7 @@ export const pageIds = {
       communicationPreferences: 'CDCP-PROT-PROF-0003',
       editCommunicationPreferences: 'CDCP-PROT-PROF-0004',
       phoneNumber: 'CDCP-PROT-PROF-0005',
+      contactInformation: 'CDCP-PROT-PROF-0006',
     },
   },
   public: {

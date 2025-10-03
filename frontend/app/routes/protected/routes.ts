@@ -60,6 +60,11 @@ export const routes = [
         paths: { en: '/:lang/protected/profile/contact/phone', fr: '/:lang/protege/profil/coordonnees/telephone' },
       },
       {
+        id: 'protected/profile/contact-information',
+        file: 'routes/protected/profile/contact-information.tsx',
+        paths: { en: '/:lang/protected/profile/contact-information', fr: '/:lang/protege/profil/contact-information' },
+      },
+      {
         file: 'routes/protected/apply/layout.tsx',
         children: [
           { id: 'protected/apply/index', file: 'routes/protected/apply/index.tsx', paths: { en: '/:lang/protected/apply', fr: '/:lang/protege/demander' } },
