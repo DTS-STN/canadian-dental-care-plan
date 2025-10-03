@@ -1,5 +1,6 @@
 {
   "required-label": "Remplissez tous les champs.",
+  "all-optional-label": "Tous les champs sont faculatives.",
   "applicant-information": {
     "page-title": "Informations des candidats",
     "form-instructions": "Si vous remarquez une erreur ou si vous devez mettre à jour le nom, la date de naissance ou le numéro d'assurance sociale (NAS), contactez Service Canada en appelant le 1-833-537-4342",
@@ -38,12 +39,29 @@
     "preferred-notification-method": "Comment souhaitez-vous recevoir des mises à jour du gouvernement du Canada concernant le Plan canadien de soins dentaires?",
     "preferred-notification-method-msca": "<span>En ligne, sur Mon dossier Service Canada (MDSC)</span><br>S'inscrire aux notifications en ligne est le moyen le plus rapide de recevoir des mises à jour.",
     "preferred-notification-method-mail": "<span>Par la poste</span><br>Vous pouvez également consulter les renseignements figurant à votre dossier du Régime canadien de soins dentaires dans MDSC.",
-    "back": "Back",
-    "save": "Save",
+    "back": "Retour",
+    "save": "Sauvegarder",
     "error-message": {
       "preferred-language-required": "Sélectionnez la langue de communication préférée",
       "preferred-method-required": "Sélectionnez votre moyen de communication préféré avec la Sun Life",
       "preferred-notification-method-required": "Sélectionnez votre moyen de communication préféré avec le gouvernement du Canada"
+    }
+  },
+  "phone-number": {
+    "page-title": "Numéro de téléphone",
+    "phone-number": "Numéro de téléphone (facultatif)",
+    "phone-number-alt": "Autre numéro de téléphone (facultatif)",
+    "back-btn": "Retour",
+    "save-btn": "Sauvegarder",
+    "option-yes": "Oui",
+    "option-no": "Non",
+    "help-message": "L'ajout de votre numéro de téléphone nous permet de vous joindre rapidement en cas de problème avec votre demande. Si vous n'indiquez pas de numéro, nous vous contacterons par courrier.",
+    "error-message": {
+      "phone-number-valid": "Numéro de téléphone invalide",
+      "phone-number-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-number-alt-valid": "Numéro de téléphone invalide",
+      "phone-number-alt-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-required": "Entrez un numéro de téléphone"
     }
   }
 }

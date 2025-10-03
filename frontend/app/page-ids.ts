@@ -115,6 +115,7 @@ export const pageIds = {
       governmentDentalBenefits: 'CDCP-PROT-PROF-0002',
       communicationPreferences: 'CDCP-PROT-PROF-0003',
       editCommunicationPreferences: 'CDCP-PROT-PROF-0004',
+      phoneNumber: 'CDCP-PROT-PROF-0005',
     },
   },
   public: {

@@ -1,5 +1,6 @@
 {
   "required-label": "Complete all fields.",
+  "all-optional-label": "All fields are optional.",
   "applicant-information": {
     "page-title": "Applicant(s) Information",
     "form-instructions": "If you notice an error or need to update the name, date of birth or Social Insurance Number (SIN), contact Service Canada by calling 1-833-537-4342.",
@@ -44,6 +45,23 @@
       "preferred-language-required": "Select preferred language of communication",
       "preferred-method-required": "Select preferred method of communication for Sun Life",
       "preferred-notification-method-required": "Select preferred method of communication for the Government of Canada"
+    }
+  },
+  "phone-number": {
+    "page-title": "Phone Number",
+    "phone-number": "Phone number (optional)",
+    "phone-number-alt": "Alternate phone number (optional)",
+    "back-btn": "Back",
+    "save-btn": "Save",
+    "option-yes": "Yes",
+    "option-no": "No",
+    "help-message": "Adding your phone number helps us reach you quickly if there's a problem with your application. If you don't give a number, we'll contact you by mail.",
+    "error-message": {
+      "phone-number-valid": "Invalid phone number",
+      "phone-number-valid-international": "Phone number does not exist. If it's an international phone number, add '+' in front",
+      "phone-number-alt-valid": "Invalid phone number",
+      "phone-number-alt-valid-international": "Phone number does not exist. If it's an international phone number, add '+' in front",
+      "phone-required": "Enter a phone number"
     }
   }
 }
