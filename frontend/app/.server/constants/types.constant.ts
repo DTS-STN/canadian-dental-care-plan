@@ -40,6 +40,7 @@ import type {
   GovernmentInsurancePlanRepository,
   LetterRepository,
   LetterTypeRepository,
+  ProfileRepository,
   ProvinceTerritoryStateRepository,
   VerificationCodeRepository,
 } from '~/.server/domain/repositories';
@@ -60,6 +61,7 @@ import type {
   LanguageService,
   LetterService,
   LetterTypeService,
+  ProfileService,
   ProvinceTerritoryStateService,
   ProvincialGovernmentInsurancePlanService,
   VerificationCodeService,
@@ -211,4 +213,6 @@ export const TYPES = assignServiceIdentifiers({
   VerificationCodeDtoMapper: serviceId<VerificationCodeDtoMapper>(),
   VerificationCodeRepository: serviceId<VerificationCodeRepository>(),
   VerificationCodeService: serviceId<VerificationCodeService>(),
+  ProfileService: serviceId<ProfileService>(),
+  ProfileRepository: serviceId<ProfileRepository>(),
 } as const satisfies ServiceTypesMap);
