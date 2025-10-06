@@ -65,9 +65,14 @@ export const routes = [
         paths: { en: '/:lang/protected/profile/contact-information', fr: '/:lang/protege/profil/contact-information' },
       },
       {
-        id: 'protected/profile/contact/email',
+        id: 'protected/profile/contact/email-address',
         file: 'routes/protected/profile/email.tsx',
         paths: { en: '/:lang/protected/profile/contact/email-address', fr: '/:lang/protege/profil/cordonnees/adresse-courriel' },
+      },
+      {
+        id: 'protected/profile/contact/email-address/verify',
+        file: 'routes/protected/profile/verify-email.tsx',
+        paths: { en: '/:lang/protected/profile/contact/email-address/verify', fr: '/:lang/protege/profil/cordonnees/adresse-courriel/verifier' },
       },
       {
         file: 'routes/protected/apply/layout.tsx',

@@ -96,7 +96,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   //TODO: handle send verification code
 
-  return redirect(getPathById('protected/profile/contact/verify-email', params));
+  return redirect(getPathById('protected/profile/contact/email-address/verify', params));
 }
 
 export default function ProtectedProfileEmailAddress({ loaderData, params }: Route.ComponentProps) {
