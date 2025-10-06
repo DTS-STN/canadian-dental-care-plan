@@ -3,7 +3,7 @@ import { redirect } from 'react-router';
 import { invariant } from '@dts-stn/invariant';
 import { useTranslation } from 'react-i18next';
 
-import type { Route } from './+types/government-dental-benefits';
+import type { Route } from './+types/dental-benefits';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -19,7 +19,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
-  pageIdentifier: pageIds.protected.profile.governmentDentalBenefits,
+  pageIdentifier: pageIds.protected.profile.dentalBenefits,
   pageTitleI18nKey: 'protected-profile:government-dental-benefits.page-title',
 };
 
@@ -51,7 +51,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
 
-  // TODO: for now, clientAppplication service is used to display information on the page.
   const clientDentalBenefits = clientApplication.dentalBenefits.flatMap(async (id) => {
     const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(id, locale);
     if (federalProgram.isSome()) return [federalProgram.unwrap().name];

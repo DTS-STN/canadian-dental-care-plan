@@ -40,9 +40,14 @@ export const routes = [
         paths: { en: '/:lang/protected/stub-login', fr: '/:lang/protege/stub-login' },
       },
       {
-        id: 'protected/profile/government-dental-benefits',
-        file: 'routes/protected/profile/government-dental-benefits.tsx',
-        paths: { en: '/:lang/protected/profile/government-dental-benefits', fr: '/:lang/protege/profil/government-dental-benefits' }, //TODO: update French path
+        id: 'protected/profile/dental-benefits',
+        file: 'routes/protected/profile/dental-benefits.tsx',
+        paths: { en: '/:lang/protected/profile/dental-benefits', fr: '/:lang/protege/profil/prestations-dentaires' },
+      },
+      {
+        id: 'protected/profile/dental-benefits/edit',
+        file: 'routes/protected/profile/edit-dental-benefits.tsx',
+        paths: { en: '/:lang/protected/profile/dental-benefits/edit', fr: '/:lang/protege/profil/prestations-dentaires/modifier' },
       },
       {
         id: 'protected/profile/communication-preferences',
