@@ -13,6 +13,7 @@ import {
   isPastDateTimeString,
   isValidDateString,
   isValidDateTimeString,
+  isValidTimeZone,
   parseDateString,
   parseDateTimeString,
   toLocaleDateString,
@@ -239,5 +240,24 @@ describe('useMonths', () => {
     it('should throw an error for an invalid Canadian locale', () => {
       expect(() => toLocaleDateString(new UTCDate(2000, 0, 1), 'xy')).toThrowError();
     });
+  });
+});
+
+describe('isValidTimeZone', () => {
+  it('should return true for valid IANA time zone strings', () => {
+    expect(isValidTimeZone('America/Toronto')).toBe(true);
+    expect(isValidTimeZone('UTC')).toBe(true);
+    expect(isValidTimeZone('America/Vancouver')).toBe(true);
+    expect(isValidTimeZone('Europe/London')).toBe(true);
+    expect(isValidTimeZone('Asia/Tokyo')).toBe(true);
+    expect(isValidTimeZone('Canada/Central')).toBe(true);
+  });
+
+  it('should return false for invalid IANA time zone strings', () => {
+    expect(isValidTimeZone('Invalid/Timezone')).toBe(false);
+    expect(isValidTimeZone('America/InvalidCity')).toBe(false);
+    expect(isValidTimeZone('NotATimeZone')).toBe(false);
+    expect(isValidTimeZone('')).toBe(false);
+    expect(isValidTimeZone('12345')).toBe(false);
   });
 });

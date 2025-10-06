@@ -64,7 +64,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.documents', { userId: idToken.sub });
 
-  const dateFormatter = new Intl.DateTimeFormat(`${locale}-CA`, { timeZone: 'Canada/Eastern', dateStyle: 'long' });
+  const { TIME_ZONE } = appContainer.get(TYPES.ClientConfig);
+  const dateFormatter = new Intl.DateTimeFormat(`${locale}-CA`, { timeZone: TIME_ZONE, dateStyle: 'long' });
 
   return {
     meta,
