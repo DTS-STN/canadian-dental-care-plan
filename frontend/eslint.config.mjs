@@ -102,7 +102,7 @@ export default defineConfig(
       jsxA11yPlugin.flatConfigs.recommended, //
       reactPlugin.configs.flat.recommended,
       reactPlugin.configs.flat['jsx-runtime'],
-      reactHooksPlugin.configs['recommended-latest'],
+      reactHooksPlugin.configs.recommended,
     ],
     rules: {
       'react/no-unknown-property': ['error', { ignore: ['property', 'resource', 'typeof', 'vocab'] }],
