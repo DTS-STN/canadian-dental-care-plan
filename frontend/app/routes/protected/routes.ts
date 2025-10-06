@@ -50,6 +50,11 @@ export const routes = [
         paths: { en: '/:lang/protected/profile/dental-benefits/edit', fr: '/:lang/protege/profil/prestations-dentaires/modifier' },
       },
       {
+        id: '/protected/profile/dental-benefits/:childId/edit',
+        file: 'routes/protected/profile/edit-child-dental-benefits.tsx',
+        paths: { en: '/:lang/protected/profile/dental-benefits/:childId/edit', fr: '/:lang/protege/profil/prestations-dentaires/:childId/modifier' },
+      },
+      {
         id: 'protected/profile/communication-preferences',
         file: 'routes/protected/profile/communication-preferences.tsx',
         paths: { en: '/:lang/protected/profile/communication-preferences', fr: '/:lang/protege/profil/preferences-communication' },

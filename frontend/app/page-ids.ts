@@ -120,6 +120,7 @@ export const pageIds = {
       email: 'CDCP-PROT-PROF-0007',
       verifyEmail: 'CDCP-PROT-PROF-0008',
       editDentalBenefits: 'CDCP-PROT-PROF-0009',
+      editChildDentalBenefits: 'CDCP-PROT-PROF-0010',
     },
   },
   public: {
