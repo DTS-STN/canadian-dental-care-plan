@@ -112,13 +112,14 @@ export const pageIds = {
     unableToProcessRequest: 'CDCP-PROT-0999',
     profile: {
       applicantInformation: 'CDCP-PROT-PROF-0001',
-      governmentDentalBenefits: 'CDCP-PROT-PROF-0002',
+      dentalBenefits: 'CDCP-PROT-PROF-0002',
       communicationPreferences: 'CDCP-PROT-PROF-0003',
       editCommunicationPreferences: 'CDCP-PROT-PROF-0004',
       phoneNumber: 'CDCP-PROT-PROF-0005',
       contactInformation: 'CDCP-PROT-PROF-0006',
       email: 'CDCP-PROT-PROF-0007',
       verifyEmail: 'CDCP-PROT-PROF-0008',
+      editDentalBenefits: 'CDCP-PROT-PROF-0009',
     },
   },
   public: {
