@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { isValidTimeZone } from '~/utils/date-utils';
+
 const validFeatureNames = ['hcaptcha', 'killswitch-api', 'show-prototype-banner', 'stub-login', 'status', 'view-letters', 'view-payload', 'demographic-survey'] as const;
 
 export type FeatureName = (typeof validFeatureNames)[number];
@@ -28,6 +30,8 @@ export const clientEnvSchema = z.object({
   BUILD_VERSION: z.string().default('0.0.0-000000-00000000'),
 
   ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default([""]),
+
+  TIME_ZONE: z.string().trim().min(1).refine(isValidTimeZone).default('Canada/Eastern'),
 
   I18NEXT_DEBUG: z.string().transform(toBoolean).default(false),
 
