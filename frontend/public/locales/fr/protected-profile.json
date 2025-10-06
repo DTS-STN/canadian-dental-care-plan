@@ -76,5 +76,17 @@
     "update-mailing-address-link-text": "Modifier l'adresse postale",
     "update-home-address-link-text": "Modifier l'adresse du domicile",
     "return-button": "Retour au tableau de bord"
+  },
+  "email": {
+    "page-title": "Adresse courriel",
+    "provide-email": "Indiquez l'adresse électronique à laquelle vous souhaitez recevoir l'information au sujet de votre couverture au titre du Régime de soins dentaires du Canada que vous communiquera le gouvernement du Canada ou la Sun Life.",
+    "verify-email": "Nous confirmerons votre adresse électronique.",
+    "email-legend": "Adresse courriel",
+    "back": "Retour",
+    "save-btn": "Sauvegarder",
+    "error-message": {
+      "email-required": "Entrez l'adresse courriel, par exemple nom@exemple.com",
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com"
+    }
   }
 }
