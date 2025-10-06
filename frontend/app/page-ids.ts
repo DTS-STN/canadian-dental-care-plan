@@ -118,6 +118,7 @@ export const pageIds = {
       phoneNumber: 'CDCP-PROT-PROF-0005',
       contactInformation: 'CDCP-PROT-PROF-0006',
       email: 'CDCP-PROT-PROF-0007',
+      verifyEmail: 'CDCP-PROT-PROF-0008',
     },
   },
   public: {
