@@ -1,5 +1,4 @@
 export type * from './address-validation.dto';
-export type * from './applicant-document.dto';
 export type * from './applicant.dto';
 export type * from './application-status.dto';
 export type * from './application-year.dto';
@@ -11,6 +10,7 @@ export type * from './client-friendly-status.dto';
 export type * from './country.dto';
 export type * from './demographic-survey.dto';
 export type * from './evidentiary-document-type.dto';
+export type * from './evidentiary-document.dto';
 export type * from './federal-government-insurance-plan.dto';
 export type * from './language.dto';
 export type * from './letter-type.dto';

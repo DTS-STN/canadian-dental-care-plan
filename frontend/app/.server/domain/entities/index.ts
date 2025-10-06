@@ -1,5 +1,4 @@
 export type * from './address-validation.entity';
-export type * from './applicant-document.entity';
 export type * from './applicant.entity';
 export type * from './application-status.entity';
 export type * from './application-year.entity';
@@ -10,6 +9,7 @@ export type * from './client-friendly-status.entity';
 export type * from './country.entity';
 export type * from './demographic-survey.entity';
 export type * from './evidentiary-document-type.entity';
+export type * from './evidentiary-document.entity';
 export type * from './government-insurance-plan.entity';
 export type * from './letter-type.entity';
 export type * from './letter.entity';

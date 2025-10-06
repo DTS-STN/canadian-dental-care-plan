@@ -1,5 +1,4 @@
 export * from './address-validation.service';
-export * from './applicant-document.service';
 export * from './applicant.service';
 export * from './application-status.service';
 export * from './application-year.service';
@@ -11,6 +10,7 @@ export * from './client-friendly-status.service';
 export * from './country.service';
 export * from './demographic-survey.service';
 export * from './evidentiary-document-type.service';
+export * from './evidentiary-document.service';
 export * from './federal-government-insurance-plan.service';
 export * from './language.service';
 export * from './letter-type.service';
