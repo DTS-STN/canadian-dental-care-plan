@@ -8,7 +8,6 @@ import { DefaultBuildInfoService } from '~/.server/core';
 import { DefaultRedisService } from '~/.server/data';
 import {
   DefaultAddressValidationService,
-  DefaultApplicantDocumentService,
   DefaultApplicantService,
   DefaultApplicationStatusService,
   DefaultApplicationYearService,
@@ -19,6 +18,7 @@ import {
   DefaultClientFriendlyStatusService,
   DefaultCountryService,
   DefaultDemographicSurveyServiceService,
+  DefaultEvidentiaryDocumentService,
   DefaultEvidentiaryDocumentTypeService,
   DefaultFederalGovernmentInsurancePlanService,
   DefaultLanguageService,
@@ -55,7 +55,6 @@ export function createServicesContainerModule(serverConfig: Pick<ServerConfig, '
   // prettier-ignore
   return new ContainerModule((options) => {
     options.bind(TYPES.AddressValidationService).to(DefaultAddressValidationService);
-    options.bind(TYPES.ApplicantDocumentService).to(DefaultApplicantDocumentService);
     options.bind(TYPES.ApplicantService).to(DefaultApplicantService);
     options.bind(TYPES.ApplicationStatusService).to(DefaultApplicationStatusService);
     options.bind(TYPES.ApplicationYearService).to(DefaultApplicationYearService);
@@ -68,6 +67,7 @@ export function createServicesContainerModule(serverConfig: Pick<ServerConfig, '
     options.bind(TYPES.CountryService).to(DefaultCountryService);
     options.bind(TYPES.DemographicSurveyService).to(DefaultDemographicSurveyServiceService);
     options.bind(TYPES.DynatraceService).to(DefaultDynatraceService);
+    options.bind(TYPES.EvidentiaryDocumentService).to(DefaultEvidentiaryDocumentService);
     options.bind(TYPES.EvidentiaryDocumentTypeService).to(DefaultEvidentiaryDocumentTypeService);
     options.bind(TYPES.FederalGovernmentInsurancePlanService).to(DefaultFederalGovernmentInsurancePlanService);
     options.bind(TYPES.HCaptchaService).to(DefaultHCaptchaService);

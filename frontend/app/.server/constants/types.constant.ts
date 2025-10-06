@@ -28,7 +28,6 @@ import type {
 } from '~/.server/domain/mappers';
 import type {
   AddressValidationRepository,
-  ApplicantDocumentRepository,
   ApplicantRepository,
   ApplicationStatusRepository,
   ApplicationYearRepository,
@@ -38,6 +37,7 @@ import type {
   ClientFriendlyStatusRepository,
   CountryRepository,
   DemographicSurveyRepository,
+  EvidentiaryDocumentRepository,
   EvidentiaryDocumentTypeRepository,
   GovernmentInsurancePlanRepository,
   LetterRepository,
@@ -48,7 +48,6 @@ import type {
 } from '~/.server/domain/repositories';
 import type {
   AddressValidationService,
-  ApplicantDocumentService,
   ApplicantService,
   ApplicationStatusService,
   ApplicationYearService,
@@ -59,6 +58,7 @@ import type {
   ClientFriendlyStatusService,
   CountryService,
   DemographicSurveyService,
+  EvidentiaryDocumentService,
   FederalGovernmentInsurancePlanService,
   LanguageService,
   LetterService,
@@ -143,8 +143,6 @@ export const TYPES = assignServiceIdentifiers({
   AddressValidationRepository: serviceId<AddressValidationRepository>(),
   AddressValidationService: serviceId<AddressValidationService>(),
   AddressValidatorFactory: serviceId<AddressValidatorFactory>(),
-  ApplicantDocumentRepository: serviceId<ApplicantDocumentRepository>(),
-  ApplicantDocumentService: serviceId<ApplicantDocumentService>(),
   ApplicantDtoMapper: serviceId<ApplicantDtoMapper>(),
   ApplicantRepository: serviceId<ApplicantRepository>(),
   ApplicantService: serviceId<ApplicantService>(),
@@ -182,8 +180,10 @@ export const TYPES = assignServiceIdentifiers({
   DynatraceDtoMapper: serviceId<DynatraceDtoMapper>(),
   DynatraceRepository: serviceId<DynatraceRepository>(),
   DynatraceService: serviceId<DynatraceService>(),
-  EvidentiaryDocumentTypeRepository: serviceId<EvidentiaryDocumentTypeRepository>(),
+  EvidentiaryDocumentRepository: serviceId<EvidentiaryDocumentRepository>(),
+  EvidentiaryDocumentService: serviceId<EvidentiaryDocumentService>(),
   EvidentiaryDocumentTypeDtoMapper: serviceId<EvidentiaryDocumentTypeDtoMapper>(),
+  EvidentiaryDocumentTypeRepository: serviceId<EvidentiaryDocumentTypeRepository>(),
   EvidentiaryDocumentTypeService: serviceId<EvidentiaryDocumentTypeService>(),
   FederalGovernmentInsurancePlanDtoMapper: serviceId<FederalGovernmentInsurancePlanDtoMapper>(),
   FederalGovernmentInsurancePlanService: serviceId<FederalGovernmentInsurancePlanService>(),

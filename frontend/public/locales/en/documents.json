@@ -3,13 +3,14 @@
     "page-title": "Submitted documents",
     "has-documents": "You have submitted the following documents for the Canadian Dental Care Plan:",
     "no-documents": "You have not submitted any documents for the Canadian Dental Care Plan.",
+    "upload-documents": "Upload documents",
     "return-dashboard": "Return to dashboard",
     "received-status-pending": "Pending",
     "table-headers": {
+      "applicant": "Applicant",
       "date-received": "Date received",
       "date-uploaded": "Date uploaded",
       "file-name": "File name",
-      "member-id": "Member ID",
       "type-of-document": "Type of document"
     }
   }

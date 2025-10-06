@@ -52,10 +52,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const clientNumber = clientNumberOption.unwrap();
   session.set('clientNumber', clientNumber);
 
-  const applicantDocumentService = appContainer.get(TYPES.ApplicantDocumentService);
+  const evidentiaryDocumentService = appContainer.get(TYPES.EvidentiaryDocumentService);
   const evidentiaryDocumentTypeService = appContainer.get(TYPES.EvidentiaryDocumentTypeService);
-  const documents = await applicantDocumentService.listApplicantDocuments({ clientNumber, userId: userInfoToken.sub });
-  const documentTypes = await evidentiaryDocumentTypeService.listLocalizedEvidentiaryDocumentTypes(locale);
+  const evidentiaryDocuments = await evidentiaryDocumentService.listEvidentiaryDocuments({ clientID: clientNumber, userId: userInfoToken.sub });
+  const localizedEvidentiaryDocumentTypes = await evidentiaryDocumentTypeService.listLocalizedEvidentiaryDocumentTypes(locale);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('documents:index.page-title') }) };
@@ -64,13 +64,27 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.documents', { userId: idToken.sub });
 
-  return { meta, documents, documentTypes, SCCH_BASE_URI };
+  const dateFormatter = new Intl.DateTimeFormat(`${locale}-CA`, { timeZone: 'Canada/Eastern', dateStyle: 'long' });
+
+  return {
+    meta,
+    documents: evidentiaryDocuments.map((document) => {
+      return {
+        ...document,
+        documentTypeName: localizedEvidentiaryDocumentTypes.find(({ id }) => id === document.documentTypeId)?.name ?? '',
+        mscaUploadDateFormatted: dateFormatter.format(new Date(document.mscaUploadDate)),
+        healthCanadaTransferDateFormatted: document.healthCanadaTransferDate ? dateFormatter.format(new Date(document.healthCanadaTransferDate)) : undefined,
+      };
+    }),
+    SCCH_BASE_URI,
+  };
 }
 
-export default function LettersIndex({ loaderData }: Route.ComponentProps) {
+export default function LettersIndex({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { documents, documentTypes, SCCH_BASE_URI } = loaderData;
+  const { documents, SCCH_BASE_URI } = loaderData;
   const hasDocuments = documents.length > 0;
+
   return (
     <div className="space-y-6">
       <p>{hasDocuments ? t('documents:index.has-documents') : t('documents:index.no-documents')}</p>
@@ -79,7 +93,7 @@ export default function LettersIndex({ loaderData }: Route.ComponentProps) {
           <TableHeader>
             <TableRow>
               <TableHead>{t('documents:index.table-headers.file-name')}</TableHead>
-              <TableHead>{t('documents:index.table-headers.member-id')}</TableHead>
+              <TableHead>{t('documents:index.table-headers.applicant')}</TableHead>
               <TableHead>{t('documents:index.table-headers.type-of-document')}</TableHead>
               <TableHead>{t('documents:index.table-headers.date-uploaded')}</TableHead>
               <TableHead>{t('documents:index.table-headers.date-received')}</TableHead>
@@ -88,20 +102,22 @@ export default function LettersIndex({ loaderData }: Route.ComponentProps) {
           <TableBody>
             {documents.map((document) => (
               <TableRow key={document.id} className="odd:bg-white even:bg-gray-50">
-                <TableCell>{document.fileName}</TableCell>
-                <TableCell>
-                  <span className="block">{`${document.firstName} ${document.lastName}`.trim()}</span>
-                  <span className="text-nowrap">{document.clientNumber}</span>
-                </TableCell>
-                <TableCell>{documentTypes.find(({ id }) => id === document.documentType)?.name ?? ''}</TableCell>
-                <TableCell className="text-nowrap">{new Date(document.uploadedAt).toLocaleDateString()}</TableCell>
-                <TableCell className="text-nowrap">{document.receivedAt ? new Date(document.receivedAt).toLocaleDateString() : t('documents:index.received-status-pending')}</TableCell>
+                <TableCell className="max-w-[200px] break-all">{document.fileName}</TableCell>
+                <TableCell>{document.name}</TableCell>
+                <TableCell>{document.documentTypeName}</TableCell>
+                <TableCell className="text-nowrap">{document.mscaUploadDateFormatted}</TableCell>
+                <TableCell className="text-nowrap">{document.healthCanadaTransferDateFormatted ?? t('documents:index.received-status-pending')}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </Activity>
-      <div className="flex flex-wrap items-center gap-3">
+      <div>
+        <ButtonLink id="upload-button" routeId="protected/documents/index" params={params} variant="primary">
+          {t('documents:index.upload-documents')}
+        </ButtonLink>
+      </div>
+      <div>
         <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
           {t('documents:index.return-dashboard')}
         </ButtonLink>

@@ -21,7 +21,6 @@ import {
   DefaultProvinceTerritoryStateRepository,
   DefaultVerificationCodeRepository,
   MockAddressValidationRepository,
-  MockApplicantDocumentRepository,
   MockApplicantRepository,
   MockApplicationStatusRepository,
   MockApplicationYearRepository,
@@ -30,6 +29,7 @@ import {
   MockClientApplicationRepository,
   MockClientFriendlyStatusRepository,
   MockCountryRepository,
+  MockEvidentiaryDocumentRepository,
   MockEvidentiaryDocumentTypeRepository,
   MockGovernmentInsurancePlanRepository,
   MockLetterRepository,
@@ -74,8 +74,6 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
     options.bind(TYPES.AddressValidationRepository).to(DefaultAddressValidationRepository).when(isMockEnabled(serverConfig, 'wsaddress', false));
     options.bind(TYPES.AddressValidationRepository).to(MockAddressValidationRepository).when(isMockEnabled(serverConfig, 'wsaddress', true));
 
-    options.bind(TYPES.ApplicantDocumentRepository).to(MockApplicantDocumentRepository);
-
     options.bind(TYPES.ApplicantRepository).to(DefaultApplicantRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
     options.bind(TYPES.ApplicantRepository).to(MockApplicantRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
 
@@ -101,6 +99,8 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
     options.bind(TYPES.CountryRepository).to(MockCountryRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
 
     options.bind(TYPES.DemographicSurveyRepository).to(DefaultDemographicSurveyRepository);
+
+    options.bind(TYPES.EvidentiaryDocumentRepository).to(MockEvidentiaryDocumentRepository);
 
     options.bind(TYPES.EvidentiaryDocumentTypeRepository).to(MockEvidentiaryDocumentTypeRepository);
 
