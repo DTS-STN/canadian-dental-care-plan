@@ -244,3 +244,22 @@ export function useMonths(locale: string, format: 'numeric' | '2-digit' | 'long'
 export function getCurrentDateString(locale: AppLocale = 'en'): string {
   return new UTCDate().toLocaleDateString(`${locale}-CA`);
 }
+
+/**
+ * Validates whether a given timezone string is a valid IANA timezone.
+ *
+ * This function attempts to create a new `Intl.DateTimeFormat` object with the provided timezone.
+ * If the timezone is valid, the function returns `true`. If an error is thrown, it indicates that
+ * the timezone is invalid, and the function returns `false`.
+ *
+ * @param timeZone - The timezone string to be validated (e.g., "Canada/Eastern", "UTC", "Canada/Pacific").
+ * @returns Returns `true` if the timezone is valid, otherwise `false`.
+ */
+export function isValidTimeZone(timeZone: string): boolean {
+  try {
+    new Intl.DateTimeFormat('en-CA', { timeZone });
+    return true;
+  } catch {
+    return false;
+  }
+}
