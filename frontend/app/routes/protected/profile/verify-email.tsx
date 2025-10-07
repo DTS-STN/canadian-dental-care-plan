@@ -29,6 +29,8 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { extractDigits } from '~/utils/string-utils';
 
+const MAX_ATTEMPTS = 5;
+
 const FORM_ACTION = {
   request: 'request',
   submit: 'submit',
@@ -47,53 +49,67 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
-
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:verify-email.page-title') }) };
 
-  const userInfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
-
-  const currentDate = getCurrentDateString(locale);
-  const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
-  const applicationYear = applicationYearService.getRenewalApplicationYear(currentDate);
-
-  const clientApplicationService = appContainer.get(TYPES.ClientApplicationService);
-  const clientApplicationResult = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.applicationYearId, userId: userInfoToken.sub });
-
-  if (clientApplicationResult.isNone()) {
-    throw redirect(getPathById('protected/data-unavailable', params));
+  if (!session.has('profileEmailVerificationState')) {
+    throw redirect(getPathById('protected/profile/contact/email-address', params));
   }
 
-  const clientApplication = clientApplicationResult.unwrap();
+  const verificationState = session.get('profileEmailVerificationState');
+
+  const createdAt = new Date(verificationState.createdAt);
+  const now = new Date();
+  // invalidate state if verification code is older than 30 minutes
+  if (now.getTime() - createdAt.getTime() > 30 * 60 * 1000) {
+    session.unset('profileEmailVerificationState');
+    throw redirect(getPathById('protected/profile/contact/email-address', params));
+  }
 
   return {
     meta,
-    email: clientApplication.contactInformation.email,
+    email: verificationState.pendingEmail,
   };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  if (!session.has('profileEmailVerificationState')) {
+    throw redirect(getPathById('protected/profile/contact/email-address', params));
+  }
+
+  const verificationState = session.get('profileEmailVerificationState');
+  const createdAt = new Date(verificationState.createdAt);
+  const now = new Date();
+  // invalidate state if verification code is older than 30 minutes
+  if (now.getTime() - createdAt.getTime() > 30 * 60 * 1000) {
+    session.unset('profileEmailVerificationState');
+    throw redirect(getPathById('protected/profile/contact/email-address', params));
+  }
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const idToken: IdToken = session.get('idToken');
-  const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
-  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.ServerConfig);
-
   const userInfoToken = session.get('userInfoToken');
+  invariant(userInfoToken.sub, 'Expected userInfoToken.sub to be defined');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
+  const idToken: IdToken = session.get('idToken');
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.ServerConfig);
+
+  const locale = getLocale(request);
   const currentDate = getCurrentDateString(locale);
   const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
   const applicationYear = applicationYearService.getRenewalApplicationYear(currentDate);
 
   const clientApplicationService = appContainer.get(TYPES.ClientApplicationService);
-  const clientApplicationResult = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.applicationYearId, userId: userInfoToken.sub });
+  const clientApplicationResult = await clientApplicationService.findClientApplicationBySin({
+    sin: userInfoToken.sin,
+    applicationYearId: applicationYear.applicationYearId,
+    userId: userInfoToken.sub,
+  });
 
   if (clientApplicationResult.isNone()) {
     throw redirect(getPathById('protected/data-unavailable', params));
@@ -101,27 +117,40 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const clientApplication = clientApplicationResult.unwrap();
 
-  // TODO: handle verification logic without the use of state (code below is left in to prevent breaking the UI)
-
-  // Fetch verification code service
   const verificationCodeService = appContainer.get(TYPES.VerificationCodeService);
-
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.request) {
-    // Create a new verification code and store the code in session
-    const verificationCode = verificationCodeService.createVerificationCode(idToken.sub);
+    const newVerificationCode = verificationCodeService.createVerificationCode(idToken.sub);
+
+    session.set('profileEmailVerificationState', {
+      ...verificationState,
+      verificationCode: newVerificationCode,
+      verificationAttempts: 0,
+      createdAt: new Date().toISOString(),
+    });
+
     await verificationCodeService.sendVerificationCodeEmail({
-      email: clientApplication.contactInformation.email ?? '',
-      verificationCode: verificationCode,
+      email: verificationState.pendingEmail,
+      verificationCode: newVerificationCode,
       preferredLanguage: clientApplication.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
       userId: idToken.sub,
     });
+
     return { status: 'verification-code-sent' } as const;
   }
 
   const verificationCodeSchema = z.object({
-    verificationCode: z.string().trim().min(1, t('protected-profile:verify-email.error-message.verification-code-required')).transform(extractDigits),
+    verificationCode: z
+      .string()
+      .trim()
+      .min(1, t('protected-profile:verify-email.error-message.verification-code-required'))
+      .transform(extractDigits)
+      .superRefine((val, ctx) => {
+        if (verificationState.verificationAttempts >= MAX_ATTEMPTS) {
+          ctx.addIssue({ code: 'custom', message: t('protected-profile:verify-email.error-message.verification-code-max-attempts'), path: ['verificationCode'] });
+        }
+      }),
   });
 
   const parsedDataResult = verificationCodeSchema.safeParse({
@@ -132,10 +161,20 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  // Check if the verification code matches
-  if (clientApplication.contactInformation.email && parsedDataResult.data.verificationCode !== '12345') {
+  if (parsedDataResult.data.verificationCode !== verificationState.verificationCode) {
+    const updatedAttempts = verificationState.verificationAttempts + 1;
+
+    session.set('profileEmailVerificationState', {
+      ...verificationState,
+      verificationAttempts: updatedAttempts,
+    });
+
     return { status: 'verification-code-mismatch' } as const;
   }
+
+  // TODO: call profile-service to update email
+
+  session.unset('profileEmailVerificationState');
 
   return redirect(getPathById('protected/profile/contact-information', params));
 }
