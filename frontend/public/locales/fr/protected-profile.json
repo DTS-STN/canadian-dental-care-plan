@@ -190,5 +190,32 @@
       "heading": "Nouveau code",
       "detail": "Un nouveau code de vérification a été envoyé à {{email}}."
     }
+  },
+  "mailing-address": {
+    "page-title": "Adresse postale",
+    "address": "Adresse",
+    "address-help": "Inclure le numéro d'appartement (s'il y a lieu), le numéro municipal et le nom de la rue. Par exemple\u00a0: 123, rue Main, app. 4B",
+    "city": "Ville ou municipalité",
+    "postal-code": "Code postal",
+    "postal-code-optional": "Code postal (facultatif)",
+    "province": "Province, territoire, état ou région",
+    "country": "Pays",
+    "use-mailing-address": "Mon adresse postale est la même que mon adresse à domicile",
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
+    "select-one": "Sélectionnez une option"
+  },
+  "home-address": {
+    "page-title": "Adresse à domicile",
+    "address": "Adresse",
+    "address-help": "Inclure le numéro d'appartement (s'il y a lieu), le numéro municipal et le nom de la rue. Par exemple\u00a0: 123, rue Main, app. 4B",
+    "city": "Ville ou municipalité",
+    "postal-code": "Code postal",
+    "postal-code-optional": "Code postal (facultatif)",
+    "province": "Province, territoire, état ou région",
+    "country": "Pays",
+    "back-btn": "Retour",
+    "save-btn": "Enregistrer",
+    "select-one": "Sélectionnez une option"
   }
 }

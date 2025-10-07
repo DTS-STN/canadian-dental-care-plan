@@ -190,5 +190,32 @@
       "heading": "New verification code",
       "detail": "A new verification code has been sent to {{email}}."
     }
+  },
+  "mailing-address": {
+    "page-title": "Mailing address",
+    "address": "Address",
+    "address-help": "Include apartment number (if applicable), street number, street name. For example: 123 Main St. Suite 4B",
+    "city": "City or town",
+    "postal-code": "Postal code or ZIP code",
+    "postal-code-optional": "Postal code or ZIP code (optional)",
+    "province": "Province, territory, state, or region.",
+    "country": "Country",
+    "use-mailing-address": "My mailing address is the same as my home address",
+    "back-btn": "Back",
+    "continue-btn": "Continue",
+    "select-one": "Select one"
+  },
+  "home-address": {
+    "page-title": "Home address",
+    "address": "Address",
+    "address-help": "Include apartment number (if applicable), street number, street name. For example: 123 Main St. Suite 4B",
+    "city": "City or town",
+    "postal-code": "Postal code or ZIP code",
+    "postal-code-optional": "Postal code or ZIP code (optional)",
+    "province": "Province, territory, state, or region.",
+    "country": "Country",
+    "back-btn": "Back",
+    "save-btn": "Save",
+    "select-one": "Select one"
   }
 }

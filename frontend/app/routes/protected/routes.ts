@@ -85,6 +85,16 @@ export const routes = [
         paths: { en: '/:lang/protected/profile/contact/email-address/verify', fr: '/:lang/protege/profil/cordonnees/adresse-courriel/verifier' },
       },
       {
+        id: 'protected/profile/contact/mailing-address',
+        file: 'routes/protected/profile/mailing-address.tsx',
+        paths: { en: '/:lang/protected/profile/contact/mailing-address', fr: '/:lang/protege/profil/cordonnees/mailing-address' },
+      },
+      {
+        id: 'protected/profile/contact/home-address',
+        file: 'routes/protected/profile/home-address.tsx',
+        paths: { en: '/:lang/protected/profile/contact/home-address', fr: '/:lang/protege/profil/cordonnees/home-address' },
+      },
+      {
         file: 'routes/protected/apply/layout.tsx',
         children: [
           { id: 'protected/apply/index', file: 'routes/protected/apply/index.tsx', paths: { en: '/:lang/protected/apply', fr: '/:lang/protege/demander' } },
