@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
-import type { CommunicationPreferenceRequestDto, dentalBenefitsRequestDto, PhoneNumberRequestDto } from '~/.server/domain/dtos';
+import type { CommunicationPreferenceRequestDto, PhoneNumberRequestDto, dentalBenefitsRequestDto } from '~/.server/domain/dtos';
 import type { ProfileRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
 import type { Logger } from '~/.server/logging';

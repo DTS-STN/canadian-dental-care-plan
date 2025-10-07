@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import type { CommunicationPreferenceRequestDto, dentalBenefitsRequestDto, PhoneNumberRequestDto } from '~/.server/domain/dtos';
+import type { CommunicationPreferenceRequestDto, PhoneNumberRequestDto, dentalBenefitsRequestDto } from '~/.server/domain/dtos';
 import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
 
