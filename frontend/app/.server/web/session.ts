@@ -46,7 +46,6 @@ type SessionTypeMap = {
     pendingEmail: string;
     verificationCode: string;
     verificationAttempts: number;
-    createdAt: string;
   };
 };
 
