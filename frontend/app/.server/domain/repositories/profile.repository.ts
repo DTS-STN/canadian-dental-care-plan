@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import type { CommunicationPreferenceRequestDto, PhoneNumberRequestDto, dentalBenefitsRequestDto } from '~/.server/domain/dtos';
+import type { CommunicationPreferenceRequestDto, DentalBenefitsRequestDto, PhoneNumberRequestDto } from '~/.server/domain/dtos';
 import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
 
@@ -27,7 +27,7 @@ export interface ProfileRepository {
    * @param dentalBenefitsDto The dental benefits dto.
    * @returns A Promise that resolves when the update is complete.
    */
-  updateDentalBenefits(dentalBenefitsDto: dentalBenefitsRequestDto): Promise<void>;
+  updateDentalBenefits(dentalBenefitsDto: DentalBenefitsRequestDto): Promise<void>;
 
   /**
    * Retrieves metadata associated with the letter repository.
@@ -67,7 +67,7 @@ export class MockProfileRepository implements ProfileRepository {
     return await Promise.resolve();
   }
 
-  async updateDentalBenefits(dentalBenefitsDto: dentalBenefitsRequestDto): Promise<void> {
+  async updateDentalBenefits(dentalBenefitsDto: DentalBenefitsRequestDto): Promise<void> {
     this.log.debug('Mock updating dental benefits for request [%j]', dentalBenefitsDto);
 
     this.log.debug('Successfully mock updated dental benefits');

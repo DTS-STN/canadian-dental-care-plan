@@ -9,7 +9,7 @@ export type PhoneNumberRequestDto = Readonly<{
   phoneNumberAlt?: string;
 }>;
 
-export type dentalBenefitsRequestDto = Readonly<{
+export type DentalBenefitsRequestDto = Readonly<{
   hasFederalBenefits: boolean;
   federalSocialProgram?: string;
   hasProvincialTerritorialBenefits: boolean;

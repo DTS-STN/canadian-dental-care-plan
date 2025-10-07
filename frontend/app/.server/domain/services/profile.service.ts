@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
-import type { CommunicationPreferenceRequestDto, PhoneNumberRequestDto, dentalBenefitsRequestDto } from '~/.server/domain/dtos';
+import type { CommunicationPreferenceRequestDto, DentalBenefitsRequestDto, PhoneNumberRequestDto } from '~/.server/domain/dtos';
 import type { ProfileRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
 import type { Logger } from '~/.server/logging';
@@ -30,7 +30,7 @@ export interface ProfileService {
    * @param dentalBenefitsDto The dental benefits dto
    * @returns A Promise that resolves when the update is complete
    */
-  updateDentalBenefits(dentalBenefitsDto: dentalBenefitsRequestDto): Promise<void>;
+  updateDentalBenefits(dentalBenefitsDto: DentalBenefitsRequestDto): Promise<void>;
 }
 
 @injectable()
@@ -64,7 +64,7 @@ export class DefaultProfileService implements ProfileService {
     this.log.trace('Successfully updated phone numbers');
   }
 
-  async updateDentalBenefits(dentalBenefitsDto: dentalBenefitsRequestDto): Promise<void> {
+  async updateDentalBenefits(dentalBenefitsDto: DentalBenefitsRequestDto): Promise<void> {
     this.log.trace('Updating dental benefits for request [%j]', dentalBenefitsDto);
 
     await this.profileRepository.updateDentalBenefits(dentalBenefitsDto);
