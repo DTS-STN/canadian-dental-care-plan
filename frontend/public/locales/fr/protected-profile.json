@@ -120,7 +120,9 @@
     "error-message": {
       "preferred-language-required": "Sélectionnez la langue de communication préférée",
       "preferred-method-required": "Sélectionnez votre moyen de communication préféré avec la Sun Life",
-      "preferred-notification-method-required": "Sélectionnez votre moyen de communication préféré avec le gouvernement du Canada"
+      "preferred-notification-method-required": "Sélectionnez votre moyen de communication préféré avec le gouvernement du Canada",
+      "preferred-method-email-verified": "Une adresse courriel vérifiée est requise pour recevoir les communications de Sun Life par voie numérique.",
+      "preferred-notification-method-email-verified": "Une adresse courriel vérifiée est requise pour recevoir les communications du gouvernement du Canada par voie numérique."
     }
   },
   "phone-number": {
