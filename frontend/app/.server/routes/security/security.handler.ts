@@ -1,15 +1,19 @@
-import { data, redirectDocument } from 'react-router';
+import { data, redirect, redirectDocument } from 'react-router';
+import type { Params } from 'react-router';
 
 import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
+import type { ClientApplicationDto } from '~/.server/domain/dtos';
+import type { ClientApplicationService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
 import type { Session } from '~/.server/web/session';
 import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
 import type { FeatureName } from '~/utils/env-utils';
+import { getPathById } from '~/utils/route-utils';
 
 /**
  * Parameters for validating the RAOIDC authentication session.
@@ -64,6 +68,15 @@ export interface ValidateRequestMethodParams {
 }
 
 /**
+ * Parameters for requiring client application.
+ */
+export interface requireClientApplicationParams {
+  params: Params;
+  request: Request;
+  session: Session;
+}
+
+/**
  * Security handler interface that defines methods for validating authentication sessions, CSRF tokens, and hCaptcha responses.
  */
 export interface SecurityHandler {
@@ -111,6 +124,15 @@ export interface SecurityHandler {
    * @returns {void} Resolves if the request method is allowed.
    */
   validateRequestMethod(params: ValidateRequestMethodParams): void;
+
+  /**
+   * Ensures that the user has a client application associated with their SIN.
+   *
+   * @param params - Parameters containing the request, session, and route params.
+   * @throws {Response} Throws a redirect response if no client application is found.
+   * @returns {Promise<void>} Resolves if a client application is found.
+   */
+  requireClientApplication(params: requireClientApplicationParams): Promise<ClientApplicationDto>;
 }
 
 /**
@@ -123,18 +145,21 @@ export class DefaultSecurityHandler implements SecurityHandler {
   private readonly csrfTokenValidator: CsrfTokenValidator;
   private readonly hCaptchaValidator: HCaptchaValidator;
   private readonly raoidcSessionValidator: RaoidcSessionValidator;
+  private readonly clientApplicationService: ClientApplicationService;
 
   constructor(
     @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>,
     @inject(TYPES.CsrfTokenValidator) csrfTokenValidator: CsrfTokenValidator,
     @inject(TYPES.HCaptchaValidator) hCaptchaValidator: HCaptchaValidator,
     @inject(TYPES.RaoidcSessionValidator) raoidcSessionValidator: RaoidcSessionValidator,
+    @inject(TYPES.ClientApplicationService) clientApplicationService: ClientApplicationService,
   ) {
     this.log = createLogger('DefaultSecurityHandler');
     this.serverConfig = serverConfig;
     this.csrfTokenValidator = csrfTokenValidator;
     this.hCaptchaValidator = hCaptchaValidator;
     this.raoidcSessionValidator = raoidcSessionValidator;
+    this.clientApplicationService = clientApplicationService;
   }
 
   /**
@@ -241,5 +266,31 @@ export class DefaultSecurityHandler implements SecurityHandler {
     }
 
     this.log.debug('Request method [%s] is allowed for path [%s] with allowed methods [%s]', method, pathname, allowedMethods);
+  }
+
+  async requireClientApplication({ params, request, session }: requireClientApplicationParams): Promise<ClientApplicationDto> {
+    this.log.debug('Requiring client application for session [%s]', session.id);
+    const userInfoToken = session.find('userInfoToken').unwrapUnchecked();
+
+    if (!userInfoToken?.sin) {
+      this.log.debug("User's SIN is not available in session [%s]; redirecting to login", session.id);
+      const { pathname, searchParams } = new URL(request.url);
+      const returnTo = encodeURIComponent(`${pathname}?${searchParams}`);
+      throw redirectDocument(`/auth/login?returnto=${returnTo}`);
+    }
+    // TODO: Remove applicant year when Interop is updated to not require it
+    const clientApplicationOption = await this.clientApplicationService.findClientApplicationBySin({
+      sin: userInfoToken.sin,
+      applicationYearId: '',
+      userId: userInfoToken.sub,
+    });
+
+    if (clientApplicationOption.isNone()) {
+      this.log.debug('No client application found for SIN [%s]; session [%s]; redirecting to data unavailable', userInfoToken.sin, session.id);
+      throw redirect(getPathById('protected/data-unavailable', params));
+    }
+
+    this.log.debug('Client application found for SIN [%s]; session [%s]', userInfoToken.sin, session.id);
+    return clientApplicationOption.unwrap();
   }
 }
