@@ -121,6 +121,8 @@ export const pageIds = {
       verifyEmail: 'CDCP-PROT-PROF-0008',
       editDentalBenefits: 'CDCP-PROT-PROF-0009',
       editChildDentalBenefits: 'CDCP-PROT-PROF-0010',
+      editMailingAddress: 'CDCP-PROT-PROF-0011',
+      editHomeAddress: 'CDCP-PROT-PROF-0012',
     },
   },
   public: {
