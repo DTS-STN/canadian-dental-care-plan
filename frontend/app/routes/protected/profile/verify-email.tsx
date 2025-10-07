@@ -56,14 +56,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const verificationState = session.get('profileEmailVerificationState');
 
-  const createdAt = new Date(verificationState.createdAt);
-  const now = new Date();
-  // invalidate state if verification code is older than 30 minutes
-  if (now.getTime() - createdAt.getTime() > 30 * 60 * 1000) {
-    session.unset('profileEmailVerificationState');
-    throw redirect(getPathById('protected/profile/contact/email-address', params));
-  }
-
   return {
     meta,
     email: verificationState.pendingEmail,
@@ -83,13 +75,6 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   const verificationState = session.get('profileEmailVerificationState');
-  const createdAt = new Date(verificationState.createdAt);
-  const now = new Date();
-  // invalidate state if verification code is older than 30 minutes
-  if (now.getTime() - createdAt.getTime() > 30 * 60 * 1000) {
-    session.unset('profileEmailVerificationState');
-    throw redirect(getPathById('protected/profile/contact/email-address', params));
-  }
 
   const userInfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sub, 'Expected userInfoToken.sub to be defined');
@@ -109,7 +94,6 @@ export async function action({ context: { appContainer, session }, params, reque
       ...verificationState,
       verificationCode: newVerificationCode,
       verificationAttempts: 0,
-      createdAt: new Date().toISOString(),
     });
 
     await verificationCodeService.sendVerificationCodeEmail({

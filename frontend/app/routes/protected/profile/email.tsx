@@ -92,7 +92,6 @@ export async function action({ context: { appContainer, session }, params, reque
       pendingEmail: parsedDataResult.data.email,
       verificationCode,
       verificationAttempts: 0,
-      createdAt: new Date().toISOString(),
     });
 
     await verificationCodeService.sendVerificationCodeEmail({
