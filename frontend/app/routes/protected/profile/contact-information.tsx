@@ -1,20 +1,15 @@
-import { redirect } from 'react-router';
-
-import { invariant } from '@dts-stn/invariant';
 import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/contact-information';
 
 import { TYPES } from '~/.server/constants';
-import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
-import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
-import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -28,28 +23,10 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
+  const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
-
-  const userInfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
-
-  const currentDate = getCurrentDateString(locale);
-  const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
-  const applicationYear = applicationYearService.getRenewalApplicationYear(currentDate);
-
-  const clientApplicationService = appContainer.get(TYPES.ClientApplicationService);
-  const clientApplicationResult = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.applicationYearId, userId: userInfoToken.sub });
-
-  if (clientApplicationResult.isNone()) {
-    throw redirect(getPathById('protected/data-unavailable', params));
-  }
-
-  const clientApplication = clientApplicationResult.unwrap();
-
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:contact-information.page-title') }) };
-
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   return {

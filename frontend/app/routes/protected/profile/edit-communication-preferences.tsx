@@ -1,6 +1,5 @@
 import { data, redirect, useFetcher } from 'react-router';
 
-import { invariant } from '@dts-stn/invariant';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -16,7 +15,6 @@ import { InputRadios } from '~/components/input-radios';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -37,25 +35,10 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
+  const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-
-  const userInfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
-
-  const currentDate = getCurrentDateString(locale);
-  const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
-  const applicationYear = applicationYearService.getRenewalApplicationYear(currentDate);
-
-  const clientApplicationService = appContainer.get(TYPES.ClientApplicationService);
-  const clientApplicationResult = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.applicationYearId, userId: userInfoToken.sub });
-
-  if (clientApplicationResult.isNone()) {
-    throw redirect(getPathById('protected/data-unavailable', params));
-  }
-
-  const clientApplication = clientApplicationResult.unwrap();
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:edit-communication-preferences.page-title') }) };
 
@@ -79,25 +62,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
+  const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
-
-  const userInfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
-
-  const currentDate = getCurrentDateString(locale);
-  const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
-  const applicationYear = applicationYearService.getRenewalApplicationYear(currentDate);
-
-  const clientApplicationService = appContainer.get(TYPES.ClientApplicationService);
-  const clientApplicationResult = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.applicationYearId, userId: userInfoToken.sub });
-
-  if (clientApplicationResult.isNone()) {
-    throw redirect(getPathById('protected/data-unavailable', params));
-  }
-
-  const clientApplication = clientApplicationResult.unwrap();
 
   const formSchema = z.object({
     preferredLanguage: z.string().trim().min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-language-required')),
