@@ -1,12 +1,16 @@
+import { None, Some } from 'oxide.ts';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { MockProxy } from 'vitest-mock-extended';
-import { mock } from 'vitest-mock-extended';
+import { anyObject, mock } from 'vitest-mock-extended';
 
+import type { ClientApplicationDto } from '~/.server/domain/dtos';
+import type { ClientApplicationService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { DefaultSecurityHandler } from '~/.server/routes/security';
 import type { ValidateRequestMethodParams } from '~/.server/routes/security';
 import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
+import type { UserinfoToken } from '~/.server/utils/raoidc.utils';
 import type { Session } from '~/.server/web/session';
 import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
 import type { FeatureName } from '~/utils/env-utils';
@@ -18,6 +22,7 @@ describe('DefaultSecurityHandler', () => {
   let mockCsrfTokenValidator: MockProxy<CsrfTokenValidator>;
   let mockHCaptchaValidator: MockProxy<HCaptchaValidator>;
   let mockRaoidcSessionValidator: MockProxy<RaoidcSessionValidator>;
+  let mockClientApplicationService: MockProxy<ClientApplicationService>;
   let securityHandler: DefaultSecurityHandler;
 
   beforeEach(() => {
@@ -27,6 +32,7 @@ describe('DefaultSecurityHandler', () => {
     mockCsrfTokenValidator = mock<CsrfTokenValidator>();
     mockHCaptchaValidator = mock<HCaptchaValidator>();
     mockRaoidcSessionValidator = mock<RaoidcSessionValidator>();
+    mockClientApplicationService = mock<ClientApplicationService>();
 
     // Creating an instance of DefaultSecurityHandler with the mocked dependencies
     securityHandler = new DefaultSecurityHandler(
@@ -34,6 +40,7 @@ describe('DefaultSecurityHandler', () => {
       mockCsrfTokenValidator,
       mockHCaptchaValidator,
       mockRaoidcSessionValidator,
+      mockClientApplicationService,
     );
   });
 
@@ -123,6 +130,7 @@ describe('DefaultSecurityHandler', () => {
         mockCsrfTokenValidator,
         mockHCaptchaValidator,
         mockRaoidcSessionValidator,
+        mockClientApplicationService,
       );
 
       expect(() => securityHandler.validateFeatureEnabled(feature)).toThrow(
@@ -142,6 +150,7 @@ describe('DefaultSecurityHandler', () => {
         mockCsrfTokenValidator,
         mockHCaptchaValidator,
         mockRaoidcSessionValidator,
+        mockClientApplicationService,
       );
 
       expect(() => securityHandler.validateFeatureEnabled(feature)).not.toThrow();
@@ -179,6 +188,7 @@ describe('DefaultSecurityHandler', () => {
         mockCsrfTokenValidator,
         mockHCaptchaValidator,
         mockRaoidcSessionValidator,
+        mockClientApplicationService,
       );
 
       const mockFormData = mock<FormData>();
@@ -251,6 +261,71 @@ describe('DefaultSecurityHandler', () => {
 
       expect(mockLogger.debug).toHaveBeenCalledWith('Validating request method [%s] for path [%s] with allowed methods [%s]', 'PUT', '/test', allowedMethods);
       expect(mockLogger.warn).toHaveBeenCalledWith('Request method [%s] is not allowed for path [%s] with allowed methods [%s]; returning 405 response', 'PUT', '/test', allowedMethods);
+    });
+  });
+
+  describe('requireClientApplication', () => {
+    it('should throw redirect to auth/login if the session does not contain a userInfoToken or sin', async () => {
+      const mockSession = mock<Session>();
+      mockSession.id = 'session-id';
+      mockSession.find.calledWith('userInfoToken').mockReturnValue(None);
+
+      const mockRequest = mock<Request>({ url: 'https://localhost:3000/en/protected-page' });
+      const params = { lang: 'en' };
+
+      try {
+        await securityHandler.requireClientApplication({ request: mockRequest, params, session: mockSession });
+      } catch (error) {
+        expect(error).toBeInstanceOf(Response);
+        expect((error as Response).status).toBe(302);
+        expect((error as Response).headers.get('Location')).toBe('/auth/login?returnto=%2Fen%2Fprotected-page%3F');
+      }
+    });
+
+    it('should throw a redirect response to data-unavailable if no client application is found', async () => {
+      const mockSession = mock<Session>();
+      mockSession.id = 'session-id';
+      const userInfoToken = mock<UserinfoToken>({ sin: '123456789', sub: 'user-id' });
+      mockSession.find.calledWith('userInfoToken').mockReturnValue(Some(userInfoToken));
+
+      const mockRequest = mock<Request>({ url: 'https://localhost:3000/en/protected-page' });
+      const params = { lang: 'en' };
+
+      mockClientApplicationService.findClientApplicationBySin.calledWith(anyObject({ sin: '123456789', applicationYearId: '', sub: 'user-id' })).mockResolvedValueOnce(None);
+
+      try {
+        await securityHandler.requireClientApplication({ request: mockRequest, params, session: mockSession });
+      } catch (error) {
+        expect(error).toBeInstanceOf(Response);
+        expect((error as Response).status).toBe(302);
+        expect((error as Response).headers.get('Location')).toBe('/en/protected/data-unavailable');
+      }
+    });
+
+    it('should return the client application if found', async () => {
+      const mockSession = mock<Session>();
+      mockSession.id = 'session-id';
+      const userInfoToken = mock<UserinfoToken>({ sin: '123456789', sub: 'user-id' });
+      mockSession.find.calledWith('userInfoToken').mockReturnValue(Some(userInfoToken));
+
+      const mockRequest = mock<Request>({ url: 'https://localhost:3000/en/protected-page' });
+      const params = { lang: 'en' };
+
+      const mockClientApplication = mock<ClientApplicationDto>({
+        applicantInformation: {
+          firstName: 'John',
+          lastName: 'Doe',
+          clientId: 'client-id',
+          clientNumber: 'client-number',
+          maritalStatus: 'single',
+          socialInsuranceNumber: '123456789',
+        },
+      });
+
+      mockClientApplicationService.findClientApplicationBySin.calledWith(anyObject({ sin: '123456789', applicationYearId: '', sub: 'user-id' })).mockResolvedValue(Some(mockClientApplication));
+
+      const clientApplication = await securityHandler.requireClientApplication({ request: mockRequest, params, session: mockSession });
+      expect(clientApplication).toBe(mockClientApplication);
     });
   });
 });

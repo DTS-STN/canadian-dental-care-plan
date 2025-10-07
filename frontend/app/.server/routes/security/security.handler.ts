@@ -1,15 +1,19 @@
-import { data, redirectDocument } from 'react-router';
+import { data, redirect, redirectDocument } from 'react-router';
+import type { Params } from 'react-router';
 
 import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
+import type { ClientApplicationDto } from '~/.server/domain/dtos';
+import type { ClientApplicationService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
 import type { Session } from '~/.server/web/session';
 import type { CsrfTokenValidator, HCaptchaValidator, RaoidcSessionValidator } from '~/.server/web/validators';
 import type { FeatureName } from '~/utils/env-utils';
+import { getPathById } from '~/utils/route-utils';
 
 /**
  * Parameters for validating the RAOIDC authentication session.
@@ -64,6 +68,15 @@ export interface ValidateRequestMethodParams {
 }
 
 /**
+ * Parameters for requiring client application.
+ */
+export interface requireClientApplicationParams {
+  params: Params;
+  request: Request;
+  session: Session;
+}
+
+/**
  * Security handler interface that defines methods for validating authentication sessions, CSRF tokens, and hCaptcha responses.
  */
 export interface SecurityHandler {
@@ -71,8 +84,8 @@ export interface SecurityHandler {
    * Validates the RAOIDC authentication session.
    *
    * @param params - Parameters containing the session and request URL.
-   * @throws {Response} Throws a redirect response if the session is invalid.
-   * @returns {Promise<void>} Resolves if the session is valid.
+   * @throws Throws a redirect response if the session is invalid.
+   * @returns Resolves if the session is valid.
    */
   validateAuthSession(params: ValidateAuthSessionParams): Promise<void>;
 
@@ -80,8 +93,8 @@ export interface SecurityHandler {
    * Validates the CSRF token in the request.
    *
    * @param params - Parameters containing the CSRF token from the request and session.
-   * @throws {Response} Throws a 403 Forbidden response if the CSRF token is invalid.
-   * @returns {void} Resolves if the token is valid.
+   * @throws Throws a 403 Forbidden response if the CSRF token is invalid.
+   * @returns Resolves if the token is valid.
    */
   validateCsrfToken(params: ValidateCsrfTokenParams): void;
 
@@ -89,8 +102,8 @@ export interface SecurityHandler {
    * Validates that a given feature is enabled.
    *
    * @param feature - The feature to validate.
-   * @throws {Response} Throws a 404 Not Found response if the feature is not enabled.
-   * @returns {void} Resolves if the feature is enabled.
+   * @throws Throws a 404 Not Found response if the feature is not enabled.
+   * @returns Resolves if the feature is enabled.
    */
   validateFeatureEnabled(feature: FeatureName): void;
 
@@ -99,7 +112,7 @@ export interface SecurityHandler {
    *
    * @param params - Parameters containing the hCaptcha response and an optional callback for invalid responses.
    * @param invalidHCaptchaCallback - Callback function invoked if hCaptcha validation fails.
-   * @returns {Promise<void>} Resolves after validation is complete.
+   * @returns Resolves after validation is complete.
    */
   validateHCaptchaResponse(params: ValidateHCaptchaResponseParams, invalidHCaptchaCallback: InvalidHCaptchaCallback): Promise<void>;
 
@@ -107,10 +120,19 @@ export interface SecurityHandler {
    * Validates the request method against a list of allowed methods.
    *
    * @param params - Parameters containing the allowed methods and the incoming request.
-   * @throws {Response} Throws a 405 Method Not Allowed response if the request method is not allowed.
-   * @returns {void} Resolves if the request method is allowed.
+   * @throws Throws a 405 Method Not Allowed response if the request method is not allowed.
+   * @returns Resolves if the request method is allowed.
    */
   validateRequestMethod(params: ValidateRequestMethodParams): void;
+
+  /**
+   * Ensures that the user has a client application associated with their SIN.
+   *
+   * @param params - Parameters containing the request, session, and route params.
+   * @throws Throws a redirect response if no client application is found.
+   * @returns Resolves if a client application is found.
+   */
+  requireClientApplication(params: requireClientApplicationParams): Promise<ClientApplicationDto>;
 }
 
 /**
@@ -123,18 +145,21 @@ export class DefaultSecurityHandler implements SecurityHandler {
   private readonly csrfTokenValidator: CsrfTokenValidator;
   private readonly hCaptchaValidator: HCaptchaValidator;
   private readonly raoidcSessionValidator: RaoidcSessionValidator;
+  private readonly clientApplicationService: ClientApplicationService;
 
   constructor(
     @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>,
     @inject(TYPES.CsrfTokenValidator) csrfTokenValidator: CsrfTokenValidator,
     @inject(TYPES.HCaptchaValidator) hCaptchaValidator: HCaptchaValidator,
     @inject(TYPES.RaoidcSessionValidator) raoidcSessionValidator: RaoidcSessionValidator,
+    @inject(TYPES.ClientApplicationService) clientApplicationService: ClientApplicationService,
   ) {
     this.log = createLogger('DefaultSecurityHandler');
     this.serverConfig = serverConfig;
     this.csrfTokenValidator = csrfTokenValidator;
     this.hCaptchaValidator = hCaptchaValidator;
     this.raoidcSessionValidator = raoidcSessionValidator;
+    this.clientApplicationService = clientApplicationService;
   }
 
   /**
@@ -241,5 +266,31 @@ export class DefaultSecurityHandler implements SecurityHandler {
     }
 
     this.log.debug('Request method [%s] is allowed for path [%s] with allowed methods [%s]', method, pathname, allowedMethods);
+  }
+
+  async requireClientApplication({ params, request, session }: requireClientApplicationParams): Promise<ClientApplicationDto> {
+    this.log.debug('Requiring client application for session [%s]', session.id);
+    const userInfoToken = session.find('userInfoToken').unwrapUnchecked();
+
+    if (!userInfoToken?.sin) {
+      this.log.debug("User's SIN is not available in session [%s]; redirecting to login", session.id);
+      const { pathname, searchParams } = new URL(request.url);
+      const returnTo = encodeURIComponent(`${pathname}?${searchParams}`);
+      throw redirectDocument(`/auth/login?returnto=${returnTo}`);
+    }
+    // TODO: Remove applicant year when Interop is updated to not require it
+    const clientApplicationOption = await this.clientApplicationService.findClientApplicationBySin({
+      sin: userInfoToken.sin,
+      applicationYearId: '',
+      userId: userInfoToken.sub,
+    });
+
+    if (clientApplicationOption.isNone()) {
+      this.log.debug('No client application found for SIN [%s]; session [%s]; redirecting to data unavailable', userInfoToken.sin, session.id);
+      throw redirect(getPathById('protected/data-unavailable', params));
+    }
+
+    this.log.debug('Client application found for SIN [%s]; session [%s]', userInfoToken.sin, session.id);
+    return clientApplicationOption.unwrap();
   }
 }
