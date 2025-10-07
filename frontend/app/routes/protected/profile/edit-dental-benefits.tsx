@@ -108,6 +108,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     provincialTerritorialSocialPrograms,
     provinceTerritoryStates,
     applicantName,
+    i18nOptions: { applicantName },
   };
 }
 
