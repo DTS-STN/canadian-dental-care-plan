@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
@@ -12,12 +11,9 @@ import type { Route } from './+types/edit-child-dental-benefits';
 
 import { TYPES } from '~/.server/constants';
 import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/apply-route-helpers';
-import { loadProtectedApplyChildState, loadProtectedApplySingleChildState } from '~/.server/routes/helpers/protected-apply-child-route-helpers';
-import { saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
-import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
-import { Button, ButtonLink } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
@@ -89,15 +85,32 @@ export async function loader({ context: { appContainer, session }, params, reque
   const provincialTerritorialSocialPrograms = await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
   const regions = allRegions.filter(({ countryId }) => countryId === CANADA_COUNTRY_ID);
 
+  let federalProgram;
+  let provincialTerritorialProgram;
+
+  if (child) {
+    for (const benefitId of child.dentalBenefits) {
+      const federal = federalSocialPrograms.find((program) => program.id === benefitId);
+      if (federal) {
+        federalProgram = federal;
+        continue;
+      }
+      const provincial = provincialTerritorialSocialPrograms.find((program) => program.id === benefitId);
+      if (provincial) {
+        provincialTerritorialProgram = provincial;
+      }
+    }
+  }
+
   const childName = child?.information.firstName;
 
   const meta = {
     title: t('gcweb:meta.title.template', { title: t('protected-profile:edit-child-dental-benefits.title', { childName }) }),
   };
-  const idToken: IdToken = session.get('idToken');
-  appContainer.get(TYPES.AuditService).createAudit('page-view.apply.child.children.federal-provincial-territorial-benefits', { userId: idToken.sub });
 
   return {
+    federalProgram,
+    provincialTerritorialProgram,
     federalSocialPrograms,
     meta,
     provincialTerritorialSocialPrograms,
@@ -183,18 +196,20 @@ export async function action({ context: { appContainer, session }, params, reque
       { status: 400 },
     );
   }
+
+  // TODO: call service to update dental benefits for the child
 }
 
 export default function AccessToDentalInsuranceQuestion({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { federalSocialPrograms, provincialTerritorialSocialPrograms, regions, defaultState, editMode, childName } = loaderData;
+  const { federalSocialPrograms, provincialTerritorialSocialPrograms, regions, childName, federalProgram, provincialTerritorialProgram } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [hasFederalBenefitValue, setHasFederalBenefitValue] = useState(defaultState?.hasFederalBenefits);
-  const [hasProvincialTerritorialBenefitValue, setHasProvincialTerritorialBenefitValue] = useState(defaultState?.hasProvincialTerritorialBenefits);
-  const [provincialTerritorialSocialProgramValue, setProvincialTerritorialSocialProgramValue] = useState(defaultState?.provincialTerritorialSocialProgram);
-  const [provinceValue, setProvinceValue] = useState(defaultState?.province);
+  const [hasFederalBenefitValue, setHasFederalBenefitValue] = useState(federalProgram !== undefined);
+  const [hasProvincialTerritorialBenefitValue, setHasProvincialTerritorialBenefitValue] = useState(provincialTerritorialProgram !== undefined);
+  const [provincialTerritorialSocialProgramValue, setProvincialTerritorialSocialProgramValue] = useState(provincialTerritorialProgram?.id);
+  const [provinceValue, setProvinceValue] = useState(provincialTerritorialProgram?.provinceTerritoryStateId);
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
@@ -258,7 +273,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                       legendClassName="font-normal"
                       options={federalSocialPrograms.map((option) => ({
                         children: option.name,
-                        defaultChecked: defaultState?.federalSocialProgram === option.id,
+                        defaultChecked: federalProgram?.id === option.id,
                         value: option.id,
                       }))}
                       errorMessage={errors?.federalSocialProgram}
@@ -287,7 +302,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-child-dental-benefits.provincial-territorial-benefits.option-yes" />,
                   value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes,
-                  defaultChecked: defaultState?.hasProvincialTerritorialBenefits === true,
+                  defaultChecked: provincialTerritorialProgram !== undefined,
                   onChange: handleOnHasProvincialTerritorialBenefitChanged,
                   append: hasProvincialTerritorialBenefitValue === true && (
                     <div className="space-y-6">
@@ -333,7 +348,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-child-dental-benefits.provincial-territorial-benefits.option-no" />,
                   value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.no,
-                  defaultChecked: defaultState?.hasProvincialTerritorialBenefits === false,
+                  defaultChecked: provincialTerritorialProgram === undefined,
                   onChange: handleOnHasProvincialTerritorialBenefitChanged,
                 },
               ]}
@@ -341,53 +356,27 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
               required
             />
           </fieldset>
-          {editMode ? (
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button
-                variant="primary"
-                id="save-button"
-                name="_action"
-                value={FORM_ACTION.save}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Save - Child access to other federal, provincial or territorial dental benefits click"
-              >
-                {t('protected-profile:edit-child-dental-benefits.button.save-btn')}
-              </Button>
-              <LoadingButton
-                id="cancel-button"
-                name="_action"
-                value={FORM_ACTION.cancel}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - Child access to other federal, provincial or territorial dental benefits click"
-              >
-                {t('protected-profile:edit-child-dental-benefits.button.cancel-btn')}
-              </LoadingButton>
-            </div>
-          ) : (
-            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton
-                variant="primary"
-                id="continue-button"
-                name="_action"
-                value={FORM_ACTION.continue}
-                loading={isSubmitting}
-                endIcon={faChevronRight}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Continue - Child access to other federal, provincial or territorial dental benefits click"
-              >
-                {t('protected-profile:edit-child-dental-benefits.button.continue')}
-              </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                routeId="protected/apply/$id/child/children/$childId/confirm-federal-provincial-territorial-benefits"
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Back - Child access to other federal, provincial or territorial dental benefits click"
-              >
-                {t('protected-profile:edit-child-dental-benefits.button.back')}
-              </ButtonLink>
-            </div>
-          )}
+          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton
+              variant="primary"
+              id="save-button"
+              name="_action"
+              value={FORM_ACTION.save}
+              loading={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Continue - Access to other dental benefits click"
+            >
+              {t('protected-profile:edit-dental-benefits.button.save-btn')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              routeId="protected/profile/dental-benefits"
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Back - Access to other dental benefits click"
+            >
+              {t('protected-profile:edit-dental-benefits.button.back')}
+            </ButtonLink>
+          </div>
         </fetcher.Form>
       </div>
     </>

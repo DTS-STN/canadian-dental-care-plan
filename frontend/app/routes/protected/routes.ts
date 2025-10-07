@@ -50,7 +50,7 @@ export const routes = [
         paths: { en: '/:lang/protected/profile/dental-benefits/edit', fr: '/:lang/protege/profil/prestations-dentaires/modifier' },
       },
       {
-        id: '/protected/profile/dental-benefits/:childId/edit',
+        id: 'protected/profile/dental-benefits/:childId/edit',
         file: 'routes/protected/profile/edit-child-dental-benefits.tsx',
         paths: { en: '/:lang/protected/profile/dental-benefits/:childId/edit', fr: '/:lang/protege/profil/prestations-dentaires/:childId/modifier' },
       },
