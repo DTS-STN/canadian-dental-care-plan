@@ -9,8 +9,7 @@ import { z } from 'zod';
 import type { Route } from './+types/verify-email';
 
 import { TYPES } from '~/.server/constants';
-import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
-import type { IdToken } from '~/.server/utils/raoidc.utils';
+import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -21,7 +20,6 @@ import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -47,6 +45,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
+  await securityHandler.requireClientApplication({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:verify-email.page-title') }) };
@@ -72,6 +71,13 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const formData = await request.formData();
+
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+  securityHandler.validateCsrfToken({ formData, session });
+  const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
+
   if (!session.has('profileEmailVerificationState')) {
     throw redirect(getPathById('protected/profile/contact/email-address', params));
   }
@@ -85,37 +91,13 @@ export async function action({ context: { appContainer, session }, params, reque
     throw redirect(getPathById('protected/profile/contact/email-address', params));
   }
 
-  const formData = await request.formData();
-
-  const securityHandler = appContainer.get(TYPES.SecurityHandler);
-  await securityHandler.validateAuthSession({ request, session });
-  securityHandler.validateCsrfToken({ formData, session });
-
   const userInfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sub, 'Expected userInfoToken.sub to be defined');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  const idToken: IdToken = session.get('idToken');
+  const idToken = session.get('idToken');
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.ServerConfig);
-
-  const locale = getLocale(request);
-  const currentDate = getCurrentDateString(locale);
-  const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
-  const applicationYear = applicationYearService.getRenewalApplicationYear(currentDate);
-
-  const clientApplicationService = appContainer.get(TYPES.ClientApplicationService);
-  const clientApplicationResult = await clientApplicationService.findClientApplicationBySin({
-    sin: userInfoToken.sin,
-    applicationYearId: applicationYear.applicationYearId,
-    userId: userInfoToken.sub,
-  });
-
-  if (clientApplicationResult.isNone()) {
-    throw redirect(getPathById('protected/data-unavailable', params));
-  }
-
-  const clientApplication = clientApplicationResult.unwrap();
 
   const verificationCodeService = appContainer.get(TYPES.VerificationCodeService);
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));

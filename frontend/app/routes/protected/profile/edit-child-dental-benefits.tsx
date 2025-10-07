@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
-import { invariant } from '@dts-stn/invariant';
 import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
@@ -21,7 +20,6 @@ import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
-import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -56,31 +54,16 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
-
-  const userInfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
-
-  const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
-
-  const currentDate = getCurrentDateString(locale);
-  const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
-  const applicationYear = applicationYearService.getRenewalApplicationYear(currentDate);
-
-  const clientApplicationService = appContainer.get(TYPES.ClientApplicationService);
-  const clientApplicationResult = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.applicationYearId, userId: userInfoToken.sub });
-
-  if (clientApplicationResult.isNone()) {
-    throw redirect(getPathById('protected/data-unavailable', params));
-  }
-
-  const clientApplication = clientApplicationResult.unwrap();
+  const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
   const child = clientApplication.children.find((child) => child.information.clientId === params.childId);
 
   if (!child) {
     throw data('Not Found', { status: 404 });
   }
+
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
 
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
 
@@ -123,12 +106,18 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.SecurityHandler);
-  await securityHandler.validateAuthSession({ request, session });
-
   const formData = await request.formData();
 
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
+  const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
+
+  const child = clientApplication.children.find((child) => child.information.clientId === params.childId);
+
+  if (!child) {
+    throw data('Not Found', { status: 404 });
+  }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
