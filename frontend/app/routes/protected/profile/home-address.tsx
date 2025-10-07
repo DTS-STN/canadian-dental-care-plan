@@ -71,7 +71,7 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.country);
+  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.country ?? CANADA_COUNTRY_ID);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
 
   //TODO: hook in errors from action when available
