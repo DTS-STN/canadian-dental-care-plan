@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import type { CommunicationPreferenceRequestDto, DentalBenefitsRequestDto, PhoneNumberRequestDto } from '~/.server/domain/dtos';
+import type { CommunicationPreferenceRequestDto, DentalBenefitsRequestDto, EmailAddressRequestDto, PhoneNumberRequestDto } from '~/.server/domain/dtos';
 import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
 
@@ -20,6 +20,14 @@ export interface ProfileRepository {
    * @returns A Promise that resolves when the update is complete.
    */
   updatePhoneNumbers(PhoneNumberDto: PhoneNumberRequestDto): Promise<void>;
+
+  /**
+   * Updates email address for a user.
+   *
+   * @param emailAddressDto The email address dto.
+   * @returns A Promise that resolves when the update is complete.
+   */
+  updateEmailAddress(emailAddressDto: EmailAddressRequestDto): Promise<void>;
 
   /**
    * Updates dental benefits for a user.
@@ -71,6 +79,13 @@ export class MockProfileRepository implements ProfileRepository {
     this.log.debug('Mock updating dental benefits for request [%j]', dentalBenefitsDto);
 
     this.log.debug('Successfully mock updated dental benefits');
+    return await Promise.resolve();
+  }
+
+  async updateEmailAddress(emailAddressDto: EmailAddressRequestDto): Promise<void> {
+    this.log.debug('Mock updating email address for request [%j]', emailAddressDto);
+
+    this.log.debug('Successfully mock updated email address');
     return await Promise.resolve();
   }
 

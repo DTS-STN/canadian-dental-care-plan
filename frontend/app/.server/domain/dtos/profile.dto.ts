@@ -16,3 +16,7 @@ export type DentalBenefitsRequestDto = Readonly<{
   provincialTerritorialSocialProgram?: string;
   province?: string;
 }>;
+
+export type EmailAddressRequestDto = Readonly<{
+  email: string;
+}>;
