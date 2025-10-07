@@ -84,8 +84,8 @@ export interface SecurityHandler {
    * Validates the RAOIDC authentication session.
    *
    * @param params - Parameters containing the session and request URL.
-   * @throws {Response} Throws a redirect response if the session is invalid.
-   * @returns {Promise<void>} Resolves if the session is valid.
+   * @throws Throws a redirect response if the session is invalid.
+   * @returns Resolves if the session is valid.
    */
   validateAuthSession(params: ValidateAuthSessionParams): Promise<void>;
 
@@ -93,8 +93,8 @@ export interface SecurityHandler {
    * Validates the CSRF token in the request.
    *
    * @param params - Parameters containing the CSRF token from the request and session.
-   * @throws {Response} Throws a 403 Forbidden response if the CSRF token is invalid.
-   * @returns {void} Resolves if the token is valid.
+   * @throws Throws a 403 Forbidden response if the CSRF token is invalid.
+   * @returns Resolves if the token is valid.
    */
   validateCsrfToken(params: ValidateCsrfTokenParams): void;
 
@@ -102,8 +102,8 @@ export interface SecurityHandler {
    * Validates that a given feature is enabled.
    *
    * @param feature - The feature to validate.
-   * @throws {Response} Throws a 404 Not Found response if the feature is not enabled.
-   * @returns {void} Resolves if the feature is enabled.
+   * @throws Throws a 404 Not Found response if the feature is not enabled.
+   * @returns Resolves if the feature is enabled.
    */
   validateFeatureEnabled(feature: FeatureName): void;
 
@@ -112,7 +112,7 @@ export interface SecurityHandler {
    *
    * @param params - Parameters containing the hCaptcha response and an optional callback for invalid responses.
    * @param invalidHCaptchaCallback - Callback function invoked if hCaptcha validation fails.
-   * @returns {Promise<void>} Resolves after validation is complete.
+   * @returns Resolves after validation is complete.
    */
   validateHCaptchaResponse(params: ValidateHCaptchaResponseParams, invalidHCaptchaCallback: InvalidHCaptchaCallback): Promise<void>;
 
@@ -120,8 +120,8 @@ export interface SecurityHandler {
    * Validates the request method against a list of allowed methods.
    *
    * @param params - Parameters containing the allowed methods and the incoming request.
-   * @throws {Response} Throws a 405 Method Not Allowed response if the request method is not allowed.
-   * @returns {void} Resolves if the request method is allowed.
+   * @throws Throws a 405 Method Not Allowed response if the request method is not allowed.
+   * @returns Resolves if the request method is allowed.
    */
   validateRequestMethod(params: ValidateRequestMethodParams): void;
 
@@ -129,8 +129,8 @@ export interface SecurityHandler {
    * Ensures that the user has a client application associated with their SIN.
    *
    * @param params - Parameters containing the request, session, and route params.
-   * @throws {Response} Throws a redirect response if no client application is found.
-   * @returns {Promise<void>} Resolves if a client application is found.
+   * @throws Throws a redirect response if no client application is found.
+   * @returns Resolves if a client application is found.
    */
   requireClientApplication(params: requireClientApplicationParams): Promise<ClientApplicationDto>;
 }
