@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+export function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   //TODO: update action for address verification
   return redirect(getPathById('protected/profile/contact-information', params));
 }
@@ -73,7 +73,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.country ?? CANADA_COUNTRY_ID);
+  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.country);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
   const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState.copyMailing === true);
 
