@@ -78,6 +78,10 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const child = clientApplication.children.find((child) => child.information.clientId === params.childId);
 
+  if (!child) {
+    throw data('Not Found', { status: 404 });
+  }
+
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
 
   const federalSocialPrograms = await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
@@ -88,17 +92,15 @@ export async function loader({ context: { appContainer, session }, params, reque
   let federalProgram;
   let provincialTerritorialProgram;
 
-  if (child) {
-    for (const benefitId of child.dentalBenefits) {
-      const federal = federalSocialPrograms.find((program) => program.id === benefitId);
-      if (federal) {
-        federalProgram = federal;
-        continue;
-      }
-      const provincial = provincialTerritorialSocialPrograms.find((program) => program.id === benefitId);
-      if (provincial) {
-        provincialTerritorialProgram = provincial;
-      }
+  for (const benefitId of child.dentalBenefits) {
+    const federal = federalSocialPrograms.find((program) => program.id === benefitId);
+    if (federal) {
+      federalProgram = federal;
+      continue;
+    }
+    const provincial = provincialTerritorialSocialPrograms.find((program) => program.id === benefitId);
+    if (provincial) {
+      provincialTerritorialProgram = provincial;
     }
   }
 
