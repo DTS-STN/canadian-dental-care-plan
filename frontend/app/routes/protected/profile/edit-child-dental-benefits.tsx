@@ -199,7 +199,8 @@ export async function action({ context: { appContainer, session }, params, reque
     );
   }
 
-  // TODO: call service to update dental benefits for the child
+  await appContainer.get(TYPES.ProfileService).updateDentalBenefits({ ...parsedFederalBenefitsResult.data, ...parsedProvincialTerritorialBenefitsResult.data });
+  return redirect(getPathById('protected/profile/dental-benefits', params));
 }
 
 export default function AccessToDentalInsuranceQuestion({ loaderData, params }: Route.ComponentProps) {
