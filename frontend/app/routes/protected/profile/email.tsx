@@ -9,6 +9,7 @@ import type { Route } from './+types/email';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -69,7 +70,31 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
+  const userInfoToken = session.get('userInfoToken');
+  invariant(userInfoToken.sub, 'Expected userInfoToken.sub to be defined');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.ServerConfig);
+  const idToken: IdToken = session.get('idToken');
+
+  const locale = getLocale(request);
+  const currentDate = getCurrentDateString(locale);
+  const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
+  const applicationYear = applicationYearService.getRenewalApplicationYear(currentDate);
+
+  const clientApplicationService = appContainer.get(TYPES.ClientApplicationService);
+  const clientApplicationResult = await clientApplicationService.findClientApplicationBySin({
+    sin: userInfoToken.sin,
+    applicationYearId: applicationYear.applicationYearId,
+    userId: userInfoToken.sub,
+  });
+
+  if (clientApplicationResult.isNone()) {
+    throw redirect(getPathById('protected/data-unavailable', params));
+  }
+
+  const clientApplication = clientApplicationResult.unwrap();
 
   const emailSchema = z
     .object({
@@ -79,7 +104,6 @@ export async function action({ context: { appContainer, session }, params, reque
         .min(1)
         .max(64),
     })
-
     .superRefine((val, ctx) => {
       if (!validator.isEmail(val.email)) {
         ctx.addIssue({ code: 'custom', message: t('protected-profile:email.error-message.email-valid'), path: ['email'] });
@@ -94,9 +118,31 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  //TODO: handle send verification code
+  // TODO: check if existing email is verified otherwise we must verify it
+  const isNewEmail = clientApplication.contactInformation.email !== parsedDataResult.data.email;
 
-  return redirect(getPathById('protected/profile/contact/email-address/verify', params));
+  if (isNewEmail) {
+    const verificationCodeService = appContainer.get(TYPES.VerificationCodeService);
+    const verificationCode = verificationCodeService.createVerificationCode(idToken.sub);
+
+    session.set('profileEmailVerificationState', {
+      pendingEmail: parsedDataResult.data.email,
+      verificationCode,
+      verificationAttempts: 0,
+      createdAt: new Date().toISOString(),
+    });
+
+    await verificationCodeService.sendVerificationCodeEmail({
+      email: parsedDataResult.data.email,
+      verificationCode,
+      preferredLanguage: clientApplication.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
+      userId: idToken.sub,
+    });
+
+    return redirect(getPathById('protected/profile/contact/email-address/verify', params));
+  }
+
+  return redirect(getPathById('protected/profile/contact-information', params));
 }
 
 export default function ProtectedProfileEmailAddress({ loaderData, params }: Route.ComponentProps) {

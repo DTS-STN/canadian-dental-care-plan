@@ -42,6 +42,12 @@ type SessionTypeMap = {
   lastAccessTime: string;
   letters: ReadonlyArray<LetterDto>;
   userInfoToken: UserinfoToken;
+  profileEmailVerificationState: {
+    pendingEmail: string;
+    verificationCode: string;
+    verificationAttempts: number;
+    createdAt: string;
+  };
 };
 
 /**
