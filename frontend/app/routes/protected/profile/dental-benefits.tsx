@@ -123,7 +123,7 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
         );
       })}
 
-      <ButtonLink variant="primary" id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
+      <ButtonLink variant="primary" id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Form-Protected-Profile:Return to dashboard - Dental benefits return button click">
         {t('protected-profile:government-dental-benefits.return-button')}
       </ButtonLink>
     </div>
