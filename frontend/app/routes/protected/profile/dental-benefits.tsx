@@ -101,8 +101,7 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
                 <li key={index}>{benefit}</li>
               ))}
             </ul>
-            {/*TODO: Update routeId*/}
-            <InlineLink id="update-government-dental-benefits" routeId="protected/profile/government-dental-benefits" params={params}>
+            <InlineLink id="update-dental-benefits" routeId="protected/profile/dental-benefits/edit" params={params}>
               {t('protected-profile:government-dental-benefits.update-link-text')}
             </InlineLink>
           </DescriptionListItem>
@@ -110,6 +109,7 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
         {children.length > 0 && (
           <div className="mt-6 space-y-8">
             {children.map((child, index) => {
+              const childParams = { ...params, childId: child.information.clientId };
               const childName = `${child.information.firstName} ${child.information.lastName}`;
               return (
                 <>
@@ -122,8 +122,7 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
                           <li key={index}>{benefit}</li>
                         ))}
                       </ul>
-                      {/*TODO: Update routeId*/}
-                      <InlineLink id="update-government-dental-benefits" routeId="protected/profile/government-dental-benefits" params={params}>
+                      <InlineLink id="update-child-dental-benefits" routeId="protected/profile/dental-benefits/:childId/edit" params={childParams}>
                         {t('protected-profile:government-dental-benefits.update-link-text')}
                       </InlineLink>
                     </DescriptionListItem>
