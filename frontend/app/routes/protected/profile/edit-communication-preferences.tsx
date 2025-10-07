@@ -81,11 +81,46 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
+
+  const userInfoToken = session.get('userInfoToken');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+
+  const currentDate = getCurrentDateString(locale);
+  const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
+  const applicationYear = applicationYearService.getRenewalApplicationYear(currentDate);
+
+  const clientApplicationService = appContainer.get(TYPES.ClientApplicationService);
+  const clientApplicationResult = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.applicationYearId, userId: userInfoToken.sub });
+
+  if (clientApplicationResult.isNone()) {
+    throw redirect(getPathById('protected/data-unavailable', params));
+  }
+
+  const clientApplication = clientApplicationResult.unwrap();
 
   const formSchema = z.object({
     preferredLanguage: z.string().trim().min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-language-required')),
-    preferredMethod: z.string().trim().min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-required')),
-    preferredMethodGovernmentOfCanada: z.string().trim().min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-notification-method-required')),
+    preferredMethod: z
+      .string()
+      .trim()
+      .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-required'))
+      .superRefine((val, ctx) => {
+        // TODO: check if email is verified once PP has updated the clientApplication payload to include that field
+        if (val === PREFERRED_SUN_LIFE_METHOD.email && clientApplication.contactInformation.email === undefined) {
+          ctx.addIssue({ code: 'custom', message: t('protected-profile:edit-communication-preferences.error-message.preferred-method-email-verified') });
+        }
+      }),
+    preferredMethodGovernmentOfCanada: z
+      .string()
+      .trim()
+      .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-notification-method-required'))
+      .superRefine((val, ctx) => {
+        // TODO: check if email is verified once PP has updated the clientApplication payload to include that field
+        if (val === PREFERRED_NOTIFICATION_METHOD.msca && clientApplication.contactInformation.email === undefined) {
+          ctx.addIssue({ code: 'custom', message: t('protected-profile:edit-communication-preferences.error-message.preferred-notification-method-email-verified') });
+        }
+      }),
   });
 
   const parsedDataResult = formSchema.safeParse({

@@ -82,7 +82,9 @@
     "error-message": {
       "preferred-language-required": "Select preferred language of communication",
       "preferred-method-required": "Select preferred method of communication for Sun Life",
-      "preferred-notification-method-required": "Select preferred method of communication for the Government of Canada"
+      "preferred-notification-method-required": "Select preferred method of communication for the Government of Canada",
+      "preferred-method-email-verified": "A verified email address is required to receive communications from Sun Life digitally.",
+      "preferred-notification-method-email-verified": "A verified email address is required to receive communications from the Government of Canada digitally."
     }
   },
   "phone-number": {
