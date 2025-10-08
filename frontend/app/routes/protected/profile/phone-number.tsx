@@ -131,7 +131,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
           </div>
         </div>
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton variant="primary" id="save-button" loading={isSubmitting}>
+          <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Phone number click">
             {t('protected-profile:phone-number.save-btn')}
           </LoadingButton>
           <ButtonLink
@@ -139,6 +139,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
             routeId="protected/profile/applicant-information" //TODO: update with correct route when it's merged
             params={params}
             disabled={isSubmitting}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Phone number click"
           >
             {t('protected-profile:phone-number.back-btn')}
           </ButtonLink>

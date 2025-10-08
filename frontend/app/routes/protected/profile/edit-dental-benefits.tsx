@@ -17,7 +17,6 @@ import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
-import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -218,131 +217,125 @@ export default function ProtectedAccessToDentalInsuranceQuestion({ loaderData, p
   }
 
   return (
-    <>
-      <div className="my-6 sm:my-8">
-        {/* TODO: Update progress value*/}
-        <Progress value={94} size="lg" label={t('protected-apply:progress.label')} />
-      </div>
-      <div className="max-w-prose">
-        <p className="mb-4">{t('protected-profile:edit-dental-benefits.access-to-dental')}</p>
-        <p className="mb-4">{t('protected-profile:edit-dental-benefits.eligibility-criteria')}</p>
-        <p className="mb-4 italic">{t('protected-apply:required-label')}</p>
-        <errorSummary.ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <fieldset className="mb-6">
-            <legend className="font-lato mb-4 text-2xl font-bold">{t('protected-profile:edit-dental-benefits.federal-benefits.title', { applicantName })}</legend>
-            <InputRadios
-              id="has-federal-benefits"
-              name="hasFederalBenefits"
-              legend={t('protected-profile:edit-dental-benefits.federal-benefits.legend')}
-              options={[
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-dental-benefits.federal-benefits.option-yes" />,
-                  value: HAS_FEDERAL_BENEFITS_OPTION.yes,
-                  defaultChecked: hasFederalBenefitValue === true,
-                  onChange: handleOnHasFederalBenefitChanged,
-                  append: hasFederalBenefitValue === true && (
-                    <InputRadios
-                      id="federal-social-programs"
-                      name="federalSocialProgram"
-                      legend={t('protected-profile:edit-dental-benefits.federal-benefits.social-programs.legend')}
-                      legendClassName="font-normal"
-                      options={federalSocialPrograms.map((option) => ({
-                        children: option.name,
-                        defaultChecked: federalProgram?.id === option.id,
-                        value: option.id,
-                      }))}
-                      errorMessage={errors?.federalSocialProgram}
+    <div className="max-w-prose">
+      <p className="mb-4">{t('protected-profile:edit-dental-benefits.access-to-dental')}</p>
+      <p className="mb-4">{t('protected-profile:edit-dental-benefits.eligibility-criteria')}</p>
+      <p className="mb-4 italic">{t('protected-apply:required-label')}</p>
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <fieldset className="mb-6">
+          <legend className="font-lato mb-4 text-2xl font-bold">{t('protected-profile:edit-dental-benefits.federal-benefits.title', { applicantName })}</legend>
+          <InputRadios
+            id="has-federal-benefits"
+            name="hasFederalBenefits"
+            legend={t('protected-profile:edit-dental-benefits.federal-benefits.legend')}
+            options={[
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-dental-benefits.federal-benefits.option-yes" />,
+                value: HAS_FEDERAL_BENEFITS_OPTION.yes,
+                defaultChecked: hasFederalBenefitValue === true,
+                onChange: handleOnHasFederalBenefitChanged,
+                append: hasFederalBenefitValue === true && (
+                  <InputRadios
+                    id="federal-social-programs"
+                    name="federalSocialProgram"
+                    legend={t('protected-profile:edit-dental-benefits.federal-benefits.social-programs.legend')}
+                    legendClassName="font-normal"
+                    options={federalSocialPrograms.map((option) => ({
+                      children: option.name,
+                      defaultChecked: federalProgram?.id === option.id,
+                      value: option.id,
+                    }))}
+                    errorMessage={errors?.federalSocialProgram}
+                    required
+                  />
+                ),
+              },
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-dental-benefits.federal-benefits.option-no" />,
+                value: HAS_FEDERAL_BENEFITS_OPTION.no,
+                defaultChecked: hasFederalBenefitValue === false,
+                onChange: handleOnHasFederalBenefitChanged,
+              },
+            ]}
+            errorMessage={errors?.hasFederalBenefits}
+            required
+          />
+        </fieldset>
+        <fieldset className="mb-8">
+          <legend className="font-lato mb-4 text-2xl font-bold">{t('protected-profile:edit-dental-benefits.provincial-territorial-benefits.title')}</legend>
+          <InputRadios
+            id="has-provincial-territorial-benefits"
+            name="hasProvincialTerritorialBenefits"
+            legend={t('protected-profile:edit-dental-benefits.provincial-territorial-benefits.legend')}
+            options={[
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-dental-benefits.provincial-territorial-benefits.option-yes" />,
+                value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes,
+                defaultChecked: provincialTerritorialProgram !== undefined,
+                onChange: handleOnHasProvincialTerritorialBenefitChanged,
+                append: hasProvincialTerritorialBenefitValue === true && (
+                  <div className="space-y-6">
+                    <InputSelect
+                      id="province"
+                      name="province"
+                      className="w-full sm:w-1/2"
+                      label={t('protected-profile:edit-dental-benefits.provincial-territorial-benefits.social-programs.input-legend')}
+                      onChange={handleOnRegionChanged}
+                      options={[
+                        {
+                          children: t('protected-profile:edit-dental-benefits.select-one'),
+                          value: '',
+                          hidden: true,
+                        },
+                        ...provinceTerritoryStates.map((region) => ({ id: region.id, value: region.id, children: region.name })),
+                      ]}
+                      defaultValue={provinceValue}
+                      errorMessage={errors?.province}
                       required
                     />
-                  ),
-                },
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-dental-benefits.federal-benefits.option-no" />,
-                  value: HAS_FEDERAL_BENEFITS_OPTION.no,
-                  defaultChecked: hasFederalBenefitValue === false,
-                  onChange: handleOnHasFederalBenefitChanged,
-                },
-              ]}
-              errorMessage={errors?.hasFederalBenefits}
-              required
-            />
-          </fieldset>
-          <fieldset className="mb-8">
-            <legend className="font-lato mb-4 text-2xl font-bold">{t('protected-profile:edit-dental-benefits.provincial-territorial-benefits.title')}</legend>
-            <InputRadios
-              id="has-provincial-territorial-benefits"
-              name="hasProvincialTerritorialBenefits"
-              legend={t('protected-profile:edit-dental-benefits.provincial-territorial-benefits.legend')}
-              options={[
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-dental-benefits.provincial-territorial-benefits.option-yes" />,
-                  value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes,
-                  defaultChecked: provincialTerritorialProgram !== undefined,
-                  onChange: handleOnHasProvincialTerritorialBenefitChanged,
-                  append: hasProvincialTerritorialBenefitValue === true && (
-                    <div className="space-y-6">
-                      <InputSelect
-                        id="province"
-                        name="province"
-                        className="w-full sm:w-1/2"
-                        label={t('protected-profile:edit-dental-benefits.provincial-territorial-benefits.social-programs.input-legend')}
-                        onChange={handleOnRegionChanged}
-                        options={[
-                          {
-                            children: t('protected-profile:edit-dental-benefits.select-one'),
-                            value: '',
-                            hidden: true,
-                          },
-                          ...provinceTerritoryStates.map((region) => ({ id: region.id, value: region.id, children: region.name })),
-                        ]}
-                        defaultValue={provinceValue}
-                        errorMessage={errors?.province}
+                    {provinceValue && (
+                      <InputRadios
+                        id="provincial-territorial-social-programs"
+                        name="provincialTerritorialSocialProgram"
+                        legend={t('protected-profile:edit-dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}
+                        legendClassName="font-normal"
+                        errorMessage={errors?.provincialTerritorialSocialProgram}
+                        options={provincialTerritorialSocialPrograms
+                          .filter((program) => program.provinceTerritoryStateId === provinceValue)
+                          .map((option) => ({
+                            children: option.name,
+                            value: option.id,
+                            checked: provincialTerritorialSocialProgramValue === option.id,
+                            onChange: handleOnProvincialTerritorialSocialProgramChanged,
+                          }))}
                         required
                       />
-                      {provinceValue && (
-                        <InputRadios
-                          id="provincial-territorial-social-programs"
-                          name="provincialTerritorialSocialProgram"
-                          legend={t('protected-profile:edit-dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}
-                          legendClassName="font-normal"
-                          errorMessage={errors?.provincialTerritorialSocialProgram}
-                          options={provincialTerritorialSocialPrograms
-                            .filter((program) => program.provinceTerritoryStateId === provinceValue)
-                            .map((option) => ({
-                              children: option.name,
-                              value: option.id,
-                              checked: provincialTerritorialSocialProgramValue === option.id,
-                              onChange: handleOnProvincialTerritorialSocialProgramChanged,
-                            }))}
-                          required
-                        />
-                      )}
-                    </div>
-                  ),
-                },
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-dental-benefits.provincial-territorial-benefits.option-no" />,
-                  value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.no,
-                  defaultChecked: provincialTerritorialProgram === undefined,
-                  onChange: handleOnHasProvincialTerritorialBenefitChanged,
-                },
-              ]}
-              errorMessage={errors?.hasProvincialTerritorialBenefits}
-              required
-            />
-          </fieldset>
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" name="_action" value={FORM_ACTION.save} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Access to other dental benefits click">
-              {t('protected-profile:edit-dental-benefits.button.save-btn')}
-            </LoadingButton>
-            <ButtonLink id="back-button" routeId="protected/profile/dental-benefits" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Access to other dental benefits click">
-              {t('protected-profile:edit-dental-benefits.button.back')}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </div>
-    </>
+                    )}
+                  </div>
+                ),
+              },
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-dental-benefits.provincial-territorial-benefits.option-no" />,
+                value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.no,
+                defaultChecked: provincialTerritorialProgram === undefined,
+                onChange: handleOnHasProvincialTerritorialBenefitChanged,
+              },
+            ]}
+            errorMessage={errors?.hasProvincialTerritorialBenefits}
+            required
+          />
+        </fieldset>
+        <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <LoadingButton variant="primary" id="continue-button" name="_action" value={FORM_ACTION.save} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Access to other dental benefits click">
+            {t('protected-profile:edit-dental-benefits.button.save-btn')}
+          </LoadingButton>
+          <ButtonLink id="back-button" routeId="protected/profile/dental-benefits" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Access to other dental benefits click">
+            {t('protected-profile:edit-dental-benefits.button.back')}
+          </ButtonLink>
+        </div>
+      </fetcher.Form>
+    </div>
   );
 }

@@ -177,10 +177,10 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
           </div>
         </fieldset>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton variant="primary" id="save-button" loading={isSubmitting}>
+          <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Mailing address click">
             {t('protected-profile:mailing-address.continue-btn')}
           </LoadingButton>
-          <ButtonLink id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting}>
+          <ButtonLink id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Mailing address click">
             {t('protected-profile:mailing-address.back-btn')}
           </ButtonLink>
         </div>

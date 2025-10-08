@@ -64,7 +64,12 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
           {t('protected-profile:communication-preferences.update-link-text')}
         </InlineLink>
       </div>
-      <ButtonLink variant="primary" id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
+      <ButtonLink
+        variant="primary"
+        id="back-button"
+        to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - My communication preferences return button click"
+      >
         {t('protected-profile:communication-preferences.return-button')}
       </ButtonLink>
     </div>
