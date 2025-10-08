@@ -3,7 +3,7 @@
   "all-optional-label": "All fields are optional.",
   "applicant-information": {
     "page-title": "Applicant(s) Information",
-    "form-instructions": "If you notice an error or need to update the name, date of birth or Social Insurance Number (SIN), contact Service Canada by calling 1-833-537-4342.",
+    "form-instructions": "If you notice an error or need to update the name, date of birth or Social Insurance Number (SIN), contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
     "member-id": "Member ID",
     "dob": "Date of birth",
     "sin": "Social insurance number (SIN)",

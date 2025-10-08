@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/applicant-information';
 
@@ -64,7 +64,9 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
 
   return (
     <div className="max-w-prose space-y-10">
-      <p>{t('protected-profile:applicant-information.form-instructions')}</p>
+      <p>
+        <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:applicant-information.form-instructions" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+      </p>
       <section className="space-y-6">
         <h2 className="font-lato text-2xl font-bold">{`${primaryApplicant.firstName} ${primaryApplicant.lastName}`}</h2>
         <dl className="divide-y border-y">
