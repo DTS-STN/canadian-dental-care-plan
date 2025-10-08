@@ -37,6 +37,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:phone-number.page-title') }) };
 
+  const idToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('page-view.profile.phone-number', { userId: idToken.sub });
+
   return {
     meta,
     defaultState: {
@@ -77,6 +80,9 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   await appContainer.get(TYPES.ProfileService).updatePhoneNumbers(parsedDataResult.data);
+
+  const idToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('update-data.profile.phone-number', { userId: idToken.sub });
 
   return redirect(getPathById('protected/profile/contact-information', params));
 }

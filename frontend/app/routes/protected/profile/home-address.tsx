@@ -44,6 +44,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:home-address.page-title') }) };
 
+  const idToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('page-view.profile.home-address', { userId: idToken.sub });
+
   return {
     meta,
     defaultState: {
@@ -60,6 +63,10 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   //TODO: update action for address verification
+
+  const idToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('update-data.profile.home-address', { userId: idToken.sub });
+
   return redirect(getPathById('protected/profile/contact-information', params));
 }
 

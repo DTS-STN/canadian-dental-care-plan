@@ -83,6 +83,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     title: t('gcweb:meta.title.template', { title: t('protected-profile:edit-dental-benefits.title', { applicantName }) }),
   };
 
+  const idToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('page-view.profile.edit-dental-benefits', { userId: idToken.sub });
+
   return {
     federalProgram,
     provincialTerritorialProgram,
@@ -173,6 +176,10 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   await appContainer.get(TYPES.ProfileService).updateDentalBenefits({ ...parsedFederalBenefitsResult.data, ...parsedProvincialTerritorialBenefitsResult.data });
+
+  const idToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('update-data.profile.edit-dental-benefits', { userId: idToken.sub });
+
   return redirect(getPathById('protected/profile/dental-benefits', params));
 }
 

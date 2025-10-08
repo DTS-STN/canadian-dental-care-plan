@@ -62,6 +62,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
+  const idToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('page-view.profile.dental-benefits', { userId: idToken.sub });
+
   return { meta, clientApplication, clientDentalBenefits, children, SCCH_BASE_URI };
 }
 
