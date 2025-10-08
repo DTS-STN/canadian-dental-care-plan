@@ -9,9 +9,11 @@
     "sin": "Numéro d'assurance sociale (NAS)",
     "return-button": "Retour au tableau de bord"
   },
-  "government-dental-benefits": {
-    "page-title": "Prestations dentaires gouvernementales",
+  "dental-benefits": {
+    "page-title": "Autres prestations dentaires gouvernementales",
     "have-access": "Accès à d'autres prestations dentaires gouvernementales",
+    "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
+    "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture sera coordonnée entre les régimes afin qu'il n'y ait pas de lacunes ou de dédoublement dans la couverture. Gardez vos renseignements à jour afin de garantir le bon déroulement de cette coordination.",
     "yes": "Oui",
     "no": "Non",
     "update-link-text": "Modifier la réponse à «\u00a0Accès à des prestations dentaires gouvernementales\u00a0»",
@@ -56,7 +58,7 @@
     }
   },
   "edit-child-dental-benefits": {
-    "title": "{{childName}}\u00a0: accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
+    "title": "L'accès de {{childName}} à d'autres prestations dentaires fédérales, provinciales ou territoriales",
     "access-to-dental": "L'accès à des prestations dentaires dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur l'admissibilité de l'enfant au Régime canadien de soins dentaires.",
     "eligibility-criteria": "Si l'enfant répond à tous les critères d'admissibilité, sa couverture doit être coordonnée entre les régimes afin qu'il n'y ait pas de dédoublement ou de lacunes dans la couverture.",
     "select-one": "Choisissez une option",
@@ -158,7 +160,7 @@
   "email": {
     "page-title": "Adresse courriel",
     "provide-email": "Indiquez l'adresse électronique à laquelle vous souhaitez recevoir l'information au sujet de votre couverture au titre du Régime de soins dentaires du Canada que vous communiquera le gouvernement du Canada ou la Sun Life.",
-    "verify-email": "Nous confirmerons votre adresse électronique.",
+    "verify-email": "Nous confirmerons votre adresse électronique. Après avoir soumis votre adresse courriel, vous recevrez un code à entrer à l'étape suivante.",
     "email-legend": "Adresse courriel",
     "back": "Retour",
     "save-btn": "Sauvegarder",

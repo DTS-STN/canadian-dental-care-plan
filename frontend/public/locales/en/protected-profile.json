@@ -9,9 +9,11 @@
     "sin": "Social insurance number (SIN)",
     "return-button": "Return to dashboard"
   },
-  "government-dental-benefits": {
-    "page-title": "Government dental benefits",
+  "dental-benefits": {
+    "page-title": "Other government dental benefits",
     "have-access": "Access to other government dental benefits",
+    "access-to-dental": "Access to dental coverage through a provincial, territorial, or federal government social program does not impact your eligibility for the Canadian Dental Care Plan.",
+    "eligibility-criteria": "If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage. Keep your information updated to help make sure this coordination is done correctly.",
     "yes": "Yes",
     "no": "No",
     "update-link-text": "Change access to other government dental benefits",
@@ -56,7 +58,7 @@
     }
   },
   "edit-child-dental-benefits": {
-    "title": "{{childName}}: access to other federal, provincial or territorial dental benefits",
+    "title": "{{childName}}'s access to other federal, provincial or territorial dental benefits",
     "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact the child's eligibility for the Canadian Dental Care Plan.",
     "select-one": "Select one",
     "eligibility-criteria": "If the child meets all the eligibility criteria, their coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
@@ -158,7 +160,7 @@
   "email": {
     "page-title": "Email address",
     "provide-email": "Provide the email address you'd like the Government of Canada and/or Sun Life to use to contact you about your Canadian Dental Care Plan coverage.",
-    "verify-email": "We will need to verify your email address.",
+    "verify-email": "We will need to verify your email address. After you submit your email address, you'll receive a code to enter in the next step.",
     "email-legend": "Email address",
     "back": "Back",
     "save-btn": "Save",
