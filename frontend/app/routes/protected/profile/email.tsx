@@ -2,7 +2,6 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
 import { useTranslation } from 'react-i18next';
-import validator from 'validator';
 import { z } from 'zod';
 
 import type { Route } from './+types/email';
@@ -62,19 +61,14 @@ export async function action({ context: { appContainer, session }, params, reque
   const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.ServerConfig);
   const idToken = session.get('idToken');
 
-  const emailSchema = z
-    .object({
-      email: z
-        .string({ error: t('protected-profile:email.error-message.email-required') })
-        .trim()
-        .min(1)
-        .max(64),
-    })
-    .superRefine((val, ctx) => {
-      if (!validator.isEmail(val.email)) {
-        ctx.addIssue({ code: 'custom', message: t('protected-profile:email.error-message.email-valid'), path: ['email'] });
-      }
-    });
+  const emailSchema = z.object({
+    email: z
+      .string(t('protected-profile:email.error-message.email-required'))
+      .trim()
+      .min(1)
+      .max(64)
+      .pipe(z.email(t('protected-profile:email.error-message.email-valid'))),
+  });
 
   const parsedDataResult = emailSchema.safeParse({
     email: formData.get('email') ? String(formData.get('email') ?? '') : undefined,
