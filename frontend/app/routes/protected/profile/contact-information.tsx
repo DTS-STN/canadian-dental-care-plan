@@ -45,7 +45,7 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
   const { phoneNumber, altPhoneNumber, emailAddress, mailingAddress, homeAddress, SCCH_BASE_URI } = loaderData;
 
   return (
-    <div className="max-w-prose">
+    <div className="max-w-prose space-y-10">
       <dl className="divide-y border-y">
         <DescriptionListItem term={t('protected-profile:contact-information.phone-number')} className="border-none pb-0 sm:pb-0">
           <p>{phoneNumber}</p>
@@ -83,12 +83,9 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
           </div>
         </DescriptionListItem>
       </dl>
-
-      <div className="mt-6 flex flex-wrap items-center gap-3">
-        <ButtonLink variant="primary" id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
-          {t('protected-profile:contact-information.return-button')}
-        </ButtonLink>
-      </div>
+      <ButtonLink variant="primary" id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
+        {t('protected-profile:contact-information.return-button')}
+      </ButtonLink>
     </div>
   );
 }
