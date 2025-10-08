@@ -19,7 +19,6 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'documents:index.page-title' }],
   i18nNamespaces: getTypedI18nNamespaces('documents', 'gcweb'),
   pageIdentifier: pageIds.protected.documents.index,
   pageTitleI18nKey: 'documents:index.page-title',
@@ -79,40 +78,42 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
-export default function LettersIndex({ loaderData, params }: Route.ComponentProps) {
+export default function DocumentsIndex({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { documents, SCCH_BASE_URI } = loaderData;
   const hasDocuments = documents.length > 0;
 
   return (
-    <div className="space-y-6">
-      <p>{hasDocuments ? t('documents:index.has-documents') : t('documents:index.no-documents')}</p>
-      {hasDocuments && (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{t('documents:index.table-headers.file-name')}</TableHead>
-              <TableHead>{t('documents:index.table-headers.applicant')}</TableHead>
-              <TableHead>{t('documents:index.table-headers.type-of-document')}</TableHead>
-              <TableHead>{t('documents:index.table-headers.date-uploaded')}</TableHead>
-              <TableHead>{t('documents:index.table-headers.date-received')}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {documents.map((document) => (
-              <TableRow key={document.id} className="odd:bg-white even:bg-gray-50">
-                <TableCell className="max-w-[200px] break-all">{document.fileName}</TableCell>
-                <TableCell>{document.name}</TableCell>
-                <TableCell>{document.documentTypeName}</TableCell>
-                <TableCell className="text-nowrap">{document.mscaUploadDateFormatted}</TableCell>
-                <TableCell className="text-nowrap">{document.healthCanadaTransferDateFormatted ?? t('documents:index.received-status-pending')}</TableCell>
+    <div className="space-y-8">
+      <div className="space-y-4">
+        <p>{hasDocuments ? t('documents:index.has-documents') : t('documents:index.no-documents')}</p>
+        {hasDocuments && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('documents:index.table-headers.file-name')}</TableHead>
+                <TableHead>{t('documents:index.table-headers.applicant')}</TableHead>
+                <TableHead>{t('documents:index.table-headers.type-of-document')}</TableHead>
+                <TableHead>{t('documents:index.table-headers.date-uploaded')}</TableHead>
+                <TableHead>{t('documents:index.table-headers.date-received')}</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
+            </TableHeader>
+            <TableBody>
+              {documents.map((document) => (
+                <TableRow key={document.id} className="odd:bg-white even:bg-gray-50">
+                  <TableCell className="max-w-[200px] break-all">{document.fileName}</TableCell>
+                  <TableCell>{document.name}</TableCell>
+                  <TableCell>{document.documentTypeName}</TableCell>
+                  <TableCell className="text-nowrap">{document.mscaUploadDateFormatted}</TableCell>
+                  <TableCell className="text-nowrap">{document.healthCanadaTransferDateFormatted ?? t('documents:index.received-status-pending')}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </div>
       <div>
-        <ButtonLink id="upload-button" routeId="protected/documents/index" params={params} variant="primary">
+        <ButtonLink id="upload-button" routeId="protected/documents/upload" params={params} variant="primary">
           {t('documents:index.upload-documents')}
         </ButtonLink>
       </div>

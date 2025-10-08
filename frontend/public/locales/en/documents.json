@@ -13,5 +13,10 @@
       "file-name": "File name",
       "type-of-document": "Type of document"
     }
+  },
+  "upload": {
+    "page-title": "Upload my documents",
+    "submit": "Submit",
+    "return-dashboard": "Return to dashboard"
   }
 }
