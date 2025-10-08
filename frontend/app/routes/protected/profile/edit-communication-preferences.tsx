@@ -179,10 +179,10 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
           />
         </div>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton variant="primary" id="save-button" loading={isSubmitting}>
+          <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Communication preferences click">
             {t('protected-profile:edit-communication-preferences.save')}
           </LoadingButton>
-          <ButtonLink id="back-button" routeId="protected/profile/communication-preferences" params={params} disabled={isSubmitting}>
+          <ButtonLink id="back-button" routeId="protected/profile/communication-preferences" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Communication preferences click">
             {t('protected-profile:edit-communication-preferences.back')}
           </ButtonLink>
         </div>

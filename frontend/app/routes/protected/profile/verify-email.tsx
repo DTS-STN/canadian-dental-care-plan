@@ -219,10 +219,10 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
           </LoadingButton>
         </fieldset>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton variant="primary" id="continue-button" name="_action" value={FORM_ACTION.submit} loading={isSubmitting}>
+          <LoadingButton variant="primary" id="continue-button" name="_action" value={FORM_ACTION.submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Verify your email address click">
             {t('protected-profile:verify-email.continue')}
           </LoadingButton>
-          <ButtonLink id="back-button" routeId="protected/profile/contact/email-address" params={params} disabled={isSubmitting}>
+          <ButtonLink id="back-button" routeId="protected/profile/contact/email-address" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Verify your email address click">
             {t('protected-profile:verify-email.back')}
           </ButtonLink>
         </div>
