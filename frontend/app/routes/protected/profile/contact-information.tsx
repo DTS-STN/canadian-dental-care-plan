@@ -56,7 +56,7 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
         <DescriptionListItem term={t('protected-profile:contact-information.alt-phone-number')}>
           <p>{altPhoneNumber}</p>
           <div className="mt-4 sm:mt-6">
-            <InlineLink id="update-contact-information-phone" routeId="protected/profile/contact-information" params={params}>
+            <InlineLink id="update-contact-information-phone" routeId="protected/profile/contact/phone" params={params}>
               {t('protected-profile:contact-information.update-phone-link-text')}
             </InlineLink>
           </div>
@@ -64,7 +64,7 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
         <DescriptionListItem term={t('protected-profile:contact-information.email')}>
           <p>{emailAddress}</p>
           <div className="mt-4 sm:mt-6">
-            <InlineLink id="update-contact-information-email" routeId="protected/profile/contact-information" params={params}>
+            <InlineLink id="update-contact-information-email" routeId="protected/profile/contact/email-address" params={params}>
               {t('protected-profile:contact-information.update-email-link-text')}
             </InlineLink>
           </div>
@@ -72,7 +72,7 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
         <DescriptionListItem term={t('protected-profile:contact-information.mailing-address')}>
           <p>{mailingAddress}</p>
           <div className="mt-4 sm:mt-6">
-            <InlineLink id="update-contact-information-mailing-address" routeId="protected/profile/contact-information" params={params}>
+            <InlineLink id="update-contact-information-mailing-address" routeId="protected/profile/contact/mailing-address" params={params}>
               {t('protected-profile:contact-information.update-mailing-address-link-text')}
             </InlineLink>
           </div>
@@ -80,7 +80,7 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
         <DescriptionListItem term={t('protected-profile:contact-information.home-address')}>
           <p>{homeAddress}</p>
           <div className="mt-4 sm:mt-6">
-            <InlineLink id="update-contact-information-home-address" routeId="protected/profile/contact-information" params={params}>
+            <InlineLink id="update-contact-information-home-address" routeId="protected/profile/contact/home-address" params={params}>
               {t('protected-profile:contact-information.update-home-address-link-text')}
             </InlineLink>
           </div>
