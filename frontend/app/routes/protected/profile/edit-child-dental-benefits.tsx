@@ -349,10 +349,10 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
             />
           </fieldset>
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="save-button" name="_action" value={FORM_ACTION.save} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Form-Protected-profile:Save - Access to other dental benefits click">
+            <LoadingButton variant="primary" id="save-button" name="_action" value={FORM_ACTION.save} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Access to other dental benefits click">
               {t('protected-profile:edit-dental-benefits.button.save-btn')}
             </LoadingButton>
-            <ButtonLink id="back-button" routeId="protected/profile/dental-benefits" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Form-Protected-profile:Back - Access to other dental benefits click">
+            <ButtonLink id="back-button" routeId="protected/profile/dental-benefits" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Access to other dental benefits click">
               {t('protected-profile:edit-dental-benefits.button.back')}
             </ButtonLink>
           </div>
