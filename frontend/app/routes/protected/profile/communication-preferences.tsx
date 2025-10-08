@@ -33,6 +33,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:communication-preferences.page-title') }) };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
+  const idToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('page-view.profile.communication-preferences', { userId: idToken.sub });
+
   return {
     meta,
     preferredLanguage: appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(clientApplication.communicationPreferences.preferredLanguage, locale),

@@ -45,6 +45,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     sin: child.information.socialInsuranceNumber,
   }));
 
+  const idToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('page-view.profile.applicant-information', { userId: idToken.sub });
+
   return {
     meta,
     SCCH_BASE_URI,

@@ -29,6 +29,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:contact-information.page-title') }) };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
+  const idToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('page-view.profile.contact-information', { userId: idToken.sub });
+
   return {
     meta,
     phoneNumber: clientApplication.contactInformation.phoneNumber,

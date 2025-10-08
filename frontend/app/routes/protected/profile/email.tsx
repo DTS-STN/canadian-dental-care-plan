@@ -38,6 +38,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:email.page-title') }) };
 
+  const idToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('page-view.profile.email-address', { userId: idToken.sub });
+
   return {
     meta,
     defaultState: clientApplication.contactInformation.email,
@@ -80,6 +83,8 @@ export async function action({ context: { appContainer, session }, params, reque
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
+
+  appContainer.get(TYPES.AuditService).createAudit('update-data.profile.email-address', { userId: idToken.sub });
 
   // TODO: check if existing email is verified otherwise we must verify it
   const isNewEmail = clientApplication.contactInformation.email !== parsedDataResult.data.email;

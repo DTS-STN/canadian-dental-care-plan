@@ -44,7 +44,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const languages = appContainer.get(TYPES.LanguageService).listAndSortLocalizedLanguages(locale);
 
-  // TODO update with correct values
+  const idToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('page-view.profile.edit-communication-preferences', { userId: idToken.sub });
+
   return {
     meta,
     defaultState: {
@@ -101,6 +103,9 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   await appContainer.get(TYPES.ProfileService).updateCommunicationPreferences(parsedDataResult.data);
+
+  const idToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('update-data.profile.edit-communication-preferences', { userId: idToken.sub });
 
   return redirect(getPathById('protected/profile/communication-preferences', params));
 }

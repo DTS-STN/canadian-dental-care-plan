@@ -54,11 +54,12 @@ export async function loader({ context: { appContainer, session }, params, reque
     throw redirect(getPathById('protected/profile/contact/email-address', params));
   }
 
-  const verificationState = session.get('profileEmailVerificationState');
+  const idToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('page-view.profile.verify-email', { userId: idToken.sub });
 
   return {
     meta,
-    email: verificationState.pendingEmail,
+    email: session.get('profileEmailVerificationState').pendingEmail,
   };
 }
 
@@ -86,6 +87,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const verificationCodeService = appContainer.get(TYPES.VerificationCodeService);
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
+
+  appContainer.get(TYPES.AuditService).createAudit('update-data.profile.verify-email', { userId: idToken.sub });
 
   if (formAction === FORM_ACTION.request) {
     const newVerificationCode = verificationCodeService.createVerificationCode(idToken.sub);
