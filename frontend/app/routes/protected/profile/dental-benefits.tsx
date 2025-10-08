@@ -15,7 +15,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.dentalBenefits,
-  pageTitleI18nKey: 'protected-profile:government-dental-benefits.page-title',
+  pageTitleI18nKey: 'protected-profile:dental-benefits.page-title',
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -58,7 +58,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     return { ...child, dentalBenefits };
   });
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:government-dental-benefits.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:dental-benefits.page-title') }) };
 
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
@@ -74,12 +74,14 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
 
   return (
     <div className="max-w-prose space-y-10">
+      <p className="mb-4">{t('protected-profile:dental-benefits.access-to-dental')}</p>
+      <p className="mb-4">{t('protected-profile:dental-benefits.eligibility-criteria')}</p>
       <section className="space-y-6">
         <h2 className="font-lato text-2xl font-bold">{`${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`}</h2>
         <dl className="divide-y border-y">
-          <DescriptionListItem term={t('protected-profile:government-dental-benefits.have-access')}>
+          <DescriptionListItem term={t('protected-profile:dental-benefits.have-access')}>
             <div className="space-y-4">
-              <p>{clientApplication.dentalBenefits.length > 0 ? t('protected-profile:government-dental-benefits.yes') : t('protected-profile:government-dental-benefits.no')}</p>
+              <p>{clientApplication.dentalBenefits.length > 0 ? t('protected-profile:dental-benefits.yes') : t('protected-profile:dental-benefits.no')}</p>
               {clientApplication.dentalBenefits.length > 0 && (
                 <ul className="list-disc space-y-2 pl-10">
                   {clientDentalBenefits.map((benefit, index) => (
@@ -90,7 +92,7 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
             </div>
             <div className="mt-4 sm:mt-6">
               <InlineLink routeId="protected/profile/dental-benefits/edit" params={params}>
-                {t('protected-profile:government-dental-benefits.update-link-text')}
+                {t('protected-profile:dental-benefits.update-link-text')}
               </InlineLink>
             </div>
           </DescriptionListItem>
@@ -104,9 +106,9 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
           <section className="space-y-6" key={child.information.clientId}>
             <h2 className="font-lato text-2xl font-bold">{childName}</h2>
             <dl className="divide-y border-y">
-              <DescriptionListItem term={t('protected-profile:government-dental-benefits.have-access')}>
+              <DescriptionListItem term={t('protected-profile:dental-benefits.have-access')}>
                 <div className="space-y-4">
-                  <p>{child.dentalBenefits.length > 0 ? t('protected-profile:government-dental-benefits.yes') : t('protected-profile:government-dental-benefits.no')}</p>
+                  <p>{child.dentalBenefits.length > 0 ? t('protected-profile:dental-benefits.yes') : t('protected-profile:dental-benefits.no')}</p>
                   {child.dentalBenefits.length > 0 && (
                     <ul className="list-disc space-y-2 pl-10">
                       {child.dentalBenefits.map((benefit) => (
@@ -117,7 +119,7 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
                 </div>
                 <div className="mt-4 sm:mt-6">
                   <InlineLink routeId="protected/profile/dental-benefits/:childId/edit" params={childParams}>
-                    {t('protected-profile:government-dental-benefits.update-link-text')}
+                    {t('protected-profile:dental-benefits.update-link-text')}
                   </InlineLink>
                 </div>
               </DescriptionListItem>
@@ -130,9 +132,9 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
         variant="primary"
         id="back-button"
         to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - Dental benefits return button click"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - Other government dental benefits return button click"
       >
-        {t('protected-profile:government-dental-benefits.return-button')}
+        {t('protected-profile:dental-benefits.return-button')}
       </ButtonLink>
     </div>
   );
