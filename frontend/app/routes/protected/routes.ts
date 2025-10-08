@@ -15,6 +15,11 @@ export const routes = [
         paths: { en: '/:lang/protected/documents', fr: '/:lang/protege/documents' },
       },
       {
+        id: 'protected/documents/upload',
+        file: 'routes/protected/documents/upload.tsx',
+        paths: { en: '/:lang/protected/documents/upload', fr: '/:lang/protege/documents/televerser' },
+      },
+      {
         id: 'protected/unable-to-process-request',
         file: 'routes/protected/unable-to-process-request.tsx',
         paths: { en: '/:lang/protected/unable-to-process-request', fr: '/:lang/protege/impossible-de-traiter-la-demande' },

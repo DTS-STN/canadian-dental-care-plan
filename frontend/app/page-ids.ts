@@ -2,6 +2,7 @@ export const pageIds = {
   protected: {
     documents: {
       index: 'CDCP-PROT-DOCS-0001',
+      upload: 'CDCP-PROT-DOCS-0002',
     },
     letters: {
       index: 'CDCP-PROT-0015',

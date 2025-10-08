@@ -4,7 +4,7 @@
     "has-documents": "Vous avez soumis les documents suivants pour le Régime canadien de soins dentaires\u00a0:",
     "no-documents": "Vous n'avez soumis aucun document pour le Régime canadien de soins dentaires.",
     "upload-documents": "Téléverser des documents",
-    "return-dashboard": "Revenir au tableau de bord",
+    "return-dashboard": "Retour au tableau de bord",
     "received-status-pending": "En attente",
     "table-headers": {
       "applicant": "Demandeur",
@@ -13,5 +13,10 @@
       "file-name": "Nom du fichier",
       "type-of-document": "Type de document"
     }
+  },
+  "upload": {
+    "page-title": "Téléverser mes documents",
+    "submit": "Soumettre",
+    "return-dashboard": "Retour au tableau de bord"
   }
 }
