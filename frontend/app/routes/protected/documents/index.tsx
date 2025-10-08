@@ -1,5 +1,3 @@
-import { Activity } from 'react';
-
 import { redirect } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
@@ -89,7 +87,7 @@ export default function LettersIndex({ loaderData, params }: Route.ComponentProp
   return (
     <div className="space-y-6">
       <p>{hasDocuments ? t('documents:index.has-documents') : t('documents:index.no-documents')}</p>
-      <Activity mode={hasDocuments ? 'visible' : 'hidden'}>
+      {hasDocuments && (
         <Table>
           <TableHeader>
             <TableRow>
@@ -112,7 +110,7 @@ export default function LettersIndex({ loaderData, params }: Route.ComponentProp
             ))}
           </TableBody>
         </Table>
-      </Activity>
+      )}
       <div>
         <ButtonLink id="upload-button" routeId="protected/documents/index" params={params} variant="primary">
           {t('documents:index.upload-documents')}
