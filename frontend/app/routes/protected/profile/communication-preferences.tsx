@@ -47,8 +47,8 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
   const { preferredLanguage, sunlifeComminicationPreference, gocComminicationPreference, SCCH_BASE_URI } = loaderData;
 
   return (
-    <div className="max-w-prose">
-      <dl>
+    <div className="max-w-prose space-y-10">
+      <dl className="divide-y border-y">
         <DescriptionListItem term={t('protected-profile:communication-preferences.language-preference')}>
           <p>{preferredLanguage.name}</p>
         </DescriptionListItem>
@@ -59,14 +59,14 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
           <p>{gocComminicationPreference === PREFERRED_NOTIFICATION_METHOD.msca ? t('protected-profile:communication-preferences.online') : t('protected-profile:communication-preferences.by-mail')}</p>
         </DescriptionListItem>
       </dl>
-      <InlineLink id="update-communication-preferences" routeId="protected/profile/communication-preferences/edit" params={params}>
-        {t('protected-profile:communication-preferences.update-link-text')}
-      </InlineLink>
-      <div className="mt-6 flex flex-wrap items-center gap-3">
-        <ButtonLink variant="primary" id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
-          {t('protected-profile:communication-preferences.return-button')}
-        </ButtonLink>
+      <div>
+        <InlineLink id="update-communication-preferences" routeId="protected/profile/communication-preferences/edit" params={params}>
+          {t('protected-profile:communication-preferences.update-link-text')}
+        </InlineLink>
       </div>
+      <ButtonLink variant="primary" id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
+        {t('protected-profile:communication-preferences.return-button')}
+      </ButtonLink>
     </div>
   );
 }

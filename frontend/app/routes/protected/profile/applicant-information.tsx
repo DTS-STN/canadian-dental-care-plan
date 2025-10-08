@@ -61,9 +61,9 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
 
   return (
     <div className="max-w-prose space-y-10">
-      <p className="mb-4">{t('protected-profile:applicant-information.form-instructions')}</p>
+      <p>{t('protected-profile:applicant-information.form-instructions')}</p>
       <section className="space-y-6">
-        <h2 className="font-lato py-4 text-2xl font-bold">{`${primaryApplicant.firstName} ${primaryApplicant.lastName}`}</h2>
+        <h2 className="font-lato text-2xl font-bold">{`${primaryApplicant.firstName} ${primaryApplicant.lastName}`}</h2>
         <dl className="divide-y border-y">
           <DescriptionListItem term={t('protected-profile:applicant-information.member-id')}>
             <p>{primaryApplicant.id}</p>
@@ -76,10 +76,11 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
           </DescriptionListItem>
         </dl>
       </section>
+
       {children.map((child) => {
         return (
           <section className="space-y-6" key={child.id}>
-            <h2 className="font-lato py-4 text-2xl font-bold">{`${child.firstName} ${child.lastName}`}</h2>
+            <h2 className="font-lato text-2xl font-bold">{`${child.firstName} ${child.lastName}`}</h2>
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('protected-profile:applicant-information.member-id')}>
                 <p>{child.id}</p>
@@ -94,16 +95,15 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
           </section>
         );
       })}
-      <div className="mt-6 flex flex-wrap items-center gap-3">
-        <ButtonLink
-          variant="primary"
-          id="back-button"
-          to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Information:Return to dashboard - Applicant information return button click"
-        >
-          {t('protected-profile:applicant-information.return-button')}
-        </ButtonLink>
-      </div>
+
+      <ButtonLink
+        variant="primary"
+        id="back-button"
+        to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Information:Return to dashboard - Applicant information return button click"
+      >
+        {t('protected-profile:applicant-information.return-button')}
+      </ButtonLink>
     </div>
   );
 }
