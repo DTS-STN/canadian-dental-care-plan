@@ -71,20 +71,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const provincialTerritorialSocialPrograms = await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
   const regions = allRegions.filter(({ countryId }) => countryId === CANADA_COUNTRY_ID);
 
-  let federalProgram;
-  let provincialTerritorialProgram;
-
-  for (const benefitId of child.dentalBenefits) {
-    const federal = federalSocialPrograms.find((program) => program.id === benefitId);
-    if (federal) {
-      federalProgram = federal;
-      continue;
-    }
-    const provincial = provincialTerritorialSocialPrograms.find((program) => program.id === benefitId);
-    if (provincial) {
-      provincialTerritorialProgram = provincial;
-    }
-  }
+  const federalProgram = federalSocialPrograms.find(({ id }) => child.dentalBenefits.includes(id));
+  const provincialTerritorialProgram = provincialTerritorialSocialPrograms.find(({ id }) => child.dentalBenefits.includes(id));
 
   const childName = child.information.firstName;
 
@@ -130,7 +118,6 @@ export async function action({ context: { appContainer, session }, params, reque
       hasFederalBenefits: z.boolean({ error: t('protected-profile:edit-child-dental-benefits.error-message.federal-benefit-required') }),
       federalSocialProgram: z.string().trim().optional(),
     })
-
     .superRefine((val, ctx) => {
       if (val.hasFederalBenefits && (!val.federalSocialProgram || validator.isEmpty(val.federalSocialProgram))) {
         ctx.addIssue({ code: 'custom', message: t('protected-profile:edit-child-dental-benefits.error-message.federal-benefit-program-required'), path: ['federalSocialProgram'] });
@@ -149,7 +136,6 @@ export async function action({ context: { appContainer, session }, params, reque
       provincialTerritorialSocialProgram: z.string().trim().optional(),
       province: z.string().trim().optional(),
     })
-
     .superRefine((val, ctx) => {
       if (val.hasProvincialTerritorialBenefits) {
         if (!val.province || validator.isEmpty(val.province)) {

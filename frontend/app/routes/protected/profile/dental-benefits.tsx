@@ -30,27 +30,26 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
+  const listAllLocalizedDentalBenefits = await federalGovernmentInsurancePlanService.listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
+  const listAllLocalizedProvincialDentalBenefits = await provincialGovernmentInsurancePlanService.listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
-  const clientDentalBenefits = clientApplication.dentalBenefits.flatMap(async (id) => {
-    const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(id, locale);
-    if (federalProgram.isSome()) return [federalProgram.unwrap().name];
+  const clientDentalBenefits = clientApplication.dentalBenefits.flatMap((id) => {
+    const federalBenefit = listAllLocalizedDentalBenefits.find((benefit) => benefit.id === id);
+    if (federalBenefit) return [federalBenefit.name];
 
-    const provincialProgram = await provincialGovernmentInsurancePlanService.findLocalizedProvincialGovernmentInsurancePlanById(id, locale);
-    if (provincialProgram.isSome()) return [provincialProgram.unwrap().name];
+    const provincialBenefit = listAllLocalizedProvincialDentalBenefits.find((benefit) => benefit.id === id);
+    if (provincialBenefit) return [provincialBenefit.name];
 
     return [];
   });
 
-  const listAllLocalizedDentalBenefits = await federalGovernmentInsurancePlanService.listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
-  const listAllLocalizedProvincialDentalBenefits = await provincialGovernmentInsurancePlanService.listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
-
   const children = clientApplication.children.map((child) => {
     const dentalBenefits = child.dentalBenefits.flatMap((id) => {
-      const federal = listAllLocalizedDentalBenefits.find((benefit) => benefit.id === id);
-      if (federal) return [federal.name];
+      const federalBenefit = listAllLocalizedDentalBenefits.find((benefit) => benefit.id === id);
+      if (federalBenefit) return [federalBenefit.name];
 
-      const provincial = listAllLocalizedProvincialDentalBenefits.find((benefit) => benefit.id === id);
-      if (provincial) return [provincial.name];
+      const provincialBenefit = listAllLocalizedProvincialDentalBenefits.find((benefit) => benefit.id === id);
+      if (provincialBenefit) return [provincialBenefit.name];
 
       return [];
     });

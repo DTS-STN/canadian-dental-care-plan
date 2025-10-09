@@ -61,20 +61,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const provinceTerritoryStates = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
   const provincialTerritorialSocialPrograms = await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
-  let federalProgram;
-  let provincialTerritorialProgram;
-
-  for (const benefitId of clientApplication.dentalBenefits) {
-    const federal = federalSocialPrograms.find((program) => program.id === benefitId);
-    if (federal) {
-      federalProgram = federal;
-      continue;
-    }
-    const provincial = provincialTerritorialSocialPrograms.find((program) => program.id === benefitId);
-    if (provincial) {
-      provincialTerritorialProgram = provincial;
-    }
-  }
+  const federalProgram = federalSocialPrograms.find(({ id }) => clientApplication.dentalBenefits.includes(id));
+  const provincialTerritorialProgram = provincialTerritorialSocialPrograms.find(({ id }) => clientApplication.dentalBenefits.includes(id));
 
   const applicantName = clientApplication.applicantInformation.firstName;
 
@@ -114,7 +102,6 @@ export async function action({ context: { appContainer, session }, params, reque
       hasFederalBenefits: z.boolean({ error: t('protected-profile:edit-dental-benefits.error-message.federal-benefit-required') }),
       federalSocialProgram: z.string().trim().optional(),
     })
-
     .superRefine((val, ctx) => {
       if (val.hasFederalBenefits && (!val.federalSocialProgram || validator.isEmpty(val.federalSocialProgram))) {
         ctx.addIssue({ code: 'custom', message: t('protected-profile:edit-dental-benefits.error-message.federal-benefit-program-required'), path: ['federalSocialProgram'] });
@@ -133,7 +120,6 @@ export async function action({ context: { appContainer, session }, params, reque
       provincialTerritorialSocialProgram: z.string().trim().optional(),
       province: z.string().trim().optional(),
     })
-
     .superRefine((val, ctx) => {
       if (val.hasProvincialTerritorialBenefits) {
         if (!val.province || validator.isEmpty(val.province)) {
