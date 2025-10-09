@@ -74,22 +74,20 @@ export async function action({ context: { appContainer, session }, params, reque
       .string()
       .trim()
       .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-required'))
-      .superRefine((val, ctx) => {
+      .refine(
         // TODO: check if email is verified once PP has updated the clientApplication payload to include that field
-        if (val === PREFERRED_SUN_LIFE_METHOD.email && clientApplication.contactInformation.email === undefined) {
-          ctx.addIssue({ code: 'custom', message: t('protected-profile:edit-communication-preferences.error-message.preferred-method-email-verified') });
-        }
-      }),
+        (val) => val !== PREFERRED_SUN_LIFE_METHOD.email || clientApplication.contactInformation.email !== undefined,
+        t('protected-profile:edit-communication-preferences.error-message.preferred-method-email-verified'),
+      ),
     preferredMethodGovernmentOfCanada: z
       .string()
       .trim()
       .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-notification-method-required'))
-      .superRefine((val, ctx) => {
+      .refine(
         // TODO: check if email is verified once PP has updated the clientApplication payload to include that field
-        if (val === PREFERRED_NOTIFICATION_METHOD.msca && clientApplication.contactInformation.email === undefined) {
-          ctx.addIssue({ code: 'custom', message: t('protected-profile:edit-communication-preferences.error-message.preferred-notification-method-email-verified') });
-        }
-      }),
+        (val) => val !== PREFERRED_NOTIFICATION_METHOD.msca || clientApplication.contactInformation.email !== undefined,
+        t('protected-profile:edit-communication-preferences.error-message.preferred-notification-method-email-verified'),
+      ),
   });
 
   const parsedDataResult = formSchema.safeParse({

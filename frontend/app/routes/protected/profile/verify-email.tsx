@@ -115,11 +115,7 @@ export async function action({ context: { appContainer, session }, params, reque
       .trim()
       .min(1, t('protected-profile:verify-email.error-message.verification-code-required'))
       .transform(extractDigits)
-      .superRefine((val, ctx) => {
-        if (verificationState.verificationAttempts >= MAX_ATTEMPTS) {
-          ctx.addIssue({ code: 'custom', message: t('protected-profile:verify-email.error-message.verification-code-max-attempts'), path: ['verificationCode'] });
-        }
-      }),
+      .refine(() => verificationState.verificationAttempts < MAX_ATTEMPTS, t('protected-profile:verify-email.error-message.verification-code-max-attempts')),
   });
 
   const parsedDataResult = verificationCodeSchema.safeParse({
