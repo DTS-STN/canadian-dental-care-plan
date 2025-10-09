@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { faFile, faFileArchive, faFileAudio, faFileCode, faFileText, faFileVideo, faGear } from '@fortawesome/free-solid-svg-icons';
+import { faFile, faFileArchive, faFileAudio, faFileCode, faFileImage, faFileText, faFileVideo, faGear } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Slot } from '@radix-ui/react-slot';
 
@@ -227,7 +227,7 @@ function useStore<T>(selector: (state: StoreState) => T): T {
     const state = store.getState();
     const prevValue = lastValueRef.current;
 
-    if (prevValue && prevValue.state === state) {
+    if (prevValue?.state === state) {
       return prevValue.value;
     }
 
@@ -657,6 +657,7 @@ function FileUploadDropzone(props: FileUploadDropzoneProps) {
         dataTransfer.items.add(file);
       }
 
+      // eslint-disable-next-line react-hooks/immutability
       inputElement.files = dataTransfer.files;
       inputElement.dispatchEvent(new Event('change', { bubbles: true }));
     },
@@ -698,6 +699,7 @@ function FileUploadDropzone(props: FileUploadDropzoneProps) {
         dataTransfer.items.add(file);
       }
 
+      // eslint-disable-next-line react-hooks/immutability
       inputElement.files = dataTransfer.files;
       inputElement.dispatchEvent(new Event('change', { bubbles: true }));
     },
@@ -904,6 +906,10 @@ function getFileIcon(file: File) {
   const type = file.type;
   const extension = file.name.split('.').pop()?.toLowerCase() ?? '';
 
+  if (type.startsWith('image/')) {
+    return <FontAwesomeIcon icon={faFileImage} />;
+  }
+
   if (type.startsWith('video/')) {
     return <FontAwesomeIcon icon={faFileVideo} />;
   }
@@ -972,10 +978,10 @@ function FileUploadItemMetadata(props: FileUploadItemMetadataProps) {
     <ItemMetadataPrimitive data-slot="file-upload-metadata" dir={context.dir} {...metadataProps} className={cn('flex min-w-0 flex-1 flex-col', className)}>
       {children ?? (
         <>
-          <span id={itemContext.nameId} className={cn('truncate text-sm font-medium', size === 'sm' && 'text-[13px] leading-snug font-normal')}>
+          <span id={itemContext.nameId} className={cn('truncate font-semibold', size === 'sm' && 'leading-snug')}>
             {itemContext.fileState.file.name}
           </span>
-          <span id={itemContext.sizeId} className={cn('text-muted-foreground truncate text-xs', size === 'sm' && 'text-[11px] leading-snug')}>
+          <span id={itemContext.sizeId} className={cn('zinc-500 truncate text-sm', size === 'sm' && 'leading-snug')}>
             {formatBytes(itemContext.fileState.file.size)}
           </span>
           {itemContext.fileState.error && (
