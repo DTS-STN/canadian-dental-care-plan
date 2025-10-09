@@ -1,15 +1,20 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { redirect, useFetcher } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import type { Route } from './+types/mailing-address';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
+import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { Dialog, DialogTrigger } from '~/components/dialog';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import type { InputOptionProps } from '~/components/input-option';
@@ -23,6 +28,13 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+
+const FORM_ACTION = {
+  submit: 'submit',
+  cancel: 'cancel',
+  useInvalidAddress: 'use-invalid-address',
+  useSelectedAddress: 'use-selected-address',
+} as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
@@ -63,13 +75,119 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
-export function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  //TODO: update action for address verification
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const formData = await request.formData();
+  const locale = getLocale(request);
+
+  const clientConfig = appContainer.get(TYPES.ClientConfig);
+  const addressValidationService = appContainer.get(TYPES.AddressValidationService);
+  const countryService = appContainer.get(TYPES.CountryService);
+  const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
+
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
+  const isCopyMailingToHome = formData.get('syncAddresses') === 'true';
+
+  const mailingAddressValidator = appContainer.get(TYPES.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
+  const validatedResult = await mailingAddressValidator.validateMailingAddress({
+    address: String(formData.get('address')),
+    countryId: String(formData.get('countryId')),
+    provinceStateId: formData.get('provinceStateId') ? String(formData.get('provinceStateId')) : undefined,
+    city: String(formData.get('city')),
+    postalZipCode: formData.get('postalZipCode') ? String(formData.get('postalZipCode')) : undefined,
+  });
+
+  if (!validatedResult.success) {
+    return data({ errors: validatedResult.errors }, { status: 400 });
+  }
+
+  const mailingAddress = {
+    address: validatedResult.data.address,
+    city: validatedResult.data.city,
+    country: validatedResult.data.countryId,
+    postalCode: validatedResult.data.postalZipCode,
+    province: validatedResult.data.provinceStateId,
+  };
+
+  const isNotCanada = validatedResult.data.countryId !== clientConfig.CANADA_COUNTRY_ID;
+  const isUseInvalidAddressAction = formAction === FORM_ACTION.useInvalidAddress;
+  const isUseSelectedAddressAction = formAction === FORM_ACTION.useSelectedAddress;
+  const canProceed = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('update-data.profile.mailing-address', { userId: idToken.sub });
 
-  return redirect(getPathById('protected/profile/contact-information', params));
+  if (canProceed) {
+    if (isCopyMailingToHome) {
+      await appContainer.get(TYPES.ProfileService).updateMailingAddress(mailingAddress);
+      await appContainer.get(TYPES.ProfileService).updateHomeAddress(mailingAddress);
+      return redirect(getPathById('protected/profile/contact-information', params));
+    }
+    await appContainer.get(TYPES.ProfileService).updateMailingAddress(mailingAddress);
+    return redirect(getPathById('protected/profile/contact/home-address', params));
+  }
+
+  // Validate Canadian adddress
+  invariant(validatedResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
+  invariant(validatedResult.data.provinceStateId, 'Province state is required for Canadian addresses');
+
+  const country = await countryService.getLocalizedCountryById(validatedResult.data.countryId, locale);
+  const provinceTerritoryState = await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedResult.data.provinceStateId, locale);
+
+  // Build the address object using validated data, transforming unique identifiers
+  const formattedMailingAddress: CanadianAddress = {
+    address: validatedResult.data.address,
+    city: validatedResult.data.city,
+    countryId: validatedResult.data.countryId,
+    country: country.name,
+    postalZipCode: validatedResult.data.postalZipCode,
+    provinceStateId: validatedResult.data.provinceStateId,
+    provinceState: validatedResult.data.provinceStateId && provinceTerritoryState.abbr,
+  };
+
+  const addressCorrectionResult = await addressValidationService.getAddressCorrectionResult({
+    address: formattedMailingAddress.address,
+    city: formattedMailingAddress.city,
+    postalCode: formattedMailingAddress.postalZipCode,
+    provinceCode: formattedMailingAddress.provinceState,
+    userId: 'anonymous',
+  });
+
+  if (addressCorrectionResult.status === 'not-correct') {
+    return {
+      invalidAddress: formattedMailingAddress,
+      status: 'address-invalid',
+    } as const satisfies AddressInvalidResponse;
+  }
+
+  if (addressCorrectionResult.status === 'corrected') {
+    const provinceTerritoryState = await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateByCode(addressCorrectionResult.provinceCode, locale);
+    return {
+      enteredAddress: formattedMailingAddress,
+      status: 'address-suggestion',
+      suggestedAddress: {
+        address: addressCorrectionResult.address,
+        city: addressCorrectionResult.city,
+        country: formattedMailingAddress.country,
+        countryId: formattedMailingAddress.countryId,
+        postalZipCode: addressCorrectionResult.postalCode,
+        provinceState: provinceTerritoryState.abbr,
+        provinceStateId: provinceTerritoryState.id,
+      },
+    } as const satisfies AddressSuggestionResponse;
+  }
+
+  if (isCopyMailingToHome) {
+    await appContainer.get(TYPES.ProfileService).updateMailingAddress(mailingAddress);
+    await appContainer.get(TYPES.ProfileService).updateHomeAddress(mailingAddress);
+    return redirect(getPathById('protected/profile/contact-information', params));
+  }
+
+  await appContainer.get(TYPES.ProfileService).updateMailingAddress(mailingAddress);
+  return redirect(getPathById('protected/profile/contact/home-address', params));
+}
+
+function isAddressResponse(data: unknown): data is AddressResponse {
+  return typeof data === 'object' && data !== null && 'status' in data && typeof data.status === 'string';
 }
 
 export default function EditMailingAddress({ loaderData, params }: Route.ComponentProps) {
@@ -83,9 +201,9 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.country);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
   const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState.copyMailing === true);
+  const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
 
-  //TODO: hook in errors from action when available
-  const errors = undefined;
+  const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'mailing-address',
     city: 'mailing-city',
@@ -103,6 +221,16 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
     const filteredProvinceTerritoryStates = regionList.filter(({ countryId }) => countryId === selectedMailingCountry);
     setMailingCountryRegions(filteredProvinceTerritoryStates);
   }, [selectedMailingCountry, regionList]);
+
+  useEffect(() => {
+    setAddressDialogContent(isAddressResponse(fetcher.data) ? fetcher.data : null);
+  }, [fetcher, fetcher.data]);
+
+  function onDialogOpenChangeHandler(open: boolean) {
+    if (!open) {
+      setAddressDialogContent(null);
+    }
+  }
 
   const mailingCountryChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement>) => {
     setSelectedMailingCountry(event.currentTarget.value);
@@ -136,11 +264,11 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
               helpMessagePrimaryClassName="text-black"
               autoComplete="address-line1"
               defaultValue={defaultState.address}
-              errorMessage={undefined}
+              errorMessage={errors?.address}
               required
             />
             <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputSanitizeField id="mailing-city" name="city" className="w-full" label={t('protected-profile:mailing-address.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={undefined} required />
+              <InputSanitizeField id="mailing-city" name="city" className="w-full" label={t('protected-profile:mailing-address.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
               <InputSanitizeField
                 id="mailing-postal-code"
                 name="postalZipCode"
@@ -149,7 +277,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                 maxLength={100}
                 autoComplete="postal-code"
                 defaultValue={defaultState.postalCode}
-                errorMessage={undefined}
+                errorMessage={errors?.postalZipCode}
                 required={isPostalCodeRequired}
               />
             </div>
@@ -161,7 +289,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                 className="w-full sm:w-1/2"
                 label={t('protected-profile:mailing-address.province')}
                 defaultValue={defaultState.province}
-                errorMessage={undefined}
+                errorMessage={errors?.provinceStateId}
                 options={[dummyOption, ...mailingRegions]}
                 required
               />
@@ -173,7 +301,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
               label={t('protected-profile:mailing-address.country')}
               autoComplete="country"
               defaultValue={defaultState.country}
-              errorMessage={undefined}
+              errorMessage={errors?.countryId}
               options={countries}
               onChange={mailingCountryChangeHandler}
               required
@@ -184,9 +312,31 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
           </div>
         </fieldset>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Mailing address click">
-            {t('protected-profile:mailing-address.continue-btn')}
-          </LoadingButton>
+          <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
+            <DialogTrigger asChild>
+              <LoadingButton
+                aria-expanded={undefined}
+                variant="primary"
+                id="continue-button"
+                type="submit"
+                name="_action"
+                value={FORM_ACTION.submit}
+                loading={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Mailing address click"
+              >
+                {t('protected-profile:mailing-address.continue-btn')}
+              </LoadingButton>
+            </DialogTrigger>
+            {!fetcher.isSubmitting && addressDialogContent && (
+              <>
+                {addressDialogContent.status === 'address-suggestion' && (
+                  <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useSelectedAddress} />
+                )}
+                {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useInvalidAddress} />}
+              </>
+            )}
+          </Dialog>
+
           <ButtonLink id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Mailing address click">
             {t('protected-profile:mailing-address.back-btn')}
           </ButtonLink>

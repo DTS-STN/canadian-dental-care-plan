@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import type { CommunicationPreferenceRequestDto, DentalBenefitsRequestDto, EmailAddressRequestDto, PhoneNumberRequestDto } from '~/.server/domain/dtos';
+import type { AddressRequestDto, CommunicationPreferenceRequestDto, DentalBenefitsRequestDto, EmailAddressRequestDto, PhoneNumberRequestDto } from '~/.server/domain/dtos';
 import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
 
@@ -36,6 +36,22 @@ export interface ProfileRepository {
    * @returns A Promise that resolves when the update is complete.
    */
   updateDentalBenefits(dentalBenefitsDto: DentalBenefitsRequestDto): Promise<void>;
+
+  /**
+   * Updates mailing address for a user.
+   *
+   * @param addressDto The address dto.
+   * @returns A Promise that resolves when the update is complete.
+   */
+  updateMailingAddress(addressDto: AddressRequestDto): Promise<void>;
+
+  /**
+   * Updates home address for a user.
+   *
+   * @param addressDto The address dto.
+   * @returns A Promise that resolves when the update is complete.
+   */
+  updateHomeAddress(addressDto: AddressRequestDto): Promise<void>;
 
   /**
    * Retrieves metadata associated with the letter repository.
@@ -86,6 +102,20 @@ export class MockProfileRepository implements ProfileRepository {
     this.log.debug('Mock updating email address for request [%j]', emailAddressDto);
 
     this.log.debug('Successfully mock updated email address');
+    return await Promise.resolve();
+  }
+
+  async updateMailingAddress(addressDto: AddressRequestDto): Promise<void> {
+    this.log.debug('Mock updating mailing address for request [%j]', addressDto);
+
+    this.log.debug('Successfully mock updated mailing address');
+    return await Promise.resolve();
+  }
+
+  async updateHomeAddress(addressDto: AddressRequestDto): Promise<void> {
+    this.log.debug('Mock updating home address for request [%j]', addressDto);
+
+    this.log.debug('Successfully mock updated home address');
     return await Promise.resolve();
   }
 
