@@ -17,6 +17,7 @@
   "upload": {
     "page-title": "Téléverser mes documents",
     "submit": "Soumettre",
-    "return-dashboard": "Retour au tableau de bord"
+    "return-dashboard": "Retour au tableau de bord",
+    "select-one": "Sélectionnez une option"
   }
 }
