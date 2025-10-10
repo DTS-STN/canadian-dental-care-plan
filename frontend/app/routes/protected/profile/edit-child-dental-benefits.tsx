@@ -41,7 +41,8 @@ const HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'apply', 'gcweb'),
+  breadcrumbs: [{ labelI18nKey: 'protected-profile:dental-benefits.page-title', routeId: 'protected/profile/dental-benefits' }],
+  i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.editChildDentalBenefits,
   pageTitleI18nKey: 'protected-profile:edit-child-dental-benefits.title',
 };
@@ -229,7 +230,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
     <div className="max-w-prose">
       <p className="mb-4">{t('protected-profile:edit-child-dental-benefits.access-to-dental')}</p>
       <p className="mb-4">{t('protected-profile:edit-child-dental-benefits.eligibility-criteria')}</p>
-      <p className="mb-4 italic">{t('apply:required-label')}</p>
+      <p className="mb-4 italic">{t('protected-profile:required-label')}</p>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
