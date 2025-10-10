@@ -35,6 +35,10 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
+  breadcrumbs: [
+    { labelI18nKey: 'protected-profile:contact-information.page-title', routeId: 'protected/profile/contact-information' },
+    { labelI18nKey: 'protected-profile:email.page-title', routeId: 'protected/profile/contact/email-address' },
+  ],
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.verifyEmail,
   pageTitleI18nKey: 'protected-profile:verify-email.page-title',

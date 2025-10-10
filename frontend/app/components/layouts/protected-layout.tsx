@@ -148,7 +148,7 @@ function PageBreadcrumbs() {
     <Breadcrumbs
       className="my-4"
       items={[
-        { content: t('gcweb:breadcrumbs.home'), to: t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }) },
+        { content: t('gcweb:breadcrumbs.dashboard'), to: t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }) },
         ...breadcrumbs.map((item) => ({
           content: t(item.labelI18nKey),
           routeId: item.routeId,

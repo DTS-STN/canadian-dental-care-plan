@@ -25,6 +25,7 @@ export const PREFERRED_SUN_LIFE_METHOD = { email: 'email', mail: 'mail' } as con
 export const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
 
 export const handle = {
+  breadcrumbs: [{ labelI18nKey: 'protected-profile:communication-preferences.page-title', routeId: 'protected/profile/communication-preferences' }],
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.editCommunicationPreferences,
   pageTitleI18nKey: 'protected-profile:edit-communication-preferences.page-title',
