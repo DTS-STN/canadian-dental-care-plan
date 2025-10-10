@@ -66,7 +66,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   session.set('letters', letters);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('letters:index.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('letters:index.page-title') }) };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   const idToken: IdToken = session.get('idToken');

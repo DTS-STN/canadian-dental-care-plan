@@ -25,7 +25,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   await securityHandler.validateAuthSession({ request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('unable-to-process-request:page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('unable-to-process-request:page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.renew.unable-to-process-request', { userId: idToken.sub });

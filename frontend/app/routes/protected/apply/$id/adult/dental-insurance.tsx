@@ -42,7 +42,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadProtectedApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult:dental-insurance.title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-apply-adult:dental-insurance.title') }) };
   invariant(state.communicationPreferences, 'Expected state.communicationPreferences to be defined');
   const backToEmail = state.communicationPreferences.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email || state.communicationPreferences.preferredNotificationMethod !== PREFERRED_NOTIFICATION_METHOD.mail;
 

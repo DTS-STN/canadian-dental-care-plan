@@ -30,7 +30,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const locale = getLocale(request);
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:communication-preferences.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:communication-preferences.page-title') }) };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   const idToken = session.get('idToken');

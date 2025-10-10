@@ -59,8 +59,8 @@ export async function loader({ context: { appContainer, session }, request, para
   const memberName = state.information?.firstName ?? childNumber;
 
   const meta = {
-    title: t('gcweb:meta.title.template', { title: t('protected-renew:children.demographic-survey.page-title', { memberName }) }),
-    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-renew:children.demographic-survey.page-title', { memberName: childNumber }) }),
+    title: t('gcweb:meta.title.msca-template', { title: t('protected-renew:children.demographic-survey.page-title', { memberName }) }),
+    dcTermsTitle: t('gcweb:meta.title.msca-template', { title: t('protected-renew:children.demographic-survey.page-title', { memberName: childNumber }) }),
   };
 
   const demographicSurveyService = appContainer.get(TYPES.DemographicSurveyService);

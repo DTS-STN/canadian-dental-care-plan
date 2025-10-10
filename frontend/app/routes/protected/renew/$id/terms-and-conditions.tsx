@@ -37,7 +37,7 @@ export async function loader({ context: { appContainer, session }, request, para
   loadProtectedRenewState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:terms-and-conditions.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-renew:terms-and-conditions.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.renew.terms-and-conditions', { userId: idToken.sub });

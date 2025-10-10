@@ -109,7 +109,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     country: countryHome?.name,
   };
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-child:review-adult-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-apply-child:review-adult-information.page-title') }) };
 
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
   const benefitApplicationDtoMapper = appContainer.get(TYPES.BenefitApplicationDtoMapper);

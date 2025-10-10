@@ -128,7 +128,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:review-adult-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-apply-adult-child:review-adult-information.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.apply.adult-child.review-adult-information', { userId: idToken.sub });

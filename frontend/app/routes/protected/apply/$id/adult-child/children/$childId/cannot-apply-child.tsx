@@ -41,7 +41,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:eligibility.cannot-apply-child.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-apply-adult-child:eligibility.cannot-apply-child.page-title') }) };
   const currentDate = APPLICATION_CURRENT_DATE ? parseDateString(APPLICATION_CURRENT_DATE) : new UTCDate();
   const coverageStartDate = parseDateString(state.applicationYear.dependentEligibilityEndDate);
   const formattedDate = toLocaleDateString(coverageStartDate, locale);

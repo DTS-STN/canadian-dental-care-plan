@@ -70,7 +70,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const provinceTerritoryStates = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
   const provincialTerritorialSocialPrograms = await provincialGovernmentInsurancePlanService.listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:update-dental-benefits.title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-renew:update-dental-benefits.title') }) };
 
   const clientDentalBenefits = (await state.clientApplication.dentalBenefits.reduce(async (benefitsPromise, id) => {
     const benefits = await benefitsPromise;

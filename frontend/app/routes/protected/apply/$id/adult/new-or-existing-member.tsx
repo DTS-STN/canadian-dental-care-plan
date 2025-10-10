@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadProtectedApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult:new-or-existing-member.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-apply-adult:new-or-existing-member.page-title') }) };
   invariant(state.applicantInformation?.dateOfBirth, 'Expected applicantInformation.dateOfBirth to be defined');
   const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
 

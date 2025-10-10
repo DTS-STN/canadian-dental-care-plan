@@ -26,7 +26,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:applicant-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:applicant-information.page-title') }) };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   const primaryApplicant = {

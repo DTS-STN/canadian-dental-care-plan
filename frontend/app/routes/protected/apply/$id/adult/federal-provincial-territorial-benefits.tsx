@@ -67,7 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const provinceTerritoryStates = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
   const provincialTerritorialSocialPrograms = await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult:dental-benefits.title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-apply-adult:dental-benefits.title') }) };
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.apply.adult.federal-provincial-territorial-benefits', { userId: idToken.sub });
