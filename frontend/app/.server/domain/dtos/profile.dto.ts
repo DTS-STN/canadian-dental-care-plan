@@ -20,3 +20,12 @@ export type DentalBenefitsRequestDto = Readonly<{
 export type EmailAddressRequestDto = Readonly<{
   email: string;
 }>;
+
+export type AddressRequestDto = Readonly<{
+  address: string;
+  apartment?: string;
+  city: string;
+  country: string;
+  postalCode?: string;
+  province?: string;
+}>;
