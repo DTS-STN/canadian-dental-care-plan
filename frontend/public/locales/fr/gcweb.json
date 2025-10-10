@@ -6,7 +6,8 @@
     "subject": "Économie et industrie;Assurance;Assurance dentaire",
     "title": {
       "default": "Régime canadien de soins dentaires - Canada.ca",
-      "template": "{{title}} - Régime canadien de soins dentaires - Canada.ca"
+      "template": "{{title}} - Régime canadien de soins dentaires - Canada.ca",
+      "msca-template": "{{title}} - Mon dossier Service Canada - Régime canadien de soins dentaires - Canada.ca"
     }
   },
   "nav": {

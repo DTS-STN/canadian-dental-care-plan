@@ -57,7 +57,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     return { ...child, dentalBenefits };
   });
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:dental-benefits.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:dental-benefits.page-title') }) };
 
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 

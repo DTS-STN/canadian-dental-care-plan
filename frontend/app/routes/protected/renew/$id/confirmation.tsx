@@ -97,7 +97,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     }),
   );
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:confirm.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-renew:confirm.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.renew.confirmation', { userId: idToken.sub });

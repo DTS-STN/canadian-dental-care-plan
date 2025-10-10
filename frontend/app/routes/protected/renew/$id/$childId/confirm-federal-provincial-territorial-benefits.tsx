@@ -69,8 +69,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const provincialTerritorialSocialPrograms = await provincialGovernmentInsurancePlanService.listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
   const meta = {
-    title: t('gcweb:meta.title.template', { title: t('protected-renew:children.update-dental-benefits.title', { childName }) }),
-    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-renew:children.update-dental-benefits.title', { childName: childNumber }) }),
+    title: t('gcweb:meta.title.msca-template', { title: t('protected-renew:children.update-dental-benefits.title', { childName }) }),
+    dcTermsTitle: t('gcweb:meta.title.msca-template', { title: t('protected-renew:children.update-dental-benefits.title', { childName: childNumber }) }),
   };
 
   const immutableChild = renewState.clientApplication.children.find((c) => c.information.socialInsuranceNumber === state.information?.socialInsuranceNumber);

@@ -66,8 +66,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const childName = state.isNew ? childNumber : (state.information?.firstName ?? childNumber);
 
   const meta = {
-    title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:children.information.page-title', { childName }) }),
-    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:children.information.page-title', { childName: childNumber }) }),
+    title: t('gcweb:meta.title.msca-template', { title: t('protected-apply-adult-child:children.information.page-title', { childName }) }),
+    dcTermsTitle: t('gcweb:meta.title.msca-template', { title: t('protected-apply-adult-child:children.information.page-title', { childName: childNumber }) }),
   };
 
   const idToken: IdToken = session.get('idToken');

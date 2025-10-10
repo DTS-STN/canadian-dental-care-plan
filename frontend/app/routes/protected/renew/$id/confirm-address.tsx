@@ -51,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     throw new Response('Not Found', { status: 404 });
   }
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:confirm-address.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-renew:confirm-address.page-title') }) };
   return { meta, defaultState: { isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress }, editMode: state.editMode };
 }
 

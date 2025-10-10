@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadProtectedApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-child:new-or-existing-member.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-apply-child:new-or-existing-member.page-title') }) };
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.apply.child.new-or-existing-member', { userId: idToken.sub });

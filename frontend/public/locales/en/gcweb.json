@@ -6,7 +6,8 @@
     "subject": "Economics and Industry;Insurance;Dental insurance",
     "title": {
       "default": "Canadian Dental Care Plan - Canada.ca",
-      "template": "{{title}} - Canadian Dental Care Plan - Canada.ca"
+      "template": "{{title}} - Canadian Dental Care Plan - Canada.ca",
+      "msca-template": "{{title}} - Canadian Dental Care Plan - My Service Canada Account - Canada.ca"
     }
   },
   "nav": {

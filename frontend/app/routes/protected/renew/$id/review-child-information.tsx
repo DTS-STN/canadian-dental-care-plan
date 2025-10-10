@@ -57,7 +57,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-renew:review-child-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-renew:review-child-information.page-title') }) };
 
   // we need to work with a copy of the state because a user could back navigate renew for another child and mutable data would have possibly filtered that child from state
   const copiedState = JSON.parse(JSON.stringify(state));

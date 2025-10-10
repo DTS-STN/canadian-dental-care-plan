@@ -69,7 +69,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-apply-adult-child:review-child-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-apply-adult-child:review-child-information.page-title') }) };
 
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
   const benefitApplicationStateMapper = appContainer.get(TYPES.BenefitApplicationStateMapper);

@@ -35,7 +35,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-profile:email.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:email.page-title') }) };
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.email-address', { userId: idToken.sub });

@@ -33,7 +33,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   securityHandler.validateFeatureEnabled('stub-login');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('stub-login:index.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('stub-login:index.page-title') }) };
 
   const idTokenOption = session.find('idToken');
   const userInfoTokenOption = session.find('userInfoToken');

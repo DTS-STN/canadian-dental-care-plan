@@ -51,8 +51,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const memberName = `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`;
 
   const meta = {
-    title: t('gcweb:meta.title.template', { title: t('protected-renew:dental-insurance.title', { memberName }) }),
-    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-renew:dental-insurance.title', { memberName: t('protected-renew:dental-insurance.member') }) }),
+    title: t('gcweb:meta.title.msca-template', { title: t('protected-renew:dental-insurance.title', { memberName }) }),
+    dcTermsTitle: t('gcweb:meta.title.msca-template', { title: t('protected-renew:dental-insurance.title', { memberName: t('protected-renew:dental-insurance.member') }) }),
   };
 
   const idToken: IdToken = session.get('idToken');
