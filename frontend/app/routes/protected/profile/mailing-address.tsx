@@ -327,7 +327,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                 {t('protected-profile:mailing-address.continue-btn')}
               </LoadingButton>
             </DialogTrigger>
-            {!fetcher.isSubmitting && addressDialogContent && (
+            {!isSubmitting && addressDialogContent && (
               <>
                 {addressDialogContent.status === 'address-suggestion' && (
                   <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useSelectedAddress} />
@@ -336,7 +336,6 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
               </>
             )}
           </Dialog>
-
           <ButtonLink id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Mailing address click">
             {t('protected-profile:mailing-address.back-btn')}
           </ButtonLink>
