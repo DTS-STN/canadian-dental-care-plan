@@ -19,6 +19,7 @@ export * from './profile.service';
 export * from './province-territory-state.service';
 export * from './provincial-government-insurance-plan.service';
 export * from './verification-code.service';
+export * from './document-upload.service';
 
 /**
  * Key that holds the killswitch boolean value in redis.
