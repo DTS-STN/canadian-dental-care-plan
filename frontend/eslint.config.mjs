@@ -102,11 +102,12 @@ export default defineConfig(
       jsxA11yPlugin.flatConfigs.recommended, //
       reactPlugin.configs.flat.recommended,
       reactPlugin.configs.flat['jsx-runtime'],
-      reactHooksPlugin.configs.recommended,
+      reactHooksPlugin.configs.flat['recommended-latest'],
     ],
     rules: {
       'react/no-unknown-property': ['error', { ignore: ['property', 'resource', 'typeof', 'vocab'] }],
       'react/prop-types': 'off',
+      'react-hooks/set-state-in-effect': 'off',
     },
     settings: {
       formComponents: ['Form'],
