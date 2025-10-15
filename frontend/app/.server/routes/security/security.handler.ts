@@ -6,7 +6,7 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
-import type { ClientApplicationService } from '~/.server/domain/services';
+import type { ApplicantService, ClientApplicationService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
@@ -70,7 +70,16 @@ export interface ValidateRequestMethodParams {
 /**
  * Parameters for requiring client application.
  */
-export interface requireClientApplicationParams {
+export interface RequireClientApplicationParams {
+  params: Params;
+  request: Request;
+  session: Session;
+}
+
+/**
+ * Parameters for requiring client number.
+ */
+export interface RequireClientNumberParams {
   params: Params;
   request: Request;
   session: Session;
@@ -132,7 +141,16 @@ export interface SecurityHandler {
    * @throws Throws a redirect response if no client application is found.
    * @returns Resolves if a client application is found.
    */
-  requireClientApplication(params: requireClientApplicationParams): Promise<ClientApplicationDto>;
+  requireClientApplication(params: RequireClientApplicationParams): Promise<ClientApplicationDto>;
+
+  /**
+   * Ensures that the user has a client number associated with their SIN.
+   *
+   * @param params - Parameters containing the request, session, and route params.
+   * @throws Throws a redirect response if no client number is found.
+   * @returns Resolves with the client number if found.
+   */
+  requireClientNumber(params: RequireClientNumberParams): Promise<string>;
 }
 
 /**
@@ -146,6 +164,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
   private readonly hCaptchaValidator: HCaptchaValidator;
   private readonly raoidcSessionValidator: RaoidcSessionValidator;
   private readonly clientApplicationService: ClientApplicationService;
+  private readonly applicantService: ApplicantService;
 
   constructor(
     @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>,
@@ -153,6 +172,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
     @inject(TYPES.HCaptchaValidator) hCaptchaValidator: HCaptchaValidator,
     @inject(TYPES.RaoidcSessionValidator) raoidcSessionValidator: RaoidcSessionValidator,
     @inject(TYPES.ClientApplicationService) clientApplicationService: ClientApplicationService,
+    @inject(TYPES.ApplicantService) applicantService: ApplicantService,
   ) {
     this.log = createLogger('DefaultSecurityHandler');
     this.serverConfig = serverConfig;
@@ -160,6 +180,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
     this.hCaptchaValidator = hCaptchaValidator;
     this.raoidcSessionValidator = raoidcSessionValidator;
     this.clientApplicationService = clientApplicationService;
+    this.applicantService = applicantService;
   }
 
   /**
@@ -268,7 +289,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
     this.log.debug('Request method [%s] is allowed for path [%s] with allowed methods [%s]', method, pathname, allowedMethods);
   }
 
-  async requireClientApplication({ params, request, session }: requireClientApplicationParams): Promise<ClientApplicationDto> {
+  async requireClientApplication({ params, request, session }: RequireClientApplicationParams): Promise<ClientApplicationDto> {
     this.log.debug('Requiring client application for session [%s]', session.id);
     const userInfoToken = session.find('userInfoToken').unwrapUnchecked();
 
@@ -292,5 +313,41 @@ export class DefaultSecurityHandler implements SecurityHandler {
 
     this.log.debug('Client application found for SIN [%s]; session [%s]', userInfoToken.sin, session.id);
     return clientApplicationOption.unwrap();
+  }
+
+  async requireClientNumber({ params, request, session }: RequireClientNumberParams): Promise<string> {
+    this.log.debug('Requiring client number for session [%s]', session.id);
+
+    const userInfoToken = session.find('userInfoToken').unwrapUnchecked();
+
+    if (!userInfoToken?.sin) {
+      this.log.debug("User's SIN is not available in session [%s]; redirecting to login", session.id);
+      const { pathname, searchParams } = new URL(request.url);
+      const returnTo = encodeURIComponent(`${pathname}?${searchParams}`);
+      throw redirectDocument(`/auth/login?returnto=${returnTo}`);
+    }
+
+    if (session.has('clientNumber')) {
+      const clientNumber = session.get('clientNumber');
+      this.log.debug('Client number found in session [%s]', session.id);
+      return clientNumber;
+    }
+
+    const clientNumberOption = await this.applicantService.findClientNumberBySin({
+      sin: userInfoToken.sin,
+      userId: userInfoToken.sub,
+    });
+
+    if (clientNumberOption.isNone()) {
+      this.log.debug('No client number found for SIN [%s]; session [%s]; redirecting to data unavailable', userInfoToken.sin, session.id);
+      throw redirect(getPathById('protected/data-unavailable', params));
+    }
+
+    const clientNumber = clientNumberOption.unwrap();
+
+    session.set('clientNumber', clientNumber);
+
+    this.log.debug('Client number found for SIN [%s]; session [%s]', userInfoToken.sin, session.id);
+    return clientNumber;
   }
 }

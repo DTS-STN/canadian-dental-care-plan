@@ -4,7 +4,7 @@ import type { MockProxy } from 'vitest-mock-extended';
 import { anyObject, mock } from 'vitest-mock-extended';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
-import type { ClientApplicationService } from '~/.server/domain/services';
+import type { ApplicantService, ClientApplicationService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { DefaultSecurityHandler } from '~/.server/routes/security';
@@ -23,6 +23,7 @@ describe('DefaultSecurityHandler', () => {
   let mockHCaptchaValidator: MockProxy<HCaptchaValidator>;
   let mockRaoidcSessionValidator: MockProxy<RaoidcSessionValidator>;
   let mockClientApplicationService: MockProxy<ClientApplicationService>;
+  let mockApplicantService: MockProxy<ApplicantService>;
   let securityHandler: DefaultSecurityHandler;
 
   beforeEach(() => {
@@ -33,6 +34,7 @@ describe('DefaultSecurityHandler', () => {
     mockHCaptchaValidator = mock<HCaptchaValidator>();
     mockRaoidcSessionValidator = mock<RaoidcSessionValidator>();
     mockClientApplicationService = mock<ClientApplicationService>();
+    mockApplicantService = mock<ApplicantService>();
 
     // Creating an instance of DefaultSecurityHandler with the mocked dependencies
     securityHandler = new DefaultSecurityHandler(
@@ -41,6 +43,7 @@ describe('DefaultSecurityHandler', () => {
       mockHCaptchaValidator,
       mockRaoidcSessionValidator,
       mockClientApplicationService,
+      mockApplicantService,
     );
   });
 
@@ -131,6 +134,7 @@ describe('DefaultSecurityHandler', () => {
         mockHCaptchaValidator,
         mockRaoidcSessionValidator,
         mockClientApplicationService,
+        mockApplicantService,
       );
 
       expect(() => securityHandler.validateFeatureEnabled(feature)).toThrow(
@@ -151,6 +155,7 @@ describe('DefaultSecurityHandler', () => {
         mockHCaptchaValidator,
         mockRaoidcSessionValidator,
         mockClientApplicationService,
+        mockApplicantService,
       );
 
       expect(() => securityHandler.validateFeatureEnabled(feature)).not.toThrow();
@@ -189,6 +194,7 @@ describe('DefaultSecurityHandler', () => {
         mockHCaptchaValidator,
         mockRaoidcSessionValidator,
         mockClientApplicationService,
+        mockApplicantService,
       );
 
       const mockFormData = mock<FormData>();

@@ -1,7 +1,4 @@
-import { redirect } from 'react-router';
-
 import { invariant } from '@dts-stn/invariant';
-import type { Option } from 'oxide.ts';
 import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/index';
@@ -15,7 +12,6 @@ import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
-import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -34,20 +30,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  // TODO: Add client number check in security handler
-  const clientNumberOption: Option<string> = session.has('clientNumber')
-    ? session.find('clientNumber')
-    : await appContainer.get(TYPES.ApplicantService).findClientNumberBySin({
-        sin: userInfoToken.sin,
-        userId: userInfoToken.sub,
-      });
-
-  if (clientNumberOption.isNone()) {
-    throw redirect(getPathById('protected/data-unavailable', params));
-  }
-
-  const clientNumber = clientNumberOption.unwrap();
-  session.set('clientNumber', clientNumber);
+  const clientNumber = await securityHandler.requireClientNumber({ params, request, session });
 
   const evidentiaryDocumentService = appContainer.get(TYPES.EvidentiaryDocumentService);
   const evidentiaryDocumentTypeService = appContainer.get(TYPES.EvidentiaryDocumentTypeService);
