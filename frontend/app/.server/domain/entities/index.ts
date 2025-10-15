@@ -15,3 +15,4 @@ export type * from './letter-type.entity';
 export type * from './letter.entity';
 export type * from './province-territory-state.entity';
 export type * from './verification-code.entity';
+export type * from './document-upload.entity';

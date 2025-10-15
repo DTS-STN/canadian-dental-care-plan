@@ -16,3 +16,4 @@ export * from './letter.repository';
 export * from './profile.repository';
 export * from './province-territory-state.repository';
 export * from './verification-code.repository';
+export * from './document-upload.repository';
