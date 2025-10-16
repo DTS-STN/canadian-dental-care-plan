@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -9,8 +10,11 @@ import type { Route } from './+types/home-address';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
+import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { Dialog, DialogTrigger } from '~/components/dialog';
 import { useErrorSummary } from '~/components/error-summary';
 import type { InputOptionProps } from '~/components/input-option';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
@@ -23,8 +27,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { invariant } from '@dts-stn/invariant';
-import type { AddressInvalidResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 
 const FORM_ACTION = {
   submit: 'submit',
@@ -75,12 +77,12 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
   const locale = getLocale(request);
-  
+
   const clientConfig = appContainer.get(TYPES.ClientConfig);
   const addressValidationService = appContainer.get(TYPES.AddressValidationService);
   const countryService = appContainer.get(TYPES.CountryService);
   const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
-  
+
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
   const mailingAddressValidator = appContainer.get(TYPES.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
@@ -116,14 +118,14 @@ export async function action({ context: { appContainer, session }, params, reque
     await appContainer.get(TYPES.ProfileService).updateHomeAddress(homeAddress);
     return redirect(getPathById('protected/profile/contact-information', params));
   }
-  
+
   // Validate Canadian adddress
   invariant(validatedResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
   invariant(validatedResult.data.provinceStateId, 'Province state is required for Canadian addresses');
 
   const country = await countryService.getLocalizedCountryById(validatedResult.data.countryId, locale);
   const provinceTerritoryState = await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedResult.data.provinceStateId, locale);
-  
+
   // Build the address object using validated data, transforming unique identifiers
   const formattedHomeAddress: CanadianAddress = {
     address: validatedResult.data.address,
@@ -171,6 +173,10 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('protected/profile/contact-information', params));
 }
 
+function isAddressResponse(data: unknown): data is AddressResponse {
+  return typeof data === 'object' && data !== null && 'status' in data && typeof data.status === 'string';
+}
+
 export default function EditHomeAddress({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, countryList, regionList } = loaderData;
@@ -181,9 +187,10 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
 
   const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.country ?? CANADA_COUNTRY_ID);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
+  const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
 
   //TODO: hook in errors from action when available
-  const errors = undefined;
+  const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'home-address',
     city: 'home-city',
@@ -197,6 +204,16 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
     const filteredProvinceTerritoryStates = regionList.filter(({ countryId }) => countryId === selectedHomeCountry);
     setHomeCountryRegions(filteredProvinceTerritoryStates);
   }, [selectedHomeCountry, regionList]);
+
+  useEffect(() => {
+    setAddressDialogContent(isAddressResponse(fetcher.data) ? fetcher.data : null);
+  }, [fetcher, fetcher.data]);
+
+  function onDialogOpenChangeHandler(open: boolean) {
+    if (!open) {
+      setAddressDialogContent(null);
+    }
+  }
 
   const homeCountryChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement>) => {
     setSelectedHomeCountry(event.currentTarget.value);
@@ -230,11 +247,11 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
               helpMessagePrimaryClassName="text-black"
               autoComplete="address-line1"
               defaultValue={defaultState.address}
-              errorMessage={undefined}
+              errorMessage={errors?.address}
               required
             />
             <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputSanitizeField id="home-city" name="city" className="w-full" label={t('protected-profile:home-address.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={undefined} required />
+              <InputSanitizeField id="home-city" name="city" className="w-full" label={t('protected-profile:home-address.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
               <InputSanitizeField
                 id="home-postal-code"
                 name="postalZipCode"
@@ -243,7 +260,7 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
                 maxLength={100}
                 autoComplete="postal-code"
                 defaultValue={defaultState.postalCode}
-                errorMessage={undefined}
+                errorMessage={errors?.postalZipCode}
                 required={isPostalCodeRequired}
               />
             </div>
@@ -255,7 +272,7 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
                 className="w-full sm:w-1/2"
                 label={t('protected-profile:home-address.province')}
                 defaultValue={defaultState.province}
-                errorMessage={undefined}
+                errorMessage={errors?.provinceStateId}
                 options={[dummyOption, ...homeRegions]}
                 required
               />
@@ -267,7 +284,7 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
               label={t('protected-profile:home-address.country')}
               autoComplete="country"
               defaultValue={defaultState.country}
-              errorMessage={undefined}
+              errorMessage={errors?.countryId}
               options={countries}
               onChange={homeCountryChangeHandler}
               required
@@ -275,9 +292,30 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
           </div>
         </fieldset>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Home address click">
-            {t('protected-profile:home-address.save-btn')}
-          </LoadingButton>
+          <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
+            <DialogTrigger asChild>
+              <LoadingButton
+                aria-expanded={undefined}
+                variant="primary"
+                id="continue-button"
+                type="submit"
+                name="_action"
+                value={FORM_ACTION.submit}
+                loading={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Home address click"
+              >
+                {t('protected-profile:home-address.save-btn')}
+              </LoadingButton>
+            </DialogTrigger>
+            {!isSubmitting && addressDialogContent && (
+              <>
+                {addressDialogContent.status === 'address-suggestion' && (
+                  <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
+                )}
+                {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
+              </>
+            )}
+          </Dialog>
           <ButtonLink id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Home address click">
             {t('protected-profile:home-address.back-btn')}
           </ButtonLink>
