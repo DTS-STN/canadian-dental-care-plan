@@ -23,7 +23,7 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
       return handleLoginRequest({ context, params, request });
     }
     case 'logout': {
-      return handleLogoutRequest({ context, params, request });
+      return await handleLogoutRequest({ context, params, request });
     }
     case 'login/raoidc': {
       return await handleRaoidcLoginRequest({ context, params, request });
@@ -59,7 +59,7 @@ function handleLoginRequest({ context: { appContainer }, request }: Route.Loader
 /**
  * Handler for /auth/logout requests
  */
-function handleLogoutRequest({ context: { appContainer, session }, request }: Route.LoaderArgs) {
+async function handleLogoutRequest({ context: { appContainer, session }, request }: Route.LoaderArgs) {
   const log = createLogger('auth.$/handleLogoutRequest');
   log.debug('Handling RAOIDC logout request');
   const instrumentationService = appContainer.get(TYPES.InstrumentationService);
@@ -83,7 +83,7 @@ function handleLogoutRequest({ context: { appContainer, session }, request }: Ro
   const auditService = appContainer.get(TYPES.AuditService);
   auditService.createAudit('auth.session-destroyed', { userId: idToken.sub });
 
-  session.destroy();
+  await session.destroy();
   return redirectDocument(signoutUrl);
 }
 
@@ -95,8 +95,6 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
   log.debug('Handling RAOIDC login request');
   const instrumentationService = appContainer.get(TYPES.InstrumentationService);
   instrumentationService.createCounter('auth.login.raoidc.requests').add(1);
-
-  session.destroy();
 
   const { origin, searchParams } = new URL(request.url);
   const returnUrl = searchParams.get('returnto');
@@ -113,15 +111,13 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
   const raoidcService = appContainer.get(TYPES.RaoidcService);
   const { authUrl, codeVerifier, state } = await raoidcService.generateSigninRequest(redirectUri);
 
+  log.debug('Regenerate session to prevent fixation and wipe prior session data');
+  await session.regenerate();
+
   log.debug('Storing [codeVerifier] and [state] in session for future validation');
   session.set('authCodeVerifier', codeVerifier);
   session.set('authReturnUrl', returnUrl ?? '/');
   session.set('authState', state);
-
-  // Note: In this particular situation, calling session.save() here is necessary because save is
-  // automatically called at the end of the HTTP response, but if session.destroy() was called before,
-  // previous set operations would not be persisted.
-  session.save();
 
   log.debug('Redirecting to RAOIDC signin URL [%s]', authUrl.href);
   return redirectDocument(authUrl.href);
