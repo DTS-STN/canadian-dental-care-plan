@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
         - name: canada-dental-care-plan-frontend
-          image: dtsrhpprodscedspokeacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend:5.6.0
+          image: dtsrhpprodscedspokeacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend:5.6.1
           envFrom:
             - configMapRef:
                 name: frontend
