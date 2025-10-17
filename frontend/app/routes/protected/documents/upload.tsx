@@ -1,8 +1,11 @@
 import { useMemo, useState } from 'react';
 
+import { useFetcher } from 'react-router';
+
 import { faArrowUpFromBracket, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { filesize } from 'filesize';
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import type { Route } from './+types/upload';
 
@@ -10,6 +13,7 @@ import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Button, ButtonLink } from '~/components/buttons';
+import { useErrorSummary } from '~/components/error-summary';
 import { FileUpload, FileUploadItem, FileUploadItemDelete, FileUploadList, FileUploadTrigger } from '~/components/file-upload';
 import { InputLegend } from '~/components/input-legend';
 import type { InputOptionProps } from '~/components/input-option';
@@ -63,11 +67,117 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
+// Client action validation schema
+// TODO beef up validation => MIME type, extension, etc
+const clientUploadSchema = z
+  .object({
+    applicant: z.string().min(1, 'documents:upload.error-message.applicant-required'),
+    reason: z.string().min(1, 'documents:upload.error-message.reason-required'),
+    files: z.array(z.any()).min(1, 'documents:upload.error-message.files-required'),
+    documentTypes: z.array(z.string().min(1, 'documents:upload.error-message.document-type-required')),
+  })
+  .superRefine((data, ctx) => {
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+    data.files.forEach((file, index) => {
+      if (file.size > MAX_FILE_SIZE) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'documents:upload.error-message.file-too-large',
+          path: ['files', index],
+        });
+      }
+    });
+
+    if (data.files.length > 10) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'documents:upload.error-message.too-many-files',
+        path: ['files'],
+      });
+    }
+
+    data.documentTypes.forEach((documentType, index) => {
+      if (!documentType || documentType.trim() === '') {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'documents:upload.error-message.document-type-required',
+          path: ['documentTypes', index],
+        });
+      }
+    });
+  });
+
+export async function clientAction({ request }: { request: Request }) {
+  const formData = await request.formData();
+
+  const applicant = formData.get('applicant') as string;
+  const reason = formData.get('reason') as string;
+
+  const files: File[] = [];
+  const documentTypes: string[] = [];
+
+  let index = 0;
+  while (true) {
+    const file = formData.get(`file-${index}`) as File;
+    const documentType = formData.get(`document-type-${index}`) as string;
+
+    console.log(file);
+    if (!file) break;
+
+    files.push(file);
+    documentTypes.push(documentType || '');
+    index++;
+  }
+
+  const formDataObj = {
+    applicant: applicant || '',
+    reason: reason || '',
+    files,
+    documentTypes,
+  };
+
+  const parsedDataResult = clientUploadSchema.safeParse(formDataObj);
+
+  if (!parsedDataResult.success) {
+    interface UploadErrors {
+      applicant?: string;
+      reason?: string;
+      files?: string;
+      documentTypes?: {
+        [key: number]: string;
+      };
+    }
+    let errors: UploadErrors = {};
+    for (let { message, path } of parsedDataResult.error.issues) {
+      if (path[0] === 'documentTypes') {
+        errors.documentTypes ??= {};
+        errors.documentTypes[path[1] as number] = message;
+      } else {
+        errors[path[0] as keyof UploadErrors] = message;
+      }
+    }
+    return { errors };
+  }
+
+  // If validation passes, you can proceed with the upload
+  // For now, we'll just return success
+  return { success: true };
+}
+
 export default function DocumentsUpload({ loaderData, params }: Route.ComponentProps) {
   const { t, i18n } = useTranslation(handle.i18nNamespaces);
   const { applicantNames, documentTypes, reasons, SCCH_BASE_URI } = loaderData;
 
-  const [files, setFiles] = useState<File[]>([]);
+  const fetcher = useFetcher<typeof clientAction>();
+  const isSubmitting = fetcher.state !== 'idle';
+
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    applicant: 'applicant',
+    reason: 'reason',
+    files: 'file-upload',
+    documentTypes: (index: number) => `document-type-${index}`, // Function to generate field IDs for array items
+  });
 
   const applicantOptions = useMemo<InputOptionProps[]>(() => {
     const dummyOption: InputOptionProps = { children: t('documents:upload.select-one'), value: '', disabled: true, hidden: true };
@@ -84,60 +194,136 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
     return [dummyOption, ...documentTypes.map(({ id, name }) => ({ children: name, value: id }))];
   }, [documentTypes, t]);
 
+  interface FileWithType {
+    file: File;
+    documentType: string;
+  }
+
+  const [filesWithTypes, setFilesWithTypes] = useState<FileWithType[]>([]);
+
+  const handleFileChange = (newFiles: File[]) => {
+    setFilesWithTypes((prev) => {
+      const updatedFiles = [...prev];
+
+      newFiles.forEach((newFile, index) => {
+        if (index < updatedFiles.length) {
+          updatedFiles[index] = { ...updatedFiles[index], file: newFile };
+        } else {
+          updatedFiles.push({ file: newFile, documentType: '' });
+        }
+      });
+
+      if (updatedFiles.length > newFiles.length) {
+        updatedFiles.length = newFiles.length;
+      }
+
+      return updatedFiles;
+    });
+  };
+
+  const handleDocumentTypeChange = (index: number, value: string) => {
+    setFilesWithTypes((prev) => {
+      const newFiles = [...prev];
+      newFiles[index] = { ...newFiles[index], documentType: value };
+      return newFiles;
+    });
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append('applicant', (event.currentTarget.elements.namedItem('applicant') as HTMLSelectElement)?.value || '');
+    formData.append('reason', (event.currentTarget.elements.namedItem('reason') as HTMLSelectElement)?.value || '');
+
+    filesWithTypes.forEach(({ file, documentType }, index) => {
+      formData.append(`file-${index}`, file);
+      formData.append(`document-type-${index}`, documentType || '');
+    });
+
+    fetcher.submit(formData, {
+      method: 'post',
+      encType: 'multipart/form-data',
+    });
+  };
+
   return (
     <div className="max-w-prose space-y-8">
-      <div className="space-y-6">
-        <InputSelect id="applicant" name="applicant" label="Whoe are you uploading for" required className="w-full" options={applicantOptions} defaultValue="" />
-        <InputSelect id="reason" name="reason" label="Reason for file upload" required className="w-full" options={reasonOptions} defaultValue="" />
-        <fieldset>
-          <InputLegend className="mb-2">Upload document</InputLegend>
-          <p>You can upload up to 10 files at once.</p>
-          <p className="mb-2">Maximum file size is 5MB. File types accepted: .docx, .ppt, .txt, .pdf, .jpg, .jpeg, .png</p>
-          <FileUpload
-            value={files}
-            onValueChange={(f) => {
-              setFiles(f);
-            }}
-            multiple={false}
-            className="gap-4 sm:gap-6"
-          >
-            <div>
-              <FileUploadTrigger asChild>
-                <Button startIcon={faArrowUpFromBracket}>Add file</Button>
-              </FileUploadTrigger>
-            </div>
-            <FileUploadList className="gap-4 sm:gap-6">
-              {files.map((file, index) => (
-                <FileUploadItem key={`${index}_${file.name}`} value={file} className="flex-col items-stretch gap-3 sm:gap-4">
-                  <dl className="space-y-3 sm:space-y-4">
-                    <div className="space-y-2">
-                      <dt className="font-semibold">File name</dt>
-                      <dd>{file.name}</dd>
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+        <div className="space-y-6">
+          <InputSelect id="applicant" name="applicant" label="Who are you uploading for" required className="w-full" options={applicantOptions} defaultValue="" errorMessage={errors?.applicant} />
+          <InputSelect id="reason" name="reason" label="Reason for file upload" required className="w-full" options={reasonOptions} defaultValue="" errorMessage={errors?.reason} />
+          <fieldset>
+            <InputLegend className="mb-2">Upload document</InputLegend>
+            <p>You can upload up to 10 files at once.</p>
+            <p className="mb-2">Maximum file size is 10MB. File types accepted: .docx, .ppt, .txt, .pdf, .jpg, .jpeg, .png</p>
+
+            {errors?.files && <p className="mb-2 text-sm text-red-700">Select a file</p>}
+
+            <FileUpload
+              id="file-upload"
+              onValueChange={handleFileChange}
+              multiple={true}
+              maxFiles={10}
+              maxSize={10 * 1024 * 1024} // 10MB
+              accept=".docx,.ppt,.txt,.pdf,.jpg,.jpeg,.png"
+              className="gap-4 sm:gap-6"
+              onFileReject={(file, message) => {
+                // Handle file rejection (too large, wrong type, etc.)
+                console.warn(`File rejected: ${file.name}, reason: ${message}`);
+              }}
+            >
+              <div>
+                <FileUploadTrigger asChild>
+                  <Button startIcon={faArrowUpFromBracket}>Add file</Button>
+                </FileUploadTrigger>
+              </div>
+              <FileUploadList className="gap-4 sm:gap-6">
+                {filesWithTypes.map(({ file, documentType }, index) => (
+                  <FileUploadItem key={`${index}_${file.name}_${file.lastModified}`} value={file} className="flex-col items-stretch gap-3 sm:gap-4">
+                    <input type="hidden" name={`file-${index}`} value={file.name} />
+                    <dl className="space-y-3 sm:space-y-4">
+                      <div className="space-y-2">
+                        <dt className="font-semibold">File name</dt>
+                        <dd>{file.name}</dd>
+                      </div>
+                      <div className="space-y-2">
+                        <dt className="font-semibold">File size</dt>
+                        <dd>{filesize(file.size, { locale: `${i18n.language}-CA` })}</dd>
+                      </div>
+                    </dl>
+                    <InputSelect
+                      id={`document-type-${index}`}
+                      name={`document-type-${index}`}
+                      label="Document Type"
+                      required
+                      className="w-full"
+                      options={documentTypeOptions}
+                      value={documentType}
+                      onChange={(e) => handleDocumentTypeChange(index, e.target.value)}
+                      errorMessage={errors?.documentTypes?.[index]}
+                    />
+                    <div className="mt-2 text-right">
+                      <FileUploadItemDelete asChild>
+                        <Button variant="outline-red" size="sm" endIcon={faTimes}>
+                          Remove
+                        </Button>
+                      </FileUploadItemDelete>
                     </div>
-                    <div className="space-y-2">
-                      <dt className="font-semibold">File size</dt>
-                      <dd>{filesize(file.size, { locale: `${i18n.language}-CA` })}</dd>
-                    </div>
-                  </dl>
-                  <InputSelect id={`document-type-${index}`} name="documentType" label="Document Type" required className="w-full" options={documentTypeOptions} defaultValue="" />
-                  <div className="mt-2 text-right">
-                    <FileUploadItemDelete asChild>
-                      <Button variant="outline-red" size="sm" endIcon={faTimes}>
-                        Remove
-                      </Button>
-                    </FileUploadItemDelete>
-                  </div>
-                </FileUploadItem>
-              ))}
-            </FileUploadList>
-          </FileUpload>
-        </fieldset>
-      </div>
-      <div>
-        <LoadingButton id="submit-button" variant="primary">
-          {t('documents:upload.submit')}
-        </LoadingButton>
-      </div>
+                  </FileUploadItem>
+                ))}
+              </FileUploadList>
+            </FileUpload>
+          </fieldset>
+        </div>
+        <div className="mt-8">
+          <LoadingButton id="submit-button" variant="primary" type="submit" loading={isSubmitting}>
+            {t('documents:upload.submit')}
+          </LoadingButton>
+        </div>
+      </fetcher.Form>
       <div>
         <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
           {t('documents:index.return-dashboard')}
