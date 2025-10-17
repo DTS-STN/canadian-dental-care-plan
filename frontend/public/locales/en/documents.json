@@ -18,5 +18,10 @@
     "page-title": "Upload my documents",
     "submit": "Submit",
     "return-dashboard": "Return to dashboard"
+  },
+  "not-required": {
+    "page-title": "Documents not required",
+    "description": "You do not need to upload any documents at this time.",
+    "return-button": "Return to dashboard"
   }
 }

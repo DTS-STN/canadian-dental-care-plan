@@ -18,5 +18,10 @@
     "page-title": "Téléverser mes documents",
     "submit": "Soumettre",
     "return-dashboard": "Retour au tableau de bord"
+  },
+  "not-required": {
+    "page-title": "Documents non requis",
+    "description": "Vous n'avez pas besoin de télécharger de documents pour le moment.",
+    "return-button": "Retour au tableau de bord"
   }
 }
