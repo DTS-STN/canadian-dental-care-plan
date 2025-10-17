@@ -131,7 +131,7 @@
     "patch-package": "^8.1.0-canary.1",
     "playwright-teamcity-reporter": "^1.0.5",
     "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.7.0",
+    "prettier-plugin-tailwindcss": "^0.7.1",
     "tailwindcss": "^4.1.14",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.20.6",
