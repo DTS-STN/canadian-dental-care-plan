@@ -46,7 +46,7 @@ export async function action({ context: { appContainer, session }, request }: Ro
     case 'end': {
       log.debug("Ending user's server-side session; sessionId: [%s], locale: [%s], redirectTo: [%s]", sessionId, locale, redirectTo);
 
-      session.destroy();
+      await session.destroy();
 
       if (redirectTo) {
         const redirectToUrl = getApiSessionRedirectToUrl(redirectTo, locale);

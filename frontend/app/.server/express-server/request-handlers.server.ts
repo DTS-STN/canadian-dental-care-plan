@@ -54,7 +54,7 @@ function getLoadContext(request: Request, response: Response): AppLoadContext {
   // `request.session` may be undefined if session middleware is not applied,
   // so a fallback `NoopSession` is used in that case.
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  const session = request.session ? new ExpressSession(request.session) : new NoopSession();
+  const session = request.session ? new ExpressSession(request) : new NoopSession();
 
   if (session instanceof ExpressSession) {
     // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.

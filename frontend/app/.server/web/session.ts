@@ -14,8 +14,6 @@ import type { RenewState, RenewStateSessionKey } from '~/.server/routes/helpers/
 import type { StatusState, StatusStateSessionKey } from '~/.server/routes/helpers/status-route-helpers';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 
-type RequestSession = Request['session'];
-
 /**
  * Defines the mapping of valid session keys to their corresponding value types.
  * Each property represents a key that can be stored in the session, and its value type.
@@ -120,7 +118,7 @@ export interface Session {
    * This method unsets a session key and its associated value.
    *
    * @param key The session key to remove.
-   * @returns {boolean} Returns true if the key was removed successfully, false if the key doesn't exist.
+   * @returns Returns true if the key was removed successfully, false if the key doesn't exist.
    */
   unset(key: SessionKey): boolean;
 
@@ -129,9 +127,10 @@ export interface Session {
    *
    * This method will destroy the session, removing all session data and invalidating the session ID.
    *
-   * @returns {void} This method does not return any value.
+   * @returns A promise that resolves once the session has been destroyed. The promise will reject if
+   * the underlying store destroy operation fails.
    */
-  destroy(): void;
+  destroy(): Promise<void>;
 
   /**
    * Saves the current session back to the store.
@@ -140,25 +139,45 @@ export interface Session {
    * the contents in memory (though a store may do something else--consult the store's documentation
    * for exact behavior).
    *
-   * @returns {void} This method does not return any value.
+   * @returns A promise that resolves once the session has been saved. The promise will reject if
+   * the underlying store save operation fails.
    */
-  save(): void;
+  save(): Promise<void>;
+
+  /**
+   * Regenerates the current session. Once complete, a new SID and Session instance will be initialized.
+   *
+   * This is useful to avoid session fixation attacks.
+   *
+   * @returns A promise that resolves once the session has been regenerated. The promise will reject if
+   * the underlying store regenerate operation fails.
+   */
+  regenerate(): Promise<void>;
 }
 
 /**
  * Wrapper around the Express session object. Provides a type-safe and convenient API for session management.
  */
 export class ExpressSession implements Session {
-  private readonly session: RequestSession;
+  private readonly req: Pick<Request, 'session'>;
   static readonly SESSION_RESERVED_KEYS = ['id', 'cookie', 'regenerate', 'destroy', 'reload', 'resetMaxAge', 'save', 'touch'] as const;
 
   private readonly log: Logger;
 
-  constructor(session: RequestSession) {
-    assert.ok(session, 'Session object is undefined. Ensure session middleware is properly configured.');
-    this.session = session;
+  constructor(req: Pick<Request, 'session'>) {
+    assert.ok(req.session, 'req.session object is undefined. Ensure session middleware is properly configured.');
+    this.req = req;
     this.log = createLogger('~/.server/web/ExpressSession');
     this.log.trace('Session initialized with ID: %s', this.id);
+  }
+
+  private get session(): Request['session'] {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (!this.req.session) {
+      throw new Error('req.session object is undefined. Session might have been destroyed.');
+    }
+
+    return this.req.session;
   }
 
   get id(): string {
@@ -217,23 +236,51 @@ export class ExpressSession implements Session {
     return true;
   }
 
-  destroy(): void {
-    this.session.destroy((err) => {
-      if (err) {
-        this.log.error('Failed to destroy session %s: %s', this.id, err.message);
-      } else {
-        this.log.info('Session %s destroyed successfully', this.id);
-      }
+  async destroy(): Promise<void> {
+    const id = this.id; // Capture ID before destruction for logging
+    this.log.debug('Destroying session [%s]', id);
+    return await new Promise((resolve, reject) => {
+      this.session.destroy((err) => {
+        if (err) {
+          this.log.error('Failed to destroy session %s: %s', id, err.message);
+          return reject(err);
+        }
+
+        this.log.info('Session %s destroyed successfully', id);
+        resolve();
+      });
     });
   }
 
-  save(): void {
-    this.session.save((err) => {
-      if (err) {
-        this.log.error('Failed to save session %s: %s', this.id, err.message);
-      } else {
+  async save(): Promise<void> {
+    this.log.debug('Saving session [%s]', this.id);
+    return await new Promise((resolve, reject) => {
+      this.session.save((err) => {
+        if (err) {
+          this.log.error('Failed to save session %s: %s', this.id, err.message);
+          return reject(err);
+        }
+
         this.log.info('Session %s saved successfully', this.id);
-      }
+        resolve();
+      });
+    });
+  }
+
+  async regenerate(): Promise<void> {
+    const originalId = this.id;
+    this.log.debug('Regenerating session. Original ID: %s', originalId);
+
+    return await new Promise((resolve, reject) => {
+      this.session.regenerate((err) => {
+        if (err) {
+          this.log.error('Failed to regenerate session %s: %s', originalId, err.message);
+          return reject(err);
+        }
+
+        this.log.info('Session %s regenerated successfully; new ID: %s', originalId, this.id);
+        resolve();
+      });
     });
   }
 
@@ -292,13 +339,21 @@ export class NoopSession implements Session {
     return false;
   }
 
-  destroy(): void {
+  async destroy(): Promise<void> {
     this.log.warn('Called "destroy" on NoopSession. No operation is performed.');
     // No operation; no session to destroy in a stateless context.
+    return await Promise.resolve();
   }
 
-  save(): void {
+  async save(): Promise<void> {
     this.log.warn('Called "save" on NoopSession. No operation is performed.');
     // No operation; no session to save in a stateless context.
+    return await Promise.resolve();
+  }
+
+  async regenerate(): Promise<void> {
+    this.log.warn('Called "regenerate" on NoopSession. No operation is performed.');
+    // No operation; no session to regenerate in a stateless context.
+    return await Promise.resolve();
   }
 }
