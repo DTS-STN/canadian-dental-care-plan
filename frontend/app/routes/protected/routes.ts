@@ -40,14 +40,19 @@ export const routes = [
         paths: { en: '/:lang/protected/letters/:id/download', fr: '/:lang/protege/lettres/:id/telecharger' },
       },
       {
-        id: 'protected/profile/applicant-information',
-        file: 'routes/protected/profile/applicant-information.tsx',
-        paths: { en: '/:lang/protected/profile/applicant-information', fr: '/:lang/protege/profil/applicant-information' },
-      },
-      {
         id: 'protected/stub-login',
         file: 'routes/protected/stub-login.tsx',
         paths: { en: '/:lang/protected/stub-login', fr: '/:lang/protege/stub-login' },
+      },
+      {
+        id: 'protected/profile/eligibility',
+        file: 'routes/protected/profile/eligibility.tsx',
+        paths: { en: '/:lang/protected/profile/eligibility', fr: '/:lang/protege/profil/admissibilite' },
+      },
+      {
+        id: 'protected/profile/applicant-information',
+        file: 'routes/protected/profile/applicant-information.tsx',
+        paths: { en: '/:lang/protected/profile/applicant-information', fr: '/:lang/protege/profil/applicant-information' },
       },
       {
         id: 'protected/profile/dental-benefits',

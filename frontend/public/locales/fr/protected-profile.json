@@ -1,6 +1,18 @@
 {
   "required-label": "Remplissez tous les champs.",
   "all-optional-label": "Tous les champs sont faculatives.",
+  "eligibility": {
+    "page-title": "Admissibilité des membres",
+    "details": "L'année de prestations du Régime canadien de soins dentaires commence le 1er juillet et se termine le 30 juin de l'année suivante.",
+    "current-year": "Année de prestations en cours",
+    "next-year": "Prochaine année de prestations",
+    "eligible": "Admissible",
+    "not-eligible": "Non admissible",
+    "enrolled": "Inscrit(e)",
+    "not-enrolled": "Non inscrit(e)",
+    "apply": "Présenter une demande",
+    "return-button": "Retour au tableau de bord"
+  },
   "applicant-information": {
     "page-title": "Informations des candidats",
     "form-instructions": "Si vous remarquez une erreur ou si vous devez mettre à jour le nom, la date de naissance ou le numéro d'assurance sociale (NAS), contactez Service Canada en appelant le <noWrap>1-833-537-4342</noWrap>.",

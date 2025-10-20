@@ -1,6 +1,18 @@
 {
   "required-label": "Complete all fields.",
   "all-optional-label": "All fields are optional.",
+  "eligibility": {
+    "page-title": "Member eligibility",
+    "details": "The Canadian Dental Care Plan benefit year starts on July 1 and ends on June 30 of the next year.",
+    "current-year": "Current benefit year",
+    "next-year": "Next benefit year",
+    "eligible": "Eligible",
+    "not-eligible": "Not eligible",
+    "enrolled": "Enrolled",
+    "not-enrolled": "Not enrolled",
+    "apply": "Apply",
+    "return-button": "Return to dashboard"
+  },
   "applicant-information": {
     "page-title": "Applicant(s) Information",
     "form-instructions": "If you notice an error or need to update the name, date of birth or Social Insurance Number (SIN), contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
