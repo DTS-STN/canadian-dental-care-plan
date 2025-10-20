@@ -44,7 +44,7 @@ export default function NotRequired({ loaderData, params }: Route.ComponentProps
     <>
       <p>{t('documents:not-required.description')}</p>
       <div className="mt-6 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
+        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Documents not required return button click">
           {t('documents:not-required.return-button')}
         </ButtonLink>
       </div>
