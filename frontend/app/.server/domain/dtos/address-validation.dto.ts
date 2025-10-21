@@ -5,6 +5,9 @@ export type AddressCorrectionRequestDto = Readonly<{
   /** The full or partial address. */
   address: string;
 
+  /** The unit, suite, or apartment number. */
+  unitNumber: string;
+
   /** The name of the city. */
   city: string;
 
@@ -27,6 +30,9 @@ export type AddressCorrectionResultDto = Readonly<{
 
   /** The full or partial address. */
   address: string;
+
+  /** The unit, suite, or apartment number. */
+  unitNumber: string;
 
   /** The name of the city. */
   city: string;

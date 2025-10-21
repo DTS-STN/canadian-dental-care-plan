@@ -14,6 +14,7 @@ import { useEnhancedFetcher } from '~/hooks';
 
 export interface CanadianAddress {
   address: string;
+  unitNumber: string;
   city: string;
   country: string;
   countryId: string;
@@ -62,6 +63,7 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
     // Append selected address suggestion to form data
     const selectedAddressSuggestion = selectedAddressSuggestionOption === enteredAddressOptionValue ? enteredAddress : suggestedAddress;
     formData.set('address', selectedAddressSuggestion.address);
+    formData.set('unitNumber', selectedAddressSuggestion.unitNumber);
     formData.set('city', selectedAddressSuggestion.city);
     formData.set('countryId', selectedAddressSuggestion.countryId);
     formData.set('postalZipCode', selectedAddressSuggestion.postalZipCode);
@@ -171,6 +173,7 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
 
     // Append selected address suggestion to form data
     formData.set('address', invalidAddress.address);
+    formData.set('unitNumber', invalidAddress.unitNumber);
     formData.set('city', invalidAddress.city);
     formData.set('countryId', invalidAddress.countryId);
     formData.set('postalZipCode', invalidAddress.postalZipCode);

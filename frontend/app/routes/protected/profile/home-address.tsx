@@ -193,6 +193,7 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'home-address',
+    unitNumber: 'unit-number',
     city: 'home-city',
     postalZipCode: 'home-postal-code',
     provinceStateId: 'home-province',
@@ -249,6 +250,18 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
               defaultValue={defaultState.address}
               errorMessage={errors?.address}
               required
+            />
+            <InputSanitizeField
+              id="unit-number"
+              name="unitNumber"
+              className="w-full"
+              label={t('protected-profile:home-address.unit-number')}
+              maxLength={100}
+              helpMessagePrimary={t('protected-profile:home-address.unit-number-help')}
+              helpMessagePrimaryClassName="text-black"
+              autoComplete="address-line2"
+              defaultValue={defaultState.unitNumber}
+              errorMessage={errors?.unitNumber}
             />
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputSanitizeField id="home-city" name="city" className="w-full" label={t('protected-profile:home-address.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />

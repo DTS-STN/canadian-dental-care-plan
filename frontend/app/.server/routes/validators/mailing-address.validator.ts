@@ -36,6 +36,9 @@ export class DefaultMailingAddressValidator implements MailingAddressValidator {
         invalidCharacters: t('common:error-message.mailing.characters-valid'),
         required: t('common:error-message.mailing.address-required'),
       },
+      unitNumber: {
+        invalidCharacters: t('common:error-message.mailing.characters-valid'),
+      },
       city: {
         required: t('common:error-message.mailing.city-required'),
         invalidCharacters: t('common:error-message.mailing.characters-valid'),
