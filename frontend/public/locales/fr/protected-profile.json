@@ -5,12 +5,13 @@
     "page-title": "Admissibilité des membres",
     "details": "L'année de prestations du Régime canadien de soins dentaires commence le 1er juillet et se termine le 30 juin de l'année suivante.",
     "current-year": "Année de prestations en cours",
+    "benefit-year-range": "(1er juillet {{start}} au 30 juin {{end}})",
     "next-year": "Prochaine année de prestations",
     "eligible": "Admissible",
     "not-eligible": "Non admissible",
     "enrolled": "Inscrit(e)",
     "not-enrolled": "Non inscrit(e)",
-    "apply": "Présenter une demande",
+    "apply": "Présenter une demande pour {{year}}",
     "return-button": "Retour au tableau de bord"
   },
   "applicant-information": {

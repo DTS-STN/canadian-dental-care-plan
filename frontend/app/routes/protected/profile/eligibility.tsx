@@ -52,23 +52,27 @@ export async function loader({ context: { appContainer, session }, params, reque
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.eligibility', { userId: idToken.sub });
 
-  // TODO: add start/end dates for current benefit year and next benefit year
+  const currentDate = new Date();
+  const benefitYearStart = currentDate.getFullYear() - (currentDate.getMonth() < 6 ? 1 : 0);
+
   return {
     meta,
     SCCH_BASE_URI,
     applicants: [primaryApplicant, ...children],
+    benefitYearStart,
   };
 }
 
 export default function ProtectedProfileEligibility({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { applicants, SCCH_BASE_URI } = loaderData;
+  const { applicants, SCCH_BASE_URI, benefitYearStart } = loaderData;
 
   return (
     <div className="max-w-prose space-y-10">
       <p>{t('protected-profile:eligibility.details')}</p>
       <section className="space-y-6">
         <h2 className="font-lato text-2xl font-bold">{t('protected-profile:eligibility.current-year')}</h2>
+        <p>{t('protected-profile:eligibility.benefit-year-range', { start: benefitYearStart, end: benefitYearStart + 1 })}</p>
         <dl className="divide-y border-y">
           {applicants.map((applicant) => (
             <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
@@ -83,6 +87,7 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
 
       <section className="space-y-6">
         <h2 className="font-lato text-2xl font-bold">{t('protected-profile:eligibility.next-year')}</h2>
+        <p>{t('protected-profile:eligibility.benefit-year-range', { start: benefitYearStart + 1, end: benefitYearStart + 2 })}</p>
         <dl className="divide-y border-y">
           {applicants.map((applicant) => (
             <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
@@ -91,7 +96,7 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
                 {applicant.isEnrolled ? t('protected-profile:eligibility.enrolled') : t('protected-profile:eligibility.not-enrolled')}
                 {!applicant.isEnrolled && (
                   <InlineLink routeId="protected/apply/index" params={params} className="pl-8">
-                    {t('protected-profile:eligibility.apply')}
+                    {t('protected-profile:eligibility.apply', { year: benefitYearStart + 2 })}
                   </InlineLink>
                 )}
               </p>
