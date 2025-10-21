@@ -56,8 +56,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {}
-
 export default function ProtectedApplicantInformation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { primaryApplicant, children, SCCH_BASE_URI } = loaderData;
