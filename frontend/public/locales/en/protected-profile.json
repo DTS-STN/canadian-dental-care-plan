@@ -197,8 +197,9 @@
       "verification-code-max-attempts": "You have entered an incorrect verification code more than 5 times. You must request a new code using the \"Request new verification code\" link below."
     },
     "verification-code-alert": {
-      "heading": "The verification code entered does not match the code that was sent to the email address provided, or the code has expired.",
-      "detail": "Please check the code and try again. If the issue continues, you can request a new code using the \"Request new verification code\" link below."
+      "heading": "The code entered does not match the code that was sent to the email address provided, or the code has expired.",
+      "detail": "Please check the code and try again. If the issue continues, you can",
+      "request-new-code": "request a new code."
     },
     "code-sent": {
       "heading": "New verification code",
