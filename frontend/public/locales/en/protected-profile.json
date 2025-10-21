@@ -175,7 +175,7 @@
     "verify-email": "We will need to verify your email address. After you submit your email address, you'll receive a code to enter in the next step.",
     "email-legend": "Email address",
     "back": "Back",
-    "save-btn": "Save",
+    "continue-btn": "Continue",
     "error-message": {
       "email-required": "Enter email address, for example name@example.com",
       "email-valid": "Enter an email address in the correct format, such as name@example.com"
@@ -191,7 +191,6 @@
     "back": "Back",
     "continue": "Continue",
     "cancel-btn": "Cancel",
-    "save-btn": "Save",
     "error-message": {
       "verification-code-required": "Enter 5-digit verification code",
       "verification-code-max-attempts": "You have entered an incorrect verification code more than 5 times. You must request a new code using the \"Request new verification code\" link below."
