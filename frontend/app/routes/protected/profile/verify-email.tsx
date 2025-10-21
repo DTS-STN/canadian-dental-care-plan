@@ -173,7 +173,27 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
     <div className="max-w-prose">
       <ErrorAlert>
         <h2 className="mb-2 font-bold">{t('protected-profile:verify-email.verification-code-alert.heading')}</h2>
-        <p className="mb-2">{t('protected-profile:verify-email.verification-code-alert.detail')}</p>
+        <p className="-mb-3">{t('protected-profile:verify-email.verification-code-alert.detail')}</p>
+        <LoadingButton
+          id="request-button"
+          type="button"
+          name="_action"
+          variant="link"
+          className="text-[17px]"
+          loading={isSubmitting}
+          value={FORM_ACTION.request}
+          onClick={async () => {
+            const formData = new FormData();
+            formData.append('_action', FORM_ACTION.request);
+
+            const csrfTokenInput = document.querySelector('input[name="_csrf"]') as HTMLInputElement;
+            formData.append('_csrf', csrfTokenInput.value);
+
+            await fetcher.submit(formData, { method: 'post' });
+          }}
+        >
+          {t('protected-profile:verify-email.verification-code-alert.request-new-code')}
+        </LoadingButton>
       </ErrorAlert>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>

@@ -196,8 +196,9 @@
       "verification-code-max-attempts": "Vous avez saisi un code de vérification incorrect plus de 5 fois. Vous devez demander un nouveau code à l'aide du lien «\u00a0Demander un nouveau code de vérification\u00a0» ci-dessous."
     },
     "verification-code-alert": {
-      "heading": "Le code de vérification saisi ne correspond pas au code envoyé à l'adresse électronique fournie, ou le code a expiré.",
-      "detail": "Veuillez vérifier le code et essayer de nouveau. Si le problème persiste, vous pouvez demander un nouveau code à l'aide du lien «\u00a0Demander un nouveau code de vérification\u00a0» ci-dessous."
+      "heading": "Le code saisi ne correspond pas au code envoyé à l'adresse courriel fournie, ou le code a expiré.",
+      "detail": " Veuillez vérifier le code et réessayer. Si le problème persiste, vous pouvez",
+      "request-new-code": "demander un nouveau code."
     },
     "code-sent": {
       "heading": "Nouveau code",
