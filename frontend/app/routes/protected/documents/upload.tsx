@@ -58,12 +58,12 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
     <div className="space-y-8">
       <div>Form inputs go here</div>
       <div>
-        <LoadingButton id="submit-button" variant="primary">
+        <LoadingButton id="submit-button" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Submit - Upload my documents click">
           {t('documents:upload.submit')}
         </LoadingButton>
       </div>
       <div>
-        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
+        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Upload my documents click">
           {t('documents:index.return-dashboard')}
         </ButtonLink>
       </div>
