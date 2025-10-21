@@ -96,12 +96,12 @@ export default function DocumentsIndex({ loaderData, params }: Route.ComponentPr
         )}
       </div>
       <div>
-        <ButtonLink id="upload-button" routeId="protected/documents/upload" params={params} variant="primary">
+        <ButtonLink id="upload-button" routeId="protected/documents/upload" params={params} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Upload documents - Submitted documents click">
           {t('documents:index.upload-documents')}
         </ButtonLink>
       </div>
       <div>
-        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
+        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Submitted documents click">
           {t('documents:index.return-dashboard')}
         </ButtonLink>
       </div>
