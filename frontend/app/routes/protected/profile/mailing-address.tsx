@@ -118,13 +118,11 @@ export async function action({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.AuditService).createAudit('update-data.profile.mailing-address', { userId: idToken.sub });
 
   if (canProceed) {
-    if (isCopyMailingToHome) {
-      await appContainer.get(TYPES.ProfileService).updateMailingAddress(mailingAddress);
-      await appContainer.get(TYPES.ProfileService).updateHomeAddress(mailingAddress);
-      return redirect(getPathById('protected/profile/contact-information', params));
-    }
     await appContainer.get(TYPES.ProfileService).updateMailingAddress(mailingAddress);
-    return redirect(getPathById('protected/profile/contact/home-address', params));
+    if (isCopyMailingToHome) {
+      await appContainer.get(TYPES.ProfileService).updateHomeAddress(mailingAddress);
+    }
+    return redirect(getPathById('protected/profile/contact-information', params));
   }
 
   // Validate Canadian adddress
@@ -177,14 +175,12 @@ export async function action({ context: { appContainer, session }, params, reque
     } as const satisfies AddressSuggestionResponse;
   }
 
+  await appContainer.get(TYPES.ProfileService).updateMailingAddress(mailingAddress);
   if (isCopyMailingToHome) {
-    await appContainer.get(TYPES.ProfileService).updateMailingAddress(mailingAddress);
     await appContainer.get(TYPES.ProfileService).updateHomeAddress(mailingAddress);
-    return redirect(getPathById('protected/profile/contact-information', params));
   }
 
-  await appContainer.get(TYPES.ProfileService).updateMailingAddress(mailingAddress);
-  return redirect(getPathById('protected/profile/contact/home-address', params));
+  return redirect(getPathById('protected/profile/contact-information', params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {
@@ -325,7 +321,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                 loading={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Mailing address click"
               >
-                {t('protected-profile:mailing-address.continue-btn')}
+                {t('protected-profile:mailing-address.save-btn')}
               </LoadingButton>
             </DialogTrigger>
             {!isSubmitting && addressDialogContent && (
