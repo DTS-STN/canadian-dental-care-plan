@@ -70,6 +70,47 @@ export interface ProfileRepository {
 }
 
 @injectable()
+export class DefaultProfileRepository implements ProfileRepository {
+  private readonly log: Logger;
+
+  constructor() {
+    this.log = createLogger('DefaultProfileRepository');
+  }
+
+  async updateCommunicationPreferences(communicationPreferenceDto: CommunicationPreferenceRequestDto): Promise<void> {
+    await Promise.reject(new Error('Method not implemented.'));
+  }
+
+  async updatePhoneNumbers(PhoneNumberDto: PhoneNumberRequestDto): Promise<void> {
+    await Promise.reject(new Error('Method not implemented.'));
+  }
+
+  async updateEmailAddress(emailAddressDto: EmailAddressRequestDto): Promise<void> {
+    await Promise.reject(new Error('Method not implemented.'));
+  }
+
+  async updateDentalBenefits(dentalBenefitsDto: DentalBenefitsRequestDto): Promise<void> {
+    await Promise.reject(new Error('Method not implemented.'));
+  }
+
+  async updateMailingAddress(addressDto: AddressRequestDto): Promise<void> {
+    await Promise.reject(new Error('Method not implemented.'));
+  }
+
+  async updateHomeAddress(addressDto: AddressRequestDto): Promise<void> {
+    await Promise.reject(new Error('Method not implemented.'));
+  }
+
+  getMetadata(): Record<string, string> {
+    throw new Error('Method not implemented.');
+  }
+
+  async checkHealth(): Promise<void> {
+    await Promise.reject(new Error('Method not implemented.'));
+  }
+}
+
+@injectable()
 export class MockProfileRepository implements ProfileRepository {
   private readonly log: Logger;
 

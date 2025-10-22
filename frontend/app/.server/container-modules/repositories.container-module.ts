@@ -18,6 +18,7 @@ import {
   DefaultGovernmentInsurancePlanRepository,
   DefaultLetterRepository,
   DefaultLetterTypeRepository,
+  DefaultProfileRepository,
   DefaultProvinceTerritoryStateRepository,
   DefaultVerificationCodeRepository,
   MockAddressValidationRepository,
@@ -122,6 +123,7 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
     options.bind(TYPES.DynatraceRepository).to(DefaultDynatraceRepository);
     options.bind(TYPES.HCaptchaRepository).to(DefaultHCaptchaRepository);
 
-    options.bind(TYPES.ProfileRepository).to(MockProfileRepository);
+    options.bind(TYPES.ProfileRepository).to(DefaultProfileRepository).when(isMockEnabled(serverConfig, 'profile', false));
+    options.bind(TYPES.ProfileRepository).to(MockProfileRepository).when(isMockEnabled(serverConfig, 'profile', true));
   });
 }
