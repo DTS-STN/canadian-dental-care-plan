@@ -135,10 +135,11 @@ export async function action({ context: { appContainer, session }, params, reque
   const country = await countryService.getLocalizedCountryById(validatedResult.data.countryId, locale);
   const provinceTerritoryState = await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedResult.data.provinceStateId, locale);
 
+  const validatedConcatenatedAddress = validatedResult.data.address + ' ' + validatedResult.data.unitNumber;
+
   // Build the address object using validated data, transforming unique identifiers
   const formattedMailingAddress: CanadianAddress = {
-    address: validatedResult.data.address,
-    unitNumber: validatedResult.data.unitNumber,
+    address: validatedConcatenatedAddress,
     city: validatedResult.data.city,
     countryId: validatedResult.data.countryId,
     country: country.name,
@@ -149,7 +150,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const addressCorrectionResult = await addressValidationService.getAddressCorrectionResult({
     address: formattedMailingAddress.address,
-    unitNumber: formattedMailingAddress.unitNumber,
     city: formattedMailingAddress.city,
     postalCode: formattedMailingAddress.postalZipCode,
     provinceCode: formattedMailingAddress.provinceState,
@@ -170,7 +170,6 @@ export async function action({ context: { appContainer, session }, params, reque
       status: 'address-suggestion',
       suggestedAddress: {
         address: addressCorrectionResult.address,
-        unitNumber: addressCorrectionResult.unitNumber,
         city: addressCorrectionResult.city,
         country: formattedMailingAddress.country,
         countryId: formattedMailingAddress.countryId,

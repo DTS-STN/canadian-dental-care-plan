@@ -126,9 +126,11 @@ export async function action({ context: { appContainer, session }, params, reque
   const country = await countryService.getLocalizedCountryById(validatedResult.data.countryId, locale);
   const provinceTerritoryState = await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedResult.data.provinceStateId, locale);
 
+  const validatedConcatenatedAddress = validatedResult.data.address + ' ' + validatedResult.data.unitNumber;
+
   // Build the address object using validated data, transforming unique identifiers
   const formattedHomeAddress: CanadianAddress = {
-    address: validatedResult.data.address,
+    address: validatedConcatenatedAddress,
     city: validatedResult.data.city,
     countryId: validatedResult.data.countryId,
     country: country.name,
@@ -260,7 +262,6 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
               helpMessagePrimary={t('protected-profile:home-address.unit-number-help')}
               helpMessagePrimaryClassName="text-black"
               autoComplete="address-line2"
-              defaultValue={defaultState.unitNumber}
               errorMessage={errors?.unitNumber}
             />
             <div className="grid items-end gap-6 md:grid-cols-2">
