@@ -17,6 +17,7 @@
   "upload": {
     "page-title": "Upload my documents",
     "submit": "Submit",
+    "select-one": "Select one",
     "return-dashboard": "Return to dashboard"
   },
   "not-required": {

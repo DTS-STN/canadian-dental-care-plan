@@ -112,40 +112,74 @@ export function ErrorSummary({ errors, id }: ErrorSummaryProps) {
 }
 
 /**
+ * Type guard to check if a value is a record with string keys
+ */
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+/**
+ * Type guard to check if a value is a string
+ */
+function isString(value: unknown): value is string {
+  return typeof value === 'string';
+}
+
+/**
+ * Field mapping configuration that supports nested array fields
+ */
+export interface ErrorFieldMap {
+  [key: string]: string | ((index: number) => string);
+}
+
+/**
  * Custom hook to generate error summary items based on provided errors and field mappings,
  * and handle side effects such as scrolling to the error summary and pushing analytics events.
+ * This version supports nested array errors like documentTypes[index].
  *
- * @param errors - Object containing error messages keyed by field names.
- * @param errorFieldMap - Object mapping field names (from errors) to corresponding field IDs. The order of field names will determine the output order.
+ * @param errors - Object containing error messages keyed by field names. Can include nested array errors.
+ * @param errorFieldMap - Object mapping field names (from errors) to corresponding field IDs or field ID generators for arrays.
  * @param errorSummaryId - ID attribute for the error summary container.
  */
-export function useErrorSummary<T extends Record<string, string | undefined>, U extends Record<keyof T, string>>(errors: T | undefined, errorFieldMap: U, errorSummaryId: string = 'error-summary') {
+export function useErrorSummary(errors: Record<string, unknown> | undefined, errorFieldMap: ErrorFieldMap, errorSummaryId: string = 'error-summary') {
   // Memoize `errorFieldMap` based on its content to trigger useMemo only if the content changes
   const memoizeErrorFieldMap = useDeepCompareMemo(() => errorFieldMap, [errorFieldMap]);
 
-  // Memoizes the stringified errors to optimize dependencies for errorSummaryItems,
-  // ensuring updates only when the content of errors changes, not just references.
-  const memoizeStringifiedErrors = useDeepCompareMemo(() => JSON.stringify(errors), [errors]);
-
   const errorSummaryItems = useMemo<ErrorSummaryItem[]>(() => {
-    return Object.keys(memoizeErrorFieldMap)
-      .map((key) => {
-        const fieldId = memoizeErrorFieldMap[key];
-        const errorMessage = errors && errors[key];
+    if (!errors) return [];
 
-        // prettier-ignore
-        if (typeof fieldId !== 'string' ||
-         validator.isEmpty(fieldId) ||
-         typeof errorMessage !== 'string' ||
-         validator.isEmpty(errorMessage)) {
-         return;
-       }
+    const items: ErrorSummaryItem[] = [];
 
-        return { errorMessage, fieldId };
-      })
-      .filter((i) => i !== undefined);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errors, memoizeStringifiedErrors, memoizeErrorFieldMap]);
+    for (const key of Object.keys(memoizeErrorFieldMap)) {
+      const fieldMapping = memoizeErrorFieldMap[key];
+      const errorValue = errors[key];
+
+      // Handle array errors (like documentTypes)
+      if (isRecord(errorValue)) {
+        // This is an object with indexed errors (e.g., documentTypes: { 0: 'error1', 1: 'error2' })
+        for (const index in errorValue) {
+          const errorMessage = errorValue[index];
+          if (isString(errorMessage) && !validator.isEmpty(errorMessage)) {
+            if (typeof fieldMapping === 'function') {
+              // Use the field ID generator function for arrays
+              const fieldId = fieldMapping(Number.parseInt(index));
+              items.push({ errorMessage, fieldId });
+            } else if (typeof fieldMapping === 'string') {
+              // For simple array field mappings, append the index
+              const fieldId = `${fieldMapping}-${index}`;
+              items.push({ errorMessage, fieldId });
+            }
+          }
+        }
+      }
+      // Handle simple string errors
+      else if (isString(errorValue) && !validator.isEmpty(errorValue) && typeof fieldMapping === 'string' && !validator.isEmpty(fieldMapping)) {
+        items.push({ errorMessage: errorValue, fieldId: fieldMapping });
+      }
+    }
+
+    return items;
+  }, [errors, memoizeErrorFieldMap]);
 
   useEffect(() => {
     if (errorSummaryItems.length > 0) {

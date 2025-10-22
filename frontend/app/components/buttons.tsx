@@ -23,6 +23,7 @@ const variantStyles = {
   green: 'border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800',
   primary: 'border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800',
   red: 'border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800',
+  'outline-red': 'text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800',
   link: 'border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700',
 };
 
