@@ -105,7 +105,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const mailingAddress = {
     address: validatedResult.data.address,
-    unitNumber: validatedResult.data.unitNumber,
+    unitNumber: validatedResult.data.unitNumber, //TODO: update with address spliting
     city: validatedResult.data.city,
     country: validatedResult.data.countryId,
     postalCode: validatedResult.data.postalZipCode,

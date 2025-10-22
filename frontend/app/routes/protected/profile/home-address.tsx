@@ -64,6 +64,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     defaultState: {
       address: clientApplication.contactInformation.homeAddress,
+      unitNumber: clientApplication.contactInformation.homeApartment, //TODO: update with address spliting
       city: clientApplication.contactInformation.homeCity,
       postalCode: clientApplication.contactInformation.homePostalCode,
       province: clientApplication.contactInformation.homeProvince,
@@ -262,6 +263,7 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
               helpMessagePrimary={t('protected-profile:home-address.unit-number-help')}
               helpMessagePrimaryClassName="text-black"
               autoComplete="address-line2"
+              defaultValue={defaultState.unitNumber}
               errorMessage={errors?.unitNumber}
             />
             <div className="grid items-end gap-6 md:grid-cols-2">
