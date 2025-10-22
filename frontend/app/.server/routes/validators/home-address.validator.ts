@@ -36,6 +36,9 @@ export class DefaultHomeAddressValidator implements HomeAddressValidator {
         invalidCharacters: t('common:error-message.home.characters-valid'),
         required: t('common:error-message.home.address-required'),
       },
+      unitNumber: {
+        invalidCharacters: t('common:error-message.mailing.characters-valid'),
+      },
       city: {
         required: t('common:error-message.home.city-required'),
         invalidCharacters: t('common:error-message.home.characters-valid'),

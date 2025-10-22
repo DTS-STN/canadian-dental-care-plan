@@ -195,6 +195,7 @@ export default function ApplyAdultChildHomeAddress({ loaderData, params }: Route
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'home-address',
+    unitNumber: '',
     city: 'home-city',
     postalZipCode: 'home-postal-code',
     provinceStateId: 'home-province',

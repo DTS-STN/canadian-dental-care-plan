@@ -14,7 +14,7 @@ export interface Address {
   /** Street address or specific location detail. */
   address: string;
   /** Unit, suite, or apartment number (optional). */
-  unitNumber: string;
+  unitNumber?: string;
   /** Name of the city associated with the address. */
   city: string;
   /** Identifier for the country associated with the address. */
@@ -103,7 +103,7 @@ export class DefaultAddressValidator {
           .min(1, this.errorMessages.address.required)
           .max(100)
           .refine(isAllValidInputCharacters, this.errorMessages.address.invalidCharacters),
-        unitNumber: z.string().trim().max(100).refine(isAllValidInputCharacters, this.errorMessages.address.invalidCharacters),
+        unitNumber: z.string().trim().max(100).refine(isAllValidInputCharacters, this.errorMessages.address.invalidCharacters).optional(),
         countryId: z
           .string({
             error: (issue) => (issue.input === undefined ? this.errorMessages.country.required : undefined),
