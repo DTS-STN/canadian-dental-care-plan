@@ -4,7 +4,8 @@ export type CommunicationPreferenceRequestDto = Readonly<{
   preferredMethodGovernmentOfCanada: string;
 }>;
 
-export type PhoneNumberRequestDto = Readonly<{
+export type UpdatePhoneNumbersRequestDto = Readonly<{
+  clientId: string;
   phoneNumber?: string;
   phoneNumberAlt?: string;
 }>;

@@ -56,7 +56,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
-  await securityHandler.requireClientApplication({ params, request, session });
+  const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -79,10 +79,17 @@ export async function action({ context: { appContainer, session }, params, reque
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
-
-  await appContainer.get(TYPES.ProfileService).updatePhoneNumbers(parsedDataResult.data);
-
   const idToken = session.get('idToken');
+
+  await appContainer.get(TYPES.ProfileService).updatePhoneNumbers(
+    {
+      clientId: clientApplication.applicantInformation.clientId,
+      phoneNumber: parsedDataResult.data.phoneNumber,
+      phoneNumberAlt: parsedDataResult.data.phoneNumberAlt,
+    },
+    idToken.sub,
+  );
+
   appContainer.get(TYPES.AuditService).createAudit('update-data.profile.phone-number', { userId: idToken.sub });
 
   return redirect(getPathById('protected/profile/contact-information', params));

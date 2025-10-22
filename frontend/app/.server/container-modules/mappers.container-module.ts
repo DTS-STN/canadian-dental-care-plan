@@ -17,6 +17,7 @@ import {
   DefaultLanguageDtoMapper,
   DefaultLetterDtoMapper,
   DefaultLetterTypeDtoMapper,
+  DefaultProfileDtoMapper,
   DefaultProvinceTerritoryStateDtoMapper,
   DefaultProvincialGovernmentInsurancePlanDtoMapper,
   DefaultVerificationCodeDtoMapper,
@@ -48,6 +49,7 @@ export function createMappersContainerModule(): ContainerModule {
     options.bind(TYPES.LanguageDtoMapper).to(DefaultLanguageDtoMapper);
     options.bind(TYPES.LetterDtoMapper).to(DefaultLetterDtoMapper);
     options.bind(TYPES.LetterTypeDtoMapper).to(DefaultLetterTypeDtoMapper);
+    options.bind(TYPES.ProfileDtoMapper).to(DefaultProfileDtoMapper);
     options.bind(TYPES.ProvinceTerritoryStateDtoMapper).to(DefaultProvinceTerritoryStateDtoMapper);
     options.bind(TYPES.ProvincialGovernmentInsurancePlanDtoMapper).to(DefaultProvincialGovernmentInsurancePlanDtoMapper);
     options.bind(TYPES.VerificationCodeDtoMapper).to(DefaultVerificationCodeDtoMapper);
