@@ -66,7 +66,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     defaultState: {
       address: clientApplication.contactInformation.mailingAddress,
-      unitNumber: clientApplication.contactInformation.mailingApartment,
+      apartment: clientApplication.contactInformation.mailingApartment,
       city: clientApplication.contactInformation.mailingCity,
       postalCode: clientApplication.contactInformation.mailingPostalCode,
       province: clientApplication.contactInformation.mailingProvince,
@@ -93,7 +93,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const mailingAddressValidator = appContainer.get(TYPES.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
     address: String(formData.get('address')),
-    unitNumber: String(formData.get('unitNumber')),
+    apartment: String(formData.get('apartment')),
     countryId: String(formData.get('countryId')),
     provinceStateId: formData.get('provinceStateId') ? String(formData.get('provinceStateId')) : undefined,
     city: String(formData.get('city')),
@@ -104,7 +104,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: validatedResult.errors }, { status: 400 });
   }
 
-  const formattedAddress = formatAddressLine({ address: validatedResult.data.address, apartment: validatedResult.data.unitNumber });
+  const formattedAddress = formatAddressLine({ address: validatedResult.data.address, apartment: validatedResult.data.apartment });
 
   const mailingAddress = {
     address: formattedAddress,
@@ -208,7 +208,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'mailing-address',
-    unitNumber: 'unit-number',
+    apartment: 'apartment',
     city: 'mailing-city',
     postalZipCode: 'mailing-postal-code',
     provinceStateId: 'mailing-province',
@@ -271,16 +271,16 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
               required
             />
             <InputSanitizeField
-              id="unit-number"
-              name="unitNumber"
+              id="apartment"
+              name="apartment"
               className="w-full"
-              label={t('protected-profile:mailing-address.unit-number')}
+              label={t('protected-profile:mailing-address.apartment')}
               maxLength={100}
-              helpMessagePrimary={t('protected-profile:mailing-address.unit-number-help')}
+              helpMessagePrimary={t('protected-profile:mailing-address.apartment-help')}
               helpMessagePrimaryClassName="text-black"
               autoComplete="address-line2"
-              defaultValue={defaultState.unitNumber}
-              errorMessage={errors?.unitNumber}
+              defaultValue={defaultState.apartment}
+              errorMessage={errors?.apartment}
             />
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputSanitizeField id="mailing-city" name="city" className="w-full" label={t('protected-profile:mailing-address.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />

@@ -229,7 +229,7 @@ export default function ApplyChildMailingAddress({ loaderData, params }: Route.C
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'mailing-address',
-    unitNumber: '',
+    apartment: '',
     city: 'mailing-city',
     postalZipCode: 'mailing-postal-code',
     provinceStateId: 'mailing-province',
