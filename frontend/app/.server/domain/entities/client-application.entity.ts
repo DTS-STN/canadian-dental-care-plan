@@ -133,7 +133,7 @@ export type ClientApplicationBasicInfoRequestEntity = ReadonlyDeep<{
       IdentificationID: string;
     }>;
   };
-  BenefitApplicationYear: {
+  BenefitApplicationYear?: {
     IdentificationID: string;
   };
 }>;
@@ -144,7 +144,7 @@ export type ClientApplicationSinRequestEntity = ReadonlyDeep<{
       IdentificationID: string;
     };
   };
-  BenefitApplicationYear: {
+  BenefitApplicationYear?: {
     IdentificationID: string;
   };
 }>;
