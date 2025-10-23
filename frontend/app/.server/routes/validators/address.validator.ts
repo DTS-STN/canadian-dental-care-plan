@@ -13,6 +13,8 @@ import { isAllValidInputCharacters } from '~/utils/string-utils';
 export interface Address {
   /** Street address or specific location detail. */
   address: string;
+  /** Unit, suite, or apartment number (optional). */
+  apartment?: string;
   /** Name of the city associated with the address. */
   city: string;
   /** Identifier for the country associated with the address. */
@@ -30,6 +32,9 @@ export interface AddressValidatorErrorMessages {
   address: {
     invalidCharacters: string;
     required: string;
+  };
+  apartment: {
+    invalidCharacters: string;
   };
   city: {
     invalidCharacters: string;
@@ -98,6 +103,7 @@ export class DefaultAddressValidator {
           .min(1, this.errorMessages.address.required)
           .max(100)
           .refine(isAllValidInputCharacters, this.errorMessages.address.invalidCharacters),
+        apartment: z.string().trim().max(100).refine(isAllValidInputCharacters, this.errorMessages.address.invalidCharacters).optional(),
         countryId: z
           .string({
             error: (issue) => (issue.input === undefined ? this.errorMessages.country.required : undefined),

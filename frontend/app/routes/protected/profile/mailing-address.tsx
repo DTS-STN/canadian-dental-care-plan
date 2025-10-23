@@ -28,6 +28,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatAddressLine } from '~/utils/string-utils';
 
 const FORM_ACTION = {
   submit: 'submit',
@@ -65,6 +66,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     defaultState: {
       address: clientApplication.contactInformation.mailingAddress,
+      apartment: clientApplication.contactInformation.mailingApartment,
       city: clientApplication.contactInformation.mailingCity,
       postalCode: clientApplication.contactInformation.mailingPostalCode,
       province: clientApplication.contactInformation.mailingProvince,
@@ -96,6 +98,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const mailingAddressValidator = appContainer.get(TYPES.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
     address: String(formData.get('address')),
+    apartment: String(formData.get('apartment')),
     countryId: String(formData.get('countryId')),
     provinceStateId: formData.get('provinceStateId') ? String(formData.get('provinceStateId')) : undefined,
     city: String(formData.get('city')),
@@ -106,8 +109,10 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: validatedResult.errors }, { status: 400 });
   }
 
+  const formattedAddress = formatAddressLine({ address: validatedResult.data.address, apartment: validatedResult.data.apartment });
+
   const mailingAddress = {
-    address: validatedResult.data.address,
+    address: formattedAddress,
     city: validatedResult.data.city,
     country: validatedResult.data.countryId,
     postalCode: validatedResult.data.postalZipCode,
@@ -152,7 +157,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   // Build the address object using validated data, transforming unique identifiers
   const formattedMailingAddress: CanadianAddress = {
-    address: validatedResult.data.address,
+    address: formattedAddress,
     city: validatedResult.data.city,
     countryId: validatedResult.data.countryId,
     country: country.name,
@@ -234,6 +239,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'mailing-address',
+    apartment: 'apartment',
     city: 'mailing-city',
     postalZipCode: 'mailing-postal-code',
     provinceStateId: 'mailing-province',
@@ -294,6 +300,18 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
               defaultValue={defaultState.address}
               errorMessage={errors?.address}
               required
+            />
+            <InputSanitizeField
+              id="apartment"
+              name="apartment"
+              className="w-full"
+              label={t('protected-profile:mailing-address.apartment')}
+              maxLength={100}
+              helpMessagePrimary={t('protected-profile:mailing-address.apartment-help')}
+              helpMessagePrimaryClassName="text-black"
+              autoComplete="address-line2"
+              defaultValue={defaultState.apartment}
+              errorMessage={errors?.apartment}
             />
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputSanitizeField id="mailing-city" name="city" className="w-full" label={t('protected-profile:mailing-address.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
