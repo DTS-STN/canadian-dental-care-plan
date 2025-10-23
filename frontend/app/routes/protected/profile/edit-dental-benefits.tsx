@@ -92,7 +92,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
-  await securityHandler.requireClientApplication({ params, request, session });
+  const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -161,9 +161,19 @@ export async function action({ context: { appContainer, session }, params, reque
     );
   }
 
-  await appContainer.get(TYPES.ProfileService).updateDentalBenefits({ ...parsedFederalBenefitsResult.data, ...parsedProvincialTerritorialBenefitsResult.data });
-
   const idToken = session.get('idToken');
+
+  await appContainer.get(TYPES.ProfileService).updateDentalBenefits(
+    {
+      clientId: clientApplication.applicantInformation.clientId,
+      hasFederalBenefits: parsedFederalBenefitsResult.data.hasFederalBenefits,
+      federalSocialProgram: parsedFederalBenefitsResult.data.federalSocialProgram,
+      hasProvincialTerritorialBenefits: parsedProvincialTerritorialBenefitsResult.data.hasProvincialTerritorialBenefits,
+      provincialTerritorialSocialProgram: parsedProvincialTerritorialBenefitsResult.data.provincialTerritorialSocialProgram,
+    },
+    idToken.sub,
+  );
+
   appContainer.get(TYPES.AuditService).createAudit('update-data.profile.edit-dental-benefits', { userId: idToken.sub });
 
   return redirect(getPathById('protected/profile/dental-benefits', params));

@@ -4,13 +4,8 @@ export type CommunicationPreferenceRequestDto = Readonly<{
   preferredMethodGovernmentOfCanada: string;
 }>;
 
-export type UpdatePhoneNumbersRequestDto = Readonly<{
+export type UpdateDentalBenefitsRequestDto = Readonly<{
   clientId: string;
-  phoneNumber?: string;
-  phoneNumberAlt?: string;
-}>;
-
-export type DentalBenefitsRequestDto = Readonly<{
   hasFederalBenefits: boolean;
   federalSocialProgram?: string;
   hasProvincialTerritorialBenefits: boolean;
@@ -21,6 +16,12 @@ export type DentalBenefitsRequestDto = Readonly<{
 export type UpdateEmailAddressRequestDto = Readonly<{
   clientId: string;
   email: string;
+}>;
+
+export type UpdatePhoneNumbersRequestDto = Readonly<{
+  clientId: string;
+  phoneNumber?: string;
+  phoneNumberAlt?: string;
 }>;
 
 export type AddressRequestDto = Readonly<{

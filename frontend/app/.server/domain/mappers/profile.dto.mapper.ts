@@ -1,41 +1,42 @@
 import { injectable } from 'inversify';
 
-import type { UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
-import type { UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
+import type { UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
+import type { UpdateDentalBenefitsRequestEntity, UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
 
 export interface ProfileDtoMapper {
-  mapUpdatePhoneNumbersRequestDtoToUpdatePhoneNumbersRequestEntity(updatePhoneNumbersRequestDto: UpdatePhoneNumbersRequestDto): UpdatePhoneNumbersRequestEntity;
+  mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity(updateDentalBenefitsRequestDto: UpdateDentalBenefitsRequestDto): UpdateDentalBenefitsRequestEntity;
   mapUpdateEmailAddressRequestDtoToUpdateEmailAddressRequestEntity(updateEmailRequestDto: UpdateEmailAddressRequestDto): UpdateEmailAddressRequestEntity;
+  mapUpdatePhoneNumbersRequestDtoToUpdatePhoneNumbersRequestEntity(updatePhoneNumbersRequestDto: UpdatePhoneNumbersRequestDto): UpdatePhoneNumbersRequestEntity;
 }
 
 @injectable()
 export class DefaultProfileDtoMapper implements ProfileDtoMapper {
-  mapUpdatePhoneNumbersRequestDtoToUpdatePhoneNumbersRequestEntity(updatePhoneNumbersRequestDto: UpdatePhoneNumbersRequestDto): UpdatePhoneNumbersRequestEntity {
+  mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity(updateDentalBenefitsRequestDto: UpdateDentalBenefitsRequestDto): UpdateDentalBenefitsRequestEntity {
+    // Only add items to the InsurancePlan array if the corresponding boolean is true and program is provided
+    const insurancePlans = [];
+
+    // Federal benefits
+    if (updateDentalBenefitsRequestDto.hasFederalBenefits && updateDentalBenefitsRequestDto.federalSocialProgram) {
+      insurancePlans.push({ InsurancePlanIdentification: [{ IdentificationID: updateDentalBenefitsRequestDto.federalSocialProgram }] });
+    }
+
+    // Provincial/Territorial benefits
+    if (updateDentalBenefitsRequestDto.hasProvincialTerritorialBenefits && updateDentalBenefitsRequestDto.provincialTerritorialSocialProgram) {
+      insurancePlans.push({ InsurancePlanIdentification: [{ IdentificationID: updateDentalBenefitsRequestDto.provincialTerritorialSocialProgram }] });
+    }
+
     return {
       BenefitApplication: {
         Applicant: {
+          ApplicantDetail: {
+            ApplicantDetail: {
+              InsurancePlan: insurancePlans,
+            },
+          },
           ClientIdentification: [
             {
-              IdentificationID: updatePhoneNumbersRequestDto.clientId,
+              IdentificationID: updateDentalBenefitsRequestDto.province ?? '',
               IdentificationCategoryText: 'Guid Primary Key',
-            },
-          ],
-          PersonContactInformation: [
-            {
-              TelephoneNumber: [
-                {
-                  TelephoneNumberCategoryCode: {
-                    ReferenceDataID: updatePhoneNumbersRequestDto.phoneNumber ?? '',
-                    ReferenceDataName: 'Primary',
-                  },
-                },
-                {
-                  TelephoneNumberCategoryCode: {
-                    ReferenceDataID: updatePhoneNumbersRequestDto.phoneNumberAlt ?? '',
-                    ReferenceDataName: 'Alternate',
-                  },
-                },
-              ],
             },
           ],
         },
@@ -61,6 +62,39 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
               EmailAddress: [
                 {
                   EmailAddressID: updateEmailAddressRequestDto.email,
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+  }
+
+  mapUpdatePhoneNumbersRequestDtoToUpdatePhoneNumbersRequestEntity(updatePhoneNumbersRequestDto: UpdatePhoneNumbersRequestDto): UpdatePhoneNumbersRequestEntity {
+    return {
+      BenefitApplication: {
+        Applicant: {
+          ClientIdentification: [
+            {
+              IdentificationID: updatePhoneNumbersRequestDto.clientId,
+              IdentificationCategoryText: 'Guid Primary Key',
+            },
+          ],
+          PersonContactInformation: [
+            {
+              TelephoneNumber: [
+                {
+                  TelephoneNumberCategoryCode: {
+                    ReferenceDataID: updatePhoneNumbersRequestDto.phoneNumber ?? '',
+                    ReferenceDataName: 'Primary',
+                  },
+                },
+                {
+                  TelephoneNumberCategoryCode: {
+                    ReferenceDataID: updatePhoneNumbersRequestDto.phoneNumberAlt ?? '',
+                    ReferenceDataName: 'Alternate',
+                  },
                 },
               ],
             },

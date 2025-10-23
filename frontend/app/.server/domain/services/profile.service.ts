@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
-import type { AddressRequestDto, CommunicationPreferenceRequestDto, DentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
+import type { AddressRequestDto, CommunicationPreferenceRequestDto, UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
 import type { ProfileDtoMapper } from '~/.server/domain/mappers';
 import type { ProfileRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
@@ -29,10 +29,10 @@ export interface ProfileService {
   /**
    * Updates dental benefits for a user in the protected route.
    *
-   * @param dentalBenefitsDto The dental benefits dto
+   * @param dentalBenefitsDto The update dental benefits request dto
    * @returns A Promise that resolves when the update is complete
    */
-  updateDentalBenefits(dentalBenefitsDto: DentalBenefitsRequestDto): Promise<void>;
+  updateDentalBenefits(updateDentalBenefitsRequestDto: UpdateDentalBenefitsRequestDto, userId: string): Promise<void>;
 
   /**
    * Updates email address for a user in the protected route.
@@ -102,10 +102,11 @@ export class DefaultProfileService implements ProfileService {
     this.log.trace('Successfully updated phone numbers');
   }
 
-  async updateDentalBenefits(dentalBenefitsDto: DentalBenefitsRequestDto): Promise<void> {
-    this.log.trace('Updating dental benefits for request [%j]', dentalBenefitsDto);
+  async updateDentalBenefits(updateDentalBenefitsRequestDto: UpdateDentalBenefitsRequestDto): Promise<void> {
+    this.log.trace('Updating dental benefits for request [%j]', updateDentalBenefitsRequestDto);
 
-    await this.profileRepository.updateDentalBenefits(dentalBenefitsDto);
+    const updateDentalBenefitsRequestEntity = this.profileDtoMapper.mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity(updateDentalBenefitsRequestDto);
+    await this.profileRepository.updateDentalBenefits(updateDentalBenefitsRequestEntity);
 
     this.log.trace('Successfully updated dental benefits');
   }
