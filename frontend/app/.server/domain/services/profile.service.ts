@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
-import type { CommunicationPreferenceRequestDto, UpdateAddressRequestDto, UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
+import type { UpdateAddressRequestDto, UpdateCommunicationPreferenceRequestDto, UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
 import type { ProfileDtoMapper } from '~/.server/domain/mappers';
 import type { ProfileRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
@@ -13,9 +13,10 @@ export interface ProfileService {
    * Updates communication preferences for a user in the protected route.
    *
    * @param communicationPreferenceDto The communication preference dto
+   * @param userId The current logged in user ID
    * @returns A Promise that resolves when the update is complete
    */
-  updateCommunicationPreferences(communicationPreferenceDto: CommunicationPreferenceRequestDto): Promise<void>;
+  updateCommunicationPreferences(communicationPreferenceDto: UpdateCommunicationPreferenceRequestDto, userId: string): Promise<void>;
 
   /**
    * Updates phone numbers for a user in the protected route.
@@ -76,10 +77,13 @@ export class DefaultProfileService implements ProfileService {
     this.log.debug('DefaultProfileService initiated.');
   }
 
-  async updateCommunicationPreferences(communicationPreferenceDto: CommunicationPreferenceRequestDto): Promise<void> {
+  async updateCommunicationPreferences(communicationPreferenceDto: UpdateCommunicationPreferenceRequestDto, userId: string): Promise<void> {
     this.log.trace('Updating communication preferences for request [%j]', communicationPreferenceDto);
 
-    await this.profileRepository.updateCommunicationPreferences(communicationPreferenceDto);
+    this.auditService.createAudit('profile-update.communication-preferences.post', { userId });
+
+    const updateCommunicationPreferenceRequestEntity = this.profileDtoMapper.mapUpdateCommunicationPreferenceRequestDtoToUpdateCommunicationPreferenceRequestEntity(communicationPreferenceDto);
+    await this.profileRepository.updateCommunicationPreferences(updateCommunicationPreferenceRequestEntity);
 
     this.log.trace('Successfully updated communication preferences');
   }

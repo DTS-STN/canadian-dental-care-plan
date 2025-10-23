@@ -91,3 +91,22 @@ export type UpdateAddressRequestEntity = ReadonlyDeep<{
     };
   };
 }>;
+
+export type UpdateCommunicationPreferenceRequestEntity = ReadonlyDeep<{
+  BenefitApplication: {
+    Applicant: {
+      PersonLanguage: {
+        CommunicationCategoryCode: {
+          ReferenceDataID: string;
+        };
+        PreferredIndicator: boolean;
+      }[];
+      PreferredMethodCommunicationCode: {
+        ReferenceDataID: string;
+      };
+      PreferredMethodCommunicationGCCode: {
+        ReferenceDataID: string;
+      };
+    };
+  };
+}>;
