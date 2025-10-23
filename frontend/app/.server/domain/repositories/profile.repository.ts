@@ -2,8 +2,8 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { AddressRequestDto, CommunicationPreferenceRequestDto, DentalBenefitsRequestDto, EmailAddressRequestDto } from '~/.server/domain/dtos';
-import type { UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
+import type { AddressRequestDto, CommunicationPreferenceRequestDto, DentalBenefitsRequestDto } from '~/.server/domain/dtos';
+import type { UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
 import type { HttpClient } from '~/.server/http';
 import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
@@ -29,10 +29,10 @@ export interface ProfileRepository {
   /**
    * Updates email address for a user.
    *
-   * @param emailAddressDto The email address dto.
+   * @param updateEmailAddressRequestEntity The email address request entity.
    * @returns A Promise that resolves when the update is complete.
    */
-  updateEmailAddress(emailAddressDto: EmailAddressRequestDto): Promise<void>;
+  updateEmailAddress(updateEmailAddressRequestEntity: UpdateEmailAddressRequestEntity): Promise<void>;
 
   /**
    * Updates dental benefits for a user.
@@ -130,8 +130,38 @@ export class DefaultProfileRepository implements ProfileRepository {
     }
   }
 
-  async updateEmailAddress(emailAddressDto: EmailAddressRequestDto): Promise<void> {
-    await Promise.reject(new Error('Method not implemented.'));
+  async updateEmailAddress(updateEmailAddressRequestEntity: UpdateEmailAddressRequestEntity): Promise<void> {
+    this.log.trace('Updating email address for request [%j]', updateEmailAddressRequestEntity);
+
+    const url = `${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/update-benefit-application`;
+    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.update-benefit-application.email-address.posts', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+      },
+      body: JSON.stringify(updateEmailAddressRequestEntity),
+      retryOptions: {
+        retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
+        backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,
+        retryConditions: {
+          [HttpStatusCodes.BAD_GATEWAY]: [],
+        },
+      },
+    });
+
+    if (!response.ok) {
+      this.log.error('%j', {
+        message: `Failed to 'POST' for update benefit application email address`,
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to 'POST' for update benefit application email address. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
   }
 
   async updateDentalBenefits(dentalBenefitsDto: DentalBenefitsRequestDto): Promise<void> {
@@ -184,8 +214,8 @@ export class MockProfileRepository implements ProfileRepository {
     return await Promise.resolve();
   }
 
-  async updateEmailAddress(emailAddressDto: EmailAddressRequestDto): Promise<void> {
-    this.log.debug('Mock updating email address for request [%j]', emailAddressDto);
+  async updateEmailAddress(updateEmailAddressRequestEntity: UpdateEmailAddressRequestEntity): Promise<void> {
+    this.log.debug('Mock updating email address for request [%j]', updateEmailAddressRequestEntity);
 
     this.log.debug('Successfully mock updated email address');
     return await Promise.resolve();

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
-import type { AddressRequestDto, CommunicationPreferenceRequestDto, DentalBenefitsRequestDto, EmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
+import type { AddressRequestDto, CommunicationPreferenceRequestDto, DentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
 import type { ProfileDtoMapper } from '~/.server/domain/mappers';
 import type { ProfileRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
@@ -38,9 +38,10 @@ export interface ProfileService {
    * Updates email address for a user in the protected route.
    *
    * @param emailAddressDto The email address dto
+   * @param userId The current logged in user ID
    * @returns A Promise that resolves when the update is complete
    */
-  updateEmailAddress(emailAddressDto: EmailAddressRequestDto): Promise<void>;
+  updateEmailAddress(emailAddressDto: UpdateEmailAddressRequestDto, userId: string): Promise<void>;
 
   /**
    * Updates mailing address for a user in the protected route.
@@ -109,10 +110,13 @@ export class DefaultProfileService implements ProfileService {
     this.log.trace('Successfully updated dental benefits');
   }
 
-  async updateEmailAddress(emailAddressDto: EmailAddressRequestDto): Promise<void> {
-    this.log.trace('Updating email address for request [%j]', emailAddressDto);
+  async updateEmailAddress(updateEmailAddressRequestDto: UpdateEmailAddressRequestDto, userId: string): Promise<void> {
+    this.log.trace('Updating email address for request [%j]', updateEmailAddressRequestDto);
 
-    await this.profileRepository.updateEmailAddress(emailAddressDto);
+    this.auditService.createAudit('profile-update.email-address.post', { userId });
+
+    const updateEmailAddressRequestEntity = this.profileDtoMapper.mapUpdateEmailAddressRequestDtoToUpdateEmailAddressRequestEntity(updateEmailAddressRequestDto);
+    await this.profileRepository.updateEmailAddress(updateEmailAddressRequestEntity);
 
     this.log.trace('Successfully updated email address');
   }

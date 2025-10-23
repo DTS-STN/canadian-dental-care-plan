@@ -18,7 +18,8 @@ export type DentalBenefitsRequestDto = Readonly<{
   province?: string;
 }>;
 
-export type EmailAddressRequestDto = Readonly<{
+export type UpdateEmailAddressRequestDto = Readonly<{
+  clientId: string;
   email: string;
 }>;
 
