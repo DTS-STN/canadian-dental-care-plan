@@ -270,8 +270,8 @@ export class MockProfileRepository implements ProfileRepository {
     this.log = createLogger('MockProfileRepository');
   }
 
-  async updateCommunicationPreferences(UpdateCommunicationPreferenceRequestEntity: UpdateCommunicationPreferenceRequestEntity): Promise<void> {
-    this.log.debug('Mock updating communication preferences for request [%j]', UpdateCommunicationPreferenceRequestEntity);
+  async updateCommunicationPreferences(updateCommunicationPreferenceRequestEntity: UpdateCommunicationPreferenceRequestEntity): Promise<void> {
+    this.log.debug('Mock updating communication preferences for request [%j]', updateCommunicationPreferenceRequestEntity);
 
     this.log.debug('Successfully mock updated communication preferences');
     return await Promise.resolve();

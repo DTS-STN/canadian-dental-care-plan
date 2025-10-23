@@ -12,7 +12,7 @@ export interface ProfileService {
   /**
    * Updates communication preferences for a user in the protected route.
    *
-   * @param communicationPreferenceDto The communication preference dto
+   * @param updateCommunicationPreferenceRequestDto The update communication preference request dto
    * @param userId The current logged in user ID
    * @returns A Promise that resolves when the update is complete
    */
