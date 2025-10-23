@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 
-import { redirect, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 
-import { invariant } from '@dts-stn/invariant';
 import { randomUUID } from 'node:crypto';
 
 import type { Route } from './+types/index';
@@ -31,21 +30,19 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-
-  const userInfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
-
   const currentDate = getCurrentDateString(locale);
   const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
   const applicationYear = applicationYearService.getRenewalApplicationYear(currentDate);
 
-  const clientApplicationService = appContainer.get(TYPES.ClientApplicationService);
-  const clientApplication = await clientApplicationService.findClientApplicationBySin({ sin: userInfoToken.sin, applicationYearId: applicationYear.applicationYearId, userId: userInfoToken.sub });
-  if (clientApplication.isNone()) {
-    throw redirect(getPathById('protected/data-unavailable', params));
-  }
+  const clientApplication = await securityHandler.requireClientApplication({
+    applicationYearId: applicationYear.applicationYearId,
+    params,
+    request,
+    session,
+  });
+
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
   const id = randomUUID().toString();
   const state = startProtectedRenewState({
@@ -54,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       taxYear: applicationYear.taxYear,
       coverageEndDate: applicationYear.dependentEligibilityEndDate,
     },
-    clientApplication: clientApplication.unwrap(),
+    clientApplication,
     id,
     session,
   });

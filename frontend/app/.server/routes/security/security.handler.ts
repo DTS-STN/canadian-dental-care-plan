@@ -71,6 +71,7 @@ export interface ValidateRequestMethodParams {
  * Parameters for requiring client application.
  */
 export interface RequireClientApplicationParams {
+  applicationYearId?: string;
   params: Params;
   request: Request;
   session: Session;
@@ -289,7 +290,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
     this.log.debug('Request method [%s] is allowed for path [%s] with allowed methods [%s]', method, pathname, allowedMethods);
   }
 
-  async requireClientApplication({ params, request, session }: RequireClientApplicationParams): Promise<ClientApplicationDto> {
+  async requireClientApplication({ applicationYearId, params, request, session }: RequireClientApplicationParams): Promise<ClientApplicationDto> {
     this.log.debug('Requiring client application for session [%s]', session.id);
     const userInfoToken = session.find('userInfoToken').unwrapUnchecked();
 
@@ -299,10 +300,10 @@ export class DefaultSecurityHandler implements SecurityHandler {
       const returnTo = encodeURIComponent(`${pathname}?${searchParams}`);
       throw redirectDocument(`/auth/login?returnto=${returnTo}`);
     }
-    // TODO: Remove applicant year when Interop is updated to not require it
+
     const clientApplicationOption = await this.clientApplicationService.findClientApplicationBySin({
+      applicationYearId,
       sin: userInfoToken.sin,
-      applicationYearId: '',
       userId: userInfoToken.sub,
     });
 

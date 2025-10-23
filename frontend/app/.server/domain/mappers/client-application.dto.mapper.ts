@@ -62,9 +62,11 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
           },
         ],
       },
-      BenefitApplicationYear: {
-        IdentificationID: clientApplicationBasicInfoRequestDto.applicationYearId,
-      },
+      BenefitApplicationYear: clientApplicationBasicInfoRequestDto.applicationYearId
+        ? {
+            IdentificationID: clientApplicationBasicInfoRequestDto.applicationYearId,
+          }
+        : undefined,
     };
   }
 
@@ -75,9 +77,11 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
           IdentificationID: clientApplicationSinRequestDto.sin,
         },
       },
-      BenefitApplicationYear: {
-        IdentificationID: clientApplicationSinRequestDto.applicationYearId,
-      },
+      BenefitApplicationYear: clientApplicationSinRequestDto.applicationYearId
+        ? {
+            IdentificationID: clientApplicationSinRequestDto.applicationYearId,
+          }
+        : undefined,
     };
   }
 
