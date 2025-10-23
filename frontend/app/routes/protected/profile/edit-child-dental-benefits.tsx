@@ -177,9 +177,19 @@ export async function action({ context: { appContainer, session }, params, reque
     );
   }
 
-  await appContainer.get(TYPES.ProfileService).updateDentalBenefits({ ...parsedFederalBenefitsResult.data, ...parsedProvincialTerritorialBenefitsResult.data });
-
   const idToken = session.get('idToken');
+
+  await appContainer.get(TYPES.ProfileService).updateDentalBenefits(
+    {
+      clientId: child.information.clientId,
+      hasFederalBenefits: parsedFederalBenefitsResult.data.hasFederalBenefits,
+      federalSocialProgram: parsedFederalBenefitsResult.data.federalSocialProgram,
+      hasProvincialTerritorialBenefits: parsedProvincialTerritorialBenefitsResult.data.hasProvincialTerritorialBenefits,
+      provincialTerritorialSocialProgram: parsedProvincialTerritorialBenefitsResult.data.provincialTerritorialSocialProgram,
+    },
+    idToken.sub,
+  );
+
   appContainer.get(TYPES.AuditService).createAudit('update-data.profile.edit-child-dental-benefits', { userId: idToken.sub });
 
   return redirect(getPathById('protected/profile/dental-benefits', params));
