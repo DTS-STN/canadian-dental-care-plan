@@ -1,10 +1,11 @@
 import { injectable } from 'inversify';
 
-import type { UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
-import type { UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
+import type { UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
+import type { UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
 
 export interface ProfileDtoMapper {
   mapUpdatePhoneNumbersRequestDtoToUpdatePhoneNumbersRequestEntity(updatePhoneNumbersRequestDto: UpdatePhoneNumbersRequestDto): UpdatePhoneNumbersRequestEntity;
+  mapUpdateEmailAddressRequestDtoToUpdateEmailAddressRequestEntity(updateEmailRequestDto: UpdateEmailAddressRequestDto): UpdateEmailAddressRequestEntity;
 }
 
 @injectable()
@@ -33,6 +34,33 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
                     ReferenceDataID: updatePhoneNumbersRequestDto.phoneNumberAlt ?? '',
                     ReferenceDataName: 'Alternate',
                   },
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+  }
+
+  mapUpdateEmailAddressRequestDtoToUpdateEmailAddressRequestEntity(updateEmailAddressRequestDto: UpdateEmailAddressRequestDto): UpdateEmailAddressRequestEntity {
+    return {
+      BenefitApplication: {
+        Applicant: {
+          ApplicantDetail: {
+            ApplicantEmailVerifiedIndicator: true,
+          },
+          ClientIdentification: [
+            {
+              IdentificationID: updateEmailAddressRequestDto.clientId,
+              IdentificationCategoryText: 'Guid Primary Key',
+            },
+          ],
+          PersonContactInformation: [
+            {
+              EmailAddress: [
+                {
+                  EmailAddressID: updateEmailAddressRequestDto.email,
                 },
               ],
             },

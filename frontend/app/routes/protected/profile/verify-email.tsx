@@ -141,7 +141,13 @@ export async function action({ context: { appContainer, session }, params, reque
     return { status: 'verification-code-mismatch' } as const;
   }
 
-  await appContainer.get(TYPES.ProfileService).updateEmailAddress({ email: verificationState.pendingEmail });
+  await appContainer.get(TYPES.ProfileService).updateEmailAddress(
+    {
+      clientId: clientApplication.applicantInformation.clientId,
+      email: verificationState.pendingEmail,
+    },
+    idToken.sub,
+  );
 
   session.unset('profileEmailVerificationState');
 
