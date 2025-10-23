@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
-import type { AddressRequestDto, CommunicationPreferenceRequestDto, UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
+import type { CommunicationPreferenceRequestDto, UpdateAddressRequestDto, UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
 import type { ProfileDtoMapper } from '~/.server/domain/mappers';
 import type { ProfileRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
@@ -44,20 +44,13 @@ export interface ProfileService {
   updateEmailAddress(emailAddressDto: UpdateEmailAddressRequestDto, userId: string): Promise<void>;
 
   /**
-   * Updates mailing address for a user in the protected route.
+   * Updates mailing and home addresses for a user in the protected route.
    *
-   * @param addressDto The address dto
+   * @param updateAddressRequestDto The address dto
+   * @param userId The current logged in user ID
    * @returns A Promise that resolves when the update is complete
    */
-  updateMailingAddress(addressDto: AddressRequestDto): Promise<void>;
-
-  /**
-   * Updates home address for a user in the protected route.
-   *
-   * @param addressDto The address dto
-   * @returns A Promise that resolves when the update is complete
-   */
-  updateHomeAddress(addressDto: AddressRequestDto): Promise<void>;
+  updateAddresses(updateAddressRequestDto: UpdateAddressRequestDto, userId: string): Promise<void>;
 }
 
 @injectable()
@@ -122,19 +115,12 @@ export class DefaultProfileService implements ProfileService {
     this.log.trace('Successfully updated email address');
   }
 
-  async updateMailingAddress(addressDto: AddressRequestDto): Promise<void> {
-    this.log.trace('Updating mailing address for request [%j]', addressDto);
+  async updateAddresses(updateAddressRequestDto: UpdateAddressRequestDto): Promise<void> {
+    this.log.trace('Updating mailing and home addresses for request [%j]', updateAddressRequestDto);
 
-    await this.profileRepository.updateMailingAddress(addressDto);
+    const updateAddressRequestEntity = this.profileDtoMapper.mapUpdateAddressRequestDtoToUpdateAddressRequestEntity(updateAddressRequestDto);
+    await this.profileRepository.updateAddresses(updateAddressRequestEntity);
 
-    this.log.trace('Successfully updated mailing address');
-  }
-
-  async updateHomeAddress(addressDto: AddressRequestDto): Promise<void> {
-    this.log.trace('Updating home address for request [%j]', addressDto);
-
-    await this.profileRepository.updateHomeAddress(addressDto);
-
-    this.log.trace('Successfully updated home address');
+    this.log.trace('Successfully updated mailing and home addresses');
   }
 }

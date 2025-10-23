@@ -57,3 +57,37 @@ export type UpdatePhoneNumbersRequestEntity = ReadonlyDeep<{
     };
   };
 }>;
+
+export type UpdateAddressRequestEntity = ReadonlyDeep<{
+  BenefitApplication: {
+    Applicant: {
+      ClientIdentification: Array<{
+        IdentificationID: string;
+        IdentificationCategoryText: 'Guid Primary Key';
+      }>;
+      PersonContactInformation: Array<{
+        Address: Array<{
+          AddressCategoryCode: {
+            ReferenceDataName: 'Home' | 'Mailing';
+          };
+          AddressCityName: string;
+          AddressCountry: {
+            CountryCode: {
+              ReferenceDataID: string;
+            };
+          };
+          AddressPostalCode: string;
+          AddressProvince: {
+            ProvinceCode: {
+              ReferenceDataID: string;
+            };
+          };
+          AddressSecondaryUnitText: string;
+          AddressStreet: {
+            StreetName: string;
+          };
+        }>;
+      }>;
+    };
+  };
+}>;
