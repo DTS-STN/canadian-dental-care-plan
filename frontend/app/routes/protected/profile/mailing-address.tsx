@@ -80,6 +80,11 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
   const locale = getLocale(request);
 
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+  securityHandler.validateCsrfToken({ formData, session });
+  const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
+
   const clientConfig = appContainer.get(TYPES.ClientConfig);
   const addressValidationService = appContainer.get(TYPES.AddressValidationService);
   const countryService = appContainer.get(TYPES.CountryService);
@@ -118,10 +123,23 @@ export async function action({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.AuditService).createAudit('update-data.profile.mailing-address', { userId: idToken.sub });
 
   if (canProceed) {
-    await appContainer.get(TYPES.ProfileService).updateMailingAddress(mailingAddress);
-    if (isCopyMailingToHome) {
-      await appContainer.get(TYPES.ProfileService).updateHomeAddress(mailingAddress);
-    }
+    await appContainer.get(TYPES.ProfileService).updateAddresses(
+      {
+        clientId: clientApplication.applicantInformation.clientId,
+        mailingAddress,
+        homeAddress: isCopyMailingToHome
+          ? mailingAddress
+          : {
+              address: clientApplication.contactInformation.homeAddress ?? '',
+              apartment: clientApplication.contactInformation.homeApartment ?? '',
+              city: clientApplication.contactInformation.homeCity ?? '',
+              country: clientApplication.contactInformation.homeCountry ?? '',
+              postalCode: clientApplication.contactInformation.homePostalCode ?? '',
+              province: clientApplication.contactInformation.homeProvince ?? '',
+            },
+      },
+      idToken.sub,
+    );
     return redirect(getPathById('protected/profile/contact-information', params));
   }
 
@@ -175,10 +193,23 @@ export async function action({ context: { appContainer, session }, params, reque
     } as const satisfies AddressSuggestionResponse;
   }
 
-  await appContainer.get(TYPES.ProfileService).updateMailingAddress(mailingAddress);
-  if (isCopyMailingToHome) {
-    await appContainer.get(TYPES.ProfileService).updateHomeAddress(mailingAddress);
-  }
+  await appContainer.get(TYPES.ProfileService).updateAddresses(
+    {
+      clientId: clientApplication.applicantInformation.clientId,
+      mailingAddress,
+      homeAddress: isCopyMailingToHome
+        ? mailingAddress
+        : {
+            address: clientApplication.contactInformation.homeAddress ?? '',
+            apartment: clientApplication.contactInformation.homeApartment ?? '',
+            city: clientApplication.contactInformation.homeCity ?? '',
+            country: clientApplication.contactInformation.homeCountry ?? '',
+            postalCode: clientApplication.contactInformation.homePostalCode ?? '',
+            province: clientApplication.contactInformation.homeProvince ?? '',
+          },
+    },
+    idToken.sub,
+  );
 
   return redirect(getPathById('protected/profile/contact-information', params));
 }

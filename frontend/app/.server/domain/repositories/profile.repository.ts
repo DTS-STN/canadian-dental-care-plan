@@ -2,8 +2,8 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { AddressRequestDto, CommunicationPreferenceRequestDto } from '~/.server/domain/dtos';
-import type { UpdateDentalBenefitsRequestEntity, UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
+import type { CommunicationPreferenceRequestDto } from '~/.server/domain/dtos';
+import type { UpdateAddressRequestEntity, UpdateDentalBenefitsRequestEntity, UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
 import type { HttpClient } from '~/.server/http';
 import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
@@ -43,20 +43,12 @@ export interface ProfileRepository {
   updateDentalBenefits(updateDentalBenefitsRequestEntity: UpdateDentalBenefitsRequestEntity): Promise<void>;
 
   /**
-   * Updates mailing address for a user.
+   * Updates mailing and home addresses for a user.
    *
-   * @param addressDto The address dto.
+   * @param updateAddressRequestEntity The address request entity.
    * @returns A Promise that resolves when the update is complete.
    */
-  updateMailingAddress(addressDto: AddressRequestDto): Promise<void>;
-
-  /**
-   * Updates home address for a user.
-   *
-   * @param addressDto The address dto.
-   * @returns A Promise that resolves when the update is complete.
-   */
-  updateHomeAddress(addressDto: AddressRequestDto): Promise<void>;
+  updateAddresses(updateAddressRequestEntity: UpdateAddressRequestEntity): Promise<void>;
 
   /**
    * Retrieves metadata associated with the letter repository.
@@ -198,12 +190,38 @@ export class DefaultProfileRepository implements ProfileRepository {
     }
   }
 
-  async updateMailingAddress(addressDto: AddressRequestDto): Promise<void> {
-    await Promise.reject(new Error('Method not implemented.'));
-  }
+  async updateAddresses(updateAddressRequestEntity: UpdateAddressRequestEntity): Promise<void> {
+    this.log.trace('Updating mailing and home addresses for request [%j]', updateAddressRequestEntity);
 
-  async updateHomeAddress(addressDto: AddressRequestDto): Promise<void> {
-    await Promise.reject(new Error('Method not implemented.'));
+    const url = `${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/update-benefit-application`;
+    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.update-benefit-application.mailing-and-home-addresses.posts', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+      },
+      body: JSON.stringify(updateAddressRequestEntity),
+      retryOptions: {
+        retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
+        backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,
+        retryConditions: {
+          [HttpStatusCodes.BAD_GATEWAY]: [],
+        },
+      },
+    });
+
+    if (!response.ok) {
+      this.log.error('%j', {
+        message: `Failed to 'POST' for update benefit application mailing and home addresses`,
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to 'POST' for update benefit application mailing and home addresses. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
   }
 
   getMetadata(): Record<string, string> {
@@ -251,17 +269,10 @@ export class MockProfileRepository implements ProfileRepository {
     return await Promise.resolve();
   }
 
-  async updateMailingAddress(addressDto: AddressRequestDto): Promise<void> {
-    this.log.debug('Mock updating mailing address for request [%j]', addressDto);
+  async updateAddresses(updateAddressRequestEntity: UpdateAddressRequestEntity): Promise<void> {
+    this.log.debug('Mock updating mailing and home addresses for request [%j]', updateAddressRequestEntity);
 
-    this.log.debug('Successfully mock updated mailing address');
-    return await Promise.resolve();
-  }
-
-  async updateHomeAddress(addressDto: AddressRequestDto): Promise<void> {
-    this.log.debug('Mock updating home address for request [%j]', addressDto);
-
-    this.log.debug('Successfully mock updated home address');
+    this.log.debug('Successfully mock updated mailing and home addresses');
     return await Promise.resolve();
   }
 

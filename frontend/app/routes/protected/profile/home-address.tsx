@@ -78,6 +78,11 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
   const locale = getLocale(request);
 
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+  securityHandler.validateCsrfToken({ formData, session });
+  const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
+
   const clientConfig = appContainer.get(TYPES.ClientConfig);
   const addressValidationService = appContainer.get(TYPES.AddressValidationService);
   const countryService = appContainer.get(TYPES.CountryService);
@@ -115,7 +120,21 @@ export async function action({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.AuditService).createAudit('update-data.profile.home-address', { userId: idToken.sub });
 
   if (canProceed) {
-    await appContainer.get(TYPES.ProfileService).updateHomeAddress(homeAddress);
+    await appContainer.get(TYPES.ProfileService).updateAddresses(
+      {
+        clientId: clientApplication.applicantInformation.clientId,
+        mailingAddress: {
+          address: clientApplication.contactInformation.mailingAddress,
+          apartment: clientApplication.contactInformation.mailingApartment,
+          city: clientApplication.contactInformation.mailingCity,
+          country: clientApplication.contactInformation.mailingCountry,
+          postalCode: clientApplication.contactInformation.mailingPostalCode,
+          province: clientApplication.contactInformation.mailingProvince,
+        },
+        homeAddress,
+      },
+      idToken.sub,
+    );
     return redirect(getPathById('protected/profile/contact-information', params));
   }
 
@@ -169,7 +188,21 @@ export async function action({ context: { appContainer, session }, params, reque
     } as const satisfies AddressSuggestionResponse;
   }
 
-  await appContainer.get(TYPES.ProfileService).updateHomeAddress(homeAddress);
+  await appContainer.get(TYPES.ProfileService).updateAddresses(
+    {
+      clientId: clientApplication.applicantInformation.clientId,
+      mailingAddress: {
+        address: clientApplication.contactInformation.mailingAddress,
+        apartment: clientApplication.contactInformation.mailingApartment,
+        city: clientApplication.contactInformation.mailingCity,
+        country: clientApplication.contactInformation.mailingCountry,
+        postalCode: clientApplication.contactInformation.mailingPostalCode,
+        province: clientApplication.contactInformation.mailingProvince,
+      },
+      homeAddress,
+    },
+    idToken.sub,
+  );
   return redirect(getPathById('protected/profile/contact-information', params));
 }
 
