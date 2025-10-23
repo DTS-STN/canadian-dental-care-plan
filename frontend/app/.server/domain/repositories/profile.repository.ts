@@ -12,10 +12,10 @@ export interface ProfileRepository {
   /**
    * Updates communication preferences for a user.
    *
-   * @param UpdateCommunicationPreferenceRequestEntity The communication preference request entity.
+   * @param updateCommunicationPreferenceRequestEntity The communication preference request entity.
    * @returns A Promise that resolves when the update is complete.
    */
-  updateCommunicationPreferences(communicationPreferenceDto: UpdateCommunicationPreferenceRequestEntity): Promise<void>;
+  updateCommunicationPreferences(updateCommunicationPreferenceRequestEntity: UpdateCommunicationPreferenceRequestEntity): Promise<void>;
 
   /**
    * Updates phone numbers for a user.
@@ -83,8 +83,8 @@ export class DefaultProfileRepository implements ProfileRepository {
     this.httpClient = httpClient;
   }
 
-  async updateCommunicationPreferences(UpdateCommunicationPreferenceRequestEntity: UpdateCommunicationPreferenceRequestEntity): Promise<void> {
-    this.log.trace('Updating communication preferences for request [%j]', UpdateCommunicationPreferenceRequestEntity);
+  async updateCommunicationPreferences(updateCommunicationPreferenceRequestEntity: UpdateCommunicationPreferenceRequestEntity): Promise<void> {
+    this.log.trace('Updating communication preferences for request [%j]', updateCommunicationPreferenceRequestEntity);
 
     const url = `${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/update-benefit-application`;
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.update-benefit-application.communication-preferences.posts', url, {
@@ -94,7 +94,7 @@ export class DefaultProfileRepository implements ProfileRepository {
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
-      body: JSON.stringify(UpdateCommunicationPreferenceRequestEntity),
+      body: JSON.stringify(updateCommunicationPreferenceRequestEntity),
       retryOptions: {
         retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
         backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,

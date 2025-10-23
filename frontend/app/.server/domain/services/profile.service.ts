@@ -16,7 +16,7 @@ export interface ProfileService {
    * @param userId The current logged in user ID
    * @returns A Promise that resolves when the update is complete
    */
-  updateCommunicationPreferences(communicationPreferenceDto: UpdateCommunicationPreferenceRequestDto, userId: string): Promise<void>;
+  updateCommunicationPreferences(updateCommunicationPreferenceRequestDto: UpdateCommunicationPreferenceRequestDto, userId: string): Promise<void>;
 
   /**
    * Updates phone numbers for a user in the protected route.
@@ -77,12 +77,12 @@ export class DefaultProfileService implements ProfileService {
     this.log.debug('DefaultProfileService initiated.');
   }
 
-  async updateCommunicationPreferences(communicationPreferenceDto: UpdateCommunicationPreferenceRequestDto, userId: string): Promise<void> {
-    this.log.trace('Updating communication preferences for request [%j]', communicationPreferenceDto);
+  async updateCommunicationPreferences(updateCommunicationPreferenceRequestDto: UpdateCommunicationPreferenceRequestDto, userId: string): Promise<void> {
+    this.log.trace('Updating communication preferences for request [%j]', updateCommunicationPreferenceRequestDto);
 
     this.auditService.createAudit('profile-update.communication-preferences.post', { userId });
 
-    const updateCommunicationPreferenceRequestEntity = this.profileDtoMapper.mapUpdateCommunicationPreferenceRequestDtoToUpdateCommunicationPreferenceRequestEntity(communicationPreferenceDto);
+    const updateCommunicationPreferenceRequestEntity = this.profileDtoMapper.mapUpdateCommunicationPreferenceRequestDtoToUpdateCommunicationPreferenceRequestEntity(updateCommunicationPreferenceRequestDto);
     await this.profileRepository.updateCommunicationPreferences(updateCommunicationPreferenceRequestEntity);
 
     this.log.trace('Successfully updated communication preferences');
