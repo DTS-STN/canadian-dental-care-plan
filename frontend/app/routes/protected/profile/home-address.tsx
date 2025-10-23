@@ -27,6 +27,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatAddressLine } from '~/utils/string-utils';
 
 const FORM_ACTION = {
   submit: 'submit',
@@ -64,7 +65,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     defaultState: {
       address: clientApplication.contactInformation.homeAddress,
-      unitNumber: clientApplication.contactInformation.homeApartment, //TODO: update with address spliting
+      unitNumber: clientApplication.contactInformation.homeApartment,
       city: clientApplication.contactInformation.homeCity,
       postalCode: clientApplication.contactInformation.homePostalCode,
       province: clientApplication.contactInformation.homeProvince,
@@ -89,6 +90,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const mailingAddressValidator = appContainer.get(TYPES.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
     address: String(formData.get('address')),
+    unitNumber: String(formData.get('unitNumber')),
     countryId: String(formData.get('countryId')),
     provinceStateId: formData.get('provinceStateId') ? String(formData.get('provinceStateId')) : undefined,
     city: String(formData.get('city')),
@@ -99,8 +101,10 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: validatedResult.errors }, { status: 400 });
   }
 
+  const formattedAddress = formatAddressLine({ address: validatedResult.data.address, apartment: validatedResult.data.unitNumber });
+
   const homeAddress = {
-    address: validatedResult.data.address,
+    address: formattedAddress,
     city: validatedResult.data.city,
     country: validatedResult.data.countryId,
     postalCode: validatedResult.data.postalZipCode,
@@ -127,11 +131,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const country = await countryService.getLocalizedCountryById(validatedResult.data.countryId, locale);
   const provinceTerritoryState = await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedResult.data.provinceStateId, locale);
 
-  const validatedConcatenatedAddress = validatedResult.data.address + ' ' + validatedResult.data.unitNumber;
-
   // Build the address object using validated data, transforming unique identifiers
   const formattedHomeAddress: CanadianAddress = {
-    address: validatedConcatenatedAddress,
+    address: formattedAddress,
     city: validatedResult.data.city,
     countryId: validatedResult.data.countryId,
     country: country.name,

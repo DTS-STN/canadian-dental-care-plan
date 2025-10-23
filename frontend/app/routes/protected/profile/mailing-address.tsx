@@ -28,6 +28,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatAddressLine } from '~/utils/string-utils';
 
 const FORM_ACTION = {
   submit: 'submit',
@@ -103,9 +104,10 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: validatedResult.errors }, { status: 400 });
   }
 
+  const formattedAddress = formatAddressLine({ address: validatedResult.data.address, apartment: validatedResult.data.unitNumber });
+
   const mailingAddress = {
-    address: validatedResult.data.address,
-    unitNumber: validatedResult.data.unitNumber, //TODO: update with address spliting
+    address: formattedAddress,
     city: validatedResult.data.city,
     country: validatedResult.data.countryId,
     postalCode: validatedResult.data.postalZipCode,
@@ -135,11 +137,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const country = await countryService.getLocalizedCountryById(validatedResult.data.countryId, locale);
   const provinceTerritoryState = await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedResult.data.provinceStateId, locale);
 
-  const validatedConcatenatedAddress = validatedResult.data.address + ' ' + validatedResult.data.unitNumber;
-
   // Build the address object using validated data, transforming unique identifiers
   const formattedMailingAddress: CanadianAddress = {
-    address: validatedConcatenatedAddress,
+    address: formattedAddress,
     city: validatedResult.data.city,
     countryId: validatedResult.data.countryId,
     country: country.name,
