@@ -101,9 +101,18 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  await appContainer.get(TYPES.ProfileService).updateCommunicationPreferences(parsedDataResult.data);
-
   const idToken = session.get('idToken');
+
+  await appContainer.get(TYPES.ProfileService).updateCommunicationPreferences(
+    {
+      clientId: clientApplication.applicantInformation.clientId,
+      preferredLanguage: parsedDataResult.data.preferredLanguage,
+      preferredMethod: parsedDataResult.data.preferredMethod,
+      preferredMethodGovernmentOfCanada: parsedDataResult.data.preferredMethodGovernmentOfCanada,
+    },
+    idToken.sub,
+  );
+
   appContainer.get(TYPES.AuditService).createAudit('update-data.profile.edit-communication-preferences', { userId: idToken.sub });
 
   return redirect(getPathById('protected/profile/communication-preferences', params));

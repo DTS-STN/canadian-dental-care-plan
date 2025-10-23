@@ -1,13 +1,14 @@
 import { injectable } from 'inversify';
 
-import type { UpdateAddressRequestDto, UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
-import type { UpdateAddressRequestEntity, UpdateDentalBenefitsRequestEntity, UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
+import type { UpdateAddressRequestDto, UpdateCommunicationPreferenceRequestDto, UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
+import type { UpdateAddressRequestEntity, UpdateCommunicationPreferenceRequestEntity, UpdateDentalBenefitsRequestEntity, UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
 
 export interface ProfileDtoMapper {
   mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity(updateDentalBenefitsRequestDto: UpdateDentalBenefitsRequestDto): UpdateDentalBenefitsRequestEntity;
   mapUpdateEmailAddressRequestDtoToUpdateEmailAddressRequestEntity(updateEmailRequestDto: UpdateEmailAddressRequestDto): UpdateEmailAddressRequestEntity;
   mapUpdatePhoneNumbersRequestDtoToUpdatePhoneNumbersRequestEntity(updatePhoneNumbersRequestDto: UpdatePhoneNumbersRequestDto): UpdatePhoneNumbersRequestEntity;
   mapUpdateAddressRequestDtoToUpdateAddressRequestEntity(updateAddressRequestDto: UpdateAddressRequestDto): UpdateAddressRequestEntity;
+  mapUpdateCommunicationPreferenceRequestDtoToUpdateCommunicationPreferenceRequestEntity(updateCommunicationPreferenceRequestDto: UpdateCommunicationPreferenceRequestDto): UpdateCommunicationPreferenceRequestEntity;
 }
 
 @injectable()
@@ -139,6 +140,29 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
               ],
             },
           ],
+        },
+      },
+    };
+  }
+
+  mapUpdateCommunicationPreferenceRequestDtoToUpdateCommunicationPreferenceRequestEntity(updateCommunicationPreferenceRequestDto: UpdateCommunicationPreferenceRequestDto): UpdateCommunicationPreferenceRequestEntity {
+    return {
+      BenefitApplication: {
+        Applicant: {
+          PersonLanguage: [
+            {
+              CommunicationCategoryCode: {
+                ReferenceDataID: updateCommunicationPreferenceRequestDto.preferredLanguage,
+              },
+              PreferredIndicator: true,
+            },
+          ],
+          PreferredMethodCommunicationCode: {
+            ReferenceDataID: updateCommunicationPreferenceRequestDto.preferredMethod,
+          },
+          PreferredMethodCommunicationGCCode: {
+            ReferenceDataID: updateCommunicationPreferenceRequestDto.preferredMethodGovernmentOfCanada,
+          },
         },
       },
     };

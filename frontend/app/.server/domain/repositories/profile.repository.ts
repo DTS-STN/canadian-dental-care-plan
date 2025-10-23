@@ -2,8 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { CommunicationPreferenceRequestDto } from '~/.server/domain/dtos';
-import type { UpdateAddressRequestEntity, UpdateDentalBenefitsRequestEntity, UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
+import type { UpdateAddressRequestEntity, UpdateCommunicationPreferenceRequestEntity, UpdateDentalBenefitsRequestEntity, UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
 import type { HttpClient } from '~/.server/http';
 import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
@@ -13,10 +12,10 @@ export interface ProfileRepository {
   /**
    * Updates communication preferences for a user.
    *
-   * @param communicationPreferenceDto The communication preference dto.
+   * @param updateCommunicationPreferenceRequestEntity The communication preference request entity.
    * @returns A Promise that resolves when the update is complete.
    */
-  updateCommunicationPreferences(communicationPreferenceDto: CommunicationPreferenceRequestDto): Promise<void>;
+  updateCommunicationPreferences(updateCommunicationPreferenceRequestEntity: UpdateCommunicationPreferenceRequestEntity): Promise<void>;
 
   /**
    * Updates phone numbers for a user.
@@ -84,8 +83,38 @@ export class DefaultProfileRepository implements ProfileRepository {
     this.httpClient = httpClient;
   }
 
-  async updateCommunicationPreferences(communicationPreferenceDto: CommunicationPreferenceRequestDto): Promise<void> {
-    await Promise.reject(new Error('Method not implemented.'));
+  async updateCommunicationPreferences(updateCommunicationPreferenceRequestEntity: UpdateCommunicationPreferenceRequestEntity): Promise<void> {
+    this.log.trace('Updating communication preferences for request [%j]', updateCommunicationPreferenceRequestEntity);
+
+    const url = `${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/update-benefit-application`;
+    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.update-benefit-application.communication-preferences.posts', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+      },
+      body: JSON.stringify(updateCommunicationPreferenceRequestEntity),
+      retryOptions: {
+        retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
+        backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,
+        retryConditions: {
+          [HttpStatusCodes.BAD_GATEWAY]: [],
+        },
+      },
+    });
+
+    if (!response.ok) {
+      this.log.error('%j', {
+        message: `Failed to 'POST' for update benefit application communication preferences`,
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to 'POST' for update benefit application communication preferences. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
   }
 
   async updatePhoneNumbers(updatePhoneNumbersRequestEntity: UpdatePhoneNumbersRequestEntity): Promise<void> {
@@ -241,8 +270,8 @@ export class MockProfileRepository implements ProfileRepository {
     this.log = createLogger('MockProfileRepository');
   }
 
-  async updateCommunicationPreferences(communicationPreferenceDto: CommunicationPreferenceRequestDto): Promise<void> {
-    this.log.debug('Mock updating communication preferences for request [%j]', communicationPreferenceDto);
+  async updateCommunicationPreferences(updateCommunicationPreferenceRequestEntity: UpdateCommunicationPreferenceRequestEntity): Promise<void> {
+    this.log.debug('Mock updating communication preferences for request [%j]', updateCommunicationPreferenceRequestEntity);
 
     this.log.debug('Successfully mock updated communication preferences');
     return await Promise.resolve();

@@ -1,4 +1,5 @@
-export type CommunicationPreferenceRequestDto = Readonly<{
+export type UpdateCommunicationPreferenceRequestDto = Readonly<{
+  clientId: string;
   preferredLanguage: string;
   preferredMethod: string;
   preferredMethodGovernmentOfCanada: string;
