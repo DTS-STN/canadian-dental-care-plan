@@ -125,7 +125,7 @@ export default function ProtectedProfileEmailAddress({ loaderData, params }: Rou
         <p className="mb-4">{t('protected-profile:email.provide-email')}</p>
         <p className="mb-8">{t('protected-profile:email.verify-email')}</p>
         <p className="mb-4 italic">{t('protected-profile:required-label')}</p>
-        <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
+        <div className="mb-6">
           <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t('protected-profile:email.email-legend')} maxLength={64} required />
         </div>
 
