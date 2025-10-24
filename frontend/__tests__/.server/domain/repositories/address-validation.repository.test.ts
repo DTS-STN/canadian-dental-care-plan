@@ -19,7 +19,7 @@ describe('DefaultAddressValidationRepository', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
     vi.clearAllMocks();
   });
 

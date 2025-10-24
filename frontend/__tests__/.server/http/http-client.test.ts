@@ -12,7 +12,7 @@ describe('DefaultHttpClient', () => {
   const mockInstrumentationService = mock<InstrumentationService>();
 
   beforeEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
     vi.clearAllMocks();
 
     httpClient = new DefaultHttpClient(mockInstrumentationService);
