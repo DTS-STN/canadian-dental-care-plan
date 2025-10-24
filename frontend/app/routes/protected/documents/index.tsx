@@ -24,6 +24,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  securityHandler.validateFeatureEnabled('doc-upload');
   await securityHandler.validateAuthSession({ request, session });
   const locale = getLocale(request);
 
