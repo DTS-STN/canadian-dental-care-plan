@@ -172,7 +172,7 @@ export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentPr
           <p className="mb-4">{t('renew-adult:confirm-email.provide-email')}</p>
           <p className="mb-8">{t('renew-adult:confirm-email.verify-email')}</p>
           <p className="mb-4 italic">{t('renew:required-label')}</p>
-          <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
+          <div className="mb-6">
             <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t('renew-adult:confirm-email.email-legend')} maxLength={64} required />
           </div>
           {editMode ? (

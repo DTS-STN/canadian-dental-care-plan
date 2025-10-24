@@ -273,7 +273,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
       value: YES_NO_OPTION.yes,
       defaultChecked: defaultState?.hasSocialInsuranceNumber ?? true,
       append: hasSocialInsuranceNumberValue === true && (
-        <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
+        <div className="mb-6">
           <InputPatternField
             id="social-insurance-number"
             name="socialInsuranceNumber"

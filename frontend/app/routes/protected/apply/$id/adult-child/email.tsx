@@ -185,7 +185,7 @@ export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentPr
           <p className="mb-4">{t('protected-apply-adult-child:email.provide-email')}</p>
           <p className="mb-8">{t('protected-apply-adult-child:email.verify-email')}</p>
           <p className="mb-4 italic">{t('protected-apply:required-label')}</p>
-          <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
+          <div className="mb-6">
             <InputField
               id="email"
               name="email"
