@@ -11,6 +11,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
@@ -75,7 +76,7 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
             <p>{primaryApplicant.dob}</p>
           </DescriptionListItem>
           <DescriptionListItem term={t('protected-profile:applicant-information.sin')}>
-            <p>{primaryApplicant.sin}</p>
+            <p>{formatSin(primaryApplicant.sin)}</p>
           </DescriptionListItem>
         </dl>
       </section>
@@ -92,7 +93,7 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
                 <p>{child.dob}</p>
               </DescriptionListItem>
               <DescriptionListItem term={t('protected-profile:applicant-information.sin')}>
-                <p>{child.sin}</p>
+                <p>{formatSin(child.sin)}</p>
               </DescriptionListItem>
             </dl>
           </section>
