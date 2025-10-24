@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { isValidTimeZone } from '~/utils/date-utils';
 
-const validFeatureNames = ['hcaptcha', 'killswitch-api', 'show-prototype-banner', 'stub-login', 'status', 'view-letters', 'view-payload', 'demographic-survey'] as const;
+const validFeatureNames = ['hcaptcha', 'killswitch-api', 'show-prototype-banner', 'stub-login', 'status', 'view-letters', 'view-payload', 'demographic-survey', 'doc-upload'] as const;
 
 export type FeatureName = (typeof validFeatureNames)[number];
 
