@@ -12,7 +12,7 @@ vi.mock('~/.server/utils/env.utils', () => ({
 
 describe('apply-route-helpers', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   describe('getAgeCategoryFromAge', () => {

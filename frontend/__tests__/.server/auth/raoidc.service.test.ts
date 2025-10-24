@@ -49,7 +49,7 @@ describe('DefaultRaoidcService', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
     vi.clearAllMocks();
   });
 

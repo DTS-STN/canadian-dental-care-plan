@@ -4,7 +4,7 @@ import { DefaultApplicationYearRepository } from '~/.server/domain/repositories'
 
 describe('DefaultApplicationYearRepository', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
     vi.clearAllMocks();
   });
 

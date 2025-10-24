@@ -14,7 +14,7 @@ vi.mock('~/.server/routes/helpers/apply-route-helpers', () => ({ applicantInform
 
 describe('apply-adult-route-helpers', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   describe('validateApplyAdultStateForReview', () => {

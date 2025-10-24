@@ -49,7 +49,7 @@ describe('DefaultClientApplicationRepository', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
     vi.clearAllMocks();
   });
 
@@ -211,7 +211,7 @@ describe('DefaultClientApplicationRepository', () => {
 
 describe('MockClientApplicationRepository', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
     vi.clearAllMocks();
   });
 

@@ -11,7 +11,7 @@ vi.mock('~/utils/env-utils');
 
 describe('isConfigured', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   it('should return true if all necessary environment variables are present and are valid URLs', () => {
@@ -55,7 +55,7 @@ describe('pushErrorEvent', () => {
 
   afterEach(() => {
     window.adobeDataLayer = originalAdobeDataLayer;
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   it('does not send an event if window.adobeDataLayer is not defined', () => {
@@ -83,7 +83,7 @@ describe('pushPageviewEvent', () => {
 
   afterEach(() => {
     window.adobeDataLayer = originalAdobeDataLayer;
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   it('does not send an event if window.adobeDataLayer is not defined', () => {
@@ -111,7 +111,7 @@ describe('pushValidationErrorEvent', () => {
 
   afterEach(() => {
     window.adobeDataLayer = originalAdobeDataLayer;
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   it('does not send an event if window.adobeDataLayer is not defined', () => {
