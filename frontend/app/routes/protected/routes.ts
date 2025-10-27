@@ -52,7 +52,7 @@ export const routes = [
       {
         id: 'protected/profile/applicant-information',
         file: 'routes/protected/profile/applicant-information.tsx',
-        paths: { en: '/:lang/protected/profile/applicant-information', fr: '/:lang/protege/profil/applicant-information' },
+        paths: { en: '/:lang/protected/profile/applicant', fr: '/:lang/protege/profil/demandeur' },
       },
       {
         id: 'protected/profile/dental-benefits',
@@ -77,7 +77,7 @@ export const routes = [
       {
         id: 'protected/profile/communication-preferences/edit',
         file: 'routes/protected/profile/edit-communication-preferences.tsx',
-        paths: { en: '/:lang/protected/profile/communication-preferences/edit', fr: '/:lang/protege/profil/preferences-de-communication/modifier' },
+        paths: { en: '/:lang/protected/profile/communication-preferences/edit', fr: '/:lang/protege/profil/preferences-communication/modifier' },
       },
       {
         id: 'protected/profile/contact/phone',
@@ -87,27 +87,27 @@ export const routes = [
       {
         id: 'protected/profile/contact-information',
         file: 'routes/protected/profile/contact-information.tsx',
-        paths: { en: '/:lang/protected/profile/contact-information', fr: '/:lang/protege/profil/coordonnees' },
+        paths: { en: '/:lang/protected/profile/contact', fr: '/:lang/protege/profil/coordonnees' },
       },
       {
         id: 'protected/profile/contact/email-address',
         file: 'routes/protected/profile/email.tsx',
-        paths: { en: '/:lang/protected/profile/contact/email-address', fr: '/:lang/protege/profil/cordonnees/adresse-courriel' },
+        paths: { en: '/:lang/protected/profile/contact/email-address', fr: '/:lang/protege/profil/coordonnees/adresse-courriel' },
       },
       {
         id: 'protected/profile/contact/email-address/verify',
         file: 'routes/protected/profile/verify-email.tsx',
-        paths: { en: '/:lang/protected/profile/contact/email-address/verify', fr: '/:lang/protege/profil/cordonnees/adresse-courriel/verifier' },
+        paths: { en: '/:lang/protected/profile/contact/email-address/verify', fr: '/:lang/protege/profil/coordonnees/adresse-courriel/verifier' },
       },
       {
         id: 'protected/profile/contact/mailing-address',
         file: 'routes/protected/profile/mailing-address.tsx',
-        paths: { en: '/:lang/protected/profile/contact/mailing-address', fr: '/:lang/protege/profil/cordonnees/adresse-postale' },
+        paths: { en: '/:lang/protected/profile/contact/mailing-address', fr: '/:lang/protege/profil/coordonnees/adresse-postale' },
       },
       {
         id: 'protected/profile/contact/home-address',
         file: 'routes/protected/profile/home-address.tsx',
-        paths: { en: '/:lang/protected/profile/contact/home-address', fr: '/:lang/protege/profil/cordonnees/adresse-domicile' },
+        paths: { en: '/:lang/protected/profile/contact/home-address', fr: '/:lang/protege/profil/coordonnees/adresse-domicile' },
       },
       {
         file: 'routes/protected/apply/layout.tsx',
