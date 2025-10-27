@@ -288,7 +288,7 @@ class DataFetcher {
         .replaceAll(/[^\u0000-\u00FF]/g, (char) => {
           const codePoint = char.codePointAt(0);
           return codePoint //
-            ? `\\u${codePoint.toString(16).padStart(4, '0')}`
+            ? String.raw`\u${codePoint.toString(16).padStart(4, '0')}`
             : char;
         })
     );
