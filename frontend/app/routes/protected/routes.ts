@@ -87,7 +87,7 @@ export const routes = [
       {
         id: 'protected/profile/contact-information',
         file: 'routes/protected/profile/contact-information.tsx',
-        paths: { en: '/:lang/protected/profile/contact-information', fr: '/:lang/protege/profil/contact-information' },
+        paths: { en: '/:lang/protected/profile/contact-information', fr: '/:lang/protege/profil/coordonnees' },
       },
       {
         id: 'protected/profile/contact/email-address',
@@ -102,12 +102,12 @@ export const routes = [
       {
         id: 'protected/profile/contact/mailing-address',
         file: 'routes/protected/profile/mailing-address.tsx',
-        paths: { en: '/:lang/protected/profile/contact/mailing-address', fr: '/:lang/protege/profil/cordonnees/mailing-address' },
+        paths: { en: '/:lang/protected/profile/contact/mailing-address', fr: '/:lang/protege/profil/cordonnees/adresse-postale' },
       },
       {
         id: 'protected/profile/contact/home-address',
         file: 'routes/protected/profile/home-address.tsx',
-        paths: { en: '/:lang/protected/profile/contact/home-address', fr: '/:lang/protege/profil/cordonnees/home-address' },
+        paths: { en: '/:lang/protected/profile/contact/home-address', fr: '/:lang/protege/profil/cordonnees/adresse-domicile' },
       },
       {
         file: 'routes/protected/apply/layout.tsx',
