@@ -21,9 +21,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-export const PREFERRED_SUN_LIFE_METHOD = { email: 'email', mail: 'mail' } as const;
-export const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
-
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'protected-profile:communication-preferences.page-title', routeId: 'protected/profile/communication-preferences' }],
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
@@ -47,6 +44,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.edit-communication-preferences', { userId: idToken.sub });
+  const { COMMUNICATION_METHOD_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_MAIL_ID } = appContainer.get(TYPES.ServerConfig);
 
   return {
     meta,
@@ -56,6 +54,10 @@ export async function loader({ context: { appContainer, session }, params, reque
       preferredMethodGovernmentOfCanada: clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada,
     },
     languages,
+    COMMUNICATION_METHOD_EMAIL_ID,
+    COMMUNICATION_METHOD_GC_DIGITAL_ID,
+    COMMUNICATION_METHOD_GC_MAIL_ID,
+    COMMUNICATION_METHOD_MAIL_ID,
   };
 }
 
@@ -66,6 +68,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
+  const { COMMUNICATION_METHOD_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -77,7 +80,7 @@ export async function action({ context: { appContainer, session }, params, reque
       .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-required'))
       .refine(
         // TODO: check if email is verified once PP has updated the clientApplication payload to include that field
-        (val) => val !== PREFERRED_SUN_LIFE_METHOD.email || clientApplication.contactInformation.email !== undefined,
+        (val) => val !== COMMUNICATION_METHOD_EMAIL_ID || clientApplication.contactInformation.email !== undefined,
         t('protected-profile:edit-communication-preferences.error-message.preferred-method-email-verified'),
       ),
     preferredMethodGovernmentOfCanada: z
@@ -86,7 +89,7 @@ export async function action({ context: { appContainer, session }, params, reque
       .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-notification-method-required'))
       .refine(
         // TODO: check if email is verified once PP has updated the clientApplication payload to include that field
-        (val) => val !== PREFERRED_NOTIFICATION_METHOD.msca || clientApplication.contactInformation.email !== undefined,
+        (val) => val !== COMMUNICATION_METHOD_GC_DIGITAL_ID || clientApplication.contactInformation.email !== undefined,
         t('protected-profile:edit-communication-preferences.error-message.preferred-notification-method-email-verified'),
       ),
   });
@@ -120,7 +123,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function EditCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, languages } = loaderData;
+  const { defaultState, languages, COMMUNICATION_METHOD_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_MAIL_ID } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -152,14 +155,14 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
             name="preferredMethod"
             options={[
               {
-                value: PREFERRED_SUN_LIFE_METHOD.email,
+                value: COMMUNICATION_METHOD_EMAIL_ID,
                 children: t('protected-profile:edit-communication-preferences.by-email'),
-                defaultChecked: defaultState.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email,
+                defaultChecked: defaultState.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID,
               },
               {
-                value: PREFERRED_SUN_LIFE_METHOD.mail,
+                value: COMMUNICATION_METHOD_MAIL_ID,
                 children: t('protected-profile:edit-communication-preferences.by-mail'),
-                defaultChecked: defaultState.preferredMethod === PREFERRED_SUN_LIFE_METHOD.mail,
+                defaultChecked: defaultState.preferredMethod === COMMUNICATION_METHOD_MAIL_ID,
               },
             ]}
             errorMessage={errors?.preferredMethod}
@@ -172,14 +175,14 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
             legend={t('protected-profile:edit-communication-preferences.preferred-notification-method')}
             options={[
               {
-                value: PREFERRED_NOTIFICATION_METHOD.msca,
+                value: COMMUNICATION_METHOD_GC_DIGITAL_ID,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-communication-preferences.preferred-notification-method-msca" components={{ span: <span className="font-semibold" /> }} />,
-                defaultChecked: defaultState.preferredMethodGovernmentOfCanada === PREFERRED_NOTIFICATION_METHOD.msca,
+                defaultChecked: defaultState.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID,
               },
               {
-                value: PREFERRED_NOTIFICATION_METHOD.mail,
+                value: COMMUNICATION_METHOD_GC_MAIL_ID,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-communication-preferences.preferred-notification-method-mail" components={{ span: <span className="font-semibold" /> }} />,
-                defaultChecked: defaultState.preferredMethodGovernmentOfCanada === PREFERRED_NOTIFICATION_METHOD.mail,
+                defaultChecked: defaultState.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_MAIL_ID,
               },
             ]}
             required
