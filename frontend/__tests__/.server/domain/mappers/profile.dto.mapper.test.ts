@@ -6,7 +6,6 @@ import { DefaultProfileDtoMapper } from '~/.server/domain/mappers';
 
 const mapper = new DefaultProfileDtoMapper();
 
-// TODO: Update to align with the new dental entity structure
 describe('mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity', () => {
   it('should map UpdateDentalBenefitsRequestDto to UpdateDentalBenefitsRequestEntity', () => {
     const mockDentalBenefitsEntity: UpdateDentalBenefitsRequestEntity = {
@@ -16,10 +15,8 @@ describe('mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity',
             ApplicantDetail: {
               InsurancePlan: [
                 {
-                  InsurancePlanIdentification: [{ IdentificationID: 'FEDERAL-PLAN-001' }],
-                },
-                {
-                  InsurancePlanIdentification: [{ IdentificationID: 'PROVINCIAL-PLAN-002' }],
+                  InsurancePlanFederalIdentification: { IdentificationID: 'FEDERAL-PLAN-001' },
+                  InsurancePlanProvincialIdentification: { IdentificationID: 'PROVINCIAL-PLAN-002' },
                 },
               ],
             },
@@ -43,6 +40,45 @@ describe('mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity',
     };
     const result = mapper.mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity(expectedDentalBenefitsDto);
     expect(result).toEqual(mockDentalBenefitsEntity);
+  });
+
+  it('should default to zero UUIDs if no benefits are selected', () => {
+    const expectedEntity: UpdateDentalBenefitsRequestEntity = {
+      BenefitApplication: {
+        Applicant: {
+          ApplicantDetail: {
+            ApplicantDetail: {
+              InsurancePlan: [
+                {
+                  InsurancePlanFederalIdentification: {
+                    IdentificationID: '00000000-0000-0000-0000-000000000000',
+                  },
+                  InsurancePlanProvincialIdentification: {
+                    IdentificationID: '00000000-0000-0000-0000-000000000000',
+                  },
+                },
+              ],
+            },
+          },
+          ClientIdentification: [
+            {
+              IdentificationID: '123456789',
+              IdentificationCategoryText: 'Guid Primary Key',
+            },
+          ],
+        },
+      },
+    };
+
+    const dto: UpdateDentalBenefitsRequestDto = {
+      clientId: '123456789',
+      hasFederalBenefits: false,
+      hasProvincialTerritorialBenefits: false,
+      province: 'ON',
+    };
+
+    const result = mapper.mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity(dto);
+    expect(result).toEqual(expectedEntity);
   });
 });
 

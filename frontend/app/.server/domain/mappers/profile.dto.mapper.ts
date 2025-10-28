@@ -14,18 +14,16 @@ export interface ProfileDtoMapper {
 @injectable()
 export class DefaultProfileDtoMapper implements ProfileDtoMapper {
   mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity(updateDentalBenefitsRequestDto: UpdateDentalBenefitsRequestDto): UpdateDentalBenefitsRequestEntity {
-    // Only add items to the InsurancePlan array if the corresponding boolean is true and program is provided
-    const insurancePlans = [];
-
-    // Federal benefits
-    if (updateDentalBenefitsRequestDto.hasFederalBenefits && updateDentalBenefitsRequestDto.federalSocialProgram) {
-      insurancePlans.push({ InsurancePlanIdentification: [{ IdentificationID: updateDentalBenefitsRequestDto.federalSocialProgram }] });
-    }
-
-    // Provincial/Territorial benefits
-    if (updateDentalBenefitsRequestDto.hasProvincialTerritorialBenefits && updateDentalBenefitsRequestDto.provincialTerritorialSocialProgram) {
-      insurancePlans.push({ InsurancePlanIdentification: [{ IdentificationID: updateDentalBenefitsRequestDto.provincialTerritorialSocialProgram }] });
-    }
+    const insurancePlans = [
+      {
+        InsurancePlanFederalIdentification: {
+          IdentificationID: updateDentalBenefitsRequestDto.federalSocialProgram ?? '00000000-0000-0000-0000-000000000000',
+        },
+        InsurancePlanProvincialIdentification: {
+          IdentificationID: updateDentalBenefitsRequestDto.provincialTerritorialSocialProgram ?? '00000000-0000-0000-0000-000000000000',
+        },
+      },
+    ];
 
     return {
       BenefitApplication: {
