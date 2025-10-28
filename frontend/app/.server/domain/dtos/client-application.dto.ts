@@ -41,7 +41,7 @@ export type ClientChildDto = ReadonlyDeep<{
 export type ClientCommunicationPreferencesDto = ReadonlyDeep<{
   email?: string;
   preferredLanguage: string;
-  preferredMethod: string;
+  preferredMethodSunLife: string;
   preferredMethodGovernmentOfCanada: string;
 }>;
 

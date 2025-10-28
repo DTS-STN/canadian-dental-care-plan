@@ -1,7 +1,7 @@
 export type UpdateCommunicationPreferenceRequestDto = Readonly<{
   clientId: string;
   preferredLanguage: string;
-  preferredMethod: string;
+  preferredMethodSunLife: string;
   preferredMethodGovernmentOfCanada: string;
 }>;
 

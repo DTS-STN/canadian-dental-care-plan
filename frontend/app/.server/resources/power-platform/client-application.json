@@ -97,6 +97,9 @@
       "PreferredMethodCommunicationCode": {
         "ReferenceDataID": "775170002"
       },
+      "PreferredMethodCommunicationGCCode": {
+        "ReferenceDataID": "775170002"
+      },
       "ApplicantDetail": {
         "AttestParentOrGuardianIndicator": true,
         "ConsentToSharePersonalInformationIndicator": true,

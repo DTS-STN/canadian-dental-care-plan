@@ -60,6 +60,9 @@ export type ClientApplicationEntity = ReadonlyDeep<{
       PreferredMethodCommunicationCode: {
         ReferenceDataID: string;
       };
+      PreferredMethodCommunicationGCCode: {
+        ReferenceDataID: string;
+      };
       ApplicantDetail: {
         InsurancePlan?: Array<{
           InsurancePlanIdentification: Array<{

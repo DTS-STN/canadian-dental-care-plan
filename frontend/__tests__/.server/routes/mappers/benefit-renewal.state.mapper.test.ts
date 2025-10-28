@@ -71,7 +71,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
     ],
     communicationPreferences: {
       preferredLanguage: 'English',
-      preferredMethod: 'Mail',
+      preferredMethodSunLife: 'Mail',
       preferredMethodGovernmentOfCanada: 'Email',
     },
     contactInformation: {

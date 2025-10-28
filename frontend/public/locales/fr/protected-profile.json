@@ -111,9 +111,6 @@
   "communication-preferences": {
     "page-title": "Mes préférences de communication",
     "language-preference": "Langue de préférence",
-    "by-email": "Par courriel",
-    "by-mail": "Par la poste",
-    "online": "En ligne, sur Mon dossier Service Canada (MDSC)",
     "sunlife-communication-preference": "Préférence de communication avec la Sun Life",
     "goc-communication-preference": "Préférence de communication du gouvernement du Canada",
     "update-link-text": "Modifier la préférences de communication",
@@ -121,23 +118,19 @@
   },
   "edit-communication-preferences": {
     "page-title": "Préférences de communication",
-    "preferred-method": "Comment aimeriez-vous que la Sun Life communique avec vous?",
     "preferred-language": "Quelle langue de communication préférez-vous?",
-    "english": "Anglais",
-    "french": "Français",
-    "by-email": "Par courriel",
-    "by-mail": "Par la poste",
-    "preferred-notification-method": "Comment souhaitez-vous recevoir des mises à jour du gouvernement du Canada concernant le Plan canadien de soins dentaires?",
-    "preferred-notification-method-msca": "<span>En ligne, sur Mon dossier Service Canada</span><br>Vous recevrez des notifications par courriel. C'est le moyen le plus rapide de recevoir des mises à jour.",
-    "preferred-notification-method-mail": "<span>Par la poste</span><br>Vous pouvez également consulter les renseignements figurant à votre dossier du Régime canadien de soins dentaires dans Mon dossier Service Canada.",
+    "preferred-method-gc-digital": "<span>{{name}}</span><br>Vous recevrez des notifications par courriel. C'est le moyen le plus rapide de recevoir des mises à jour.",
+    "preferred-method-gc-mail": "<span>{{name}}</span><br>Vous pouvez également consulter les renseignements figurant à votre dossier du Régime canadien de soins dentaires dans Mon dossier Service Canada.",
+    "preferred-method-gc": "Comment souhaitez-vous recevoir des mises à jour du gouvernement du Canada concernant le Plan canadien de soins dentaires?",
+    "preferred-method-sunlife": "Comment aimeriez-vous que la Sun Life communique avec vous?",
     "back": "Retour",
     "save": "Sauvegarder",
     "error-message": {
       "preferred-language-required": "Sélectionnez la langue de communication préférée",
-      "preferred-method-required": "Sélectionnez votre moyen de communication préféré avec la Sun Life",
-      "preferred-notification-method-required": "Sélectionnez votre moyen de communication préféré avec le gouvernement du Canada",
-      "preferred-method-email-verified": "Une adresse courriel vérifiée est requise pour recevoir les communications de Sun Life par voie numérique.",
-      "preferred-notification-method-email-verified": "Une adresse courriel vérifiée est requise pour recevoir les communications du gouvernement du Canada par voie numérique."
+      "preferred-method-gc-email-verified": "Une adresse courriel vérifiée est requise pour recevoir les communications du gouvernement du Canada par voie numérique.",
+      "preferred-method-gc-required": "Sélectionnez votre moyen de communication préféré avec le gouvernement du Canada",
+      "preferred-method-sunlife-email-verified": "Une adresse courriel vérifiée est requise pour recevoir les communications de Sun Life par voie numérique.",
+      "preferred-method-sunlife-required": "Sélectionnez votre moyen de communication préféré avec la Sun Life"
     }
   },
   "phone-number": {

@@ -135,8 +135,8 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
     const communicationPreferences = {
       email: applicant.PersonContactInformation[0].EmailAddress?.at(0)?.EmailAddressID,
       preferredLanguage: applicant.PersonLanguage[0].CommunicationCategoryCode.ReferenceDataID,
-      preferredMethod: applicant.PreferredMethodCommunicationCode.ReferenceDataID,
-      preferredMethodGovernmentOfCanada: applicant.PreferredMethodCommunicationCode.ReferenceDataID, //TODO update with correct value once Interop sends the value in the payload
+      preferredMethodSunLife: applicant.PreferredMethodCommunicationCode.ReferenceDataID,
+      preferredMethodGovernmentOfCanada: applicant.PreferredMethodCommunicationGCCode.ReferenceDataID,
     };
 
     const homeAddress = applicant.PersonContactInformation[0].Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Home');

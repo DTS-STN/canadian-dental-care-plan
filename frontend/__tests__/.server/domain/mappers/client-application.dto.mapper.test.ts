@@ -132,6 +132,9 @@ describe('DefaultClientApplicationDtoMapper', () => {
             PreferredMethodCommunicationCode: {
               ReferenceDataID: 'EMAIL',
             },
+            PreferredMethodCommunicationGCCode: {
+              ReferenceDataID: 'DIGITAL',
+            },
             ApplicantDetail: {
               InsurancePlan: [
                 {
@@ -216,8 +219,8 @@ describe('DefaultClientApplicationDtoMapper', () => {
         communicationPreferences: {
           email: 'email@example.com',
           preferredLanguage: '1',
-          preferredMethod: 'EMAIL',
-          preferredMethodGovernmentOfCanada: 'EMAIL',
+          preferredMethodSunLife: 'EMAIL',
+          preferredMethodGovernmentOfCanada: 'DIGITAL',
         },
         contactInformation: {
           copyMailingAddress: true,

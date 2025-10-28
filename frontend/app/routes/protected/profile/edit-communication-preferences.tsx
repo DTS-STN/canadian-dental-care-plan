@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import { data, redirect, useFetcher } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
@@ -15,6 +17,7 @@ import { InputRadios } from '~/components/input-radios';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
+import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -41,23 +44,22 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:edit-communication-preferences.page-title') }) };
 
   const languages = appContainer.get(TYPES.LanguageService).listAndSortLocalizedLanguages(locale);
+  const gcCommunicationMethods = appContainer.get(TYPES.GCCommunicationMethodService).listLocalizedGCCommunicationMethods(locale);
+  const sunLifeCommunicationMethods = appContainer.get(TYPES.SunLifeCommunicationMethodService).listLocalizedSunLifeCommunicationMethods(locale);
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.edit-communication-preferences', { userId: idToken.sub });
-  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_SUNLIFE_MAIL_ID } = appContainer.get(TYPES.ServerConfig);
 
   return {
     meta,
     defaultState: {
       preferredLanguage: clientApplication.communicationPreferences.preferredLanguage,
-      preferredMethod: clientApplication.communicationPreferences.preferredMethod,
+      preferredMethodSunLife: clientApplication.communicationPreferences.preferredMethodSunLife,
       preferredMethodGovernmentOfCanada: clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada,
     },
     languages,
-    COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
-    COMMUNICATION_METHOD_GC_DIGITAL_ID,
-    COMMUNICATION_METHOD_GC_MAIL_ID,
-    COMMUNICATION_METHOD_SUNLIFE_MAIL_ID,
+    gcCommunicationMethods,
+    sunLifeCommunicationMethods,
   };
 }
 
@@ -74,30 +76,30 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formSchema = z.object({
     preferredLanguage: z.string().trim().min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-language-required')),
-    preferredMethod: z
+    preferredMethodSunLife: z
       .string()
       .trim()
-      .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-required'))
+      .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-sunlife-required'))
       .refine(
         // TODO: check if email is verified once PP has updated the clientApplication payload to include that field
         (val) => val !== COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || clientApplication.contactInformation.email !== undefined,
-        t('protected-profile:edit-communication-preferences.error-message.preferred-method-email-verified'),
+        t('protected-profile:edit-communication-preferences.error-message.preferred-method-sunlife-email-verified'),
       ),
     preferredMethodGovernmentOfCanada: z
       .string()
       .trim()
-      .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-notification-method-required'))
+      .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-gc-required'))
       .refine(
         // TODO: check if email is verified once PP has updated the clientApplication payload to include that field
         (val) => val !== COMMUNICATION_METHOD_GC_DIGITAL_ID || clientApplication.contactInformation.email !== undefined,
-        t('protected-profile:edit-communication-preferences.error-message.preferred-notification-method-email-verified'),
+        t('protected-profile:edit-communication-preferences.error-message.preferred-method-gc-email-verified'),
       ),
   });
 
   const parsedDataResult = formSchema.safeParse({
     preferredLanguage: String(formData.get('preferredLanguage') ?? ''),
-    preferredMethod: String(formData.get('preferredMethod') ?? ''),
-    preferredMethodGovernmentOfCanada: String(formData.get('preferredMethodGovernmentOfCanada   ') ?? ''),
+    preferredMethodSunLife: String(formData.get('preferredMethodSunLife') ?? ''),
+    preferredMethodGovernmentOfCanada: String(formData.get('preferredMethodGovernmentOfCanada') ?? ''),
   });
 
   if (!parsedDataResult.success) {
@@ -110,7 +112,7 @@ export async function action({ context: { appContainer, session }, params, reque
     {
       clientId: clientApplication.applicantInformation.clientId,
       preferredLanguage: parsedDataResult.data.preferredLanguage,
-      preferredMethod: parsedDataResult.data.preferredMethod,
+      preferredMethodSunLife: parsedDataResult.data.preferredMethodSunLife,
       preferredMethodGovernmentOfCanada: parsedDataResult.data.preferredMethodGovernmentOfCanada,
     },
     idToken.sub,
@@ -123,7 +125,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function EditCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, languages, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_SUNLIFE_MAIL_ID } = loaderData;
+  const { defaultState, languages, sunLifeCommunicationMethods, gcCommunicationMethods } = loaderData;
+  const { COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID } = useClientEnv();
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -131,7 +134,7 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
     preferredLanguage: 'input-radio-preferred-language-option-0',
-    preferredMethod: 'input-radio-preferred-methods-option-0',
+    preferredMethodSunLife: 'input-radio-preferred-methods-option-0',
     preferredMethodGovernmentOfCanada: 'input-radio-preferred-notification-method-option-0',
   });
 
@@ -140,6 +143,28 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
     children: language.name,
     defaultChecked: defaultState.preferredLanguage === language.id,
   }));
+
+  const sunLifeCommunicationMethodOptions: InputRadiosProps['options'] = sunLifeCommunicationMethods.map((method) => ({
+    value: method.id,
+    children: method.name,
+    defaultChecked: defaultState.preferredMethodSunLife === method.id,
+  }));
+
+  const gcCommunicationMethodOptions: InputRadiosProps['options'] = gcCommunicationMethods.map((method) => {
+    let children: ReactNode = method.name;
+
+    if (method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
+      children = <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-communication-preferences.preferred-method-gc-digital" values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
+    } else if (method.id === COMMUNICATION_METHOD_GC_MAIL_ID) {
+      children = <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-communication-preferences.preferred-method-gc-mail" values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
+    }
+
+    return {
+      value: method.id,
+      children,
+      defaultChecked: defaultState.preferredMethodGovernmentOfCanada === method.id,
+    };
+  });
 
   return (
     <div className="max-w-prose">
@@ -150,41 +175,19 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
         <div className="mb-8 space-y-6">
           <InputRadios id="preferred-language" name="preferredLanguage" legend={t('protected-profile:edit-communication-preferences.preferred-language')} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
           <InputRadios
-            id="preferred-methods"
-            legend={t('protected-profile:edit-communication-preferences.preferred-method')}
-            name="preferredMethod"
-            options={[
-              {
-                value: COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
-                children: t('protected-profile:edit-communication-preferences.by-email'),
-                defaultChecked: defaultState.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
-              },
-              {
-                value: COMMUNICATION_METHOD_SUNLIFE_MAIL_ID,
-                children: t('protected-profile:edit-communication-preferences.by-mail'),
-                defaultChecked: defaultState.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_MAIL_ID,
-              },
-            ]}
-            errorMessage={errors?.preferredMethod}
+            id="preferred-method-sunlife"
+            legend={t('protected-profile:edit-communication-preferences.preferred-method-sunlife')}
+            name="preferredMethodSunLife"
+            options={sunLifeCommunicationMethodOptions}
+            errorMessage={errors?.preferredMethodSunLife}
             required
           />
 
           <InputRadios
-            id="preferred-notification-method"
-            name="preferredMethodGovernmentOfCanada   "
-            legend={t('protected-profile:edit-communication-preferences.preferred-notification-method')}
-            options={[
-              {
-                value: COMMUNICATION_METHOD_GC_DIGITAL_ID,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-communication-preferences.preferred-notification-method-msca" components={{ span: <span className="font-semibold" /> }} />,
-                defaultChecked: defaultState.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID,
-              },
-              {
-                value: COMMUNICATION_METHOD_GC_MAIL_ID,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-communication-preferences.preferred-notification-method-mail" components={{ span: <span className="font-semibold" /> }} />,
-                defaultChecked: defaultState.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_MAIL_ID,
-              },
-            ]}
+            id="preferred-method-gc"
+            name="preferredMethodGovernmentOfCanada"
+            legend={t('protected-profile:edit-communication-preferences.preferred-method-gc')}
+            options={gcCommunicationMethodOptions}
             required
             errorMessage={errors?.preferredMethodGovernmentOfCanada}
           />
