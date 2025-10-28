@@ -14,12 +14,14 @@ import {
   DefaultDemographicSurveyDtoMapper,
   DefaultEvidentiaryDocumentTypeDtoMapper,
   DefaultFederalGovernmentInsurancePlanDtoMapper,
+  DefaultGCCommunicationMethodDtoMapper,
   DefaultLanguageDtoMapper,
   DefaultLetterDtoMapper,
   DefaultLetterTypeDtoMapper,
   DefaultProfileDtoMapper,
   DefaultProvinceTerritoryStateDtoMapper,
   DefaultProvincialGovernmentInsurancePlanDtoMapper,
+  DefaultSunLifeCommunicationMethodDtoMapper,
   DefaultVerificationCodeDtoMapper,
 } from '~/.server/domain/mappers';
 import { DefaultBenefitApplicationStateMapper, DefaultBenefitRenewalStateMapper } from '~/.server/routes/mappers';
@@ -45,6 +47,7 @@ export function createMappersContainerModule(): ContainerModule {
     options.bind(TYPES.DynatraceDtoMapper).to(DefaultDynatraceDtoMapper);
     options.bind(TYPES.EvidentiaryDocumentTypeDtoMapper).to(DefaultEvidentiaryDocumentTypeDtoMapper);
     options.bind(TYPES.FederalGovernmentInsurancePlanDtoMapper).to(DefaultFederalGovernmentInsurancePlanDtoMapper);
+    options.bind(TYPES.GCCommunicationMethodDtoMapper).to(DefaultGCCommunicationMethodDtoMapper);
     options.bind(TYPES.HCaptchaDtoMapper).to(DefaultHCaptchaDtoMapper);
     options.bind(TYPES.LanguageDtoMapper).to(DefaultLanguageDtoMapper);
     options.bind(TYPES.LetterDtoMapper).to(DefaultLetterDtoMapper);
@@ -52,6 +55,7 @@ export function createMappersContainerModule(): ContainerModule {
     options.bind(TYPES.ProfileDtoMapper).to(DefaultProfileDtoMapper);
     options.bind(TYPES.ProvinceTerritoryStateDtoMapper).to(DefaultProvinceTerritoryStateDtoMapper);
     options.bind(TYPES.ProvincialGovernmentInsurancePlanDtoMapper).to(DefaultProvincialGovernmentInsurancePlanDtoMapper);
+    options.bind(TYPES.SunLifeCommunicationMethodDtoMapper).to(DefaultSunLifeCommunicationMethodDtoMapper);
     options.bind(TYPES.VerificationCodeDtoMapper).to(DefaultVerificationCodeDtoMapper);
   });
 }

@@ -44,7 +44,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.edit-communication-preferences', { userId: idToken.sub });
-  const { COMMUNICATION_METHOD_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_MAIL_ID } = appContainer.get(TYPES.ServerConfig);
+  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_SUNLIFE_MAIL_ID } = appContainer.get(TYPES.ServerConfig);
 
   return {
     meta,
@@ -54,10 +54,10 @@ export async function loader({ context: { appContainer, session }, params, reque
       preferredMethodGovernmentOfCanada: clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada,
     },
     languages,
-    COMMUNICATION_METHOD_EMAIL_ID,
+    COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
     COMMUNICATION_METHOD_GC_DIGITAL_ID,
     COMMUNICATION_METHOD_GC_MAIL_ID,
-    COMMUNICATION_METHOD_MAIL_ID,
+    COMMUNICATION_METHOD_SUNLIFE_MAIL_ID,
   };
 }
 
@@ -68,7 +68,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
-  const { COMMUNICATION_METHOD_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
+  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -80,7 +80,7 @@ export async function action({ context: { appContainer, session }, params, reque
       .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-required'))
       .refine(
         // TODO: check if email is verified once PP has updated the clientApplication payload to include that field
-        (val) => val !== COMMUNICATION_METHOD_EMAIL_ID || clientApplication.contactInformation.email !== undefined,
+        (val) => val !== COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || clientApplication.contactInformation.email !== undefined,
         t('protected-profile:edit-communication-preferences.error-message.preferred-method-email-verified'),
       ),
     preferredMethodGovernmentOfCanada: z
@@ -123,7 +123,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function EditCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, languages, COMMUNICATION_METHOD_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_MAIL_ID } = loaderData;
+  const { defaultState, languages, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_SUNLIFE_MAIL_ID } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -155,14 +155,14 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
             name="preferredMethod"
             options={[
               {
-                value: COMMUNICATION_METHOD_EMAIL_ID,
+                value: COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
                 children: t('protected-profile:edit-communication-preferences.by-email'),
-                defaultChecked: defaultState.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID,
+                defaultChecked: defaultState.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
               },
               {
-                value: COMMUNICATION_METHOD_MAIL_ID,
+                value: COMMUNICATION_METHOD_SUNLIFE_MAIL_ID,
                 children: t('protected-profile:edit-communication-preferences.by-mail'),
-                defaultChecked: defaultState.preferredMethod === COMMUNICATION_METHOD_MAIL_ID,
+                defaultChecked: defaultState.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_MAIL_ID,
               },
             ]}
             errorMessage={errors?.preferredMethod}

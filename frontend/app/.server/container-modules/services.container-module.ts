@@ -21,12 +21,14 @@ import {
   DefaultEvidentiaryDocumentService,
   DefaultEvidentiaryDocumentTypeService,
   DefaultFederalGovernmentInsurancePlanService,
+  DefaultGCCommunicationMethodService,
   DefaultLanguageService,
   DefaultLetterService,
   DefaultLetterTypeService,
   DefaultProfileService,
   DefaultProvinceTerritoryStateService,
   DefaultProvincialGovernmentInsurancePlanService,
+  DefaultSunLifeCommunicationMethodService,
   DefaultVerificationCodeService,
   StubVerificationCodeService,
 } from '~/.server/domain/services';
@@ -70,6 +72,7 @@ export function createServicesContainerModule(serverConfig: Pick<ServerConfig, '
     options.bind(TYPES.EvidentiaryDocumentService).to(DefaultEvidentiaryDocumentService);
     options.bind(TYPES.EvidentiaryDocumentTypeService).to(DefaultEvidentiaryDocumentTypeService);
     options.bind(TYPES.FederalGovernmentInsurancePlanService).to(DefaultFederalGovernmentInsurancePlanService);
+    options.bind(TYPES.GCCommunicationMethodService).to(DefaultGCCommunicationMethodService);
     options.bind(TYPES.HCaptchaService).to(DefaultHCaptchaService);
     options.bind(TYPES.HttpClient).to(DefaultHttpClient);
     options.bind(TYPES.InstrumentationService).to(DefaultInstrumentationService);
@@ -82,6 +85,7 @@ export function createServicesContainerModule(serverConfig: Pick<ServerConfig, '
     options.bind(TYPES.RaoidcService).to(DefaultRaoidcService);
     // RedisService bindings depend on the SESSION_STORAGE_TYPE configuration string
     options.bind(TYPES.RedisService).to(DefaultRedisService).when(sessionTypeIs(serverConfig, 'redis'));
+    options.bind(TYPES.SunLifeCommunicationMethodService).to(DefaultSunLifeCommunicationMethodService);
     options.bind(TYPES.VerificationCodeService).to(DefaultVerificationCodeService).when(isMockEnabled(serverConfig, 'verification-code', false));
     options.bind(TYPES.VerificationCodeService).to(StubVerificationCodeService).when(isMockEnabled(serverConfig, 'verification-code', true));
   });

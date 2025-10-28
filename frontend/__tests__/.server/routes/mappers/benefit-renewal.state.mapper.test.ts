@@ -40,8 +40,8 @@ describe('DefaultBenefitRenewalStateMapper', () => {
   ]);
 
   const mockServerConfig = mock<ServerConfig>();
-  mockServerConfig.COMMUNICATION_METHOD_EMAIL_ID = 'Email';
-  mockServerConfig.COMMUNICATION_METHOD_MAIL_ID = 'Mail';
+  mockServerConfig.COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID = 'Email';
+  mockServerConfig.COMMUNICATION_METHOD_SUNLIFE_MAIL_ID = 'Mail';
 
   const mapper = new DefaultBenefitRenewalStateMapper(mockFederalGovernmentInsurancePlanService, mockProvincialGovernmentInsurancePlanService, mockServerConfig);
 
