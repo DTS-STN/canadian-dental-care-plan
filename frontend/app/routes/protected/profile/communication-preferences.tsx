@@ -37,8 +37,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     meta,
     preferredLanguage: appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(clientApplication.communicationPreferences.preferredLanguage, locale),
-    preferredMethodSunLife: clientApplication.communicationPreferences.preferredMethodSunLife,
-    preferredMethodGovernmentOfCanada: clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada,
+    preferredMethodSunLife: appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(clientApplication.communicationPreferences.preferredMethodSunLife, locale),
+    preferredMethodGovernmentOfCanada: appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada, locale),
     SCCH_BASE_URI,
     COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
     COMMUNICATION_METHOD_GC_DIGITAL_ID,
@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export default function ViewCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { preferredLanguage, preferredMethodSunLife, preferredMethodGovernmentOfCanada, SCCH_BASE_URI, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = loaderData;
+  const { preferredLanguage, preferredMethodSunLife, preferredMethodGovernmentOfCanada, SCCH_BASE_URI } = loaderData;
 
   return (
     <div className="max-w-prose space-y-10">
@@ -56,10 +56,10 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
           <p>{preferredLanguage.name}</p>
         </DescriptionListItem>
         <DescriptionListItem term={t('protected-profile:communication-preferences.sunlife-communication-preference')}>
-          <p>{preferredMethodSunLife === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID ? t('protected-profile:communication-preferences.by-email') : t('protected-profile:communication-preferences.by-mail')}</p>
+          <p>{preferredMethodSunLife.name}</p>
         </DescriptionListItem>
         <DescriptionListItem term={t('protected-profile:communication-preferences.goc-communication-preference')}>
-          <p>{preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID ? t('protected-profile:communication-preferences.online') : t('protected-profile:communication-preferences.by-mail')}</p>
+          <p>{preferredMethodGovernmentOfCanada.name}</p>
         </DescriptionListItem>
       </dl>
       <div>

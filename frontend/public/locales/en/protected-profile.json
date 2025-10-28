@@ -111,9 +111,6 @@
   "communication-preferences": {
     "page-title": "My communication preferences",
     "language-preference": "Language preference",
-    "by-email": "By email",
-    "by-mail": "By mail",
-    "online": "Online through My Service Canada Account",
     "sunlife-communication-preference": "Sun Life communication preference",
     "goc-communication-preference": "Government of Canada communication preference",
     "update-link-text": "Change communication preferences",
@@ -121,23 +118,19 @@
   },
   "edit-communication-preferences": {
     "page-title": "Communication preferences",
-    "preferred-method": "How would you like Sun Life to communicate with you?",
     "preferred-language": "What is your preferred official language of communication?",
-    "english": "English",
-    "french": "French",
-    "by-email": "By email",
-    "by-mail": "By mail",
-    "preferred-notification-method": "How would you like to receive updates from the Government of Canada about the Canadian Dental Care Plan?",
-    "preferred-notification-method-msca": "<span>Online through My Service Canada Account (MSCA)</span><br>You'll receive email notifications. It's the fastest way to receive updates.",
-    "preferred-notification-method-mail": "<span>By mail</span><br>You can also view your Canadian Dental Care Plan information in MSCA.",
+    "preferred-method-gc": "How would you like to receive updates from the Government of Canada about the Canadian Dental Care Plan?",
+    "preferred-method-gc-digital": "<span>{{name}}</span><br>You'll receive email notifications. It's the fastest way to receive updates.",
+    "preferred-method-gc-mail": "<span>{{name}}</span><br>You can also view your Canadian Dental Care Plan information in MSCA.",
+    "preferred-method-sunlife": "How would you like Sun Life to communicate with you?",
     "back": "Back",
     "save": "Save",
     "error-message": {
       "preferred-language-required": "Select preferred language of communication",
-      "preferred-method-required": "Select preferred method of communication for Sun Life",
-      "preferred-notification-method-required": "Select preferred method of communication for the Government of Canada",
-      "preferred-method-email-verified": "A verified email address is required to receive communications from Sun Life digitally.",
-      "preferred-notification-method-email-verified": "A verified email address is required to receive communications from the Government of Canada digitally."
+      "preferred-method-gc-email-verified": "A verified email address is required to receive communications from the Government of Canada digitally.",
+      "preferred-method-gc-required": "Select preferred method of communication for the Government of Canada",
+      "preferred-method-sunlife-email-verified": "A verified email address is required to receive communications from Sun Life digitally.",
+      "preferred-method-sunlife-required": "Select preferred method of communication for Sun Life"
     }
   },
   "phone-number": {

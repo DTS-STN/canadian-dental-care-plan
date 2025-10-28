@@ -234,7 +234,7 @@ describe('mapUpdateCommunicationPreferenceRequestDtoToUpdateCommunicationPrefere
     const expectedCommunicationPreferenceDto: UpdateCommunicationPreferenceRequestDto = {
       clientId: '123456789',
       preferredLanguage: 'fr',
-      preferredMethod: 'mail',
+      preferredMethodSunLife: 'mail',
       preferredMethodGovernmentOfCanada: 'email',
     };
     const result = mapper.mapUpdateCommunicationPreferenceRequestDtoToUpdateCommunicationPreferenceRequestEntity(expectedCommunicationPreferenceDto);

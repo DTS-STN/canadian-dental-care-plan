@@ -158,7 +158,7 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
             },
           ],
           PreferredMethodCommunicationCode: {
-            ReferenceDataID: updateCommunicationPreferenceRequestDto.preferredMethod,
+            ReferenceDataID: updateCommunicationPreferenceRequestDto.preferredMethodSunLife,
           },
           PreferredMethodCommunicationGCCode: {
             ReferenceDataID: updateCommunicationPreferenceRequestDto.preferredMethodGovernmentOfCanada,

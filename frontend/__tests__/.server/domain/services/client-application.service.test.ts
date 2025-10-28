@@ -85,6 +85,9 @@ describe('DefaultClientApplicationService', () => {
         PreferredMethodCommunicationCode: {
           ReferenceDataID: 'EMAIL',
         },
+        PreferredMethodCommunicationGCCode: {
+          ReferenceDataID: 'DIGITAL',
+        },
         ApplicantDetail: {
           InsurancePlan: [
             {
@@ -169,7 +172,7 @@ describe('DefaultClientApplicationService', () => {
     communicationPreferences: {
       preferredLanguage: 'ENG',
       preferredMethodSunLife: 'EMAIL',
-      preferredMethodGovernmentOfCanada: 'EMAIL',
+      preferredMethodGovernmentOfCanada: 'DIGITAL',
     },
     contactInformation: {
       copyMailingAddress: true,
