@@ -41,6 +41,45 @@ describe('mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity',
     const result = mapper.mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity(expectedDentalBenefitsDto);
     expect(result).toEqual(mockDentalBenefitsEntity);
   });
+
+  it('should default to zero UUIDs if no benefits are selected', () => {
+    const expectedEntity: UpdateDentalBenefitsRequestEntity = {
+      BenefitApplication: {
+        Applicant: {
+          ApplicantDetail: {
+            ApplicantDetail: {
+              InsurancePlan: [
+                {
+                  InsurancePlanFederalIdentification: {
+                    IdentificationID: '00000000-0000-0000-0000-000000000000',
+                  },
+                  InsurancePlanProvincialIdentification: {
+                    IdentificationID: '00000000-0000-0000-0000-000000000000',
+                  },
+                },
+              ],
+            },
+          },
+          ClientIdentification: [
+            {
+              IdentificationID: '123456789',
+              IdentificationCategoryText: 'Guid Primary Key',
+            },
+          ],
+        },
+      },
+    };
+
+    const dto: UpdateDentalBenefitsRequestDto = {
+      clientId: '123456789',
+      hasFederalBenefits: false,
+      hasProvincialTerritorialBenefits: false,
+      province: 'ON',
+    };
+
+    const result = mapper.mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity(dto);
+    expect(result).toEqual(expectedEntity);
+  });
 });
 
 describe('mapUpdateEmailAddressRequestDtoToUpdateEmailAddressRequestEntity', () => {

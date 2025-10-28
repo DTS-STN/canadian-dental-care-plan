@@ -17,10 +17,10 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
     const insurancePlans = [
       {
         InsurancePlanFederalIdentification: {
-          IdentificationID: updateDentalBenefitsRequestDto.federalSocialProgram ?? '',
+          IdentificationID: updateDentalBenefitsRequestDto.federalSocialProgram ?? '00000000-0000-0000-0000-000000000000',
         },
         InsurancePlanProvincialIdentification: {
-          IdentificationID: updateDentalBenefitsRequestDto.provincialTerritorialSocialProgram ?? '',
+          IdentificationID: updateDentalBenefitsRequestDto.provincialTerritorialSocialProgram ?? '00000000-0000-0000-0000-000000000000',
         },
       },
     ];
