@@ -37,7 +37,7 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
           },
           ClientIdentification: [
             {
-              IdentificationID: updateDentalBenefitsRequestDto.province ?? '',
+              IdentificationID: updateDentalBenefitsRequestDto.clientId,
               IdentificationCategoryText: 'Guid Primary Key',
             },
           ],
