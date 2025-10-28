@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { LanguageDto, LanguageLocalizedDto } from '~/.server/domain/dtos';
@@ -6,8 +6,6 @@ import { LanguageNotFoundException } from '~/.server/domain/exceptions';
 import type { LanguageDtoMapper } from '~/.server/domain/mappers';
 import { DefaultLanguageService } from '~/.server/domain/services';
 import type { DefaultLanguageService_ServiceConfig } from '~/.server/domain/services/language.service';
-
-vi.mock('moize');
 
 describe('DefaultLanguageService', () => {
   const mockServerConfig: DefaultLanguageService_ServiceConfig = {
