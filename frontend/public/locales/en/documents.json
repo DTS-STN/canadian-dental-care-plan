@@ -18,7 +18,15 @@
     "page-title": "Upload my documents",
     "submit": "Submit",
     "select-one": "Select one",
-    "return-dashboard": "Return to dashboard"
+    "return-dashboard": "Return to dashboard",
+    "error-message": {
+      "applicant-required": "Select a person from the drop down list.",
+      "file-required": "Select a file",
+      "document-type-required": "Select a document type",
+      "invalid-file-type": "The file type you're trying to upload is not supported. You can upload a file in one of the following formats: .docx, .ppt, .txt, .pdf, .jpg, .jpeg, .png",
+      "too-many-files": "You can upload a maximum of 10 files at a time. Submit your current documents before uploading additional files.",
+      "file-too-large": "The file you are trying to upload is too large. Make sure the file size is less than 5MB."
+    }
   },
   "not-required": {
     "page-title": "Documents not required",

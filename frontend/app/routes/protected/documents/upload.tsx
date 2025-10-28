@@ -49,9 +49,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const evidentiaryDocumentTypeService = appContainer.get(TYPES.EvidentiaryDocumentTypeService);
   const localizedEvidentiaryDocumentTypes = await evidentiaryDocumentTypeService.listLocalizedEvidentiaryDocumentTypes(locale);
 
-  // TODO: fetch from API
-  const reasons = [{ id: '1', name: 'Member Eligibility Review' }];
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.msca-template', { title: t('documents:upload.page-title') }) };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
@@ -63,7 +60,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     applicantNames,
     documentTypes: localizedEvidentiaryDocumentTypes,
-    reasons,
     SCCH_BASE_URI,
   };
 }
@@ -73,7 +69,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 const clientUploadSchema = z
   .object({
     applicant: z.string().min(1, 'documents:upload.error-message.applicant-required'),
-    reason: z.string().min(1, 'documents:upload.error-message.reason-required'),
     files: z.array(z.instanceof(File, { message: 'documents:upload.error-message.file-required' })).min(1, 'documents:upload.error-message.files-required'),
     documentTypes: z.array(z.string().min(1, 'documents:upload.error-message.document-type-required')),
   })
@@ -143,7 +138,6 @@ export async function clientAction({ request }: { request: Request }) {
 
   const formDataObj = {
     applicant: formData.get('applicant'),
-    reason: formData.get('reason'),
     files: [...files],
     documentTypes: [...documentTypes],
   };
@@ -153,7 +147,6 @@ export async function clientAction({ request }: { request: Request }) {
   if (!parsedDataResult.success) {
     interface UploadErrors {
       applicant?: string;
-      reason?: string;
       files?: string;
       documentTypes?: {
         [key: number]: string;
@@ -178,7 +171,7 @@ export async function clientAction({ request }: { request: Request }) {
 
 export default function DocumentsUpload({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { applicantNames, documentTypes, reasons, SCCH_BASE_URI } = loaderData;
+  const { applicantNames, documentTypes, SCCH_BASE_URI } = loaderData;
 
   const fetcher = useFetcher<typeof clientAction>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -190,7 +183,6 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
   const errorFieldMap = useMemo(
     () => ({
       applicant: 'applicant',
-      reason: 'reason',
       files: 'file-upload',
       documentTypes: (index: number) => `document-type-${index}`, // Function to generate field IDs for array items
     }),
@@ -203,11 +195,6 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
     const dummyOption: InputOptionProps = { children: t('documents:upload.select-one'), value: '', disabled: true, hidden: true };
     return [dummyOption, ...applicantNames.map((name) => ({ children: name, value: name }))];
   }, [applicantNames, t]);
-
-  const reasonOptions = useMemo<InputOptionProps[]>(() => {
-    const dummyOption: InputOptionProps = { children: t('documents:upload.select-one'), value: '', disabled: true, hidden: true };
-    return [dummyOption, ...reasons.map((reason) => ({ children: reason.name, value: reason.id }))];
-  }, [reasons, t]);
 
   const documentTypeOptions = useMemo<InputOptionProps[]>(() => {
     const dummyOption: InputOptionProps = { children: t('documents:upload.select-one'), value: '', disabled: true, hidden: true };
@@ -250,7 +237,6 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
     const formData = new FormData();
 
     formData.append('applicant', (event.currentTarget.elements.namedItem('applicant') as HTMLSelectElement).value);
-    formData.append('reason', (event.currentTarget.elements.namedItem('reason') as HTMLSelectElement).value);
 
     for (const { file, documentType } of filesWithTypes) {
       formData.append('files', file);
@@ -269,7 +255,6 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
         <div className="space-y-6">
           <InputSelect id="applicant" name="applicant" label="Who are you uploading for" required className="w-full" options={applicantOptions} defaultValue="" errorMessage={errors?.applicant} />
-          <InputSelect id="reason" name="reason" label="Reason for file upload" required className="w-full" options={reasonOptions} defaultValue="" errorMessage={errors?.reason} />
           <fieldset>
             <InputLegend className="mb-2">Upload document</InputLegend>
             <p>You can upload up to 10 files at once.</p>
