@@ -6,9 +6,12 @@ export type UpdateDentalBenefitsRequestEntity = ReadonlyDeep<{
       ApplicantDetail: {
         ApplicantDetail: {
           InsurancePlan: Array<{
-            InsurancePlanIdentification: Array<{
+            InsurancePlanFederalIdentification: {
               IdentificationID: string;
-            }>;
+            };
+            InsurancePlanProvincialIdentification: {
+              IdentificationID: string;
+            };
           }>;
         };
       };

@@ -6,7 +6,6 @@ import { DefaultProfileDtoMapper } from '~/.server/domain/mappers';
 
 const mapper = new DefaultProfileDtoMapper();
 
-// TODO: Update to align with the new dental entity structure
 describe('mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity', () => {
   it('should map UpdateDentalBenefitsRequestDto to UpdateDentalBenefitsRequestEntity', () => {
     const mockDentalBenefitsEntity: UpdateDentalBenefitsRequestEntity = {
@@ -16,10 +15,8 @@ describe('mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity',
             ApplicantDetail: {
               InsurancePlan: [
                 {
-                  InsurancePlanIdentification: [{ IdentificationID: 'FEDERAL-PLAN-001' }],
-                },
-                {
-                  InsurancePlanIdentification: [{ IdentificationID: 'PROVINCIAL-PLAN-002' }],
+                  InsurancePlanFederalIdentification: { IdentificationID: 'FEDERAL-PLAN-001' },
+                  InsurancePlanProvincialIdentification: { IdentificationID: 'PROVINCIAL-PLAN-002' },
                 },
               ],
             },
