@@ -13,6 +13,7 @@ export type * from './document-upload.dto';
 export type * from './evidentiary-document-type.dto';
 export type * from './evidentiary-document.dto';
 export type * from './federal-government-insurance-plan.dto';
+export type * from './gc-communication-method.dto';
 export type * from './language.dto';
 export type * from './letter-type.dto';
 export type * from './letter.dto';

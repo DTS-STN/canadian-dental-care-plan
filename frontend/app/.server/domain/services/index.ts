@@ -13,6 +13,7 @@ export * from './document-upload.service';
 export * from './evidentiary-document-type.service';
 export * from './evidentiary-document.service';
 export * from './federal-government-insurance-plan.service';
+export * from './gc-communication-method.service';
 export * from './language.service';
 export * from './letter-type.service';
 export * from './letter.service';

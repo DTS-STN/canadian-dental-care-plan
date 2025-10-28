@@ -21,6 +21,7 @@ import {
   DefaultEvidentiaryDocumentService,
   DefaultEvidentiaryDocumentTypeService,
   DefaultFederalGovernmentInsurancePlanService,
+  DefaultGCCommunicationMethodService,
   DefaultLanguageService,
   DefaultLetterService,
   DefaultLetterTypeService,
@@ -71,6 +72,7 @@ export function createServicesContainerModule(serverConfig: Pick<ServerConfig, '
     options.bind(TYPES.EvidentiaryDocumentService).to(DefaultEvidentiaryDocumentService);
     options.bind(TYPES.EvidentiaryDocumentTypeService).to(DefaultEvidentiaryDocumentTypeService);
     options.bind(TYPES.FederalGovernmentInsurancePlanService).to(DefaultFederalGovernmentInsurancePlanService);
+    options.bind(TYPES.GCCommunicationMethodService).to(DefaultGCCommunicationMethodService);
     options.bind(TYPES.HCaptchaService).to(DefaultHCaptchaService);
     options.bind(TYPES.HttpClient).to(DefaultHttpClient);
     options.bind(TYPES.InstrumentationService).to(DefaultInstrumentationService);
