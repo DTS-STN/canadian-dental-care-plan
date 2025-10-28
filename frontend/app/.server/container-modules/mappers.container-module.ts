@@ -20,6 +20,7 @@ import {
   DefaultProfileDtoMapper,
   DefaultProvinceTerritoryStateDtoMapper,
   DefaultProvincialGovernmentInsurancePlanDtoMapper,
+  DefaultSunLifeCommunicationMethodDtoMapper,
   DefaultVerificationCodeDtoMapper,
 } from '~/.server/domain/mappers';
 import { DefaultBenefitApplicationStateMapper, DefaultBenefitRenewalStateMapper } from '~/.server/routes/mappers';
@@ -52,6 +53,7 @@ export function createMappersContainerModule(): ContainerModule {
     options.bind(TYPES.ProfileDtoMapper).to(DefaultProfileDtoMapper);
     options.bind(TYPES.ProvinceTerritoryStateDtoMapper).to(DefaultProvinceTerritoryStateDtoMapper);
     options.bind(TYPES.ProvincialGovernmentInsurancePlanDtoMapper).to(DefaultProvincialGovernmentInsurancePlanDtoMapper);
+    options.bind(TYPES.SunLifeCommunicationMethodDtoMapper).to(DefaultSunLifeCommunicationMethodDtoMapper);
     options.bind(TYPES.VerificationCodeDtoMapper).to(DefaultVerificationCodeDtoMapper);
   });
 }

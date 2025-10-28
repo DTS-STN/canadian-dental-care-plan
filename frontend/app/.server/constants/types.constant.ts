@@ -26,6 +26,7 @@ import type {
   ProfileDtoMapper,
   ProvinceTerritoryStateDtoMapper,
   ProvincialGovernmentInsurancePlanDtoMapper,
+  SunLifeCommunicationMethodDtoMapper,
   VerificationCodeDtoMapper,
 } from '~/.server/domain/mappers';
 import type {
@@ -70,6 +71,7 @@ import type {
   ProfileService,
   ProvinceTerritoryStateService,
   ProvincialGovernmentInsurancePlanService,
+  SunLifeCommunicationMethodService,
   VerificationCodeService,
 } from '~/.server/domain/services';
 import type { EvidentiaryDocumentTypeService } from '~/.server/domain/services/evidentiary-document-type.service';
@@ -226,6 +228,8 @@ export const TYPES = assignServiceIdentifiers({
   RedisService: serviceId<RedisService>(),
   SecurityHandler: serviceId<SecurityHandler>(),
   ServerConfig: serviceId<ServerConfig>(),
+  SunLifeCommunicationMethodDtoMapper: serviceId<SunLifeCommunicationMethodDtoMapper>(),
+  SunLifeCommunicationMethodService: serviceId<SunLifeCommunicationMethodService>(),
   VerificationCodeDtoMapper: serviceId<VerificationCodeDtoMapper>(),
   VerificationCodeRepository: serviceId<VerificationCodeRepository>(),
   VerificationCodeService: serviceId<VerificationCodeService>(),
