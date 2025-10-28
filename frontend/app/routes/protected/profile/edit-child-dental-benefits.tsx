@@ -78,8 +78,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const childName = child.information.firstName;
 
   const meta = {
-    title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:edit-child-dental-benefits.title', { childName }) }),
-    dcTermsTitle: t('gcweb:meta.title.msca-template', { title: t('protected-profile:edit-child-dental-benefits.dc-terms-title') }),
+    title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:edit-child-dental-benefits.dc-terms-title') }),
   };
 
   const idToken = session.get('idToken');
