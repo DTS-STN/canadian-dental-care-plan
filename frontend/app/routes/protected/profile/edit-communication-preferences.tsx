@@ -50,7 +50,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     defaultState: {
       preferredLanguage: clientApplication.communicationPreferences.preferredLanguage,
-      preferredMethod: clientApplication.communicationPreferences.preferredMethod,
+      preferredMethod: clientApplication.communicationPreferences.preferredMethodSunLife,
       preferredMethodGovernmentOfCanada: clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada,
     },
     languages,

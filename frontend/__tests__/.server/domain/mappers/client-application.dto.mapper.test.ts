@@ -216,7 +216,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
         communicationPreferences: {
           email: 'email@example.com',
           preferredLanguage: '1',
-          preferredMethod: 'EMAIL',
+          preferredMethodSunLife: 'EMAIL',
           preferredMethodGovernmentOfCanada: 'EMAIL',
         },
         contactInformation: {

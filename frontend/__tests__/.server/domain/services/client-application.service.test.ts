@@ -168,7 +168,7 @@ describe('DefaultClientApplicationService', () => {
     children: [],
     communicationPreferences: {
       preferredLanguage: 'ENG',
-      preferredMethod: 'EMAIL',
+      preferredMethodSunLife: 'EMAIL',
       preferredMethodGovernmentOfCanada: 'EMAIL',
     },
     contactInformation: {
