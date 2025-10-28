@@ -69,6 +69,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = {
     title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:edit-dental-benefits.title', { applicantName }) }),
+    dcTermsTitle: t('gcweb:meta.title.msca-template', { title: t('protected-profile:edit-dental-benefits.dc-terms-title') }),
   };
 
   const idToken = session.get('idToken');
