@@ -9,15 +9,15 @@ import type { DefaultSunLifeCommunicationMethodService_ServiceConfig } from '~/.
 
 describe('DefaultSunLifeCommunicationMethodService', () => {
   const mockServerConfig: DefaultSunLifeCommunicationMethodService_ServiceConfig = {
-    COMMUNICATION_METHOD_EMAIL_ID: '1',
-    COMMUNICATION_METHOD_MAIL_ID: '2',
+    COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID: '1',
+    COMMUNICATION_METHOD_SUNLIFE_MAIL_ID: '2',
   };
 
   describe('listSunLifeCommunicationMethods', () => {
     it('fetches all SunLife communication methods', () => {
       const mockDtos: SunLifeCommunicationMethodDto[] = [
-        { id: mockServerConfig.COMMUNICATION_METHOD_EMAIL_ID.toString(), code: 'email', nameEn: 'By email', nameFr: 'Par courriel' },
-        { id: mockServerConfig.COMMUNICATION_METHOD_MAIL_ID.toString(), code: 'mail', nameEn: 'By mail', nameFr: 'Par la poste' },
+        { id: mockServerConfig.COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID.toString(), code: 'email', nameEn: 'By email', nameFr: 'Par courriel' },
+        { id: mockServerConfig.COMMUNICATION_METHOD_SUNLIFE_MAIL_ID.toString(), code: 'mail', nameEn: 'By mail', nameFr: 'Par la poste' },
       ];
 
       const mockSunLifeCommunicationMethodDtoMapper = mock<SunLifeCommunicationMethodDtoMapper>();
@@ -32,7 +32,7 @@ describe('DefaultSunLifeCommunicationMethodService', () => {
   describe('getSunLifeCommunicationMethod', () => {
     it('fetches SunLife communication method by id', () => {
       const id = '1';
-      const mockDto: SunLifeCommunicationMethodDto = { id: mockServerConfig.COMMUNICATION_METHOD_EMAIL_ID.toString(), code: 'email', nameEn: 'By email', nameFr: 'Par courriel' };
+      const mockDto: SunLifeCommunicationMethodDto = { id: mockServerConfig.COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID.toString(), code: 'email', nameEn: 'By email', nameFr: 'Par courriel' };
       const mockSunLifeCommunicationMethodDtoMapper = mock<SunLifeCommunicationMethodDtoMapper>();
       const service = new DefaultSunLifeCommunicationMethodService(mockSunLifeCommunicationMethodDtoMapper, mockServerConfig);
 

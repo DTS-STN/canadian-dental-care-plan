@@ -29,7 +29,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:communication-preferences.page-title') }) };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
-  const { COMMUNICATION_METHOD_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
+  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.communication-preferences', { userId: idToken.sub });
@@ -40,14 +40,14 @@ export async function loader({ context: { appContainer, session }, params, reque
     sunlifeComminicationPreference: clientApplication.communicationPreferences.preferredMethod,
     gocComminicationPreference: clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada,
     SCCH_BASE_URI,
-    COMMUNICATION_METHOD_EMAIL_ID,
+    COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
     COMMUNICATION_METHOD_GC_DIGITAL_ID,
   };
 }
 
 export default function ViewCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { preferredLanguage, sunlifeComminicationPreference, gocComminicationPreference, SCCH_BASE_URI, COMMUNICATION_METHOD_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = loaderData;
+  const { preferredLanguage, sunlifeComminicationPreference, gocComminicationPreference, SCCH_BASE_URI, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = loaderData;
 
   return (
     <div className="max-w-prose space-y-10">
@@ -56,7 +56,7 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
           <p>{preferredLanguage.name}</p>
         </DescriptionListItem>
         <DescriptionListItem term={t('protected-profile:communication-preferences.sunlife-communication-preference')}>
-          <p>{sunlifeComminicationPreference === COMMUNICATION_METHOD_EMAIL_ID ? t('protected-profile:communication-preferences.by-email') : t('protected-profile:communication-preferences.by-mail')}</p>
+          <p>{sunlifeComminicationPreference === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID ? t('protected-profile:communication-preferences.by-email') : t('protected-profile:communication-preferences.by-mail')}</p>
         </DescriptionListItem>
         <DescriptionListItem term={t('protected-profile:communication-preferences.goc-communication-preference')}>
           <p>{gocComminicationPreference === COMMUNICATION_METHOD_GC_DIGITAL_ID ? t('protected-profile:communication-preferences.online') : t('protected-profile:communication-preferences.by-mail')}</p>

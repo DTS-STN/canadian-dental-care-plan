@@ -214,12 +214,12 @@ interface ToTypeOfApplicationArgs {
 export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapper {
   private readonly federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService;
   private readonly provincialGovernmentInsurancePlanService: ProvincialGovernmentInsurancePlanService;
-  private readonly serverConfig: Pick<ServerConfig, 'COMMUNICATION_METHOD_EMAIL_ID' | 'COMMUNICATION_METHOD_MAIL_ID'>;
+  private readonly serverConfig: Pick<ServerConfig, 'COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID' | 'COMMUNICATION_METHOD_SUNLIFE_MAIL_ID'>;
 
   constructor(
     @inject(TYPES.FederalGovernmentInsurancePlanService) federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService,
     @inject(TYPES.ProvincialGovernmentInsurancePlanService) provincialGovernmentInsurancePlanService: ProvincialGovernmentInsurancePlanService,
-    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'COMMUNICATION_METHOD_EMAIL_ID' | 'COMMUNICATION_METHOD_MAIL_ID'>,
+    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID' | 'COMMUNICATION_METHOD_SUNLIFE_MAIL_ID'>,
   ) {
     this.federalGovernmentInsurancePlanService = federalGovernmentInsurancePlanService;
     this.provincialGovernmentInsurancePlanService = provincialGovernmentInsurancePlanService;

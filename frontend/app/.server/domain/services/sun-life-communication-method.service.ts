@@ -47,7 +47,7 @@ export interface SunLifeCommunicationMethodService {
   getLocalizedSunLifeCommunicationMethodById(id: string, locale: AppLocale): SunLifeCommunicationMethodLocalizedDto;
 }
 
-export type DefaultSunLifeCommunicationMethodService_ServiceConfig = Pick<ServerConfig, 'COMMUNICATION_METHOD_EMAIL_ID' | 'COMMUNICATION_METHOD_MAIL_ID'>;
+export type DefaultSunLifeCommunicationMethodService_ServiceConfig = Pick<ServerConfig, 'COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID' | 'COMMUNICATION_METHOD_SUNLIFE_MAIL_ID'>;
 
 @injectable()
 export class DefaultSunLifeCommunicationMethodService implements SunLifeCommunicationMethodService {
@@ -63,8 +63,8 @@ export class DefaultSunLifeCommunicationMethodService implements SunLifeCommunic
     this.sunLifeCommunicationMethodDtoMapper = sunLifeCommunicationMethodDtoMapper;
 
     this.sunLifeCommunicationMethodDtos = [
-      { id: serverConfig.COMMUNICATION_METHOD_EMAIL_ID.toString(), code: 'email', nameEn: 'By email', nameFr: 'Par courriel' },
-      { id: serverConfig.COMMUNICATION_METHOD_MAIL_ID.toString(), code: 'mail', nameEn: 'By mail', nameFr: 'Par la poste' },
+      { id: serverConfig.COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID.toString(), code: 'email', nameEn: 'By email', nameFr: 'Par courriel' },
+      { id: serverConfig.COMMUNICATION_METHOD_SUNLIFE_MAIL_ID.toString(), code: 'mail', nameEn: 'By mail', nameFr: 'Par la poste' },
     ];
   }
 
