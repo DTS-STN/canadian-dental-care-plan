@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { useFetcher } from 'react-router';
 
 import { faArrowUpFromBracket, faTimes } from '@fortawesome/free-solid-svg-icons';
+import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -19,7 +20,7 @@ import type { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getTypedI18nNamespaces, initI18n } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -64,74 +65,75 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
-// Client action validation schema
-// TODO beef up validation => MIME type, extension, etc
-const clientUploadSchema = z
-  .object({
-    applicant: z.string().min(1, 'documents:upload.error-message.applicant-required'),
-    files: z.array(z.instanceof(File, { message: 'documents:upload.error-message.file-required' })).min(1, 'documents:upload.error-message.files-required'),
-    documentTypes: z.array(z.string().min(1, 'documents:upload.error-message.document-type-required')),
-  })
-  .superRefine((data, ctx) => {
-    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
-    const ALLOWED_EXTENSIONS = new Set(['.docx', '.ppt', '.txt', '.pdf', '.jpg', '.jpeg', '.png']);
-    const ALLOWED_MIME_TYPES = new Set([
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-      'application/vnd.ms-powerpoint', // .ppt
-      'text/plain', // .txt
-      'application/pdf', // .pdf
-      'image/jpeg', // .jpg, .jpeg
-      'image/png', // .png
-    ]);
+function createDocumentUploadSchema(t: TFunction) {
+  return z
+    .object({
+      applicant: z.string().min(1, t('documents:upload.error-message.applicant-required')),
+      files: z.array(z.instanceof(File, { message: t('documents:upload.error-message.file-required') })).min(1, t('documents:upload.error-message.file-required')),
+      documentTypes: z.array(z.string().min(1, t('documents:upload.error-message.document-type-required'))),
+    })
+    .superRefine((data, ctx) => {
+      const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+      const ALLOWED_EXTENSIONS = new Set(['.docx', '.ppt', '.txt', '.pdf', '.jpg', '.jpeg', '.png']);
+      const ALLOWED_MIME_TYPES = new Set([
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+        'application/vnd.ms-powerpoint', // .ppt
+        'text/plain', // .txt
+        'application/pdf', // .pdf
+        'image/jpeg', // .jpg, .jpeg
+        'image/png', // .png
+      ]);
 
-    for (let index = 0, file = data.files[index]; index < data.files.length; index++) {
-      if (file.size > MAX_FILE_SIZE) {
+      for (let index = 0, file = data.files[index]; index < data.files.length; index++) {
+        if (file.size > MAX_FILE_SIZE) {
+          ctx.addIssue({
+            code: 'custom',
+            message: t('documents:upload.error-message.file-too-large'),
+            path: ['files', index],
+          });
+        }
+
+        const fileExtension = file.name.includes('.') ? '.' + file.name.split('.').at(-1)?.toLowerCase() : '';
+        if (!ALLOWED_EXTENSIONS.has(fileExtension)) {
+          ctx.addIssue({
+            code: 'custom',
+            message: t('documents:upload.error-message.invalid-file-type'),
+            path: ['files', index],
+          });
+        }
+
+        if (!ALLOWED_MIME_TYPES.has(file.type)) {
+          ctx.addIssue({
+            code: 'custom',
+            message: t('documents:upload.error-message.invalid-file-type'),
+            path: ['files', index],
+          });
+        }
+      }
+
+      if (data.files.length > 10) {
         ctx.addIssue({
           code: 'custom',
-          message: 'documents:upload.error-message.file-too-large',
-          path: ['files', index],
+          message: t('documents:upload.error-message.too-many-files'),
+          path: ['files'],
         });
       }
 
-      const fileExtension = file.name.includes('.') ? '.' + file.name.split('.').at(-1)?.toLowerCase() : '';
-      if (!ALLOWED_EXTENSIONS.has(fileExtension)) {
-        ctx.addIssue({
-          code: 'custom',
-          message: 'documents:upload.error-message.invalid-file-type',
-          path: ['files', index],
-        });
+      for (let index = 0, documentType = data.documentTypes[index]; index < data.documentTypes.length; index++) {
+        if (!documentType || documentType.trim() === '') {
+          ctx.addIssue({
+            code: 'custom',
+            message: t('documents:upload.error-message.document-type-required'),
+            path: ['documentTypes', index],
+          });
+        }
       }
-
-      if (!ALLOWED_MIME_TYPES.has(file.type)) {
-        ctx.addIssue({
-          code: 'custom',
-          message: 'documents:upload.error-message.invalid-file-type',
-          path: ['files', index],
-        });
-      }
-    }
-
-    if (data.files.length > 10) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'documents:upload.error-message.too-many-files',
-        path: ['files'],
-      });
-    }
-
-    for (let index = 0, documentType = data.documentTypes[index]; index < data.documentTypes.length; index++) {
-      if (!documentType || documentType.trim() === '') {
-        ctx.addIssue({
-          code: 'custom',
-          message: 'documents:upload.error-message.document-type-required',
-          path: ['documentTypes', index],
-        });
-      }
-    }
-  });
+    });
+}
 
 export async function clientAction({ request }: { request: Request }) {
   const formData = await request.formData();
+  const i18n = await initI18n(['documents']);
 
   const files = formData.getAll('files');
   const documentTypes = formData.getAll('documentTypes');
@@ -142,7 +144,7 @@ export async function clientAction({ request }: { request: Request }) {
     documentTypes: [...documentTypes],
   };
 
-  const parsedDataResult = clientUploadSchema.safeParse(formDataObj);
+  const parsedDataResult = createDocumentUploadSchema(i18n.t).safeParse(formDataObj);
 
   if (!parsedDataResult.success) {
     interface UploadErrors {
@@ -260,7 +262,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
             <p>You can upload up to 10 files at once.</p>
             <p className="mb-2">Maximum file size is 10MB. File types accepted: .docx, .ppt, .txt, .pdf, .jpg, .jpeg, .png</p>
 
-            {errors?.files && <p className="mb-2 text-sm text-red-700">Select a file</p>}
+            {errors?.files && <p className="mb-2 text-sm text-red-700">{t('documents:upload.error-message.file-required')}</p>}
 
             <FileUpload
               id="file-upload"
