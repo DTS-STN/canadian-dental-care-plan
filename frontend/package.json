@@ -90,7 +90,7 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.4.0",
+    "@eslint/compat": "^1.4.1",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.38.0",
     "@inquirer/checkbox": "^4.3.0",
