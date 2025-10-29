@@ -34,7 +34,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 /**
  * Returns true if the incoming request is authorized to view detailed responses.
  */
-async function isAuthorized({ context, request }: Omit<Route.LoaderArgs, 'params'>): Promise<boolean> {
+async function isAuthorized({ context, request }: Pick<Route.LoaderArgs, 'context' | 'request'>): Promise<boolean> {
   const bearerTokenResolver = context.appContainer.get(TYPES.BearerTokenResolver);
   const serverConfig = context.appContainer.get(TYPES.ServerConfig);
   const tokenRolesExtractor = context.appContainer.get(TYPES.HealthTokenRolesExtractor);
