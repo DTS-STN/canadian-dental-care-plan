@@ -243,6 +243,90 @@ describe('mapUpdateAddressRequestDtoToUpdateAddressRequestEntity', () => {
     const result = mapper.mapUpdateAddressRequestDtoToUpdateAddressRequestEntity(expectedAddressDto);
     expect(result).toEqual(mockAddressEntity);
   });
+
+  it('should default AddressProvinces to zero UUIDs if no provinces are selected', () => {
+    const mockAddressEntity: UpdateAddressRequestEntity = {
+      BenefitApplication: {
+        Applicant: {
+          ClientIdentification: [
+            {
+              IdentificationID: '123456789',
+              IdentificationCategoryText: 'Guid Primary Key',
+            },
+          ],
+          PersonContactInformation: [
+            {
+              Address: [
+                {
+                  AddressCategoryCode: {
+                    ReferenceDataName: 'Mailing',
+                  },
+                  AddressCityName: 'Mailing City',
+                  AddressCountry: {
+                    CountryCode: {
+                      ReferenceDataID: 'USA',
+                    },
+                  },
+                  AddressPostalCode: '90210',
+                  AddressProvince: {
+                    ProvinceCode: {
+                      ReferenceDataID: '00000000-0000-0000-0000-000000000000',
+                    },
+                  },
+                  AddressSecondaryUnitText: '',
+                  AddressStreet: {
+                    StreetName: '298 Fake Street',
+                  },
+                },
+                {
+                  AddressCategoryCode: {
+                    ReferenceDataName: 'Home',
+                  },
+                  AddressCityName: 'Home City',
+                  AddressCountry: {
+                    CountryCode: {
+                      ReferenceDataID: 'CAN',
+                    },
+                  },
+                  AddressPostalCode: 'H0H 0H0',
+                  AddressProvince: {
+                    ProvinceCode: {
+                      ReferenceDataID: '00000000-0000-0000-0000-000000000000',
+                    },
+                  },
+                  AddressSecondaryUnitText: '',
+                  AddressStreet: {
+                    StreetName: '123 Fake Street',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+    const expectedAddressDto: UpdateAddressRequestDto = {
+      clientId: '123456789',
+      mailingAddress: {
+        address: '298 Fake Street',
+        apartment: '',
+        city: 'Mailing City',
+        country: 'USA',
+        postalCode: '90210',
+        province: undefined,
+      },
+      homeAddress: {
+        address: '123 Fake Street',
+        apartment: '',
+        city: 'Home City',
+        country: 'CAN',
+        postalCode: 'H0H 0H0',
+        province: undefined,
+      },
+    };
+    const result = mapper.mapUpdateAddressRequestDtoToUpdateAddressRequestEntity(expectedAddressDto);
+    expect(result).toEqual(mockAddressEntity);
+  });
 });
 
 describe('mapUpdateCommunicationPreferenceRequestDtoToUpdateCommunicationPreferenceRequestEntity', () => {
