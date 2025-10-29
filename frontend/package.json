@@ -64,7 +64,7 @@
     "jose": "^6.1.0",
     "libphonenumber-js": "^1.12.25",
     "markdown-to-jsx": "^8.0.0",
-    "minimatch": "^10.0.3",
+    "minimatch": "^10.1.1",
     "moderndash": "^4.0.0",
     "moize": "^6.1.6",
     "morgan": "^1.10.1",
