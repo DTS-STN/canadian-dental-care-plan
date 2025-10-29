@@ -11,5 +11,5 @@ export function transformAdobeAnalyticsUrl(url: string | URL) {
   const urlObj = new URL(url);
   const protectedRenewRouteRegex = /^\/(en|fr)\/(protected|protege)\/(profile|profil)\/(dental-benefits|prestations-dentaires)\/.*\/(edit|modifier)\//i;
   if (!protectedRenewRouteRegex.test(urlObj.pathname)) return urlObj;
-  return new URL(removePathSegment(urlObj, 3));
+  return new URL(removePathSegment(urlObj, 4));
 }
