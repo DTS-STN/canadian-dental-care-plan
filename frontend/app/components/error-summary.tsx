@@ -126,16 +126,29 @@ function isString(value: unknown): value is string {
 }
 
 /**
+ * A mapping for a single error field. Can be:
+ * - A `string` (for a simple field ID)
+ * - A `(index: number) => string` (for a simple array of errors)
+ * - A `Record<string, string | ((index: number) => string)>` (for a nested array of error objects)
+ */
+export type ErrorFieldMapping =
+  | string
+  | ((index: number) => string)
+  | {
+      [nestedKey: string]: string | ((index: number) => string);
+    };
+
+/**
  * Field mapping configuration that supports nested array fields
  */
 export interface ErrorFieldMap {
-  [key: string]: string | ((index: number) => string);
+  [key: string]: ErrorFieldMapping;
 }
 
 /**
  * Custom hook to generate error summary items based on provided errors and field mappings,
  * and handle side effects such as scrolling to the error summary and pushing analytics events.
- * This version supports nested array errors like documentTypes[index].
+ * This version supports nested array errors like fileItems[index].file.
  *
  * @param errors - Object containing error messages keyed by field names. Can include nested array errors.
  * @param errorFieldMap - Object mapping field names (from errors) to corresponding field IDs or field ID generators for arrays.
@@ -154,25 +167,54 @@ export function useErrorSummary(errors: Record<string, unknown> | undefined, err
       const fieldMapping = memoizeErrorFieldMap[key];
       const errorValue = errors[key];
 
-      // Handle array errors (like documentTypes)
+      // Handle array errors (like fileItems or the old documentTypes)
       if (isRecord(errorValue)) {
-        // This is an object with indexed errors (e.g., documentTypes: { 0: 'error1', 1: 'error2' })
-        for (const index in errorValue) {
-          const errorMessage = errorValue[index];
-          if (isString(errorMessage) && !validator.isEmpty(errorMessage)) {
+        // errorValue is { 0: {...}, 1: {...} } or { 0: '...', 1: '...' }
+
+        for (const indexStr in errorValue) {
+          if (!Object.prototype.hasOwnProperty.call(errorValue, indexStr)) continue;
+
+          const index = Number.parseInt(indexStr);
+          const innerError = errorValue[indexStr]; // This can be a string OR an object
+
+          if (isRecord(innerError) && typeof fieldMapping === 'object' && !Array.isArray(fieldMapping) && typeof fieldMapping !== 'function') {
+            // innerError is { file: '...', documentType: '...' }
+            // fieldMapping is { file: (index) => '...', documentType: (index) => '...' }
+
+            for (const nestedKey of Object.keys(innerError)) {
+              if (!Object.prototype.hasOwnProperty.call(innerError, nestedKey)) continue;
+
+              const nestedErrorMessage = innerError[nestedKey];
+              const nestedFieldMapValue = fieldMapping[nestedKey]; // e.g., fieldMapping['file']
+
+              if (isString(nestedErrorMessage) && !validator.isEmpty(nestedErrorMessage)) {
+                let fieldId: string | undefined;
+
+                if (typeof nestedFieldMapValue === 'function') {
+                  fieldId = nestedFieldMapValue(index); // Pass index to the generator
+                } else if (typeof nestedFieldMapValue === 'string') {
+                  fieldId = nestedFieldMapValue; // Use the static ID
+                }
+
+                if (fieldId) {
+                  items.push({ errorMessage: nestedErrorMessage, fieldId });
+                }
+              }
+            }
+          } else if (isString(innerError) && !validator.isEmpty(innerError)) {
+            // innerError is "some error message"
             if (typeof fieldMapping === 'function') {
-              // Use the field ID generator function for arrays
-              const fieldId = fieldMapping(Number.parseInt(index));
-              items.push({ errorMessage, fieldId });
+              const fieldId = fieldMapping(index);
+              items.push({ errorMessage: innerError, fieldId });
             } else if (typeof fieldMapping === 'string') {
               // For simple array field mappings, append the index
               const fieldId = `${fieldMapping}-${index}`;
-              items.push({ errorMessage, fieldId });
+              items.push({ errorMessage: innerError, fieldId });
             }
           }
         }
       }
-      // Handle simple string errors
+      // Handle simple string errors (like 'applicant')
       else if (isString(errorValue) && !validator.isEmpty(errorValue) && typeof fieldMapping === 'string' && !validator.isEmpty(fieldMapping)) {
         items.push({ errorMessage: errorValue, fieldId: fieldMapping });
       }

@@ -13,6 +13,7 @@ import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Button, ButtonLink } from '~/components/buttons';
+import type { ErrorFieldMap } from '~/components/error-summary';
 import { useErrorSummary } from '~/components/error-summary';
 import { FileUpload, FileUploadItem, FileUploadItemDelete, FileUploadList, FileUploadTrigger } from '~/components/file-upload';
 import { InputLegend } from '~/components/input-legend';
@@ -66,82 +67,53 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 function createDocumentUploadSchema(t: TFunction) {
-  return z
-    .object({
-      applicant: z.string().min(1, t('documents:upload.error-message.applicant-required')),
-      files: z.array(z.instanceof(File, { message: t('documents:upload.error-message.file-required') })).min(1, t('documents:upload.error-message.file-required')),
-      documentTypes: z.array(z.string().min(1, t('documents:upload.error-message.document-type-required'))),
-    })
-    .superRefine((data, ctx) => {
-      const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
-      const ALLOWED_EXTENSIONS = new Set(['.docx', '.ppt', '.txt', '.pdf', '.jpg', '.jpeg', '.png']);
-      const ALLOWED_MIME_TYPES = new Set([
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-        'application/vnd.ms-powerpoint', // .ppt
-        'text/plain', // .txt
-        'application/pdf', // .pdf
-        'image/jpeg', // .jpg, .jpeg
-        'image/png', // .png
-      ]);
+  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+  const ALLOWED_EXTENSIONS = new Set(['.docx', '.ppt', '.txt', '.pdf', '.jpg', '.jpeg', '.png']);
+  const ALLOWED_MIME_TYPES = new Set([
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+    'application/vnd.ms-powerpoint', // .ppt
+    'text/plain', // .txt
+    'application/pdf', // .pdf
+    'image/jpeg', // .jpg, .jpeg
+    'image/png', // .png
+  ]);
 
-      for (let index = 0, file = data.files[index]; index < data.files.length; index++) {
-        if (file.size > MAX_FILE_SIZE) {
-          ctx.addIssue({
-            code: 'custom',
-            message: t('documents:upload.error-message.file-too-large'),
-            path: ['files', index],
-          });
-        }
-
+  const fileWithDocumentTypeSchema = z.object({
+    file: z
+      .instanceof(File, { message: t('documents:upload.error-message.file-required') })
+      .refine((file) => file.size <= MAX_FILE_SIZE, t('documents:upload.error-message.file-too-large'))
+      .refine((file) => {
         const fileExtension = file.name.includes('.') ? '.' + file.name.split('.').at(-1)?.toLowerCase() : '';
-        if (!ALLOWED_EXTENSIONS.has(fileExtension)) {
-          ctx.addIssue({
-            code: 'custom',
-            message: t('documents:upload.error-message.invalid-file-type'),
-            path: ['files', index],
-          });
-        }
+        return ALLOWED_EXTENSIONS.has(fileExtension);
+      }, t('documents:upload.error-message.invalid-file-type'))
+      .refine((file) => {
+        return ALLOWED_MIME_TYPES.has(file.type);
+      }, t('documents:upload.error-message.invalid-file-type')),
+    documentType: z.string().min(1, t('documents:upload.error-message.document-type-required')),
+  });
 
-        if (!ALLOWED_MIME_TYPES.has(file.type)) {
-          ctx.addIssue({
-            code: 'custom',
-            message: t('documents:upload.error-message.invalid-file-type'),
-            path: ['files', index],
-          });
-        }
-      }
-
-      if (data.files.length > 10) {
-        ctx.addIssue({
-          code: 'custom',
-          message: t('documents:upload.error-message.too-many-files'),
-          path: ['files'],
-        });
-      }
-
-      for (let index = 0, documentType = data.documentTypes[index]; index < data.documentTypes.length; index++) {
-        if (!documentType || documentType.trim() === '') {
-          ctx.addIssue({
-            code: 'custom',
-            message: t('documents:upload.error-message.document-type-required'),
-            path: ['documentTypes', index],
-          });
-        }
-      }
-    });
+  return z.object({
+    applicant: z.string().min(1, t('documents:upload.error-message.applicant-required')),
+    files: z.array(fileWithDocumentTypeSchema).min(1, t('documents:upload.error-message.file-required')).max(10, t('documents:upload.error-message.too-many-files')),
+  });
 }
 
 export async function clientAction({ request }: { request: Request }) {
   const formData = await request.formData();
   const i18n = await initI18n(['documents']);
 
-  const files = formData.getAll('files');
-  const documentTypes = formData.getAll('documentTypes');
+  const applicant = formData.get('applicant') as string;
+  const files = formData.getAll('files') as File[];
+  const documentTypes = formData.getAll('documentTypes') as string[];
+
+  const filesWithTypes = files.map((file, index) => ({
+    file: file,
+    documentType: documentTypes[index] ?? '',
+  }));
 
   const formDataObj = {
-    applicant: formData.get('applicant'),
-    files: [...files],
-    documentTypes: [...documentTypes],
+    applicant: applicant,
+    files: filesWithTypes,
   };
 
   const parsedDataResult = createDocumentUploadSchema(i18n.t).safeParse(formDataObj);
@@ -150,17 +122,28 @@ export async function clientAction({ request }: { request: Request }) {
     interface UploadErrors {
       applicant?: string;
       files?: string;
-      documentTypes?: {
-        [key: number]: string;
+      fileItems?: {
+        [key: number]: {
+          file?: string;
+          documentType?: string;
+        };
       };
     }
+
     const errors: UploadErrors = {};
     for (const { message, path } of parsedDataResult.error.issues) {
-      if (path[0] === 'documentTypes') {
-        errors.documentTypes ??= {};
-        errors.documentTypes[path[1] as number] = message;
-      } else {
-        errors[path[0] as keyof UploadErrors] = message;
+      if (path[0] === 'applicant') {
+        errors.applicant = message;
+      } else if (path[0] === 'files') {
+        if (path.length === 1) {
+          errors.files = message;
+        } else {
+          const index = path[1] as number;
+          const field = path[2] as 'file' | 'documentType';
+          errors.fileItems ??= {};
+          errors.fileItems[index] ??= {};
+          errors.fileItems[index][field] = message;
+        }
       }
     }
     return { errors };
@@ -180,13 +163,14 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
 
   const errors = fetcher.data?.errors;
 
-  // Memoize the errorFieldMap to prevent it from being a new object on every render.
-  // This stops the useEffect in useErrorSummary from re-running on state changes.
-  const errorFieldMap = useMemo(
+  const errorFieldMap = useMemo<ErrorFieldMap>(
     () => ({
       applicant: 'applicant',
       files: 'file-upload',
-      documentTypes: (index: number) => `document-type-${index}`, // Function to generate field IDs for array items
+      fileItems: {
+        file: (index: number) => `document-type-${index}`,
+        documentType: (index: number) => `document-type-${index}`,
+      },
     }),
     [],
   );
@@ -212,9 +196,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
 
   const handleFileChange = (newFiles: File[]) => {
     setFilesWithTypes((prev) => {
-      // Create a new array by mapping over the new list of files
       const newFilesWithTypes = newFiles.map((newFile) => {
-        // Find the old file entry, if it exists, to preserve the documentType
         const existingEntry = prev.find((oldEntry) => oldEntry.file.name === newFile.name && oldEntry.file.lastModified === newFile.lastModified && oldEntry.file.size === newFile.size);
         return {
           file: newFile,
@@ -262,7 +244,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
             <p>You can upload up to 10 files at once.</p>
             <p className="mb-2">Maximum file size is 10MB. File types accepted: .docx, .ppt, .txt, .pdf, .jpg, .jpeg, .png</p>
 
-            {errors?.files && <p className="mb-2 text-sm text-red-700">{t('documents:upload.error-message.file-required')}</p>}
+            {errors?.files && <p className="mb-2 text-sm text-red-700">{errors.files}</p>}
 
             <FileUpload
               id="file-upload"
@@ -273,7 +255,6 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
               accept=".docx,.ppt,.txt,.pdf,.jpg,.jpeg,.png"
               className="gap-4 sm:gap-6"
               onFileReject={(file, message) => {
-                // Handle file rejection (too large, wrong type, etc.)
                 console.warn(`File rejected: ${file.name}, reason: ${message}`);
               }}
             >
@@ -292,6 +273,9 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                         <dd>{file.name}</dd>
                       </div>
                     </dl>
+
+                    {errors?.fileItems?.[index]?.file && <p className="mb-2 text-sm text-red-700">{errors.fileItems[index].file}</p>}
+
                     <InputSelect
                       id={`document-type-${index}`}
                       name={`document-type-${index}`}
@@ -304,7 +288,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                         e.preventDefault();
                         handleDocumentTypeChange(index, e.target.value);
                       }}
-                      errorMessage={errors?.documentTypes?.[index]}
+                      errorMessage={errors?.fileItems?.[index]?.documentType}
                     />
                     <div className="mt-2">
                       <FileUploadItemDelete asChild>
