@@ -12,6 +12,23 @@ export function removePathSegment(url: string | URL, position: number) {
   return urlObj.toString();
 }
 
+/**
+ * Replaces a segment from the pathname of a URL at the specified position
+ * @param url - The URL string or URL object.
+ * @param position - The zero-based index of the segment to be removed.
+ * @param replacement - The new string value to replace the segment with.
+ * @returns A string representing the modified URL after replacement.
+ */
+export function replacePathSegment(url: string | URL, position: number, replacement: string): string {
+  const urlObj = new URL(url);
+  const segments = urlObj.pathname.split('/');
+  if (position >= 0 && position < segments.length) {
+    segments[position + 1] = replacement;
+  }
+  urlObj.pathname = segments.join('/');
+  return urlObj.toString();
+}
+
 type ParseUrlSuccess = { success: true; url: URL };
 type ParseUrlFailure = { success: false; error: TypeError };
 type ParseUrlResult = ParseUrlSuccess | ParseUrlFailure;
