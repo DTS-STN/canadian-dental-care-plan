@@ -14,23 +14,21 @@ export interface ProfileDtoMapper {
 @injectable()
 export class DefaultProfileDtoMapper implements ProfileDtoMapper {
   mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity(updateDentalBenefitsRequestDto: UpdateDentalBenefitsRequestDto): UpdateDentalBenefitsRequestEntity {
-    const insurancePlans = [
-      {
-        InsurancePlanFederalIdentification: {
-          IdentificationID: updateDentalBenefitsRequestDto.federalSocialProgram ?? '00000000-0000-0000-0000-000000000000',
-        },
-        InsurancePlanProvincialIdentification: {
-          IdentificationID: updateDentalBenefitsRequestDto.provincialTerritorialSocialProgram ?? '00000000-0000-0000-0000-000000000000',
-        },
-      },
-    ];
-
     return {
       BenefitApplication: {
         Applicant: {
           ApplicantDetail: {
             ApplicantDetail: {
-              InsurancePlan: insurancePlans,
+              InsurancePlan: [
+                {
+                  InsurancePlanFederalIdentification: {
+                    IdentificationID: updateDentalBenefitsRequestDto.federalSocialProgram ?? '00000000-0000-0000-0000-000000000000',
+                  },
+                  InsurancePlanProvincialIdentification: {
+                    IdentificationID: updateDentalBenefitsRequestDto.provincialTerritorialSocialProgram ?? '00000000-0000-0000-0000-000000000000',
+                  },
+                },
+              ],
             },
           },
           ClientIdentification: [
@@ -122,7 +120,7 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
                   AddressCityName: updateAddressRequestDto.mailingAddress.city,
                   AddressCountry: { CountryCode: { ReferenceDataID: updateAddressRequestDto.mailingAddress.country } },
                   AddressPostalCode: updateAddressRequestDto.mailingAddress.postalCode ?? '',
-                  AddressProvince: { ProvinceCode: { ReferenceDataID: updateAddressRequestDto.mailingAddress.province ?? '' } },
+                  AddressProvince: { ProvinceCode: { ReferenceDataID: updateAddressRequestDto.mailingAddress.province ?? '00000000-0000-0000-0000-000000000000' } },
                   AddressSecondaryUnitText: '',
                   AddressStreet: { StreetName: updateAddressRequestDto.mailingAddress.address },
                 },
@@ -131,7 +129,7 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
                   AddressCityName: updateAddressRequestDto.homeAddress.city,
                   AddressCountry: { CountryCode: { ReferenceDataID: updateAddressRequestDto.homeAddress.country } },
                   AddressPostalCode: updateAddressRequestDto.homeAddress.postalCode ?? '',
-                  AddressProvince: { ProvinceCode: { ReferenceDataID: updateAddressRequestDto.homeAddress.province ?? '' } },
+                  AddressProvince: { ProvinceCode: { ReferenceDataID: updateAddressRequestDto.homeAddress.province ?? '00000000-0000-0000-0000-000000000000' } },
                   AddressSecondaryUnitText: '',
                   AddressStreet: { StreetName: updateAddressRequestDto.homeAddress.address },
                 },
