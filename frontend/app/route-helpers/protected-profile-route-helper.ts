@@ -1,4 +1,4 @@
-import { removePathSegment } from '~/utils/url-utils';
+import { replacePathSegment } from '~/utils/url-utils';
 
 /**
  * Adobe Analytics needs us to clean up URLs before sending event data. This ensures their reports focus
@@ -7,9 +7,9 @@ import { removePathSegment } from '~/utils/url-utils';
  * @param url
  * @returns
  */
-export function transformAdobeAnalyticsUrl(url: string | URL) {
+export function transformEditChildDentalBenefitsAdobeAnalyticsUrl(url: string | URL) {
   const urlObj = new URL(url);
-  const protectedRenewRouteRegex = /^\/(en|fr)\/(protected|protege)\/(profile|profil)\/(dental-benefits|prestations-dentaires)\/.*\/(edit|modifier)\//i;
+  const protectedRenewRouteRegex = /^\/(en|fr)\/(protected|protege)\/(profile|profil)\/(dental-benefits|prestations-dentaires)\/.*\/(edit|modifier)/i;
   if (!protectedRenewRouteRegex.test(urlObj.pathname)) return urlObj;
-  return new URL(removePathSegment(urlObj, 4));
+  return new URL(replacePathSegment(urlObj, 4, 'childId'));
 }

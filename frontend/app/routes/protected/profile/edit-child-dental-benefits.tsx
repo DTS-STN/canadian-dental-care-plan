@@ -19,7 +19,7 @@ import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { transformAdobeAnalyticsUrl } from '~/route-helpers/protected-profile-route-helper';
+import { transformEditChildDentalBenefitsAdobeAnalyticsUrl as transformAdobeAnalyticsUrl } from '~/route-helpers/protected-profile-route-helper';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
