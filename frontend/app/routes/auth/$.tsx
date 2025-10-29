@@ -20,16 +20,16 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
 
   switch (slug) {
     case 'login': {
-      return handleLoginRequest({ context, params, request });
+      return handleLoginRequest({ context, request });
     }
     case 'logout': {
-      return await handleLogoutRequest({ context, params, request });
+      return await handleLogoutRequest({ context, request });
     }
     case 'login/raoidc': {
-      return await handleRaoidcLoginRequest({ context, params, request });
+      return await handleRaoidcLoginRequest({ context, request });
     }
     case 'callback/raoidc': {
-      return await handleRaoidcCallbackRequest({ context, params, request });
+      return await handleRaoidcCallbackRequest({ context, request });
     }
     default: {
       log.warn('Invalid authentication route requested: [%s]', slug);
@@ -43,7 +43,7 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
 /**
  * Handler for /auth/login requests
  */
-function handleLoginRequest({ context: { appContainer }, request }: Route.LoaderArgs) {
+function handleLoginRequest({ context: { appContainer }, request }: Pick<Route.LoaderArgs, 'context' | 'request'>) {
   const log = createLogger('auth.$/handleLoginRequest');
   log.debug('Handling login request');
   const instrumentationService = appContainer.get(TYPES.InstrumentationService);
@@ -59,7 +59,7 @@ function handleLoginRequest({ context: { appContainer }, request }: Route.Loader
 /**
  * Handler for /auth/logout requests
  */
-async function handleLogoutRequest({ context: { appContainer, session }, request }: Route.LoaderArgs) {
+async function handleLogoutRequest({ context: { appContainer, session }, request }: Pick<Route.LoaderArgs, 'context' | 'request'>) {
   const log = createLogger('auth.$/handleLogoutRequest');
   log.debug('Handling RAOIDC logout request');
   const instrumentationService = appContainer.get(TYPES.InstrumentationService);
@@ -90,7 +90,7 @@ async function handleLogoutRequest({ context: { appContainer, session }, request
 /**
  * Handler for /auth/login/raoidc requests
  */
-async function handleRaoidcLoginRequest({ context: { appContainer, session }, request }: Route.LoaderArgs) {
+async function handleRaoidcLoginRequest({ context: { appContainer, session }, request }: Pick<Route.LoaderArgs, 'context' | 'request'>) {
   const log = createLogger('auth.$/handleRaoidcLoginRequest');
   log.debug('Handling RAOIDC login request');
   const instrumentationService = appContainer.get(TYPES.InstrumentationService);
@@ -126,7 +126,7 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
 /**
  * Handler for /auth/callback/raoidc requests
  */
-async function handleRaoidcCallbackRequest({ context: { appContainer, session }, request }: Route.LoaderArgs) {
+async function handleRaoidcCallbackRequest({ context: { appContainer, session }, request }: Pick<Route.LoaderArgs, 'context' | 'request'>) {
   const log = createLogger('auth.$/handleRaoidcCallbackRequest');
   log.debug('Handling RAOIDC callback request');
   const instrumentationService = appContainer.get(TYPES.InstrumentationService);

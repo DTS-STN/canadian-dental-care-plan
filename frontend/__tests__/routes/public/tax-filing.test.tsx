@@ -28,7 +28,12 @@ describe('_public.apply.id.tax-filing', () => {
 
   describe('loader()', () => {
     it('should load id, and hasFiledTaxes', async () => {
-      const response = await loader({ request: new Request('http://localhost:3000/en/apply/123/tax-filing'), context: mock<AppLoadContext>(), params: { id: '123', lang: 'en' } });
+      const response = await loader({
+        request: new Request('http://localhost:3000/en/apply/123/tax-filing'),
+        context: mock<AppLoadContext>(),
+        params: { id: '123', lang: 'en' },
+        unstable_pattern: '',
+      });
 
       expect(response).toMatchObject({ meta: {}, defaultState: true });
     });
@@ -39,7 +44,12 @@ describe('_public.apply.id.tax-filing', () => {
       const mockContext = mockDeep<AppLoadContext>();
       mockContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
-      const response = await action({ request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: new FormData() }), context: mockContext, params: { id: '123', lang: 'en' } });
+      const response = await action({
+        request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: new FormData() }),
+        context: mockContext,
+        params: { id: '123', lang: 'en' },
+        unstable_pattern: '',
+      });
 
       expect(response).toEqual({ data: { errors: { hasFiledTaxes: 'apply:tax-filing.error-message.tax-filing-required' } }, init: { status: 400 }, type: 'DataWithResponseInit' });
     });
@@ -51,7 +61,12 @@ describe('_public.apply.id.tax-filing', () => {
       const mockContext = mockDeep<AppLoadContext>();
       mockContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
-      const response = await action({ request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }), context: mockContext, params: { lang: 'en', id: '123' } });
+      const response = await action({
+        request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }),
+        context: mockContext,
+        params: { lang: 'en', id: '123' },
+        unstable_pattern: '',
+      });
 
       expect(response).toBeInstanceOf(Response);
       expect((response as Response).status).toBe(302);
@@ -65,7 +80,12 @@ describe('_public.apply.id.tax-filing', () => {
       const mockContext = mockDeep<AppLoadContext>();
       mockContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
-      const response = await action({ request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }), context: mockContext, params: { lang: 'en', id: '123' } });
+      const response = await action({
+        request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }),
+        context: mockContext,
+        params: { lang: 'en', id: '123' },
+        unstable_pattern: '',
+      });
 
       expect(response).toBeInstanceOf(Response);
       expect((response as Response).status).toBe(302);

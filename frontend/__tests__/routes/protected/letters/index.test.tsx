@@ -56,6 +56,7 @@ describe('Letters Page', () => {
         request: new Request('http://localhost/letters?sort=desc'),
         context: mockAppLoadContext,
         params: { lang: 'en' },
+        unstable_pattern: '',
       });
 
       expect(response.letters).toHaveLength(3);
@@ -103,6 +104,7 @@ describe('Letters Page', () => {
       request: new Request('http://localhost/letters'),
       context: mockAppLoadContext,
       params: { lang: 'en' },
+      unstable_pattern: '',
     });
 
     expect(response.letterTypes).toContainEqual({ id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' });
