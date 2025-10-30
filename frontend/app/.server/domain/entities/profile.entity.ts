@@ -96,6 +96,10 @@ export type UpdateAddressRequestEntity = ReadonlyDeep<{
 export type UpdateCommunicationPreferenceRequestEntity = ReadonlyDeep<{
   BenefitApplication: {
     Applicant: {
+      ClientIdentification: Array<{
+        IdentificationID: string;
+        IdentificationCategoryText: 'Guid Primary Key';
+      }>;
       PersonLanguage: Array<{
         CommunicationCategoryCode: {
           ReferenceDataID: string;

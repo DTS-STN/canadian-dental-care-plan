@@ -28,6 +28,12 @@ describe('DefaultProfileService', () => {
     const mockCommunicationPreferenceEntity: UpdateCommunicationPreferenceRequestEntity = {
       BenefitApplication: {
         Applicant: {
+          ClientIdentification: [
+            {
+              IdentificationID: '123456789',
+              IdentificationCategoryText: 'Guid Primary Key',
+            },
+          ],
           PersonLanguage: [
             {
               CommunicationCategoryCode: {
