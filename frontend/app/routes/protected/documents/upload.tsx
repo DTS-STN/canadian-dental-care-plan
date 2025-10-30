@@ -25,6 +25,7 @@ import { getTypedI18nNamespaces, initI18n } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { randomHexString } from '~/utils/string-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'documents:index.page-title', routeId: 'protected/documents/index' }],
@@ -161,6 +162,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
   const fetcher = useFetcher<typeof clientAction>();
   const isSubmitting = fetcher.state !== 'idle';
 
+  const [filesWithTypes, setFilesWithTypes] = useState<FileWithType[]>([]);
   const errors = fetcher.data?.errors;
 
   const errorFieldMap = useMemo<ErrorFieldMap>(
@@ -168,11 +170,17 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
       applicant: 'applicant',
       files: 'file-upload',
       fileItems: {
-        file: (index: number) => `document-type-${index}`,
-        documentType: (index: number) => `document-type-${index}`,
+        file: (index: number) => {
+          const id = filesWithTypes[index]?.id;
+          return id ? `document-type-${id}` : `document-type-${index}`;
+        },
+        documentType: (index: number) => {
+          const id = filesWithTypes[index]?.id;
+          return id ? `document-type-${id}` : `document-type-${index}`;
+        },
       },
     }),
-    [],
+    [filesWithTypes],
   );
 
   const errorSummary = useErrorSummary(errors, errorFieldMap);
@@ -188,30 +196,50 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
   }, [documentTypes, t]);
 
   interface FileWithType {
+    id: string;
     file: File;
     documentType: string;
   }
 
-  const [filesWithTypes, setFilesWithTypes] = useState<FileWithType[]>([]);
-
   const handleFileChange = (newFiles: File[]) => {
+    const uniqueFilesMap = new Map<string, File>();
+    for (const file of newFiles) {
+      const fileKey = `${file.name}-${file.size}-${file.lastModified}`;
+      if (!uniqueFilesMap.has(fileKey)) {
+        uniqueFilesMap.set(fileKey, file);
+      }
+    }
+    const uniqueNewFiles = [...uniqueFilesMap.values()];
+
     setFilesWithTypes((prev) => {
-      const newFilesWithTypes = newFiles.map((newFile) => {
-        const existingEntry = prev.find((oldEntry) => oldEntry.file.name === newFile.name && oldEntry.file.lastModified === newFile.lastModified && oldEntry.file.size === newFile.size);
+      const matchedPrevIds = new Set<string>();
+
+      const newFilesWithTypes = uniqueNewFiles.map((newFile) => {
+        const existingEntry = prev.find((oldEntry) => !matchedPrevIds.has(oldEntry.id) && oldEntry.file.name === newFile.name && oldEntry.file.lastModified === newFile.lastModified && oldEntry.file.size === newFile.size);
+
+        if (existingEntry) {
+          matchedPrevIds.add(existingEntry.id);
+          return {
+            id: existingEntry.id,
+            file: newFile,
+            documentType: existingEntry.documentType,
+          };
+        }
+
         return {
+          id: randomHexString(8),
           file: newFile,
-          documentType: existingEntry ? existingEntry.documentType : '',
+          documentType: '',
         };
       });
+
       return newFilesWithTypes;
     });
   };
 
-  const handleDocumentTypeChange = (index: number, value: string) => {
+  const handleDocumentTypeChange = (id: string, value: string) => {
     setFilesWithTypes((prev) => {
-      const newFiles = [...prev];
-      newFiles[index] = { ...newFiles[index], documentType: value };
-      return newFiles;
+      return prev.map((item) => (item.id === id ? { ...item, documentType: value } : item));
     });
   };
 
@@ -264,8 +292,8 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                 </FileUploadTrigger>
               </div>
               <FileUploadList className="gap-4 sm:gap-6">
-                {filesWithTypes.map(({ file, documentType }, index) => (
-                  <FileUploadItem key={`${file.name}_${file.lastModified}_${file.size}`} value={file} className="flex-col items-stretch gap-3 sm:gap-4">
+                {filesWithTypes.map(({ id, file, documentType }, index) => (
+                  <FileUploadItem key={id} value={file} className="flex-col items-stretch gap-3 sm:gap-4">
                     <input type="hidden" name={`file-${index}`} value={file.name} />
                     <dl className="space-y-3 sm:space-y-4">
                       <div className="space-y-2">
@@ -277,7 +305,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                     {errors?.fileItems?.[index]?.file && <p className="mb-2 text-sm text-red-700">{errors.fileItems[index].file}</p>}
 
                     <InputSelect
-                      id={`document-type-${index}`}
+                      id={`document-type-${id}`}
                       name={`document-type-${index}`}
                       label="Document Type"
                       required
@@ -286,7 +314,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                       value={documentType}
                       onChange={(e) => {
                         e.preventDefault();
-                        handleDocumentTypeChange(index, e.target.value);
+                        handleDocumentTypeChange(id, e.target.value);
                       }}
                       errorMessage={errors?.fileItems?.[index]?.documentType}
                     />
