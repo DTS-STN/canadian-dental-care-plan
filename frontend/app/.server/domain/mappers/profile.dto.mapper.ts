@@ -143,6 +143,12 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
     return {
       BenefitApplication: {
         Applicant: {
+          ClientIdentification: [
+            {
+              IdentificationID: updateCommunicationPreferenceRequestDto.clientId,
+              IdentificationCategoryText: 'Guid Primary Key',
+            },
+          ],
           PersonLanguage: [
             {
               CommunicationCategoryCode: {
