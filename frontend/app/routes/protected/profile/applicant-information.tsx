@@ -11,7 +11,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatSin } from '~/utils/sin-utils';
+import { formatSin, isValidSin } from '~/utils/sin-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
@@ -75,9 +75,7 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
           <DescriptionListItem term={t('protected-profile:applicant-information.dob')}>
             <p>{primaryApplicant.dob}</p>
           </DescriptionListItem>
-          <DescriptionListItem term={t('protected-profile:applicant-information.sin')}>
-            <p>{formatSin(primaryApplicant.sin)}</p>
-          </DescriptionListItem>
+          <DescriptionListItem term={t('protected-profile:applicant-information.sin')}>{isValidSin(primaryApplicant.sin) && <p>{formatSin(primaryApplicant.sin)}</p>}</DescriptionListItem>
         </dl>
       </section>
 
@@ -92,9 +90,7 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
               <DescriptionListItem term={t('protected-profile:applicant-information.dob')}>
                 <p>{child.dob}</p>
               </DescriptionListItem>
-              <DescriptionListItem term={t('protected-profile:applicant-information.sin')}>
-                <p>{formatSin(child.sin)}</p>
-              </DescriptionListItem>
+              <DescriptionListItem term={t('protected-profile:applicant-information.sin')}>{isValidSin(child.sin) && <p>{formatSin(child.sin)}</p>}</DescriptionListItem>
             </dl>
           </section>
         );
