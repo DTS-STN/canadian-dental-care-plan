@@ -223,15 +223,19 @@ export function useErrorSummary(errors: Record<string, unknown> | undefined, err
     return items;
   }, [errors, memoizeErrorFieldMap]);
 
-  useEffect(() => {
-    if (errorSummaryItems.length > 0) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-      if (adobeAnalytics.isConfigured()) {
-        const fieldIds = errorSummaryItems.map(({ fieldId }) => fieldId);
-        adobeAnalytics.pushValidationErrorEvent(fieldIds);
+  useEffect(
+    () => {
+      if (errors && errorSummaryItems.length > 0) {
+        scrollAndFocusToErrorSummary(errorSummaryId);
+        if (adobeAnalytics.isConfigured()) {
+          const fieldIds = errorSummaryItems.map(({ fieldId }) => fieldId);
+          adobeAnalytics.pushValidationErrorEvent(fieldIds);
+        }
       }
-    }
-  }, [errorSummaryId, errorSummaryItems]);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [errorSummaryId, errors],
+  );
 
   const errorSummaryComponent = useCallback(() => {
     return errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />;
