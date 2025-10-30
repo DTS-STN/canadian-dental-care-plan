@@ -12,14 +12,12 @@ describe('mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity',
       BenefitApplication: {
         Applicant: {
           ApplicantDetail: {
-            ApplicantDetail: {
-              InsurancePlan: [
-                {
-                  InsurancePlanFederalIdentification: { IdentificationID: 'FEDERAL-PLAN-001' },
-                  InsurancePlanProvincialIdentification: { IdentificationID: 'PROVINCIAL-PLAN-002' },
-                },
-              ],
-            },
+            InsurancePlan: [
+              {
+                InsurancePlanFederalIdentification: { IdentificationID: 'FEDERAL-PLAN-001' },
+                InsurancePlanProvincialIdentification: { IdentificationID: 'PROVINCIAL-PLAN-002' },
+              },
+            ],
           },
           ClientIdentification: [
             {
@@ -47,18 +45,16 @@ describe('mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity',
       BenefitApplication: {
         Applicant: {
           ApplicantDetail: {
-            ApplicantDetail: {
-              InsurancePlan: [
-                {
-                  InsurancePlanFederalIdentification: {
-                    IdentificationID: '00000000-0000-0000-0000-000000000000',
-                  },
-                  InsurancePlanProvincialIdentification: {
-                    IdentificationID: '00000000-0000-0000-0000-000000000000',
-                  },
+            InsurancePlan: [
+              {
+                InsurancePlanFederalIdentification: {
+                  IdentificationID: '00000000-0000-0000-0000-000000000000',
                 },
-              ],
-            },
+                InsurancePlanProvincialIdentification: {
+                  IdentificationID: '00000000-0000-0000-0000-000000000000',
+                },
+              },
+            ],
           },
           ClientIdentification: [
             {

@@ -18,18 +18,16 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
       BenefitApplication: {
         Applicant: {
           ApplicantDetail: {
-            ApplicantDetail: {
-              InsurancePlan: [
-                {
-                  InsurancePlanFederalIdentification: {
-                    IdentificationID: updateDentalBenefitsRequestDto.federalSocialProgram ?? '00000000-0000-0000-0000-000000000000',
-                  },
-                  InsurancePlanProvincialIdentification: {
-                    IdentificationID: updateDentalBenefitsRequestDto.provincialTerritorialSocialProgram ?? '00000000-0000-0000-0000-000000000000',
-                  },
+            InsurancePlan: [
+              {
+                InsurancePlanFederalIdentification: {
+                  IdentificationID: updateDentalBenefitsRequestDto.federalSocialProgram ?? '00000000-0000-0000-0000-000000000000',
                 },
-              ],
-            },
+                InsurancePlanProvincialIdentification: {
+                  IdentificationID: updateDentalBenefitsRequestDto.provincialTerritorialSocialProgram ?? '00000000-0000-0000-0000-000000000000',
+                },
+              },
+            ],
           },
           ClientIdentification: [
             {

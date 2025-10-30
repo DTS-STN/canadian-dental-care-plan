@@ -69,14 +69,12 @@ describe('DefaultProfileService', () => {
       BenefitApplication: {
         Applicant: {
           ApplicantDetail: {
-            ApplicantDetail: {
-              InsurancePlan: [
-                {
-                  InsurancePlanFederalIdentification: { IdentificationID: 'FEDERAL-PLAN-001' },
-                  InsurancePlanProvincialIdentification: { IdentificationID: 'PROVINCIAL-PLAN-002' },
-                },
-              ],
-            },
+            InsurancePlan: [
+              {
+                InsurancePlanFederalIdentification: { IdentificationID: 'FEDERAL-PLAN-001' },
+                InsurancePlanProvincialIdentification: { IdentificationID: 'PROVINCIAL-PLAN-002' },
+              },
+            ],
           },
           ClientIdentification: [
             {
