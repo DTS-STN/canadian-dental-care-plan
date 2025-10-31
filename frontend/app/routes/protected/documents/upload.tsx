@@ -4,6 +4,7 @@ import { useFetcher } from 'react-router';
 
 import { faArrowUpFromBracket, faTimes } from '@fortawesome/free-solid-svg-icons';
 import type { TFunction } from 'i18next';
+import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -13,6 +14,7 @@ import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Button, ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import type { ErrorFieldMap } from '~/components/error-summary';
 import { useErrorSummary } from '~/components/error-summary';
 import { FileUpload, FileUploadItem, FileUploadItemDelete, FileUploadList, FileUploadTrigger } from '~/components/file-upload';
@@ -21,7 +23,7 @@ import type { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { getTypedI18nNamespaces, initI18n } from '~/utils/locale-utils';
+import { getLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -67,7 +69,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
-function createDocumentUploadSchema(t: TFunction) {
+function createDocumentUploadSchema(t: TFunction<typeof handle.i18nNamespaces>) {
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
   const ALLOWED_EXTENSIONS = new Set(['.docx', '.ppt', '.txt', '.pdf', '.jpg', '.jpeg', '.png']);
   const ALLOWED_MIME_TYPES = new Set([
@@ -99,9 +101,22 @@ function createDocumentUploadSchema(t: TFunction) {
   });
 }
 
-export async function clientAction({ request }: { request: Request }) {
-  const formData = await request.formData();
-  const i18n = await initI18n(['documents']);
+type UploadErrors = {
+  applicant?: string;
+  files?: string;
+  fileItems?: {
+    [key: number]: {
+      file?: string;
+      documentType?: string;
+    };
+  };
+};
+
+export async function clientAction({ request, serverAction }: Route.ClientActionArgs) {
+  const formData = await request.clone().formData();
+
+  const locale = getLanguage(request);
+  const t = i18next.getFixedT(locale, handle.i18nNamespaces);
 
   const applicant = formData.get('applicant') as string;
   const files = formData.getAll('files') as File[];
@@ -117,20 +132,9 @@ export async function clientAction({ request }: { request: Request }) {
     files: filesWithTypes,
   };
 
-  const parsedDataResult = createDocumentUploadSchema(i18n.t).safeParse(formDataObj);
+  const parsedDataResult = createDocumentUploadSchema(t).safeParse(formDataObj);
 
   if (!parsedDataResult.success) {
-    interface UploadErrors {
-      applicant?: string;
-      files?: string;
-      fileItems?: {
-        [key: number]: {
-          file?: string;
-          documentType?: string;
-        };
-      };
-    }
-
     const errors: UploadErrors = {};
     for (const { message, path } of parsedDataResult.error.issues) {
       if (path[0] === 'applicant') {
@@ -150,8 +154,56 @@ export async function clientAction({ request }: { request: Request }) {
     return { errors };
   }
 
-  // If validation passes, you can proceed with the upload
-  // For now, we'll just return success
+  return await serverAction();
+}
+
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const formData = await request.formData();
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+  securityHandler.validateCsrfToken({ formData, session });
+
+  const locale = getLocale(request);
+  const t = await getFixedT(locale, handle.i18nNamespaces);
+
+  const applicant = formData.get('applicant') as string;
+  const files = formData.getAll('files') as File[];
+  const documentTypes = formData.getAll('documentTypes') as string[];
+
+  const filesWithTypes = files.map((file, index) => ({
+    file: file,
+    documentType: documentTypes[index] ?? '',
+  }));
+
+  const formDataObj = {
+    applicant: applicant,
+    files: filesWithTypes,
+  };
+
+  const parsedDataResult = createDocumentUploadSchema(t).safeParse(formDataObj);
+
+  if (!parsedDataResult.success) {
+    const errors: UploadErrors = {};
+    for (const { message, path } of parsedDataResult.error.issues) {
+      if (path[0] === 'applicant') {
+        errors.applicant = message;
+      } else if (path[0] === 'files') {
+        if (path.length === 1) {
+          errors.files = message;
+        } else {
+          const index = path[1] as number;
+          const field = path[2] as 'file' | 'documentType';
+          errors.fileItems ??= {};
+          errors.fileItems[index] ??= {};
+          errors.fileItems[index][field] = message;
+        }
+      }
+    }
+    return { errors };
+  }
+
+  // TODO: add document scan
+
   return { success: true };
 }
 
@@ -159,7 +211,8 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
   const { t } = useTranslation(handle.i18nNamespaces);
   const { applicantNames, documentTypes, SCCH_BASE_URI } = loaderData;
 
-  const fetcher = useFetcher<typeof clientAction>();
+  type ActionData = { errors: UploadErrors } | Awaited<ReturnType<typeof action>>;
+  const fetcher = useFetcher<ActionData>();
   const isSubmitting = fetcher.state !== 'idle';
 
   const [filesWithTypes, setFilesWithTypes] = useState<FileWithType[]>([]);
@@ -183,7 +236,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
     [filesWithTypes],
   );
 
-  const errorSummary = useErrorSummary(errors, errorFieldMap);
+  const errorSummary = useErrorSummary(errors as Record<string, unknown>, errorFieldMap);
 
   const applicantOptions = useMemo<InputOptionProps[]>(() => {
     const dummyOption: InputOptionProps = { children: t('documents:upload.select-one'), value: '', disabled: true, hidden: true };
@@ -248,6 +301,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
 
     const formData = new FormData();
 
+    formData.append('_csrf', (event.currentTarget.elements.namedItem('_csrf') as HTMLSelectElement).value);
     formData.append('applicant', (event.currentTarget.elements.namedItem('applicant') as HTMLSelectElement).value);
 
     for (const { file, documentType } of filesWithTypes) {
@@ -265,6 +319,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
     <div className="max-w-prose space-y-8">
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+        <CsrfTokenInput />
         <div className="space-y-6">
           <InputSelect id="applicant" name="applicant" label="Who are you uploading for" required className="w-full" options={applicantOptions} defaultValue="" errorMessage={errors?.applicant} />
           <fieldset>
