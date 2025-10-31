@@ -5,6 +5,7 @@ import { UTCDate } from '@date-fns/utc';
 import { invariant } from '@dts-stn/invariant';
 import type { JWK, JWTPayload, JWTVerifyResult } from 'jose';
 import { SignJWT, compactDecrypt, decodeProtectedHeader, importJWK, jwtVerify } from 'jose';
+import type { webcrypto } from 'node:crypto';
 import { createHash, subtle } from 'node:crypto';
 import { fetch } from 'undici';
 
@@ -86,12 +87,12 @@ export interface ClientMetadata {
    * The application's private decryption key.
    * Used for decrypting the userinfo token payload.
    */
-  privateDecryptionKey: CryptoKey;
+  privateDecryptionKey: webcrypto.CryptoKey;
   /**
    * The application's private signing key.
    * Used for client assertion signing during token exchange.
    */
-  privateSigningKey: CryptoKey;
+  privateSigningKey: webcrypto.CryptoKey;
   /**
    * A unique identifier identifying the private RSA signing key of the client.
    */
@@ -361,7 +362,7 @@ async function createClientAssertion(issuer: string, client: ClientMetadata) {
 /**
  * Decrypt a JWE token using the provided private key.
  */
-async function decryptJwe(jwe: string, privateKey: CryptoKey) {
+async function decryptJwe(jwe: string, privateKey: webcrypto.CryptoKey) {
   const { kty, ...restOfJwk } = await subtle.exportKey('jwk', privateKey);
   invariant(kty, 'Expected JWK to have a key type');
 

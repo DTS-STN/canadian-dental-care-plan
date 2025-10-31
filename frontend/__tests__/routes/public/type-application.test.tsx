@@ -36,7 +36,7 @@ describe('_public.apply.id.type-of-application', () => {
       mockContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({
-        request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: new FormData() }),
+        request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: new URLSearchParams() }),
         context: mockContext,
         params: { id: '123', lang: 'en' },
         unstable_pattern: '',
@@ -46,7 +46,7 @@ describe('_public.apply.id.type-of-application', () => {
     });
 
     it('should redirect to error page if delegate is selected', async () => {
-      const formData = new FormData();
+      const formData = new URLSearchParams();
       formData.append('typeOfApplication', 'delegate');
 
       const mockContext = mockDeep<AppLoadContext>();
@@ -65,7 +65,7 @@ describe('_public.apply.id.type-of-application', () => {
     });
 
     it('should redirect to tax filing page if personal is selected', async () => {
-      const formData = new FormData();
+      const formData = new URLSearchParams();
       formData.append('typeOfApplication', 'adult');
 
       const mockContext = mockDeep<AppLoadContext>();

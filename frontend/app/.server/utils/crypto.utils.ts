@@ -21,7 +21,7 @@ export function generateJwkId(jwk: webcrypto.JsonWebKey) {
 /**
  * Converts a PEM encoded string to a webcrypto CryptoKey.
  */
-export async function generateCryptoKey(pem: string, algorithm: CryptoKeyAlgorithm) {
+export async function generateCryptoKey(pem: string, algorithm: CryptoKeyAlgorithm): Promise<webcrypto.CryptoKey> {
   const log = createLogger('crypto-utils.server/generateCryptoKey');
   log.trace('Converting PEM [%s] to CryptoKey with algorighm [%s]', pem, algorithm);
 

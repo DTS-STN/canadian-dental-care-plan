@@ -45,7 +45,7 @@ describe('_public.apply.id.tax-filing', () => {
       mockContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
 
       const response = await action({
-        request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: new FormData() }),
+        request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: new URLSearchParams() }),
         context: mockContext,
         params: { id: '123', lang: 'en' },
         unstable_pattern: '',
@@ -55,7 +55,7 @@ describe('_public.apply.id.tax-filing', () => {
     });
 
     it('should redirect to type-application page if tax filing is completed', async () => {
-      const formData = new FormData();
+      const formData = new URLSearchParams();
       formData.append('hasFiledTaxes', 'yes');
 
       const mockContext = mockDeep<AppLoadContext>();
@@ -74,7 +74,7 @@ describe('_public.apply.id.tax-filing', () => {
     });
 
     it('should redirect to error page if tax filing is incompleted', async () => {
-      const formData = new FormData();
+      const formData = new URLSearchParams();
       formData.append('hasFiledTaxes', 'no');
 
       const mockContext = mockDeep<AppLoadContext>();
