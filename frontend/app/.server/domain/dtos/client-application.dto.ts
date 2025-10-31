@@ -39,7 +39,6 @@ export type ClientChildDto = ReadonlyDeep<{
 }>;
 
 export type ClientCommunicationPreferencesDto = ReadonlyDeep<{
-  email?: string;
   preferredLanguage: string;
   preferredMethodSunLife: string;
   preferredMethodGovernmentOfCanada: string;
@@ -63,6 +62,7 @@ export type ClientContactInformationDto = ReadonlyDeep<{
   phoneNumber?: string;
   phoneNumberAlt?: string;
   email?: string;
+  emailVerified?: boolean;
 }>;
 
 export type ClientPartnerInformationDto = ReadonlyDeep<{

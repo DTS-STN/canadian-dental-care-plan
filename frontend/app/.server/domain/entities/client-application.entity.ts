@@ -3,6 +3,24 @@ import type { ReadonlyDeep } from 'type-fest';
 export type ClientApplicationEntity = ReadonlyDeep<{
   BenefitApplication: {
     Applicant: {
+      ApplicantDetail: {
+        ApplicantEmailVerifiedIndicator: boolean;
+        InsurancePlan?: Array<{
+          InsurancePlanIdentification: Array<{
+            IdentificationID: string;
+            IdentificationCategoryText?: string;
+          }>;
+        }>;
+        InvitationToApplyIndicator: boolean;
+        LivingIndependentlyIndicator: boolean;
+        PreviousApplicationIndicator: boolean;
+        PreviousTaxesFiledIndicator: boolean;
+        PrivateDentalInsuranceIndicator: boolean;
+      };
+      ClientIdentification: Array<{
+        IdentificationID: string;
+        IdentificationCategoryText?: string;
+      }>;
       PersonBirthDate: {
         date: string;
       };
@@ -63,23 +81,6 @@ export type ClientApplicationEntity = ReadonlyDeep<{
       PreferredMethodCommunicationGCCode: {
         ReferenceDataID: string;
       };
-      ApplicantDetail: {
-        InsurancePlan?: Array<{
-          InsurancePlanIdentification: Array<{
-            IdentificationID: string;
-            IdentificationCategoryText?: string;
-          }>;
-        }>;
-        InvitationToApplyIndicator: boolean;
-        LivingIndependentlyIndicator: boolean;
-        PreviousApplicationIndicator: boolean;
-        PreviousTaxesFiledIndicator: boolean;
-        PrivateDentalInsuranceIndicator: boolean;
-      };
-      ClientIdentification: Array<{
-        IdentificationID: string;
-        IdentificationCategoryText?: string;
-      }>;
       RelatedPerson?: Array<{
         PersonBirthDate: {
           date?: string;

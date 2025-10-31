@@ -105,7 +105,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     communicationSunLifePreference: state.communicationPreferences.preferredMethod,
     communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
     preferredLanguage: state.preferredLanguage ?? state.clientApplication.communicationPreferences.preferredLanguage,
-    clientApplicationEmail: state.clientApplication.communicationPreferences.email,
     isItaClient: isInvitationToApplyClient(state.clientApplication),
   };
 

@@ -101,6 +101,7 @@
         "ReferenceDataID": "775170002"
       },
       "ApplicantDetail": {
+        "ApplicantEmailVerifiedIndicator": true,
         "AttestParentOrGuardianIndicator": true,
         "ConsentToSharePersonalInformationIndicator": true,
         "DisabilityTaxCreditIndicator": true,
