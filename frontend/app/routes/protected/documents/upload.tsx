@@ -3,6 +3,8 @@ import { useMemo, useState } from 'react';
 import { useFetcher } from 'react-router';
 
 import { faArrowUpFromBracket, faTimes } from '@fortawesome/free-solid-svg-icons';
+import type { TFunction } from 'i18next';
+import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -21,7 +23,7 @@ import type { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { getTypedI18nNamespaces, initI18n } from '~/utils/locale-utils';
+import { getLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -67,7 +69,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
-function createDocumentUploadSchema(t: (key: string) => string) {
+function createDocumentUploadSchema(t: TFunction<typeof handle.i18nNamespaces>) {
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
   const ALLOWED_EXTENSIONS = new Set(['.docx', '.ppt', '.txt', '.pdf', '.jpg', '.jpeg', '.png']);
   const ALLOWED_MIME_TYPES = new Set([
@@ -112,7 +114,9 @@ type UploadErrors = {
 
 export async function clientAction({ request, serverAction }: Route.ClientActionArgs) {
   const formData = await request.clone().formData();
-  const i18n = await initI18n(['documents']);
+
+  const locale = getLanguage(request);
+  const t = i18next.getFixedT(locale, handle.i18nNamespaces);
 
   const applicant = formData.get('applicant') as string;
   const files = formData.getAll('files') as File[];
@@ -128,7 +132,7 @@ export async function clientAction({ request, serverAction }: Route.ClientAction
     files: filesWithTypes,
   };
 
-  const parsedDataResult = createDocumentUploadSchema(i18n.t).safeParse(formDataObj);
+  const parsedDataResult = createDocumentUploadSchema(t).safeParse(formDataObj);
 
   if (!parsedDataResult.success) {
     const errors: UploadErrors = {};
@@ -160,7 +164,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const locale = getLocale(request);
-  const t = (await getFixedT(locale, ['documents'])) as (key: string) => string;
+  const t = await getFixedT(locale, handle.i18nNamespaces);
 
   const applicant = formData.get('applicant') as string;
   const files = formData.getAll('files') as File[];
