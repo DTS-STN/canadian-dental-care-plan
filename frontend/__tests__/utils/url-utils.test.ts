@@ -1,6 +1,6 @@
 import { assert, describe, expect, it } from 'vitest';
 
-import { parseUrl, removePathSegment } from '~/utils/url-utils';
+import { parseUrl, removePathSegment, replacePathSegment } from '~/utils/url-utils';
 
 describe('removePathSegment function', () => {
   it('removes the segment at the specified position from the URL pathname', () => {
@@ -43,6 +43,56 @@ describe('removePathSegment function', () => {
     const newPosition = 3;
     const expectedUrl = 'https://example.com/path/segment1/segment2';
     expect(removePathSegment(url, newPosition)).toBe(expectedUrl);
+  });
+});
+
+describe('replacePathSegment function', () => {
+  it('replaces the segment at the specified position from the URL pathname with the specified replacement string', () => {
+    const url = 'https://example.com/path/segment1/segment2/segment3';
+    const replacementPosition = 2;
+    const replacementString = 'test';
+    const expectedUrl = 'https://example.com/path/segment1/test/segment3';
+    expect(replacePathSegment(url, replacementPosition, replacementString)).toBe(expectedUrl);
+  });
+
+  it('handles URLs with fewer segments than the specified replacement position', () => {
+    const url = 'https://example.com/path/segment1';
+    const replacementPosition = 3;
+    const replacementString = 'test';
+    const expectedUrl = 'https://example.com/path/segment1';
+    expect(replacePathSegment(url, replacementPosition, replacementString)).toBe(expectedUrl);
+  });
+
+  it('handles URLs with no pathname', () => {
+    const url = 'https://example.com';
+    const replacementPosition = 0;
+    const replacementString = 'test';
+    const expectedUrl = 'https://example.com/test';
+    expect(replacePathSegment(url, replacementPosition, replacementString)).toBe(expectedUrl);
+  });
+
+  it('handles URLs with only root pathname', () => {
+    const url = 'https://example.com/';
+    const replacementPosition = 0;
+    const replacementString = 'test';
+    const expectedUrl = 'https://example.com/test';
+    expect(replacePathSegment(url, replacementPosition, replacementString)).toBe(expectedUrl);
+  });
+
+  it('handles replacing the first segment', () => {
+    const url = 'https://example.com/path/segment1/segment2';
+    const replacementPosition = 1;
+    const replacementString = 'test';
+    const expectedUrl = 'https://example.com/path/test/segment2';
+    expect(replacePathSegment(url, replacementPosition, replacementString)).toBe(expectedUrl);
+  });
+
+  it('handles replacing the last segment', () => {
+    const url = 'https://example.com/path/segment1/segment2/segment3';
+    const replacementPosition = 3;
+    const replacementString = 'test';
+    const expectedUrl = 'https://example.com/path/segment1/segment2/test';
+    expect(replacePathSegment(url, replacementPosition, replacementString)).toBe(expectedUrl);
   });
 });
 
