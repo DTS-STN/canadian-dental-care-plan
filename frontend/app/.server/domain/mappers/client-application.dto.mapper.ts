@@ -103,7 +103,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
 
     const children =
       applicant.RelatedPerson?.filter((person) => person.PersonRelationshipCode.ReferenceDataName === 'Dependant').map((child) => ({
-        dentalBenefits: child.ApplicantDetail.InsurancePlan?.[0].InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
+        dentalBenefits: child.ApplicantDetail.InsurancePlan?.at(0)?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
         dentalInsurance:
           child.ApplicantDetail.PrivateDentalInsuranceIndicator ??
           (() => {
@@ -133,7 +133,6 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       })) ?? [];
 
     const communicationPreferences = {
-      email: applicant.PersonContactInformation[0].EmailAddress?.at(0)?.EmailAddressID,
       preferredLanguage: applicant.PersonLanguage[0].CommunicationCategoryCode.ReferenceDataID,
       preferredMethodSunLife: applicant.PreferredMethodCommunicationCode.ReferenceDataID,
       preferredMethodGovernmentOfCanada: applicant.PreferredMethodCommunicationGCCode.ReferenceDataID,
@@ -174,6 +173,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       phoneNumber: applicant.PersonContactInformation[0].TelephoneNumber?.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary')?.TelephoneNumberCategoryCode.ReferenceDataID,
       phoneNumberAlt: applicant.PersonContactInformation[0].TelephoneNumber?.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')?.TelephoneNumberCategoryCode.ReferenceDataID,
       email: applicant.PersonContactInformation[0].EmailAddress?.at(0)?.EmailAddressID,
+      emailVerified: applicant.ApplicantDetail.ApplicantEmailVerifiedIndicator,
     };
 
     const partner = applicant.RelatedPerson?.find((person) => person.PersonRelationshipCode.ReferenceDataName === 'Spouse');
@@ -201,7 +201,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       communicationPreferences,
       contactInformation,
       dateOfBirth: applicant.PersonBirthDate.date,
-      dentalBenefits: applicant.ApplicantDetail.InsurancePlan?.[0].InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
+      dentalBenefits: applicant.ApplicantDetail.InsurancePlan?.at(0)?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
       dentalInsurance: applicant.ApplicantDetail.PrivateDentalInsuranceIndicator,
       hasFiledTaxes: applicant.ApplicantDetail.PreviousTaxesFiledIndicator,
       isInvitationToApplyClient: applicant.ApplicantDetail.InvitationToApplyIndicator,

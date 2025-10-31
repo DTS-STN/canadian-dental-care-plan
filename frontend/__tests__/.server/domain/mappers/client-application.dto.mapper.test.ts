@@ -145,6 +145,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
                   ],
                 },
               ],
+              ApplicantEmailVerifiedIndicator: true,
               InvitationToApplyIndicator: false,
               LivingIndependentlyIndicator: true,
               PreviousApplicationIndicator: false,
@@ -217,7 +218,6 @@ describe('DefaultClientApplicationDtoMapper', () => {
         },
         children: [],
         communicationPreferences: {
-          email: 'email@example.com',
           preferredLanguage: '1',
           preferredMethodSunLife: 'EMAIL',
           preferredMethodGovernmentOfCanada: 'DIGITAL',
@@ -225,6 +225,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
         contactInformation: {
           copyMailingAddress: true,
           email: 'email@example.com',
+          emailVerified: true,
           homeAddress: '123 Fake Street',
           homeApartment: 'Unit 101',
           homeCity: 'Home City',

@@ -71,6 +71,7 @@
         "ReferenceDataID": "775170002"
       },
       "ApplicantDetail": {
+        "ApplicantEmailVerifiedIndicator": false,
         "DisabilityTaxCreditIndicator": false,
         "InvitationToApplyIndicator": true,
         "LivingIndependentlyIndicator": false,

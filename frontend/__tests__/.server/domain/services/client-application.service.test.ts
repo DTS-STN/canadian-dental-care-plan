@@ -98,6 +98,7 @@ describe('DefaultClientApplicationService', () => {
               ],
             },
           ],
+          ApplicantEmailVerifiedIndicator: true,
           InvitationToApplyIndicator: true,
           LivingIndependentlyIndicator: true,
           PreviousApplicationIndicator: false,
@@ -175,6 +176,8 @@ describe('DefaultClientApplicationService', () => {
       preferredMethodGovernmentOfCanada: 'DIGITAL',
     },
     contactInformation: {
+      email: 'email@example.com',
+      emailVerified: true,
       copyMailingAddress: true,
       homeAddress: '123 Fake Street',
       homeCity: 'Home City',
