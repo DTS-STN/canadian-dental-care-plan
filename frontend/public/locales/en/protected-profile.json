@@ -3,8 +3,9 @@
   "all-optional-label": "All fields are optional.",
   "eligibility": {
     "page-title": "Member eligibility",
-    "details": "The Canadian Dental Care Plan benefit year starts on July 1 and ends on June 30 of the next year.",
+    "details": "Members should always verify their coverage and confirm what costs, if any, will not be covered by the Canadian Dental Care Plan with their oral health provider before receiving care.",
     "current-year": "Current benefit year",
+    "current-year-details": "The start date for the current benefit year is based on when you applied or renewed your coverage. Please refer to the letter sent by Service Canada. The last day of coverage is June 30, {{end}}.",
     "benefit-year-range": "(July 1, {{start}} to June 30, {{end}})",
     "next-year": "Next benefit year",
     "eligible": "Eligible",
