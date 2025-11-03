@@ -200,6 +200,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
+  const submittedAction = fetcher.formData?.get('_action')?.toString();
 
   const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
@@ -251,7 +252,8 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
               type="button"
               name="_action"
               variant="link"
-              loading={isSubmitting}
+              disabled={isSubmitting}
+              loading={isSubmitting && submittedAction === FORM_ACTION.request}
               value={FORM_ACTION.request}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Request new verification code - Verify email click"
               onClick={async () => {
@@ -269,7 +271,15 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Save - Verify email click">
+              <LoadingButton
+                variant="primary"
+                id="save-button"
+                disabled={isSubmitting}
+                loading={isSubmitting && submittedAction === FORM_ACTION.submit}
+                name="_action"
+                value={FORM_ACTION.submit}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Save - Verify email click"
+              >
                 {t('protected-apply-child:verify-email.save-btn')}
               </LoadingButton>
               <ButtonLink
@@ -289,7 +299,8 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
                 id="continue-button"
                 name="_action"
                 value={FORM_ACTION.submit}
-                loading={isSubmitting}
+                disabled={isSubmitting}
+                loading={isSubmitting && submittedAction === FORM_ACTION.submit}
                 endIcon={faChevronRight}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Continue - Verify email"
               >
