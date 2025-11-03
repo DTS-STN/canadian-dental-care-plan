@@ -132,7 +132,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }) satisfies z.ZodType<PartnerInformationState>;
 
   const maritalStatusData = {
-    maritalStatus: formData.get('maritalStatus') ? String(formData.get('maritalStatus')) : undefined,
+    maritalStatus: formData.get('maritalStatus')?.toString(),
   };
   const partnerInformationData = {
     confirm: formData.get('confirm') === 'yes',

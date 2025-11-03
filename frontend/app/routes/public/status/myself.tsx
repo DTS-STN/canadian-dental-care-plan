@@ -75,8 +75,8 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const parsedDataResult = formDataSchema.safeParse({
-    sin: formData.get('sin') ? String(formData.get('sin')) : undefined,
-    code: formData.get('code') ? String(formData.get('code')) : undefined,
+    sin: formData.get('sin')?.toString(),
+    code: formData.get('code')?.toString(),
   });
 
   if (!parsedDataResult.success) {

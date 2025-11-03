@@ -92,11 +92,11 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const mailingAddressValidator = appContainer.get(TYPES.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
-    address: String(formData.get('address')),
-    countryId: String(formData.get('countryId')),
-    provinceStateId: formData.get('provinceStateId') ? String(formData.get('provinceStateId')) : undefined,
-    city: String(formData.get('city')),
-    postalZipCode: formData.get('postalZipCode') ? String(formData.get('postalZipCode')) : undefined,
+    address: String(formData.get('address') ?? ''),
+    countryId: String(formData.get('countryId') ?? ''),
+    provinceStateId: formData.get('provinceStateId')?.toString(),
+    city: String(formData.get('city') ?? ''),
+    postalZipCode: formData.get('postalZipCode')?.toString(),
   });
 
   if (!validatedResult.success) {

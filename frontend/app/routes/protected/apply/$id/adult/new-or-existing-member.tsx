@@ -113,7 +113,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const parsedDataResult = newOrExistingMemberSchema.safeParse({
     newOrExistingMember: formData.get('newOrExistingMember'),
-    clientNumber: formData.get('clientNumber') ? String(formData.get('clientNumber') ?? '') : undefined,
+    clientNumber: formData.get('clientNumber')?.toString(),
   });
 
   if (!parsedDataResult.success) {

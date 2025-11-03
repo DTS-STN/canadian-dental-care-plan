@@ -187,7 +187,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const parsedSinDataResult = childSinSchema.safeParse({
     hasSocialInsuranceNumber: formData.get('hasSocialInsuranceNumber') ? formData.get('hasSocialInsuranceNumber') === YES_NO_OPTION.yes : undefined,
-    socialInsuranceNumber: formData.get('socialInsuranceNumber') ? String(formData.get('socialInsuranceNumber') ?? '') : undefined,
+    socialInsuranceNumber: formData.get('socialInsuranceNumber')?.toString(),
   });
 
   if (!parsedDataResult.success || !parsedSinDataResult.success) {

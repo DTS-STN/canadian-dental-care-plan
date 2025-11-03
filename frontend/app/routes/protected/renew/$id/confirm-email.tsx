@@ -81,7 +81,7 @@ export async function action({ context: { appContainer, session }, params, reque
     });
 
   const parsedDataResult = emailSchema.safeParse({
-    email: formData.get('email') ? String(formData.get('email') ?? '') : undefined,
+    email: formData.get('email')?.toString(),
   });
 
   if (!parsedDataResult.success) {

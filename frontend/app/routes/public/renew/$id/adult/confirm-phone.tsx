@@ -101,8 +101,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const parsedDataResult = phoneNumberSchema.safeParse({
     isNewOrUpdatedPhoneNumber: formData.get('isNewOrUpdatedPhoneNumber'),
-    phoneNumber: formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined,
-    phoneNumberAlt: formData.get('phoneNumberAlt') ? String(formData.get('phoneNumberAlt')) : undefined,
+    phoneNumber: formData.get('phoneNumber')?.toString(),
+    phoneNumberAlt: formData.get('phoneNumberAlt')?.toString(),
   });
 
   if (!parsedDataResult.success) {

@@ -171,13 +171,13 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const dentalFederalBenefits = {
     hasFederalBenefits: formData.get('hasFederalBenefits') ? formData.get('hasFederalBenefits') === HAS_FEDERAL_BENEFITS_OPTION.yes : undefined,
-    federalSocialProgram: formData.get('federalSocialProgram') ? String(formData.get('federalSocialProgram')) : undefined,
+    federalSocialProgram: formData.get('federalSocialProgram')?.toString(),
   };
 
   const dentalProvincialTerritorialBenefits = {
     hasProvincialTerritorialBenefits: formData.get('hasProvincialTerritorialBenefits') ? formData.get('hasProvincialTerritorialBenefits') === HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes : undefined,
-    provincialTerritorialSocialProgram: formData.get('provincialTerritorialSocialProgram') ? String(formData.get('provincialTerritorialSocialProgram')) : undefined,
-    province: formData.get('province') ? String(formData.get('province')) : undefined,
+    provincialTerritorialSocialProgram: formData.get('provincialTerritorialSocialProgram')?.toString(),
+    province: formData.get('province')?.toString(),
   };
 
   const parsedFederalBenefitsResult = federalBenefitsSchema.safeParse(dentalFederalBenefits);
