@@ -81,8 +81,7 @@ export async function action({ context: { appContainer, session }, params, reque
       .trim()
       .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-sunlife-required'))
       .refine(
-        // TODO: check if email is verified once PP has updated the clientApplication payload to include that field
-        (val) => val !== COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || clientApplication.contactInformation.email !== undefined,
+        (val) => val !== COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || (clientApplication.contactInformation.email !== undefined && clientApplication.contactInformation.emailVerified === true),
         t('protected-profile:edit-communication-preferences.error-message.preferred-method-sunlife-email-verified'),
       ),
     preferredMethodGovernmentOfCanada: z
@@ -90,8 +89,7 @@ export async function action({ context: { appContainer, session }, params, reque
       .trim()
       .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-gc-required'))
       .refine(
-        // TODO: check if email is verified once PP has updated the clientApplication payload to include that field
-        (val) => val !== COMMUNICATION_METHOD_GC_DIGITAL_ID || clientApplication.contactInformation.email !== undefined,
+        (val) => val !== COMMUNICATION_METHOD_GC_DIGITAL_ID || (clientApplication.contactInformation.email !== undefined && clientApplication.contactInformation.emailVerified === true),
         t('protected-profile:edit-communication-preferences.error-message.preferred-method-gc-email-verified'),
       ),
   });

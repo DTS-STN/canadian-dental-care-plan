@@ -2,6 +2,7 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
 import { useTranslation } from 'react-i18next';
+import validator from 'validator';
 import { z } from 'zod';
 
 import type { Route } from './+types/email';
@@ -66,9 +67,10 @@ export async function action({ context: { appContainer, session }, params, reque
     email: z
       .string(t('protected-profile:email.error-message.email-required'))
       .trim()
+      .toLowerCase()
       .min(1)
       .max(64)
-      .pipe(z.email(t('protected-profile:email.error-message.email-valid'))),
+      .refine((val) => validator.isEmail(val), t('protected-profile:email.error-message.email-valid')),
   });
 
   const parsedDataResult = emailSchema.safeParse({
@@ -81,8 +83,10 @@ export async function action({ context: { appContainer, session }, params, reque
 
   appContainer.get(TYPES.AuditService).createAudit('update-data.profile.email-address', { userId: idToken.sub });
 
-  // TODO: check if existing email is verified otherwise we must verify it
-  const isNewEmail = clientApplication.contactInformation.email !== parsedDataResult.data.email;
+  const isNewEmail =
+    clientApplication.contactInformation.email !== parsedDataResult.data.email ||
+    clientApplication.contactInformation.email.localeCompare(parsedDataResult.data.email, undefined, { sensitivity: 'accent' }) !== 0 ||
+    clientApplication.contactInformation.emailVerified === false;
 
   if (isNewEmail) {
     const verificationCodeService = appContainer.get(TYPES.VerificationCodeService);
