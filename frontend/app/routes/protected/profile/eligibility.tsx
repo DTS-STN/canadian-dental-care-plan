@@ -72,7 +72,7 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
       <p>{t('protected-profile:eligibility.details')}</p>
       <section className="space-y-6">
         <h2 className="font-lato text-2xl font-bold">{t('protected-profile:eligibility.current-year')}</h2>
-        <p>{t('protected-profile:eligibility.benefit-year-range', { start: benefitYearStart, end: benefitYearStart + 1 })}</p>
+        <p>{t('protected-profile:eligibility.current-year-details', { end: benefitYearStart + 1 })}</p>
         <dl className="divide-y border-y">
           {applicants.map((applicant) => (
             <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>

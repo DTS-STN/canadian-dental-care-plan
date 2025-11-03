@@ -3,8 +3,9 @@
   "all-optional-label": "Tous les champs sont faculatives.",
   "eligibility": {
     "page-title": "Admissibilité des membres",
-    "details": "L'année de prestations du Régime canadien de soins dentaires commence le 1er juillet et se termine le 30 juin de l'année suivante.",
+    "details": "Les membres doivent toujours vérifier leur couverture et confirmer avec leur professionnel de la santé bucco-dentaire quels frais, le cas échéant, ne seront pas couverts par le Régime canadien de soins dentaires avant de recevoir des soins.",
     "current-year": "Année de prestations en cours",
+    "current-year-details": "La date de début de la couverture en cours dépend du moment où vous avez présenté votre demande ou renouvelé votre couverture. Veuillez vous référer à la lettre envoyée par Service Canada. La dernière journée de couverture est le 30 juin {{end}}.",
     "benefit-year-range": "(1er juillet {{start}} au 30 juin {{end}})",
     "next-year": "Prochaine année de prestations",
     "eligible": "Admissible",
