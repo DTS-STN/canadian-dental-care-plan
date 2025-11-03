@@ -4,13 +4,13 @@ import { useFetcher } from 'react-router';
 
 import { faArrowUpFromBracket, faTimes } from '@fortawesome/free-solid-svg-icons';
 import type { TFunction } from 'i18next';
-import i18next from 'i18next';
-import { useTranslation } from 'react-i18next';
+import { getI18n, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/upload';
 
 import { TYPES } from '~/.server/constants';
+import type { DocumentScanRequestDto } from '~/.server/domain/dtos';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -116,7 +116,7 @@ export async function clientAction({ request, serverAction }: Route.ClientAction
   const formData = await request.clone().formData();
 
   const locale = getLanguage(request);
-  const t = i18next.getFixedT(locale, handle.i18nNamespaces);
+  const t = getI18n().getFixedT(locale, handle.i18nNamespaces);
 
   const applicant = formData.get('applicant') as string;
   const files = formData.getAll('files') as File[];
@@ -202,8 +202,80 @@ export async function action({ context: { appContainer, session }, params, reque
     return { errors };
   }
 
-  // TODO: add document scan
+  const documentUploadService = appContainer.get(TYPES.DocumentUploadService);
+  const idToken: IdToken = session.get('idToken');
 
+  const scanPromises = files.map(async (file, index) => {
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const binary = Buffer.from(arrayBuffer).toString('base64');
+
+      // TODO: get username and password from config
+      const scanRequest: DocumentScanRequestDto = {
+        username: 'username',
+        password: 'password',
+        fileName: file.name,
+        binary: binary,
+        userId: idToken.sub,
+      };
+
+      const scanResponse = await documentUploadService.scanDocument(scanRequest);
+
+      if (scanResponse.Error) {
+        return {
+          index,
+          fileName: file.name,
+          success: false,
+          error: t('documents:upload.error-message.scan-failed', {
+            error: scanResponse.Error.ErrorMessage,
+            code: scanResponse.Error.ErrorCode,
+          }),
+        };
+      }
+
+      if (scanResponse.Percent !== '100') {
+        return {
+          index,
+          fileName: file.name,
+          success: false,
+          error: t('documents:upload.error-message.scan-incomplete'),
+        };
+      }
+
+      return {
+        index,
+        fileName: file.name,
+        success: true,
+        error: undefined,
+      };
+    } catch {
+      return {
+        index,
+        fileName: file.name,
+        success: false,
+        error: t('documents:upload.error-message.scan-error'),
+      };
+    }
+  });
+
+  const scanResults = await Promise.all(scanPromises);
+  const failedScans = scanResults.filter((result) => !result.success);
+
+  if (failedScans.length > 0) {
+    const scanErrors: UploadErrors = {};
+    for (const { index, error } of failedScans) {
+      if (error) {
+        scanErrors.fileItems ??= {};
+        scanErrors.fileItems[index] = {
+          file: error,
+        };
+      }
+    }
+
+    return { errors: scanErrors };
+  }
+
+  // All scans passed - return success
   return { success: true };
 }
 
