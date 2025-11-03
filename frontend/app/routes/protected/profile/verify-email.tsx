@@ -161,6 +161,7 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
+  const submittedAction = fetcher.formData?.get('_action')?.toString();
 
   const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
@@ -175,6 +176,16 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
     }
   }, [fetcherStatus, fetcher.data]);
 
+  function handleRequestNewCode() {
+    const formData = new FormData();
+    formData.append('_action', FORM_ACTION.request);
+
+    const csrfTokenInput = document.querySelector('input[name="_csrf"]') as HTMLInputElement;
+    formData.append('_csrf', csrfTokenInput.value);
+
+    void fetcher.submit(formData, { method: 'post' });
+  }
+
   return (
     <div className="max-w-prose">
       <ErrorAlert>
@@ -186,17 +197,10 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
           name="_action"
           variant="link"
           className="text-[17px]"
-          loading={isSubmitting}
+          disabled={isSubmitting}
+          loading={isSubmitting && submittedAction === FORM_ACTION.request}
           value={FORM_ACTION.request}
-          onClick={async () => {
-            const formData = new FormData();
-            formData.append('_action', FORM_ACTION.request);
-
-            const csrfTokenInput = document.querySelector('input[name="_csrf"]') as HTMLInputElement;
-            formData.append('_csrf', csrfTokenInput.value);
-
-            await fetcher.submit(formData, { method: 'post' });
-          }}
+          onClick={handleRequestNewCode}
         >
           {t('protected-profile:verify-email.verification-code-alert.request-new-code')}
         </LoadingButton>
@@ -229,23 +233,24 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
             name="_action"
             variant="link"
             className="no-underline hover:underline"
-            loading={isSubmitting}
+            disabled={isSubmitting}
+            loading={isSubmitting && submittedAction === FORM_ACTION.request}
             value={FORM_ACTION.request}
-            onClick={async () => {
-              const formData = new FormData();
-              formData.append('_action', FORM_ACTION.request);
-
-              const csrfTokenInput = document.querySelector('input[name="_csrf"]') as HTMLInputElement;
-              formData.append('_csrf', csrfTokenInput.value);
-
-              await fetcher.submit(formData, { method: 'post' });
-            }}
+            onClick={handleRequestNewCode}
           >
             {t('protected-profile:verify-email.request-new-code')}
           </LoadingButton>
         </fieldset>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton variant="primary" id="continue-button" name="_action" value={FORM_ACTION.submit} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Verify your email address click">
+          <LoadingButton
+            variant="primary"
+            id="continue-button"
+            name="_action"
+            value={FORM_ACTION.submit}
+            disabled={isSubmitting}
+            loading={isSubmitting && submittedAction === FORM_ACTION.submit}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Verify your email address click"
+          >
             {t('protected-profile:verify-email.continue')}
           </LoadingButton>
           <ButtonLink id="back-button" routeId="protected/profile/contact/email-address" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Verify your email address click">

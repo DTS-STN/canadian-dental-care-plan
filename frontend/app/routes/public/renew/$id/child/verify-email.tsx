@@ -192,6 +192,7 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
+  const submittedAction = fetcher.formData?.get('_action')?.toString();
 
   const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
@@ -244,7 +245,8 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
               name="_action"
               variant="link"
               className="no-underline hover:underline"
-              loading={isSubmitting}
+              disabled={isSubmitting}
+              loading={isSubmitting && submittedAction === FORM_ACTION.request}
               value={FORM_ACTION.request}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Request new verification code - Verify email click"
               onClick={async () => {
@@ -262,7 +264,15 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} name="_action" value={FORM_ACTION.submit} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Verify email click">
+              <LoadingButton
+                variant="primary"
+                id="save-button"
+                disabled={isSubmitting}
+                loading={isSubmitting && submittedAction === FORM_ACTION.submit}
+                name="_action"
+                value={FORM_ACTION.submit}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Verify email click"
+              >
                 {t('renew-child:verify-email.save-btn')}
               </LoadingButton>
               <ButtonLink id="cancel-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Verify email click">
@@ -276,7 +286,8 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
                 id="continue-button"
                 name="_action"
                 value={FORM_ACTION.submit}
-                loading={isSubmitting}
+                disabled={isSubmitting}
+                loading={isSubmitting && submittedAction === FORM_ACTION.submit}
                 endIcon={faChevronRight}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Continue - Verify email"
               >
