@@ -105,6 +105,7 @@ const serverEnv = clientEnvSchema.extend({
   // Enterprise Wide Document Upload settings
   EWDU_ENCAPSULATION_USERNAME: z.string().optional(),
   EWDU_ENCAPSULATION_PASSWORD: z.string().optional(),
+  EWDU_PROGRAM_ACTIVITY_ID: z.string().default('CDCP'),
 
   // simulation/testing date settings
   APPLICATION_CURRENT_DATE: z.string().optional(),

@@ -27,7 +27,9 @@
       "file-too-large": "The file you are trying to upload is too large. Make sure the file size is less than 5MB.",
       "scan-failed": "File scan failed: {{error}} (Code: {{code}})",
       "scan-incomplete": "File scan could not be completed",
-      "scan-error": "Error during file scanning"
+      "scan-error": "Error during file scanning",
+      "upload-failed": "File upload failed: {{error}} (Code: {{code}})",
+      "upload-error": "Error during file upload"
     }
   },
   "not-required": {

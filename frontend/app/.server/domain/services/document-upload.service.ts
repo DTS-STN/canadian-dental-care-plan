@@ -53,7 +53,6 @@ export class DefaultDocumentUploadService implements DocumentUploadService {
     this.auditService.createAudit('documentupload.upload', {
       userId: documentUploadRequestDto.userId,
       fileName: documentUploadRequestDto.fileName,
-      programActivityId: documentUploadRequestDto.ProgramActivityIdentificationID,
     });
 
     const responseEntity = await this.documentUploadRepository.uploadDocument(documentUploadRequestDto);

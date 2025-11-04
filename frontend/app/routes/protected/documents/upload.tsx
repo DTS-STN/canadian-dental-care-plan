@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 
-import { useFetcher } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 
 import { faArrowUpFromBracket, faTimes } from '@fortawesome/free-solid-svg-icons';
 import type { TFunction } from 'i18next';
@@ -10,7 +10,7 @@ import { z } from 'zod';
 import type { Route } from './+types/upload';
 
 import { TYPES } from '~/.server/constants';
-import type { DocumentScanRequestDto } from '~/.server/domain/dtos';
+import type { DocumentScanRequestDto, DocumentUploadRequestDto } from '~/.server/domain/dtos';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -25,6 +25,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
+import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { randomHexString } from '~/utils/string-utils';
@@ -205,6 +206,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const documentUploadService = appContainer.get(TYPES.DocumentUploadService);
   const idToken: IdToken = session.get('idToken');
 
+  // document scan
   const scanPromises = files.map(async (file, index) => {
     try {
       const arrayBuffer = await file.arrayBuffer();
@@ -272,15 +274,73 @@ export async function action({ context: { appContainer, session }, params, reque
     return { errors: scanErrors };
   }
 
-  // All scans passed - return success
-  return { success: true };
+  // document upload
+  const uploadPromises = files.map(async (file, index) => {
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const binary = Buffer.from(arrayBuffer).toString('base64');
+
+      const uploadRequest: DocumentUploadRequestDto = {
+        fileName: file.name,
+        binary: binary,
+        userId: idToken.sub,
+      };
+
+      const uploadResponse = await documentUploadService.uploadDocument(uploadRequest);
+
+      let error: string | undefined;
+
+      if (uploadResponse.Error) {
+        error = t('documents:upload.error-message.upload-failed', {
+          error: uploadResponse.Error.ErrorMessage,
+          code: uploadResponse.Error.ErrorCode,
+        });
+      }
+
+      return {
+        index,
+        fileName: file.name,
+        success: !uploadResponse.Error,
+        error,
+        documentFileName: uploadResponse.DocumentFileName,
+      };
+    } catch {
+      return {
+        index,
+        fileName: file.name,
+        success: false,
+        error: t('documents:upload.error-message.upload-error'),
+        documentFileName: null,
+      };
+    }
+  });
+
+  const uploadResults = await Promise.all(uploadPromises);
+  const failedUploads = uploadResults.filter((result) => !result.success);
+
+  if (failedUploads.length > 0) {
+    const uploadErrors: UploadErrors = {};
+
+    for (const failedUpload of failedUploads) {
+      if (failedUpload.error) {
+        uploadErrors.fileItems ??= {};
+        uploadErrors.fileItems[failedUpload.index] = {
+          file: failedUpload.error,
+        };
+      }
+    }
+
+    return { errors: uploadErrors };
+  }
+
+  return redirect(getPathById('protected/documents/index', params));
 }
 
 export default function DocumentsUpload({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { applicantNames, documentTypes, SCCH_BASE_URI } = loaderData;
 
-  type ActionData = { errors: UploadErrors } | Awaited<ReturnType<typeof action>>;
+  type ActionData = { errors: UploadErrors } | typeof action;
   const fetcher = useFetcher<ActionData>();
   const isSubmitting = fetcher.state !== 'idle';
 
