@@ -210,10 +210,7 @@ export async function action({ context: { appContainer, session }, params, reque
       const arrayBuffer = await file.arrayBuffer();
       const binary = Buffer.from(arrayBuffer).toString('base64');
 
-      // TODO: get username and password from config
       const scanRequest: DocumentScanRequestDto = {
-        username: 'username',
-        password: 'password',
         fileName: file.name,
         binary: binary,
         userId: idToken.sub,

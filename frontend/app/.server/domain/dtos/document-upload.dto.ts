@@ -2,12 +2,6 @@
  * Represents a Data Transfer Object (DTO) for Document Upload request.
  */
 export type DocumentUploadRequestDto = Readonly<{
-  /** Encapsulation username given by EWDU */
-  username: string;
-
-  /** Encapsulation password given by EWDU */
-  password: string;
-
   /** Original file name provided by user */
   fileName: string;
 
@@ -62,12 +56,6 @@ export type DocumentUploadErrorDto = Readonly<{
  * Represents a Data Transfer Object (DTO) for Document Scan request.
  */
 export type DocumentScanRequestDto = Readonly<{
-  /** Encapsulation username given by EWDU */
-  username: string;
-
-  /** Encapsulation password given by EWDU */
-  password: string;
-
   /** Original file name provided by user */
   fileName: string;
 
