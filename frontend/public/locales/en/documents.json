@@ -8,7 +8,6 @@
     "received-status-pending": "Pending",
     "table-headers": {
       "applicant": "Applicant",
-      "date-received": "Date received",
       "date-uploaded": "Date uploaded",
       "file-name": "File name",
       "type-of-document": "Type of document"

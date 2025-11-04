@@ -55,7 +55,6 @@ export async function loader({ context: { appContainer, session }, params, reque
         ...document,
         documentTypeName: localizedEvidentiaryDocumentTypes.find(({ id }) => id === document.documentTypeId)?.name ?? '',
         mscaUploadDateFormatted: dateFormatter.format(new Date(document.mscaUploadDate)),
-        healthCanadaTransferDateFormatted: document.healthCanadaTransferDate ? dateFormatter.format(new Date(document.healthCanadaTransferDate)) : undefined,
       };
     }),
     SCCH_BASE_URI,

@@ -8,7 +8,6 @@
     "received-status-pending": "En attente",
     "table-headers": {
       "applicant": "Demandeur",
-      "date-received": "Date de réception",
       "date-uploaded": "Date de téléversement",
       "file-name": "Nom du fichier",
       "type-of-document": "Type de document"
