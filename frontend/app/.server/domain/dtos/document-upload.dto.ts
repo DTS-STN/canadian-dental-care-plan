@@ -8,9 +8,6 @@ export type DocumentUploadRequestDto = Readonly<{
   /** Base64 encoded bytes from the file being uploaded */
   binary: string;
 
-  /** Code to designate desired library in repository */
-  ProgramActivityIdentificationID: string;
-
   /** Name of the application uploading */
   ApplicationProfileName?: string;
 
