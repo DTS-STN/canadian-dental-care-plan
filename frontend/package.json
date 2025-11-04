@@ -42,8 +42,8 @@
     "@opentelemetry/sdk-node": "^0.207.0",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.16",
-    "@radix-ui/react-progress": "^1.1.7",
-    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-progress": "^1.1.8",
+    "@radix-ui/react-slot": "^1.2.4",
     "@react-router/node": "^7.9.5",
     "@react-router/serve": "^7.9.5",
     "bowser": "^2.12.1",
@@ -114,7 +114,7 @@
     "@vitejs/plugin-react": "^5.1.0",
     "@vitest/coverage-v8": "^4.0.7",
     "@vitest/eslint-plugin": "^1.4.0",
-    "@vitest/ui": "^4.0.6",
+    "@vitest/ui": "^4.0.7",
     "commander": "^14.0.2",
     "eslint": "^9.39.1",
     "eslint-formatter-summary": "^2.0.2",
@@ -142,7 +142,7 @@
     "vite": "^7.1.12",
     "vite-plugin-static-copy": "^3.1.4",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^4.0.6",
+    "vitest": "^4.0.7",
     "vitest-mock-extended": "^3.1.0"
   },
   "engines": {
