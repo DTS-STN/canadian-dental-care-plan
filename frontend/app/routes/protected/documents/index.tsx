@@ -55,7 +55,6 @@ export async function loader({ context: { appContainer, session }, params, reque
         ...document,
         documentTypeName: localizedEvidentiaryDocumentTypes.find(({ id }) => id === document.documentTypeId)?.name ?? '',
         mscaUploadDateFormatted: dateFormatter.format(new Date(document.mscaUploadDate)),
-        healthCanadaTransferDateFormatted: document.healthCanadaTransferDate ? dateFormatter.format(new Date(document.healthCanadaTransferDate)) : undefined,
       };
     }),
     SCCH_BASE_URI,
@@ -79,7 +78,6 @@ export default function DocumentsIndex({ loaderData, params }: Route.ComponentPr
                 <TableHead>{t('documents:index.table-headers.applicant')}</TableHead>
                 <TableHead>{t('documents:index.table-headers.type-of-document')}</TableHead>
                 <TableHead>{t('documents:index.table-headers.date-uploaded')}</TableHead>
-                <TableHead>{t('documents:index.table-headers.date-received')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -89,7 +87,6 @@ export default function DocumentsIndex({ loaderData, params }: Route.ComponentPr
                   <TableCell>{document.name}</TableCell>
                   <TableCell>{document.documentTypeName}</TableCell>
                   <TableCell className="text-nowrap">{document.mscaUploadDateFormatted}</TableCell>
-                  <TableCell className="text-nowrap">{document.healthCanadaTransferDateFormatted ?? t('documents:index.received-status-pending')}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
