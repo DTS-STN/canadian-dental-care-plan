@@ -30,6 +30,7 @@ import {
   MockClientApplicationRepository,
   MockClientFriendlyStatusRepository,
   MockCountryRepository,
+  MockDocumentUploadRepository,
   MockEvidentiaryDocumentRepository,
   MockEvidentiaryDocumentTypeRepository,
   MockGovernmentInsurancePlanRepository,
@@ -100,6 +101,8 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
     options.bind(TYPES.CountryRepository).to(MockCountryRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
 
     options.bind(TYPES.DemographicSurveyRepository).to(DefaultDemographicSurveyRepository);
+
+    options.bind(TYPES.DocumentUploadRepository).to(MockDocumentUploadRepository);
 
     options.bind(TYPES.EvidentiaryDocumentRepository).to(MockEvidentiaryDocumentRepository);
 

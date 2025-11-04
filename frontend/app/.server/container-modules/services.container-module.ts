@@ -18,6 +18,7 @@ import {
   DefaultClientFriendlyStatusService,
   DefaultCountryService,
   DefaultDemographicSurveyServiceService,
+  DefaultDocumentUploadService,
   DefaultEvidentiaryDocumentService,
   DefaultEvidentiaryDocumentTypeService,
   DefaultFederalGovernmentInsurancePlanService,
@@ -68,6 +69,7 @@ export function createServicesContainerModule(serverConfig: Pick<ServerConfig, '
     options.bind(TYPES.ClientFriendlyStatusService).to(DefaultClientFriendlyStatusService);
     options.bind(TYPES.CountryService).to(DefaultCountryService);
     options.bind(TYPES.DemographicSurveyService).to(DefaultDemographicSurveyServiceService);
+    options.bind(TYPES.DocumentUploadService).to(DefaultDocumentUploadService);
     options.bind(TYPES.DynatraceService).to(DefaultDynatraceService);
     options.bind(TYPES.EvidentiaryDocumentService).to(DefaultEvidentiaryDocumentService);
     options.bind(TYPES.EvidentiaryDocumentTypeService).to(DefaultEvidentiaryDocumentTypeService);
