@@ -20,7 +20,7 @@ export function createConsoleTransport(levelsConfig: LevelsConfig): w.transports
     format: format.combine(
       formatLevels(),
       formatLabels(),
-      format.cli({
+      format.colorize({
         all: false,
         message: false,
         level: true,
