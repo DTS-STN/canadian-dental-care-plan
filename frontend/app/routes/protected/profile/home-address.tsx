@@ -92,8 +92,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
-  const mailingAddressValidator = appContainer.get(TYPES.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
-  const validatedResult = await mailingAddressValidator.validateMailingAddress({
+  const homeAddressValidator = appContainer.get(TYPES.HomeAddressValidatorFactory).createHomeAddressValidator(locale);
+  const validatedResult = await homeAddressValidator.validateHomeAddress({
     address: formData.get('address')?.toString(),
     apartment: formData.get('apartment')?.toString(),
     countryId: formData.get('countryId')?.toString(),
