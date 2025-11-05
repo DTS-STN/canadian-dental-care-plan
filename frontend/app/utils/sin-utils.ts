@@ -1,25 +1,29 @@
 /**
- * Regular expression to validate Canadian SIN (Social Insurance Number) format.
+ * Regular expression to validate the format of a Canadian Social Insurance Number (SIN).
  *
- * The SIN must follow the format XXXXXXXXX or XXX XXX XXX or XXX-XXX-XXX.
- * The SIN number cannot consist entirely of zeros (e.g., 000000000 or 000 000 000 or 000-000-000 is not valid).
+ * The SIN must contain exactly nine digits and may optionally include spaces or hyphens as separators:
+ * - `XXXXXXXXX`
+ * - `XXX XXX XXX`
+ * - `XXX-XXX-XXX`
  *
- * Note: This regular expression only validates the format of the SIN.
- * Consumers must validate the SIN against the Luhn algorithm separately.
+ * The first digit must be between 1 and 9 (cannot start with 0).
+ * For example, `000000042`, `000 000 042`, or `000-000-042` are not valid.
  *
- * Examples of valid SIN formats:
- * - 123-456-789
- * - 123 456 789
+ * Note: This regular expression validates only the format of the SIN.
+ * It does not verify its validity using the Luhn algorithm; consumers must perform that check separately.
+ *
+ * Examples of valid formats:
  * - 123456789
- * - 000-000-010
+ * - 123 456 789
+ * - 123-456-789
  *
- * Examples of invalid SIN formats:
- * - 000-000-000
- * - 000000000
- * - 123-45-6789
- * - ABC-DEF-GHI
+ * Examples of invalid formats:
+ * - 000-000-000  (starts with 0)
+ * - 123-45-6789  (incorrect grouping)
+ * - ABC-DEF-GHI  (non-numeric characters)
+ * - 123 4567 89  (invalid spacing)
  */
-const sinFormatRegex = /^(?!0{3}[ -]?0{3}[ -]?0{3})\d{3}[ -]?\d{3}[ -]?\d{3}$/;
+const sinFormatRegex = /^[1-9]\d{2}[ -]?\d{3}[ -]?\d{3}$/;
 
 /**
  * This pattern is intended for use with the `format` property of the `InputPatternField` component.
