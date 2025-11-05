@@ -450,11 +450,11 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
         <CsrfTokenInput />
         <div className="space-y-6">
-          <InputSelect id="applicant" name="applicant" label="Who are you uploading for" required className="w-full" options={applicantOptions} defaultValue="" errorMessage={errors?.applicant} />
+          <InputSelect id="applicant" name="applicant" label={t('documents:upload.who-are-you-uploading-for')} required className="w-full" options={applicantOptions} defaultValue="" errorMessage={errors?.applicant} />
           <fieldset>
-            <InputLegend className="mb-2">Upload document</InputLegend>
-            <p>You can upload up to 10 files at once.</p>
-            <p className="mb-2">Maximum file size is 10MB. File types accepted: .docx, .ppt, .txt, .pdf, .jpg, .jpeg, .png</p>
+            <InputLegend className="mb-2">{t('documents:upload.upload-document')}</InputLegend>
+            <p>{t('documents:upload.ten-files')}</p>
+            <p className="mb-2">{t('documents:upload.max-size')}</p>
 
             {errors?.files && <p className="mb-2 text-sm text-red-700">{errors.files}</p>}
 
@@ -472,7 +472,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
             >
               <div>
                 <FileUploadTrigger asChild>
-                  <Button startIcon={faArrowUpFromBracket}>Add file</Button>
+                  <Button startIcon={faArrowUpFromBracket}>{t('documents:upload.add-file')}</Button>
                 </FileUploadTrigger>
               </div>
               <FileUploadList className="gap-4 sm:gap-6">
@@ -481,7 +481,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                     <input type="hidden" name={`file-${index}`} value={file.name} />
                     <dl className="space-y-3 sm:space-y-4">
                       <div className="space-y-2">
-                        <dt className="font-semibold">File name</dt>
+                        <dt className="font-semibold">{t('documents:upload.file-name')}</dt>
                         <dd>{file.name}</dd>
                       </div>
                     </dl>
@@ -491,7 +491,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                     <InputSelect
                       id={`document-type-${id}`}
                       name={`document-type-${index}`}
-                      label="Document Type"
+                      label={t('documents:upload.document-type')}
                       required
                       className="w-full"
                       options={documentTypeOptions}
@@ -505,7 +505,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                     <div className="mt-2">
                       <FileUploadItemDelete asChild>
                         <Button size="sm" endIcon={faTimes}>
-                          Remove
+                          {t('documents:upload.remove')}
                         </Button>
                       </FileUploadItemDelete>
                     </div>
