@@ -96,7 +96,7 @@
     "@playwright/test": "^1.56.1",
     "@react-router/dev": "^7.9.5",
     "@react-router/express": "^7.9.5",
-    "@tailwindcss/vite": "^4.1.16",
+    "@tailwindcss/vite": "^4.1.17",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
