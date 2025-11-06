@@ -4,7 +4,22 @@ import { createRoutesStub } from 'react-router';
 
 import { describe, expect, it, vi } from 'vitest';
 
-import { Button, ButtonLink } from '~/components/buttons';
+import { Button, ButtonLink, buttonSizeStyles, buttonVariantStyles } from '~/components/buttons';
+
+const variantKeys = Object.entries(buttonVariantStyles) as [keyof typeof buttonVariantStyles, string][];
+const pillOptions = [false, true] as const;
+const disabledOptions = [false, true] as const;
+const sizeKeys = Object.entries(buttonSizeStyles) as [keyof typeof buttonSizeStyles, string][];
+
+type StyleCombination = [(typeof pillOptions)[number], (typeof disabledOptions)[number], keyof typeof buttonSizeStyles];
+const styleCombinations: StyleCombination[] = [];
+for (const pill of pillOptions) {
+  for (const disabled of disabledOptions) {
+    for (const [sizeKey] of sizeKeys) {
+      styleCombinations.push([pill, disabled, sizeKey]);
+    }
+  }
+}
 
 describe('Button Component', () => {
   it('renders button with default props', () => {
@@ -44,6 +59,22 @@ describe('Button Component', () => {
     const button = getByText('Click me');
     fireEvent.click(button);
     expect(handleClick).toHaveBeenCalledOnce();
+  });
+
+  it.each(variantKeys)('should render the Button style combinations for variant: %s', (variant) => {
+    const { container } = render(
+      <>
+        {styleCombinations.map(([pill, disabled, size]) => {
+          const id = `${variant}_pill_${pill}_disabled_${disabled}_${size}`;
+          return (
+            <Button key={id} id={id} variant={variant} pill={pill} disabled={disabled} size={size}>
+              Click me
+            </Button>
+          );
+        })}
+      </>,
+    );
+    expect(container).toMatchSnapshot('expected html');
   });
 });
 
@@ -107,5 +138,28 @@ describe('ButtonLink Component', () => {
     expect(button.role).toEqual('link');
     expect(button.ariaDisabled).toEqual('true');
     expect(button).toHaveClass('pointer-events-none', 'cursor-not-allowed', 'opacity-70');
+  });
+
+  it.each(variantKeys)('should render the ButtonLink style combinations for variant: %s', (variant) => {
+    const RoutesStub = createRoutesStub([
+      {
+        Component: () => (
+          <>
+            {styleCombinations.map(([pill, disabled, size]) => {
+              const id = `${variant}_pill_${pill}_disabled_${disabled}_size_${size}`;
+              return (
+                <ButtonLink key={id} id={id} variant={variant} pill={pill} disabled={disabled} size={size} to="/">
+                  Click me
+                </ButtonLink>
+              );
+            })}
+          </>
+        ),
+        path: '/',
+      },
+    ]);
+
+    const { container } = render(<RoutesStub />);
+    expect(container.children.item(0)).toMatchSnapshot('expected html');
   });
 });
