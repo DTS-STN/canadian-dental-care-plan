@@ -103,6 +103,7 @@ const serverEnv = clientEnvSchema.extend({
   INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY: z.string().trim().transform(emptyToUndefined).optional(),
 
   // Enterprise Wide Document Upload settings
+  EWDU_API_BASE_URI: z.string().optional(),
   EWDU_ENCAPSULATION_USERNAME: z.string().optional(),
   EWDU_ENCAPSULATION_PASSWORD: z.string().optional(),
   EWDU_PROGRAM_ACTIVITY_ID: z.string().default('CDCP'),
