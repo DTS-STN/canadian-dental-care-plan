@@ -27,7 +27,7 @@ describe('Button Component', () => {
     const button = getByText('Click me');
     expect(button).toBeInTheDocument();
     expect(button.tagName).toEqual('BUTTON');
-    expect(button).toHaveClass('inline-flex', 'items-center', 'justify-center', 'rounded-sm', 'border', 'align-middle', 'font-lato', 'outline-offset-4');
+    expect(button).toHaveClass('inline-flex', 'items-center', 'justify-center', 'rounded-sm', 'border-2', 'align-middle', 'font-lato', 'outline-offset-4');
   });
 
   it('renders button with custom size and variant', () => {
@@ -37,7 +37,7 @@ describe('Button Component', () => {
       </Button>,
     );
     const button = getByText('Click me');
-    expect(button).toHaveClass('px-5', 'py-3', 'text-base', 'bg-slate-700', 'text-white', 'hover:bg-sky-800');
+    expect(button).toHaveClass('px-5', 'py-3', 'text-base', 'bg-slate-700', 'text-white', 'hover:bg-blue-900');
   });
 
   it('renders disabled button', () => {
@@ -91,7 +91,7 @@ describe('ButtonLink Component', () => {
     const link = getByText('Click me');
     expect(link).toBeInTheDocument();
     expect(link.tagName).toEqual('A');
-    expect(link).toHaveClass('inline-flex', 'items-center', 'justify-center', 'rounded-sm', 'border', 'align-middle', 'font-lato', 'outline-offset-4');
+    expect(link).toHaveClass('inline-flex', 'items-center', 'justify-center', 'rounded-sm', 'border-2', 'align-middle', 'font-lato', 'outline-offset-4');
   });
 
   it('renders link with custom size and variant', () => {
@@ -108,7 +108,7 @@ describe('ButtonLink Component', () => {
 
     const { getByText } = render(<RoutesStub />);
     const link = getByText('Click me');
-    expect(link).toHaveClass('px-5', 'py-3', 'text-base', 'bg-slate-700', 'text-white', 'hover:bg-sky-800');
+    expect(link).toHaveClass('px-5', 'py-3', 'text-base', 'bg-slate-700', 'text-white', 'hover:bg-blue-900');
   });
 
   it('renders pill link', () => {
@@ -146,7 +146,7 @@ describe('ButtonLink Component', () => {
         Component: () => (
           <>
             {styleCombinations.map(([pill, disabled, size]) => {
-              const id = `${variant}_pill_${pill}_disabled_${disabled}_size_${size}`;
+              const id = `${variant}_pill_${pill}_disabled_${disabled}_${size}`;
               return (
                 <ButtonLink key={id} id={id} variant={variant} pill={pill} disabled={disabled} size={size} to="/">
                   Click me
@@ -160,6 +160,6 @@ describe('ButtonLink Component', () => {
     ]);
 
     const { container } = render(<RoutesStub />);
-    expect(container.children.item(0)).toMatchSnapshot('expected html');
+    expect(container).toMatchSnapshot('expected html');
   });
 });
