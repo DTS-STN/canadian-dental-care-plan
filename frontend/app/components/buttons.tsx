@@ -17,17 +17,17 @@ export const buttonSizeStyles = {
 };
 
 export const buttonVariantStyles = {
-  alternative: 'border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700',
-  default: 'border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300',
-  dark: 'border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900',
-  green: 'border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800',
-  primary: 'border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800',
-  red: 'border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800',
-  'outline-red': 'text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800',
+  alternative: 'border-gray-200 bg-white font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700',
+  default: 'border-gray-300 bg-gray-200 font-medium text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300',
+  green: 'border-green-700 bg-green-700 font-medium text-white hover:border-green-800 hover:bg-green-800 focus:border-green-800 focus:bg-green-800',
+  primary: 'border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900',
+  red: 'border-red-800 bg-red-800 font-medium text-white hover:border-red-900 hover:bg-red-900 focus:border-red-900 focus:bg-red-900',
+  'outline-red': 'border-red-800 font-medium text-red-800 hover:border-red-900 hover:bg-red-900 hover:text-white focus:border-red-900 focus:bg-red-900 focus:text-white',
   link: 'border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700',
+  secondary: 'border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100',
 };
 
-export const buttonBaseStyles = 'inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4';
+export const buttonBaseStyles = 'inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4';
 
 export interface ButtonProps extends ComponentProps<'button'> {
   endIcon?: ButtonEndIconProps['icon'];
