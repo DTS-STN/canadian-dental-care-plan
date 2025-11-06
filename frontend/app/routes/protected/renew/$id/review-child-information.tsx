@@ -257,7 +257,15 @@ export default function ProtectedRenewReviewChildInformation({ loaderData, param
           >
             {t('protected-renew:review-child-information.continue-button')}
           </LoadingButton>
-          <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Review child(ren) information click">
+          <Button
+            id="back-button"
+            variant="secondary"
+            name="_action"
+            value={FORM_ACTION.back}
+            disabled={isSubmitting}
+            startIcon={faChevronLeft}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Review child(ren) information click"
+          >
             {t('protected-renew:review-child-information.back-button')}
           </Button>
         </div>

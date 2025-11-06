@@ -164,6 +164,7 @@ export default function RenewTypeOfRenewal({ loaderData, params }: Route.Compone
             </LoadingButton>
             <ButtonLink
               id="back-button"
+              variant="secondary"
               routeId={hasFiledTaxes ? 'public/renew/$id/applicant-information' : 'public/renew/$id/tax-filing'}
               params={params}
               disabled={isSubmitting}

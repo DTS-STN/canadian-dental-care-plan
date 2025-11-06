@@ -354,7 +354,14 @@ export default function ProtectedRenewConfirmMailingAddress({ loaderData, params
               )}
             </Dialog>
           </div>
-          <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Mailing address click">
+          <ButtonLink
+            id="cancel-button"
+            variant="secondary"
+            routeId="protected/renew/$id/review-adult-information"
+            params={params}
+            disabled={isSubmitting}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Mailing address click"
+          >
             {t('protected-renew:update-address.cancel-btn')}
           </ButtonLink>
         </div>

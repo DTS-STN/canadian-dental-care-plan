@@ -271,6 +271,7 @@ export default function ProtectedDemographicSurveyQuestions({ loaderData, params
             </LoadingButton>
             <ButtonLink
               id="back-button"
+              variant="secondary"
               routeId="protected/renew/$id/review-adult-information"
               params={params}
               disabled={isSubmitting}
@@ -294,6 +295,7 @@ export default function ProtectedDemographicSurveyQuestions({ loaderData, params
             </LoadingButton>
             <ButtonLink
               id="back-button"
+              variant="secondary"
               routeId="protected/renew/$id/dental-insurance"
               params={params}
               disabled={isSubmitting}

@@ -430,7 +430,7 @@ export default function RenewItaReviewInformation({ loaderData, params }: Route.
           >
             {t('renew-ita:review-information.submit-button')}
           </LoadingButton>
-          <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Review your information click">
+          <Button id="back-button" variant="secondary" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Review your information click">
             {t('renew-ita:review-information.back-button')}
           </Button>
         </fetcher.Form>

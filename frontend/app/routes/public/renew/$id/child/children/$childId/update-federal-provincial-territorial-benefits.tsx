@@ -380,6 +380,7 @@ export default function RenewChildUpdateFederalProvincialTerritorialBenefits({ l
               </Button>
               <LoadingButton
                 id="cancel-button"
+                variant="secondary"
                 name="_action"
                 value={FORM_ACTION.cancel}
                 disabled={isSubmitting}
@@ -403,6 +404,7 @@ export default function RenewChildUpdateFederalProvincialTerritorialBenefits({ l
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/child/children/$childId/confirm-federal-provincial-territorial-benefits"
                 params={params}
                 disabled={isSubmitting}

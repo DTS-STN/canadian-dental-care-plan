@@ -69,6 +69,7 @@ export default function ProtectedRenewFlowParentOrGuardianRequired({ loaderData,
         <CsrfTokenInput />
         <ButtonLink
           id="back-button"
+          variant="secondary"
           routeId="protected/renew/$id/$childId/parent-or-guardian"
           params={params}
           disabled={isSubmitting}

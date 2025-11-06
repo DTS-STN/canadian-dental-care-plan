@@ -164,6 +164,7 @@ export default function RenewTermsAndConditions({ loaderData, params }: Route.Co
           </LoadingButton>
           <ButtonLink
             id="back-button"
+            variant="secondary"
             to={t('renew:terms-and-conditions.apply.link')}
             disabled={isSubmitting}
             startIcon={faChevronLeft}

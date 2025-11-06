@@ -283,6 +283,7 @@ export default function RenewAdultChildChildrenDemographicSurveyQuestions({ load
               </Button>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/renew/$id/adult-child/review-child-information"
                 params={params}
                 disabled={isSubmitting}
@@ -306,6 +307,7 @@ export default function RenewAdultChildChildrenDemographicSurveyQuestions({ load
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/adult-child/children/$childId/confirm-federal-provincial-territorial-benefits"
                 params={params}
                 disabled={isSubmitting}

@@ -80,6 +80,7 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
         <CsrfTokenInput />
         <ButtonLink
           id="back-button"
+          variant="secondary"
           routeId="protected/apply/$id/adult-child/children/$childId/information"
           params={params}
           disabled={isSubmitting}

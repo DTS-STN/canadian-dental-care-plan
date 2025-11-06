@@ -389,6 +389,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
               </Button>
               <LoadingButton
                 id="cancel-button"
+                variant="secondary"
                 name="_action"
                 value={FORM_ACTION.cancel}
                 disabled={isSubmitting}
@@ -412,6 +413,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="protected/apply/$id/child/children/$childId/confirm-federal-provincial-territorial-benefits"
                 params={params}
                 disabled={isSubmitting}

@@ -288,7 +288,14 @@ export default function ProtectedRenewVerifyEmail({ loaderData, params }: Route.
             >
               {t('protected-renew:verify-email.save-btn')}
             </LoadingButton>
-            <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Verify email click">
+            <ButtonLink
+              id="cancel-button"
+              variant="secondary"
+              routeId="protected/renew/$id/review-adult-information"
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Verify email click"
+            >
               {t('protected-renew:verify-email.cancel-btn')}
             </ButtonLink>
           </div>
@@ -308,6 +315,7 @@ export default function ProtectedRenewVerifyEmail({ loaderData, params }: Route.
             </LoadingButton>
             <ButtonLink
               id="back-button"
+              variant="secondary"
               routeId="protected/renew/$id/confirm-email"
               params={params}
               disabled={isSubmitting}

@@ -123,6 +123,7 @@ export default function ProtectedRenewFlowTaxFiling({ loaderData, params }: Rout
           </LoadingButton>
           <ButtonLink
             id="back-button"
+            variant="secondary"
             routeId="protected/renew/$id/terms-and-conditions"
             params={params}
             disabled={isSubmitting}

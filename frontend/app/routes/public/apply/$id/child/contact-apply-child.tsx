@@ -85,6 +85,7 @@ export default function ApplyFlowContactApplyChild({ loaderData, params }: Route
         <CsrfTokenInput />
         <ButtonLink
           id="back-button"
+          variant="secondary"
           routeId="public/apply/$id/child/applicant-information"
           params={params}
           disabled={isSubmitting}

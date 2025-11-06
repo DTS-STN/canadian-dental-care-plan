@@ -144,6 +144,7 @@ export default function ProtectedRenewParentOrGuardian({ loaderData, params }: R
           </LoadingButton>
           <ButtonLink
             id="back-button"
+            variant="secondary"
             routeId="protected/renew/$id/member-selection"
             params={params}
             disabled={isSubmitting}

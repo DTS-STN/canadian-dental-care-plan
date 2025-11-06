@@ -60,6 +60,7 @@ export default function RenewItaExitApplication({ loaderData, params }: Route.Co
         <CsrfTokenInput />
         <ButtonLink
           id="back-button"
+          variant="secondary"
           routeId="public/renew/$id/ita/review-information"
           params={params}
           disabled={isSubmitting}

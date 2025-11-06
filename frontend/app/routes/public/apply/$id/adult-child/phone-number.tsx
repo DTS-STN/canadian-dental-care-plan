@@ -152,6 +152,7 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
               </Button>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/apply/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
@@ -167,6 +168,7 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId={defaultState.backToMailingAddress ? 'public/apply/$id/adult-child/mailing-address' : 'public/apply/$id/adult-child/home-address'}
                 params={params}
                 disabled={isSubmitting}

@@ -107,6 +107,7 @@ export default function ProtectedApplyFlowParentOrGuardian({ loaderData, params 
         <CsrfTokenInput />
         <ButtonLink
           id="back-button"
+          variant="secondary"
           routeId={getBackButtonRouteId()}
           params={params}
           disabled={isSubmitting}

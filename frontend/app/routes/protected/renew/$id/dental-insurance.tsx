@@ -213,6 +213,7 @@ export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion(
             </Button>
             <ButtonLink
               id="back-button"
+              variant="secondary"
               routeId="protected/renew/$id/review-adult-information"
               params={params}
               disabled={isSubmitting}
@@ -234,7 +235,14 @@ export default function ProtectedRenewAdultChildAccessToDentalInsuranceQuestion(
             >
               {t('dental-insurance.button.continue')}
             </LoadingButton>
-            <LoadingButton name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Access to private dental insurance click">
+            <LoadingButton
+              variant="secondary"
+              name="_action"
+              value={FORM_ACTION.back}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Access to private dental insurance click"
+            >
               {t('dental-insurance.button.back')}
             </LoadingButton>
           </div>

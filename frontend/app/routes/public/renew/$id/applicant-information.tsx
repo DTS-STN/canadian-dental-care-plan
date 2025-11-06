@@ -270,6 +270,7 @@ export default function RenewApplicationInformation({ loaderData, params }: Rout
             </LoadingButton>
             <ButtonLink
               id="back-button"
+              variant="secondary"
               routeId="public/renew/$id/terms-and-conditions"
               params={params}
               disabled={isSubmitting}

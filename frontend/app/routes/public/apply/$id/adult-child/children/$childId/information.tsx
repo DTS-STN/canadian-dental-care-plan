@@ -364,6 +364,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
               </Button>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/apply/$id/adult-child/review-child-information"
                 params={params}
                 disabled={isSubmitting}
@@ -379,6 +380,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/apply/$id/adult-child/children/index"
                 params={params}
                 disabled={isSubmitting}

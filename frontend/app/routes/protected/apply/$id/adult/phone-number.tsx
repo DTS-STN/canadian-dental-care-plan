@@ -161,7 +161,14 @@ export default function ProtectedApplyFlowPhoneNumber({ loaderData, params }: Ro
               <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Save - Phone Number click">
                 {t('protected-apply-adult:phone-number.save-btn')}
               </Button>
-              <ButtonLink id="cancel-button" routeId="protected/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Phone Number click">
+              <ButtonLink
+                id="cancel-button"
+                variant="secondary"
+                routeId="protected/apply/$id/adult/review-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Phone Number click"
+              >
                 {t('protected-apply-adult:phone-number.cancel-btn')}
               </ButtonLink>
             </div>
@@ -172,6 +179,7 @@ export default function ProtectedApplyFlowPhoneNumber({ loaderData, params }: Ro
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId={defaultState.backToMailingAddress ? 'protected/apply/$id/adult/mailing-address' : 'protected/apply/$id/adult/home-address'}
                 params={params}
                 disabled={isSubmitting}

@@ -240,7 +240,14 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
           >
             {t('apply:terms-and-conditions.apply.continue-button')}
           </LoadingButton>
-          <ButtonLink id="back-button" to={t('apply:terms-and-conditions.apply.link')} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Terms and Conditions click">
+          <ButtonLink
+            id="back-button"
+            variant="secondary"
+            to={t('apply:terms-and-conditions.apply.link')}
+            disabled={isSubmitting}
+            startIcon={faChevronLeft}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Terms and Conditions click"
+          >
             {t('apply:terms-and-conditions.apply.back-button')}
           </ButtonLink>
         </div>

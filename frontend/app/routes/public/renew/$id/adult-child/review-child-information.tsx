@@ -267,7 +267,15 @@ export default function RenewAdultChildReviewChildInformation({ loaderData, para
             >
               {t('renew-adult-child:review-child-information.submit-button')}
             </LoadingButton>
-            <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Back - Review child(ren) information click">
+            <Button
+              id="back-button"
+              variant="secondary"
+              name="_action"
+              value={FORM_ACTION.back}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Back - Review child(ren) information click"
+            >
               {t('renew-adult-child:review-child-information.back-button')}
             </Button>
           </div>

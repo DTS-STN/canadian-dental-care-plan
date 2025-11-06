@@ -78,6 +78,7 @@ export default function RenewalDelegate({ loaderData, params }: Route.ComponentP
         <CsrfTokenInput />
         <ButtonLink
           type="button"
+          variant="secondary"
           routeId="public/renew/$id/type-renewal"
           params={params}
           disabled={isSubmitting}

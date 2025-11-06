@@ -289,7 +289,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
           <p>{t('confirm.modal.are-you-sure')}</p>
           <DialogFooter>
             <DialogClose asChild>
-              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Modal Back - Your renewal for the Canadian Dental Care Plan is complete click">
+              <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Modal Back - Your renewal for the Canadian Dental Care Plan is complete click">
                 {t('confirm.modal.back-btn')}
               </Button>
             </DialogClose>

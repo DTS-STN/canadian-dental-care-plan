@@ -242,7 +242,14 @@ export default function RenewItaMaritalStatus({ loaderData, params }: Route.Comp
               <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Marital status click">
                 {t('renew-ita:marital-status.save-btn')}
               </Button>
-              <ButtonLink id="cancel-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Marital status click">
+              <ButtonLink
+                id="cancel-button"
+                variant="secondary"
+                routeId="public/renew/$id/ita/review-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Marital status click"
+              >
                 {t('renew-ita:marital-status.cancel-btn')}
               </ButtonLink>
             </div>
@@ -259,7 +266,15 @@ export default function RenewItaMaritalStatus({ loaderData, params }: Route.Comp
               >
                 {t('renew-ita:marital-status.continue-btn')}
               </LoadingButton>
-              <ButtonLink id="back-button" routeId="public/renew/$id/type-renewal" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Marital status click">
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId="public/renew/$id/type-renewal"
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Marital status click"
+              >
                 {t('renew-ita:marital-status.back-btn')}
               </ButtonLink>
             </div>

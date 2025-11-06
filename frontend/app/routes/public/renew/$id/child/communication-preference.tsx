@@ -180,7 +180,14 @@ export default function RenewFlowCommunicationPreferencePage({ loaderData, param
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Communication click">
                 {t('renew-child:communication-preference.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Communication click">
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId="public/renew/$id/child/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Communication click"
+              >
                 {t('renew-child:communication-preference.cancel-btn')}
               </ButtonLink>
             </div>
@@ -191,6 +198,7 @@ export default function RenewFlowCommunicationPreferencePage({ loaderData, param
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/child/confirm-phone"
                 params={params}
                 disabled={isSubmitting}

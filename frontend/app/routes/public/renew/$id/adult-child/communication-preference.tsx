@@ -182,6 +182,7 @@ export default function RenewFlowCommunicationPreferencePage({ loaderData, param
               </Button>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
@@ -197,6 +198,7 @@ export default function RenewFlowCommunicationPreferencePage({ loaderData, param
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/adult-child/confirm-phone"
                 params={params}
                 disabled={isSubmitting}

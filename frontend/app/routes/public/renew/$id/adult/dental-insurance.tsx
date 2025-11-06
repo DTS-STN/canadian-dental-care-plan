@@ -180,6 +180,7 @@ export default function RenewAdultAccessToDentalInsuranceQuestion({ loaderData, 
               </Button>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/renew/$id/adult/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
@@ -201,7 +202,15 @@ export default function RenewAdultAccessToDentalInsuranceQuestion({ loaderData, 
               >
                 {t('dental-insurance.button.continue')}
               </LoadingButton>
-              <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Access to private dental insurance click">
+              <Button
+                id="back-button"
+                variant="secondary"
+                name="_action"
+                value={FORM_ACTION.back}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Back - Access to private dental insurance click"
+              >
                 {t('dental-insurance.button.back')}
               </Button>
             </div>

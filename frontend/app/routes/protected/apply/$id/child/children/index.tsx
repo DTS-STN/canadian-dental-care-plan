@@ -211,7 +211,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
                         <p>{t('protected-apply-child:children.index.modal.info', { childName })}</p>
                         <DialogFooter>
                           <DialogClose asChild>
-                            <Button id="confirm-modal-back" disabled={isSubmitting} variant="default" size="sm">
+                            <Button id="confirm-modal-back" disabled={isSubmitting} variant="secondary" size="sm">
                               {t('protected-apply-child:children.index.modal.back-btn')}
                             </Button>
                           </DialogClose>
@@ -244,6 +244,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
           <CsrfTokenInput />
           <Button
+            variant="secondary"
             className="my-10"
             id="add-child"
             name="_action"
@@ -269,6 +270,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
               </ButtonLink>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="protected/apply/$id/child/review-child-information"
                 params={params}
                 disabled={!hasChildren || isSubmitting}
@@ -293,6 +295,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="protected/apply/$id/type-application"
                 params={params}
                 disabled={isSubmitting}

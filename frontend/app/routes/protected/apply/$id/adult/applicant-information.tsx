@@ -305,7 +305,7 @@ export default function ProtectedApplyFlowApplicationInformation({ loaderData, p
               <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Save - Applicant information click">
                 {t('protected-apply-adult:applicant-information.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Applicant information click">
+              <Button id="cancel-button" name="_action" variant="secondary" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Applicant information click">
                 {t('protected-apply-adult:applicant-information.cancel-btn')}
               </Button>
             </div>
@@ -324,6 +324,7 @@ export default function ProtectedApplyFlowApplicationInformation({ loaderData, p
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId={`protected/apply/$id/type-application`}
                 params={params}
                 disabled={isSubmitting}

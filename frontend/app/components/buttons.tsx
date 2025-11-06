@@ -18,7 +18,6 @@ export const buttonSizeStyles = {
 
 export const buttonVariantStyles = {
   alternative: 'border-gray-200 bg-white font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700',
-  default: 'border-gray-300 bg-gray-200 font-medium text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300',
   green: 'border-green-700 bg-green-700 font-medium text-white hover:border-green-800 hover:bg-green-800 focus:border-green-800 focus:bg-green-800',
   primary: 'border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900',
   red: 'border-red-800 bg-red-800 font-medium text-white hover:border-red-900 hover:bg-red-900 focus:border-red-900 focus:bg-red-900',
@@ -36,14 +35,14 @@ export interface ButtonProps extends ComponentProps<'button'> {
   size?: keyof typeof buttonSizeStyles;
   startIcon?: ButtonStartIconProps['icon'];
   startIconProps?: OmitStrict<ButtonStartIconProps, 'icon'>;
-  variant?: keyof typeof buttonVariantStyles;
+  variant: keyof typeof buttonVariantStyles;
 }
 
 /**
  * Tailwind CSS Buttons from Flowbite
  * @see https://flowbite.com/docs/components/buttons/
  */
-export function Button({ children, className, endIcon, endIconProps, pill, size = 'base', startIcon, startIconProps, variant = 'default', ...props }: ButtonProps) {
+export function Button({ children, className, endIcon, endIconProps, pill, size = 'base', startIcon, startIconProps, variant, ...props }: ButtonProps) {
   return (
     <button
       className={cn(
@@ -68,7 +67,7 @@ export interface ButtonLinkProps extends ComponentProps<typeof AppLink> {
   endIcon?: ButtonEndIconProps['icon'];
   endIconProps?: OmitStrict<ButtonEndIconProps, 'icon'>;
   size?: keyof typeof buttonSizeStyles;
-  variant?: keyof typeof buttonVariantStyles;
+  variant: keyof typeof buttonVariantStyles;
   startIcon?: ButtonStartIconProps['icon'];
   startIconProps?: OmitStrict<ButtonStartIconProps, 'icon'>;
   pill?: boolean;
@@ -81,7 +80,7 @@ export interface ButtonLinkProps extends ComponentProps<typeof AppLink> {
  * Disabling a link
  * @see https://www.scottohara.me/blog/2021/05/28/disabled-links.html
  */
-export function ButtonLink({ children, className, disabled, endIcon, endIconProps, pill, size = 'base', routeId, startIcon, startIconProps, to, variant = 'default', ...props }: ButtonLinkProps) {
+export function ButtonLink({ children, className, disabled, endIcon, endIconProps, pill, size = 'base', routeId, startIcon, startIconProps, to, variant, ...props }: ButtonLinkProps) {
   const buttonLinkStyles = cn(buttonBaseStyles, buttonSizeStyles[size], buttonVariantStyles[variant], pill && 'rounded-full', className);
 
   const actualChildren = (

@@ -330,7 +330,7 @@ export default function ApplyChildHomeAddress({ loaderData, params }: Route.Comp
                   </>
                 )}
               </Dialog>
-              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Home address click">
+              <Button id="cancel-button" name="_action" variant="secondary" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Home address click">
                 {t('apply-child:address.cancel-btn')}
               </Button>
             </div>
@@ -363,6 +363,7 @@ export default function ApplyChildHomeAddress({ loaderData, params }: Route.Comp
               </Dialog>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId={`public/apply/$id/child/mailing-address`}
                 params={params}
                 disabled={isSubmitting}

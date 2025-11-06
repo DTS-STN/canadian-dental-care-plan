@@ -23,7 +23,7 @@ for (const pill of pillOptions) {
 
 describe('Button Component', () => {
   it('renders button with default props', () => {
-    const { getByText } = render(<Button>Click me</Button>);
+    const { getByText } = render(<Button variant="primary">Click me</Button>);
     const button = getByText('Click me');
     expect(button).toBeInTheDocument();
     expect(button.tagName).toEqual('BUTTON');
@@ -41,21 +41,33 @@ describe('Button Component', () => {
   });
 
   it('renders disabled button', () => {
-    const { getByText } = render(<Button disabled>Click me</Button>);
+    const { getByText } = render(
+      <Button variant="primary" disabled>
+        Click me
+      </Button>,
+    );
     const button = getByText('Click me') as HTMLButtonElement;
     expect(button.disabled).toEqual(true);
     expect(button).toHaveClass('disabled:pointer-events-none', 'disabled:cursor-not-allowed', 'disabled:opacity-70');
   });
 
   it('renders pill button', () => {
-    const { getByText } = render(<Button pill>Click me</Button>);
+    const { getByText } = render(
+      <Button variant="primary" pill>
+        Click me
+      </Button>,
+    );
     const button = getByText('Click me');
     expect(button).toHaveClass('rounded-full');
   });
 
   it('executes onClick handler', () => {
     const handleClick = vi.fn();
-    const { getByText } = render(<Button onClick={handleClick}>Click me</Button>);
+    const { getByText } = render(
+      <Button variant="primary" onClick={handleClick}>
+        Click me
+      </Button>,
+    );
     const button = getByText('Click me');
     fireEvent.click(button);
     expect(handleClick).toHaveBeenCalledOnce();
@@ -82,7 +94,11 @@ describe('ButtonLink Component', () => {
   it('renders link with default props', () => {
     const RoutesStub = createRoutesStub([
       {
-        Component: () => <ButtonLink to="/">Click me</ButtonLink>,
+        Component: () => (
+          <ButtonLink variant="primary" to="/">
+            Click me
+          </ButtonLink>
+        ),
         path: '/',
       },
     ]);
@@ -115,7 +131,7 @@ describe('ButtonLink Component', () => {
     const RoutesStub = createRoutesStub([
       {
         Component: () => (
-          <ButtonLink pill to="/">
+          <ButtonLink variant="primary" pill to="/">
             Click me
           </ButtonLink>
         ),
@@ -130,7 +146,7 @@ describe('ButtonLink Component', () => {
 
   it('renders disabled link', () => {
     const { getByText } = render(
-      <ButtonLink disabled to="/">
+      <ButtonLink variant="primary" disabled to="/">
         Click me
       </ButtonLink>,
     );

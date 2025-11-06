@@ -189,7 +189,15 @@ export default function ProtectedRenewReviewSubmit({ loaderData, params }: Route
             >
               {t('protected-renew:review-submit.submit-button')}
             </LoadingButton>
-            <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Submit your renewal application click">
+            <Button
+              id="back-button"
+              variant="secondary"
+              name="_action"
+              value={FORM_ACTION.back}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Back - Submit your renewal application click"
+            >
               {t('protected-renew:review-submit.back-button')}
             </Button>
           </div>

@@ -183,6 +183,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
               </Button>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/apply/$id/child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
@@ -198,6 +199,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/apply/$id/child/phone-number"
                 params={params}
                 disabled={isSubmitting}

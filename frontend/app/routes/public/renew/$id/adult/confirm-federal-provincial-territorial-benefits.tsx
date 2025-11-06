@@ -165,6 +165,7 @@ export default function RenewAdultConfirmFederalProvincialTerritorialBenefits({ 
               </Button>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/renew/$id/adult/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
@@ -180,6 +181,7 @@ export default function RenewAdultConfirmFederalProvincialTerritorialBenefits({ 
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/adult/dental-insurance"
                 params={params}
                 disabled={isSubmitting}

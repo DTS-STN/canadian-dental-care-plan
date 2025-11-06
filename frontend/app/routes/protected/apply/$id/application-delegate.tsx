@@ -88,6 +88,7 @@ export default function ProtectedApplyFlowApplicationDelegate({ loaderData, para
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
         <ButtonLink
+          variant="secondary"
           type="button"
           routeId="protected/apply/$id/type-application"
           params={params}

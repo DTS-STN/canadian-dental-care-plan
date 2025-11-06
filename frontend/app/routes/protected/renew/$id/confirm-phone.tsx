@@ -150,7 +150,14 @@ export default function ProtectedRenewConfirmPhone({ loaderData, params }: Route
           <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Phone Number click">
             {t('protected-renew:confirm-phone.save-btn')}
           </Button>
-          <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Phone Number click">
+          <ButtonLink
+            id="cancel-button"
+            variant="secondary"
+            routeId="protected/renew/$id/review-adult-information"
+            params={params}
+            disabled={isSubmitting}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Phone Number click"
+          >
             {t('protected-renew:confirm-phone.cancel-btn')}
           </ButtonLink>
         </div>

@@ -60,6 +60,7 @@ export default function RenewChildExitApplication({ loaderData, params }: Route.
         <CsrfTokenInput />
         <ButtonLink
           id="back-button"
+          variant="secondary"
           routeId="public/renew/$id/child/review-adult-information"
           params={params}
           disabled={isSubmitting}

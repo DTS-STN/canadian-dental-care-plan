@@ -118,7 +118,7 @@ export default function StatusCheckerResult({ loaderData, params }: Route.Compon
           </Button>
         </div>
         <div className="mt-6">
-          <Button id="exit-button" name="_action" value={FORM_ACTION.exit} disabled={isSubmitting} className="mt-6">
+          <Button id="exit-button" name="_action" value={FORM_ACTION.exit} disabled={isSubmitting} className="mt-6" variant="secondary">
             {t('status:result.exit-btn')}
           </Button>
         </div>

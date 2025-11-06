@@ -472,7 +472,9 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
             >
               <div>
                 <FileUploadTrigger asChild>
-                  <Button startIcon={faArrowUpFromBracket}>{t('documents:upload.add-file')}</Button>
+                  <Button variant="secondary" startIcon={faArrowUpFromBracket}>
+                    {t('documents:upload.add-file')}
+                  </Button>
                 </FileUploadTrigger>
               </div>
               <FileUploadList className="gap-4 sm:gap-6">
@@ -504,7 +506,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                     />
                     <div className="mt-2">
                       <FileUploadItemDelete asChild>
-                        <Button size="sm" endIcon={faTimes}>
+                        <Button variant="secondary" size="sm" endIcon={faTimes}>
                           {t('documents:upload.remove')}
                         </Button>
                       </FileUploadItemDelete>
@@ -523,7 +525,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
       </fetcher.Form>
 
       <div>
-        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Upload my documents click">
+        <ButtonLink id="back-button" variant="secondary" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Upload my documents click">
           {t('documents:index.return-dashboard')}
         </ButtonLink>
       </div>

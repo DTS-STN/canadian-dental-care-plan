@@ -99,7 +99,7 @@ export default function DocumentsIndex({ loaderData, params }: Route.ComponentPr
         </ButtonLink>
       </div>
       <div>
-        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Submitted documents click">
+        <ButtonLink id="back-button" variant="secondary" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Submitted documents click">
           {t('documents:index.return-dashboard')}
         </ButtonLink>
       </div>

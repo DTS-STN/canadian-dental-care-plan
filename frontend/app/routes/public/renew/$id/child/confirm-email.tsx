@@ -180,7 +180,14 @@ export default function RenewFlowEmail({ loaderData, params }: Route.ComponentPr
               <Button variant="primary" id="save-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Email click">
                 {t('renew-child:confirm-email.save-btn')}
               </Button>
-              <ButtonLink id="cancel-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Email click">
+              <ButtonLink
+                id="cancel-button"
+                variant="secondary"
+                routeId="public/renew/$id/child/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Email click"
+              >
                 {t('renew-child:confirm-email.cancel-btn')}
               </ButtonLink>
             </div>
@@ -191,6 +198,7 @@ export default function RenewFlowEmail({ loaderData, params }: Route.ComponentPr
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/child/communication-preference"
                 params={params}
                 disabled={isSubmitting}

@@ -75,6 +75,7 @@ export default function ApplyFlowTaxFiling({ loaderData, params }: Route.Compone
         <CsrfTokenInput />
         <ButtonLink
           id="back-button"
+          variant="secondary"
           routeId="protected/apply/$id/adult-child/review-child-information"
           params={params}
           disabled={isSubmitting}

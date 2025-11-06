@@ -359,7 +359,14 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
               <Button id="save-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Child Information click">
                 {t('apply-child:children.information.save-btn')}
               </Button>
-              <ButtonLink id="cancel-button" routeId="public/apply/$id/child/review-child-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Child Information click">
+              <ButtonLink
+                id="cancel-button"
+                variant="secondary"
+                routeId="public/apply/$id/child/review-child-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Child Information click"
+              >
                 {t('apply-child:children.information.cancel-btn')}
               </ButtonLink>
             </div>
@@ -370,6 +377,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/apply/$id/child/children/index"
                 params={params}
                 disabled={isSubmitting}

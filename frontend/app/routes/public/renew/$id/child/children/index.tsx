@@ -200,7 +200,7 @@ export default function RenewChildIndex({ loaderData, params }: Route.ComponentP
                         <p>{t('renew-child:children.index.modal.info', { childName })}</p>
                         <DialogFooter>
                           <DialogClose asChild>
-                            <Button id="confirm-modal-back" disabled={isSubmitting} variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Return to summary page - Child(ren) renewal click">
+                            <Button id="confirm-modal-back" disabled={isSubmitting} variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Return to summary page - Child(ren) renewal click">
                               {t('renew-child:children.index.modal.back-btn')}
                             </Button>
                           </DialogClose>
@@ -232,7 +232,16 @@ export default function RenewChildIndex({ loaderData, params }: Route.ComponentP
 
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
           <CsrfTokenInput />
-          <Button className="my-10" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} startIcon={faPlus} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Renew a child - Child(ren) renewal click">
+          <Button
+            variant="secondary"
+            className="my-10"
+            id="add-child"
+            name="_action"
+            value={FORM_ACTION.add}
+            disabled={isSubmitting}
+            startIcon={faPlus}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Renew a child - Child(ren) renewal click"
+          >
             {children.length === 0 ? t('renew-child:children.index.add-child') : t('renew-child:children.index.add-another-child')}
           </Button>
 
@@ -250,6 +259,7 @@ export default function RenewChildIndex({ loaderData, params }: Route.ComponentP
               </ButtonLink>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/renew/$id/child/review-child-information"
                 params={params}
                 disabled={!hasChildren || isSubmitting}
@@ -272,7 +282,15 @@ export default function RenewChildIndex({ loaderData, params }: Route.ComponentP
               >
                 {t('renew-child:children.index.continue-btn')}
               </LoadingButton>
-              <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Child(ren) renewal click">
+              <Button
+                id="back-button"
+                variant="secondary"
+                name="_action"
+                value={FORM_ACTION.back}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Child(ren) renewal click"
+              >
                 {t('renew-child:children.index.back-btn')}
               </Button>
             </div>

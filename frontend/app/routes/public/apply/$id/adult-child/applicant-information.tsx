@@ -299,7 +299,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Applicant information click">
                 {t('apply-adult-child:applicant-information.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Applicant information click">
+              <Button id="cancel-button" name="_action" variant="secondary" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Applicant information click">
                 {t('apply-adult-child:applicant-information.cancel-btn')}
               </Button>
             </div>
@@ -318,6 +318,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId={`public/apply/$id/type-application`}
                 params={params}
                 disabled={isSubmitting}

@@ -179,6 +179,7 @@ export default function ApplyAdultChildConfirmFederalProvincialTerritorialBenefi
               </Button>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/apply/$id/adult-child/review-child-information"
                 params={params}
                 disabled={isSubmitting}
@@ -200,6 +201,7 @@ export default function ApplyAdultChildConfirmFederalProvincialTerritorialBenefi
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/apply/$id/adult-child/children/$childId/dental-insurance"
                 params={params}
                 disabled={isSubmitting}

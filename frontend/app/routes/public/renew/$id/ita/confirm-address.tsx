@@ -174,7 +174,7 @@ export default function RenewItaConfirmAddress({ loaderData, params }: Route.Com
               <LoadingButton id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Address click">
                 {t('renew-ita:confirm-address.save-btn')}
               </LoadingButton>
-              <ButtonLink id="cancel-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Address click">
+              <ButtonLink id="cancel-button" variant="secondary" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Address click">
                 {t('renew-ita:confirm-address.cancel-btn')}
               </ButtonLink>
             </div>
@@ -185,6 +185,7 @@ export default function RenewItaConfirmAddress({ loaderData, params }: Route.Com
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId={backToEmail ? 'public/renew/$id/ita/confirm-email' : 'public/renew/$id/ita/communication-preference'}
                 params={params}
                 disabled={isSubmitting}

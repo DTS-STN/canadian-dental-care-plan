@@ -295,6 +295,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
             </LoadingButton>
             <Button
               id="back-button"
+              variant="secondary"
               name="_action"
               value={FORM_ACTION.back}
               disabled={isSubmitting}
