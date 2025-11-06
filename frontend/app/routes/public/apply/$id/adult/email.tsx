@@ -180,7 +180,7 @@ export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentPr
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Email click">
                 {t('apply-adult:email.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Email click">
+              <ButtonLink id="back-button" variant="secondary" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Email click">
                 {t('apply-adult:email.cancel-btn')}
               </ButtonLink>
             </div>
@@ -191,6 +191,7 @@ export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentPr
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/apply/$id/adult/communication-preference"
                 params={params}
                 disabled={isSubmitting}

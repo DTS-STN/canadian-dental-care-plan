@@ -183,6 +183,7 @@ export default function RenewItaAccessToDentalInsuranceQuestion({ loaderData, pa
               </Button>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/renew/$id/ita/review-information"
                 params={params}
                 disabled={isSubmitting}
@@ -204,7 +205,15 @@ export default function RenewItaAccessToDentalInsuranceQuestion({ loaderData, pa
               >
                 {t('dental-insurance.button.continue')}
               </LoadingButton>
-              <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Access to private dental insurance click">
+              <Button
+                id="back-button"
+                variant="secondary"
+                name="_action"
+                value={FORM_ACTION.back}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Access to private dental insurance click"
+              >
                 {t('dental-insurance.button.back')}
               </Button>
             </div>

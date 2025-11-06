@@ -170,6 +170,7 @@ export default function ProtectedApplyAdultConfirmFederalProvincialTerritorialBe
               </Button>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="protected/apply/$id/adult/review-information"
                 params={params}
                 disabled={isSubmitting}
@@ -191,6 +192,7 @@ export default function ProtectedApplyAdultConfirmFederalProvincialTerritorialBe
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="protected/apply/$id/adult/dental-insurance"
                 params={params}
                 disabled={isSubmitting}

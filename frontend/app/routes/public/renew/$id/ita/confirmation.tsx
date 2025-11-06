@@ -310,7 +310,7 @@ export default function RenewFlowConfirm({ loaderData, params }: Route.Component
           <p>{t('renew-ita:confirm.modal.are-you-sure')}</p>
           <DialogFooter>
             <DialogClose asChild>
-              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-ITA:Modal Back - Your renewal for the Canadian Dental Care Plan is complete click">
+              <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-ITA:Modal Back - Your renewal for the Canadian Dental Care Plan is complete click">
                 {t('renew-ita:confirm.modal.back-btn')}
               </Button>
             </DialogClose>

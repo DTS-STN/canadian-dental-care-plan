@@ -207,6 +207,7 @@ export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentPr
               </Button>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="protected/apply/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
@@ -222,6 +223,7 @@ export default function ApplyFlowEmail({ loaderData, params }: Route.ComponentPr
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="protected/apply/$id/adult-child/communication-preference"
                 params={params}
                 disabled={isSubmitting}

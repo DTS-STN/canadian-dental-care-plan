@@ -182,6 +182,7 @@ export default function RenewTermsAndConditions({ loaderData, params }: Route.Co
           </LoadingButton>
           <ButtonLink
             id="back-button"
+            variant="secondary"
             to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}
             disabled={isSubmitting}
             startIcon={faChevronLeft}

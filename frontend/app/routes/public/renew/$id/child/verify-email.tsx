@@ -275,7 +275,14 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
               >
                 {t('renew-child:verify-email.save-btn')}
               </LoadingButton>
-              <ButtonLink id="cancel-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Verify email click">
+              <ButtonLink
+                id="cancel-button"
+                variant="secondary"
+                routeId="public/renew/$id/child/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Verify email click"
+              >
                 {t('renew-child:verify-email.cancel-btn')}
               </ButtonLink>
             </div>
@@ -295,6 +302,7 @@ export default function RenewFlowVerifyEmail({ loaderData, params }: Route.Compo
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/child/confirm-email"
                 params={params}
                 disabled={isSubmitting}

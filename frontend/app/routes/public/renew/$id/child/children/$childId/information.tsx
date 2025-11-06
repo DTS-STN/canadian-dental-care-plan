@@ -326,7 +326,14 @@ export default function RenewFlowChildInformation({ loaderData, params }: Route.
               <Button id="save-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Child information click">
                 {t('renew-child:children.information.save-btn')}
               </Button>
-              <ButtonLink id="cancel-button" routeId="public/renew/$id/child/review-child-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Child information click">
+              <ButtonLink
+                id="cancel-button"
+                variant="secondary"
+                routeId="public/renew/$id/child/review-child-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Child information click"
+              >
                 {t('renew-child:children.information.cancel-btn')}
               </ButtonLink>
             </div>
@@ -337,6 +344,7 @@ export default function RenewFlowChildInformation({ loaderData, params }: Route.
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/child/children/index"
                 params={params}
                 disabled={isSubmitting}

@@ -263,6 +263,7 @@ export default function RenewAdultDemographicSurveyQuestions({ loaderData, param
               </Button>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/renew/$id/adult/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
@@ -286,6 +287,7 @@ export default function RenewAdultDemographicSurveyQuestions({ loaderData, param
               </LoadingButton>
               <LoadingButton
                 id="back-button"
+                variant="secondary"
                 name="_action"
                 value={FORM_ACTION.back}
                 disabled={isSubmitting}

@@ -178,7 +178,7 @@ export default function RenewFlowCommunicationPreferencePage({ loaderData, param
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Communication click">
                 {t('renew-ita:communication-preference.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Communication click">
+              <ButtonLink id="back-button" variant="secondary" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Communication click">
                 {t('renew-ita:communication-preference.cancel-btn')}
               </ButtonLink>
             </div>
@@ -187,7 +187,15 @@ export default function RenewFlowCommunicationPreferencePage({ loaderData, param
               <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Continue - Communication click">
                 {t('renew-ita:communication-preference.continue')}
               </LoadingButton>
-              <ButtonLink id="back-button" routeId="public/renew/$id/ita/confirm-phone" params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Communication click">
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId="public/renew/$id/ita/confirm-phone"
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Back - Communication click"
+              >
                 {t('renew-ita:communication-preference.back')}
               </ButtonLink>
             </div>

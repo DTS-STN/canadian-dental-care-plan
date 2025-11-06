@@ -131,7 +131,7 @@ export default function LettersIndex({ loaderData, params }: Route.ComponentProp
       )}
 
       <div className="my-6 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
+        <ButtonLink id="back-button" variant="secondary" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
           {t('letters:index.button.back')}
         </ButtonLink>
       </div>

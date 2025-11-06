@@ -319,7 +319,14 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               >
                 {t('protected-apply-child:applicant-information.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - Parent or legal guardian personal information click">
+              <Button
+                id="cancel-button"
+                variant="secondary"
+                name="_action"
+                value={FORM_ACTION.cancel}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - Parent or legal guardian personal information click"
+              >
                 {t('protected-apply-child:applicant-information.cancel-btn')}
               </Button>
             </div>
@@ -338,6 +345,7 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="protected/apply/$id/child/children/index"
                 params={params}
                 disabled={isSubmitting}

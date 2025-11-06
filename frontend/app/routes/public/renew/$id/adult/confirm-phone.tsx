@@ -209,7 +209,14 @@ export default function RenewAdultConfirmPhone({ loaderData, params }: Route.Com
               <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Phone Number click">
                 {t('renew-adult:confirm-phone.save-btn')}
               </Button>
-              <ButtonLink id="cancel-button" routeId="public/renew/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Phone Number click">
+              <ButtonLink
+                id="cancel-button"
+                variant="secondary"
+                routeId="public/renew/$id/adult/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Phone Number click"
+              >
                 {t('renew-adult:confirm-phone.cancel-btn')}
               </ButtonLink>
             </div>
@@ -228,6 +235,7 @@ export default function RenewAdultConfirmPhone({ loaderData, params }: Route.Com
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId={hasMaritalStatusChanged ? 'public/renew/$id/adult/marital-status' : 'public/renew/$id/adult/confirm-marital-status'}
                 params={params}
                 disabled={isSubmitting}

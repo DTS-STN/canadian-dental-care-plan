@@ -344,7 +344,14 @@ export default function ProtectedRenewConfirmHomeAddress({ loaderData, params }:
                   </>
                 )}
               </Dialog>
-              <ButtonLink id="back-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Home address click">
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId="protected/renew/$id/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Home address click"
+              >
                 {t('protected-renew:update-address.cancel-btn')}
               </ButtonLink>
             </div>
@@ -378,6 +385,7 @@ export default function ProtectedRenewConfirmHomeAddress({ loaderData, params }:
             </Dialog>
             <ButtonLink
               id="back-button"
+              variant="secondary"
               routeId="protected/renew/$id/confirm-address"
               params={params}
               disabled={isSubmitting}

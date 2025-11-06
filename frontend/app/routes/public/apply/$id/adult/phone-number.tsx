@@ -150,7 +150,14 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
               <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Phone Number click">
                 {t('apply-adult:phone-number.save-btn')}
               </Button>
-              <ButtonLink id="cancel-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Phone Number click">
+              <ButtonLink
+                id="cancel-button"
+                variant="secondary"
+                routeId="public/apply/$id/adult/review-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Phone Number click"
+              >
                 {t('apply-adult:phone-number.cancel-btn')}
               </ButtonLink>
             </div>
@@ -161,6 +168,7 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId={defaultState.backToMailingAddress ? 'public/apply/$id/adult/mailing-address' : 'public/apply/$id/adult/home-address'}
                 params={params}
                 disabled={isSubmitting}

@@ -211,6 +211,7 @@ export default function RenewAdultChildConfirmPhone({ loaderData, params }: Rout
               </Button>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/renew/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
@@ -234,6 +235,7 @@ export default function RenewAdultChildConfirmPhone({ loaderData, params }: Rout
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId={hasMaritalStatusChanged ? 'public/renew/$id/adult-child/marital-status' : 'public/renew/$id/adult-child/confirm-marital-status'}
                 params={params}
                 disabled={isSubmitting}

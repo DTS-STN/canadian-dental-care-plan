@@ -28,7 +28,7 @@ export function DebugPayload({ data, enableCopy }: DebugPayloadProps) {
     <>
       <pre className="rounded-log block max-h-96 overflow-auto bg-gray-100 p-4 shadow-inner">{json}</pre>
       {enableCopy && (
-        <Button onClick={copyToClipboard} endIcon={hasCopied ? faCheck : faClipboard}>
+        <Button variant="secondary" onClick={copyToClipboard} endIcon={hasCopied ? faCheck : faClipboard}>
           Copy
         </Button>
       )}

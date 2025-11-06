@@ -131,7 +131,14 @@ export default function RenewChildConfirmMaritalStatus({ loaderData, params }: R
               <Button id="save-button" name="_action" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Save - Marital status click">
                 {t('renew-child:marital-status.save-btn')}
               </Button>
-              <ButtonLink id="cancel-button" routeId="public/renew/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Marital status click">
+              <ButtonLink
+                id="cancel-button"
+                variant="secondary"
+                routeId="public/renew/$id/child/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Cancel - Marital status click"
+              >
                 {t('marital-status.cancel-btn')}
               </ButtonLink>
             </div>
@@ -142,6 +149,7 @@ export default function RenewChildConfirmMaritalStatus({ loaderData, params }: R
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/child/parent-intro"
                 params={params}
                 disabled={isSubmitting}

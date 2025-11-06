@@ -70,6 +70,7 @@ export default function RenewFlowParentOrGuardian({ loaderData, params }: Route.
         <CsrfTokenInput />
         <ButtonLink
           id="back-button"
+          variant="secondary"
           routeId="public/renew/$id/child/children/$childId/information"
           params={params}
           disabled={isSubmitting}

@@ -288,6 +288,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
               </LoadingButton>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="protected/apply/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
@@ -312,6 +313,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="protected/apply/$id/adult-child/email"
                 params={params}
                 disabled={isSubmitting}

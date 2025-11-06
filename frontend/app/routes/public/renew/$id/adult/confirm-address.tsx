@@ -143,7 +143,14 @@ export default function RenewAdultConfirmAddress({ loaderData, params }: Route.C
               <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Save - Address click">
                 {t('renew-adult:confirm-address.save-btn')}
               </Button>
-              <ButtonLink id="cancel-button" routeId="public/renew/$id/adult/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Address click">
+              <ButtonLink
+                id="cancel-button"
+                variant="secondary"
+                routeId="public/renew/$id/adult/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult:Cancel - Address click"
+              >
                 {t('renew-adult:confirm-address.cancel-btn')}
               </ButtonLink>
             </div>
@@ -154,6 +161,7 @@ export default function RenewAdultConfirmAddress({ loaderData, params }: Route.C
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId={backToEmail ? 'public/renew/$id/adult/confirm-email' : 'public/renew/$id/adult/communication-preference'}
                 params={params}
                 disabled={isSubmitting}

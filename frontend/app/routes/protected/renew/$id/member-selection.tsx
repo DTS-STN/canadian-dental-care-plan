@@ -153,6 +153,7 @@ export default function ProtectedRenewMemberSelection({ loaderData, params }: Ro
           </LoadingButton>
           <ButtonLink
             id="back-button"
+            variant="secondary"
             routeId="protected/renew/$id/tax-filing"
             params={params}
             disabled={isSubmitting}

@@ -380,6 +380,7 @@ export default function ProtectedRenewConfirmFederalProvincialTerritorialBenefit
             </Button>
             <ButtonLink
               id="back-button"
+              variant="secondary"
               routeId="protected/renew/$id/review-child-information"
               params={params}
               disabled={isSubmitting}

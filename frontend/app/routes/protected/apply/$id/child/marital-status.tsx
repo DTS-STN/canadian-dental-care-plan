@@ -288,7 +288,7 @@ export default function ApplyChildMaritalStatus({ loaderData, params }: Route.Co
               <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Save - Marital status click">
                 {t('protected-apply-child:marital-status.save-btn')}
               </Button>
-              <LoadingButton id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - Marital status click">
+              <LoadingButton id="cancel-button" variant="secondary" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - Marital status click">
                 {t('protected-apply-child:marital-status.cancel-btn')}
               </LoadingButton>
             </div>
@@ -307,6 +307,7 @@ export default function ApplyChildMaritalStatus({ loaderData, params }: Route.Co
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId={getBackButtonRouteId()}
                 params={params}
                 disabled={isSubmitting}

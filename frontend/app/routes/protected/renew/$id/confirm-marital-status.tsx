@@ -284,7 +284,14 @@ export default function ProtectedRenewMaritalStatus({ loaderData, params }: Rout
             <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Marital status click">
               {t('protected-renew:marital-status.save-btn')}
             </Button>
-            <ButtonLink id="cancel-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Marital status click">
+            <ButtonLink
+              id="cancel-button"
+              variant="secondary"
+              routeId="protected/renew/$id/review-adult-information"
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Marital status click"
+            >
               {t('protected-renew:marital-status.cancel-btn')}
             </ButtonLink>
           </div>
@@ -303,6 +310,7 @@ export default function ProtectedRenewMaritalStatus({ loaderData, params }: Rout
             </LoadingButton>
             <ButtonLink
               id="back-button"
+              variant="secondary"
               routeId="protected/renew/$id/member-selection"
               params={params}
               disabled={isSubmitting}

@@ -191,7 +191,14 @@ export default function ProtectedApplyFlowEmail({ loaderData, params }: Route.Co
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Save - Email click">
                 {t('protected-apply-adult:email.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="protected/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Email click">
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId="protected/apply/$id/adult/review-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Email click"
+              >
                 {t('protected-apply-adult:email.cancel-btn')}
               </ButtonLink>
             </div>
@@ -202,6 +209,7 @@ export default function ProtectedApplyFlowEmail({ loaderData, params }: Route.Co
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="protected/apply/$id/adult/communication-preference"
                 params={params}
                 disabled={isSubmitting}

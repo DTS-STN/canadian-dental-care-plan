@@ -114,6 +114,7 @@ export default function ProtectedApplyFlowTaxFiling({ loaderData, params }: Rout
             </LoadingButton>
             <ButtonLink
               id="back-button"
+              variant="secondary"
               routeId="protected/apply/$id/terms-and-conditions"
               params={params}
               disabled={isSubmitting}

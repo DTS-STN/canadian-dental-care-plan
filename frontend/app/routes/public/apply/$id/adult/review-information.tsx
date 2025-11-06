@@ -446,7 +446,15 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
           >
             {t('apply-adult:review-information.submit-button')}
           </LoadingButton>
-          <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - Review your information click">
+          <Button
+            id="back-button"
+            variant="secondary"
+            name="_action"
+            value={FORM_ACTION.back}
+            disabled={isSubmitting}
+            startIcon={faChevronLeft}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - Review your information click"
+          >
             {t('apply-adult:review-information.back-button')}
           </Button>
         </fetcher.Form>

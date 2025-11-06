@@ -325,6 +325,7 @@ export default function RenewItaFederalProvincialTerritorialBenefits({ loaderDat
               </Button>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/renew/$id/ita/review-information"
                 params={params}
                 disabled={isSubmitting}
@@ -346,6 +347,7 @@ export default function RenewItaFederalProvincialTerritorialBenefits({ loaderDat
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/ita/dental-insurance"
                 params={params}
                 disabled={isSubmitting}

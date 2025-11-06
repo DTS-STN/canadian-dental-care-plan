@@ -103,7 +103,15 @@ export default function RenewChildParentIntro({ loaderData, params }: Route.Comp
             >
               {t('renew-child:parent-intro.continue-btn')}
             </LoadingButton>
-            <Button id="back-button" name="_action" value={FORM_ACTION.back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Parent or legal guardian information click">
+            <Button
+              id="back-button"
+              variant="secondary"
+              name="_action"
+              value={FORM_ACTION.back}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Child:Back - Parent or legal guardian information click"
+            >
               {t('renew-child:parent-intro.back-btn')}
             </Button>
           </div>

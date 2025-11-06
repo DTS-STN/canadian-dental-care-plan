@@ -368,7 +368,7 @@ export default function RenewItaUpdateAddress({ loaderData, params }: Route.Comp
                   </>
                 )}
               </Dialog>
-              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Mailing address click">
+              <Button id="cancel-button" name="_action" variant="secondary" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Mailing address click">
                 {t('renew-ita:update-address.cancel-btn')}
               </Button>
             </div>
@@ -402,6 +402,7 @@ export default function RenewItaUpdateAddress({ loaderData, params }: Route.Comp
 
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/ita/confirm-address"
                 params={params}
                 disabled={isSubmitting}

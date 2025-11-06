@@ -181,7 +181,14 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Communication click">
                 {t('apply-adult:communication-preference.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Communication click">
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId="public/apply/$id/adult/review-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Communication click"
+              >
                 {t('apply-adult:communication-preference.cancel-btn')}
               </ButtonLink>
             </div>
@@ -192,6 +199,7 @@ export default function ApplyFlowCommunicationPreferencePage({ loaderData, param
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/apply/$id/adult/phone-number"
                 params={params}
                 disabled={isSubmitting}

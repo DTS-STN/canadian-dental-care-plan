@@ -343,7 +343,7 @@ export default function ProtectedApplyAdultHomeAddress({ loaderData, params }: R
                   </>
                 )}
               </Dialog>
-              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Home address click">
+              <Button id="cancel-button" name="_action" variant="secondary" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Home address click">
                 {t('protected-apply-adult:address.cancel-btn')}
               </Button>
             </div>
@@ -376,6 +376,7 @@ export default function ProtectedApplyAdultHomeAddress({ loaderData, params }: R
               </Dialog>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId={`protected/apply/$id/adult/mailing-address`}
                 params={params}
                 disabled={isSubmitting}

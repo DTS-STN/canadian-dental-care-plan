@@ -74,6 +74,7 @@ export default function ProtectedApplyFlowTaxFiling({ loaderData, params }: Rout
         <CsrfTokenInput />
         <ButtonLink
           id="back-button"
+          variant="secondary"
           routeId="protected/apply/$id/adult/review-information"
           params={params}
           disabled={isSubmitting}

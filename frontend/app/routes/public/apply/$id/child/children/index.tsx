@@ -195,7 +195,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
                         <p>{t('apply-child:children.index.modal.info', { childName })}</p>
                         <DialogFooter>
                           <DialogClose asChild>
-                            <Button id="confirm-modal-back" disabled={isSubmitting} variant="default" size="sm">
+                            <Button id="confirm-modal-back" disabled={isSubmitting} variant="secondary" size="sm">
                               {t('apply-child:children.index.modal.back-btn')}
                             </Button>
                           </DialogClose>
@@ -227,7 +227,16 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
 
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
           <CsrfTokenInput />
-          <Button className="my-10" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} startIcon={faPlus} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Add child - Child(ren) application click">
+          <Button
+            variant="secondary"
+            className="my-10"
+            id="add-child"
+            name="_action"
+            value={FORM_ACTION.add}
+            disabled={isSubmitting}
+            startIcon={faPlus}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Add child - Child(ren) application click"
+          >
             {children.length === 0 ? t('apply-child:children.index.add-child') : t('apply-child:children.index.add-another-child')}
           </Button>
 
@@ -245,6 +254,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
               </ButtonLink>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/apply/$id/child/review-child-information"
                 params={params}
                 disabled={!hasChildren || isSubmitting}
@@ -269,6 +279,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/apply/$id/type-application"
                 params={params}
                 disabled={isSubmitting}

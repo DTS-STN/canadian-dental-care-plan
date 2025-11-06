@@ -374,7 +374,7 @@ export default function RenewAdultChildUpdateAddress({ loaderData, params }: Rou
                   </>
                 )}
               </Dialog>
-              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Mailing address click">
+              <Button id="cancel-button" name="_action" variant="secondary" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Adult_Child:Cancel - Mailing address click">
                 {t('renew-adult-child:update-address.cancel-btn')}
               </Button>
             </div>
@@ -408,6 +408,7 @@ export default function RenewAdultChildUpdateAddress({ loaderData, params }: Rou
 
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/adult-child/confirm-address"
                 params={params}
                 disabled={isSubmitting}

@@ -212,7 +212,7 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
               <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Save - New or existing member click">
                 {t('protected-apply-child:new-or-existing-member.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - New or existing member click">
+              <Button id="cancel-button" name="_action" variant="secondary" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Child:Cancel - New or existing member click">
                 {t('protected-apply-child:new-or-existing-member.cancel-btn')}
               </Button>
             </div>
@@ -231,6 +231,7 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="protected/apply/$id/child/applicant-information"
                 params={params}
                 disabled={isSubmitting}

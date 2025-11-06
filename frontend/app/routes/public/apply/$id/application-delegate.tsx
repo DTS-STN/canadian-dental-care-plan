@@ -77,6 +77,7 @@ export default function ApplyFlowApplicationDelegate({ loaderData, params }: Rou
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
         <ButtonLink
+          variant="secondary"
           type="button"
           routeId="public/apply/$id/type-application"
           params={params}

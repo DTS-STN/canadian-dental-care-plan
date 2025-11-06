@@ -167,6 +167,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
               </Button>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/apply/$id/adult/review-information"
                 params={params}
                 disabled={isSubmitting}
@@ -182,6 +183,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId={backToEmail ? 'public/apply/$id/adult/email' : 'public/apply/$id/adult/communication-preference'}
                 params={params}
                 disabled={isSubmitting}

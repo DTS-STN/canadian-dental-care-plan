@@ -180,6 +180,7 @@ export default function RenewAdultChildAccessToDentalInsuranceQuestion({ loaderD
               </Button>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/renew/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
@@ -203,6 +204,7 @@ export default function RenewAdultChildAccessToDentalInsuranceQuestion({ loaderD
               </LoadingButton>
               <Button
                 id="back-button"
+                variant="secondary"
                 name="_action"
                 value={FORM_ACTION.back}
                 disabled={isSubmitting}

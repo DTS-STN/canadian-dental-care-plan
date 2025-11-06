@@ -141,7 +141,14 @@ export default function ProtectedRenewConfirmCommunicationPreference({ loaderDat
           <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Save - Communication click">
             {t('protected-renew:confirm-communication-preference.save-btn')}
           </Button>
-          <ButtonLink id="back-button" routeId="protected/renew/$id/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Communication click">
+          <ButtonLink
+            id="back-button"
+            variant="secondary"
+            routeId="protected/renew/$id/review-adult-information"
+            params={params}
+            disabled={isSubmitting}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Cancel - Communication click"
+          >
             {t('protected-renew:confirm-communication-preference.cancel-btn')}
           </ButtonLink>
         </div>

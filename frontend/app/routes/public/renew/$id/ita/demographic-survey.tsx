@@ -250,7 +250,14 @@ export default function RenewItaDemographicSurveyQuestions({ loaderData, params 
               <Button id="save-button" name="_action" value={FORM_ACTION.continue} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Save - Voluntary demographic questions click">
                 {t('renew-ita:demographic-survey.save-btn')}
               </Button>
-              <ButtonLink id="cancel-button" routeId="public/renew/$id/ita/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Voluntary demographic questions click">
+              <ButtonLink
+                id="cancel-button"
+                variant="secondary"
+                routeId="public/renew/$id/ita/review-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-ITA:Cancel - Voluntary demographic questions click"
+              >
                 {t('renew-ita:demographic-survey.cancel-btn')}
               </ButtonLink>
             </div>
@@ -269,6 +276,7 @@ export default function RenewItaDemographicSurveyQuestions({ loaderData, params 
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/ita/federal-provincial-territorial-benefits"
                 params={params}
                 disabled={isSubmitting}

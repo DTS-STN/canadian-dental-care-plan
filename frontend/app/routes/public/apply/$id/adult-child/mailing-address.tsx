@@ -364,7 +364,7 @@ export default function ApplyAdultChildMailingAddress({ loaderData, params }: Ro
                   </>
                 )}
               </Dialog>
-              <Button id="cancel-button" name="_action" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Mailing address click">
+              <Button id="cancel-button" name="_action" variant="secondary" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Cancel - Mailing address click">
                 {t('apply-adult-child:address.cancel-btn')}
               </Button>
             </div>
@@ -398,6 +398,7 @@ export default function ApplyAdultChildMailingAddress({ loaderData, params }: Ro
 
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/apply/$id/adult-child/marital-status"
                 params={params}
                 disabled={isSubmitting}

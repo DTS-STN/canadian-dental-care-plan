@@ -129,6 +129,7 @@ export default function ProtectedApplyFlowTypeOfApplication({ loaderData, params
             </LoadingButton>
             <ButtonLink
               id="back-button"
+              variant="secondary"
               routeId="protected/apply/$id/tax-filing"
               params={params}
               disabled={isSubmitting}

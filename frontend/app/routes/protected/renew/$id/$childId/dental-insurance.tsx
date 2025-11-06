@@ -192,6 +192,7 @@ export default function ProtectedRenewChildrenDentalInsurance({ loaderData, para
             </Button>
             <ButtonLink
               id="back-button"
+              variant="secondary"
               routeId="protected/renew/$id/review-child-information"
               params={params}
               disabled={isSubmitting}
@@ -207,6 +208,7 @@ export default function ProtectedRenewChildrenDentalInsurance({ loaderData, para
             </LoadingButton>
             <ButtonLink
               id="back-button"
+              variant="secondary"
               routeId="protected/renew/$id/$childId/parent-or-guardian"
               params={params}
               disabled={isSubmitting}

@@ -352,7 +352,14 @@ export default function ProtectedAccessToDentalInsuranceQuestion({ loaderData, p
               <Button variant="primary" id="save-button" name="_action" value={FORM_ACTION.save} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Save - Access to other dental benefits click">
                 {t('protected-apply-adult:dental-benefits.button.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Access to other dental benefits click">
+              <Button
+                id="cancel-button"
+                variant="secondary"
+                name="_action"
+                value={FORM_ACTION.cancel}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult:Cancel - Access to other dental benefits click"
+              >
                 {t('protected-apply-adult:dental-benefits.button.cancel-btn')}
               </Button>
             </div>
@@ -371,6 +378,7 @@ export default function ProtectedAccessToDentalInsuranceQuestion({ loaderData, p
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="protected/apply/$id/adult/confirm-federal-provincial-territorial-benefits"
                 params={params}
                 disabled={isSubmitting}

@@ -158,7 +158,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
               <Button id="save-button" name="_action" value={FORM_ACTION.save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Save - Living independently click">
                 {t('protected-apply-adult-child:living-independently.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Cancel - Living independently click">
+              <Button id="cancel-button" name="_action" variant="secondary" value={FORM_ACTION.cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Adult_Child:Cancel - Living independently click">
                 {t('protected-apply-adult-child:living-independently.cancel-btn')}
               </Button>
             </div>
@@ -177,6 +177,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="protected/apply/$id/adult-child/applicant-information"
                 params={params}
                 disabled={isSubmitting}

@@ -88,6 +88,7 @@ export default function ApplyForYourself({ loaderData, params }: Route.Component
         <CsrfTokenInput />
         <ButtonLink
           id="back-button"
+          variant="secondary"
           routeId="public/apply/$id/adult-child/children/$childId/information"
           params={params}
           disabled={isSubmitting}

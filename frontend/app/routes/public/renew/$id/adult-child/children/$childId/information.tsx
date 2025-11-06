@@ -327,6 +327,7 @@ export default function RenewFlowChildInformation({ loaderData, params }: Route.
               </Button>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/renew/$id/adult-child/review-child-information"
                 params={params}
                 disabled={isSubmitting}
@@ -342,6 +343,7 @@ export default function RenewFlowChildInformation({ loaderData, params }: Route.
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/adult-child/children/index"
                 params={params}
                 disabled={isSubmitting}

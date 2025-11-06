@@ -280,6 +280,7 @@ export default function RenewChildrenDemographicSurveyQuestions({ loaderData, pa
               </LoadingButton>
               <ButtonLink
                 id="cancel-button"
+                variant="secondary"
                 routeId="public/renew/$id/child/review-child-information"
                 params={params}
                 disabled={isSubmitting}
@@ -303,6 +304,7 @@ export default function RenewChildrenDemographicSurveyQuestions({ loaderData, pa
               </LoadingButton>
               <ButtonLink
                 id="back-button"
+                variant="secondary"
                 routeId="public/renew/$id/child/children/$childId/dental-insurance"
                 params={params}
                 disabled={isSubmitting}
