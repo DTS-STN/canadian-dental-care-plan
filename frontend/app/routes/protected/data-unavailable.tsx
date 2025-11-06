@@ -14,7 +14,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'data-unavailable:breadcrumbs.cdcp' }],
   i18nNamespaces: getTypedI18nNamespaces('data-unavailable', 'gcweb'),
   pageIdentifier: pageIds.protected.dataUnavailable,
   pageTitleI18nKey: 'data-unavailable:page-title',
@@ -41,22 +40,21 @@ export default function DataUnavailable({ loaderData, params }: Route.ComponentP
   const { t } = useTranslation(handle.i18nNamespaces);
   const { SCCH_BASE_URI } = loaderData;
 
-  const doyouqualify = <InlineLink to={t('data-unavailable:do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
-  const howtoapply = <InlineLink to={t('data-unavailable:how-to-apply.href')} className="external-link" newTabIndicator target="_blank" />;
-  const contactus = <InlineLink to={t('data-unavailable:contact-us.href')} className="external-link" newTabIndicator target="_blank" />;
-  const statuschecker = <InlineLink routeId="public/status/index" className="external-link" newTabIndicator target="_blank" params={params} />;
+  const statusCheckerLink = <InlineLink routeId="public/status/index" className="external-link" newTabIndicator target="_blank" params={params} />;
+  const cdcpLink = <InlineLink to={t('data-unavailable:do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
+  const contactLink = <InlineLink to={t('data-unavailable:contact-us.href')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
-    <>
+    <div className="max-w-prose">
       <div className="space-y-4">
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="data-unavailable:service-eligible" components={{ doyouqualify, howtoapply }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="data-unavailable:service-eligible" components={{ statusCheckerLink }} />
         </p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="data-unavailable:other-enquiry" components={{ contactus }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="data-unavailable:other-enquiry" components={{ cdcpLink }} />
         </p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="data-unavailable:service-delay" components={{ statuschecker }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="data-unavailable:service-delay" components={{ contactLink }} />
         </p>
       </div>
 
@@ -65,6 +63,6 @@ export default function DataUnavailable({ loaderData, params }: Route.ComponentP
           {t('data-unavailable:back-button')}
         </ButtonLink>
       </div>
-    </>
+    </div>
   );
 }
