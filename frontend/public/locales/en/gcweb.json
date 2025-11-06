@@ -21,7 +21,7 @@
     "govt-of-canada.text": "Government of Canada",
     "govt-of-canada.href": "https://www.canada.ca/en.html",
     "menu-title": "Account",
-    "menu-dashboard.text": "My Dashboard",
+    "menu-dashboard.text": "My dashboard",
     "menu-dashboard.href": "{{baseUri}}/en/my-dashboard",
     "menu-msca-home.href": "{{baseUri}}/sc/msca-mdsc/portal-portail/pro/home-accueil?Lang=eng",
     "menu-profile.text": "Profile",
@@ -69,7 +69,7 @@
   "breadcrumbs": {
     "you-are-here": "You are here:",
     "home": "My Service Canada Account",
-    "dashboard": "My Dashboard",
+    "dashboard": "My dashboard",
     "canada-ca": "Canada.ca",
     "canada-ca-url": "https://www.canada.ca/en.html",
     "benefits": "Benefits",
