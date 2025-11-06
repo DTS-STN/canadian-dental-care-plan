@@ -122,7 +122,7 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
           <Button
             id="dialog.corrected-address-close-button"
             disabled={fetcher.isSubmitting}
-            variant="default"
+            variant="secondary"
             size="sm"
             startIcon={faChevronLeft}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Suggestion click"
@@ -196,7 +196,7 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
       </div>
       <DialogFooter>
         <DialogClose asChild>
-          <Button id="dialog.address-invalid-close-button" variant="default" size="sm" startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Invalid click">
+          <Button id="dialog.address-invalid-close-button" variant="secondary" size="sm" startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Invalid click">
             {t('common:dialog.address-invalid.close-button')}
           </Button>
         </DialogClose>

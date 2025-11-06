@@ -194,7 +194,14 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
           <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Communication preferences click">
             {t('protected-profile:edit-communication-preferences.save')}
           </LoadingButton>
-          <ButtonLink id="back-button" routeId="protected/profile/communication-preferences" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Communication preferences click">
+          <ButtonLink
+            variant="secondary"
+            id="back-button"
+            routeId="protected/profile/communication-preferences"
+            params={params}
+            disabled={isSubmitting}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Communication preferences click"
+          >
             {t('protected-profile:edit-communication-preferences.back')}
           </ButtonLink>
         </div>

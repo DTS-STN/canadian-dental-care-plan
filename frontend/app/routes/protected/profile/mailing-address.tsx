@@ -382,7 +382,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
               </>
             )}
           </Dialog>
-          <ButtonLink id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Mailing address click">
+          <ButtonLink variant="secondary" id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Mailing address click">
             {t('protected-profile:mailing-address.back-btn')}
           </ButtonLink>
         </div>
