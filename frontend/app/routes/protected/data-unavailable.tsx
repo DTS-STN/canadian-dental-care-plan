@@ -59,7 +59,7 @@ export default function DataUnavailable({ loaderData, params }: Route.ComponentP
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Return to dashboard - You have not applied for CDCP click">
+        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Return to dashboard - You have not applied for CDCP click">
           {t('data-unavailable:back-button')}
         </ButtonLink>
       </div>

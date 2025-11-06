@@ -367,7 +367,7 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
               </>
             )}
           </Dialog>
-          <ButtonLink id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Home address click">
+          <ButtonLink variant="secondary" id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Home address click">
             {t('protected-profile:home-address.back-btn')}
           </ButtonLink>
         </div>

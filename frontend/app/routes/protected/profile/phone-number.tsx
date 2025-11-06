@@ -148,7 +148,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
           <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Phone number click">
             {t('protected-profile:phone-number.save-btn')}
           </LoadingButton>
-          <ButtonLink id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Phone number click">
+          <ButtonLink variant="secondary" id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Phone number click">
             {t('protected-profile:phone-number.back-btn')}
           </ButtonLink>
         </div>

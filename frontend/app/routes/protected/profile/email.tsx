@@ -137,7 +137,7 @@ export default function ProtectedProfileEmailAddress({ loaderData, params }: Rou
           <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Email address click">
             {t('protected-profile:email.continue-btn')}
           </LoadingButton>
-          <ButtonLink id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Email address click">
+          <ButtonLink variant="secondary" id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Email address click">
             {t('protected-profile:email.back')}
           </ButtonLink>
         </div>
