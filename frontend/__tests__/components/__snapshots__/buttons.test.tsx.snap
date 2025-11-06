@@ -1,0 +1,1169 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Button Component > should render the Button style combinations for variant: alternative > expected html 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="alternative_pill_false_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="alternative_pill_false_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="alternative_pill_false_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="alternative_pill_false_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="alternative_pill_false_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="alternative_pill_false_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="alternative_pill_false_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="alternative_pill_false_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="alternative_pill_false_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="alternative_pill_false_disabled_true_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="alternative_pill_true_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="alternative_pill_true_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="alternative_pill_true_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="alternative_pill_true_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="alternative_pill_true_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="alternative_pill_true_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="alternative_pill_true_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="alternative_pill_true_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="alternative_pill_true_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="alternative_pill_true_disabled_true_xl"
+  >
+    Click me
+  </button>
+</div>
+`;
+
+exports[`Button Component > should render the Button style combinations for variant: dark > expected html 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="dark_pill_false_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="dark_pill_false_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="dark_pill_false_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="dark_pill_false_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="dark_pill_false_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="dark_pill_false_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="dark_pill_false_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="dark_pill_false_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="dark_pill_false_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="dark_pill_false_disabled_true_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="dark_pill_true_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="dark_pill_true_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="dark_pill_true_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="dark_pill_true_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="dark_pill_true_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="dark_pill_true_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="dark_pill_true_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="dark_pill_true_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="dark_pill_true_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="dark_pill_true_disabled_true_xl"
+  >
+    Click me
+  </button>
+</div>
+`;
+
+exports[`Button Component > should render the Button style combinations for variant: default > expected html 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="default_pill_false_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="default_pill_false_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="default_pill_false_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="default_pill_false_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="default_pill_false_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="default_pill_false_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="default_pill_false_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="default_pill_false_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="default_pill_false_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="default_pill_false_disabled_true_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="default_pill_true_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="default_pill_true_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="default_pill_true_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="default_pill_true_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="default_pill_true_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="default_pill_true_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="default_pill_true_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="default_pill_true_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="default_pill_true_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="default_pill_true_disabled_true_xl"
+  >
+    Click me
+  </button>
+</div>
+`;
+
+exports[`Button Component > should render the Button style combinations for variant: green > expected html 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="green_pill_false_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="green_pill_false_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="green_pill_false_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="green_pill_false_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="green_pill_false_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="green_pill_false_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="green_pill_false_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="green_pill_false_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="green_pill_false_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="green_pill_false_disabled_true_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="green_pill_true_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="green_pill_true_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="green_pill_true_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="green_pill_true_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="green_pill_true_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="green_pill_true_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="green_pill_true_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="green_pill_true_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="green_pill_true_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="green_pill_true_disabled_true_xl"
+  >
+    Click me
+  </button>
+</div>
+`;
+
+exports[`Button Component > should render the Button style combinations for variant: link > expected html 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 py-2 text-xs border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="link_pill_false_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 py-2 text-sm border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="link_pill_false_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 py-2.5 text-sm border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="link_pill_false_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 py-3 text-base border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="link_pill_false_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 py-3.5 text-base border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="link_pill_false_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 py-2 text-xs border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="link_pill_false_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 py-2 text-sm border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="link_pill_false_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 py-2.5 text-sm border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="link_pill_false_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 py-3 text-base border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="link_pill_false_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 py-3.5 text-base border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="link_pill_false_disabled_true_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 py-2 text-xs border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="link_pill_true_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 py-2 text-sm border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="link_pill_true_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 py-2.5 text-sm border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="link_pill_true_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 py-3 text-base border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="link_pill_true_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 py-3.5 text-base border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="link_pill_true_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 py-2 text-xs border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="link_pill_true_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 py-2 text-sm border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="link_pill_true_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 py-2.5 text-sm border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="link_pill_true_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 py-3 text-base border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="link_pill_true_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 py-3.5 text-base border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="link_pill_true_disabled_true_xl"
+  >
+    Click me
+  </button>
+</div>
+`;
+
+exports[`Button Component > should render the Button style combinations for variant: outline-red > expected html 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="outline-red_pill_false_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-sm text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="outline-red_pill_false_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="outline-red_pill_false_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-3 text-base text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="outline-red_pill_false_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="outline-red_pill_false_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="outline-red_pill_false_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-sm text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="outline-red_pill_false_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="outline-red_pill_false_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-3 text-base text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="outline-red_pill_false_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="outline-red_pill_false_disabled_true_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-xs text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="outline-red_pill_true_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-sm text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="outline-red_pill_true_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="outline-red_pill_true_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-3 text-base text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="outline-red_pill_true_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="outline-red_pill_true_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-xs text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="outline-red_pill_true_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-sm text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="outline-red_pill_true_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="outline-red_pill_true_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-3 text-base text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="outline-red_pill_true_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="outline-red_pill_true_disabled_true_xl"
+  >
+    Click me
+  </button>
+</div>
+`;
+
+exports[`Button Component > should render the Button style combinations for variant: primary > expected html 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="primary_pill_false_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="primary_pill_false_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="primary_pill_false_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="primary_pill_false_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="primary_pill_false_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="primary_pill_false_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="primary_pill_false_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="primary_pill_false_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="primary_pill_false_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="primary_pill_false_disabled_true_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="primary_pill_true_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="primary_pill_true_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="primary_pill_true_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="primary_pill_true_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="primary_pill_true_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="primary_pill_true_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="primary_pill_true_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="primary_pill_true_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="primary_pill_true_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="primary_pill_true_disabled_true_xl"
+  >
+    Click me
+  </button>
+</div>
+`;
+
+exports[`Button Component > should render the Button style combinations for variant: red > expected html 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="red_pill_false_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="red_pill_false_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="red_pill_false_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="red_pill_false_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    id="red_pill_false_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="red_pill_false_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="red_pill_false_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="red_pill_false_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="red_pill_false_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    disabled=""
+    id="red_pill_false_disabled_true_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="red_pill_true_disabled_false_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="red_pill_true_disabled_false_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="red_pill_true_disabled_false_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="red_pill_true_disabled_false_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    id="red_pill_true_disabled_false_xl"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="red_pill_true_disabled_true_xs"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="red_pill_true_disabled_true_sm"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="red_pill_true_disabled_true_base"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-5 py-3 text-base border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="red_pill_true_disabled_true_lg"
+  >
+    Click me
+  </button>
+  <button
+    class="inline-flex items-center justify-center border align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    disabled=""
+    id="red_pill_true_disabled_true_xl"
+  >
+    Click me
+  </button>
+</div>
+`;
+
+exports[`ButtonLink Component > should render the ButtonLink style combinations for variant: alternative > expected html 1`] = `
+<a
+  class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700"
+  data-discover="true"
+  href="/"
+  id="alternative_pill_false_disabled_false_size_xs"
+>
+  Click me
+</a>
+`;
+
+exports[`ButtonLink Component > should render the ButtonLink style combinations for variant: dark > expected html 1`] = `
+<a
+  class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-800 bg-gray-800 text-white hover:bg-gray-900 focus:bg-gray-900"
+  data-discover="true"
+  href="/"
+  id="dark_pill_false_disabled_false_size_xs"
+>
+  Click me
+</a>
+`;
+
+exports[`ButtonLink Component > should render the ButtonLink style combinations for variant: default > expected html 1`] = `
+<a
+  class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-gray-300 bg-gray-200 text-slate-700 hover:bg-neutral-300 focus:bg-neutral-300"
+  data-discover="true"
+  href="/"
+  id="default_pill_false_disabled_false_size_xs"
+>
+  Click me
+</a>
+`;
+
+exports[`ButtonLink Component > should render the ButtonLink style combinations for variant: green > expected html 1`] = `
+<a
+  class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-green-700 bg-green-700 text-white hover:bg-green-800 focus:bg-green-800"
+  data-discover="true"
+  href="/"
+  id="green_pill_false_disabled_false_size_xs"
+>
+  Click me
+</a>
+`;
+
+exports[`ButtonLink Component > should render the ButtonLink style combinations for variant: link > expected html 1`] = `
+<a
+  class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 py-2 text-xs border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700"
+  data-discover="true"
+  href="/"
+  id="link_pill_false_disabled_false_size_xs"
+>
+  Click me
+</a>
+`;
+
+exports[`ButtonLink Component > should render the ButtonLink style combinations for variant: outline-red > expected html 1`] = `
+<a
+  class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs text-red-700 hover:text-white focus:text-white border-red-700 hover:bg-red-800 focus:bg-red-800"
+  data-discover="true"
+  href="/"
+  id="outline-red_pill_false_disabled_false_size_xs"
+>
+  Click me
+</a>
+`;
+
+exports[`ButtonLink Component > should render the ButtonLink style combinations for variant: primary > expected html 1`] = `
+<a
+  class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-700 bg-slate-700 text-white hover:bg-sky-800 focus:bg-sky-800"
+  data-discover="true"
+  href="/"
+  id="primary_pill_false_disabled_false_size_xs"
+>
+  Click me
+</a>
+`;
+
+exports[`ButtonLink Component > should render the ButtonLink style combinations for variant: red > expected html 1`] = `
+<a
+  class="inline-flex items-center justify-center rounded-sm border align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-red-700 bg-red-700 text-white hover:bg-red-800 focus:bg-red-800"
+  data-discover="true"
+  href="/"
+  id="red_pill_false_disabled_false_size_xs"
+>
+  Click me
+</a>
+`;
