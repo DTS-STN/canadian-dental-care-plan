@@ -215,7 +215,7 @@
     "postal-code-optional": "Postal code or ZIP code (optional)",
     "province": "Province, territory, state, or region.",
     "country": "Country",
-    "use-mailing-address": "My mailing address is the same as my home address",
+    "use-mailing-address": "Use this address as my home address.",
     "back-btn": "Back",
     "save-btn": "Save",
     "select-one": "Select one"

@@ -215,7 +215,7 @@
     "postal-code-optional": "Code postal (facultatif)",
     "province": "Province, territoire, état ou région",
     "country": "Pays",
-    "use-mailing-address": "Mon adresse postale est la même que mon adresse à domicile",
+    "use-mailing-address": "Utiliser cette adresse comme adresse de mon domicile.",
     "back-btn": "Retour",
     "save-btn": "Enregistrer",
     "select-one": "Sélectionnez une option"
