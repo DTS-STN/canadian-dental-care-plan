@@ -26,6 +26,7 @@
 # Base image used for all future stages
 FROM docker.io/node:24.11.0-trixie-slim AS base
 ENV NODE_ENV production
+RUN npm install -g npm@11.6.2
 
 # ---------------------------------------------------------------------------- #
 
