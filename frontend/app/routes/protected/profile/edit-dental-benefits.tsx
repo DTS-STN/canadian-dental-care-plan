@@ -40,7 +40,7 @@ const HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION = {
 } as const;
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'protected-profile:dental-benefits.page-title', routeId: 'protected/profile/dental-benefits' }],
+  breadcrumbs: [{ labelI18nKey: 'protected-profile:edit-dental-benefits.breadcrumb', routeId: 'protected/profile/dental-benefits' }],
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.editDentalBenefits,
   pageTitleI18nKey: 'protected-profile:edit-dental-benefits.title',
