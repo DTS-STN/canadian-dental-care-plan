@@ -121,7 +121,7 @@
   },
   "edit-communication-preferences": {
     "page-title": "Communication preferences",
-    "preferred-language": "What is your preferred official language of communication?",
+    "preferred-language": "What is your preferred language of communication?",
     "preferred-method-gc": "How would you like to receive updates from the Government of Canada about the Canadian Dental Care Plan?",
     "preferred-method-gc-digital": "<span>{{name}}</span><br>You'll receive email notifications. It's the fastest way to receive updates.",
     "preferred-method-gc-mail": "<span>{{name}}</span><br>You can also view your Canadian Dental Care Plan information in MSCA.",
