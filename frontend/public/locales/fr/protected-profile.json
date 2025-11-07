@@ -205,8 +205,8 @@
   "mailing-address": {
     "page-title": "Adresse postale",
     "address": "Adresse",
-    "address-help": "Inclure le numéro d'appartement (s'il y a lieu), le numéro municipal et le nom de la rue. Par exemple\u00a0: 123, rue Main, app. 4B",
-    "apartment": "Numéro d'unité / de suite / d'appartement",
+    "address-help": "Inclure le numéro et le nom de la rue. Par exemple\u00a0: 123, rue Main",
+    "apartment": "Numéro d'unité / de suite / d'appartement (facultatif)",
     "apartment-help": "Par exemple\u00a0: Suite 4B",
     "city": "Ville ou municipalité",
     "postal-code": "Code postal",
@@ -221,8 +221,8 @@
   "home-address": {
     "page-title": "Adresse à domicile",
     "address": "Adresse",
-    "address-help": "Inclure le numéro d'appartement (s'il y a lieu), le numéro municipal et le nom de la rue. Par exemple\u00a0: 123, rue Main, app. 4B",
-    "apartment": "Numéro d'unité / de suite / d'appartement",
+    "address-help": "Inclure le numéro et le nom de la rue. Par exemple\u00a0: 123, rue Main",
+    "apartment": "Numéro d'unité / de suite / d'appartement (facultatif)",
     "apartment-help": "Par exemple\u00a0: Suite 4B",
     "city": "Ville ou municipalité",
     "postal-code": "Code postal",
