@@ -1,4 +1,4 @@
-import { render, renderHook, screen } from '@testing-library/react';
+import { render, renderHook } from '@testing-library/react';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -59,17 +59,17 @@ describe('ErrorSummary component', () => {
       { fieldId: 'field1', errorMessage: 'Error 1' },
       { fieldId: 'field2', errorMessage: 'Error 2' },
     ];
-    render(<ErrorSummary errors={errors} id="error-summary" />);
+    const { getByRole, getAllByRole } = render(<ErrorSummary errors={errors} id="error-summary" />);
 
-    expect(screen.getByText('gcweb:error-summary.header')).toBeInTheDocument();
-    expect(screen.getAllByRole('listitem')).toHaveLength(2);
+    expect(getByRole('heading', { level: 2 })).toBeInTheDocument();
+    expect(getAllByRole('listitem')).toHaveLength(2);
   });
 
   it('renders no errors when errors array is empty', () => {
-    render(<ErrorSummary errors={[]} id="error-summary" />);
+    const { getByRole, queryByRole } = render(<ErrorSummary errors={[]} id="error-summary" />);
 
-    expect(screen.getByText('gcweb:error-summary.header')).toBeInTheDocument();
-    expect(screen.queryByRole('listitem')).not.toBeInTheDocument();
+    expect(getByRole('heading', { level: 2 })).toBeInTheDocument();
+    expect(queryByRole('listitem')).not.toBeInTheDocument();
   });
 });
 

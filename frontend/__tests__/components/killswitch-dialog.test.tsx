@@ -4,18 +4,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { KillswitchDialog } from '~/components/killswitch-dialog';
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    /**
-     * Implementation of the t() function that will add stringify any options that are passed.
-     */
-    t: (key?: string | string[], options?: Record<string, unknown>) => {
-      const i18nKey = Array.isArray(key) ? key.join('.') : key;
-      return options ? JSON.stringify({ key: i18nKey, options }) : i18nKey;
-    },
-  }),
-}));
-
 describe('KillswitchDialog', () => {
   beforeEach(() => {
     vi.useFakeTimers();

@@ -1,0 +1,324 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AddressInvalidDialogContent > should render the AddressInvalidDialogContent > expected html 1`] = `
+<div
+  aria-labelledby="radix-_r_1_"
+  class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-white p-6 shadow-lg duration-200 sm:rounded-lg sm:max-w-md"
+  data-state="open"
+  id="radix-_r_0_"
+  role="dialog"
+  style="pointer-events: auto;"
+  tabindex="-1"
+>
+  <div
+    class="flex flex-col space-y-1.5 sm:text-left"
+  >
+    <h2
+      class="font-lato text-lg leading-none font-semibold tracking-tight"
+      id="radix-_r_1_"
+    >
+      common:dialog.address-invalid.header
+    </h2>
+    <p
+      class="text-sm text-neutral-500"
+      id="radix-_r_2_"
+    >
+      common:dialog.address-invalid.description
+    </p>
+  </div>
+  <div
+    class="space-y-2"
+  >
+    <p>
+      <strong>
+        common:dialog.address-invalid.entered-address
+      </strong>
+    </p>
+    <address
+      class="whitespace-pre-wrap not-italic"
+    >
+      1234 Retemele ST
+Ottawa ON  E5E 4A2
+CA
+    </address>
+  </div>
+  <div
+    class="flex flex-wrap-reverse justify-end gap-2"
+  >
+    <button
+      class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Invalid click"
+      id="dialog.address-invalid-close-button"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-chevron-left me-2"
+        data-icon="chevron-left"
+        data-prefix="fas"
+        role="img"
+        viewBox="0 0 320 512"
+      >
+        <path
+          d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"
+          fill="currentColor"
+        />
+      </svg>
+      common:dialog.address-invalid.close-button
+    </button>
+    <form
+      method="post"
+    >
+      <button
+        class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Use entered address - Address Invalid click"
+        id="dialog.address-invalid-use-entered-address-button"
+        name="_action"
+        type="submit"
+        value="use-invalid-address"
+      >
+        <span>
+          common:dialog.address-invalid.use-entered-address-button
+        </span>
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-chevron-right ms-2"
+          data-icon="chevron-right"
+          data-prefix="fas"
+          role="img"
+          viewBox="0 0 320 512"
+        >
+          <path
+            d="M311.1 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L243.2 256 73.9 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </form>
+  </div>
+  <button
+    class="absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-white data-[state=open]:text-black"
+    type="button"
+  >
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-xmark block size-4"
+      data-icon="xmark"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 384 512"
+    >
+      <path
+        d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
+        fill="currentColor"
+      />
+    </svg>
+    <span
+      class="sr-only"
+    >
+      dialog.close
+    </span>
+  </button>
+</div>
+`;
+
+exports[`AddressSuggestionDialogContent > should render the AddressSuggestionDialogContent > expected html 1`] = `
+<div
+  aria-labelledby="radix-_r_a_"
+  class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-white p-6 shadow-lg duration-200 sm:rounded-lg sm:max-w-md"
+  data-state="open"
+  id="radix-_r_9_"
+  role="dialog"
+  style="pointer-events: auto;"
+  tabindex="-1"
+>
+  <div
+    class="flex flex-col space-y-1.5 sm:text-left"
+  >
+    <h2
+      class="font-lato text-lg leading-none font-semibold tracking-tight"
+      id="radix-_r_a_"
+    >
+      common:dialog.address-suggestion.header
+    </h2>
+    <p
+      class="text-sm text-neutral-500"
+      id="_r_c_"
+    >
+      common:dialog.address-suggestion.description
+    </p>
+  </div>
+  <fieldset
+    aria-describedby="_r_c_"
+    aria-labelledby="input-radios-addressSelection-legend"
+    class="space-y-2"
+    id="input-radios-addressSelection"
+    role="radiogroup"
+  >
+    <legend
+      class="block font-semibold"
+      id="input-radios-addressSelection-legend"
+    >
+      <span>
+        common:dialog.address-suggestion.address-selection-legend
+      </span>
+    </legend>
+    <ul
+      class="space-y-2"
+    >
+      <li>
+        <div>
+          <div
+            class="flex items-start"
+          >
+            <input
+              aria-invalid="false"
+              aria-labelledby="input-radio-addressSelection-option-0-label"
+              class="mt-0.5 size-5 border-gray-500 bg-gray-50 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+              id="input-radio-addressSelection-option-0"
+              name="addressSelection"
+              type="radio"
+              value="entered-address"
+            />
+            <label
+              class="block pl-3 leading-6"
+              for="input-radio-addressSelection-option-0"
+              id="input-radio-addressSelection-option-0-label"
+            >
+              <p
+                class="mb-2"
+              >
+                <strong>
+                  common:dialog.address-suggestion.entered-address-option
+                </strong>
+              </p>
+              <address
+                class="whitespace-pre-wrap not-italic"
+              >
+                1234 Retemele ST
+Ottawa ON  E5E 4A2
+CA
+              </address>
+            </label>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <div
+            class="flex items-start"
+          >
+            <input
+              aria-invalid="false"
+              aria-labelledby="input-radio-addressSelection-option-1-label"
+              checked=""
+              class="mt-0.5 size-5 border-gray-500 bg-gray-50 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+              id="input-radio-addressSelection-option-1"
+              name="addressSelection"
+              type="radio"
+              value="suggested-address"
+            />
+            <label
+              class="block pl-3 leading-6"
+              for="input-radio-addressSelection-option-1"
+              id="input-radio-addressSelection-option-1-label"
+            >
+              <p
+                class="mb-2"
+              >
+                <strong>
+                  common:dialog.address-suggestion.suggested-address-option
+                </strong>
+              </p>
+              <address
+                class="whitespace-pre-wrap not-italic"
+              >
+                1234 Remetale Avenue
+Ottawa ON  K5E 4A2
+CA
+              </address>
+            </label>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </fieldset>
+  <div
+    class="flex flex-wrap-reverse justify-end gap-2"
+  >
+    <button
+      class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Suggestion click"
+      id="dialog.corrected-address-close-button"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-chevron-left me-2"
+        data-icon="chevron-left"
+        data-prefix="fas"
+        role="img"
+        viewBox="0 0 320 512"
+      >
+        <path
+          d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"
+          fill="currentColor"
+        />
+      </svg>
+      common:dialog.address-suggestion.cancel-button
+    </button>
+    <form
+      method="post"
+    >
+      <button
+        class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Use Selected Address - Address Suggestion click"
+        id="dialog.corrected-address-use-selected-address-button"
+        name="_action"
+        type="submit"
+        value="use-suggested-address"
+      >
+        <span>
+          common:dialog.address-suggestion.use-selected-address-button
+        </span>
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-chevron-right ms-2"
+          data-icon="chevron-right"
+          data-prefix="fas"
+          role="img"
+          viewBox="0 0 320 512"
+        >
+          <path
+            d="M311.1 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L243.2 256 73.9 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </form>
+  </div>
+  <button
+    class="absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-white data-[state=open]:text-black"
+    type="button"
+  >
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-xmark block size-4"
+      data-icon="xmark"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 384 512"
+    >
+      <path
+        d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
+        fill="currentColor"
+      />
+    </svg>
+    <span
+      class="sr-only"
+    >
+      dialog.close
+    </span>
+  </button>
+</div>
+`;
