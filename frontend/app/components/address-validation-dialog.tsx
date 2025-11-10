@@ -2,12 +2,13 @@ import { useId, useState } from 'react';
 import type { SyntheticEvent } from 'react';
 
 import { invariant } from '@dts-stn/invariant';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useTranslation } from 'react-i18next';
+import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
-import { DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { useEnhancedFetcher } from '~/hooks';
@@ -76,57 +77,57 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
   const dialogDescriptionId = useId();
 
   return (
-    <DialogContent aria-describedby={undefined} className="sm:max-w-md">
+    <DialogContent aria-describedby={undefined}>
       <DialogHeader>
-        <DialogTitle>{t('common:dialog.address-suggestion.header')}</DialogTitle>
-        <DialogDescription id={dialogDescriptionId}>{t('common:dialog.address-suggestion.description')}</DialogDescription>
+        <DialogTitle className="flex items-center gap-2">
+          <FontAwesomeIcon icon={faTriangleExclamation} className="text-lg text-amber-600" />
+          <span>{t('common:dialog.address-suggestion.header')}</span>
+        </DialogTitle>
       </DialogHeader>
-      <InputRadios
-        id="addressSelection"
-        name="addressSelection"
-        legend={t('common:dialog.address-suggestion.address-selection-legend')}
-        outerAriaDescribedById={dialogDescriptionId}
-        options={[
-          {
-            value: enteredAddressOptionValue,
-            children: (
-              <>
-                <p className="mb-2">
-                  <strong>{t('common:dialog.address-suggestion.entered-address-option')}</strong>
-                </p>
-                <Address address={enteredAddress} />
-              </>
-            ),
-          },
-          {
-            value: suggestedAddressOptionValue,
-            children: (
-              <>
-                <p className="mb-2">
-                  <strong>{t('common:dialog.address-suggestion.suggested-address-option')}</strong>
-                </p>
-                <Address address={suggestedAddress} />
-              </>
-            ),
-          },
-        ].map((option) => ({
-          ...option,
-          onChange: (e) => {
-            setSelectedAddressSuggestionOption(e.target.value as AddressSelectionOption);
-          },
-          checked: option.value === selectedAddressSuggestionOption,
-        }))}
-      />
+      <div className="space-y-6">
+        <p id={dialogDescriptionId}>
+          <Trans ns={['common']} i18nKey="common:dialog.address-suggestion.description" />
+        </p>
+        <InputRadios
+          id="addressSelection"
+          name="addressSelection"
+          legend={t('common:dialog.address-suggestion.address-selection-legend')}
+          outerAriaDescribedById={dialogDescriptionId}
+          options={[
+            {
+              value: enteredAddressOptionValue,
+              children: (
+                <>
+                  <p className="mb-2">
+                    <strong>{t('common:dialog.address-suggestion.entered-address-option')}</strong>
+                  </p>
+                  <Address address={enteredAddress} />
+                </>
+              ),
+            },
+            {
+              value: suggestedAddressOptionValue,
+              children: (
+                <>
+                  <p className="mb-2">
+                    <strong>{t('common:dialog.address-suggestion.suggested-address-option')}</strong>
+                  </p>
+                  <Address address={suggestedAddress} />
+                </>
+              ),
+            },
+          ].map((option) => ({
+            ...option,
+            onChange: (e) => {
+              setSelectedAddressSuggestionOption(e.target.value as AddressSelectionOption);
+            },
+            checked: option.value === selectedAddressSuggestionOption,
+          }))}
+        />
+      </div>
       <DialogFooter>
         <DialogClose asChild>
-          <Button
-            id="dialog.corrected-address-close-button"
-            disabled={fetcher.isSubmitting}
-            variant="secondary"
-            size="sm"
-            startIcon={faChevronLeft}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Suggestion click"
-          >
+          <Button id="dialog.corrected-address-close-button" disabled={fetcher.isSubmitting} variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Suggestion click">
             {t('common:dialog.address-suggestion.cancel-button')}
           </Button>
         </DialogClose>
@@ -137,7 +138,6 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
             type="submit"
             id="dialog.corrected-address-use-selected-address-button"
             loading={fetcher.isSubmitting}
-            endIcon={faChevronRight}
             variant="primary"
             size="sm"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Use Selected Address - Address Suggestion click"
@@ -154,9 +154,10 @@ interface AddressInvalidDialogContentProps {
   invalidAddress: CanadianAddress;
   formAction: string;
   syncAddresses?: boolean;
+  addressContext?: 'home-address' | 'mailing-address';
 }
 
-export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAddresses = false }: AddressInvalidDialogContentProps) {
+export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAddresses = false, addressContext }: AddressInvalidDialogContentProps) {
   const { t } = useTranslation(['common']);
   const fetcher = useEnhancedFetcher();
 
@@ -183,20 +184,28 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
   }
 
   return (
-    <DialogContent aria-describedby={undefined} className="sm:max-w-md">
+    <DialogContent aria-describedby={undefined}>
       <DialogHeader>
-        <DialogTitle>{t('common:dialog.address-invalid.header')}</DialogTitle>
-        <DialogDescription>{t('common:dialog.address-invalid.description')}</DialogDescription>
+        <DialogTitle className="flex items-center gap-2">
+          <FontAwesomeIcon icon={faTriangleExclamation} className="text-lg text-amber-600" />
+          <span>{t('common:dialog.address-invalid.header')}</span>
+        </DialogTitle>
       </DialogHeader>
-      <div className="space-y-2">
+      <div className="mb-6 space-y-6">
         <p>
-          <strong>{t('common:dialog.address-invalid.entered-address')}</strong>
+          <Trans ns={['common']} i18nKey="common:dialog.address-invalid.description" />
         </p>
-        <Address address={invalidAddress} />
+        {addressContext && <h3 className="font-lato text-xl font-bold">{t(`common:dialog.address-invalid.context.${addressContext}`)}</h3>}
+        <div className="space-y-2">
+          <p>
+            <strong>{t('common:dialog.address-invalid.entered-address')}</strong>
+          </p>
+          <Address address={invalidAddress} />
+        </div>
       </div>
       <DialogFooter>
         <DialogClose asChild>
-          <Button id="dialog.address-invalid-close-button" variant="secondary" size="sm" startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Invalid click">
+          <Button id="dialog.address-invalid-close-button" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Invalid click">
             {t('common:dialog.address-invalid.close-button')}
           </Button>
         </DialogClose>
@@ -207,7 +216,6 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
             type="submit"
             id="dialog.address-invalid-use-entered-address-button"
             loading={fetcher.isSubmitting}
-            endIcon={faChevronRight}
             variant="primary"
             size="sm"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Use entered address - Address Invalid click"

@@ -3,7 +3,7 @@
 exports[`AddressInvalidDialogContent > should render the AddressInvalidDialogContent > expected html 1`] = `
 <div
   aria-labelledby="radix-_r_1_"
-  class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-white p-6 shadow-lg duration-200 sm:rounded-lg sm:max-w-md"
+  class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-white p-6 shadow-lg duration-200 sm:rounded-lg"
   data-state="open"
   id="radix-_r_0_"
   role="dialog"
@@ -14,33 +14,54 @@ exports[`AddressInvalidDialogContent > should render the AddressInvalidDialogCon
     class="flex flex-col space-y-1.5 sm:text-left"
   >
     <h2
-      class="font-lato text-lg leading-none font-semibold tracking-tight"
+      class="font-lato text-2xl leading-none font-bold tracking-tight flex items-center gap-2"
       id="radix-_r_1_"
     >
-      common:dialog.address-invalid.header
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-triangle-exclamation text-lg text-amber-600"
+        data-icon="triangle-exclamation"
+        data-prefix="fas"
+        role="img"
+        viewBox="0 0 512 512"
+      >
+        <path
+          d="M256 0c14.7 0 28.2 8.1 35.2 21l216 400c6.7 12.4 6.4 27.4-.8 39.5S486.1 480 472 480L40 480c-14.1 0-27.2-7.4-34.4-19.5s-7.5-27.1-.8-39.5l216-400c7-12.9 20.5-21 35.2-21zm0 352a32 32 0 1 0 0 64 32 32 0 1 0 0-64zm0-192c-18.2 0-32.7 15.5-31.4 33.7l7.4 104c.9 12.5 11.4 22.3 23.9 22.3 12.6 0 23-9.7 23.9-22.3l7.4-104c1.3-18.2-13.1-33.7-31.4-33.7z"
+          fill="currentColor"
+        />
+      </svg>
+      <span>
+        common:dialog.address-invalid.header
+      </span>
     </h2>
-    <p
-      class="text-sm text-neutral-500"
-      id="radix-_r_2_"
-    >
-      common:dialog.address-invalid.description
-    </p>
   </div>
   <div
-    class="space-y-2"
+    class="mb-6 space-y-6"
   >
     <p>
-      <strong>
-        common:dialog.address-invalid.entered-address
-      </strong>
+      common:dialog.address-invalid.description
     </p>
-    <address
-      class="whitespace-pre-wrap not-italic"
+    <h3
+      class="font-lato text-xl font-bold"
     >
-      1234 Retemele ST
+      common:dialog.address-invalid.context.mailing-address
+    </h3>
+    <div
+      class="space-y-2"
+    >
+      <p>
+        <strong>
+          common:dialog.address-invalid.entered-address
+        </strong>
+      </p>
+      <address
+        class="whitespace-pre-wrap not-italic"
+      >
+        1234 Retemele ST
 Ottawa ON  E5E 4A2
 CA
-    </address>
+      </address>
+    </div>
   </div>
   <div
     class="flex flex-wrap-reverse justify-end gap-2"
@@ -51,19 +72,6 @@ CA
       id="dialog.address-invalid-close-button"
       type="button"
     >
-      <svg
-        aria-hidden="true"
-        class="svg-inline--fa fa-chevron-left me-2"
-        data-icon="chevron-left"
-        data-prefix="fas"
-        role="img"
-        viewBox="0 0 320 512"
-      >
-        <path
-          d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"
-          fill="currentColor"
-        />
-      </svg>
       common:dialog.address-invalid.close-button
     </button>
     <form
@@ -80,19 +88,6 @@ CA
         <span>
           common:dialog.address-invalid.use-entered-address-button
         </span>
-        <svg
-          aria-hidden="true"
-          class="svg-inline--fa fa-chevron-right ms-2"
-          data-icon="chevron-right"
-          data-prefix="fas"
-          role="img"
-          viewBox="0 0 320 512"
-        >
-          <path
-            d="M311.1 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L243.2 256 73.9 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
-            fill="currentColor"
-          />
-        </svg>
       </button>
     </form>
   </div>
@@ -124,10 +119,10 @@ CA
 
 exports[`AddressSuggestionDialogContent > should render the AddressSuggestionDialogContent > expected html 1`] = `
 <div
-  aria-labelledby="radix-_r_a_"
-  class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-white p-6 shadow-lg duration-200 sm:rounded-lg sm:max-w-md"
+  aria-labelledby="radix-_r_8_"
+  class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-white p-6 shadow-lg duration-200 sm:rounded-lg"
   data-state="open"
-  id="radix-_r_9_"
+  id="radix-_r_7_"
   role="dialog"
   style="pointer-events: auto;"
   tabindex="-1"
@@ -136,113 +131,131 @@ exports[`AddressSuggestionDialogContent > should render the AddressSuggestionDia
     class="flex flex-col space-y-1.5 sm:text-left"
   >
     <h2
-      class="font-lato text-lg leading-none font-semibold tracking-tight"
-      id="radix-_r_a_"
+      class="font-lato text-2xl leading-none font-bold tracking-tight flex items-center gap-2"
+      id="radix-_r_8_"
     >
-      common:dialog.address-suggestion.header
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-triangle-exclamation text-lg text-amber-600"
+        data-icon="triangle-exclamation"
+        data-prefix="fas"
+        role="img"
+        viewBox="0 0 512 512"
+      >
+        <path
+          d="M256 0c14.7 0 28.2 8.1 35.2 21l216 400c6.7 12.4 6.4 27.4-.8 39.5S486.1 480 472 480L40 480c-14.1 0-27.2-7.4-34.4-19.5s-7.5-27.1-.8-39.5l216-400c7-12.9 20.5-21 35.2-21zm0 352a32 32 0 1 0 0 64 32 32 0 1 0 0-64zm0-192c-18.2 0-32.7 15.5-31.4 33.7l7.4 104c.9 12.5 11.4 22.3 23.9 22.3 12.6 0 23-9.7 23.9-22.3l7.4-104c1.3-18.2-13.1-33.7-31.4-33.7z"
+          fill="currentColor"
+        />
+      </svg>
+      <span>
+        common:dialog.address-suggestion.header
+      </span>
     </h2>
+  </div>
+  <div
+    class="space-y-6"
+  >
     <p
-      class="text-sm text-neutral-500"
-      id="_r_c_"
+      id="_r_a_"
     >
       common:dialog.address-suggestion.description
     </p>
-  </div>
-  <fieldset
-    aria-describedby="_r_c_"
-    aria-labelledby="input-radios-addressSelection-legend"
-    class="space-y-2"
-    id="input-radios-addressSelection"
-    role="radiogroup"
-  >
-    <legend
-      class="block font-semibold"
-      id="input-radios-addressSelection-legend"
-    >
-      <span>
-        common:dialog.address-suggestion.address-selection-legend
-      </span>
-    </legend>
-    <ul
+    <fieldset
+      aria-describedby="_r_a_"
+      aria-labelledby="input-radios-addressSelection-legend"
       class="space-y-2"
+      id="input-radios-addressSelection"
+      role="radiogroup"
     >
-      <li>
-        <div>
-          <div
-            class="flex items-start"
-          >
-            <input
-              aria-invalid="false"
-              aria-labelledby="input-radio-addressSelection-option-0-label"
-              class="mt-0.5 size-5 border-gray-500 bg-gray-50 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
-              id="input-radio-addressSelection-option-0"
-              name="addressSelection"
-              type="radio"
-              value="entered-address"
-            />
-            <label
-              class="block pl-3 leading-6"
-              for="input-radio-addressSelection-option-0"
-              id="input-radio-addressSelection-option-0-label"
+      <legend
+        class="block font-semibold"
+        id="input-radios-addressSelection-legend"
+      >
+        <span>
+          common:dialog.address-suggestion.address-selection-legend
+        </span>
+      </legend>
+      <ul
+        class="space-y-2"
+      >
+        <li>
+          <div>
+            <div
+              class="flex items-start"
             >
-              <p
-                class="mb-2"
+              <input
+                aria-invalid="false"
+                aria-labelledby="input-radio-addressSelection-option-0-label"
+                class="mt-0.5 size-5 border-gray-500 bg-gray-50 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+                id="input-radio-addressSelection-option-0"
+                name="addressSelection"
+                type="radio"
+                value="entered-address"
+              />
+              <label
+                class="block pl-3 leading-6"
+                for="input-radio-addressSelection-option-0"
+                id="input-radio-addressSelection-option-0-label"
               >
-                <strong>
-                  common:dialog.address-suggestion.entered-address-option
-                </strong>
-              </p>
-              <address
-                class="whitespace-pre-wrap not-italic"
-              >
-                1234 Retemele ST
+                <p
+                  class="mb-2"
+                >
+                  <strong>
+                    common:dialog.address-suggestion.entered-address-option
+                  </strong>
+                </p>
+                <address
+                  class="whitespace-pre-wrap not-italic"
+                >
+                  1234 Retemele ST
 Ottawa ON  E5E 4A2
 CA
-              </address>
-            </label>
+                </address>
+              </label>
+            </div>
           </div>
-        </div>
-      </li>
-      <li>
-        <div>
-          <div
-            class="flex items-start"
-          >
-            <input
-              aria-invalid="false"
-              aria-labelledby="input-radio-addressSelection-option-1-label"
-              checked=""
-              class="mt-0.5 size-5 border-gray-500 bg-gray-50 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
-              id="input-radio-addressSelection-option-1"
-              name="addressSelection"
-              type="radio"
-              value="suggested-address"
-            />
-            <label
-              class="block pl-3 leading-6"
-              for="input-radio-addressSelection-option-1"
-              id="input-radio-addressSelection-option-1-label"
+        </li>
+        <li>
+          <div>
+            <div
+              class="flex items-start"
             >
-              <p
-                class="mb-2"
+              <input
+                aria-invalid="false"
+                aria-labelledby="input-radio-addressSelection-option-1-label"
+                checked=""
+                class="mt-0.5 size-5 border-gray-500 bg-gray-50 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+                id="input-radio-addressSelection-option-1"
+                name="addressSelection"
+                type="radio"
+                value="suggested-address"
+              />
+              <label
+                class="block pl-3 leading-6"
+                for="input-radio-addressSelection-option-1"
+                id="input-radio-addressSelection-option-1-label"
               >
-                <strong>
-                  common:dialog.address-suggestion.suggested-address-option
-                </strong>
-              </p>
-              <address
-                class="whitespace-pre-wrap not-italic"
-              >
-                1234 Remetale Avenue
+                <p
+                  class="mb-2"
+                >
+                  <strong>
+                    common:dialog.address-suggestion.suggested-address-option
+                  </strong>
+                </p>
+                <address
+                  class="whitespace-pre-wrap not-italic"
+                >
+                  1234 Remetale Avenue
 Ottawa ON  K5E 4A2
 CA
-              </address>
-            </label>
+                </address>
+              </label>
+            </div>
           </div>
-        </div>
-      </li>
-    </ul>
-  </fieldset>
+        </li>
+      </ul>
+    </fieldset>
+  </div>
   <div
     class="flex flex-wrap-reverse justify-end gap-2"
   >
@@ -252,19 +265,6 @@ CA
       id="dialog.corrected-address-close-button"
       type="button"
     >
-      <svg
-        aria-hidden="true"
-        class="svg-inline--fa fa-chevron-left me-2"
-        data-icon="chevron-left"
-        data-prefix="fas"
-        role="img"
-        viewBox="0 0 320 512"
-      >
-        <path
-          d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"
-          fill="currentColor"
-        />
-      </svg>
       common:dialog.address-suggestion.cancel-button
     </button>
     <form
@@ -281,19 +281,6 @@ CA
         <span>
           common:dialog.address-suggestion.use-selected-address-button
         </span>
-        <svg
-          aria-hidden="true"
-          class="svg-inline--fa fa-chevron-right ms-2"
-          data-icon="chevron-right"
-          data-prefix="fas"
-          role="img"
-          viewBox="0 0 320 512"
-        >
-          <path
-            d="M311.1 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L243.2 256 73.9 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
-            fill="currentColor"
-          />
-        </svg>
       </button>
     </form>
   </div>
