@@ -166,6 +166,7 @@ describe('mapUpdateAddressRequestDtoToUpdateAddressRequestEntity', () => {
               IdentificationCategoryText: 'Guid Primary Key',
             },
           ],
+          MailingSameAsHomeIndicator: false,
           PersonContactInformation: [
             {
               Address: [
@@ -250,6 +251,7 @@ describe('mapUpdateAddressRequestDtoToUpdateAddressRequestEntity', () => {
               IdentificationCategoryText: 'Guid Primary Key',
             },
           ],
+          MailingSameAsHomeIndicator: false,
           PersonContactInformation: [
             {
               Address: [
@@ -322,6 +324,181 @@ describe('mapUpdateAddressRequestDtoToUpdateAddressRequestEntity', () => {
     };
     const result = mapper.mapUpdateAddressRequestDtoToUpdateAddressRequestEntity(expectedAddressDto);
     expect(result).toEqual(mockAddressEntity);
+  });
+
+  it('should set MailingSameAsHomeIndicator to true when mailing and home addresses are the same', () => {
+    const expectedEntity: UpdateAddressRequestEntity = {
+      BenefitApplication: {
+        Applicant: {
+          ClientIdentification: [
+            {
+              IdentificationID: '123456789',
+              IdentificationCategoryText: 'Guid Primary Key',
+            },
+          ],
+          MailingSameAsHomeIndicator: true,
+          PersonContactInformation: [
+            {
+              Address: [
+                {
+                  AddressCategoryCode: {
+                    ReferenceDataName: 'Mailing',
+                  },
+                  AddressCityName: 'Same City',
+                  AddressCountry: {
+                    CountryCode: {
+                      ReferenceDataID: 'CAN',
+                    },
+                  },
+                  AddressPostalCode: 'A1A 1A1',
+                  AddressProvince: {
+                    ProvinceCode: {
+                      ReferenceDataID: 'ON',
+                    },
+                  },
+                  AddressSecondaryUnitText: '',
+                  AddressStreet: {
+                    StreetName: '123 Same Street',
+                  },
+                },
+                {
+                  AddressCategoryCode: {
+                    ReferenceDataName: 'Home',
+                  },
+                  AddressCityName: 'Same City',
+                  AddressCountry: {
+                    CountryCode: {
+                      ReferenceDataID: 'CAN',
+                    },
+                  },
+                  AddressPostalCode: 'A1A 1A1',
+                  AddressProvince: {
+                    ProvinceCode: {
+                      ReferenceDataID: 'ON',
+                    },
+                  },
+                  AddressSecondaryUnitText: '',
+                  AddressStreet: {
+                    StreetName: '123 Same Street',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+
+    const dto: UpdateAddressRequestDto = {
+      clientId: '123456789',
+      mailingAddress: {
+        address: '123 Same Street',
+        apartment: '',
+        city: 'Same City',
+        country: 'CAN',
+        postalCode: 'A1A 1A1',
+        province: 'ON',
+      },
+      homeAddress: {
+        address: '123 Same Street',
+        apartment: '',
+        city: 'Same City',
+        country: 'CAN',
+        postalCode: 'A1A 1A1',
+        province: 'ON',
+      },
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToUpdateAddressRequestEntity(dto);
+    expect(result).toEqual(expectedEntity);
+  });
+
+  // add unit test where mailing and home addresses are the same except for address line case, to ensure MailingSameAsHomeIndicator is false
+  it('should set MailingSameAsHomeIndicator to false when mailing and home addresses differ in case', () => {
+    const expectedEntity: UpdateAddressRequestEntity = {
+      BenefitApplication: {
+        Applicant: {
+          ClientIdentification: [
+            {
+              IdentificationID: '123456789',
+              IdentificationCategoryText: 'Guid Primary Key',
+            },
+          ],
+          MailingSameAsHomeIndicator: false,
+          PersonContactInformation: [
+            {
+              Address: [
+                {
+                  AddressCategoryCode: {
+                    ReferenceDataName: 'Mailing',
+                  },
+                  AddressCityName: 'Same City',
+                  AddressCountry: {
+                    CountryCode: {
+                      ReferenceDataID: 'CAN',
+                    },
+                  },
+                  AddressPostalCode: 'A1A 1A1',
+                  AddressProvince: {
+                    ProvinceCode: {
+                      ReferenceDataID: 'ON',
+                    },
+                  },
+                  AddressSecondaryUnitText: '',
+                  AddressStreet: {
+                    StreetName: '123 SAME Street',
+                  },
+                },
+                {
+                  AddressCategoryCode: {
+                    ReferenceDataName: 'Home',
+                  },
+                  AddressCityName: 'Same City',
+                  AddressCountry: {
+                    CountryCode: {
+                      ReferenceDataID: 'CAN',
+                    },
+                  },
+                  AddressPostalCode: 'A1A 1A1',
+                  AddressProvince: {
+                    ProvinceCode: {
+                      ReferenceDataID: 'ON',
+                    },
+                  },
+                  AddressSecondaryUnitText: '',
+                  AddressStreet: {
+                    StreetName: '123 Same Street',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+
+    const dto: UpdateAddressRequestDto = {
+      clientId: '123456789',
+      mailingAddress: {
+        address: '123 SAME Street',
+        apartment: '',
+        city: 'Same City',
+        country: 'CAN',
+        postalCode: 'A1A 1A1',
+        province: 'ON',
+      },
+      homeAddress: {
+        address: '123 Same Street',
+        apartment: '',
+        city: 'Same City',
+        country: 'CAN',
+        postalCode: 'A1A 1A1',
+        province: 'ON',
+      },
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToUpdateAddressRequestEntity(dto);
+    expect(result).toEqual(expectedEntity);
   });
 });
 

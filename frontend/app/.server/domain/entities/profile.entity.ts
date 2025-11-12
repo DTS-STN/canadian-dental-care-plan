@@ -66,6 +66,7 @@ export type UpdateAddressRequestEntity = ReadonlyDeep<{
         IdentificationID: string;
         IdentificationCategoryText: 'Guid Primary Key';
       }>;
+      MailingSameAsHomeIndicator: boolean;
       PersonContactInformation: Array<{
         Address: Array<{
           AddressCategoryCode: {

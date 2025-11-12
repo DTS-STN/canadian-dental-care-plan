@@ -379,6 +379,7 @@ describe('DefaultProfileRepository', () => {
                 IdentificationCategoryText: 'Guid Primary Key',
               },
             ],
+            MailingSameAsHomeIndicator: false,
             PersonContactInformation: [
               {
                 Address: [
@@ -462,6 +463,7 @@ describe('DefaultProfileRepository', () => {
               IdentificationCategoryText: 'Guid Primary Key',
             },
           ],
+          MailingSameAsHomeIndicator: false,
           PersonContactInformation: [
             {
               Address: [
