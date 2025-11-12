@@ -190,14 +190,9 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
       earnings: [
         {
           taxationYear: applicant.ApplicantEarning[0].EarningTaxationYear.YearDate,
-          isEligible: this.toEligibilityStatusCode(applicant.BenefitEligibilityStatus.StatusCode.ReferenceDataID),
+          isEligible: false,
         },
       ],
     };
-  }
-
-  private toEligibilityStatusCode(statusCode: string) {
-    const { ELIGIBILITY_STATUS_CODE_ELIGIBLE } = this.serverConfig;
-    return statusCode === ELIGIBILITY_STATUS_CODE_ELIGIBLE;
   }
 }
