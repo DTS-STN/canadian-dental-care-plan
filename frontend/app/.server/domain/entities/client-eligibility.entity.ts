@@ -17,7 +17,7 @@ export type ClientEligibilityEntity = ReadonlyDeep<{
         };
         Coverage: Array<{
           CoverageCategoryCode: {
-            ReferenceDataName: 'Co-Pay Tier (TPC)';
+            ReferenceDataName: string;
             CoverageTierCode: {
               ReferenceDataId: string;
             };

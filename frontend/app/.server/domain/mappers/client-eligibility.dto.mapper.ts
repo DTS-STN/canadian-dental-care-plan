@@ -19,7 +19,7 @@ export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMa
       lastName: applicant.PersonName[0].PersonSurName,
       earnings: applicant.ApplicantEarning.map((earning) => ({
         taxationYear: earning.EarningTaxationYear.YearDate,
-        isEligible: earning.Coverage.length > 0,
+        isEligible: earning.Coverage.some((coverage) => coverage.CoverageCategoryCode.ReferenceDataName === 'Co-Pay Tier (TPC)'),
       })),
     };
   }
