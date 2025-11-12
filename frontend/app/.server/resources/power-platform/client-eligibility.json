@@ -1,0 +1,112 @@
+[
+  {
+    "Applicant": {
+      "ApplicantDetail": { "PrivateDentalInsuranceIndicator": false },
+      "ApplicantEarning": [
+        {
+          "BenefitApplicationYearIdentification": [{ "IdentificationID": "98f8ad43-4069-ee11-9ae7-000d3a09d1b8" }],
+          "BenefitEligibilityStatus": {
+            "StatusCode": { "ReferenceDataID": "775170000" }
+          },
+          "Coverage": [
+            {
+              "CoverageCategoryCode": {
+                "ReferenceDataName": "Co-Pay Tier (TPC)",
+                "CoverageTierCode": { "ReferenceDataID": "GUID" }
+              }
+            }
+          ],
+          "EarningIdentification": [
+            {
+              "IdentificationID": "GUID",
+              "IdentificationCategoryText": "Earning ID"
+            }
+          ],
+          "EarningTaxationYear": { "YearDate": "2024" }
+        }
+      ],
+      "ApplicantCategoryCode": { "ReferenceDataID": "775170000" },
+      "ApplicantEnrollmentStatus": {
+        "StatusCode": { "ReferenceDataID": "775170000" }
+      },
+      "BenefitEligibilityStatus": {
+        "StatusCode": { "ReferenceDataID": "775170000" }
+      },
+      "BenefitEligibilityNextYearStatus": {
+        "StatusCode": { "ReferenceDataID": "775170001" }
+      },
+      "BenefitApplicationYearIdentification": [{ "IdentificationID": "98f8ad43-4069-ee11-9ae7-000d3a09d1b8" }],
+      "ClientIdentification": [
+        {
+          "IdentificationID": "A123451",
+          "IdentificationCategoryText": "Client Number"
+        },
+        {
+          "IdentificationID": "GUID",
+          "IdentificationCategoryText": "Client ID"
+        }
+      ],
+      "PersonName": [
+        {
+          "PersonGivenName": ["John"],
+          "PersonSurName": "Smith"
+        }
+      ]
+    }
+  },
+  {
+    "Applicant": {
+      "ApplicantDetail": { "PrivateDentalInsuranceIndicator": false },
+      "ApplicantEarning": [
+        {
+          "BenefitApplicationYearIdentification": [{ "IdentificationID": "98f8ad43-4069-ee11-9ae7-000d3a09d1b8" }],
+          "BenefitEligibilityStatus": {
+            "StatusCode": { "ReferenceDataID": "775170000" }
+          },
+          "Coverage": [
+            {
+              "CoverageCategoryCode": {
+                "ReferenceDataName": "Co-Pay Tier (TPC)",
+                "CoverageTierCode": { "ReferenceDataID": "GUID" }
+              }
+            }
+          ],
+          "EarningIdentification": [
+            {
+              "IdentificationID": "GUID",
+              "IdentificationCategoryText": "Earning ID"
+            }
+          ],
+          "EarningTaxationYear": { "YearDate": "2024" }
+        }
+      ],
+      "ApplicantCategoryCode": { "ReferenceDataID": "775170002" },
+      "ApplicantEnrollmentStatus": {
+        "StatusCode": { "ReferenceDataID": "775170000" }
+      },
+      "BenefitEligibilityStatus": {
+        "StatusCode": { "ReferenceDataID": "775170000" }
+      },
+      "BenefitEligibilityNextYearStatus": {
+        "StatusCode": { "ReferenceDataID": "775170001" }
+      },
+      "BenefitApplicationYearIdentification": [{ "IdentificationID": "98f8ad43-4069-ee11-9ae7-000d3a09d1b8" }],
+      "ClientIdentification": [
+        {
+          "IdentificationID": "A123451",
+          "IdentificationCategoryText": "Client Number"
+        },
+        {
+          "IdentificationID": "GUID",
+          "IdentificationCategoryText": "Client ID"
+        }
+      ],
+      "PersonName": [
+        {
+          "PersonGivenName": ["Johnny Jr"],
+          "PersonSurName": "Smith"
+        }
+      ]
+    }
+  }
+]

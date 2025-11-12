@@ -1,7 +1,9 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 
-import type { UpdateAddressRequestDto, UpdateCommunicationPreferenceRequestDto, UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
-import type { UpdateAddressRequestEntity, UpdateCommunicationPreferenceRequestEntity, UpdateDentalBenefitsRequestEntity, UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
+import type { ServerConfig } from '~/.server/configs';
+import { TYPES } from '~/.server/constants';
+import type { ApplicantEligibilityDto, UpdateAddressRequestDto, UpdateCommunicationPreferenceRequestDto, UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
+import type { ApplicantEligibilityEntity, UpdateAddressRequestEntity, UpdateCommunicationPreferenceRequestEntity, UpdateDentalBenefitsRequestEntity, UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
 
 export interface ProfileDtoMapper {
   mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity(updateDentalBenefitsRequestDto: UpdateDentalBenefitsRequestDto): UpdateDentalBenefitsRequestEntity;
@@ -9,10 +11,20 @@ export interface ProfileDtoMapper {
   mapUpdatePhoneNumbersRequestDtoToUpdatePhoneNumbersRequestEntity(updatePhoneNumbersRequestDto: UpdatePhoneNumbersRequestDto): UpdatePhoneNumbersRequestEntity;
   mapUpdateAddressRequestDtoToUpdateAddressRequestEntity(updateAddressRequestDto: UpdateAddressRequestDto): UpdateAddressRequestEntity;
   mapUpdateCommunicationPreferenceRequestDtoToUpdateCommunicationPreferenceRequestEntity(updateCommunicationPreferenceRequestDto: UpdateCommunicationPreferenceRequestDto): UpdateCommunicationPreferenceRequestEntity;
+  mapApplicantEligibilityEntityToApplicantEligibilityDto(applicantEligibilityEntity: ApplicantEligibilityEntity): ApplicantEligibilityDto;
 }
 
 @injectable()
 export class DefaultProfileDtoMapper implements ProfileDtoMapper {
+  private readonly serverConfig: Pick<ServerConfig, 'ELIGIBILITY_STATUS_CODE_ELIGIBLE'>;
+
+  constructor(
+    @inject(TYPES.ServerConfig)
+    serverConfig: Pick<ServerConfig, 'ELIGIBILITY_STATUS_CODE_ELIGIBLE'>,
+  ) {
+    this.serverConfig = serverConfig;
+  }
+
   mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity(updateDentalBenefitsRequestDto: UpdateDentalBenefitsRequestDto): UpdateDentalBenefitsRequestEntity {
     return {
       BenefitApplication: {
@@ -166,5 +178,22 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
         },
       },
     };
+  }
+
+  mapApplicantEligibilityEntityToApplicantEligibilityDto(applicantEligibilityEntity: ApplicantEligibilityEntity): ApplicantEligibilityDto {
+    const applicant = applicantEligibilityEntity.BenefitApplication.Applicant;
+
+    return {
+      clientId: applicant.ClientIdentification[0].IdentificationID,
+      firstName: applicant.PersonName[0].PersonGivenName[0],
+      lastName: applicant.PersonName[0].PersonSurName,
+      isEligible: this.toEligibilityStatusCode(applicant.BenefitEligibilityStatus.StatusCode.ReferenceDataID),
+      isEnrolled: this.toEligibilityStatusCode(applicant.ApplicantEnrollmentStatus.StatusCode.ReferenceDataID),
+    };
+  }
+
+  private toEligibilityStatusCode(statusCode: string) {
+    const { ELIGIBILITY_STATUS_CODE_ELIGIBLE } = this.serverConfig;
+    return statusCode === ELIGIBILITY_STATUS_CODE_ELIGIBLE;
   }
 }

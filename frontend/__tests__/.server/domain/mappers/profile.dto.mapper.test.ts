@@ -1,10 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
+import type { ServerConfig } from '~/.server/configs';
 import type { UpdateAddressRequestDto, UpdateCommunicationPreferenceRequestDto, UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
 import type { UpdateAddressRequestEntity, UpdateCommunicationPreferenceRequestEntity, UpdateDentalBenefitsRequestEntity, UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
 import { DefaultProfileDtoMapper } from '~/.server/domain/mappers';
 
-const mapper = new DefaultProfileDtoMapper();
+const mockServerConfig: Pick<ServerConfig, 'ELIGIBILITY_STATUS_CODE_ELIGIBLE'> = {
+  ELIGIBILITY_STATUS_CODE_ELIGIBLE: '123456',
+};
+
+const mapper = new DefaultProfileDtoMapper(mockServerConfig);
 
 describe('mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity', () => {
   it('should map UpdateDentalBenefitsRequestDto to UpdateDentalBenefitsRequestEntity', () => {
