@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 
-import type { ApplicantEligibilityDto, UpdateAddressRequestDto, UpdateCommunicationPreferenceRequestDto, UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
-import type { ApplicantEligibilityEntity, UpdateAddressRequestEntity, UpdateCommunicationPreferenceRequestEntity, UpdateDentalBenefitsRequestEntity, UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
+import type { UpdateAddressRequestDto, UpdateCommunicationPreferenceRequestDto, UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
+import type { UpdateAddressRequestEntity, UpdateCommunicationPreferenceRequestEntity, UpdateDentalBenefitsRequestEntity, UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
 
 export interface ProfileDtoMapper {
   mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity(updateDentalBenefitsRequestDto: UpdateDentalBenefitsRequestDto): UpdateDentalBenefitsRequestEntity;
@@ -9,7 +9,6 @@ export interface ProfileDtoMapper {
   mapUpdatePhoneNumbersRequestDtoToUpdatePhoneNumbersRequestEntity(updatePhoneNumbersRequestDto: UpdatePhoneNumbersRequestDto): UpdatePhoneNumbersRequestEntity;
   mapUpdateAddressRequestDtoToUpdateAddressRequestEntity(updateAddressRequestDto: UpdateAddressRequestDto): UpdateAddressRequestEntity;
   mapUpdateCommunicationPreferenceRequestDtoToUpdateCommunicationPreferenceRequestEntity(updateCommunicationPreferenceRequestDto: UpdateCommunicationPreferenceRequestDto): UpdateCommunicationPreferenceRequestEntity;
-  mapApplicantEligibilityEntityToApplicantEligibilityDto(applicantEligibilityEntity: ApplicantEligibilityEntity): ApplicantEligibilityDto;
 }
 
 @injectable()
@@ -166,20 +165,6 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
           },
         },
       },
-    };
-  }
-
-  mapApplicantEligibilityEntityToApplicantEligibilityDto(applicantEligibilityEntity: ApplicantEligibilityEntity): ApplicantEligibilityDto {
-    const applicant = applicantEligibilityEntity.BenefitApplication.Applicant;
-
-    return {
-      clientId: applicant.ClientIdentification[0].IdentificationID,
-      firstName: applicant.PersonName[0].PersonGivenName[0],
-      lastName: applicant.PersonName[0].PersonSurName,
-      earnings: applicant.ApplicantEarning.map((earning) => ({
-        taxationYear: earning.EarningTaxationYear.YearDate,
-        isEligible: earning.Coverage.some((coverage) => coverage.CoverageCategoryCode.ReferenceDataName === 'Co-Pay Tier (TPC)'),
-      })),
     };
   }
 }

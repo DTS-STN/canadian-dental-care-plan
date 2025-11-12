@@ -44,13 +44,3 @@ export type UpdateAddressRequestDto = Readonly<{
     province?: string;
   };
 }>;
-
-export type ApplicantEligibilityDto = Readonly<{
-  clientId: string;
-  firstName: string;
-  lastName: string;
-  earnings: ReadonlyArray<{
-    taxationYear: string;
-    isEligible: boolean;
-  }>;
-}>;
