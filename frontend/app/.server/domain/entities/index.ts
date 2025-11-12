@@ -9,6 +9,7 @@ export type * from './client-friendly-status.entity';
 export type * from './country.entity';
 export type * from './demographic-survey.entity';
 export type * from './document-upload.entity';
+export type * from './document-upload-reason.entity';
 export type * from './evidentiary-document-type.entity';
 export type * from './evidentiary-document.entity';
 export type * from './government-insurance-plan.entity';

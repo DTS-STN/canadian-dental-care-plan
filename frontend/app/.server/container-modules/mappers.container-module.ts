@@ -13,6 +13,7 @@ import {
   DefaultCountryDtoMapper,
   DefaultDemographicSurveyDtoMapper,
   DefaultDocumentUploadDtoMapper,
+  DefaultDocumentUploadReasonDtoMapper,
   DefaultEvidentiaryDocumentTypeDtoMapper,
   DefaultFederalGovernmentInsurancePlanDtoMapper,
   DefaultGCCommunicationMethodDtoMapper,
@@ -46,6 +47,7 @@ export function createMappersContainerModule(): ContainerModule {
     options.bind(TYPES.CountryDtoMapper).to(DefaultCountryDtoMapper);
     options.bind(TYPES.DemographicSurveyDtoMapper).to(DefaultDemographicSurveyDtoMapper);
     options.bind(TYPES.DocumentUploadDtoMapper).to(DefaultDocumentUploadDtoMapper);
+    options.bind(TYPES.DocumentUploadReasonDtoMapper).to(DefaultDocumentUploadReasonDtoMapper);
     options.bind(TYPES.DynatraceDtoMapper).to(DefaultDynatraceDtoMapper);
     options.bind(TYPES.EvidentiaryDocumentTypeDtoMapper).to(DefaultEvidentiaryDocumentTypeDtoMapper);
     options.bind(TYPES.FederalGovernmentInsurancePlanDtoMapper).to(DefaultFederalGovernmentInsurancePlanDtoMapper);

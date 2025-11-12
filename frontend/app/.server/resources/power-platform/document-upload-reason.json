@@ -1,0 +1,27 @@
+{
+  "@odata.context": "https://canadadental-sandbox.crm3.dynamics.com/api/data/v9.2/$metadata#esdc_documentuploadreasons",
+  "value": [
+    {
+      "@odata.etag": "W/\"226651253\"",
+      "versionnumber": 226651253,
+      "_organizationid_value": "33d4128d-77ef-ed11-a80c-0022486d85f3",
+      "modifiedon": "2025-10-17T14:36:40Z",
+      "esdc_namefrench": "Examen de l'admissibilité du membre",
+      "overriddencreatedon": null,
+      "_modifiedby_value": "7bfaaca4-34f3-ed11-8849-000d3a09d640",
+      "esdc_documentuploadreasonid": "89823b11-bfaa-f011-bbd3-7c1e520630db",
+      "_createdonbehalfby_value": null,
+      "esdc_nameenglish": "Member Eligibility Review",
+      "importsequencenumber": null,
+      "timezoneruleversionnumber": null,
+      "createdon": "2025-10-16T18:36:47Z",
+      "_createdby_value": "7bfaaca4-34f3-ed11-8849-000d3a09d640",
+      "esdc_name": "Member Eligibility Review",
+      "statuscode": 1,
+      "utcconversiontimezonecode": null,
+      "_modifiedonbehalfby_value": null,
+      "statecode": 0,
+      "emailaddress": null
+    }
+  ]
+}

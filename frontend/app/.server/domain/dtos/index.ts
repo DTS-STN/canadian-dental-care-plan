@@ -10,6 +10,7 @@ export type * from './client-friendly-status.dto';
 export type * from './country.dto';
 export type * from './demographic-survey.dto';
 export type * from './document-upload.dto';
+export type * from './document-upload-reason.dto';
 export type * from './evidentiary-document-type.dto';
 export type * from './evidentiary-document.dto';
 export type * from './federal-government-insurance-plan.dto';
