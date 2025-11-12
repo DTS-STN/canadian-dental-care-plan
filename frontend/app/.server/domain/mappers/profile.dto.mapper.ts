@@ -1,7 +1,5 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 
-import type { ServerConfig } from '~/.server/configs';
-import { TYPES } from '~/.server/constants';
 import type { ApplicantEligibilityDto, UpdateAddressRequestDto, UpdateCommunicationPreferenceRequestDto, UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
 import type { ApplicantEligibilityEntity, UpdateAddressRequestEntity, UpdateCommunicationPreferenceRequestEntity, UpdateDentalBenefitsRequestEntity, UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
 
@@ -16,15 +14,6 @@ export interface ProfileDtoMapper {
 
 @injectable()
 export class DefaultProfileDtoMapper implements ProfileDtoMapper {
-  private readonly serverConfig: Pick<ServerConfig, 'ELIGIBILITY_STATUS_CODE_ELIGIBLE'>;
-
-  constructor(
-    @inject(TYPES.ServerConfig)
-    serverConfig: Pick<ServerConfig, 'ELIGIBILITY_STATUS_CODE_ELIGIBLE'>,
-  ) {
-    this.serverConfig = serverConfig;
-  }
-
   mapUpdateDentalBenefitsRequestDtoToUpdateDentalBenefitsRequestEntity(updateDentalBenefitsRequestDto: UpdateDentalBenefitsRequestDto): UpdateDentalBenefitsRequestEntity {
     return {
       BenefitApplication: {
@@ -187,12 +176,10 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
       clientId: applicant.ClientIdentification[0].IdentificationID,
       firstName: applicant.PersonName[0].PersonGivenName[0],
       lastName: applicant.PersonName[0].PersonSurName,
-      earnings: [
-        {
-          taxationYear: applicant.ApplicantEarning[0].EarningTaxationYear.YearDate,
-          isEligible: false,
-        },
-      ],
+      earnings: applicant.ApplicantEarning.map((earning) => ({
+        taxationYear: earning.EarningTaxationYear.YearDate,
+        isEligible: earning.Coverage.some((coverage) => coverage.CoverageCategoryCode.ReferenceDataName === 'Co-Pay Tier (TPC)'),
+      })),
     };
   }
 }
