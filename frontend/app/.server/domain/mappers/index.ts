@@ -10,6 +10,7 @@ export * from './country.dto.mapper';
 export * from './demographic-survey.dto.mapper';
 export * from './document-upload.dto.mapper';
 export * from './document-upload-reason.dto.mapper';
+export * from './evidentiary-document.dto.mapper';
 export * from './evidentiary-document-type.dto.mapper';
 export * from './federal-government-insurance-plan.dto.mapper';
 export * from './gc-communication-method.dto.mapper';

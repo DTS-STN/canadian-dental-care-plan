@@ -5,13 +5,42 @@ import type { ReadonlyDeep } from 'type-fest';
  */
 export type EvidentiaryDocumentDto = ReadonlyDeep<{
   id: string;
-  /** The name of the applicant. */
-  name: string;
   fileName: string;
   clientID: string;
   documentTypeId: string;
   mscaUploadDate: string; // ISO 8601 date string
   healthCanadaTransferDate?: string; // ISO 8601 date string
+  client: {
+    id: string;
+    firstName: string;
+    lastName: string;
+  };
+  documentType: {
+    id: string;
+    nameEnglish: string;
+    nameFrench: string;
+  };
+}>;
+
+/**
+ * Localized DTO representing an evidentiary document.
+ */
+export type EvidentiaryDocumentLocalizedDto = ReadonlyDeep<{
+  id: string;
+  fileName: string;
+  clientID: string;
+  documentTypeId: string;
+  mscaUploadDate: string; // ISO 8601 date string
+  healthCanadaTransferDate?: string; // ISO 8601 date string
+  client: {
+    id: string;
+    firstName: string;
+    lastName: string;
+  };
+  documentType: {
+    id: string;
+    name: string;
+  };
 }>;
 
 /*

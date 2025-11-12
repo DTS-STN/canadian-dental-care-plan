@@ -34,9 +34,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const clientNumber = await securityHandler.requireClientNumber({ params, request, session });
 
   const evidentiaryDocumentService = appContainer.get(TYPES.EvidentiaryDocumentService);
-  const evidentiaryDocumentTypeService = appContainer.get(TYPES.EvidentiaryDocumentTypeService);
-  const evidentiaryDocuments = await evidentiaryDocumentService.listEvidentiaryDocuments({ clientID: clientNumber, userId: userInfoToken.sub });
-  const localizedEvidentiaryDocumentTypes = await evidentiaryDocumentTypeService.listLocalizedEvidentiaryDocumentTypes(locale);
+  const evidentiaryDocuments = await evidentiaryDocumentService.listLocalizedEvidentiaryDocuments({ clientID: clientNumber, userId: userInfoToken.sub }, locale);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.msca-template', { title: t('documents:index.page-title') }) };
@@ -53,7 +51,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     documents: evidentiaryDocuments.map((document) => {
       return {
         ...document,
-        documentTypeName: localizedEvidentiaryDocumentTypes.find(({ id }) => id === document.documentTypeId)?.name ?? '',
         mscaUploadDateFormatted: dateFormatter.format(new Date(document.mscaUploadDate)),
       };
     }),
@@ -84,8 +81,8 @@ export default function DocumentsIndex({ loaderData, params }: Route.ComponentPr
               {documents.map((document) => (
                 <TableRow key={document.id} className="odd:bg-white even:bg-gray-50">
                   <TableCell className="max-w-[200px] break-all">{document.fileName}</TableCell>
-                  <TableCell>{document.name}</TableCell>
-                  <TableCell>{document.documentTypeName}</TableCell>
+                  <TableCell>{`${document.client.firstName} ${document.client.lastName}`}</TableCell>
+                  <TableCell>{document.documentType.name}</TableCell>
                   <TableCell className="text-nowrap">{document.mscaUploadDateFormatted}</TableCell>
                 </TableRow>
               ))}
