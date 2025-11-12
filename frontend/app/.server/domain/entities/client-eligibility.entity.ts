@@ -1,6 +1,6 @@
 import type { ReadonlyDeep } from 'type-fest';
 
-export type EligibilityEntity = ReadonlyDeep<{
+export type ClientEligibilityEntity = ReadonlyDeep<{
   BenefitApplication: {
     Applicant: {
       ApplicantDetail: {

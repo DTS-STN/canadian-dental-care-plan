@@ -1,4 +1,4 @@
-export type EligibilityDto = Readonly<{
+export type ClientEligibilityDto = Readonly<{
   clientId: string;
   firstName: string;
   lastName: string;
