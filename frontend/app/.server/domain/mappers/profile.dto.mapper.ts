@@ -187,8 +187,12 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
       clientId: applicant.ClientIdentification[0].IdentificationID,
       firstName: applicant.PersonName[0].PersonGivenName[0],
       lastName: applicant.PersonName[0].PersonSurName,
-      isEligible: this.toEligibilityStatusCode(applicant.BenefitEligibilityStatus.StatusCode.ReferenceDataID),
-      isEnrolled: this.toEligibilityStatusCode(applicant.ApplicantEnrollmentStatus.StatusCode.ReferenceDataID),
+      earnings: [
+        {
+          taxationYear: applicant.ApplicantEarning[0].EarningTaxationYear.YearDate,
+          isEligible: this.toEligibilityStatusCode(applicant.BenefitEligibilityStatus.StatusCode.ReferenceDataID),
+        },
+      ],
     };
   }
 

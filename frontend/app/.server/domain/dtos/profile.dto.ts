@@ -49,6 +49,8 @@ export type ApplicantEligibilityDto = Readonly<{
   clientId: string;
   firstName: string;
   lastName: string;
-  isEligible: boolean;
-  isEnrolled: boolean;
+  earnings: ReadonlyArray<{
+    taxationYear: string;
+    isEligible: boolean;
+  }>;
 }>;
