@@ -230,9 +230,6 @@ const serverEnv = clientEnvSchema.extend({
    * TODO ::: GjB ::: this is a temporary fix that should eventually be removed
    */
   APPLICATION_KILLSWITCH_TTL_SECONDS: z.coerce.number().default(5 * 60),
-
-  // Member Eligibility status code
-  ELIGIBILITY_STATUS_CODE_ELIGIBLE: z.string().trim().min(1).default("775170000"),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
