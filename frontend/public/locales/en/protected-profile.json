@@ -218,6 +218,7 @@
     "use-mailing-address": "Use this address as my home address.",
     "back-btn": "Back",
     "save-btn": "Save",
+    "continue-btn": "Continue",
     "select-one": "Select one"
   },
   "home-address": {
