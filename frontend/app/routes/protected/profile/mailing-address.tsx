@@ -145,7 +145,7 @@ export async function action({ context: { appContainer, session }, params, reque
       },
       idToken.sub,
     );
-    return redirect(getPathById('protected/profile/contact-information', params));
+    return isCopyMailingToHome ? redirect(getPathById('protected/profile/contact-information', params)) : redirect(getPathById('protected/profile/contact/home-address', params));
   }
 
   // Validate Canadian adddress
@@ -216,7 +216,7 @@ export async function action({ context: { appContainer, session }, params, reque
     idToken.sub,
   );
 
-  return redirect(getPathById('protected/profile/contact-information', params));
+  return isCopyMailingToHome ? redirect(getPathById('protected/profile/contact-information', params)) : redirect(getPathById('protected/profile/contact/home-address', params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {
@@ -370,7 +370,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                 loading={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Mailing address click"
               >
-                {t('protected-profile:mailing-address.save-btn')}
+                {copyAddressChecked ? t('protected-profile:mailing-address.save-btn') : t('protected-profile:mailing-address.continue-btn')}
               </LoadingButton>
             </DialogTrigger>
             {!isSubmitting && addressDialogContent && (
