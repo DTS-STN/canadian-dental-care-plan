@@ -10,7 +10,7 @@ export interface ClientEligibilityDtoMapper {
 @injectable()
 export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMapper {
   mapClientEligibilityEntityToClientEligibilityDto(clientEligibilityEntity: ClientEligibilityEntity): ClientEligibilityDto {
-    const applicant = clientEligibilityEntity.BenefitApplication.Applicant;
+    const applicant = clientEligibilityEntity.Applicant;
 
     return {
       clientId: applicant.ClientIdentification.find(({ IdentificationCategoryText }) => IdentificationCategoryText === 'Client ID')?.IdentificationID ?? '',
