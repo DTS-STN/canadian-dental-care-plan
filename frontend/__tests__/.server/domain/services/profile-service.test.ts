@@ -251,19 +251,17 @@ describe('DefaultProfileService', () => {
       clientId: '123456789',
       mailingAddress: {
         address: '298 Fake Street',
-        apartment: '',
         city: 'Mailing City',
-        country: 'USA',
-        postalCode: '90210',
-        province: 'LA',
+        countryId: 'USA',
+        postalZipCode: '90210',
+        provinceStateId: 'LA',
       },
       homeAddress: {
         address: '123 Fake Street',
-        apartment: '',
         city: 'Home City',
-        country: 'CAN',
-        postalCode: 'H0H 0H0',
-        province: 'ON',
+        countryId: 'CAN',
+        postalZipCode: 'H0H 0H0',
+        provinceStateId: 'ON',
       },
     };
     mockProfileDtoMapper.mapUpdateAddressRequestDtoToUpdateAddressRequestEntity.mockReturnValue(mockAddressEntity);
