@@ -222,19 +222,17 @@ describe('mapUpdateAddressRequestDtoToUpdateAddressRequestEntity', () => {
       clientId: '123456789',
       mailingAddress: {
         address: '298 Fake Street',
-        apartment: '',
         city: 'Mailing City',
-        country: 'USA',
-        postalCode: '90210',
-        province: 'LA',
+        countryId: 'USA',
+        postalZipCode: '90210',
+        provinceStateId: 'LA',
       },
       homeAddress: {
         address: '123 Fake Street',
-        apartment: '',
         city: 'Home City',
-        country: 'CAN',
-        postalCode: 'H0H 0H0',
-        province: 'ON',
+        countryId: 'CAN',
+        postalZipCode: 'H0H 0H0',
+        provinceStateId: 'ON',
       },
     };
     const result = mapper.mapUpdateAddressRequestDtoToUpdateAddressRequestEntity(expectedAddressDto);
@@ -307,19 +305,17 @@ describe('mapUpdateAddressRequestDtoToUpdateAddressRequestEntity', () => {
       clientId: '123456789',
       mailingAddress: {
         address: '298 Fake Street',
-        apartment: '',
         city: 'Mailing City',
-        country: 'USA',
-        postalCode: '90210',
-        province: undefined,
+        countryId: 'USA',
+        postalZipCode: '90210',
+        provinceStateId: undefined,
       },
       homeAddress: {
         address: '123 Fake Street',
-        apartment: '',
         city: 'Home City',
-        country: 'CAN',
-        postalCode: 'H0H 0H0',
-        province: undefined,
+        countryId: 'CAN',
+        postalZipCode: 'H0H 0H0',
+        provinceStateId: undefined,
       },
     };
     const result = mapper.mapUpdateAddressRequestDtoToUpdateAddressRequestEntity(expectedAddressDto);
@@ -393,19 +389,17 @@ describe('mapUpdateAddressRequestDtoToUpdateAddressRequestEntity', () => {
       clientId: '123456789',
       mailingAddress: {
         address: '123 Same Street',
-        apartment: '',
         city: 'Same City',
-        country: 'CAN',
-        postalCode: 'A1A 1A1',
-        province: 'ON',
+        countryId: 'CAN',
+        postalZipCode: 'A1A 1A1',
+        provinceStateId: 'ON',
       },
       homeAddress: {
         address: '123 Same Street',
-        apartment: '',
         city: 'Same City',
-        country: 'CAN',
-        postalCode: 'A1A 1A1',
-        province: 'ON',
+        countryId: 'CAN',
+        postalZipCode: 'A1A 1A1',
+        provinceStateId: 'ON',
       },
     };
 
@@ -413,8 +407,8 @@ describe('mapUpdateAddressRequestDtoToUpdateAddressRequestEntity', () => {
     expect(result).toEqual(expectedEntity);
   });
 
-  // add unit test where mailing and home addresses are the same except for address line case, to ensure MailingSameAsHomeIndicator is false
-  it('should set MailingSameAsHomeIndicator to false when mailing and home addresses differ in case', () => {
+  // add unit test where mailing and home addresses are the same except for address line case, to ensure MailingSameAsHomeIndicator is true (case-insensitive comparison)
+  it('should set MailingSameAsHomeIndicator to true when mailing and home addresses differ only in case', () => {
     const expectedEntity: UpdateAddressRequestEntity = {
       BenefitApplication: {
         Applicant: {
@@ -424,7 +418,7 @@ describe('mapUpdateAddressRequestDtoToUpdateAddressRequestEntity', () => {
               IdentificationCategoryText: 'Guid Primary Key',
             },
           ],
-          MailingSameAsHomeIndicator: false,
+          MailingSameAsHomeIndicator: true,
           PersonContactInformation: [
             {
               Address: [
@@ -481,24 +475,382 @@ describe('mapUpdateAddressRequestDtoToUpdateAddressRequestEntity', () => {
       clientId: '123456789',
       mailingAddress: {
         address: '123 SAME Street',
-        apartment: '',
         city: 'Same City',
-        country: 'CAN',
-        postalCode: 'A1A 1A1',
-        province: 'ON',
+        countryId: 'CAN',
+        postalZipCode: 'A1A 1A1',
+        provinceStateId: 'ON',
       },
       homeAddress: {
         address: '123 Same Street',
-        apartment: '',
         city: 'Same City',
-        country: 'CAN',
-        postalCode: 'A1A 1A1',
-        province: 'ON',
+        countryId: 'CAN',
+        postalZipCode: 'A1A 1A1',
+        provinceStateId: 'ON',
       },
     };
 
     const result = mapper.mapUpdateAddressRequestDtoToUpdateAddressRequestEntity(dto);
     expect(result).toEqual(expectedEntity);
+  });
+
+  it('should set MailingSameAsHomeIndicator to false when mailing and home addresses differ in content', () => {
+    const expectedEntity: UpdateAddressRequestEntity = {
+      BenefitApplication: {
+        Applicant: {
+          ClientIdentification: [
+            {
+              IdentificationID: '123456789',
+              IdentificationCategoryText: 'Guid Primary Key',
+            },
+          ],
+          MailingSameAsHomeIndicator: false,
+          PersonContactInformation: [
+            {
+              Address: [
+                {
+                  AddressCategoryCode: {
+                    ReferenceDataName: 'Mailing',
+                  },
+                  AddressCityName: 'Different City',
+                  AddressCountry: {
+                    CountryCode: {
+                      ReferenceDataID: 'USA',
+                    },
+                  },
+                  AddressPostalCode: '90210',
+                  AddressProvince: {
+                    ProvinceCode: {
+                      ReferenceDataID: 'CA',
+                    },
+                  },
+                  AddressSecondaryUnitText: '',
+                  AddressStreet: {
+                    StreetName: '456 Different Street',
+                  },
+                },
+                {
+                  AddressCategoryCode: {
+                    ReferenceDataName: 'Home',
+                  },
+                  AddressCityName: 'Home City',
+                  AddressCountry: {
+                    CountryCode: {
+                      ReferenceDataID: 'CAN',
+                    },
+                  },
+                  AddressPostalCode: 'H0H 0H0',
+                  AddressProvince: {
+                    ProvinceCode: {
+                      ReferenceDataID: 'ON',
+                    },
+                  },
+                  AddressSecondaryUnitText: '',
+                  AddressStreet: {
+                    StreetName: '123 Home Street',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+
+    const dto: UpdateAddressRequestDto = {
+      clientId: '123456789',
+      mailingAddress: {
+        address: '456 Different Street',
+        city: 'Different City',
+        countryId: 'USA',
+        postalZipCode: '90210',
+        provinceStateId: 'CA',
+      },
+      homeAddress: {
+        address: '123 Home Street',
+        city: 'Home City',
+        countryId: 'CAN',
+        postalZipCode: 'H0H 0H0',
+        provinceStateId: 'ON',
+      },
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToUpdateAddressRequestEntity(dto);
+    expect(result).toEqual(expectedEntity);
+  });
+});
+
+describe('mapUpdateAddressRequestDtoToMailingSameAsHomeIndicator', () => {
+  it('should return true when addresses are identical', () => {
+    const mailingAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: 'ON',
+    };
+
+    const homeAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: 'ON',
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToMailingSameAsHomeIndicator({ mailingAddress, homeAddress });
+    expect(result).toBe(true);
+  });
+
+  it('should return true when addresses differ only in case', () => {
+    const mailingAddress = {
+      address: '123 MAIN STREET',
+      city: 'TORONTO',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: 'ON',
+    };
+
+    const homeAddress = {
+      address: '123 main street',
+      city: 'toronto',
+      countryId: 'CAN',
+      postalZipCode: 'm5v 3a8',
+      provinceStateId: 'ON',
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToMailingSameAsHomeIndicator({ mailingAddress, homeAddress });
+    expect(result).toBe(true);
+  });
+
+  it('should return true when addresses have accented characters that normalize to same', () => {
+    const mailingAddress = {
+      address: '123 Rue Saint-André',
+      city: 'Montréal',
+      countryId: 'CAN',
+      postalZipCode: 'H2X 1A1',
+      provinceStateId: 'QC',
+    };
+
+    const homeAddress = {
+      address: '123 Rue Saint-Andre',
+      city: 'Montreal',
+      countryId: 'CAN',
+      postalZipCode: 'H2X 1A1',
+      provinceStateId: 'QC',
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToMailingSameAsHomeIndicator({ mailingAddress, homeAddress });
+    expect(result).toBe(true);
+  });
+
+  it('should return false when addresses differ in street name', () => {
+    const mailingAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: 'ON',
+    };
+
+    const homeAddress = {
+      address: '456 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: 'ON',
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToMailingSameAsHomeIndicator({ mailingAddress, homeAddress });
+    expect(result).toBe(false);
+  });
+
+  it('should return false when addresses differ in city', () => {
+    const mailingAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: 'ON',
+    };
+
+    const homeAddress = {
+      address: '123 Main Street',
+      city: 'Ottawa',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: 'ON',
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToMailingSameAsHomeIndicator({ mailingAddress, homeAddress });
+    expect(result).toBe(false);
+  });
+
+  it('should return false when addresses differ in country', () => {
+    const mailingAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: 'ON',
+    };
+
+    const homeAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'USA',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: 'ON',
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToMailingSameAsHomeIndicator({ mailingAddress, homeAddress });
+    expect(result).toBe(false);
+  });
+
+  it('should return false when addresses differ in province/state', () => {
+    const mailingAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: 'ON',
+    };
+
+    const homeAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: 'QC',
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToMailingSameAsHomeIndicator({ mailingAddress, homeAddress });
+    expect(result).toBe(false);
+  });
+
+  it('should return false when addresses differ in postal code', () => {
+    const mailingAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: 'ON',
+    };
+
+    const homeAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'K1A 0A6',
+      provinceStateId: 'ON',
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToMailingSameAsHomeIndicator({ mailingAddress, homeAddress });
+    expect(result).toBe(false);
+  });
+
+  it('should return true when both addresses have undefined postal codes', () => {
+    const mailingAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: undefined,
+      provinceStateId: 'ON',
+    };
+
+    const homeAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: undefined,
+      provinceStateId: 'ON',
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToMailingSameAsHomeIndicator({ mailingAddress, homeAddress });
+    expect(result).toBe(true);
+  });
+
+  it('should return false when one address has postal code and other is undefined', () => {
+    const mailingAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: 'ON',
+    };
+
+    const homeAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: undefined,
+      provinceStateId: 'ON',
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToMailingSameAsHomeIndicator({ mailingAddress, homeAddress });
+    expect(result).toBe(false);
+  });
+
+  it('should return true when both addresses have undefined province/state', () => {
+    const mailingAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: undefined,
+    };
+
+    const homeAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: undefined,
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToMailingSameAsHomeIndicator({ mailingAddress, homeAddress });
+    expect(result).toBe(true);
+  });
+
+  it('should return false when one address has province/state and other is undefined', () => {
+    const mailingAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: 'ON',
+    };
+
+    const homeAddress = {
+      address: '123 Main Street',
+      city: 'Toronto',
+      countryId: 'CAN',
+      postalZipCode: 'M5V 3A8',
+      provinceStateId: undefined,
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToMailingSameAsHomeIndicator({ mailingAddress, homeAddress });
+    expect(result).toBe(false);
+  });
+
+  it('should handle complex mixed case and accents correctly', () => {
+    const mailingAddress = {
+      address: '123 Boul. René-Lévesque Est',
+      city: 'Québec',
+      countryId: 'CAN',
+      postalZipCode: 'G1R 2B5',
+      provinceStateId: 'QC',
+    };
+
+    const homeAddress = {
+      address: '123 BOUL. RENE-LEVESQUE EST',
+      city: 'QUEBEC',
+      countryId: 'CAN',
+      postalZipCode: 'g1r 2b5',
+      provinceStateId: 'QC',
+    };
+
+    const result = mapper.mapUpdateAddressRequestDtoToMailingSameAsHomeIndicator({ mailingAddress, homeAddress });
+    expect(result).toBe(true);
   });
 });
 

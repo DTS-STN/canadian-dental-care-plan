@@ -114,9 +114,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const mailingAddress = {
     address: formattedAddress,
     city: validatedResult.data.city,
-    country: validatedResult.data.countryId,
-    postalCode: validatedResult.data.postalZipCode,
-    province: validatedResult.data.provinceStateId,
+    countryId: validatedResult.data.countryId,
+    postalZipCode: validatedResult.data.postalZipCode,
+    provinceStateId: validatedResult.data.provinceStateId,
   };
 
   const isNotCanada = validatedResult.data.countryId !== clientConfig.CANADA_COUNTRY_ID;
@@ -136,11 +136,10 @@ export async function action({ context: { appContainer, session }, params, reque
           ? mailingAddress
           : {
               address: clientApplication.contactInformation.homeAddress ?? '',
-              apartment: clientApplication.contactInformation.homeApartment ?? '',
               city: clientApplication.contactInformation.homeCity ?? '',
-              country: clientApplication.contactInformation.homeCountry ?? '',
-              postalCode: clientApplication.contactInformation.homePostalCode ?? '',
-              province: clientApplication.contactInformation.homeProvince ?? '',
+              countryId: clientApplication.contactInformation.homeCountry ?? '',
+              postalZipCode: clientApplication.contactInformation.homePostalCode ?? '',
+              provinceStateId: clientApplication.contactInformation.homeProvince ?? '',
             },
       },
       idToken.sub,
@@ -206,11 +205,10 @@ export async function action({ context: { appContainer, session }, params, reque
         ? mailingAddress
         : {
             address: clientApplication.contactInformation.homeAddress ?? '',
-            apartment: clientApplication.contactInformation.homeApartment ?? '',
             city: clientApplication.contactInformation.homeCity ?? '',
-            country: clientApplication.contactInformation.homeCountry ?? '',
-            postalCode: clientApplication.contactInformation.homePostalCode ?? '',
-            province: clientApplication.contactInformation.homeProvince ?? '',
+            countryId: clientApplication.contactInformation.homeCountry ?? '',
+            postalZipCode: clientApplication.contactInformation.homePostalCode ?? '',
+            provinceStateId: clientApplication.contactInformation.homeProvince ?? '',
           },
     },
     idToken.sub,

@@ -111,9 +111,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const homeAddress = {
     address: formattedAddress,
     city: validatedResult.data.city,
-    country: validatedResult.data.countryId,
-    postalCode: validatedResult.data.postalZipCode,
-    province: validatedResult.data.provinceStateId,
+    countryId: validatedResult.data.countryId,
+    postalZipCode: validatedResult.data.postalZipCode,
+    provinceStateId: validatedResult.data.provinceStateId,
   };
 
   const isNotCanada = validatedResult.data.countryId !== clientConfig.CANADA_COUNTRY_ID;
@@ -130,11 +130,10 @@ export async function action({ context: { appContainer, session }, params, reque
         clientId: clientApplication.applicantInformation.clientId,
         mailingAddress: {
           address: clientApplication.contactInformation.mailingAddress,
-          apartment: clientApplication.contactInformation.mailingApartment,
           city: clientApplication.contactInformation.mailingCity,
-          country: clientApplication.contactInformation.mailingCountry,
-          postalCode: clientApplication.contactInformation.mailingPostalCode,
-          province: clientApplication.contactInformation.mailingProvince,
+          countryId: clientApplication.contactInformation.mailingCountry,
+          postalZipCode: clientApplication.contactInformation.mailingPostalCode,
+          provinceStateId: clientApplication.contactInformation.mailingProvince,
         },
         homeAddress,
       },
@@ -198,11 +197,10 @@ export async function action({ context: { appContainer, session }, params, reque
       clientId: clientApplication.applicantInformation.clientId,
       mailingAddress: {
         address: clientApplication.contactInformation.mailingAddress,
-        apartment: clientApplication.contactInformation.mailingApartment,
         city: clientApplication.contactInformation.mailingCity,
-        country: clientApplication.contactInformation.mailingCountry,
-        postalCode: clientApplication.contactInformation.mailingPostalCode,
-        province: clientApplication.contactInformation.mailingProvince,
+        countryId: clientApplication.contactInformation.mailingCountry,
+        postalZipCode: clientApplication.contactInformation.mailingPostalCode,
+        provinceStateId: clientApplication.contactInformation.mailingProvince,
       },
       homeAddress,
     },

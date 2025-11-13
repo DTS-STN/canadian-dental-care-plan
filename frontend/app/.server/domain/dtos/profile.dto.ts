@@ -29,18 +29,16 @@ export type UpdateAddressRequestDto = Readonly<{
   clientId: string;
   mailingAddress: {
     address: string;
-    apartment?: string;
     city: string;
-    country: string;
-    postalCode?: string;
-    province?: string;
+    countryId: string;
+    postalZipCode?: string;
+    provinceStateId?: string;
   };
   homeAddress: {
     address: string;
-    apartment?: string;
     city: string;
-    country: string;
-    postalCode?: string;
-    province?: string;
+    countryId: string;
+    postalZipCode?: string;
+    provinceStateId?: string;
   };
 }>;
