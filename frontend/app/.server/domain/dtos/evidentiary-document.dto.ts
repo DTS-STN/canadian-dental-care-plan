@@ -43,6 +43,38 @@ export type EvidentiaryDocumentLocalizedDto = ReadonlyDeep<{
   };
 }>;
 
+/**
+ * DTO for uploading evidentiary document metadata
+ */
+export type CreateEvidentiaryDocumentMetadataDto = ReadonlyDeep<{
+  fileName: string;
+  documentTypeId: string;
+  documentUploadReasonId: string;
+  recordSource: number; // Online = 775170001, MSCA = 775170004
+  uploadDate: string; // ISO 8601 date string
+  healthCanadaTransferDate?: string; // ISO 8601 date string
+}>;
+
+/**
+ * DTO representing the response from uploading document metadata
+ */
+export type CreateEvidentiaryDocumentMetadataResponseDto = ReadonlyDeep<{
+  processed: boolean;
+  requestContext: {
+    simulate: boolean;
+    debug: boolean;
+  };
+  evidentiaryDocuments: ReadonlyArray<{
+    fileName: string;
+    documentTypeId: string;
+    documentUploadReasonId: string;
+    uploadDate: string;
+    healthCanadaTransferDate?: string;
+    clientId: string;
+    recordSource: number;
+  }>;
+}>;
+
 /*
  * Request object for listing evidentiary documents.
  */
@@ -52,4 +84,24 @@ export type ListEvidentiaryDocumentsRequest = Readonly<{
 
   /** A unique identifier for the applicant - used for auditing */
   userId: string;
+}>;
+
+/**
+ * Request object for uploading evidentiary document metadata
+ */
+export type CreateEvidentiaryDocumentMetadataRequest = Readonly<{
+  /** The client ID of the applicant. */
+  clientID: string;
+
+  /** A unique identifier for the applicant - used for auditing */
+  userId: string;
+
+  /** Whether to simulate the upload */
+  simulate: boolean;
+
+  /** Whether to enable debug mode */
+  debug: boolean;
+
+  /** The documents to upload */
+  documents: ReadonlyArray<CreateEvidentiaryDocumentMetadataDto>;
 }>;

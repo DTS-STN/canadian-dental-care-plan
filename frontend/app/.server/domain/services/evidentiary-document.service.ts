@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
-import type { EvidentiaryDocumentDto, EvidentiaryDocumentLocalizedDto, ListEvidentiaryDocumentsRequest } from '~/.server/domain/dtos';
+import type { CreateEvidentiaryDocumentMetadataRequest, CreateEvidentiaryDocumentMetadataResponseDto, EvidentiaryDocumentDto, EvidentiaryDocumentLocalizedDto, ListEvidentiaryDocumentsRequest } from '~/.server/domain/dtos';
 import type { EvidentiaryDocumentDtoMapper } from '~/.server/domain/mappers';
 import type { EvidentiaryDocumentRepository } from '~/.server/domain/repositories';
 import { createLogger } from '~/.server/logging';
@@ -27,6 +27,14 @@ export interface EvidentiaryDocumentService {
    * @returns A promise that resolves to an array of localized evidentiary document DTOs.
    */
   listLocalizedEvidentiaryDocuments(listEvidentiaryDocumentsRequestDto: ListEvidentiaryDocumentsRequest, locale: AppLocale): Promise<ReadonlyArray<EvidentiaryDocumentLocalizedDto>>;
+
+  /**
+   * Uploads evidentiary document metadata.
+   *
+   * @param createEvidentiaryDocumentMetadataRequest The request object containing the documents to upload.
+   * @returns A promise that resolves to the upload response DTO.
+   */
+  createEvidentiaryDocumentMetadata(createEvidentiaryDocumentMetadataRequest: CreateEvidentiaryDocumentMetadataRequest): Promise<CreateEvidentiaryDocumentMetadataResponseDto>;
 }
 
 @injectable()
@@ -62,5 +70,27 @@ export class DefaultEvidentiaryDocumentService implements EvidentiaryDocumentSer
 
     this.log.trace('Returning localized evidentiary documents: [%j]', localizedEvidentiaryDocumentDtos);
     return localizedEvidentiaryDocumentDtos;
+  }
+
+  async createEvidentiaryDocumentMetadata(createEvidentiaryDocumentMetadataRequest: CreateEvidentiaryDocumentMetadataRequest): Promise<CreateEvidentiaryDocumentMetadataResponseDto> {
+    this.log.debug('Upload evidentiary document metadata for client: %s; userId: %s', createEvidentiaryDocumentMetadataRequest.clientID, createEvidentiaryDocumentMetadataRequest.userId);
+    this.log.trace('Upload evidentiary document metadata for request [%j]', createEvidentiaryDocumentMetadataRequest);
+
+    const documentEntities = this.evidentiaryDocumentDtoMapper.mapCreateEvidentiaryDocumentMetadataDtosToEntities(createEvidentiaryDocumentMetadataRequest.documents);
+
+    const repositoryRequest = {
+      clientID: createEvidentiaryDocumentMetadataRequest.clientID,
+      userId: createEvidentiaryDocumentMetadataRequest.userId,
+      simulate: createEvidentiaryDocumentMetadataRequest.simulate,
+      debug: createEvidentiaryDocumentMetadataRequest.debug,
+      documents: documentEntities,
+    };
+
+    const uploadResponseEntity = await this.evidentiaryDocumentRepository.createEvidentiaryDocumentMetadata(repositoryRequest);
+
+    const uploadResponseDto = this.evidentiaryDocumentDtoMapper.mapCreateEvidentiaryDocumentMetadataResponseEntityToDto(uploadResponseEntity);
+
+    this.log.trace('Returning upload evidentiary document metadata response: [%j]', uploadResponseDto);
+    return uploadResponseDto;
   }
 }
