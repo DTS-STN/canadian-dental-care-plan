@@ -22,16 +22,61 @@ export type EvidentiaryDocumentEntity = ReadonlyDeep<{
   };
 }>;
 
-export type FindEvidentiaryDocumentsRequest = Readonly<{
-  /** The client ID of the applicant. */
-  clientID: string;
+/**
+ * Entity for uploading evidentiary document metadata
+ */
+export type UploadEvidentiaryDocumentMetadataEntity = ReadonlyDeep<{
+  fileName: string;
+  documentTypeId: string;
+  documentUploadReasonId: string;
+  recordSource: number; // Online = 775170001, MSCA = 775170004
+  uploadDate: string; // ISO 8601 date string
+  healthCanadaTransferDate?: string; // ISO 8601 date string
+}>;
 
-  /** A unique identifier for the applicant - used for auditing */
+/**
+ * Entity representing the response from uploading document metadata
+ */
+export type CreateEvidentiaryDocumentMetadataResponseEntity = ReadonlyDeep<{
+  esdc: {
+    esdc_processed: boolean;
+    RequestContext: {
+      esdc_simulate: boolean;
+      esdc_debug: boolean;
+    };
+  };
+  esdc_evidentiarydocuments: ReadonlyArray<{
+    esdc_filename: string;
+    _esdc_documenttypeid_value: string;
+    _esdc_documentuploadreasonid_value: string;
+    esdc_uploaddate: string;
+    esdc_hctransferdate?: string;
+    _esdc_clientid_value: string;
+    esdc_recordsource: number;
+  }>;
+}>;
+
+/**
+ * Request entity for the Power Platform API for GET evidentiary documents
+ */
+export type FindEvidentiaryDocumentsRequest = Readonly<{
+  clientID: string;
   userId: string;
 }>;
 
 /**
- * Response entity from the Power Platform API
+ * Request entity for the Power Platform API for POST evidentiary documents
+ */
+export type CreateEvidentiaryDocumentMetadataRepositoryRequest = Readonly<{
+  clientID: string;
+  userId: string;
+  simulate: boolean;
+  debug: boolean;
+  documents: ReadonlyArray<UploadEvidentiaryDocumentMetadataEntity>;
+}>;
+
+/**
+ * Response entity from the Power Platform API for GET
  */
 export type EvidentiaryDocumentResponseEntity = ReadonlyDeep<{
   value: ReadonlyArray<{

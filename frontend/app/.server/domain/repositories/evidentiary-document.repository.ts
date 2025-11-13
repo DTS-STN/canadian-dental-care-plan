@@ -3,7 +3,7 @@ import { URL } from 'node:url';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { EvidentiaryDocumentEntity, EvidentiaryDocumentResponseEntity, FindEvidentiaryDocumentsRequest } from '~/.server/domain/entities';
+import type { CreateEvidentiaryDocumentMetadataRepositoryRequest, CreateEvidentiaryDocumentMetadataResponseEntity, EvidentiaryDocumentEntity, EvidentiaryDocumentResponseEntity, FindEvidentiaryDocumentsRequest } from '~/.server/domain/entities';
 import type { HttpClient } from '~/.server/http';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
@@ -20,6 +20,14 @@ export interface EvidentiaryDocumentRepository {
    * @returns A promise that resolves to an array of evidentiary document entities.
    */
   findEvidentiaryDocuments(findEvidentiaryDocumentsRequest: FindEvidentiaryDocumentsRequest): Promise<ReadonlyArray<EvidentiaryDocumentEntity>>;
+
+  /**
+   * Uploads evidentiary document metadata.
+   *
+   * @param createRequest The request object containing the documents to upload.
+   * @returns A promise that resolves to the upload response entity.
+   */
+  createEvidentiaryDocumentMetadata(createRequest: CreateEvidentiaryDocumentMetadataRepositoryRequest): Promise<CreateEvidentiaryDocumentMetadataResponseEntity>;
 
   /**
    * Retrieves metadata associated with the evidentiary documents repository.
@@ -62,7 +70,6 @@ export class DefaultEvidentiaryDocumentRepository implements EvidentiaryDocument
 
     const url = new URL(`${this.baseUrl}/esdc_evidentiarydocuments`);
 
-    // Build query parameters as per spec
     url.searchParams.set('$select', 'esdc_filename,_esdc_documenttypeid_value,esdc_uploaddate');
     url.searchParams.set('$expand', 'esdc_Clientid($select=esdc_firstname,esdc_lastname),esdc_DocumentTypeid($select=esdc_nameenglish,esdc_namefrench)');
     url.searchParams.set('$filter', `statuscode eq 1 and _esdc_clientid_value eq '${findEvidentiaryDocumentsRequest.clientID}'`);
@@ -98,6 +105,62 @@ export class DefaultEvidentiaryDocumentRepository implements EvidentiaryDocument
 
     this.log.trace('Returning evidentiary documents [%j]', documentEntities);
     return documentEntities;
+  }
+
+  async createEvidentiaryDocumentMetadata(createRequest: CreateEvidentiaryDocumentMetadataRepositoryRequest): Promise<CreateEvidentiaryDocumentMetadataResponseEntity> {
+    this.log.debug('Uploading evidentiary document metadata for client: [%s]', createRequest.clientID);
+    this.log.trace('Uploading evidentiary document metadata for request [%j]', createRequest);
+
+    const url = new URL(`${this.baseUrl}/esdc_client(${createRequest.clientID})/Microsoft.Dynamics.CRM.esdc_UploadEvidentiaryDocuments`);
+
+    const requestBody = {
+      esdc: {
+        '@odata.type': '#Microsoft.Dynamics.CRM.expando',
+        esdc_simulate: createRequest.simulate,
+        esdc_debug: createRequest.debug,
+      },
+      Documents: createRequest.documents.map((doc) => ({
+        '@odata.type': '#Microsoft.Dynamics.CRM.esdc_evidentiarydocument',
+        'esdc_DocumentTypeid@odata.bind': `esdc_documenttypes(${doc.documentTypeId})`,
+        'esdc_DocumentUploadReasonid@odata.bind': `esdc_documentuploadreasons(${doc.documentUploadReasonId})`,
+        esdc_recordsource: doc.recordSource,
+        esdc_filename: doc.fileName,
+        esdc_uploaddate: doc.uploadDate,
+        ...(doc.healthCanadaTransferDate && { esdc_hctransferdate: doc.healthCanadaTransferDate }),
+      })),
+    };
+
+    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.evidentiary-documents.upload', url, {
+      method: 'POST',
+      headers: {
+        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+      retryOptions: {
+        retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
+        backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,
+        retryConditions: {
+          [HttpStatusCodes.BAD_GATEWAY]: [],
+        },
+      },
+    });
+
+    if (!response.ok) {
+      this.log.error('%j', {
+        message: 'Failed to upload evidentiary document metadata',
+        status: response.status,
+        statusText: response.statusText,
+        url: url.toString(),
+        clientID: createRequest.clientID,
+        responseBody: await response.text(),
+      });
+      throw new Error(`Failed to upload evidentiary document metadata. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+
+    const uploadResponse = (await response.json()) as CreateEvidentiaryDocumentMetadataResponseEntity;
+    this.log.trace('Upload evidentiary document metadata response [%j]', uploadResponse);
+    return uploadResponse;
   }
 
   private mapResponseToEntities(response: EvidentiaryDocumentResponseEntity): ReadonlyArray<EvidentiaryDocumentEntity> {
@@ -146,7 +209,6 @@ export class MockEvidentiaryDocumentRepository implements EvidentiaryDocumentRep
     this.log.debug('Fetch evidentiary documents for client: [%s]', findEvidentiaryDocumentsRequest.clientID);
     this.log.trace('Fetch evidentiary documents for request [%j]', findEvidentiaryDocumentsRequest);
 
-    // Updated mock data to match the new structure
     const mockEvidentiaryDocumentEntities: ReadonlyArray<EvidentiaryDocumentEntity> = [
       {
         id: 'aff431b7-9bae-f011-bbd3-7c1e520630db',
@@ -186,6 +248,33 @@ export class MockEvidentiaryDocumentRepository implements EvidentiaryDocumentRep
 
     this.log.trace('Returning evidentiary documents [%j]', mockEvidentiaryDocumentEntities);
     return await Promise.resolve(mockEvidentiaryDocumentEntities);
+  }
+
+  async createEvidentiaryDocumentMetadata(createRequest: CreateEvidentiaryDocumentMetadataRepositoryRequest): Promise<CreateEvidentiaryDocumentMetadataResponseEntity> {
+    this.log.debug('Upload evidentiary document metadata for client: [%s]', createRequest.clientID);
+    this.log.trace('Upload evidentiary document metadata for request [%j]', createRequest);
+
+    const mockResponse: CreateEvidentiaryDocumentMetadataResponseEntity = {
+      esdc: {
+        esdc_processed: true,
+        RequestContext: {
+          esdc_simulate: createRequest.simulate,
+          esdc_debug: createRequest.debug,
+        },
+      },
+      esdc_evidentiarydocuments: createRequest.documents.map((doc) => ({
+        esdc_filename: doc.fileName,
+        _esdc_documenttypeid_value: doc.documentTypeId,
+        _esdc_documentuploadreasonid_value: '89823b11-bfaa-f011-bbd3-7c1e520630db',
+        esdc_uploaddate: doc.uploadDate,
+        ...(doc.healthCanadaTransferDate && { esdc_hctransferdate: doc.healthCanadaTransferDate }),
+        _esdc_clientid_value: createRequest.clientID,
+        esdc_recordsource: doc.recordSource,
+      })),
+    };
+
+    this.log.trace('Returning upload evidentiary document metadata response [%j]', mockResponse);
+    return await Promise.resolve(mockResponse);
   }
 
   getMetadata(): Record<string, string> {
