@@ -1,6 +1,8 @@
+import type { ReadonlyDeep } from 'type-fest';
 import { z } from 'zod';
 
 import { isValidTimeZone } from '~/utils/date-utils';
+import { isValidExtension } from '~/utils/file.utils';
 
 const validFeatureNames = ['hcaptcha', 'killswitch-api', 'show-prototype-banner', 'stub-login', 'status', 'view-letters', 'view-payload', 'demographic-survey', 'doc-upload'] as const;
 
@@ -8,9 +10,11 @@ export type FeatureName = (typeof validFeatureNames)[number];
 
 // refiners
 const areValidFeatureNames = (arr: Array<string>): arr is FeatureName[] => arr.every((featureName) => validFeatureNames.includes(featureName as FeatureName));
+const areValidFileExtensions = (extensions: Set<string>) => [...extensions].every(isValidExtension);
 
 // transformers
 const csvToArray = (csv?: string) => csv?.split(',').map((str) => str.trim()) ?? [];
+const csvToSet = (csv?: string) => new Set(csvToArray(csv));
 const emptyToUndefined = (val?: string) => (val === '' ? undefined : val);
 const toBoolean = (val?: string) => val === 'true';
 
@@ -71,10 +75,14 @@ export const clientEnvSchema = z.object({
 
   // CDCP Survey URLs
   CDCP_SURVEY_LINK_EN: z.url().default('https://forms-formulaires.alpha.canada.ca/en/id/cmdsycga6008qx701dw5x5n9c'),
-  CDCP_SURVEY_LINK_FR: z.url().default('https://forms-formulaires.alpha.canada.ca/fr/id/cmdsycga6008qx701dw5x5n9c')
+  CDCP_SURVEY_LINK_FR: z.url().default('https://forms-formulaires.alpha.canada.ca/fr/id/cmdsycga6008qx701dw5x5n9c'),
+
+  // Document pload configs
+  DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS: z.string().trim().min(1).transform(csvToSet).refine(areValidFileExtensions).default(new Set(['.docx', '.ppt', '.txt', '.pdf', '.jpg', '.jpeg', '.png'])),
+  DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB: z.coerce.number().min(1).default(10),
 });
 
-export type ClientEnv = z.infer<typeof clientEnvSchema>;
+export type ClientEnv = ReadonlyDeep<z.infer<typeof clientEnvSchema>>;
 
 /**
  * A utility function that returns environment varaibles:
