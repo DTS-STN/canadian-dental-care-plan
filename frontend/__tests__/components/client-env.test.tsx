@@ -27,6 +27,8 @@ describe('<ClientEnv>', () => {
       COMMUNICATION_METHOD_SUNLIFE_MAIL_ID: 'MAIL',
       COMMUNICATION_METHOD_GC_DIGITAL_ID: 'DIGITAL',
       COMMUNICATION_METHOD_GC_MAIL_ID: 'MAIL',
+      DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS: new Set(['pdf', 'jpg', 'png']),
+      DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB: 5,
       ECAS_BASE_URI: 'https://srv136.services.gc.ca/ecas-seca/rascl/SCL',
       ENABLED_FEATURES: ['feature1', 'feature2'] as unknown as FeatureName[],
       HCAPTCHA_SITE_KEY: 'hcaptcha-site-key',
