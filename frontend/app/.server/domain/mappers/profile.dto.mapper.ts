@@ -1,4 +1,5 @@
 import { injectable } from 'inversify';
+import { isDeepStrictEqual } from 'node:util';
 
 import type { UpdateAddressRequestDto, UpdateCommunicationPreferenceRequestDto, UpdateDentalBenefitsRequestDto, UpdateEmailAddressRequestDto, UpdatePhoneNumbersRequestDto } from '~/.server/domain/dtos';
 import type { UpdateAddressRequestEntity, UpdateCommunicationPreferenceRequestEntity, UpdateDentalBenefitsRequestEntity, UpdateEmailAddressRequestEntity, UpdatePhoneNumbersRequestEntity } from '~/.server/domain/entities';
@@ -101,35 +102,37 @@ export class DefaultProfileDtoMapper implements ProfileDtoMapper {
   }
 
   mapUpdateAddressRequestDtoToUpdateAddressRequestEntity(updateAddressRequestDto: UpdateAddressRequestDto): UpdateAddressRequestEntity {
+    const { clientId, mailingAddress, homeAddress } = updateAddressRequestDto;
     return {
       BenefitApplication: {
         Applicant: {
           ClientIdentification: [
             {
-              IdentificationID: updateAddressRequestDto.clientId,
+              IdentificationID: clientId,
               IdentificationCategoryText: 'Guid Primary Key',
             },
           ],
+          MailingSameAsHomeIndicator: isDeepStrictEqual(mailingAddress, homeAddress),
           PersonContactInformation: [
             {
               Address: [
                 {
                   AddressCategoryCode: { ReferenceDataName: 'Mailing' },
-                  AddressCityName: updateAddressRequestDto.mailingAddress.city,
-                  AddressCountry: { CountryCode: { ReferenceDataID: updateAddressRequestDto.mailingAddress.country } },
-                  AddressPostalCode: updateAddressRequestDto.mailingAddress.postalCode ?? '',
-                  AddressProvince: { ProvinceCode: { ReferenceDataID: updateAddressRequestDto.mailingAddress.province ?? '00000000-0000-0000-0000-000000000000' } },
+                  AddressCityName: mailingAddress.city,
+                  AddressCountry: { CountryCode: { ReferenceDataID: mailingAddress.country } },
+                  AddressPostalCode: mailingAddress.postalCode ?? '',
+                  AddressProvince: { ProvinceCode: { ReferenceDataID: mailingAddress.province ?? '00000000-0000-0000-0000-000000000000' } },
                   AddressSecondaryUnitText: '',
-                  AddressStreet: { StreetName: updateAddressRequestDto.mailingAddress.address },
+                  AddressStreet: { StreetName: mailingAddress.address },
                 },
                 {
                   AddressCategoryCode: { ReferenceDataName: 'Home' },
-                  AddressCityName: updateAddressRequestDto.homeAddress.city,
-                  AddressCountry: { CountryCode: { ReferenceDataID: updateAddressRequestDto.homeAddress.country } },
-                  AddressPostalCode: updateAddressRequestDto.homeAddress.postalCode ?? '',
-                  AddressProvince: { ProvinceCode: { ReferenceDataID: updateAddressRequestDto.homeAddress.province ?? '00000000-0000-0000-0000-000000000000' } },
+                  AddressCityName: homeAddress.city,
+                  AddressCountry: { CountryCode: { ReferenceDataID: homeAddress.country } },
+                  AddressPostalCode: homeAddress.postalCode ?? '',
+                  AddressProvince: { ProvinceCode: { ReferenceDataID: homeAddress.province ?? '00000000-0000-0000-0000-000000000000' } },
                   AddressSecondaryUnitText: '',
-                  AddressStreet: { StreetName: updateAddressRequestDto.homeAddress.address },
+                  AddressStreet: { StreetName: homeAddress.address },
                 },
               ],
             },

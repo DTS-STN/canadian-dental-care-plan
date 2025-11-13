@@ -195,6 +195,7 @@ describe('DefaultProfileService', () => {
               IdentificationCategoryText: 'Guid Primary Key',
             },
           ],
+          MailingSameAsHomeIndicator: false,
           PersonContactInformation: [
             {
               Address: [
