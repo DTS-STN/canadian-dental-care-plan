@@ -1,110 +1,183 @@
 [
   {
     "Applicant": {
-      "ApplicantDetail": { "PrivateDentalInsuranceIndicator": false },
       "ApplicantEarning": [
         {
-          "BenefitApplicationYearIdentification": [{ "IdentificationID": "98f8ad43-4069-ee11-9ae7-000d3a09d1b8" }],
+          "BenefitApplicationYearIdentification": {
+            "IdentificationID": "98f8ad43-4069-ee11-9ae7-000d3a09d1b8",
+            "IdentificationCategoryText": "Application Year ID"
+          },
           "BenefitEligibilityStatus": {
-            "StatusCode": { "ReferenceDataID": "775170000" }
+            "StatusCode": {
+              "ReferenceDataID": "775170001"
+            }
           },
           "Coverage": [
             {
               "CoverageCategoryCode": {
                 "ReferenceDataName": "Co-Pay Tier (TPC)",
-                "CoverageTierCode": { "ReferenceDataID": "GUID" }
+                "CoverageTierCode": {
+                  "ReferenceDataID": "c12531e1-ef6d-49f9-9737-c32271fbba79"
+                }
               }
             }
           ],
           "EarningIdentification": [
             {
-              "IdentificationID": "GUID",
-              "IdentificationCategoryText": "Earning ID"
+              "IdentificationID": "56757517-7f2a-ef11-840a-000d3a09c0c7",
+              "IdentificationCategoryText": "Client Earning ID"
             }
           ],
-          "EarningTaxationYear": { "YearDate": "2024" }
-        }
-      ],
-      "ApplicantCategoryCode": { "ReferenceDataID": "775170000" },
-      "ApplicantEnrollmentStatus": {
-        "StatusCode": { "ReferenceDataID": "775170000" }
-      },
-      "BenefitEligibilityStatus": {
-        "StatusCode": { "ReferenceDataID": "775170000" }
-      },
-      "BenefitEligibilityNextYearStatus": {
-        "StatusCode": { "ReferenceDataID": "775170001" }
-      },
-      "BenefitApplicationYearIdentification": [{ "IdentificationID": "98f8ad43-4069-ee11-9ae7-000d3a09d1b8" }],
-      "ClientIdentification": [
-        {
-          "IdentificationID": "A123451",
-          "IdentificationCategoryText": "Client Number"
+          "EarningTaxationYear": {
+            "YearDate": "2023"
+          },
+          "PrivateDentalInsuranceIndicator": true
         },
         {
-          "IdentificationID": "GUID",
-          "IdentificationCategoryText": "Client ID"
+          "BenefitApplicationYearIdentification": {
+            "IdentificationID": "4232aa81-7a46-ee11-be6f-000d3a09d640",
+            "IdentificationCategoryText": "Application Year ID"
+          },
+          "BenefitEligibilityStatus": {
+            "StatusCode": {
+              "ReferenceDataID": "775170001"
+            }
+          },
+          "Coverage": [
+            {
+              "CoverageCategoryCode": {
+                "ReferenceDataName": "Co-Pay Tier (TPC)",
+                "CoverageTierCode": {
+                  "ReferenceDataID": "c12531e1-ef6d-49f9-9737-c32271fbba79"
+                }
+              }
+            }
+          ],
+          "EarningIdentification": [
+            {
+              "IdentificationID": "fb5eb6a4-94ab-ef11-8a69-000d3a0a072d",
+              "IdentificationCategoryText": "Client Earning ID"
+            }
+          ],
+          "EarningTaxationYear": {
+            "YearDate": "2022"
+          },
+          "PrivateDentalInsuranceIndicator": true
         }
       ],
+      "ApplicantCategoryCode": {
+        "ReferenceDataID": "775170000"
+      },
+      "ApplicantEnrollmentStatus": {
+        "StatusCode": {
+          "ReferenceDataID": "775170001"
+        }
+      },
+      "BenefitEligibilityStatus": {
+        "StatusCode": {
+          "ReferenceDataID": "775170001"
+        }
+      },
+      "BenefitEligibilityNextYearStatus": {
+        "StatusCode": {
+          "ReferenceDataID": "775170001"
+        }
+      },
+      "BenefitApplicationYearIdentification": {
+        "IdentificationID": "98f8ad43-4069-ee11-9ae7-000d3a09d1b8",
+        "IdentificationCategoryText": "Application Year ID"
+      },
+      "ClientIdentification": [
+        {
+          "IdentificationID": "51757517-7f2a-ef11-840a-000d3a09c0c7",
+          "IdentificationCategoryText": "Client ID"
+        },
+        {
+          "IdentificationID": "31730703573",
+          "IdentificationCategoryText": "Client Number"
+        }
+      ],
+      "PersonContactInformation": [],
+      "PersonLanguage": [],
       "PersonName": [
         {
-          "PersonGivenName": ["John"],
-          "PersonSurName": "Smith"
+          "PersonGivenName": ["Marcel"],
+          "PersonSurName": "Wright"
         }
       ]
     }
   },
   {
     "Applicant": {
-      "ApplicantDetail": { "PrivateDentalInsuranceIndicator": false },
       "ApplicantEarning": [
         {
-          "BenefitApplicationYearIdentification": [{ "IdentificationID": "98f8ad43-4069-ee11-9ae7-000d3a09d1b8" }],
+          "BenefitApplicationYearIdentification": {
+            "IdentificationID": "4232aa81-7a46-ee11-be6f-000d3a09d640",
+            "IdentificationCategoryText": "Application Year ID"
+          },
           "BenefitEligibilityStatus": {
-            "StatusCode": { "ReferenceDataID": "775170000" }
+            "StatusCode": {
+              "ReferenceDataID": "775170001"
+            }
           },
           "Coverage": [
             {
               "CoverageCategoryCode": {
                 "ReferenceDataName": "Co-Pay Tier (TPC)",
-                "CoverageTierCode": { "ReferenceDataID": "GUID" }
+                "CoverageTierCode": {
+                  "ReferenceDataID": "c12531e1-ef6d-49f9-9737-c32271fbba79"
+                }
               }
             }
           ],
           "EarningIdentification": [
             {
-              "IdentificationID": "GUID",
-              "IdentificationCategoryText": "Earning ID"
+              "IdentificationID": "bd2d81f7-1f7f-ee11-8179-000d3a09d132",
+              "IdentificationCategoryText": "Client Earning ID"
             }
           ],
-          "EarningTaxationYear": { "YearDate": "2024" }
+          "EarningTaxationYear": {
+            "YearDate": "2022"
+          },
+          "PrivateDentalInsuranceIndicator": true
         }
       ],
-      "ApplicantCategoryCode": { "ReferenceDataID": "775170002" },
+      "ApplicantCategoryCode": {
+        "ReferenceDataID": "775170000"
+      },
       "ApplicantEnrollmentStatus": {
-        "StatusCode": { "ReferenceDataID": "775170000" }
+        "StatusCode": {
+          "ReferenceDataID": "775170000"
+        }
       },
       "BenefitEligibilityStatus": {
-        "StatusCode": { "ReferenceDataID": "775170000" }
+        "StatusCode": {
+          "ReferenceDataID": "775170001"
+        }
       },
       "BenefitEligibilityNextYearStatus": {
-        "StatusCode": { "ReferenceDataID": "775170001" }
+        "StatusCode": {
+          "ReferenceDataID": "775170001"
+        }
       },
-      "BenefitApplicationYearIdentification": [{ "IdentificationID": "98f8ad43-4069-ee11-9ae7-000d3a09d1b8" }],
+      "BenefitApplicationYearIdentification": {
+        "IdentificationID": "98f8ad43-4069-ee11-9ae7-000d3a09d1b8",
+        "IdentificationCategoryText": "Application Year ID"
+      },
       "ClientIdentification": [
         {
-          "IdentificationID": "A123451",
-          "IdentificationCategoryText": "Client Number"
+          "IdentificationID": "9c2d81f7-1f7f-ee11-8179-000d3a09d132",
+          "IdentificationCategoryText": "Client ID"
         },
         {
-          "IdentificationID": "GUID",
-          "IdentificationCategoryText": "Client ID"
+          "IdentificationID": "17665273131",
+          "IdentificationCategoryText": "Client Number"
         }
       ],
       "PersonName": [
         {
-          "PersonGivenName": ["Johnny Jr"],
-          "PersonSurName": "Smith"
+          "PersonGivenName": ["Test1, testa, testb"],
+          "PersonSurName": "Doe"
         }
       ]
     }
