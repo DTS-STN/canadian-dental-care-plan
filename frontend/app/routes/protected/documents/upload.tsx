@@ -333,6 +333,25 @@ export async function action({ context: { appContainer, session }, params, reque
     return { errors: uploadErrors };
   }
 
+  const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
+  const documentUploadReasons = await appContainer.get(TYPES.DocumentUploadReasonService).listDocumentUploadReasons();
+
+  const uploadMetadataRequest = {
+    clientID: clientApplication.applicantInformation.clientId,
+    userId: idToken.sub,
+    simulate: true,
+    debug: true,
+    documents: parsedDataResult.data.files.map(({ file, documentType }) => ({
+      fileName: file.name,
+      documentTypeId: documentType,
+      documentUploadReasonId: documentUploadReasons[0].id,
+      recordSource: Number(appContainer.get(TYPES.ServerConfig).EWDU_RECORD_SOURCE_MSCA),
+      uploadDate: new Date().toISOString(),
+    })),
+  };
+
+  await appContainer.get(TYPES.EvidentiaryDocumentService).createEvidentiaryDocumentMetadata(uploadMetadataRequest);
+
   return redirect(getPathById('protected/documents/index', params));
 }
 
