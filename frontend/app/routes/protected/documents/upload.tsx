@@ -83,13 +83,14 @@ type CreateDocumentUploadSchemaArgs = {
 function createDocumentUploadSchema({ t, validFileExtensions, maxFileSizeInMB }: CreateDocumentUploadSchemaArgs) {
   const MAX_FILE_SIZE = megabytesToBytes(maxFileSizeInMB);
   const ALLOWED_EXTENSIONS = new Set(validFileExtensions);
-  const ALLOWED_MIME_TYPES = new Set(validFileExtensions.map(getMimeType));
+  const ALLOWED_MIME_TYPES = validFileExtensions.map(getMimeType);
 
   const fileWithDocumentTypeSchema = z.object({
     file: z
-      .instanceof(File, { message: t('documents:upload.error-message.file-required') })
-      .refine((file) => file.size <= MAX_FILE_SIZE, t('documents:upload.error-message.file-too-large'))
-      .refine((file) => ALLOWED_EXTENSIONS.has(getFileExtension(file.name)) && ALLOWED_MIME_TYPES.has(file.type), t('documents:upload.error-message.invalid-file-type', { extensions: [...ALLOWED_EXTENSIONS].join(', ') })),
+      .file(t('documents:upload.error-message.file-required'))
+      .max(MAX_FILE_SIZE, t('documents:upload.error-message.file-too-large'))
+      .refine((file) => ALLOWED_EXTENSIONS.has(getFileExtension(file.name)), t('documents:upload.error-message.invalid-file-type', { extensions: [...ALLOWED_EXTENSIONS].join(', ') }))
+      .mime(ALLOWED_MIME_TYPES, t('documents:upload.error-message.invalid-file-type', { extensions: [...ALLOWED_EXTENSIONS].join(', ') })),
     documentType: z.string().min(1, t('documents:upload.error-message.document-type-required')),
   });
 
