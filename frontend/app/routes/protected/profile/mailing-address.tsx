@@ -280,7 +280,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('protected-profile:required-label')}</p>
+      <p className="mb-4 italic">{t('protected-profile:optional-label')}</p>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />

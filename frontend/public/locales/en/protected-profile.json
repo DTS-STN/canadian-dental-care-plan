@@ -1,5 +1,6 @@
 {
   "required-label": "Complete all fields.",
+  "optional-label": "Complete all fields unless marked as optional.",
   "all-optional-label": "All fields are optional.",
   "eligibility": {
     "page-title": "Member eligibility",
