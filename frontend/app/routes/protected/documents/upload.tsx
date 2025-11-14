@@ -78,9 +78,10 @@ type CreateDocumentUploadSchemaArgs = {
   t: TFunction<typeof handle.i18nNamespaces>;
   validFileExtensions: ReadonlyArray<string>;
   maxFileSizeInMB: number;
+  maxFileCount: number;
 };
 
-function createDocumentUploadSchema({ t, validFileExtensions, maxFileSizeInMB }: CreateDocumentUploadSchemaArgs) {
+function createDocumentUploadSchema({ t, validFileExtensions, maxFileSizeInMB, maxFileCount }: CreateDocumentUploadSchemaArgs) {
   const MAX_FILE_SIZE = megabytesToBytes(maxFileSizeInMB);
   const ALLOWED_EXTENSIONS = new Set(validFileExtensions);
   const ALLOWED_MIME_TYPES = validFileExtensions.map(getMimeType);
@@ -96,7 +97,7 @@ function createDocumentUploadSchema({ t, validFileExtensions, maxFileSizeInMB }:
 
   return z.object({
     applicant: z.string().min(1, t('documents:upload.error-message.applicant-required')),
-    files: z.array(fileWithDocumentTypeSchema).min(1, t('documents:upload.error-message.file-required')).max(10, t('documents:upload.error-message.too-many-files')),
+    files: z.array(fileWithDocumentTypeSchema).min(1, t('documents:upload.error-message.file-required')).max(maxFileCount, t('documents:upload.error-message.too-many-files')),
   });
 }
 
@@ -131,11 +132,12 @@ export async function clientAction({ request, serverAction }: Route.ClientAction
     files: filesWithTypes,
   };
 
-  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB } = getClientEnv();
+  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB, DOCUMENT_UPLOAD_MAX_FILE_COUNT } = getClientEnv();
   const parsedDataResult = createDocumentUploadSchema({
     t,
     validFileExtensions: DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS,
     maxFileSizeInMB: DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB,
+    maxFileCount: DOCUMENT_UPLOAD_MAX_FILE_COUNT,
   }).safeParse(formDataObj);
 
   if (!parsedDataResult.success) {
@@ -184,11 +186,12 @@ export async function action({ context: { appContainer, session }, params, reque
     files: filesWithTypes,
   };
 
-  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB } = appContainer.get(TYPES.ClientConfig);
+  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB, DOCUMENT_UPLOAD_MAX_FILE_COUNT } = appContainer.get(TYPES.ClientConfig);
   const parsedDataResult = createDocumentUploadSchema({
     t,
     validFileExtensions: DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS,
     maxFileSizeInMB: DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB,
+    maxFileCount: DOCUMENT_UPLOAD_MAX_FILE_COUNT,
   }).safeParse(formDataObj);
 
   if (!parsedDataResult.success) {
@@ -366,7 +369,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function DocumentsUpload({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { applicantNames, documentTypes, SCCH_BASE_URI } = loaderData;
-  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB } = useClientEnv();
+  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB, DOCUMENT_UPLOAD_MAX_FILE_COUNT } = useClientEnv();
 
   const fileUploadMaxSize = megabytesToBytes(DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB);
   const fileUploadAcceptMimeTypes = [...DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS].map(getMimeType);
@@ -494,7 +497,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
               id="file-upload"
               onValueChange={handleFileChange}
               multiple={false}
-              maxFiles={10}
+              maxFiles={DOCUMENT_UPLOAD_MAX_FILE_COUNT}
               maxSize={fileUploadMaxSize}
               accept={fileUploadAccept}
               className="gap-4 sm:gap-6"
