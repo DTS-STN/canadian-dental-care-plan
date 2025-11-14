@@ -25,7 +25,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
 import { getClientEnv } from '~/utils/env-utils';
-import { getMimeType } from '~/utils/file.utils';
+import { getFileExtension, getMimeType } from '~/utils/file.utils';
 import { getLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -76,32 +76,20 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 type CreateDocumentUploadSchemaArgs = {
   t: TFunction<typeof handle.i18nNamespaces>;
-  validFileExtensions: ReadonlySet<string>;
+  validFileExtensions: ReadonlyArray<string>;
   maxFileSizeInMB: number;
 };
 
 function createDocumentUploadSchema({ t, validFileExtensions, maxFileSizeInMB }: CreateDocumentUploadSchemaArgs) {
   const MAX_FILE_SIZE = megabytesToBytes(maxFileSizeInMB);
-  const ALLOWED_EXTENSIONS = validFileExtensions;
-  const ALLOWED_MIME_TYPES = new Set([...validFileExtensions].map(getMimeType));
+  const ALLOWED_EXTENSIONS = new Set(validFileExtensions);
+  const ALLOWED_MIME_TYPES = new Set(validFileExtensions.map(getMimeType));
 
   const fileWithDocumentTypeSchema = z.object({
     file: z
       .instanceof(File, { message: t('documents:upload.error-message.file-required') })
       .refine((file) => file.size <= MAX_FILE_SIZE, t('documents:upload.error-message.file-too-large'))
-      .refine(
-        (file) => {
-          const fileExtension = file.name.includes('.') ? '.' + file.name.split('.').at(-1)?.toLowerCase() : '';
-          return ALLOWED_EXTENSIONS.has(fileExtension);
-        },
-        t('documents:upload.error-message.invalid-file-type', { extensions: [...ALLOWED_EXTENSIONS].join(', ') }),
-      )
-      .refine(
-        (file) => {
-          return ALLOWED_MIME_TYPES.has(file.type);
-        },
-        t('documents:upload.error-message.invalid-file-type', { extensions: [...ALLOWED_EXTENSIONS].join(', ') }),
-      ),
+      .refine((file) => ALLOWED_EXTENSIONS.has(getFileExtension(file.name)) && ALLOWED_MIME_TYPES.has(file.type), t('documents:upload.error-message.invalid-file-type', { extensions: [...ALLOWED_EXTENSIONS].join(', ') })),
     documentType: z.string().min(1, t('documents:upload.error-message.document-type-required')),
   });
 
