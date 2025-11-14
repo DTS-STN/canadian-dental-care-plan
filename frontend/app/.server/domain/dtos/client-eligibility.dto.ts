@@ -1,4 +1,6 @@
-export type ClientEligibilityDto = Readonly<{
+import type { ReadonlyDeep } from 'type-fest';
+
+export type ClientEligibilityDto = ReadonlyDeep<{
   clientId: string;
   clientNumber: string;
   firstName: string;
@@ -9,6 +11,8 @@ export type ClientEligibilityDto = Readonly<{
   }>;
 }>;
 
-export type ClientEligibilityRequestDto = ReadonlyArray<{
-  clientIdentification: string;
-}>;
+export type ClientEligibilityRequestDto = ReadonlyDeep<
+  Array<{
+    clientIdentification: string;
+  }>
+>;

@@ -54,11 +54,13 @@ export type ClientEligibilityEntity = ReadonlyDeep<{
   };
 }>;
 
-export type ClientEligibilityRequestEntity = ReadonlyArray<{
-  Applicant: {
-    PersonClientNumberIdentification: {
-      IdentificationID: string;
-      IdentificationCategoryText: 'Client Number' | 'Client ID';
+export type ClientEligibilityRequestEntity = ReadonlyDeep<
+  Array<{
+    Applicant: {
+      PersonClientNumberIdentification: {
+        IdentificationID: string;
+        IdentificationCategoryText: 'Client Number' | 'Client ID';
+      };
     };
-  };
-}>;
+  }>
+>;

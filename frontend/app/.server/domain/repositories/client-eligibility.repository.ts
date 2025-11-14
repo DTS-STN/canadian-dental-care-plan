@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { None, Option, Some } from 'oxide.ts';
+import { Option, Some } from 'oxide.ts';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -15,7 +15,7 @@ export interface ClientEligibilityRepository {
    * @param clientEligibilityRequestEntity The request object containing the client number.
    * @returns A Promise that resolves to the client eligibility entity if found, or None otherwise.
    */
-  findClientEligibilityByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<Array<ClientEligibilityEntity>>>;
+  findClientEligibilityByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<ReadonlyArray<ClientEligibilityEntity>>>;
 }
 
 @injectable()
@@ -35,7 +35,7 @@ export class DefaultClientEligibilityRepository implements ClientEligibilityRepo
     this.httpClient = httpClient;
   }
 
-  async findClientEligibilityByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<Array<ClientEligibilityEntity>>> {
+  async findClientEligibilityByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<ReadonlyArray<ClientEligibilityEntity>>> {
     this.log.trace('Fetching client eligibility for client numbers [%j]', clientEligibilityRequestEntity);
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dts/applicant-eligibility`);
@@ -49,15 +49,10 @@ export class DefaultClientEligibilityRepository implements ClientEligibilityRepo
       body: JSON.stringify(clientEligibilityRequestEntity),
     });
 
-    if (response.status === 200) {
-      const data = (await response.json()) as Array<ClientEligibilityEntity>;
+    if (response.ok) {
+      const data = (await response.json()) as ReadonlyArray<ClientEligibilityEntity>;
       this.log.trace('Client eligibility [%j]', data);
       return Some(data);
-    }
-
-    if (response.status === 204) {
-      this.log.trace('Client eligibility not found for client numbers [%j]', clientEligibilityRequestEntity);
-      return None;
     }
 
     this.log.error('%j', {
@@ -79,7 +74,7 @@ export class MockClientEligibilityRepository implements ClientEligibilityReposit
   constructor() {
     this.log = createLogger('MockClientEligibilityRepository');
   }
-  async findClientEligibilityByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<Array<ClientEligibilityEntity>>> {
+  async findClientEligibilityByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<ReadonlyArray<ClientEligibilityEntity>>> {
     this.log.debug('Fetching client eligibility for client numbers [%j]', clientEligibilityRequestEntity);
 
     const entities: Array<ClientEligibilityEntity> = clientEligibilityRequestEntity.map((request) => {

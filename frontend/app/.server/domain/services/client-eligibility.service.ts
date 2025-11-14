@@ -20,7 +20,7 @@ export interface ClientEligibilityService {
    * @param clientEligibilitySinRequestDto The SIN request dto.
    * @returns A Promise that resolves to the client eligibility dto if found, or `null` otherwise.
    */
-  findClientEligibilityByClientNumbers(clientEligibilityRequestDto: ClientEligibilityRequestDto): Promise<Option<Array<ClientEligibilityDto>>>;
+  findClientEligibilityByClientNumbers(clientEligibilityRequestDto: ClientEligibilityRequestDto): Promise<Option<ReadonlyArray<ClientEligibilityDto>>>;
 }
 
 @injectable()
@@ -46,7 +46,7 @@ export class DefaultClientEligibilityService implements ClientEligibilityService
     this.log.debug('DefaultClientEligibilityService initiated.');
   }
 
-  async findClientEligibilityByClientNumbers(clientEligibilityRequestDto: ClientEligibilityRequestDto): Promise<Option<Array<ClientEligibilityDto>>> {
+  async findClientEligibilityByClientNumbers(clientEligibilityRequestDto: ClientEligibilityRequestDto): Promise<Option<ReadonlyArray<ClientEligibilityDto>>> {
     this.log.trace('Get client eligibility with number: [%j]', clientEligibilityRequestDto);
 
     this.auditService.createAudit('client-eligibility.number.get');
