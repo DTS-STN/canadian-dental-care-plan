@@ -91,8 +91,8 @@
       "header": "Adresse postale"
     },
     "home-address": {
-      "page-title": "Adresse à domicile",
-      "use-mailing-address": "Mon adresse postale est la même que mon adresse à domicile"
+      "page-title": "Adresse du domicile",
+      "use-mailing-address": "Mon adresse postale est la même que mon adresse du domicile"
     },
     "address-field": {
       "address": "Adresse",
