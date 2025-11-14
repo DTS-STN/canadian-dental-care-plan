@@ -26,13 +26,13 @@ export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMa
   }
 
   mapClientEligibilityRequestDtoToClientEligibilityRequestEntity(clientEligibilityRequestDto: ClientEligibilityRequestDto): ClientEligibilityRequestEntity {
-    return {
+    return clientEligibilityRequestDto.map((dto) => ({
       Applicant: {
         PersonClientNumberIdentification: {
-          IdentificationID: clientEligibilityRequestDto.clientIdentification,
+          IdentificationID: dto.clientIdentification,
           IdentificationCategoryText: 'Client Number',
         },
       },
-    };
+    }));
   }
 }

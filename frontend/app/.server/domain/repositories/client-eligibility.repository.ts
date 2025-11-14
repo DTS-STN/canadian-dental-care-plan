@@ -15,7 +15,7 @@ export interface ClientEligibilityRepository {
    * @param clientEligibilityRequestEntity The request object containing the client number.
    * @returns A Promise that resolves to the client eligibility entity if found, or None otherwise.
    */
-  findClientEligibilityByClientNumber(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<ClientEligibilityEntity>>;
+  findClientEligibilityByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<Array<ClientEligibilityEntity>>>;
 }
 
 @injectable()
@@ -35,34 +35,40 @@ export class DefaultClientEligibilityRepository implements ClientEligibilityRepo
     this.httpClient = httpClient;
   }
 
-  async findClientEligibilityByClientNumber(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<ClientEligibilityEntity>> {
-    this.log.trace('Fetching client eligibility for client number [%j]', clientEligibilityRequestEntity);
+  async findClientEligibilityByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<Array<ClientEligibilityEntity>>> {
+    this.log.trace('Fetching client eligibility for client numbers [%j]', clientEligibilityRequestEntity);
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dts/applicant-eligibility`);
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.applicant-eligibility_by-client-number.posts', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+      },
+      body: JSON.stringify(clientEligibilityRequestEntity),
     });
 
     if (response.status === 200) {
-      const data = (await response.json()) as ClientEligibilityEntity;
+      const data = (await response.json()) as Array<ClientEligibilityEntity>;
       this.log.trace('Client eligibility [%j]', data);
       return Some(data);
     }
 
     if (response.status === 204) {
-      this.log.trace('Client eligibility not found for client number [%j]', clientEligibilityRequestEntity);
+      this.log.trace('Client eligibility not found for client numbers [%j]', clientEligibilityRequestEntity);
       return None;
     }
 
     this.log.error('%j', {
-      message: "Failed to 'POST' for client eligibility by client number",
+      message: "Failed to 'POST' for client eligibility by client numbers",
       status: response.status,
       statusText: response.statusText,
       url: url,
       responseBody: await response.text(),
     });
 
-    throw new Error(`Failed to 'POST' for client eligibility by client number. Status: ${response.status}, Status Text: ${response.statusText}`);
+    throw new Error(`Failed to 'POST' for client eligibility by client numbers. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 }
 
@@ -73,21 +79,23 @@ export class MockClientEligibilityRepository implements ClientEligibilityReposit
   constructor() {
     this.log = createLogger('MockClientEligibilityRepository');
   }
-  async findClientEligibilityByClientNumber(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<ClientEligibilityEntity>> {
-    this.log.debug('Fetching client eligibility for client number [%j]', clientEligibilityRequestEntity);
+  async findClientEligibilityByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<Array<ClientEligibilityEntity>>> {
+    this.log.debug('Fetching client eligibility for client numbers [%j]', clientEligibilityRequestEntity);
 
-    const personClientNumberIdentification = clientEligibilityRequestEntity.Applicant.PersonClientNumberIdentification.IdentificationID;
-    const jsonDataSource = clientEligibilityJsonDataSource[0];
+    const entities: Array<ClientEligibilityEntity> = clientEligibilityRequestEntity.map((request) => {
+      const personClientNumberIdentification = request.Applicant.PersonClientNumberIdentification.IdentificationID;
+      const jsonDataSource = clientEligibilityJsonDataSource[0];
 
-    const clientEligibilityEntity: ClientEligibilityEntity = {
-      ...jsonDataSource,
-      Applicant: {
-        ...jsonDataSource.Applicant,
-        ClientIdentification: [{ IdentificationID: personClientNumberIdentification, IdentificationCategoryText: 'Client Number' }],
-      },
-    };
+      return {
+        ...jsonDataSource,
+        Applicant: {
+          ...jsonDataSource.Applicant,
+          ClientIdentification: [{ IdentificationID: personClientNumberIdentification, IdentificationCategoryText: 'Client Number' }],
+        },
+      };
+    });
 
-    this.log.debug('Client eligibility [%j]', clientEligibilityEntity);
-    return await Promise.resolve(Some(clientEligibilityEntity));
+    this.log.debug('Client eligibility [%j]', entities);
+    return await Promise.resolve(Some(entities));
   }
 }

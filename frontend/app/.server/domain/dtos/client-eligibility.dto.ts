@@ -9,6 +9,6 @@ export type ClientEligibilityDto = Readonly<{
   }>;
 }>;
 
-export type ClientEligibilityRequestDto = Readonly<{
+export type ClientEligibilityRequestDto = ReadonlyArray<{
   clientIdentification: string;
 }>;

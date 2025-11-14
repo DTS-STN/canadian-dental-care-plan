@@ -20,7 +20,7 @@ export interface ClientEligibilityService {
    * @param clientEligibilitySinRequestDto The SIN request dto.
    * @returns A Promise that resolves to the client eligibility dto if found, or `null` otherwise.
    */
-  findClientEligibilityByClientNumber(clientEligibilityRequestDto: ClientEligibilityRequestDto): Promise<Option<ClientEligibilityDto>>;
+  findClientEligibilityByClientNumbers(clientEligibilityRequestDto: ClientEligibilityRequestDto): Promise<Option<Array<ClientEligibilityDto>>>;
 }
 
 @injectable()
@@ -46,14 +46,14 @@ export class DefaultClientEligibilityService implements ClientEligibilityService
     this.log.debug('DefaultClientEligibilityService initiated.');
   }
 
-  async findClientEligibilityByClientNumber(clientEligibilityRequestDto: ClientEligibilityRequestDto): Promise<Option<ClientEligibilityDto>> {
+  async findClientEligibilityByClientNumbers(clientEligibilityRequestDto: ClientEligibilityRequestDto): Promise<Option<Array<ClientEligibilityDto>>> {
     this.log.trace('Get client eligibility with number: [%j]', clientEligibilityRequestDto);
 
     this.auditService.createAudit('client-eligibility.number.get');
 
     const clientEligibilityRequestEntity = this.clientEligibilityDtoMapper.mapClientEligibilityRequestDtoToClientEligibilityRequestEntity(clientEligibilityRequestDto);
-    const clientEligibilityEntity = await this.clientEligibilityRepository.findClientEligibilityByClientNumber(clientEligibilityRequestEntity);
-    const clientEligibilityDto = clientEligibilityEntity.isSome() ? Some(this.clientEligibilityDtoMapper.mapClientEligibilityEntityToClientEligibilityDto(clientEligibilityEntity.unwrap())) : None;
+    const clientEligibilityEntity = await this.clientEligibilityRepository.findClientEligibilityByClientNumbers(clientEligibilityRequestEntity);
+    const clientEligibilityDto = clientEligibilityEntity.isSome() ? Some(clientEligibilityEntity.unwrap().map((entity) => this.clientEligibilityDtoMapper.mapClientEligibilityEntityToClientEligibilityDto(entity))) : None;
 
     this.log.trace('Returning client eligibility: [%j]', clientEligibilityDto);
     return clientEligibilityDto;

@@ -54,7 +54,7 @@ export type ClientEligibilityEntity = ReadonlyDeep<{
   };
 }>;
 
-export type ClientEligibilityRequestEntity = ReadonlyDeep<{
+export type ClientEligibilityRequestEntity = ReadonlyArray<{
   Applicant: {
     PersonClientNumberIdentification: {
       IdentificationID: string;
