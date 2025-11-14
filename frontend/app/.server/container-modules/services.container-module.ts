@@ -17,6 +17,7 @@ import {
   DefaultClientApplicationService,
   DefaultClientFriendlyStatusService,
   DefaultCountryService,
+  DefaultCoverageService,
   DefaultDemographicSurveyServiceService,
   DefaultDocumentUploadReasonService,
   DefaultDocumentUploadService,
@@ -69,6 +70,7 @@ export function createServicesContainerModule(serverConfig: Pick<ServerConfig, '
     options.bind(TYPES.ClientApplicationService).to(DefaultClientApplicationService);
     options.bind(TYPES.ClientFriendlyStatusService).to(DefaultClientFriendlyStatusService);
     options.bind(TYPES.CountryService).to(DefaultCountryService);
+    options.bind(TYPES.CoverageService).to(DefaultCoverageService);
     options.bind(TYPES.DemographicSurveyService).to(DefaultDemographicSurveyServiceService);
     options.bind(TYPES.DocumentUploadService).to(DefaultDocumentUploadService);
     options.bind(TYPES.DocumentUploadReasonService).to(DefaultDocumentUploadReasonService);
