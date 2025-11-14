@@ -8,3 +8,7 @@ export type ClientEligibilityDto = Readonly<{
     isEligible: boolean;
   }>;
 }>;
+
+export type ClientEligibilityRequestDto = Readonly<{
+  clientNumber: string;
+}>;

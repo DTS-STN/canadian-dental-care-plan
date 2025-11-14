@@ -1,10 +1,11 @@
 import { injectable } from 'inversify';
 
-import type { ClientEligibilityDto } from '../dtos/client-eligibility.dto';
-import type { ClientEligibilityEntity } from '../entities/client-eligibility.entity';
+import type { ClientEligibilityDto, ClientEligibilityRequestDto } from '../dtos/client-eligibility.dto';
+import type { ClientEligibilityEntity, ClientEligibilityRequestEntity } from '../entities/client-eligibility.entity';
 
 export interface ClientEligibilityDtoMapper {
   mapClientEligibilityEntityToClientEligibilityDto(clientEligibilityEntity: ClientEligibilityEntity): ClientEligibilityDto;
+  mapClientEligibilityRequestDtoToClientEligibilityRequestEntity(clientEligibilityRequestDto: ClientEligibilityRequestDto): ClientEligibilityRequestEntity;
 }
 
 @injectable()
@@ -21,6 +22,17 @@ export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMa
         taxationYear: earning.EarningTaxationYear.YearDate,
         isEligible: earning.Coverage.some((coverage) => coverage.CoverageCategoryCode.ReferenceDataName === 'Co-Pay Tier (TPC)'),
       })),
+    };
+  }
+
+  mapClientEligibilityRequestDtoToClientEligibilityRequestEntity(clientEligibilityRequestDto: ClientEligibilityRequestDto): ClientEligibilityRequestEntity {
+    return {
+      Applicant: {
+        PersonClientNumberIdentification: {
+          IdentificationID: clientEligibilityRequestDto.clientNumber,
+          IdentificationCategoryText: 'Client Number',
+        },
+      },
     };
   }
 }

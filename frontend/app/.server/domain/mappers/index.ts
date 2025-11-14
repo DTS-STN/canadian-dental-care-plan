@@ -22,3 +22,4 @@ export * from './province-territory-state.dto.mapper';
 export * from './provincial-government-insurance-plan.dto.mapper';
 export * from './sun-life-communication-method.dto.mapper';
 export * from './verification-code.dto.mapper';
+export * from './client-eligibility.dto.mapper';
