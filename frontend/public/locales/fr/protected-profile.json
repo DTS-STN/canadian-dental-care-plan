@@ -1,6 +1,7 @@
 {
   "required-label": "Remplissez tous les champs.",
-  "all-optional-label": "Tous les champs sont faculatives.",
+  "optional-label": "Remplissez tous les champs sauf, s'ils sont indiqués facultatifs.",
+  "all-optional-label": "Tous les champs sont facultatifs.",
   "eligibility": {
     "page-title": "Admissibilité des membres",
     "details": "Les membres doivent toujours vérifier leur couverture et confirmer avec leur professionnel de la santé bucco-dentaire quels frais, le cas échéant, ne seront pas couverts par le Régime canadien de soins dentaires avant de recevoir des soins.",
