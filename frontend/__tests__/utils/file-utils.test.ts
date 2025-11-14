@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { findMimeType, getMimeType, isValidExtension } from '~/utils/file.utils';
+import { findMimeType, getFileExtension, getMimeType, isValidExtension } from '~/utils/file.utils';
 
 describe('file.utils', () => {
   describe('findMimeType', () => {
@@ -70,5 +70,28 @@ describe('file.utils', () => {
     it('should return false for empty string', () => {
       expect(isValidExtension('')).toBe(false);
     });
+  });
+});
+
+describe('getFileExtension', () => {
+  it('should return the correct file extension for a simple filename', () => {
+    expect(getFileExtension('document.pdf')).toBe('.pdf');
+  });
+
+  it('should return the correct file extension for a filename with multiple dots', () => {
+    expect(getFileExtension('archive.tar.gz')).toBe('.gz');
+  });
+
+  it('should return an empty string for a filename without an extension', () => {
+    expect(getFileExtension('file_without_extension')).toBe('');
+  });
+
+  it('should return the correct file extension for hidden files', () => {
+    expect(getFileExtension('.env')).toBe('');
+    expect(getFileExtension('.env.local')).toBe('.local');
+  });
+
+  it('should return an empty string for an empty filename', () => {
+    expect(getFileExtension('')).toBe('');
   });
 });

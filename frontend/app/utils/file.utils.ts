@@ -53,3 +53,24 @@ export function getMimeType(extension: string): string {
 export function isValidExtension(extension: string): boolean {
   return findMimeType(extension).isSome();
 }
+
+/**
+ * Extracts the file extension from a given filename.
+ *
+ * @param filename - The name of the file (e.g., "document.pdf")
+ * @returns The file extension including the dot (e.g., ".pdf"), or an empty string if no extension is found
+ *
+ * @example
+ * ```typescript
+ * getFileExtension('document.pdf') // '.pdf'
+ * getFileExtension('archive.tar.gz') // '.gz'
+ * getFileExtension('file_without_extension') // ''
+ * ```
+ */
+export function getFileExtension(filename: string): string {
+  const lastDotIndex = filename.lastIndexOf('.');
+  if (lastDotIndex === -1 || lastDotIndex === 0) {
+    return '';
+  }
+  return filename.slice(lastDotIndex);
+}
