@@ -5,7 +5,7 @@ export type ClientEligibilityEntity = ReadonlyDeep<{
     ApplicantEarning: Array<{
       BenefitApplicationYearIdentification: {
         IdentificationID: string;
-        IdentificationCategoryText: 'Application Year ID';
+        IdentificationCategoryText: string;
       };
       BenefitEligibilityStatus: {
         StatusCode: {
@@ -22,7 +22,7 @@ export type ClientEligibilityEntity = ReadonlyDeep<{
       }>;
       EarningIdentification: Array<{
         IdentificationID: string;
-        IdentificationCategoryText: 'Client Earning ID';
+        IdentificationCategoryText: string;
       }>;
       EarningTaxationYear: {
         YearDate: string;
@@ -41,7 +41,7 @@ export type ClientEligibilityEntity = ReadonlyDeep<{
     };
     BenefitApplicationYearIdentification: {
       IdentificationID: string;
-      IdentificationCategoryText: 'Application Year ID';
+      IdentificationCategoryText: string;
     };
     ClientIdentification: Array<{
       IdentificationID: string;
@@ -53,3 +53,14 @@ export type ClientEligibilityEntity = ReadonlyDeep<{
     }>;
   };
 }>;
+
+export type ClientEligibilityRequestEntity = ReadonlyDeep<
+  Array<{
+    Applicant: {
+      PersonClientNumberIdentification: {
+        IdentificationID: string;
+        IdentificationCategoryText: 'Client Number' | 'Client ID';
+      };
+    };
+  }>
+>;
