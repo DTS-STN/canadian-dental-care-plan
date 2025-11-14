@@ -81,6 +81,7 @@ export const clientEnvSchema = z.object({
     .transform((val) => [...new Set(val)]) // remove duplicates
     .pipe(z.array(z.string().refine(isValidExtension)).min(1)),
   DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB: z.coerce.number().positive().default(10),
+  DOCUMENT_UPLOAD_MAX_FILE_COUNT:z.coerce.number().positive().default(10),
 });
 
 export type ClientEnv = ReadonlyDeep<z.infer<typeof clientEnvSchema>>;
