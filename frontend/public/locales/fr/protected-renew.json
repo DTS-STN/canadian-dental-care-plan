@@ -385,9 +385,9 @@
       "header": "Adresse postale"
     },
     "home-address": {
-      "page-title": "Adresse à domicile",
-      "header": "Adresse à domicile",
-      "use-mailing-address": "Mon adresse postale est la même que mon adresse à domicile"
+      "page-title": "Adresse du domicile",
+      "header": "Adresse du domicile",
+      "use-mailing-address": "Mon adresse postale est la même que mon adresse du domicile"
     },
     "address-field": {
       "address": "Adresse postale",
@@ -510,8 +510,8 @@
     "email-change": "Modifier l'adresse courriel",
     "mailing-title": "Adresse postale",
     "mailing-change": "Modifier l'adresse postale",
-    "home-title": "Adresse à domicile",
-    "home-change": "Modifier l'adresse à domicile",
+    "home-title": "Adresse du domicile",
+    "home-change": "Modifier l'adresse du domicile",
     "comm-title": "Communication",
     "comm-pref-title": "Préférence en matière de communication",
     "comm-pref-change": "Modifier la préférence de communication",
@@ -604,7 +604,7 @@
       "no": "Non"
     },
     "error-message": {
-      "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse à domicile est la même que votre adresse postale"
+      "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse du domicile est la même que votre adresse postale"
     },
     "back-btn": "Retour",
     "continue-btn": "Continuer",

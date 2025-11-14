@@ -139,7 +139,7 @@
     "help-message": "L'adresse que nous avons au dossier se trouve également sur la lettre de renouvellement que vous avez reçue de Service Canada.",
     "error-message": {
       "has-address-changed-required": "Sélectionnez si vous souhaitez mettre à jour votre adresse postale",
-      "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse à domicile est la même que votre adresse postale"
+      "is-home-address-same-as-mailing-address-required": "Sélectionnez si votre adresse du domicile est la même que votre adresse postale"
     },
     "back-btn": "Retour",
     "continue-btn": "Continuer",
@@ -152,8 +152,8 @@
       "header": "Adresse postale"
     },
     "home-address": {
-      "page-title": "Adresse à domicile",
-      "use-mailing-address": "Mon adresse postale est la même que mon adresse à domicile"
+      "page-title": "Adresse du domicile",
+      "use-mailing-address": "Mon adresse postale est la même que mon adresse du domicile"
     },
     "address-field": {
       "address": "Adresse",
@@ -576,7 +576,7 @@
     "alt-phone-number": "Autre numéro de téléphone",
     "email": "Courriel",
     "mailing": "Adresse postale",
-    "home": "Adresse à domicile",
+    "home": "Adresse du domicile",
     "dental-private": "Accès à une assurance ou une couverture dentaire privée\u00a0:",
     "dental-public": "Accès à des prestations dentaires gouvernementales\u00a0:",
     "child-title": "Renseignements sur {{childName}}",
@@ -630,7 +630,7 @@
     "email-change": "Modifier l'adresse courriel",
     "mailing-title": "Adresse postale",
     "mailing-change": "Modifier l'adresse postale",
-    "home-title": "Adresse à domicile",
+    "home-title": "Adresse du domicile",
     "home-change": "Modifier l'adresse domiciliaire",
     "comm-title": "Préférences en matière de communication",
     "sun-life-comm-pref-title": "Préférence de communication de Sun Life",
