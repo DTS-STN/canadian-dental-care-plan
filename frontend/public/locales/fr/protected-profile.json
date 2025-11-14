@@ -161,11 +161,11 @@
     "alt-phone-number": "Autre numéro de téléphone",
     "email": "Adresse courriel",
     "mailing-address": "Adresse postale",
-    "home-address": "Adresse du domicile",
+    "home-address": "Adresse à domicile",
     "update-phone-link-text": "Modifier le numéro de téléphone",
     "update-email-link-text": "Modifier l'adresse courriel",
     "update-mailing-address-link-text": "Modifier l'adresse postale",
-    "update-home-address-link-text": "Modifier l'adresse du domicile",
+    "update-home-address-link-text": "Modifier l'adresse à domicile",
     "return-button": "Retour au tableau de bord"
   },
   "email": {
