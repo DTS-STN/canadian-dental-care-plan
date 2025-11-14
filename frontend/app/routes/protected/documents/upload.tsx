@@ -23,12 +23,16 @@ import type { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
+import { useClientEnv } from '~/root';
+import { getClientEnv } from '~/utils/env-utils';
+import { getMimeType } from '~/utils/file.utils';
 import { getLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { randomHexString } from '~/utils/string-utils';
+import { megabytesToBytes } from '~/utils/units.utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'documents:index.page-title', routeId: 'protected/documents/index' }],
@@ -70,29 +74,34 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
-function createDocumentUploadSchema(t: TFunction<typeof handle.i18nNamespaces>) {
-  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
-  const ALLOWED_EXTENSIONS = new Set(['.docx', '.ppt', '.txt', '.pdf', '.jpg', '.jpeg', '.png']);
-  const ALLOWED_MIME_TYPES = new Set([
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-    'application/vnd.ms-powerpoint', // .ppt
-    'text/plain', // .txt
-    'application/pdf', // .pdf
-    'image/jpeg', // .jpg, .jpeg
-    'image/png', // .png
-  ]);
+type CreateDocumentUploadSchemaArgs = {
+  t: TFunction<typeof handle.i18nNamespaces>;
+  validFileExtensions: ReadonlySet<string>;
+  maxFileSizeInMB: number;
+};
+
+function createDocumentUploadSchema({ t, validFileExtensions, maxFileSizeInMB }: CreateDocumentUploadSchemaArgs) {
+  const MAX_FILE_SIZE = megabytesToBytes(maxFileSizeInMB);
+  const ALLOWED_EXTENSIONS = validFileExtensions;
+  const ALLOWED_MIME_TYPES = new Set([...validFileExtensions].map(getMimeType));
 
   const fileWithDocumentTypeSchema = z.object({
     file: z
       .instanceof(File, { message: t('documents:upload.error-message.file-required') })
       .refine((file) => file.size <= MAX_FILE_SIZE, t('documents:upload.error-message.file-too-large'))
-      .refine((file) => {
-        const fileExtension = file.name.includes('.') ? '.' + file.name.split('.').at(-1)?.toLowerCase() : '';
-        return ALLOWED_EXTENSIONS.has(fileExtension);
-      }, t('documents:upload.error-message.invalid-file-type'))
-      .refine((file) => {
-        return ALLOWED_MIME_TYPES.has(file.type);
-      }, t('documents:upload.error-message.invalid-file-type')),
+      .refine(
+        (file) => {
+          const fileExtension = file.name.includes('.') ? '.' + file.name.split('.').at(-1)?.toLowerCase() : '';
+          return ALLOWED_EXTENSIONS.has(fileExtension);
+        },
+        t('documents:upload.error-message.invalid-file-type', { extensions: [...ALLOWED_EXTENSIONS].join(', ') }),
+      )
+      .refine(
+        (file) => {
+          return ALLOWED_MIME_TYPES.has(file.type);
+        },
+        t('documents:upload.error-message.invalid-file-type', { extensions: [...ALLOWED_EXTENSIONS].join(', ') }),
+      ),
     documentType: z.string().min(1, t('documents:upload.error-message.document-type-required')),
   });
 
@@ -133,7 +142,12 @@ export async function clientAction({ request, serverAction }: Route.ClientAction
     files: filesWithTypes,
   };
 
-  const parsedDataResult = createDocumentUploadSchema(t).safeParse(formDataObj);
+  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB } = getClientEnv();
+  const parsedDataResult = createDocumentUploadSchema({
+    t,
+    validFileExtensions: DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS,
+    maxFileSizeInMB: DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB,
+  }).safeParse(formDataObj);
 
   if (!parsedDataResult.success) {
     const errors: UploadErrors = {};
@@ -181,7 +195,12 @@ export async function action({ context: { appContainer, session }, params, reque
     files: filesWithTypes,
   };
 
-  const parsedDataResult = createDocumentUploadSchema(t).safeParse(formDataObj);
+  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB } = appContainer.get(TYPES.ClientConfig);
+  const parsedDataResult = createDocumentUploadSchema({
+    t,
+    validFileExtensions: DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS,
+    maxFileSizeInMB: DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB,
+  }).safeParse(formDataObj);
 
   if (!parsedDataResult.success) {
     const errors: UploadErrors = {};
@@ -358,6 +377,11 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function DocumentsUpload({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { applicantNames, documentTypes, SCCH_BASE_URI } = loaderData;
+  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB } = useClientEnv();
+
+  const fileUploadMaxSize = megabytesToBytes(DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB);
+  const fileUploadAcceptMimeTypes = [...DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS].map(getMimeType);
+  const fileUploadAccept = [...new Set([...DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, ...fileUploadAcceptMimeTypes])].join(',');
 
   type ActionData = { errors: UploadErrors } | typeof action;
   const fetcher = useFetcher<ActionData>();
@@ -473,7 +497,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
           <fieldset>
             <InputLegend className="mb-2">{t('documents:upload.upload-document')}</InputLegend>
             <p>{t('documents:upload.ten-files')}</p>
-            <p className="mb-2">{t('documents:upload.max-size')}</p>
+            <p className="mb-2">{t('documents:upload.max-size', { extensions: [...DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS].join(', ') })}</p>
 
             {errors?.files && <p className="mb-2 text-sm text-red-700">{errors.files}</p>}
 
@@ -482,8 +506,8 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
               onValueChange={handleFileChange}
               multiple={false}
               maxFiles={10}
-              maxSize={10 * 1024 * 1024} // 10MB
-              accept=".docx,.ppt,.txt,.pdf,.jpg,.jpeg,.png"
+              maxSize={fileUploadMaxSize}
+              accept={fileUploadAccept}
               className="gap-4 sm:gap-6"
               onFileReject={(file, message) => {
                 console.warn(`File rejected: ${file.name}, reason: ${message}`);
