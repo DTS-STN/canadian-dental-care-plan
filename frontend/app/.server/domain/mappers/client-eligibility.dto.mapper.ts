@@ -29,7 +29,7 @@ export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMa
     return {
       Applicant: {
         PersonClientNumberIdentification: {
-          IdentificationID: clientEligibilityRequestDto.clientNumber,
+          IdentificationID: clientEligibilityRequestDto.clientIdentification,
           IdentificationCategoryText: 'Client Number',
         },
       },

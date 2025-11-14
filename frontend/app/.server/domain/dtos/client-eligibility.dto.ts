@@ -10,5 +10,5 @@ export type ClientEligibilityDto = Readonly<{
 }>;
 
 export type ClientEligibilityRequestDto = Readonly<{
-  clientNumber: string;
+  clientIdentification: string;
 }>;
