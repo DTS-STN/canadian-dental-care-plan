@@ -32,9 +32,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const dependentClientNumbers = clientApplication.children.map((child) => child.information.clientNumber);
   const clientNumbers = [clientNumber, ...dependentClientNumbers];
 
-  const clientEligibilityRequestDto = clientNumbers.map((clientNumber) => ({ clientIdentification: clientNumber }));
+  const clientEligibilityRequestDto = clientNumbers.map((clientNumber) => ({ clientNumber: clientNumber ?? '' }));
 
-  const clientInformation = await appContainer.get(TYPES.ClientEligibilityService).findClientEligibilityByClientNumbers(clientEligibilityRequestDto);
+  const clientInformation = await appContainer.get(TYPES.ClientEligibilityService).listClientEligibilitiesByClientNumbers(clientEligibilityRequestDto);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:eligibility.page-title') }) };
@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     meta,
     SCCH_BASE_URI,
-    applicants: clientInformation.unwrap(),
+    applicants: clientInformation,
     benefitYearStart,
   };
 }
