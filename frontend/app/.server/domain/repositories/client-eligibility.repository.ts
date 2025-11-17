@@ -78,20 +78,7 @@ export class MockClientEligibilityRepository implements ClientEligibilityReposit
   async listClientEligibilitiesByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<ReadonlyArray<ClientEligibilityEntity>> {
     this.log.debug('Fetching client eligibility for client numbers [%j]', clientEligibilityRequestEntity);
 
-    const entities: Array<ClientEligibilityEntity> = clientEligibilityRequestEntity.map((request) => {
-      const personClientNumberIdentification = request.Applicant.PersonClientNumberIdentification.IdentificationID;
-      const jsonDataSource = clientEligibilityJsonDataSource[0];
-
-      return {
-        ...jsonDataSource,
-        Applicant: {
-          ...jsonDataSource.Applicant,
-          ClientIdentification: [{ IdentificationID: personClientNumberIdentification, IdentificationCategoryText: 'Client Number' }],
-        },
-      };
-    });
-
-    this.log.debug('Client eligibility [%j]', entities);
-    return await Promise.resolve(entities);
+    this.log.debug('Successfully mock client eligibility');
+    return await Promise.resolve(clientEligibilityJsonDataSource as ReadonlyArray<ClientEligibilityEntity>);
   }
 }

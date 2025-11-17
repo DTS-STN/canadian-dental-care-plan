@@ -30,11 +30,31 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const clientNumber = clientApplication.applicantInformation.clientNumber;
   const dependentClientNumbers = clientApplication.children.map((child) => child.information.clientNumber);
-  const clientNumbers = [clientNumber, ...dependentClientNumbers];
+  const clientNumbers = [clientNumber, ...dependentClientNumbers].filter((num): num is string => typeof num === 'string');
 
-  const clientEligibilityRequestDto = clientNumbers.map((clientNumber) => ({ clientNumber: clientNumber ?? '' }));
+  const clientEligibilityRequestDto = clientNumbers.map((clientNumber) => ({ clientNumber }));
 
-  const clientInformation = await appContainer.get(TYPES.ClientEligibilityService).listClientEligibilitiesByClientNumbers(clientEligibilityRequestDto);
+  const clientEligibilityResponse = await appContainer.get(TYPES.ClientEligibilityService).listClientEligibilitiesByClientNumbers(clientEligibilityRequestDto);
+
+  const eligibilityMap = new Map(clientEligibilityResponse.map((eligibility) => [eligibility.clientNumber, eligibility]));
+
+  const primaryApplicant = {
+    clientId: clientApplication.applicantInformation.clientId,
+    clientNumber: clientApplication.applicantInformation.clientNumber,
+    firstName: clientApplication.applicantInformation.firstName,
+    lastName: clientApplication.applicantInformation.lastName,
+    earnings: clientApplication.applicantInformation.clientNumber ? (eligibilityMap.get(clientApplication.applicantInformation.clientNumber)?.earnings ?? []) : [],
+  };
+
+  const children = clientApplication.children.map((child) => ({
+    clientId: child.information.clientId,
+    clientNumber: child.information.clientNumber,
+    firstName: child.information.firstName,
+    lastName: child.information.lastName,
+    earnings: child.information.clientNumber ? (eligibilityMap.get(child.information.clientNumber)?.earnings ?? []) : [],
+  }));
+
+  const applicants = [primaryApplicant, ...children];
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:eligibility.page-title') }) };
@@ -49,7 +69,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     meta,
     SCCH_BASE_URI,
-    applicants: clientInformation,
+    applicants,
     benefitYearStart,
   };
 }
