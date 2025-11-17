@@ -12,6 +12,7 @@ import {
   DefaultBenefitApplicationRepository,
   DefaultBenefitRenewalRepository,
   DefaultClientApplicationRepository,
+  DefaultClientEligibilityRepository,
   DefaultClientFriendlyStatusRepository,
   DefaultCountryRepository,
   DefaultDemographicSurveyRepository,
@@ -29,6 +30,7 @@ import {
   MockBenefitApplicationRepository,
   MockBenefitRenewalRepository,
   MockClientApplicationRepository,
+  MockClientEligibilityRepository,
   MockClientFriendlyStatusRepository,
   MockCountryRepository,
   MockDocumentUploadReasonRepository,
@@ -95,6 +97,9 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
 
     options.bind(TYPES.ClientApplicationRepository).to(DefaultClientApplicationRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
     options.bind(TYPES.ClientApplicationRepository).to(MockClientApplicationRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
+
+    options.bind(TYPES.ClientEligibilityRepository).to(DefaultClientEligibilityRepository).when(isMockEnabled(serverConfig, 'power-platform', false));
+    options.bind(TYPES.ClientEligibilityRepository).to(MockClientEligibilityRepository).when(isMockEnabled(serverConfig, 'power-platform', true));
 
     options.bind(TYPES.ClientFriendlyStatusRepository).to(DefaultClientFriendlyStatusRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
     options.bind(TYPES.ClientFriendlyStatusRepository).to(MockClientFriendlyStatusRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
