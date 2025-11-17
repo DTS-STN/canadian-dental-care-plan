@@ -211,14 +211,12 @@ export class MockApplicantRepository implements ApplicantRepository {
       return await Promise.resolve(None);
     }
 
-    const clientIdentification: { IdentificationID?: string; IdentificationCategoryText?: string }[] = [];
+    const clientIdentification: { IdentificationID: string; IdentificationCategoryText: 'Client ID' | 'Client Number' }[] = [];
 
-    if (peronalInformationEntity.applicantId) {
-      clientIdentification.push({ IdentificationID: peronalInformationEntity.applicantId, IdentificationCategoryText: 'Applicant ID' });
-    }
     if (peronalInformationEntity.clientNumber) {
       clientIdentification.push({ IdentificationID: peronalInformationEntity.clientNumber, IdentificationCategoryText: 'Client Number' });
     }
+
     if (peronalInformationEntity.clientId) {
       clientIdentification.push({ IdentificationID: peronalInformationEntity.clientId, IdentificationCategoryText: 'Client ID' });
     }
@@ -227,6 +225,18 @@ export class MockApplicantRepository implements ApplicantRepository {
       BenefitApplication: {
         Applicant: {
           ClientIdentification: clientIdentification,
+          PersonBirthDate: {
+            date: peronalInformationEntity.birthdate,
+          },
+        },
+        PersonName: [
+          {
+            PersonGivenName: [peronalInformationEntity.firstName],
+            PersonSurName: peronalInformationEntity.lastName,
+          },
+        ],
+        PersonSINIdentification: {
+          IdentificationID: peronalInformationEntity.sinIdentification,
         },
       },
     };

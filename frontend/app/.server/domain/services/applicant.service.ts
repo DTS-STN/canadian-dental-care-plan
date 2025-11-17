@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
 import type { Option } from 'oxide.ts';
-import { None } from 'oxide.ts';
+import { None, Some } from 'oxide.ts';
 
 import { TYPES } from '~/.server/constants';
-import type { ApplicantRequestDto } from '~/.server/domain/dtos';
+import type { ApplicantDto, FindApplicantBySinRequestDto } from '~/.server/domain/dtos';
 import type { ApplicantDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicantRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
@@ -15,12 +15,12 @@ import type { Logger } from '~/.server/logging';
  */
 export interface ApplicantService {
   /**
-   * Finds the client number of an applicant by SIN.
+   * Finds the applicant DTO by SIN.
    *
    * @param applicantRequestDto The applicant request dto that includes SIN and userId for auditing
-   * @returns A Promise that resolves to the client number if found, or `null` otherwise.
+   * @returns A Promise that resolves to the applicant DTO if found, or `None` otherwise.
    */
-  findClientNumberBySin(applicantRequestDto: ApplicantRequestDto): Promise<Option<string>>;
+  findApplicantBySin({ sin, userId }: FindApplicantBySinRequestDto): Promise<Option<ApplicantDto>>;
 }
 
 @injectable()
@@ -42,8 +42,8 @@ export class DefaultApplicantService implements ApplicantService {
     this.log.debug('DefaultApplicantService initiated.');
   }
 
-  async findClientNumberBySin({ sin, userId }: ApplicantRequestDto): Promise<Option<string>> {
-    this.log.trace('Finding client number with sin [%s] and userId [%s]', sin, userId);
+  async findApplicantBySin({ sin, userId }: FindApplicantBySinRequestDto): Promise<Option<ApplicantDto>> {
+    this.log.trace('Finding applicant with sin [%s] and userId [%s]', sin, userId);
 
     this.auditService.createAudit('personal-information.get', { userId });
 
@@ -54,8 +54,8 @@ export class DefaultApplicantService implements ApplicantService {
       return None;
     }
 
-    const clientNumber = this.applicantDtoMapper.mapApplicantResponseEntityToClientNumber(applicantResponseEntity.unwrap());
-    this.log.trace('Returning client number [%s] for sin [%s]', clientNumber.unwrapUnchecked(), sin);
-    return clientNumber;
+    const applicantDto = this.applicantDtoMapper.mapApplicantResponseEntityToApplicantDto(applicantResponseEntity.unwrap());
+    this.log.trace('Returning applicant DTO for sin [%s]', sin);
+    return Some(applicantDto);
   }
 }

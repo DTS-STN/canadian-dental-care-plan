@@ -31,10 +31,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  const clientNumber = await securityHandler.requireClientNumber({ params, request, session });
+  const applicant = await securityHandler.requireApplicant({ params, request, session });
 
   const evidentiaryDocumentService = appContainer.get(TYPES.EvidentiaryDocumentService);
-  const evidentiaryDocuments = await evidentiaryDocumentService.listLocalizedEvidentiaryDocuments({ clientID: clientNumber, userId: userInfoToken.sub }, locale);
+  const evidentiaryDocuments = await evidentiaryDocumentService.listLocalizedEvidentiaryDocuments({ clientID: applicant.clientId, userId: userInfoToken.sub }, locale);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.msca-template', { title: t('documents:index.page-title') }) };

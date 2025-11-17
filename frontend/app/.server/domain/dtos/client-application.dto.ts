@@ -21,7 +21,7 @@ export type ClientApplicantInformationDto = Readonly<{
   maritalStatus?: string; // optional because ITA clients initially have no marital status
   socialInsuranceNumber: string;
   clientId: string;
-  clientNumber?: string;
+  clientNumber: string;
 }>;
 
 export type ClientChildDto = ReadonlyDeep<{
@@ -33,7 +33,7 @@ export type ClientChildDto = ReadonlyDeep<{
     dateOfBirth: string;
     isParent: boolean;
     clientId: string;
-    clientNumber?: string;
+    clientNumber: string;
     socialInsuranceNumber: string;
   };
 }>;

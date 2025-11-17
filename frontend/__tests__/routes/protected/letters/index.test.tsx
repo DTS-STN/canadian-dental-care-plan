@@ -1,12 +1,12 @@
 import type { AppLoadContext } from 'react-router';
 
-import { None, Some } from 'oxide.ts';
+import { None } from 'oxide.ts';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock, mockDeep } from 'vitest-mock-extended';
 
 import type { ClientConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { ApplicantService, AuditService, LetterService, LetterTypeService } from '~/.server/domain/services';
+import type { AuditService, LetterService, LetterTypeService } from '~/.server/domain/services';
 import type { SecurityHandler } from '~/.server/routes/security';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { loader } from '~/routes/protected/letters/index';
@@ -24,18 +24,27 @@ describe('Letters Page', () => {
 
       mockAppLoadContext.session.get.calledWith('idToken').mockReturnValueOnce({ sub: '00000000-0000-0000-0000-000000000000' } as IdToken);
       mockAppLoadContext.session.get.calledWith('userInfoToken').mockReturnValueOnce({ sin: '999999999', sub: '1111111' } as UserinfoToken);
-      mockAppLoadContext.session.find.calledWith('clientNumber').mockReturnValueOnce(None);
+      mockAppLoadContext.session.find.calledWith('applicant').mockReturnValueOnce(None);
 
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
+      mockAppLoadContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(
+        mock<SecurityHandler>({
+          requireApplicant: async () =>
+            await Promise.resolve({
+              clientId: 'some-client-id',
+              clientNumber: 'some-client-number',
+              dateOfBirth: '2000-01-01',
+              firstName: 'John',
+              lastName: 'Doe',
+              socialInsuranceNumber: '999999999',
+            }),
+        }),
+      );
       mockAppLoadContext.appContainer.get.calledWith(TYPES.ClientConfig).mockReturnValueOnce({
         SCCH_BASE_URI: 'https://api.example.com',
       } satisfies Partial<ClientConfig>);
       mockAppLoadContext.appContainer.get.calledWith(TYPES.AuditService).mockReturnValue({
         createAudit: vi.fn(),
       } satisfies Partial<AuditService>);
-      mockAppLoadContext.appContainer.get.calledWith(TYPES.ApplicantService).mockReturnValue({
-        findClientNumberBySin: async () => await Promise.resolve(Some('some-client-number')),
-      } satisfies Partial<ApplicantService>);
       mockAppLoadContext.appContainer.get.calledWith(TYPES.LetterService).mockReturnValue({
         findLettersByClientId: async () =>
           await Promise.resolve([
@@ -72,18 +81,27 @@ describe('Letters Page', () => {
 
     mockAppLoadContext.session.get.calledWith('idToken').mockReturnValueOnce({ sub: '00000000-0000-0000-0000-000000000000' } as IdToken);
     mockAppLoadContext.session.get.calledWith('userInfoToken').mockReturnValueOnce({ sin: '999999999' } as UserinfoToken);
-    mockAppLoadContext.session.find.calledWith('clientNumber').mockReturnValueOnce(None);
+    mockAppLoadContext.session.find.calledWith('applicant').mockReturnValueOnce(None);
 
-    mockAppLoadContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(mock<SecurityHandler>());
+    mockAppLoadContext.appContainer.get.calledWith(TYPES.SecurityHandler).mockReturnValueOnce(
+      mock<SecurityHandler>({
+        requireApplicant: async () =>
+          await Promise.resolve({
+            clientId: 'some-client-id',
+            clientNumber: 'some-client-number',
+            dateOfBirth: '2000-01-01',
+            firstName: 'John',
+            lastName: 'Doe',
+            socialInsuranceNumber: '999999999',
+          }),
+      }),
+    );
     mockAppLoadContext.appContainer.get.calledWith(TYPES.ClientConfig).mockReturnValue({
       SCCH_BASE_URI: 'https://api.example.com',
     } satisfies Partial<ClientConfig>);
     mockAppLoadContext.appContainer.get.calledWith(TYPES.AuditService).mockReturnValue({
       createAudit: vi.fn(),
     } satisfies Partial<AuditService>);
-    mockAppLoadContext.appContainer.get.calledWith(TYPES.ApplicantService).mockReturnValue({
-      findClientNumberBySin: async () => await Promise.resolve(Some('some-client-number')),
-    } satisfies Partial<ApplicantService>);
     mockAppLoadContext.appContainer.get.calledWith(TYPES.LetterService).mockReturnValue({
       findLettersByClientId: async () =>
         await Promise.resolve([

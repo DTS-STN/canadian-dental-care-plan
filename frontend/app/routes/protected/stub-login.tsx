@@ -118,7 +118,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   session.set('idToken', idToken);
-  session.unset('clientNumber');
+  session.unset('applicant');
 
   return redirectDocument(getPathById(parsedDataResult.data.destinationRouteId, params));
 }

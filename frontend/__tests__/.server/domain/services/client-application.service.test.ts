@@ -166,6 +166,7 @@ describe('DefaultClientApplicationService', () => {
       firstName: 'John',
       lastName: 'Doe',
       clientId: '00000000-0000-0000-0000-000000000000',
+      clientNumber: '000000001',
       maritalStatus: 'MARRIED',
       socialInsuranceNumber: '80000002',
     },

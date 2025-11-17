@@ -51,7 +51,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const locale = getLocale(request);
 
-  await securityHandler.requireClientNumber({ params, request, session });
   const applicantNames = [`${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`, ...clientApplication.children.map((c) => `${c.information.firstName} ${c.information.lastName}`)].map((name) =>
     name.trim(),
   );

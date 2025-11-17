@@ -97,7 +97,11 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
         (() => {
           throw new Error("Expected applicant.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client ID'");
         })(),
-      clientNumber: applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID,
+      clientNumber:
+        applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID ??
+        (() => {
+          throw new Error("Expected applicant.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client Number'");
+        })(),
       socialInsuranceNumber: applicant.PersonSINIdentification.IdentificationID,
     };
 
@@ -127,7 +131,11 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
             (() => {
               throw new Error("Expected child.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client ID'");
             })(),
-          clientNumber: child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID,
+          clientNumber:
+            child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID ??
+            (() => {
+              throw new Error("Expected child.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client Number'");
+            })(),
           socialInsuranceNumber: child.PersonSINIdentification.IdentificationID,
         },
       })) ?? [];

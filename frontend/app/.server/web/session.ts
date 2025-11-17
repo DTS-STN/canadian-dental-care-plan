@@ -4,7 +4,7 @@ import type { Option } from 'oxide.ts';
 import { None, Some } from 'oxide.ts';
 import validator from 'validator';
 
-import type { LetterDto } from '~/.server/domain/dtos';
+import type { ApplicantDto, LetterDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import type { ApplyState, ApplyStateSessionKey } from '~/.server/routes/helpers/apply-route-helpers';
@@ -34,7 +34,7 @@ type SessionTypeMap = {
   authCodeVerifier: string;
   authReturnUrl: string;
   authState: string;
-  clientNumber: string;
+  applicant: ApplicantDto;
   csrfToken: string;
   idToken: IdToken;
   lastAccessTime: string;

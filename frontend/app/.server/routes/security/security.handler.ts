@@ -5,7 +5,7 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { ClientApplicationDto } from '~/.server/domain/dtos';
+import type { ApplicantDto, ClientApplicationDto } from '~/.server/domain/dtos';
 import type { ApplicantService, ClientApplicationService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
@@ -145,13 +145,13 @@ export interface SecurityHandler {
   requireClientApplication(params: RequireClientApplicationParams): Promise<ClientApplicationDto>;
 
   /**
-   * Ensures that the user has a client number associated with their SIN.
+   * Ensures that the user has a applicant associated with their SIN.
    *
    * @param params - Parameters containing the request, session, and route params.
-   * @throws Throws a redirect response if no client number is found.
-   * @returns Resolves with the client number if found.
+   * @throws Throws a redirect response if no applicant is found.
+   * @returns Resolves with the applicant DTO if found.
    */
-  requireClientNumber(params: RequireClientNumberParams): Promise<string>;
+  requireApplicant(params: RequireClientNumberParams): Promise<ApplicantDto>;
 }
 
 /**
@@ -316,8 +316,8 @@ export class DefaultSecurityHandler implements SecurityHandler {
     return clientApplicationOption.unwrap();
   }
 
-  async requireClientNumber({ params, request, session }: RequireClientNumberParams): Promise<string> {
-    this.log.debug('Requiring client number for session [%s]', session.id);
+  async requireApplicant({ params, request, session }: RequireClientNumberParams): Promise<ApplicantDto> {
+    this.log.debug('Requiring applicant for session [%s]', session.id);
 
     const userInfoToken = session.find('userInfoToken').unwrapUnchecked();
 
@@ -328,27 +328,27 @@ export class DefaultSecurityHandler implements SecurityHandler {
       throw redirectDocument(`/auth/login?returnto=${returnTo}`);
     }
 
-    if (session.has('clientNumber')) {
-      const clientNumber = session.get('clientNumber');
-      this.log.debug('Client number found in session [%s]', session.id);
-      return clientNumber;
+    if (session.has('applicant')) {
+      const applicant = session.get('applicant');
+      this.log.debug('Applicant found in session [%s]', session.id);
+      return applicant;
     }
 
-    const clientNumberOption = await this.applicantService.findClientNumberBySin({
+    const applicantOption = await this.applicantService.findApplicantBySin({
       sin: userInfoToken.sin,
       userId: userInfoToken.sub,
     });
 
-    if (clientNumberOption.isNone()) {
-      this.log.debug('No client number found for SIN [%s]; session [%s]; redirecting to data unavailable', userInfoToken.sin, session.id);
+    if (applicantOption.isNone()) {
+      this.log.debug('No applicant found for SIN [%s]; session [%s]; redirecting to data unavailable', userInfoToken.sin, session.id);
       throw redirect(getPathById('protected/data-unavailable', params));
     }
 
-    const clientNumber = clientNumberOption.unwrap();
+    const applicant = applicantOption.unwrap();
 
-    session.set('clientNumber', clientNumber);
+    session.set('applicant', applicant);
 
-    this.log.debug('Client number found for SIN [%s]; session [%s]', userInfoToken.sin, session.id);
-    return clientNumber;
+    this.log.debug('Applicant found for SIN [%s]; session [%s]', userInfoToken.sin, session.id);
+    return applicant;
   }
 }

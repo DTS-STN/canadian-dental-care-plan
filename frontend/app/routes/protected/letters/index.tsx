@@ -1,9 +1,8 @@
 import type { ChangeEvent } from 'react';
 
-import { redirect, useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import type { Option } from 'oxide.ts';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -21,7 +20,6 @@ import { pageIds } from '~/page-ids';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
-import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -39,6 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('view-letters');
   await securityHandler.validateAuthSession({ request, session });
+  const applicant = await securityHandler.requireApplicant({ params, request, session });
 
   const sortParam = new URL(request.url).searchParams.get('sort');
   const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);
@@ -46,23 +45,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  const clientNumberOption: Option<string> = session.has('clientNumber')
-    ? session.find('clientNumber')
-    : await appContainer.get(TYPES.ApplicantService).findClientNumberBySin({
-        sin: userInfoToken.sin,
-        userId: userInfoToken.sub,
-      });
-
-  if (clientNumberOption.isNone()) {
-    throw redirect(getPathById('protected/data-unavailable', params));
-  }
-
-  const clientNumber = clientNumberOption.unwrap();
+  const clientNumber = applicant.clientNumber;
   const allLetters = await appContainer.get(TYPES.LetterService).findLettersByClientId({ clientId: clientNumber, userId: userInfoToken.sub, sortOrder });
   const letterTypes = await appContainer.get(TYPES.LetterTypeService).listLetterTypes();
   const letters = allLetters.filter(({ letterTypeId }) => letterTypes.some(({ id }) => letterTypeId === id));
 
-  session.set('clientNumber', clientNumber);
   session.set('letters', letters);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
