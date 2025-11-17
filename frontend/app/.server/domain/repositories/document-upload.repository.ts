@@ -50,7 +50,7 @@ export class DefaultDocumentUploadRepository implements DocumentUploadRepository
   private readonly log: Logger;
   private readonly serverConfig: Pick<
     ServerConfig,
-    'INTEROP_API_SUBSCRIPTION_KEY' | 'HTTP_PROXY_URL' | 'EWDU_API_BASE_URI' | 'EWDU_ENCAPSULATION_USERNAME' | 'EWDU_ENCAPSULATION_PASSWORD' | 'EWDU_PROGRAM_ACTIVITY_ID' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'
+    'INTEROP_API_SUBSCRIPTION_KEY' | 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'EWDU_ENCAPSULATION_USERNAME' | 'EWDU_ENCAPSULATION_PASSWORD' | 'EWDU_PROGRAM_ACTIVITY_ID' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'
   >;
   private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
@@ -59,14 +59,14 @@ export class DefaultDocumentUploadRepository implements DocumentUploadRepository
     @inject(TYPES.ServerConfig)
     serverConfig: Pick<
       ServerConfig,
-      'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'EWDU_API_BASE_URI' | 'EWDU_ENCAPSULATION_USERNAME' | 'EWDU_ENCAPSULATION_PASSWORD' | 'EWDU_PROGRAM_ACTIVITY_ID' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'
+      'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_API_BASE_URI' | 'EWDU_ENCAPSULATION_USERNAME' | 'EWDU_ENCAPSULATION_PASSWORD' | 'EWDU_PROGRAM_ACTIVITY_ID' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'
     >,
     @inject(TYPES.HttpClient) httpClient: HttpClient,
   ) {
     this.log = createLogger('DefaultDocumentUploadRepository');
     this.serverConfig = serverConfig;
     this.httpClient = httpClient;
-    this.baseUrl = `${this.serverConfig.EWDU_API_BASE_URI}/api`;
+    this.baseUrl = `${this.serverConfig.INTEROP_API_BASE_URI}/client-correspondence/document-upload/cct/v1/api`;
   }
 
   async uploadDocument(documentUploadRequestEntity: DocumentUploadRequestEntity): Promise<DocumentUploadResponseEntity> {
