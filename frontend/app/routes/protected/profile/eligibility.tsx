@@ -84,7 +84,7 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
         <p>{t('protected-profile:eligibility.benefit-year-range', { start: benefitYearStart + 1, end: benefitYearStart + 2 })}</p>
         <dl className="divide-y border-y">
           {applicants.map((applicant) => {
-            const nextYearEarning = applicant.earnings.find((earning) => earning.taxationYear === String(benefitYearStart + 1));
+            const nextYearEarning = applicant.earnings.find((earning) => earning.taxationYear === String(benefitYearStart));
             const isEnrolled = !!nextYearEarning;
 
             return (
