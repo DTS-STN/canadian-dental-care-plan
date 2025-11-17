@@ -88,14 +88,24 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
           {applicants.map((applicant) => {
             const currentEarning = applicant.earnings.find((earning) => earning.taxationYear === String(benefitYearStart));
             const isEligible = currentEarning?.isEligible ?? false;
+            const isEnrolled = !!currentEarning;
 
             return (
-              <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
-                <p className="flex items-center gap-4">
-                  {isEligible ? <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" /> : <FontAwesomeIcon icon={faCircleXmark} className="text-red-700" />}
-                  {isEligible ? t('protected-profile:eligibility.eligible') : t('protected-profile:eligibility.not-eligible')}
-                </p>
-              </DescriptionListItem>
+              <>
+                <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
+                  {isEnrolled ? (
+                    <p className="flex items-center gap-4">
+                      {isEligible ? <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" /> : <FontAwesomeIcon icon={faCircleXmark} className="text-red-700" />}
+                      {isEligible ? t('protected-profile:eligibility.eligible') : t('protected-profile:eligibility.not-eligible')}
+                    </p>
+                  ) : (
+                    <p className="flex items-center gap-4">
+                      <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-700" />
+                      {t('protected-profile:eligibility.not-enrolled')}
+                    </p>
+                  )}
+                </DescriptionListItem>
+              </>
             );
           })}
         </dl>
