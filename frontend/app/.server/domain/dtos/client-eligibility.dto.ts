@@ -13,6 +13,6 @@ export type ClientEligibilityDto = ReadonlyDeep<{
 
 export type ClientEligibilityRequestDto = ReadonlyDeep<
   Array<{
-    clientIdentification: string;
+    clientNumber: string;
   }>
 >;
