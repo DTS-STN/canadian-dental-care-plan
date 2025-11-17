@@ -15,6 +15,7 @@ import {
   DefaultBenefitApplicationService,
   DefaultBenefitRenewalService,
   DefaultClientApplicationService,
+  DefaultClientEligibilityService,
   DefaultClientFriendlyStatusService,
   DefaultCountryService,
   DefaultCoverageService,
@@ -68,6 +69,7 @@ export function createServicesContainerModule(serverConfig: Pick<ServerConfig, '
     options.bind(TYPES.BenefitRenewalService).to(DefaultBenefitRenewalService);
     options.bind(TYPES.BuildInfoService).to(DefaultBuildInfoService);
     options.bind(TYPES.ClientApplicationService).to(DefaultClientApplicationService);
+    options.bind(TYPES.ClientEligibilityService).to(DefaultClientEligibilityService);
     options.bind(TYPES.ClientFriendlyStatusService).to(DefaultClientFriendlyStatusService);
     options.bind(TYPES.CountryService).to(DefaultCountryService);
     options.bind(TYPES.CoverageService).to(DefaultCoverageService);

@@ -28,14 +28,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
-  const clientIds = [clientApplication.applicantInformation.clientId];
-  const childClientIds = clientApplication.children.map((child) => child.information.clientId);
+  const clientIds = [clientApplication.applicantInformation.clientNumber ?? clientApplication.applicantInformation.clientId];
 
   const clientEligibilityRequestDto = clientIds.map((clientId) => ({ clientIdentification: clientId }));
-  const childEligibilityRequestDto = childClientIds.map((clientId) => ({ clientIdentification: clientId }));
 
-  const primaryApplicant = await appContainer.get(TYPES.ClientEligibilityService).findClientEligibilityByClientNumbers(clientEligibilityRequestDto);
-  const children = await appContainer.get(TYPES.ClientEligibilityService).findClientEligibilityByClientNumbers(childEligibilityRequestDto);
+  const clientInformation = await appContainer.get(TYPES.ClientEligibilityService).findClientEligibilityByClientNumbers(clientEligibilityRequestDto);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:eligibility.page-title') }) };
@@ -50,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     meta,
     SCCH_BASE_URI,
-    applicants: [...primaryApplicant, ...children],
+    applicants: clientInformation.unwrap(),
     benefitYearStart,
   };
 }
