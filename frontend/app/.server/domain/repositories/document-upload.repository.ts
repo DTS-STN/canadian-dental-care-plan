@@ -48,13 +48,19 @@ export interface DocumentUploadRepository {
 @injectable()
 export class DefaultDocumentUploadRepository implements DocumentUploadRepository {
   private readonly log: Logger;
-  private readonly serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'EWDU_API_BASE_URI' | 'EWDU_ENCAPSULATION_USERNAME' | 'EWDU_ENCAPSULATION_PASSWORD' | 'EWDU_PROGRAM_ACTIVITY_ID' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>;
+  private readonly serverConfig: Pick<
+    ServerConfig,
+    'INTEROP_API_SUBSCRIPTION_KEY' | 'HTTP_PROXY_URL' | 'EWDU_API_BASE_URI' | 'EWDU_ENCAPSULATION_USERNAME' | 'EWDU_ENCAPSULATION_PASSWORD' | 'EWDU_PROGRAM_ACTIVITY_ID' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'
+  >;
   private readonly httpClient: HttpClient;
   private readonly baseUrl: string;
 
   constructor(
     @inject(TYPES.ServerConfig)
-    serverConfig: Pick<ServerConfig, 'HTTP_PROXY_URL' | 'EWDU_API_BASE_URI' | 'EWDU_ENCAPSULATION_USERNAME' | 'EWDU_ENCAPSULATION_PASSWORD' | 'EWDU_PROGRAM_ACTIVITY_ID' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>,
+    serverConfig: Pick<
+      ServerConfig,
+      'HTTP_PROXY_URL' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'EWDU_API_BASE_URI' | 'EWDU_ENCAPSULATION_USERNAME' | 'EWDU_ENCAPSULATION_PASSWORD' | 'EWDU_PROGRAM_ACTIVITY_ID' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'
+    >,
     @inject(TYPES.HttpClient) httpClient: HttpClient,
   ) {
     this.log = createLogger('DefaultDocumentUploadRepository');
@@ -81,6 +87,7 @@ export class DefaultDocumentUploadRepository implements DocumentUploadRepository
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
       body: JSON.stringify(uploadRequest),
       retryOptions: {
@@ -135,6 +142,7 @@ export class DefaultDocumentUploadRepository implements DocumentUploadRepository
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
       body: JSON.stringify(scanRequest),
       retryOptions: {
