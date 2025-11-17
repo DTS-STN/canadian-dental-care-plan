@@ -28,9 +28,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
-  const clientIds = [clientApplication.applicantInformation.clientNumber ?? clientApplication.applicantInformation.clientId];
+  const clientNumber = clientApplication.applicantInformation.clientNumber;
+  const dependentClientNumbers = clientApplication.children.map((child) => child.information.clientNumber);
+  const clientNumbers = [clientNumber, ...dependentClientNumbers];
 
-  const clientEligibilityRequestDto = clientIds.map((clientId) => ({ clientIdentification: clientId }));
+  const clientEligibilityRequestDto = clientNumbers.map((clientNumber) => ({ clientIdentification: clientNumber }));
 
   const clientInformation = await appContainer.get(TYPES.ClientEligibilityService).findClientEligibilityByClientNumbers(clientEligibilityRequestDto);
 
@@ -84,7 +86,7 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
         <p>{t('protected-profile:eligibility.benefit-year-range', { start: benefitYearStart + 1, end: benefitYearStart + 2 })}</p>
         <dl className="divide-y border-y">
           {applicants.map((applicant) => {
-            const nextYearEarning = applicant.earnings.find((earning) => earning.taxationYear === String(benefitYearStart));
+            const nextYearEarning = applicant.earnings.find((earning) => earning.taxationYear === String(benefitYearStart + 1));
             const isEnrolled = !!nextYearEarning;
 
             return (
