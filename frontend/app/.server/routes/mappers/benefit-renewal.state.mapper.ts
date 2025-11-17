@@ -612,11 +612,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       maritalStatus: renewedMaritalStatus,
       socialInsuranceNumber: existingApplicantInformation.socialInsuranceNumber,
       clientId: existingApplicantInformation.clientId,
-      clientNumber:
-        existingApplicantInformation.clientNumber ??
-        (() => {
-          throw new Error('Expected existingApplicantInformation.clientNumber to be defined');
-        })(),
+      clientNumber: existingApplicantInformation.clientNumber,
     };
   }
 
@@ -632,11 +628,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
 
       return {
         clientId: existingChild.information.clientId,
-        clientNumber:
-          existingChild.information.clientNumber ??
-          (() => {
-            throw new Error('Expected existingChild.information.clientNumber to be defined');
-          })(),
+        clientNumber: existingChild.information.clientNumber,
         dentalBenefits: this.toDentalBenefits({
           existingDentalBenefits: existingChild.dentalBenefits,
           hasFederalProvincialTerritorialBenefitsChanged: isProtectedRenewal ? !!renewedChild.dentalBenefits : true,
