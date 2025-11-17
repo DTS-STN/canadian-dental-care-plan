@@ -1,5 +1,4 @@
 import { inject, injectable } from 'inversify';
-import { Option, Some } from 'oxide.ts';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -11,11 +10,13 @@ import clientEligibilityJsonDataSource from '~/.server/resources/power-platform/
 
 export interface ClientEligibilityRepository {
   /**
-   * Finds client eligibility by client number.
-   * @param clientEligibilityRequestEntity The request object containing the client number.
-   * @returns A Promise that resolves to the client eligibility entity if found, or None otherwise.
+   * Lists client eligibility information by client numbers.
+   *
+   * @param clientEligibilityRequestEntity - The request entity containing an array of client identification information.
+   * @returns A Promise that resolves to a read-only array of client eligibility entities.
+   * @throws {Error} When the API request fails or returns a non-OK response.
    */
-  findClientEligibilityByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<ReadonlyArray<ClientEligibilityEntity>>>;
+  listClientEligibilitiesByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<ReadonlyArray<ClientEligibilityEntity>>;
 }
 
 @injectable()
@@ -35,7 +36,7 @@ export class DefaultClientEligibilityRepository implements ClientEligibilityRepo
     this.httpClient = httpClient;
   }
 
-  async findClientEligibilityByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<ReadonlyArray<ClientEligibilityEntity>>> {
+  async listClientEligibilitiesByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<ReadonlyArray<ClientEligibilityEntity>> {
     this.log.trace('Fetching client eligibility for client numbers [%j]', clientEligibilityRequestEntity);
 
     const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dts/applicant-eligibility`);
@@ -52,7 +53,7 @@ export class DefaultClientEligibilityRepository implements ClientEligibilityRepo
     if (response.ok) {
       const data = (await response.json()) as ReadonlyArray<ClientEligibilityEntity>;
       this.log.trace('Client eligibility [%j]', data);
-      return Some(data);
+      return data;
     }
 
     this.log.error('%j', {
@@ -74,7 +75,7 @@ export class MockClientEligibilityRepository implements ClientEligibilityReposit
   constructor() {
     this.log = createLogger('MockClientEligibilityRepository');
   }
-  async findClientEligibilityByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<Option<ReadonlyArray<ClientEligibilityEntity>>> {
+  async listClientEligibilitiesByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<ReadonlyArray<ClientEligibilityEntity>> {
     this.log.debug('Fetching client eligibility for client numbers [%j]', clientEligibilityRequestEntity);
 
     const entities: Array<ClientEligibilityEntity> = clientEligibilityRequestEntity.map((request) => {
@@ -91,6 +92,6 @@ export class MockClientEligibilityRepository implements ClientEligibilityReposit
     });
 
     this.log.debug('Client eligibility [%j]', entities);
-    return await Promise.resolve(Some(entities));
+    return await Promise.resolve(entities);
   }
 }
