@@ -28,26 +28,18 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
+  const clientIds = [clientApplication.applicantInformation.clientId];
+  const childClientIds = clientApplication.children.map((child) => child.information.clientId);
+
+  const clientEligibilityRequestDto = clientIds.map((clientId) => ({ clientIdentification: clientId }));
+  const childEligibilityRequestDto = childClientIds.map((clientId) => ({ clientIdentification: clientId }));
+
+  const primaryApplicant = await appContainer.get(TYPES.ClientEligibilityService).findClientEligibilityByClientNumbers(clientEligibilityRequestDto);
+  const children = await appContainer.get(TYPES.ClientEligibilityService).findClientEligibilityByClientNumbers(childEligibilityRequestDto);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:eligibility.page-title') }) };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
-
-  // TODO: fetch proper eligibility criteria from PP when it's ready
-  const primaryApplicant = {
-    clientId: clientApplication.applicantInformation.clientId,
-    firstName: clientApplication.applicantInformation.firstName,
-    lastName: clientApplication.applicantInformation.lastName,
-    isEligible: true,
-    isEnrolled: false,
-  };
-
-  const children = clientApplication.children.map((child) => ({
-    clientId: child.information.clientId,
-    firstName: child.information.firstName,
-    lastName: child.information.lastName,
-    isEligible: false,
-    isEnrolled: false,
-  }));
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.eligibility', { userId: idToken.sub });
@@ -58,7 +50,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     meta,
     SCCH_BASE_URI,
-    applicants: [primaryApplicant, ...children],
+    applicants: [...primaryApplicant, ...children],
     benefitYearStart,
   };
 }
@@ -74,14 +66,19 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
         <h2 className="font-lato text-2xl font-bold">{t('protected-profile:eligibility.current-year')}</h2>
         <p>{t('protected-profile:eligibility.current-year-details', { end: benefitYearStart + 1 })}</p>
         <dl className="divide-y border-y">
-          {applicants.map((applicant) => (
-            <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
-              <p className="flex items-center gap-4">
-                {applicant.isEligible ? <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" /> : <FontAwesomeIcon icon={faCircleXmark} className="text-red-700" />}
-                {applicant.isEligible ? t('protected-profile:eligibility.eligible') : t('protected-profile:eligibility.not-eligible')}
-              </p>
-            </DescriptionListItem>
-          ))}
+          {applicants.map((applicant) => {
+            const currentEarning = applicant.earnings.find((earning) => earning.taxationYear === String(benefitYearStart));
+            const isEligible = currentEarning?.isEligible ?? false;
+
+            return (
+              <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
+                <p className="flex items-center gap-4">
+                  {isEligible ? <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" /> : <FontAwesomeIcon icon={faCircleXmark} className="text-red-700" />}
+                  {isEligible ? t('protected-profile:eligibility.eligible') : t('protected-profile:eligibility.not-eligible')}
+                </p>
+              </DescriptionListItem>
+            );
+          })}
         </dl>
       </section>
 
@@ -89,19 +86,24 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
         <h2 className="font-lato text-2xl font-bold">{t('protected-profile:eligibility.next-year')}</h2>
         <p>{t('protected-profile:eligibility.benefit-year-range', { start: benefitYearStart + 1, end: benefitYearStart + 2 })}</p>
         <dl className="divide-y border-y">
-          {applicants.map((applicant) => (
-            <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
-              <p className="flex items-center gap-4">
-                {applicant.isEnrolled ? <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" /> : <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-700" />}
-                {applicant.isEnrolled ? t('protected-profile:eligibility.enrolled') : t('protected-profile:eligibility.not-enrolled')}
-                {!applicant.isEnrolled && (
-                  <InlineLink routeId="protected/apply/index" params={params} className="pl-8">
-                    {t('protected-profile:eligibility.apply', { year: benefitYearStart + 2 })}
-                  </InlineLink>
-                )}
-              </p>
-            </DescriptionListItem>
-          ))}
+          {applicants.map((applicant) => {
+            const nextYearEarning = applicant.earnings.find((earning) => earning.taxationYear === String(benefitYearStart + 1));
+            const isEnrolled = !!nextYearEarning;
+
+            return (
+              <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
+                <p className="flex items-center gap-4">
+                  {isEnrolled ? <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" /> : <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-700" />}
+                  {isEnrolled ? t('protected-profile:eligibility.enrolled') : t('protected-profile:eligibility.not-enrolled')}
+                  {!isEnrolled && (
+                    <InlineLink routeId="protected/apply/index" params={params} className="pl-8">
+                      {t('protected-profile:eligibility.apply', { year: benefitYearStart + 2 })}
+                    </InlineLink>
+                  )}
+                </p>
+              </DescriptionListItem>
+            );
+          })}
         </dl>
       </section>
 
