@@ -15,10 +15,11 @@ describe('DefaultCoverageService', () => {
       const result = service.getCoverage(date);
 
       expect(result).toEqual({
-        year: 2023,
-        taxationYear: 2022,
-        startDate: '2023-07-01T00:00:00.000Z',
         endDate: '2024-06-30T23:59:59.999Z',
+        endYear: 2024,
+        startDate: '2023-07-01T00:00:00.000Z',
+        startYear: 2023,
+        taxationYear: 2022,
       });
     });
 
@@ -27,10 +28,11 @@ describe('DefaultCoverageService', () => {
       const result = service.getCoverage(date);
 
       expect(result).toEqual({
-        year: 2024,
-        taxationYear: 2023,
-        startDate: '2024-07-01T00:00:00.000Z',
         endDate: '2025-06-30T23:59:59.999Z',
+        endYear: 2025,
+        startDate: '2024-07-01T00:00:00.000Z',
+        startYear: 2024,
+        taxationYear: 2023,
       });
     });
 
@@ -39,10 +41,11 @@ describe('DefaultCoverageService', () => {
       const result = service.getCoverage(date);
 
       expect(result).toEqual({
-        year: 2023,
-        taxationYear: 2022,
-        startDate: '2023-07-01T00:00:00.000Z',
         endDate: '2024-06-30T23:59:59.999Z',
+        endYear: 2024,
+        startDate: '2023-07-01T00:00:00.000Z',
+        startYear: 2023,
+        taxationYear: 2022,
       });
     });
 
@@ -51,10 +54,11 @@ describe('DefaultCoverageService', () => {
       const result = service.getCoverage(date);
 
       expect(result).toEqual({
-        year: 2024,
-        taxationYear: 2023,
-        startDate: '2024-07-01T00:00:00.000Z',
         endDate: '2025-06-30T23:59:59.999Z',
+        endYear: 2025,
+        startDate: '2024-07-01T00:00:00.000Z',
+        startYear: 2024,
+        taxationYear: 2023,
       });
     });
   });
@@ -67,10 +71,11 @@ describe('DefaultCoverageService', () => {
       const result = service.getCurrentCoverage();
 
       expect(result).toEqual({
-        year: 2024,
-        taxationYear: 2023,
-        startDate: '2024-07-01T00:00:00.000Z',
         endDate: '2025-06-30T23:59:59.999Z',
+        endYear: 2025,
+        startDate: '2024-07-01T00:00:00.000Z',
+        startYear: 2024,
+        taxationYear: 2023,
       });
 
       vi.useRealTimers();

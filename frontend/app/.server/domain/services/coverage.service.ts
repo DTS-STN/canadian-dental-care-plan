@@ -34,12 +34,14 @@ export class DefaultCoverageService implements CoverageService {
   getCoverage(date: Date): CoverageDto {
     this.log.trace('Finding coverage with date: [%s]', date.toISOString());
     // Substract one year if month is less than July
-    const year = date.getFullYear() - (date.getMonth() < 6 ? 1 : 0);
+    const startYear = date.getFullYear() - (date.getMonth() < 6 ? 1 : 0);
+    const endYear = startYear + 1;
     return {
-      year,
-      taxationYear: year - 1,
-      startDate: `${year}-07-01T00:00:00.000Z`,
-      endDate: `${year + 1}-06-30T23:59:59.999Z`,
+      endDate: `${endYear}-06-30T23:59:59.999Z`,
+      endYear,
+      startDate: `${startYear}-07-01T00:00:00.000Z`,
+      startYear,
+      taxationYear: startYear - 1,
     };
   }
 
