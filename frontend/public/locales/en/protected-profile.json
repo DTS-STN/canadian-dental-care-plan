@@ -13,7 +13,7 @@
     "not-eligible": "Not eligible",
     "enrolled": "Enrolled",
     "not-enrolled": "Not enrolled",
-    "apply": "Apply for {{year}}",
+    "apply": "Apply for {{start}}\u2011{{end}}",
     "return-button": "Return to dashboard"
   },
   "applicant-information": {
