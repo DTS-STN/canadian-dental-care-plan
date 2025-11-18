@@ -30,7 +30,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const clientNumber = clientApplication.applicantInformation.clientNumber;
   const dependentClientNumbers = clientApplication.children.map((child) => child.information.clientNumber);
-  const clientNumbers = [clientNumber, ...dependentClientNumbers].filter((num): num is string => typeof num === 'string');
+  const clientNumbers = [clientNumber, ...dependentClientNumbers];
 
   const clientEligibilityRequestDto = clientNumbers.map((clientNumber) => ({ clientNumber }));
 
