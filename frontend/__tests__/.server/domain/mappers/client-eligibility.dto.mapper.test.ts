@@ -1,143 +1,105 @@
-import { describe, expect, it } from 'vitest';
+// generate unit tests for app/.server/domain/mappers/client-eligibility.dto.mapper.ts with vitest
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import type { ClientEligibilityEntity } from '~/.server/domain/entities/client-eligibility.entity';
-import { DefaultClientEligibilityDtoMapper } from '~/.server/domain/mappers';
+import { DefaultClientEligibilityDtoMapper } from '~/.server/domain/mappers/client-eligibility.dto.mapper';
 
 describe('DefaultClientEligibilityDtoMapper', () => {
-  const mapper = new DefaultClientEligibilityDtoMapper();
+  let mapper: DefaultClientEligibilityDtoMapper;
+
+  beforeEach(() => {
+    const serverConfig = {
+      COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: 'coverage-001',
+      ELIGIBLE_STATUS_CODE_ELIGIBLE: 'status-001',
+      ELIGIBLE_STATUS_CODE_INELIGIBLE: 'status-002',
+    };
+    mapper = new DefaultClientEligibilityDtoMapper(serverConfig);
+  });
 
   describe('mapClientEligibilityEntityToClientEligibilityDto', () => {
-    it('should map a valid client eligibility entity to DTO', () => {
-      const entity: ClientEligibilityEntity = {
+    it('should map ClientEligibilityEntity to ClientEligibilityDto correctly', () => {
+      const clientEligibilityEntity: ClientEligibilityEntity = {
         Applicant: {
+          ClientIdentification: [
+            { IdentificationCategoryText: 'Client ID', IdentificationID: '12345' },
+            { IdentificationCategoryText: 'Client Number', IdentificationID: '67890' },
+          ],
+          PersonName: [{ PersonGivenName: ['John'], PersonSurName: 'Doe' }],
           ApplicantEarning: [
             {
-              BenefitApplicationYearIdentification: {
-                IdentificationID: '2024-benefit-id',
-                IdentificationCategoryText: 'Benefit Year ID',
-              },
-              BenefitEligibilityStatus: {
-                StatusCode: {
-                  ReferenceDataID: 'eligible-status-001',
-                },
-              },
+              EarningTaxationYear: { YearDate: '2022' },
+              BenefitEligibilityStatus: { StatusCode: { ReferenceDataID: 'status-001' } },
               Coverage: [
                 {
                   CoverageCategoryCode: {
                     ReferenceDataName: 'Co-Pay Tier (TPC)',
-                    CoverageTierCode: {
-                      ReferenceDataID: '001',
-                    },
+                    CoverageTierCode: { ReferenceDataID: 'coverage-001' },
                   },
                 },
               ],
+              BenefitApplicationYearIdentification: {
+                IdentificationID: '2022',
+                IdentificationCategoryText: 'Benefit Application Year',
+              },
               EarningIdentification: [
                 {
-                  IdentificationID: 'earning-id-2024',
                   IdentificationCategoryText: 'Earning ID',
+                  IdentificationID: 'earning-001',
                 },
               ],
-              EarningTaxationYear: {
-                YearDate: '2024',
-              },
               PrivateDentalInsuranceIndicator: false,
             },
             {
-              BenefitApplicationYearIdentification: {
-                IdentificationID: '2023-benefit-id',
-                IdentificationCategoryText: 'Benefit Year ID',
-              },
-              BenefitEligibilityStatus: {
-                StatusCode: {
-                  ReferenceDataID: 'eligible-status-002',
-                },
-              },
+              EarningTaxationYear: { YearDate: '2023' },
+              BenefitEligibilityStatus: { StatusCode: { ReferenceDataID: 'status-002' } },
               Coverage: [
                 {
                   CoverageCategoryCode: {
-                    ReferenceDataName: 'Co-Pay Tier (TPC)',
-                    CoverageTierCode: {
-                      ReferenceDataID: '001',
-                    },
+                    ReferenceDataName: 'Other Tier',
+                    CoverageTierCode: { ReferenceDataID: 'coverage-002' },
                   },
                 },
               ],
+              BenefitApplicationYearIdentification: {
+                IdentificationID: '2023',
+                IdentificationCategoryText: 'Benefit Application Year',
+              },
               EarningIdentification: [
                 {
-                  IdentificationID: 'earning-id-2023',
                   IdentificationCategoryText: 'Earning ID',
+                  IdentificationID: 'earning-002',
                 },
               ],
-              EarningTaxationYear: {
-                YearDate: '2023',
-              },
               PrivateDentalInsuranceIndicator: true,
-            },
-            {
-              BenefitApplicationYearIdentification: {
-                IdentificationID: '2022-benefit-id',
-                IdentificationCategoryText: 'Benefit Year ID',
-              },
-              BenefitEligibilityStatus: {
-                StatusCode: {
-                  ReferenceDataID: 'ineligible-status-001',
-                },
-              },
-              Coverage: [],
-              EarningIdentification: [
-                {
-                  IdentificationID: 'earning-id-2022',
-                  IdentificationCategoryText: 'Earning ID',
-                },
-              ],
-              EarningTaxationYear: {
-                YearDate: '2022',
-              },
-              PrivateDentalInsuranceIndicator: false,
             },
           ],
           ApplicantCategoryCode: {
-            ReferenceDataID: 'primary-applicant',
+            ReferenceDataID: 'applicant-category-001',
           },
+
           ApplicantEnrollmentStatus: {
             StatusCode: {
-              ReferenceDataID: 'enrolled',
+              ReferenceDataID: 'enrollment-status-001',
             },
           },
           BenefitEligibilityStatus: {
             StatusCode: {
-              ReferenceDataID: 'eligible',
+              ReferenceDataID: 'benefit-eligibility-status-001',
             },
           },
           BenefitEligibilityNextYearStatus: {
             StatusCode: {
-              ReferenceDataID: 'eligible',
+              ReferenceDataID: 'benefit-eligibility-next-year-status-001',
             },
           },
           BenefitApplicationYearIdentification: {
-            IdentificationID: 'current-benefit-year-id',
-            IdentificationCategoryText: 'Current Benefit Year',
+            IdentificationID: 'benefit-application-year-identification-001',
+            IdentificationCategoryText: 'Benefit Application Year',
           },
-          ClientIdentification: [
-            {
-              IdentificationID: '12345',
-              IdentificationCategoryText: 'Client ID',
-            },
-            {
-              IdentificationID: '67890',
-              IdentificationCategoryText: 'Client Number',
-            },
-          ],
-          PersonName: [
-            {
-              PersonGivenName: ['John'],
-              PersonSurName: 'Doe',
-            },
-          ],
         },
       };
 
-      const result = mapper.mapClientEligibilityEntityToClientEligibilityDto(entity);
+      const result = mapper.mapClientEligibilityEntityToClientEligibilityDto(clientEligibilityEntity);
 
       expect(result).toEqual({
         clientId: '12345',
@@ -145,11 +107,29 @@ describe('DefaultClientEligibilityDtoMapper', () => {
         firstName: 'John',
         lastName: 'Doe',
         earnings: [
-          { taxationYear: '2024', isEligible: true },
-          { taxationYear: '2023', isEligible: true },
-          { taxationYear: '2022', isEligible: false },
+          { taxationYear: 2022, isEligible: true },
+          { taxationYear: 2023, isEligible: false },
         ],
       });
+    });
+  });
+
+  describe('mapClientEligibilityRequestDtoToClientEligibilityRequestEntity', () => {
+    it('should map ClientEligibilityRequestDto to ClientEligibilityRequestEntity correctly', () => {
+      const clientEligibilityRequestDto = [{ clientNumber: '67890' }];
+
+      const result = mapper.mapClientEligibilityRequestDtoToClientEligibilityRequestEntity(clientEligibilityRequestDto);
+
+      expect(result).toEqual([
+        {
+          Applicant: {
+            PersonClientNumberIdentification: {
+              IdentificationID: '67890',
+              IdentificationCategoryText: 'Client Number',
+            },
+          },
+        },
+      ]);
     });
   });
 });

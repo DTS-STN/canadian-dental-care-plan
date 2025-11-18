@@ -13,7 +13,7 @@
     "not-eligible": "Non admissible",
     "enrolled": "Inscrit(e)",
     "not-enrolled": "Non inscrit(e)",
-    "apply": "Présenter une demande pour {{year}}",
+    "apply": "Présenter une demande pour {{start}}\u2011{{end}}",
     "return-button": "Retour au tableau de bord"
   },
   "applicant-information": {

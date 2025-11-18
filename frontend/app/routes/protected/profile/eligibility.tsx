@@ -1,3 +1,5 @@
+import { useParams } from 'react-router';
+
 import { faCheckCircle, faCircleXmark, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
@@ -73,12 +75,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 }
 
-function getEligibilityStatus(earnings: Route.ComponentProps['loaderData']['applicants'][number]['earnings'], taxationYear: number): 'eligible' | 'not-eligible' | 'not-enrolled' {
-  const earning = earnings.find((earning) => earning.taxationYear === taxationYear.toString());
-  if (!earning) return 'not-enrolled';
-  return earning.isEligible ? 'eligible' : 'not-eligible';
-}
-
 export default function ProtectedProfileEligibility({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { applicants, SCCH_BASE_URI, currentCoverage } = loaderData;
@@ -94,26 +90,7 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
             const eligibilityStatus = getEligibilityStatus(applicant.earnings, currentCoverage.taxationYear);
             return (
               <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
-                <p className="flex items-center gap-4">
-                  {eligibilityStatus === 'not-enrolled' && (
-                    <>
-                      <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-700" />
-                      <span>{t('protected-profile:eligibility.not-enrolled')}</span>
-                    </>
-                  )}
-                  {eligibilityStatus === 'eligible' && (
-                    <>
-                      <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />
-                      <span>{t('protected-profile:eligibility.eligible')}</span>
-                    </>
-                  )}
-                  {eligibilityStatus === 'not-eligible' && (
-                    <>
-                      <FontAwesomeIcon icon={faCircleXmark} className="text-red-700" />
-                      <span>{t('protected-profile:eligibility.not-eligible')}</span>
-                    </>
-                  )}
-                </p>
+                <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={currentCoverage.startYear} coverageEndYear={currentCoverage.endYear} />
               </DescriptionListItem>
             );
           })}
@@ -125,32 +102,13 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
         <p>{t('protected-profile:eligibility.benefit-year-range', { start: currentCoverage.startYear + 1, end: currentCoverage.endYear + 1 })}</p>
         <dl className="divide-y border-y">
           {applicants.map((applicant) => {
-            const eligibilityStatus = getEligibilityStatus(applicant.earnings, currentCoverage.taxationYear + 1);
+            const taxationYear = currentCoverage.taxationYear + 1;
+            const coverageStartYear = currentCoverage.startYear + 1;
+            const coverageEndYear = currentCoverage.endYear + 1;
+            const eligibilityStatus = getEligibilityStatus(applicant.earnings, taxationYear);
             return (
               <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
-                <p className="flex items-center gap-4">
-                  {eligibilityStatus === 'not-enrolled' && (
-                    <>
-                      <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-700" />
-                      <span>{t('protected-profile:eligibility.not-enrolled')}</span>
-                      <InlineLink routeId="protected/apply/index" params={params} className="pl-8">
-                        {t('protected-profile:eligibility.apply', { year: currentCoverage.endYear + 1 })}
-                      </InlineLink>
-                    </>
-                  )}
-                  {eligibilityStatus === 'eligible' && (
-                    <>
-                      <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />
-                      <span>{t('protected-profile:eligibility.eligible')}</span>
-                    </>
-                  )}
-                  {eligibilityStatus === 'not-eligible' && (
-                    <>
-                      <FontAwesomeIcon icon={faCircleXmark} className="text-red-700" />
-                      <span>{t('protected-profile:eligibility.not-eligible')}</span>
-                    </>
-                  )}
-                </p>
+                <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={coverageStartYear} coverageEndYear={coverageEndYear} showApplyLink={true} />
               </DescriptionListItem>
             );
           })}
@@ -165,6 +123,58 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
       >
         {t('protected-profile:eligibility.return-button')}
       </ButtonLink>
+    </div>
+  );
+}
+
+type EligibilityStatus = 'eligible' | 'not-eligible' | 'not-enrolled';
+
+function getEligibilityStatus(earnings: Route.ComponentProps['loaderData']['applicants'][number]['earnings'], taxationYear: number): EligibilityStatus {
+  const earning = earnings.find((earning) => earning.taxationYear === taxationYear);
+  if (!earning) return 'not-enrolled';
+  return earning.isEligible ? 'eligible' : 'not-eligible';
+}
+
+interface EligibilityStatusIndicatorProps {
+  status: EligibilityStatus;
+  coverageStartYear: number;
+  coverageEndYear: number;
+  showApplyLink?: boolean;
+}
+
+export function EligibilityStatusIndicator({ status, coverageStartYear, coverageEndYear, showApplyLink }: EligibilityStatusIndicatorProps) {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const params = useParams();
+
+  if (status === 'eligible') {
+    return (
+      <div className="flex items-center gap-2">
+        <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />
+        <span className="text-nowrap">{t('protected-profile:eligibility.eligible')}</span>
+      </div>
+    );
+  }
+
+  if (status === 'not-eligible') {
+    return (
+      <div className="flex items-center gap-2">
+        <FontAwesomeIcon icon={faCircleXmark} className="text-red-700" />
+        <span className="text-nowrap">{t('protected-profile:eligibility.not-eligible')}</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col items-start gap-2 sm:flex-row sm:gap-6">
+      <div className="flex items-center gap-2">
+        <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-700" />
+        <span className="text-nowrap">{t('protected-profile:eligibility.not-enrolled')}</span>
+      </div>
+      {showApplyLink && (
+        <InlineLink routeId="protected/apply/index" params={params}>
+          {t('protected-profile:eligibility.apply', { start: coverageStartYear, end: coverageEndYear })}
+        </InlineLink>
+      )}
     </div>
   );
 }
