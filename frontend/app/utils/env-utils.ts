@@ -82,6 +82,10 @@ export const clientEnvSchema = z.object({
     .pipe(z.array(z.string().refine(isValidExtension)).min(1)),
   DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB: z.coerce.number().positive().default(10),
   DOCUMENT_UPLOAD_MAX_FILE_COUNT:z.coerce.number().positive().default(10),
+
+  // Eligibility Status Codes
+  ELIGIBLE_STATUS_CODE_ELIGIBLE: z.string().trim().min(1).default('775170000'),
+  ELIGIBLE_STATUS_CODE_INELIGIBLE: z.string().trim().min(1).default('775170001'),
 });
 
 export type ClientEnv = ReadonlyDeep<z.infer<typeof clientEnvSchema>>;

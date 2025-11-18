@@ -30,6 +30,8 @@ describe('<ClientEnv>', () => {
       DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS: ['.pdf', '.jpg', '.png'],
       DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB: 5,
       DOCUMENT_UPLOAD_MAX_FILE_COUNT: 10,
+      ELIGIBLE_STATUS_CODE_ELIGIBLE: '775170000',
+      ELIGIBLE_STATUS_CODE_INELIGIBLE: '775170001',
       ECAS_BASE_URI: 'https://srv136.services.gc.ca/ecas-seca/rascl/SCL',
       ENABLED_FEATURES: ['feature1', 'feature2'] as unknown as FeatureName[],
       HCAPTCHA_SITE_KEY: 'hcaptcha-site-key',
