@@ -39,7 +39,7 @@ export class DefaultClientEligibilityRepository implements ClientEligibilityRepo
   async listClientEligibilitiesByClientNumbers(clientEligibilityRequestEntity: ClientEligibilityRequestEntity): Promise<ReadonlyArray<ClientEligibilityEntity>> {
     this.log.trace('Fetching client eligibility for client numbers [%j]', clientEligibilityRequestEntity);
 
-    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dts/applicant-eligibility`);
+    const url = new URL(`${this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant-eligibility`);
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.applicant-eligibility_by-client-number.posts', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'POST',

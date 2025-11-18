@@ -59,7 +59,7 @@ export type ClientEligibilityRequestEntity = ReadonlyDeep<
     Applicant: {
       PersonClientNumberIdentification: {
         IdentificationID: string;
-        IdentificationCategoryText: 'Client Number' | 'Client ID';
+        IdentificationCategoryText: 'Client Number';
       };
     };
   }>
