@@ -74,7 +74,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 function getEligibilityStatus(earnings: Route.ComponentProps['loaderData']['applicants'][number]['earnings'], taxationYear: number): 'eligible' | 'not-eligible' | 'not-enrolled' {
-  const earning = earnings.find((earning) => earning.taxationYear === taxationYear.toString());
+  const earning = earnings.find((earning) => earning.taxationYear === taxationYear);
   if (!earning) return 'not-enrolled';
   return earning.isEligible ? 'eligible' : 'not-eligible';
 }

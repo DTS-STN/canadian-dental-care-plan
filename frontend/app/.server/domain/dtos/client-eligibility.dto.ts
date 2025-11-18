@@ -6,7 +6,7 @@ export type ClientEligibilityDto = ReadonlyDeep<{
   firstName: string;
   lastName: string;
   earnings: ReadonlyArray<{
-    taxationYear: string;
+    taxationYear: number;
     isEligible: boolean;
   }>;
 }>;
