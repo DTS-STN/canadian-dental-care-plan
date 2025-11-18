@@ -154,7 +154,7 @@ interface AddressInvalidDialogContentProps {
   invalidAddress: CanadianAddress;
   formAction: string;
   syncAddresses?: boolean;
-  addressContext?: 'home-address' | 'mailing-address';
+  addressContext: 'home-address' | 'mailing-address';
 }
 
 export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAddresses = false, addressContext }: AddressInvalidDialogContentProps) {
@@ -195,7 +195,7 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
         <p>
           <Trans ns={['common']} i18nKey="common:dialog.address-invalid.description" />
         </p>
-        {addressContext && <h3 className="font-lato text-xl font-bold">{t(`common:dialog.address-invalid.context.${addressContext}`)}</h3>}
+        <h3 className="font-lato text-xl font-bold">{t(`common:dialog.address-invalid.context.${addressContext}`)}</h3>
         <div className="space-y-2">
           <p>
             <strong>{t('common:dialog.address-invalid.entered-address')}</strong>

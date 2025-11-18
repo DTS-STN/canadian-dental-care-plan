@@ -326,7 +326,7 @@ export default function ApplyChildHomeAddress({ loaderData, params }: Route.Comp
                     {addressDialogContent.status === 'address-suggestion' && (
                       <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
                     )}
-                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
+                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent addressContext="home-address" invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
                   </>
                 )}
               </Dialog>
@@ -357,7 +357,7 @@ export default function ApplyChildHomeAddress({ loaderData, params }: Route.Comp
                     {addressDialogContent.status === 'address-suggestion' && (
                       <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
                     )}
-                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
+                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent addressContext="home-address" invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
                   </>
                 )}
               </Dialog>

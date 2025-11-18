@@ -360,7 +360,9 @@ export default function ApplyChildMailingAddress({ loaderData, params }: Route.C
                     {addressDialogContent.status === 'address-suggestion' && (
                       <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useSelectedAddress} />
                     )}
-                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useInvalidAddress} />}
+                    {addressDialogContent.status === 'address-invalid' && (
+                      <AddressInvalidDialogContent addressContext="mailing-address" invalidAddress={addressDialogContent.invalidAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useInvalidAddress} />
+                    )}
                   </>
                 )}
               </Dialog>
@@ -391,7 +393,9 @@ export default function ApplyChildMailingAddress({ loaderData, params }: Route.C
                     {addressDialogContent.status === 'address-suggestion' && (
                       <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useSelectedAddress} />
                     )}
-                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent invalidAddress={addressDialogContent.invalidAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useInvalidAddress} />}
+                    {addressDialogContent.status === 'address-invalid' && (
+                      <AddressInvalidDialogContent addressContext="mailing-address" invalidAddress={addressDialogContent.invalidAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useInvalidAddress} />
+                    )}
                   </>
                 )}
               </Dialog>
