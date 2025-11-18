@@ -33,11 +33,11 @@ export type ClientEligibilityEntity = ReadonlyDeep<{
     ApplicantEnrollmentStatus: {
       StatusCode: { ReferenceDataID: string };
     };
-    BenefitEligibilityStatus: {
-      StatusCode: { ReferenceDataID: string };
+    BenefitEligibilityStatus?: {
+      StatusCode?: { ReferenceDataID?: string };
     };
-    BenefitEligibilityNextYearStatus: {
-      StatusCode: { ReferenceDataID: string };
+    BenefitEligibilityNextYearStatus?: {
+      StatusCode?: { ReferenceDataID?: string };
     };
     BenefitApplicationYearIdentification: {
       IdentificationID: string;

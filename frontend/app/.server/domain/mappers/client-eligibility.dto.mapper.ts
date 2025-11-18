@@ -31,13 +31,18 @@ export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMa
       firstName: Result.from(applicant.PersonName.at(0)?.PersonGivenName.at(0)).expect('First name not found'),
       lastName: Result.from(applicant.PersonName.at(0)?.PersonSurName).expect('Last name not found'),
       earnings: applicant.ApplicantEarning.map((earning) => {
-        const hasEligibilityStatusCode = earning.BenefitEligibilityStatus.StatusCode.ReferenceDataID === this.serverConfig.ELIGIBLE_STATUS_CODE_ELIGIBLE;
-        const hasCopayTierCoverage = earning.Coverage.some((coverage) => coverage.CoverageCategoryCode.CoverageTierCode.ReferenceDataID === this.serverConfig.COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC);
+        const earningStatusCode = earning.BenefitEligibilityStatus.StatusCode.ReferenceDataID;
+        const earningHasEligibilityStatusCode = earningStatusCode === this.serverConfig.ELIGIBLE_STATUS_CODE_ELIGIBLE;
+        const earningHasCopayTierCoverage = earning.Coverage.some((coverage) => coverage.CoverageCategoryCode.ReferenceDataName === this.serverConfig.COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC);
         return {
+          hasCopayTierCoverage: earningHasCopayTierCoverage,
+          isEligible: earningHasEligibilityStatusCode && earningHasCopayTierCoverage,
+          statusCode: earningStatusCode,
           taxationYear: Number.parseInt(earning.EarningTaxationYear.YearDate),
-          isEligible: hasEligibilityStatusCode && hasCopayTierCoverage,
         };
       }),
+      statusCode: applicant.BenefitEligibilityStatus?.StatusCode?.ReferenceDataID,
+      statusCodeNextYear: applicant.BenefitEligibilityNextYearStatus?.StatusCode?.ReferenceDataID,
     };
   }
 
