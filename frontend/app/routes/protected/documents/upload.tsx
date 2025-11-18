@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('doc-upload');
   await securityHandler.validateAuthSession({ request, session });
-  const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
+  const clientApplication = await securityHandler.requireClientApplication({ params, request, session, options: { redirectUrl: getPathById('protected/documents/not-required', params) } });
 
   const locale = getLocale(request);
 
@@ -166,6 +166,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
+  const clientApplication = await securityHandler.requireClientApplication({ params, request, session, options: { redirectUrl: getPathById('protected/documents/not-required', params) } });
   securityHandler.validateCsrfToken({ formData, session });
 
   const locale = getLocale(request);
@@ -343,7 +344,6 @@ export async function action({ context: { appContainer, session }, params, reque
     return { errors: uploadErrors };
   }
 
-  const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
   const documentUploadReasons = await appContainer.get(TYPES.DocumentUploadReasonService).listDocumentUploadReasons();
 
   const uploadMetadataRequest = {

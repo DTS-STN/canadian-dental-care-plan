@@ -308,6 +308,33 @@ describe('DefaultSecurityHandler', () => {
       }
     });
 
+    // added test for the new redirectUrl option
+    it('should throw a redirect response to the custom redirectUrl if no client application is found', async () => {
+      const mockSession = mock<Session>();
+      mockSession.id = 'session-id';
+      const userInfoToken = mock<UserinfoToken>({ sin: '123456789', sub: 'user-id' });
+      mockSession.find.calledWith('userInfoToken').mockReturnValue(Some(userInfoToken));
+
+      const mockRequest = mock<Request>({ url: 'https://localhost:3000/en/protected-page' });
+      const params = { lang: 'en' };
+      const customRedirectUrl = '/en/custom-data-unavailable';
+
+      mockClientApplicationService.findClientApplicationBySin.calledWith(anyObject({ sin: '123456789', applicationYearId: '', sub: 'user-id' })).mockResolvedValueOnce(None);
+
+      try {
+        await securityHandler.requireClientApplication({
+          request: mockRequest,
+          params,
+          session: mockSession,
+          options: { redirectUrl: customRedirectUrl },
+        });
+      } catch (error) {
+        expect(error).toBeInstanceOf(Response);
+        expect((error as Response).status).toBe(302);
+        expect((error as Response).headers.get('Location')).toBe(customRedirectUrl);
+      }
+    });
+
     it('should return the client application if found', async () => {
       const mockSession = mock<Session>();
       mockSession.id = 'session-id';

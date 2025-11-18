@@ -75,6 +75,10 @@ export interface RequireClientApplicationParams {
   params: Params;
   request: Request;
   session: Session;
+  options?: {
+    /** Custom URL to redirect to instead of the default data-unavailable route */
+    redirectUrl?: string;
+  };
 }
 
 /**
@@ -290,7 +294,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
     this.log.debug('Request method [%s] is allowed for path [%s] with allowed methods [%s]', method, pathname, allowedMethods);
   }
 
-  async requireClientApplication({ applicationYearId, params, request, session }: RequireClientApplicationParams): Promise<ClientApplicationDto> {
+  async requireClientApplication({ applicationYearId, params, request, session, options }: RequireClientApplicationParams): Promise<ClientApplicationDto> {
     this.log.debug('Requiring client application for session [%s]', session.id);
     const userInfoToken = session.find('userInfoToken').unwrapUnchecked();
 
@@ -308,8 +312,9 @@ export class DefaultSecurityHandler implements SecurityHandler {
     });
 
     if (clientApplicationOption.isNone()) {
-      this.log.debug('No client application found for SIN [%s]; session [%s]; redirecting to data unavailable', userInfoToken.sin, session.id);
-      throw redirect(getPathById('protected/data-unavailable', params));
+      const redirectUrl = options?.redirectUrl ?? getPathById('protected/data-unavailable', params);
+      this.log.debug('No client application found for SIN [%s]; session [%s]; redirecting to [%s]', userInfoToken.sin, session.id, redirectUrl);
+      throw redirect(redirectUrl);
     }
 
     this.log.debug('Client application found for SIN [%s]; session [%s]', userInfoToken.sin, session.id);
