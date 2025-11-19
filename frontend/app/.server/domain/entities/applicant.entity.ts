@@ -18,13 +18,13 @@ export type ApplicantResponseEntity = ReadonlyDeep<{
       PersonBirthDate: {
         date: string;
       };
-    };
-    PersonName: Array<{
-      PersonGivenName: Array<string>;
-      PersonSurName: string;
-    }>;
-    PersonSINIdentification: {
-      IdentificationID: string;
+      PersonName: Array<{
+        PersonGivenName: Array<string>;
+        PersonSurName: string;
+      }>;
+      PersonSINIdentification: {
+        IdentificationID: string;
+      };
     };
   };
 }>;

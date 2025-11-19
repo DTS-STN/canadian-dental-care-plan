@@ -228,15 +228,15 @@ export class MockApplicantRepository implements ApplicantRepository {
           PersonBirthDate: {
             date: peronalInformationEntity.birthdate,
           },
-        },
-        PersonName: [
-          {
-            PersonGivenName: [peronalInformationEntity.firstName],
-            PersonSurName: peronalInformationEntity.lastName,
+          PersonName: [
+            {
+              PersonGivenName: [peronalInformationEntity.firstName],
+              PersonSurName: peronalInformationEntity.lastName,
+            },
+          ],
+          PersonSINIdentification: {
+            IdentificationID: peronalInformationEntity.sinIdentification,
           },
-        ],
-        PersonSINIdentification: {
-          IdentificationID: peronalInformationEntity.sinIdentification,
         },
       },
     };

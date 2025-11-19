@@ -22,13 +22,14 @@ export class DefaultApplicantDtoMapper implements ApplicantDtoMapper {
   }
 
   mapApplicantResponseEntityToApplicantDto(applicantResponseEntity: ApplicantResponseEntity): ApplicantDto {
+    const applicant = applicantResponseEntity.BenefitApplication.Applicant;
     return {
-      clientId: Result.from(applicantResponseEntity.BenefitApplication.Applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID).expect('Expected clientId to be defined'),
-      clientNumber: Result.from(applicantResponseEntity.BenefitApplication.Applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID).expect('Expected clientNumber to be defined'),
-      dateOfBirth: applicantResponseEntity.BenefitApplication.Applicant.PersonBirthDate.date,
-      firstName: Result.from(applicantResponseEntity.BenefitApplication.PersonName.at(0)?.PersonGivenName.at(0)).expect('Expected applicantResponseEntity.BenefitApplication.PersonName[0].PersonGivenName[0] to be defined'),
-      lastName: Result.from(applicantResponseEntity.BenefitApplication.PersonName.at(0)?.PersonSurName).expect('Expected applicantResponseEntity.BenefitApplication.PersonName[0].PersonSurName to be defined'),
-      socialInsuranceNumber: applicantResponseEntity.BenefitApplication.PersonSINIdentification.IdentificationID,
+      clientId: Result.from(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID).expect('Expected clientId to be defined'),
+      clientNumber: Result.from(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID).expect('Expected clientNumber to be defined'),
+      dateOfBirth: applicant.PersonBirthDate.date,
+      firstName: Result.from(applicant.PersonName.at(0)?.PersonGivenName.at(0)).expect('Expected applicant.PersonName[0].PersonGivenName[0] to be defined'),
+      lastName: Result.from(applicant.PersonName.at(0)?.PersonSurName).expect('Expected applicant.PersonName[0].PersonSurName to be defined'),
+      socialInsuranceNumber: applicant.PersonSINIdentification.IdentificationID,
     };
   }
 }
