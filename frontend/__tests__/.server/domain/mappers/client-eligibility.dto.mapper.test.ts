@@ -9,7 +9,7 @@ describe('DefaultClientEligibilityDtoMapper', () => {
 
   beforeEach(() => {
     const serverConfig = {
-      COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: 'coverage-001',
+      COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: 'Co-Pay Tier (TPC)',
       ELIGIBLE_STATUS_CODE_ELIGIBLE: 'status-001',
       ELIGIBLE_STATUS_CODE_INELIGIBLE: 'status-002',
     };
@@ -84,12 +84,12 @@ describe('DefaultClientEligibilityDtoMapper', () => {
           },
           BenefitEligibilityStatus: {
             StatusCode: {
-              ReferenceDataID: 'benefit-eligibility-status-001',
+              ReferenceDataID: 'status-001',
             },
           },
           BenefitEligibilityNextYearStatus: {
             StatusCode: {
-              ReferenceDataID: 'benefit-eligibility-next-year-status-001',
+              ReferenceDataID: 'status-001',
             },
           },
           BenefitApplicationYearIdentification: {
@@ -104,12 +104,24 @@ describe('DefaultClientEligibilityDtoMapper', () => {
       expect(result).toEqual({
         clientId: '12345',
         clientNumber: '67890',
+        earnings: [
+          {
+            hasCopayTierCoverage: true,
+            isEligible: true,
+            statusCode: 'status-001',
+            taxationYear: 2022,
+          },
+          {
+            hasCopayTierCoverage: false,
+            isEligible: false,
+            statusCode: 'status-002',
+            taxationYear: 2023,
+          },
+        ],
         firstName: 'John',
         lastName: 'Doe',
-        earnings: [
-          { taxationYear: 2022, isEligible: true },
-          { taxationYear: 2023, isEligible: false },
-        ],
+        statusCode: 'status-001',
+        statusCodeNextYear: 'status-001',
       });
     });
   });

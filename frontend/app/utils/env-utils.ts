@@ -88,7 +88,7 @@ export const clientEnvSchema = z.object({
   ELIGIBLE_STATUS_CODE_INELIGIBLE: z.string().trim().min(1).default('775170001'),
 
   // Coverage Category Code
-  COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: z.string().trim().min(1).default('5984caeb-311c-ee11-8f6d-000d3a09d1b8'),
+  COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: z.string().trim().min(1).default('Co-Pay Tier (TPC)'),
 });
 
 export type ClientEnv = ReadonlyDeep<z.infer<typeof clientEnvSchema>>;

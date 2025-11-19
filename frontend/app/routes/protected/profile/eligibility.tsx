@@ -12,6 +12,7 @@ import { ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
+import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -40,21 +41,29 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const eligibilityMap = new Map(clientEligibilityResponse.map((eligibility) => [eligibility.clientNumber, eligibility]));
 
+  const primaryApplicantEligibility = eligibilityMap.get(clientApplication.applicantInformation.clientNumber);
   const primaryApplicant = {
     clientId: clientApplication.applicantInformation.clientId,
     clientNumber: clientApplication.applicantInformation.clientNumber,
     firstName: clientApplication.applicantInformation.firstName,
     lastName: clientApplication.applicantInformation.lastName,
-    earnings: clientApplication.applicantInformation.clientNumber ? (eligibilityMap.get(clientApplication.applicantInformation.clientNumber)?.earnings ?? []) : [],
+    earnings: primaryApplicantEligibility?.earnings ?? [],
+    statusCode: primaryApplicantEligibility?.statusCode,
+    statusCodeNextYear: primaryApplicantEligibility?.statusCodeNextYear,
   };
 
-  const children = clientApplication.children.map((child) => ({
-    clientId: child.information.clientId,
-    clientNumber: child.information.clientNumber,
-    firstName: child.information.firstName,
-    lastName: child.information.lastName,
-    earnings: child.information.clientNumber ? (eligibilityMap.get(child.information.clientNumber)?.earnings ?? []) : [],
-  }));
+  const children = clientApplication.children.map((child) => {
+    const childEligibility = eligibilityMap.get(child.information.clientNumber);
+    return {
+      clientId: child.information.clientId,
+      clientNumber: child.information.clientNumber,
+      firstName: child.information.firstName,
+      lastName: child.information.lastName,
+      earnings: childEligibility?.earnings ?? [],
+      statusCode: childEligibility?.statusCode,
+      statusCodeNextYear: childEligibility?.statusCodeNextYear,
+    };
+  });
 
   const applicants = [primaryApplicant, ...children];
 
@@ -78,6 +87,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export default function ProtectedProfileEligibility({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { applicants, SCCH_BASE_URI, currentCoverage } = loaderData;
+  const { ELIGIBLE_STATUS_CODE_ELIGIBLE } = useClientEnv();
 
   return (
     <div className="max-w-prose space-y-10">
@@ -87,7 +97,7 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
         <p>{t('protected-profile:eligibility.current-year-details', { end: currentCoverage.endYear })}</p>
         <dl className="divide-y border-y">
           {applicants.map((applicant) => {
-            const eligibilityStatus = getEligibilityStatus(applicant.earnings, currentCoverage.taxationYear);
+            const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear: currentCoverage.taxationYear, isNextYear: false, ELIGIBLE_STATUS_CODE_ELIGIBLE });
             return (
               <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
                 <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={currentCoverage.startYear} coverageEndYear={currentCoverage.endYear} />
@@ -105,7 +115,7 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
             const taxationYear = currentCoverage.taxationYear + 1;
             const coverageStartYear = currentCoverage.startYear + 1;
             const coverageEndYear = currentCoverage.endYear + 1;
-            const eligibilityStatus = getEligibilityStatus(applicant.earnings, taxationYear);
+            const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear, isNextYear: true, ELIGIBLE_STATUS_CODE_ELIGIBLE });
             return (
               <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
                 <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={coverageStartYear} coverageEndYear={coverageEndYear} showApplyLink={true} />
@@ -128,9 +138,23 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
 }
 
 type EligibilityStatus = 'eligible' | 'not-eligible' | 'not-enrolled';
+interface GetEligibilityStatusParams {
+  applicant: Route.ComponentProps['loaderData']['applicants'][number];
+  taxationYear: number;
+  isNextYear: boolean;
+  ELIGIBLE_STATUS_CODE_ELIGIBLE: string;
+}
 
-function getEligibilityStatus(earnings: Route.ComponentProps['loaderData']['applicants'][number]['earnings'], taxationYear: number): EligibilityStatus {
-  const earning = earnings.find((earning) => earning.taxationYear === taxationYear);
+function getEligibilityStatus({ applicant, taxationYear, isNextYear, ELIGIBLE_STATUS_CODE_ELIGIBLE }: GetEligibilityStatusParams): EligibilityStatus {
+  const statusCode = isNextYear ? applicant.statusCodeNextYear : applicant.statusCode;
+
+  // Applicant profile eligibility status codes take precedence over earnings
+  if (statusCode) {
+    return statusCode === ELIGIBLE_STATUS_CODE_ELIGIBLE ? 'eligible' : 'not-eligible';
+  }
+
+  // Fallback to earnings if no status code is present
+  const earning = applicant.earnings.find((earning) => earning.taxationYear === taxationYear);
   if (!earning) return 'not-enrolled';
   return earning.isEligible ? 'eligible' : 'not-eligible';
 }
