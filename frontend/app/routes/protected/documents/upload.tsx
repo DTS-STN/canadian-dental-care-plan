@@ -120,6 +120,7 @@ export async function clientAction({ request, serverAction }: Route.ClientAction
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  securityHandler.validateFeatureEnabled('doc-upload');
   await securityHandler.validateAuthSession({ request, session });
 
   const formData = await request.formData();
