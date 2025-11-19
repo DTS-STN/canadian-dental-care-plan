@@ -76,7 +76,7 @@
     "react-number-format": "^5.4.4",
     "react-phone-number-input": "^3.4.14",
     "react-router": "^7.9.6",
-    "redis": "^5.9.0",
+    "redis": "^5.10.0",
     "reflect-metadata": "^0.2.2",
     "sanitize-filename-ts": "^1.0.2",
     "source-map-support": "^0.5.21",
