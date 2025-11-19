@@ -9,8 +9,9 @@ import { z } from 'zod';
 
 import type { Route } from './+types/upload';
 
+import type { AppContainerProvider } from '~/.server/app-container.provider';
 import { TYPES } from '~/.server/constants';
-import type { DocumentScanRequestDto, DocumentUploadRequestDto } from '~/.server/domain/dtos';
+import type { DocumentUploadService } from '~/.server/domain/services';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -18,6 +19,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import type { ErrorFieldMap } from '~/components/error-summary';
 import { useErrorSummary } from '~/components/error-summary';
 import { FileUpload, FileUploadItem, FileUploadItemDelete, FileUploadList, FileUploadTrigger } from '~/components/file-upload';
+import { InputError } from '~/components/input-error';
 import { InputLegend } from '~/components/input-legend';
 import type { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
@@ -28,11 +30,31 @@ import { getClientEnv } from '~/utils/env-utils';
 import { getFileExtension, getMimeType } from '~/utils/file.utils';
 import { getLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
-import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { randomHexString } from '~/utils/string-utils';
 import { megabytesToBytes } from '~/utils/units.utils';
+
+type UploadErrors = {
+  applicant?: string;
+  files?: string;
+  fileItems?: Record<number, { file?: string; documentType?: string }>;
+};
+
+type ParsedUploadData = {
+  applicant: string;
+  files: { file: File; documentType: string }[];
+};
+
+type CreateDocumentUploadSchemaArgs = {
+  t: TFunction<typeof handle.i18nNamespaces>;
+  validFileExtensions: ReadonlyArray<string>;
+  maxFileSizeInMB: number;
+  maxFileCount: number;
+};
+
+type FileWithDocumentType = { id: string; file: File; documentType: string };
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'documents:index.page-title', routeId: 'protected/documents/index' }],
@@ -47,45 +69,214 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('doc-upload');
   await securityHandler.validateAuthSession({ request, session });
-  const clientApplication = await securityHandler.requireClientApplication({ params, request, session, options: { redirectUrl: getPathById('protected/documents/not-required', params) } });
+
+  const clientApplication = await securityHandler.requireClientApplication({
+    params,
+    request,
+    session,
+    options: { redirectUrl: getPathById('protected/documents/not-required', params) },
+  });
 
   const locale = getLocale(request);
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
   const applicantNames = [`${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`, ...clientApplication.children.map((c) => `${c.information.firstName} ${c.information.lastName}`)].map((name) =>
     name.trim(),
   );
 
-  const evidentiaryDocumentTypeService = appContainer.get(TYPES.EvidentiaryDocumentTypeService);
-  const localizedEvidentiaryDocumentTypes = await evidentiaryDocumentTypeService.listLocalizedEvidentiaryDocumentTypes(locale);
+  const documentTypes = await appContainer.get(TYPES.EvidentiaryDocumentTypeService).listLocalizedEvidentiaryDocumentTypes(locale);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('documents:upload.page-title') }) };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
-
   const idToken: IdToken = session.get('idToken');
+
   appContainer.get(TYPES.AuditService).createAudit('page-view.documents-upload', { userId: idToken.sub });
 
   return {
-    meta,
+    meta: { title: t('gcweb:meta.title.msca-template', { title: t('documents:upload.page-title') }) },
     applicantNames,
-    documentTypes: localizedEvidentiaryDocumentTypes,
+    documentTypes,
     SCCH_BASE_URI,
   };
 }
 
-type CreateDocumentUploadSchemaArgs = {
-  t: TFunction<typeof handle.i18nNamespaces>;
-  validFileExtensions: ReadonlyArray<string>;
-  maxFileSizeInMB: number;
-  maxFileCount: number;
-};
+export async function clientAction({ request, serverAction }: Route.ClientActionArgs) {
+  const formData = await request.clone().formData();
+  const locale = getLanguage(request);
+  const t = getI18n().getFixedT(locale, handle.i18nNamespaces);
+  const env = getClientEnv();
+
+  const validationResult = validateUploadForm(formData, t, {
+    allowedExtensions: env.DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS,
+    maxSizeMB: env.DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB,
+    maxCount: env.DOCUMENT_UPLOAD_MAX_FILE_COUNT,
+  });
+
+  if (!validationResult.success) {
+    return { errors: validationResult.errors };
+  }
+
+  return await serverAction();
+}
+
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+
+  const formData = await request.formData();
+  securityHandler.validateCsrfToken({ formData, session });
+
+  const clientApplication = await securityHandler.requireClientApplication({
+    params,
+    request,
+    session,
+    options: { redirectUrl: getPathById('protected/documents/not-required', params) },
+  });
+
+  const locale = getLocale(request);
+  const t = await getFixedT(locale, handle.i18nNamespaces);
+  const config = appContainer.get(TYPES.ClientConfig);
+  const idToken: IdToken = session.get('idToken');
+
+  const validationResult = validateUploadForm(formData, t, {
+    allowedExtensions: config.DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS,
+    maxSizeMB: config.DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB,
+    maxCount: config.DOCUMENT_UPLOAD_MAX_FILE_COUNT,
+  });
+
+  if (!validationResult.success) {
+    return { errors: validationResult.errors };
+  }
+
+  const { files } = validationResult.data;
+  const uploadService = appContainer.get(TYPES.DocumentUploadService);
+
+  const scanResult = await scanDocuments(files, idToken.sub, uploadService, t);
+  if (!scanResult.success) {
+    return { errors: scanResult.errors };
+  }
+
+  const uploadResult = await uploadDocuments(files, idToken.sub, uploadService, t);
+  if (!uploadResult.success) {
+    return { errors: uploadResult.errors };
+  }
+
+  await createMetadata(files, clientApplication.applicantInformation.clientId, idToken.sub, appContainer);
+
+  return redirect(getPathById('protected/documents/index', params));
+}
+
+function validateUploadForm(
+  formData: FormData,
+  t: TFunction<typeof handle.i18nNamespaces>,
+  config: { allowedExtensions: readonly string[]; maxSizeMB: number; maxCount: number },
+): { success: true; data: ParsedUploadData } | { success: false; errors: UploadErrors } {
+  const rawFiles = formData.getAll('files') as File[];
+  const documentTypes = formData.getAll('documentTypes') as string[];
+
+  const filesWithTypes = rawFiles.map((file, index) => ({
+    file,
+    documentType: documentTypes[index] ?? '',
+  }));
+
+  const schema = createDocumentUploadSchema({
+    t,
+    validFileExtensions: config.allowedExtensions,
+    maxFileSizeInMB: config.maxSizeMB,
+    maxFileCount: config.maxCount,
+  });
+
+  const result = schema.safeParse({
+    applicant: formData.get('applicant'),
+    files: filesWithTypes,
+  });
+
+  if (!result.success) {
+    return { success: false, errors: mapZodErrors(result.error) };
+  }
+
+  return { success: true, data: result.data as ParsedUploadData };
+}
+
+async function scanDocuments(files: ParsedUploadData['files'], userId: string, service: DocumentUploadService, t: TFunction<typeof handle.i18nNamespaces>): Promise<{ success: boolean; errors?: UploadErrors }> {
+  const promises = files.map(async ({ file }, index) => {
+    try {
+      const binary = Buffer.from(await file.arrayBuffer()).toString('base64');
+      const response = await service.scanDocument({ fileName: file.name, binary, userId });
+
+      if (response.Error) {
+        return { index, error: t('documents:upload.error-message.scan-failed', { error: response.Error.ErrorMessage }) };
+      }
+      if (response.Percent !== '100') {
+        return { index, error: t('documents:upload.error-message.scan-incomplete') };
+      }
+      return { index, success: true };
+    } catch {
+      return { index, error: t('documents:upload.error-message.scan-error') };
+    }
+  });
+
+  const results = await Promise.all(promises);
+  return processBatchResults(results);
+}
+
+async function uploadDocuments(files: ParsedUploadData['files'], userId: string, service: DocumentUploadService, t: TFunction<typeof handle.i18nNamespaces>): Promise<{ success: boolean; errors?: UploadErrors }> {
+  const promises = files.map(async ({ file }, index) => {
+    try {
+      const binary = Buffer.from(await file.arrayBuffer()).toString('base64');
+      const response = await service.uploadDocument({ fileName: file.name, binary, userId });
+
+      if (response.Error) {
+        return { index, error: t('documents:upload.error-message.upload-failed', { error: response.Error.ErrorMessage }) };
+      }
+      return { index, success: true };
+    } catch {
+      return { index, error: t('documents:upload.error-message.upload-error') };
+    }
+  });
+
+  const results = await Promise.all(promises);
+  return processBatchResults(results);
+}
+
+function processBatchResults(results: { index: number; error?: string }[]): { success: boolean; errors?: UploadErrors } {
+  const failures = results.filter((r) => r.error);
+  if (failures.length === 0) return { success: true };
+
+  const errors: UploadErrors = { fileItems: {} };
+  for (const { index, error } of failures) {
+    if (errors.fileItems) errors.fileItems[index] = { file: error };
+  }
+  return { success: false, errors };
+}
+
+async function createMetadata(files: ParsedUploadData['files'], clientId: string, userId: string, appContainer: AppContainerProvider) {
+  const reasons = await appContainer.get(TYPES.DocumentUploadReasonService).listDocumentUploadReasons();
+  const reasonId = reasons[0].id;
+  const recordSource = Number(appContainer.get(TYPES.ServerConfig).EWDU_RECORD_SOURCE_MSCA);
+
+  const request = {
+    clientID: clientId,
+    userId: userId,
+    simulate: true,
+    debug: true,
+    documents: files.map(({ file, documentType }) => ({
+      fileName: file.name,
+      documentTypeId: documentType,
+      documentUploadReasonId: reasonId,
+      recordSource,
+      uploadDate: new Date().toISOString(),
+    })),
+  };
+
+  await appContainer.get(TYPES.EvidentiaryDocumentService).createEvidentiaryDocumentMetadata(request);
+}
 
 function createDocumentUploadSchema({ t, validFileExtensions, maxFileSizeInMB, maxFileCount }: CreateDocumentUploadSchemaArgs) {
   const MAX_FILE_SIZE = megabytesToBytes(maxFileSizeInMB);
   const ALLOWED_EXTENSIONS = new Set(validFileExtensions);
   const ALLOWED_MIME_TYPES = validFileExtensions.map(getMimeType);
 
-  const fileWithDocumentTypeSchema = z.object({
+  const fileSchema = z.object({
     file: z
       .file(t('documents:upload.error-message.file-required'))
       .max(MAX_FILE_SIZE, t('documents:upload.error-message.file-too-large'))
@@ -95,305 +286,89 @@ function createDocumentUploadSchema({ t, validFileExtensions, maxFileSizeInMB, m
   });
 
   return z.object({
-    applicant: z.string().min(1, t('documents:upload.error-message.applicant-required')),
-    files: z.array(fileWithDocumentTypeSchema).min(1, t('documents:upload.error-message.file-required')).max(maxFileCount, t('documents:upload.error-message.too-many-files')),
+    applicant: z.string(t('documents:upload.error-message.applicant-required')).trim().min(1, t('documents:upload.error-message.applicant-required')),
+    files: z.array(fileSchema).min(1, t('documents:upload.error-message.file-required')).max(maxFileCount, t('documents:upload.error-message.too-many-files')),
   });
 }
 
-type UploadErrors = {
-  applicant?: string;
-  files?: string;
-  fileItems?: {
-    [key: number]: {
-      file?: string;
-      documentType?: string;
-    };
-  };
-};
-
-export async function clientAction({ request, serverAction }: Route.ClientActionArgs) {
-  const formData = await request.clone().formData();
-
-  const locale = getLanguage(request);
-  const t = getI18n().getFixedT(locale, handle.i18nNamespaces);
-
-  const applicant = formData.get('applicant') as string;
-  const files = formData.getAll('files') as File[];
-  const documentTypes = formData.getAll('documentTypes') as string[];
-
-  const filesWithTypes = files.map((file, index) => ({
-    file: file,
-    documentType: documentTypes[index] ?? '',
-  }));
-
-  const formDataObj = {
-    applicant: applicant,
-    files: filesWithTypes,
-  };
-
-  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB, DOCUMENT_UPLOAD_MAX_FILE_COUNT } = getClientEnv();
-  const parsedDataResult = createDocumentUploadSchema({
-    t,
-    validFileExtensions: DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS,
-    maxFileSizeInMB: DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB,
-    maxFileCount: DOCUMENT_UPLOAD_MAX_FILE_COUNT,
-  }).safeParse(formDataObj);
-
-  if (!parsedDataResult.success) {
-    const errors: UploadErrors = {};
-    for (const { message, path } of parsedDataResult.error.issues) {
-      if (path[0] === 'applicant') {
-        errors.applicant = message;
-      } else if (path[0] === 'files') {
-        if (path.length === 1) {
-          errors.files = message;
-        } else {
-          const index = path[1] as number;
-          const field = path[2] as 'file' | 'documentType';
-          errors.fileItems ??= {};
-          errors.fileItems[index] ??= {};
-          errors.fileItems[index][field] = message;
-        }
+function mapZodErrors(zodError: z.ZodError): UploadErrors {
+  const errors: UploadErrors = {};
+  for (const issue of zodError.issues) {
+    const { message, path } = issue;
+    if (path[0] === 'applicant') {
+      errors.applicant = message;
+    } else if (path[0] === 'files') {
+      if (path.length === 1) {
+        errors.files = message;
+      } else {
+        const index = path[1] as number;
+        const field = path[2] as 'file' | 'documentType';
+        errors.fileItems ??= {};
+        errors.fileItems[index] ??= {};
+        errors.fileItems[index][field] = message;
       }
     }
-    return { errors };
   }
-
-  return await serverAction();
-}
-
-export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const formData = await request.formData();
-  const securityHandler = appContainer.get(TYPES.SecurityHandler);
-  await securityHandler.validateAuthSession({ request, session });
-  const clientApplication = await securityHandler.requireClientApplication({ params, request, session, options: { redirectUrl: getPathById('protected/documents/not-required', params) } });
-  securityHandler.validateCsrfToken({ formData, session });
-
-  const locale = getLocale(request);
-  const t = await getFixedT(locale, handle.i18nNamespaces);
-
-  const applicant = formData.get('applicant') as string;
-  const files = formData.getAll('files') as File[];
-  const documentTypes = formData.getAll('documentTypes') as string[];
-
-  const filesWithTypes = files.map((file, index) => ({
-    file: file,
-    documentType: documentTypes[index] ?? '',
-  }));
-
-  const formDataObj = {
-    applicant: applicant,
-    files: filesWithTypes,
-  };
-
-  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB, DOCUMENT_UPLOAD_MAX_FILE_COUNT } = appContainer.get(TYPES.ClientConfig);
-  const parsedDataResult = createDocumentUploadSchema({
-    t,
-    validFileExtensions: DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS,
-    maxFileSizeInMB: DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB,
-    maxFileCount: DOCUMENT_UPLOAD_MAX_FILE_COUNT,
-  }).safeParse(formDataObj);
-
-  if (!parsedDataResult.success) {
-    const errors: UploadErrors = {};
-    for (const { message, path } of parsedDataResult.error.issues) {
-      if (path[0] === 'applicant') {
-        errors.applicant = message;
-      } else if (path[0] === 'files') {
-        if (path.length === 1) {
-          errors.files = message;
-        } else {
-          const index = path[1] as number;
-          const field = path[2] as 'file' | 'documentType';
-          errors.fileItems ??= {};
-          errors.fileItems[index] ??= {};
-          errors.fileItems[index][field] = message;
-        }
-      }
-    }
-    return { errors };
-  }
-
-  const documentUploadService = appContainer.get(TYPES.DocumentUploadService);
-  const idToken: IdToken = session.get('idToken');
-
-  // document scan
-  const scanPromises = files.map(async (file, index) => {
-    try {
-      const arrayBuffer = await file.arrayBuffer();
-      const binary = Buffer.from(arrayBuffer).toString('base64');
-
-      const scanRequest: DocumentScanRequestDto = {
-        fileName: file.name,
-        binary: binary,
-        userId: idToken.sub,
-      };
-
-      const scanResponse = await documentUploadService.scanDocument(scanRequest);
-
-      if (scanResponse.Error) {
-        return {
-          index,
-          fileName: file.name,
-          success: false,
-          error: t('documents:upload.error-message.scan-failed', {
-            error: scanResponse.Error.ErrorMessage,
-            code: scanResponse.Error.ErrorCode,
-          }),
-        };
-      }
-
-      if (scanResponse.Percent !== '100') {
-        return {
-          index,
-          fileName: file.name,
-          success: false,
-          error: t('documents:upload.error-message.scan-incomplete'),
-        };
-      }
-
-      return {
-        index,
-        fileName: file.name,
-        success: true,
-        error: undefined,
-      };
-    } catch {
-      return {
-        index,
-        fileName: file.name,
-        success: false,
-        error: t('documents:upload.error-message.scan-error'),
-      };
-    }
-  });
-
-  const scanResults = await Promise.all(scanPromises);
-  const failedScans = scanResults.filter((result) => !result.success);
-
-  if (failedScans.length > 0) {
-    const scanErrors: UploadErrors = {};
-    for (const { index, error } of failedScans) {
-      if (error) {
-        scanErrors.fileItems ??= {};
-        scanErrors.fileItems[index] = {
-          file: error,
-        };
-      }
-    }
-
-    return { errors: scanErrors };
-  }
-
-  // document upload
-  const uploadPromises = files.map(async (file, index) => {
-    try {
-      const arrayBuffer = await file.arrayBuffer();
-      const binary = Buffer.from(arrayBuffer).toString('base64');
-
-      const uploadRequest: DocumentUploadRequestDto = {
-        fileName: file.name,
-        binary: binary,
-        userId: idToken.sub,
-      };
-
-      const uploadResponse = await documentUploadService.uploadDocument(uploadRequest);
-
-      let error: string | undefined;
-
-      if (uploadResponse.Error) {
-        error = t('documents:upload.error-message.upload-failed', {
-          error: uploadResponse.Error.ErrorMessage,
-          code: uploadResponse.Error.ErrorCode,
-        });
-      }
-
-      return {
-        index,
-        fileName: file.name,
-        success: !uploadResponse.Error,
-        error,
-        documentFileName: uploadResponse.DocumentFileName,
-      };
-    } catch {
-      return {
-        index,
-        fileName: file.name,
-        success: false,
-        error: t('documents:upload.error-message.upload-error'),
-        documentFileName: null,
-      };
-    }
-  });
-
-  const uploadResults = await Promise.all(uploadPromises);
-  const failedUploads = uploadResults.filter((result) => !result.success);
-
-  if (failedUploads.length > 0) {
-    const uploadErrors: UploadErrors = {};
-
-    for (const failedUpload of failedUploads) {
-      if (failedUpload.error) {
-        uploadErrors.fileItems ??= {};
-        uploadErrors.fileItems[failedUpload.index] = {
-          file: failedUpload.error,
-        };
-      }
-    }
-
-    return { errors: uploadErrors };
-  }
-
-  const documentUploadReasons = await appContainer.get(TYPES.DocumentUploadReasonService).listDocumentUploadReasons();
-
-  const uploadMetadataRequest = {
-    clientID: clientApplication.applicantInformation.clientId,
-    userId: idToken.sub,
-    simulate: true,
-    debug: true,
-    documents: parsedDataResult.data.files.map(({ file, documentType }) => ({
-      fileName: file.name,
-      documentTypeId: documentType,
-      documentUploadReasonId: documentUploadReasons[0].id,
-      recordSource: Number(appContainer.get(TYPES.ServerConfig).EWDU_RECORD_SOURCE_MSCA),
-      uploadDate: new Date().toISOString(),
-    })),
-  };
-
-  await appContainer.get(TYPES.EvidentiaryDocumentService).createEvidentiaryDocumentMetadata(uploadMetadataRequest);
-
-  return redirect(getPathById('protected/documents/index', params));
+  return errors;
 }
 
 export default function DocumentsUpload({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { applicantNames, documentTypes, SCCH_BASE_URI } = loaderData;
-  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB, DOCUMENT_UPLOAD_MAX_FILE_COUNT } = useClientEnv();
+  const env = useClientEnv();
+  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS } = env;
 
-  const fileUploadMaxSize = megabytesToBytes(DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB);
-  const fileUploadAcceptMimeTypes = [...DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS].map(getMimeType);
-  const fileUploadAccept = [...new Set([...DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, ...fileUploadAcceptMimeTypes])].join(',');
-
-  type ActionData = { errors: UploadErrors } | typeof action;
-  const fetcher = useFetcher<ActionData>();
+  const fetcher = useFetcher<{ errors: UploadErrors }>();
   const isSubmitting = fetcher.state !== 'idle';
-
-  const [filesWithTypes, setFilesWithTypes] = useState<FileWithType[]>([]);
   const errors = fetcher.data?.errors;
+
+  const [filesWithTypes, setFilesWithTypes] = useState<FileWithDocumentType[]>([]);
+
+  const handleFileChange = (newFiles: File[]) => {
+    setFilesWithTypes((currentItems) => {
+      const currentMap = new Map(currentItems.map((item) => [getFileKey(item.file), item]));
+      const newItems = [];
+
+      for (const file of newFiles) {
+        const key = getFileKey(file);
+        if (currentMap.has(key)) {
+          newItems.push(currentMap.get(key) as FileWithDocumentType);
+        } else {
+          newItems.push({ id: randomHexString(8), file, documentType: '' });
+        }
+      }
+      const uniqueItems = new Map(newItems.map((item) => [getFileKey(item.file), item]));
+      return [...uniqueItems.values()];
+    });
+  };
+
+  const getFileKey = (file: File) => `${file.name}-${file.size}-${file.lastModified}`;
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    formData.delete('files');
+    formData.delete('documentTypes');
+
+    for (const { file, documentType } of filesWithTypes) {
+      formData.append('files', file);
+      formData.append('documentTypes', documentType);
+    }
+
+    await fetcher.submit(formData, { method: 'post', encType: 'multipart/form-data' });
+  };
+
+  const applicantOptions = useMemo<InputOptionProps[]>(() => [{ children: t('documents:upload.select-one'), value: '', disabled: true, hidden: true }, ...applicantNames.map((name) => ({ children: name, value: name }))], [applicantNames, t]);
+
+  const docTypeOptions = useMemo<InputOptionProps[]>(() => [{ children: t('documents:upload.select-one'), value: '', disabled: true, hidden: true }, ...documentTypes.map((d) => ({ children: d.name, value: d.id }))], [documentTypes, t]);
 
   const errorFieldMap = useMemo<ErrorFieldMap>(
     () => ({
       applicant: 'applicant',
       files: 'file-upload',
       fileItems: {
-        file: (index: number) => {
-          const id = filesWithTypes[index]?.id;
-          return id ? `document-type-${id}` : `document-type-${index}`;
-        },
-        documentType: (index: number) => {
-          const id = filesWithTypes[index]?.id;
-          return id ? `document-type-${id}` : `document-type-${index}`;
-        },
+        file: (i) => `document-type-${filesWithTypes[i]?.id ?? i}`,
+        documentType: (i) => `document-type-${filesWithTypes[i]?.id ?? i}`,
       },
     }),
     [filesWithTypes],
@@ -401,108 +376,35 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
 
   const errorSummary = useErrorSummary(errors as Record<string, unknown>, errorFieldMap);
 
-  const applicantOptions = useMemo<InputOptionProps[]>(() => {
-    const dummyOption: InputOptionProps = { children: t('documents:upload.select-one'), value: '', disabled: true, hidden: true };
-    return [dummyOption, ...applicantNames.map((name) => ({ children: name, value: name }))];
-  }, [applicantNames, t]);
-
-  const documentTypeOptions = useMemo<InputOptionProps[]>(() => {
-    const dummyOption: InputOptionProps = { children: t('documents:upload.select-one'), value: '', disabled: true, hidden: true };
-    return [dummyOption, ...documentTypes.map(({ id, name }) => ({ children: name, value: id }))];
-  }, [documentTypes, t]);
-
-  interface FileWithType {
-    id: string;
-    file: File;
-    documentType: string;
-  }
-
-  const handleFileChange = (newFiles: File[]) => {
-    const uniqueFilesMap = new Map<string, File>();
-    for (const file of newFiles) {
-      const fileKey = `${file.name}-${file.size}-${file.lastModified}`;
-      if (!uniqueFilesMap.has(fileKey)) {
-        uniqueFilesMap.set(fileKey, file);
-      }
-    }
-    const uniqueNewFiles = [...uniqueFilesMap.values()];
-
-    setFilesWithTypes((prev) => {
-      const matchedPrevIds = new Set<string>();
-
-      const newFilesWithTypes = uniqueNewFiles.map((newFile) => {
-        const existingEntry = prev.find((oldEntry) => !matchedPrevIds.has(oldEntry.id) && oldEntry.file.name === newFile.name && oldEntry.file.lastModified === newFile.lastModified && oldEntry.file.size === newFile.size);
-
-        if (existingEntry) {
-          matchedPrevIds.add(existingEntry.id);
-          return {
-            id: existingEntry.id,
-            file: newFile,
-            documentType: existingEntry.documentType,
-          };
-        }
-
-        return {
-          id: randomHexString(8),
-          file: newFile,
-          documentType: '',
-        };
-      });
-
-      return newFilesWithTypes;
-    });
-  };
-
-  const handleDocumentTypeChange = (id: string, value: string) => {
-    setFilesWithTypes((prev) => {
-      return prev.map((item) => (item.id === id ? { ...item, documentType: value } : item));
-    });
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const formData = new FormData();
-
-    formData.append('_csrf', (event.currentTarget.elements.namedItem('_csrf') as HTMLSelectElement).value);
-    formData.append('applicant', (event.currentTarget.elements.namedItem('applicant') as HTMLSelectElement).value);
-
-    for (const { file, documentType } of filesWithTypes) {
-      formData.append('files', file);
-      formData.append('documentTypes', documentType);
-    }
-
-    await fetcher.submit(formData, {
-      method: 'post',
-      encType: 'multipart/form-data',
-    });
-  };
-
   return (
     <div className="max-w-prose space-y-8">
       <errorSummary.ErrorSummary />
+
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
         <CsrfTokenInput />
+
         <div className="space-y-6">
           <InputSelect id="applicant" name="applicant" label={t('documents:upload.who-are-you-uploading-for')} required className="w-full" options={applicantOptions} defaultValue="" errorMessage={errors?.applicant} />
+
           <fieldset>
             <InputLegend className="mb-2">{t('documents:upload.upload-document')}</InputLegend>
             <p>{t('documents:upload.ten-files')}</p>
             <p className="mb-2">{t('documents:upload.max-size', { extensions: [...DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS].join(', ') })}</p>
 
-            {errors?.files && <p className="mb-2 text-sm text-red-700">{errors.files}</p>}
+            {errors?.files && (
+              <InputError id="files-error" className="mb-2">
+                {errors.files}
+              </InputError>
+            )}
 
             <FileUpload
               id="file-upload"
               onValueChange={handleFileChange}
               multiple={false}
-              maxFiles={DOCUMENT_UPLOAD_MAX_FILE_COUNT}
-              maxSize={fileUploadMaxSize}
-              accept={fileUploadAccept}
+              maxFiles={env.DOCUMENT_UPLOAD_MAX_FILE_COUNT}
+              maxSize={megabytesToBytes(env.DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB)}
+              accept={[...new Set([...DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, ...DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.map(getMimeType)])].join(',')}
               className="gap-4 sm:gap-6"
-              onFileReject={(file, message) => {
-                console.warn(`File rejected: ${file.name}, reason: ${message}`);
-              }}
             >
               <div>
                 <FileUploadTrigger asChild>
@@ -511,10 +413,10 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                   </Button>
                 </FileUploadTrigger>
               </div>
+
               <FileUploadList className="gap-4 sm:gap-6">
                 {filesWithTypes.map(({ id, file, documentType }, index) => (
                   <FileUploadItem key={id} value={file} className="flex-col items-stretch gap-3 sm:gap-4">
-                    <input type="hidden" name={`file-${index}`} value={file.name} />
                     <dl className="space-y-3 sm:space-y-4">
                       <div className="space-y-2">
                         <dt className="font-semibold">{t('documents:upload.file-name')}</dt>
@@ -522,22 +424,20 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                       </div>
                     </dl>
 
-                    {errors?.fileItems?.[index]?.file && <p className="mb-2 text-sm text-red-700">{errors.fileItems[index].file}</p>}
-
                     <InputSelect
                       id={`document-type-${id}`}
                       name={`document-type-${index}`}
                       label={t('documents:upload.document-type')}
                       required
                       className="w-full"
-                      options={documentTypeOptions}
+                      options={docTypeOptions}
                       value={documentType}
                       onChange={(e) => {
-                        e.preventDefault();
-                        handleDocumentTypeChange(id, e.target.value);
+                        setFilesWithTypes((prev) => prev.map((p) => (p.id === id ? { ...p, documentType: e.target.value } : p)));
                       }}
                       errorMessage={errors?.fileItems?.[index]?.documentType}
                     />
+
                     <div className="mt-2">
                       <FileUploadItemDelete asChild>
                         <Button variant="secondary" size="sm" endIcon={faTimes}>
@@ -551,6 +451,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
             </FileUpload>
           </fieldset>
         </div>
+
         <div className="mt-8">
           <LoadingButton id="submit-button" variant="primary" type="submit" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Submit - Upload my documents click">
             {t('documents:upload.submit')}
