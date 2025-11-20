@@ -17,6 +17,9 @@ import {
   DefaultCountryRepository,
   DefaultDemographicSurveyRepository,
   DefaultDocumentUploadReasonRepository,
+  DefaultDocumentUploadRepository,
+  DefaultEvidentiaryDocumentRepository,
+  DefaultEvidentiaryDocumentTypeRepository,
   DefaultGovernmentInsurancePlanRepository,
   DefaultLetterRepository,
   DefaultLetterTypeRepository,
@@ -109,14 +112,17 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
 
     options.bind(TYPES.DemographicSurveyRepository).to(DefaultDemographicSurveyRepository);
 
-    options.bind(TYPES.DocumentUploadRepository).to(MockDocumentUploadRepository);
+    options.bind(TYPES.DocumentUploadRepository).to(DefaultDocumentUploadRepository).when(isMockEnabled(serverConfig, 'document-upload', false));
+    options.bind(TYPES.DocumentUploadRepository).to(MockDocumentUploadRepository).when(isMockEnabled(serverConfig, 'document-upload', true));
 
     options.bind(TYPES.DocumentUploadReasonRepository).to(DefaultDocumentUploadReasonRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
     options.bind(TYPES.DocumentUploadReasonRepository).to(MockDocumentUploadReasonRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
 
-    options.bind(TYPES.EvidentiaryDocumentRepository).to(MockEvidentiaryDocumentRepository);
+    options.bind(TYPES.EvidentiaryDocumentRepository).to(DefaultEvidentiaryDocumentRepository).when(isMockEnabled(serverConfig, 'document-upload', false));
+    options.bind(TYPES.EvidentiaryDocumentRepository).to(MockEvidentiaryDocumentRepository).when(isMockEnabled(serverConfig, 'document-upload', true));
 
-    options.bind(TYPES.EvidentiaryDocumentTypeRepository).to(MockEvidentiaryDocumentTypeRepository);
+    options.bind(TYPES.EvidentiaryDocumentTypeRepository).to(DefaultEvidentiaryDocumentTypeRepository).when(isMockEnabled(serverConfig, 'document-upload', false));
+    options.bind(TYPES.EvidentiaryDocumentTypeRepository).to(MockEvidentiaryDocumentTypeRepository).when(isMockEnabled(serverConfig, 'document-upload', true));
 
     options.bind(TYPES.GovernmentInsurancePlanRepository).to(DefaultGovernmentInsurancePlanRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
     options.bind(TYPES.GovernmentInsurancePlanRepository).to(MockGovernmentInsurancePlanRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
