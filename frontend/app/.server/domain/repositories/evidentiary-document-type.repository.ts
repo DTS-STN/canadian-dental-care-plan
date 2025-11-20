@@ -64,7 +64,7 @@ export class DefaultEvidentiaryDocumentTypeRepository implements EvidentiaryDocu
 
     const url = new URL(`${this.baseUrl}/esdc_evidentiarydocumenttypes`);
     url.searchParams.set('$select', 'esdc_value,esdc_nameenglish,esdc_namefrench');
-    url.searchParams.set('$filter', 'esdc_displayonportal eq 1 and statecode eq 0');
+    url.searchParams.set('$filter', 'statecode eq 0');
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.evidentiary-document-types.gets', url, {
       method: 'GET',
       headers: {
