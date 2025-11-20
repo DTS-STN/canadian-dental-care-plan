@@ -3,6 +3,7 @@ export type EvidentiaryDocumentTypeResponseEntity = Readonly<{
 }>;
 
 export type EvidentiaryDocumentTypeEntity = Readonly<{
+  esdc_evidentiarydocumenttypeid: string;
   esdc_value: string;
   esdc_nameenglish: string;
   esdc_namefrench: string;

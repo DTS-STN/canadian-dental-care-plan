@@ -25,10 +25,12 @@ export class DefaultEvidentiaryDocumentTypeDtoMapper implements EvidentiaryDocum
   }
 
   mapEvidentiaryDocumentTypeEntityToEvidentiaryDocumentTypeDto(evidentiaryDocumentTypeEntity: EvidentiaryDocumentTypeEntity): EvidentiaryDocumentTypeDto {
-    const id = evidentiaryDocumentTypeEntity.esdc_value;
-    const nameEn = evidentiaryDocumentTypeEntity.esdc_nameenglish;
-    const nameFr = evidentiaryDocumentTypeEntity.esdc_namefrench;
-    return { id, nameEn, nameFr };
+    return {
+      id: evidentiaryDocumentTypeEntity.esdc_evidentiarydocumenttypeid,
+      code: evidentiaryDocumentTypeEntity.esdc_value,
+      nameEn: evidentiaryDocumentTypeEntity.esdc_nameenglish,
+      nameFr: evidentiaryDocumentTypeEntity.esdc_namefrench,
+    };
   }
 
   mapEvidentiaryDocumentTypeEntitiesToEvidentiaryDocumentTypeDtos(EvidentiaryDocumentTypeEntities: ReadonlyArray<EvidentiaryDocumentTypeEntity>): ReadonlyArray<EvidentiaryDocumentTypeDto> {
