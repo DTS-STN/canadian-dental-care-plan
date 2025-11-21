@@ -23,7 +23,7 @@ function tryOrElseFalse(fn: () => void) {
   }
 }
 
-const validMockNames = ['cct', 'code-tables', 'document-upload', 'gc-notify', 'power-platform', 'profile', 'raoidc', 'status-check', 'verification-code', 'wsaddress'] as const;
+const validMockNames = ['cct', 'code-tables', 'document-upload', 'evidentiary-document', 'gc-notify', 'power-platform', 'profile', 'raoidc', 'status-check', 'verification-code', 'wsaddress'] as const;
 export type MockName = (typeof validMockNames)[number];
 
 // refiners
