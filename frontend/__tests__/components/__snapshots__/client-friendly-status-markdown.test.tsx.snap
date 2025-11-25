@@ -1,0 +1,54 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ClientFriendlyStatusMarkdown Component > renders inline-links from parsing anchors in markdown content > expected html 1`] = `
+<div>
+  <div
+    class="space-y-4"
+  >
+    <a
+      class="text-slate-700 underline hover:text-blue-700 focus:text-blue-700 external-link"
+      href="https://www.example.com"
+      target="_blank"
+    >
+      link text
+      <span
+        class="sr-only"
+      >
+         (screen-reader.new-tab)
+      </span>
+    </a>
+  </div>
+</div>
+`;
+
+exports[`ClientFriendlyStatusMarkdown Component > renders markdown component > expected html 1`] = `
+<div>
+  <div
+    class="space-y-4"
+  />
+</div>
+`;
+
+exports[`ClientFriendlyStatusMarkdown Component > renders markdown component with correct markdown parsing > expected html 1`] = `
+<div>
+  <div
+    class="space-y-4"
+  >
+    <h1
+      id="h1"
+    >
+      H1
+    </h1>
+    <h2
+      id="h2"
+    >
+      H2
+    </h2>
+    <ul>
+      <li>
+        unordered list item 1
+      </li>
+    </ul>
+  </div>
+</div>
+`;

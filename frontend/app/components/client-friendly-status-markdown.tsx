@@ -1,11 +1,12 @@
 import type { PropsWithChildren } from 'react';
 
-import type { MarkdownToJSX } from 'markdown-to-jsx';
-import Markdown from 'markdown-to-jsx';
+import type { MarkdownToJSX } from 'markdown-to-jsx/react';
+import Markdown from 'markdown-to-jsx/react';
 
 import { InlineLink } from './inline-link';
 
 const markdownOptions: MarkdownToJSX.Options = {
+  forceWrapper: true,
   wrapper: ClientFriendlyStatusMarkdownWrapper,
   overrides: {
     a: {
