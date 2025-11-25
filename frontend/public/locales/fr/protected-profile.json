@@ -167,6 +167,10 @@
     "update-email-link-text": "Modifier l'adresse courriel",
     "update-mailing-address-link-text": "Modifier l'adresse postale",
     "update-home-address-link-text": "Modifier l'adresse du domicile",
+    "email-verification-status": {
+      "unverified": "Non vérifiée",
+      "verified": "Vérifiée"
+    },
     "return-button": "Retour au tableau de bord"
   },
   "email": {
