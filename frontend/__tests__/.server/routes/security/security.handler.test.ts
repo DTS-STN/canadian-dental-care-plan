@@ -59,21 +59,18 @@ describe('DefaultSecurityHandler', () => {
       const mockSession = mock<Session>();
       const mockRequest = mock<Request>({ url: 'https://localhost:3000/en/protected-page' });
 
-      await expect(securityHandler.validateAuthSession({ request: mockRequest, session: mockSession })).rejects.toThrowError(Response);
+      // Capture the thrown error
+      const error = await securityHandler.validateAuthSession({ request: mockRequest, session: mockSession }).catch((error_) => error_);
 
-      try {
-        await securityHandler.validateAuthSession({ request: mockRequest, session: mockSession });
-      } catch (error) {
-        // Assert the error is a Response object
-        expect(error).toBeInstanceOf(Response);
+      // Assert the error is a Response object
+      expect(error).toBeInstanceOf(Response);
 
-        // Assert status code
-        expect((error as Response).status).toBe(302);
+      // Assert status code
+      expect((error as Response).status).toBe(302);
 
-        // Assert headers
-        expect((error as Response).headers.get('Location')).toBe('/auth/login?returnto=%2Fen%2Fprotected-page%3F');
-        expect((error as Response).headers.get('X-Remix-Reload-Document')).toBe('true');
-      }
+      // Assert headers
+      expect((error as Response).headers.get('Location')).toBe('/auth/login?returnto=%2Fen%2Fprotected-page%3F');
+      expect((error as Response).headers.get('X-Remix-Reload-Document')).toBe('true');
     });
 
     it('should not throw anything when the RAOIDC session is valid', async () => {
@@ -279,13 +276,11 @@ describe('DefaultSecurityHandler', () => {
       const mockRequest = mock<Request>({ url: 'https://localhost:3000/en/protected-page' });
       const params = { lang: 'en' };
 
-      try {
-        await securityHandler.requireClientApplication({ request: mockRequest, params, session: mockSession });
-      } catch (error) {
-        expect(error).toBeInstanceOf(Response);
-        expect((error as Response).status).toBe(302);
-        expect((error as Response).headers.get('Location')).toBe('/auth/login?returnto=%2Fen%2Fprotected-page%3F');
-      }
+      const error = await securityHandler.requireClientApplication({ request: mockRequest, params, session: mockSession }).catch((error_) => error_);
+
+      expect(error).toBeInstanceOf(Response);
+      expect((error as Response).status).toBe(302);
+      expect((error as Response).headers.get('Location')).toBe('/auth/login?returnto=%2Fen%2Fprotected-page%3F');
     });
 
     it('should throw a redirect response to data-unavailable if no client application is found', async () => {
@@ -299,13 +294,11 @@ describe('DefaultSecurityHandler', () => {
 
       mockClientApplicationService.findClientApplicationBySin.calledWith(anyObject({ sin: '123456789', applicationYearId: '', sub: 'user-id' })).mockResolvedValueOnce(None);
 
-      try {
-        await securityHandler.requireClientApplication({ request: mockRequest, params, session: mockSession });
-      } catch (error) {
-        expect(error).toBeInstanceOf(Response);
-        expect((error as Response).status).toBe(302);
-        expect((error as Response).headers.get('Location')).toBe('/en/protected/data-unavailable');
-      }
+      const error = await securityHandler.requireClientApplication({ request: mockRequest, params, session: mockSession }).catch((error_) => error_);
+
+      expect(error).toBeInstanceOf(Response);
+      expect((error as Response).status).toBe(302);
+      expect((error as Response).headers.get('Location')).toBe('/en/protected/data-unavailable');
     });
 
     // added test for the new redirectUrl option
@@ -321,18 +314,11 @@ describe('DefaultSecurityHandler', () => {
 
       mockClientApplicationService.findClientApplicationBySin.calledWith(anyObject({ sin: '123456789', applicationYearId: '', sub: 'user-id' })).mockResolvedValueOnce(None);
 
-      try {
-        await securityHandler.requireClientApplication({
-          request: mockRequest,
-          params,
-          session: mockSession,
-          options: { redirectUrl: customRedirectUrl },
-        });
-      } catch (error) {
-        expect(error).toBeInstanceOf(Response);
-        expect((error as Response).status).toBe(302);
-        expect((error as Response).headers.get('Location')).toBe(customRedirectUrl);
-      }
+      const error = await securityHandler.requireClientApplication({ request: mockRequest, params, session: mockSession, options: { redirectUrl: customRedirectUrl } }).catch((error_) => error_);
+
+      expect(error).toBeInstanceOf(Response);
+      expect((error as Response).status).toBe(302);
+      expect((error as Response).headers.get('Location')).toBe(customRedirectUrl);
     });
 
     it('should return the client application if found', async () => {
