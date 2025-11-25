@@ -37,6 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
+  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -54,8 +55,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     defaultState: {
       preferredLanguage: clientApplication.communicationPreferences.preferredLanguage,
-      preferredMethodSunLife: clientApplication.communicationPreferences.preferredMethodSunLife,
-      preferredMethodGovernmentOfCanada: clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada,
+      preferredMethodSunLife: COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
+      preferredMethodGovernmentOfCanada: COMMUNICATION_METHOD_GC_DIGITAL_ID,
     },
     languages,
     gcCommunicationMethods,
