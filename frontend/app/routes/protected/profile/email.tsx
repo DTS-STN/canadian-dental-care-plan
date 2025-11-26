@@ -1,6 +1,5 @@
 import { data, redirect, useFetcher } from 'react-router';
 
-import { invariant } from '@dts-stn/invariant';
 import { useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
@@ -22,6 +21,40 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
+// prettier-ignore
+const profileEmailContextSchema = z
+  .object({
+    context: z.literal('contact').optional(),
+    // eslint-disable-next-line unicorn/no-useless-undefined
+    pref_lang: z.any().transform(() => undefined).optional(),
+    // eslint-disable-next-line unicorn/no-useless-undefined
+    pref_method_sl: z.any().transform(() => undefined).optional(),
+    // eslint-disable-next-line unicorn/no-useless-undefined
+    pref_method_goc: z.any().transform(() => undefined).optional(),
+  })
+  .or(
+    z.object({
+      context: z.literal('communication-preferences'),
+      pref_lang: z.string(),
+      pref_method_sl: z.string(),
+      pref_method_goc: z.string(),
+    }),
+  );
+
+export type ProfileEmailContext = z.infer<typeof profileEmailContextSchema>;
+
+function requireProfileEmailContext({ request, params }: Pick<Route.LoaderArgs | Route.ActionArgs, 'request' | 'params'>): ProfileEmailContext {
+  const url = new URL(request.url);
+  const searchParams = Object.fromEntries(url.searchParams);
+  const parsed = profileEmailContextSchema.safeParse(searchParams);
+
+  if (!parsed.success) {
+    throw redirect(getPathById('protected/profile/contact/email-address', params));
+  }
+
+  return parsed.data;
+}
+
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'protected-profile:contact-information.page-title', routeId: 'protected/profile/contact-information' }],
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
@@ -35,6 +68,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
+  const profileEmailContext = requireProfileEmailContext({ request, params });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:email.page-title') }) };
@@ -45,6 +79,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     meta,
     defaultState: clientApplication.contactInformation.email,
+    context: profileEmailContext.context,
   };
 }
 
@@ -55,9 +90,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
-
-  const userInfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sub, 'Expected userInfoToken.sub to be defined');
+  const profileEmailContext = requireProfileEmailContext({ request, params });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.ServerConfig);
@@ -92,11 +125,25 @@ export async function action({ context: { appContainer, session }, params, reque
     const verificationCodeService = appContainer.get(TYPES.VerificationCodeService);
     const verificationCode = verificationCodeService.createVerificationCode(idToken.sub);
 
-    session.set('profileEmailVerificationState', {
-      pendingEmail: parsedDataResult.data.email,
-      verificationCode,
-      verificationAttempts: 0,
-    });
+    session.set(
+      'profileEmailAddressFlowState',
+      profileEmailContext.context === 'communication-preferences'
+        ? {
+            context: profileEmailContext.context,
+            preferredLanguage: profileEmailContext.pref_lang,
+            preferredMethodSunLife: profileEmailContext.pref_method_sl,
+            preferredMethodGovernmentOfCanada: profileEmailContext.pref_method_goc,
+            emailAddress: parsedDataResult.data.email,
+            verificationCode,
+            verificationAttempts: 0,
+          }
+        : {
+            context: profileEmailContext.context,
+            emailAddress: parsedDataResult.data.email,
+            verificationCode,
+            verificationAttempts: 0,
+          },
+    );
 
     await verificationCodeService.sendVerificationCodeEmail({
       email: parsedDataResult.data.email,
@@ -108,18 +155,24 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/profile/contact/email-address/verify', params));
   }
 
+  if (profileEmailContext.context === 'communication-preferences') {
+    return redirect(getPathById('protected/profile/communication-preferences', params));
+  }
+
   return redirect(getPathById('protected/profile/contact-information', params));
 }
 
 export default function ProtectedProfileEmailAddress({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = loaderData;
+  const { defaultState, context } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, { email: 'email' });
+
+  const backButtonRouteId = context === 'communication-preferences' ? 'protected/profile/communication-preferences/edit' : 'protected/profile/contact-information';
 
   return (
     <div className="max-w-prose">
@@ -137,7 +190,7 @@ export default function ProtectedProfileEmailAddress({ loaderData, params }: Rou
           <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Email address click">
             {t('protected-profile:email.continue-btn')}
           </LoadingButton>
-          <ButtonLink variant="secondary" id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Email address click">
+          <ButtonLink variant="secondary" id="back-button" routeId={backButtonRouteId} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Email address click">
             {t('protected-profile:email.back')}
           </ButtonLink>
         </div>
