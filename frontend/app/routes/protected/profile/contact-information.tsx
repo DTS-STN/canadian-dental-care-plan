@@ -86,10 +86,10 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
     <div className="max-w-prose space-y-10">
       <dl className="divide-y border-y">
         <DescriptionListItem term={t('protected-profile:contact-information.phone-number')} className="border-none pb-0 sm:pb-0">
-          <p>{phoneNumber}</p>
+          <p>{phoneNumber ?? t('protected-profile:none')}</p>
         </DescriptionListItem>
         <DescriptionListItem term={t('protected-profile:contact-information.alt-phone-number')}>
-          <p>{altPhoneNumber}</p>
+          <p>{altPhoneNumber ?? t('protected-profile:none')}</p>
           <div className="mt-4 sm:mt-6">
             <InlineLink id="update-contact-information-phone" routeId="protected/profile/contact/phone" params={params}>
               {t('protected-profile:contact-information.update-phone-link-text')}
@@ -97,14 +97,16 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
           </div>
         </DescriptionListItem>
         <DescriptionListItem term={t('protected-profile:contact-information.email')}>
-          {emailAddress && <p>{emailAddress}</p>}
-          {emailVerificationStatus && (
+          {emailAddress ? <p>{emailAddress}</p> : t('protected-profile:none')}
+          {emailVerificationStatus ? (
             <Badge asChild size="lg" variant={emailVerificationStatus === 'unverified' ? 'warning' : 'success'}>
               <p>
                 <FontAwesomeIcon icon={emailVerificationStatus === 'unverified' ? faExclamationTriangle : faCheckCircle} />
                 {t(`protected-profile:contact-information.email-verification-status.${emailVerificationStatus}`)}
               </p>
             </Badge>
+          ) : (
+            t('protected-profile:none')
           )}
           <div className="mt-4 sm:mt-6">
             <InlineLink id="update-contact-information-email" routeId="protected/profile/contact/email-address" params={params}>
