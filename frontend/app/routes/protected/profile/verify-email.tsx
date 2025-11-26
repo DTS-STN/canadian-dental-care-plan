@@ -20,6 +20,7 @@ import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
+import type { ProfileEmailContext } from '~/routes/protected/profile/email';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -33,6 +34,13 @@ const FORM_ACTION = {
   request: 'request',
   submit: 'submit',
 } as const;
+
+function requireProfileEmailAddressFlowState({ session, params }: { session: Route.LoaderArgs['context']['session']; params: Route.LoaderArgs['params'] }) {
+  const profileEmailAddressFlowState = session.find('profileEmailAddressFlowState').unwrapOrElse(() => {
+    throw redirect(getPathById('protected/profile/contact-information', params));
+  });
+  return profileEmailAddressFlowState;
+}
 
 export const handle = {
   breadcrumbs: [
@@ -51,19 +59,29 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   await securityHandler.requireClientApplication({ params, request, session });
 
+  const profileEmailAddressFlowState = requireProfileEmailAddressFlowState({ session, params });
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:verify-email.page-title') }) };
-
-  if (!session.has('profileEmailVerificationState')) {
-    throw redirect(getPathById('protected/profile/contact/email-address', params));
-  }
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.verify-email', { userId: idToken.sub });
 
+  // Prepare back button context
+  const backButtonProfileEmailContext: ProfileEmailContext =
+    profileEmailAddressFlowState.context === 'communication-preferences'
+      ? {
+          context: profileEmailAddressFlowState.context,
+          pref_lang: profileEmailAddressFlowState.preferredLanguage,
+          pref_method_sl: profileEmailAddressFlowState.preferredMethodSunLife,
+          pref_method_goc: profileEmailAddressFlowState.preferredMethodGovernmentOfCanada,
+        }
+      : { context: profileEmailAddressFlowState.context };
+
   return {
     meta,
-    email: session.get('profileEmailVerificationState').pendingEmail,
+    email: profileEmailAddressFlowState.emailAddress,
+    backButtonProfileEmailContext,
   };
 }
 
@@ -75,11 +93,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
-  if (!session.has('profileEmailVerificationState')) {
-    throw redirect(getPathById('protected/profile/contact/email-address', params));
-  }
-
-  const verificationState = session.get('profileEmailVerificationState');
+  const profileEmailAddressFlowState = requireProfileEmailAddressFlowState({ session, params });
 
   const userInfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sub, 'Expected userInfoToken.sub to be defined');
@@ -97,14 +111,14 @@ export async function action({ context: { appContainer, session }, params, reque
   if (formAction === FORM_ACTION.request) {
     const newVerificationCode = verificationCodeService.createVerificationCode(idToken.sub);
 
-    session.set('profileEmailVerificationState', {
-      ...verificationState,
+    session.set('profileEmailAddressFlowState', {
+      ...profileEmailAddressFlowState,
       verificationCode: newVerificationCode,
       verificationAttempts: 0,
     });
 
     await verificationCodeService.sendVerificationCodeEmail({
-      email: verificationState.pendingEmail,
+      email: profileEmailAddressFlowState.emailAddress,
       verificationCode: newVerificationCode,
       preferredLanguage: clientApplication.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
       userId: idToken.sub,
@@ -119,7 +133,7 @@ export async function action({ context: { appContainer, session }, params, reque
       .trim()
       .min(1, t('protected-profile:verify-email.error-message.verification-code-required'))
       .transform(extractDigits)
-      .refine(() => verificationState.verificationAttempts < MAX_ATTEMPTS, t('protected-profile:verify-email.error-message.verification-code-max-attempts')),
+      .refine(() => profileEmailAddressFlowState.verificationAttempts < MAX_ATTEMPTS, t('protected-profile:verify-email.error-message.verification-code-max-attempts')),
   });
 
   const parsedDataResult = verificationCodeSchema.safeParse({
@@ -130,26 +144,47 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  if (parsedDataResult.data.verificationCode !== verificationState.verificationCode) {
-    const updatedAttempts = verificationState.verificationAttempts + 1;
+  if (parsedDataResult.data.verificationCode !== profileEmailAddressFlowState.verificationCode) {
+    const updatedAttempts = profileEmailAddressFlowState.verificationAttempts + 1;
 
-    session.set('profileEmailVerificationState', {
-      ...verificationState,
+    session.set('profileEmailAddressFlowState', {
+      ...profileEmailAddressFlowState,
       verificationAttempts: updatedAttempts,
     });
 
     return { status: 'verification-code-mismatch' } as const;
   }
 
-  await appContainer.get(TYPES.ProfileService).updateEmailAddress(
+  // Proceed to update email address; and communication preferences if applicable
+  const profileService = appContainer.get(TYPES.ProfileService);
+
+  await profileService.updateEmailAddress(
     {
       clientId: clientApplication.applicantInformation.clientId,
-      email: verificationState.pendingEmail,
+      email: profileEmailAddressFlowState.emailAddress,
     },
     idToken.sub,
   );
 
-  session.unset('profileEmailVerificationState');
+  if (profileEmailAddressFlowState.context === 'communication-preferences') {
+    await profileService.updateCommunicationPreferences(
+      {
+        clientId: clientApplication.applicantInformation.clientId,
+        preferredLanguage: profileEmailAddressFlowState.preferredLanguage,
+        preferredMethodSunLife: profileEmailAddressFlowState.preferredMethodSunLife,
+        preferredMethodGovernmentOfCanada: profileEmailAddressFlowState.preferredMethodGovernmentOfCanada,
+      },
+      idToken.sub,
+    );
+  }
+
+  // Clear the flow state
+  session.unset('profileEmailAddressFlowState');
+
+  // Redirect based on context
+  if (profileEmailAddressFlowState.context === 'communication-preferences') {
+    return redirect(getPathById('protected/profile/communication-preferences', params));
+  }
 
   return redirect(getPathById('protected/profile/contact-information', params));
 }
@@ -185,6 +220,9 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
 
     void fetcher.submit(formData, { method: 'post' });
   }
+
+  const backButtonSearchParams = loaderData.backButtonProfileEmailContext.context === 'communication-preferences' ? new URLSearchParams(loaderData.backButtonProfileEmailContext) : undefined;
+  const backButtonTo = getPathById('protected/profile/contact/email-address', params) + (backButtonSearchParams ? `?${backButtonSearchParams.toString()}` : '');
 
   return (
     <div className="max-w-prose">
@@ -253,14 +291,7 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
           >
             {t('protected-profile:verify-email.continue')}
           </LoadingButton>
-          <ButtonLink
-            variant="secondary"
-            id="back-button"
-            routeId="protected/profile/contact/email-address"
-            params={params}
-            disabled={isSubmitting}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Verify your email address click"
-          >
+          <ButtonLink variant="secondary" id="back-button" to={backButtonTo} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Verify your email address click">
             {t('protected-profile:verify-email.back')}
           </ButtonLink>
         </div>

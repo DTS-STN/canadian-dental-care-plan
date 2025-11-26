@@ -18,6 +18,7 @@ import type { InputRadiosProps } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
+import type { ProfileEmailContext } from '~/routes/protected/profile/email';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -77,22 +78,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formSchema = z.object({
     preferredLanguage: z.string().trim().min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-language-required')),
-    preferredMethodSunLife: z
-      .string()
-      .trim()
-      .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-sunlife-required'))
-      .refine(
-        (val) => val !== COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || (clientApplication.contactInformation.email !== undefined && clientApplication.contactInformation.emailVerified === true),
-        t('protected-profile:edit-communication-preferences.error-message.preferred-method-sunlife-email-verified'),
-      ),
-    preferredMethodGovernmentOfCanada: z
-      .string()
-      .trim()
-      .min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-gc-required'))
-      .refine(
-        (val) => val !== COMMUNICATION_METHOD_GC_DIGITAL_ID || (clientApplication.contactInformation.email !== undefined && clientApplication.contactInformation.emailVerified === true),
-        t('protected-profile:edit-communication-preferences.error-message.preferred-method-gc-email-verified'),
-      ),
+    preferredMethodSunLife: z.string().trim().min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-sunlife-required')),
+    preferredMethodGovernmentOfCanada: z.string().trim().min(1, t('protected-profile:edit-communication-preferences.error-message.preferred-method-gc-required')),
   });
 
   const parsedDataResult = formSchema.safeParse({
@@ -105,6 +92,21 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
+  // Redirect to edit email address if digital communication method is selected without a verified email address
+  const isDigitalCommunicationMethodSelected = parsedDataResult.data.preferredMethodSunLife === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || parsedDataResult.data.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID;
+  const hasEmailAddress = clientApplication.contactInformation.email !== undefined;
+  const emailAddressVerified = clientApplication.contactInformation.emailVerified;
+  if (isDigitalCommunicationMethodSelected && (!hasEmailAddress || !emailAddressVerified)) {
+    const profileEmailContext: ProfileEmailContext = {
+      context: 'communication-preferences',
+      pref_lang: parsedDataResult.data.preferredLanguage,
+      pref_method_sl: parsedDataResult.data.preferredMethodSunLife,
+      pref_method_goc: parsedDataResult.data.preferredMethodGovernmentOfCanada,
+    };
+    return redirect(getPathById('protected/profile/contact/email-address', params) + `?${new URLSearchParams(profileEmailContext)}`);
+  }
+
+  // Update communication preferences
   const idToken = session.get('idToken');
 
   await appContainer.get(TYPES.ProfileService).updateCommunicationPreferences(

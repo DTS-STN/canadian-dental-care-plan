@@ -133,9 +133,7 @@
     "save": "Sauvegarder",
     "error-message": {
       "preferred-language-required": "Sélectionnez la langue de communication préférée",
-      "preferred-method-gc-email-verified": "Une adresse courriel vérifiée est requise pour recevoir les communications du gouvernement du Canada par voie numérique.",
       "preferred-method-gc-required": "Sélectionnez votre moyen de communication préféré avec le gouvernement du Canada",
-      "preferred-method-sunlife-email-verified": "Une adresse courriel vérifiée est requise pour recevoir les communications de Sun Life par voie numérique.",
       "preferred-method-sunlife-required": "Sélectionnez votre moyen de communication préféré avec la Sun Life"
     }
   },
