@@ -111,7 +111,7 @@ export class DefaultEvidentiaryDocumentRepository implements EvidentiaryDocument
     this.log.debug('Uploading evidentiary document metadata for client: [%s]', createRequest.clientId);
     this.log.trace('Uploading evidentiary document metadata for request [%j]', createRequest);
 
-    const url = new URL(`${this.baseUrl}/esdc_client(${createRequest.clientId})/Microsoft.Dynamics.CRM.esdc_UploadEvidentiaryDocuments`);
+    const url = new URL(`${this.baseUrl}/esdc_clients(${createRequest.clientId})/Microsoft.Dynamics.CRM.esdc_UploadEvidentiaryDocuments`);
 
     const requestBody = {
       Documents: createRequest.documents.map((doc) => ({
