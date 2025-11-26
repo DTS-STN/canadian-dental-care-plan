@@ -38,13 +38,6 @@ export type UploadEvidentiaryDocumentMetadataEntity = ReadonlyDeep<{
  * Entity representing the response from uploading document metadata
  */
 export type CreateEvidentiaryDocumentMetadataResponseEntity = ReadonlyDeep<{
-  esdc: {
-    esdc_processed: boolean;
-    RequestContext: {
-      esdc_simulate: boolean;
-      esdc_debug: boolean;
-    };
-  };
   esdc_evidentiarydocuments: ReadonlyArray<{
     esdc_filename: string;
     _esdc_documenttypeid_value: string;
@@ -70,8 +63,6 @@ export type FindEvidentiaryDocumentsRequest = Readonly<{
 export type CreateEvidentiaryDocumentMetadataRepositoryRequest = Readonly<{
   clientID: string;
   userId: string;
-  simulate: boolean;
-  debug: boolean;
   documents: ReadonlyArray<UploadEvidentiaryDocumentMetadataEntity>;
 }>;
 

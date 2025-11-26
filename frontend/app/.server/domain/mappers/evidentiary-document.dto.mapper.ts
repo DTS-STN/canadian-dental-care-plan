@@ -65,11 +65,6 @@ export class DefaultEvidentiaryDocumentDtoMapper implements EvidentiaryDocumentD
 
   mapCreateEvidentiaryDocumentMetadataResponseEntityToDto(responseEntity: CreateEvidentiaryDocumentMetadataResponseEntity): CreateEvidentiaryDocumentMetadataResponseDto {
     return {
-      processed: responseEntity.esdc.esdc_processed,
-      requestContext: {
-        simulate: responseEntity.esdc.RequestContext.esdc_simulate,
-        debug: responseEntity.esdc.RequestContext.esdc_debug,
-      },
       evidentiaryDocuments: responseEntity.esdc_evidentiarydocuments.map((doc) => ({
         fileName: doc.esdc_filename,
         documentTypeId: doc['_esdc_documenttypeid_value'],

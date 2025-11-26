@@ -81,8 +81,6 @@ export class DefaultEvidentiaryDocumentService implements EvidentiaryDocumentSer
     const repositoryRequest = {
       clientID: createEvidentiaryDocumentMetadataRequest.clientID,
       userId: createEvidentiaryDocumentMetadataRequest.userId,
-      simulate: createEvidentiaryDocumentMetadataRequest.simulate,
-      debug: createEvidentiaryDocumentMetadataRequest.debug,
       documents: documentEntities,
     };
 

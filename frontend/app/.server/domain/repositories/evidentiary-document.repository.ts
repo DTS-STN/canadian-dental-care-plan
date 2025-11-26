@@ -114,11 +114,6 @@ export class DefaultEvidentiaryDocumentRepository implements EvidentiaryDocument
     const url = new URL(`${this.baseUrl}/esdc_client(${createRequest.clientID})/Microsoft.Dynamics.CRM.esdc_UploadEvidentiaryDocuments`);
 
     const requestBody = {
-      esdc: {
-        '@odata.type': '#Microsoft.Dynamics.CRM.expando',
-        esdc_simulate: createRequest.simulate,
-        esdc_debug: createRequest.debug,
-      },
       Documents: createRequest.documents.map((doc) => ({
         '@odata.type': '#Microsoft.Dynamics.CRM.esdc_evidentiarydocument',
         'esdc_DocumentTypeid@odata.bind': `esdc_documenttypes(${doc.documentTypeId})`,
@@ -255,13 +250,6 @@ export class MockEvidentiaryDocumentRepository implements EvidentiaryDocumentRep
     this.log.trace('Upload evidentiary document metadata for request [%j]', createRequest);
 
     const mockResponse: CreateEvidentiaryDocumentMetadataResponseEntity = {
-      esdc: {
-        esdc_processed: true,
-        RequestContext: {
-          esdc_simulate: createRequest.simulate,
-          esdc_debug: createRequest.debug,
-        },
-      },
       esdc_evidentiarydocuments: createRequest.documents.map((doc) => ({
         esdc_filename: doc.fileName,
         _esdc_documenttypeid_value: doc.documentTypeId,

@@ -59,11 +59,6 @@ export type CreateEvidentiaryDocumentMetadataDto = ReadonlyDeep<{
  * DTO representing the response from uploading document metadata
  */
 export type CreateEvidentiaryDocumentMetadataResponseDto = ReadonlyDeep<{
-  processed: boolean;
-  requestContext: {
-    simulate: boolean;
-    debug: boolean;
-  };
   evidentiaryDocuments: ReadonlyArray<{
     fileName: string;
     documentTypeId: string;
@@ -95,12 +90,6 @@ export type CreateEvidentiaryDocumentMetadataRequest = Readonly<{
 
   /** A unique identifier for the applicant - used for auditing */
   userId: string;
-
-  /** Whether to simulate the upload */
-  simulate: boolean;
-
-  /** Whether to enable debug mode */
-  debug: boolean;
 
   /** The documents to upload */
   documents: ReadonlyArray<CreateEvidentiaryDocumentMetadataDto>;

@@ -258,8 +258,6 @@ async function createMetadata(files: ParsedUploadData['files'], clientId: string
   const request = {
     clientID: clientId,
     userId: userId,
-    simulate: true,
-    debug: true,
     documents: files.map(({ file, documentType }) => ({
       fileName: file.name,
       documentTypeId: documentType,
