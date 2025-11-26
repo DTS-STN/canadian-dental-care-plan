@@ -2,6 +2,7 @@
   "required-label": "Complete all fields.",
   "optional-label": "Complete all fields unless marked as optional.",
   "all-optional-label": "All fields are optional.",
+  "none": "None",
   "eligibility": {
     "page-title": "Member eligibility",
     "details": "Members should always verify their coverage and confirm what costs, if any, will not be covered by the Canadian Dental Care Plan with their oral health provider before receiving care.",
