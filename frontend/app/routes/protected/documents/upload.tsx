@@ -256,7 +256,7 @@ async function createMetadata(files: ParsedUploadData['files'], clientId: string
   const recordSource = Number(appContainer.get(TYPES.ServerConfig).EWDU_RECORD_SOURCE_MSCA);
 
   const request = {
-    clientID: clientId,
+    clientId: clientId,
     userId: userId,
     documents: files.map(({ file, documentType }) => ({
       fileName: file.name,

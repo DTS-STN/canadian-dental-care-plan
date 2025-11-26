@@ -35,7 +35,7 @@ export class DefaultEvidentiaryDocumentDtoMapper implements EvidentiaryDocumentD
     return {
       id: evidentiaryDocumentEntity.id,
       fileName: evidentiaryDocumentEntity.fileName,
-      clientID: evidentiaryDocumentEntity.clientID,
+      clientId: evidentiaryDocumentEntity.clientId,
       documentTypeId: evidentiaryDocumentEntity.documentTypeId,
       mscaUploadDate: evidentiaryDocumentEntity.mscaUploadDate,
       healthCanadaTransferDate: evidentiaryDocumentEntity.healthCanadaTransferDate,

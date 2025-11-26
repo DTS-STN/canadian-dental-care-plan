@@ -65,14 +65,14 @@ export class DefaultEvidentiaryDocumentRepository implements EvidentiaryDocument
   }
 
   async findEvidentiaryDocuments(findEvidentiaryDocumentsRequest: FindEvidentiaryDocumentsRequest): Promise<ReadonlyArray<EvidentiaryDocumentEntity>> {
-    this.log.debug('Fetching evidentiary documents for client: [%s]', findEvidentiaryDocumentsRequest.clientID);
+    this.log.debug('Fetching evidentiary documents for client: [%s]', findEvidentiaryDocumentsRequest.clientId);
     this.log.trace('Fetching evidentiary documents for request [%j]', findEvidentiaryDocumentsRequest);
 
     const url = new URL(`${this.baseUrl}/esdc_evidentiarydocuments`);
 
     url.searchParams.set('$select', 'esdc_filename,_esdc_documenttypeid_value,esdc_uploaddate');
     url.searchParams.set('$expand', 'esdc_Clientid($select=esdc_firstname,esdc_lastname),esdc_DocumentTypeid($select=esdc_nameenglish,esdc_namefrench)');
-    url.searchParams.set('$filter', `statuscode eq 1 and _esdc_clientid_value eq '${findEvidentiaryDocumentsRequest.clientID}'`);
+    url.searchParams.set('$filter', `statuscode eq 1 and _esdc_clientid_value eq '${findEvidentiaryDocumentsRequest.clientId}'`);
 
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.evidentiary-documents.gets', url, {
       method: 'GET',
@@ -94,7 +94,7 @@ export class DefaultEvidentiaryDocumentRepository implements EvidentiaryDocument
         status: response.status,
         statusText: response.statusText,
         url: url.toString(),
-        clientID: findEvidentiaryDocumentsRequest.clientID,
+        clientId: findEvidentiaryDocumentsRequest.clientId,
         responseBody: await response.text(),
       });
       throw new Error(`Failed to fetch evidentiary documents. Status: ${response.status}, Status Text: ${response.statusText}`);
@@ -108,10 +108,10 @@ export class DefaultEvidentiaryDocumentRepository implements EvidentiaryDocument
   }
 
   async createEvidentiaryDocumentMetadata(createRequest: CreateEvidentiaryDocumentMetadataRepositoryRequest): Promise<CreateEvidentiaryDocumentMetadataResponseEntity> {
-    this.log.debug('Uploading evidentiary document metadata for client: [%s]', createRequest.clientID);
+    this.log.debug('Uploading evidentiary document metadata for client: [%s]', createRequest.clientId);
     this.log.trace('Uploading evidentiary document metadata for request [%j]', createRequest);
 
-    const url = new URL(`${this.baseUrl}/esdc_client(${createRequest.clientID})/Microsoft.Dynamics.CRM.esdc_UploadEvidentiaryDocuments`);
+    const url = new URL(`${this.baseUrl}/esdc_client(${createRequest.clientId})/Microsoft.Dynamics.CRM.esdc_UploadEvidentiaryDocuments`);
 
     const requestBody = {
       Documents: createRequest.documents.map((doc) => ({
@@ -147,7 +147,7 @@ export class DefaultEvidentiaryDocumentRepository implements EvidentiaryDocument
         status: response.status,
         statusText: response.statusText,
         url: url.toString(),
-        clientID: createRequest.clientID,
+        clientId: createRequest.clientId,
         responseBody: await response.text(),
       });
       throw new Error(`Failed to upload evidentiary document metadata. Status: ${response.status}, Status Text: ${response.statusText}`);
@@ -162,7 +162,7 @@ export class DefaultEvidentiaryDocumentRepository implements EvidentiaryDocument
     return response.value.map((doc) => ({
       id: doc.esdc_evidentiarydocumentid,
       fileName: doc.esdc_filename,
-      clientID: doc.esdc_Clientid.esdc_clientid,
+      clientId: doc.esdc_Clientid.esdc_clientid,
       documentTypeId: doc._esdc_documenttypeid_value,
       mscaUploadDate: doc.esdc_uploaddate,
       client: {
@@ -186,7 +186,7 @@ export class DefaultEvidentiaryDocumentRepository implements EvidentiaryDocument
 
   async checkHealth(): Promise<void> {
     await this.findEvidentiaryDocuments({
-      clientID: '00000000-0000-0000-0000-000000000000',
+      clientId: '00000000-0000-0000-0000-000000000000',
       userId: 'health-check',
     });
   }
@@ -201,18 +201,18 @@ export class MockEvidentiaryDocumentRepository implements EvidentiaryDocumentRep
   }
 
   async findEvidentiaryDocuments(findEvidentiaryDocumentsRequest: FindEvidentiaryDocumentsRequest): Promise<ReadonlyArray<EvidentiaryDocumentEntity>> {
-    this.log.debug('Fetch evidentiary documents for client: [%s]', findEvidentiaryDocumentsRequest.clientID);
+    this.log.debug('Fetch evidentiary documents for client: [%s]', findEvidentiaryDocumentsRequest.clientId);
     this.log.trace('Fetch evidentiary documents for request [%j]', findEvidentiaryDocumentsRequest);
 
     const mockEvidentiaryDocumentEntities: ReadonlyArray<EvidentiaryDocumentEntity> = [
       {
         id: 'aff431b7-9bae-f011-bbd3-7c1e520630db',
         fileName: 'Benefit Provider Letter.pdf',
-        clientID: findEvidentiaryDocumentsRequest.clientID,
+        clientId: findEvidentiaryDocumentsRequest.clientId,
         documentTypeId: '70a54c5a-9f9f-f011-bbd2-7ced8d05477c',
         mscaUploadDate: '2025-10-21T16:33:31Z',
         client: {
-          id: findEvidentiaryDocumentsRequest.clientID,
+          id: findEvidentiaryDocumentsRequest.clientId,
           firstName: 'Liam',
           lastName: 'Anderson',
         },
@@ -225,11 +225,11 @@ export class MockEvidentiaryDocumentRepository implements EvidentiaryDocumentRep
       {
         id: '01968123-96ae-f011-bbd3-7c1e52408057',
         fileName: 'Employer Letter.pdf',
-        clientID: findEvidentiaryDocumentsRequest.clientID,
+        clientId: findEvidentiaryDocumentsRequest.clientId,
         documentTypeId: 'de3c6d3c-9f9f-f011-bbd2-7ced8d05477c',
         mscaUploadDate: '2025-10-21T15:53:11Z',
         client: {
-          id: findEvidentiaryDocumentsRequest.clientID,
+          id: findEvidentiaryDocumentsRequest.clientId,
           firstName: 'Liam',
           lastName: 'Anderson',
         },
@@ -246,7 +246,7 @@ export class MockEvidentiaryDocumentRepository implements EvidentiaryDocumentRep
   }
 
   async createEvidentiaryDocumentMetadata(createRequest: CreateEvidentiaryDocumentMetadataRepositoryRequest): Promise<CreateEvidentiaryDocumentMetadataResponseEntity> {
-    this.log.debug('Upload evidentiary document metadata for client: [%s]', createRequest.clientID);
+    this.log.debug('Upload evidentiary document metadata for client: [%s]', createRequest.clientId);
     this.log.trace('Upload evidentiary document metadata for request [%j]', createRequest);
 
     const mockResponse: CreateEvidentiaryDocumentMetadataResponseEntity = {
@@ -256,7 +256,7 @@ export class MockEvidentiaryDocumentRepository implements EvidentiaryDocumentRep
         _esdc_documentuploadreasonid_value: '89823b11-bfaa-f011-bbd3-7c1e520630db',
         esdc_uploaddate: doc.uploadDate,
         ...(doc.healthCanadaTransferDate && { esdc_hctransferdate: doc.healthCanadaTransferDate }),
-        _esdc_clientid_value: createRequest.clientID,
+        _esdc_clientid_value: createRequest.clientId,
         esdc_recordsource: doc.recordSource,
       })),
     };

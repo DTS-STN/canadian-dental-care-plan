@@ -6,7 +6,7 @@ import type { ReadonlyDeep } from 'type-fest';
 export type EvidentiaryDocumentEntity = ReadonlyDeep<{
   id: string;
   fileName: string;
-  clientID: string;
+  clientId: string;
   documentTypeId: string;
   mscaUploadDate: string; // ISO 8601 date string
   healthCanadaTransferDate?: string; // ISO 8601 date string
@@ -53,7 +53,7 @@ export type CreateEvidentiaryDocumentMetadataResponseEntity = ReadonlyDeep<{
  * Request entity for the Power Platform API for GET evidentiary documents
  */
 export type FindEvidentiaryDocumentsRequest = Readonly<{
-  clientID: string;
+  clientId: string;
   userId: string;
 }>;
 
@@ -61,7 +61,7 @@ export type FindEvidentiaryDocumentsRequest = Readonly<{
  * Request entity for the Power Platform API for POST evidentiary documents
  */
 export type CreateEvidentiaryDocumentMetadataRepositoryRequest = Readonly<{
-  clientID: string;
+  clientId: string;
   userId: string;
   documents: ReadonlyArray<UploadEvidentiaryDocumentMetadataEntity>;
 }>;
