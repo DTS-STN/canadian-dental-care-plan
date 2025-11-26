@@ -52,5 +52,6 @@
     "overloaded": "We're getting a lot of visitors right now, which is slowing things down. You will be able to continue when the timer reaches zero.",
     "dont-worry-be-happy": "Don't worry\u2014your information is saved. Do not close your browser, or you will have to start the application over again.",
     "remaining-time": "Continuing to application in: {{mins}} min {{secs}} sec"
-  }
+  },
+  "none": "None"
 }
