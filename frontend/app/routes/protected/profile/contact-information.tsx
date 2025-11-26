@@ -97,16 +97,14 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
           </div>
         </DescriptionListItem>
         <DescriptionListItem term={t('protected-profile:contact-information.email')}>
-          {<p>{emailAddress ?? t('protected-profile:none')}</p>}
-          {emailVerificationStatus ? (
+          <p>{emailAddress ?? t('protected-profile:none')}</p>
+          {emailVerificationStatus && (
             <Badge asChild size="lg" variant={emailVerificationStatus === 'unverified' ? 'warning' : 'success'}>
               <p>
                 <FontAwesomeIcon icon={emailVerificationStatus === 'unverified' ? faExclamationTriangle : faCheckCircle} />
                 {t(`protected-profile:contact-information.email-verification-status.${emailVerificationStatus}`)}
               </p>
             </Badge>
-          ) : (
-            <p>{t('protected-profile:none')}</p>
           )}
           <div className="mt-4 sm:mt-6">
             <InlineLink id="update-contact-information-email" routeId="protected/profile/contact/email-address" params={params}>
