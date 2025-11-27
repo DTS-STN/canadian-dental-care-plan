@@ -65,7 +65,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Enregistrer"
+      "save-btn": "Sauvegarder"
     },
     "error-message": {
       "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel vous êtes couvert",
@@ -105,7 +105,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Enregistrer"
+      "save-btn": "Sauvegarder"
     },
     "error-message": {
       "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel l'enfant est couvert",
@@ -221,7 +221,7 @@
     "country": "Pays",
     "use-mailing-address": "Utiliser cette adresse comme adresse de mon domicile.",
     "back-btn": "Retour",
-    "save-btn": "Enregistrer",
+    "save-btn": "Sauvegarder",
     "continue-btn": "Continuer",
     "select-one": "Sélectionnez une option"
   },
@@ -237,7 +237,7 @@
     "province": "Province, territoire, état ou région",
     "country": "Pays",
     "back-btn": "Retour",
-    "save-btn": "Enregistrer",
+    "save-btn": "Sauvegarder",
     "select-one": "Sélectionnez une option"
   }
 }
