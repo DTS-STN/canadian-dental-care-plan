@@ -1,0 +1,3454 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ProgressStepper > Edge Cases > should handle currentStep out of bounds 1`] = `
+<div>
+  <div
+    aria-orientation="horizontal"
+    class="w-full"
+    data-orientation="horizontal"
+    data-slot="stepper"
+    role="tablist"
+  >
+    <nav
+      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+      data-orientation="horizontal"
+      data-slot="stepper-nav"
+      data-state="11"
+    >
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="completed"
+      >
+        <button
+          aria-controls="stepper-panel-1"
+          aria-selected="false"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="completed"
+          id="stepper-tab-1"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="completed"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                data-icon="circle-check"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="completed"
+          >
+            Personal Information
+          </h3>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
+          data-slot="stepper-separator"
+          data-state="completed"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="completed"
+      >
+        <button
+          aria-controls="stepper-panel-2"
+          aria-selected="false"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="completed"
+          id="stepper-tab-2"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="completed"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                data-icon="circle-check"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-blue-700"
+            data-slot="stepper-title"
+            data-state="completed"
+          >
+            Contact Details
+          </h3>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+          data-slot="stepper-separator"
+          data-state="completed"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="completed"
+      >
+        <button
+          aria-controls="stepper-panel-3"
+          aria-selected="false"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="completed"
+          id="stepper-tab-3"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="completed"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                data-icon="circle-check"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="completed"
+          >
+            Preferences
+          </h3>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+          data-slot="stepper-separator"
+          data-state="completed"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="completed"
+      >
+        <button
+          aria-controls="stepper-panel-4"
+          aria-selected="false"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="completed"
+          id="stepper-tab-4"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="completed"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                data-icon="circle-check"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="completed"
+          >
+            Review & Submit
+          </h3>
+        </button>
+      </div>
+    </nav>
+  </div>
+</div>
+`;
+
+exports[`ProgressStepper > Edge Cases > should handle empty steps array 1`] = `
+<div>
+  <div
+    aria-orientation="horizontal"
+    class="w-full"
+    data-orientation="horizontal"
+    data-slot="stepper"
+    role="tablist"
+  >
+    <nav
+      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+      data-orientation="horizontal"
+      data-slot="stepper-nav"
+      data-state="1"
+    />
+  </div>
+</div>
+`;
+
+exports[`ProgressStepper > Edge Cases > should handle negative currentStep 1`] = `
+<div>
+  <div
+    aria-orientation="horizontal"
+    class="w-full"
+    data-orientation="horizontal"
+    data-slot="stepper"
+    role="tablist"
+  >
+    <nav
+      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+      data-orientation="horizontal"
+      data-slot="stepper-nav"
+      data-state="0"
+    >
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="completed"
+      >
+        <button
+          aria-controls="stepper-panel-1"
+          aria-selected="false"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="completed"
+          id="stepper-tab-1"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="completed"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                data-icon="circle-check"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="completed"
+          >
+            Personal Information
+          </h3>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
+          data-slot="stepper-separator"
+          data-state="completed"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="inactive"
+      >
+        <button
+          aria-controls="stepper-panel-2"
+          aria-selected="false"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="inactive"
+          id="stepper-tab-2"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="inactive"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                data-icon="ban"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-blue-700"
+            data-slot="stepper-title"
+            data-state="inactive"
+          >
+            Contact Details
+          </h3>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+          data-slot="stepper-separator"
+          data-state="inactive"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="inactive"
+      >
+        <button
+          aria-controls="stepper-panel-3"
+          aria-selected="false"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="inactive"
+          id="stepper-tab-3"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="inactive"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                data-icon="ban"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="inactive"
+          >
+            Preferences
+          </h3>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+          data-slot="stepper-separator"
+          data-state="inactive"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="inactive"
+      >
+        <button
+          aria-controls="stepper-panel-4"
+          aria-selected="false"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="inactive"
+          id="stepper-tab-4"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="inactive"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                data-icon="ban"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="inactive"
+          >
+            Review & Submit
+          </h3>
+        </button>
+      </div>
+    </nav>
+  </div>
+</div>
+`;
+
+exports[`ProgressStepper > ProgressStepper (Responsive) > should render the responsive stepper with all completed steps 1`] = `
+<div>
+  <div>
+    <div
+      class="hidden sm:block"
+    >
+      <div
+        aria-orientation="horizontal"
+        class="w-full"
+        data-orientation="horizontal"
+        data-slot="stepper"
+        role="tablist"
+      >
+        <nav
+          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+          data-orientation="horizontal"
+          data-slot="stepper-nav"
+          data-state="4"
+        >
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="completed"
+          >
+            <button
+              aria-controls="stepper-panel-1"
+              aria-selected="false"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="completed"
+              id="stepper-tab-1"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="completed"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                    data-icon="circle-check"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="completed"
+              >
+                Personal Information
+              </h3>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
+              data-slot="stepper-separator"
+              data-state="completed"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="completed"
+          >
+            <button
+              aria-controls="stepper-panel-2"
+              aria-selected="false"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="completed"
+              id="stepper-tab-2"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="completed"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                    data-icon="circle-check"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="completed"
+              >
+                Contact Details
+              </h3>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
+              data-slot="stepper-separator"
+              data-state="completed"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="completed"
+          >
+            <button
+              aria-controls="stepper-panel-3"
+              aria-selected="false"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="completed"
+              id="stepper-tab-3"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="completed"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                    data-icon="circle-check"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="completed"
+              >
+                Preferences
+              </h3>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
+              data-slot="stepper-separator"
+              data-state="completed"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="completed"
+          >
+            <button
+              aria-controls="stepper-panel-4"
+              aria-selected="true"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="completed"
+              id="stepper-tab-4"
+              role="tab"
+              tabindex="0"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="completed"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                    data-icon="circle-check"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="completed"
+              >
+                Review & Submit
+              </h3>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div
+      class="sm:hidden"
+    >
+      <div
+        aria-orientation="vertical"
+        class="w-full"
+        data-orientation="vertical"
+        data-slot="stepper"
+        role="tablist"
+      >
+        <nav
+          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+          data-orientation="vertical"
+          data-slot="stepper-nav"
+          data-state="4"
+        >
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="completed"
+          >
+            <button
+              aria-controls="stepper-panel-1"
+              aria-selected="false"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="completed"
+              id="stepper-tab-1"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="completed"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                    data-icon="circle-check"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-slate-700"
+                  data-slot="stepper-title"
+                  data-state="completed"
+                >
+                  Personal Information
+                </h3>
+              </div>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
+              data-slot="stepper-separator"
+              data-state="completed"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="completed"
+          >
+            <button
+              aria-controls="stepper-panel-2"
+              aria-selected="false"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="completed"
+              id="stepper-tab-2"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="completed"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                    data-icon="circle-check"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-slate-700"
+                  data-slot="stepper-title"
+                  data-state="completed"
+                >
+                  Contact Details
+                </h3>
+              </div>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
+              data-slot="stepper-separator"
+              data-state="completed"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="completed"
+          >
+            <button
+              aria-controls="stepper-panel-3"
+              aria-selected="false"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="completed"
+              id="stepper-tab-3"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="completed"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                    data-icon="circle-check"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-slate-700"
+                  data-slot="stepper-title"
+                  data-state="completed"
+                >
+                  Preferences
+                </h3>
+              </div>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
+              data-slot="stepper-separator"
+              data-state="completed"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="completed"
+          >
+            <button
+              aria-controls="stepper-panel-4"
+              aria-selected="true"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="completed"
+              id="stepper-tab-4"
+              role="tab"
+              tabindex="0"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="completed"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                    data-icon="circle-check"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-slate-700"
+                  data-slot="stepper-title"
+                  data-state="completed"
+                >
+                  Review & Submit
+                </h3>
+              </div>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ProgressStepper > ProgressStepper (Responsive) > should render the responsive stepper with all inactive steps 1`] = `
+<div>
+  <div>
+    <div
+      class="hidden sm:block"
+    >
+      <div
+        aria-orientation="horizontal"
+        class="w-full"
+        data-orientation="horizontal"
+        data-slot="stepper"
+        role="tablist"
+      >
+        <nav
+          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+          data-orientation="horizontal"
+          data-slot="stepper-nav"
+          data-state="1"
+        >
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="active"
+          >
+            <button
+              aria-controls="stepper-panel-1"
+              aria-selected="true"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="active"
+              id="stepper-tab-1"
+              role="tab"
+              tabindex="0"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="active"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
+                    data-icon="circle-dot"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="active"
+              >
+                Personal Information
+              </h3>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+              data-slot="stepper-separator"
+              data-state="active"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="inactive"
+          >
+            <button
+              aria-controls="stepper-panel-2"
+              aria-selected="false"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="inactive"
+              id="stepper-tab-2"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="inactive"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                    data-icon="ban"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="inactive"
+              >
+                Contact Details
+              </h3>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+              data-slot="stepper-separator"
+              data-state="inactive"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="inactive"
+          >
+            <button
+              aria-controls="stepper-panel-3"
+              aria-selected="false"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="inactive"
+              id="stepper-tab-3"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="inactive"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                    data-icon="ban"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="inactive"
+              >
+                Preferences
+              </h3>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+              data-slot="stepper-separator"
+              data-state="inactive"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="inactive"
+          >
+            <button
+              aria-controls="stepper-panel-4"
+              aria-selected="false"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="inactive"
+              id="stepper-tab-4"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="inactive"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                    data-icon="ban"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="inactive"
+              >
+                Review & Submit
+              </h3>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div
+      class="sm:hidden"
+    >
+      <div
+        aria-orientation="vertical"
+        class="w-full"
+        data-orientation="vertical"
+        data-slot="stepper"
+        role="tablist"
+      >
+        <nav
+          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+          data-orientation="vertical"
+          data-slot="stepper-nav"
+          data-state="1"
+        >
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="active"
+          >
+            <button
+              aria-controls="stepper-panel-1"
+              aria-selected="true"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="active"
+              id="stepper-tab-1"
+              role="tab"
+              tabindex="0"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="active"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
+                    data-icon="circle-dot"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-slate-700"
+                  data-slot="stepper-title"
+                  data-state="active"
+                >
+                  Personal Information
+                </h3>
+              </div>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
+              data-slot="stepper-separator"
+              data-state="active"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="inactive"
+          >
+            <button
+              aria-controls="stepper-panel-2"
+              aria-selected="false"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="inactive"
+              id="stepper-tab-2"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="inactive"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                    data-icon="ban"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-slate-700"
+                  data-slot="stepper-title"
+                  data-state="inactive"
+                >
+                  Contact Details
+                </h3>
+              </div>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
+              data-slot="stepper-separator"
+              data-state="inactive"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="inactive"
+          >
+            <button
+              aria-controls="stepper-panel-3"
+              aria-selected="false"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="inactive"
+              id="stepper-tab-3"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="inactive"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                    data-icon="ban"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-slate-700"
+                  data-slot="stepper-title"
+                  data-state="inactive"
+                >
+                  Preferences
+                </h3>
+              </div>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
+              data-slot="stepper-separator"
+              data-state="inactive"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="inactive"
+          >
+            <button
+              aria-controls="stepper-panel-4"
+              aria-selected="false"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="inactive"
+              id="stepper-tab-4"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="inactive"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                    data-icon="ban"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-slate-700"
+                  data-slot="stepper-title"
+                  data-state="inactive"
+                >
+                  Review & Submit
+                </h3>
+              </div>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ProgressStepper > ProgressStepper (Responsive) > should render the responsive stepper with different current step 1`] = `
+<div>
+  <div>
+    <div
+      class="hidden sm:block"
+    >
+      <div
+        aria-orientation="horizontal"
+        class="w-full"
+        data-orientation="horizontal"
+        data-slot="stepper"
+        role="tablist"
+      >
+        <nav
+          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+          data-orientation="horizontal"
+          data-slot="stepper-nav"
+          data-state="3"
+        >
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="completed"
+          >
+            <button
+              aria-controls="stepper-panel-1"
+              aria-selected="false"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="completed"
+              id="stepper-tab-1"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="completed"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                    data-icon="circle-check"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="completed"
+              >
+                Personal Information
+              </h3>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
+              data-slot="stepper-separator"
+              data-state="completed"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="completed"
+          >
+            <button
+              aria-controls="stepper-panel-2"
+              aria-selected="false"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="completed"
+              id="stepper-tab-2"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="completed"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                    data-icon="circle-check"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-blue-700"
+                data-slot="stepper-title"
+                data-state="completed"
+              >
+                Contact Details
+              </h3>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+              data-slot="stepper-separator"
+              data-state="completed"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="active"
+          >
+            <button
+              aria-controls="stepper-panel-3"
+              aria-selected="true"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="active"
+              id="stepper-tab-3"
+              role="tab"
+              tabindex="0"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="active"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
+                    data-icon="circle-dot"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="active"
+              >
+                Preferences
+              </h3>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+              data-slot="stepper-separator"
+              data-state="active"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="inactive"
+          >
+            <button
+              aria-controls="stepper-panel-4"
+              aria-selected="false"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="inactive"
+              id="stepper-tab-4"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="inactive"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                    data-icon="ban"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="inactive"
+              >
+                Review & Submit
+              </h3>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div
+      class="sm:hidden"
+    >
+      <div
+        aria-orientation="vertical"
+        class="w-full"
+        data-orientation="vertical"
+        data-slot="stepper"
+        role="tablist"
+      >
+        <nav
+          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+          data-orientation="vertical"
+          data-slot="stepper-nav"
+          data-state="3"
+        >
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="completed"
+          >
+            <button
+              aria-controls="stepper-panel-1"
+              aria-selected="false"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="completed"
+              id="stepper-tab-1"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="completed"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                    data-icon="circle-check"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-slate-700"
+                  data-slot="stepper-title"
+                  data-state="completed"
+                >
+                  Personal Information
+                </h3>
+              </div>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
+              data-slot="stepper-separator"
+              data-state="completed"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="completed"
+          >
+            <button
+              aria-controls="stepper-panel-2"
+              aria-selected="false"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="completed"
+              id="stepper-tab-2"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="completed"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                    data-icon="circle-check"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-blue-700"
+                  data-slot="stepper-title"
+                  data-state="completed"
+                >
+                  Contact Details
+                </h3>
+              </div>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
+              data-slot="stepper-separator"
+              data-state="completed"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="active"
+          >
+            <button
+              aria-controls="stepper-panel-3"
+              aria-selected="true"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="active"
+              id="stepper-tab-3"
+              role="tab"
+              tabindex="0"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="active"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
+                    data-icon="circle-dot"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-slate-700"
+                  data-slot="stepper-title"
+                  data-state="active"
+                >
+                  Preferences
+                </h3>
+              </div>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
+              data-slot="stepper-separator"
+              data-state="active"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="inactive"
+          >
+            <button
+              aria-controls="stepper-panel-4"
+              aria-selected="false"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="inactive"
+              id="stepper-tab-4"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="inactive"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                    data-icon="ban"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-slate-700"
+                  data-slot="stepper-title"
+                  data-state="inactive"
+                >
+                  Review & Submit
+                </h3>
+              </div>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ProgressStepper > ProgressStepper (Responsive) > should render the responsive stepper wrapper 1`] = `
+<div>
+  <div>
+    <div
+      class="hidden sm:block"
+    >
+      <div
+        aria-orientation="horizontal"
+        class="w-full"
+        data-orientation="horizontal"
+        data-slot="stepper"
+        role="tablist"
+      >
+        <nav
+          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+          data-orientation="horizontal"
+          data-slot="stepper-nav"
+          data-state="2"
+        >
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="completed"
+          >
+            <button
+              aria-controls="stepper-panel-1"
+              aria-selected="false"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="completed"
+              id="stepper-tab-1"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="completed"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                    data-icon="circle-check"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="completed"
+              >
+                Personal Information
+              </h3>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
+              data-slot="stepper-separator"
+              data-state="completed"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="active"
+          >
+            <button
+              aria-controls="stepper-panel-2"
+              aria-selected="true"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="active"
+              id="stepper-tab-2"
+              role="tab"
+              tabindex="0"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="active"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
+                    data-icon="circle-dot"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-blue-700"
+                data-slot="stepper-title"
+                data-state="active"
+              >
+                Contact Details
+              </h3>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+              data-slot="stepper-separator"
+              data-state="active"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="inactive"
+          >
+            <button
+              aria-controls="stepper-panel-3"
+              aria-selected="false"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="inactive"
+              id="stepper-tab-3"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="inactive"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                    data-icon="ban"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="inactive"
+              >
+                Preferences
+              </h3>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+              data-slot="stepper-separator"
+              data-state="inactive"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+            data-slot="stepper-item"
+            data-state="inactive"
+          >
+            <button
+              aria-controls="stepper-panel-4"
+              aria-selected="false"
+              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="inactive"
+              id="stepper-tab-4"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="inactive"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                    data-icon="ban"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                class="max-w-24 text-center text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="inactive"
+              >
+                Review & Submit
+              </h3>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div
+      class="sm:hidden"
+    >
+      <div
+        aria-orientation="vertical"
+        class="w-full"
+        data-orientation="vertical"
+        data-slot="stepper"
+        role="tablist"
+      >
+        <nav
+          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+          data-orientation="vertical"
+          data-slot="stepper-nav"
+          data-state="2"
+        >
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="completed"
+          >
+            <button
+              aria-controls="stepper-panel-1"
+              aria-selected="false"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="completed"
+              id="stepper-tab-1"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="completed"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                    data-icon="circle-check"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-slate-700"
+                  data-slot="stepper-title"
+                  data-state="completed"
+                >
+                  Personal Information
+                </h3>
+              </div>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
+              data-slot="stepper-separator"
+              data-state="completed"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="active"
+          >
+            <button
+              aria-controls="stepper-panel-2"
+              aria-selected="true"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="active"
+              id="stepper-tab-2"
+              role="tab"
+              tabindex="0"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="active"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
+                    data-icon="circle-dot"
+                    data-prefix="far"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-blue-700"
+                  data-slot="stepper-title"
+                  data-state="active"
+                >
+                  Contact Details
+                </h3>
+              </div>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
+              data-slot="stepper-separator"
+              data-state="active"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="inactive"
+          >
+            <button
+              aria-controls="stepper-panel-3"
+              aria-selected="false"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="inactive"
+              id="stepper-tab-3"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="inactive"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                    data-icon="ban"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-slate-700"
+                  data-slot="stepper-title"
+                  data-state="inactive"
+                >
+                  Preferences
+                </h3>
+              </div>
+            </button>
+            <div
+              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
+              data-slot="stepper-separator"
+              data-state="inactive"
+            />
+          </div>
+          <div
+            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+            data-slot="stepper-item"
+            data-state="inactive"
+          >
+            <button
+              aria-controls="stepper-panel-4"
+              aria-selected="false"
+              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+              data-loading="false"
+              data-slot="stepper-trigger"
+              data-state="inactive"
+              id="stepper-tab-4"
+              role="tab"
+              tabindex="-1"
+            >
+              <div
+                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+                data-slot="stepper-indicator"
+                data-state="inactive"
+              >
+                <div
+                  class="absolute"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                    data-icon="ban"
+                    data-prefix="fas"
+                    role="img"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="mt-0.5 text-left"
+              >
+                <h3
+                  class="text-sm font-medium text-slate-700"
+                  data-slot="stepper-title"
+                  data-state="inactive"
+                >
+                  Review & Submit
+                </h3>
+              </div>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizontal stepper with all steps 1`] = `
+<div>
+  <div
+    aria-orientation="horizontal"
+    class="w-full"
+    data-orientation="horizontal"
+    data-slot="stepper"
+    role="tablist"
+  >
+    <nav
+      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+      data-orientation="horizontal"
+      data-slot="stepper-nav"
+      data-state="2"
+    >
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="completed"
+      >
+        <button
+          aria-controls="stepper-panel-1"
+          aria-selected="false"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="completed"
+          id="stepper-tab-1"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="completed"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                data-icon="circle-check"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="completed"
+          >
+            Personal Information
+          </h3>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
+          data-slot="stepper-separator"
+          data-state="completed"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="active"
+      >
+        <button
+          aria-controls="stepper-panel-2"
+          aria-selected="true"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="active"
+          id="stepper-tab-2"
+          role="tab"
+          tabindex="0"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="active"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
+                data-icon="circle-dot"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-blue-700"
+            data-slot="stepper-title"
+            data-state="active"
+          >
+            Contact Details
+          </h3>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+          data-slot="stepper-separator"
+          data-state="active"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="inactive"
+      >
+        <button
+          aria-controls="stepper-panel-3"
+          aria-selected="false"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="inactive"
+          id="stepper-tab-3"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="inactive"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                data-icon="ban"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="inactive"
+          >
+            Preferences
+          </h3>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+          data-slot="stepper-separator"
+          data-state="inactive"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="inactive"
+      >
+        <button
+          aria-controls="stepper-panel-4"
+          aria-selected="false"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="inactive"
+          id="stepper-tab-4"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="inactive"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                data-icon="ban"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="inactive"
+          >
+            Review & Submit
+          </h3>
+        </button>
+      </div>
+    </nav>
+  </div>
+</div>
+`;
+
+exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizontal stepper with different current step 1`] = `
+<div>
+  <div
+    aria-orientation="horizontal"
+    class="w-full"
+    data-orientation="horizontal"
+    data-slot="stepper"
+    role="tablist"
+  >
+    <nav
+      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+      data-orientation="horizontal"
+      data-slot="stepper-nav"
+      data-state="3"
+    >
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="completed"
+      >
+        <button
+          aria-controls="stepper-panel-1"
+          aria-selected="false"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="completed"
+          id="stepper-tab-1"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="completed"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                data-icon="circle-check"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="completed"
+          >
+            Personal Information
+          </h3>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
+          data-slot="stepper-separator"
+          data-state="completed"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="completed"
+      >
+        <button
+          aria-controls="stepper-panel-2"
+          aria-selected="false"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="completed"
+          id="stepper-tab-2"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="completed"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                data-icon="circle-check"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-blue-700"
+            data-slot="stepper-title"
+            data-state="completed"
+          >
+            Contact Details
+          </h3>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+          data-slot="stepper-separator"
+          data-state="completed"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="active"
+      >
+        <button
+          aria-controls="stepper-panel-3"
+          aria-selected="true"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="active"
+          id="stepper-tab-3"
+          role="tab"
+          tabindex="0"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="active"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
+                data-icon="circle-dot"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="active"
+          >
+            Preferences
+          </h3>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
+          data-slot="stepper-separator"
+          data-state="active"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="inactive"
+      >
+        <button
+          aria-controls="stepper-panel-4"
+          aria-selected="false"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="inactive"
+          id="stepper-tab-4"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="inactive"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                data-icon="ban"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="inactive"
+          >
+            Review & Submit
+          </h3>
+        </button>
+      </div>
+    </nav>
+  </div>
+</div>
+`;
+
+exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizontal stepper with single step 1`] = `
+<div>
+  <div
+    aria-orientation="horizontal"
+    class="w-full"
+    data-orientation="horizontal"
+    data-slot="stepper"
+    role="tablist"
+  >
+    <nav
+      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+      data-orientation="horizontal"
+      data-slot="stepper-nav"
+      data-state="1"
+    >
+      <div
+        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
+        data-slot="stepper-item"
+        data-state="completed"
+      >
+        <button
+          aria-controls="stepper-panel-1"
+          aria-selected="true"
+          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="completed"
+          id="stepper-tab-1"
+          role="tab"
+          tabindex="0"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="completed"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                data-icon="circle-check"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <h3
+            class="max-w-24 text-center text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="completed"
+          >
+            Personal Information
+          </h3>
+        </button>
+      </div>
+    </nav>
+  </div>
+</div>
+`;
+
+exports[`ProgressStepper > ProgressStepperVertical > should render the vertical stepper with all steps 1`] = `
+<div>
+  <div
+    aria-orientation="vertical"
+    class="w-full"
+    data-orientation="vertical"
+    data-slot="stepper"
+    role="tablist"
+  >
+    <nav
+      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+      data-orientation="vertical"
+      data-slot="stepper-nav"
+      data-state="2"
+    >
+      <div
+        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+        data-slot="stepper-item"
+        data-state="completed"
+      >
+        <button
+          aria-controls="stepper-panel-1"
+          aria-selected="false"
+          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="completed"
+          id="stepper-tab-1"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="completed"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                data-icon="circle-check"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            class="mt-0.5 text-left"
+          >
+            <h3
+              class="text-sm font-medium text-slate-700"
+              data-slot="stepper-title"
+              data-state="completed"
+            >
+              Personal Information
+            </h3>
+          </div>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
+          data-slot="stepper-separator"
+          data-state="completed"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+        data-slot="stepper-item"
+        data-state="active"
+      >
+        <button
+          aria-controls="stepper-panel-2"
+          aria-selected="true"
+          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="active"
+          id="stepper-tab-2"
+          role="tab"
+          tabindex="0"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="active"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
+                data-icon="circle-dot"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            class="mt-0.5 text-left"
+          >
+            <h3
+              class="text-sm font-medium text-blue-700"
+              data-slot="stepper-title"
+              data-state="active"
+            >
+              Contact Details
+            </h3>
+          </div>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
+          data-slot="stepper-separator"
+          data-state="active"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+        data-slot="stepper-item"
+        data-state="inactive"
+      >
+        <button
+          aria-controls="stepper-panel-3"
+          aria-selected="false"
+          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="inactive"
+          id="stepper-tab-3"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="inactive"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                data-icon="ban"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            class="mt-0.5 text-left"
+          >
+            <h3
+              class="text-sm font-medium text-slate-700"
+              data-slot="stepper-title"
+              data-state="inactive"
+            >
+              Preferences
+            </h3>
+          </div>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
+          data-slot="stepper-separator"
+          data-state="inactive"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+        data-slot="stepper-item"
+        data-state="inactive"
+      >
+        <button
+          aria-controls="stepper-panel-4"
+          aria-selected="false"
+          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="inactive"
+          id="stepper-tab-4"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="inactive"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                data-icon="ban"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            class="mt-0.5 text-left"
+          >
+            <h3
+              class="text-sm font-medium text-slate-700"
+              data-slot="stepper-title"
+              data-state="inactive"
+            >
+              Review & Submit
+            </h3>
+          </div>
+        </button>
+      </div>
+    </nav>
+  </div>
+</div>
+`;
+
+exports[`ProgressStepper > ProgressStepperVertical > should render the vertical stepper with different current step 1`] = `
+<div>
+  <div
+    aria-orientation="vertical"
+    class="w-full"
+    data-orientation="vertical"
+    data-slot="stepper"
+    role="tablist"
+  >
+    <nav
+      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+      data-orientation="vertical"
+      data-slot="stepper-nav"
+      data-state="3"
+    >
+      <div
+        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+        data-slot="stepper-item"
+        data-state="completed"
+      >
+        <button
+          aria-controls="stepper-panel-1"
+          aria-selected="false"
+          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="completed"
+          id="stepper-tab-1"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="completed"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                data-icon="circle-check"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            class="mt-0.5 text-left"
+          >
+            <h3
+              class="text-sm font-medium text-slate-700"
+              data-slot="stepper-title"
+              data-state="completed"
+            >
+              Personal Information
+            </h3>
+          </div>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
+          data-slot="stepper-separator"
+          data-state="completed"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+        data-slot="stepper-item"
+        data-state="completed"
+      >
+        <button
+          aria-controls="stepper-panel-2"
+          aria-selected="false"
+          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="completed"
+          id="stepper-tab-2"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="completed"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                data-icon="circle-check"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            class="mt-0.5 text-left"
+          >
+            <h3
+              class="text-sm font-medium text-blue-700"
+              data-slot="stepper-title"
+              data-state="completed"
+            >
+              Contact Details
+            </h3>
+          </div>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
+          data-slot="stepper-separator"
+          data-state="completed"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+        data-slot="stepper-item"
+        data-state="active"
+      >
+        <button
+          aria-controls="stepper-panel-3"
+          aria-selected="true"
+          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="active"
+          id="stepper-tab-3"
+          role="tab"
+          tabindex="0"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="active"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
+                data-icon="circle-dot"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            class="mt-0.5 text-left"
+          >
+            <h3
+              class="text-sm font-medium text-slate-700"
+              data-slot="stepper-title"
+              data-state="active"
+            >
+              Preferences
+            </h3>
+          </div>
+        </button>
+        <div
+          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
+          data-slot="stepper-separator"
+          data-state="active"
+        />
+      </div>
+      <div
+        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+        data-slot="stepper-item"
+        data-state="inactive"
+      >
+        <button
+          aria-controls="stepper-panel-4"
+          aria-selected="false"
+          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="inactive"
+          id="stepper-tab-4"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="inactive"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
+                data-icon="ban"
+                data-prefix="fas"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            class="mt-0.5 text-left"
+          >
+            <h3
+              class="text-sm font-medium text-slate-700"
+              data-slot="stepper-title"
+              data-state="inactive"
+            >
+              Review & Submit
+            </h3>
+          </div>
+        </button>
+      </div>
+    </nav>
+  </div>
+</div>
+`;
+
+exports[`ProgressStepper > ProgressStepperVertical > should render the vertical stepper with single step 1`] = `
+<div>
+  <div
+    aria-orientation="vertical"
+    class="w-full"
+    data-orientation="vertical"
+    data-slot="stepper"
+    role="tablist"
+  >
+    <nav
+      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+      data-orientation="vertical"
+      data-slot="stepper-nav"
+      data-state="1"
+    >
+      <div
+        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
+        data-slot="stepper-item"
+        data-state="completed"
+      >
+        <button
+          aria-controls="stepper-panel-1"
+          aria-selected="true"
+          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
+          data-loading="false"
+          data-slot="stepper-trigger"
+          data-state="completed"
+          id="stepper-tab-1"
+          role="tab"
+          tabindex="0"
+        >
+          <div
+            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
+            data-slot="stepper-indicator"
+            data-state="completed"
+          >
+            <div
+              class="absolute"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
+                data-icon="circle-check"
+                data-prefix="far"
+                role="img"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            class="mt-0.5 text-left"
+          >
+            <h3
+              class="text-sm font-medium text-slate-700"
+              data-slot="stepper-title"
+              data-state="completed"
+            >
+              Personal Information
+            </h3>
+          </div>
+        </button>
+      </div>
+    </nav>
+  </div>
+</div>
+`;
