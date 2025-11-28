@@ -1,0 +1,437 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ApplicantCard > should render a basic card with all components 1`] = `
+<div>
+  <div
+    class="flex flex-col overflow-hidden rounded-xl border border-slate-300 bg-slate-50"
+    data-slot="applicant-card"
+  >
+    <div
+      class="flex flex-row items-center justify-between p-6"
+      data-slot="applicant-card-header"
+    >
+      <h3
+        class="font-lato text-2xl leading-8 font-semibold"
+        data-slot="applicant-card-title"
+      >
+        John Doe
+      </h3>
+      <div
+        data-status="complete"
+        data-testid="status-tag"
+      >
+        Status: 
+        complete
+      </div>
+    </div>
+    <div
+      class="px-6 pb-6"
+      data-slot="applicant-card-body"
+    >
+      <p>
+        Primary applicant information
+      </p>
+      <ul>
+        <li>
+          Date of birth: January 1, 1980
+        </li>
+        <li>
+          Status: Completed
+        </li>
+      </ul>
+    </div>
+    <div
+      class="border-t border-slate-300 bg-slate-200 px-6 py-4"
+      data-slot="applicant-card-footer"
+    >
+      <button>
+        Edit Information
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ApplicantCard > should render a card with multiple footer actions 1`] = `
+<div>
+  <div
+    class="flex flex-col overflow-hidden rounded-xl border border-slate-300 bg-slate-50"
+    data-slot="applicant-card"
+  >
+    <div
+      class="flex flex-row items-center justify-between p-6"
+      data-slot="applicant-card-header"
+    >
+      <h3
+        class="font-lato text-2xl leading-8 font-semibold"
+        data-slot="applicant-card-title"
+      >
+        Jane Smith
+      </h3>
+      <div
+        data-status="complete"
+        data-testid="status-tag"
+      >
+        Status: 
+        complete
+      </div>
+    </div>
+    <div
+      class="px-6 pb-6"
+      data-slot="applicant-card-body"
+    >
+      <p>
+        Dependent information
+      </p>
+    </div>
+    <div
+      class="border-t border-slate-300 bg-slate-200 px-6 py-4"
+      data-slot="applicant-card-footer"
+    >
+      <div
+        class="flex justify-between"
+      >
+        <button
+          class="text-blue-600"
+        >
+          Edit
+        </button>
+        <button
+          class="text-red-600"
+        >
+          Remove
+        </button>
+        <button
+          class="text-gray-600"
+        >
+          View Details
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ApplicantCard > should render a card with new status 1`] = `
+<div>
+  <div
+    class="flex flex-col overflow-hidden rounded-xl border border-slate-300 bg-slate-50"
+    data-slot="applicant-card"
+  >
+    <div
+      class="flex flex-row items-center justify-between p-6"
+      data-slot="applicant-card-header"
+    >
+      <h3
+        class="font-lato text-2xl leading-8 font-semibold"
+        data-slot="applicant-card-title"
+      >
+        Add Child
+      </h3>
+      <div
+        data-status="new"
+        data-testid="status-tag"
+      >
+        Status: 
+        new
+      </div>
+    </div>
+    <div
+      class="px-6 pb-6"
+      data-slot="applicant-card-body"
+    >
+      <p>
+        Add a new child to the application
+      </p>
+      <p
+        class="text-sm text-gray-600"
+      >
+        Children must be under 18 years old and dependents.
+      </p>
+    </div>
+    <div
+      class="border-t border-slate-300 bg-slate-200 px-6 py-4"
+      data-slot="applicant-card-footer"
+    >
+      <button>
+        Add Child
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ApplicantCard > should render a card without footer 1`] = `
+<div>
+  <div
+    class="flex flex-col overflow-hidden rounded-xl border border-slate-300 bg-slate-50"
+    data-slot="applicant-card"
+  >
+    <div
+      class="flex flex-row items-center justify-between p-6"
+      data-slot="applicant-card-header"
+    >
+      <h3
+        class="font-lato text-2xl leading-8 font-semibold"
+        data-slot="applicant-card-title"
+      >
+        Simple Card
+      </h3>
+    </div>
+    <div
+      class="px-6 pb-6"
+      data-slot="applicant-card-body"
+    >
+      <p>
+        This card has no footer section.
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ApplicantCard > should render a card without status tag 1`] = `
+<div>
+  <div
+    class="flex flex-col overflow-hidden rounded-xl border border-slate-300 bg-slate-50"
+    data-slot="applicant-card"
+  >
+    <div
+      class="flex flex-row items-center justify-between p-6"
+      data-slot="applicant-card-header"
+    >
+      <h3
+        class="font-lato text-2xl leading-8 font-semibold"
+        data-slot="applicant-card-title"
+      >
+        Information Card
+      </h3>
+    </div>
+    <div
+      class="px-6 pb-6"
+      data-slot="applicant-card-body"
+    >
+      <p>
+        This card has no status tag.
+      </p>
+      <p>
+        Any content can go here.
+      </p>
+    </div>
+    <div
+      class="border-t border-slate-300 bg-slate-200 px-6 py-4"
+      data-slot="applicant-card-footer"
+    >
+      <span>
+        Simple footer text
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ApplicantCard > should render card with custom className 1`] = `
+<div>
+  <div
+    class="flex flex-col overflow-hidden rounded-xl border border-slate-300 bg-slate-50 custom-card"
+    data-slot="applicant-card"
+  >
+    <div
+      class="flex flex-row items-center justify-between p-6 custom-header"
+      data-slot="applicant-card-header"
+    >
+      <h3
+        class="font-lato text-2xl leading-8 font-semibold custom-title"
+        data-slot="applicant-card-title"
+      >
+        Custom Card
+      </h3>
+    </div>
+    <div
+      class="px-6 pb-6 custom-body"
+      data-slot="applicant-card-body"
+    >
+      <p>
+        Custom styled card
+      </p>
+    </div>
+    <div
+      class="border-t border-slate-300 bg-slate-200 px-6 py-4 custom-footer"
+      data-slot="applicant-card-footer"
+    >
+      <button>
+        Custom Action
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ApplicantCard > should render complex card content 1`] = `
+<div>
+  <div
+    class="flex flex-col overflow-hidden rounded-xl border border-slate-300 bg-slate-50"
+    data-slot="applicant-card"
+  >
+    <div
+      class="flex flex-row items-center justify-between p-6"
+      data-slot="applicant-card-header"
+    >
+      <h3
+        class="font-lato text-2xl leading-8 font-semibold"
+        data-slot="applicant-card-title"
+      >
+        Complex Application Card
+      </h3>
+      <div
+        data-status="new"
+        data-testid="status-tag"
+      >
+        Status: 
+        new
+      </div>
+    </div>
+    <div
+      class="px-6 pb-6"
+      data-slot="applicant-card-body"
+    >
+      <div
+        class="space-y-4"
+      >
+        <h4
+          class="font-semibold"
+        >
+          Application Details
+        </h4>
+        <div
+          class="grid grid-cols-2 gap-4"
+        >
+          <div>
+            <label
+              class="block text-sm font-medium"
+              for="firstName"
+            >
+              First Name
+            </label>
+            <p
+              id="firstName"
+            >
+              John
+            </p>
+          </div>
+          <div>
+            <label
+              class="block text-sm font-medium"
+              for="lastName"
+            >
+              Last Name
+            </label>
+            <p
+              id="lastName"
+            >
+              Doe
+            </p>
+          </div>
+          <div>
+            <label
+              class="block text-sm font-medium"
+              for="dob"
+            >
+              Date of Birth
+            </label>
+            <p
+              id="dob"
+            >
+              January 1, 1980
+            </p>
+          </div>
+          <div>
+            <label
+              class="block text-sm font-medium"
+              for="status"
+            >
+              Status
+            </label>
+            <p
+              id="status"
+            >
+              Pending Review
+            </p>
+          </div>
+        </div>
+        <div
+          class="rounded border border-yellow-200 bg-yellow-50 p-3"
+        >
+          <p
+            class="text-sm text-yellow-800"
+          >
+            Additional verification required
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      class="border-t border-slate-300 bg-slate-200 px-6 py-4"
+      data-slot="applicant-card-footer"
+    >
+      <div
+        class="flex items-center justify-between"
+      >
+        <span
+          class="text-sm text-gray-600"
+        >
+          Last updated: 2023-12-01
+        </span>
+        <div
+          class="space-x-2"
+        >
+          <button
+            class="rounded bg-blue-600 px-3 py-1 text-white"
+          >
+            Edit
+          </button>
+          <button
+            class="rounded bg-gray-600 px-3 py-1 text-white"
+          >
+            View
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ApplicantCard > should render individual components independently 1`] = `
+<div>
+  <div>
+    <div
+      class="flex flex-row items-center justify-between p-6"
+      data-slot="applicant-card-header"
+    >
+      <h3
+        class="font-lato text-2xl leading-8 font-semibold"
+        data-slot="applicant-card-title"
+      >
+        Independent Header
+      </h3>
+    </div>
+    <div
+      class="px-6 pb-6"
+      data-slot="applicant-card-body"
+    >
+      <p>
+        Independent Body
+      </p>
+    </div>
+    <div
+      class="border-t border-slate-300 bg-slate-200 px-6 py-4"
+      data-slot="applicant-card-footer"
+    >
+      <p>
+        Independent Footer
+      </p>
+    </div>
+  </div>
+</div>
+`;
