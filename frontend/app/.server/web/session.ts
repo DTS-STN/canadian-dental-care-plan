@@ -10,6 +10,7 @@ import type { Logger } from '~/.server/logging';
 import type { ApplyState, ApplyStateSessionKey } from '~/.server/routes/helpers/apply-route-helpers';
 import type { ProtectedApplyState, ProtectedApplyStateSessionKey } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import type { ProtectedRenewState, ProtectedRenewStateSessionKey } from '~/.server/routes/helpers/protected-renew-route-helpers';
+import type { PublicApplicationState, PublicApplicationStateSessionKey } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { RenewState, RenewStateSessionKey } from '~/.server/routes/helpers/renew-route-helpers';
 import type { StatusState, StatusStateSessionKey } from '~/.server/routes/helpers/status-route-helpers';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
@@ -21,6 +22,8 @@ import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
  * Extend this interface to add more session keys and their types as needed.
  */
 type SessionTypeMap = {
+  [K in PublicApplicationStateSessionKey]: PublicApplicationState;
+} & {
   [K in ApplyStateSessionKey]: ApplyState;
 } & {
   [K in ProtectedApplyStateSessionKey]: ProtectedApplyState;
