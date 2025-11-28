@@ -1,0 +1,31 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`StatusTag > should render complete status 1`] = `
+<div>
+  <div
+    class="flex items-center gap-2 rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white"
+  >
+    <span
+      data-icon="icon"
+      data-testid="font-awesome-icon"
+    >
+      Icon
+    </span>
+    <span>
+      status.complete
+    </span>
+  </div>
+</div>
+`;
+
+exports[`StatusTag > should render new status 1`] = `
+<div>
+  <div
+    class="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-800"
+  >
+    <span>
+      status.new
+    </span>
+  </div>
+</div>
+`;
