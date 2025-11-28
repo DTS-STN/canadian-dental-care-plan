@@ -47,6 +47,7 @@
     "@react-router/node": "^7.9.6",
     "@react-router/serve": "^7.9.6",
     "bowser": "^2.13.0",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "compression": "^1.8.1",
     "connect-redis": "^9.0.0",

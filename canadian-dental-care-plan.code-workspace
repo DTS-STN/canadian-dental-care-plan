@@ -40,6 +40,7 @@
       "org.springframework.test.web.servlet.result.MockMvcResultMatchers.*"
     ],
     "java.configuration.updateBuildConfiguration": "automatic",
+    "tailwindCSS.classFunctions": ["cva", "cx"],
     "tailwindCSS.experimental.configFile": "frontend/app/tailwind.css"
   }
 }
