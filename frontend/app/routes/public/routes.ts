@@ -5,6 +5,10 @@ export const routes = [
     file: 'routes/public/layout.tsx',
     children: [
       {
+        file: 'routes/public/application/layout.tsx',
+        children: [{ id: 'public/application/index', file: 'routes/public/application/index.tsx', paths: { en: '/:lang/application', fr: '/:lang/demandes' } }],
+      },
+      {
         file: 'routes/public/apply/layout.tsx',
         children: [
           { id: 'public/apply/index', file: 'routes/public/apply/index.tsx', paths: { en: '/:lang/apply', fr: '/:lang/demander' } },

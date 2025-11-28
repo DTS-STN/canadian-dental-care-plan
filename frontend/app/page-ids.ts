@@ -129,6 +129,9 @@ export const pageIds = {
     },
   },
   public: {
+    application: {
+      index: 'CDCP-APPL-0001',
+    },
     apply: {
       index: 'CDCP-APPL-0001',
       termsAndConditions: 'CDCP-APPL-0002',
