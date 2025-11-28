@@ -6,7 +6,10 @@ export const routes = [
     children: [
       {
         file: 'routes/public/application/layout.tsx',
-        children: [{ id: 'public/application/index', file: 'routes/public/application/index.tsx', paths: { en: '/:lang/application', fr: '/:lang/demandes' } }],
+        children: [
+          { id: 'public/application/index', file: 'routes/public/application/index.tsx', paths: { en: '/:lang/application', fr: '/:lang/demandes' } },
+          { id: 'public/application/$id/eligibility-requirements', file: 'routes/public/application/entry/eligibility-requirements.tsx', paths: { en: '/:lang/application/:id/eligibility-requirements', fr: '/:lang/demandes/:id/criteres-admissibilite' } },
+        ],
       },
       {
         file: 'routes/public/apply/layout.tsx',

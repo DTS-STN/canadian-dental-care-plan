@@ -3,7 +3,7 @@ import { redirectDocument } from 'react-router';
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';
 import { omit } from 'moderndash';
-import { nanoid } from 'nanoid';
+import { customAlphabet, urlAlphabet } from 'nanoid';
 import type { ReadonlyDeep } from 'type-fest';
 import { z } from 'zod';
 
@@ -158,9 +158,14 @@ export type TermsAndConditionsState = NonNullable<PublicApplicationState['termsA
 export type TypeOfApplicationState = NonNullable<PublicApplicationState['typeOfApplication']>;
 
 /**
+ * Predefined Nano ID function.
+ */
+const nanoid = customAlphabet(urlAlphabet, 10);
+
+/**
  * Schema for validating Nano ID.
  */
-const idSchema = z.nanoid();
+const idSchema = z.string().regex(/^[a-zA-Z0-9_-]+$/);
 
 /**
  * Gets the public application flow session key.
@@ -284,7 +289,8 @@ interface StartArgs {
 export function startApplicationState({ applicationYear, session }: StartArgs): PublicApplicationState {
   const log = createLogger('application-route-helpers.server/startApplicationState');
 
-  const id = nanoid(12);
+  const id = nanoid();
+  console.log({ id });
   const initialState: PublicApplicationState = {
     id,
     editMode: false,

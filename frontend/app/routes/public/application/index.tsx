@@ -18,7 +18,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'gcweb'),
   pageIdentifier: pageIds.public.application.index,
-  pageTitleI18nKey: 'application:terms-and-conditions.page-heading',
+  pageTitleI18nKey: 'application:eligibility-requirements.page-heading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -42,7 +42,7 @@ export default function PublicApplicationIndex({ loaderData, params }: Route.Com
 
   const navigate = useNavigate();
 
-  const path = getPathById('public/application/$id/terms-and-conditions', { ...params, id });
+  const path = getPathById('public/application/$id/eligibility-requirements', { ...params, id });
 
   useEffect(() => {
     sessionStorage.setItem('flow.state', 'active');

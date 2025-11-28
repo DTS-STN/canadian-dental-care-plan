@@ -131,6 +131,7 @@ export const pageIds = {
   public: {
     application: {
       index: 'CDCP-APPL-0001',
+      eligibilityRequirements: 'CDCP-APPL-0002',
     },
     apply: {
       index: 'CDCP-APPL-0001',
