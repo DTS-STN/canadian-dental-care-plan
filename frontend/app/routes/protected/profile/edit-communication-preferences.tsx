@@ -1,13 +1,16 @@
+import { useState } from 'react';
 import type { ReactNode } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
+import type { PickDeep } from 'type-fest';
 import { z } from 'zod';
 
 import type { Route } from './+types/edit-communication-preferences';
 
 import { TYPES } from '~/.server/constants';
+import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -33,6 +36,12 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
+
+function isClientApplicationEmailAddressVerified(clientApplication: PickDeep<ClientApplicationDto, 'contactInformation.email' | 'contactInformation.emailVerified'>): boolean {
+  const hasEmailAddress = clientApplication.contactInformation.email !== undefined;
+  const emailAddressVerified = clientApplication.contactInformation.emailVerified === true;
+  return hasEmailAddress && emailAddressVerified;
+}
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
@@ -62,6 +71,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     languages,
     gcCommunicationMethods,
     sunLifeCommunicationMethods,
+    isClientApplicationEmailAddressVerified: isClientApplicationEmailAddressVerified(clientApplication),
   };
 }
 
@@ -94,9 +104,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   // Redirect to edit email address if digital communication method is selected without a verified email address
   const isDigitalCommunicationMethodSelected = parsedDataResult.data.preferredMethodSunLife === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || parsedDataResult.data.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID;
-  const hasEmailAddress = clientApplication.contactInformation.email !== undefined;
-  const emailAddressVerified = clientApplication.contactInformation.emailVerified;
-  if (isDigitalCommunicationMethodSelected && (!hasEmailAddress || !emailAddressVerified)) {
+  if (isDigitalCommunicationMethodSelected && !isClientApplicationEmailAddressVerified(clientApplication)) {
     const profileEmailContext: ProfileEmailContext = {
       context: 'communication-preferences',
       pref_lang: parsedDataResult.data.preferredLanguage,
@@ -126,8 +134,10 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function EditCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, languages, sunLifeCommunicationMethods, gcCommunicationMethods } = loaderData;
-  const { COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID } = useClientEnv();
+  const { defaultState, languages, sunLifeCommunicationMethods, gcCommunicationMethods, isClientApplicationEmailAddressVerified } = loaderData;
+  const { COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID } = useClientEnv();
+  const [selectedPreferredMethodSunLife, setSelectedPreferredMethodSunLife] = useState(defaultState.preferredMethodSunLife);
+  const [selectedPreferredMethodGovernmentOfCanada, setSelectedPreferredMethodGovernmentOfCanada] = useState(defaultState.preferredMethodGovernmentOfCanada);
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -148,7 +158,8 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
   const sunLifeCommunicationMethodOptions: InputRadiosProps['options'] = sunLifeCommunicationMethods.map((method) => ({
     value: method.id,
     children: method.name,
-    defaultChecked: defaultState.preferredMethodSunLife === method.id,
+    defaultChecked: selectedPreferredMethodSunLife === method.id,
+    onChange: () => setSelectedPreferredMethodSunLife(method.id),
   }));
 
   const gcCommunicationMethodOptions: InputRadiosProps['options'] = gcCommunicationMethods.map((method) => {
@@ -163,9 +174,13 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
     return {
       value: method.id,
       children,
-      defaultChecked: defaultState.preferredMethodGovernmentOfCanada === method.id,
+      defaultChecked: selectedPreferredMethodGovernmentOfCanada === method.id,
+      onChange: () => setSelectedPreferredMethodGovernmentOfCanada(method.id),
     };
   });
+
+  const isDigitalCommunicationMethodSelected = selectedPreferredMethodSunLife === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || selectedPreferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID;
+  const submitButtonText = isDigitalCommunicationMethodSelected && !isClientApplicationEmailAddressVerified ? t('protected-profile:edit-communication-preferences.continue') : t('protected-profile:edit-communication-preferences.save');
 
   return (
     <div className="max-w-prose">
@@ -183,7 +198,6 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
             errorMessage={errors?.preferredMethodSunLife}
             required
           />
-
           <InputRadios
             id="preferred-method-gc"
             name="preferredMethodGovernmentOfCanada"
@@ -195,7 +209,7 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
         </div>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Communication preferences click">
-            {t('protected-profile:edit-communication-preferences.save')}
+            {submitButtonText}
           </LoadingButton>
           <ButtonLink
             variant="secondary"

@@ -131,6 +131,7 @@
     "preferred-method-gc-mail": "<span>{{name}}</span><br>You can also view your Canadian Dental Care Plan information in MSCA.",
     "preferred-method-sunlife": "How would you like Sun Life to communicate with you?",
     "back": "Back",
+    "continue": "Continue",
     "save": "Save",
     "error-message": {
       "preferred-language-required": "Select preferred language of communication",

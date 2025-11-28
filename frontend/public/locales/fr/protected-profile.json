@@ -131,6 +131,7 @@
     "preferred-method-gc": "Comment souhaitez-vous recevoir des mises à jour du gouvernement du Canada concernant le Plan canadien de soins dentaires?",
     "preferred-method-sunlife": "Comment aimeriez-vous que la Sun Life communique avec vous?",
     "back": "Retour",
+    "continue": "Continuer",
     "save": "Sauvegarder",
     "error-message": {
       "preferred-language-required": "Sélectionnez la langue de communication préférée",
