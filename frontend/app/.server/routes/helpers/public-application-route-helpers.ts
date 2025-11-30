@@ -1,4 +1,5 @@
 import { redirectDocument } from 'react-router';
+import type { Params } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';
@@ -13,6 +14,7 @@ import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
 import { getAgeFromDateString } from '~/utils/date-utils';
+import { getPathById } from '~/utils/route-utils';
 
 export type PublicApplicationStateSessionKey = `public-application-flow-${string}`;
 
@@ -156,6 +158,7 @@ export type PartnerInformationState = NonNullable<PublicApplicationState['partne
 export type SubmissionInfoState = NonNullable<PublicApplicationState['submissionInfo']>;
 export type TermsAndConditionsState = NonNullable<PublicApplicationState['termsAndConditions']>;
 export type TypeOfApplicationState = NonNullable<PublicApplicationState['typeOfApplication']>;
+export type TypeOfApplicationFlowState = NonNullable<PublicApplicationState['typeOfApplicationFlow']>;
 
 /**
  * Predefined Nano ID function.
@@ -365,4 +368,44 @@ export function getEligibilityByAge(dateOfBirth: string): EligibilityResult {
 
   // No eligibility group found; Young and seniors are outisde the eligibility range validation.
   return { eligible: true };
+}
+
+/**
+ * Validates that the application type and flow combination in the state is allowed.
+ *
+ * @param state - The public application state containing type and flow information
+ * @param params - Route parameters used to construct redirect URLs
+ * @param allowedTypesAndFlows - Array of allowed type-flow combinations in the format "type-flow"
+ *
+ * @throws {Response} Redirects to the eligibility requirements page if:
+ * - Either type or flow is not defined in the state
+ * - The type-flow combination is not in the allowed list
+ *
+ * @example
+ * ```typescript
+ * validateApplicationTypeAndFlow(
+ *   state,
+ *   params,
+ *   ['new-adult', 'renew-adult']
+ * );
+ * ```
+ */
+export function validateApplicationTypeAndFlow(state: PublicApplicationState, params: Params, allowedTypesAndFlows: ReadonlyArray<`${TypeOfApplicationState}-${TypeOfApplicationFlowState}`>) {
+  const log = createLogger('application-route-helpers.server/validateApplicationTypeAndFlow');
+  const redirectUrl = getPathById('public/application/$id/eligibility-requirements', params);
+
+  const type = state.typeOfApplication;
+  const flow = state.typeOfApplicationFlow;
+
+  if (!type || !flow) {
+    log.warn('Type of application or flow is not defined; redirecting to [%s]; stateId: [%s]', redirectUrl, state.id);
+    throw redirectDocument(redirectUrl);
+  }
+
+  const typeAndFlowKey = `${type}-${flow}` as const;
+
+  if (!allowedTypesAndFlows.includes(typeAndFlowKey)) {
+    log.warn('Type and flow combination is not allowed; typeAndFlow: [%s], allowedTypesAndFlows: [%s], redirecting to [%s], stateId: [%s]', typeAndFlowKey, allowedTypesAndFlows, redirectUrl, state.id);
+    throw redirectDocument(redirectUrl);
+  }
 }
