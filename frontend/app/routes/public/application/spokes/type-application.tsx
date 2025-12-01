@@ -1,0 +1,130 @@
+import { data, redirect, useFetcher } from 'react-router';
+
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { Trans, useTranslation } from 'react-i18next';
+import { z } from 'zod';
+
+import type { Route } from './+types/type-application';
+
+import { TYPES } from '~/.server/constants';
+import { loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { getFixedT } from '~/.server/utils/locale.utils';
+import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { useErrorSummary } from '~/components/error-summary';
+import { InputRadios } from '~/components/input-radios';
+import { LoadingButton } from '~/components/loading-button';
+import { Progress } from '~/components/progress';
+import { pageIds } from '~/page-ids';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
+import { getTitleMetaTags } from '~/utils/seo-utils';
+
+const APPLICANT_TYPE = { adult: 'adult', adultChild: 'adult-child', child: 'child', delegate: 'delegate' } as const;
+
+export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'), pageIdentifier: pageIds.public.apply.typeOfApplication, pageTitleI18nKey: 'apply:type-of-application.page-title' } as const satisfies RouteHandleData;
+
+export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
+
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const state = loadApplyState({ params, session });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:type-of-application.page-title') }) };
+
+  return { meta, defaultState: state.typeOfApplication };
+}
+
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const formData = await request.formData();
+
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  securityHandler.validateCsrfToken({ formData, session });
+  loadApplyState({ params, session });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+
+  /**
+   * Schema for application delegate.
+   */
+  const typeOfApplicationSchema = z.object({ typeOfApplication: z.enum(APPLICANT_TYPE, { error: t('apply:type-of-application.error-message.type-of-application-required') }) });
+
+  const parsedDataResult = typeOfApplicationSchema.safeParse({ typeOfApplication: String(formData.get('typeOfApplication') ?? '') });
+
+  if (!parsedDataResult.success) {
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
+  }
+
+  saveApplyState({ params, session, state: { editMode: false, typeOfApplication: parsedDataResult.data.typeOfApplication } });
+
+  if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.adult) {
+    return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
+  }
+
+  if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.adultChild) {
+    return redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
+  }
+
+  if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.child) {
+    return redirect(getPathById('public/apply/$id/child/children/index', params));
+  }
+
+  return redirect(getPathById('public/apply/$id/application-delegate', params));
+}
+
+export default function ApplyFlowTypeOfApplication({ loaderData, params }: Route.ComponentProps) {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { defaultState } = loaderData;
+
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
+
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, { typeOfApplication: 'input-radio-type-of-application-option-0' });
+
+  return (
+    <>
+      <div className="my-6 sm:my-8">
+        <Progress value={20} size="lg" label={t('apply:progress.label')} />
+      </div>
+      <div className="max-w-prose">
+        <p className="mt-8 mb-4 italic">{t('apply:required-label')}</p>
+        <errorSummary.ErrorSummary />
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <InputRadios
+            id="type-of-application"
+            name="typeOfApplication"
+            legend={t('apply:type-of-application.form-instructions')}
+            options={[
+              { value: APPLICANT_TYPE.adult, children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.personal" />, defaultChecked: defaultState === APPLICANT_TYPE.adult },
+              { value: APPLICANT_TYPE.child, children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.child" />, defaultChecked: defaultState === APPLICANT_TYPE.child },
+              { value: APPLICANT_TYPE.adultChild, children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.personal-and-child" />, defaultChecked: defaultState === APPLICANT_TYPE.adultChild },
+              { value: APPLICANT_TYPE.delegate, children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.delegate" />, defaultChecked: defaultState === APPLICANT_TYPE.delegate },
+            ]}
+            required
+            errorMessage={errors?.typeOfApplication}
+          />
+          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Type of application click">
+              {t('apply:type-of-application.continue-btn')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              variant="secondary"
+              routeId="public/apply/$id/tax-filing"
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Type of application click"
+            >
+              {t('apply:type-of-application.back-btn')}
+            </ButtonLink>
+          </div>
+        </fetcher.Form>
+      </div>
+    </>
+  );
+}

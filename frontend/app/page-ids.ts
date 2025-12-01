@@ -138,7 +138,8 @@ export const pageIds = {
         maritalStatus: 'CDCP-APPL-AD-0001',
       },
       spokes: {
-        maritalStatus: 'CDCP-APPL-SPK-0001',
+        typeOfApplication: 'CDCP-APPL-SPK-0001',
+        maritalStatus: 'CDCP-APPL-SPK-0002',
       },
     },
     apply: {
