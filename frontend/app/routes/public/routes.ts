@@ -10,8 +10,8 @@ export const routes = [
           { id: 'public/application/index', file: 'routes/public/application/index.tsx', paths: { en: '/:lang/application', fr: '/:lang/demandes' } },
           { id: 'public/application/$id/eligibility-requirements', file: 'routes/public/application/entry/eligibility-requirements.tsx', paths: { en: '/:lang/application/:id/eligibility-requirements', fr: '/:lang/demandes/:id/criteres-admissibilite' } },
           { id: 'public/application/$id/new-adult/marital-status', file: 'routes/public/application/new-adult/marital-status.tsx', paths: { en: '/:lang/application/:id/new-adult/marital-status', fr: '/:lang/demandes/:id/new-adult/etat-civil' } },
-          { id: 'public/application/$id/tax-filing', file: 'routes/public/application/tax-filing.tsx', paths: { en: '/:lang/application/:id/tax-filing', fr: '/:lang/demandes/:id/declaration-impot' } },
-          { id: 'public/application/$id/file-taxes', file: 'routes/public/application/file-taxes.tsx', paths: { en: '/:lang/application/:id/file-taxes', fr: '/:lang/demandes/:id/produire-declaration-revenus' } },
+          { id: 'public/application/$id/tax-filing', file: 'routes/public/application/spokes/tax-filing.tsx', paths: { en: '/:lang/application/:id/tax-filing', fr: '/:lang/demandes/:id/declaration-impot' } },
+          { id: 'public/application/$id/file-taxes', file: 'routes/public/application/spokes/file-taxes.tsx', paths: { en: '/:lang/application/:id/file-taxes', fr: '/:lang/demandes/:id/produire-declaration-revenus' } },
         ],
       },
       {

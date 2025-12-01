@@ -75,7 +75,7 @@ export default function ApplyFlowFileYourTaxes({ loaderData, params }: Route.Com
         <ButtonLink
           id="back-button"
           variant="secondary"
-          routeId="public/application/$id//tax-filing"
+          routeId="public/application/$id/tax-filing"
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
