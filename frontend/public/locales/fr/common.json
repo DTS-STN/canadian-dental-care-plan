@@ -56,5 +56,9 @@
   "status": {
     "complete": "Complet",
     "new": "Nouveau"
+  },
+  "navigation": {
+    "previous": "Précédent",
+    "next": "Suivant"
   }
 }
