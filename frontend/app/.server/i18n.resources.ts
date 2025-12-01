@@ -1,3 +1,4 @@
+import applicationNewAdultEn from '~/../public/locales/en/application-new-adult.json';
 import applicationEn from '~/../public/locales/en/application.json';
 import applyAdultChildEn from '~/../public/locales/en/apply-adult-child.json';
 import applyAdultEn from '~/../public/locales/en/apply-adult.json';
@@ -22,6 +23,7 @@ import renewEn from '~/../public/locales/en/renew.json';
 import statusEn from '~/../public/locales/en/status.json';
 import stubLoginEn from '~/../public/locales/en/stub-login.json';
 import unableToProcessRequestEn from '~/../public/locales/en/unable-to-process-request.json';
+import applicationNewAdultFr from '~/../public/locales/fr/application-new-adult.json';
 import applicationFr from '~/../public/locales/fr/application.json';
 import applyAdultChildFr from '~/../public/locales/fr/apply-adult-child.json';
 import applyAdultFr from '~/../public/locales/fr/apply-adult.json';
@@ -51,6 +53,7 @@ type I18nResources = typeof i18nResourcesEn;
 
 const i18nResourcesEn = {
   application: applicationEn,
+  'application-new-adult': applicationNewAdultEn,
   'apply-adult-child': applyAdultChildEn,
   'apply-adult': applyAdultEn,
   'protected-apply-adult': protectedApplyAdultEn,
@@ -78,6 +81,7 @@ const i18nResourcesEn = {
 
 const i18nResourcesFr = {
   application: applicationFr,
+  'application-new-adult': applicationNewAdultFr,
   'apply-adult-child': applyAdultChildFr,
   'apply-adult': applyAdultFr,
   'protected-apply-adult': protectedApplyAdultFr,

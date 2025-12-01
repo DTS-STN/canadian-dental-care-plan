@@ -9,6 +9,7 @@ export const routes = [
         children: [
           { id: 'public/application/index', file: 'routes/public/application/index.tsx', paths: { en: '/:lang/application', fr: '/:lang/demandes' } },
           { id: 'public/application/$id/eligibility-requirements', file: 'routes/public/application/entry/eligibility-requirements.tsx', paths: { en: '/:lang/application/:id/eligibility-requirements', fr: '/:lang/demandes/:id/criteres-admissibilite' } },
+          { id: 'public/application/$id/new-adult/marital-status', file: 'routes/public/application/new-adult/marital-status.tsx', paths: { en: '/:lang/application/:id/new-adult/marital-status', fr: '/:lang/demandes/:id/new-adult/etat-civil' } },
         ],
       },
       {
