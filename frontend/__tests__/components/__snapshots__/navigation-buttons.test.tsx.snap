@@ -1,0 +1,237 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NavigationButton > renders next button > expected html 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 gap-2 text-left"
+    id="next-btn"
+  >
+    <span>
+      <span
+        class="space-y-1 sm:space-y-2"
+      >
+        <span
+          class="block text-sm font-normal sm:text-base"
+        >
+          common:navigation.next
+        </span>
+        <span
+          class="text-base sm:text-lg"
+        >
+          Access to dental insurance
+        </span>
+      </span>
+    </span>
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-circle-chevron-right ms-2 text-3xl"
+      data-icon="circle-chevron-right"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 512 512"
+    >
+      <path
+        d="M0 256a256 256 0 1 0 512 0 256 256 0 1 0 -512 0zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z"
+        fill="currentColor"
+      />
+    </svg>
+  </button>
+</div>
+`;
+
+exports[`NavigationButton > renders next button when loading > expected html 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 gap-2 text-left"
+    disabled=""
+    id="next-btn"
+  >
+    <span>
+      <span
+        class="space-y-1 sm:space-y-2"
+      >
+        <span
+          class="block text-sm font-normal sm:text-base"
+        >
+          common:navigation.next
+        </span>
+        <span
+          class="text-base sm:text-lg"
+        >
+          Access to dental insurance
+        </span>
+      </span>
+    </span>
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-spinner ms-2 text-3xl fa-spin"
+      data-icon="spinner"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 512 512"
+    >
+      <path
+        d="M208 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm0 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM48 208a48 48 0 1 1 0 96 48 48 0 1 1 0-96zm368 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM75 369.1A48 48 0 1 1 142.9 437 48 48 0 1 1 75 369.1zM75 75A48 48 0 1 1 142.9 142.9 48 48 0 1 1 75 75zM437 369.1A48 48 0 1 1 369.1 437 48 48 0 1 1 437 369.1z"
+        fill="currentColor"
+      />
+    </svg>
+  </button>
+</div>
+`;
+
+exports[`NavigationButton > renders previous button > expected html 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 gap-2 text-left"
+    id="prev-btn"
+  >
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-circle-chevron-left me-2 text-3xl"
+      data-icon="circle-chevron-left"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 512 512"
+    >
+      <path
+        d="M512 256a256 256 0 1 0 -512 0 256 256 0 1 0 512 0zM271 135c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-87 87 87 87c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L167 273c-9.4-9.4-9.4-24.6 0-33.9L271 135z"
+        fill="currentColor"
+      />
+    </svg>
+    <span>
+      <span
+        class="space-y-1 sm:space-y-2"
+      >
+        <span
+          class="block text-sm font-normal sm:text-base"
+        >
+          common:navigation.previous
+        </span>
+        <span
+          class="text-base sm:text-lg"
+        >
+          Your marital status
+        </span>
+      </span>
+    </span>
+  </button>
+</div>
+`;
+
+exports[`NavigationButton > renders previous button when loading > expected html 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 gap-2 text-left"
+    disabled=""
+    id="prev-btn"
+  >
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-spinner me-2 text-3xl fa-spin"
+      data-icon="spinner"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 512 512"
+    >
+      <path
+        d="M208 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm0 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM48 208a48 48 0 1 1 0 96 48 48 0 1 1 0-96zm368 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM75 369.1A48 48 0 1 1 142.9 437 48 48 0 1 1 75 369.1zM75 75A48 48 0 1 1 142.9 142.9 48 48 0 1 1 75 75zM437 369.1A48 48 0 1 1 369.1 437 48 48 0 1 1 437 369.1z"
+        fill="currentColor"
+      />
+    </svg>
+    <span>
+      <span
+        class="space-y-1 sm:space-y-2"
+      >
+        <span
+          class="block text-sm font-normal sm:text-base"
+        >
+          common:navigation.previous
+        </span>
+        <span
+          class="text-base sm:text-lg"
+        >
+          Your marital status
+        </span>
+      </span>
+    </span>
+  </button>
+</div>
+`;
+
+exports[`NavigationButtonLink > renders next link > expected html 1`] = `
+<div>
+  <a
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 gap-2 text-left"
+    data-discover="true"
+    href="/next"
+    id="next-link"
+  >
+    <span
+      class="space-y-1 sm:space-y-2"
+    >
+      <span
+        class="block text-sm font-normal sm:text-base"
+      >
+        common:navigation.next
+      </span>
+      <span
+        class="text-base sm:text-lg"
+      >
+        Access to dental insurance
+      </span>
+    </span>
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-circle-chevron-right ms-2 text-3xl"
+      data-icon="circle-chevron-right"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 512 512"
+    >
+      <path
+        d="M0 256a256 256 0 1 0 512 0 256 256 0 1 0 -512 0zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z"
+        fill="currentColor"
+      />
+    </svg>
+  </a>
+</div>
+`;
+
+exports[`NavigationButtonLink > renders previous link > expected html 1`] = `
+<div>
+  <a
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 gap-2 text-left"
+    data-discover="true"
+    href="/prev"
+    id="prev-link"
+  >
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-circle-chevron-left me-2 text-3xl"
+      data-icon="circle-chevron-left"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 512 512"
+    >
+      <path
+        d="M512 256a256 256 0 1 0 -512 0 256 256 0 1 0 512 0zM271 135c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-87 87 87 87c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L167 273c-9.4-9.4-9.4-24.6 0-33.9L271 135z"
+        fill="currentColor"
+      />
+    </svg>
+    <span
+      class="space-y-1 sm:space-y-2"
+    >
+      <span
+        class="block text-sm font-normal sm:text-base"
+      >
+        common:navigation.previous
+      </span>
+      <span
+        class="text-base sm:text-lg"
+      >
+        Your marital status
+      </span>
+    </span>
+  </a>
+</div>
+`;
