@@ -135,7 +135,7 @@ export type PublicApplicationState = ReadonlyDeep<{
     shareData: boolean;
   };
   typeOfApplication?: 'new' | 'renew';
-  typeOfApplicationFlow?: 'adult' | 'children' | 'family';
+  typeOfApplicationFlow?: 'adult' | 'children' | 'family' | 'delegate';
 }>;
 
 export type ApplicantInformationState = NonNullable<PublicApplicationState['applicantInformation']>;

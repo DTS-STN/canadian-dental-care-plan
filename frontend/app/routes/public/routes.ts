@@ -15,7 +15,8 @@ export const routes = [
 
           // spokes
           { id: 'public/application/$id/marital-status', file: 'routes/public/application/spokes/marital-status.tsx', paths: { en: '/:lang/application/:id/marital-status', fr: '/:lang/demander/:id/etat-civil' } },
-          { id: 'public/application/$id/type-application', file: 'routes/public/application/spokes/type-of-application.tsx', paths: { en: '/:lang/application/:id/type-application', fr: '/:lang/demander/:id/type-demande' } },
+          { id: 'public/application/$id/type-application', file: 'routes/public/application/spokes/type-application.tsx', paths: { en: '/:lang/application/:id/type-application', fr: '/:lang/demander/:id/type-demande' } },
+          { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },
         ],
       },
       {

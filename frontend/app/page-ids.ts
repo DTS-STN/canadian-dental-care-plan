@@ -132,14 +132,15 @@ export const pageIds = {
     application: {
       index: 'CDCP-APPL-0001',
       eligibilityRequirements: 'CDCP-APPL-0002',
-      taxFiling: 'CDCP-APPL-0003',
-      fileYourTaxes: 'CDCP-APPL-0004',
       newAdult: {
         maritalStatus: 'CDCP-APPL-AD-0001',
       },
       spokes: {
-        typeOfApplication: 'CDCP-APPL-SPK-0001',
-        maritalStatus: 'CDCP-APPL-SPK-0002',
+        taxFiling: 'CDCP-APPL-SPK-0001',
+        fileYourTaxes: 'CDCP-APPL-SPK-0002',
+        typeOfApplication: 'CDCP-APPL-SPK-0003',
+        applicationDelegate: 'CDCP-APPL-SPK-0004',
+        maritalStatus: 'CDCP-APPL-SPK-0005',
       },
     },
     apply: {

@@ -31,5 +31,30 @@
       "sin-valid": "Must be a valid SIN",
       "sin-unique": "SIN must be unique"
     }
+  },
+  "type-of-application": {
+    "page-title": "Type of application",
+    "form-instructions": "Who are you applying for?",
+    "radio-options": {
+      "personal": "I am applying for <strong>myself</strong>",
+      "delegate": "I am applying on behalf of someone else as a <strong>legal delegate or Power of Attorney</strong>",
+      "child": "I am applying for <strong>my child(ren)</strong>",
+      "personal-and-child": "I am applying for <strong>myself and my child(ren)</strong>"
+    },
+    "error-message": {
+      "type-of-application-required": "Select who this application is for"
+    },
+    "back-btn": "Back",
+    "continue-btn": "Continue"
+  },
+  "application-delegate": {
+    "page-title": "Applying on behalf of someone as a legal delegate or Power of Attorney",
+    "contact-representative": "You must speak to a Service Canada representative if you are applying on behalf of someone as their legal delegate or Power of Attorney. You can contact Service Canada by calling 1-833-537-4342 or by visiting a <contactServiceCanada>Service Canada Centre</contactServiceCanada> near you.",
+    "prepare-to-apply": "<preparingToApply>Preparing to apply on behalf of someone</preparingToApply>",
+    "contact-service-canada-href": "https://bureaux.service.canada.ca/en",
+    "preparing-to-apply-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#helping",
+    "back-btn": "Back",
+    "return-btn": "Return to main page",
+    "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   }
 }

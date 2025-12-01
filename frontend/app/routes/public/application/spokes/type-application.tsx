@@ -7,7 +7,7 @@ import { z } from 'zod';
 import type { Route } from './+types/type-application';
 
 import { TYPES } from '~/.server/constants';
-import { loadApplyState, saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -15,7 +15,6 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
-import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -23,19 +22,23 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-const APPLICANT_TYPE = { adult: 'adult', adultChild: 'adult-child', child: 'child', delegate: 'delegate' } as const;
+const APPLICANT_TYPE = { adult: 'adult', family: 'family', children: 'children', delegate: 'delegate' } as const;
 
-export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'), pageIdentifier: pageIds.public.apply.typeOfApplication, pageTitleI18nKey: 'apply:type-of-application.page-title' } as const satisfies RouteHandleData;
+export const handle = {
+  i18nNamespaces: getTypedI18nNamespaces('application', 'application-spokes', 'gcweb'),
+  pageIdentifier: pageIds.public.application.spokes.typeOfApplication,
+  pageTitleI18nKey: 'application-spokes:type-of-application.page-title',
+} as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const state = loadApplyState({ params, session });
+  const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:type-of-application.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:type-of-application.page-title') }) };
 
-  return { meta, defaultState: state.typeOfApplication };
+  return { meta, defaultState: state.typeOfApplicationFlow };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -43,13 +46,13 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
-  loadApplyState({ params, session });
+  getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   /**
    * Schema for application delegate.
    */
-  const typeOfApplicationSchema = z.object({ typeOfApplication: z.enum(APPLICANT_TYPE, { error: t('apply:type-of-application.error-message.type-of-application-required') }) });
+  const typeOfApplicationSchema = z.object({ typeOfApplication: z.enum(APPLICANT_TYPE, { error: t('application-spokes:type-of-application.error-message.type-of-application-required') }) });
 
   const parsedDataResult = typeOfApplicationSchema.safeParse({ typeOfApplication: String(formData.get('typeOfApplication') ?? '') });
 
@@ -57,24 +60,16 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  saveApplyState({ params, session, state: { editMode: false, typeOfApplication: parsedDataResult.data.typeOfApplication } });
+  savePublicApplicationState({ params, session, state: { editMode: false, typeOfApplicationFlow: parsedDataResult.data.typeOfApplication } });
 
-  if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.adult) {
-    return redirect(getPathById('public/apply/$id/adult/applicant-information', params));
+  if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.delegate) {
+    return redirect(getPathById('public/application/$id/application-delegate', params));
   }
 
-  if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.adultChild) {
-    return redirect(getPathById('public/apply/$id/adult-child/applicant-information', params));
-  }
-
-  if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.child) {
-    return redirect(getPathById('public/apply/$id/child/children/index', params));
-  }
-
-  return redirect(getPathById('public/apply/$id/application-delegate', params));
+  return redirect(getPathById('public/application/$id/type-application', params));
 }
 
-export default function ApplyFlowTypeOfApplication({ loaderData, params }: Route.ComponentProps) {
+export default function ApplicationTypeOfApplication({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState } = loaderData;
 
@@ -86,41 +81,38 @@ export default function ApplyFlowTypeOfApplication({ loaderData, params }: Route
 
   return (
     <>
-      <div className="my-6 sm:my-8">
-        <Progress value={20} size="lg" label={t('apply:progress.label')} />
-      </div>
       <div className="max-w-prose">
-        <p className="mt-8 mb-4 italic">{t('apply:required-label')}</p>
+        <p className="mt-8 mb-4 italic">{t('application:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <InputRadios
             id="type-of-application"
             name="typeOfApplication"
-            legend={t('apply:type-of-application.form-instructions')}
+            legend={t('application-spokes:type-of-application.form-instructions')}
             options={[
-              { value: APPLICANT_TYPE.adult, children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.personal" />, defaultChecked: defaultState === APPLICANT_TYPE.adult },
-              { value: APPLICANT_TYPE.child, children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.child" />, defaultChecked: defaultState === APPLICANT_TYPE.child },
-              { value: APPLICANT_TYPE.adultChild, children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.personal-and-child" />, defaultChecked: defaultState === APPLICANT_TYPE.adultChild },
-              { value: APPLICANT_TYPE.delegate, children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.delegate" />, defaultChecked: defaultState === APPLICANT_TYPE.delegate },
+              { value: APPLICANT_TYPE.adult, children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:type-of-application.radio-options.personal" />, defaultChecked: defaultState === APPLICANT_TYPE.adult },
+              { value: APPLICANT_TYPE.children, children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:type-of-application.radio-options.child" />, defaultChecked: defaultState === APPLICANT_TYPE.children },
+              { value: APPLICANT_TYPE.family, children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:type-of-application.radio-options.personal-and-child" />, defaultChecked: defaultState === APPLICANT_TYPE.family },
+              { value: APPLICANT_TYPE.delegate, children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:type-of-application.radio-options.delegate" />, defaultChecked: defaultState === APPLICANT_TYPE.delegate },
             ]}
             required
             errorMessage={errors?.typeOfApplication}
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Type of application click">
-              {t('apply:type-of-application.continue-btn')}
+              {t('application-spokes:type-of-application.continue-btn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId="public/apply/$id/tax-filing"
+              routeId="public/application/$id/type-application"
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Type of application click"
             >
-              {t('apply:type-of-application.back-btn')}
+              {t('application-spokes:type-of-application.back-btn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

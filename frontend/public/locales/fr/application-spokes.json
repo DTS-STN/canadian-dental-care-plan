@@ -31,5 +31,30 @@
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "NAS doit être unique"
     }
+  },
+  "type-of-application": {
+    "page-title": "Type de demande",
+    "form-instructions": "Pour qui présentez-vous la demande?",
+    "radio-options": {
+      "personal": "Je présente une demande pour <strong>moi-même</strong>",
+      "child": "Je présente une demande pour <strong>mon (mes) enfant(s)</strong>",
+      "personal-and-child": "Je présente une demande pour <strong>moi-même et mon (mes) enfant(s)</strong>",
+      "delegate": "Je présente une demande <strong>au nom d'une autre personne à titre de représentant légal ou mandataire</strong>"
+    },
+    "error-message": {
+      "type-of-application-required": "Sélectionnez à qui s'adresse cette demande"
+    },
+    "back-btn": "Retour",
+    "continue-btn": "Continuer"
+  },
+  "application-delegate": {
+    "page-title": "Présenter une demande au nom d'une autre personne à titre de délégué ou de mandataire",
+    "contact-representative": "Vous devez parler à un représentant de Service Canada si vous présentez une demande au nom d'une autre personne à titre de délégué ou de mandataire. Veuillez communiquer avec Service Canada au <noWrap>1-833-537-4342</noWrap> ou vous rendre dans un <contactServiceCanada>bureau de Service Canada</contactServiceCanada> près de chez vous.",
+    "prepare-to-apply": "<preparingToApply>Se préparer à présenter une demande au nom de quelqu'un</preparingToApply>",
+    "contact-service-canada-href": "https://bureaux.service.canada.ca/fr",
+    "preparing-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#aide",
+    "back-btn": "Retour",
+    "return-btn": "Revenir à la page principale",
+    "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   }
 }
