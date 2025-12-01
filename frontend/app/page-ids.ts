@@ -132,6 +132,8 @@ export const pageIds = {
     application: {
       index: 'CDCP-APPL-0001',
       eligibilityRequirements: 'CDCP-APPL-0002',
+      taxFiling: 'CDCP-APPL-0003',
+      fileYourTaxes: 'CDCP-APPL-0004',
       newAdult: {
         maritalStatus: 'CDCP-APPL-AD-0001',
       },

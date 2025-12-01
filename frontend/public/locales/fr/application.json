@@ -19,5 +19,30 @@
   "eligibility-requirements": {
     "page-title": "Avant de commencer votre demande",
     "page-heading": "Avant de commencer votre demande"
+  },
+  "tax-filing": {
+    "page-title": "Déclaration de revenus",
+    "form-instructions": "(fr) Have you received your Notice of Assessment for your {{taxYear}} Canadian income tax return? If you have a spouse or common-law partner, have they received theirs too?",
+    "radio-options": {
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "error-message": {
+      "tax-filing-required": "Sélectionnez si vous avez fait votre déclaration de revenus ou non"
+    },
+    "back-btn": "Retour",
+    "continue-btn": "Continuer"
+  },
+  "file-your-taxes": {
+    "page-title": "Produire votre déclaration de revenus",
+    "ineligible-to-apply": "Vous n'êtes pas admissible au Régime canadien de soins dentaires pour le moment.",
+    "tax-not-filed": "Vous et votre époux/épouse ou conjoint/conjointe de fait, si vous en avez un, n'avez pas reçu votre avis de cotisation pour {{taxYear}} de l'Agence du revenu du Canada.",
+    "unable-to-assess": "(fr) We use your tax information to confirm that you meet the income and residency requirements for the Canadian Dental Care Plan.",
+    "tax-info": "Pour en savoir plus sur la façon de produire votre déclaration de revenus, consultez la page <taxInfo>Préparez-vous à faire vos impôts</taxInfo>.",
+    "apply-after": "(fr) You can apply for the plan <strong>after</strong> you or your spouse or common-law partner have <strong>filed your taxes</strong> and received your Notice of Assessment.",
+    "tax-info-href": "https://www.canada.ca/fr/services/impots/impot-sur-le-revenu/impot-sur-le-revenu-des-particuliers/preparez-vous-impots.html",
+    "back-btn": "Retour",
+    "return-btn": "Revenir à la page principale",
+    "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   }
 }
