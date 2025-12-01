@@ -137,6 +137,9 @@ export const pageIds = {
       newAdult: {
         maritalStatus: 'CDCP-APPL-AD-0001',
       },
+      spokes: {
+        maritalStatus: 'CDCP-APPL-SPK-0001',
+      },
     },
     apply: {
       index: 'CDCP-APPL-0001',
