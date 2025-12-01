@@ -7,6 +7,15 @@
   },
   "required-label": "Complete all fields.",
   "optional-label": "Complete all fields unless marked as optional.",
+  "sections-completed": "{{number}} out of 1 sections completed",
+  "next": "Next",
+  "previous": "Previous",
+  "progress-stepper": {
+    "marital-status": "Marital-status",
+    "contact-information": "Contact information",
+    "dental-insurance": "Access to dental insurance",
+    "submit": "Submit"
+  },
   "eligibility-requirements": {
     "page-title": "Before you start your application",
     "page-heading": "Before you start your application"

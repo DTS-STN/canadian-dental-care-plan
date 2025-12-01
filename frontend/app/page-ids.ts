@@ -132,6 +132,9 @@ export const pageIds = {
     application: {
       index: 'CDCP-APPL-0001',
       eligibilityRequirements: 'CDCP-APPL-0002',
+      newAdult: {
+        maritalStatus: 'CDCP-APPL-AD-0001',
+      },
     },
     apply: {
       index: 'CDCP-APPL-0001',

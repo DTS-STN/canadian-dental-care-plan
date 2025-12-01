@@ -7,6 +7,15 @@
   },
   "required-label": "Remplissez tous les champs.",
   "optional-label": "Remplissez tous les champs, sauf s'ils sont indiqués facultatifs.",
+  "sections-completed": "(FR) {{number}} out of 1 sections completed",
+  "next": "(FR) Next",
+  "previous": "(FR) Previous",
+  "progress-stepper": {
+    "marital-status": "(FR) Marital-status",
+    "contact-information": "(FR) Contact information",
+    "dental-insurance": "(FR) Access to dental insurance",
+    "submit": "(FR) Submit"
+  },
   "eligibility-requirements": {
     "page-title": "Avant de commencer votre demande",
     "page-heading": "Avant de commencer votre demande"
