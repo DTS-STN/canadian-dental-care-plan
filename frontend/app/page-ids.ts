@@ -135,6 +135,11 @@ export const pageIds = {
       newAdult: {
         maritalStatus: 'CDCP-APPL-AD-0001',
       },
+      taxFiling: 'CDCP-APPL-0003',
+      fileYourTaxes: 'CDCP-APPL-0004',
+    },
+    newAdult: {
+      maritalStatus: 'CDCP-APPL-AD-0001',
     },
     apply: {
       index: 'CDCP-APPL-0001',
