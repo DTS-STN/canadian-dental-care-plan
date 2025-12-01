@@ -63,7 +63,7 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('public/application/$id/eligibility-requirements', params));
 }
 
-export default function ApplyFlowTaxFiling({ loaderData, params }: Route.ComponentProps) {
+export default function ApplicationTaxFiling({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, taxYear } = loaderData;
 
