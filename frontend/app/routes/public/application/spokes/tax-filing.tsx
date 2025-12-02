@@ -25,7 +25,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const TAX_FILING_OPTION = { no: 'no', yes: 'yes' } as const;
 
-export const handle = { i18nNamespaces: getTypedI18nNamespaces('application', 'gcweb'), pageIdentifier: pageIds.public.application.taxFiling, pageTitleI18nKey: 'application:tax-filing.page-title' } as const satisfies RouteHandleData;
+export const handle = { i18nNamespaces: getTypedI18nNamespaces('application', 'gcweb'), pageIdentifier: pageIds.public.application.spokes.taxFiling, pageTitleI18nKey: 'application:tax-filing.page-title' } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
