@@ -185,5 +185,11 @@
     "error-message": {
       "dental-insurance-required": "Sélectionnez si vous avez une assurance dentaire"
     }
+  },
+  "new-or-returning-member": {
+    "page-title": "(fr) New or returning member",
+    "legend": "(fr) Are you currently, or have you ever been enrolled in the Canadian Dental Care Plan?",
+    "yes": "Oui",
+    "no": "Non"
   }
 }
