@@ -13,5 +13,24 @@
     "edit-marital-status": "Edit marital status information",
     "type-of-application": "Type of application",
     "contact-information": "Contact information"
+  },
+  "dental-insurance": {
+    "page-title": "Your access to dental insurance",
+    "page-heading": "Your access to dental insurance",
+    "access-to-dental-insurance": "Access to private dental insurance",
+    "dental-insurance-indicate-status": "Indicate if you have access to private dental insurance.",
+    "access-to-dental-insurance-or-coverage": "Access to private dental insurance or coverage",
+    "dental-insurance-yes": "Yes, I have access to private dental insurance or coverage",
+    "dental-insurance-no": "No, I do not have access to private dental insurance or coverage",
+    "edit-access-to-dental-insurance": "Edit access to private dental insurance",
+    "other-benefits": "Other government detnal benefits",
+    "access-to-government-benefits": "Access to government benefits",
+    "dental-benefits-indicate-status": "Indicate if you have access to other government dental insurance.",
+    "edit-access-to-government-benefits": "Edit access to government dental benefits",
+    "add-answer": "Add answer",
+    "yes": "Yes",
+    "no": "No",
+    "contact-information": "Contact information",
+    "submit": "Submit"
   }
 }
