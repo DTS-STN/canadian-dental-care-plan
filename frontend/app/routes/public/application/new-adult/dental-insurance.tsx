@@ -59,7 +59,7 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
       <ApplicantCard>
         <ApplicantCardHeader>
           <ApplicantCardTitle>{t('application-new-adult:dental-insurance.access-to-dental-insurance')}</ApplicantCardTitle>
-          {defaultState.dentalInsurance && <StatusTag status="complete" />}
+          {defaultState.dentalInsurance !== undefined && <StatusTag status="complete" />}
         </ApplicantCardHeader>
         <ApplicantCardBody>
           {defaultState.dentalInsurance === undefined ? (
@@ -73,8 +73,7 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
           )}
         </ApplicantCardBody>
         <ApplicantCardFooter>
-          {/* TODO: update routeIds */}
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-adult/marital-status" params={params} startIcon={faCirclePlus} size="lg">
+          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/dental-insurance" params={params} startIcon={faCirclePlus} size="lg">
             {defaultState.dentalInsurance === undefined ? t('application-new-adult:dental-insurance.add-answer') : t('application-new-adult:dental-insurance.edit-access-to-dental-insurance')}
           </ButtonLink>
         </ApplicantCardFooter>

@@ -145,5 +145,45 @@
         "consent-required": "You must agree to the Terms and Conditions and Privacy Notice Statement, and consent to the sharing of your information. To apply for the Canadian Dental Care Plan, you must agree to the Terms and Conditions and Privacy Notice Statement. You must also consent to the sharing of your personal information for the purposes listed."
       }
     }
+  },
+  "dental-insurance": {
+    "title": "Access to private dental insurance",
+    "legend": "Do you have access to private dental insurance or coverage?",
+    "option-yes": "<strong>Yes</strong>, I have access to dental insurance or coverage",
+    "option-no": "<strong>No</strong>, I do not have access to dental insurance or coverage",
+    "button": {
+      "back": "Back",
+      "continue": "Continue",
+      "cancel-btn": "Cancel",
+      "save-btn": "Save"
+    },
+    "detail": {
+      "additional-info": {
+        "title": "What does it mean to have access to private dental insurance or coverage?",
+        "eligible": "It means you do not have access to any type of dental insurance or coverage through:",
+        "list": {
+          "employer": "your employment benefits or a family member's employment benefits, including health and wellness accounts",
+          "organization": "a professional or student organization",
+          "organization-note": "Note: If you're eligible for dental coverage through your employment benefits or through a professional or student organization, you're not eligible for CDCP. This is true even if:",
+          "organization-list": {
+            "decide": "you decide not to take it",
+            "premium": "you have to pay a premium for it",
+            "use": "you don't use it"
+          },
+          "pension": "your pension benefits or a family member's pension benefits",
+          "pension-plans": "this includes federal, provincial and territorial government employer pension plans",
+          "pension-exemption": "Exception: You may be eligible for the CDCP if you're retired and:",
+          "pension-list": {
+            "opt-out": "you opted out of pension benefits before December 11, 2023, and",
+            "opt-in": "you can't opt back in under the pension rules"
+          },
+          "company": "coverage bought by you or a family member or through a group plan from an insurance or benefits company",
+          "cannot-opt": "if you purchased your current dental insurance policy privately (and not as part of any of the coverage described above), you're not eligible for the CDCP while that coverage is in effect."
+        }
+      }
+    },
+    "error-message": {
+      "dental-insurance-required": "Select whether you have access to dental insurance"
+    }
   }
 }
