@@ -133,8 +133,8 @@ export const pageIds = {
       index: 'CDCP-APPL-0001',
       eligibilityRequirements: 'CDCP-APPL-0002',
       newAdult: {
-        maritalStatus: 'CDCP-APPL-AD-0001',
-        dentalInsurance: 'CDCP-APPL-AD-0002',
+        maritalStatus: 'CDCP-APPL-NAD-0001',
+        dentalInsurance: 'CDCP-APPL-NAD-0002',
       },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',
@@ -142,6 +142,7 @@ export const pageIds = {
         typeOfApplication: 'CDCP-APPL-SPK-0003',
         applicationDelegate: 'CDCP-APPL-SPK-0004',
         maritalStatus: 'CDCP-APPL-SPK-0005',
+        termsConditions: 'CDCP-APPL-SPK-0006',
       },
     },
     apply: {

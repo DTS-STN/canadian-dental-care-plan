@@ -7,7 +7,8 @@
   },
   "required-label": "Remplissez tous les champs.",
   "optional-label": "Remplissez tous les champs, sauf s'ils sont indiqués facultatifs.",
-  "sections-completed": "(FR) {{number}} out of 1 sections completed",
+  "sections-completed_one": "(FR) {{number}} out of {{count}} section completed",
+  "sections-completed_other": "(FR) {{number}} out of {{count}} sections completed",
   "next": "(FR) Next",
   "previous": "(FR) Previous",
   "progress-stepper": {
@@ -17,8 +18,18 @@
     "submit": "(FR) Submit"
   },
   "eligibility-requirements": {
-    "page-title": "Avant de commencer votre demande",
-    "page-heading": "Avant de commencer votre demande"
+    "page-title": "(FR) Before you start your application",
+    "page-heading": "(FR) Before you start your application",
+    "next-button": "(FR) Type of application",
+    "terms-conditions-section": {
+      "title": "(FR) Terms and conditions of use and privacy statement",
+      "instructions": "(FR) Read the terms and conditions of use and privacy statement.",
+      "acknowledge-terms": "(FR) I read the Terms and Conditions",
+      "acknowledge-privacy": "(FR) I read the Privacy Notice Statement",
+      "share-data": "(FR) I consent to the sharing of data",
+      "add-button": "(FR) Agree to the terms and conditions of use and privacy statement",
+      "edit-button": "(FR) Edit answer"
+    }
   },
   "tax-filing": {
     "page-title": "Déclaration de revenus",

@@ -7,7 +7,8 @@
   },
   "required-label": "Complete all fields.",
   "optional-label": "Complete all fields unless marked as optional.",
-  "sections-completed": "{{number}} out of 1 sections completed",
+  "sections-completed_one": "{{number}} out of {{count}} section completed",
+  "sections-completed_other": "{{number}} out of {{count}} sections completed",
   "next": "Next",
   "previous": "Previous",
   "progress-stepper": {
@@ -18,7 +19,17 @@
   },
   "eligibility-requirements": {
     "page-title": "Before you start your application",
-    "page-heading": "Before you start your application"
+    "page-heading": "Before you start your application",
+    "next-button": "Type of application",
+    "terms-conditions-section": {
+      "title": "Terms and conditions of use and privacy statement",
+      "instructions": "Read the terms and conditions of use and privacy statement.",
+      "acknowledge-terms": "I read the Terms and Conditions",
+      "acknowledge-privacy": "I read the Privacy Notice Statement",
+      "share-data": "I consent to the sharing of data",
+      "add-button": "Agree to the terms and conditions of use and privacy statement",
+      "edit-button": "Edit answer"
+    }
   },
   "tax-filing": {
     "page-title": "Tax filing",
