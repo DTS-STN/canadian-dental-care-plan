@@ -74,7 +74,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           {defaultState.typeOfApplication === undefined ? (
             <p>{t('application:type-of-application.type-application-description')}</p>
           ) : (
-            <dl className="divide-y border-y">
+            <dl className="divide-hidden">
               <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.type-application-legend')}>
                 <p>{getTypeOfApplication(defaultState.typeOfApplication)}</p>
               </DescriptionListItem>
@@ -130,7 +130,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           {defaultState.newOrReturningMember === undefined ? (
             <p>{t('application:type-of-application.new-or-returning-description')}</p>
           ) : (
-            <dl className="divide-y border-y">
+            <dl className="divide-y">
               <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.type-application-legend')}>
                 {/* TODO: Need to confirm the value to be displayed*/}
                 <p>{defaultState.newOrReturningMember.isNewOrExistingMember}</p>
