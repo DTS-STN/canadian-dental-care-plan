@@ -66,7 +66,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/application/$id/application-delegate', params));
   }
 
-  return redirect(getPathById('public/application/$id/type-application', params));
+  return redirect(getPathById('public/application/$id/type-of-application', params));
 }
 
 export default function ApplicationTypeOfApplication({ loaderData, params }: Route.ComponentProps) {
