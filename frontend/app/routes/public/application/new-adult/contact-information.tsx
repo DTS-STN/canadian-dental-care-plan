@@ -5,6 +5,7 @@ import type { Route } from './+types/contact-information';
 
 import { getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import { Address } from '~/components/address';
 import { ApplicantCard, ApplicantCardBody, ApplicantCardFooter, ApplicantCardHeader, ApplicantCardTitle } from '~/components/applicant-card';
 import { ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
@@ -37,9 +38,8 @@ export async function loader({ context: { appContainer, session }, request, para
       phoneNumber: state.contactInformation,
       mailingAddress: state.mailingAddress,
       homeAddress: state.homeAddress,
-      preferredLanguage: state.communicationPreferences?.preferredLanguage,
-      preferredMethod: state.communicationPreferences?.preferredMethod ?? PREFERRED_SUN_LIFE_METHOD.email,
-      preferredNotificationMethod: state.communicationPreferences?.preferredNotificationMethod ?? PREFERRED_NOTIFICATION_METHOD.msca,
+      communicationPreferences: state.communicationPreferences,
+      email: state.email,
     },
     meta,
   };
@@ -54,34 +54,40 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
       <ProgressStepper
         steps={[
           { id: 'marital-status', status: 'inactive', description: t('application:progress-stepper.marital-status') },
-          { id: 'contact-information', status: 'inactive', description: t('application:progress-stepper.contact-information') },
-          { id: 'dental-insurance', status: 'active', description: t('application:progress-stepper.dental-insurance') },
+          { id: 'contact-information', status: 'active', description: t('application:progress-stepper.contact-information') },
+          { id: 'dental-insurance', status: 'inactive', description: t('application:progress-stepper.dental-insurance') },
           { id: 'submit', status: 'inactive', description: t('application:progress-stepper.submit') },
         ]}
-        currentStep={2}
+        currentStep={1}
       />
       <p>{t('application:required-label')}</p>
-      <p>{t('application:sections-completed', { number: defaultState.maritalStatus === undefined ? 0 : 1 })}</p>
+
+      <p>
+        {t('application:sections-completed_other', {
+          count: 3,
+          number: (defaultState.phoneNumber === undefined ? 0 : 1) + (defaultState.mailingAddress === undefined && defaultState.homeAddress === undefined ? 0 : 1) + (defaultState.communicationPreferences === undefined ? 0 : 1),
+        })}
+      </p>
 
       <ApplicantCard>
         <ApplicantCardHeader>
           <ApplicantCardTitle>{t('application-new-adult:contact-information.phone-number')}</ApplicantCardTitle>
-          {defaultState.contactInformation.phoneNumber !== undefined && <StatusTag status="complete" />}
+          {defaultState.phoneNumber !== undefined && <StatusTag status="complete" />}
         </ApplicantCardHeader>
         <ApplicantCardBody>
-          {defaultState.contactInformation.phoneNumber === undefined ? (
+          {defaultState.phoneNumber === undefined ? (
             <p>{t('application-new-adult:contact-information.phone-number-help')}</p>
           ) : (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-adult:contact-information.phone-number')}>
-                <p>{defaultState.contactInformation.phoneNumber}</p>
+                <p>{defaultState.phoneNumber.phoneNumber}</p>
               </DescriptionListItem>
             </dl>
           )}
         </ApplicantCardBody>
         <ApplicantCardFooter>
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/contact-information" params={params} startIcon={faCirclePlus} size="lg">
-            {defaultState.contactInformation.phoneNumber === undefined ? t('application-new-adult:contact-information.add-phone-number') : t('application-new-adult:contact-information.edit-phone-number')}
+          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-adult/contact-information" params={params} startIcon={faCirclePlus} size="lg">
+            {defaultState.phoneNumber === undefined ? t('application-new-adult:contact-information.add-phone-number') : t('application-new-adult:contact-information.edit-phone-number')}
           </ButtonLink>
         </ApplicantCardFooter>
       </ApplicantCard>
@@ -89,27 +95,43 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
       <ApplicantCard>
         <ApplicantCardHeader>
           <ApplicantCardTitle>{t('application-new-adult:contact-information.mailing-and-home-address')}</ApplicantCardTitle>
-          {defaultState.contactInformation.mailingAddress && defaultState.contactInformation.homeAddress && <StatusTag status="complete" />}
+          {defaultState.mailingAddress && defaultState.homeAddress && <StatusTag status="complete" />}
         </ApplicantCardHeader>
         <ApplicantCardBody>
-          {defaultState.contactInformation.mailingAddress === undefined ? (
+          {defaultState.mailingAddress === undefined ? (
             <p>{t('application-new-adult:contact-information.address-help')}</p>
           ) : (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-adult:contact-information.mailing-address')}>
                 <p>{t('application-new-adult:contact-information.mailing-address')}</p>
-                {defaultState.contactInformation.mailingAddress}
+                <Address
+                  address={{
+                    address: defaultState.mailingAddress.address ?? '',
+                    city: defaultState.mailingAddress.city ?? '',
+                    provinceState: defaultState.mailingAddress.province,
+                    postalZipCode: defaultState.mailingAddress.postalCode,
+                    country: defaultState.mailingAddress.country ?? '',
+                  }}
+                />
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-adult:contact-information.home-address')}>
                 <p>{t('application-new-adult:contact-information.home-address')}</p>
-                {defaultState.contactInformation.homeAddress}
+                <Address
+                  address={{
+                    address: defaultState.homeAddress?.address ?? '',
+                    city: defaultState.homeAddress?.city ?? '',
+                    provinceState: defaultState.homeAddress?.province,
+                    postalZipCode: defaultState.homeAddress?.postalCode,
+                    country: defaultState.homeAddress?.country ?? '',
+                  }}
+                />
               </DescriptionListItem>
             </dl>
           )}
         </ApplicantCardBody>
         <ApplicantCardFooter>
           <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-adult/contact-information" params={params} startIcon={faCirclePlus} size="lg">
-            {defaultState.contactInformation.mailingAddress || defaultState.contactInformation.homeAddress ? t('application-new-adult:contact-information.add-address') : t('application-new-adult:contact-information.edit-address')}
+            {defaultState.mailingAddress || defaultState.homeAddress ? t('application-new-adult:contact-information.add-address') : t('application-new-adult:contact-information.edit-address')}
           </ButtonLink>
         </ApplicantCardFooter>
       </ApplicantCard>
@@ -117,35 +139,35 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
       <ApplicantCard>
         <ApplicantCardHeader>
           <ApplicantCardTitle>{t('application-new-adult:contact-information.communication-preferences')}</ApplicantCardTitle>
-          {defaultState.contactInformation.communicationPreferences && <StatusTag status="complete" />}
+          {defaultState.communicationPreferences && <StatusTag status="complete" />}
         </ApplicantCardHeader>
         <ApplicantCardBody>
-          {defaultState.contactInformation.communicationPreferences.preferredLanguage === undefined ? (
+          {defaultState.communicationPreferences?.preferredLanguage === undefined ? (
             <p>{t('application-new-adult:contact-information.communication-preferences-help')}</p>
           ) : (
             <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-new-adult:contact-information.preferrred-language')}>
-                <p>{t('application-new-adult:contact-information.preferrred-language')}</p>
-                {defaultState.contactInformation.communicationPreferences.preferrredLanguage}
+              <DescriptionListItem term={t('application-new-adult:contact-information.preferred-language')}>
+                <p>{t('application-new-adult:contact-information.preferred-language')}</p>
+                {defaultState.communicationPreferences?.preferredLanguage}
               </DescriptionListItem>
-              <DescriptionListItem term={t('application-new-adult:contact-information.preferrred-method')}>
-                <p>{t('application-new-adult:contact-information.preferrred-method')}</p>
-                {defaultState.contactInformation.communicationPreferences.preferrredMethod}
+              <DescriptionListItem term={t('application-new-adult:contact-information.preferred-method')}>
+                <p>{t('application-new-adult:contact-information.preferred-method')}</p>
+                {defaultState.communicationPreferences?.preferredMethod}
               </DescriptionListItem>
-              <DescriptionListItem term={t('application-new-adult:contact-information.preferrred-notification-method')}>
-                <p>{t('application-new-adult:contact-information.preferrred-notification-method')}</p>
-                {defaultState.contactInformation.communicationPreferences.preferredNotificationMethod}
+              <DescriptionListItem term={t('application-new-adult:contact-information.preferred-notification-method')}>
+                <p>{t('application-new-adult:contact-information.preferred-notification-method')}</p>
+                {defaultState.communicationPreferences?.preferredNotificationMethod}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-adult:contact-information.email')}>
                 <p>{t('application-new-adult:contact-information.email')}</p>
-                {defaultState.contactInformation.communicationPreferences.email}
+                {defaultState.email}
               </DescriptionListItem>
             </dl>
           )}
         </ApplicantCardBody>
         <ApplicantCardFooter>
           <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-adult/contact-information" params={params} startIcon={faCirclePlus} size="lg">
-            {defaultState.contactInformation.communicationPreferences ? t('application-new-adult:contact-information.add-communication-preferences') : t('application-new-adult:contact-information.edit-communication-preferences')}
+            {defaultState.communicationPreferences ? t('application-new-adult:contact-information.add-communication-preferences') : t('application-new-adult:contact-information.edit-communication-preferences')}
           </ButtonLink>
         </ApplicantCardFooter>
       </ApplicantCard>

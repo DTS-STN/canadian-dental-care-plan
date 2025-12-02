@@ -49,10 +49,12 @@
     "communication-preferences": "(FR) Communication preferences",
     "communication-preferences-help": "(FR) Select your communication preferences.",
     "preferred-language": "(FR) Language preference",
-    "preferrred-method": "(FR) Sun Life Communication preference",
-    "preferrred-notification-method": "(FR) Government of Canada communication preference",
+    "preferred-method": "(FR) Sun Life Communication preference",
+    "preferred-notification-method": "(FR) Government of Canada communication preference",
     "email": "(FR) Email address",
     "add-communication-preferences": "(FR) Add communication-preferences",
-    "edit-communication-preferences": "(FR) Edit communication-preferences"
+    "edit-communication-preferences": "(FR) Edit communication-preferences",
+    "next-btn": "(FR) Access to dental insurance",
+    "prev-btn": "(FR) Marital status"
   }
 }
