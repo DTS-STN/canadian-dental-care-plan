@@ -14,6 +14,9 @@
     "marital-status": "(FR) Marital-status",
     "contact-information": "(FR) Contact information",
     "dental-insurance": "(FR) Access to dental insurance",
+    "type-of-application": "(FR) Type of application",
+    "personal-information": "(FR) Personal information",
+    "new-or-returning-member": "(FR) New or returning member",
     "submit": "(FR) Submit"
   },
   "eligibility-requirements": {
@@ -44,5 +47,30 @@
     "back-btn": "Retour",
     "return-btn": "Revenir à la page principale",
     "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
+  "type-of-application": {
+    "page-title": "(fr) Type of application",
+    "type-application-heading": "(fr) ype of application",
+    "type-application-legend": "(fr) Who are you applying for?",
+    "type-application-description": "(fr) Tell us who you are applying for. Are you applying for yourself, your child(ren) or on behalf of someone else?",
+    "type-application-personal": "(fr) I am applying for myself",
+    "type-application-children": "(fr) I am applying for my child(ren)",
+    "type-application-family": "(fr) I am applying for myself and my child(ren)",
+    "personal-info-heading": "(fr) Personal information",
+    "personal-info-description": "(fr) Enter your Member ID, name, date of birth and Social Insurance Number (SIN).",
+    "member-id": "(fr) Member ID",
+    "full-name": "(fr) Full name",
+    "date-of-birth": "(fr) Date of birth",
+    "sin": "(fr) Social Insurance Number (SIN)",
+    "new-or-returning-heading": "(fr) New or returning member",
+    "new-or-returning-description": "(fr) Select whether or not you have a Member ID.",
+    "application": "(fr) Application",
+    "before-you-start": "(fr) Before you start your application",
+    "add-answer": "(fr) Add answer",
+    "edit-answer": "(fr) Edit answer",
+    "add-type-application": "(fr) Add type of application",
+    "edit-type-application": "(fr) Edit type of application",
+    "add-personal-information": "(fr) Add personal information",
+    "edit-personal-information": "(fr) Edit personal information"
   }
 }

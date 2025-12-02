@@ -91,7 +91,7 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
         <NavigationButtonLink variant="primary" direction="next" routeId="public/application/$id/new-adult/marital-status" params={params}>
           {t('application-new-adult:marital-status.contact-information')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-adult/marital-status" params={params}>
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
           {t('application-new-adult:marital-status.type-of-application')}
         </NavigationButtonLink>
       </div>
