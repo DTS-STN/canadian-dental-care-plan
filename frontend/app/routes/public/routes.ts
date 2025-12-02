@@ -15,6 +15,11 @@ export const routes = [
             file: 'routes/public/application/new-adult/dental-insurance.tsx',
             paths: { en: '/:lang/application/:id/new-adult/dental-insurance', fr: '/:lang/demandes/:id/new-adult/assurance-dentaire' },
           },
+          {
+            id: 'public/application/$id/new-adult/contact-information',
+            file: 'routes/public/application/new-adult/contact-information.tsx',
+            paths: { en: '/:lang/application/:id/new-adult/contact-information', fr: '/:lang/demandes/:id/new-adult/coordonnees' },
+          },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },

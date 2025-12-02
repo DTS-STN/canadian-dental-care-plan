@@ -32,5 +32,27 @@
     "no": "No",
     "contact-information": "Contact information",
     "submit": "Submit"
+  },
+  "contact-information": {
+    "page-title": "Your contact information",
+    "page-heading": "Your contact information",
+    "phone-number": "Phone number",
+    "phone-number-help": "Enter your phone number.",
+    "add-phone-number": "Add phone number",
+    "edit-phone-number": "Edit phone number",
+    "mailing-and-home-address": "Mailing and home address",
+    "address-help": "Enter your mailing and home address.",
+    "mailing-address": "Mailing address",
+    "home-address": "Home address",
+    "add-address": "Add address",
+    "edit-address": "Edit address",
+    "communication-preferences": "Communication preferences",
+    "communication-preferences-help": "Select your communication preferences.",
+    "preferred-language": "Language preference",
+    "preferrred-method": "Sun Life Communication preference",
+    "preferrred-notification-method": "Government of Canada communication preference",
+    "email": "Email address",
+    "add-communication-preferences": "Add communication-preferences",
+    "edit-communication-preferences": "Edit communication-preferences"
   }
 }
