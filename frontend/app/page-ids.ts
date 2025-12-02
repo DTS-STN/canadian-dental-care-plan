@@ -143,6 +143,7 @@ export const pageIds = {
         applicationDelegate: 'CDCP-APPL-SPK-0004',
         maritalStatus: 'CDCP-APPL-SPK-0005',
         termsConditions: 'CDCP-APPL-SPK-0006',
+        dentalInsurance: 'CDCP-APPL-SPK0007',
       },
     },
     apply: {

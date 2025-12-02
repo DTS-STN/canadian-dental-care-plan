@@ -71,8 +71,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  console.log(formData);
-
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.cancel) {
     // TODO: needs to be generic
