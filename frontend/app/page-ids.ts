@@ -134,6 +134,7 @@ export const pageIds = {
       eligibilityRequirements: 'CDCP-APPL-0002',
       newAdult: {
         maritalStatus: 'CDCP-APPL-AD-0001',
+        dentalInsurance: 'CDCP-APPL-AD-0002',
       },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',
