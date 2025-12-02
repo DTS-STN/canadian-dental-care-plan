@@ -81,7 +81,7 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
           )}
         </ApplicantCardBody>
         <ApplicantCardFooter>
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-adult/marital-status" params={params} startIcon={faCirclePlus}>
+          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-adult/marital-status" params={params} startIcon={faCirclePlus} size="lg">
             {defaultState.maritalStatus === undefined ? t('application-new-adult:marital-status.add-marital-status') : t('application-new-adult:marital-status.edit-marital-status')}
           </ButtonLink>
         </ApplicantCardFooter>

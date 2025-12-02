@@ -15,7 +15,7 @@ function ApplicantCardBody({ className, ...props }: ComponentProps<'div'>) {
 }
 
 function ApplicantCardFooter({ className, ...props }: ComponentProps<'div'>) {
-  return <div data-slot="applicant-card-footer" className={cn('border-t border-slate-300 bg-slate-200 px-6 py-4', className)} {...props} />;
+  return <div data-slot="applicant-card-footer" className={cn('border-t border-slate-300 bg-slate-200 px-6 py-2', className)} {...props} />;
 }
 
 function ApplicantCardTitle({ className, children, ...props }: ComponentProps<'h3'>) {

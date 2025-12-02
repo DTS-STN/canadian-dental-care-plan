@@ -41,7 +41,7 @@ exports[`ApplicantCard > should render a basic card with all components 1`] = `
       </ul>
     </div>
     <div
-      class="border-t border-slate-300 bg-slate-200 px-6 py-4"
+      class="border-t border-slate-300 bg-slate-200 px-6 py-2"
       data-slot="applicant-card-footer"
     >
       <button>
@@ -85,7 +85,7 @@ exports[`ApplicantCard > should render a card with multiple footer actions 1`] =
       </p>
     </div>
     <div
-      class="border-t border-slate-300 bg-slate-200 px-6 py-4"
+      class="border-t border-slate-300 bg-slate-200 px-6 py-2"
       data-slot="applicant-card-footer"
     >
       <div
@@ -150,7 +150,7 @@ exports[`ApplicantCard > should render a card with new status 1`] = `
       </p>
     </div>
     <div
-      class="border-t border-slate-300 bg-slate-200 px-6 py-4"
+      class="border-t border-slate-300 bg-slate-200 px-6 py-2"
       data-slot="applicant-card-footer"
     >
       <button>
@@ -219,7 +219,7 @@ exports[`ApplicantCard > should render a card without status tag 1`] = `
       </p>
     </div>
     <div
-      class="border-t border-slate-300 bg-slate-200 px-6 py-4"
+      class="border-t border-slate-300 bg-slate-200 px-6 py-2"
       data-slot="applicant-card-footer"
     >
       <span>
@@ -256,7 +256,7 @@ exports[`ApplicantCard > should render card with custom className 1`] = `
       </p>
     </div>
     <div
-      class="border-t border-slate-300 bg-slate-200 px-6 py-4 custom-footer"
+      class="border-t border-slate-300 bg-slate-200 px-6 py-2 custom-footer"
       data-slot="applicant-card-footer"
     >
       <button>
@@ -371,7 +371,7 @@ exports[`ApplicantCard > should render complex card content 1`] = `
       </div>
     </div>
     <div
-      class="border-t border-slate-300 bg-slate-200 px-6 py-4"
+      class="border-t border-slate-300 bg-slate-200 px-6 py-2"
       data-slot="applicant-card-footer"
     >
       <div
@@ -425,7 +425,7 @@ exports[`ApplicantCard > should render individual components independently 1`] =
       </p>
     </div>
     <div
-      class="border-t border-slate-300 bg-slate-200 px-6 py-4"
+      class="border-t border-slate-300 bg-slate-200 px-6 py-2"
       data-slot="applicant-card-footer"
     >
       <p>
