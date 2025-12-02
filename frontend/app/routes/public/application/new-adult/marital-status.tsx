@@ -1,4 +1,4 @@
-import { faChevronLeft, faChevronRight, faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/marital-status';
@@ -8,6 +8,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { ApplicantCard, ApplicantCardBody, ApplicantCardFooter, ApplicantCardHeader, ApplicantCardTitle } from '~/components/applicant-card';
 import { ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
+import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
 import { pageIds } from '~/page-ids';
@@ -87,20 +88,12 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
       </ApplicantCard>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <ButtonLink id="continue-button" variant="primary" routeId="public/application/$id/new-adult/marital-status" params={params} endIcon={faChevronRight}>
-          <span>
-            {t('application:next')}
-            <br />
-            {t('application-new-adult:marital-status.type-of-application')}
-          </span>
-        </ButtonLink>
-        <ButtonLink id="back-button" variant="secondary" routeId="public/application/$id/new-adult/marital-status" params={params} startIcon={faChevronLeft}>
-          <span>
-            {t('application:previous')}
-            <br />
-            {t('application-new-adult:marital-status.contact-information')}
-          </span>
-        </ButtonLink>
+        <NavigationButtonLink variant="primary" direction="next" routeId="public/application/$id/new-adult/marital-status" params={params}>
+          {t('application-new-adult:marital-status.contact-information')}
+        </NavigationButtonLink>
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-adult/marital-status" params={params}>
+          {t('application-new-adult:marital-status.type-of-application')}
+        </NavigationButtonLink>
       </div>
     </div>
   );
