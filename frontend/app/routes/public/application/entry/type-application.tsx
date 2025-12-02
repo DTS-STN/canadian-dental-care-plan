@@ -46,14 +46,18 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
 
   function getTypeOfApplication(typeOfApplication: string) {
     switch (typeOfApplication) {
-      case APPLICANT_TYPE.adult:
+      case APPLICANT_TYPE.adult: {
         return t('application:type-of-application.type-application-personal');
-      case APPLICANT_TYPE.family:
+      }
+      case APPLICANT_TYPE.family: {
         return t('application:type-of-application.type-application-family');
-      case APPLICANT_TYPE.children:
+      }
+      case APPLICANT_TYPE.children: {
         return t('application:type-of-application.type-application-children');
-      default:
+      }
+      default: {
         return '';
+      }
     }
   }
 
@@ -97,7 +101,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
               <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.member-id')}>
                 <p>{defaultState.personalInformation.memberId}</p>
               </DescriptionListItem>
-              <DescriptionListItem className="sm:grid-co ls-none"term={t('application:type-of-application.full-name')}>
+              <DescriptionListItem className="sm:grid-co ls-none" term={t('application:type-of-application.full-name')}>
                 <p>{`${defaultState.personalInformation.firstName} ${defaultState.personalInformation.lastName}`}</p>
               </DescriptionListItem>
               <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.date-of-birth')}>
@@ -120,7 +124,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
       <ApplicantCard>
         <ApplicantCardHeader>
           <ApplicantCardTitle>{t('application:type-of-application.new-or-returning-heading')}</ApplicantCardTitle>
-          {defaultState.typeOfApplication && <StatusTag status="complete" />}
+          {defaultState.newOrReturningMember && <StatusTag status="complete" />}
         </ApplicantCardHeader>
         <ApplicantCardBody>
           {defaultState.newOrReturningMember === undefined ? (
