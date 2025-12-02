@@ -29,6 +29,13 @@
       "share-data": "(FR) I consent to the sharing of data",
       "add-button": "(FR) Agree to the terms and conditions of use and privacy statement",
       "edit-button": "(FR) Edit answer"
+    },
+    "tax-filing-section": {
+      "title": "(FR) Tax filing",
+      "instructions": "(FR) Your tax information is used to confirm that you are eligible for the Canadian Dental Care Plan.",
+      "have-filed-taxes": "(FR) Myself and my spouse or common-law partner (if applicable) have received our Notice of Assessments from our income tax return.",
+      "add-button": "(FR) Confirm tax filing",
+      "edit-button": "(FR) Edit answer"
     }
   },
   "tax-filing": {
