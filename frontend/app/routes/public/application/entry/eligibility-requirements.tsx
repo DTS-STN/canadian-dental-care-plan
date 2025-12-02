@@ -28,49 +28,75 @@ export async function loader({ context: { appContainer, session }, request, para
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application:eligibility-requirements.page-title') }) };
   return {
-    defaultState: {
+    state: {
       termsAndConditions: state.termsAndConditions,
+      hasFiledTaxes: state.hasFiledTaxes,
     },
     meta,
   };
 }
 
 export default function ApplyIndex({ loaderData, params }: Route.ComponentProps) {
-  const { defaultState } = loaderData;
+  const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  const sections = [{ id: 'terms-and-conditions', completed: defaultState.termsAndConditions !== undefined }] as const;
+  const sections = [
+    { id: 'terms-and-conditions', completed: state.termsAndConditions !== undefined }, //
+    { id: 'tax-filing', completed: state.hasFiledTaxes !== undefined },
+  ] as const;
   const completedSections = sections.filter((section) => section.completed).length;
   const allSectionsCompleted = completedSections === sections.length;
 
   return (
     <div className="max-w-prose space-y-8">
-      <p>{t('application:sections-completed', { number: completedSections, count: sections.length })}</p>
+      <div className="space-y-4">
+        <p>{t('application:required-label')}</p>
+        <p>{t('application:sections-completed', { number: completedSections, count: sections.length })}</p>
+      </div>
       <ApplicantCard>
         <ApplicantCardHeader>
           <ApplicantCardTitle>{t('application:eligibility-requirements.terms-conditions-section.title')}</ApplicantCardTitle>
-          {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
           {sections.some((section) => section.id === 'terms-and-conditions' && section.completed) && <StatusTag status="complete" />}
         </ApplicantCardHeader>
         <ApplicantCardBody>
-          {defaultState.termsAndConditions === undefined ? (
+          {state.termsAndConditions === undefined ? (
             <p>{t('application:eligibility-requirements.terms-conditions-section.instructions')}</p>
           ) : (
             <ul className="list-disc space-y-1 pl-7">
-              {defaultState.termsAndConditions.acknowledgeTerms && <li>{t('application:eligibility-requirements.terms-conditions-section.acknowledge-terms')}</li>}
-              {defaultState.termsAndConditions.acknowledgePrivacy && <li>{t('application:eligibility-requirements.terms-conditions-section.acknowledge-privacy')}</li>}
-              {defaultState.termsAndConditions.shareData && <li>{t('application:eligibility-requirements.terms-conditions-section.share-data')}</li>}
+              {state.termsAndConditions.acknowledgeTerms && <li>{t('application:eligibility-requirements.terms-conditions-section.acknowledge-terms')}</li>}
+              {state.termsAndConditions.acknowledgePrivacy && <li>{t('application:eligibility-requirements.terms-conditions-section.acknowledge-privacy')}</li>}
+              {state.termsAndConditions.shareData && <li>{t('application:eligibility-requirements.terms-conditions-section.share-data')}</li>}
             </ul>
           )}
         </ApplicantCardBody>
         <ApplicantCardFooter>
-          {defaultState.termsAndConditions === undefined ? (
-            <ButtonLink id="add-button" variant="link" routeId="public/application/$id/terms-conditions" params={params} startIcon={faCircleCheck} size="lg">
+          {state.termsAndConditions === undefined ? (
+            <ButtonLink id="add-terms-conditions-button" variant="link" routeId="public/application/$id/terms-conditions" params={params} startIcon={faCircleCheck} size="lg">
               {t('application:eligibility-requirements.terms-conditions-section.add-button')}
             </ButtonLink>
           ) : (
-            <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/terms-conditions" params={params} startIcon={faPenToSquare} size="lg">
+            <ButtonLink id="edit-terms-conditions-button" variant="link" routeId="public/application/$id/terms-conditions" params={params} startIcon={faPenToSquare} size="lg">
               {t('application:eligibility-requirements.terms-conditions-section.edit-button')}
+            </ButtonLink>
+          )}
+        </ApplicantCardFooter>
+      </ApplicantCard>
+      <ApplicantCard>
+        <ApplicantCardHeader>
+          <ApplicantCardTitle>{t('application:eligibility-requirements.tax-filing-section.title')}</ApplicantCardTitle>
+          {sections.some((section) => section.id === 'tax-filing' && section.completed) && <StatusTag status="complete" />}
+        </ApplicantCardHeader>
+        <ApplicantCardBody>
+          {state.termsAndConditions === undefined ? <p>{t('application:eligibility-requirements.tax-filing-section.instructions')}</p> : <p>{t('application:eligibility-requirements.tax-filing-section.have-filed-taxes')}</p>}
+        </ApplicantCardBody>
+        <ApplicantCardFooter>
+          {state.termsAndConditions === undefined ? (
+            <ButtonLink id="add-tax-filing-button" variant="link" routeId="public/application/$id/tax-filing" params={params} startIcon={faCircleCheck} size="lg">
+              {t('application:eligibility-requirements.tax-filing-section.add-button')}
+            </ButtonLink>
+          ) : (
+            <ButtonLink id="edit-tax-filing-button" variant="link" routeId="public/application/$id/tax-filing" params={params} startIcon={faPenToSquare} size="lg">
+              {t('application:eligibility-requirements.tax-filing-section.edit-button')}
             </ButtonLink>
           )}
         </ApplicantCardFooter>
