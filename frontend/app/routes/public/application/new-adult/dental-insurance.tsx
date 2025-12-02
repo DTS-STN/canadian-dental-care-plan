@@ -30,7 +30,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-adult:dental-insurance.page-title') }) };
   return {
-    defaultState: {
+    state: {
       dentalInsurance: state.dentalInsurance,
       dentalBenefits: state.dentalBenefits,
     },
@@ -39,8 +39,15 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export default function NewAdultDentalInsurance({ loaderData, params }: Route.ComponentProps) {
-  const { defaultState } = loaderData;
+  const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
+
+  const sections = [
+    { id: 'dental-insurance', completed: state.dentalInsurance !== undefined }, //
+    { id: 'dental-benefits', completed: state.dentalBenefits !== undefined },
+  ] as const;
+  const completedSections = sections.filter((section) => section.completed).length;
+  const allSectionsCompleted = completedSections === sections.length;
 
   return (
     <div className="max-w-prose space-y-8">
@@ -53,28 +60,31 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
         ]}
         currentStep={2}
       />
-      <p>{t('application:required-label')}</p>
-      <p>{t('application:sections-completed', { number: (defaultState.dentalInsurance === undefined ? 0 : 1) + (defaultState.dentalBenefits === undefined ? 0 : 1) })}</p>
+
+      <div className="space-y-4">
+        <p>{t('application:required-label')}</p>
+        <p>{t('application:sections-completed', { number: completedSections, count: sections.length })}</p>
+      </div>
 
       <ApplicantCard>
         <ApplicantCardHeader>
           <ApplicantCardTitle>{t('application-new-adult:dental-insurance.access-to-dental-insurance')}</ApplicantCardTitle>
-          {defaultState.dentalInsurance !== undefined && <StatusTag status="complete" />}
+          {sections.some((section) => section.id === 'dental-insurance' && section.completed) && <StatusTag status="complete" />}
         </ApplicantCardHeader>
         <ApplicantCardBody>
-          {defaultState.dentalInsurance === undefined ? (
+          {state.dentalInsurance === undefined ? (
             <p>{t('application-new-adult:dental-insurance.dental-insurance-indicate-status')}</p>
           ) : (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-adult:dental-insurance.access-to-dental-insurance-or-coverage')}>
-                <p>{defaultState.dentalInsurance ? t('application-new-adult:dental-insurance.dental-insurance-yes') : t('application-new-adult:dental-insurance.dental-insurance-no')}</p>
+                <p>{state.dentalInsurance ? t('application-new-adult:dental-insurance.dental-insurance-yes') : t('application-new-adult:dental-insurance.dental-insurance-no')}</p>
               </DescriptionListItem>
             </dl>
           )}
         </ApplicantCardBody>
         <ApplicantCardFooter>
           <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/dental-insurance" params={params} startIcon={faCirclePlus} size="lg">
-            {defaultState.dentalInsurance === undefined ? t('application-new-adult:dental-insurance.add-answer') : t('application-new-adult:dental-insurance.edit-access-to-dental-insurance')}
+            {state.dentalInsurance === undefined ? t('application-new-adult:dental-insurance.add-answer') : t('application-new-adult:dental-insurance.edit-access-to-dental-insurance')}
           </ButtonLink>
         </ApplicantCardFooter>
       </ApplicantCard>
@@ -82,21 +92,21 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
       <ApplicantCard>
         <ApplicantCardHeader>
           <ApplicantCardTitle>{t('application-new-adult:dental-insurance.other-benefits')}</ApplicantCardTitle>
-          {defaultState.dentalBenefits && <StatusTag status="complete" />}
+          {sections.some((section) => section.id === 'dental-benefits' && section.completed) && <StatusTag status="complete" />}
         </ApplicantCardHeader>
         <ApplicantCardBody>
-          {defaultState.dentalBenefits === undefined ? (
+          {state.dentalBenefits === undefined ? (
             <p>{t('application-new-adult:dental-insurance.dental-benefits-indicate-status')}</p>
           ) : (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-adult:dental-insurance.access-to-government-benefits')}>
                 <p>{t('application-new-adult:dental-insurance.dental-insurance-yes')}</p>
-                {defaultState.dentalBenefits.hasFederalBenefits || defaultState.dentalBenefits.hasProvincialTerritorialBenefits ? (
+                {state.dentalBenefits.hasFederalBenefits || state.dentalBenefits.hasProvincialTerritorialBenefits ? (
                   <>
                     <p>{t('application-new-adult:dental-insurance.yes')}</p>
                     <ul className="ml-6 list-disc">
-                      {defaultState.dentalBenefits.hasFederalBenefits && <li>{defaultState.dentalBenefits.federalSocialProgram}</li>}
-                      {defaultState.dentalBenefits.hasProvincialTerritorialBenefits && <li>{defaultState.dentalBenefits.provincialTerritorialSocialProgram}</li>}
+                      {state.dentalBenefits.hasFederalBenefits && <li>{state.dentalBenefits.federalSocialProgram}</li>}
+                      {state.dentalBenefits.hasProvincialTerritorialBenefits && <li>{state.dentalBenefits.provincialTerritorialSocialProgram}</li>}
                     </ul>
                   </>
                 ) : (
@@ -109,14 +119,14 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
         <ApplicantCardFooter>
           {/* TODO: update routeIds */}
           <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-adult/marital-status" params={params} startIcon={faCirclePlus} size="lg">
-            {defaultState.dentalBenefits === undefined ? t('application-new-adult:dental-insurance.add-answer') : t('application-new-adult:dental-insurance.edit-access-to-government-benefits')}
+            {state.dentalBenefits === undefined ? t('application-new-adult:dental-insurance.add-answer') : t('application-new-adult:dental-insurance.edit-access-to-government-benefits')}
           </ButtonLink>
         </ApplicantCardFooter>
       </ApplicantCard>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         {/* TODO: update routeIds */}
-        <NavigationButtonLink variant="secondary" direction="next" routeId="public/application/$id/new-adult/marital-status" params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="secondary" direction="next" routeId="public/application/$id/new-adult/marital-status" params={params}>
           {t('application-new-adult:dental-insurance.submit')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="primary" direction="previous" routeId="public/application/$id/new-adult/marital-status" params={params}>
