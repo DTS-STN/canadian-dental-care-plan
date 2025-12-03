@@ -126,21 +126,10 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           <ApplicantCardTitle>{t('application:type-of-application.new-or-returning-heading')}</ApplicantCardTitle>
           {defaultState.newOrReturningMember && <StatusTag status="complete" />}
         </ApplicantCardHeader>
-        <ApplicantCardBody>
-          {defaultState.newOrReturningMember === undefined ? (
-            <p>{t('application:type-of-application.new-or-returning-description')}</p>
-          ) : (
-            <dl className="divide-y">
-              <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.type-application-legend')}>
-                {/* TODO: Need to confirm the value to be displayed*/}
-                <p>{defaultState.newOrReturningMember.isNewOrExistingMember}</p>
-              </DescriptionListItem>
-            </dl>
-          )}
-        </ApplicantCardBody>
+        {/* TODO: Need to confirm the value to be displayed for new or returning member*/}
+        <ApplicantCardBody>{defaultState.newOrReturningMember === undefined ? <p>{t('application:type-of-application.new-or-returning-description')}</p> : <p>{defaultState.newOrReturningMember.isNewOrExistingMember}</p>}</ApplicantCardBody>
         <ApplicantCardFooter>
-          {/* TODO: Update routeId to new-or-returning-member route when created */}
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/type-of-application" params={params} startIcon={faCirclePlus}>
+          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus}>
             {defaultState.newOrReturningMember === undefined ? t('application:type-of-application.add-answer') : t('application:type-of-application.edit-answer')}
           </ButtonLink>
         </ApplicantCardFooter>

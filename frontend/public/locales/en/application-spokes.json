@@ -188,8 +188,17 @@
   },
   "new-or-returning-member": {
     "page-title": "New or returning member",
-    "legend": "Are you currently, or have you ever been enrolled in the Canadian Dental Care Plan?",
+    "previously-enrolled": "Are you currently, or have you ever been enrolled in the Canadian Dental Care Plan?",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "member-id": "Canadian Dental Care Plan Member ID",
+    "member-id-description": "You can find your 11-digit Member ID in the upper right corner of the letter from Service Canada or on your Canadian Dental Care Plan member card.",
+    "save-btn": "Save",
+    "back-btn": "Back",
+    "error-message": {
+      "is-new-or-existing-member-required": "Select whether you have ever been enrolled in the Canadian Dental Care Plan",
+      "member-id-required": "Enter 11-digit Member ID",
+      "member-id-valid": "Member ID must be 11 digits"
+    }
   }
 }

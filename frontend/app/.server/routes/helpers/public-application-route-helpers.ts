@@ -115,7 +115,7 @@ export type PublicApplicationState = ReadonlyDeep<{
   };
   newOrExistingMember?: {
     isNewOrExistingMember: boolean;
-    clientNumber?: string;
+    memberId?: string;
   };
   submissionInfo?: {
     /**

@@ -145,6 +145,7 @@ export const pageIds = {
         maritalStatus: 'CDCP-APPL-SPK-0005',
         termsConditions: 'CDCP-APPL-SPK-0006',
         dentalInsurance: 'CDCP-APPL-SPK0007',
+        newOrReturningMember: 'CDCP-APPL-SPK-0008',
       },
     },
     apply: {
