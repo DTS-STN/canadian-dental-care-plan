@@ -61,10 +61,18 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
     }
   }
 
+  const sections = [
+    { id: 'type-application', completed: defaultState.typeOfApplication !== undefined },
+    { id: 'personal-information', completed: defaultState.personalInformation !== undefined },
+    { id: 'new-or-returning-member', completed: defaultState.newOrReturningMember !== undefined },
+  ] as const;
+  const completedSections = sections.filter((section) => section.completed).length;
+  const allSectionsCompleted = completedSections === sections.length;
+
   return (
     <div className="max-w-prose space-y-8">
       <p>{t('application:required-label')}</p>
-      <p>{t('application:sections-completed', { number: defaultState.typeOfApplication === undefined ? 0 : 1 })}</p>
+      <p>{t('application:sections-completed', { number: completedSections, count: sections.length })}</p>
       <ApplicantCard>
         <ApplicantCardHeader>
           <ApplicantCardTitle>{t('application:type-of-application.type-application-heading')}</ApplicantCardTitle>
@@ -121,25 +129,27 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
         </ApplicantCardFooter>
       </ApplicantCard>
 
-      <ApplicantCard>
-        <ApplicantCardHeader>
-          <ApplicantCardTitle>{t('application:type-of-application.new-or-returning-heading')}</ApplicantCardTitle>
-          {defaultState.newOrReturningMember && <StatusTag status="complete" />}
-        </ApplicantCardHeader>
-        {/* TODO: Need to confirm the value to be displayed for new or returning member*/}
-        <ApplicantCardBody>{defaultState.newOrReturningMember === undefined ? <p>{t('application:type-of-application.new-or-returning-description')}</p> : <p>{defaultState.newOrReturningMember.isNewOrExistingMember}</p>}</ApplicantCardBody>
-        <ApplicantCardFooter>
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus}>
-            {defaultState.newOrReturningMember === undefined ? t('application:type-of-application.add-answer') : t('application:type-of-application.edit-answer')}
-          </ButtonLink>
-        </ApplicantCardFooter>
-      </ApplicantCard>
+      {defaultState.personalInformation !== undefined && (
+        <ApplicantCard>
+          <ApplicantCardHeader>
+            <ApplicantCardTitle>{t('application:type-of-application.new-or-returning-heading')}</ApplicantCardTitle>
+            {defaultState.newOrReturningMember && <StatusTag status="complete" />}
+          </ApplicantCardHeader>
+          {/* TODO: Need to confirm the value to be displayed for new or returning member*/}
+          <ApplicantCardBody>{defaultState.newOrReturningMember === undefined ? <p>{t('application:type-of-application.new-or-returning-description')}</p> : <p>{defaultState.newOrReturningMember.isNewOrExistingMember}</p>}</ApplicantCardBody>
+          <ApplicantCardFooter>
+            <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus}>
+              {defaultState.newOrReturningMember === undefined ? t('application:type-of-application.add-answer') : t('application:type-of-application.edit-answer')}
+            </ButtonLink>
+          </ApplicantCardFooter>
+        </ApplicantCard>
+      )}
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <NavigationButtonLink variant="primary" direction="next" routeId="public/application/$id/type-of-application" params={params}>
           {t('application:type-of-application.application')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/eligibility-requirements" params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="secondary" direction="previous" routeId="public/application/$id/eligibility-requirements" params={params}>
           {t('application:type-of-application.before-you-start')}
         </NavigationButtonLink>
       </div>
