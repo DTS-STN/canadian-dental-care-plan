@@ -106,11 +106,11 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
                 <p>{t('application-new-adult:contact-information.mailing-address')}</p>
                 <Address
                   address={{
-                    address: defaultState.mailingAddress.address ?? '',
-                    city: defaultState.mailingAddress.city ?? '',
+                    address: defaultState.mailingAddress.address,
+                    city: defaultState.mailingAddress.city,
                     provinceState: defaultState.mailingAddress.province,
                     postalZipCode: defaultState.mailingAddress.postalCode,
-                    country: defaultState.mailingAddress.country ?? '',
+                    country: defaultState.mailingAddress.country,
                   }}
                 />
               </DescriptionListItem>
@@ -148,15 +148,15 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-adult:contact-information.preferred-language')}>
                 <p>{t('application-new-adult:contact-information.preferred-language')}</p>
-                {defaultState.communicationPreferences?.preferredLanguage}
+                {defaultState.communicationPreferences.preferredLanguage}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-adult:contact-information.preferred-method')}>
                 <p>{t('application-new-adult:contact-information.preferred-method')}</p>
-                {defaultState.communicationPreferences?.preferredMethod}
+                {defaultState.communicationPreferences.preferredMethod}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-adult:contact-information.preferred-notification-method')}>
                 <p>{t('application-new-adult:contact-information.preferred-notification-method')}</p>
-                {defaultState.communicationPreferences?.preferredNotificationMethod}
+                {defaultState.communicationPreferences.preferredNotificationMethod}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-adult:contact-information.email')}>
                 <p>{t('application-new-adult:contact-information.email')}</p>
