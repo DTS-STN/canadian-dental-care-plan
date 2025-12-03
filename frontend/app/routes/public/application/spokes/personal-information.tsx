@@ -149,9 +149,6 @@ export async function action({ context: { appContainer, session }, params, reque
   if (ageCategory === 'children') {
     return redirect(getPathById('public/application/$id/parent-or-guardian', params));
   }
-  if (parsedDataResult.data.dateOfBirthYear >= 2006) {
-    return redirect(getPathById('public/application/$id/new-or-existing-member', params));
-  }
 
   return redirect(getPathById('public/application/$id/type-of-application', params));
 }

@@ -100,13 +100,13 @@ export default function ApplicationTypeOfApplication({ loaderData, params }: Rou
             errorMessage={errors?.typeOfApplication}
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Type of application click">
-              {t('application-spokes:type-of-application.continue-btn')}
+            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Type of application click">
+              {t('application-spokes:type-of-application.save-btn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId="public/application/$id/type-application"
+              routeId="public/application/$id/type-of-application"
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
