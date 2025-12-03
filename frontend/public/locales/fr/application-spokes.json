@@ -45,7 +45,7 @@
       "type-of-application-required": "Sélectionnez à qui s'adresse cette demande"
     },
     "back-btn": "Retour",
-    "continue-btn": "Continuer"
+    "save-btn": "Enregistrer"
   },
   "application-delegate": {
     "page-title": "Présenter une demande au nom d'une autre personne à titre de délégué ou de mandataire",
@@ -199,6 +199,45 @@
       "is-new-or-existing-member-required": "(fr) Select whether you have ever been enrolled in the Canadian Dental Care Plan",
       "member-id-required": "(fr) Enter 11-digit Member ID",
       "member-id-valid": "(fr) Member ID must be 11 digits"
+    }
+  },
+  "personal-information": {
+    "page-title": "Renseignements personnels",
+    "form-instructions-sin": "(fr) Enter your name exactly as shown on your Social Insurance Number (SIN) record or Canadian Dental Care Plan (CDCP) letters.",
+    "form-instructions-info": "(fr) We'll use the information you provide to confirm your identity. Any information that does not match the information on your SIN or CDCP record may cause a delay in the processing of your application.",
+    "sin": "Numéro d'assurance sociale (NAS)",
+    "last-name": "Nom de famille",
+    "first-name": "Prénom",
+    "dob": "Date de naissance",
+    "single-legal-name": "Si vous utilisez un seul nom légal",
+    "name-instructions": "Si vous utilisez un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
+    "back-btn": "Retour",
+    "save-btn": "Enregistrer",
+    "help-message": {
+      "sin": "Entrez un NAS de 9 chiffres"
+    },
+    "error-message": {
+      "first-name-required": "Entrez le prénom",
+      "last-name-required": "Entrez le nom de famille",
+      "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
+      "sin-valid": "Le NAS doit être valide",
+      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",
+      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
+      "first-name-no-digits": "Le prénom doit contenir uniquement des lettres",
+      "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres",
+      "date-of-birth-day-number": "Le jour doit être un nombre",
+      "date-of-birth-day-required": "La date de naissance doit inclure un jour",
+      "date-of-birth-is-past": "La date de naissance doit être dans le passé",
+      "date-of-birth-is-past-valid": "Date de naissance trop éloignée dans le passé",
+      "date-of-birth-month-required": "La date de naissance doit inclure un mois",
+      "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisis",
+      "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
+      "date-of-birth-year-required": "La date de naissance doit inclure une année",
+      "alert": {
+        "heading": "Vous ne pouvez pas souscrire pour le moment",
+        "detail": "Compte tenu de votre date de naissance, vous ne pouvez pas souscrire au Régime canadien de soins dentaires pour le moment.",
+        "applyDate": "Vous pouvez souscrire à partir du {{startDate}}."
+      }
     }
   }
 }

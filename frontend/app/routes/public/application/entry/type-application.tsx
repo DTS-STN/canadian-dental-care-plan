@@ -1,4 +1,5 @@
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/type-application';
@@ -69,6 +70,9 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
   const completedSections = sections.filter((section) => section.completed).length;
   const allSectionsCompleted = completedSections === sections.length;
 
+  const formattedDate = defaultState.personalInformation ? format(new Date(defaultState.personalInformation.dateOfBirth), 'MMMM d, yyyy') : undefined;
+  const yearOfBirth = defaultState.personalInformation ? Number(format(new Date(defaultState.personalInformation.dateOfBirth), 'yyyy')) : undefined;
+
   return (
     <div className="max-w-prose space-y-8">
       <p>{t('application:required-label')}</p>
@@ -106,14 +110,16 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             <p>{t('application:type-of-application.personal-info-description')}</p>
           ) : (
             <dl className="divide-y border-y">
-              <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.member-id')}>
-                <p>{defaultState.personalInformation.memberId}</p>
-              </DescriptionListItem>
-              <DescriptionListItem className="sm:grid-co ls-none" term={t('application:type-of-application.full-name')}>
+              {defaultState.personalInformation.memberId && (
+                <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.member-id')}>
+                  <p>{defaultState.personalInformation.memberId}</p>
+                </DescriptionListItem>
+              )}
+              <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.full-name')}>
                 <p>{`${defaultState.personalInformation.firstName} ${defaultState.personalInformation.lastName}`}</p>
               </DescriptionListItem>
               <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.date-of-birth')}>
-                <p>{defaultState.personalInformation.dateOfBirth}</p>
+                <p>{formattedDate}</p>
               </DescriptionListItem>
               <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.sin')}>
                 <p>{defaultState.personalInformation.socialInsuranceNumber}</p>
@@ -122,14 +128,13 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           )}
         </ApplicantCardBody>
         <ApplicantCardFooter>
-          {/* TODO: Update routeId to personal-information route when created */}
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/type-of-application" params={params} startIcon={faCirclePlus}>
+          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/personal-information" params={params} startIcon={faCirclePlus}>
             {defaultState.personalInformation === undefined ? t('application:type-of-application.add-personal-information') : t('application:type-of-application.edit-personal-information')}
           </ButtonLink>
         </ApplicantCardFooter>
       </ApplicantCard>
 
-      {defaultState.personalInformation !== undefined && (
+      {yearOfBirth !== undefined && yearOfBirth >= 2006 && (
         <ApplicantCard>
           <ApplicantCardHeader>
             <ApplicantCardTitle>{t('application:type-of-application.new-or-returning-heading')}</ApplicantCardTitle>
