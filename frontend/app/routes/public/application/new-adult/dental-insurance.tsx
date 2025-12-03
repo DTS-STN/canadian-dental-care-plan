@@ -5,8 +5,8 @@ import type { Route } from './+types/dental-insurance';
 
 import { getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
-import { ApplicantCard, ApplicantCardBody, ApplicantCardFooter, ApplicantCardHeader, ApplicantCardTitle } from '~/components/applicant-card';
 import { ButtonLink } from '~/components/buttons';
+import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
@@ -46,8 +46,8 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
     { id: 'dental-insurance', completed: state.dentalInsurance !== undefined }, //
     { id: 'dental-benefits', completed: state.dentalBenefits !== undefined },
   ] as const;
-  const completedSections = sections.filter((section) => section.completed).length;
-  const allSectionsCompleted = completedSections === sections.length;
+  const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
+  const allSectionsCompleted = completedSections.length === sections.length;
 
   return (
     <div className="max-w-prose space-y-8">
@@ -60,18 +60,16 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
         ]}
         currentStep={2}
       />
-
       <div className="space-y-4">
         <p>{t('application:required-label')}</p>
-        <p>{t('application:sections-completed', { number: completedSections, count: sections.length })}</p>
+        <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
       </div>
-
-      <ApplicantCard>
-        <ApplicantCardHeader>
-          <ApplicantCardTitle>{t('application-new-adult:dental-insurance.access-to-dental-insurance')}</ApplicantCardTitle>
-          {sections.some((section) => section.id === 'dental-insurance' && section.completed) && <StatusTag status="complete" />}
-        </ApplicantCardHeader>
-        <ApplicantCardBody>
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('application-new-adult:dental-insurance.access-to-dental-insurance')}</CardTitle>
+          <CardAction>{completedSections.includes('dental-insurance') && <StatusTag status="complete" />}</CardAction>
+        </CardHeader>
+        <CardContent>
           {state.dentalInsurance === undefined ? (
             <p>{t('application-new-adult:dental-insurance.dental-insurance-indicate-status')}</p>
           ) : (
@@ -81,20 +79,20 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
               </DescriptionListItem>
             </dl>
           )}
-        </ApplicantCardBody>
-        <ApplicantCardFooter>
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/dental-insurance" params={params} startIcon={faCirclePlus} size="lg">
+        </CardContent>
+        <CardFooter className="border-t bg-zinc-100">
+          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={faCirclePlus} size="lg">
             {state.dentalInsurance === undefined ? t('application-new-adult:dental-insurance.add-answer') : t('application-new-adult:dental-insurance.edit-access-to-dental-insurance')}
           </ButtonLink>
-        </ApplicantCardFooter>
-      </ApplicantCard>
+        </CardFooter>
+      </Card>
 
-      <ApplicantCard>
-        <ApplicantCardHeader>
-          <ApplicantCardTitle>{t('application-new-adult:dental-insurance.other-benefits')}</ApplicantCardTitle>
-          {sections.some((section) => section.id === 'dental-benefits' && section.completed) && <StatusTag status="complete" />}
-        </ApplicantCardHeader>
-        <ApplicantCardBody>
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('application-new-adult:dental-insurance.other-benefits')}</CardTitle>
+          <CardAction>{completedSections.includes('dental-benefits') && <StatusTag status="complete" />}</CardAction>
+        </CardHeader>
+        <CardContent>
           {state.dentalBenefits === undefined ? (
             <p>{t('application-new-adult:dental-insurance.dental-benefits-indicate-status')}</p>
           ) : (
@@ -115,14 +113,14 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
               </DescriptionListItem>
             </dl>
           )}
-        </ApplicantCardBody>
-        <ApplicantCardFooter>
+        </CardContent>
+        <CardFooter className="border-t bg-zinc-100">
           {/* TODO: update routeIds */}
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-adult/marital-status" params={params} startIcon={faCirclePlus} size="lg">
+          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/new-adult/marital-status" params={params} startIcon={faCirclePlus} size="lg">
             {state.dentalBenefits === undefined ? t('application-new-adult:dental-insurance.add-answer') : t('application-new-adult:dental-insurance.edit-access-to-government-benefits')}
           </ButtonLink>
-        </ApplicantCardFooter>
-      </ApplicantCard>
+        </CardFooter>
+      </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         {/* TODO: update routeIds */}

@@ -6,8 +6,8 @@ import type { Route } from './+types/type-application';
 
 import { getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
-import { ApplicantCard, ApplicantCardBody, ApplicantCardFooter, ApplicantCardHeader, ApplicantCardTitle } from '~/components/applicant-card';
 import { ButtonLink } from '~/components/buttons';
+import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
@@ -67,22 +67,24 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
     { id: 'personal-information', completed: defaultState.personalInformation !== undefined },
     { id: 'new-or-returning-member', completed: defaultState.newOrReturningMember !== undefined },
   ] as const;
-  const completedSections = sections.filter((section) => section.completed).length;
-  const allSectionsCompleted = completedSections === sections.length;
+  const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
+  const allSectionsCompleted = completedSections.length === sections.length;
 
   const formattedDate = defaultState.personalInformation ? format(new Date(defaultState.personalInformation.dateOfBirth), 'MMMM d, yyyy') : undefined;
   const yearOfBirth = defaultState.personalInformation ? Number(format(new Date(defaultState.personalInformation.dateOfBirth), 'yyyy')) : undefined;
 
   return (
     <div className="max-w-prose space-y-8">
-      <p>{t('application:required-label')}</p>
-      <p>{t('application:sections-completed', { number: completedSections, count: sections.length })}</p>
-      <ApplicantCard>
-        <ApplicantCardHeader>
-          <ApplicantCardTitle>{t('application:type-of-application.type-application-heading')}</ApplicantCardTitle>
-          {defaultState.typeOfApplication && <StatusTag status="complete" />}
-        </ApplicantCardHeader>
-        <ApplicantCardBody>
+      <div className="space-y-4">
+        <p>{t('application:required-label')}</p>
+        <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('application:type-of-application.type-application-heading')}</CardTitle>
+          <CardAction>{completedSections.includes('type-application') && <StatusTag status="complete" />}</CardAction>
+        </CardHeader>
+        <CardContent>
           {defaultState.typeOfApplication === undefined ? (
             <p>{t('application:type-of-application.type-application-description')}</p>
           ) : (
@@ -92,20 +94,20 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
               </DescriptionListItem>
             </dl>
           )}
-        </ApplicantCardBody>
-        <ApplicantCardFooter>
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/type-application" params={params} startIcon={faCirclePlus}>
+        </CardContent>
+        <CardFooter className="border-t bg-zinc-100">
+          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/type-application" params={params} startIcon={faCirclePlus}>
             {defaultState.typeOfApplication === undefined ? t('application:type-of-application.add-type-application') : t('application:type-of-application.edit-type-application')}
           </ButtonLink>
-        </ApplicantCardFooter>
-      </ApplicantCard>
+        </CardFooter>
+      </Card>
 
-      <ApplicantCard>
-        <ApplicantCardHeader>
-          <ApplicantCardTitle>{t('application:type-of-application.personal-info-heading')}</ApplicantCardTitle>
-          {defaultState.personalInformation && <StatusTag status="complete" />}
-        </ApplicantCardHeader>
-        <ApplicantCardBody>
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('application:type-of-application.personal-info-heading')}</CardTitle>
+          <CardAction>{completedSections.includes('personal-information') && <StatusTag status="complete" />}</CardAction>
+        </CardHeader>
+        <CardContent>
           {defaultState.personalInformation === undefined ? (
             <p>{t('application:type-of-application.personal-info-description')}</p>
           ) : (
@@ -126,28 +128,28 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
               </DescriptionListItem>
             </dl>
           )}
-        </ApplicantCardBody>
-        <ApplicantCardFooter>
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/personal-information" params={params} startIcon={faCirclePlus}>
+        </CardContent>
+        <CardFooter className="border-t bg-zinc-100">
+          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/personal-information" params={params} startIcon={faCirclePlus}>
             {defaultState.personalInformation === undefined ? t('application:type-of-application.add-personal-information') : t('application:type-of-application.edit-personal-information')}
           </ButtonLink>
-        </ApplicantCardFooter>
-      </ApplicantCard>
+        </CardFooter>
+      </Card>
 
       {yearOfBirth !== undefined && yearOfBirth >= 2006 && (
-        <ApplicantCard>
-          <ApplicantCardHeader>
-            <ApplicantCardTitle>{t('application:type-of-application.new-or-returning-heading')}</ApplicantCardTitle>
-            {defaultState.newOrReturningMember && <StatusTag status="complete" />}
-          </ApplicantCardHeader>
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('application:type-of-application.new-or-returning-heading')}</CardTitle>
+            <CardAction>{completedSections.includes('new-or-returning-member') && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
           {/* TODO: Need to confirm the value to be displayed for new or returning member*/}
-          <ApplicantCardBody>{defaultState.newOrReturningMember === undefined ? <p>{t('application:type-of-application.new-or-returning-description')}</p> : <p>{defaultState.newOrReturningMember.isNewOrExistingMember}</p>}</ApplicantCardBody>
-          <ApplicantCardFooter>
-            <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus}>
+          <CardContent>{defaultState.newOrReturningMember === undefined ? <p>{t('application:type-of-application.new-or-returning-description')}</p> : <p>{defaultState.newOrReturningMember.isNewOrExistingMember}</p>}</CardContent>
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus}>
               {defaultState.newOrReturningMember === undefined ? t('application:type-of-application.add-answer') : t('application:type-of-application.edit-answer')}
             </ButtonLink>
-          </ApplicantCardFooter>
-        </ApplicantCard>
+          </CardFooter>
+        </Card>
       )}
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">

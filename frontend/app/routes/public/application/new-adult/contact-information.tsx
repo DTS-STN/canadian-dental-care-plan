@@ -1,3 +1,4 @@
+import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -6,8 +7,8 @@ import type { Route } from './+types/contact-information';
 import { getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
-import { ApplicantCard, ApplicantCardBody, ApplicantCardFooter, ApplicantCardHeader, ApplicantCardTitle } from '~/components/applicant-card';
 import { ButtonLink } from '~/components/buttons';
+import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
@@ -49,6 +50,14 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
   const { defaultState } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
+  const sections = [
+    { id: 'phone-number', completed: defaultState.phoneNumber !== undefined }, //
+    { id: 'address', completed: defaultState.mailingAddress !== undefined && defaultState.homeAddress !== undefined },
+    { id: 'communication-preferences', completed: defaultState.communicationPreferences !== undefined },
+  ] as const;
+  const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
+  const allSectionsCompleted = completedSections.length === sections.length;
+
   return (
     <div className="max-w-prose space-y-8">
       <ProgressStepper
@@ -60,21 +69,16 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
         ]}
         currentStep={1}
       />
-      <p>{t('application:required-label')}</p>
-
-      <p>
-        {t('application:sections-completed_other', {
-          count: 3,
-          number: (defaultState.phoneNumber === undefined ? 0 : 1) + (defaultState.mailingAddress === undefined && defaultState.homeAddress === undefined ? 0 : 1) + (defaultState.communicationPreferences === undefined ? 0 : 1),
-        })}
-      </p>
-
-      <ApplicantCard>
-        <ApplicantCardHeader>
-          <ApplicantCardTitle>{t('application-new-adult:contact-information.phone-number')}</ApplicantCardTitle>
-          {defaultState.phoneNumber !== undefined && <StatusTag status="complete" />}
-        </ApplicantCardHeader>
-        <ApplicantCardBody>
+      <div className="space-y-4">
+        <p>{t('application:required-label')}</p>
+        <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('application-new-adult:contact-information.phone-number')}</CardTitle>
+          <CardAction>{completedSections.includes('phone-number') && <StatusTag status="complete" />}</CardAction>
+        </CardHeader>
+        <CardContent>
           {defaultState.phoneNumber === undefined ? (
             <p>{t('application-new-adult:contact-information.phone-number-help')}</p>
           ) : (
@@ -84,65 +88,87 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
               </DescriptionListItem>
             </dl>
           )}
-        </ApplicantCardBody>
-        <ApplicantCardFooter>
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-adult/contact-information" params={params} startIcon={faCirclePlus} size="lg">
-            {defaultState.phoneNumber === undefined ? t('application-new-adult:contact-information.add-phone-number') : t('application-new-adult:contact-information.edit-phone-number')}
+        </CardContent>
+        <CardFooter className="border-t bg-zinc-100">
+          <ButtonLink
+            id="edit-button" //
+            variant="link"
+            className="p-0"
+            routeId="public/application/$id/new-adult/contact-information"
+            params={params}
+            startIcon={completedSections.includes('phone-number') ? faPenToSquare : faCirclePlus}
+            size="lg"
+          >
+            {completedSections.includes('phone-number') //
+              ? t('application-new-adult:contact-information.edit-phone-number')
+              : t('application-new-adult:contact-information.add-phone-number')}
           </ButtonLink>
-        </ApplicantCardFooter>
-      </ApplicantCard>
+        </CardFooter>
+      </Card>
 
-      <ApplicantCard>
-        <ApplicantCardHeader>
-          <ApplicantCardTitle>{t('application-new-adult:contact-information.mailing-and-home-address')}</ApplicantCardTitle>
-          {defaultState.mailingAddress && defaultState.homeAddress && <StatusTag status="complete" />}
-        </ApplicantCardHeader>
-        <ApplicantCardBody>
-          {defaultState.mailingAddress === undefined ? (
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('application-new-adult:contact-information.mailing-and-home-address')}</CardTitle>
+          <CardAction>{completedSections.includes('address') && <StatusTag status="complete" />}</CardAction>
+        </CardHeader>
+        <CardContent>
+          {defaultState.mailingAddress === undefined && defaultState.homeAddress === undefined ? (
             <p>{t('application-new-adult:contact-information.address-help')}</p>
           ) : (
             <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-new-adult:contact-information.mailing-address')}>
-                <p>{t('application-new-adult:contact-information.mailing-address')}</p>
-                <Address
-                  address={{
-                    address: defaultState.mailingAddress.address,
-                    city: defaultState.mailingAddress.city,
-                    provinceState: defaultState.mailingAddress.province,
-                    postalZipCode: defaultState.mailingAddress.postalCode,
-                    country: defaultState.mailingAddress.country,
-                  }}
-                />
-              </DescriptionListItem>
-              <DescriptionListItem term={t('application-new-adult:contact-information.home-address')}>
-                <p>{t('application-new-adult:contact-information.home-address')}</p>
-                <Address
-                  address={{
-                    address: defaultState.homeAddress?.address ?? '',
-                    city: defaultState.homeAddress?.city ?? '',
-                    provinceState: defaultState.homeAddress?.province,
-                    postalZipCode: defaultState.homeAddress?.postalCode,
-                    country: defaultState.homeAddress?.country ?? '',
-                  }}
-                />
-              </DescriptionListItem>
+              {defaultState.mailingAddress !== undefined && (
+                <DescriptionListItem term={t('application-new-adult:contact-information.mailing-address')}>
+                  <Address
+                    address={{
+                      address: defaultState.mailingAddress.address,
+                      city: defaultState.mailingAddress.city,
+                      provinceState: defaultState.mailingAddress.province,
+                      postalZipCode: defaultState.mailingAddress.postalCode,
+                      country: defaultState.mailingAddress.country,
+                    }}
+                  />
+                </DescriptionListItem>
+              )}
+              {defaultState.homeAddress !== undefined && (
+                <DescriptionListItem term={t('application-new-adult:contact-information.home-address')}>
+                  <Address
+                    address={{
+                      address: defaultState.homeAddress.address,
+                      city: defaultState.homeAddress.city,
+                      provinceState: defaultState.homeAddress.province,
+                      postalZipCode: defaultState.homeAddress.postalCode,
+                      country: defaultState.homeAddress.country,
+                    }}
+                  />
+                </DescriptionListItem>
+              )}
             </dl>
           )}
-        </ApplicantCardBody>
-        <ApplicantCardFooter>
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-adult/contact-information" params={params} startIcon={faCirclePlus} size="lg">
-            {defaultState.mailingAddress || defaultState.homeAddress ? t('application-new-adult:contact-information.add-address') : t('application-new-adult:contact-information.edit-address')}
+        </CardContent>
+        <CardFooter className="border-t bg-zinc-100">
+          <ButtonLink
+            id="edit-button" //
+            variant="link"
+            className="p-0"
+            routeId="public/application/$id/new-adult/contact-information"
+            params={params}
+            startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus}
+            size="lg"
+          >
+            {completedSections.includes('address') //
+              ? t('application-new-adult:contact-information.edit-address')
+              : t('application-new-adult:contact-information.add-address')}
           </ButtonLink>
-        </ApplicantCardFooter>
-      </ApplicantCard>
+        </CardFooter>
+      </Card>
 
-      <ApplicantCard>
-        <ApplicantCardHeader>
-          <ApplicantCardTitle>{t('application-new-adult:contact-information.communication-preferences')}</ApplicantCardTitle>
-          {defaultState.communicationPreferences && <StatusTag status="complete" />}
-        </ApplicantCardHeader>
-        <ApplicantCardBody>
-          {defaultState.communicationPreferences?.preferredLanguage === undefined ? (
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('application-new-adult:contact-information.communication-preferences')}</CardTitle>
+          {completedSections.includes('communication-preferences') && <StatusTag status="complete" />}
+        </CardHeader>
+        <CardContent>
+          {defaultState.communicationPreferences === undefined ? (
             <p>{t('application-new-adult:contact-information.communication-preferences-help')}</p>
           ) : (
             <dl className="divide-y border-y">
@@ -164,16 +190,26 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
               </DescriptionListItem>
             </dl>
           )}
-        </ApplicantCardBody>
-        <ApplicantCardFooter>
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/new-adult/contact-information" params={params} startIcon={faCirclePlus} size="lg">
-            {defaultState.communicationPreferences ? t('application-new-adult:contact-information.add-communication-preferences') : t('application-new-adult:contact-information.edit-communication-preferences')}
+        </CardContent>
+        <CardFooter className="border-t bg-zinc-100">
+          <ButtonLink
+            id="edit-button" //
+            variant="link"
+            className="p-0"
+            routeId="public/application/$id/new-adult/contact-information"
+            params={params}
+            startIcon={completedSections.includes('communication-preferences') ? faPenToSquare : faCirclePlus}
+            size="lg"
+          >
+            {completedSections.includes('communication-preferences') //
+              ? t('application-new-adult:contact-information.edit-communication-preferences')
+              : t('application-new-adult:contact-information.add-communication-preferences')}
           </ButtonLink>
-        </ApplicantCardFooter>
-      </ApplicantCard>
+        </CardFooter>
+      </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink variant="secondary" direction="next" routeId="public/application/$id/new-adult/dental-insurance" params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="secondary" direction="next" routeId="public/application/$id/new-adult/dental-insurance" params={params}>
           {t('application-new-adult:contact-information.next-btn')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="primary" direction="previous" routeId="public/application/$id/new-adult/marital-status" params={params}>

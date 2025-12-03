@@ -5,8 +5,8 @@ import type { Route } from './+types/marital-status';
 
 import { getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
-import { ApplicantCard, ApplicantCardBody, ApplicantCardFooter, ApplicantCardHeader, ApplicantCardTitle } from '~/components/applicant-card';
 import { ButtonLink } from '~/components/buttons';
+import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
@@ -45,8 +45,8 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
   const sections = [
     { id: 'marital-status', completed: state.maritalStatus !== undefined }, //
   ] as const;
-  const completedSections = sections.filter((section) => section.completed).length;
-  const allSectionsCompleted = completedSections === sections.length;
+  const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
+  const allSectionsCompleted = completedSections.length === sections.length;
 
   return (
     <div className="max-w-prose space-y-8">
@@ -59,18 +59,16 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
         ]}
         currentStep={0}
       />
-
       <div className="space-y-4">
         <p>{t('application:required-label')}</p>
-        <p>{t('application:sections-completed', { number: completedSections, count: sections.length })}</p>
+        <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
       </div>
-
-      <ApplicantCard>
-        <ApplicantCardHeader>
-          <ApplicantCardTitle>{t('application-new-adult:marital-status.marital-status')}</ApplicantCardTitle>
-          {state.maritalStatus !== undefined && <StatusTag status="complete" />}
-        </ApplicantCardHeader>
-        <ApplicantCardBody>
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('application-new-adult:marital-status.marital-status')}</CardTitle>
+          <CardAction>{completedSections.includes('marital-status') && <StatusTag status="complete" />}</CardAction>
+        </CardHeader>
+        <CardContent>
           {state.maritalStatus === undefined ? (
             <p>{t('application-new-adult:marital-status.select-your-status')}</p>
           ) : (
@@ -93,14 +91,13 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
               )}
             </dl>
           )}
-        </ApplicantCardBody>
-        <ApplicantCardFooter>
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/marital-status" params={params} startIcon={faCirclePlus} size="lg">
+        </CardContent>
+        <CardFooter className="border-t bg-zinc-100">
+          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={faCirclePlus} size="lg">
             {state.maritalStatus === undefined ? t('application-new-adult:marital-status.add-marital-status') : t('application-new-adult:marital-status.edit-marital-status')}
           </ButtonLink>
-        </ApplicantCardFooter>
-      </ApplicantCard>
-
+        </CardFooter>
+      </Card>
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-adult/marital-status" params={params}>
           {t('application-new-adult:marital-status.contact-information')}

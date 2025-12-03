@@ -51,14 +51,13 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
     { id: 'tax-filing', completed: state.hasFiledTaxes === true },
   ] as const;
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
-  const completedSectionsCount = completedSections.length;
-  const allSectionsCompleted = completedSectionsCount === sections.length;
+  const allSectionsCompleted = completedSections.length === sections.length;
 
   return (
     <div className="max-w-prose space-y-8">
       <div className="space-y-4">
         <p>{t('application:required-label')}</p>
-        <p>{t('application:sections-completed', { number: completedSectionsCount, count: sections.length })}</p>
+        <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
       </div>
       <Card>
         <CardHeader>
@@ -77,15 +76,19 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          {completedSections.includes('terms-and-conditions') ? (
-            <ButtonLink id="edit-terms-conditions-button" variant="link" className="p-0" routeId="public/application/$id/terms-conditions" params={params} startIcon={faPenToSquare} size="lg">
-              {t('application:eligibility-requirements.terms-conditions-section.edit-button')}
-            </ButtonLink>
-          ) : (
-            <ButtonLink id="add-terms-conditions-button" variant="link" className="p-0" routeId="public/application/$id/terms-conditions" params={params} startIcon={faCircleCheck} size="lg">
-              {t('application:eligibility-requirements.terms-conditions-section.add-button')}
-            </ButtonLink>
-          )}
+          <ButtonLink
+            id="edit-terms-conditions-button" //
+            variant="link"
+            className="p-0"
+            routeId="public/application/$id/terms-conditions"
+            params={params}
+            startIcon={completedSections.includes('terms-and-conditions') ? faPenToSquare : faCircleCheck}
+            size="lg"
+          >
+            {completedSections.includes('terms-and-conditions') //
+              ? t('application:eligibility-requirements.terms-conditions-section.edit-button')
+              : t('application:eligibility-requirements.terms-conditions-section.add-button')}
+          </ButtonLink>
         </CardFooter>
       </Card>
       <Card>
@@ -101,15 +104,19 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
           </p>
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          {completedSections.includes('tax-filing') ? (
-            <ButtonLink id="edit-tax-filing-button" variant="link" className="p-0" routeId="public/application/$id/tax-filing" params={params} startIcon={faPenToSquare} size="lg">
-              {t('application:eligibility-requirements.tax-filing-section.edit-button')}
-            </ButtonLink>
-          ) : (
-            <ButtonLink id="add-tax-filing-button" variant="link" className="p-0" routeId="public/application/$id/tax-filing" params={params} startIcon={faCircleCheck} size="lg">
-              {t('application:eligibility-requirements.tax-filing-section.add-button')}
-            </ButtonLink>
-          )}
+          <ButtonLink
+            id="edit-tax-filing-button" //
+            variant="link"
+            className="p-0"
+            routeId="public/application/$id/tax-filing"
+            params={params}
+            startIcon={completedSections.includes('tax-filing') ? faPenToSquare : faCircleCheck}
+            size="lg"
+          >
+            {completedSections.includes('tax-filing') //
+              ? t('application:eligibility-requirements.tax-filing-section.edit-button')
+              : t('application:eligibility-requirements.tax-filing-section.add-button')}
+          </ButtonLink>
         </CardFooter>
       </Card>
       <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/type-of-application" params={params}>
