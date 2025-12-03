@@ -1,0 +1,50 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Card components > should render correctly > expected html 1`] = `
+<div>
+  <div
+    class="flex flex-col gap-6 rounded-xl border bg-white py-6 shadow-sm"
+    data-slot="card"
+  >
+    <div
+      class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+      data-slot="card-header"
+    >
+      <h3
+        class="font-lato text-xl leading-none font-semibold"
+        data-slot="card-title"
+      >
+        Card Title
+      </h3>
+      <div
+        class="text-black/50"
+        data-slot="card-description"
+      >
+        Card Description
+      </div>
+      <div
+        class="col-start-2 row-span-2 row-start-1 self-start justify-self-end"
+        data-slot="card-action"
+      >
+        Card Action
+      </div>
+    </div>
+    <div
+      class="px-6"
+      data-slot="card-content"
+    >
+      <p>
+        Card Content
+      </p>
+    </div>
+    <div
+      class="flex items-center px-6 [.border-t]:pt-6 border-t"
+      data-slot="card-footer"
+    >
+      <p>
+        Card Footer
+      </p>
+    </div>
+  </div>
+</div>
+`;
