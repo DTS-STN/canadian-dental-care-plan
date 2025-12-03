@@ -62,7 +62,7 @@
     "inversify": "^7.10.4",
     "isbot": "^5.1.32",
     "jose": "^6.1.2",
-    "libphonenumber-js": "^1.12.30",
+    "libphonenumber-js": "^1.12.31",
     "markdown-to-jsx": "^9.3.0",
     "mime": "^4.1.0",
     "minimatch": "^10.1.1",
