@@ -25,6 +25,7 @@ export const routes = [
           { id: 'public/application/$id/tax-filing', file: 'routes/public/application/spokes/tax-filing.tsx', paths: { en: '/:lang/application/:id/tax-filing', fr: '/:lang/demandes/:id/declaration-impot' } },
           { id: 'public/application/$id/terms-conditions', file: 'routes/public/application/spokes/terms-conditions.tsx', paths: { en: '/:lang/application/:id/terms-conditions', fr: '/:lang/demander/:id/conditions-utilisation' } },
           { id: 'public/application/$id/type-application', file: 'routes/public/application/spokes/type-application.tsx', paths: { en: '/:lang/application/:id/type-application', fr: '/:lang/demander/:id/type-demande' } },
+          { id: 'public/application/$id/new-or-returning-member', file: 'routes/public/application/spokes/new-or-returning-member.tsx', paths: { en: '/:lang/application/:id/new-or-returning-member', fr: '/:lang/demander/:id/membre-nouveau-ou-actuel' } },
         ],
       },
       {
