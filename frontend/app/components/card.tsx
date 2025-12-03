@@ -5,7 +5,7 @@ import { Slot } from '@radix-ui/react-slot';
 import { cn } from '~/utils/tw-utils';
 
 export function Card({ className, ...props }: ComponentProps<'div'>) {
-  return <div data-slot="card" className={cn('flex flex-col gap-6 rounded-xl border bg-white py-6 shadow-sm', className)} {...props} />;
+  return <div data-slot="card" className={cn('flex flex-col gap-6 rounded-lg border bg-white py-6 shadow-sm', className)} {...props} />;
 }
 
 export function CardHeader({ className, ...props }: ComponentProps<'div'>) {
@@ -18,7 +18,7 @@ interface CardTitleProps extends ComponentProps<'h3'> {
 
 export function CardTitle({ asChild, className, ...props }: CardTitleProps) {
   const CardTitlePrimitive = asChild ? Slot : 'h3';
-  return <CardTitlePrimitive data-slot="card-title" className={cn('font-lato text-xl leading-none font-semibold', className)} {...props} />;
+  return <CardTitlePrimitive data-slot="card-title" className={cn('font-lato text-xl leading-none font-bold', className)} {...props} />;
 }
 
 export function CardDescription({ className, ...props }: ComponentProps<'div'>) {
@@ -34,5 +34,5 @@ export function CardContent({ className, ...props }: ComponentProps<'div'>) {
 }
 
 export function CardFooter({ className, ...props }: ComponentProps<'div'>) {
-  return <div data-slot="card-footer" className={cn('flex items-center px-6 [.border-t]:pt-6', className)} {...props} />;
+  return <div data-slot="card-footer" className={cn('-mb-6 flex items-center px-6 pb-6 [.border-t]:pt-6', className)} {...props} />;
 }
