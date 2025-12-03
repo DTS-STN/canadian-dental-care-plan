@@ -106,10 +106,12 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             <p>{t('application:type-of-application.personal-info-description')}</p>
           ) : (
             <dl className="divide-y border-y">
-              <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.member-id')}>
-                <p>{defaultState.personalInformation.memberId}</p>
-              </DescriptionListItem>
-              <DescriptionListItem className="sm:grid-co ls-none" term={t('application:type-of-application.full-name')}>
+              {defaultState.personalInformation.memberId && (
+                <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.member-id')}>
+                  <p>{defaultState.personalInformation.memberId}</p>
+                </DescriptionListItem>
+              )}
+              <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.full-name')}>
                 <p>{`${defaultState.personalInformation.firstName} ${defaultState.personalInformation.lastName}`}</p>
               </DescriptionListItem>
               <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.date-of-birth')}>
@@ -122,8 +124,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           )}
         </ApplicantCardBody>
         <ApplicantCardFooter>
-          {/* TODO: Update routeId to personal-information route when created */}
-          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/type-of-application" params={params} startIcon={faCirclePlus}>
+          <ButtonLink id="edit-button" variant="link" routeId="public/application/$id/personal-information" params={params} startIcon={faCirclePlus}>
             {defaultState.personalInformation === undefined ? t('application:type-of-application.add-personal-information') : t('application:type-of-application.edit-personal-information')}
           </ButtonLink>
         </ApplicantCardFooter>

@@ -30,7 +30,7 @@ export type PublicApplicationState = ReadonlyDeep<{
   };
   editModeLivingIndependently?: boolean;
   applicantInformation?: {
-    memberId: string;
+    memberId?: string;
     firstName: string;
     lastName: string;
     dateOfBirth: string;
