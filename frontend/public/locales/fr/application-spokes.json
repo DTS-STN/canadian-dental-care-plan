@@ -311,5 +311,24 @@
     "back-btn": "Retour",
     "exit-btn": "(fr) Exit application",
     "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
+  "phone-number": {
+    "page-title": "Numéro de téléphone",
+    "phone-number": "Numéro de téléphone",
+    "phone-number-alt": "Autre numéro de téléphone (facultatif)",
+    "back-btn": "Retour",
+    "save-btn": "Enregistrer",
+    "dont-have-number": "(FR) I don't have a phone number",
+    "need-phone-number": "(FR) You need a phone number to apply online. If you cannot be reached by phone, you can still apply for the Canadian Dental Care Plan:",
+    "service-canada": "(FR) By phone: call Service Canada at <noWrap>1-833-537-4342</noWrap>",
+    "in-person": "(FR) In-person: <findOffice>find a Service Canada office</findOffice>",
+    "office-link": "https://offices.service.canada.ca/fr",
+    "error-message": {
+      "phone-number-valid": "Numéro de téléphone invalide",
+      "phone-number-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-number-alt-valid": "Numéro de téléphone invalide",
+      "phone-number-alt-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-required": "Entrez un numéro de téléphone"
+    }
   }
 }

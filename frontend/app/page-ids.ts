@@ -152,6 +152,7 @@ export const pageIds = {
         newOrReturningMember: 'CDCP-APPL-SPK-0011',
         confirmFederalProvincialTerritorialBenefits: 'CDCP-APPL-SPK-0012',
         federalProvincialTerritorialBenefits: 'CDCP-APPL-SPK-0013',
+        phoneNumber: 'CDCP-APPL-SPK-0014',
       },
     },
     apply: {
