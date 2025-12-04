@@ -1,6 +1,6 @@
 import { data, useFetcher } from 'react-router';
 
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/phone-number';
@@ -11,8 +11,10 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { phoneSchema } from '~/.server/validation/phone-schema';
 import { ButtonLink } from '~/components/buttons';
+import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
+import { InlineLink } from '~/components/inline-link';
 import { InputPhoneField } from '~/components/input-phone-field';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
@@ -93,6 +95,8 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
     phoneNumberAlt: 'phone-number-alt',
   });
 
+  const findOffice = <InlineLink to={t('application-spokes:phone-number.office-link')} className="external-link" newTabIndicator target="_blank" />;
+
   return (
     <div className="max-w-prose">
       <errorSummary.ErrorSummary />
@@ -129,6 +133,21 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
             />
           </div>
         </div>
+        <Collapsible summary={t('application-spokes:phone-number.dont-have-number')}>
+          <div className="space-y-6">
+            <section className="space-y-4">
+              <p>{t('application-spokes:phone-number.need-phone-number')}</p>
+              <ul className="list-disc space-y-1 pl-7">
+                <li>
+                  <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:phone-number.service-canada" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+                </li>
+                <li>
+                  <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:phone-number.in-person" components={{ findOffice }} />
+                </li>
+              </ul>
+            </section>
+          </div>
+        </Collapsible>
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Phone number click">
             {t('application-spokes:phone-number.save-btn')}

@@ -51,7 +51,7 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const sections = [
-    { id: 'phone-number', completed: defaultState.phoneNumber !== undefined }, //
+    { id: 'phone-number', completed: defaultState.phoneNumber !== undefined },
     { id: 'address', completed: defaultState.mailingAddress !== undefined && defaultState.homeAddress !== undefined },
     { id: 'communication-preferences', completed: defaultState.communicationPreferences !== undefined },
   ] as const;
@@ -90,18 +90,8 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink
-            id="edit-button" //
-            variant="link"
-            className="p-0"
-            routeId="public/application/$id/new-adult/contact-information"
-            params={params}
-            startIcon={completedSections.includes('phone-number') ? faPenToSquare : faCirclePlus}
-            size="lg"
-          >
-            {completedSections.includes('phone-number') //
-              ? t('application-new-adult:contact-information.edit-phone-number')
-              : t('application-new-adult:contact-information.add-phone-number')}
+          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={completedSections.includes('phone-number') ? faPenToSquare : faCirclePlus} size="lg">
+            {completedSections.includes('phone-number') ? t('application-new-adult:contact-information.edit-phone-number') : t('application-new-adult:contact-information.add-phone-number')}
           </ButtonLink>
         </CardFooter>
       </Card>
@@ -146,18 +136,8 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink
-            id="edit-button" //
-            variant="link"
-            className="p-0"
-            routeId="public/application/$id/new-adult/contact-information"
-            params={params}
-            startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus}
-            size="lg"
-          >
-            {completedSections.includes('address') //
-              ? t('application-new-adult:contact-information.edit-address')
-              : t('application-new-adult:contact-information.add-address')}
+          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/new-adult/contact-information" params={params} startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus} size="lg">
+            {completedSections.includes('address') ? t('application-new-adult:contact-information.edit-address') : t('application-new-adult:contact-information.add-address')}
           </ButtonLink>
         </CardFooter>
       </Card>
@@ -193,7 +173,7 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
           <ButtonLink
-            id="edit-button" //
+            id="edit-button"
             variant="link"
             className="p-0"
             routeId="public/application/$id/new-adult/contact-information"
@@ -201,9 +181,7 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
             startIcon={completedSections.includes('communication-preferences') ? faPenToSquare : faCirclePlus}
             size="lg"
           >
-            {completedSections.includes('communication-preferences') //
-              ? t('application-new-adult:contact-information.edit-communication-preferences')
-              : t('application-new-adult:contact-information.add-communication-preferences')}
+            {completedSections.includes('communication-preferences') ? t('application-new-adult:contact-information.edit-communication-preferences') : t('application-new-adult:contact-information.add-communication-preferences')}
           </ButtonLink>
         </CardFooter>
       </Card>
