@@ -13,6 +13,7 @@ import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { maritalStatusMap } from '~/utils/marital-status-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -74,7 +75,7 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
           ) : (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-adult:marital-status.marital-status')}>
-                <p>{state.maritalStatus}</p>
+                <p>{state.maritalStatus ? t(`application-new-adult:${maritalStatusMap[state.maritalStatus as keyof typeof maritalStatusMap]}`) : ''}</p>
               </DescriptionListItem>
               {state.partnerInformation && (
                 <>
