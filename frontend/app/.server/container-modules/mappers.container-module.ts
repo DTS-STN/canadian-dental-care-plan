@@ -22,6 +22,7 @@ import {
   DefaultLanguageDtoMapper,
   DefaultLetterDtoMapper,
   DefaultLetterTypeDtoMapper,
+  DefaultMaritalStatusDtoMapper,
   DefaultProfileDtoMapper,
   DefaultProvinceTerritoryStateDtoMapper,
   DefaultProvincialGovernmentInsurancePlanDtoMapper,
@@ -65,5 +66,6 @@ export function createMappersContainerModule(): ContainerModule {
     options.bind(TYPES.ProvincialGovernmentInsurancePlanDtoMapper).to(DefaultProvincialGovernmentInsurancePlanDtoMapper);
     options.bind(TYPES.SunLifeCommunicationMethodDtoMapper).to(DefaultSunLifeCommunicationMethodDtoMapper);
     options.bind(TYPES.VerificationCodeDtoMapper).to(DefaultVerificationCodeDtoMapper);
+    options.bind(TYPES.MaritalStatusDtoMapper).to(DefaultMaritalStatusDtoMapper);
   });
 }

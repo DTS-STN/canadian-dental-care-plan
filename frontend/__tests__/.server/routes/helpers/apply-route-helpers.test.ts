@@ -5,8 +5,8 @@ import { applicantInformationStateHasPartner, getAgeCategoryFromAge, getChildren
 
 vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn(() => ({
-    MARITAL_STATUS_CODE_MARRIED: 'married',
-    MARITAL_STATUS_CODE_COMMONLAW: 'commonlaw',
+    MARITAL_STATUS_CODE_COMMON_LAW: 'mock_code_common_law',
+    MARITAL_STATUS_CODE_MARRIED: 'mock_code_married',
   })),
 }));
 
@@ -119,13 +119,8 @@ describe('apply-route-helpers', () => {
   });
 
   describe('applicantInformationStateHasPartner', () => {
-    it('should return true for marital status code "married" for MARRIED', () => {
-      const result = applicantInformationStateHasPartner('married');
-      expect(result).toBe(true);
-    });
-
-    it('should return true for marital status code  "commonlaw" for COMMONLAW', () => {
-      const result = applicantInformationStateHasPartner('commonlaw');
+    it.each([['married'], ['commonlaw'], ['mock_code_common_law'], ['mock_code_married']])('should return true for marital status code "%s"', (maritalStatus) => {
+      const result = applicantInformationStateHasPartner(maritalStatus);
       expect(result).toBe(true);
     });
 

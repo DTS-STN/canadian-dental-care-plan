@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/marital-status';
 
+import { TYPES } from '~/.server/constants';
 import { getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { DescriptionListItem } from '~/components/description-list-item';
@@ -13,7 +14,6 @@ import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { maritalStatusMap } from '~/utils/marital-status-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -30,9 +30,10 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-adult:marital-status.page-title') }) };
+  const locale = getLocale(request);
   return {
     state: {
-      maritalStatus: state.maritalStatus,
+      maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined,
       partnerInformation: state.partnerInformation,
     },
     meta,
@@ -75,7 +76,7 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
           ) : (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-adult:marital-status.marital-status')}>
-                <p>{state.maritalStatus ? t(`application-new-adult:${maritalStatusMap[state.maritalStatus as keyof typeof maritalStatusMap]}`) : ''}</p>
+                <p>{state.maritalStatus.name}</p>
               </DescriptionListItem>
               {state.partnerInformation && (
                 <>

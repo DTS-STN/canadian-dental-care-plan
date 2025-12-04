@@ -12,7 +12,7 @@ import type { Route } from './+types/marital-status';
 import { TYPES } from '~/.server/constants';
 import type { PartnerInformationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { applicantInformationStateHasPartner, getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -23,6 +23,7 @@ import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
+import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -36,15 +37,6 @@ const FORM_ACTION = {
   save: 'save',
 } as const;
 
-const MARITAL_STATUS = {
-  single: 'single',
-  married: 'married',
-  commonlaw: 'commonlaw',
-  separated: 'separated',
-  divorced: 'divorced',
-  widowed: 'widowed',
-} as const;
-
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'application-spokes', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.maritalStatus,
@@ -55,11 +47,11 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-
   const t = await getFixedT(request, handle.i18nNamespaces);
-
+  const locale = getLocale(request);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:marital-status.page-title') }) };
-  return { defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, meta };
+  const maritalStatues = appContainer.get(TYPES.MaritalStatusService).listLocalizedMaritalStatuses(locale);
+  return { defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, meta, maritalStatues };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -147,12 +139,12 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = loaderData;
-
+  const { defaultState, maritalStatues } = loaderData;
+  const { MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const [marriedOrCommonlaw, setMarriedOrCommonlaw] = useState(defaultState.maritalStatus);
+  const [selectedMaritalStatus, setSelectedMaritalStatus] = useState(defaultState.maritalStatus);
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
@@ -163,49 +155,17 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
   });
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setMarriedOrCommonlaw(e.target.value);
+    setSelectedMaritalStatus(e.target.value);
   };
 
   const maritalStatusOptions = useMemo<InputRadiosProps['options']>(() => {
-    return [
-      {
-        value: MARITAL_STATUS.single,
-        children: t('application-spokes:marital-status.single'),
-        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.single,
-        onChange: handleChange,
-      },
-      {
-        value: MARITAL_STATUS.married,
-        children: t('application-spokes:marital-status.married'),
-        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.married,
-        onChange: handleChange,
-      },
-      {
-        value: MARITAL_STATUS.commonlaw,
-        children: t('application-spokes:marital-status.commonlaw'),
-        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.commonlaw,
-        onChange: handleChange,
-      },
-      {
-        value: MARITAL_STATUS.separated,
-        children: t('application-spokes:marital-status.separated'),
-        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.separated,
-        onChange: handleChange,
-      },
-      {
-        value: MARITAL_STATUS.divorced,
-        children: t('application-spokes:marital-status.divorced'),
-        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.divorced,
-        onChange: handleChange,
-      },
-      {
-        value: MARITAL_STATUS.widowed,
-        children: t('application-spokes:marital-status.widowed'),
-        defaultChecked: defaultState.maritalStatus === MARITAL_STATUS.widowed,
-        onChange: handleChange,
-      },
-    ];
-  }, [defaultState, t]);
+    return maritalStatues.map(({ id, name }) => ({
+      value: id,
+      children: name,
+      defaultChecked: defaultState.maritalStatus === id,
+      onChange: handleChange,
+    }));
+  }, [defaultState, maritalStatues]);
 
   return (
     <div className="max-w-prose">
@@ -216,7 +176,7 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
         <div className="mb-8 space-y-6">
           <InputRadios id="marital-status" name="maritalStatus" legend={t('application-spokes:marital-status.marital-status')} options={maritalStatusOptions} errorMessage={errors?.maritalStatus} required />
 
-          {(marriedOrCommonlaw === MARITAL_STATUS.commonlaw || marriedOrCommonlaw === MARITAL_STATUS.married) && (
+          {(selectedMaritalStatus === MARITAL_STATUS_CODE_COMMON_LAW || selectedMaritalStatus === MARITAL_STATUS_CODE_MARRIED) && (
             <>
               <h2 className="font-lato mb-6 text-2xl font-bold">{t('application-spokes:marital-status.spouse-or-commonlaw')}</h2>
               <p className="mb-4">{t('application-spokes:marital-status.provide-sin')}</p>

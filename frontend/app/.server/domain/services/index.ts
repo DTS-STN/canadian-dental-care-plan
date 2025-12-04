@@ -6,6 +6,7 @@ export * from './audit.service';
 export * from './benefit-application.service';
 export * from './benefit-renewal.service';
 export * from './client-application.service';
+export * from './client-eligibility.service';
 export * from './client-friendly-status.service';
 export * from './country.service';
 export * from './coverage.service';
@@ -19,12 +20,12 @@ export * from './gc-communication-method.service';
 export * from './language.service';
 export * from './letter-type.service';
 export * from './letter.service';
+export * from './marital-status.service';
 export * from './profile.service';
 export * from './province-territory-state.service';
 export * from './provincial-government-insurance-plan.service';
 export * from './sun-life-communication-method.service';
 export * from './verification-code.service';
-export * from './client-eligibility.service';
 
 /**
  * Key that holds the killswitch boolean value in redis.
