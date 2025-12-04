@@ -58,7 +58,7 @@ export async function action({ context: { appContainer, session }, params, reque
     phoneNumber: phoneSchema({
       invalid_phone_canadian_error: t('application-spokes:phone-number.error-message.phone-number-valid'),
       invalid_phone_international_error: t('application-spokes:phone-number.error-message.phone-number-valid-international'),
-    }).optional(),
+    }),
     phoneNumberAlt: phoneSchema({
       invalid_phone_canadian_error: t('application-spokes:phone-number.error-message.phone-number-alt-valid'),
       invalid_phone_international_error: t('application-spokes:phone-number.error-message.phone-number-alt-valid-international'),
@@ -66,7 +66,7 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   const parsedDataResult = phoneNumberSchema.safeParse({
-    phoneNumber: formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined,
+    phoneNumber: formData.get('phoneNumber')?.toString(),
     phoneNumberAlt: formData.get('phoneNumberAlt') ? String(formData.get('phoneNumberAlt')) : undefined,
   });
 
