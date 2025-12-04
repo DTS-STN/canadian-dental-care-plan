@@ -20,16 +20,10 @@ exports[`ProgressStepper > Edge Cases > should handle currentStep out of bounds 
         data-slot="stepper-item"
         data-state="completed"
       >
-        <button
-          aria-controls="stepper-panel-1"
-          aria-selected="false"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="completed"
-          id="stepper-tab-1"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -61,7 +55,7 @@ exports[`ProgressStepper > Edge Cases > should handle currentStep out of bounds 
           >
             Personal Information
           </h3>
-        </button>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
           data-slot="stepper-separator"
@@ -73,16 +67,10 @@ exports[`ProgressStepper > Edge Cases > should handle currentStep out of bounds 
         data-slot="stepper-item"
         data-state="completed"
       >
-        <button
-          aria-controls="stepper-panel-2"
-          aria-selected="false"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="completed"
-          id="stepper-tab-2"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -114,7 +102,7 @@ exports[`ProgressStepper > Edge Cases > should handle currentStep out of bounds 
           >
             Contact Details
           </h3>
-        </button>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
           data-slot="stepper-separator"
@@ -126,16 +114,10 @@ exports[`ProgressStepper > Edge Cases > should handle currentStep out of bounds 
         data-slot="stepper-item"
         data-state="completed"
       >
-        <button
-          aria-controls="stepper-panel-3"
-          aria-selected="false"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="completed"
-          id="stepper-tab-3"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -167,7 +149,7 @@ exports[`ProgressStepper > Edge Cases > should handle currentStep out of bounds 
           >
             Preferences
           </h3>
-        </button>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
           data-slot="stepper-separator"
@@ -179,16 +161,10 @@ exports[`ProgressStepper > Edge Cases > should handle currentStep out of bounds 
         data-slot="stepper-item"
         data-state="completed"
       >
-        <button
-          aria-controls="stepper-panel-4"
-          aria-selected="false"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="completed"
-          id="stepper-tab-4"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -220,7 +196,7 @@ exports[`ProgressStepper > Edge Cases > should handle currentStep out of bounds 
           >
             Review & Submit
           </h3>
-        </button>
+        </div>
       </div>
     </nav>
   </div>
@@ -266,16 +242,10 @@ exports[`ProgressStepper > Edge Cases > should handle negative currentStep 1`] =
         data-slot="stepper-item"
         data-state="completed"
       >
-        <button
-          aria-controls="stepper-panel-1"
-          aria-selected="false"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="completed"
-          id="stepper-tab-1"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -307,7 +277,7 @@ exports[`ProgressStepper > Edge Cases > should handle negative currentStep 1`] =
           >
             Personal Information
           </h3>
-        </button>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
           data-slot="stepper-separator"
@@ -319,16 +289,10 @@ exports[`ProgressStepper > Edge Cases > should handle negative currentStep 1`] =
         data-slot="stepper-item"
         data-state="inactive"
       >
-        <button
-          aria-controls="stepper-panel-2"
-          aria-selected="false"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="inactive"
-          id="stepper-tab-2"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -360,7 +324,7 @@ exports[`ProgressStepper > Edge Cases > should handle negative currentStep 1`] =
           >
             Contact Details
           </h3>
-        </button>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
           data-slot="stepper-separator"
@@ -372,16 +336,10 @@ exports[`ProgressStepper > Edge Cases > should handle negative currentStep 1`] =
         data-slot="stepper-item"
         data-state="inactive"
       >
-        <button
-          aria-controls="stepper-panel-3"
-          aria-selected="false"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="inactive"
-          id="stepper-tab-3"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -413,7 +371,7 @@ exports[`ProgressStepper > Edge Cases > should handle negative currentStep 1`] =
           >
             Preferences
           </h3>
-        </button>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
           data-slot="stepper-separator"
@@ -425,16 +383,10 @@ exports[`ProgressStepper > Edge Cases > should handle negative currentStep 1`] =
         data-slot="stepper-item"
         data-state="inactive"
       >
-        <button
-          aria-controls="stepper-panel-4"
-          aria-selected="false"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="inactive"
-          id="stepper-tab-4"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -466,7 +418,7 @@ exports[`ProgressStepper > Edge Cases > should handle negative currentStep 1`] =
           >
             Review & Submit
           </h3>
-        </button>
+        </div>
       </div>
     </nav>
   </div>
@@ -497,16 +449,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="completed"
           >
-            <button
-              aria-controls="stepper-panel-1"
-              aria-selected="false"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="completed"
-              id="stepper-tab-1"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -538,7 +484,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Personal Information
               </h3>
-            </button>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
               data-slot="stepper-separator"
@@ -550,16 +496,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="completed"
           >
-            <button
-              aria-controls="stepper-panel-2"
-              aria-selected="false"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="completed"
-              id="stepper-tab-2"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -591,7 +531,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Contact Details
               </h3>
-            </button>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
               data-slot="stepper-separator"
@@ -603,16 +543,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="completed"
           >
-            <button
-              aria-controls="stepper-panel-3"
-              aria-selected="false"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="completed"
-              id="stepper-tab-3"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -644,7 +578,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Preferences
               </h3>
-            </button>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
               data-slot="stepper-separator"
@@ -656,16 +590,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="completed"
           >
-            <button
-              aria-controls="stepper-panel-4"
-              aria-selected="true"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="completed"
-              id="stepper-tab-4"
-              role="tab"
-              tabindex="0"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -697,7 +625,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Review & Submit
               </h3>
-            </button>
+            </div>
           </div>
         </nav>
       </div>
@@ -723,16 +651,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="completed"
           >
-            <button
-              aria-controls="stepper-panel-1"
-              aria-selected="false"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="completed"
-              id="stepper-tab-1"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -757,18 +679,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="completed"
               >
-                <h3
-                  class="text-sm font-medium text-slate-700"
-                  data-slot="stepper-title"
-                  data-state="completed"
-                >
-                  Personal Information
-                </h3>
-              </div>
-            </button>
+                Personal Information
+              </h3>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
               data-slot="stepper-separator"
@@ -780,16 +698,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="completed"
           >
-            <button
-              aria-controls="stepper-panel-2"
-              aria-selected="false"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="completed"
-              id="stepper-tab-2"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -814,18 +726,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="completed"
               >
-                <h3
-                  class="text-sm font-medium text-slate-700"
-                  data-slot="stepper-title"
-                  data-state="completed"
-                >
-                  Contact Details
-                </h3>
-              </div>
-            </button>
+                Contact Details
+              </h3>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
               data-slot="stepper-separator"
@@ -837,16 +745,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="completed"
           >
-            <button
-              aria-controls="stepper-panel-3"
-              aria-selected="false"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="completed"
-              id="stepper-tab-3"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -871,18 +773,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="completed"
               >
-                <h3
-                  class="text-sm font-medium text-slate-700"
-                  data-slot="stepper-title"
-                  data-state="completed"
-                >
-                  Preferences
-                </h3>
-              </div>
-            </button>
+                Preferences
+              </h3>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
               data-slot="stepper-separator"
@@ -894,16 +792,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="completed"
           >
-            <button
-              aria-controls="stepper-panel-4"
-              aria-selected="true"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="completed"
-              id="stepper-tab-4"
-              role="tab"
-              tabindex="0"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -928,18 +820,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="completed"
               >
-                <h3
-                  class="text-sm font-medium text-slate-700"
-                  data-slot="stepper-title"
-                  data-state="completed"
-                >
-                  Review & Submit
-                </h3>
-              </div>
-            </button>
+                Review & Submit
+              </h3>
+            </div>
           </div>
         </nav>
       </div>
@@ -972,16 +860,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="active"
           >
-            <button
-              aria-controls="stepper-panel-1"
-              aria-selected="true"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="active"
-              id="stepper-tab-1"
-              role="tab"
-              tabindex="0"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1013,7 +895,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Personal Information
               </h3>
-            </button>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
               data-slot="stepper-separator"
@@ -1025,16 +907,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="inactive"
           >
-            <button
-              aria-controls="stepper-panel-2"
-              aria-selected="false"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="inactive"
-              id="stepper-tab-2"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1066,7 +942,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Contact Details
               </h3>
-            </button>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
               data-slot="stepper-separator"
@@ -1078,16 +954,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="inactive"
           >
-            <button
-              aria-controls="stepper-panel-3"
-              aria-selected="false"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="inactive"
-              id="stepper-tab-3"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1119,7 +989,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Preferences
               </h3>
-            </button>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
               data-slot="stepper-separator"
@@ -1131,16 +1001,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="inactive"
           >
-            <button
-              aria-controls="stepper-panel-4"
-              aria-selected="false"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="inactive"
-              id="stepper-tab-4"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1172,7 +1036,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Review & Submit
               </h3>
-            </button>
+            </div>
           </div>
         </nav>
       </div>
@@ -1198,16 +1062,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="active"
           >
-            <button
-              aria-controls="stepper-panel-1"
-              aria-selected="true"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="active"
-              id="stepper-tab-1"
-              role="tab"
-              tabindex="0"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1232,18 +1090,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="active"
               >
-                <h3
-                  class="text-sm font-medium text-slate-700"
-                  data-slot="stepper-title"
-                  data-state="active"
-                >
-                  Personal Information
-                </h3>
-              </div>
-            </button>
+                Personal Information
+              </h3>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
               data-slot="stepper-separator"
@@ -1255,16 +1109,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="inactive"
           >
-            <button
-              aria-controls="stepper-panel-2"
-              aria-selected="false"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="inactive"
-              id="stepper-tab-2"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1289,18 +1137,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="inactive"
               >
-                <h3
-                  class="text-sm font-medium text-slate-700"
-                  data-slot="stepper-title"
-                  data-state="inactive"
-                >
-                  Contact Details
-                </h3>
-              </div>
-            </button>
+                Contact Details
+              </h3>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
               data-slot="stepper-separator"
@@ -1312,16 +1156,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="inactive"
           >
-            <button
-              aria-controls="stepper-panel-3"
-              aria-selected="false"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="inactive"
-              id="stepper-tab-3"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1346,18 +1184,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="inactive"
               >
-                <h3
-                  class="text-sm font-medium text-slate-700"
-                  data-slot="stepper-title"
-                  data-state="inactive"
-                >
-                  Preferences
-                </h3>
-              </div>
-            </button>
+                Preferences
+              </h3>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
               data-slot="stepper-separator"
@@ -1369,16 +1203,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="inactive"
           >
-            <button
-              aria-controls="stepper-panel-4"
-              aria-selected="false"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="inactive"
-              id="stepper-tab-4"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1403,18 +1231,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="inactive"
               >
-                <h3
-                  class="text-sm font-medium text-slate-700"
-                  data-slot="stepper-title"
-                  data-state="inactive"
-                >
-                  Review & Submit
-                </h3>
-              </div>
-            </button>
+                Review & Submit
+              </h3>
+            </div>
           </div>
         </nav>
       </div>
@@ -1447,16 +1271,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="completed"
           >
-            <button
-              aria-controls="stepper-panel-1"
-              aria-selected="false"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="completed"
-              id="stepper-tab-1"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1488,7 +1306,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Personal Information
               </h3>
-            </button>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
               data-slot="stepper-separator"
@@ -1500,16 +1318,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="completed"
           >
-            <button
-              aria-controls="stepper-panel-2"
-              aria-selected="false"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="completed"
-              id="stepper-tab-2"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1541,7 +1353,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Contact Details
               </h3>
-            </button>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
               data-slot="stepper-separator"
@@ -1553,16 +1365,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="active"
           >
-            <button
-              aria-controls="stepper-panel-3"
-              aria-selected="true"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="active"
-              id="stepper-tab-3"
-              role="tab"
-              tabindex="0"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1594,7 +1400,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Preferences
               </h3>
-            </button>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
               data-slot="stepper-separator"
@@ -1606,16 +1412,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="inactive"
           >
-            <button
-              aria-controls="stepper-panel-4"
-              aria-selected="false"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="inactive"
-              id="stepper-tab-4"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1647,7 +1447,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Review & Submit
               </h3>
-            </button>
+            </div>
           </div>
         </nav>
       </div>
@@ -1673,16 +1473,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="completed"
           >
-            <button
-              aria-controls="stepper-panel-1"
-              aria-selected="false"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="completed"
-              id="stepper-tab-1"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1707,18 +1501,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="completed"
               >
-                <h3
-                  class="text-sm font-medium text-slate-700"
-                  data-slot="stepper-title"
-                  data-state="completed"
-                >
-                  Personal Information
-                </h3>
-              </div>
-            </button>
+                Personal Information
+              </h3>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
               data-slot="stepper-separator"
@@ -1730,16 +1520,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="completed"
           >
-            <button
-              aria-controls="stepper-panel-2"
-              aria-selected="false"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="completed"
-              id="stepper-tab-2"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1764,18 +1548,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-blue-700"
+                data-slot="stepper-title"
+                data-state="completed"
               >
-                <h3
-                  class="text-sm font-medium text-blue-700"
-                  data-slot="stepper-title"
-                  data-state="completed"
-                >
-                  Contact Details
-                </h3>
-              </div>
-            </button>
+                Contact Details
+              </h3>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
               data-slot="stepper-separator"
@@ -1787,16 +1567,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="active"
           >
-            <button
-              aria-controls="stepper-panel-3"
-              aria-selected="true"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="active"
-              id="stepper-tab-3"
-              role="tab"
-              tabindex="0"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1821,18 +1595,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="active"
               >
-                <h3
-                  class="text-sm font-medium text-slate-700"
-                  data-slot="stepper-title"
-                  data-state="active"
-                >
-                  Preferences
-                </h3>
-              </div>
-            </button>
+                Preferences
+              </h3>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
               data-slot="stepper-separator"
@@ -1844,16 +1614,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="inactive"
           >
-            <button
-              aria-controls="stepper-panel-4"
-              aria-selected="false"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="inactive"
-              id="stepper-tab-4"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1878,18 +1642,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="inactive"
               >
-                <h3
-                  class="text-sm font-medium text-slate-700"
-                  data-slot="stepper-title"
-                  data-state="inactive"
-                >
-                  Review & Submit
-                </h3>
-              </div>
-            </button>
+                Review & Submit
+              </h3>
+            </div>
           </div>
         </nav>
       </div>
@@ -1922,16 +1682,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="completed"
           >
-            <button
-              aria-controls="stepper-panel-1"
-              aria-selected="false"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="completed"
-              id="stepper-tab-1"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -1963,7 +1717,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Personal Information
               </h3>
-            </button>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
               data-slot="stepper-separator"
@@ -1975,16 +1729,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="active"
           >
-            <button
-              aria-controls="stepper-panel-2"
-              aria-selected="true"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="active"
-              id="stepper-tab-2"
-              role="tab"
-              tabindex="0"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2016,7 +1764,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Contact Details
               </h3>
-            </button>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
               data-slot="stepper-separator"
@@ -2028,16 +1776,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="inactive"
           >
-            <button
-              aria-controls="stepper-panel-3"
-              aria-selected="false"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="inactive"
-              id="stepper-tab-3"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2069,7 +1811,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Preferences
               </h3>
-            </button>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
               data-slot="stepper-separator"
@@ -2081,16 +1823,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="inactive"
           >
-            <button
-              aria-controls="stepper-panel-4"
-              aria-selected="false"
-              class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-              data-loading="false"
+            <div
+              class="flex cursor-default flex-col items-center gap-2.5"
               data-slot="stepper-trigger"
               data-state="inactive"
-              id="stepper-tab-4"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2122,7 +1858,7 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
               >
                 Review & Submit
               </h3>
-            </button>
+            </div>
           </div>
         </nav>
       </div>
@@ -2148,16 +1884,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="completed"
           >
-            <button
-              aria-controls="stepper-panel-1"
-              aria-selected="false"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="completed"
-              id="stepper-tab-1"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2182,18 +1912,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="completed"
               >
-                <h3
-                  class="text-sm font-medium text-slate-700"
-                  data-slot="stepper-title"
-                  data-state="completed"
-                >
-                  Personal Information
-                </h3>
-              </div>
-            </button>
+                Personal Information
+              </h3>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
               data-slot="stepper-separator"
@@ -2205,16 +1931,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="active"
           >
-            <button
-              aria-controls="stepper-panel-2"
-              aria-selected="true"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="active"
-              id="stepper-tab-2"
-              role="tab"
-              tabindex="0"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2239,18 +1959,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-blue-700"
+                data-slot="stepper-title"
+                data-state="active"
               >
-                <h3
-                  class="text-sm font-medium text-blue-700"
-                  data-slot="stepper-title"
-                  data-state="active"
-                >
-                  Contact Details
-                </h3>
-              </div>
-            </button>
+                Contact Details
+              </h3>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
               data-slot="stepper-separator"
@@ -2262,16 +1978,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="inactive"
           >
-            <button
-              aria-controls="stepper-panel-3"
-              aria-selected="false"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="inactive"
-              id="stepper-tab-3"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2296,18 +2006,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="inactive"
               >
-                <h3
-                  class="text-sm font-medium text-slate-700"
-                  data-slot="stepper-title"
-                  data-state="inactive"
-                >
-                  Preferences
-                </h3>
-              </div>
-            </button>
+                Preferences
+              </h3>
+            </div>
             <div
               class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
               data-slot="stepper-separator"
@@ -2319,16 +2025,10 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
             data-slot="stepper-item"
             data-state="inactive"
           >
-            <button
-              aria-controls="stepper-panel-4"
-              aria-selected="false"
-              class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-              data-loading="false"
+            <div
+              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
               data-slot="stepper-trigger"
               data-state="inactive"
-              id="stepper-tab-4"
-              role="tab"
-              tabindex="-1"
             >
               <div
                 class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2353,18 +2053,14 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
                   </svg>
                 </div>
               </div>
-              <div
-                class="mt-0.5 text-left"
+              <h3
+                class="text-sm font-medium text-slate-700"
+                data-slot="stepper-title"
+                data-state="inactive"
               >
-                <h3
-                  class="text-sm font-medium text-slate-700"
-                  data-slot="stepper-title"
-                  data-state="inactive"
-                >
-                  Review & Submit
-                </h3>
-              </div>
-            </button>
+                Review & Submit
+              </h3>
+            </div>
           </div>
         </nav>
       </div>
@@ -2393,16 +2089,10 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
         data-slot="stepper-item"
         data-state="completed"
       >
-        <button
-          aria-controls="stepper-panel-1"
-          aria-selected="false"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="completed"
-          id="stepper-tab-1"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2434,7 +2124,7 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
           >
             Personal Information
           </h3>
-        </button>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
           data-slot="stepper-separator"
@@ -2446,16 +2136,10 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
         data-slot="stepper-item"
         data-state="active"
       >
-        <button
-          aria-controls="stepper-panel-2"
-          aria-selected="true"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="active"
-          id="stepper-tab-2"
-          role="tab"
-          tabindex="0"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2487,7 +2171,7 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
           >
             Contact Details
           </h3>
-        </button>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
           data-slot="stepper-separator"
@@ -2499,16 +2183,10 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
         data-slot="stepper-item"
         data-state="inactive"
       >
-        <button
-          aria-controls="stepper-panel-3"
-          aria-selected="false"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="inactive"
-          id="stepper-tab-3"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2540,7 +2218,7 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
           >
             Preferences
           </h3>
-        </button>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
           data-slot="stepper-separator"
@@ -2552,16 +2230,10 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
         data-slot="stepper-item"
         data-state="inactive"
       >
-        <button
-          aria-controls="stepper-panel-4"
-          aria-selected="false"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="inactive"
-          id="stepper-tab-4"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2593,7 +2265,7 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
           >
             Review & Submit
           </h3>
-        </button>
+        </div>
       </div>
     </nav>
   </div>
@@ -2620,16 +2292,10 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
         data-slot="stepper-item"
         data-state="completed"
       >
-        <button
-          aria-controls="stepper-panel-1"
-          aria-selected="false"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="completed"
-          id="stepper-tab-1"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2661,7 +2327,7 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
           >
             Personal Information
           </h3>
-        </button>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
           data-slot="stepper-separator"
@@ -2673,16 +2339,10 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
         data-slot="stepper-item"
         data-state="completed"
       >
-        <button
-          aria-controls="stepper-panel-2"
-          aria-selected="false"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="completed"
-          id="stepper-tab-2"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2714,7 +2374,7 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
           >
             Contact Details
           </h3>
-        </button>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
           data-slot="stepper-separator"
@@ -2726,16 +2386,10 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
         data-slot="stepper-item"
         data-state="active"
       >
-        <button
-          aria-controls="stepper-panel-3"
-          aria-selected="true"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="active"
-          id="stepper-tab-3"
-          role="tab"
-          tabindex="0"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2767,7 +2421,7 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
           >
             Preferences
           </h3>
-        </button>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
           data-slot="stepper-separator"
@@ -2779,16 +2433,10 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
         data-slot="stepper-item"
         data-state="inactive"
       >
-        <button
-          aria-controls="stepper-panel-4"
-          aria-selected="false"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="inactive"
-          id="stepper-tab-4"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2820,7 +2468,7 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
           >
             Review & Submit
           </h3>
-        </button>
+        </div>
       </div>
     </nav>
   </div>
@@ -2847,16 +2495,10 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
         data-slot="stepper-item"
         data-state="completed"
       >
-        <button
-          aria-controls="stepper-panel-1"
-          aria-selected="true"
-          class="rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 flex cursor-default flex-col items-center gap-2.5"
-          data-loading="false"
+        <div
+          class="flex cursor-default flex-col items-center gap-2.5"
           data-slot="stepper-trigger"
           data-state="completed"
-          id="stepper-tab-1"
-          role="tab"
-          tabindex="0"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2888,7 +2530,7 @@ exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizon
           >
             Personal Information
           </h3>
-        </button>
+        </div>
       </div>
     </nav>
   </div>
@@ -2915,16 +2557,10 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
         data-slot="stepper-item"
         data-state="completed"
       >
-        <button
-          aria-controls="stepper-panel-1"
-          aria-selected="false"
-          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-          data-loading="false"
+        <div
+          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
           data-slot="stepper-trigger"
           data-state="completed"
-          id="stepper-tab-1"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -2949,18 +2585,14 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
               </svg>
             </div>
           </div>
-          <div
-            class="mt-0.5 text-left"
+          <h3
+            class="text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="completed"
           >
-            <h3
-              class="text-sm font-medium text-slate-700"
-              data-slot="stepper-title"
-              data-state="completed"
-            >
-              Personal Information
-            </h3>
-          </div>
-        </button>
+            Personal Information
+          </h3>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
           data-slot="stepper-separator"
@@ -2972,16 +2604,10 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
         data-slot="stepper-item"
         data-state="active"
       >
-        <button
-          aria-controls="stepper-panel-2"
-          aria-selected="true"
-          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-          data-loading="false"
+        <div
+          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
           data-slot="stepper-trigger"
           data-state="active"
-          id="stepper-tab-2"
-          role="tab"
-          tabindex="0"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -3006,18 +2632,14 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
               </svg>
             </div>
           </div>
-          <div
-            class="mt-0.5 text-left"
+          <h3
+            class="text-sm font-medium text-blue-700"
+            data-slot="stepper-title"
+            data-state="active"
           >
-            <h3
-              class="text-sm font-medium text-blue-700"
-              data-slot="stepper-title"
-              data-state="active"
-            >
-              Contact Details
-            </h3>
-          </div>
-        </button>
+            Contact Details
+          </h3>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
           data-slot="stepper-separator"
@@ -3029,16 +2651,10 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
         data-slot="stepper-item"
         data-state="inactive"
       >
-        <button
-          aria-controls="stepper-panel-3"
-          aria-selected="false"
-          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-          data-loading="false"
+        <div
+          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
           data-slot="stepper-trigger"
           data-state="inactive"
-          id="stepper-tab-3"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -3063,18 +2679,14 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
               </svg>
             </div>
           </div>
-          <div
-            class="mt-0.5 text-left"
+          <h3
+            class="text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="inactive"
           >
-            <h3
-              class="text-sm font-medium text-slate-700"
-              data-slot="stepper-title"
-              data-state="inactive"
-            >
-              Preferences
-            </h3>
-          </div>
-        </button>
+            Preferences
+          </h3>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
           data-slot="stepper-separator"
@@ -3086,16 +2698,10 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
         data-slot="stepper-item"
         data-state="inactive"
       >
-        <button
-          aria-controls="stepper-panel-4"
-          aria-selected="false"
-          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-          data-loading="false"
+        <div
+          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
           data-slot="stepper-trigger"
           data-state="inactive"
-          id="stepper-tab-4"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -3120,18 +2726,14 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
               </svg>
             </div>
           </div>
-          <div
-            class="mt-0.5 text-left"
+          <h3
+            class="text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="inactive"
           >
-            <h3
-              class="text-sm font-medium text-slate-700"
-              data-slot="stepper-title"
-              data-state="inactive"
-            >
-              Review & Submit
-            </h3>
-          </div>
-        </button>
+            Review & Submit
+          </h3>
+        </div>
       </div>
     </nav>
   </div>
@@ -3158,16 +2760,10 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
         data-slot="stepper-item"
         data-state="completed"
       >
-        <button
-          aria-controls="stepper-panel-1"
-          aria-selected="false"
-          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-          data-loading="false"
+        <div
+          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
           data-slot="stepper-trigger"
           data-state="completed"
-          id="stepper-tab-1"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -3192,18 +2788,14 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
               </svg>
             </div>
           </div>
-          <div
-            class="mt-0.5 text-left"
+          <h3
+            class="text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="completed"
           >
-            <h3
-              class="text-sm font-medium text-slate-700"
-              data-slot="stepper-title"
-              data-state="completed"
-            >
-              Personal Information
-            </h3>
-          </div>
-        </button>
+            Personal Information
+          </h3>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
           data-slot="stepper-separator"
@@ -3215,16 +2807,10 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
         data-slot="stepper-item"
         data-state="completed"
       >
-        <button
-          aria-controls="stepper-panel-2"
-          aria-selected="false"
-          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-          data-loading="false"
+        <div
+          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
           data-slot="stepper-trigger"
           data-state="completed"
-          id="stepper-tab-2"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -3249,18 +2835,14 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
               </svg>
             </div>
           </div>
-          <div
-            class="mt-0.5 text-left"
+          <h3
+            class="text-sm font-medium text-blue-700"
+            data-slot="stepper-title"
+            data-state="completed"
           >
-            <h3
-              class="text-sm font-medium text-blue-700"
-              data-slot="stepper-title"
-              data-state="completed"
-            >
-              Contact Details
-            </h3>
-          </div>
-        </button>
+            Contact Details
+          </h3>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
           data-slot="stepper-separator"
@@ -3272,16 +2854,10 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
         data-slot="stepper-item"
         data-state="active"
       >
-        <button
-          aria-controls="stepper-panel-3"
-          aria-selected="true"
-          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-          data-loading="false"
+        <div
+          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
           data-slot="stepper-trigger"
           data-state="active"
-          id="stepper-tab-3"
-          role="tab"
-          tabindex="0"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -3306,18 +2882,14 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
               </svg>
             </div>
           </div>
-          <div
-            class="mt-0.5 text-left"
+          <h3
+            class="text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="active"
           >
-            <h3
-              class="text-sm font-medium text-slate-700"
-              data-slot="stepper-title"
-              data-state="active"
-            >
-              Preferences
-            </h3>
-          </div>
-        </button>
+            Preferences
+          </h3>
+        </div>
         <div
           class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
           data-slot="stepper-separator"
@@ -3329,16 +2901,10 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
         data-slot="stepper-item"
         data-state="inactive"
       >
-        <button
-          aria-controls="stepper-panel-4"
-          aria-selected="false"
-          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-          data-loading="false"
+        <div
+          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
           data-slot="stepper-trigger"
           data-state="inactive"
-          id="stepper-tab-4"
-          role="tab"
-          tabindex="-1"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -3363,18 +2929,14 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
               </svg>
             </div>
           </div>
-          <div
-            class="mt-0.5 text-left"
+          <h3
+            class="text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="inactive"
           >
-            <h3
-              class="text-sm font-medium text-slate-700"
-              data-slot="stepper-title"
-              data-state="inactive"
-            >
-              Review & Submit
-            </h3>
-          </div>
-        </button>
+            Review & Submit
+          </h3>
+        </div>
       </div>
     </nav>
   </div>
@@ -3401,16 +2963,10 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
         data-slot="stepper-item"
         data-state="completed"
       >
-        <button
-          aria-controls="stepper-panel-1"
-          aria-selected="true"
-          class="inline-flex rounded-full outline-none focus-visible:z-10 focus-visible:border-zinc-400 focus-visible:ring-[3px] focus-visible:ring-zinc-400/50 disabled:pointer-events-none disabled:opacity-60 cursor-default items-start gap-2.5 pb-12 last:pb-0"
-          data-loading="false"
+        <div
+          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
           data-slot="stepper-trigger"
           data-state="completed"
-          id="stepper-tab-1"
-          role="tab"
-          tabindex="0"
         >
           <div
             class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
@@ -3435,18 +2991,14 @@ exports[`ProgressStepper > ProgressStepperVertical > should render the vertical 
               </svg>
             </div>
           </div>
-          <div
-            class="mt-0.5 text-left"
+          <h3
+            class="text-sm font-medium text-slate-700"
+            data-slot="stepper-title"
+            data-state="completed"
           >
-            <h3
-              class="text-sm font-medium text-slate-700"
-              data-slot="stepper-title"
-              data-state="completed"
-            >
-              Personal Information
-            </h3>
-          </div>
-        </button>
+            Personal Information
+          </h3>
+        </div>
       </div>
     </nav>
   </div>
