@@ -49,6 +49,12 @@ describe('<ClientEnv>', () => {
       CDCP_SURVEY_LINK_EN: 'https://forms-formulaires.alpha.canada.ca/en/id/cmdsycga6008qx701dw5x5n9c',
       CDCP_SURVEY_LINK_FR: 'https://forms-formulaires.alpha.canada.ca/fr/id/cmdsycga6008qx701dw5x5n9c',
       TIME_ZONE: 'Canada/Eastern',
+      MARITAL_STATUS_CODE_COMMON_LAW: 'mock-common-law',
+      MARITAL_STATUS_CODE_MARRIED: 'mock-married',
+      MARITAL_STATUS_CODE_DIVORCED: 'mock-divorced',
+      MARITAL_STATUS_CODE_SEPARATED: 'mock-separated',
+      MARITAL_STATUS_CODE_SINGLE: 'mock-single',
+      MARITAL_STATUS_CODE_WIDOWED: 'mock-widowed',
     };
 
     const { container } = render(<ClientEnvComponent env={env} nonce={nonce} />);

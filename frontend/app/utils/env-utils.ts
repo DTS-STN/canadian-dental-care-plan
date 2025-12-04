@@ -70,6 +70,12 @@ export const clientEnvSchema = z.object({
   CLIENT_STATUS_SUCCESS_ID: z.string().trim().min(1).default('51af5170-614e-ee11-be6f-000d3a09d640'),
   INVALID_CLIENT_FRIENDLY_STATUS: z.string().trim().min(1).default('504fba6e-604e-ee11-be6f-000d3a09d640'),
   INVALID_LETTER_TYPE_IDS: z.string().trim().transform(csvToArray).default(['775170000']),
+  MARITAL_STATUS_CODE_SINGLE: z.string().trim().min(1).default("775170000"),
+  MARITAL_STATUS_CODE_MARRIED: z.string().trim().min(1).default("775170001"),
+  MARITAL_STATUS_CODE_COMMON_LAW: z.string().trim().min(1).default("775170002"),
+  MARITAL_STATUS_CODE_SEPARATED: z.string().trim().min(1).default("775170003"),
+  MARITAL_STATUS_CODE_DIVORCED: z.string().trim().min(1).default("775170004"),
+  MARITAL_STATUS_CODE_WIDOWED: z.string().trim().min(1).default("775170005"),
 
   // CDCP Survey URLs
   CDCP_SURVEY_LINK_EN: z.url().default('https://forms-formulaires.alpha.canada.ca/en/id/cmdsycga6008qx701dw5x5n9c'),
