@@ -295,5 +295,27 @@
       "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits",
       "provincial-territorial-required": "Select a province or territory"
     }
+  },
+  "living-independently": {
+    "page-title": "Living independently",
+    "description": "Living independently from your parents means you are 16 or 17, do not receive financial support from your parents, and your primary residence is different from theirs.",
+    "form-instructions": "Do you live independently from your parents?",
+    "radio-options": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "error-message": {
+      "living-independently-required": "Select whether or not you live independently from your parents"
+    },
+    "back-btn": "Back",
+    "save-btn": "Save"
+  },
+  "parent-or-guardian": {
+    "page-title": "Parent or legal guardian needs to apply",
+    "unable-to-apply": "You are under 18. A parent or legal guardian must apply on your behalf.",
+    "apply-for-yourself": "If you have previously applied for a child, and now want to apply for yourself, you must speak to a Service Canada representative. Contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
+    "back-btn": "Back",
+    "exit-btn": "Exit application",
+    "exit-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   }
 }

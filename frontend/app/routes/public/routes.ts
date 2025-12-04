@@ -42,6 +42,8 @@ export const routes = [
             file: 'routes/public/application/spokes/federal-provincial-territorial-benefits.tsx',
             paths: { en: '/:lang/application/:id/federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/prestations-dentaires-federales-provinciales-territoriales' },
           },
+          { id: 'public/application/$id/living-independently', file: 'routes/public/application/spokes/living-independently.tsx', paths: { en: '/:lang/application/:id/living-independently', fr: '/:lang/demander/:id/vivre-maniere-independante' } },
+          { id: 'public/application/$id/parent-or-guardian', file: 'routes/public/application/spokes/parent-or-guardian.tsx', paths: { en: '/:lang/application/:id/parent-or-guardian', fr: '/:lang/demander/:id/parent-ou-tuteur' } },
         ],
       },
       {

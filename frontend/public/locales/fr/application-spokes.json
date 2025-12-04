@@ -295,5 +295,27 @@
       "provincial-benefit-required": "Sélectionnez si vous avez la prestation dentaire provinciale ou territoriale",
       "provincial-territorial-required": "Sélectionnez une province ou territoire"
     }
+  },
+  "living-independently": {
+    "page-title": "Vivre de manière indépendante",
+    "description": "Vivre de manière indépendante signifie que vous avez 16 ou 17 ans, que vous ne recevez pas d'aide financière de vos parents et que votre résidence principale est différente de la leur.",
+    "form-instructions": "Vivez-vous indépendamment de vos parents?",
+    "radio-options": {
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "error-message": {
+      "living-independently-required": "Sélectionnez si vous vivez de manière indépendente de vos parents"
+    },
+    "back-btn": "Retour",
+    "save-btn": "Enregistrer"
+  },
+  "parent-or-guardian": {
+    "page-title": "Un parent ou un tuteur légal doit faire la demande",
+    "unable-to-apply": "(fr) You are under 18. A parent or legal guardian must apply on your behalf.",
+    "apply-for-yourself": "Si vous avez déjà fait une demande pour un enfant et que vous souhaitez maintenant faire une demande pour vous-même, vous devez vous adresser à un représentant de Service Canada. Vous pouvez contacter Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
+    "back-btn": "Retour",
+    "exit-btn": "(fr) Exit application",
+    "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   }
 }
