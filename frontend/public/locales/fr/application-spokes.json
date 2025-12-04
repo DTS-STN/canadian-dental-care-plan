@@ -311,5 +311,19 @@
     "back-btn": "Retour",
     "exit-btn": "(fr) Exit application",
     "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
+  "phone-number": {
+    "page-title": "Numéro de téléphone",
+    "phone-number": "Numéro de téléphone",
+    "phone-number-alt": "Autre numéro de téléphone (facultatif)",
+    "back-btn": "Retour",
+    "save-btn": "Enregistrer",
+    "error-message": {
+      "phone-number-valid": "Numéro de téléphone invalide",
+      "phone-number-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-number-alt-valid": "Numéro de téléphone invalide",
+      "phone-number-alt-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-required": "Entrez un numéro de téléphone"
+    }
   }
 }
