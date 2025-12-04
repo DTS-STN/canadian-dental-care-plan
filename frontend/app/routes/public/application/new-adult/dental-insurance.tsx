@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/dental-insurance';
 
+import { TYPES } from '~/.server/constants';
 import { getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { DescriptionListItem } from '~/components/description-list-item';
@@ -28,11 +29,33 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-adult:dental-insurance.page-title') }) };
+
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram
+    ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
+    : undefined;
+
+  const selectedProvincialBenefit = state.dentalBenefits?.provincialTerritorialSocialProgram
+    ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+    : undefined;
+
+  const dentalBenefits = {
+    federalBenefit: {
+      access: state.dentalBenefits?.hasFederalBenefits,
+      benefit: selectedFederalGovernmentInsurancePlan?.name,
+    },
+    provTerrBenefit: {
+      access: state.dentalBenefits?.hasProvincialTerritorialBenefits,
+      benefit: selectedProvincialBenefit?.name,
+    },
+  };
+
   return {
     state: {
       dentalInsurance: state.dentalInsurance,
-      dentalBenefits: state.dentalBenefits,
+      hasFederalProvincialTerritorialBenefits: state.hasFederalProvincialTerritorialBenefits,
+      dentalBenefits: state.dentalBenefits ? dentalBenefits : undefined,
     },
     meta,
   };
@@ -44,7 +67,7 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
 
   const sections = [
     { id: 'dental-insurance', completed: state.dentalInsurance !== undefined }, //
-    { id: 'dental-benefits', completed: state.dentalBenefits !== undefined },
+    { id: 'dental-benefits', completed: state.hasFederalProvincialTerritorialBenefits !== undefined },
   ] as const;
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
   const allSectionsCompleted = completedSections.length === sections.length;
@@ -93,22 +116,28 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
           <CardAction>{completedSections.includes('dental-benefits') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
-          {state.dentalBenefits === undefined ? (
+          {state.hasFederalProvincialTerritorialBenefits === undefined ? (
             <p>{t('application-new-adult:dental-insurance.dental-benefits-indicate-status')}</p>
           ) : (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-adult:dental-insurance.access-to-government-benefits')}>
-                <p>{t('application-new-adult:dental-insurance.dental-insurance-yes')}</p>
-                {state.dentalBenefits.hasFederalBenefits || state.dentalBenefits.hasProvincialTerritorialBenefits ? (
+                {state.hasFederalProvincialTerritorialBenefits === true ? (
                   <>
-                    <p>{t('application-new-adult:dental-insurance.yes')}</p>
-                    <ul className="ml-6 list-disc">
-                      {state.dentalBenefits.hasFederalBenefits && <li>{state.dentalBenefits.federalSocialProgram}</li>}
-                      {state.dentalBenefits.hasProvincialTerritorialBenefits && <li>{state.dentalBenefits.provincialTerritorialSocialProgram}</li>}
-                    </ul>
+                    <p>{t('application-new-adult:dental-insurance.dental-insurance-yes')}</p>
+                    {state.dentalBenefits?.federalBenefit.access || state.dentalBenefits?.provTerrBenefit.access ? (
+                      <>
+                        <p>{t('application-new-adult:dental-insurance.yes')}</p>
+                        <ul className="ml-6 list-disc">
+                          {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
+                          {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
+                        </ul>
+                      </>
+                    ) : (
+                      <p>{t('application-new-adult:dental-insurance.no')}</p>
+                    )}
                   </>
                 ) : (
-                  <p>{t('application-new-adult:dental-insurance.no')}</p>
+                  <p>{t('application-new-adult:dental-insurance.dental-insurance-no')}</p>
                 )}
               </DescriptionListItem>
             </dl>
