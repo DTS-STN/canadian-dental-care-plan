@@ -217,9 +217,9 @@ function StepperTrigger({ asChild = false, className, children, tabIndex, ...pro
 
   if (asChild) {
     return (
-      <span data-slot="stepper-trigger" data-state={state} className={className}>
+      <div data-slot="stepper-trigger" data-state={state} className={cn('inline-flex items-center', className)}>
         {children}
-      </span>
+      </div>
     );
   }
 
