@@ -239,5 +239,61 @@
         "applyDate": "Vous pouvez souscrire à partir du {{startDate}}."
       }
     }
+  },
+  "confirm-dental-benefits": {
+    "title": "Accès à d'autres prestations dentaires gouvernementales",
+    "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
+    "select-one": "Sélectionnez une option",
+    "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture sera coordonnée entre les régimes afin qu'il n'y ait pas de lacunes ou de dédoublement dans la couverture.",
+    "has-benefits": "Bénéficiez-vous d'autres prestations pour soins dentaires dans le cadre d'un programme social fédéral, provincial ou territorial autre que le Régime canadien de soins dentaires?",
+    "option-yes": "<strong>Oui</strong>, j'ai des prestations fédérales, provinciales ou territoriales",
+    "option-no": "<strong>Non</strong>, je n'ai pas de prestations fédérales, provinciales ou territoriales",
+    "button": {
+      "back": "Retour",
+      "continue": "Continuer",
+      "cancel-btn": "Annuler",
+      "save-btn": "Enregistrer"
+    },
+    "error-message": {
+      "federal-provincial-territorial-benefit-required": "Sélectionnez si vous bénéficiez de prestations dentaires fédérales, provinciales ou territoriales"
+    }
+  },
+  "dental-benefits": {
+    "title": "Accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
+    "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
+    "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture sera coordonnée entre les régimes afin qu'il n'y ait pas de lacunes ou de dédoublement dans la couverture.",
+    "select-one": "Choisissez une option",
+    "federal-benefits": {
+      "title": "Prestations fédérales",
+      "legend": "Bénéficiez-vous d'autres prestations pour soins dentaires dans le cadre d'un programme social fédéral autre que le Régime canadien de soins dentaires?",
+      "option-yes": "<strong>Oui</strong>, j'ai des prestations <strong>fédérales</strong> pour soins dentaires",
+      "option-no": "<strong>Non</strong>, je n'ai pas de prestations <strong>fédérales</strong> pour soins dentaires",
+      "social-programs": {
+        "legend": "Veuillez sélectionner le programme de protection sociale avec lequel vous êtes assuré. Si vous en avez plus d'un, veuillez sélectionner celui que vous utilisez le plus."
+      }
+    },
+    "provincial-territorial-benefits": {
+      "title": "Prestations provinciales ou territoriales",
+      "legend": "Bénéficiez-vous d'autres prestations pour soins dentaires dans le cadre d'un programme social provincial ou territorial autre que le Régime canadien de soins dentaires?",
+      "option-yes": "<strong>Oui</strong>, j'ai des prestations <strong>provinciales ou territoriales</strong> pour soins dentaires",
+      "option-no": "<strong>Non</strong>, je n'ai pas de prestations <strong>provinciales ou territoriales</strong> pour soins dentaires",
+      "social-programs": {
+        "input-legend": "Par l'entremise de quelle province ou de quel territoire?",
+        "radio-legend": "Veuillez sélectionner le programme de protection sociale avec lequel vous êtes assuré. Si vous en avez plus d'un, veuillez sélectionner celui que vous utilisez le plus."
+      }
+    },
+    "button": {
+      "back": "Retour",
+      "continue": "Continuer",
+      "cancel-btn": "Annuler",
+      "save-btn": "Enregistrer"
+    },
+    "error-message": {
+      "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel vous êtes couvert",
+      "federal-benefit-required": "Sélectionnez si vous avez la prestation dentaire fédérale",
+      "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial auquel vous êtes couvert",
+      "provincial-benefit-required": "Sélectionnez si vous avez la prestation dentaire provinciale ou territoriale",
+      "provincial-territorial-required": "Sélectionnez une province ou territoire"
+    }
   }
 }

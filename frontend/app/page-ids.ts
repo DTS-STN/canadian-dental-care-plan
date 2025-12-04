@@ -148,6 +148,8 @@ export const pageIds = {
         termsConditions: 'CDCP-APPL-SPK-0007',
         dentalInsurance: 'CDCP-APPL-SPK-0008',
         newOrReturningMember: 'CDCP-APPL-SPK-0009',
+        confirmFederalProvincialTerritorialBenefits: 'CDCP-APPL-SPK-0010',
+        federalProvincialTerritorialBenefits: 'CDCP-APPL-SPK-0011',
       },
     },
     apply: {
