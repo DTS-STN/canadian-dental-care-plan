@@ -32,6 +32,16 @@ export const routes = [
           { id: 'public/application/$id/type-application', file: 'routes/public/application/spokes/type-application.tsx', paths: { en: '/:lang/application/:id/type-application', fr: '/:lang/demander/:id/type-demande' } },
           { id: 'public/application/$id/new-or-returning-member', file: 'routes/public/application/spokes/new-or-returning-member.tsx', paths: { en: '/:lang/application/:id/new-or-returning-member', fr: '/:lang/demander/:id/membre-nouveau-ou-actuel' } },
           { id: 'public/application/$id/personal-information', file: 'routes/public/application/spokes/personal-information.tsx', paths: { en: '/:lang/application/:id/personal-information', fr: '/:lang/demander/:id/renseignements-personnels' } },
+          {
+            id: 'public/application/$id/confirm-federal-provincial-territorial-benefits',
+            file: 'routes/public/application/spokes/confirm-federal-provincial-territorial-benefits.tsx',
+            paths: { en: '/:lang/application/:id/confirm-federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/confirmer-prestations-dentaires-federales-provinciales-territoriales' },
+          },
+          {
+            id: 'public/application/$id/federal-provincial-territorial-benefits',
+            file: 'routes/public/application/spokes/federal-provincial-territorial-benefits.tsx',
+            paths: { en: '/:lang/application/:id/federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/prestations-dentaires-federales-provinciales-territoriales' },
+          },
         ],
       },
       {
