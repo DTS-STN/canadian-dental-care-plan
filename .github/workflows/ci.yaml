@@ -1,0 +1,85 @@
+name: Build and test solution
+permissions: read-all
+
+on:
+  push:
+    branches:
+      - main
+      - release/**
+  pull_request:
+    branches:
+      - main
+      - release/**
+  workflow_call: {}
+  workflow_dispatch: {}
+
+env:
+  CI: true
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'DTS-STN/canadian-dental-care-plan' }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: frontend
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            src:
+              - frontend/**
+      - id: gitops
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            src:
+              - gitops/**
+      - id: infrastructure
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            src:
+              - infrastructure/**
+    outputs:
+      frontend-changed: ${{ steps.frontend.outputs.src }}
+      gitops-changed: ${{ steps.gitops.outputs.src }}
+      infrastructure-changed: ${{ steps.infrastructure.outputs.src }}
+
+  test-frontend:
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.frontend-changed == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+      - run: npm clean-install
+        working-directory: frontend/
+      - run: npm run format:check
+        working-directory: frontend/
+      - run: npm run typecheck
+        working-directory: frontend/
+      - run: npm run lint
+        working-directory: frontend/
+      - run: npm run test:unit:coverage
+        working-directory: frontend/
+      - run: npm run build
+        working-directory: frontend/
+      - run: npx playwright install chromium --with-deps
+        working-directory: frontend/
+      - run: npm run test:e2e:smoke
+        working-directory: frontend/
+  build-frontend:
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.frontend-changed == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+      - run: npm clean-install
+        working-directory: frontend/
+      - run: podman build --file dockerfile .
+        working-directory: frontend/
