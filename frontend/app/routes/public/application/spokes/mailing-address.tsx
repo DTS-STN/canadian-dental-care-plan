@@ -121,7 +121,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(isCopyMailingToHome ? getPathById('public/application/$id/new-adult/contact-information', params) : getPathById('public/application/$id/home-address', params));
   }
 
-  // Validate Canadian adddress
+  // Validate Canadian address
   invariant(validatedResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
   invariant(validatedResult.data.provinceStateId, 'Province state is required for Canadian addresses');
 
