@@ -1,17 +1,17 @@
-export type DocumentUploadResponseEntity = Readonly<{
-  Error: DocumentUploadErrorEntity | null;
-  DocumentFileName: string | null;
-}>;
+export type DocumentUploadResponseEntity = Readonly<
+  | { DocumentFileName: string; Error: null } //
+  | { DocumentFileName: null; Error: DocumentUploadErrorEntity }
+>;
 
 export type DocumentUploadErrorEntity = Readonly<{
   ErrorCode: string;
   ErrorMessage: string;
 }>;
 
-export type DocumentScanResponseEntity = Readonly<{
-  Error: DocumentUploadErrorEntity | null;
-  Percent: string | null;
-}>;
+export type DocumentScanResponseEntity = Readonly<
+  | { DataId: string; Error: null } //
+  | { DataId: null; Error: DocumentUploadErrorEntity }
+>;
 
 export type DocumentUploadRequestEntity = Readonly<{
   filename: string;

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 
 import { redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { faArrowUpFromBracket, faTimes } from '@fortawesome/free-solid-svg-icons';
 import type { TFunction } from 'i18next';
 import { getI18n, useTranslation } from 'react-i18next';
@@ -127,12 +128,17 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
 
-  await securityHandler.requireClientApplication({
+  const clientApplication = await securityHandler.requireClientApplication({
     params,
     request,
     session,
     options: { redirectUrl: getPathById('protected/documents/not-required', params) },
   });
+
+  const clientIdToNumberMap: ReadonlyMap<string, string> = new Map<string, string>([
+    [clientApplication.applicantInformation.clientId, clientApplication.applicantInformation.clientNumber] as const,
+    ...clientApplication.children.map((c) => [c.information.clientId, c.information.clientNumber] as const),
+  ]);
 
   const locale = getLocale(request);
   const t = await getFixedT(locale, handle.i18nNamespaces);
@@ -157,7 +163,9 @@ export async function action({ context: { appContainer, session }, params, reque
     return { errors: scanResult.errors };
   }
 
-  const uploadResult = await uploadDocuments({ clientId: applicant, files: files, service: uploadService, t, userId: idToken.sub });
+  const clientNumber = clientIdToNumberMap.get(applicant);
+  invariant(clientNumber, 'Client number not found for client ID: ' + applicant);
+  const uploadResult = await uploadDocuments({ clientNumber, files: files, service: uploadService, t, userId: idToken.sub });
 
   if (!uploadResult.success) {
     return { errors: uploadResult.errors };
@@ -212,9 +220,6 @@ async function scanDocuments(files: ParsedUploadData['files'], userId: string, s
       if (response.Error) {
         return { index, error: t('documents:upload.error-message.scan-failed', { error: response.Error.ErrorMessage }) };
       }
-      if (response.Percent !== '100') {
-        return { index, error: t('documents:upload.error-message.scan-incomplete') };
-      }
       return { index, success: true };
     } catch {
       return { index, error: t('documents:upload.error-message.scan-error') };
@@ -226,7 +231,7 @@ async function scanDocuments(files: ParsedUploadData['files'], userId: string, s
 }
 
 interface UploadDocumentsRequestArgs {
-  clientId: string;
+  clientNumber: string;
   files: ParsedUploadData['files'];
   userId: string;
   service: DocumentUploadService;
@@ -238,11 +243,11 @@ interface UploadDocumentsResponseArgs {
   errors?: UploadErrors;
 }
 
-async function uploadDocuments({ clientId, files, service, t, userId }: UploadDocumentsRequestArgs): Promise<UploadDocumentsResponseArgs> {
+async function uploadDocuments({ clientNumber, files, service, t, userId }: UploadDocumentsRequestArgs): Promise<UploadDocumentsResponseArgs> {
   const promises = files.map(async ({ file, documentType }, index) => {
     try {
       const response = await service.uploadDocument({
-        clientId,
+        clientNumber,
         evidentiaryDocumentTypeId: documentType,
         fileName: file.name,
         binary: Buffer.from(await file.arrayBuffer()).toString('base64'),

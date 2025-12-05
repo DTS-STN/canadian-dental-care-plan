@@ -199,8 +199,8 @@ export class MockDocumentUploadRepository implements DocumentUploadRepository {
     this.log.debug('Successfully uploaded document: [%s]', documentUploadRequestEntity.filename);
 
     return await Promise.resolve({
-      Error: null,
       DocumentFileName: documentUploadRequestEntity.filename,
+      Error: null,
     });
   }
 
@@ -209,16 +209,11 @@ export class MockDocumentUploadRepository implements DocumentUploadRepository {
 
     this.log.debug('Successfully scanned document. File is safe.');
 
-    return await Promise.resolve({
-      Error: null,
-      Percent: '100',
-    });
+    return await Promise.resolve({ DataId: 'mock-data-id-12345', Error: null });
   }
 
   getMetadata(): Record<string, string> {
-    return {
-      mockEnabled: 'true',
-    };
+    return { mockEnabled: 'true' };
   }
 
   async checkHealth(): Promise<void> {

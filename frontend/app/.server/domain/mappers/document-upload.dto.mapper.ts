@@ -29,10 +29,9 @@ export class DefaultDocumentUploadDtoMapper implements DocumentUploadDtoMapper {
   }
 
   mapDocumentScanResponseEntityToDto(documentScanResponseEntity: DocumentScanResponseEntity): DocumentScanResponseDto {
-    return {
-      Error: documentScanResponseEntity.Error ? this.mapDocumentUploadErrorEntityToDto(documentScanResponseEntity.Error) : null,
-      Percent: documentScanResponseEntity.Percent,
-    };
+    return documentScanResponseEntity.DataId === null //
+      ? { Error: this.mapDocumentUploadErrorEntityToDto(documentScanResponseEntity.Error) }
+      : { DataId: documentScanResponseEntity.DataId };
   }
 
   mapDocumentUploadErrorEntityToDto(documentUploadErrorEntity: DocumentUploadErrorEntity): DocumentUploadErrorDto {
@@ -47,16 +46,15 @@ export class DefaultDocumentUploadDtoMapper implements DocumentUploadDtoMapper {
     return {
       filename: documentUploadRequestDto.fileName,
       binary: documentUploadRequestDto.binary,
-      subjectPersonIdentificationID: documentUploadRequestDto.clientId,
+      subjectPersonIdentificationID: documentUploadRequestDto.clientNumber,
       documentCategoryText: evidentiaryDocumentType.code,
       originalDocumentCreationDate: documentUploadRequestDto.uploadDate.toISOString(),
     };
   }
 
   mapDocumentUploadResponseEntityToDto(documentUploadResponseEntity: DocumentUploadResponseEntity): DocumentUploadResponseDto {
-    return {
-      Error: documentUploadResponseEntity.Error ? this.mapDocumentUploadErrorEntityToDto(documentUploadResponseEntity.Error) : null,
-      DocumentFileName: documentUploadResponseEntity.DocumentFileName,
-    };
+    return documentUploadResponseEntity.DocumentFileName === null //
+      ? { Error: this.mapDocumentUploadErrorEntityToDto(documentUploadResponseEntity.Error) }
+      : { DocumentFileName: documentUploadResponseEntity.DocumentFileName };
   }
 }
