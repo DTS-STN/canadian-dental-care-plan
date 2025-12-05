@@ -10,12 +10,11 @@ import { z } from 'zod';
 import type { Route } from './+types/home-address';
 
 import { TYPES } from '~/.server/constants';
-import { loadApplyAdultState } from '~/.server/routes/helpers/apply-adult-route-helpers';
-import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
-import { Button, ButtonLink } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogTrigger } from '~/components/dialog';
 import { useErrorSummary } from '~/components/error-summary';
@@ -41,29 +40,28 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.adult.homeAddress,
-  pageTitleI18nKey: 'apply-adult:address.home-address.page-title',
+  i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
+  pageIdentifier: pageIds.public.application.spokes.homeAddress,
+  pageTitleI18nKey: 'application-spokes:address.home-address.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const state = loadApplyAdultState({ params, request, session });
+  const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
   const countryList = await appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:address.home-address.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:address.home-address.page-title') }) };
 
   return {
     meta,
     defaultState: state,
     countryList,
     regionList,
-    editMode: state.editMode,
   };
 }
 
@@ -79,11 +77,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
 
   securityHandler.validateCsrfToken({ formData, session });
-  const state = loadApplyAdultState({ params, request, session });
-
-  if (formAction === FORM_ACTION.cancel) {
-    return redirect(getPathById('public/apply/$id/adult/review-information', params));
-  }
 
   const homeAddressValidator = appContainer.get(TYPES.HomeAddressValidatorFactory).createHomeAddressValidator(locale);
 
@@ -113,11 +106,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const canProceedToDental = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
 
   if (canProceedToDental) {
-    saveApplyState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
-    if (state.editMode) {
-      return redirect(getPathById('public/apply/$id/adult/review-information', params));
-    }
-    return redirect(getPathById('public/apply/$id/adult/phone-number', params));
+    savePublicApplicationState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
+    return redirect(getPathById('public/application/$id/new-adult/contact-information', params));
   }
 
   invariant(parsedDataResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
@@ -169,21 +159,18 @@ export async function action({ context: { appContainer, session }, params, reque
     } as const satisfies AddressSuggestionResponse;
   }
 
-  saveApplyState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
+  savePublicApplicationState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
 
-  if (state.editMode) {
-    return redirect(getPathById('public/apply/$id/adult/review-information', params));
-  }
-  return redirect(getPathById('public/apply/$id/adult/phone-number', params));
+  return redirect(getPathById('public/application/$id/new-adult/contact-information', params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {
   return typeof data === 'object' && data !== null && 'status' in data && typeof data.status === 'string';
 }
 
-export default function ApplyAdultHomeAddress({ loaderData, params }: Route.ComponentProps) {
+export default function HomeAddress({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, countryList, regionList, editMode } = loaderData;
+  const { defaultState, countryList, regionList } = loaderData;
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useClientEnv();
 
   const fetcher = useEnhancedFetcher<typeof action>();
@@ -226,16 +213,16 @@ export default function ApplyAdultHomeAddress({ loaderData, params }: Route.Comp
 
   const homeRegions = useMemo<InputOptionProps[]>(() => homeCountryRegions.map(({ id, name }) => ({ children: name, value: id })), [homeCountryRegions]);
 
-  const dummyOption: InputOptionProps = { children: t('apply-adult:address.address-field.select-one'), value: '' };
+  const dummyOption: InputOptionProps = { children: t('application-spokes:address.address-field.select-one'), value: '' };
 
   const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedHomeCountry);
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={55} size="lg" label={t('apply:progress.label')} />
+        <Progress value={55} size="lg" label={t('application:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('apply:required-label')}</p>
+        <p className="mb-4 italic">{t('application:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
@@ -245,8 +232,8 @@ export default function ApplyAdultHomeAddress({ loaderData, params }: Route.Comp
                 id="home-address"
                 name="address"
                 className="w-full"
-                label={t('apply-adult:address.address-field.address')}
-                helpMessagePrimary={t('apply-adult:address.address-field.address-note')}
+                label={t('application-spokes:address.address-field.address')}
+                helpMessagePrimary={t('application-spokes:address.address-field.address-note')}
                 helpMessagePrimaryClassName="text-black"
                 maxLength={100}
                 autoComplete="address-line1"
@@ -259,7 +246,7 @@ export default function ApplyAdultHomeAddress({ loaderData, params }: Route.Comp
                   id="home-city"
                   name="city"
                   className="w-full"
-                  label={t('apply-adult:address.address-field.city')}
+                  label={t('application-spokes:address.address-field.city')}
                   maxLength={100}
                   autoComplete="address-level2"
                   defaultValue={defaultState.homeAddress?.city}
@@ -270,7 +257,7 @@ export default function ApplyAdultHomeAddress({ loaderData, params }: Route.Comp
                   id="home-postal-code"
                   name="postalZipCode"
                   className="w-full"
-                  label={isPostalCodeRequired ? t('apply-adult:address.address-field.postal-code') : t('apply-adult:address.address-field.postal-code-optional')}
+                  label={isPostalCodeRequired ? t('application-spokes:address.address-field.postal-code') : t('application-spokes:address.address-field.postal-code-optional')}
                   maxLength={100}
                   autoComplete="postal-code"
                   defaultValue={defaultState.homeAddress?.postalCode ?? ''}
@@ -283,7 +270,7 @@ export default function ApplyAdultHomeAddress({ loaderData, params }: Route.Comp
                   id="home-province"
                   name="provinceStateId"
                   className="w-full sm:w-1/2"
-                  label={t('apply-adult:address.address-field.province')}
+                  label={t('application-spokes:address.address-field.province')}
                   defaultValue={defaultState.homeAddress?.province}
                   errorMessage={errors?.provinceStateId}
                   options={[dummyOption, ...homeRegions]}
@@ -294,7 +281,7 @@ export default function ApplyAdultHomeAddress({ loaderData, params }: Route.Comp
                 id="home-country"
                 name="countryId"
                 className="w-full sm:w-1/2"
-                label={t('apply-adult:address.address-field.country')}
+                label={t('application-spokes:address.address-field.country')}
                 autoComplete="country"
                 defaultValue={defaultState.homeAddress?.country ?? ''}
                 errorMessage={errors?.countryId}
@@ -304,76 +291,44 @@ export default function ApplyAdultHomeAddress({ loaderData, params }: Route.Comp
               />
             </div>
           </fieldset>
-          {editMode ? (
-            <div className="flex flex-wrap items-center gap-3">
-              <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
-                <DialogTrigger asChild>
-                  <LoadingButton
-                    aria-expanded={undefined}
-                    variant="primary"
-                    id="save-button"
-                    type="submit"
-                    name="_action"
-                    value={FORM_ACTION.submit}
-                    loading={isSubmitting}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Home address click"
-                  >
-                    {t('apply-adult:address.save-btn')}
-                  </LoadingButton>
-                </DialogTrigger>
-                {!fetcher.isSubmitting && addressDialogContent && (
-                  <>
-                    {addressDialogContent.status === 'address-suggestion' && (
-                      <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
-                    )}
-                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent addressContext="home-address" invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
-                  </>
-                )}
-              </Dialog>
-              <Button id="cancel-button" name="_action" variant="secondary" disabled={isSubmitting} value={FORM_ACTION.cancel} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Home address click">
-                {t('apply-adult:address.cancel-btn')}
-              </Button>
-            </div>
-          ) : (
-            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
-                <DialogTrigger asChild>
-                  <LoadingButton
-                    aria-expanded={undefined}
-                    variant="primary"
-                    id="continue-button"
-                    type="submit"
-                    name="_action"
-                    value={FORM_ACTION.submit}
-                    loading={isSubmitting}
-                    endIcon={faChevronRight}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Home address click"
-                  >
-                    {t('apply-adult:address.save-btn')}
-                  </LoadingButton>
-                </DialogTrigger>
-                {!fetcher.isSubmitting && addressDialogContent && (
-                  <>
-                    {addressDialogContent.status === 'address-suggestion' && (
-                      <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
-                    )}
-                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent addressContext="home-address" invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
-                  </>
-                )}
-              </Dialog>
-              <ButtonLink
-                id="back-button"
-                variant="secondary"
-                routeId={`public/apply/$id/adult/mailing-address`}
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Home address click"
-              >
-                {t('apply-adult:address.back')}
-              </ButtonLink>
-            </div>
-          )}
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
+              <DialogTrigger asChild>
+                <LoadingButton
+                  aria-expanded={undefined}
+                  variant="primary"
+                  id="continue-button"
+                  type="submit"
+                  name="_action"
+                  value={FORM_ACTION.submit}
+                  loading={isSubmitting}
+                  endIcon={faChevronRight}
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Home address click"
+                >
+                  {t('application-spokes:address.continue')}
+                </LoadingButton>
+              </DialogTrigger>
+              {!fetcher.isSubmitting && addressDialogContent && (
+                <>
+                  {addressDialogContent.status === 'address-suggestion' && (
+                    <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
+                  )}
+                  {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent addressContext="home-address" invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
+                </>
+              )}
+            </Dialog>
+            <ButtonLink
+              id="back-button"
+              variant="secondary"
+              routeId={`public/application/$id/mailing-address`}
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Home address click"
+            >
+              {t('application-spokes:address.back')}
+            </ButtonLink>
+          </div>
         </fetcher.Form>
       </div>
     </>

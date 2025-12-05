@@ -153,6 +153,8 @@ export const pageIds = {
         confirmFederalProvincialTerritorialBenefits: 'CDCP-APPL-SPK-0012',
         federalProvincialTerritorialBenefits: 'CDCP-APPL-SPK-0013',
         phoneNumber: 'CDCP-APPL-SPK-0014',
+        mailingAddress: 'CDCP-APPL-SPK-0015',
+        homeAddress: 'CDCP-APPL-SPK-0016',
       },
     },
     apply: {
