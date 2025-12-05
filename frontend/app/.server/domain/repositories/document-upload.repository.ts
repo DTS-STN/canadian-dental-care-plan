@@ -81,7 +81,7 @@ export class DefaultDocumentUploadRepository implements DocumentUploadRepository
   async uploadDocument(documentUploadRequestEntity: DocumentUploadRequestEntity): Promise<DocumentUploadResponseEntity> {
     this.log.trace('Uploading document for filename [%s]', documentUploadRequestEntity.filename);
 
-    const url = new URL('/ScanAndSave', this.baseUrl);
+    const url = `${this.baseUrl}/ScanAndSave`;
 
     const response = await this.httpClient.instrumentedFetch('http.client.document-scan-api.scan-and-save.posts', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
@@ -129,7 +129,7 @@ export class DefaultDocumentUploadRepository implements DocumentUploadRepository
   async scanDocument(scanDocumentRequestEntity: DocumentScanRequestEntity): Promise<DocumentScanResponseEntity> {
     this.log.trace('Scanning document for filename [%s]', scanDocumentRequestEntity.filename);
 
-    const url = new URL('/Scan', this.baseUrl);
+    const url = `${this.baseUrl}/Scan`;
 
     const response = await this.httpClient.instrumentedFetch('http.client.document-scan-api.scan.posts', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
