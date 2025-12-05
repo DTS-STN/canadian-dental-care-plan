@@ -1,0 +1,171 @@
+import { data, redirect, useFetcher } from 'react-router';
+
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { Trans, useTranslation } from 'react-i18next';
+import { z } from 'zod';
+
+import type { Route } from './+types/communication-preferences';
+
+import { TYPES } from '~/.server/constants';
+import { getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { CommunicationPreferencesState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { useErrorSummary } from '~/components/error-summary';
+import { InlineLink } from '~/components/inline-link';
+import { InputRadios } from '~/components/input-radios';
+import type { InputRadiosProps } from '~/components/input-radios';
+import { LoadingButton } from '~/components/loading-button';
+import { pageIds } from '~/page-ids';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
+import { getPathById } from '~/utils/route-utils';
+import { getTitleMetaTags } from '~/utils/seo-utils';
+
+export const PREFERRED_SUN_LIFE_METHOD = { email: 'email', mail: 'mail' } as const;
+export const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
+
+export const handle = {
+  i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
+  pageIdentifier: pageIds.public.application.spokes.communicationPreferences,
+  pageTitleI18nKey: 'application-spokes:communication-preferences.page-title',
+};
+
+export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
+
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const state = getPublicApplicationState({ params, session });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
+
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:communication-preferences.page-title') }) };
+
+  const languages = appContainer.get(TYPES.LanguageService).listAndSortLocalizedLanguages(locale);
+
+  return { defaultState: state.communicationPreferences, languages, meta };
+}
+
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const formData = await request.formData();
+
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  securityHandler.validateCsrfToken({ formData, session });
+
+  getPublicApplicationState({ params, session });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+
+  // state validation schema
+  const communicationPreferencesSchema = z.object({
+    preferredLanguage: z.string().trim().min(1, t('application-spokes:communication-preferences.error-message.preferred-language-required')),
+    preferredMethod: z.string().trim().min(1, t('application-spokes:communication-preferences.error-message.preferred-method-required')),
+    preferredNotificationMethod: z.string().trim().min(1, t('application-spokes:communication-preferences.error-message.preferred-notification-method-required')),
+  }) satisfies z.ZodType<CommunicationPreferencesState>;
+
+  const parsedDataResult = communicationPreferencesSchema.safeParse({
+    preferredLanguage: String(formData.get('preferredLanguage') ?? ''),
+    preferredMethod: String(formData.get('preferredMethod') ?? ''),
+    preferredNotificationMethod: String(formData.get('preferredNotificationMethod') ?? ''),
+  });
+
+  if (!parsedDataResult.success) {
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
+  }
+
+  savePublicApplicationState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
+
+  return redirect(getPathById('public/application/$id/new-adult/contact-information', params));
+}
+
+export default function ApplicationSpokeCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { defaultState } = loaderData;
+
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
+
+  const mscaLinkAccount = <InlineLink to={t('application-spokes:communication-preferences.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
+
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    preferredLanguage: 'input-radio-preferred-language-option-0',
+    preferredMethod: 'input-radio-preferred-methods-option-0',
+    preferredNotificationMethod: 'input-radio-preferred-notification-method-option-0',
+  });
+
+  const preferredLanguageOptions: InputRadiosProps['options'] = loaderData.languages.map((language) => ({
+    value: language.id,
+    children: language.name,
+    defaultChecked: defaultState.preferredLanguage === language.id,
+  }));
+
+  return (
+    <div className="max-w-prose">
+      <p className="mb-4 italic">{t('application:required-label')}</p>
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <div className="mb-8 space-y-6">
+          <InputRadios id="preferred-language" name="preferredLanguage" legend={t('application-spokes:communication-preferences.preferred-language')} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
+          <InputRadios
+            id="preferred-methods"
+            legend={t('application-spokes:communication-preferences.preferred-method')}
+            name="preferredMethod"
+            helpMessagePrimary={t('application-spokes:communication-preferences.preferred-method-help-message')}
+            options={[
+              {
+                value: PREFERRED_SUN_LIFE_METHOD.email,
+                children: t('application-spokes:communication-preferences.by-email'),
+                defaultChecked: defaultState.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email,
+              },
+              {
+                value: PREFERRED_SUN_LIFE_METHOD.mail,
+                children: t('application-spokes:communication-preferences.by-mail'),
+                defaultChecked: defaultState.preferredMethod === PREFERRED_SUN_LIFE_METHOD.mail,
+              },
+            ]}
+            errorMessage={errors?.preferredMethod}
+            required
+          />
+
+          <InputRadios
+            id="preferred-notification-method"
+            name="preferredNotificationMethod"
+            legend={t('application-spokes:communication-preferences.preferred-notification-method')}
+            options={[
+              {
+                value: PREFERRED_NOTIFICATION_METHOD.msca,
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communication-preferences.preferred-notification-method-msca" components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />,
+                defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.msca,
+              },
+              {
+                value: PREFERRED_NOTIFICATION_METHOD.mail,
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communication-preferences.preferred-notification-method-mail" components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />,
+                defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail,
+              },
+            ]}
+            required
+            errorMessage={errors?.preferredNotificationMethod}
+          />
+        </div>
+        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Communication preferences click">
+            {t('application-spokes:communication-preferences.continue')}
+          </LoadingButton>
+          <ButtonLink
+            id="back-button"
+            variant="secondary"
+            routeId="public/application/$id/new-adult/contact-information"
+            params={params}
+            disabled={isSubmitting}
+            startIcon={faChevronLeft}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Communication preferences click"
+          >
+            {t('application-spokes:communication-preferences.back')}
+          </ButtonLink>
+        </div>
+      </fetcher.Form>
+    </div>
+  );
+}
