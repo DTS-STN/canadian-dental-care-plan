@@ -136,7 +136,7 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/new-adult/contact-information" params={params} startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus} size="lg">
+          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus} size="lg">
             {completedSections.includes('address') ? t('application-new-adult:contact-information.edit-address') : t('application-new-adult:contact-information.add-address')}
           </ButtonLink>
         </CardFooter>
