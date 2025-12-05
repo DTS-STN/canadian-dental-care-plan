@@ -166,15 +166,7 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink
-            id="edit-button"
-            variant="link"
-            className="p-0"
-            routeId="public/application/$id/new-adult/contact-information"
-            params={params}
-            startIcon={completedSections.includes('communication-preferences') ? faPenToSquare : faCirclePlus}
-            size="lg"
-          >
+          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/communication-preferences" params={params} startIcon={completedSections.includes('communication-preferences') ? faPenToSquare : faCirclePlus} size="lg">
             {completedSections.includes('communication-preferences') ? t('application-new-adult:contact-information.edit-communication-preferences') : t('application-new-adult:contact-information.add-communication-preferences')}
           </ButtonLink>
         </CardFooter>

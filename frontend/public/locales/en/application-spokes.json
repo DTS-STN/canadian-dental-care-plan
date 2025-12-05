@@ -446,7 +446,7 @@
     "by-email": "<span>By email</span><br>Signing up for email is the fastest way to get updates.",
     "by-mail": "By mail",
     "preferred-notification-method": "How would you like to receive updates from the Government of Canada about the Canadian Dental Care Plan?",
-    "preferred-notification-method-msca": "<span>Online through My Service Canada Account (MSCA)</span><br><mscaLinkAccount>Signing up</<mscaLinkAccount> for online notifications is the fastest way to get updates.",
+    "preferred-notification-method-msca": "<span>Online through My Service Canada Account (MSCA)</span><br><mscaLinkAccount>Signing up</mscaLinkAccount> for online notifications is the fastest way to get updates.",
     "preferred-notification-method-mail": "<span>By mail</span><br>You can also view your Canadian Dental Care Plan information in your <mscaLinkAccount>MSCA.</mscaLinkAccount>.",
     "back": "Back",
     "continue": "Continue",
