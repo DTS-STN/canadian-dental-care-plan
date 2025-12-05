@@ -2,26 +2,20 @@
  * Represents a Data Transfer Object (DTO) for Document Upload request.
  */
 export type DocumentUploadRequestDto = Readonly<{
+  /** Client identifier */
+  clientId: string;
+
   /** Original file name provided by user */
   fileName: string;
 
   /** Base64 encoded bytes from the file being uploaded */
   binary: string;
 
-  /** Name of the application uploading */
-  ApplicationProfileName?: string;
+  /** Evidentiary document type identifier */
+  evidentiaryDocumentTypeId: string;
 
-  /** Category of document being uploaded to the repository */
-  DocumentCategoryText?: string;
-
-  /** The identification of the case associated with the document */
-  CaseNumberText?: string;
-
-  /** The identification of the person who is the main subject of/in the uploaded document */
-  SubjectPersonIdentificationID?: string;
-
-  /** The original document creation date as provided by the partner system. Format UTC ISO 8601 */
-  OriginalDocumentCreationDate?: string;
+  /** Upload date */
+  uploadDate: Date;
 
   /** A unique identifier for the user making the request - used for auditing */
   userId: string;

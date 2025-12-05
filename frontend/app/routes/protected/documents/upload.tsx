@@ -80,9 +80,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   const locale = getLocale(request);
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const applicantNames = [`${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`, ...clientApplication.children.map((c) => `${c.information.firstName} ${c.information.lastName}`)].map((name) =>
-    name.trim(),
-  );
+  const applicants: Array<{ clientId: string; name: string }> = [
+    { clientId: clientApplication.applicantInformation.clientId, name: `${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`.trim() },
+    ...clientApplication.children.map((c) => ({ clientId: c.information.clientId, name: `${c.information.firstName} ${c.information.lastName}`.trim() })),
+  ];
 
   const documentTypes = await appContainer.get(TYPES.EvidentiaryDocumentTypeService).listLocalizedEvidentiaryDocumentTypes(locale);
 
@@ -93,7 +94,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     meta: { title: t('gcweb:meta.title.msca-template', { title: t('documents:upload.page-title') }) },
-    applicantNames,
+    applicants,
     documentTypes,
     SCCH_BASE_URI,
   };
@@ -126,7 +127,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
 
-  const clientApplication = await securityHandler.requireClientApplication({
+  await securityHandler.requireClientApplication({
     params,
     request,
     session,
@@ -148,7 +149,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return { errors: validationResult.errors };
   }
 
-  const { files } = validationResult.data;
+  const { applicant, files } = validationResult.data;
   const uploadService = appContainer.get(TYPES.DocumentUploadService);
 
   const scanResult = await scanDocuments(files, idToken.sub, uploadService, t);
@@ -156,12 +157,13 @@ export async function action({ context: { appContainer, session }, params, reque
     return { errors: scanResult.errors };
   }
 
-  const uploadResult = await uploadDocuments(files, idToken.sub, uploadService, t);
+  const uploadResult = await uploadDocuments({ clientId: applicant, files: files, service: uploadService, t, userId: idToken.sub });
+
   if (!uploadResult.success) {
     return { errors: uploadResult.errors };
   }
 
-  await createMetadata(files, clientApplication.applicantInformation.clientId, idToken.sub, appContainer);
+  await createMetadata({ appContainer, clientId: applicant, files, userId: idToken.sub });
 
   return redirect(getPathById('protected/documents/index', params));
 }
@@ -201,8 +203,11 @@ function validateUploadForm(
 async function scanDocuments(files: ParsedUploadData['files'], userId: string, service: DocumentUploadService, t: TFunction<typeof handle.i18nNamespaces>): Promise<{ success: boolean; errors?: UploadErrors }> {
   const promises = files.map(async ({ file }, index) => {
     try {
-      const binary = Buffer.from(await file.arrayBuffer()).toString('base64');
-      const response = await service.scanDocument({ fileName: file.name, binary, userId });
+      const response = await service.scanDocument({
+        fileName: file.name,
+        binary: Buffer.from(await file.arrayBuffer()).toString('base64'),
+        userId,
+      });
 
       if (response.Error) {
         return { index, error: t('documents:upload.error-message.scan-failed', { error: response.Error.ErrorMessage }) };
@@ -220,11 +225,30 @@ async function scanDocuments(files: ParsedUploadData['files'], userId: string, s
   return processBatchResults(results);
 }
 
-async function uploadDocuments(files: ParsedUploadData['files'], userId: string, service: DocumentUploadService, t: TFunction<typeof handle.i18nNamespaces>): Promise<{ success: boolean; errors?: UploadErrors }> {
-  const promises = files.map(async ({ file }, index) => {
+interface UploadDocumentsRequestArgs {
+  clientId: string;
+  files: ParsedUploadData['files'];
+  userId: string;
+  service: DocumentUploadService;
+  t: TFunction<typeof handle.i18nNamespaces>;
+}
+
+interface UploadDocumentsResponseArgs {
+  success: boolean;
+  errors?: UploadErrors;
+}
+
+async function uploadDocuments({ clientId, files, service, t, userId }: UploadDocumentsRequestArgs): Promise<UploadDocumentsResponseArgs> {
+  const promises = files.map(async ({ file, documentType }, index) => {
     try {
-      const binary = Buffer.from(await file.arrayBuffer()).toString('base64');
-      const response = await service.uploadDocument({ fileName: file.name, binary, userId });
+      const response = await service.uploadDocument({
+        clientId,
+        evidentiaryDocumentTypeId: documentType,
+        fileName: file.name,
+        binary: Buffer.from(await file.arrayBuffer()).toString('base64'),
+        uploadDate: new Date(),
+        userId,
+      });
 
       if (response.Error) {
         return { index, error: t('documents:upload.error-message.upload-failed', { error: response.Error.ErrorMessage }) };
@@ -250,24 +274,29 @@ function processBatchResults(results: { index: number; error?: string }[]): { su
   return { success: false, errors };
 }
 
-async function createMetadata(files: ParsedUploadData['files'], clientId: string, userId: string, appContainer: AppContainerProvider) {
+interface CreateMetadataArgs {
+  appContainer: AppContainerProvider;
+  clientId: string;
+  files: ParsedUploadData['files'];
+  userId: string;
+}
+
+async function createMetadata({ appContainer, clientId, files, userId }: CreateMetadataArgs) {
   const reasons = await appContainer.get(TYPES.DocumentUploadReasonService).listDocumentUploadReasons();
   const reasonId = reasons[0].id;
   const recordSource = Number(appContainer.get(TYPES.ServerConfig).EWDU_RECORD_SOURCE_MSCA);
-
-  const request = {
+  const evidentiaryDocumentService = appContainer.get(TYPES.EvidentiaryDocumentService);
+  return await evidentiaryDocumentService.createEvidentiaryDocumentMetadata({
     clientId: clientId,
-    userId: userId,
     documents: files.map(({ file, documentType }) => ({
       fileName: file.name,
-      documentTypeId: documentType,
+      evidentiaryDocumentTypeId: documentType,
       documentUploadReasonId: reasonId,
       recordSource,
-      uploadDate: new Date().toISOString(),
+      uploadDate: new Date(),
     })),
-  };
-
-  await appContainer.get(TYPES.EvidentiaryDocumentService).createEvidentiaryDocumentMetadata(request);
+    userId: userId,
+  });
 }
 
 function createDocumentUploadSchema({ t, validFileExtensions, maxFileSizeInMB, maxFileCount }: CreateDocumentUploadSchemaArgs) {
@@ -313,7 +342,7 @@ function mapZodErrors(zodError: z.ZodError): UploadErrors {
 
 export default function DocumentsUpload({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { applicantNames, documentTypes, SCCH_BASE_URI } = loaderData;
+  const { applicants, documentTypes, SCCH_BASE_URI } = loaderData;
   const env = useClientEnv();
   const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS } = env;
 
@@ -357,9 +386,19 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
     await fetcher.submit(formData, { method: 'post', encType: 'multipart/form-data' });
   };
 
-  const applicantOptions = useMemo<InputOptionProps[]>(() => [{ children: t('documents:upload.select-one'), value: '', disabled: true, hidden: true }, ...applicantNames.map((name) => ({ children: name, value: name }))], [applicantNames, t]);
+  const applicantOptions = useMemo<InputOptionProps[]>(() => {
+    return [
+      { children: t('documents:upload.select-one'), value: '', disabled: true, hidden: true }, //
+      ...applicants.map(({ clientId, name }) => ({ children: name, value: clientId })),
+    ];
+  }, [applicants, t]);
 
-  const docTypeOptions = useMemo<InputOptionProps[]>(() => [{ children: t('documents:upload.select-one'), value: '', disabled: true, hidden: true }, ...documentTypes.map((d) => ({ children: d.name, value: d.id }))], [documentTypes, t]);
+  const docTypeOptions = useMemo<InputOptionProps[]>(() => {
+    return [
+      { children: t('documents:upload.select-one'), value: '', disabled: true, hidden: true }, //
+      ...documentTypes.map((d) => ({ children: d.name, value: d.id })),
+    ];
+  }, [documentTypes, t]);
 
   const errorFieldMap = useMemo<ErrorFieldMap>(
     () => ({

@@ -1,34 +1,62 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 
-import type { DocumentScanResponseDto, DocumentUploadErrorDto, DocumentUploadResponseDto } from '~/.server/domain/dtos';
-import type { DocumentScanResponseEntity, DocumentUploadErrorEntity, DocumentUploadResponseEntity } from '~/.server/domain/entities';
+import { TYPES } from '~/.server/constants';
+import type { DocumentScanRequestDto, DocumentScanResponseDto, DocumentUploadErrorDto, DocumentUploadRequestDto, DocumentUploadResponseDto } from '~/.server/domain/dtos';
+import type { DocumentScanRequestEntity, DocumentScanResponseEntity, DocumentUploadErrorEntity, DocumentUploadRequestEntity, DocumentUploadResponseEntity } from '~/.server/domain/entities';
+import type { EvidentiaryDocumentTypeService } from '~/.server/domain/services';
 
 export interface DocumentUploadDtoMapper {
-  mapDocumentUploadResponseEntityToDto(responseEntity: DocumentUploadResponseEntity): DocumentUploadResponseDto;
-  mapDocumentUploadErrorEntityToDto(errorEntity: DocumentUploadErrorEntity): DocumentUploadErrorDto;
-  mapDocumentScanResponseEntityToDto(responseEntity: DocumentScanResponseEntity): DocumentScanResponseDto;
+  mapDocumentScanRequestDtoToEntity(documentScanRequestDto: DocumentScanRequestDto): DocumentScanRequestEntity;
+  mapDocumentScanResponseEntityToDto(documentScanResponseEntity: DocumentScanResponseEntity): DocumentScanResponseDto;
+  mapDocumentUploadErrorEntityToDto(documentUploadErrorEntity: DocumentUploadErrorEntity): DocumentUploadErrorDto;
+  mapDocumentUploadRequestDtoToEntity(documentUploadRequestDto: DocumentUploadRequestDto): Promise<DocumentUploadRequestEntity>;
+  mapDocumentUploadResponseEntityToDto(documentUploadResponseEntity: DocumentUploadResponseEntity): DocumentUploadResponseDto;
 }
 
 @injectable()
 export class DefaultDocumentUploadDtoMapper implements DocumentUploadDtoMapper {
-  mapDocumentUploadResponseEntityToDto(responseEntity: DocumentUploadResponseEntity): DocumentUploadResponseDto {
+  private readonly evidentiaryDocumentTypeService;
+
+  constructor(@inject(TYPES.EvidentiaryDocumentTypeService) evidentiaryDocumentTypeService: EvidentiaryDocumentTypeService) {
+    this.evidentiaryDocumentTypeService = evidentiaryDocumentTypeService;
+  }
+
+  mapDocumentScanRequestDtoToEntity(documentScanRequestDto: DocumentScanRequestDto): DocumentScanRequestEntity {
     return {
-      Error: responseEntity.Error ? this.mapDocumentUploadErrorEntityToDto(responseEntity.Error) : null,
-      DocumentFileName: responseEntity.DocumentFileName,
+      filename: documentScanRequestDto.fileName,
+      binary: documentScanRequestDto.binary,
     };
   }
 
-  mapDocumentUploadErrorEntityToDto(errorEntity: DocumentUploadErrorEntity): DocumentUploadErrorDto {
+  mapDocumentScanResponseEntityToDto(documentScanResponseEntity: DocumentScanResponseEntity): DocumentScanResponseDto {
     return {
-      ErrorCode: errorEntity.ErrorCode,
-      ErrorMessage: errorEntity.ErrorMessage,
+      Error: documentScanResponseEntity.Error ? this.mapDocumentUploadErrorEntityToDto(documentScanResponseEntity.Error) : null,
+      Percent: documentScanResponseEntity.Percent,
     };
   }
 
-  mapDocumentScanResponseEntityToDto(responseEntity: DocumentScanResponseEntity): DocumentScanResponseDto {
+  mapDocumentUploadErrorEntityToDto(documentUploadErrorEntity: DocumentUploadErrorEntity): DocumentUploadErrorDto {
     return {
-      Error: responseEntity.Error ? this.mapDocumentUploadErrorEntityToDto(responseEntity.Error) : null,
-      Percent: responseEntity.Percent,
+      ErrorCode: documentUploadErrorEntity.ErrorCode,
+      ErrorMessage: documentUploadErrorEntity.ErrorMessage,
+    };
+  }
+
+  async mapDocumentUploadRequestDtoToEntity(documentUploadRequestDto: DocumentUploadRequestDto): Promise<DocumentUploadRequestEntity> {
+    const evidentiaryDocumentType = await this.evidentiaryDocumentTypeService.getEvidentiaryDocumentTypeById(documentUploadRequestDto.evidentiaryDocumentTypeId);
+    return {
+      filename: documentUploadRequestDto.fileName,
+      binary: documentUploadRequestDto.binary,
+      subjectPersonIdentificationID: documentUploadRequestDto.clientId,
+      documentCategoryText: evidentiaryDocumentType.code,
+      originalDocumentCreationDate: documentUploadRequestDto.uploadDate.toISOString(),
+    };
+  }
+
+  mapDocumentUploadResponseEntityToDto(documentUploadResponseEntity: DocumentUploadResponseEntity): DocumentUploadResponseDto {
+    return {
+      Error: documentUploadResponseEntity.Error ? this.mapDocumentUploadErrorEntityToDto(documentUploadResponseEntity.Error) : null,
+      DocumentFileName: documentUploadResponseEntity.DocumentFileName,
     };
   }
 }

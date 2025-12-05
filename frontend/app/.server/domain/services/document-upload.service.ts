@@ -50,13 +50,10 @@ export class DefaultDocumentUploadService implements DocumentUploadService {
   async uploadDocument(documentUploadRequestDto: DocumentUploadRequestDto): Promise<DocumentUploadResponseDto> {
     this.log.trace('Uploading document with fileName [%s] for userId [%s]', documentUploadRequestDto.fileName, documentUploadRequestDto.userId);
 
-    this.auditService.createAudit('documentupload.upload', {
-      userId: documentUploadRequestDto.userId,
-      fileName: documentUploadRequestDto.fileName,
-    });
+    this.auditService.createAudit('documentupload.upload', { userId: documentUploadRequestDto.userId });
 
-    const responseEntity = await this.documentUploadRepository.uploadDocument(documentUploadRequestDto);
-
+    const requestEntity = await this.documentUploadDtoMapper.mapDocumentUploadRequestDtoToEntity(documentUploadRequestDto);
+    const responseEntity = await this.documentUploadRepository.uploadDocument(requestEntity);
     const responseDto = this.documentUploadDtoMapper.mapDocumentUploadResponseEntityToDto(responseEntity);
 
     this.log.trace('Returning document upload response [%j] for fileName [%s]', responseDto, documentUploadRequestDto.fileName);
@@ -66,13 +63,10 @@ export class DefaultDocumentUploadService implements DocumentUploadService {
   async scanDocument(documentScanRequestDto: DocumentScanRequestDto): Promise<DocumentScanResponseDto> {
     this.log.trace('Scanning document with fileName [%s] for userId [%s]', documentScanRequestDto.fileName, documentScanRequestDto.userId);
 
-    this.auditService.createAudit('documentupload.scan', {
-      userId: documentScanRequestDto.userId,
-      fileName: documentScanRequestDto.fileName,
-    });
+    this.auditService.createAudit('documentupload.scan', { userId: documentScanRequestDto.userId });
 
-    const responseEntity = await this.documentUploadRepository.scanDocument(documentScanRequestDto);
-
+    const requestEntity = this.documentUploadDtoMapper.mapDocumentScanRequestDtoToEntity(documentScanRequestDto);
+    const responseEntity = await this.documentUploadRepository.scanDocument(requestEntity);
     const responseDto = this.documentUploadDtoMapper.mapDocumentScanResponseEntityToDto(responseEntity);
 
     this.log.trace('Returning document scan response [%j] for fileName [%s]', responseDto, documentScanRequestDto.fileName);

@@ -14,18 +14,14 @@ export type DocumentScanResponseEntity = Readonly<{
 }>;
 
 export type DocumentUploadRequestEntity = Readonly<{
-  fileName: string;
+  filename: string;
   binary: string;
-  ApplicationProfileName?: string;
-  DocumentCategoryText?: string;
-  CaseNumberText?: string;
-  SubjectPersonIdentificationID?: string;
-  OriginalDocumentCreationDate?: string;
-  userId: string;
+  subjectPersonIdentificationID: string;
+  documentCategoryText: string;
+  originalDocumentCreationDate: string;
 }>;
 
 export type DocumentScanRequestEntity = Readonly<{
-  fileName: string;
+  filename: string;
   binary: string;
-  userId: string;
 }>;

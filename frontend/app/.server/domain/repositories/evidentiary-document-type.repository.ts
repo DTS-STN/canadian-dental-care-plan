@@ -101,7 +101,7 @@ export class DefaultEvidentiaryDocumentTypeRepository implements EvidentiaryDocu
     this.log.debug('Fetching evidentiary document type with id: [%s]', id);
 
     const documentTypeEntities = await this.listAllEvidentiaryDocumentTypes();
-    const documentEntity = documentTypeEntities.find(({ esdc_value }) => esdc_value === id);
+    const documentEntity = documentTypeEntities.find(({ esdc_evidentiarydocumenttypeid }) => esdc_evidentiarydocumenttypeid === id);
 
     if (!documentEntity) {
       this.log.warn('Document type not found; id: [%s]', id);
@@ -148,7 +148,7 @@ export class MockEvidentiaryDocumentTypeRepository implements EvidentiaryDocumen
     this.log.debug('Fetching evidentiary document type with id: [%s]', id);
 
     const documentTypeEntities = evidentiaryDocumentTypeJsonDataSource.value;
-    const documentEntity = documentTypeEntities.find(({ esdc_value }) => esdc_value === id);
+    const documentEntity = documentTypeEntities.find(({ esdc_evidentiarydocumenttypeid }) => esdc_evidentiarydocumenttypeid === id);
 
     if (!documentEntity) {
       this.log.warn('Document type not found; id: [%s]', id);

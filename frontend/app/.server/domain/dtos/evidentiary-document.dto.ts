@@ -48,10 +48,10 @@ export type EvidentiaryDocumentLocalizedDto = ReadonlyDeep<{
  */
 export type CreateEvidentiaryDocumentMetadataDto = ReadonlyDeep<{
   fileName: string;
-  documentTypeId: string;
+  evidentiaryDocumentTypeId: string;
   documentUploadReasonId: string;
   recordSource: number; // Online = 775170001, MSCA = 775170004
-  uploadDate: string; // ISO 8601 date string
+  uploadDate: Date;
   healthCanadaTransferDate?: string; // ISO 8601 date string
 }>;
 
@@ -61,7 +61,7 @@ export type CreateEvidentiaryDocumentMetadataDto = ReadonlyDeep<{
 export type CreateEvidentiaryDocumentMetadataResponseDto = ReadonlyDeep<{
   evidentiaryDocuments: ReadonlyArray<{
     fileName: string;
-    documentTypeId: string;
+    evidentiaryDocumentTypeId: string;
     documentUploadReasonId: string;
     uploadDate: string;
     healthCanadaTransferDate?: string;
