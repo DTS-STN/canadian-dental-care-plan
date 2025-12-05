@@ -13,6 +13,7 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
+import { useProgressStepper } from '~/hooks/use-progress-stepper';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -49,6 +50,7 @@ export async function loader({ context: { appContainer, session }, request, para
 export default function NewAdultContactInformation({ loaderData, params }: Route.ComponentProps) {
   const { defaultState } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
+  const { steps, currentStep } = useProgressStepper('new-adult', 'contact-information');
 
   const sections = [
     { id: 'phone-number', completed: defaultState.phoneNumber !== undefined },
@@ -60,15 +62,7 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
 
   return (
     <div className="max-w-prose space-y-8">
-      <ProgressStepper
-        steps={[
-          { id: 'marital-status', status: 'inactive', description: t('application:progress-stepper.marital-status') },
-          { id: 'contact-information', status: 'active', description: t('application:progress-stepper.contact-information') },
-          { id: 'dental-insurance', status: 'inactive', description: t('application:progress-stepper.dental-insurance') },
-          { id: 'submit', status: 'inactive', description: t('application:progress-stepper.submit') },
-        ]}
-        currentStep={1}
-      />
+      <ProgressStepper steps={steps} currentStep={currentStep} />
       <div className="space-y-4">
         <p>{t('application:required-label')}</p>
         <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
