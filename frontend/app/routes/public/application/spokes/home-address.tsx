@@ -305,7 +305,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   endIcon={faChevronRight}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Home address click"
                 >
-                  {t('application-spokes:address.continue')}
+                  {t('application-spokes:address.save-btn')}
                 </LoadingButton>
               </DialogTrigger>
               {!fetcher.isSubmitting && addressDialogContent && (

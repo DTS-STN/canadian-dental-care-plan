@@ -349,7 +349,7 @@ export default function ApplyAdultHomeAddress({ loaderData, params }: Route.Comp
                     endIcon={faChevronRight}
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Home address click"
                   >
-                    {t('apply-adult:address.save-btn')}
+                    {t('apply-adult:address.continue')}
                   </LoadingButton>
                 </DialogTrigger>
                 {!fetcher.isSubmitting && addressDialogContent && (
