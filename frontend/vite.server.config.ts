@@ -2,6 +2,10 @@ import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
+// TODO ::: GjB ::: this line exists just to force a frontend build
+//                  it should be removed immediately after the CI/CD pipeline has been tested
+console.log('Building server runtime with vite.server.config.ts...');
+
 /**
  * This file is used separately from `vite.config.ts` to build the server
  * runtime that bootstraps the application.
