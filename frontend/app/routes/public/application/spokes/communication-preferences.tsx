@@ -97,7 +97,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
   const preferredLanguageOptions: InputRadiosProps['options'] = loaderData.languages.map((language) => ({
     value: language.id,
     children: language.name,
-    defaultChecked: defaultState.preferredLanguage === language.id,
+    defaultChecked: defaultState?.preferredLanguage === language.id,
   }));
 
   return (
@@ -116,13 +116,13 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
             options={[
               {
                 value: PREFERRED_SUN_LIFE_METHOD.email,
-                children: t('application-spokes:communication-preferences.by-email'),
-                defaultChecked: defaultState.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email,
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communication-preferences.by-email" components={{ span: <span className="font-semibold" /> }} />,
+                defaultChecked: defaultState?.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email,
               },
               {
                 value: PREFERRED_SUN_LIFE_METHOD.mail,
-                children: t('application-spokes:communication-preferences.by-mail'),
-                defaultChecked: defaultState.preferredMethod === PREFERRED_SUN_LIFE_METHOD.mail,
+                children: <span className="font-semibold">{t('application-spokes:communication-preferences.by-mail')}</span>,
+                defaultChecked: defaultState?.preferredMethod === PREFERRED_SUN_LIFE_METHOD.mail,
               },
             ]}
             errorMessage={errors?.preferredMethod}
@@ -137,12 +137,12 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
               {
                 value: PREFERRED_NOTIFICATION_METHOD.msca,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communication-preferences.preferred-notification-method-msca" components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />,
-                defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.msca,
+                defaultChecked: defaultState?.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.msca,
               },
               {
                 value: PREFERRED_NOTIFICATION_METHOD.mail,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communication-preferences.preferred-notification-method-mail" components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />,
-                defaultChecked: defaultState.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail,
+                defaultChecked: defaultState?.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail,
               },
             ]}
             required
