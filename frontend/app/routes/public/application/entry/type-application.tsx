@@ -19,6 +19,16 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const APPLICANT_TYPE = { adult: 'adult', family: 'family', children: 'children' } as const;
 
+function getNextRouteId(applicationType: string) {
+  if (applicationType === APPLICANT_TYPE.adult) {
+    return 'public/application/$id/new-adult/marital-status';
+  }
+  if (applicationType === APPLICANT_TYPE.family) {
+    return 'public/application/$id/new-family/marital-status';
+  }
+  // TODO: add condition for children flow
+}
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'gcweb'),
   pageIdentifier: pageIds.public.application.typeOfApplication,
@@ -66,8 +76,6 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
 
   const yearOfBirth = defaultState.personalInformation ? parseISO(defaultState.personalInformation.dateOfBirth).getFullYear() : undefined;
 
-  const applicationType = defaultState.typeOfApplication;
-
   const isNewOrReturningMember = yearOfBirth !== undefined && yearOfBirth >= 2006;
 
   const sections = [
@@ -81,17 +89,6 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
 
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
   const allSectionsCompleted = completedSections.length === sections.length;
-
-  // eslint-disable-next-line unicorn/consistent-function-scoping
-  function getNextRouteId(applicationType?: string) {
-    if (applicationType === APPLICANT_TYPE.adult) {
-      return 'public/application/$id/new-adult/marital-status';
-    }
-    if (applicationType === APPLICANT_TYPE.family) {
-      return 'public/application/$id/new-family/marital-status';
-    }
-    // TODO: add condition for children flow
-  }
 
   return (
     <div className="max-w-prose space-y-8">
@@ -173,7 +170,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
       )}
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId={getNextRouteId(applicationType)} params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId={defaultState.typeOfApplication && getNextRouteId(defaultState.typeOfApplication)} params={params}>
           {t('application:type-of-application.application')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/eligibility-requirements" params={params}>
