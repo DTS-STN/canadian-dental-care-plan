@@ -79,8 +79,8 @@ export async function action({ context: { appContainer, session }, request, para
   }
 
   savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data } });
-  // TODO update with correct route
-  return redirect(getPathById('public/application/$id/new-adult/submit', params));
+
+  return redirect(getPathById('public/application/$id/new-adult/confirmation', params));
 }
 
 export default function NewAdultSubmit({ loaderData, params }: Route.ComponentProps) {
