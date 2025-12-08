@@ -167,6 +167,12 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
 
   const communicationLink = <InlineLink routeId="public/application/$id/new-adult/contact-information" params={params} />;
 
+  useEffect(() => {
+    if (fetcherStatus === 'verification-code-sent') {
+      setShowDialog(true);
+    }
+  }, [fetcherStatus, fetcher.data]);
+
   return (
     <div className="max-w-prose">
       <ErrorAlert>
