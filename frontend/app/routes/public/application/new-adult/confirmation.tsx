@@ -15,6 +15,8 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
+import { ProgressStepper } from '~/components/progress-stepper';
+import { useProgressStepper } from '~/hooks/use-progress-stepper';
 import { pageIds } from '~/page-ids';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
@@ -144,15 +146,13 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink } = loaderData;
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
-  const mscaLinkChecker = <InlineLink to={t('confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
-  const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('application-spokes:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
-  // this link will be used in a future release
-  // const cdcpLink = <InlineLink routeId="public/status/index" params={params} className="external-link" target='_blank' />;
+  const { steps } = useProgressStepper('new-adult', 'submit');
 
   return (
     <div className="max-w-prose space-y-10">
+      <ProgressStepper steps={steps} currentStep={4} />
       <ContextualAlert type="success">
         <div className="space-y-4">
           <p className="text-2xl">
@@ -215,27 +215,17 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
       </section>
 
       <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.register-msca-title')}</h2>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.get-updates-title')}</h2>
         <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey={'confirm.register-msca-text'} components={{ mscaLinkAccount }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey={'confirm.get-updates-text'} components={{ mscaLinkAccount }} />
         </p>
-        <p className="mt-4">{t('confirm.register-msca-info')}</p>
+        <p className="mt-4">{t('confirm.get-updates-info')}</p>
         <ul className="list-disc space-y-1 pl-7">
-          <li>{t('confirm.register-msca-correspondence')}</li>
-          <li>{t('confirm.register-msca-confirm')}</li>
+          <li>{t('confirm.view')}</li>
+          <li>{t('confirm.upload')}</li>
+          <li>{t('confirm.update')}</li>
+          <li>{t('confirm.access')}</li>
         </ul>
-        <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-checker" components={{ mscaLinkChecker }} />
-        </p>
-      </section>
-
-      <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.how-insurance')}</h2>
-        <p className="mt-4">{t('confirm.eligible-text')}</p>
-        <p className="mt-4">{t('confirm.more-info-cdcp')}</p>
-        <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-service" components={{ dentalContactUsLink }} />
-        </p>
       </section>
 
       <section className="space-y-8">
@@ -262,7 +252,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
                 {userInfo.previouslyEnrolled.isNewOrExistingMember ? (
                   <>
                     <p>{t('confirm.yes')}</p>
-                    <p>{userInfo.previouslyEnrolled.clientNumber}</p>
+                    <p>{userInfo.previouslyEnrolled.memberId}</p>
                   </>
                 ) : (
                   <p>{t('confirm.no')}</p>
