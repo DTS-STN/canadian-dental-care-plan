@@ -95,7 +95,7 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
         </CardFooter>
       </Card>
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-adult/marital-status" params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-adult/contact-information" params={params}>
           {t('application-new-adult:marital-status.contact-information')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
