@@ -177,7 +177,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
         <fieldset className="mb-6">
-          <p className="mb-4">{t('application-spokes:verify-email.verification-code', { email: defaultState.email })}</p>
+          <p className="mb-4">{t('application-spokes:verify-email.verification-code', { email: defaultState })}</p>
           <p className="mb-4">{t('application-spokes:verify-email.request-new')}</p>
           <p className="mb-8">
             <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:verify-email.unable-to-verify" components={{ communicationLink }} />
@@ -241,7 +241,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
           <DialogHeader>
             <DialogTitle>{t('application-spokes:verify-email.code-sent.heading')}</DialogTitle>
           </DialogHeader>
-          <DialogDescription>{t('application-spokes:verify-email.code-sent.detail', { email: defaultState.email })}</DialogDescription>
+          <DialogDescription>{t('application-spokes:verify-email.code-sent.detail', { email: defaultState })}</DialogDescription>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="modal-continue" disabled={isSubmitting} variant="primary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Modal Continue - Verify email click">
