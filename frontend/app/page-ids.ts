@@ -139,6 +139,7 @@ export const pageIds = {
         contactInformation: 'CDCP-APPL-NAD-0003',
         submit: 'CDCP-APPL-NAD-0004',
         confirmation: 'CDCP-APPL-NAD-0005',
+        exitApplication: 'CDCP-APPL-NAD-0006',
       },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',

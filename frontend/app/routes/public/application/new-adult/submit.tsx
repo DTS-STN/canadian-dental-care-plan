@@ -137,7 +137,6 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
               </InputCheckbox>
             </div>
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              {/* TODO update with correct routes */}
               <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
                 {t('application-new-adult:submit.submit')}
               </NavigationButton>
@@ -147,6 +146,11 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
             </div>
           </fetcher.Form>
         </section>
+      </div>
+      <div className="mt-8">
+        <InlineLink routeId="public/application/$id/new-adult/exit-application" params={params}>
+          {t('application-new-adult:submit.exit-application')}
+        </InlineLink>
       </div>
     </div>
   );
