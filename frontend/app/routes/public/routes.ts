@@ -26,6 +26,11 @@ export const routes = [
             file: 'routes/public/application/new-adult/submit.tsx',
             paths: { en: '/:lang/application/:id/new-adult/submit', fr: '/:lang/demandes/:id/new-adult/submit' },
           },
+          {
+            id: 'public/application/$id/new-adult/confirmation',
+            file: 'routes/public/application/new-adult/confirmation.tsx',
+            paths: { en: '/:lang/application/:id/new-adult/confirmation', fr: '/:lang/demandes/:id/new-adult/confirmation' },
+          },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },

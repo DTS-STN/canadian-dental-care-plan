@@ -138,6 +138,7 @@ export const pageIds = {
         dentalInsurance: 'CDCP-APPL-NAD-0002',
         contactInformation: 'CDCP-APPL-NAD-0003',
         submit: 'CDCP-APPL-NAD-0004',
+        confirmation: 'CDCP-APPL-NAD-0005',
       },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',
