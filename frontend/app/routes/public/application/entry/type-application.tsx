@@ -1,5 +1,5 @@
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/type-application';
@@ -18,6 +18,16 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const APPLICANT_TYPE = { adult: 'adult', family: 'family', children: 'children' } as const;
+
+function getNextRouteId(applicationType: string) {
+  if (applicationType === APPLICANT_TYPE.adult) {
+    return 'public/application/$id/new-adult/marital-status';
+  }
+  if (applicationType === APPLICANT_TYPE.family) {
+    return 'public/application/$id/new-family/marital-status';
+  }
+  // TODO: add condition for children flow
+}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'gcweb'),
@@ -62,16 +72,23 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
     }
   }
 
+  const formattedDate = defaultState.personalInformation ? format(parseISO(defaultState.personalInformation.dateOfBirth), 'MMMM d, yyyy') : undefined;
+
+  const yearOfBirth = defaultState.personalInformation ? parseISO(defaultState.personalInformation.dateOfBirth).getFullYear() : undefined;
+
+  const isNewOrReturningMember = yearOfBirth !== undefined && yearOfBirth >= 2006;
+
   const sections = [
     { id: 'type-application', completed: defaultState.typeOfApplication !== undefined },
     { id: 'personal-information', completed: defaultState.personalInformation !== undefined },
-    { id: 'new-or-returning-member', completed: defaultState.newOrReturningMember !== undefined },
-  ] as const;
+  ];
+
+  if (isNewOrReturningMember) {
+    sections.push({ id: 'new-or-returning-member', completed: defaultState.newOrReturningMember !== undefined });
+  }
+
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
   const allSectionsCompleted = completedSections.length === sections.length;
-
-  const formattedDate = defaultState.personalInformation ? format(new Date(defaultState.personalInformation.dateOfBirth), 'MMMM d, yyyy') : undefined;
-  const yearOfBirth = defaultState.personalInformation ? Number(format(new Date(defaultState.personalInformation.dateOfBirth), 'yyyy')) : undefined;
 
   return (
     <div className="max-w-prose space-y-8">
@@ -136,7 +153,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
         </CardFooter>
       </Card>
 
-      {yearOfBirth !== undefined && yearOfBirth >= 2006 && (
+      {isNewOrReturningMember && (
         <Card>
           <CardHeader>
             <CardTitle>{t('application:type-of-application.new-or-returning-heading')}</CardTitle>
@@ -153,10 +170,10 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
       )}
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink variant="primary" direction="next" routeId="public/application/$id/type-of-application" params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId={defaultState.typeOfApplication && getNextRouteId(defaultState.typeOfApplication)} params={params}>
           {t('application:type-of-application.application')}
         </NavigationButtonLink>
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="secondary" direction="previous" routeId="public/application/$id/eligibility-requirements" params={params}>
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/eligibility-requirements" params={params}>
           {t('application:type-of-application.before-you-start')}
         </NavigationButtonLink>
       </div>
