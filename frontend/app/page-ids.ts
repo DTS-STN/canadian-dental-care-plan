@@ -159,6 +159,8 @@ export const pageIds = {
         mailingAddress: 'CDCP-APPL-SPK-0015',
         homeAddress: 'CDCP-APPL-SPK-0016',
         communicationPreferences: 'CDCP-APPL-SPK-0017',
+        email: 'CDCP-APPL-SPK-0018',
+        verifyEmail: 'CDCP-APPL-SPK-0019',
       },
     },
     apply: {
