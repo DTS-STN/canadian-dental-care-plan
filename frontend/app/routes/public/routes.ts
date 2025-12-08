@@ -45,6 +45,8 @@ export const routes = [
           { id: 'public/application/$id/living-independently', file: 'routes/public/application/spokes/living-independently.tsx', paths: { en: '/:lang/application/:id/living-independently', fr: '/:lang/demander/:id/vivre-maniere-independante' } },
           { id: 'public/application/$id/parent-or-guardian', file: 'routes/public/application/spokes/parent-or-guardian.tsx', paths: { en: '/:lang/application/:id/parent-or-guardian', fr: '/:lang/demander/:id/parent-ou-tuteur' } },
           { id: 'public/application/$id/phone-number', file: 'routes/public/application/spokes/phone-number.tsx', paths: { en: '/:lang/application/:id/phone-number', fr: '/:lang/demander/:id/numero-telephone' } },
+          { id: 'public/application/$id/mailing-address', file: 'routes/public/application/spokes/mailing-address.tsx', paths: { en: '/:lang/application/:id/mailing-address', fr: '/:lang/demander/:id/adresse-postale' } },
+          { id: 'public/application/$id/home-address', file: 'routes/public/application/spokes/home-address.tsx', paths: { en: '/:lang/application/:id/home-address', fr: '/:lang/demander/:id/adresse-domicile' } },
         ],
       },
       {
