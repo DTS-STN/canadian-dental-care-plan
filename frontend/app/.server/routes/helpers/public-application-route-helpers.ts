@@ -117,6 +117,10 @@ export type PublicApplicationState = ReadonlyDeep<{
     isNewOrExistingMember: boolean;
     memberId?: string;
   };
+  submitTerms?: {
+    acknowledgeInfo: boolean;
+    acknowledgeCriteria: boolean;
+  };
   submissionInfo?: {
     /**
      * The confirmation code associated with the application submission.
