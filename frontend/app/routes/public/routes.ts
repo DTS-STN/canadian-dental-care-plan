@@ -27,6 +27,11 @@ export const routes = [
             paths: { en: '/:lang/application/:id/new-adult/submit', fr: '/:lang/demandes/:id/new-adult/submit' },
           },
           {
+            id: 'public/application/$id/new-adult/exit-application',
+            file: 'routes/public/application/new-adult/exit-application.tsx',
+            paths: { en: '/:lang/application/:id/new-adult/exit-application', fr: '/:lang/demandes/:id/new-adult/quitter-demande' },
+          },
+          {
             id: 'public/application/$id/new-adult/confirmation',
             file: 'routes/public/application/new-adult/confirmation.tsx',
             paths: { en: '/:lang/application/:id/new-adult/confirmation', fr: '/:lang/demandes/:id/new-adult/confirmation' },
