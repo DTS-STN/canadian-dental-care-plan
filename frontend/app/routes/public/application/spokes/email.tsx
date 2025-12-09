@@ -107,8 +107,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/application/$id/verify-email', params));
   }
 
-  //Update to: public/application/$id/new-adult/communication-preferences
-  return redirect(getPathById('public/application/$id/new-adult/contact-information', params));
+  return redirect(getPathById('public/application/$id/new-adult/communication-preferences', params));
 }
 
 export default function ApplicationEmail({ loaderData, params }: Route.ComponentProps) {
@@ -140,7 +139,7 @@ export default function ApplicationEmail({ loaderData, params }: Route.Component
           <ButtonLink
             id="back-button"
             variant="secondary"
-            routeId="public/application/$id/new-adult/contact-information"
+            routeId="public/application/$id/new-adult/communication-preferences"
             params={params}
             disabled={isSubmitting}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Email click"

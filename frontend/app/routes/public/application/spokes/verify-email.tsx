@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
@@ -147,7 +147,7 @@ export async function action({ context: { appContainer, session }, params, reque
       });
     }
 
-    return redirect(getPathById('public/application/$id/new-adult/contact-information', params));
+    return redirect(getPathById('public/application/$id/new-adult/communication-preferences', params));
   }
 }
 
@@ -165,7 +165,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
   const errorSummary = useErrorSummary(errors, { verificationCode: 'verification-code' });
   const { ErrorAlert } = useErrorAlert(fetcherStatus === 'verification-code-mismatch');
 
-  const communicationLink = <InlineLink routeId="public/application/$id/new-adult/contact-information" params={params} />;
+  const communicationLink = <InlineLink routeId="public/application/$id/new-adult/communication-preferences" params={params} />;
 
   useEffect(() => {
     if (fetcherStatus === 'verification-code-sent') {
