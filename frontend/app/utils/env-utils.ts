@@ -80,7 +80,7 @@ export const clientEnvSchema = z.object({
     .transform(csvToArray)
     .transform((val) => [...new Set(val)]) // remove duplicates
     .pipe(z.array(z.string().refine(isValidExtension)).min(1)),
-  DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB: z.coerce.number().positive().default(10),
+  DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB: z.coerce.number().positive().default(5),
   DOCUMENT_UPLOAD_MAX_FILE_COUNT:z.coerce.number().positive().default(10),
 
   // Eligibility Status Codes
