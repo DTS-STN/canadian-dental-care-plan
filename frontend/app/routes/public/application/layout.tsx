@@ -18,7 +18,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces(...layoutI18nNamespaces),
+  i18nNamespaces: getTypedI18nNamespaces(...layoutI18nNamespaces, 'common'),
   transformAdobeAnalyticsUrl,
 } as const satisfies RouteHandleData;
 
