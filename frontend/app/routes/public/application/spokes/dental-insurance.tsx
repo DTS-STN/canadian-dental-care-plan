@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -11,9 +13,10 @@ import { getPublicApplicationState, savePublicApplicationState } from '~/.server
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
-import { Collapsible } from '~/components/collapsible';
+import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
+import { InputCheckbox } from '~/components/input-checkbox';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
@@ -22,10 +25,19 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
+const CHECKBOX_VALUE = {
+  yes: 'yes',
+} as const;
+
+const HAS_DENTAL_INSURANCE_OPTION = {
+  no: 'no',
+  yes: 'yes',
+} as const;
+
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.dentalInsurance,
-  pageTitleI18nKey: 'apply-adult:dental-insurance.title',
+  pageTitleI18nKey: 'application-spokes:dental-insurance.title',
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -34,7 +46,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:dental-insurance.title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:dental-insurance.title') }) };
 
   return { meta, defaultState: state.dentalInsurance };
 }
@@ -48,20 +60,31 @@ export async function action({ context: { appContainer, session }, params, reque
   getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  // state validation schema
-  const dentalInsuranceSchema = z.object({
-    dentalInsurance: z.boolean({ error: t('apply-adult:dental-insurance.error-message.dental-insurance-required') }),
-  });
+  const dentalInsuranceSchema = z
+    .object({
+      hasDentalInsurance: z.boolean({ error: t('application-spokes:dental-insurance.error-message.dental-insurance-required') }),
+      dentalInsuranceEligibilityConfirmation: z.string().trim().optional(),
+    })
+    .superRefine((val, ctx) => {
+      if (val.hasDentalInsurance && !val.dentalInsuranceEligibilityConfirmation) {
+        ctx.addIssue({ code: 'custom', message: t('application-spokes:dental-insurance.error-message.dental-insurance-eligibility-confirmation-required'), path: ['dentalInsuranceEligibilityConfirmation'] });
+      }
+    })
+    .transform((val) => ({
+      ...val,
+      dentalInsuranceEligibilityConfirmation: val.hasDentalInsurance ? val.dentalInsuranceEligibilityConfirmation === CHECKBOX_VALUE.yes : undefined,
+    }));
 
   const parsedDataResult = dentalInsuranceSchema.safeParse({
-    dentalInsurance: formData.get('dentalInsurance') ? formData.get('dentalInsurance') === 'yes' : undefined,
+    hasDentalInsurance: formData.get('hasDentalInsurance') ? formData.get('hasDentalInsurance') === 'yes' : undefined,
+    dentalInsuranceEligibilityConfirmation: formData.get('dentalInsuranceEligibilityConfirmation') ?? '',
   });
 
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  savePublicApplicationState({ params, session, state: { dentalInsurance: parsedDataResult.data.dentalInsurance } });
+  savePublicApplicationState({ params, session, state: { dentalInsurance: parsedDataResult.data } });
 
   // TODO: update with correct route
   return redirect(getPathById('public/application/$id/new-adult/dental-insurance', params));
@@ -74,80 +97,81 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
+  const [hasDentalInsurance, setHasDentalInsurance] = useState(defaultState?.hasDentalInsurance);
+
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, { dentalInsurance: 'input-radio-dental-insurance-option-0' });
+  const errorSummary = useErrorSummary(errors, {
+    hasDentalInsurance: 'input-radio-has-dental-insurance-option-0',
+    dentalInsuranceEligibilityConfirmation: 'input-checkbox-dental-insurance-elgibility-confirmation',
+  });
+
+  function handleOnHasDentalInsuranceChanged(e: React.ChangeEvent<HTMLInputElement>) {
+    setHasDentalInsurance(e.target.value === HAS_DENTAL_INSURANCE_OPTION.yes);
+  }
 
   const helpMessage = (
-    <div className="my-4 space-y-4">
-      <Collapsible summary={t('dental-insurance.detail.additional-info.title')}>
-        <div className="space-y-4">
-          <p>{t('dental-insurance.detail.additional-info.eligible')}</p>
-          <ul className="list-disc space-y-1 pl-7">
-            <li>{t('dental-insurance.detail.additional-info.list.employer')}</li>
-            <li>
-              {t('dental-insurance.detail.additional-info.list.organization')}
-              <p>{t('dental-insurance.detail.additional-info.list.organization-note')}</p>
-              <ul className="list-disc space-y-1 pl-7">
-                <li>{t('dental-insurance.detail.additional-info.list.organization-list.decide')}</li>
-                <li>{t('dental-insurance.detail.additional-info.list.organization-list.premium')}</li>
-                <li>{t('dental-insurance.detail.additional-info.list.organization-list.use')}</li>
-              </ul>
-            </li>
-            <li>
-              {t('dental-insurance.detail.additional-info.list.pension')}
-              <ul className="list-disc space-y-1 pl-7">
-                <li>{t('dental-insurance.detail.additional-info.list.pension-plans')}</li>
-                <li>
-                  {t('dental-insurance.detail.additional-info.list.pension-exemption')}
-                  <ul className="list-disc space-y-1 pl-7">
-                    <li>{t('dental-insurance.detail.additional-info.list.pension-list.opt-out')}</li>
-                    <li>{t('dental-insurance.detail.additional-info.list.pension-list.opt-in')}</li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li>
-              {t('dental-insurance.detail.additional-info.list.company')}
-              <ul className="list-disc space-y-1 pl-7">
-                <li>{t('dental-insurance.detail.additional-info.list.cannot-opt')}</li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </Collapsible>
+    <div className="mb-4 space-y-4">
+      <ul className="list-disc space-y-1 pl-7">
+        <li>{t('dental-insurance.detail.additional-info.list.employer')}</li>
+        <li>{t('dental-insurance.detail.additional-info.list.pension')}</li>
+        <li>{t('dental-insurance.detail.additional-info.list.pension-plans')}</li>
+        <li>{t('dental-insurance.detail.additional-info.list.organization')}</li>
+        <li>{t('dental-insurance.detail.additional-info.list.company')}</li>
+      </ul>
+      <p>{t('dental-insurance.detail.additional-info.eligible')}</p>
+      <p>{t('dental-insurance.detail.additional-info.access')}</p>
     </div>
   );
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('apply:required-label')}</p>
+      <p className="mb-4 italic">{t('application:required-label')}</p>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
         <div className="my-6">
           <InputRadios
-            id="dental-insurance"
-            name="dentalInsurance"
+            id="has-dental-insurance"
+            name="hasDentalInsurance"
             legend={t('dental-insurance.legend')}
             options={[
               {
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.option-yes" />,
-                value: 'yes',
-                defaultChecked: defaultState === true,
+                value: HAS_DENTAL_INSURANCE_OPTION.yes,
+                defaultChecked: defaultState?.hasDentalInsurance === true,
+                onChange: handleOnHasDentalInsuranceChanged,
               },
               {
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.option-no" />,
-                value: 'no',
-                defaultChecked: defaultState === false,
+                value: HAS_DENTAL_INSURANCE_OPTION.no,
+                defaultChecked: defaultState?.hasDentalInsurance === false,
+                onChange: handleOnHasDentalInsuranceChanged,
               },
             ]}
             helpMessagePrimary={helpMessage}
             helpMessagePrimaryClassName="text-black"
-            errorMessage={errors?.dentalInsurance}
+            errorMessage={errors?.hasDentalInsurance}
             required
           />
         </div>
-
+        {hasDentalInsurance && (
+          <div className="space-y-4">
+            <ContextualAlert type="info">
+              <h3 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.alert.title')}</h3>
+              <p>{t('dental-insurance.alert.body')}</p>
+            </ContextualAlert>
+            <InputCheckbox
+              id="dental-insurance-elgibility-confirmation"
+              name="dentalInsuranceEligibilityConfirmation"
+              value={CHECKBOX_VALUE.yes}
+              defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmation}
+              errorMessage={errors?.dentalInsuranceEligibilityConfirmation}
+              required
+            >
+              {t('dental-insurance.dental-insurance-eligibility-confirmation')}
+            </InputCheckbox>
+          </div>
+        )}
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton id="continue-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Access to other dental insurance click">
             {t('dental-insurance.button.continue')}

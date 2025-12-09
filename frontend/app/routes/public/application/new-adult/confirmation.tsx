@@ -107,7 +107,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const dentalInsurance = {
-    acessToDentalInsurance: state.dentalInsurance,
+    accessToDentalInsurance: state.dentalInsurance.hasDentalInsurance,
     selectedFederalBenefits: selectedFederalGovernmentInsurancePlan?.name,
     selectedProvincialBenefits: selectedProvincialBenefits?.name,
   };
@@ -317,7 +317,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h3>
           <dl className="divide-y border-y">
-            <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.dental-public')}>
               {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
                 <>
