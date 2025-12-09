@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   return {
     state: {
-      dentalInsurance: state.dentalInsurance,
+      dentalInsurance: state.dentalInsurance?.hasDentalInsurance,
       hasFederalProvincialTerritorialBenefits: state.hasFederalProvincialTerritorialBenefits,
       dentalBenefits: state.dentalBenefits ? dentalBenefits : undefined,
     },
