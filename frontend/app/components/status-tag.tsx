@@ -2,31 +2,27 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
-export type StatusTagStatus = 'complete' | 'new';
+import { Badge } from '~/components/badge';
 
 interface StatusTagProps {
-  status: StatusTagStatus;
+  status: 'complete' | 'new';
 }
 
 export function StatusTag({ status }: StatusTagProps) {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation(['common']);
 
   switch (status) {
     case 'complete': {
       return (
-        <div className="flex items-center gap-2 rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white">
-          <FontAwesomeIcon icon={faCheck} className="size-4" />
-          <span>{t('status.complete')}</span>
-        </div>
+        <Badge variant="success">
+          <FontAwesomeIcon icon={faCheck} />
+          <span>{t('common:status.complete')}</span>
+        </Badge>
       );
     }
 
     case 'new': {
-      return (
-        <div className="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-800">
-          <span>{t('status.new')}</span>
-        </div>
-      );
+      return <Badge variant="info">{t('common:status.new')}</Badge>;
     }
 
     default: {

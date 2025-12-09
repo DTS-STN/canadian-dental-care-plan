@@ -2,30 +2,37 @@
 
 exports[`StatusTag > should render complete status 1`] = `
 <div>
-  <div
-    class="flex items-center gap-2 rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white"
+  <span
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-base leading-none [&>svg]:size-3.5 bg-green-600 text-white [a&]:hover:bg-green-600/90"
+    data-slot="badge"
   >
-    <span
-      data-icon="icon"
-      data-testid="font-awesome-icon"
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-check"
+      data-icon="check"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 448 512"
     >
-      Icon
-    </span>
+      <path
+        d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+        fill="currentColor"
+      />
+    </svg>
     <span>
-      status.complete
+      common:status.complete
     </span>
-  </div>
+  </span>
 </div>
 `;
 
 exports[`StatusTag > should render new status 1`] = `
 <div>
-  <div
-    class="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-800"
+  <span
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-base leading-none [&>svg]:size-3.5 bg-blue-600 text-white [a&]:hover:bg-blue-600/90"
+    data-slot="badge"
   >
-    <span>
-      status.new
-    </span>
-  </div>
+    common:status.new
+  </span>
 </div>
 `;
