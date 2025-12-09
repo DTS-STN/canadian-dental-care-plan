@@ -158,6 +158,7 @@ export const pageIds = {
         phoneNumber: 'CDCP-APPL-SPK-0014',
         mailingAddress: 'CDCP-APPL-SPK-0015',
         homeAddress: 'CDCP-APPL-SPK-0016',
+        communicationPreferences: 'CDCP-APPL-SPK-0017',
       },
     },
     apply: {

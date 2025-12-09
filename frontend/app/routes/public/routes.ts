@@ -62,6 +62,11 @@ export const routes = [
           { id: 'public/application/$id/phone-number', file: 'routes/public/application/spokes/phone-number.tsx', paths: { en: '/:lang/application/:id/phone-number', fr: '/:lang/demander/:id/numero-telephone' } },
           { id: 'public/application/$id/mailing-address', file: 'routes/public/application/spokes/mailing-address.tsx', paths: { en: '/:lang/application/:id/mailing-address', fr: '/:lang/demander/:id/adresse-postale' } },
           { id: 'public/application/$id/home-address', file: 'routes/public/application/spokes/home-address.tsx', paths: { en: '/:lang/application/:id/home-address', fr: '/:lang/demander/:id/adresse-domicile' } },
+          {
+            id: 'public/application/$id/communication-preferences',
+            file: 'routes/public/application/spokes/communication-preferences.tsx',
+            paths: { en: '/:lang/application/:id/communication-preferences', fr: '/:lang/demander/:id/preference-communication' },
+          },
         ],
       },
       {
