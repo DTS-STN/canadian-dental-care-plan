@@ -23,7 +23,7 @@ export function StatusTag({ status }: StatusTagProps) {
 
     case 'new': {
       return (
-        <div className="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-800">
+        <div className="w-fit rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-800">
           <span>{t('status.new')}</span>
         </div>
       );
