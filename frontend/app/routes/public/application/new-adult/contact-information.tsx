@@ -173,10 +173,10 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="secondary" direction="next" routeId="public/application/$id/new-adult/dental-insurance" params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-adult/dental-insurance" params={params}>
           {t('application-new-adult:contact-information.next-btn')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="primary" direction="previous" routeId="public/application/$id/new-adult/marital-status" params={params}>
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-adult/marital-status" params={params}>
           {t('application-new-adult:contact-information.prev-btn')}
         </NavigationButtonLink>
       </div>
