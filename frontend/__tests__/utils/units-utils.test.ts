@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  bytesToFilesize,
   bytesToKilobytes,
   bytesToMegabytes,
   hoursToMinutes,
@@ -144,5 +145,23 @@ describe('Time Conversion Utilities', () => {
       expect(secondsToMilliseconds(0.5)).toBe(500);
       expect(secondsToMilliseconds(0)).toBe(0);
     });
+  });
+});
+
+describe('bytesToFilesize', () => {
+  it('should convert bytes to human-readable filesize in English', () => {
+    expect(bytesToFilesize(1023, 'en-CA')).toBe('1,023\u00A0B');
+    expect(bytesToFilesize(1024, 'en-CA')).toBe('1\u00A0KB');
+    expect(bytesToFilesize(1_048_576, 'en-CA')).toBe('1\u00A0MB');
+    expect(bytesToFilesize(1_073_741_824, 'en-CA')).toBe('1\u00A0GB');
+    expect(bytesToFilesize(1_099_511_627_776, 'en-CA')).toBe('1\u00A0TB');
+  });
+
+  it('should convert bytes to human-readable filesize in French', () => {
+    expect(bytesToFilesize(1023, 'fr-CA')).toBe('1\u00A0023\u00A0o');
+    expect(bytesToFilesize(1024, 'fr-CA')).toBe('1\u00A0Ko');
+    expect(bytesToFilesize(1_048_576, 'fr-CA')).toBe('1\u00A0Mo');
+    expect(bytesToFilesize(1_073_741_824, 'fr-CA')).toBe('1\u00A0Go');
+    expect(bytesToFilesize(1_099_511_627_776, 'fr-CA')).toBe('1\u00A0To');
   });
 });

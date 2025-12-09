@@ -4,6 +4,7 @@
  * These functions convert between different units of file size using binary (base-2) conversion.
  * 1 KB = 1024 bytes, 1 MB = 1024 KB = 1,048,576 bytes
  */
+import { filesize } from 'filesize';
 
 /**
  * Converts bytes to kilobytes.
@@ -248,3 +249,40 @@ export const millisecondsToSeconds = (milliseconds: number): number => {
 export const secondsToMilliseconds = (seconds: number): number => {
   return seconds * 1000;
 };
+
+/** * Converts a file size in bytes to a human-readable string with appropriate units
+ * using binary (base-2) conversion (1 KB = 1024 bytes).
+ *
+ * @param size - The file size in bytes to convert
+ * @param locale - The locale string for formatting (e.g., 'en', 'fr')
+ * @returns Formatted file size string (e.g., "1 KB", "5 MB")
+ *
+ * @example
+ * ```typescript
+ * bytesToFilesize(1024, 'en');        // "1 KB"
+ * bytesToFilesize(1048576, 'en');     // "1 MB"
+ * bytesToFilesize(5242880, 'fr');     // "5 Mo"
+ * ```
+ */
+export function bytesToFilesize(size: number, locale: string): string {
+  const symbols = locale.toLowerCase().startsWith('fr')
+    ? {
+        B: 'o', // octet
+        KB: 'Ko', // kilooctet
+        MB: 'Mo', // mégaoctet
+        GB: 'Go', // gigaoctet
+        TB: 'To', // téraoctet
+        PB: 'Po', // pétaoctet
+        EB: 'Eo', // exaoctet
+        ZB: 'Zo', // zettaoctet
+        YB: 'Yo', // yottaoctet
+      }
+    : undefined;
+  return filesize(size, {
+    base: 2,
+    locale,
+    standard: 'jedec',
+    symbols,
+    spacer: '\u00A0', // non-breaking space
+  });
+}

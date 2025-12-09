@@ -35,7 +35,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { randomHexString } from '~/utils/string-utils';
-import { megabytesToBytes } from '~/utils/units.utils';
+import { bytesToFilesize, megabytesToBytes } from '~/utils/units.utils';
 
 type UploadErrors = {
   applicant?: string;
@@ -49,6 +49,7 @@ type ParsedUploadData = {
 };
 
 type CreateDocumentUploadSchemaArgs = {
+  locale: string;
   t: TFunction<typeof handle.i18nNamespaces>;
   validFileExtensions: ReadonlyArray<string>;
   maxFileSizeInMB: number;
@@ -107,7 +108,7 @@ export async function clientAction({ request, serverAction }: Route.ClientAction
   const t = getI18n().getFixedT(locale, handle.i18nNamespaces);
   const env = getClientEnv();
 
-  const validationResult = validateUploadForm(formData, t, {
+  const validationResult = validateUploadForm(formData, locale, t, {
     allowedExtensions: env.DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS,
     maxSizeMB: env.DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB,
     maxCount: env.DOCUMENT_UPLOAD_MAX_FILE_COUNT,
@@ -145,7 +146,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const config = appContainer.get(TYPES.ClientConfig);
   const idToken: IdToken = session.get('idToken');
 
-  const validationResult = validateUploadForm(formData, t, {
+  const validationResult = validateUploadForm(formData, locale, t, {
     allowedExtensions: config.DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS,
     maxSizeMB: config.DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB,
     maxCount: config.DOCUMENT_UPLOAD_MAX_FILE_COUNT,
@@ -178,6 +179,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 function validateUploadForm(
   formData: FormData,
+  locale: string,
   t: TFunction<typeof handle.i18nNamespaces>,
   config: { allowedExtensions: readonly string[]; maxSizeMB: number; maxCount: number },
 ): { success: true; data: ParsedUploadData } | { success: false; errors: UploadErrors } {
@@ -190,6 +192,7 @@ function validateUploadForm(
   }));
 
   const schema = createDocumentUploadSchema({
+    locale,
     t,
     validFileExtensions: config.allowedExtensions,
     maxFileSizeInMB: config.maxSizeMB,
@@ -304,7 +307,7 @@ async function createMetadata({ appContainer, clientId, files, userId }: CreateM
   });
 }
 
-function createDocumentUploadSchema({ t, validFileExtensions, maxFileSizeInMB, maxFileCount }: CreateDocumentUploadSchemaArgs) {
+function createDocumentUploadSchema({ locale, t, validFileExtensions, maxFileSizeInMB, maxFileCount }: CreateDocumentUploadSchemaArgs) {
   const MAX_FILE_SIZE = megabytesToBytes(maxFileSizeInMB);
   const ALLOWED_EXTENSIONS = new Set(validFileExtensions);
   const ALLOWED_MIME_TYPES = validFileExtensions.map(getMimeType);
@@ -312,7 +315,7 @@ function createDocumentUploadSchema({ t, validFileExtensions, maxFileSizeInMB, m
   const fileSchema = z.object({
     file: z
       .file(t('documents:upload.error-message.file-required'))
-      .max(MAX_FILE_SIZE, t('documents:upload.error-message.file-too-large'))
+      .max(MAX_FILE_SIZE, t('documents:upload.error-message.file-too-large', { filesize: bytesToFilesize(MAX_FILE_SIZE, `${locale}-CA`) }))
       .refine((file) => ALLOWED_EXTENSIONS.has(getFileExtension(file.name)), t('documents:upload.error-message.invalid-file-type', { extensions: [...ALLOWED_EXTENSIONS].join(', ') }))
       .mime(ALLOWED_MIME_TYPES, t('documents:upload.error-message.invalid-file-type', { extensions: [...ALLOWED_EXTENSIONS].join(', ') })),
     documentType: z.string().min(1, t('documents:upload.error-message.document-type-required')),
@@ -320,7 +323,10 @@ function createDocumentUploadSchema({ t, validFileExtensions, maxFileSizeInMB, m
 
   return z.object({
     applicant: z.string(t('documents:upload.error-message.applicant-required')).trim().min(1, t('documents:upload.error-message.applicant-required')),
-    files: z.array(fileSchema).min(1, t('documents:upload.error-message.file-required')).max(maxFileCount, t('documents:upload.error-message.too-many-files')),
+    files: z
+      .array(fileSchema) //
+      .min(1, t('documents:upload.error-message.file-required'))
+      .max(maxFileCount, t('documents:upload.error-message.too-many-files', { count: maxFileCount })),
   });
 }
 
@@ -346,10 +352,10 @@ function mapZodErrors(zodError: z.ZodError): UploadErrors {
 }
 
 export default function DocumentsUpload({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t, i18n } = useTranslation(handle.i18nNamespaces);
   const { applicants, documentTypes, SCCH_BASE_URI } = loaderData;
   const env = useClientEnv();
-  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS } = env;
+  const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_COUNT } = env;
 
   const fetcher = useFetcher<{ errors: UploadErrors }>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -431,8 +437,13 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
 
           <fieldset>
             <InputLegend className="mb-2">{t('documents:upload.upload-document')}</InputLegend>
-            <p>{t('documents:upload.ten-files')}</p>
-            <p className="mb-2">{t('documents:upload.max-size', { extensions: [...DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS].join(', ') })}</p>
+            <p>{t('documents:upload.max-files', { count: DOCUMENT_UPLOAD_MAX_FILE_COUNT })}</p>
+            <p className="mb-2">
+              {t('documents:upload.max-size', {
+                filesize: bytesToFilesize(megabytesToBytes(env.DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB), `${i18n.language}-CA`),
+                extensions: [...DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS].join(', '),
+              })}
+            </p>
 
             {errors?.files && (
               <InputError id="files-error" className="mb-2">
@@ -444,8 +455,6 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
               id="file-upload"
               onValueChange={handleFileChange}
               multiple={false}
-              maxFiles={env.DOCUMENT_UPLOAD_MAX_FILE_COUNT}
-              maxSize={megabytesToBytes(env.DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB)}
               accept={[...new Set([...DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, ...DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.map(getMimeType)])].join(',')}
               className="gap-4 sm:gap-6"
             >
