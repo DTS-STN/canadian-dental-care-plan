@@ -113,7 +113,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/type-application" params={params} startIcon={faCirclePlus}>
+          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/type-application" params={params} startIcon={faCirclePlus} size="lg">
             {defaultState.typeOfApplication === undefined ? t('application:type-of-application.add-type-application') : t('application:type-of-application.edit-type-application')}
           </ButtonLink>
         </CardFooter>
@@ -147,7 +147,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/personal-information" params={params} startIcon={faCirclePlus}>
+          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/personal-information" params={params} startIcon={faCirclePlus} size="lg">
             {defaultState.personalInformation === undefined ? t('application:type-of-application.add-personal-information') : t('application:type-of-application.edit-personal-information')}
           </ButtonLink>
         </CardFooter>
@@ -162,7 +162,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           {/* TODO: Need to confirm the value to be displayed for new or returning member*/}
           <CardContent>{defaultState.newOrReturningMember === undefined ? <p>{t('application:type-of-application.new-or-returning-description')}</p> : <p>{defaultState.newOrReturningMember.isNewOrExistingMember}</p>}</CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus}>
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus} size="lg">
               {defaultState.newOrReturningMember === undefined ? t('application:type-of-application.add-answer') : t('application:type-of-application.edit-answer')}
             </ButtonLink>
           </CardFooter>
