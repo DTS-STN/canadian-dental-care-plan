@@ -3,7 +3,7 @@
 exports[`Badge > renders as a child > expected html 1`] = `
 <div>
   <a
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-1.5 py-0.5 text-xs [&>svg]:size-3 border-gray-300 bg-white text-black [a&]:hover:bg-gray-100"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-base leading-none [&>svg]:size-3.5 border-gray-300 bg-white text-black [a&]:hover:bg-gray-100"
     data-slot="badge"
     href="#top"
   >
@@ -15,7 +15,7 @@ exports[`Badge > renders as a child > expected html 1`] = `
 exports[`Badge > renders variant="danger" and size="base" > expected html 1`] = `
 <div>
   <span
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-1.5 py-0.5 text-xs [&>svg]:size-3 bg-red-700 text-white [a&]:hover:bg-red-700/90"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-base leading-none [&>svg]:size-3.5 bg-red-600 text-white [a&]:hover:bg-red-600/90"
     data-slot="badge"
   >
     <svg
@@ -41,7 +41,7 @@ exports[`Badge > renders variant="danger" and size="base" > expected html 1`] = 
 exports[`Badge > renders variant="danger" and size="lg" > expected html 1`] = `
 <div>
   <span
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-sm leading-none [&>svg]:size-3.5 bg-red-700 text-white [a&]:hover:bg-red-700/90"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2.5 py-1.5 text-lg leading-none [&>svg]:size-4 bg-red-600 text-white [a&]:hover:bg-red-600/90"
     data-slot="badge"
   >
     <svg
@@ -64,10 +64,36 @@ exports[`Badge > renders variant="danger" and size="lg" > expected html 1`] = `
 </div>
 `;
 
+exports[`Badge > renders variant="danger" and size="sm" > expected html 1`] = `
+<div>
+  <span
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-1.5 py-0.5 text-xs [&>svg]:size-3 bg-red-600 text-white [a&]:hover:bg-red-600/90"
+    data-slot="badge"
+  >
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-star"
+      data-icon="star"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 576 512"
+    >
+      <path
+        d="M309.5-18.9c-4.1-8-12.4-13.1-21.4-13.1s-17.3 5.1-21.4 13.1L193.1 125.3 33.2 150.7c-8.9 1.4-16.3 7.7-19.1 16.3s-.5 18 5.8 24.4l114.4 114.5-25.2 159.9c-1.4 8.9 2.3 17.9 9.6 23.2s16.9 6.1 25 2L288.1 417.6 432.4 491c8 4.1 17.7 3.3 25-2s11-14.2 9.6-23.2L441.7 305.9 556.1 191.4c6.4-6.4 8.6-15.8 5.8-24.4s-10.1-14.9-19.1-16.3L383 125.3 309.5-18.9z"
+        fill="currentColor"
+      />
+    </svg>
+    danger
+     
+    sm
+  </span>
+</div>
+`;
+
 exports[`Badge > renders variant="default" and size="base" > expected html 1`] = `
 <div>
   <span
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-1.5 py-0.5 text-xs [&>svg]:size-3 border-gray-300 bg-white text-black [a&]:hover:bg-gray-100"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-base leading-none [&>svg]:size-3.5 border-gray-300 bg-white text-black [a&]:hover:bg-gray-100"
     data-slot="badge"
   >
     <svg
@@ -93,7 +119,7 @@ exports[`Badge > renders variant="default" and size="base" > expected html 1`] =
 exports[`Badge > renders variant="default" and size="lg" > expected html 1`] = `
 <div>
   <span
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-sm leading-none [&>svg]:size-3.5 border-gray-300 bg-white text-black [a&]:hover:bg-gray-100"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2.5 py-1.5 text-lg leading-none [&>svg]:size-4 border-gray-300 bg-white text-black [a&]:hover:bg-gray-100"
     data-slot="badge"
   >
     <svg
@@ -116,10 +142,36 @@ exports[`Badge > renders variant="default" and size="lg" > expected html 1`] = `
 </div>
 `;
 
+exports[`Badge > renders variant="default" and size="sm" > expected html 1`] = `
+<div>
+  <span
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-1.5 py-0.5 text-xs [&>svg]:size-3 border-gray-300 bg-white text-black [a&]:hover:bg-gray-100"
+    data-slot="badge"
+  >
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-star"
+      data-icon="star"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 576 512"
+    >
+      <path
+        d="M309.5-18.9c-4.1-8-12.4-13.1-21.4-13.1s-17.3 5.1-21.4 13.1L193.1 125.3 33.2 150.7c-8.9 1.4-16.3 7.7-19.1 16.3s-.5 18 5.8 24.4l114.4 114.5-25.2 159.9c-1.4 8.9 2.3 17.9 9.6 23.2s16.9 6.1 25 2L288.1 417.6 432.4 491c8 4.1 17.7 3.3 25-2s11-14.2 9.6-23.2L441.7 305.9 556.1 191.4c6.4-6.4 8.6-15.8 5.8-24.4s-10.1-14.9-19.1-16.3L383 125.3 309.5-18.9z"
+        fill="currentColor"
+      />
+    </svg>
+    default
+     
+    sm
+  </span>
+</div>
+`;
+
 exports[`Badge > renders variant="gray" and size="base" > expected html 1`] = `
 <div>
   <span
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-1.5 py-0.5 text-xs [&>svg]:size-3 bg-gray-500 text-white [a&]:hover:bg-gray-500/90"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-base leading-none [&>svg]:size-3.5 bg-gray-600 text-white [a&]:hover:bg-gray-600/90"
     data-slot="badge"
   >
     <svg
@@ -145,7 +197,7 @@ exports[`Badge > renders variant="gray" and size="base" > expected html 1`] = `
 exports[`Badge > renders variant="gray" and size="lg" > expected html 1`] = `
 <div>
   <span
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-sm leading-none [&>svg]:size-3.5 bg-gray-500 text-white [a&]:hover:bg-gray-500/90"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2.5 py-1.5 text-lg leading-none [&>svg]:size-4 bg-gray-600 text-white [a&]:hover:bg-gray-600/90"
     data-slot="badge"
   >
     <svg
@@ -168,10 +220,36 @@ exports[`Badge > renders variant="gray" and size="lg" > expected html 1`] = `
 </div>
 `;
 
+exports[`Badge > renders variant="gray" and size="sm" > expected html 1`] = `
+<div>
+  <span
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-1.5 py-0.5 text-xs [&>svg]:size-3 bg-gray-600 text-white [a&]:hover:bg-gray-600/90"
+    data-slot="badge"
+  >
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-star"
+      data-icon="star"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 576 512"
+    >
+      <path
+        d="M309.5-18.9c-4.1-8-12.4-13.1-21.4-13.1s-17.3 5.1-21.4 13.1L193.1 125.3 33.2 150.7c-8.9 1.4-16.3 7.7-19.1 16.3s-.5 18 5.8 24.4l114.4 114.5-25.2 159.9c-1.4 8.9 2.3 17.9 9.6 23.2s16.9 6.1 25 2L288.1 417.6 432.4 491c8 4.1 17.7 3.3 25-2s11-14.2 9.6-23.2L441.7 305.9 556.1 191.4c6.4-6.4 8.6-15.8 5.8-24.4s-10.1-14.9-19.1-16.3L383 125.3 309.5-18.9z"
+        fill="currentColor"
+      />
+    </svg>
+    gray
+     
+    sm
+  </span>
+</div>
+`;
+
 exports[`Badge > renders variant="info" and size="base" > expected html 1`] = `
 <div>
   <span
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-1.5 py-0.5 text-xs [&>svg]:size-3 bg-blue-700 text-white [a&]:hover:bg-blue-700/90"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-base leading-none [&>svg]:size-3.5 bg-blue-600 text-white [a&]:hover:bg-blue-600/90"
     data-slot="badge"
   >
     <svg
@@ -197,7 +275,7 @@ exports[`Badge > renders variant="info" and size="base" > expected html 1`] = `
 exports[`Badge > renders variant="info" and size="lg" > expected html 1`] = `
 <div>
   <span
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-sm leading-none [&>svg]:size-3.5 bg-blue-700 text-white [a&]:hover:bg-blue-700/90"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2.5 py-1.5 text-lg leading-none [&>svg]:size-4 bg-blue-600 text-white [a&]:hover:bg-blue-600/90"
     data-slot="badge"
   >
     <svg
@@ -220,10 +298,36 @@ exports[`Badge > renders variant="info" and size="lg" > expected html 1`] = `
 </div>
 `;
 
+exports[`Badge > renders variant="info" and size="sm" > expected html 1`] = `
+<div>
+  <span
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-1.5 py-0.5 text-xs [&>svg]:size-3 bg-blue-600 text-white [a&]:hover:bg-blue-600/90"
+    data-slot="badge"
+  >
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-star"
+      data-icon="star"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 576 512"
+    >
+      <path
+        d="M309.5-18.9c-4.1-8-12.4-13.1-21.4-13.1s-17.3 5.1-21.4 13.1L193.1 125.3 33.2 150.7c-8.9 1.4-16.3 7.7-19.1 16.3s-.5 18 5.8 24.4l114.4 114.5-25.2 159.9c-1.4 8.9 2.3 17.9 9.6 23.2s16.9 6.1 25 2L288.1 417.6 432.4 491c8 4.1 17.7 3.3 25-2s11-14.2 9.6-23.2L441.7 305.9 556.1 191.4c6.4-6.4 8.6-15.8 5.8-24.4s-10.1-14.9-19.1-16.3L383 125.3 309.5-18.9z"
+        fill="currentColor"
+      />
+    </svg>
+    info
+     
+    sm
+  </span>
+</div>
+`;
+
 exports[`Badge > renders variant="success" and size="base" > expected html 1`] = `
 <div>
   <span
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-1.5 py-0.5 text-xs [&>svg]:size-3 bg-green-700 text-white [a&]:hover:bg-green-700/90"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-base leading-none [&>svg]:size-3.5 bg-green-600 text-white [a&]:hover:bg-green-600/90"
     data-slot="badge"
   >
     <svg
@@ -249,7 +353,7 @@ exports[`Badge > renders variant="success" and size="base" > expected html 1`] =
 exports[`Badge > renders variant="success" and size="lg" > expected html 1`] = `
 <div>
   <span
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-sm leading-none [&>svg]:size-3.5 bg-green-700 text-white [a&]:hover:bg-green-700/90"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2.5 py-1.5 text-lg leading-none [&>svg]:size-4 bg-green-600 text-white [a&]:hover:bg-green-600/90"
     data-slot="badge"
   >
     <svg
@@ -272,10 +376,36 @@ exports[`Badge > renders variant="success" and size="lg" > expected html 1`] = `
 </div>
 `;
 
+exports[`Badge > renders variant="success" and size="sm" > expected html 1`] = `
+<div>
+  <span
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-1.5 py-0.5 text-xs [&>svg]:size-3 bg-green-600 text-white [a&]:hover:bg-green-600/90"
+    data-slot="badge"
+  >
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-star"
+      data-icon="star"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 576 512"
+    >
+      <path
+        d="M309.5-18.9c-4.1-8-12.4-13.1-21.4-13.1s-17.3 5.1-21.4 13.1L193.1 125.3 33.2 150.7c-8.9 1.4-16.3 7.7-19.1 16.3s-.5 18 5.8 24.4l114.4 114.5-25.2 159.9c-1.4 8.9 2.3 17.9 9.6 23.2s16.9 6.1 25 2L288.1 417.6 432.4 491c8 4.1 17.7 3.3 25-2s11-14.2 9.6-23.2L441.7 305.9 556.1 191.4c6.4-6.4 8.6-15.8 5.8-24.4s-10.1-14.9-19.1-16.3L383 125.3 309.5-18.9z"
+        fill="currentColor"
+      />
+    </svg>
+    success
+     
+    sm
+  </span>
+</div>
+`;
+
 exports[`Badge > renders variant="warning" and size="base" > expected html 1`] = `
 <div>
   <span
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-1.5 py-0.5 text-xs [&>svg]:size-3 bg-yellow-600 text-white [a&]:hover:bg-yellow-600/90"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-base leading-none [&>svg]:size-3.5 bg-yellow-600 text-white [a&]:hover:bg-yellow-600/90"
     data-slot="badge"
   >
     <svg
@@ -301,7 +431,7 @@ exports[`Badge > renders variant="warning" and size="base" > expected html 1`] =
 exports[`Badge > renders variant="warning" and size="lg" > expected html 1`] = `
 <div>
   <span
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-sm leading-none [&>svg]:size-3.5 bg-yellow-600 text-white [a&]:hover:bg-yellow-600/90"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2.5 py-1.5 text-lg leading-none [&>svg]:size-4 bg-yellow-600 text-white [a&]:hover:bg-yellow-600/90"
     data-slot="badge"
   >
     <svg
@@ -324,10 +454,36 @@ exports[`Badge > renders variant="warning" and size="lg" > expected html 1`] = `
 </div>
 `;
 
+exports[`Badge > renders variant="warning" and size="sm" > expected html 1`] = `
+<div>
+  <span
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-1.5 py-0.5 text-xs [&>svg]:size-3 bg-yellow-600 text-white [a&]:hover:bg-yellow-600/90"
+    data-slot="badge"
+  >
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-star"
+      data-icon="star"
+      data-prefix="fas"
+      role="img"
+      viewBox="0 0 576 512"
+    >
+      <path
+        d="M309.5-18.9c-4.1-8-12.4-13.1-21.4-13.1s-17.3 5.1-21.4 13.1L193.1 125.3 33.2 150.7c-8.9 1.4-16.3 7.7-19.1 16.3s-.5 18 5.8 24.4l114.4 114.5-25.2 159.9c-1.4 8.9 2.3 17.9 9.6 23.2s16.9 6.1 25 2L288.1 417.6 432.4 491c8 4.1 17.7 3.3 25-2s11-14.2 9.6-23.2L441.7 305.9 556.1 191.4c6.4-6.4 8.6-15.8 5.8-24.4s-10.1-14.9-19.1-16.3L383 125.3 309.5-18.9z"
+        fill="currentColor"
+      />
+    </svg>
+    warning
+     
+    sm
+  </span>
+</div>
+`;
+
 exports[`Badge > renders with default props > expected html 1`] = `
 <div>
   <span
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-1.5 py-0.5 text-xs [&>svg]:size-3 border-gray-300 bg-white text-black [a&]:hover:bg-gray-100"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-base leading-none [&>svg]:size-3.5 border-gray-300 bg-white text-black [a&]:hover:bg-gray-100"
     data-slot="badge"
   >
     Default Badge
