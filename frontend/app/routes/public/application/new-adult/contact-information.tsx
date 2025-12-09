@@ -139,7 +139,7 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
       <Card>
         <CardHeader>
           <CardTitle>{t('application-new-adult:contact-information.communication-preferences')}</CardTitle>
-          {completedSections.includes('communication-preferences') && <StatusTag status="complete" />}
+          <CardAction>{completedSections.includes('communication-preferences') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {defaultState.communicationPreferences === undefined ? (
