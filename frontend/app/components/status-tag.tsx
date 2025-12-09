@@ -14,7 +14,7 @@ export function StatusTag({ status }: StatusTagProps) {
   switch (status) {
     case 'complete': {
       return (
-        <div className="flex items-center gap-2 rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white">
+        <div className="flex w-fit items-center gap-2 rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white">
           <FontAwesomeIcon icon={faCheck} className="size-4" />
           <span>{t('status.complete')}</span>
         </div>
