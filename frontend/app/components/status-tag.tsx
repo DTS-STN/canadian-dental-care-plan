@@ -14,7 +14,7 @@ export function StatusTag({ status }: StatusTagProps) {
   switch (status) {
     case 'complete': {
       return (
-        <div className="flex w-fit items-center gap-2 rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white">
+        <div className="flex items-center gap-2 rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white">
           <FontAwesomeIcon icon={faCheck} className="size-4" />
           <span>{t('status.complete')}</span>
         </div>
@@ -23,7 +23,7 @@ export function StatusTag({ status }: StatusTagProps) {
 
     case 'new': {
       return (
-        <div className="w-fit rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-800">
+        <div className="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-800">
           <span>{t('status.new')}</span>
         </div>
       );
