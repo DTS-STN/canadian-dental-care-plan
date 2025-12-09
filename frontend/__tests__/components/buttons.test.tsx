@@ -37,7 +37,7 @@ describe('Button Component', () => {
       </Button>,
     );
     const button = getByText('Click me');
-    expect(button).toHaveClass('px-5', 'py-3', 'text-base', 'bg-slate-700', 'text-white', 'hover:bg-blue-900');
+    expect(button).toHaveClass('px-5', 'py-3', 'text-base', 'bg-[#26374A]', 'text-white', 'hover:bg-[#2B4380]');
   });
 
   it('renders disabled button', () => {
@@ -124,7 +124,7 @@ describe('ButtonLink Component', () => {
 
     const { getByText } = render(<RoutesStub />);
     const link = getByText('Click me');
-    expect(link).toHaveClass('px-5', 'py-3', 'text-base', 'bg-slate-700', 'text-white', 'hover:bg-blue-900');
+    expect(link).toHaveClass('px-5', 'py-3', 'text-base', 'bg-[#26374A]', 'text-white', 'hover:bg-[#2B4380]');
   });
 
   it('renders pill link', () => {

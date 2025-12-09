@@ -543,130 +543,130 @@ exports[`Button Component > should render the Button style combinations for vari
 exports[`Button Component > should render the Button style combinations for variant: primary > expected html 1`] = `
 <div>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     id="primary_pill_false_disabled_false_xs"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     id="primary_pill_false_disabled_false_sm"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     id="primary_pill_false_disabled_false_base"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     id="primary_pill_false_disabled_false_lg"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     id="primary_pill_false_disabled_false_xl"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     disabled=""
     id="primary_pill_false_disabled_true_xs"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     disabled=""
     id="primary_pill_false_disabled_true_sm"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     disabled=""
     id="primary_pill_false_disabled_true_base"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     disabled=""
     id="primary_pill_false_disabled_true_lg"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     disabled=""
     id="primary_pill_false_disabled_true_xl"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     id="primary_pill_true_disabled_false_xs"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     id="primary_pill_true_disabled_false_sm"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     id="primary_pill_true_disabled_false_base"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     id="primary_pill_true_disabled_false_lg"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     id="primary_pill_true_disabled_false_xl"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     disabled=""
     id="primary_pill_true_disabled_true_xs"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     disabled=""
     id="primary_pill_true_disabled_true_sm"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     disabled=""
     id="primary_pill_true_disabled_true_base"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     disabled=""
     id="primary_pill_true_disabled_true_lg"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     disabled=""
     id="primary_pill_true_disabled_true_xl"
   >
@@ -813,130 +813,130 @@ exports[`Button Component > should render the Button style combinations for vari
 exports[`Button Component > should render the Button style combinations for variant: secondary > expected html 1`] = `
 <div>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     id="secondary_pill_false_disabled_false_xs"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     id="secondary_pill_false_disabled_false_sm"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     id="secondary_pill_false_disabled_false_base"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     id="secondary_pill_false_disabled_false_lg"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     id="secondary_pill_false_disabled_false_xl"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     disabled=""
     id="secondary_pill_false_disabled_true_xs"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     disabled=""
     id="secondary_pill_false_disabled_true_sm"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     disabled=""
     id="secondary_pill_false_disabled_true_base"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     disabled=""
     id="secondary_pill_false_disabled_true_lg"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
     disabled=""
     id="secondary_pill_false_disabled_true_xl"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     id="secondary_pill_true_disabled_false_xs"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     id="secondary_pill_true_disabled_false_sm"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     id="secondary_pill_true_disabled_false_base"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     id="secondary_pill_true_disabled_false_lg"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     id="secondary_pill_true_disabled_false_xl"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     disabled=""
     id="secondary_pill_true_disabled_true_xs"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     disabled=""
     id="secondary_pill_true_disabled_true_sm"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     disabled=""
     id="secondary_pill_true_disabled_true_base"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     disabled=""
     id="secondary_pill_true_disabled_true_lg"
   >
     Click me
   </button>
   <button
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 rounded-full"
     disabled=""
     id="secondary_pill_true_disabled_true_xl"
   >
@@ -1608,7 +1608,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
 exports[`ButtonLink Component > should render the ButtonLink style combinations for variant: primary > expected html 1`] = `
 <div>
   <a
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380]"
     data-discover="true"
     href="/"
     id="primary_pill_false_disabled_false_xs"
@@ -1616,7 +1616,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380]"
     data-discover="true"
     href="/"
     id="primary_pill_false_disabled_false_sm"
@@ -1624,7 +1624,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380]"
     data-discover="true"
     href="/"
     id="primary_pill_false_disabled_false_base"
@@ -1632,7 +1632,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380]"
     data-discover="true"
     href="/"
     id="primary_pill_false_disabled_false_lg"
@@ -1640,7 +1640,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380]"
     data-discover="true"
     href="/"
     id="primary_pill_false_disabled_false_xl"
@@ -1649,7 +1649,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] pointer-events-none cursor-not-allowed opacity-70"
     id="primary_pill_false_disabled_true_xs"
     role="link"
   >
@@ -1657,7 +1657,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] pointer-events-none cursor-not-allowed opacity-70"
     id="primary_pill_false_disabled_true_sm"
     role="link"
   >
@@ -1665,7 +1665,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] pointer-events-none cursor-not-allowed opacity-70"
     id="primary_pill_false_disabled_true_base"
     role="link"
   >
@@ -1673,7 +1673,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] pointer-events-none cursor-not-allowed opacity-70"
     id="primary_pill_false_disabled_true_lg"
     role="link"
   >
@@ -1681,14 +1681,14 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] pointer-events-none cursor-not-allowed opacity-70"
     id="primary_pill_false_disabled_true_xl"
     role="link"
   >
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] rounded-full"
     data-discover="true"
     href="/"
     id="primary_pill_true_disabled_false_xs"
@@ -1696,7 +1696,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] rounded-full"
     data-discover="true"
     href="/"
     id="primary_pill_true_disabled_false_sm"
@@ -1704,7 +1704,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] rounded-full"
     data-discover="true"
     href="/"
     id="primary_pill_true_disabled_false_base"
@@ -1712,7 +1712,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] rounded-full"
     data-discover="true"
     href="/"
     id="primary_pill_true_disabled_false_lg"
@@ -1720,7 +1720,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] rounded-full"
     data-discover="true"
     href="/"
     id="primary_pill_true_disabled_false_xl"
@@ -1729,7 +1729,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 rounded-full pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] rounded-full pointer-events-none cursor-not-allowed opacity-70"
     id="primary_pill_true_disabled_true_xs"
     role="link"
   >
@@ -1737,7 +1737,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 rounded-full pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] rounded-full pointer-events-none cursor-not-allowed opacity-70"
     id="primary_pill_true_disabled_true_sm"
     role="link"
   >
@@ -1745,7 +1745,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 rounded-full pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] rounded-full pointer-events-none cursor-not-allowed opacity-70"
     id="primary_pill_true_disabled_true_base"
     role="link"
   >
@@ -1753,7 +1753,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 rounded-full pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] rounded-full pointer-events-none cursor-not-allowed opacity-70"
     id="primary_pill_true_disabled_true_lg"
     role="link"
   >
@@ -1761,7 +1761,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 rounded-full pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] rounded-full pointer-events-none cursor-not-allowed opacity-70"
     id="primary_pill_true_disabled_true_xl"
     role="link"
   >
@@ -1938,7 +1938,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
 exports[`ButtonLink Component > should render the ButtonLink style combinations for variant: secondary > expected html 1`] = `
 <div>
   <a
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5]"
     data-discover="true"
     href="/"
     id="secondary_pill_false_disabled_false_xs"
@@ -1946,7 +1946,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5]"
     data-discover="true"
     href="/"
     id="secondary_pill_false_disabled_false_sm"
@@ -1954,7 +1954,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5]"
     data-discover="true"
     href="/"
     id="secondary_pill_false_disabled_false_base"
@@ -1962,7 +1962,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5]"
     data-discover="true"
     href="/"
     id="secondary_pill_false_disabled_false_lg"
@@ -1970,7 +1970,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5]"
     data-discover="true"
     href="/"
     id="secondary_pill_false_disabled_false_xl"
@@ -1979,7 +1979,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] pointer-events-none cursor-not-allowed opacity-70"
     id="secondary_pill_false_disabled_true_xs"
     role="link"
   >
@@ -1987,7 +1987,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] pointer-events-none cursor-not-allowed opacity-70"
     id="secondary_pill_false_disabled_true_sm"
     role="link"
   >
@@ -1995,7 +1995,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] pointer-events-none cursor-not-allowed opacity-70"
     id="secondary_pill_false_disabled_true_base"
     role="link"
   >
@@ -2003,7 +2003,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] pointer-events-none cursor-not-allowed opacity-70"
     id="secondary_pill_false_disabled_true_lg"
     role="link"
   >
@@ -2011,14 +2011,14 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] pointer-events-none cursor-not-allowed opacity-70"
     id="secondary_pill_false_disabled_true_xl"
     role="link"
   >
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] rounded-full"
     data-discover="true"
     href="/"
     id="secondary_pill_true_disabled_false_xs"
@@ -2026,7 +2026,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] rounded-full"
     data-discover="true"
     href="/"
     id="secondary_pill_true_disabled_false_sm"
@@ -2034,7 +2034,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] rounded-full"
     data-discover="true"
     href="/"
     id="secondary_pill_true_disabled_false_base"
@@ -2042,7 +2042,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] rounded-full"
     data-discover="true"
     href="/"
     id="secondary_pill_true_disabled_false_lg"
@@ -2050,7 +2050,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
     Click me
   </a>
   <a
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 rounded-full"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] rounded-full"
     data-discover="true"
     href="/"
     id="secondary_pill_true_disabled_false_xl"
@@ -2059,7 +2059,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 rounded-full pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-xs border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] rounded-full pointer-events-none cursor-not-allowed opacity-70"
     id="secondary_pill_true_disabled_true_xs"
     role="link"
   >
@@ -2067,7 +2067,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 rounded-full pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] rounded-full pointer-events-none cursor-not-allowed opacity-70"
     id="secondary_pill_true_disabled_true_sm"
     role="link"
   >
@@ -2075,7 +2075,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 rounded-full pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] rounded-full pointer-events-none cursor-not-allowed opacity-70"
     id="secondary_pill_true_disabled_true_base"
     role="link"
   >
@@ -2083,7 +2083,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 rounded-full pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-5 py-3 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] rounded-full pointer-events-none cursor-not-allowed opacity-70"
     id="secondary_pill_true_disabled_true_lg"
     role="link"
   >
@@ -2091,7 +2091,7 @@ exports[`ButtonLink Component > should render the ButtonLink style combinations 
   </a>
   <a
     aria-disabled="true"
-    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 rounded-full pointer-events-none cursor-not-allowed opacity-70"
+    class="inline-flex items-center justify-center border-2 align-middle font-lato outline-offset-4 px-6 py-3.5 text-base border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] rounded-full pointer-events-none cursor-not-allowed opacity-70"
     id="secondary_pill_true_disabled_true_xl"
     role="link"
   >
