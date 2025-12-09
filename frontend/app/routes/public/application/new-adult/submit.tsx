@@ -78,6 +78,7 @@ export async function action({ context: { appContainer, session }, request, para
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
+  // TODO: call interop to submit application and receive submission code
   savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data } });
 
   return redirect(getPathById('public/application/$id/new-adult/confirmation', params));

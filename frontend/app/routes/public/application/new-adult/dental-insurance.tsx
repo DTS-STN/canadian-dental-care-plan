@@ -145,11 +145,10 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        {/* TODO: update routeIds */}
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="secondary" direction="next" routeId="public/application/$id/new-adult/marital-status" params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-adult/submit" params={params}>
           {t('application-new-adult:dental-insurance.submit')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="primary" direction="previous" routeId="public/application/$id/new-adult/marital-status" params={params}>
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-adult/marital-status" params={params}>
           {t('application-new-adult:dental-insurance.contact-information')}
         </NavigationButtonLink>
       </div>
