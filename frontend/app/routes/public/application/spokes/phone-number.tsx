@@ -1,4 +1,4 @@
-import { data, useFetcher } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -21,6 +21,7 @@ import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -79,6 +80,9 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } },
   });
+
+  // TODO: update with correct route
+  return redirect(getPathById('public/application/$id/new-adult/contact-information', params));
 }
 
 export default function PhoneNumber({ loaderData, params }: Route.ComponentProps) {
