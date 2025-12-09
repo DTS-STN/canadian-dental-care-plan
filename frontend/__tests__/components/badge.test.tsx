@@ -13,7 +13,7 @@ describe('Badge', () => {
   });
 
   const variants = ['danger', 'default', 'gray', 'info', 'success', 'warning'] as const;
-  const sizes = ['base', 'lg'] as const;
+  const sizes = ['sm', 'base', 'lg'] as const;
 
   const combinations = variants.flatMap((variant) => sizes.map((size) => [variant, size] as const));
   it.each(combinations)('renders variant="%s" and size="%s"', (variant, size) => {
