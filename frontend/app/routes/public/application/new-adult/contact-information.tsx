@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/contact-information';
 
+import { TYPES } from '~/.server/constants';
 import { getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -35,26 +36,49 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-adult:contact-information.page-title') }) };
+  const locale = getLocale(request);
+
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
+  const countryMailing = state.mailingAddress?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale) : undefined;
+  const countryHome = state.homeAddress?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
+
+  const mailingAddressInfo = {
+    address: state.mailingAddress?.address,
+    city: state.mailingAddress?.city,
+    province: mailingProvinceTerritoryStateAbbr?.abbr,
+    postalCode: state.mailingAddress?.postalCode,
+    country: countryMailing?.name,
+  };
+
+  const homeAddressInfo = {
+    address: state.homeAddress?.address,
+    city: state.homeAddress?.city,
+    province: homeProvinceTerritoryStateAbbr?.abbr,
+    postalCode: state.homeAddress?.postalCode,
+    country: countryHome?.name,
+  };
+
   return {
     defaultState: {
       phoneNumber: state.contactInformation,
-      mailingAddress: state.mailingAddress,
-      homeAddress: state.homeAddress,
       communicationPreferences: state.communicationPreferences,
       email: state.email,
     },
+    mailingAddressInfo,
+    homeAddressInfo,
     meta,
   };
 }
 
 export default function NewAdultContactInformation({ loaderData, params }: Route.ComponentProps) {
-  const { defaultState } = loaderData;
+  const { defaultState, mailingAddressInfo, homeAddressInfo } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const { steps, currentStep } = useProgressStepper('new-adult', 'contact-information');
 
   const sections = [
     { id: 'phone-number', completed: defaultState.phoneNumber !== undefined },
-    { id: 'address', completed: defaultState.mailingAddress !== undefined && defaultState.homeAddress !== undefined },
+    { id: 'address', completed: mailingAddressInfo.address !== undefined && homeAddressInfo.address !== undefined },
     { id: 'communication-preferences', completed: defaultState.communicationPreferences !== undefined },
   ] as const;
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
@@ -96,32 +120,32 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
           <CardAction>{completedSections.includes('address') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
-          {defaultState.mailingAddress === undefined && defaultState.homeAddress === undefined ? (
+          {mailingAddressInfo.address === undefined && homeAddressInfo.address === undefined ? (
             <p>{t('application-new-adult:contact-information.address-help')}</p>
           ) : (
             <dl className="divide-y border-y">
-              {defaultState.mailingAddress !== undefined && (
+              {mailingAddressInfo.address !== undefined && (
                 <DescriptionListItem term={t('application-new-adult:contact-information.mailing-address')}>
                   <Address
                     address={{
-                      address: defaultState.mailingAddress.address,
-                      city: defaultState.mailingAddress.city,
-                      provinceState: defaultState.mailingAddress.province,
-                      postalZipCode: defaultState.mailingAddress.postalCode,
-                      country: defaultState.mailingAddress.country,
+                      address: mailingAddressInfo.address,
+                      city: mailingAddressInfo.city ?? '',
+                      provinceState: mailingAddressInfo.province,
+                      postalZipCode: mailingAddressInfo.postalCode,
+                      country: mailingAddressInfo.country ?? '',
                     }}
                   />
                 </DescriptionListItem>
               )}
-              {defaultState.homeAddress !== undefined && (
+              {homeAddressInfo.address !== undefined && (
                 <DescriptionListItem term={t('application-new-adult:contact-information.home-address')}>
                   <Address
                     address={{
-                      address: defaultState.homeAddress.address,
-                      city: defaultState.homeAddress.city,
-                      provinceState: defaultState.homeAddress.province,
-                      postalZipCode: defaultState.homeAddress.postalCode,
-                      country: defaultState.homeAddress.country,
+                      address: homeAddressInfo.address,
+                      city: homeAddressInfo.city ?? '',
+                      provinceState: homeAddressInfo.province,
+                      postalZipCode: homeAddressInfo.postalCode,
+                      country: homeAddressInfo.country ?? '',
                     }}
                   />
                 </DescriptionListItem>
