@@ -399,12 +399,12 @@ export function getEligibilityByAge(dateOfBirth: string): EligibilityResult {
  */
 export function validateApplicationTypeAndFlow(state: PublicApplicationState, params: Params, allowedTypesAndFlows: ReadonlyArray<`${TypeOfApplicationState}-${TypeOfApplicationFlowState}`>) {
   const log = createLogger('application-route-helpers.server/validateApplicationTypeAndFlow');
-  const redirectUrl = getPathById('public/application/$id/eligibility-requirements', params);
 
   const type = state.typeOfApplication;
   const flow = state.typeOfApplicationFlow;
 
   if (!type || !flow) {
+    const redirectUrl = getInitialTypeAndFlowUrl('entry', params);
     log.warn('Type of application or flow is not defined; redirecting to [%s]; stateId: [%s]', redirectUrl, state.id);
     throw redirectDocument(redirectUrl);
   }
@@ -412,7 +412,52 @@ export function validateApplicationTypeAndFlow(state: PublicApplicationState, pa
   const typeAndFlowKey = `${type}-${flow}` as const;
 
   if (!allowedTypesAndFlows.includes(typeAndFlowKey)) {
+    const redirectUrl = getInitialTypeAndFlowUrl(typeAndFlowKey, params);
     log.warn('Type and flow combination is not allowed; typeAndFlow: [%s], allowedTypesAndFlows: [%s], redirecting to [%s], stateId: [%s]', typeAndFlowKey, allowedTypesAndFlows, redirectUrl, state.id);
     throw redirectDocument(redirectUrl);
+  }
+}
+
+/**
+ * Determines the initial URL path based on the application type and flow state.
+ *
+ * @param typeAndFlow - Either 'entry' for initial entry point, or a combination of application type
+ *                      and flow state in the format `${TypeOfApplicationState}-${TypeOfApplicationFlowState}`
+ * @param params - Route parameters used to generate the path, typically containing an application ID
+ * @returns The URL path string for the corresponding application type and flow
+ * @throws {Error} When an unknown typeAndFlow value is provided
+ */
+export function getInitialTypeAndFlowUrl(typeAndFlow: 'entry' | `${TypeOfApplicationState}-${TypeOfApplicationFlowState}`, params: Params) {
+  switch (typeAndFlow) {
+    case 'entry': {
+      return getPathById('public/application/$id/eligibility-requirements', params);
+    }
+    case 'new-adult': {
+      return getPathById('public/application/$id/new-adult/marital-status', params);
+    }
+    case 'new-children': {
+      throw new Error('Not implemented yet: "new-children" case');
+    }
+    case 'new-family': {
+      throw new Error('Not implemented yet: "new-family" case');
+    }
+    case 'new-delegate': {
+      return getPathById('public/application/$id/application-delegate', params);
+    }
+    case 'renew-adult': {
+      throw new Error('Not implemented yet: "renew-adult" case');
+    }
+    case 'renew-children': {
+      throw new Error('Not implemented yet: "renew-children" case');
+    }
+    case 'renew-family': {
+      throw new Error('Not implemented yet: "renew-family" case');
+    }
+    case 'renew-delegate': {
+      return getPathById('public/application/$id/application-delegate', params);
+    }
+    default: {
+      throw new Error(`Unknown typeAndFlow value: [${typeAndFlow}]`);
+    }
   }
 }
