@@ -19,11 +19,11 @@ export const buttonSizeStyles = {
 export const buttonVariantStyles = {
   alternative: 'border-gray-200 bg-white font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:bg-gray-100 focus:text-blue-700',
   green: 'border-green-700 bg-green-700 font-medium text-white hover:border-green-800 hover:bg-green-800 focus:border-green-800 focus:bg-green-800',
-  primary: 'border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900',
+  primary: 'border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380]',
   red: 'border-red-800 bg-red-800 font-medium text-white hover:border-red-900 hover:bg-red-900 focus:border-red-900 focus:bg-red-900',
   'outline-red': 'border-red-800 font-medium text-red-800 hover:border-red-900 hover:bg-red-900 hover:text-white focus:border-red-900 focus:bg-red-900 focus:text-white',
   link: 'border-none px-0 text-slate-700 underline hover:text-blue-700 focus:text-blue-700',
-  secondary: 'border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100',
+  secondary: 'border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5]',
 };
 
 export const buttonBaseStyles = 'inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4';

@@ -3,7 +3,7 @@
 exports[`NavigationButton > renders next button > expected html 1`] = `
 <div>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 gap-2 text-left"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 gap-2 text-left"
     id="next-btn"
   >
     <span>
@@ -42,7 +42,7 @@ exports[`NavigationButton > renders next button > expected html 1`] = `
 exports[`NavigationButton > renders next button when loading > expected html 1`] = `
 <div>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 gap-2 text-left"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 gap-2 text-left"
     disabled=""
     id="next-btn"
   >
@@ -82,7 +82,7 @@ exports[`NavigationButton > renders next button when loading > expected html 1`]
 exports[`NavigationButton > renders previous button > expected html 1`] = `
 <div>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 gap-2 text-left"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 gap-2 text-left"
     id="prev-btn"
   >
     <svg
@@ -121,7 +121,7 @@ exports[`NavigationButton > renders previous button > expected html 1`] = `
 exports[`NavigationButton > renders previous button when loading > expected html 1`] = `
 <div>
   <button
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 gap-2 text-left"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70 gap-2 text-left"
     disabled=""
     id="prev-btn"
   >
@@ -161,7 +161,7 @@ exports[`NavigationButton > renders previous button when loading > expected html
 exports[`NavigationButtonLink > renders next link > expected html 1`] = `
 <div>
   <a
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-700 bg-slate-700 font-medium text-white hover:border-blue-900 hover:bg-blue-900 focus:border-blue-900 focus:bg-blue-900 gap-2 text-left"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] gap-2 text-left"
     data-discover="true"
     href="/next"
     id="next-link"
@@ -200,7 +200,7 @@ exports[`NavigationButtonLink > renders next link > expected html 1`] = `
 exports[`NavigationButtonLink > renders previous link > expected html 1`] = `
 <div>
   <a
-    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-slate-500 font-medium text-slate-500 hover:bg-blue-100 focus:bg-blue-100 gap-2 text-left"
+    class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-5 py-2.5 text-sm border-[#2B4380] font-medium text-[#2B4380] hover:bg-[#D7E5F5] focus:bg-[#D7E5F5] gap-2 text-left"
     data-discover="true"
     href="/prev"
     id="prev-link"
