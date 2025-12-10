@@ -84,7 +84,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const applicants: Array<{ clientId: string; name: string }> = [
     { clientId: clientApplication.applicantInformation.clientId, name: `${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`.trim() },
-    ...clientApplication.children.map((c) => ({ clientId: c.information.clientId, name: `${c.information.firstName} ${c.information.lastName}`.trim() })),
+    // TODO: Add children later when upload for children is supported
+    // ...clientApplication.children.map((c) => ({ clientId: c.information.clientId, name: `${c.information.firstName} ${c.information.lastName}`.trim() })),
   ];
 
   const documentTypes = await appContainer.get(TYPES.EvidentiaryDocumentTypeService).listLocalizedEvidentiaryDocumentTypes(locale);
