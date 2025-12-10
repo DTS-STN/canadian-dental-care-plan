@@ -1,7 +1,7 @@
 import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { Route } from './+types/personal-information';
@@ -194,7 +194,9 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
             <Collapsible id="name-instructions" summary={t('application-spokes:personal-information.single-legal-name')}>
-              <p>{t('application-spokes:personal-information.name-instructions')}</p>
+              <p>
+                <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.name-instructions" />
+              </p>
             </Collapsible>
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputSanitizeField

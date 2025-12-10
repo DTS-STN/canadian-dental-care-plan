@@ -174,7 +174,15 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />
         <div className="mb-8 space-y-6">
-          <InputRadios id="marital-status" name="maritalStatus" legend={t('application-spokes:marital-status.marital-status')} options={maritalStatusOptions} errorMessage={errors?.maritalStatus} required />
+          <InputRadios
+            id="marital-status"
+            name="maritalStatus"
+            legend={t('application-spokes:marital-status.marital-status')}
+            helpMessagePrimary={t('application-spokes:marital-status.primary-help-message')}
+            options={maritalStatusOptions}
+            errorMessage={errors?.maritalStatus}
+            required
+          />
 
           {(selectedMaritalStatus === MARITAL_STATUS_CODE_COMMON_LAW || selectedMaritalStatus === MARITAL_STATUS_CODE_MARRIED) && (
             <>

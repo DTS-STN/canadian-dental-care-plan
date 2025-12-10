@@ -2,9 +2,10 @@
   "marital-status": {
     "page-title": "État civil",
     "marital-status": "Quel est votre état civil actuel?",
+    "primary-help-message": "(fr) Make sure the information matches what is on file with the Canada Revenue Agency.",
     "spouse-or-commonlaw": "Renseignements sur l'époux/épouse ou le conjoint/la conjointe de fait",
-    "provide-sin": "Fournissez les renseignements sur votre époux/épouse ou conjoint/conjointe de fait actuel/actuelle tels qu'ils figurent sur sa carte ou sa lettre de numéro d'assurance sociale (NAS).",
-    "required-information": "Ces renseignements sont nécessaires pour calculer le revenu familial net rajusté. Votre époux/épouse ou conjoint/conjointe de fait doit présenter sa propre demande au Régime canadien de soins dentaires.",
+    "provide-sin": "(fr) Enter your spouse or common-law partner's name exactly as shown on their Social Insurance Number (SIN) record.",
+    "required-information": "(fr) We need this information to calculate your family income. Your spouse or common-law partner must fill out their own application for the Canadian Dental Care Plan.",
     "single": "Célibataire",
     "married": "Marié(e)",
     "commonlaw": "Conjoint(e) de fait",
@@ -205,7 +206,7 @@
     "first-name": "Prénom",
     "dob": "Date de naissance",
     "single-legal-name": "Si vous utilisez un seul nom légal",
-    "name-instructions": "Si vous utilisez un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
+    "name-instructions": "(fr) If you have only one legal name, enter it in <strong>both</strong> the first and last name fields.",
     "back-btn": "Retour",
     "save-btn": "Enregistrer",
     "help-message": {
