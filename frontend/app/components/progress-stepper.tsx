@@ -82,7 +82,7 @@ export function ProgressStepperVertical({ steps, currentStep }: ProgressStepperP
 
 export function ProgressStepper({ steps, currentStep }: ProgressStepperProps) {
   return (
-    <div>
+    <div className="print:hidden">
       <div className="hidden sm:block">
         <ProgressStepperHorizontal steps={steps} currentStep={currentStep} />
       </div>

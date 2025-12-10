@@ -427,7 +427,9 @@ exports[`ProgressStepper > Edge Cases > should handle negative currentStep 1`] =
 
 exports[`ProgressStepper > ProgressStepper (Responsive) > should render the responsive stepper with all completed steps 1`] = `
 <div>
-  <div>
+  <div
+    class="print:hidden"
+  >
     <div
       class="hidden sm:block"
     >
@@ -838,7 +840,9 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
 
 exports[`ProgressStepper > ProgressStepper (Responsive) > should render the responsive stepper with all inactive steps 1`] = `
 <div>
-  <div>
+  <div
+    class="print:hidden"
+  >
     <div
       class="hidden sm:block"
     >
@@ -1249,7 +1253,9 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
 
 exports[`ProgressStepper > ProgressStepper (Responsive) > should render the responsive stepper with different current step 1`] = `
 <div>
-  <div>
+  <div
+    class="print:hidden"
+  >
     <div
       class="hidden sm:block"
     >
@@ -1660,7 +1666,9 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
 
 exports[`ProgressStepper > ProgressStepper (Responsive) > should render the responsive stepper wrapper 1`] = `
 <div>
-  <div>
+  <div
+    class="print:hidden"
+  >
     <div
       class="hidden sm:block"
     >
