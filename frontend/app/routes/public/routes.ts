@@ -67,6 +67,8 @@ export const routes = [
             file: 'routes/public/application/spokes/communication-preferences.tsx',
             paths: { en: '/:lang/application/:id/communication-preferences', fr: '/:lang/demander/:id/preference-communication' },
           },
+          { id: 'public/application/$id/email', file: 'routes/public/application/spokes/email.tsx', paths: { en: '/:lang/application/:id/email', fr: '/:lang/demander/:id/adresse-courriel' } },
+          { id: 'public/application/$id/verify-email', file: 'routes/public/application/spokes/verify-email.tsx', paths: { en: '/:lang/application/:id/verify-email', fr: '/:lang/demander/:id/verifier-courriel' } },
         ],
       },
       {
