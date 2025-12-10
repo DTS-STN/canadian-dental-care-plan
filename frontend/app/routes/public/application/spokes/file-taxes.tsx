@@ -68,7 +68,9 @@ export default function ApplicationFileYourTaxes({ loaderData, params }: Route.C
         <p>
           <Trans ns={handle.i18nNamespaces} i18nKey="application:file-your-taxes.tax-info" components={{ taxInfo }} />
         </p>
-        <p>{t('application:file-your-taxes.apply-after')}</p>
+        <p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="application:file-your-taxes.apply-after" />
+        </p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
