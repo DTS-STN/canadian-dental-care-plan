@@ -154,16 +154,14 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
   return (
     <div className="max-w-prose space-y-10">
       <ProgressStepper steps={steps} currentStep={4} />
-      <ContextualAlert type="success">
-        <div className="space-y-4">
-          <p className="text-2xl">
-            <strong>{t('confirm.app-code-is')}</strong>
-            <br />
-            <strong>{formatSubmissionApplicationCode(submissionInfo?.confirmationCode ?? '')}</strong>
-          </p>
-          <p>{t('confirm.make-note')}</p>
-        </div>
-      </ContextualAlert>
+      <div className="space-y-4">
+        <p className="text-2xl">
+          <strong>{t('confirm.app-code-is')}</strong>
+          <br />
+          <strong>{formatSubmissionApplicationCode(submissionInfo?.confirmationCode ?? '')}</strong>
+        </p>
+        <p>{t('confirm.make-note')}</p>
+      </div>
 
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.keep-copy')}</h2>
