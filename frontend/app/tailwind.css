@@ -386,11 +386,34 @@
 }
 
 @media print {
-  a[href]:after {
+  a[href]:not(.external-link):after {
     content: ' (' attr(href) ')';
     display: inline;
     height: auto;
     margin-left: auto;
     width: auto;
+  }
+
+  a.external-link[href]:after {
+    content: ' (' attr(href) ')';
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    background-color: transparent !important;
+    display: inline !important;
+    height: auto !important;
+    width: auto !important;
+    margin-left: 0.25rem !important;
+  }
+
+  [data-href]:after {
+    content: ' (' attr(data-href) ')';
+  }
+
+  [data-to]:after {
+    content: ' (' attr(data-to) ')';
+  }
+
+  [data-link]:after {
+    content: ' (' attr(data-link) ')';
   }
 }
