@@ -76,7 +76,7 @@ export const clientEnvSchema = z.object({
   CDCP_SURVEY_LINK_FR: z.url().default('https://forms-formulaires.alpha.canada.ca/fr/id/cmdsycga6008qx701dw5x5n9c'),
 
   // Document upload configs
-  DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS: z.string().trim().toLowerCase().default('.docx,.ppt,.txt,.pdf,.jpg,.jpeg,.png')
+  DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS: z.string().trim().toLowerCase().default('.docx,.pptx,.txt,.pdf,.jpg,.jpeg,.png')
     .transform(csvToArray)
     .transform((val) => [...new Set(val)]) // remove duplicates
     .pipe(z.array(z.string().refine(isValidExtension)).min(1)),
