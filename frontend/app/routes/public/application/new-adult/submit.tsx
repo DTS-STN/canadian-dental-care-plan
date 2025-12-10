@@ -1,5 +1,6 @@
 import { data, redirect, useFetcher } from 'react-router';
 
+import { UTCDate } from '@date-fns/utc';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -7,6 +8,7 @@ import type { Route } from './+types/submit';
 
 import { TYPES } from '~/.server/constants';
 import { getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { ApplyAdultState } from '~/.server/routes/mappers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -51,7 +53,7 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
-  getPublicApplicationState({ params, session });
+  const state = getPublicApplicationState({ params, session });
 
   const formData = await request.formData();
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -78,8 +80,10 @@ export async function action({ context: { appContainer, session }, request, para
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  // TODO: call interop to submit application and receive submission code
-  savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data } });
+  const benefitApplicationDto = appContainer.get(TYPES.BenefitApplicationStateMapper).mapApplyAdultStateToBenefitApplicationDto(state as unknown as ApplyAdultState); // TODO: the mapper needs to be modified to accept the proper type
+  const confirmationCode = await appContainer.get(TYPES.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
+  const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
+  savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
 
   return redirect(getPathById('public/application/$id/new-adult/confirmation', params));
 }
