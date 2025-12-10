@@ -49,8 +49,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     state.mailingAddress === undefined ||
     state.submitTerms === undefined ||
     state.hasFiledTaxes === undefined  ||
-    state.typeOfApplicationFlow === undefined 
-    // state.submissionInfo === undefined   // TODO: uncomment once submission is obtained from interop
+    state.typeOfApplicationFlow === undefined ||
+    state.submissionInfo === undefined
     ) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
@@ -158,7 +158,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
         <p className="text-2xl">
           <strong>{t('confirm.app-code-is')}</strong>
           <br />
-          <strong>{formatSubmissionApplicationCode(submissionInfo?.confirmationCode ?? '')}</strong>
+          <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
         </p>
         <p>{t('confirm.make-note')}</p>
       </div>
@@ -232,7 +232,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
           <h2 className="font-lato text-3xl font-bold">{t('confirm.application-summ')}</h2>
           <dl className="divide-y border-y text-xl">
             <DescriptionListItem term={t('confirm.application-code')}>
-              <strong>{formatSubmissionApplicationCode(submissionInfo?.confirmationCode ?? '')}</strong>
+              <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
             </DescriptionListItem>
           </dl>
         </div>
