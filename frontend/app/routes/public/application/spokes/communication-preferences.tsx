@@ -92,7 +92,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
 
   const mscaLinkAccount = <InlineLink to={t('application-spokes:communication-preferences.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
 
-  const [preferredMethod, setPreferredMethod] = useState(defaultState.preferredMethod);
+  const [preferredMethod, setPreferredMethod] = useState(defaultState?.preferredMethod);
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
@@ -108,7 +108,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
   }));
 
   function handleOnPreferredMethodChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setPreferredMethod(e.target.value === PREFERRED_SUN_LIFE_METHOD.email);
+    setPreferredMethod(e.target.value);
   }
 
   return (
