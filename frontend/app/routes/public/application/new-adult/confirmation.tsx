@@ -29,9 +29,9 @@ import { formatSin } from '~/utils/sin-utils';
 export const applyIdParamSchema = z.uuid();
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application-new-adult', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.newAdult.confirmation,
-  pageTitleI18nKey: 'application-spokes:confirm.page-title',
+  pageTitleI18nKey: 'application-new-adult:confirm.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -113,7 +113,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     selectedProvincialBenefits: selectedProvincialBenefits?.name,
   };
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:confirm.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-adult:confirm.page-title') }) };
 
   return {
     dentalInsurance,
@@ -147,7 +147,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink } = loaderData;
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('application-spokes:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('application-new-adult:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
   const { steps } = useProgressStepper('new-adult', 'submit');
 
@@ -320,8 +320,8 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
             <DescriptionListItem term={t('confirm.dental-public')}>
               {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
                 <>
-                  <p>{t('application-spokes:confirm.yes')}</p>
-                  <p>{t('application-spokes:confirm.dental-benefit-has-access')}</p>
+                  <p>{t('application-new-adult:confirm.yes')}</p>
+                  <p>{t('application-new-adult:confirm.dental-benefit-has-access')}</p>
                   <ul className="ml-6 list-disc">
                     {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
                     {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
@@ -356,19 +356,19 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
             className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - Application successfully submitted click"
           >
-            {t('application-spokes:confirm.close-application')}
+            {t('application-new-adult:confirm.close-application')}
           </button>
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{t('application-spokes:confirm.modal.header')}</DialogTitle>
+            <DialogTitle>{t('application-new-adult:confirm.modal.header')}</DialogTitle>
           </DialogHeader>
-          <p>{t('application-spokes:confirm.modal.info')}</p>
-          <p>{t('application-spokes:confirm.modal.are-you-sure')}</p>
+          <p>{t('application-new-adult:confirm.modal.info')}</p>
+          <p>{t('application-new-adult:confirm.modal.are-you-sure')}</p>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back exit modal - Application successfully submitted click">
-                {t('application-spokes:confirm.modal.back-btn')}
+                {t('application-new-adult:confirm.modal.back-btn')}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
@@ -380,7 +380,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
                 onClick={() => sessionStorage.removeItem('flow.state')}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Confirmation exit modal - Application successfully submitted click"
               >
-                {t('application-spokes:confirm.modal.close-btn')}
+                {t('application-new-adult:confirm.modal.close-btn')}
               </Button>
             </fetcher.Form>
           </DialogFooter>
