@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -75,6 +77,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   savePublicApplicationState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
 
+  if (parsedDataResult.data.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email) {
+    return redirect(getPathById('public/application/$id/email', params));
+  }
   return redirect(getPathById('public/application/$id/new-adult/contact-information', params));
 }
 
@@ -86,6 +91,8 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
   const isSubmitting = fetcher.state !== 'idle';
 
   const mscaLinkAccount = <InlineLink to={t('application-spokes:communication-preferences.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
+
+  const [preferredMethod, setPreferredMethod] = useState(defaultState.preferredMethod);
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
@@ -99,6 +106,10 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
     children: language.name,
     defaultChecked: defaultState?.preferredLanguage === language.id,
   }));
+
+  function handleOnPreferredMethodChanged(e: React.ChangeEvent<HTMLInputElement>) {
+    setPreferredMethod(e.target.value === PREFERRED_SUN_LIFE_METHOD.email);
+  }
 
   return (
     <div className="max-w-prose">
@@ -118,11 +129,13 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
                 value: PREFERRED_SUN_LIFE_METHOD.email,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communication-preferences.by-email" components={{ span: <span className="font-semibold" /> }} />,
                 defaultChecked: defaultState?.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email,
+                onChange: handleOnPreferredMethodChanged,
               },
               {
                 value: PREFERRED_SUN_LIFE_METHOD.mail,
                 children: <span className="font-semibold">{t('application-spokes:communication-preferences.by-mail')}</span>,
                 defaultChecked: defaultState?.preferredMethod === PREFERRED_SUN_LIFE_METHOD.mail,
+                onChange: handleOnPreferredMethodChanged,
               },
             ]}
             errorMessage={errors?.preferredMethod}
@@ -151,7 +164,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
         </div>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Communication preferences click">
-            {t('application-spokes:communication-preferences.continue')}
+            {preferredMethod === PREFERRED_SUN_LIFE_METHOD.email ? t('application-spokes:communication-preferences.continue') : t('application-spokes:communication-preferences.save')}
           </LoadingButton>
           <ButtonLink
             id="back-button"

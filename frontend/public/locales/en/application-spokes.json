@@ -371,6 +371,7 @@
     "preferred-notification-method-mail": "<span>By mail</span><br>You can also view your Canadian Dental Care Plan information in your <mscaLinkAccount>MSCA.</mscaLinkAccount>.",
     "back": "Back",
     "continue": "Continue",
+    "save": "Save",
     "msca-link-account": "https://www.canada.ca/en/employment-social-development/services/my-account.html",
     "error-message": {
       "preferred-language-required": "Select preferred language of communication",
