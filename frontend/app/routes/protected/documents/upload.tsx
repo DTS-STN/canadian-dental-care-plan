@@ -18,13 +18,13 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import type { ErrorFieldMap } from '~/components/error-summary';
-import { useErrorSummary } from '~/components/error-summary';
 import { FileUpload, FileUploadItem, FileUploadItemDelete, FileUploadList, FileUploadTrigger } from '~/components/file-upload';
-import { InputError } from '~/components/input-error';
+import { ErrorMessage } from '~/components/future-error-message';
+import { ErrorSummary } from '~/components/future-error-summary';
+import { ErrorSummaryProvider } from '~/components/future-error-summary-context';
+import { InputSelect } from '~/components/future-input-select';
 import { InputLegend } from '~/components/input-legend';
 import type { InputOptionProps } from '~/components/input-option';
-import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
@@ -36,6 +36,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { randomHexString } from '~/utils/string-utils';
+import { cn } from '~/utils/tw-utils';
 import { bytesToFilesize, megabytesToBytes } from '~/utils/units.utils';
 
 type UploadErrors = {
@@ -441,99 +442,94 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
     ];
   }, [documentTypes, t]);
 
-  const errorFieldMap = useMemo<ErrorFieldMap>(
-    () => ({
-      applicant: 'applicant',
-      files: 'file-upload',
-      fileItems: {
-        file: (i) => `document-type-${filesWithTypes[i]?.id ?? i}`,
-        documentType: (i) => `document-type-${filesWithTypes[i]?.id ?? i}`,
-      },
-    }),
-    [filesWithTypes],
-  );
-
-  const errorSummary = useErrorSummary(errors as Record<string, unknown>, errorFieldMap);
-
   return (
     <div className="max-w-prose space-y-8">
-      <errorSummary.ErrorSummary />
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
 
-      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
-        <CsrfTokenInput />
+        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+          <CsrfTokenInput />
 
-        <div className="space-y-6">
-          <InputSelect id="applicant" name="applicant" label={t('documents:upload.who-are-you-uploading-for')} required className="w-full" options={applicantOptions} defaultValue="" errorMessage={errors?.applicant} />
+          <div className="space-y-6">
+            <InputSelect id="applicant" name="applicant" label={t('documents:upload.who-are-you-uploading-for')} required className="w-full" options={applicantOptions} defaultValue="" errorMessage={errors?.applicant} />
 
-          <fieldset>
-            <InputLegend className="mb-2">{t('documents:upload.upload-document')}</InputLegend>
-            <p>{t('documents:upload.max-files', { count: DOCUMENT_UPLOAD_MAX_FILE_COUNT })}</p>
-            <p className="mb-2">
-              {t('documents:upload.max-size', {
-                filesize: bytesToFilesize(megabytesToBytes(env.DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB), `${i18n.language}-CA`),
-                extensions: DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(', '),
-              })}
-            </p>
+            <fieldset>
+              <InputLegend className="mb-2">{t('documents:upload.upload-document')}</InputLegend>
+              <p>{t('documents:upload.max-files', { count: DOCUMENT_UPLOAD_MAX_FILE_COUNT })}</p>
+              <p className="mb-2">
+                {t('documents:upload.max-size', {
+                  filesize: bytesToFilesize(megabytesToBytes(env.DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB), `${i18n.language}-CA`),
+                  extensions: DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(', '),
+                })}
+              </p>
 
-            {errors?.files && (
-              <InputError id="files-error" className="mb-2">
-                {errors.files}
-              </InputError>
-            )}
+              {errors?.files && <ErrorMessage id="files-error" className="mb-2" fieldId="fileUploadTrigger" message={errors.files} />}
 
-            <FileUpload id="file-upload" onValueChange={handleFileChange} multiple={false} accept={DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(',')} className="gap-4 sm:gap-6">
-              <div>
-                <FileUploadTrigger asChild>
-                  <Button variant="secondary" startIcon={faArrowUpFromBracket}>
-                    {t('documents:upload.add-file')}
-                  </Button>
-                </FileUploadTrigger>
-              </div>
+              <FileUpload id="file-upload" onValueChange={handleFileChange} multiple={false} accept={DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(',')} className="gap-4 sm:gap-6">
+                <div>
+                  <FileUploadTrigger asChild>
+                    <Button id="fileUploadTrigger" variant="secondary" className={cn(errors?.files && 'border-red-500 text-red-500 hover:bg-red-100 focus:bg-red-100')} startIcon={faArrowUpFromBracket}>
+                      {t('documents:upload.add-file')}
+                    </Button>
+                  </FileUploadTrigger>
+                </div>
 
-              <FileUploadList className="gap-4 sm:gap-6">
-                {filesWithTypes.map(({ id, file, documentType }, index) => (
-                  <FileUploadItem key={id} value={file} className="flex-col items-stretch gap-3 sm:gap-4">
-                    <dl className="space-y-3 sm:space-y-4">
-                      <div className="space-y-2">
-                        <dt className="font-semibold">{t('documents:upload.file-name')}</dt>
-                        <dd>{file.name}</dd>
-                      </div>
-                    </dl>
+                <FileUploadList className="gap-4 sm:gap-6">
+                  {filesWithTypes.map(({ id, file, documentType }, index) => {
+                    const fileError = errors?.fileItems?.[index]?.file;
+                    const documentTypeError = errors?.fileItems?.[index]?.documentType;
+                    return (
+                      <FileUploadItem
+                        id={`file-upload-item-${id}`}
+                        key={id}
+                        value={file}
+                        className={cn('flex-col items-stretch gap-3 sm:gap-4', fileError && 'border-red-500 focus:border-red-500 focus:ring-3 focus:ring-red-500 focus:outline-hidden')}
+                        tabIndex={-1}
+                      >
+                        {fileError && <ErrorMessage id={`file-error-${index}`} fieldId={`file-upload-item-${id}`} message={fileError} />}
+                        <dl className="space-y-3 sm:space-y-4">
+                          <div className="space-y-2">
+                            <dt className="font-semibold">{t('documents:upload.file-name')}</dt>
+                            <dd>{file.name}</dd>
+                          </div>
+                        </dl>
 
-                    <InputSelect
-                      id={`document-type-${id}`}
-                      name={`document-type-${index}`}
-                      label={t('documents:upload.document-type')}
-                      required
-                      className="w-full"
-                      options={docTypeOptions}
-                      value={documentType}
-                      onChange={(e) => {
-                        setFilesWithTypes((prev) => prev.map((p) => (p.id === id ? { ...p, documentType: e.target.value } : p)));
-                      }}
-                      errorMessage={errors?.fileItems?.[index]?.documentType}
-                    />
+                        <InputSelect
+                          id={`document-type-${id}`}
+                          name={`document-type-${index}`}
+                          label={t('documents:upload.document-type')}
+                          required
+                          className="w-full"
+                          options={docTypeOptions}
+                          value={documentType}
+                          onChange={(e) => {
+                            setFilesWithTypes((prev) => prev.map((p) => (p.id === id ? { ...p, documentType: e.target.value } : p)));
+                          }}
+                          errorMessage={documentTypeError}
+                        />
 
-                    <div className="mt-2">
-                      <FileUploadItemDelete asChild>
-                        <Button variant="secondary" size="sm" endIcon={faTimes}>
-                          {t('documents:upload.remove')}
-                        </Button>
-                      </FileUploadItemDelete>
-                    </div>
-                  </FileUploadItem>
-                ))}
-              </FileUploadList>
-            </FileUpload>
-          </fieldset>
-        </div>
+                        <div className="mt-2">
+                          <FileUploadItemDelete asChild>
+                            <Button variant="secondary" size="sm" endIcon={faTimes}>
+                              {t('documents:upload.remove')}
+                            </Button>
+                          </FileUploadItemDelete>
+                        </div>
+                      </FileUploadItem>
+                    );
+                  })}
+                </FileUploadList>
+              </FileUpload>
+            </fieldset>
+          </div>
 
-        <div className="mt-8">
-          <LoadingButton id="submit-button" variant="primary" type="submit" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Submit - Upload my documents click">
-            {t('documents:upload.submit')}
-          </LoadingButton>
-        </div>
-      </fetcher.Form>
+          <div className="mt-8">
+            <LoadingButton id="submit-button" variant="primary" type="submit" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Submit - Upload my documents click">
+              {t('documents:upload.submit')}
+            </LoadingButton>
+          </div>
+        </fetcher.Form>
+      </ErrorSummaryProvider>
 
       <div>
         <ButtonLink id="back-button" variant="secondary" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Upload my documents click">
