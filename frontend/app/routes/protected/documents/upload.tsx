@@ -446,13 +446,10 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
     <div className="max-w-prose space-y-8">
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
-
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
           <CsrfTokenInput />
-
           <div className="space-y-6">
             <InputSelect id="applicant" name="applicant" label={t('documents:upload.who-are-you-uploading-for')} required className="w-full" options={applicantOptions} defaultValue="" errorMessage={errors?.applicant} />
-
             <fieldset>
               <InputLegend className="mb-2">{t('documents:upload.upload-document')}</InputLegend>
               <p>{t('documents:upload.max-files', { count: DOCUMENT_UPLOAD_MAX_FILE_COUNT })}</p>
@@ -462,10 +459,8 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                   extensions: DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(', '),
                 })}
               </p>
-
               {errors?.files && <ErrorMessage id="files-error" className="mb-2" fieldId="fileUploadTrigger" message={errors.files} />}
-
-              <FileUpload id="file-upload" onValueChange={handleFileChange} multiple={false} accept={DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(',')} className="gap-4 sm:gap-6">
+              <FileUpload id="file-upload" label={t('documents:upload.upload-document')} onValueChange={handleFileChange} accept={DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(',')} noValidate className="gap-4 sm:gap-6">
                 <div>
                   <FileUploadTrigger asChild>
                     <Button id="fileUploadTrigger" variant="secondary" className={cn(errors?.files && 'border-red-500 text-red-500 hover:bg-red-100 focus:bg-red-100')} startIcon={faArrowUpFromBracket}>
@@ -473,7 +468,6 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                     </Button>
                   </FileUploadTrigger>
                 </div>
-
                 <FileUploadList className="gap-4 sm:gap-6">
                   {filesWithTypes.map(({ id, file, documentType }, index) => {
                     const fileError = errors?.fileItems?.[index]?.file;

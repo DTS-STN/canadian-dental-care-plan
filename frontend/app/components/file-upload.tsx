@@ -287,6 +287,13 @@ interface FileUploadRootProps extends Omit<React.ComponentProps<'div'>, 'default
   invalid?: boolean;
   multiple?: boolean;
   required?: boolean;
+  /**
+   * Turn off the accept, max files and max size validation.
+   * "onFileValidate" event will still be called if provided.
+   *
+   * @default false
+   */
+  noValidate?: boolean;
 }
 
 function FileUploadRoot(props: FileUploadRootProps) {
@@ -312,6 +319,7 @@ function FileUploadRoot(props: FileUploadRootProps) {
     required = false,
     children,
     className,
+    noValidate = false,
     ...rootProps
   } = props;
 
@@ -413,7 +421,7 @@ function FileUploadRoot(props: FileUploadRootProps) {
       let filesToProcess = [...originalFiles];
       let invalid = false;
 
-      if (maxFiles) {
+      if (!noValidate && maxFiles) {
         const currentCount = store.getState().files.size;
         const remainingSlotCount = Math.max(0, maxFiles - currentCount);
 
@@ -456,7 +464,7 @@ function FileUploadRoot(props: FileUploadRootProps) {
           }
         }
 
-        if (acceptTypes) {
+        if (!noValidate && acceptTypes) {
           const fileType = file.type;
           const fileExtension = `.${file.name.split('.').pop()}`;
 
@@ -468,7 +476,7 @@ function FileUploadRoot(props: FileUploadRootProps) {
           }
         }
 
-        if (maxSize && file.size > maxSize) {
+        if (!noValidate && maxSize && file.size > maxSize) {
           rejectionMessage = 'File too large';
           onFileReject?.(file, rejectionMessage);
           rejected = true;
@@ -512,7 +520,7 @@ function FileUploadRoot(props: FileUploadRootProps) {
         }
       }
     },
-    [store, isControlled, onValueChange, onAccept, onFileAccept, onUpload, onFilesUpload, maxFiles, onFileValidate, onFileReject, acceptTypes, maxSize, disabled],
+    [store, isControlled, onValueChange, onAccept, onFileAccept, onUpload, onFilesUpload, maxFiles, onFileValidate, onFileReject, acceptTypes, maxSize, disabled, noValidate],
   );
 
   const onInputChange = React.useCallback(
