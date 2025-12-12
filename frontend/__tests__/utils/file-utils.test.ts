@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { findMimeType, getFileExtension, getMimeType, isValidExtension } from '~/utils/file.utils';
+import { arrayBufferToBase64, findMimeType, getFileExtension, getMimeType, isValidExtension } from '~/utils/file.utils';
 
 describe('file.utils', () => {
   describe('findMimeType', () => {
@@ -93,5 +93,22 @@ describe('getFileExtension', () => {
 
   it('should return an empty string for an empty filename', () => {
     expect(getFileExtension('')).toBe('');
+  });
+});
+
+describe('arrayBufferToBase64', () => {
+  it('should convert an ArrayBuffer to a Base64 string', () => {
+    const str = 'Hello, World!';
+    const encoder = new TextEncoder();
+    const buffer = encoder.encode(str).buffer;
+
+    const base64 = arrayBufferToBase64(buffer);
+    expect(base64).toBe('SGVsbG8sIFdvcmxkIQ==');
+  });
+
+  it('should handle an empty ArrayBuffer', () => {
+    const buffer = new ArrayBuffer(0);
+    const base64 = arrayBufferToBase64(buffer);
+    expect(base64).toBe('');
   });
 });
