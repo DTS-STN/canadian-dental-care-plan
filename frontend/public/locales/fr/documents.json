@@ -29,17 +29,18 @@
     "return-dashboard": "Retour au tableau de bord",
     "error-message": {
       "applicant-required": "Sélectionnez une personne dans la liste déroulante.",
-      "file-required": "Sélectionnez un fichier",
-      "document-type-required": "Sélectionnez un type de document",
-      "invalid-file-type": "Le type de fichier que vous tentez de téléverser n'est pas pris en charge. Vous pouvez téléverser un fichier dans l'un des formats suivants\u00a0: {{extensions}}",
+      "file-required": "Sélectionnez un fichier.",
+      "document-type-required": "Sélectionnez un type de document pour le fichier «\u00a0{{filename}}\u00a0».",
+      "invalid-file-type": "Le fichier «\u00a0{{filename}}\u00a0» n'est pas pris en charge. Vous pouvez téléverser un fichier dans l'un des formats suivants\u00a0: {{extensions}}",
       "too-many-files_one": "Vous pouvez téléverser un fichier à la fois. Soumettez vos documents actuels avant de téléverser des fichiers supplémentaires.",
       "too-many-files_other": "Vous pouvez téléverser un maximum de {{count}} fichiers à la fois. Soumettez vos documents actuels avant de téléverser des fichiers supplémentaires.",
-      "file-too-large": "Le fichier que vous tentez de téléverser est trop volumineux. Assurez-vous que la taille est inférieure à {{filesize}}.",
+      "duplicate-file": "Le fichier «\u00a0{{filename}}\u00a0» a déjà été sélectionné.",
+      "file-too-large": "Le fichier «\u00a0{{filename}}\u00a0» est trop volumineux. Assurez-vous que la taille du fichier est inférieure à {{filesize}}.",
       "scan-failed": "(L'analyse de fichier(s) a échoué: {{error}} (Code: {{code}})",
-      "scan-incomplete": "L'analyse de fichier(s) n'a pas pu être effectuée",
-      "scan-error": "Erreur lors de l'analyse de fichier(s)",
+      "scan-incomplete": "L'analyse de fichier(s) n'a pas pu être effectuée.",
+      "scan-error": "Erreur lors de l'analyse de fichier(s).",
       "upload-failed": "Le téléversement de fichier(s) a échoué: {{error}} (Code: {{code}})",
-      "upload-error": "Erreur lors du téléversement de fichier(s)"
+      "upload-error": "Erreur lors du téléversement de fichier(s)."
     }
   },
   "not-required": {

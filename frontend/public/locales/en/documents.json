@@ -29,17 +29,18 @@
     "return-dashboard": "Return to dashboard",
     "error-message": {
       "applicant-required": "Select a person from the drop down list.",
-      "file-required": "Select a file",
-      "document-type-required": "Select a document type",
-      "invalid-file-type": "The file type you're trying to upload is not supported. You can upload a file in one of the following formats: {{extensions}}",
+      "file-required": "Select a file.",
+      "document-type-required": "Select a document type for file “{{filename}}”.",
+      "invalid-file-type": "File “{{filename}}” is not supported. You can upload a file in one of the following formats: {{extensions}}",
       "too-many-files_one": "You can upload one file at a time. Submit your current documents before uploading additional files.",
       "too-many-files_other": "You can upload a maximum of {{count}} files at a time. Submit your current documents before uploading additional files.",
-      "file-too-large": "The file you are trying to upload is too large. Make sure the file size is less than {{filesize}}.",
+      "duplicate-file": "File “{{filename}}” has already been selected.",
+      "file-too-large": "File “{{filename}}” is too large. Make sure the file size is less than {{filesize}}.",
       "scan-failed": "File(s) scan failed: {{error}} (Code: {{code}})",
-      "scan-incomplete": "File(s) scan could not be completed",
-      "scan-error": "Error during file(s) scanning",
+      "scan-incomplete": "File(s) scan could not be completed.",
+      "scan-error": "Error during file(s) scanning.",
       "upload-failed": "File(s) upload failed: {{error}} (Code: {{code}})",
-      "upload-error": "Error during file(s) upload"
+      "upload-error": "Error during file(s) upload."
     }
   },
   "not-required": {
