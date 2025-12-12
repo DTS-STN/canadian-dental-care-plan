@@ -301,7 +301,6 @@ export function startApplicationState({ applicationYear, session }: StartArgs): 
   const log = createLogger('application-route-helpers.server/startApplicationState');
 
   const id = nanoid();
-  console.log({ id });
   const initialState: PublicApplicationState = {
     id,
     editMode: false,

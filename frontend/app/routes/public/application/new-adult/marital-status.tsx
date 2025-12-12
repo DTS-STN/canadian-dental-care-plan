@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -29,6 +29,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult']);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-adult:marital-status.page-title') }) };
   const locale = getLocale(request);
