@@ -107,7 +107,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/application/$id/verify-email', params));
   }
 
-  return redirect(getPathById('public/application/$id/new-adult/communication-preferences', params));
+  return redirect(getPathById('public/application/$id/new-adult/contact-information', params));
 }
 
 export default function ApplicationEmail({ loaderData, params }: Route.ComponentProps) {
@@ -136,14 +136,7 @@ export default function ApplicationEmail({ loaderData, params }: Route.Component
           <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Email click">
             {t('application-spokes:email.continue')}
           </LoadingButton>
-          <ButtonLink
-            id="back-button"
-            variant="secondary"
-            routeId="public/application/$id/new-adult/communication-preferences"
-            params={params}
-            disabled={isSubmitting}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Email click"
-          >
+          <ButtonLink id="back-button" variant="secondary" routeId="public/application/$id/communication-preferences" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Email click">
             {t('application-spokes:email.back')}
           </ButtonLink>
         </div>
