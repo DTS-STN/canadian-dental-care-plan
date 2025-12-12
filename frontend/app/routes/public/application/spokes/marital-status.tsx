@@ -11,7 +11,7 @@ import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
 import type { PartnerInformationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { applicantInformationStateHasPartner, getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { applicantInformationStateHasPartner, getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -47,26 +47,34 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult']);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:marital-status.page-title') }) };
   const maritalStatues = appContainer.get(TYPES.MaritalStatusService).listLocalizedMaritalStatuses(locale);
-  return { defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation }, meta, maritalStatues };
+  return {
+    defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation },
+    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
+    meta,
+    maritalStatues,
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult']);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.cancel) {
-    // TODO: needs to be generic
-    return redirect(getPathById('public/application/$id/new-adult/marital-status', params));
+    return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/marital-status`, params));
   }
 
   // state validation schema
@@ -133,13 +141,12 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  // TODO: needs to be generic
-  return redirect(getPathById('public/application/$id/new-adult/marital-status', params));
+  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/marital-status`, params));
 }
 
 export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, maritalStatues } = loaderData;
+  const { defaultState, maritalStatues, typeAndFlow } = loaderData;
   const { MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -232,7 +239,7 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
           <ButtonLink
             id="back-button"
             variant="secondary"
-            routeId="public/application/$id/new-adult/marital-status" // TODO: needs to be generic
+            routeId={`public/application/$id/${typeAndFlow}/marital-status`}
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}
