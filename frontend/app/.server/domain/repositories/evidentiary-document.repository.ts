@@ -73,6 +73,7 @@ export class DefaultEvidentiaryDocumentRepository implements EvidentiaryDocument
     url.searchParams.set('$select', 'esdc_filename,_esdc_documenttypeid_value,esdc_uploaddate');
     url.searchParams.set('$expand', 'esdc_Clientid($select=esdc_firstname,esdc_lastname),esdc_DocumentTypeid($select=esdc_nameenglish,esdc_namefrench)');
     url.searchParams.set('$filter', `statuscode eq 1 and _esdc_clientid_value eq '${findEvidentiaryDocumentsRequest.clientId}'`);
+    url.searchParams.set('$orderby', 'esdc_uploaddate desc,esdc_filename asc');
 
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.evidentiary-documents.gets', url, {
       method: 'GET',
