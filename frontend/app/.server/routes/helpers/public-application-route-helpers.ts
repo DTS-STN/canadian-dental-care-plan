@@ -380,6 +380,19 @@ export function getEligibilityByAge(dateOfBirth: string): EligibilityResult {
 }
 
 /**
+ * Extracts the typeOfApplication and typeOfApplicationFlow from a string literal of the form "type-flow".
+ * If the string matches the expected pattern and both type and flow are valid, returns an object type with those properties.
+ * Otherwise, resolves to never.
+ */
+type ExtractStateFromTypeAndFlow<S extends string> = S extends `${infer T}-${infer F}` //
+  ? T extends TypeOfApplicationState
+    ? F extends TypeOfApplicationFlowState
+      ? { typeOfApplication: T; typeOfApplicationFlow: F }
+      : never
+    : never
+  : never;
+
+/**
  * Validates that the application type and flow combination in the state is allowed.
  *
  * @param state - The public application state containing type and flow information
@@ -399,7 +412,11 @@ export function getEligibilityByAge(dateOfBirth: string): EligibilityResult {
  * );
  * ```
  */
-export function validateApplicationTypeAndFlow(state: PublicApplicationState, params: Params, allowedTypesAndFlows: ReadonlyArray<`${TypeOfApplicationState}-${TypeOfApplicationFlowState}`>) {
+export function validateApplicationTypeAndFlow<TAllowedTypesAndFlows extends ReadonlyArray<`${TypeOfApplicationState}-${TypeOfApplicationFlowState}`>>(
+  state: PublicApplicationState,
+  params: Params,
+  allowedTypesAndFlows: TAllowedTypesAndFlows,
+): asserts state is OmitStrict<PublicApplicationState, 'typeOfApplication' | 'typeOfApplicationFlow'> & ExtractStateFromTypeAndFlow<TAllowedTypesAndFlows[number]> {
   const log = createLogger('application-route-helpers.server/validateApplicationTypeAndFlow');
 
   const type = state.typeOfApplication;

@@ -51,7 +51,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     state.mailingAddress === undefined ||
     state.submitTerms === undefined ||
     state.hasFiledTaxes === undefined  ||
-    state.typeOfApplicationFlow === undefined ||
     state.submissionInfo === undefined
     ) {
     throw new Error(`Incomplete application "${state.id}" state!`);
