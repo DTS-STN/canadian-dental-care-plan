@@ -1,10 +1,10 @@
 import { None, Some } from 'oxide.ts';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { MockProxy } from 'vitest-mock-extended';
-import { anyObject, mock } from 'vitest-mock-extended';
+import { anyArray, anyObject, mock } from 'vitest-mock-extended';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
-import type { ApplicantService, ClientApplicationService } from '~/.server/domain/services';
+import type { ApplicantService, ClientApplicationService, ClientEligibilityService, CoverageService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { DefaultSecurityHandler } from '~/.server/routes/security';
@@ -24,6 +24,8 @@ describe('DefaultSecurityHandler', () => {
   let mockRaoidcSessionValidator: MockProxy<RaoidcSessionValidator>;
   let mockClientApplicationService: MockProxy<ClientApplicationService>;
   let mockApplicantService: MockProxy<ApplicantService>;
+  let mockCoverageService: MockProxy<CoverageService>;
+  let mockClientEligibilityService: MockProxy<ClientEligibilityService>;
   let securityHandler: DefaultSecurityHandler;
 
   beforeEach(() => {
@@ -35,6 +37,8 @@ describe('DefaultSecurityHandler', () => {
     mockRaoidcSessionValidator = mock<RaoidcSessionValidator>();
     mockClientApplicationService = mock<ClientApplicationService>();
     mockApplicantService = mock<ApplicantService>();
+    mockCoverageService = mock<CoverageService>();
+    mockClientEligibilityService = mock<ClientEligibilityService>();
 
     // Creating an instance of DefaultSecurityHandler with the mocked dependencies
     securityHandler = new DefaultSecurityHandler(
@@ -44,6 +48,8 @@ describe('DefaultSecurityHandler', () => {
       mockRaoidcSessionValidator,
       mockClientApplicationService,
       mockApplicantService,
+      mockCoverageService,
+      mockClientEligibilityService,
     );
   });
 
@@ -135,6 +141,8 @@ describe('DefaultSecurityHandler', () => {
         mockRaoidcSessionValidator,
         mockClientApplicationService,
         mockApplicantService,
+        mockCoverageService,
+        mockClientEligibilityService,
       );
 
       expect(() => securityHandler.validateFeatureEnabled(feature)).toThrow(
@@ -156,6 +164,8 @@ describe('DefaultSecurityHandler', () => {
         mockRaoidcSessionValidator,
         mockClientApplicationService,
         mockApplicantService,
+        mockCoverageService,
+        mockClientEligibilityService,
       );
 
       expect(() => securityHandler.validateFeatureEnabled(feature)).not.toThrow();
@@ -195,6 +205,8 @@ describe('DefaultSecurityHandler', () => {
         mockRaoidcSessionValidator,
         mockClientApplicationService,
         mockApplicantService,
+        mockCoverageService,
+        mockClientEligibilityService,
       );
 
       const mockFormData = mock<FormData>();
@@ -359,6 +371,54 @@ describe('DefaultSecurityHandler', () => {
 
       const clientApplication = await securityHandler.requireClientApplication({ request: mockRequest, params, session: mockSession });
       expect(clientApplication).toBe(mockClientApplication);
+    });
+  });
+
+  describe('requireEligibleApplicant', () => {
+    it('should throw redirect to ineligible page if the applicant is not eligible', async () => {
+      const clientNumber = 'client-number-123';
+      const params = { lang: 'en' };
+
+      mockCoverageService.getCurrentCoverage //
+        .mockReturnValueOnce({
+          startDate: '2024-01-01',
+          endDate: '2024-12-31',
+          startYear: 2024,
+          endYear: 2024,
+          taxationYear: 2024,
+        });
+
+      mockClientEligibilityService.listClientEligibilityByClientNumbersAndTaxationYear //
+        .calledWith(anyArray([clientNumber]), 2024)
+        .mockResolvedValueOnce(new Map([[clientNumber, 'not-eligible']]));
+
+      try {
+        await securityHandler.requireEligibleApplicant({ clientNumber, params });
+      } catch (error) {
+        expect(error).toBeInstanceOf(Response);
+        expect((error as Response).status).toBe(302);
+        expect((error as Response).headers.get('Location')).toBe('/en/protected/data-unavailable');
+      }
+    });
+
+    it('should not throw if the applicant is eligible', async () => {
+      const clientNumber = 'client-number-123';
+      const params = { lang: 'en' };
+
+      mockCoverageService.getCurrentCoverage //
+        .mockReturnValueOnce({
+          startDate: '2024-01-01',
+          endDate: '2024-12-31',
+          startYear: 2024,
+          endYear: 2024,
+          taxationYear: 2024,
+        });
+
+      mockClientEligibilityService.listClientEligibilityByClientNumbersAndTaxationYear //
+        .calledWith(anyArray([clientNumber]), 2024)
+        .mockResolvedValueOnce(new Map([[clientNumber, 'eligible']]));
+
+      await expect(securityHandler.requireEligibleApplicant({ clientNumber, params })).resolves.not.toThrow();
     });
   });
 });

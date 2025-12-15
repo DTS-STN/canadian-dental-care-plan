@@ -66,6 +66,12 @@ export async function loader({ context: { appContainer, session }, params, reque
     options: { redirectUrl: getPathById('protected/documents/not-required', params) },
   });
 
+  await securityHandler.requireEligibleApplicant({
+    clientNumber: clientApplication.applicantInformation.clientNumber,
+    params,
+    options: { redirectUrl: getPathById('protected/documents/not-required', params) },
+  });
+
   const locale = getLocale(request);
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -121,6 +127,12 @@ export async function action({ context: { appContainer, session }, params, reque
     params,
     request,
     session,
+    options: { redirectUrl: getPathById('protected/documents/not-required', params) },
+  });
+
+  await securityHandler.requireEligibleApplicant({
+    clientNumber: clientApplication.applicantInformation.clientNumber,
+    params,
     options: { redirectUrl: getPathById('protected/documents/not-required', params) },
   });
 

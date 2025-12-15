@@ -13,7 +13,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'documents:index.page-title' }],
+  breadcrumbs: [{ labelI18nKey: 'documents:index.page-title', routeId: 'protected/documents/index' }],
   i18nNamespaces: getTypedI18nNamespaces('documents', 'gcweb'),
   pageIdentifier: pageIds.protected.documents.notRequired,
   pageTitleI18nKey: 'documents:not-required.page-title',
@@ -47,7 +47,7 @@ export default function NotRequired({ loaderData, params }: Route.ComponentProps
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <ButtonLink
           id="back-button"
-          variant="secondary"
+          variant="primary"
           to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Documents not required button click"
         >

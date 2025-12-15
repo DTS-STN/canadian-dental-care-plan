@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 
+import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ClientEligibilityDto, ClientEligibilityRequestDto } from '~/.server/domain/dtos';
 import type { ClientEligibilityDtoMapper } from '~/.server/domain/mappers';
@@ -19,6 +20,15 @@ export interface ClientEligibilityService {
    * @returns A Promise that resolves to a readonly array of client eligibility dtos.
    */
   listClientEligibilitiesByClientNumbers(clientEligibilityRequestDto: ClientEligibilityRequestDto): Promise<ReadonlyArray<ClientEligibilityDto>>;
+
+  /**
+   * Lists client eligibility status by client numbers and taxation year.
+   *
+   * @param clientNumbers The array of client numbers.
+   * @param taxationYear The taxation year.
+   * @returns A Promise that resolves to a readonly map of client numbers to their eligibility status.
+   */
+  listClientEligibilityByClientNumbersAndTaxationYear(clientNumbers: ReadonlyArray<string>, taxationYear: number): Promise<ReadonlyMap<string, 'eligible' | 'not-eligible' | 'not-enrolled'>>;
 }
 
 @injectable()
@@ -27,16 +37,19 @@ export class DefaultClientEligibilityService implements ClientEligibilityService
   private readonly clientEligibilityDtoMapper: ClientEligibilityDtoMapper;
   private readonly clientEligibilityRepository: ClientEligibilityRepository;
   private readonly auditService: AuditService;
+  private readonly serverConfig: Pick<ServerConfig, 'ELIGIBLE_STATUS_CODE_ELIGIBLE'>;
 
   constructor(
     @inject(TYPES.ClientEligibilityDtoMapper) clientEligibilityDtoMapper: ClientEligibilityDtoMapper,
     @inject(TYPES.ClientEligibilityRepository) clientEligibilityRepository: ClientEligibilityRepository,
     @inject(TYPES.AuditService) auditService: AuditService,
+    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'ELIGIBLE_STATUS_CODE_ELIGIBLE'>,
   ) {
     this.log = createLogger('DefaultClientEligibilityService');
     this.clientEligibilityDtoMapper = clientEligibilityDtoMapper;
     this.clientEligibilityRepository = clientEligibilityRepository;
     this.auditService = auditService;
+    this.serverConfig = serverConfig;
   }
 
   async listClientEligibilitiesByClientNumbers(clientEligibilityRequestDto: ClientEligibilityRequestDto): Promise<ReadonlyArray<ClientEligibilityDto>> {
@@ -50,5 +63,46 @@ export class DefaultClientEligibilityService implements ClientEligibilityService
 
     this.log.trace('Returning client eligibility: [%j]', clientEligibilityDtos);
     return clientEligibilityDtos;
+  }
+
+  async listClientEligibilityByClientNumbersAndTaxationYear(clientNumbers: ReadonlyArray<string>, taxationYear: number): Promise<ReadonlyMap<string, 'eligible' | 'not-eligible' | 'not-enrolled'>> {
+    this.log.trace('Get client eligibility status for client numbers: [%j] and taxation year: [%d]', clientNumbers, taxationYear);
+
+    this.auditService.createAudit('client-eligibility_by-client-number-and-taxation-year.get');
+
+    const clientEligibilityRequestDtos = clientNumbers.map((clientNumber) => ({ clientNumber }));
+    const clientEligibilities = await this.listClientEligibilitiesByClientNumbers(clientEligibilityRequestDtos);
+    const clientEligibilityMap = new Map(clientEligibilities.map((eligibility) => [eligibility.clientNumber, eligibility]));
+
+    const clientEligibilityStatusMap = new Map<string, 'eligible' | 'not-eligible' | 'not-enrolled'>();
+
+    for (const clientNumber of clientNumbers) {
+      const applicant = clientEligibilityMap.get(clientNumber);
+
+      if (!applicant) {
+        this.log.warn('No eligibility information found for client number: [%s]', clientNumber);
+        clientEligibilityStatusMap.set(clientNumber, 'not-enrolled');
+        continue;
+      }
+
+      // Applicant profile eligibility status codes take precedence over earnings
+      if (applicant.statusCode) {
+        const status = applicant.statusCode === this.serverConfig.ELIGIBLE_STATUS_CODE_ELIGIBLE ? 'eligible' : 'not-eligible';
+        clientEligibilityStatusMap.set(clientNumber, status);
+        continue;
+      }
+
+      // Fallback to earnings if no status code is present
+      const earning = applicant.earnings.find((earning) => earning.taxationYear === taxationYear);
+
+      if (!earning) {
+        clientEligibilityStatusMap.set(clientNumber, 'not-enrolled');
+        continue;
+      }
+
+      clientEligibilityStatusMap.set(clientNumber, earning.isEligible ? 'eligible' : 'not-eligible');
+    }
+
+    return clientEligibilityStatusMap;
   }
 }
