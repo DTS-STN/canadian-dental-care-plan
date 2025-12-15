@@ -141,6 +141,9 @@ export const pageIds = {
         confirmation: 'CDCP-APPL-NAD-0005',
         exitApplication: 'CDCP-APPL-NAD-0006',
       },
+      newChild: {
+        parentOrGuardian: 'CDCP-APPL-NAD-0001',
+      },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',
         fileYourTaxes: 'CDCP-APPL-SPK-0002',

@@ -37,6 +37,12 @@ export const routes = [
             paths: { en: '/:lang/application/:id/new-adult/confirmation', fr: '/:lang/demandes/:id/new-adult/confirmation' },
           },
 
+          {
+            id: 'public/application/$id/new-children/parent-or-guardian',
+            file: 'routes/public/application/new-children/parent-or-guardian.tsx',
+            paths: { en: '/:lang/application/:id/new-children/parent-or-guardian', fr: '/:lang/demandes/:id/new-children/parent-ou-tuteur' },
+          },
+
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },
           { id: 'public/application/$id/file-taxes', file: 'routes/public/application/spokes/file-taxes.tsx', paths: { en: '/:lang/application/:id/file-taxes', fr: '/:lang/demandes/:id/produire-declaration-revenus' } },
