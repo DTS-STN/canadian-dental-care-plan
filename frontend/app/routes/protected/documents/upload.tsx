@@ -39,21 +39,11 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 import { bytesToFilesize, megabytesToBytes } from '~/utils/units.utils';
 
-type UploadErrors = {
-  applicant?: string;
-  files?: string;
-  fileItems?: Record<string, { file?: string; documentType?: string }>;
-};
-
-type CreateDocumentUploadSchemaArgs = {
-  locale: string;
-  t: TFunction<typeof handle.i18nNamespaces>;
-  allowedExtensions: ReadonlyArray<string>;
-  maxFileSizeInMB: number;
-  maxFileCount: number;
-};
-
 type FileStateWithDocumentType = FileState & { readonly documentType: string };
+
+type DocumentUploadSchema = ReturnType<typeof createDocumentUploadSchema>;
+type DocumentUploadSchemaOuput = z.output<DocumentUploadSchema>;
+type DocumentUploadSchemaErrorTree = z.core.$ZodErrorTree<DocumentUploadSchemaOuput>;
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'documents:index.page-title', routeId: 'protected/documents/index' }],
@@ -181,7 +171,7 @@ async function validateUploadForm(
   locale: string,
   t: TFunction<typeof handle.i18nNamespaces>,
   config: { allowedExtensions: readonly string[]; maxSizeMB: number; maxCount: number },
-): Promise<{ success: true; data: DocumentUploadSchemaOuput } | { success: false; errors: UploadErrors }> {
+): Promise<{ success: true; data: DocumentUploadSchemaOuput } | { success: false; errors: DocumentUploadSchemaErrorTree }> {
   const schema = createDocumentUploadSchema({ locale, t, allowedExtensions: config.allowedExtensions, maxFileSizeInMB: config.maxSizeMB, maxFileCount: config.maxCount });
 
   // Parse form data into expected structure
@@ -211,7 +201,7 @@ async function validateUploadForm(
   const result = schema.safeParse(data);
 
   if (!result.success) {
-    return { success: false, errors: mapZodErrors(result.error) };
+    return { success: false, errors: z.treeifyError(result.error) };
   }
 
   return { success: true, data: result.data };
@@ -280,10 +270,9 @@ interface UploadDocumentsRequestArgs {
   t: TFunction<typeof handle.i18nNamespaces>;
 }
 
-interface UploadDocumentsResponseArgs {
-  success: boolean;
-  errors?: UploadErrors;
-}
+type UploadDocumentsResponseArgs =
+  | { success: true; errors?: undefined } //
+  | { success: false; errors: DocumentUploadSchemaErrorTree };
 
 async function uploadDocuments({ clientNumber, files, service, t, userId }: UploadDocumentsRequestArgs): Promise<UploadDocumentsResponseArgs> {
   const promises = Object.entries(files).map(async ([id, { file, fileBuffer, documentType }]) => {
@@ -309,14 +298,35 @@ async function uploadDocuments({ clientNumber, files, service, t, userId }: Uplo
   return processBatchResults(results);
 }
 
-function processBatchResults(results: { id: string; error?: string }[]): { success: boolean; errors?: UploadErrors } {
+function processBatchResults(results: ReadonlyArray<{ id: string; error?: string }>):
+  | { success: true; errors?: undefined } //
+  | { success: false; errors: DocumentUploadSchemaErrorTree } {
   const failures = results.filter((r) => r.error);
   if (failures.length === 0) return { success: true };
 
-  const errors: UploadErrors = { fileItems: {} };
+  const errors: DocumentUploadSchemaErrorTree = {
+    errors: [],
+    properties: {
+      files: {
+        errors: [],
+        properties: {},
+      },
+    },
+  };
+
   for (const { id, error } of failures) {
-    if (errors.fileItems) errors.fileItems[id] = { file: error };
+    if (error && errors.properties?.files?.properties) {
+      errors.properties.files.properties[id] = {
+        errors: [],
+        properties: {
+          file: {
+            errors: [error],
+          },
+        },
+      };
+    }
   }
+
   return { success: false, errors };
 }
 
@@ -345,7 +355,13 @@ async function createMetadata({ appContainer, clientId, files, userId }: CreateM
   });
 }
 
-type DocumentUploadSchemaOuput = z.output<ReturnType<typeof createDocumentUploadSchema>>;
+type CreateDocumentUploadSchemaArgs = {
+  locale: string;
+  t: TFunction<typeof handle.i18nNamespaces>;
+  allowedExtensions: ReadonlyArray<string>;
+  maxFileSizeInMB: number;
+  maxFileCount: number;
+};
 
 function createDocumentUploadSchema({ locale, t, allowedExtensions, maxFileSizeInMB, maxFileCount }: CreateDocumentUploadSchemaArgs) {
   const maxFileSizeInBytes = megabytesToBytes(maxFileSizeInMB);
@@ -367,9 +383,7 @@ function createDocumentUploadSchema({ locale, t, allowedExtensions, maxFileSizeI
           }),
           path: ['file'],
         });
-      }
-
-      if (data.file.size > maxFileSizeInBytes) {
+      } else if (data.file.size > maxFileSizeInBytes) {
         ctx.addIssue({
           code: 'custom',
           message: t('documents:upload.error-message.file-too-large', {
@@ -378,9 +392,7 @@ function createDocumentUploadSchema({ locale, t, allowedExtensions, maxFileSizeI
           }),
           path: ['file'],
         });
-      }
-
-      if (!data.documentType) {
+      } else if (!data.documentType) {
         ctx.addIssue({
           code: 'custom',
           message: t('documents:upload.error-message.document-type-required', { filename: data.file.name }),
@@ -416,36 +428,18 @@ function createDocumentUploadSchema({ locale, t, allowedExtensions, maxFileSizeI
   });
 }
 
-function mapZodErrors(zodError: z.ZodError): UploadErrors {
-  const errors: UploadErrors = {};
-  for (const issue of zodError.issues) {
-    const { message, path } = issue;
-    if (path[0] === 'applicant') {
-      errors.applicant = message;
-    } else if (path[0] === 'files') {
-      if (path.length === 1) {
-        errors.files = message;
-      } else {
-        const id = path[1] as string;
-        const field = path[2] as 'file' | 'documentType';
-        errors.fileItems ??= {};
-        errors.fileItems[id] ??= {};
-        errors.fileItems[id][field] = message;
-      }
-    }
-  }
-  return errors;
-}
-
 export default function DocumentsUpload({ loaderData, params }: Route.ComponentProps) {
   const { t, i18n } = useTranslation(handle.i18nNamespaces);
   const { applicants, documentTypes, SCCH_BASE_URI } = loaderData;
   const env = useClientEnv();
   const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_COUNT } = env;
 
-  const fetcher = useFetcher<{ errors: UploadErrors }>();
+  const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
+
   const errors = fetcher.data?.errors;
+  const applicantError = errors?.properties?.applicant?.errors.at(0);
+  const filesError = errors?.properties?.files?.errors.at(0);
 
   const [filesWithTypes, setFilesWithTypes] = useState<FileStateWithDocumentType[]>([]);
 
@@ -504,7 +498,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
           <CsrfTokenInput />
           <div className="space-y-6">
-            <InputSelect id="applicant" name="applicant" label={t('documents:upload.who-are-you-uploading-for')} required className="w-full" options={applicantOptions} defaultValue="" errorMessage={errors?.applicant} />
+            <InputSelect id="applicant" name="applicant" label={t('documents:upload.who-are-you-uploading-for')} required className="w-full" options={applicantOptions} defaultValue="" errorMessage={applicantError} />
             <fieldset>
               <InputLegend className="mb-2">{t('documents:upload.upload-document')}</InputLegend>
               <p>{t('documents:upload.max-files', { count: DOCUMENT_UPLOAD_MAX_FILE_COUNT })}</p>
@@ -514,19 +508,19 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                   extensions: DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(', '),
                 })}
               </p>
-              {errors?.files && <ErrorMessage id="files-error" className="mb-2" fieldId="fileUploadTrigger" message={errors.files} />}
+              {filesError && <ErrorMessage id="files-error" className="mb-2" fieldId="fileUploadTrigger" message={filesError} />}
               <FileUpload id="file-upload" label={t('documents:upload.upload-document')} value={filesWithTypes} onValueChange={handleFileChange} accept={DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(',')} className="gap-4 sm:gap-6">
                 <div>
                   <FileUploadTrigger asChild>
-                    <Button id="fileUploadTrigger" variant="secondary" className={cn(errors?.files && 'border-red-500 text-red-500 hover:bg-red-100 focus:bg-red-100')} startIcon={faArrowUpFromBracket}>
+                    <Button id="fileUploadTrigger" variant="secondary" className={cn(filesError !== undefined && 'border-red-500 text-red-500 hover:bg-red-100 focus:bg-red-100')} startIcon={faArrowUpFromBracket}>
                       {t('documents:upload.add-file')}
                     </Button>
                   </FileUploadTrigger>
                 </div>
                 <FileUploadList className="gap-4 sm:gap-6">
                   {filesWithTypes.map(({ id, file, documentType }) => {
-                    const fileError = errors?.fileItems?.[id]?.file;
-                    const documentTypeError = errors?.fileItems?.[id]?.documentType;
+                    const fileError = errors?.properties?.files?.properties?.[id]?.properties?.file?.errors.at(0);
+                    const documentTypeError = errors?.properties?.files?.properties?.[id]?.properties?.documentType?.errors.at(0);
                     return (
                       <FileUploadItem
                         id={`file-upload-item-${id}`}
