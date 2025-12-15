@@ -455,7 +455,7 @@ export function getInitialTypeAndFlowUrl(typeAndFlow: 'entry' | `${TypeOfApplica
       return getPathById('public/application/$id/new-adult/marital-status', params);
     }
     case 'new-children': {
-      return getPathById('public/application/$id/parent-or-guardian', params);
+      return getPathById('public/application/$id/new-children/parent-or-guardian', params);
     }
     case 'new-family': {
       throw new Error('Not implemented yet: "new-family" case');
