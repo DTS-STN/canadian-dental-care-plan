@@ -6,7 +6,7 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicantDto, ClientApplicationDto } from '~/.server/domain/dtos';
-import type { ApplicantService, ClientApplicationService } from '~/.server/domain/services';
+import type { ApplicantService, ClientApplicationService, ClientEligibilityService, CoverageService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
@@ -82,12 +82,21 @@ export interface RequireClientApplicationParams {
 }
 
 /**
- * Parameters for requiring client number.
+ * Arguments for requiring applicant.
  */
-export interface RequireClientNumberParams {
+export interface RequireApplicantArgs {
   params: Params;
   request: Request;
   session: Session;
+}
+
+export interface RequireEligibleApplicantArgs {
+  clientNumber: string;
+  params: Params;
+  options?: {
+    /** Custom URL to redirect to instead of the default data-unavailable route */
+    redirectUrl?: string;
+  };
 }
 
 /**
@@ -151,11 +160,20 @@ export interface SecurityHandler {
   /**
    * Ensures that the user has a applicant associated with their SIN.
    *
-   * @param params - Parameters containing the request, session, and route params.
+   * @param args - Parameters containing the request, session, and route params.
    * @throws Throws a redirect response if no applicant is found.
    * @returns Resolves with the applicant DTO if found.
    */
-  requireApplicant(params: RequireClientNumberParams): Promise<ApplicantDto>;
+  requireApplicant(args: RequireApplicantArgs): Promise<ApplicantDto>;
+
+  /**
+   * Ensures that the applicant with the given client number is eligible.
+   *
+   * @param args - Parameters containing the client number, request, session, and route params.
+   * @throws Throws a redirect response if the applicant is not eligible.
+   * @returns Resolves if the applicant is eligible.
+   */
+  requireEligibleApplicant(args: RequireEligibleApplicantArgs): Promise<void>;
 }
 
 /**
@@ -170,6 +188,8 @@ export class DefaultSecurityHandler implements SecurityHandler {
   private readonly raoidcSessionValidator: RaoidcSessionValidator;
   private readonly clientApplicationService: ClientApplicationService;
   private readonly applicantService: ApplicantService;
+  private readonly coverageService: CoverageService;
+  private readonly clientEligibilityService: ClientEligibilityService;
 
   constructor(
     @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>,
@@ -178,6 +198,8 @@ export class DefaultSecurityHandler implements SecurityHandler {
     @inject(TYPES.RaoidcSessionValidator) raoidcSessionValidator: RaoidcSessionValidator,
     @inject(TYPES.ClientApplicationService) clientApplicationService: ClientApplicationService,
     @inject(TYPES.ApplicantService) applicantService: ApplicantService,
+    @inject(TYPES.CoverageService) coverageService: CoverageService,
+    @inject(TYPES.ClientEligibilityService) clientEligibilityService: ClientEligibilityService,
   ) {
     this.log = createLogger('DefaultSecurityHandler');
     this.serverConfig = serverConfig;
@@ -186,6 +208,8 @@ export class DefaultSecurityHandler implements SecurityHandler {
     this.raoidcSessionValidator = raoidcSessionValidator;
     this.clientApplicationService = clientApplicationService;
     this.applicantService = applicantService;
+    this.coverageService = coverageService;
+    this.clientEligibilityService = clientEligibilityService;
   }
 
   /**
@@ -321,7 +345,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
     return clientApplicationOption.unwrap();
   }
 
-  async requireApplicant({ params, request, session }: RequireClientNumberParams): Promise<ApplicantDto> {
+  async requireApplicant({ params, request, session }: RequireApplicantArgs): Promise<ApplicantDto> {
     this.log.debug('Requiring applicant for session [%s]', session.id);
 
     const userInfoToken = session.find('userInfoToken').unwrapUnchecked();
@@ -355,5 +379,18 @@ export class DefaultSecurityHandler implements SecurityHandler {
 
     this.log.debug('Applicant found for SIN [%s]; session [%s]', userInfoToken.sin, session.id);
     return applicant;
+  }
+
+  async requireEligibleApplicant({ clientNumber, params, options = {} }: RequireEligibleApplicantArgs): Promise<void> {
+    this.log.debug('Requiring eligible applicant with client number [%s]', clientNumber);
+    const currentCoverage = this.coverageService.getCurrentCoverage();
+    const clientEligibilities = await this.clientEligibilityService.listClientEligibilityByClientNumbersAndTaxationYear([clientNumber], currentCoverage.taxationYear);
+    const eligibilityStatus = clientEligibilities.get(clientNumber);
+
+    if (eligibilityStatus !== 'eligible') {
+      const redirectUrl = options.redirectUrl ?? getPathById('protected/data-unavailable', params);
+      this.log.debug('Applicant with client number [%s] is not eligible; eligibilityStatus: [%s]; redirecting to [%s]', clientNumber, eligibilityStatus, redirectUrl);
+      throw redirect(redirectUrl);
+    }
   }
 }
