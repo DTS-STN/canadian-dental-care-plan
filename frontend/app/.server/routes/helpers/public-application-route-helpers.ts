@@ -1,4 +1,4 @@
-import { redirectDocument } from 'react-router';
+import { redirect, redirectDocument } from 'react-router';
 import type { Params } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
@@ -479,4 +479,40 @@ export function getInitialTypeAndFlowUrl(typeAndFlow: 'entry' | `${TypeOfApplica
       throw new Error(`Unknown typeAndFlow value: [${typeAndFlow}]`);
     }
   }
+}
+
+interface getSingleChildStateArgs {
+  params: ApplicationStateParams & { childId: string };
+  request: Request;
+  session: Session;
+}
+
+/**
+ * Loads single child state from public application state.
+ * @param args - The arguments.
+ * @returns The loaded child state.
+ */
+export function getSingleChildState({ params, request, session }: getSingleChildStateArgs) {
+  const log = createLogger('public-application-route-helpers.server/publicApplicationSingleChildState');
+  const applicationState = getPublicApplicationState({ params, session });
+
+  const parsedChildId = z.uuid().safeParse(params.childId);
+
+  if (!parsedChildId.success) {
+    log.warn('Invalid "childId" param format; childId: [%s]', params.childId);
+    throw redirect(getPathById('public/application/$id/new-children/children/index', params));
+  }
+
+  const childId = parsedChildId.data;
+  const childStateIndex = applicationState.children.findIndex(({ id }) => id === childId);
+
+  if (childStateIndex === -1) {
+    log.warn('Apply single child has not been found; childId: [%s]', childId);
+    throw redirect(getPathById('public/application/$id/new-children/children/index', params));
+  }
+
+  const childState = applicationState.children[childStateIndex];
+  const isNew = isNewChildState(childState);
+
+  return { ...childState, childNumber: childStateIndex + 1, isNew };
 }
