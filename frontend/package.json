@@ -109,7 +109,7 @@
     "@types/jmespath": "^0.15.2",
     "@types/jsdom": "^27.0.0",
     "@types/morgan": "^1.9.10",
-    "@types/node": "^24.10.1",
+    "@types/node": "^25.0.2",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@types/source-map-support": "^0.5.10",
