@@ -23,6 +23,9 @@ function getNextRouteId(applicationType: string) {
   if (applicationType === APPLICANT_TYPE.adult) {
     return 'public/application/$id/new-adult/marital-status';
   }
+  if (applicationType === APPLICANT_TYPE.children) {
+    return 'public/application/$id/new-children/parent-or-guardian';
+  }
   if (applicationType === APPLICANT_TYPE.family) {
     return 'public/application/$id/new-family/marital-status';
   }

@@ -37,6 +37,17 @@ const FORM_ACTION = {
   save: 'save',
 } as const;
 
+function getRouteFromTypeAndFlow(typeAndFlow: string) {
+  switch (typeAndFlow) {
+    case 'new-children': {
+      return `public/application/$id/${typeAndFlow}/parent-or-guardian`;
+    }
+    default: {
+      return `public/application/$id/${typeAndFlow}/marital-status`;
+    }
+  }
+}
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'application-spokes', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.maritalStatus,
@@ -47,7 +58,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult']);
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -63,7 +74,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult']);
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children']);
 
   const formData = await request.formData();
 
@@ -72,9 +83,11 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
+  const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
+
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.cancel) {
-    return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/marital-status`, params));
+    return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
   }
 
   // state validation schema
@@ -141,7 +154,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/marital-status`, params));
+  return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
 }
 
 export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Route.ComponentProps) {
@@ -239,7 +252,7 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
           <ButtonLink
             id="back-button"
             variant="secondary"
-            routeId={`public/application/$id/${typeAndFlow}/marital-status`}
+            routeId={getRouteFromTypeAndFlow(typeAndFlow)}
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}
