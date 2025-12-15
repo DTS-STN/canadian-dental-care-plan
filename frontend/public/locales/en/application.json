@@ -18,7 +18,9 @@
     "type-of-application": "Type of application",
     "personal-information": "Personal information",
     "new-or-returning-member": "New or returning member",
-    "submit": "Submit"
+    "submit": "Submit",
+    "parent-or-guardian": "Parent or legal guardian information",
+    "childrens-application": "Your child(ren)'s application"
   },
   "eligibility-requirements": {
     "page-title": "Before you start your application",

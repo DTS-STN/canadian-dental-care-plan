@@ -18,7 +18,9 @@
     "type-of-application": "(FR) Type of application",
     "personal-information": "(FR) Personal information",
     "new-or-returning-member": "(FR) New or returning member",
-    "submit": "(FR) Submit"
+    "submit": "(FR) Submit",
+    "parent-or-guardian": "(FR) Parent or legal guardian information",
+    "childrens-application": "(FR) Your child(ren)'s application"
   },
   "eligibility-requirements": {
     "page-title": "(FR) Before you start your application",

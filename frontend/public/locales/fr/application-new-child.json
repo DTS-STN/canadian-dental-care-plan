@@ -1,0 +1,17 @@
+{
+  "parent-or-guardian": {
+    "page-title": "(FR) Parent or legal guardian information",
+    "page-heading": "(FR) Parent or legal guardian information",
+    "marital-status": "(FR) Marital status",
+    "select-your-status": "(FR) Select your marital status",
+    "spouse-sin": "(FR) Spouse or common-law partner's Social Insurance Number (SIN)",
+    "spouse-yob": "(FR) Spouse or common-law partner's year of birth",
+    "consent": "(FR) Consent",
+    "consent-yes": "(FR) My spouse or common-law partner has agreed to share their personal information.",
+    "consent-no": "(FR) My spouse or common-law partner has not agreed to share their personal information.",
+    "add-marital-status": "(FR) Add marital status",
+    "edit-marital-status": "(FR) Edit marital status information",
+    "type-of-application": "(FR) Type of application",
+    "childrens-application": "(FR) Your child(ren)'s application"
+  }
+}

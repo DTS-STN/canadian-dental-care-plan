@@ -1,4 +1,5 @@
 import applicationNewAdultEn from '~/../public/locales/en/application-new-adult.json';
+import applicationNewChildEn from '~/../public/locales/en/application-new-child.json';
 import applicationSpokesEn from '~/../public/locales/en/application-spokes.json';
 import applicationEn from '~/../public/locales/en/application.json';
 import applyAdultChildEn from '~/../public/locales/en/apply-adult-child.json';
@@ -25,6 +26,7 @@ import statusEn from '~/../public/locales/en/status.json';
 import stubLoginEn from '~/../public/locales/en/stub-login.json';
 import unableToProcessRequestEn from '~/../public/locales/en/unable-to-process-request.json';
 import applicationNewAdultFr from '~/../public/locales/fr/application-new-adult.json';
+import applicationNewChildFr from '~/../public/locales/fr/application-new-child.json';
 import applicationSpokesFr from '~/../public/locales/fr/application-spokes.json';
 import applicationFr from '~/../public/locales/fr/application.json';
 import applyAdultChildFr from '~/../public/locales/fr/apply-adult-child.json';
@@ -57,6 +59,7 @@ const i18nResourcesEn = {
   application: applicationEn,
   'application-spokes': applicationSpokesEn,
   'application-new-adult': applicationNewAdultEn,
+  'application-new-child': applicationNewChildEn,
   'apply-adult-child': applyAdultChildEn,
   'apply-adult': applyAdultEn,
   'protected-apply-adult': protectedApplyAdultEn,
@@ -85,6 +88,7 @@ const i18nResourcesEn = {
 const i18nResourcesFr = {
   application: applicationFr,
   'application-new-adult': applicationNewAdultFr,
+  'application-new-child': applicationNewChildFr,
   'application-spokes': applicationSpokesFr,
   'apply-adult-child': applyAdultChildFr,
   'apply-adult': applyAdultFr,

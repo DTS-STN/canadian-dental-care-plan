@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next';
 
 export type StepStatus = 'completed' | 'active' | 'inactive';
 
-export type StepId = 'marital-status' | 'contact-information' | 'dental-insurance' | 'submit';
+export type StepId = 'marital-status' | 'contact-information' | 'dental-insurance' | 'submit' | 'parent-or-guardian' | 'childrens-application';
 
-export type FlowId = 'new-adult';
+export type FlowId = 'new-adult' | 'new-children';
 
 export interface StepInfo {
   id: StepId;
@@ -22,6 +22,9 @@ export function useProgressStepper(flowId: FlowId, currentStepId: StepId) {
   const flows: Record<FlowId, FlowConfig> = {
     'new-adult': {
       steps: ['marital-status', 'contact-information', 'dental-insurance', 'submit'],
+    },
+    'new-children': {
+      steps: ['parent-or-guardian', 'childrens-application', 'submit'],
     },
   };
 
