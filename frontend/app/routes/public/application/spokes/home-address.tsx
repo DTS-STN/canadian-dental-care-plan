@@ -10,7 +10,7 @@ import { z } from 'zod';
 import type { Route } from './+types/home-address';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
@@ -49,6 +49,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -58,14 +60,17 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:address.home-address.page-title') }) };
 
   return {
-    meta,
     defaultState: state,
     countryList,
     regionList,
+    meta,
   };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+
   const formData = await request.formData();
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   const locale = getLocale(request);
@@ -107,7 +112,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (canProceedToDental) {
     savePublicApplicationState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
-    return redirect(getPathById('public/application/$id/new-adult/contact-information', params));
+    return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/contact-information`, params));
   }
 
   invariant(parsedDataResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
@@ -161,7 +166,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   savePublicApplicationState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
 
-  return redirect(getPathById('public/application/$id/new-adult/contact-information', params));
+  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/contact-information`, params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {

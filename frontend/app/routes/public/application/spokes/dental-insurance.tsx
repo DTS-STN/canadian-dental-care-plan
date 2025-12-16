@@ -9,7 +9,7 @@ import { z } from 'zod';
 import type { Route } from './+types/dental-insurance';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -44,20 +44,28 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:dental-insurance.title') }) };
 
-  return { meta, defaultState: state.dentalInsurance };
+  return {
+    defaultState: state.dentalInsurance,
+    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
+    meta,
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const dentalInsuranceSchema = z
@@ -86,13 +94,12 @@ export async function action({ context: { appContainer, session }, params, reque
 
   savePublicApplicationState({ params, session, state: { dentalInsurance: parsedDataResult.data } });
 
-  // TODO: update with correct route
-  return redirect(getPathById('public/application/$id/new-adult/dental-insurance', params));
+  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/dental-insurance`, params));
 }
 
 export default function ApplicationSpokeDentalInsurance({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = loaderData;
+  const { defaultState, typeAndFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -179,7 +186,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
           <ButtonLink
             id="back-button"
             variant="secondary"
-            routeId="public/application/$id/new-adult/dental-insurance" // TODO: update with correct route
+            routeId={`public/application/$id/${typeAndFlow}/dental-insurance`}
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}

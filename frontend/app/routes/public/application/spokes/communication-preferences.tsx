@@ -9,7 +9,7 @@ import { z } from 'zod';
 import type { Route } from './+types/communication-preferences';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { CommunicationPreferencesState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -39,6 +39,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -46,16 +48,23 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const languages = appContainer.get(TYPES.LanguageService).listAndSortLocalizedLanguages(locale);
 
-  return { defaultState: state.communicationPreferences, languages, meta };
+  return {
+    defaultState: state.communicationPreferences,
+    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
+    languages,
+    meta,
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -80,12 +89,12 @@ export async function action({ context: { appContainer, session }, params, reque
   if (parsedDataResult.data.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email) {
     return redirect(getPathById('public/application/$id/email', params));
   }
-  return redirect(getPathById('public/application/$id/new-adult/contact-information', params));
+  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/contact-information`, params));
 }
 
 export default function ApplicationSpokeCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = loaderData;
+  const { defaultState, typeAndFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -169,7 +178,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
           <ButtonLink
             id="back-button"
             variant="secondary"
-            routeId="public/application/$id/new-adult/contact-information"
+            routeId={`public/application/$id/${typeAndFlow}/contact-information`}
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}
