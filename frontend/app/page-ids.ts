@@ -166,6 +166,7 @@ export const pageIds = {
         communicationPreferences: 'CDCP-APPL-SPK-0017',
         email: 'CDCP-APPL-SPK-0018',
         verifyEmail: 'CDCP-APPL-SPK-0019',
+        childInformation: 'CDCP-APPL-SPK-0020',
       },
     },
     apply: {

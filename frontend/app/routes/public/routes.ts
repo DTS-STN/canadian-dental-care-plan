@@ -85,6 +85,11 @@ export const routes = [
           },
           { id: 'public/application/$id/email', file: 'routes/public/application/spokes/email.tsx', paths: { en: '/:lang/application/:id/email', fr: '/:lang/demander/:id/adresse-courriel' } },
           { id: 'public/application/$id/verify-email', file: 'routes/public/application/spokes/verify-email.tsx', paths: { en: '/:lang/application/:id/verify-email', fr: '/:lang/demander/:id/verifier-courriel' } },
+          {
+            id: 'public/application/$id/children/$childId/information',
+            file: 'routes/public/application/spokes/child-information.tsx',
+            paths: { en: '/:lang/application/:id/children/:childId/information', fr: '/:lang/demander/:id/enfant/:childId/information' },
+          },
         ],
       },
       {
