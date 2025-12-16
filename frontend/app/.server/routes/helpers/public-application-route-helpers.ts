@@ -437,6 +437,8 @@ export function validateApplicationTypeAndFlow<TAllowedTypesAndFlows extends Rea
   }
 }
 
+export type TypeAndFlow = 'entry' | `${TypeOfApplicationState}-${TypeOfApplicationFlowState}`;
+
 /**
  * Determines the initial URL path based on the application type and flow state.
  *
@@ -446,7 +448,7 @@ export function validateApplicationTypeAndFlow<TAllowedTypesAndFlows extends Rea
  * @returns The URL path string for the corresponding application type and flow
  * @throws {Error} When an unknown typeAndFlow value is provided
  */
-export function getInitialTypeAndFlowUrl(typeAndFlow: 'entry' | `${TypeOfApplicationState}-${TypeOfApplicationFlowState}`, params: Params) {
+export function getInitialTypeAndFlowUrl(typeAndFlow: TypeAndFlow, params: Params) {
   switch (typeAndFlow) {
     case 'entry': {
       return getPathById('public/application/$id/eligibility-requirements', params);

@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/type-application';
 
-import { getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { TypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getInitialTypeAndFlowUrl, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -19,19 +20,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const APPLICANT_TYPE = { adult: 'adult', family: 'family', children: 'children' } as const;
 
-function getNextRouteId(applicationType: string) {
-  if (applicationType === APPLICANT_TYPE.adult) {
-    return 'public/application/$id/new-adult/marital-status';
-  }
-  if (applicationType === APPLICANT_TYPE.children) {
-    return 'public/application/$id/new-children/parent-or-guardian';
-  }
-  if (applicationType === APPLICANT_TYPE.family) {
-    return 'public/application/$id/new-family/marital-status';
-  }
-  // TODO: add condition for children flow
-}
-
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'gcweb'),
   pageIdentifier: pageIds.public.application.typeOfApplication,
@@ -44,18 +32,22 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application:type-of-application.page-title') }) };
+
+  const typeAndFlow: TypeAndFlow = state.typeOfApplication && state.typeOfApplicationFlow ? `${state.typeOfApplication}-${state.typeOfApplicationFlow}` : 'entry';
+  const nextRouteId = getInitialTypeAndFlowUrl(typeAndFlow, params);
   return {
     defaultState: {
       typeOfApplication: state.typeOfApplicationFlow,
       personalInformation: state.applicantInformation,
       newOrReturningMember: state.newOrExistingMember,
     },
+    nextRouteId,
     meta,
   };
 }
 
 export default function TypeOfApplication({ loaderData, params }: Route.ComponentProps) {
-  const { defaultState } = loaderData;
+  const { defaultState, nextRouteId } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   function getTypeOfApplication(typeOfApplication: string) {
@@ -173,7 +165,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
       )}
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId={defaultState.typeOfApplication && getNextRouteId(defaultState.typeOfApplication)} params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId}>
           {t('application:type-of-application.application')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/eligibility-requirements" params={params}>
