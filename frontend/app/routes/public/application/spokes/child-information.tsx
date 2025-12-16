@@ -11,7 +11,7 @@ import type { Route } from './+types/child-information';
 
 import { TYPES } from '~/.server/constants';
 import type { ChildInformationState, ChildSinState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getAgeCategoryFromDateString, getPublicApplicationState, getSingleChildState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getAgeCategoryFromDateString, getPublicApplicationState, getSingleChildState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -51,28 +51,33 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const state = getSingleChildState({ params, request, session });
+  const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-children']);
+  const childState = getSingleChildState({ params, request, session });
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const childNumber = t('application-spokes:children.child-number', { childNumber: state.childNumber });
-  const childName = state.isNew ? childNumber : (state.information?.firstName ?? childNumber);
+  const childNumber = t('application-spokes:children.child-number', { childNumber: childState.childNumber });
+  const childName = childState.isNew ? childNumber : (childState.information?.firstName ?? childNumber);
 
   const meta = {
     title: t('gcweb:meta.title.template', { title: t('application-spokes:children.information.page-title', { childName }) }),
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('application-spokes:children.information.page-title', { childName: childNumber }) }),
   };
 
-  return { meta, defaultState: state.information, childName, isNew: state.isNew };
+  return { meta, defaultState: childState.information, childName, isNew: childState.isNew, typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}` };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-children']);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const state = getSingleChildState({ params, request, session });
-  const applyState = getPublicApplicationState({ params, session });
+  const childState = getSingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // Form action Continue & Save
@@ -154,7 +159,7 @@ export async function action({ context: { appContainer, session }, params, reque
           ctx.addIssue({ code: 'custom', message: t('application-spokes:children.information.error-message.sin-valid'), path: ['socialInsuranceNumber'] });
         } else if (
           val.socialInsuranceNumber &&
-          [applyState.applicantInformation?.socialInsuranceNumber, applyState.partnerInformation?.socialInsuranceNumber, ...applyState.children.filter((child) => state.id !== child.id).map((child) => child.information?.socialInsuranceNumber)]
+          [state.applicantInformation?.socialInsuranceNumber, state.partnerInformation?.socialInsuranceNumber, ...state.children.filter((child) => state.id !== child.id).map((child) => child.information?.socialInsuranceNumber)]
             .filter((sin) => sin !== undefined)
             .map((sin) => formatSin(sin))
             .includes(formatSin(val.socialInsuranceNumber))
@@ -197,8 +202,8 @@ export async function action({ context: { appContainer, session }, params, reque
     params,
     session,
     state: {
-      children: applyState.children.map((child) => {
-        if (child.id !== state.id) return child;
+      children: state.children.map((child) => {
+        if (child.id !== childState.id) return child;
         const information = { ...parsedDataResult.data, ...parsedSinDataResult.data };
         if (ageCategory !== 'youth' && ageCategory !== 'children') {
           information['dateOfBirth'] = child.information?.dateOfBirth ?? '';
@@ -209,20 +214,20 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (!parsedDataResult.data.isParent) {
-    return redirect(getPathById('public/apply/$id/child/children/$childId/parent-or-guardian', params));
+    return redirect(getPathById('public/application/$id/children/$childId/parent-or-guardian', params));
   }
 
   if (ageCategory === 'adults' || ageCategory === 'seniors') {
-    return redirect(getPathById('public/apply/$id/child/children/$childId/cannot-application-spokes', params));
+    return redirect(getPathById('public/application/$id/children/$childId/cannot-application-spokes', params));
   }
 
-  return redirect(getPathById('public/apply/$id/child/children/$childId/dental-insurance', params));
+  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/parent-or-guardian`, params));
 }
 
 export default function ApplyFlowChildInformation({ loaderData, params }: Route.ComponentProps) {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, childName, isNew } = loaderData;
+  const { defaultState, childName, isNew, typeAndFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -352,7 +357,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId="public/apply/$id/child/children/index"
+              routeId={`public/application/$id/${typeAndFlow}/parent-or-guardian`}
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
