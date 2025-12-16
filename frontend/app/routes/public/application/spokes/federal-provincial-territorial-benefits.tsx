@@ -12,7 +12,7 @@ import type { Route } from './+types/federal-provincial-territorial-benefits';
 import { TYPES } from '~/.server/constants';
 import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/apply-route-helpers';
 import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
-import { getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -52,9 +52,11 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
 
-  const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -74,13 +76,15 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const state = getPublicApplicationState({ params, session });
 
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.cancel) {
@@ -93,8 +97,8 @@ export async function action({ context: { appContainer, session }, params, reque
         },
       });
     }
-    // TODO: update with correct route
-    return redirect(getPathById('public/application/$id/new-adult/dental-insurance', params));
+
+    return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/dental-insurance`, params));
   }
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
@@ -175,8 +179,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  // TODO: update with correct route
-  return redirect(getPathById('public/application/$id/new-adult/dental-insurance', params));
+  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/dental-insurance`, params));
 }
 
 export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ loaderData, params }: Route.ComponentProps) {

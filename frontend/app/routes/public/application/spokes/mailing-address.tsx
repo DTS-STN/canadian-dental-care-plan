@@ -10,7 +10,7 @@ import { z } from 'zod';
 import type { Route } from './+types/mailing-address';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
@@ -49,6 +49,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const countryList = await appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
@@ -57,15 +59,18 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:address.mailing-address.page-title') }) };
 
   return {
-    meta,
     defaultState: state,
+    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
     countryList,
     regionList,
-    editMode: state.editMode,
+    meta,
   };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+
   const formData = await request.formData();
   const locale = getLocale(request);
 
@@ -118,7 +123,7 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     });
 
-    return redirect(isCopyMailingToHome ? getPathById('public/application/$id/new-adult/contact-information', params) : getPathById('public/application/$id/home-address', params));
+    return redirect(isCopyMailingToHome ? getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/contact-information`, params) : getPathById('public/application/$id/home-address', params));
   }
 
   // Validate Canadian address
@@ -181,7 +186,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(isCopyMailingToHome ? getPathById('public/application/$id/new-adult/contact-information', params) : getPathById('public/application/$id/home-address', params));
+  return redirect(isCopyMailingToHome ? getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/contact-information`, params) : getPathById('public/application/$id/home-address', params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {
@@ -190,7 +195,7 @@ function isAddressResponse(data: unknown): data is AddressResponse {
 
 export default function MailingAddress({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, countryList, regionList } = loaderData;
+  const { defaultState, countryList, regionList, typeAndFlow } = loaderData;
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useClientEnv();
 
   const fetcher = useEnhancedFetcher<typeof action>();
@@ -353,7 +358,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId="public/application/$id/new-adult/contact-information"
+              routeId={`public/application/$id/${typeAndFlow}/contact-information`}
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}

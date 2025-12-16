@@ -6,7 +6,7 @@ import { z } from 'zod';
 import type { Route } from './+types/phone-number';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { phoneSchema } from '~/.server/validation/phone-schema';
@@ -34,6 +34,8 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:phone-number.page-title') }) };
@@ -42,17 +44,20 @@ export async function loader({ context: { appContainer, session }, params, reque
       phoneNumber: state.contactInformation?.phoneNumber,
       phoneNumberAlt: state.contactInformation?.phoneNumberAlt,
     },
+    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
     meta,
   };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const phoneNumberSchema = z.object({
@@ -81,13 +86,12 @@ export async function action({ context: { appContainer, session }, params, reque
     state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } },
   });
 
-  // TODO: update with correct route
-  return redirect(getPathById('public/application/$id/new-adult/contact-information', params));
+  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/contact-information`, params));
 }
 
 export default function PhoneNumber({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = loaderData;
+  const { defaultState, typeAndFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -159,7 +163,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
           <ButtonLink
             id="back-button"
             variant="secondary"
-            routeId={'public/application/$id/new-adult/contact-information'}
+            routeId={`public/application/$id/${typeAndFlow}/contact-information`}
             params={params}
             disabled={isSubmitting}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Phone number click"

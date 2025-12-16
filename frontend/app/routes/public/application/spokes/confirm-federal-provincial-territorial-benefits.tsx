@@ -9,7 +9,7 @@ import { z } from 'zod';
 import type { Route } from './+types/confirm-federal-provincial-territorial-benefits';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -38,24 +38,28 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:confirm-dental-benefits.title') }) };
 
   return {
     defaultState: state.hasFederalProvincialTerritorialBenefits,
+    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
     meta,
   };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const state = getPublicApplicationState({ params, session });
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-
-  const state = getPublicApplicationState({ params, session });
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
@@ -93,13 +97,12 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/application/$id/federal-provincial-territorial-benefits', params));
   }
 
-  // TODO: update with correct route
-  return redirect(getPathById('public/application/$id/new-adult/dental-insurance', params));
+  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/dental-insurance`, params));
 }
 
 export default function ApplicationSpokeConfirmFederalProvincialTerritorialBenefits({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = loaderData;
+  const { defaultState, typeAndFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -152,7 +155,7 @@ export default function ApplicationSpokeConfirmFederalProvincialTerritorialBenef
           <ButtonLink
             id="back-button"
             variant="secondary"
-            routeId="public/application/$id/new-adult/dental-insurance" // TODO: update with correct route
+            routeId={`public/application/$id/${typeAndFlow}/dental-insurance`}
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}
