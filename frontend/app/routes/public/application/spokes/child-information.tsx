@@ -7,7 +7,7 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import type { Route } from './+types/information';
+import type { Route } from './+types/child-information';
 
 import { TYPES } from '~/.server/constants';
 import type { ChildInformationState, ChildSinState } from '~/.server/routes/helpers/public-application-route-helpers';
@@ -43,7 +43,7 @@ const YES_NO_OPTION = {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.child.childInformation,
+  pageIdentifier: pageIds.public.application.spokes.childInformation,
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {

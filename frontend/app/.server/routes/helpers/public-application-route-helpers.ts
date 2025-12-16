@@ -500,7 +500,7 @@ export function getSingleChildState({ params, request, session }: getSingleChild
 
   if (!parsedChildId.success) {
     log.warn('Invalid "childId" param format; childId: [%s]', params.childId);
-    throw redirect(getPathById('public/application/$id/new-children/children/index', params));
+    throw redirect(getPathById(`public/application/$id/${applicationState.typeOfApplication}-${applicationState.typeOfApplicationFlow}/children/index`, params));
   }
 
   const childId = parsedChildId.data;
@@ -508,7 +508,7 @@ export function getSingleChildState({ params, request, session }: getSingleChild
 
   if (childStateIndex === -1) {
     log.warn('Apply single child has not been found; childId: [%s]', childId);
-    throw redirect(getPathById('public/application/$id/new-children/children/index', params));
+    throw redirect(getPathById(`public/application/$id/${applicationState.typeOfApplication}-${applicationState.typeOfApplicationFlow}/children/index`, params));
   }
 
   const childState = applicationState.children[childStateIndex];
