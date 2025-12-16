@@ -42,6 +42,16 @@ export const routes = [
             file: 'routes/public/application/new-children/parent-or-guardian.tsx',
             paths: { en: '/:lang/application/:id/new-children/parent-or-guardian', fr: '/:lang/demandes/:id/new-children/parent-ou-tuteur' },
           },
+          {
+            id: 'public/application/$id/new-children/submit',
+            file: 'routes/public/application/new-children/submit.tsx',
+            paths: { en: '/:lang/application/:id/new-children/submit', fr: '/:lang/demandes/:id/new-children/submit' },
+          },
+          {
+            id: 'public/application/$id/new-children/exit-application',
+            file: 'routes/public/application/new-children/exit-application.tsx',
+            paths: { en: '/:lang/application/:id/new-children/exit-application', fr: '/:lang/demandes/:id/new-children/quitter-demande' },
+          },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },

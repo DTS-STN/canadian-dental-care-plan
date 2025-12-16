@@ -142,7 +142,9 @@ export const pageIds = {
         exitApplication: 'CDCP-APPL-NAD-0006',
       },
       newChild: {
-        parentOrGuardian: 'CDCP-APPL-NAD-0001',
+        parentOrGuardian: 'CDCP-APPL-NCH-0001',
+        submit: 'CDCP-APPL-NCH-0003',
+        exitApplication: 'CDCP-APPL-NCH-0004',
       },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',
