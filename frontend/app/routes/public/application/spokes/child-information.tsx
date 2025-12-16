@@ -159,7 +159,7 @@ export async function action({ context: { appContainer, session }, params, reque
           ctx.addIssue({ code: 'custom', message: t('application-spokes:children.information.error-message.sin-valid'), path: ['socialInsuranceNumber'] });
         } else if (
           val.socialInsuranceNumber &&
-          [state.applicantInformation?.socialInsuranceNumber, state.partnerInformation?.socialInsuranceNumber, ...state.children.filter((child) => state.id !== child.id).map((child) => child.information?.socialInsuranceNumber)]
+          [state.applicantInformation?.socialInsuranceNumber, state.partnerInformation?.socialInsuranceNumber, ...state.children.filter((child) => childState.id !== child.id).map((child) => child.information?.socialInsuranceNumber)]
             .filter((sin) => sin !== undefined)
             .map((sin) => formatSin(sin))
             .includes(formatSin(val.socialInsuranceNumber))
