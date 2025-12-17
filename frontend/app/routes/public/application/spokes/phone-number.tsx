@@ -24,6 +24,17 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
+function getRouteFromTypeAndFlow(typeAndFlow: string) {
+  switch (typeAndFlow) {
+    case 'new-children': {
+      return `public/application/$id/${typeAndFlow}/parent-or-guardian`;
+    }
+    default: {
+      return `public/application/$id/${typeAndFlow}/marital-status`;
+    }
+  }
+}
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.phoneNumber,
@@ -60,6 +71,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
+  const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
+
   const phoneNumberSchema = z.object({
     phoneNumber: phoneSchema({
       invalid_phone_canadian_error: t('application-spokes:phone-number.error-message.phone-number-valid'),
@@ -86,7 +99,7 @@ export async function action({ context: { appContainer, session }, params, reque
     state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } },
   });
 
-  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/contact-information`, params));
+  return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
 }
 
 export default function PhoneNumber({ loaderData, params }: Route.ComponentProps) {
@@ -160,14 +173,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
           <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Phone number click">
             {t('application-spokes:phone-number.save-btn')}
           </LoadingButton>
-          <ButtonLink
-            id="back-button"
-            variant="secondary"
-            routeId={`public/application/$id/${typeAndFlow}/contact-information`}
-            params={params}
-            disabled={isSubmitting}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Phone number click"
-          >
+          <ButtonLink id="back-button" variant="secondary" routeId={getRouteFromTypeAndFlow(typeAndFlow)} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Phone number click">
             {t('application-spokes:phone-number.back-btn')}
           </ButtonLink>
         </div>
