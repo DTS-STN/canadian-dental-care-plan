@@ -145,6 +145,7 @@ export const pageIds = {
         parentOrGuardian: 'CDCP-APPL-NCH-0001',
         submit: 'CDCP-APPL-NCH-0003',
         exitApplication: 'CDCP-APPL-NCH-0004',
+        confirmation: 'CDCP-APPL-NCH-0005',
       },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',

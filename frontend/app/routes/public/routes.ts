@@ -52,6 +52,11 @@ export const routes = [
             file: 'routes/public/application/new-children/exit-application.tsx',
             paths: { en: '/:lang/application/:id/new-children/exit-application', fr: '/:lang/demandes/:id/new-children/quitter-demande' },
           },
+          {
+            id: 'public/application/$id/new-children/confirmation',
+            file: 'routes/public/application/new-children/confirmation.tsx',
+            paths: { en: '/:lang/application/:id/new-children/confirmation', fr: '/:lang/demandes/:id/new-children/confirmation' },
+          },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },
