@@ -16,6 +16,7 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
 import { ProgressStepper } from '~/components/progress-stepper';
+import { useCurrentLanguage } from '~/hooks';
 import { useProgressStepper } from '~/hooks/use-progress-stepper';
 import { pageIds } from '~/page-ids';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
@@ -61,12 +62,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   const env = appContainer.get(TYPES.ClientConfig);
   const surveyLink = locale === 'en' ? env.CDCP_SURVEY_LINK_EN : env.CDCP_SURVEY_LINK_FR;
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram
-    ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
-    : undefined;
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
+
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale) : undefined;
 
   const selectedProvincialBenefits = state.dentalBenefits?.provincialTerritorialSocialProgram
-    ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+    ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
     : undefined;
 
   const mailingProvinceTerritoryStateAbbr = state.mailingAddress.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
@@ -116,6 +118,41 @@ export async function loader({ context: { appContainer, session }, params, reque
     selectedProvincialBenefits: selectedProvincialBenefits?.name,
   };
 
+  const children = await Promise.all(
+    state.children.map(async (child) => {
+      // prettier-ignore
+      const selectFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
+      ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+      : undefined;
+
+      // prettier-ignore
+      const selectedProvincialBenefit = child.dentalBenefits?.provincialTerritorialSocialProgram
+      ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+      : undefined;
+
+      return {
+        id: child.id,
+        firstName: child.information?.firstName,
+        lastName: child.information?.lastName,
+        birthday: child.information?.dateOfBirth,
+        sin: child.information?.socialInsuranceNumber,
+        isParent: child.information?.isParent,
+        dentalInsurance: {
+          accessToDentalInsurance: child.dentalInsurance,
+          federalBenefit: {
+            access: child.dentalBenefits?.hasFederalBenefits,
+            benefit: selectFederalGovernmentInsurancePlan?.name,
+          },
+          provTerrBenefit: {
+            access: child.dentalBenefits?.hasProvincialTerritorialBenefits,
+            province: child.dentalBenefits?.province,
+            benefit: selectedProvincialBenefit?.name,
+          },
+        },
+      };
+    }),
+  );
+
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-child:confirm.page-title') }) };
 
   return {
@@ -127,6 +164,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     submissionInfo: state.submissionInfo,
     surveyLink,
     userInfo,
+    children,
   };
 }
 
@@ -149,12 +187,13 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function NewChildrenConfirmation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink } = loaderData;
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, children } = loaderData;
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('application-new-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
   const { steps } = useProgressStepper('new-children', 'submit');
+  const { currentLanguage } = useCurrentLanguage();
 
   return (
     <div className="max-w-prose space-y-10">
@@ -338,6 +377,48 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
             </DescriptionListItem>
           </dl>
         </section>
+
+        <div className="mb-8 space-y-10">
+          {children.map((child) => {
+            const dateOfBirth = toLocaleDateString(parseDateString(child.birthday ?? ''), currentLanguage);
+            return (
+              <section key={child.id} className="space-y-10">
+                <h2 className="font-lato text-3xl font-bold">{child.firstName}</h2>
+                <div>
+                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-new-child:confirm.page-sub-title', { child: child.firstName })}</h3>
+                  <dl className="divide-y border-y">
+                    <DescriptionListItem term={t('application-new-child:confirm.full-name-title')}>{`${child.firstName} ${child.lastName}`}</DescriptionListItem>
+                    <DescriptionListItem term={t('application-new-child:confirm.dob-title')}>{dateOfBirth}</DescriptionListItem>
+                    <DescriptionListItem term={t('application-new-child:confirm.sin-title')}>{child.sin && formatSin(child.sin)}</DescriptionListItem>
+                    <DescriptionListItem term={t('application-new-child:confirm.is-parent')}>{child.isParent ? t('application-new-child:confirm.yes') : t('application-new-child:confirm.no')}</DescriptionListItem>
+                  </dl>
+                </div>
+                <div>
+                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-new-child:confirm.dental-title', { child: child.firstName })}</h3>
+                  <dl className="divide-y border-y">
+                    <DescriptionListItem term={t('application-new-child:confirm.dental-insurance-title')}>{child.dentalInsurance.accessToDentalInsurance ? t('application-new-child:confirm.yes') : t('application-new-child:confirm.no')}</DescriptionListItem>
+                    <DescriptionListItem term={t('application-new-child:confirm.dental-benefit-title')}>
+                      {child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access ? (
+                        <>
+                          <p>{t('application-new-child:confirm.yes')}</p>
+                          <p>{t('application-new-child:confirm.dental-benefit-has-access')}</p>
+                          <div>
+                            <ul className="ml-6 list-disc">
+                              {child.dentalInsurance.federalBenefit.access && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
+                              {child.dentalInsurance.provTerrBenefit.access && <li>{child.dentalInsurance.provTerrBenefit.benefit}</li>}
+                            </ul>
+                          </div>
+                        </>
+                      ) : (
+                        <>{t('application-new-child:confirm.no')}</>
+                      )}
+                    </DescriptionListItem>
+                  </dl>
+                </div>
+              </section>
+            );
+          })}
+        </div>
       </section>
 
       <div className="my-6">
