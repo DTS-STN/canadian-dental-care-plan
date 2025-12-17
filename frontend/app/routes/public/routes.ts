@@ -58,9 +58,9 @@ export const routes = [
             paths: { en: '/:lang/application/:id/new-children/confirmation', fr: '/:lang/demandes/:id/new-children/confirmation' },
           },
           {
-            id: 'public/application/$id/new-children/child-application',
-            file: 'routes/public/application/new-children/child-application.tsx',
-            paths: { en: '/:lang/application/:id/new-children/child-application', fr: '/:lang/demandes/:id/new-children/application-enfants' },
+            id: 'public/application/$id/new-children/childrens-application',
+            file: 'routes/public/application/new-children/childrens-application.tsx',
+            paths: { en: '/:lang/application/:id/new-children/childrens-application', fr: '/:lang/demandes/:id/new-children/application-enfants' },
           },
 
           // spokes

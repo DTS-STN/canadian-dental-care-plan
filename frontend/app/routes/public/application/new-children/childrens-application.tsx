@@ -112,14 +112,14 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                       <p>{child.information?.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</p>
                     </DescriptionListItem>
                     <DescriptionListItem term={t('application-new-child:childrens-application.parent-guardian-title')}>
-                      <p>{child.parentOrGuardian ? t('application-new-child:childrens-application.yes') : t('application-new-child:childrens-application.no')}</p>
+                      <p>{child.information.isParent ? t('application-new-child:childrens-application.yes') : t('application-new-child:childrens-application.no')}</p>
                     </DescriptionListItem>
                   </dl>
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
                 <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/child-information" params={params} startIcon={faCirclePlus} size="lg">
-                  {state.dentalInsurance === undefined ? t('application-new-child:childrens-application.add-child-information') : t('application-new-child:childrens-application.edit-child-information')}
+                  {child.information === undefined ? t('application-new-child:childrens-application.add-child-information') : t('application-new-child:childrens-application.edit-child-information')}
                 </ButtonLink>
               </CardFooter>
             </Card>
@@ -135,14 +135,14 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                 ) : (
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('application-new-child:childrens-application.dental-insurance-title')}>
-                      <p>{child.parentOrGuardian ? t('application-new-child:childrens-application.yes') : t('application-new-child:childrens-application.no')}</p>
+                      <p>{child.dentalInsurance ? t('application-new-child:childrens-application.yes') : t('application-new-child:childrens-application.no')}</p>
                     </DescriptionListItem>
                   </dl>
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
                 <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={faCirclePlus} size="lg">
-                  {state.dentalBenefits === undefined ? t('application-new-child:childrens-application.add-child-dental-insurance') : t('application-new-child:childrens-application.edit-child-dental-insurance')}
+                  {child.dentalInsurance === undefined ? t('application-new-child:childrens-application.add-child-dental-insurance') : t('application-new-child:childrens-application.edit-child-dental-insurance')}
                 </ButtonLink>
               </CardFooter>
             </Card>
@@ -158,7 +158,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                 ) : (
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('application-new-child:childrens-application.dental-benefits-title')}>
-                      <p>{child.parentOrGuardian ? t('application-new-child:childrens-application.yes') : t('application-new-child:childrens-application.no')}</p>
+                      <p>{child.dentalBenefits.hasFederalBenefits || child.dentalBenefits.hasProvincialTerritorialBenefits ? t('application-new-child:childrens-application.yes') : t('application-new-child:childrens-application.no')}</p>
                       {!!child.dentalBenefits.hasFederalBenefits || !!child.dentalBenefits.hasProvincialTerritorialBenefits ? (
                         <>
                           <p>{t('application-new-child:childrens-application.yes')}</p>
@@ -178,7 +178,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
                 <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faCirclePlus} size="lg">
-                  {state.dentalBenefits === undefined ? t('application-new-child:childrens-application.add-child-dental-benefits') : t('application-new-child:childrens-application.edit-child-dental-benefits')}
+                  {child.dentalBenefits === undefined ? t('application-new-child:childrens-application.add-child-dental-benefits') : t('application-new-child:childrens-application.edit-child-dental-benefits')}
                 </ButtonLink>
               </CardFooter>
             </Card>
@@ -187,10 +187,10 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
       })}
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink /*disabled={!allSectionsCompleted}*/ variant="primary" direction="next" routeId="public/application/$id/new-child/submit" params={params}>
+        <NavigationButtonLink /*disabled={!allSectionsCompleted}*/ variant="primary" direction="next" routeId="public/application/$id/new-children/submit" params={params}>
           {t('application-new-child:childrens-application.submit-btn')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-child/parent-or-guardian" params={params}>
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-children/parent-or-guardian" params={params}>
           {t('application-new-child:childrens-application.back-btn')}
         </NavigationButtonLink>
       </div>
