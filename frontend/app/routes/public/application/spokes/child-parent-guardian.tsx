@@ -5,7 +5,7 @@ import { redirect, useFetcher } from 'react-router';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
-import type { Route } from './+types/parent-or-guardian';
+import type { Route } from './+types/child-parent-guardian';
 
 import { TYPES } from '~/.server/constants';
 import { clearPublicApplicationState, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
@@ -50,7 +50,7 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(t('application-spokes:children.parent-or-guardian.return-btn-link'));
 }
 
-export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
+export default function ParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const fetcher = useFetcher<typeof action>();
