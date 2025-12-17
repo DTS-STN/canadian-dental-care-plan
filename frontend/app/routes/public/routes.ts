@@ -90,6 +90,16 @@ export const routes = [
             file: 'routes/public/application/spokes/child-information.tsx',
             paths: { en: '/:lang/application/:id/children/:childId/information', fr: '/:lang/demander/:id/enfant/:childId/information' },
           },
+          {
+            id: 'public/application/$id/children/$childId/parent-or-guardian',
+            file: 'routes/public/application/spokes/child-parent-guardian.tsx',
+            paths: { en: '/:lang/application/:id/children/:childId/parent-or-guardian', fr: '/:lang/demander/:id/enfant/:childId/parent-ou-tuteur' },
+          },
+          {
+            id: 'public/application/$id/children/$childId/cannot-apply-child',
+            file: 'routes/public/application/spokes/cannot-apply-child.tsx',
+            paths: { en: '/:lang/application/:id/children/:childId/cannot-apply-child', fr: '/:lang/demander/:id/enfant/:childId/pas-demande-enfant' },
+          },
         ],
       },
       {
