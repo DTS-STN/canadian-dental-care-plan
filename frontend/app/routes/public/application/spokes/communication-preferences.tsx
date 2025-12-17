@@ -29,6 +29,17 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const PREFERRED_SUN_LIFE_METHOD = { email: 'email', mail: 'mail' } as const;
 export const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
 
+function getRouteFromTypeAndFlow(typeAndFlow: string) {
+  switch (typeAndFlow) {
+    case 'new-children': {
+      return `public/application/$id/${typeAndFlow}/parent-or-guardian`;
+    }
+    default: {
+      return `public/application/$id/${typeAndFlow}/marital-status`;
+    }
+  }
+}
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.communicationPreferences,
@@ -67,6 +78,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
+  const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
+
   // state validation schema
   const communicationPreferencesSchema = z.object({
     preferredLanguage: z.string().trim().min(1, t('application-spokes:communication-preferences.error-message.preferred-language-required')),
@@ -89,7 +102,7 @@ export async function action({ context: { appContainer, session }, params, reque
   if (parsedDataResult.data.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email) {
     return redirect(getPathById('public/application/$id/email', params));
   }
-  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/contact-information`, params));
+  return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
 }
 
 export default function ApplicationSpokeCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
@@ -178,7 +191,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
           <ButtonLink
             id="back-button"
             variant="secondary"
-            routeId={`public/application/$id/${typeAndFlow}/contact-information`}
+            routeId={getRouteFromTypeAndFlow(typeAndFlow)}
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}

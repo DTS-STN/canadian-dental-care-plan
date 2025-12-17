@@ -39,6 +39,17 @@ const FORM_ACTION = {
   useSelectedAddress: 'use-selected-address',
 } as const;
 
+function getRouteFromTypeAndFlow(typeAndFlow: string) {
+  switch (typeAndFlow) {
+    case 'new-children': {
+      return `public/application/$id/${typeAndFlow}/parent-or-guardian`;
+    }
+    default: {
+      return `public/application/$id/${typeAndFlow}/marital-status`;
+    }
+  }
+}
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.mailingAddress,
@@ -84,6 +95,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   const isCopyMailingToHome = formData.get('syncAddresses') === 'true';
 
+  const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
+
   const mailingAddressValidator = appContainer.get(TYPES.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const validatedResult = await mailingAddressValidator.validateMailingAddress({
     address: String(formData.get('address')),
@@ -123,7 +136,7 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     });
 
-    return redirect(isCopyMailingToHome ? getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/contact-information`, params) : getPathById('public/application/$id/home-address', params));
+    return redirect(isCopyMailingToHome ? getPathById(getRouteFromTypeAndFlow(typeAndFlow), params) : getPathById('public/application/$id/home-address', params));
   }
 
   // Validate Canadian address
@@ -186,7 +199,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(isCopyMailingToHome ? getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/contact-information`, params) : getPathById('public/application/$id/home-address', params));
+  return redirect(isCopyMailingToHome ? getPathById(getRouteFromTypeAndFlow(typeAndFlow), params) : getPathById('public/application/$id/home-address', params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {
@@ -358,7 +371,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId={`public/application/$id/${typeAndFlow}/contact-information`}
+              routeId={getRouteFromTypeAndFlow(typeAndFlow)}
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}

@@ -39,6 +39,17 @@ const FORM_ACTION = {
   useSelectedAddress: 'use-selected-address',
 } as const;
 
+function getRouteFromTypeAndFlow(typeAndFlow: string) {
+  switch (typeAndFlow) {
+    case 'new-children': {
+      return `public/application/$id/${typeAndFlow}/parent-or-guardian`;
+    }
+    default: {
+      return `public/application/$id/${typeAndFlow}/marital-status`;
+    }
+  }
+}
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.homeAddress,
@@ -85,6 +96,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const homeAddressValidator = appContainer.get(TYPES.HomeAddressValidatorFactory).createHomeAddressValidator(locale);
 
+  const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
+
   const parsedDataResult = await homeAddressValidator.validateHomeAddress({
     address: String(formData.get('address')),
     countryId: String(formData.get('countryId')),
@@ -112,7 +125,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (canProceedToDental) {
     savePublicApplicationState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
-    return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/contact-information`, params));
+    return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
   }
 
   invariant(parsedDataResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
@@ -166,7 +179,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   savePublicApplicationState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
 
-  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/contact-information`, params));
+  return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {

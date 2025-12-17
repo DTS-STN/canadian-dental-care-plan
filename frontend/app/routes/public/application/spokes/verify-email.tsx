@@ -34,6 +34,17 @@ const FORM_ACTION = {
 
 const MAX_ATTEMPTS = 5;
 
+function getRouteFromTypeAndFlow(typeAndFlow: string) {
+  switch (typeAndFlow) {
+    case 'new-children': {
+      return `public/application/$id/${typeAndFlow}/parent-or-guardian`;
+    }
+    default: {
+      return `public/application/$id/${typeAndFlow}/marital-status`;
+    }
+  }
+}
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.verifyEmail,
@@ -65,6 +76,9 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
+
   const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.ServerConfig);
 
   const verificationCodeService = appContainer.get(TYPES.VerificationCodeService);
@@ -151,7 +165,7 @@ export async function action({ context: { appContainer, session }, params, reque
       });
     }
 
-    return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/contact-information`, params));
+    return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
   }
 }
 
