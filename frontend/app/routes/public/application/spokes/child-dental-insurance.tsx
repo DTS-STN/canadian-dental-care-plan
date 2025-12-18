@@ -121,7 +121,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
   const isSubmitting = fetcher.state !== 'idle';
 
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, { dentalInsurance: 'input-radio-dental-insurance-option-0' });
+  const errorSummary = useErrorSummary(errors, { hasDentalInsurance: 'input-radio-dental-insurance-option-0' });
 
   const [hasDentalInsurance, setHasDentalInsurance] = useState(defaultState?.hasDentalInsurance);
 
@@ -151,8 +151,8 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
           <CsrfTokenInput />
           <div className="my-6">
             <InputRadios
-              id="dental-insurance"
-              name="dentalInsurance"
+              id="has-dental-insurance"
+              name="hasDentalInsurance"
               legend={t('children.dental-insurance.legend', { childName: childName })}
               options={[
                 {
@@ -178,17 +178,17 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
             <div className="space-y-4">
               <ContextualAlert type="info">
                 <h3 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.alert.title')}</h3>
-                <p>{t('dental-insurance.alert.body')}</p>
+                <p>{t('children.dental-insurance.alert.body')}</p>
               </ContextualAlert>
               <InputCheckbox
-                id="dental-insurance-elgibility-confirmation"
+                id="dental-insurance-eligibility-confirmation"
                 name="dentalInsuranceEligibilityConfirmation"
                 value={CHECKBOX_VALUE.yes}
                 defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmation}
                 errorMessage={errors?.dentalInsuranceEligibilityConfirmation}
                 required
               >
-                {t('dental-insurance.dental-insurance-eligibility-confirmation')}
+                {t('children.dental-insurance.dental-insurance-eligibility-confirmation')}
               </InputCheckbox>
             </div>
           )}
