@@ -188,7 +188,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                 errorMessage={errors?.dentalInsuranceEligibilityConfirmation}
                 required
               >
-                {t('children.dental-insurance.dental-insurance-eligibility-confirmation')}
+                {t('children.dental-insurance.dental-insurance-eligibility-confirmation', { childName: childName })}
               </InputCheckbox>
             </div>
           )}
