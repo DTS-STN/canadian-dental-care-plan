@@ -177,8 +177,8 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
           {hasDentalInsurance && (
             <div className="space-y-4">
               <ContextualAlert type="info">
-                <h3 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.alert.title')}</h3>
-                <p>{t('children.dental-insurance.alert.body')}</p>
+                <h3 className="font-lato mb-2 text-xl font-semibold">{t('children.dental-insurance.alert.title')}</h3>
+                <p>{t('children.dental-insurance.alert.body', { childName: childName })}</p>
               </ContextualAlert>
               <InputCheckbox
                 id="dental-insurance-eligibility-confirmation"
