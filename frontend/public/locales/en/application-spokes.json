@@ -531,6 +531,40 @@
         "provincial-benefit-required": "Select whether the child has provincial or territorial dental benefits",
         "provincial-territorial-required": "Select a province or territory"
       }
+    },
+    "dental-insurance": {
+      "title": "{{childName}}'s access to private dental insurance",
+      "legend": "Does {{childName}} have private dental insurance or coverage through any of the following:",
+      "option-yes": "<strong>Yes</strong>, this child has access to private dental insurance or coverage",
+      "option-no": "<strong>No</strong>, this child does not have access to private dental insurance or coverage",
+      "dental-insurance-eligibility-confirmation": "I understand that {{childName}} is not eligible for the Canadian Dental Care Plan if they have access to dental insurance or coverage.",
+      "button": {
+        "back": "Back",
+        "continue": "Continue",
+        "cancel-btn": "Cancel",
+        "save-btn": "Save"
+      },
+      "detail": {
+        "additional-info": {
+          "title": "Does {{childName}} have private dental insurance or coverage through any of the following:",
+          "list": {
+            "employer": "a family member's employer",
+            "pension": "a family member's pension plan",
+            "organization": "a professional or student organization",
+            "private": "coverage bought privately"
+          },
+          "eligible": "This also applies even if they choose not to enrol in, do not use, or have to pay a premium for private dental insurance or coverage.",
+          "access": "Having access to dental coverage through the Canadian Dental Care Plan or other federal, provincial or territorial government social programs is not considered as having access to private dental insurance."
+        }
+      },
+      "alert": {
+        "title": "Private dental insurance confirmation",
+        "body": "If {{childName}} has access to private dental insurance or coverage, they are not eligible for the Canadian Dental Care Plan. If you continue with the application and {{childName}} is a current member, their benefits will end immediately."
+      },
+      "error-message": {
+        "dental-insurance-required": "Select whether you have access to dental insurance",
+        "dental-insurance-eligibility-confirmation-required": "Select whether you understand that if you have private dental insurance you are not eligible for the Canadian Dental Care Plan"
+      }
     }
   }
 }

@@ -531,6 +531,40 @@
         "provincial-benefit-required": "Sélectionnez si l'enfant bénéficie de prestations dentaires provinciales ou territoriales",
         "provincial-territorial-required": "Sélectionnez une province ou territoire"
       }
+    },
+    "dental-insurance": {
+      "title": "Accès de {{childName}} à une assurance dentaire privée",
+      "legend": "Est-ce que {{childName}} a une assurance dentaire privée ou une couverture par l'entremise de l'un des suivants :",
+      "option-yes": "<strong>Oui</strong>, cet enfant a accès à une assurance dentaire privée ou une couverture",
+      "option-no": "<strong>Non</strong>, cet enfant n'a pas accès à une assurance dentaire privée ou une couverture",
+      "dental-insurance-eligibility-confirmation": "Je comprends que {{childName}} n'est pas admissible au Régime canadien de soins dentaires s'il a accès à une assurance dentaire ou une couverture.",
+      "button": {
+        "back": "Retour",
+        "continue": "Continuer",
+        "cancel-btn": "Annuler",
+        "save-btn": "Enregistrer"
+      },
+      "detail": {
+        "additional-info": {
+          "title": "Est-ce que {{childName}} a une assurance dentaire privée ou une couverture par l'entremise de l'un des suivants :",
+          "list": {
+            "employer": "l'employeur d'un membre de la famille",
+            "pension": "le régime de pension d'un membre de la famille",
+            "organization": "une organisation professionnelle ou étudiante",
+            "private": "une couverture achetée de manière privée"
+          },
+          "eligible": "Cela s'applique également même s'ils choisissent de ne pas s'inscrire, de ne pas utiliser ou de devoir payer une prime pour une assurance dentaire privée ou une couverture.",
+          "access": "Avoir accès à une couverture dentaire par le biais du Régime canadien de soins dentaires ou d'autres programmes sociaux gouvernementaux fédéraux, provinciaux ou territoriaux n'est pas considéré comme ayant accès à une assurance dentaire privée."
+        }
+      },
+      "alert": {
+        "title": "Confirmation d'assurance dentaire privée",
+        "body": "Si {{childName}} a accès à une assurance dentaire privée ou une couverture, il n'est pas admissible au Régime canadien de soins dentaires. Si vous continuez avec la demande et que {{childName}} est un membre actuel, ses prestations prendront fin immédiatement."
+      },
+      "error-message": {
+        "dental-insurance-required": "Sélectionnez si vous avez accès à une assurance dentaire",
+        "dental-insurance-eligibility-confirmation-required": "Sélectionnez si vous comprenez que si vous avez une assurance dentaire privée, vous n'êtes pas admissible au Régime canadien de soins dentaires"
+      }
     }
   }
 }

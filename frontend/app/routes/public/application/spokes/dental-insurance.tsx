@@ -109,7 +109,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
     hasDentalInsurance: 'input-radio-has-dental-insurance-option-0',
-    dentalInsuranceEligibilityConfirmation: 'input-checkbox-dental-insurance-elgibility-confirmation',
+    dentalInsuranceEligibilityConfirmation: 'input-checkbox-dental-insurance-eligibility-confirmation',
   });
 
   function handleOnHasDentalInsuranceChanged(e: React.ChangeEvent<HTMLInputElement>) {
@@ -168,7 +168,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
               <p>{t('dental-insurance.alert.body')}</p>
             </ContextualAlert>
             <InputCheckbox
-              id="dental-insurance-elgibility-confirmation"
+              id="dental-insurance-eligibility-confirmation"
               name="dentalInsuranceEligibilityConfirmation"
               value={CHECKBOX_VALUE.yes}
               defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmation}

@@ -51,7 +51,10 @@ export type PublicApplicationState = ReadonlyDeep<{
       provincialTerritorialSocialProgram?: string;
       province?: string;
     };
-    dentalInsurance?: boolean;
+    dentalInsurance?: {
+      hasDentalInsurance: boolean;
+      dentalInsuranceEligibilityConfirmation?: boolean;
+    };
     information?: {
       firstName: string;
       lastName: string;
