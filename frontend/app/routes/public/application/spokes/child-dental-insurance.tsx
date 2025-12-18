@@ -194,7 +194,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
           )}
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton id="continue-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Child access to other dental insurance click">
-              {t('children.dental-insurance.button.continue')}
+              {t('children.dental-insurance.button.save-btn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
