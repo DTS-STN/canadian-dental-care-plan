@@ -105,6 +105,16 @@ export const routes = [
             file: 'routes/public/application/spokes/cannot-apply-child.tsx',
             paths: { en: '/:lang/application/:id/children/:childId/cannot-apply-child', fr: '/:lang/demander/:id/enfant/:childId/pas-demande-enfant' },
           },
+          {
+            id: 'public/application/$id/children/$childId/confirm-federal-provincial-territorial-benefits',
+            file: 'routes/public/application/spokes/child-confirm-federal-provincial-territorial-benefits.tsx',
+            paths: { en: '/:lang/application/:id/children/:childId/confirm-federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/enfant/:childId/confirm-federal-provincial-territorial-benefits' },
+          },
+          {
+            id: 'public/application/$id/children/$childId/federal-provincial-territorial-benefits',
+            file: 'routes/public/application/spokes/child-federal-provincial-territorial-benefits.tsx',
+            paths: { en: '/:lang/application/:id/children/:childId/federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/enfant/:childId/prestations-dentaires-federales-provinciales-territoriales' },
+          },
         ],
       },
       {

@@ -170,6 +170,8 @@ export const pageIds = {
         childInformation: 'CDCP-APPL-SPK-0020',
         childParentOrGuardian: 'CDCP-APPL-SPK-0021',
         cannotApplyChild: 'CDCP-APPL-SPK-0022',
+        childConfirmFederalProvincialTerritorialBenefits: 'CDCP-APPL-SPK-0023',
+        childFederalProvincialTerritorialBenefits: 'CDCP-APPL-SPK-0024',
       },
     },
     apply: {
