@@ -115,6 +115,11 @@ export const routes = [
             file: 'routes/public/application/spokes/child-federal-provincial-territorial-benefits.tsx',
             paths: { en: '/:lang/application/:id/children/:childId/federal-provincial-territorial-benefits', fr: '/:lang/demander/:id/enfant/:childId/prestations-dentaires-federales-provinciales-territoriales' },
           },
+          {
+            id: 'public/application/$id/children/$childId/dental-insurance',
+            file: 'routes/public/application/spokes/child-dental-insurance.tsx',
+            paths: { en: '/:lang/application/:id/children/:childId/dental-insurance', fr: '/:lang/demander/:id/enfant/:childId/assurance-dentaire' },
+          },
         ],
       },
       {
