@@ -152,11 +152,11 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
         return (
           <div key={child.id}>
             <h2 className="font-lato mb-4 text-2xl font-bold">{t('application-new-child:childrens-application.child-title', { childNumber: index })}</h2>
-            <div className="my-2 space-y-4">
+            <div className="space-y-4">
               <p>{t('application:required-label')}</p>
               <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
             </div>
-            <Card>
+            <Card className="my-2">
               <CardHeader>
                 <CardTitle>{t('application-new-child:childrens-application.child-information-card-title', { childNumber: index })}</CardTitle>
                 <CardAction>{completedSections.includes('child-information') && <StatusTag status="complete" />}</CardAction>
@@ -191,7 +191,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
               </CardFooter>
             </Card>
 
-            <Card>
+            <Card className="my-2">
               <CardHeader>
                 <CardTitle>{t('application-new-child:childrens-application.child-dental-insurance-card-title')}</CardTitle>
                 <CardAction>{completedSections.includes('child-dental-insurance') && <StatusTag status="complete" />}</CardAction>
@@ -214,7 +214,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
               </CardFooter>
             </Card>
 
-            <Card>
+            <Card className="my-2">
               <CardHeader>
                 <CardTitle>{t('application-new-child:childrens-application.child-dental-benefits-card-title')}</CardTitle>
                 <CardAction>{completedSections.includes('child-dental-benefits') && <StatusTag status="complete" />}</CardAction>

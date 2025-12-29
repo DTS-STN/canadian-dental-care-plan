@@ -24,7 +24,7 @@ export function useProgressStepper(flowId: FlowId, currentStepId: StepId) {
       steps: ['marital-status', 'contact-information', 'dental-insurance', 'submit'],
     },
     'new-children': {
-      steps: ['parent-or-guardian', 'childrens-application', 'submit', 'childrens-application'],
+      steps: ['parent-or-guardian', 'childrens-application', 'submit'],
     },
   };
 
