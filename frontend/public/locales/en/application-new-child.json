@@ -168,6 +168,8 @@
     "dental-benefits-yes": "Yes, this child has federal, provincial, or territorial benefits",
     "dental-benefits-no": "No, this child does not have federal, provincial, or territorial benefits",
     "back-btn": "Parent or legal guardian information",
-    "submit-btn": "Submit"
+    "submit-btn": "Submit",
+    "add-child": "Add a child",
+    "remove-child": "Remove child"
   }
 }
