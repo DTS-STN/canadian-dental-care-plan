@@ -387,7 +387,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
     const clientEligibilities = await this.clientEligibilityService.listClientEligibilityByClientNumbersAndTaxationYear([clientNumber], currentCoverage.taxationYear);
     const eligibilityStatus = clientEligibilities.get(clientNumber);
 
-    if (eligibilityStatus !== 'eligible') {
+    if (eligibilityStatus === 'not-enrolled') {
       const redirectUrl = options.redirectUrl ?? getPathById('protected/data-unavailable', params);
       this.log.debug('Applicant with client number [%s] is not eligible; eligibilityStatus: [%s]; redirecting to [%s]', clientNumber, eligibilityStatus, redirectUrl);
       throw redirect(redirectUrl);
