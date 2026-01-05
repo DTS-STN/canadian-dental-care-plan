@@ -31,7 +31,7 @@ export const clientEnvSchema = z.object({
   BUILD_REVISION: z.string().default('00000000'),
   BUILD_VERSION: z.string().default('0.0.0-000000-00000000'),
 
-  ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default([""]),
+  ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default([]),
 
   TIME_ZONE: z.string().trim().min(1).refine(isValidTimeZone).default('Canada/Eastern'),
 
