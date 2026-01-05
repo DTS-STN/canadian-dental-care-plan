@@ -225,7 +225,6 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                 ) : (
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('application-new-child:childrens-application.dental-benefits-title')}>
-                      <p>{child.dentalBenefits.hasFederalBenefits || child.dentalBenefits.hasProvincialTerritorialBenefits ? t('application-new-child:childrens-application.yes') : t('application-new-child:childrens-application.no')}</p>
                       {!!child.dentalBenefits.hasFederalBenefits || !!child.dentalBenefits.hasProvincialTerritorialBenefits ? (
                         <>
                           <p>{t('application-new-child:childrens-application.yes')}</p>
@@ -237,7 +236,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                           </div>
                         </>
                       ) : (
-                        <>{t('application-new-child:childrens-application.no')}</>
+                        <p>{t('application-new-child:childrens-application.no')}</p>
                       )}
                     </DescriptionListItem>
                   </dl>
