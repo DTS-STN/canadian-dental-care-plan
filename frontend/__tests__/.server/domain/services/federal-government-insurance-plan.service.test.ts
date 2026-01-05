@@ -200,7 +200,7 @@ describe('DefaultFederalGovernmentInsurancePlanService', () => {
 
       const service = new DefaultFederalGovernmentInsurancePlanService(mockFederalGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig);
 
-      await expect(async () => await service.getFederalGovernmentInsurancePlanById(id)).rejects.toThrow(FederalGovernmentInsurancePlanNotFoundException);
+      await expect(service.getFederalGovernmentInsurancePlanById(id)).rejects.toThrow(FederalGovernmentInsurancePlanNotFoundException);
       expect(mockGovernmentInsurancePlanRepository.listAllGovernmentInsurancePlans).toHaveBeenCalledOnce();
       expect(mockFederalGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
     });
@@ -367,7 +367,7 @@ describe('DefaultFederalGovernmentInsurancePlanService', () => {
 
       const service = new DefaultFederalGovernmentInsurancePlanService(mockFederalGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig);
 
-      await expect(async () => await service.getLocalizedFederalGovernmentInsurancePlanById(id, 'en')).rejects.toThrow(FederalGovernmentInsurancePlanNotFoundException);
+      await expect(service.getLocalizedFederalGovernmentInsurancePlanById(id, 'en')).rejects.toThrow(FederalGovernmentInsurancePlanNotFoundException);
       expect(mockGovernmentInsurancePlanRepository.listAllGovernmentInsurancePlans).toHaveBeenCalledOnce();
       expect(mockFederalGovernmentInsurancePlanDtoMapper.mapGovernmentInsurancePlanEntitiesToFederalGovernmentInsurancePlanDtos).toHaveBeenCalledOnce();
       expect(mockFederalGovernmentInsurancePlanDtoMapper.mapFederalGovernmentInsurancePlanDtoToFederalGovernmentInsurancePlanLocalizedDto).not.toHaveBeenCalled();
