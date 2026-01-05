@@ -67,7 +67,7 @@ describe('DefaultClientFriendlyStatusService', () => {
 
       const service = new DefaultClientFriendlyStatusService(mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
-      await expect(async () => await service.getClientFriendlyStatusById(id)).rejects.toThrow(ClientFriendlyStatusNotFoundException);
+      await expect(service.getClientFriendlyStatusById(id)).rejects.toThrow(ClientFriendlyStatusNotFoundException);
       expect(mockClientFriendlyStatusRepository.findClientFriendlyStatusById).toHaveBeenCalledOnce();
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusEntityToClientFriendlyStatusDto).not.toHaveBeenCalled();
     });
@@ -108,7 +108,7 @@ describe('DefaultClientFriendlyStatusService', () => {
 
       const service = new DefaultClientFriendlyStatusService(mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig);
 
-      await expect(async () => await service.getClientFriendlyStatusById(id)).rejects.toThrow(ClientFriendlyStatusNotFoundException);
+      await expect(service.getClientFriendlyStatusById(id)).rejects.toThrow(ClientFriendlyStatusNotFoundException);
       expect(mockClientFriendlyStatusRepository.findClientFriendlyStatusById).toHaveBeenCalledOnce();
       expect(mockClientFriendlyStatusDtoMapper.mapClientFriendlyStatusDtoToClientFriendlyStatusLocalizedDto).not.toHaveBeenCalled();
     });

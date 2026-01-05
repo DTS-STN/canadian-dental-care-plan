@@ -35,16 +35,15 @@ describe('DefaultHttpClient', () => {
       mockFetch.mockResolvedValue(response);
 
       await expect(
-        async () =>
-          await httpClient.instrumentedFetch('example-metric', 'http://api.example.com', {
-            retryOptions: {
-              retries: 1,
-              backoffMs: 1,
-              retryConditions: {
-                503: [/retry this/],
-              },
+        httpClient.instrumentedFetch('example-metric', 'http://api.example.com', {
+          retryOptions: {
+            retries: 1,
+            backoffMs: 1,
+            retryConditions: {
+              503: [/retry this/],
             },
-          }),
+          },
+        }),
       ).rejects.toThrow(AppError);
 
       expect(mockInstrumentationService.countHttpStatus).toHaveBeenCalledWith('example-metric', 503);
@@ -56,16 +55,15 @@ describe('DefaultHttpClient', () => {
       mockFetch.mockResolvedValue(response);
 
       await expect(
-        async () =>
-          await httpClient.instrumentedFetch('example-metric', 'http://api.example.com', {
-            retryOptions: {
-              retries: 1,
-              backoffMs: 1,
-              retryConditions: {
-                503: [],
-              },
+        httpClient.instrumentedFetch('example-metric', 'http://api.example.com', {
+          retryOptions: {
+            retries: 1,
+            backoffMs: 1,
+            retryConditions: {
+              503: [],
             },
-          }),
+          },
+        }),
       ).rejects.toThrow(AppError);
 
       expect(mockInstrumentationService.countHttpStatus).toHaveBeenCalledWith('example-metric', 503);
@@ -107,7 +105,7 @@ describe('DefaultHttpClient', () => {
     it('calls instrumentationService with 500 on unexpected error', async () => {
       mockFetch.mockRejectedValue(new Error('Network fail'));
 
-      await expect(async () => await httpClient.instrumentedFetch('example-metric', 'http://api.example.com')).rejects.toThrow();
+      await expect(httpClient.instrumentedFetch('example-metric', 'http://api.example.com')).rejects.toThrow();
 
       expect(mockInstrumentationService.countHttpStatus).toHaveBeenCalledWith('example-metric', 500);
       expect(mockInstrumentationService.countHttpStatus).toHaveBeenCalledOnce();

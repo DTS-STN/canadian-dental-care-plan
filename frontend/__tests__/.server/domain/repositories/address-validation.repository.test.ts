@@ -130,7 +130,7 @@ describe('DefaultAddressValidationRepository', () => {
 
       // act & assert
       const repository = new DefaultAddressValidationRepository(serverConfigMock, mockHttpClient);
-      await expect(async () => await repository.getAddressCorrectionResult(requestEntityMock)).rejects.toThrowError();
+      await expect(repository.getAddressCorrectionResult(requestEntityMock)).rejects.toThrowError();
     });
   });
 });

@@ -105,7 +105,7 @@ describe('DefaultProvinceTerritoryStateService', () => {
 
       const service = new DefaultProvinceTerritoryStateService(mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig);
 
-      await expect(async () => await service.getProvinceTerritoryStateById(id)).rejects.toThrow(ProvinceTerritoryStateNotFoundException);
+      await expect(service.getProvinceTerritoryStateById(id)).rejects.toThrow(ProvinceTerritoryStateNotFoundException);
       expect(mockProvinceTerritoryStateRepository.findProvinceTerritoryStateById).toHaveBeenCalledOnce();
       expect(mockProvinceTerritoryStateDtoMapper.mapProvinceTerritoryStateEntityToProvinceTerritoryStateDto).not.toHaveBeenCalled();
     });

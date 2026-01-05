@@ -103,7 +103,7 @@ describe('DefaultCountryService', () => {
 
       const service = new DefaultCountryService(mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
-      await expect(async () => await service.getCountryById(id)).rejects.toThrow(CountryNotFoundException);
+      await expect(service.getCountryById(id)).rejects.toThrow(CountryNotFoundException);
       expect(mockCountryRepository.findCountryById).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryEntityToCountryDto).not.toHaveBeenCalled();
     });
@@ -194,7 +194,7 @@ describe('DefaultCountryService', () => {
 
       const service = new DefaultCountryService(mockCountryDtoMapper, mockCountryRepository, mockServerConfig);
 
-      await expect(async () => await service.getLocalizedCountryById(id, 'en')).rejects.toThrow(CountryNotFoundException);
+      await expect(service.getLocalizedCountryById(id, 'en')).rejects.toThrow(CountryNotFoundException);
       expect(mockCountryRepository.findCountryById).toHaveBeenCalledOnce();
       expect(mockCountryDtoMapper.mapCountryDtoToCountryLocalizedDto).not.toHaveBeenCalled();
     });
