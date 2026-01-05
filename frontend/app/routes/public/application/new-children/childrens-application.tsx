@@ -202,7 +202,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                 ) : (
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('application-new-child:childrens-application.dental-insurance-title')}>
-                      <p>{child.dentalInsurance ? t('application-new-child:childrens-application.yes') : t('application-new-child:childrens-application.no')}</p>
+                      <p>{child.dentalInsurance === false ? t('application-new-child:childrens-application.no') : t('application-new-child:childrens-application.yes')}</p>
                     </DescriptionListItem>
                   </dl>
                 )}
