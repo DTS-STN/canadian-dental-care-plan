@@ -151,14 +151,14 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
 
         return (
           <div key={child.id}>
-            <h2 className="font-lato mb-4 text-2xl font-bold">{t('application-new-child:childrens-application.child-title', { childNumber: index })}</h2>
+            <h2 className="font-lato mb-4 text-2xl font-bold">{t('application-new-child:childrens-application.child-title', { childNumber: index + 1 })}</h2>
             <div className="space-y-4">
               <p>{t('application:required-label')}</p>
               <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
             </div>
             <Card className="my-2">
               <CardHeader>
-                <CardTitle>{t('application-new-child:childrens-application.child-information-card-title', { childNumber: index })}</CardTitle>
+                <CardTitle>{t('application-new-child:childrens-application.child-information-card-title', { childNumber: index + 1 })}</CardTitle>
                 <CardAction>{completedSections.includes('child-information') && <StatusTag status="complete" />}</CardAction>
               </CardHeader>
               <CardContent>
@@ -186,7 +186,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
                 <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/children/$childId/information" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
-                  {child.information === undefined ? t('application-new-child:childrens-application.add-child-information') : t('application-new-child:childrens-application.edit-child-information', { childNumber: index })}
+                  {child.information === undefined ? t('application-new-child:childrens-application.add-child-information') : t('application-new-child:childrens-application.edit-child-information', { childNumber: index + 1 })}
                 </ButtonLink>
               </CardFooter>
             </Card>
@@ -209,7 +209,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
                 <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={faCirclePlus} size="lg">
-                  {child.dentalInsurance === undefined ? t('application-new-child:childrens-application.add-child-dental-insurance') : t('application-new-child:childrens-application.edit-child-dental-insurance', { childNumber: index })}
+                  {child.dentalInsurance === undefined ? t('application-new-child:childrens-application.add-child-dental-insurance') : t('application-new-child:childrens-application.edit-child-dental-insurance', { childNumber: index + 1 })}
                 </ButtonLink>
               </CardFooter>
             </Card>
@@ -244,7 +244,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
                 <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faCirclePlus} size="lg">
-                  {child.dentalBenefits === undefined ? t('application-new-child:childrens-application.add-child-dental-benefits') : t('application-new-child:childrens-application.edit-child-dental-benefits', { childNumber: index })}
+                  {child.dentalBenefits === undefined ? t('application-new-child:childrens-application.add-child-dental-benefits') : t('application-new-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })}
                 </ButtonLink>
               </CardFooter>
             </Card>
