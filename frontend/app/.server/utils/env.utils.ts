@@ -174,15 +174,16 @@ const serverEnv = clientEnvSchema.extend({
   LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
   LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
   LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_CLIENT_ELIGIBILITY_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
   LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
   LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
   LOOKUP_SVC_DOCUMENT_UPLOAD_REASON_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
   LOOKUP_SVC_EVIDENTIARY_DOCUMENT_TYPE_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
   LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
   LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
   LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
   LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
-  LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
 
   // OpenTelemetry/Dynatrace settings
   OTEL_LOG_LEVEL: z.string().refine((val) => otelLogLevels.has(val)).default('info'),
