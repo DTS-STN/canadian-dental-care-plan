@@ -35,7 +35,7 @@ function getRouteFromTypeAndFlow(typeAndFlow: string) {
       return `public/application/$id/${typeAndFlow}/parent-or-guardian`;
     }
     default: {
-      return `public/application/$id/${typeAndFlow}/marital-status`;
+      return `public/application/$id/${typeAndFlow}/contact-information`;
     }
   }
 }
