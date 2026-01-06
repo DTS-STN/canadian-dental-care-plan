@@ -218,7 +218,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   if (ageCategory === 'adults' || ageCategory === 'seniors') {
-    return redirect(getPathById('public/application/$id/children/$childId/cannot-application-spokes', params));
+    return redirect(getPathById('public/application/$id/children/$childId/cannot-apply-child', params));
   }
 
   return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/childrens-application`, params));
