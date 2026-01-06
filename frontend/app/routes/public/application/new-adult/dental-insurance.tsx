@@ -141,7 +141,7 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
           <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/confirm-federal-provincial-territorial-benefits" params={params} startIcon={faCirclePlus} size="lg">
-            {state.dentalBenefits === undefined ? t('application-new-adult:dental-insurance.add-answer') : t('application-new-adult:dental-insurance.edit-access-to-government-benefits')}
+            {state.hasFederalProvincialTerritorialBenefits === undefined ? t('application-new-adult:dental-insurance.add-answer') : t('application-new-adult:dental-insurance.edit-access-to-government-benefits')}
           </ButtonLink>
         </CardFooter>
       </Card>
