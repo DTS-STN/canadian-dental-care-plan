@@ -221,7 +221,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/application/$id/children/$childId/cannot-application-spokes', params));
   }
 
-  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/parent-or-guardian`, params));
+  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/childrens-application`, params));
 }
 
 export default function ApplyFlowChildInformation({ loaderData, params }: Route.ComponentProps) {
@@ -357,7 +357,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId={`public/application/$id/${typeAndFlow}/parent-or-guardian`}
+              routeId={`public/application/$id/${typeAndFlow}/childrens-application`}
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
