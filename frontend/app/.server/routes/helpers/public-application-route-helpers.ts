@@ -463,7 +463,7 @@ export function getInitialTypeAndFlowUrl(typeAndFlow: TypeAndFlow, params: Param
       return getPathById('public/application/$id/new-children/parent-or-guardian', params);
     }
     case 'new-family': {
-      throw new Error('Not implemented yet: "new-family" case');
+      return getPathById('public/application/$id/new-family/marital-status', params);
     }
     case 'new-delegate': {
       return getPathById('public/application/$id/application-delegate', params);

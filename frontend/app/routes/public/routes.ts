@@ -62,6 +62,7 @@ export const routes = [
             file: 'routes/public/application/new-children/childrens-application.tsx',
             paths: { en: '/:lang/application/:id/new-children/childrens-application', fr: '/:lang/demandes/:id/new-children/application-enfants' },
           },
+          { id: 'public/application/$id/new-family/marital-status', file: 'routes/public/application/new-family/marital-status.tsx', paths: { en: '/:lang/application/:id/new-family/marital-status', fr: '/:lang/demandes/:id/new-family/etat-civil' } },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },
