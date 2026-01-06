@@ -148,6 +148,9 @@ export const pageIds = {
         confirmation: 'CDCP-APPL-NCH-0005',
         childApplication: 'CDCP-APPL-NCH-0006',
       },
+      newFamily: {
+        maritalStatus: 'CDCP-APPL-NFAM-0001',
+      },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',
         fileYourTaxes: 'CDCP-APPL-SPK-0002',

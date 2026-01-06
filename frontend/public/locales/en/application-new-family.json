@@ -1,0 +1,17 @@
+{
+  "marital-status": {
+    "page-title": "Your marital status",
+    "page-heading": "Your marital status",
+    "marital-status": "Marital status",
+    "select-your-status": "Select your marital status",
+    "spouse-sin": "Spouse or common-law partner's Social Insurance Number (SIN)",
+    "spouse-yob": "Spouse or common-law partner's year of birth",
+    "consent": "Consent",
+    "consent-yes": "My spouse or common-law partner has agreed to share their personal information.",
+    "consent-no": "My spouse or common-law partner has not agreed to share their personal information.",
+    "add-marital-status": "Add marital status",
+    "edit-marital-status": "Edit marital status information",
+    "type-of-application": "Type of application",
+    "contact-information": "Contact information"
+  }
+}
