@@ -66,7 +66,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     options: { redirectUrl: getPathById('protected/documents/not-required', params) },
   });
 
-  await securityHandler.requireEligibleApplicant({
+  await securityHandler.requireEnrolledApplicant({
     clientNumber: clientApplication.applicantInformation.clientNumber,
     params,
     options: { redirectUrl: getPathById('protected/documents/not-required', params) },
@@ -130,7 +130,7 @@ export async function action({ context: { appContainer, session }, params, reque
     options: { redirectUrl: getPathById('protected/documents/not-required', params) },
   });
 
-  await securityHandler.requireEligibleApplicant({
+  await securityHandler.requireEnrolledApplicant({
     clientNumber: clientApplication.applicantInformation.clientNumber,
     params,
     options: { redirectUrl: getPathById('protected/documents/not-required', params) },

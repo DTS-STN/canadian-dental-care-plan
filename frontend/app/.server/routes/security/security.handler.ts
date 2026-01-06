@@ -90,7 +90,10 @@ export interface RequireApplicantArgs {
   session: Session;
 }
 
-export interface RequireEligibleApplicantArgs {
+/**
+ * Arguments for requiring enrolled applicant.
+ */
+export interface RequireEnrolledApplicantArgs {
   clientNumber: string;
   params: Params;
   options?: {
@@ -167,13 +170,13 @@ export interface SecurityHandler {
   requireApplicant(args: RequireApplicantArgs): Promise<ApplicantDto>;
 
   /**
-   * Ensures that the applicant with the given client number is eligible.
+   * Ensures that the applicant with the given client number is enrolled.
    *
    * @param args - Parameters containing the client number, request, session, and route params.
-   * @throws Throws a redirect response if the applicant is not eligible.
-   * @returns Resolves if the applicant is eligible.
+   * @throws Throws a redirect response if the applicant is not enrolled.
+   * @returns Resolves if the applicant is enrolled.
    */
-  requireEligibleApplicant(args: RequireEligibleApplicantArgs): Promise<void>;
+  requireEnrolledApplicant(args: RequireEnrolledApplicantArgs): Promise<void>;
 }
 
 /**
@@ -381,15 +384,15 @@ export class DefaultSecurityHandler implements SecurityHandler {
     return applicant;
   }
 
-  async requireEligibleApplicant({ clientNumber, params, options = {} }: RequireEligibleApplicantArgs): Promise<void> {
-    this.log.debug('Requiring eligible applicant with client number [%s]', clientNumber);
+  async requireEnrolledApplicant({ clientNumber, params, options = {} }: RequireEnrolledApplicantArgs): Promise<void> {
+    this.log.debug('Requiring enrolled applicant with client number [%s]', clientNumber);
     const currentCoverage = this.coverageService.getCurrentCoverage();
     const clientEligibilities = await this.clientEligibilityService.listClientEligibilityByClientNumbersAndTaxationYear([clientNumber], currentCoverage.taxationYear);
     const eligibilityStatus = clientEligibilities.get(clientNumber);
 
-    if (eligibilityStatus !== 'eligible') {
+    if (!eligibilityStatus || eligibilityStatus === 'not-enrolled') {
       const redirectUrl = options.redirectUrl ?? getPathById('protected/data-unavailable', params);
-      this.log.debug('Applicant with client number [%s] is not eligible; eligibilityStatus: [%s]; redirecting to [%s]', clientNumber, eligibilityStatus, redirectUrl);
+      this.log.debug('Applicant with client number [%s] is not enrolled; eligibilityStatus: [%s]; redirecting to [%s]', clientNumber, eligibilityStatus, redirectUrl);
       throw redirect(redirectUrl);
     }
   }
