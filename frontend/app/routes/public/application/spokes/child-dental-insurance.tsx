@@ -110,7 +110,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/parent-or-guardian`, params));
+  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/childrens-application`, params));
 }
 
 export default function AccessToDentalInsuranceQuestion({ loaderData, params }: Route.ComponentProps) {
@@ -199,7 +199,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId={`public/application/$id/${typeAndFlow}/parent-or-guardian`}
+              routeId={`public/application/$id/${typeAndFlow}/childrens-application`}
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}

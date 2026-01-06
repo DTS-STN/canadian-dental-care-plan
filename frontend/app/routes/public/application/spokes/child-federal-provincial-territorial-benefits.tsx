@@ -114,7 +114,7 @@ export async function action({ context: { appContainer, session }, params, reque
         },
       });
     }
-    return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/parent-or-guardian`, params));
+    return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/childrens-application`, params));
   }
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
@@ -201,7 +201,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/parent-or-guardian`, params));
+  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/childrens-application`, params));
 }
 
 export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, params }: Route.ComponentProps) {
