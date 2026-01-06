@@ -43,10 +43,10 @@ export async function loader({ context: { appContainer, session }, request, para
   };
 }
 
-export default function NewAdultMaritalStatus({ loaderData, params }: Route.ComponentProps) {
+export default function NewFamilyMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('new-adult', 'marital-status');
+  const { steps, currentStep } = useProgressStepper('new-family', 'marital-status');
 
   const sections = [
     { id: 'marital-status', completed: state.maritalStatus !== undefined }, //
