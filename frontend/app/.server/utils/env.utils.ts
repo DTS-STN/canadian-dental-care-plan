@@ -162,7 +162,7 @@ const serverEnv = clientEnvSchema.extend({
   REDIS_COMMAND_TIMEOUT_SECONDS: z.string().transform(toNumber).default(1),
 
   // mocks settings
-  ENABLED_MOCKS: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidMockNames).default(['']),
+  ENABLED_MOCKS: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidMockNames).default([]),
   MOCK_AUTH_ALLOWED_REDIRECTS: z.string().transform(emptyToUndefined).transform(csvToArray).default(['http://localhost:3000/auth/callback/raoidc']),
 
   // cache duration settings
