@@ -73,7 +73,7 @@ export async function loader({ context: { appContainer, session }, request, para
   };
 }
 
-export default function NewAdultContactInformation({ loaderData, params }: Route.ComponentProps) {
+export default function NewFamilyContactInformation({ loaderData, params }: Route.ComponentProps) {
   const { defaultState, mailingAddressInfo, homeAddressInfo } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const { steps, currentStep } = useProgressStepper('new-family', 'contact-information');
