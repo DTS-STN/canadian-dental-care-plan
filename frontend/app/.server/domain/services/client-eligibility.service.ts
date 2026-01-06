@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import moize from 'moize';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -8,6 +9,7 @@ import type { ClientEligibilityRepository } from '~/.server/domain/repositories'
 import type { AuditService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
+import { secondsToMilliseconds } from '~/utils/units.utils';
 
 /**
  * A service that provides access to client eligibility data.
@@ -37,19 +39,35 @@ export class DefaultClientEligibilityService implements ClientEligibilityService
   private readonly clientEligibilityDtoMapper: ClientEligibilityDtoMapper;
   private readonly clientEligibilityRepository: ClientEligibilityRepository;
   private readonly auditService: AuditService;
-  private readonly serverConfig: Pick<ServerConfig, 'ELIGIBLE_STATUS_CODE_ELIGIBLE'>;
+  private readonly serverConfig: Pick<ServerConfig, 'ELIGIBLE_STATUS_CODE_ELIGIBLE' | 'LOOKUP_SVC_CLIENT_ELIGIBILITY_CACHE_TTL_SECONDS'>;
 
   constructor(
     @inject(TYPES.ClientEligibilityDtoMapper) clientEligibilityDtoMapper: ClientEligibilityDtoMapper,
     @inject(TYPES.ClientEligibilityRepository) clientEligibilityRepository: ClientEligibilityRepository,
     @inject(TYPES.AuditService) auditService: AuditService,
-    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'ELIGIBLE_STATUS_CODE_ELIGIBLE'>,
+    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'ELIGIBLE_STATUS_CODE_ELIGIBLE' | 'LOOKUP_SVC_CLIENT_ELIGIBILITY_CACHE_TTL_SECONDS'>,
   ) {
     this.log = createLogger('DefaultClientEligibilityService');
     this.clientEligibilityDtoMapper = clientEligibilityDtoMapper;
     this.clientEligibilityRepository = clientEligibilityRepository;
     this.auditService = auditService;
     this.serverConfig = serverConfig;
+
+    this.init();
+  }
+
+  private init(): void {
+    const clientEligibilityCacheTtl = secondsToMilliseconds(this.serverConfig.LOOKUP_SVC_CLIENT_ELIGIBILITY_CACHE_TTL_SECONDS);
+    this.log.debug('Cache TTL value: %d ms', clientEligibilityCacheTtl);
+
+    this.listClientEligibilitiesByClientNumbers = moize(this.listClientEligibilitiesByClientNumbers, {
+      isPromise: true,
+      maxAge: clientEligibilityCacheTtl,
+      maxSize: Infinity,
+      onCacheAdd: () => this.log.info('Creating new listClientEligibilitiesByClientNumbers memo'),
+    });
+
+    this.log.debug('DefaultClientEligibilityService initiated.');
   }
 
   async listClientEligibilitiesByClientNumbers(clientEligibilityRequestDto: ClientEligibilityRequestDto): Promise<ReadonlyArray<ClientEligibilityDto>> {
