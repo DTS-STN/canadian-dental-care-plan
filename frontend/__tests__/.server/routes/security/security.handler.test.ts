@@ -374,8 +374,8 @@ describe('DefaultSecurityHandler', () => {
     });
   });
 
-  describe('requireEligibleApplicant', () => {
-    it('should throw redirect to ineligible page if the applicant is not eligible', async () => {
+  describe('requireEnrolledApplicant', () => {
+    it('should throw redirect to ineligible page if the applicant is not enrolled', async () => {
       const clientNumber = 'client-number-123';
       const params = { lang: 'en' };
 
@@ -390,10 +390,10 @@ describe('DefaultSecurityHandler', () => {
 
       mockClientEligibilityService.listClientEligibilityByClientNumbersAndTaxationYear //
         .calledWith(anyArray([clientNumber]), 2024)
-        .mockResolvedValueOnce(new Map([[clientNumber, 'not-eligible']]));
+        .mockResolvedValueOnce(new Map([[clientNumber, 'not-enrolled']]));
 
       try {
-        await securityHandler.requireEligibleApplicant({ clientNumber, params });
+        await securityHandler.requireEnrolledApplicant({ clientNumber, params });
       } catch (error) {
         expect(error).toBeInstanceOf(Response);
         expect((error as Response).status).toBe(302);
@@ -401,7 +401,7 @@ describe('DefaultSecurityHandler', () => {
       }
     });
 
-    it('should not throw if the applicant is eligible', async () => {
+    it.each([['eligible'], ['not-eligible']] as const)('should not throw if the applicant is enrolled with status "%s"', async (eligibilityStatus) => {
       const clientNumber = 'client-number-123';
       const params = { lang: 'en' };
 
@@ -416,9 +416,9 @@ describe('DefaultSecurityHandler', () => {
 
       mockClientEligibilityService.listClientEligibilityByClientNumbersAndTaxationYear //
         .calledWith(anyArray([clientNumber]), 2024)
-        .mockResolvedValueOnce(new Map([[clientNumber, 'eligible']]));
+        .mockResolvedValueOnce(new Map([[clientNumber, eligibilityStatus]]));
 
-      await expect(securityHandler.requireEligibleApplicant({ clientNumber, params })).resolves.not.toThrow();
+      await expect(securityHandler.requireEnrolledApplicant({ clientNumber, params })).resolves.not.toThrow();
     });
   });
 });
