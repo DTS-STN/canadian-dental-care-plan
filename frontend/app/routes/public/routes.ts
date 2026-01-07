@@ -63,6 +63,11 @@ export const routes = [
             paths: { en: '/:lang/application/:id/new-children/childrens-application', fr: '/:lang/demandes/:id/new-children/application-enfants' },
           },
           { id: 'public/application/$id/new-family/marital-status', file: 'routes/public/application/new-family/marital-status.tsx', paths: { en: '/:lang/application/:id/new-family/marital-status', fr: '/:lang/demandes/:id/new-family/etat-civil' } },
+          {
+            id: 'public/application/$id/new-family/contact-information',
+            file: 'routes/public/application/new-family/contact-information.tsx',
+            paths: { en: '/:lang/application/:id/new-family/contact-information', fr: '/:lang/demandes/:id/new-family/coordonnees' },
+          },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },

@@ -13,5 +13,29 @@
     "edit-marital-status": "(FR) Edit marital status information",
     "type-of-application": "(FR) Type of application",
     "contact-information": "(FR) Contact information"
+  },
+  "contact-information": {
+    "page-title": "(FR) Your contact information",
+    "page-heading": "(FR) Your contact information",
+    "phone-number": "(FR) Phone number",
+    "phone-number-help": "(FR) Enter your phone number.",
+    "add-phone-number": "(FR) Add phone number",
+    "edit-phone-number": "(FR) Edit phone number",
+    "mailing-and-home-address": "(FR) Mailing and home address",
+    "address-help": "(FR) Enter your mailing and home address.",
+    "mailing-address": "(FR) Mailing address",
+    "home-address": "(FR) Home address",
+    "add-address": "(FR) Add address",
+    "edit-address": "(FR) Edit address",
+    "communication-preferences": "(FR) Communication preferences",
+    "communication-preferences-help": "(FR) Select your communication preferences.",
+    "preferred-language": "(FR) Language preference",
+    "preferred-method": "(FR) Sun Life Communication preference",
+    "preferred-notification-method": "(FR) Government of Canada communication preference",
+    "email": "(FR) Email address",
+    "add-communication-preferences": "(FR) Add communication-preferences",
+    "edit-communication-preferences": "(FR) Edit communication-preferences",
+    "next-btn": "(FR) Access to dental insurance",
+    "prev-btn": "(FR) Marital status"
   }
 }
