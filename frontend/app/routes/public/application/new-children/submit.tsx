@@ -132,7 +132,6 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
         <section className="space-y-4">
           <h2 className="font-lato text-3xl leading-none font-bold">{t('application-new-child:submit.review-your-application')}</h2>
           <p>{t('application-new-child:submit.please-review')}</p>
-          {/* TODO: update with correct route */}
           <ButtonLink variant="primary" routeId="public/application/$id/new-children/parent-or-guardian" params={params}>
             {t('application-new-child:submit.review-application')}
           </ButtonLink>
@@ -157,8 +156,7 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
               <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
                 {t('application-new-child:submit.submit')}
               </NavigationButton>
-              {/* TODO: update with correct route */}
-              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-children/parent-or-guardian" params={params}>
+              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-children/childrens-application" params={params}>
                 {t('application-new-child:submit.dental-insurance')}
               </NavigationButtonLink>
             </div>

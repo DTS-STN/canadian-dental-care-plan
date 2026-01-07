@@ -44,17 +44,14 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  // TODO: load children state
-
   // prettier-ignore
   if (state.applicantInformation === undefined ||
     state.communicationPreferences === undefined ||
-    state.hasFederalProvincialTerritorialBenefits === undefined ||
-    state.dentalInsurance === undefined ||
     state.mailingAddress === undefined ||
     state.submitTerms === undefined ||
-    state.hasFiledTaxes === undefined  ||
-    state.submissionInfo === undefined
+    state.hasFiledTaxes === undefined ||
+    state.submissionInfo === undefined ||
+    state.children.some(child => child.information === undefined || child.dentalInsurance === undefined || child.hasFederalProvincialTerritorialBenefits === undefined)
     ) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
@@ -64,12 +61,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
-
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale) : undefined;
-
-  const selectedProvincialBenefits = state.dentalBenefits?.provincialTerritorialSocialProgram
-    ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
-    : undefined;
 
   const mailingProvinceTerritoryStateAbbr = state.mailingAddress.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
   const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
@@ -112,12 +103,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     country: countryHome?.name,
   };
 
-  const dentalInsurance = {
-    accessToDentalInsurance: state.dentalInsurance.hasDentalInsurance,
-    selectedFederalBenefits: selectedFederalGovernmentInsurancePlan?.name,
-    selectedProvincialBenefits: selectedProvincialBenefits?.name,
-  };
-
   const children = await Promise.all(
     state.children.map(async (child) => {
       // prettier-ignore
@@ -156,7 +141,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-child:confirm.page-title') }) };
 
   return {
-    dentalInsurance,
     homeAddressInfo,
     mailingAddressInfo,
     meta,
@@ -187,7 +171,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function NewChildrenConfirmation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, children } = loaderData;
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo, surveyLink, children } = loaderData;
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('application-new-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
@@ -353,27 +337,6 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
                   country: homeAddressInfo.country ?? '',
                 }}
               />
-            </DescriptionListItem>
-          </dl>
-        </section>
-
-        <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h3>
-          <dl className="divide-y border-y">
-            <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
-            <DescriptionListItem term={t('confirm.dental-public')}>
-              {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
-                <>
-                  <p>{t('application-new-child:confirm.yes')}</p>
-                  <p>{t('application-new-child:confirm.dental-benefit-has-access')}</p>
-                  <ul className="ml-6 list-disc">
-                    {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
-                    {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
-                  </ul>
-                </>
-              ) : (
-                <p>{t('confirm.no')}</p>
-              )}
             </DescriptionListItem>
           </dl>
         </section>
