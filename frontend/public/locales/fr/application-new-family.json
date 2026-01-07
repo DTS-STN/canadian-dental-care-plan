@@ -140,5 +140,27 @@
       "info": "Vous pouvez nous aider à améliorer le Régime canadien de soins dentaires en participant à un court sondage. Cela ne vous prendra que 3 à 5 minutes. Le sondage s'ouvrira dans une nouvelle fenêtre.",
       "button": "Participez au court sondage"
     }
+  },
+  "submit": {
+    "page-title": "(FR) Submit your application",
+    "page-heading": "(FR) Submit your application",
+    "overview": "(FR) Overview of applicants",
+    "you-are-submitting": "(FR) You are submitting an application for the following people:",
+    "review-your-application": "(FR) Review your application",
+    "please-review": "(FR) Please review your application to make sure all the information is correct.",
+    "review-application": "(FR) Review application",
+    "submit-your-application": "(FR) Submit your application",
+    "by-submitting": "(FR) By submitting the application, you're confirming that all information you've shared is correct. This information will be verified against your Social insurance Number (SIN) and Canada Revenue Agency (CRA) records. If any information provided is incorrect, you could lose your coverage.",
+    "review-eligibility-criteria": "(FR) Please review the Canadian Dental Care Plan (CDCP) <eligibilityLink>eligibility criteria</eligibilityLink> and confirm that you meet all requirements. If you are found to be ineligible for the CDCP at any time during the benefit year, you may need to repay the full costs of dental care you received under the plan.",
+    "do-you-qualify.href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/admissibilite.html",
+    "info-is-correct": "(FR) I confirm that all the information provided in the application is correct, and understand that it will be verified against my tax information.",
+    "i-understand": "(FR) I understand the CDCP eligibility criteria, and I acknowledge that if I am found to be ineligible at any point during the benefit year, based on incorrect information I provided, I will need to repay the cost of any dental care received under the plan.",
+    "error-message": {
+      "acknowledge-info-required": "(FR) You must confirm that all information provided is correct to proceed",
+      "acknowledge-criteria-required": "(FR) You must confirm that you understand the eligibility criteria to proceed"
+    },
+    "children-application": "(FR) Your child(ren)'s application",
+    "submit": "(FR) Submit",
+    "exit-application": "(FR) Exit application"
   }
 }
