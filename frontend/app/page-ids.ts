@@ -151,6 +151,7 @@ export const pageIds = {
       newFamily: {
         maritalStatus: 'CDCP-APPL-NFAM-0001',
         contactInformation: 'CDCP-APPL-NFAM-0002',
+        dentalInsurance: 'CDCP-APPL-NFAM-0003',
       },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',
