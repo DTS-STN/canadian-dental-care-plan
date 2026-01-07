@@ -73,6 +73,11 @@ export const routes = [
             file: 'routes/public/application/new-family/dental-insurance.tsx',
             paths: { en: '/:lang/application/:id/new-family/dental-insurance', fr: '/:lang/demandes/:id/new-family/assurance-dentaire' },
           },
+          {
+            id: 'public/application/$id/new-family/confirmation',
+            file: 'routes/public/application/new-family/confirmation.tsx',
+            paths: { en: '/:lang/application/:id/new-family/confirmation', fr: '/:lang/demandes/:id/new-family/confirmation' },
+          },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },
