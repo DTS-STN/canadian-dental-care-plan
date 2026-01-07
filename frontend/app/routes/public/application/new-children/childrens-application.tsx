@@ -149,6 +149,8 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
     await fetcher.submit(formData, { method: 'POST' });
   }
 
+  const anyChildCompleted = state.children.some((child) => child.information !== undefined && child.dentalInsurance !== undefined && child.hasFederalProvincialTerritorialBenefits !== undefined);
+
   return (
     <div className="max-w-prose space-y-8">
       <ProgressStepper steps={steps} currentStep={currentStep} />
@@ -296,7 +298,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
       </fetcher.Form>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink variant="primary" direction="next" routeId="public/application/$id/new-children/submit" params={params}>
+        <NavigationButtonLink disabled={!anyChildCompleted} variant="primary" direction="next" routeId="public/application/$id/new-children/submit" params={params}>
           {t('application-new-child:childrens-application.submit-btn')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-children/parent-or-guardian" params={params}>
