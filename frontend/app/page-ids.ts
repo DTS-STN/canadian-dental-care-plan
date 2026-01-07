@@ -152,7 +152,8 @@ export const pageIds = {
         maritalStatus: 'CDCP-APPL-NFAM-0001',
         contactInformation: 'CDCP-APPL-NFAM-0002',
         dentalInsurance: 'CDCP-APPL-NFAM-0003',
-        confirmation: 'CDCP-APPL-NFAM-0004',
+        submit: 'CDCP-APPL-NFAM-0004',
+        confirmation: 'CDCP-APPL-NFAM-0005',
       },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',
