@@ -225,7 +225,7 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
                 <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/children/$childId/dental-insurance" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
-                  {child.dentalInsurance === undefined ? t('application-new-family:childrens-application.add-child-dental-insurance') : t('application-new-family:childrens-application.edit-child-dental-insurance', { childNumber: index + 1 })}
+                  {child.dentalInsurance === undefined ? t('application-new-family:childrens-application.add-child-dental-insurance') : t('application-new-family:childrens-application.edit-child-dental-insurance')}
                 </ButtonLink>
               </CardFooter>
             </Card>
@@ -265,9 +265,7 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
                 <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/children/$childId/confirm-federal-provincial-territorial-benefits" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
-                  {child.hasFederalProvincialTerritorialBenefits === undefined
-                    ? t('application-new-family:childrens-application.add-child-dental-benefits')
-                    : t('application-new-family:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })}
+                  {child.hasFederalProvincialTerritorialBenefits === undefined ? t('application-new-family:childrens-application.add-child-dental-benefits') : t('application-new-family:childrens-application.edit-child-dental-benefits')}
                 </ButtonLink>
               </CardFooter>
             </Card>
