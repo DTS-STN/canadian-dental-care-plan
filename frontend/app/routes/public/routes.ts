@@ -88,6 +88,11 @@ export const routes = [
             file: 'routes/public/application/new-family/submit.tsx',
             paths: { en: '/:lang/application/:id/new-family/submit', fr: '/:lang/demandes/:id/new-family/submit' },
           },
+          {
+            id: 'public/application/$id/new-family/exit-application',
+            file: 'routes/public/application/new-family/exit-application.tsx',
+            paths: { en: '/:lang/application/:id/new-family/exit-application', fr: '/:lang/demandes/:id/new-family/quitter-demande' },
+          },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },

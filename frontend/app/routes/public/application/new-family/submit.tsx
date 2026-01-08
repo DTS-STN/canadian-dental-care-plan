@@ -134,7 +134,7 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
         <section className="space-y-4">
           <h2 className="font-lato text-3xl leading-none font-bold">{t('application-new-family:submit.review-your-application')}</h2>
           <p>{t('application-new-family:submit.please-review')}</p>
-          <ButtonLink variant="primary" routeId="public/application/$id/new-family/parent-or-guardian" params={params}>
+          <ButtonLink variant="primary" routeId="public/application/$id/new-family/marital-status" params={params}>
             {t('application-new-family:submit.review-application')}
           </ButtonLink>
         </section>
@@ -158,7 +158,7 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
               <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
                 {t('application-new-family:submit.submit')}
               </NavigationButton>
-              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-family/parent-or-guardian" params={params}>
+              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-family/confirmation" params={params}>
                 {t('application-new-family:submit.children-application')}
               </NavigationButtonLink>
             </div>
