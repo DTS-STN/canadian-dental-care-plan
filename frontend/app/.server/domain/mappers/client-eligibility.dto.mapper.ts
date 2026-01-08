@@ -12,7 +12,7 @@ export interface ClientEligibilityDtoMapper {
   mapClientEligibilityRequestDtoToClientEligibilityRequestEntity(clientEligibilityRequestDto: ClientEligibilityRequestDto): ClientEligibilityRequestEntity;
 }
 
-export type DefaultClientEligibilityDtoMapperServerConfig = Pick<ServerConfig, 'COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC' | 'ELIGIBLE_STATUS_CODE_ELIGIBLE' | 'ELIGIBLE_STATUS_CODE_INELIGIBLE'>;
+export type DefaultClientEligibilityDtoMapperServerConfig = Pick<ServerConfig, 'COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC' | 'ELIGIBILITY_STATUS_CODE_ELIGIBLE' | 'ELIGIBILITY_STATUS_CODE_INELIGIBLE'>;
 
 @injectable()
 export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMapper {
@@ -32,7 +32,7 @@ export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMa
       lastName: Result.from(applicant.PersonName.at(0)?.PersonSurName).expect('Last name not found'),
       earnings: applicant.ApplicantEarning.map((earning) => {
         const earningStatusCode = earning.BenefitEligibilityStatus.StatusCode.ReferenceDataID;
-        const earningHasEligibilityStatusCode = earningStatusCode === this.serverConfig.ELIGIBLE_STATUS_CODE_ELIGIBLE;
+        const earningHasEligibilityStatusCode = earningStatusCode === this.serverConfig.ELIGIBILITY_STATUS_CODE_ELIGIBLE;
         const earningHasCopayTierCoverage = earning.Coverage.some((coverage) => coverage.CoverageCategoryCode.ReferenceDataName === this.serverConfig.COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC);
         return {
           hasCopayTierCoverage: earningHasCopayTierCoverage,
@@ -41,8 +41,9 @@ export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMa
           taxationYear: Number.parseInt(earning.EarningTaxationYear.YearDate),
         };
       }),
-      statusCode: applicant.BenefitEligibilityStatus?.StatusCode?.ReferenceDataID,
-      statusCodeNextYear: applicant.BenefitEligibilityNextYearStatus?.StatusCode?.ReferenceDataID,
+      eligibilityStatusCode: applicant.BenefitEligibilityStatus?.StatusCode?.ReferenceDataID,
+      eligibilityStatusCodeNextYear: applicant.BenefitEligibilityNextYearStatus?.StatusCode?.ReferenceDataID,
+      enrollmentStatusCode: applicant.ApplicantEnrollmentStatus?.StatusCode?.ReferenceDataID,
     };
   }
 

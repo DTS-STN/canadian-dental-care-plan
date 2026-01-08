@@ -42,7 +42,7 @@ describe('DefaultSecurityHandler', () => {
 
     // Creating an instance of DefaultSecurityHandler with the mocked dependencies
     securityHandler = new DefaultSecurityHandler(
-      { ENABLED_FEATURES: ['hcaptcha'] }, // Mocked server config
+      { ENABLED_FEATURES: ['hcaptcha'], ENROLLMENT_STATUS_CODE_ENROLLED: 'enrolled' }, // Mocked server config
       mockCsrfTokenValidator,
       mockHCaptchaValidator,
       mockRaoidcSessionValidator,
@@ -135,7 +135,7 @@ describe('DefaultSecurityHandler', () => {
       const feature: FeatureName = 'status';
 
       const securityHandler = new DefaultSecurityHandler(
-        { ENABLED_FEATURES: ['hcaptcha'] }, // Mocked server config
+        { ENABLED_FEATURES: ['hcaptcha'], ENROLLMENT_STATUS_CODE_ENROLLED: 'enrolled' }, // Mocked server config
         mockCsrfTokenValidator,
         mockHCaptchaValidator,
         mockRaoidcSessionValidator,
@@ -158,7 +158,7 @@ describe('DefaultSecurityHandler', () => {
       const feature: FeatureName = 'hcaptcha';
 
       const securityHandler = new DefaultSecurityHandler(
-        { ENABLED_FEATURES: ['hcaptcha'] }, // Mocked server config
+        { ENABLED_FEATURES: ['hcaptcha'], ENROLLMENT_STATUS_CODE_ENROLLED: 'enrolled' }, // Mocked server config
         mockCsrfTokenValidator,
         mockHCaptchaValidator,
         mockRaoidcSessionValidator,
@@ -199,7 +199,7 @@ describe('DefaultSecurityHandler', () => {
     it('should skip hCaptcha validation if the feature is disabled', async () => {
       // Mocking the server config to disable hCaptcha
       securityHandler = new DefaultSecurityHandler(
-        { ENABLED_FEATURES: [] }, // hCaptcha feature is not enabled
+        { ENABLED_FEATURES: [], ENROLLMENT_STATUS_CODE_ENROLLED: 'enrolled' }, // hCaptcha feature is not enabled
         mockCsrfTokenValidator,
         mockHCaptchaValidator,
         mockRaoidcSessionValidator,
@@ -390,7 +390,22 @@ describe('DefaultSecurityHandler', () => {
 
       mockClientEligibilityService.listClientEligibilityByClientNumbersAndTaxationYear //
         .calledWith(anyArray([clientNumber]), 2024)
-        .mockResolvedValueOnce(new Map([[clientNumber, 'not-enrolled']]));
+        .mockResolvedValueOnce(
+          new Map([
+            [
+              clientNumber,
+              {
+                clientId: 'client-id-123',
+                clientNumber: clientNumber,
+                earnings: [],
+                firstName: 'John',
+                lastName: 'Doe',
+                eligibilityStatusCode: 'eligible',
+                enrollmentStatusCode: 'not-enrolled',
+              },
+            ],
+          ]),
+        );
 
       try {
         await securityHandler.requireEnrolledApplicant({ clientNumber, params });
@@ -401,7 +416,7 @@ describe('DefaultSecurityHandler', () => {
       }
     });
 
-    it.each([['eligible'], ['not-eligible']] as const)('should not throw if the applicant is enrolled with status "%s"', async (eligibilityStatus) => {
+    it('should not throw if the applicant is enrolled', async () => {
       const clientNumber = 'client-number-123';
       const params = { lang: 'en' };
 
@@ -416,7 +431,22 @@ describe('DefaultSecurityHandler', () => {
 
       mockClientEligibilityService.listClientEligibilityByClientNumbersAndTaxationYear //
         .calledWith(anyArray([clientNumber]), 2024)
-        .mockResolvedValueOnce(new Map([[clientNumber, eligibilityStatus]]));
+        .mockResolvedValueOnce(
+          new Map([
+            [
+              clientNumber,
+              {
+                clientId: 'client-id-123',
+                clientNumber: clientNumber,
+                earnings: [],
+                firstName: 'John',
+                lastName: 'Doe',
+                eligibilityStatusCode: 'eligible',
+                enrollmentStatusCode: 'enrolled',
+              },
+            ],
+          ]),
+        );
 
       await expect(securityHandler.requireEnrolledApplicant({ clientNumber, params })).resolves.not.toThrow();
     });

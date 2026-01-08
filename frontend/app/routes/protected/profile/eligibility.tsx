@@ -48,8 +48,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     firstName: clientApplication.applicantInformation.firstName,
     lastName: clientApplication.applicantInformation.lastName,
     earnings: primaryApplicantEligibility?.earnings ?? [],
-    statusCode: primaryApplicantEligibility?.statusCode,
-    statusCodeNextYear: primaryApplicantEligibility?.statusCodeNextYear,
+    statusCode: primaryApplicantEligibility?.eligibilityStatusCode,
+    statusCodeNextYear: primaryApplicantEligibility?.eligibilityStatusCodeNextYear,
   };
 
   const children = clientApplication.children.map((child) => {
@@ -60,8 +60,8 @@ export async function loader({ context: { appContainer, session }, params, reque
       firstName: child.information.firstName,
       lastName: child.information.lastName,
       earnings: childEligibility?.earnings ?? [],
-      statusCode: childEligibility?.statusCode,
-      statusCodeNextYear: childEligibility?.statusCodeNextYear,
+      statusCode: childEligibility?.eligibilityStatusCode,
+      statusCodeNextYear: childEligibility?.eligibilityStatusCodeNextYear,
     };
   });
 
@@ -87,7 +87,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export default function ProtectedProfileEligibility({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { applicants, SCCH_BASE_URI, currentCoverage } = loaderData;
-  const { ELIGIBLE_STATUS_CODE_ELIGIBLE } = useClientEnv();
+  const { ELIGIBILITY_STATUS_CODE_ELIGIBLE: ELIGIBILITY_STATUS_CODE_ELIGIBLE } = useClientEnv();
 
   return (
     <div className="max-w-prose space-y-10">
@@ -97,7 +97,7 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
         <p>{t('protected-profile:eligibility.current-year-details', { end: currentCoverage.endYear })}</p>
         <dl className="divide-y border-y">
           {applicants.map((applicant) => {
-            const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear: currentCoverage.taxationYear, isNextYear: false, ELIGIBLE_STATUS_CODE_ELIGIBLE });
+            const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear: currentCoverage.taxationYear, isNextYear: false, ELIGIBILITY_STATUS_CODE_ELIGIBLE });
             return (
               <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
                 <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={currentCoverage.startYear} coverageEndYear={currentCoverage.endYear} />
@@ -115,7 +115,7 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
             const taxationYear = currentCoverage.taxationYear + 1;
             const coverageStartYear = currentCoverage.startYear + 1;
             const coverageEndYear = currentCoverage.endYear + 1;
-            const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear, isNextYear: true, ELIGIBLE_STATUS_CODE_ELIGIBLE });
+            const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear, isNextYear: true, ELIGIBILITY_STATUS_CODE_ELIGIBLE });
             return (
               <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
                 <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={coverageStartYear} coverageEndYear={coverageEndYear} showApplyLink={true} />
@@ -142,15 +142,15 @@ interface GetEligibilityStatusParams {
   applicant: Route.ComponentProps['loaderData']['applicants'][number];
   taxationYear: number;
   isNextYear: boolean;
-  ELIGIBLE_STATUS_CODE_ELIGIBLE: string;
+  ELIGIBILITY_STATUS_CODE_ELIGIBLE: string;
 }
 
-function getEligibilityStatus({ applicant, taxationYear, isNextYear, ELIGIBLE_STATUS_CODE_ELIGIBLE }: GetEligibilityStatusParams): EligibilityStatus {
+function getEligibilityStatus({ applicant, taxationYear, isNextYear, ELIGIBILITY_STATUS_CODE_ELIGIBLE }: GetEligibilityStatusParams): EligibilityStatus {
   const statusCode = isNextYear ? applicant.statusCodeNextYear : applicant.statusCode;
 
   // Applicant profile eligibility status codes take precedence over earnings
   if (statusCode) {
-    return statusCode === ELIGIBLE_STATUS_CODE_ELIGIBLE ? 'eligible' : 'not-eligible';
+    return statusCode === ELIGIBILITY_STATUS_CODE_ELIGIBLE ? 'eligible' : 'not-eligible';
   }
 
   // Fallback to earnings if no status code is present

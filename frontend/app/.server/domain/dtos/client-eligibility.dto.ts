@@ -15,10 +15,12 @@ export type ClientEligibilityDto = ReadonlyDeep<{
   }>;
   firstName: string;
   lastName: string;
-  /** Applicant profile current status code */
-  statusCode?: string;
-  /** Applicant profile next year status code */
-  statusCodeNextYear?: string;
+  /** Applicant profile current eligibility status code */
+  eligibilityStatusCode?: string;
+  /** Applicant profile next year eligibility status code */
+  eligibilityStatusCodeNextYear?: string;
+  /** Applicant profile enrollment status code */
+  enrollmentStatusCode?: string;
 }>;
 
 export type ClientEligibilityRequestDto = ReadonlyDeep<

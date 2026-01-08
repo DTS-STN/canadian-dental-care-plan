@@ -185,7 +185,7 @@ export interface SecurityHandler {
 @injectable()
 export class DefaultSecurityHandler implements SecurityHandler {
   private readonly log: Logger;
-  private readonly serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>;
+  private readonly serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES' | 'ENROLLMENT_STATUS_CODE_ENROLLED'>;
   private readonly csrfTokenValidator: CsrfTokenValidator;
   private readonly hCaptchaValidator: HCaptchaValidator;
   private readonly raoidcSessionValidator: RaoidcSessionValidator;
@@ -195,7 +195,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
   private readonly clientEligibilityService: ClientEligibilityService;
 
   constructor(
-    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES'>,
+    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'ENABLED_FEATURES' | 'ENROLLMENT_STATUS_CODE_ENROLLED'>,
     @inject(TYPES.CsrfTokenValidator) csrfTokenValidator: CsrfTokenValidator,
     @inject(TYPES.HCaptchaValidator) hCaptchaValidator: HCaptchaValidator,
     @inject(TYPES.RaoidcSessionValidator) raoidcSessionValidator: RaoidcSessionValidator,
@@ -388,11 +388,11 @@ export class DefaultSecurityHandler implements SecurityHandler {
     this.log.debug('Requiring enrolled applicant with client number [%s]', clientNumber);
     const currentCoverage = this.coverageService.getCurrentCoverage();
     const clientEligibilities = await this.clientEligibilityService.listClientEligibilityByClientNumbersAndTaxationYear([clientNumber], currentCoverage.taxationYear);
-    const eligibilityStatus = clientEligibilities.get(clientNumber);
+    const enrollmentStatusCode = clientEligibilities.get(clientNumber)?.enrollmentStatusCode;
 
-    if (!eligibilityStatus || eligibilityStatus === 'not-enrolled') {
+    if (enrollmentStatusCode !== this.serverConfig.ENROLLMENT_STATUS_CODE_ENROLLED) {
       const redirectUrl = options.redirectUrl ?? getPathById('protected/data-unavailable', params);
-      this.log.debug('Applicant with client number [%s] is not enrolled; eligibilityStatus: [%s]; redirecting to [%s]', clientNumber, eligibilityStatus, redirectUrl);
+      this.log.debug('Applicant with client number [%s] is not enrolled; enrollmentStatusCode: [%s]; redirecting to [%s]', clientNumber, enrollmentStatusCode, redirectUrl);
       throw redirect(redirectUrl);
     }
   }

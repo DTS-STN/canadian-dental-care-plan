@@ -84,8 +84,11 @@ export const clientEnvSchema = z.object({
   DOCUMENT_UPLOAD_MAX_FILE_COUNT:z.coerce.number().positive().default(10),
 
   // Eligibility Status Codes
-  ELIGIBLE_STATUS_CODE_ELIGIBLE: z.string().trim().min(1).default('775170000'),
-  ELIGIBLE_STATUS_CODE_INELIGIBLE: z.string().trim().min(1).default('775170001'),
+  ELIGIBILITY_STATUS_CODE_ELIGIBLE: z.string().trim().min(1).default('775170000'),
+  ELIGIBILITY_STATUS_CODE_INELIGIBLE: z.string().trim().min(1).default('775170001'),
+
+  // Enrollment Status Codes
+  ENROLLMENT_STATUS_CODE_ENROLLED: z.string().trim().min(1).default('775170000'),
 
   // Coverage Category Code
   COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: z.string().trim().min(1).default('Co-Pay Tier (TPC)'),

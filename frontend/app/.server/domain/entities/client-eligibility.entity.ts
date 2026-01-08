@@ -30,8 +30,8 @@ export type ClientEligibilityEntity = ReadonlyDeep<{
       PrivateDentalInsuranceIndicator: boolean;
     }>;
     ApplicantCategoryCode: { ReferenceDataID: string };
-    ApplicantEnrollmentStatus: {
-      StatusCode: { ReferenceDataID: string };
+    ApplicantEnrollmentStatus?: {
+      StatusCode?: { ReferenceDataID?: string };
     };
     BenefitEligibilityStatus?: {
       StatusCode?: { ReferenceDataID?: string };
