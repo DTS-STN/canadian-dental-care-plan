@@ -40,7 +40,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-children']);
+  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family']);
   const childState = getSingleChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -64,7 +64,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-children']);
+  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family']);
 
   const formData = await request.formData();
 

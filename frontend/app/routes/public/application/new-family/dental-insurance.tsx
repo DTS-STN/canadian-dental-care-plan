@@ -147,8 +147,7 @@ export default function NewFamilyDentalInsurance({ loaderData, params }: Route.C
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        {/* TODO update with correct route */}
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-family/dental-insurance" params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-family/childrens-application" params={params}>
           {t('application-new-family:dental-insurance.childrens-application')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-family/contact-information" params={params}>
