@@ -36,7 +36,7 @@ export function ProgressStepperHorizontal({ steps, currentStep }: ProgressSteppe
             <StepperItem key={step.id} step={index + 1} completed={completed} className="relative flex-1 items-start">
               <StepperTrigger asChild className="flex cursor-default flex-col items-center gap-2.5">
                 <StepperIndicator className="size-8 bg-transparent!" />
-                <StepperTitle className={cn('max-w-24 text-center text-sm font-medium text-slate-700', state === 'active' && 'text-blue-700')}>{step.description}</StepperTitle>
+                <StepperTitle className={cn('max-w-24 text-center text-sm font-medium text-slate-700', state === 'active' && currentStep < steps.length && 'text-blue-700')}>{step.description}</StepperTitle>
               </StepperTrigger>
 
               {steps.length > index + 1 && (
@@ -66,7 +66,7 @@ export function ProgressStepperVertical({ steps, currentStep }: ProgressStepperP
             <StepperItem key={step.id} step={index + 1} completed={completed} className="relative items-start not-last:flex-1">
               <StepperTrigger asChild className="cursor-default items-center gap-2.5 pb-12 last:pb-0">
                 <StepperIndicator className="size-8 bg-transparent!" />
-                <StepperTitle className={cn('text-sm font-medium text-slate-700', state === 'active' && 'text-blue-700')}>{step.description}</StepperTitle>
+                <StepperTitle className={cn('text-sm font-medium text-slate-700', state === 'active' && currentStep < steps.length && 'text-blue-700')}>{step.description}</StepperTitle>
               </StepperTrigger>
 
               {index < steps.length - 1 && (
