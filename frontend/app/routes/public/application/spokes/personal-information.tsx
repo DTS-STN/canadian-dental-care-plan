@@ -44,7 +44,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:personal-information.page-title') }) };
-  return { defaultState: state.applicantInformation, editMode: state.editMode, meta };
+  return { defaultState: state.applicantInformation, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

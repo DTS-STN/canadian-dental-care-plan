@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   invariant(state.applicantInformation?.dateOfBirth, 'Expected applicantInformation.dateOfBirth to be defined');
   const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
 
-  return { meta, defaultState: state.newOrExistingMember, userAgeCategory: ageCategory, editMode: state.editMode };
+  return { meta, defaultState: state.newOrExistingMember, userAgeCategory: ageCategory };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
