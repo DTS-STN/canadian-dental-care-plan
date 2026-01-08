@@ -40,7 +40,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:living-independently.page-title') }) };
-  return { meta, defaultState: state.livingIndependently, editMode: state.editMode };
+  return { meta, defaultState: state.livingIndependently };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

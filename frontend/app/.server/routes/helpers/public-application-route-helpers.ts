@@ -20,15 +20,7 @@ export type PublicApplicationStateSessionKey = `public-application-flow-${string
 
 export type PublicApplicationState = ReadonlyDeep<{
   id: string;
-  editMode: boolean;
   lastUpdatedOn: string;
-  editModeApplicantInformation?: {
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    socialInsuranceNumber: string;
-  };
-  editModeLivingIndependently?: boolean;
   applicantInformation?: {
     memberId?: string;
     firstName: string;
@@ -69,12 +61,6 @@ export type PublicApplicationState = ReadonlyDeep<{
     preferredMethod: string;
     preferredNotificationMethod: string;
   };
-  editModeCommunicationPreferences?: {
-    preferredLanguage: string;
-    preferredMethod: string;
-    preferredNotificationMethod: string;
-  };
-  editModeEmail?: string;
   email?: string;
   verifyEmail?: {
     verificationCode: string;
@@ -244,7 +230,7 @@ interface SaveStateArgs {
   params: ApplicationStateParams;
   session: Session;
   state: Partial<OmitStrict<PublicApplicationState, 'id' | 'lastUpdatedOn' | 'applicationYear'>>;
-  remove?: keyof OmitStrict<PublicApplicationState, 'children' | 'editMode' | 'id' | 'lastUpdatedOn' | 'applicationYear'>;
+  remove?: keyof OmitStrict<PublicApplicationState, 'children' | 'id' | 'lastUpdatedOn' | 'applicationYear'>;
 }
 
 /**
@@ -306,7 +292,6 @@ export function startApplicationState({ applicationYear, session }: StartArgs): 
   const id = nanoid();
   const initialState: PublicApplicationState = {
     id,
-    editMode: false,
     lastUpdatedOn: new UTCDate().toISOString(),
     applicationYear,
     children: [],
