@@ -96,7 +96,7 @@ exports[`ProgressStepper > Edge Cases > should handle currentStep out of bounds 
             </div>
           </div>
           <h3
-            class="max-w-24 text-center text-sm font-medium text-blue-700"
+            class="max-w-24 text-center text-sm font-medium text-slate-700"
             data-slot="stepper-title"
             data-state="completed"
           >
