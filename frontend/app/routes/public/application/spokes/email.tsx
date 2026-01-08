@@ -101,7 +101,7 @@ export async function action({ context: { appContainer, session }, params, reque
     await verificationCodeService.sendVerificationCodeEmail({
       email: parsedDataResult.data.email,
       verificationCode,
-      preferredLanguage: state.communicationPreferences?.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
+      preferredLanguage: state.communicationPreferences?.value?.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
       userId: 'anonymous',
     });
   }

@@ -57,11 +57,11 @@ export type PublicApplicationState = ReadonlyDeep<{
       socialInsuranceNumber?: string;
     };
   }[];
-  communicationPreferences?: {
+  communicationPreferences?: DeclaredChange<{
     preferredLanguage: string;
     preferredMethod: string;
     preferredNotificationMethod: string;
-  };
+  }>;
   email?: string;
   verifyEmail?: {
     verificationCode: string;
@@ -144,8 +144,8 @@ export type ChildDentalBenefitsState = NonNullable<ChildState['dentalBenefits']>
 export type ChildDentalInsuranceState = NonNullable<ChildState['dentalInsurance']>;
 export type ChildInformationState = NonNullable<ChildState['information']>;
 export type ChildSinState = Pick<NonNullable<ChildState['information']>, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>;
-export type CommunicationPreferencesState = NonNullable<PublicApplicationState['communicationPreferences']>;
-export type PhoneNumberState = NonNullable<PublicApplicationState['phoneNumber']>;
+export type CommunicationPreferencesState = NonNullable<NonNullable<PublicApplicationState['communicationPreferences']>['value']>;
+export type PhoneNumberState = NonNullable<NonNullable<PublicApplicationState['phoneNumber']>['value']>;
 export type DentalFederalBenefitsState = Pick<NonNullable<PublicApplicationState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type DentalInsuranceState = NonNullable<PublicApplicationState['dentalInsurance']>;
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<PublicApplicationState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
