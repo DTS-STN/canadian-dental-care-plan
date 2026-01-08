@@ -47,6 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   // prettier-ignore
   if (state.applicantInformation === undefined ||
     state.communicationPreferences === undefined ||
+    state.phoneNumber?.hasChanged !== true ||
     state.mailingAddress === undefined ||
     state.submitTerms === undefined ||
     state.hasFiledTaxes === undefined ||
@@ -70,8 +71,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const userInfo = {
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
-    phoneNumber: state.contactInformation?.phoneNumber,
-    altPhoneNumber: state.contactInformation?.phoneNumberAlt,
+    phoneNumber: state.phoneNumber.value.primary,
+    altPhoneNumber: state.phoneNumber.value.alternate,
     preferredLanguage: appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.preferredLanguage, locale),
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,

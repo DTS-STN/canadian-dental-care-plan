@@ -61,7 +61,7 @@ export async function loader({ context: { appContainer, session }, request, para
     state: {
       maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined,
       partnerInformation: state.partnerInformation,
-      phoneNumber: state.contactInformation,
+      phoneNumber: state.phoneNumber,
       communicationPreferences: state.communicationPreferences,
       email: state.email,
     },
@@ -78,7 +78,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
 
   const sections = [
     { id: 'marital-status', completed: state.maritalStatus !== undefined },
-    { id: 'phone-number', completed: state.phoneNumber !== undefined },
+    { id: 'phone-number', completed: state.phoneNumber?.hasChanged === true },
     { id: 'address', completed: mailingAddressInfo.address !== undefined && homeAddressInfo.address !== undefined },
     { id: 'communication-preferences', completed: state.communicationPreferences !== undefined },
   ] as const;
@@ -134,14 +134,14 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
           <CardAction>{completedSections.includes('phone-number') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
-          {state.phoneNumber === undefined ? (
-            <p>{t('application-new-child:parent-or-guardian.phone-number-help')}</p>
-          ) : (
+          {state.phoneNumber?.hasChanged ? (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-child:parent-or-guardian.phone-number')}>
-                <p>{state.phoneNumber.phoneNumber}</p>
+                <p>{state.phoneNumber.value.primary}</p>
               </DescriptionListItem>
             </dl>
+          ) : (
+            <p>{t('application-new-child:parent-or-guardian.phone-number-help')}</p>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
