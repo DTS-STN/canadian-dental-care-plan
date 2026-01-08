@@ -9,6 +9,7 @@ import type { ReadonlyDeep } from 'type-fest';
 import { z } from 'zod';
 
 import { createLogger } from '~/.server/logging';
+import type { DeclaredChange } from '~/.server/routes/helpers/declared-change-type';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
@@ -101,10 +102,10 @@ export type PublicApplicationState = ReadonlyDeep<{
     postalCode?: string;
     province?: string;
   };
-  contactInformation?: {
-    phoneNumber?: string;
-    phoneNumberAlt?: string;
-  };
+  phoneNumber?: DeclaredChange<{
+    primary: string;
+    alternate?: string;
+  }>;
   newOrExistingMember?: {
     isNewOrExistingMember: boolean;
     memberId?: string;
@@ -144,7 +145,7 @@ export type ChildDentalInsuranceState = NonNullable<ChildState['dentalInsurance'
 export type ChildInformationState = NonNullable<ChildState['information']>;
 export type ChildSinState = Pick<NonNullable<ChildState['information']>, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>;
 export type CommunicationPreferencesState = NonNullable<PublicApplicationState['communicationPreferences']>;
-export type ContactInformationState = NonNullable<PublicApplicationState['contactInformation']>;
+export type PhoneNumberState = NonNullable<PublicApplicationState['phoneNumber']>;
 export type DentalFederalBenefitsState = Pick<NonNullable<PublicApplicationState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type DentalInsuranceState = NonNullable<PublicApplicationState['dentalInsurance']>;
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<PublicApplicationState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;

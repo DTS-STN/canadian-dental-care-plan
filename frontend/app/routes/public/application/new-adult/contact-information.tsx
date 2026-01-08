@@ -63,7 +63,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   return {
     defaultState: {
-      phoneNumber: state.contactInformation,
+      phoneNumber: state.phoneNumber,
       communicationPreferences: state.communicationPreferences,
       email: state.email,
     },
@@ -79,7 +79,7 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
   const { steps, currentStep } = useProgressStepper('new-adult', 'contact-information');
 
   const sections = [
-    { id: 'phone-number', completed: defaultState.phoneNumber !== undefined },
+    { id: 'phone-number', completed: defaultState.phoneNumber?.hasChanged === true },
     { id: 'address', completed: mailingAddressInfo.address !== undefined && homeAddressInfo.address !== undefined },
     { id: 'communication-preferences', completed: defaultState.communicationPreferences !== undefined },
   ] as const;
@@ -99,14 +99,14 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
           <CardAction>{completedSections.includes('phone-number') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
-          {defaultState.phoneNumber === undefined ? (
-            <p>{t('application-new-adult:contact-information.phone-number-help')}</p>
-          ) : (
+          {defaultState.phoneNumber?.hasChanged ? (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-adult:contact-information.phone-number')}>
-                <p>{defaultState.phoneNumber.phoneNumber}</p>
+                <p>{defaultState.phoneNumber.value.primary}</p>
               </DescriptionListItem>
             </dl>
+          ) : (
+            <p>{t('application-new-adult:contact-information.phone-number-help')}</p>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">

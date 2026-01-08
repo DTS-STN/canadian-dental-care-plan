@@ -52,8 +52,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:phone-number.page-title') }) };
   return {
     defaultState: {
-      phoneNumber: state.contactInformation?.phoneNumber,
-      phoneNumberAlt: state.contactInformation?.phoneNumberAlt,
+      phoneNumber: state.phoneNumber?.value?.primary,
+      phoneNumberAlt: state.phoneNumber?.value?.alternate,
     },
     typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
     meta,
@@ -96,7 +96,15 @@ export async function action({ context: { appContainer, session }, params, reque
   savePublicApplicationState({
     params,
     session,
-    state: { contactInformation: { ...state.contactInformation, ...parsedDataResult.data } },
+    state: {
+      phoneNumber: {
+        hasChanged: true,
+        value: {
+          primary: parsedDataResult.data.phoneNumber,
+          alternate: parsedDataResult.data.phoneNumberAlt,
+        },
+      },
+    },
   });
 
   return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
