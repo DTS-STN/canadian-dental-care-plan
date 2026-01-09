@@ -82,7 +82,7 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
   const sections = [
     { id: 'phone-number', completed: defaultState.phoneNumber?.hasChanged === true },
     { id: 'address', completed: mailingAddressInfo.address !== undefined && homeAddressInfo.address !== undefined },
-    { id: 'communication-preferences', completed: defaultState.communicationPreferences !== undefined },
+    { id: 'communication-preferences', completed: defaultState.communicationPreferences?.hasChanged === true },
   ] as const;
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
   const allSectionsCompleted = completedSections.length === sections.length;
@@ -169,27 +169,27 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
           <CardAction>{completedSections.includes('communication-preferences') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
-          {defaultState.communicationPreferences === undefined ? (
-            <p>{t('application-new-adult:contact-information.communication-preferences-help')}</p>
-          ) : (
+          {defaultState.communicationPreferences?.hasChanged ? (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-adult:contact-information.preferred-language')}>
                 <p>{t('application-new-adult:contact-information.preferred-language')}</p>
-                {defaultState.communicationPreferences.preferredLanguage}
+                {defaultState.communicationPreferences.value.preferredLanguage}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-adult:contact-information.preferred-method')}>
                 <p>{t('application-new-adult:contact-information.preferred-method')}</p>
-                {defaultState.communicationPreferences.preferredMethod}
+                {defaultState.communicationPreferences.value.preferredMethod}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-adult:contact-information.preferred-notification-method')}>
                 <p>{t('application-new-adult:contact-information.preferred-notification-method')}</p>
-                {defaultState.communicationPreferences.preferredNotificationMethod}
+                {defaultState.communicationPreferences.value.preferredNotificationMethod}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-adult:contact-information.email')}>
                 <p>{t('application-new-adult:contact-information.email')}</p>
                 {defaultState.email}
               </DescriptionListItem>
             </dl>
+          ) : (
+            <p>{t('application-new-adult:contact-information.communication-preferences-help')}</p>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
