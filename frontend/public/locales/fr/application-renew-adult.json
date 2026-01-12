@@ -31,5 +31,26 @@
     "communication-preferences-unchanged": "(FR) My communication preferences have not changed",
     "next-btn": "(FR) Access to dental insurance",
     "prev-btn": "(FR) Marital status"
+  },
+  "dental-insurance": {
+    "page-title": "(FR) Your access to dental insurance",
+    "page-heading": "(FR) Your access to dental insurance",
+    "access-to-dental-insurance": "(FR) Access to private dental insurance",
+    "dental-insurance-indicate-status": "(FR) Indicate if you have access to private dental insurance.",
+    "access-to-dental-insurance-or-coverage": "(FR) Access to private dental insurance or coverage",
+    "dental-insurance-yes": "(FR) Yes, I have access to private dental insurance or coverage",
+    "dental-insurance-no": "(FR) No, I do not have access to private dental insurance or coverage",
+    "edit-access-to-dental-insurance": "(FR) Edit access to private dental insurance",
+    "other-benefits": "(FR) Other government dental benefits",
+    "access-to-government-benefits": "(FR) Access to government benefits",
+    "dental-benefits-indicate-status": "(FR) Would you like to update your access to other government dental benefits?",
+    "edit-access-to-government-benefits": "(FR) Edit access to government dental benefits",
+    "update-my-access": "(FR) Update my access government dental benefits",
+    "access-not-changed": "(FR) My access to government dental benefits has not changed",
+    "add-answer": "(FR) Add answer",
+    "yes": "(FR) Yes",
+    "no": "(FR) No",
+    "contact-information": "(FR) Your contact information",
+    "submit": "(FR) Submit"
   }
 }

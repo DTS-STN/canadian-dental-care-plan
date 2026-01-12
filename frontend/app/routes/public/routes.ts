@@ -98,6 +98,11 @@ export const routes = [
             file: 'routes/public/application/renew-adult/contact-information.tsx',
             paths: { en: '/:lang/application/:id/renew-adult/contact-information', fr: '/:lang/demandes/:id/renouveler-adulte/coordonnees' },
           },
+          {
+            id: 'public/application/$id/renew-adult/dental-insurance',
+            file: 'routes/public/application/renew-adult/dental-insurance.tsx',
+            paths: { en: '/:lang/application/:id/renew-adult/dental-insurance', fr: '/:lang/demandes/:id/renew-adult/assurance-dentaire' },
+          },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },
