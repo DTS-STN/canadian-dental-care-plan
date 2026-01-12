@@ -56,6 +56,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  securityHandler.validateFeatureEnabled('profile-update');
   await securityHandler.validateAuthSession({ request, session });
   await securityHandler.requireClientApplication({ params, request, session });
 
@@ -89,6 +90,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  securityHandler.validateFeatureEnabled('profile-update');
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
