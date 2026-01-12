@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const languages = appContainer.get(TYPES.LanguageService).listAndSortLocalizedLanguages(locale);
 
   return {
-    defaultState: state.communicationPreferences,
+    defaultState: state.communicationPreferences?.value,
     typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
     languages,
     meta,
@@ -97,7 +97,20 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  savePublicApplicationState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
+  savePublicApplicationState({
+    params,
+    session,
+    state: {
+      communicationPreferences: {
+        hasChanged: true,
+        value: {
+          preferredLanguage: parsedDataResult.data.preferredLanguage,
+          preferredMethod: parsedDataResult.data.preferredMethod,
+          preferredNotificationMethod: parsedDataResult.data.preferredNotificationMethod,
+        },
+      },
+    },
+  });
 
   if (parsedDataResult.data.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email) {
     return redirect(getPathById('public/application/$id/email', params));
