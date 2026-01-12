@@ -119,21 +119,21 @@ export function validatePublicApplicationAdultStateForReview({ params, state }: 
   }
 
   if (applicantInformation === undefined) {
-    throw redirect(getPathById('public/application/$id/new-adult/type-of-application', params));
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
   const ageCategory = getAgeCategoryFromDateString(applicantInformation.dateOfBirth);
 
   if (ageCategory === 'children') {
-    throw redirect(getPathById('public/application/$id/new-adult/type-of-application', params));
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
   if (ageCategory === 'youth' && livingIndependently === undefined) {
-    throw redirect(getPathById('public/application/$id/new-adult/type-of-application', params));
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
   if (ageCategory === 'youth' && livingIndependently === false) {
-    throw redirect(getPathById('public/application/$id/new-adult/type-of-application', params));
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {

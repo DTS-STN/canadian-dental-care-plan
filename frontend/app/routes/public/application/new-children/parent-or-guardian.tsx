@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import type { Route } from './+types/parent-or-guardian';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { loadPublicApplicationChildState } from '~/.server/routes/helpers/public-application-child-route-helpers';
+import { validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { ButtonLink } from '~/components/buttons';
@@ -29,7 +30,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  const state = getPublicApplicationState({ params, session });
+  const state = loadPublicApplicationChildState({ params, request, session });
   validateApplicationTypeAndFlow(state, params, ['new-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);

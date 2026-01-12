@@ -11,7 +11,8 @@ import { z } from 'zod';
 import type { Route } from './+types/childrens-application';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { loadPublicApplicationChildState } from '~/.server/routes/helpers/public-application-child-route-helpers';
+import { savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -42,7 +43,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  const state = getPublicApplicationState({ params, session });
+  const state = loadPublicApplicationChildState({ params, request, session });
   validateApplicationTypeAndFlow(state, params, ['new-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -89,7 +90,7 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const state = getPublicApplicationState({ params, session });
+  const state = loadPublicApplicationChildState({ params, request, session });
   validateApplicationTypeAndFlow(state, params, ['new-children']);
 
   const formData = await request.formData();
