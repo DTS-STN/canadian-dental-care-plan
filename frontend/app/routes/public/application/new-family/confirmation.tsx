@@ -48,7 +48,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   // prettier-ignore
   if (state.applicantInformation === undefined ||
-    state.communicationPreferences === undefined ||
+    state.communicationPreferences?.hasChanged !== true ||
     state.hasFederalProvincialTerritorialBenefits === undefined ||
     state.dentalInsurance === undefined ||
     state.phoneNumber?.hasChanged !== true ||
@@ -82,13 +82,13 @@ export async function loader({ context: { appContainer, session }, params, reque
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.phoneNumber.value.primary,
     altPhoneNumber: state.phoneNumber.value.alternate,
-    preferredLanguage: appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.preferredLanguage, locale),
+    preferredLanguage: appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale),
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
     contactInformationEmail: state.email,
-    communicationSunLifePreference: state.communicationPreferences.preferredMethod,
-    communicationGOCPreference: state.communicationPreferences.preferredNotificationMethod,
+    communicationSunLifePreference: state.communicationPreferences.value.preferredMethod,
+    communicationGOCPreference: state.communicationPreferences.value.preferredNotificationMethod,
     previouslyEnrolled: state.newOrExistingMember,
   };
 

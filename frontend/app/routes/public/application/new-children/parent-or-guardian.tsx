@@ -80,7 +80,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
     { id: 'marital-status', completed: state.maritalStatus !== undefined },
     { id: 'phone-number', completed: state.phoneNumber?.hasChanged === true },
     { id: 'address', completed: mailingAddressInfo.address !== undefined && homeAddressInfo.address !== undefined },
-    { id: 'communication-preferences', completed: state.communicationPreferences !== undefined },
+    { id: 'communication-preferences', completed: state.communicationPreferences?.hasChanged === true },
   ] as const;
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
   const allSectionsCompleted = completedSections.length === sections.length;
@@ -203,27 +203,27 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
           <CardAction>{completedSections.includes('communication-preferences') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
-          {state.communicationPreferences === undefined ? (
-            <p>{t('application-new-child:parent-or-guardian.communication-preferences-help')}</p>
-          ) : (
+          {state.communicationPreferences?.hasChanged ? (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-child:parent-or-guardian.preferred-language')}>
                 <p>{t('application-new-child:parent-or-guardian.preferred-language')}</p>
-                {state.communicationPreferences.preferredLanguage}
+                {state.communicationPreferences.value.preferredLanguage}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-child:parent-or-guardian.preferred-method')}>
                 <p>{t('application-new-child:parent-or-guardian.preferred-method')}</p>
-                {state.communicationPreferences.preferredMethod}
+                {state.communicationPreferences.value.preferredMethod}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-child:parent-or-guardian.preferred-notification-method')}>
                 <p>{t('application-new-child:parent-or-guardian.preferred-notification-method')}</p>
-                {state.communicationPreferences.preferredNotificationMethod}
+                {state.communicationPreferences.value.preferredNotificationMethod}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-child:parent-or-guardian.email')}>
                 <p>{t('application-new-child:parent-or-guardian.email')}</p>
                 {state.email}
               </DescriptionListItem>
             </dl>
+          ) : (
+            <p>{t('application-new-child:parent-or-guardian.communication-preferences-help')}</p>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">

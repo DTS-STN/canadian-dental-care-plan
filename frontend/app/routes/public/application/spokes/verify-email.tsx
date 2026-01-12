@@ -100,11 +100,11 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     });
 
-    if (state.email && state.communicationPreferences?.preferredLanguage) {
+    if (state.email && state.communicationPreferences?.value?.preferredLanguage) {
       await verificationCodeService.sendVerificationCodeEmail({
         email: state.email,
         verificationCode,
-        preferredLanguage: state.communicationPreferences.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
+        preferredLanguage: state.communicationPreferences.value.preferredLanguage === ENGLISH_LANGUAGE_CODE.toString() ? 'en' : 'fr',
         userId: 'anonymous',
       });
       return { status: 'verification-code-sent' } as const;
