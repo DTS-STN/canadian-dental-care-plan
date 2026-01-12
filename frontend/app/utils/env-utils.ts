@@ -4,7 +4,18 @@ import { z } from 'zod';
 import { isValidTimeZone } from '~/utils/date-utils';
 import { isValidExtension } from '~/utils/file.utils';
 
-const validFeatureNames = ['hcaptcha', 'killswitch-api', 'show-prototype-banner', 'stub-login', 'status', 'view-letters', 'view-payload', 'demographic-survey', 'doc-upload'] as const;
+const validFeatureNames = [
+  'demographic-survey', //
+  'doc-upload',
+  'hcaptcha',
+  'killswitch-api',
+  'profile-update',
+  'show-prototype-banner',
+  'status',
+  'stub-login',
+  'view-letters',
+  'view-payload',
+] as const;
 
 export type FeatureName = (typeof validFeatureNames)[number];
 
