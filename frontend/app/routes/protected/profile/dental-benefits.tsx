@@ -8,6 +8,7 @@ import { ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
+import { useFeature } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -70,6 +71,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export default function ViewGovernmentDentalBenefits({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { clientApplication, clientDentalBenefits, children, SCCH_BASE_URI } = loaderData;
+  const profileUpdateEnabled = useFeature('profile-update');
 
   return (
     <div className="max-w-prose space-y-10">
@@ -89,11 +91,13 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
                 </ul>
               )}
             </div>
-            <div className="mt-4 sm:mt-6">
-              <InlineLink routeId="protected/profile/dental-benefits/edit" params={params}>
-                {t('protected-profile:dental-benefits.update-link-text')}
-              </InlineLink>
-            </div>
+            {profileUpdateEnabled && (
+              <div className="mt-4 sm:mt-6">
+                <InlineLink routeId="protected/profile/dental-benefits/edit" params={params}>
+                  {t('protected-profile:dental-benefits.update-link-text')}
+                </InlineLink>
+              </div>
+            )}
           </DescriptionListItem>
         </dl>
       </section>
@@ -116,11 +120,13 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
                     </ul>
                   )}
                 </div>
-                <div className="mt-4 sm:mt-6">
-                  <InlineLink routeId="protected/profile/dental-benefits/:childId/edit" params={childParams}>
-                    {t('protected-profile:dental-benefits.update-link-text')}
-                  </InlineLink>
-                </div>
+                {profileUpdateEnabled && (
+                  <div className="mt-4 sm:mt-6">
+                    <InlineLink routeId="protected/profile/dental-benefits/:childId/edit" params={childParams}>
+                      {t('protected-profile:dental-benefits.update-link-text')}
+                    </InlineLink>
+                  </div>
+                )}
               </DescriptionListItem>
             </dl>
           </section>

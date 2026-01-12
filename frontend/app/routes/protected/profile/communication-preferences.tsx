@@ -8,6 +8,7 @@ import { ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
+import { useFeature } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -48,6 +49,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export default function ViewCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { preferredLanguage, preferredMethodSunLife, preferredMethodGovernmentOfCanada, SCCH_BASE_URI } = loaderData;
+  const profileUpdateEnabled = useFeature('profile-update');
 
   return (
     <div className="max-w-prose space-y-10">
@@ -62,11 +64,13 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
           <p>{preferredMethodGovernmentOfCanada.name}</p>
         </DescriptionListItem>
       </dl>
-      <div>
-        <InlineLink id="update-communication-preferences" routeId="protected/profile/communication-preferences/edit" params={params}>
-          {t('protected-profile:communication-preferences.update-link-text')}
-        </InlineLink>
-      </div>
+      {profileUpdateEnabled && (
+        <div>
+          <InlineLink id="update-communication-preferences" routeId="protected/profile/communication-preferences/edit" params={params}>
+            {t('protected-profile:communication-preferences.update-link-text')}
+          </InlineLink>
+        </div>
+      )}
       <ButtonLink
         variant="primary"
         id="back-button"
