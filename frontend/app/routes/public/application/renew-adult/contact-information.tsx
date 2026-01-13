@@ -207,15 +207,15 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-renew-adult:contact-information.preferred-language')}>
                 <p>{t('application-renew-adult:contact-information.preferred-language')}</p>
-                {defaultState.communicationPreferences.preferredLanguage}
+                {defaultState.communicationPreferences.value?.preferredLanguage}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-renew-adult:contact-information.preferred-method')}>
                 <p>{t('application-renew-adult:contact-information.preferred-method')}</p>
-                {defaultState.communicationPreferences.preferredMethod}
+                {defaultState.communicationPreferences.value?.preferredMethod}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-renew-adult:contact-information.preferred-notification-method')}>
                 <p>{t('application-renew-adult:contact-information.preferred-notification-method')}</p>
-                {defaultState.communicationPreferences.preferredNotificationMethod}
+                {defaultState.communicationPreferences.value?.preferredNotificationMethod}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-renew-adult:contact-information.email')}>
                 <p>{t('application-renew-adult:contact-information.email')}</p>
