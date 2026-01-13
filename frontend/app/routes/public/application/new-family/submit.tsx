@@ -7,7 +7,8 @@ import { z } from 'zod';
 import type { Route } from './+types/submit';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { loadPublicApplicationFamilyStateForReview } from '~/.server/routes/helpers/public-application-family-route-helpers';
+import { savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { ApplyAdultState } from '~/.server/routes/mappers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -39,7 +40,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  const state = getPublicApplicationState({ params, session });
+  const state = loadPublicApplicationFamilyStateForReview({ params, request, session });
   validateApplicationTypeAndFlow(state, params, ['new-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -47,12 +48,12 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const children = [];
   for (const child of state.children) {
-    children.push(`${child.information?.firstName} ${child.information?.lastName}`);
+    children.push(`${child.information.firstName} ${child.information.lastName}`);
   }
 
   return {
     state: {
-      applicantName: `${state.applicantInformation?.firstName} ${state.applicantInformation?.lastName}`,
+      applicantName: `${state.applicantInformation.firstName} ${state.applicantInformation.lastName}`,
       acknowledgeInfo: state.submitTerms?.acknowledgeInfo,
       acknowledgeCriteria: state.submitTerms?.acknowledgeCriteria,
       children,
@@ -62,7 +63,7 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
-  const state = getPublicApplicationState({ params, session });
+  const state = loadPublicApplicationFamilyStateForReview({ params, request, session });
   validateApplicationTypeAndFlow(state, params, ['new-family']);
 
   const formData = await request.formData();
