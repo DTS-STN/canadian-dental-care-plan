@@ -89,7 +89,7 @@ import type {
 import type { EvidentiaryDocumentTypeService } from '~/.server/domain/services/evidentiary-document-type.service';
 import type { HttpClient } from '~/.server/http';
 import type { InstrumentationService } from '~/.server/observability';
-import type { BenefitApplicationStateMapper, BenefitRenewalStateMapper } from '~/.server/routes/mappers';
+import type { BenefitApplicationStateMapper, BenefitRenewalStateMapper, HubSpokeBenefitApplicationStateMapper } from '~/.server/routes/mappers';
 import type { SecurityHandler } from '~/.server/routes/security';
 import type { AddressValidatorFactory, HomeAddressValidatorFactory, MailingAddressValidatorFactory } from '~/.server/routes/validators';
 import { assignServiceIdentifiers, serviceIdentifier as serviceId } from '~/.server/utils/service-identifier.utils';
@@ -176,6 +176,7 @@ export const TYPES = assignServiceIdentifiers({
   BenefitApplicationRepository: serviceId<BenefitApplicationRepository>(),
   BenefitApplicationService: serviceId<BenefitApplicationService>(),
   BenefitApplicationStateMapper: serviceId<BenefitApplicationStateMapper>(),
+  HubSpokeBenefitApplicationStateMapper: serviceId<HubSpokeBenefitApplicationStateMapper>(),
   BenefitRenewalDtoMapper: serviceId<BenefitRenewalDtoMapper>(),
   BenefitRenewalRepository: serviceId<BenefitRenewalRepository>(),
   BenefitRenewalService: serviceId<BenefitRenewalService>(),

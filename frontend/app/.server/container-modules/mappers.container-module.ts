@@ -29,7 +29,7 @@ import {
   DefaultSunLifeCommunicationMethodDtoMapper,
   DefaultVerificationCodeDtoMapper,
 } from '~/.server/domain/mappers';
-import { DefaultBenefitApplicationStateMapper, DefaultBenefitRenewalStateMapper } from '~/.server/routes/mappers';
+import { DefaultBenefitApplicationStateMapper, DefaultBenefitRenewalStateMapper, DefaultHubSpokeBenefitApplicationStateMapper } from '~/.server/routes/mappers';
 import { DefaultDynatraceDtoMapper, DefaultHCaptchaDtoMapper } from '~/.server/web/mappers';
 
 /**
@@ -43,6 +43,7 @@ export function createMappersContainerModule(): ContainerModule {
     options.bind(TYPES.ApplicationYearDtoMapper).to(DefaultApplicationYearDtoMapper);
     options.bind(TYPES.BenefitApplicationDtoMapper).to(DefaultBenefitApplicationDtoMapper);
     options.bind(TYPES.BenefitApplicationStateMapper).to(DefaultBenefitApplicationStateMapper);
+    options.bind(TYPES.HubSpokeBenefitApplicationStateMapper).to(DefaultHubSpokeBenefitApplicationStateMapper);
     options.bind(TYPES.BenefitRenewalDtoMapper).to(DefaultBenefitRenewalDtoMapper);
     options.bind(TYPES.BenefitRenewalStateMapper).to(DefaultBenefitRenewalStateMapper);
     options.bind(TYPES.ClientApplicationDtoMapper).to(DefaultClientApplicationDtoMapper);
