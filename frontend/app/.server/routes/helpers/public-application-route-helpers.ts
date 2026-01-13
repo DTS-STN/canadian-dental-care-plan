@@ -509,3 +509,19 @@ export function getSingleChildState({ params, request, session }: getSingleChild
 
   return { ...childState, childNumber: childStateIndex + 1, isNew };
 }
+
+/**
+ * Checks if the provided date falls within the configured renewal period.
+ *
+ * The renewal period is defined by the `RENEWAL_PERIOD_START_DATE` and
+ * `RENEWAL_PERIOD_END_DATE` environment variables.
+ *
+ * @param date - The date to check. Defaults to the current date and time.
+ * @returns `true` if the date is within the renewal period (inclusive); otherwise, `false`.
+ */
+export function isWithinRenewalPeriod(date: Date = new Date()): boolean {
+  const { RENEWAL_PERIOD_START_DATE, RENEWAL_PERIOD_END_DATE } = getEnv();
+  const startDate = new Date(RENEWAL_PERIOD_START_DATE);
+  const endDate = new Date(RENEWAL_PERIOD_END_DATE);
+  return date >= startDate && date <= endDate;
+}
