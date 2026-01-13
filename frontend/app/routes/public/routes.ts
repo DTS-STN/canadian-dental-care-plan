@@ -93,6 +93,11 @@ export const routes = [
             file: 'routes/public/application/new-family/exit-application.tsx',
             paths: { en: '/:lang/application/:id/new-family/exit-application', fr: '/:lang/demandes/:id/new-family/quitter-demande' },
           },
+          {
+            id: 'public/application/$id/renew-adult/contact-information',
+            file: 'routes/public/application/renew-adult/contact-information.tsx',
+            paths: { en: '/:lang/application/:id/renew-adult/contact-information', fr: '/:lang/demandes/:id/renouveler-adulte/coordonnees' },
+          },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },

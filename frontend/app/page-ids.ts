@@ -157,6 +157,9 @@ export const pageIds = {
         childApplication: 'CDCP-APPL-NFAM-0006',
         exitApplication: 'CDCP-APPL-NFAM-0007',
       },
+      renewAdult: {
+        contactInformation: 'CDCP-RENW-RAD-0001',
+      },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',
         fileYourTaxes: 'CDCP-APPL-SPK-0002',
