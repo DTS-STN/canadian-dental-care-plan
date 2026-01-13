@@ -159,6 +159,7 @@ export const pageIds = {
       },
       renewAdult: {
         contactInformation: 'CDCP-RENW-RAD-0001',
+        dentalInsurance: 'CDCP-RENW-RAD-0002',
       },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',

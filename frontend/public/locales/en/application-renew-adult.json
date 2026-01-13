@@ -31,5 +31,26 @@
     "communication-preferences-unchanged": "My communication preferences have not changed",
     "next-btn": "Access to dental insurance",
     "prev-btn": "Marital status"
+  },
+  "dental-insurance": {
+    "page-title": "Your access to dental insurance",
+    "page-heading": "Your access to dental insurance",
+    "access-to-dental-insurance": "Access to private dental insurance",
+    "dental-insurance-indicate-status": "Indicate if you have access to private dental insurance.",
+    "access-to-dental-insurance-or-coverage": "Access to private dental insurance or coverage",
+    "dental-insurance-yes": "Yes, I have access to private dental insurance or coverage",
+    "dental-insurance-no": "No, I do not have access to private dental insurance or coverage",
+    "edit-access-to-dental-insurance": "Edit access to private dental insurance",
+    "other-benefits": "Other government dental benefits",
+    "access-to-government-benefits": "Access to government benefits",
+    "dental-benefits-indicate-status": "Would you like to update your access to other government dental benefits?",
+    "edit-access-to-government-benefits": "Edit access to government dental benefits",
+    "update-my-access": "Update my access to government dental benefits",
+    "access-not-changed": "My access to government dental benefits has not changed",
+    "add-answer": "Add answer",
+    "yes": "Yes",
+    "no": "No",
+    "contact-information": "Your contact information",
+    "submit": "Submit"
   }
 }
