@@ -214,6 +214,16 @@ const serverEnv = clientEnvSchema.extend({
   APPLY_ELIGIBILITY_RULES: z.string().default('[{"minAge":18,"maxAge":34,"startDate":"2025-05-15T04:00:00.000Z"},{"minAge":35,"maxAge":54,"startDate":"2025-05-29T04:00:00.000Z"}]'),
 
   /**
+   * Defines the start date for the application renewal period.
+   */
+  RENEWAL_PERIOD_START_DATE: z.iso.datetime().default('2026-04-15T04:00:00.000Z'),
+
+  /**
+   * Defines the end date for the application renewal period.
+   */
+  RENEWAL_PERIOD_END_DATE: z.iso.datetime().default('2026-06-02T03:59:59.999Z'),
+
+  /**
    * Defines the duration (in seconds) the application killswitch remains active once engaged.
    *
    * When the killswitch is active (triggered by heavy system load), users
@@ -224,7 +234,16 @@ const serverEnv = clientEnvSchema.extend({
    * TODO ::: GjB ::: this is a temporary fix that should eventually be removed
    */
   APPLICATION_KILLSWITCH_TTL_SECONDS: z.coerce.number().default(5 * 60),
-});
+})
+/**
+ * Refiner to ensure that RENEWAL_PERIOD_END_DATE is greater than or equal to RENEWAL_PERIOD_START_DATE
+ */
+.refine(({RENEWAL_PERIOD_END_DATE, RENEWAL_PERIOD_START_DATE}) => {
+    return new Date(RENEWAL_PERIOD_START_DATE) <= new Date(RENEWAL_PERIOD_END_DATE);
+  }, {
+    path: ['RENEWAL_PERIOD_END_DATE'],
+    message: 'RENEWAL_PERIOD_END_DATE must be greater than or equal to RENEWAL_PERIOD_START_DATE',
+  });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
 
