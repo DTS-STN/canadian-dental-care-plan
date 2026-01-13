@@ -8,6 +8,7 @@ import { customAlphabet, urlAlphabet } from 'nanoid';
 import type { ReadonlyDeep } from 'type-fest';
 import { z } from 'zod';
 
+import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
 import type { DeclaredChange } from '~/.server/routes/helpers/declared-change-type';
 import { getEnv } from '~/.server/utils/env.utils';
@@ -134,6 +135,7 @@ export type PublicApplicationState = ReadonlyDeep<{
   };
   typeOfApplication?: 'new' | 'renew';
   typeOfApplicationFlow?: 'adult' | 'children' | 'family' | 'delegate';
+  clientApplication?: ClientApplicationDto;
 }>;
 
 export type ApplicantInformationState = NonNullable<PublicApplicationState['applicantInformation']>;
@@ -455,7 +457,7 @@ export function getInitialTypeAndFlowUrl(typeAndFlow: TypeAndFlow, params: Param
       return getPathById('public/application/$id/application-delegate', params);
     }
     case 'renew-adult': {
-      throw new Error('Not implemented yet: "renew-adult" case');
+      return getPathById('public/application/$id/renew-adult/contact-information');
     }
     case 'renew-children': {
       throw new Error('Not implemented yet: "renew-children" case');

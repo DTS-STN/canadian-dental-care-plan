@@ -34,5 +34,5 @@ export function CardContent({ className, ...props }: ComponentProps<'div'>) {
 }
 
 export function CardFooter({ className, ...props }: ComponentProps<'div'>) {
-  return <div data-slot="card-footer" className={cn('-mb-6 flex items-center px-6 pb-6 [.border-t]:pt-6', className)} {...props} />;
+  return <div data-slot="card-footer" className={cn('-mb-6 flex flex-col items-start px-6 pb-6 [.border-t]:pt-6', className)} {...props} />;
 }

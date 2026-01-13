@@ -38,7 +38,7 @@ exports[`Card components > should render correctly > expected html 1`] = `
       </p>
     </div>
     <div
-      class="-mb-6 flex items-center px-6 pb-6 [.border-t]:pt-6 border-t"
+      class="-mb-6 flex flex-col items-start px-6 pb-6 [.border-t]:pt-6 border-t"
       data-slot="card-footer"
     >
       <p>
