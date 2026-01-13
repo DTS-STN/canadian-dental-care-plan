@@ -9,7 +9,6 @@ import type { Route } from './+types/submit';
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationChildStateForReview } from '~/.server/routes/helpers/public-application-child-route-helpers';
 import { savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
-import type { ApplyAdultState } from '~/.server/routes/mappers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -90,7 +89,7 @@ export async function action({ context: { appContainer, session }, request, para
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  const benefitApplicationDto = appContainer.get(TYPES.BenefitApplicationStateMapper).mapApplyAdultStateToBenefitApplicationDto(state as unknown as ApplyAdultState); // TODO: the mapper needs to be modified to accept the proper type
+  const benefitApplicationDto = appContainer.get(TYPES.HubSpokeBenefitApplicationStateMapper).mapApplicationChildrenStateToBenefitApplicationDto(state);
   const confirmationCode = await appContainer.get(TYPES.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
   savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
