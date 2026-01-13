@@ -101,7 +101,7 @@ export const routes = [
           {
             id: 'public/application/$id/renew-adult/dental-insurance',
             file: 'routes/public/application/renew-adult/dental-insurance.tsx',
-            paths: { en: '/:lang/application/:id/renew-adult/dental-insurance', fr: '/:lang/demandes/:id/renew-adult/assurance-dentaire' },
+            paths: { en: '/:lang/application/:id/renew-adult/dental-insurance', fr: '/:lang/demandes/:id/renouveler-adulte/assurance-dentaire' },
           },
 
           // spokes
