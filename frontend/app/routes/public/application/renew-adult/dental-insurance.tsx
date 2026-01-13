@@ -102,7 +102,7 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={faCirclePlus} size="lg">
+          <ButtonLink id="edit-button-dental-insurance" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={faCirclePlus} size="lg">
             {state.dentalInsurance === undefined ? t('application-renew-adult:dental-insurance.add-answer') : t('application-renew-adult:dental-insurance.edit-access-to-dental-insurance')}
           </ButtonLink>
         </CardFooter>
@@ -144,16 +144,16 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
         <CardFooter className="flex-col items-start border-t bg-zinc-100">
           {state.hasFederalProvincialTerritorialBenefits === undefined ? (
             <>
-              <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/confirm-federal-provincial-territorial-benefits" params={params} startIcon={faPenToSquare} size="lg">
+              <ButtonLink id="edit-button-update-access" variant="link" className="p-0" routeId="public/application/$id/confirm-federal-provincial-territorial-benefits" params={params} startIcon={faPenToSquare} size="lg">
                 {t('application-renew-adult:dental-insurance.update-my-access')}
               </ButtonLink>
               <br />
-              <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/confirm-federal-provincial-territorial-benefits" params={params} startIcon={faCircleCheck} size="lg">
+              <ButtonLink id="edit-button-not-changed" variant="link" className="p-0" routeId="public/application/$id/confirm-federal-provincial-territorial-benefits" params={params} startIcon={faCircleCheck} size="lg">
                 {t('application-renew-adult:dental-insurance.access-not-changed')}
               </ButtonLink>
             </>
           ) : (
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/confirm-federal-provincial-territorial-benefits" params={params} startIcon={faCirclePlus} size="lg">
+            <ButtonLink id="edit-button-government-benefits" variant="link" className="p-0" routeId="public/application/$id/confirm-federal-provincial-territorial-benefits" params={params} startIcon={faCirclePlus} size="lg">
               {t('application-renew-adult:dental-insurance.edit-access-to-government-benefits')}
             </ButtonLink>
           )}
