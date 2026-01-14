@@ -143,23 +143,42 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate className="space-y-6">
         <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('stub-login:index.sin')} required inputMode="numeric" defaultValue={defaultValues.sin} errorMessage={errors?.sin} />
-
         <InputSelect
           id="destination-page"
           name="destinationRouteId"
           label={t('stub-login:index.destination')}
           options={[
             {
-              children: 'Letters',
-              value: 'protected/letters/index',
-            },
-            {
               children: 'Apply',
               value: 'protected/apply/index',
             },
             {
-              children: 'Renew my coverage',
-              value: 'protected/renew/index',
+              children: 'Documents',
+              value: 'protected/documents/index',
+            },
+            {
+              children: 'Letters',
+              value: 'protected/letters/index',
+            },
+            {
+              children: 'Member Eligibility',
+              value: 'protected/profile/eligibility',
+            },
+            {
+              children: 'Profile - Applicant Information',
+              value: 'protected/profile/applicant-information',
+            },
+            {
+              children: 'Profile - Communication Preferences',
+              value: 'protected/profile/communication-preferences',
+            },
+            {
+              children: 'Profile - Contact Information',
+              value: 'protected/profile/contact-information',
+            },
+            {
+              children: 'Profile - Dental Benefits',
+              value: 'protected/profile/dental-benefits',
             },
           ]}
         />
