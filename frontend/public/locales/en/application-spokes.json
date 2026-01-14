@@ -152,7 +152,6 @@
     "legend": "Do you have access to private dental insurance or coverage through any of the following:",
     "option-yes": "<strong>Yes</strong>, I have access to dental insurance or coverage",
     "option-no": "<strong>No</strong>, I do not have access to dental insurance or coverage",
-    "dental-insurance-eligibility-confirmation": "I understand that I am not eligible for the Canadian Dental Care Plan if I have access to dental insurance or coverage.",
     "button": {
       "back": "Back",
       "continue": "Continue",
@@ -173,9 +172,17 @@
         "access": "Having access to dental coverage through the Canadian Dental Care Plan or other federal, provincial or territorial government social programs is not considered as having access to private dental insurance."
       }
     },
-    "alert": {
-      "title": "Private dental insurance confirmation",
-      "body": "If you have access to private dental insurance or coverage, you are not eligible for the Canadian Dental Care Plan. If you are a current member and continue with the application, your benefits will end immediately."
+    "yes": {
+      "alert-title": "Private dental insurance confirmation",
+      "alert-body": "If you have access to private dental insurance or coverage, you are not eligible for the Canadian Dental Care Plan. If you are a current member and continue with the application, your benefits will end immediately.",
+      "confirmation": "I understand that I am not eligible for the Canadian Dental Care Plan if I have access to dental insurance or coverage."
+    },
+    "no": {
+      "alert-title": "Dental insurance confirmation",
+      "alert-body": "We'll confirm your response using any <t4Href>T4 (box 45)</t4Href> or <t4aHref>T4A (box 015)</t4aHref> documents you may have. If the document shows you have access to employer or pension sponsored dental insurance or coverage, you may be asked to provide proof that you're not covered.",
+      "alert-t4-href": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/tax-slips/understand-your-tax-slips/t4-slips/t4-statement-remuneration-paid.html",
+      "alert-t4a-href": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/tax-slips/understand-your-tax-slips/t4-slips/t4a-slip.html",
+      "confirmation": "I understand that I may be asked to provide proof that I do not have access to dental insurance or coverage."
     },
     "error-message": {
       "dental-insurance-required": "Select whether you have access to dental insurance",
@@ -566,5 +573,13 @@
         "dental-insurance-eligibility-confirmation-required": "Select whether you understand that if you have private dental insurance you are not eligible for the Canadian Dental Care Plan"
       }
     }
+  },
+  "dental-insurance-exit-application": {
+    "page-title": "We may ask you for additional information",
+    "are-you-sure": "You may be asked to provide proof that you do not have access to other dental insurance. Check the box to show you understand what's needed.",
+    "click-back": "If you want to end the session and stop your application, click \"Close application.\" Any information entered will not be saved.",
+    "back-btn": "Back",
+    "exit-btn": "Close application",
+    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   }
 }
