@@ -57,9 +57,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const stubLoginSchema = z.object({
     sin: z.string().trim().nonempty(t('stub-login:index.error-message.sin-required')).refine(isValidSin, t('stub-login:index.error-message.sin-invalid')),
-    destinationRouteId: z.string().trim().min(1, t('stub-login:index.error-message.destination-required')),
-    sid: z.string().trim().min(1, t('stub-login:index.error-message.sid-required')),
-    sub: z.string().trim().min(1, t('stub-login:index.error-message.sub-required')),
+    destinationRouteId: z.string().trim().nonempty(t('stub-login:index.error-message.destination-required')),
+    sid: z.string().trim().nonempty(t('stub-login:index.error-message.sid-required')),
+    sub: z.string().trim().nonempty(t('stub-login:index.error-message.sub-required')),
   });
 
   const formData = await request.formData();
@@ -147,7 +147,11 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
           id="destination-page"
           name="destinationRouteId"
           label={t('stub-login:index.destination')}
+          errorMessage={errors?.destinationRouteId}
+          defaultValue=""
+          required
           options={[
+            { children: 'Select a destination', value: '', disabled: true, hidden: true },
             {
               children: 'Apply',
               value: 'protected/apply/index',
@@ -185,8 +189,8 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
         <fieldset>
           <legend className="mb-2 text-xl font-semibold">{t('stub-login:index.raoidc')}</legend>
           <div className="space-y-6">
-            <InputField id="sid" name="sid" className="w-full" inputMode="text" label={t('stub-login:index.sid')} defaultValue={defaultValues.sid} />
-            <InputField id="sub" name="sub" className="w-full" inputMode="text" label={t('stub-login:index.sub')} defaultValue={defaultValues.sub} />
+            <InputField id="sid" name="sid" className="w-full" inputMode="text" label={t('stub-login:index.sid')} defaultValue={defaultValues.sid} errorMessage={errors?.sid} />
+            <InputField id="sub" name="sub" className="w-full" inputMode="text" label={t('stub-login:index.sub')} defaultValue={defaultValues.sub} errorMessage={errors?.sub} />
           </div>
         </fieldset>
         <Button variant="primary" id="login-button">
