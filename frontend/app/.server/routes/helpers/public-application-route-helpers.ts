@@ -80,7 +80,7 @@ export type PublicApplicationState = ReadonlyDeep<{
   };
   dentalInsurance?: {
     hasDentalInsurance: boolean;
-    dentalInsuranceEligibilityConfirmation?: boolean;
+    dentalInsuranceEligibilityConfirmation: boolean;
   };
   livingIndependently?: boolean;
   partnerInformation?: {

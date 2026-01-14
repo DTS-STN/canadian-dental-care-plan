@@ -57,7 +57,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   return {
     state: {
-      dentalInsurance: state.dentalInsurance?.hasDentalInsurance,
+      dentalInsurance: state.dentalInsurance,
       hasFederalProvincialTerritorialBenefits: state.hasFederalProvincialTerritorialBenefits,
       dentalBenefits: state.dentalBenefits ? dentalBenefits : undefined,
     },
@@ -71,7 +71,7 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
   const { steps, currentStep } = useProgressStepper('new-adult', 'dental-insurance');
 
   const sections = [
-    { id: 'dental-insurance', completed: state.dentalInsurance !== undefined }, //
+    { id: 'dental-insurance', completed: state.dentalInsurance?.dentalInsuranceEligibilityConfirmation === true }, //
     { id: 'dental-benefits', completed: state.hasFederalProvincialTerritorialBenefits !== undefined },
   ] as const;
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
@@ -90,14 +90,14 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
           <CardAction>{completedSections.includes('dental-insurance') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
-          {state.dentalInsurance === undefined ? (
-            <p>{t('application-new-adult:dental-insurance.dental-insurance-indicate-status')}</p>
-          ) : (
+          {state.dentalInsurance?.dentalInsuranceEligibilityConfirmation === true ? (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-adult:dental-insurance.access-to-dental-insurance-or-coverage')}>
-                <p>{state.dentalInsurance ? t('application-new-adult:dental-insurance.dental-insurance-yes') : t('application-new-adult:dental-insurance.dental-insurance-no')}</p>
+                <p>{state.dentalInsurance.hasDentalInsurance ? t('application-new-adult:dental-insurance.dental-insurance-yes') : t('application-new-adult:dental-insurance.dental-insurance-no')}</p>
               </DescriptionListItem>
             </dl>
+          ) : (
+            <p>{t('application-new-adult:dental-insurance.dental-insurance-indicate-status')}</p>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
