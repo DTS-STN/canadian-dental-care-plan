@@ -16,6 +16,7 @@ import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
+import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
@@ -73,14 +74,9 @@ export async function action({ context: { appContainer, session }, params, reque
       hasDentalInsurance: z.boolean({ error: t('application-spokes:dental-insurance.error-message.dental-insurance-required') }),
       dentalInsuranceEligibilityConfirmation: z.string().trim().optional(),
     })
-    .superRefine((val, ctx) => {
-      if (val.hasDentalInsurance && !val.dentalInsuranceEligibilityConfirmation) {
-        ctx.addIssue({ code: 'custom', message: t('application-spokes:dental-insurance.error-message.dental-insurance-eligibility-confirmation-required'), path: ['dentalInsuranceEligibilityConfirmation'] });
-      }
-    })
     .transform((val) => ({
       ...val,
-      dentalInsuranceEligibilityConfirmation: val.hasDentalInsurance ? val.dentalInsuranceEligibilityConfirmation === CHECKBOX_VALUE.yes : undefined,
+      dentalInsuranceEligibilityConfirmation: val.dentalInsuranceEligibilityConfirmation ? val.dentalInsuranceEligibilityConfirmation === CHECKBOX_VALUE.yes : undefined,
     }));
 
   const parsedDataResult = dentalInsuranceSchema.safeParse({
@@ -90,6 +86,10 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (!parsedDataResult.success) {
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
+  }
+
+  if (!parsedDataResult.data.dentalInsuranceEligibilityConfirmation) {
+    return redirect(getPathById('public/application/$id/dental-insurance-exit-application', params));
   }
 
   savePublicApplicationState({ params, session, state: { dentalInsurance: parsedDataResult.data } });
@@ -130,6 +130,9 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
     </div>
   );
 
+  const t4Href = <InlineLink to={t('application-spokes:dental-insurance.alert-no.t4-href')} className="external-link" newTabIndicator target="_blank" />;
+  const t4aHref = <InlineLink to={t('application-spokes:dental-insurance.alert-no.t4a-href')} className="external-link" newTabIndicator target="_blank" />;
+
   return (
     <div className="max-w-prose">
       <p className="mb-4 italic">{t('application:required-label')}</p>
@@ -161,24 +164,32 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
             required
           />
         </div>
-        {hasDentalInsurance && (
-          <div className="space-y-4">
+        {hasDentalInsurance === true && (
+          <div className="mb-4">
             <ContextualAlert type="info">
-              <h3 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.alert.title')}</h3>
-              <p>{t('dental-insurance.alert.body')}</p>
+              <h3 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.alert-yes.title')}</h3>
+              <p>{t('dental-insurance.alert-yes.body')}</p>
             </ContextualAlert>
-            <InputCheckbox
-              id="dental-insurance-eligibility-confirmation"
-              name="dentalInsuranceEligibilityConfirmation"
-              value={CHECKBOX_VALUE.yes}
-              defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmation}
-              errorMessage={errors?.dentalInsuranceEligibilityConfirmation}
-              required
-            >
-              {t('dental-insurance.dental-insurance-eligibility-confirmation')}
-            </InputCheckbox>
           </div>
         )}
+        {hasDentalInsurance === false && (
+          <div className="mb-4">
+            <ContextualAlert type="info">
+              <h3 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.alert-no.title')}</h3>
+              <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:dental-insurance.alert-no.body" components={{ t4Href, t4aHref }} />
+            </ContextualAlert>
+          </div>
+        )}
+        <InputCheckbox
+          id="dental-insurance-eligibility-confirmation"
+          name="dentalInsuranceEligibilityConfirmation"
+          value={CHECKBOX_VALUE.yes}
+          defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmation}
+          errorMessage={errors?.dentalInsuranceEligibilityConfirmation}
+          required
+        >
+          {t('dental-insurance.dental-insurance-eligibility-confirmation')}
+        </InputCheckbox>
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton id="continue-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Access to other dental insurance click">
             {t('dental-insurance.button.continue')}
