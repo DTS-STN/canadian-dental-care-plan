@@ -75,7 +75,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  const sin = parsedDataResult.data.sin;
+  const sin = parsedDataResult.data.sin.replaceAll(/\s+/g, ''); // Remove any spaces
   const sid = parsedDataResult.data.sid;
   const sub = parsedDataResult.data.sub;
 
