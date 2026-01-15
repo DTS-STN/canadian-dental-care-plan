@@ -7,7 +7,7 @@ import { z } from 'zod';
 import type { Route } from './+types/type-application';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, isWithinRenewalPeriod, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -46,7 +46,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
-  const state = getPublicApplicationState({ params, session });
+  getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   /**
@@ -60,15 +60,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  savePublicApplicationState({
-    params,
-    session,
-    state: {
-      // Preserve existing typeOfApplication otherwise set based on renewal period
-      typeOfApplication: state.typeOfApplication ?? (isWithinRenewalPeriod() ? 'renew' : 'new'),
-      typeOfApplicationFlow: parsedDataResult.data.typeOfApplication,
-    },
-  });
+  savePublicApplicationState({ params, session, state: { typeOfApplicationFlow: parsedDataResult.data.typeOfApplication } });
 
   if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.delegate) {
     return redirect(getPathById('public/application/$id/application-delegate', params));

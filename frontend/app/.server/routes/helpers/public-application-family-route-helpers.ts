@@ -135,10 +135,6 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
   }
 
-  if (typeOfApplication === undefined) {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
-  }
-
   if (typeOfApplicationFlow === 'delegate') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
