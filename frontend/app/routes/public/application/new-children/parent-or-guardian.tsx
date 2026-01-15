@@ -58,8 +58,6 @@ export async function loader({ context: { appContainer, session }, request, para
     country: countryHome?.name,
   };
 
-  const preferredLanguage = state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined;
-
   return {
     state: {
       maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined,
@@ -70,13 +68,15 @@ export async function loader({ context: { appContainer, session }, request, para
     },
     mailingAddressInfo,
     homeAddressInfo,
-    preferredLanguage,
+    preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
+    preferredMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale) : undefined,
+    preferredNotificationMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale) : undefined,
     meta,
   };
 }
 
 export default function NewChildParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const { steps, currentStep } = useProgressStepper('new-children', 'parent-or-guardian');
 
@@ -209,22 +209,10 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
         <CardContent>
           {state.communicationPreferences?.hasChanged ? (
             <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-new-child:parent-or-guardian.preferred-language')}>
-                <p>{t('application-new-child:parent-or-guardian.preferred-language')}</p>
-                {preferredLanguage?.name}
-              </DescriptionListItem>
-              <DescriptionListItem term={t('application-new-child:parent-or-guardian.preferred-method')}>
-                <p>{t('application-new-child:parent-or-guardian.preferred-method')}</p>
-                {state.communicationPreferences.value.preferredMethod}
-              </DescriptionListItem>
-              <DescriptionListItem term={t('application-new-child:parent-or-guardian.preferred-notification-method')}>
-                <p>{t('application-new-child:parent-or-guardian.preferred-notification-method')}</p>
-                {state.communicationPreferences.value.preferredNotificationMethod}
-              </DescriptionListItem>
-              <DescriptionListItem term={t('application-new-child:parent-or-guardian.email')}>
-                <p>{t('application-new-child:parent-or-guardian.email')}</p>
-                {state.email}
-              </DescriptionListItem>
+              <DescriptionListItem term={t('application-new-child:parent-or-guardian.preferred-language')}>{preferredLanguage?.name}</DescriptionListItem>
+              <DescriptionListItem term={t('application-new-child:parent-or-guardian.preferred-method')}>{preferredMethod?.name}</DescriptionListItem>
+              <DescriptionListItem term={t('application-new-child:parent-or-guardian.preferred-notification-method')}>{preferredNotificationMethod?.name}</DescriptionListItem>
+              <DescriptionListItem term={t('application-new-child:parent-or-guardian.email')}>{state.email}</DescriptionListItem>
             </dl>
           ) : (
             <p>{t('application-new-child:parent-or-guardian.communication-preferences-help')}</p>

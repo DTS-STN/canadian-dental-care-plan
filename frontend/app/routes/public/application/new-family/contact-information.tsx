@@ -62,8 +62,6 @@ export async function loader({ context: { appContainer, session }, request, para
     country: countryHome?.name,
   };
 
-  const preferredLanguage = state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined;
-
   return {
     state: {
       phoneNumber: state.phoneNumber,
@@ -72,13 +70,15 @@ export async function loader({ context: { appContainer, session }, request, para
     },
     mailingAddressInfo,
     homeAddressInfo,
-    preferredLanguage,
+    preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
+    preferredMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale) : undefined,
+    preferredNotificationMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale) : undefined,
     meta,
   };
 }
 
 export default function NewFamilyContactInformation({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const { steps, currentStep } = useProgressStepper('new-family', 'contact-information');
 
@@ -174,22 +174,10 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
         <CardContent>
           {state.communicationPreferences?.hasChanged ? (
             <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-new-family:contact-information.preferred-language')}>
-                <p>{t('application-new-family:contact-information.preferred-language')}</p>
-                {preferredLanguage?.name}
-              </DescriptionListItem>
-              <DescriptionListItem term={t('application-new-family:contact-information.preferred-method')}>
-                <p>{t('application-new-family:contact-information.preferred-method')}</p>
-                {state.communicationPreferences.value.preferredMethod}
-              </DescriptionListItem>
-              <DescriptionListItem term={t('application-new-family:contact-information.preferred-notification-method')}>
-                <p>{t('application-new-family:contact-information.preferred-notification-method')}</p>
-                {state.communicationPreferences.value.preferredNotificationMethod}
-              </DescriptionListItem>
-              <DescriptionListItem term={t('application-new-family:contact-information.email')}>
-                <p>{t('application-new-family:contact-information.email')}</p>
-                {state.email}
-              </DescriptionListItem>
+              <DescriptionListItem term={t('application-new-family:contact-information.preferred-language')}>{preferredLanguage?.name}</DescriptionListItem>
+              <DescriptionListItem term={t('application-new-family:contact-information.preferred-method')}>{preferredMethod?.name}</DescriptionListItem>
+              <DescriptionListItem term={t('application-new-family:contact-information.preferred-notification-method')}>{preferredNotificationMethod?.name}</DescriptionListItem>
+              <DescriptionListItem term={t('application-new-family:contact-information.email')}>{state.email}</DescriptionListItem>
             </dl>
           ) : (
             <p>{t('application-new-family:contact-information.communication-preferences-help')}</p>
