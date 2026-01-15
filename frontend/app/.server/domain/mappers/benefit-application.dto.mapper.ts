@@ -37,6 +37,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     | 'APPLICANT_CATEGORY_CODE_FAMILY'
     | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
     | 'COMMUNICATION_METHOD_GC_DIGITAL_ID'
+    | 'COMMUNICATION_METHOD_GC_MAIL_ID'
     | 'COMMUNICATION_METHOD_SUNLIFE_MAIL_ID'
     | 'COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID'
     | 'ENGLISH_LANGUAGE_CODE'
@@ -59,6 +60,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
       | 'APPLICANT_CATEGORY_CODE_FAMILY'
       | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
       | 'COMMUNICATION_METHOD_GC_DIGITAL_ID'
+      | 'COMMUNICATION_METHOD_GC_MAIL_ID'
       | 'COMMUNICATION_METHOD_SUNLIFE_MAIL_ID'
       | 'COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID'
       | 'ENGLISH_LANGUAGE_CODE'
@@ -338,18 +340,20 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     }));
   }
 
-  private toPreferredMethodCommunicationCode(preferredMethod?: string) {
+  private toPreferredMethodCommunicationCode(preferredMethod: string) {
     const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_SUNLIFE_MAIL_ID } = this.serverConfig;
+    // TODO remove the 'email' and 'mail' conditionals once hub/spoke has been released
     if (preferredMethod === 'email') return COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID;
     if (preferredMethod === 'mail') return COMMUNICATION_METHOD_SUNLIFE_MAIL_ID;
-    throw new Error(`Unexpected preferredMethod [${preferredMethod}]`);
+    return preferredMethod;
   }
 
-  private toPreferredMethodCommunicationGCCode(preferredMethodGovernmentOfCanada?: string) {
-    const { COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_SUNLIFE_MAIL_ID } = this.serverConfig;
+  private toPreferredMethodCommunicationGCCode(preferredMethodGovernmentOfCanada: string) {
+    const { COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID } = this.serverConfig;
+    // TODO remove the 'email' and 'mail' conditionals once hub/spoke has been released
     if (preferredMethodGovernmentOfCanada === 'msca') return COMMUNICATION_METHOD_GC_DIGITAL_ID;
-    if (preferredMethodGovernmentOfCanada === 'mail') return COMMUNICATION_METHOD_SUNLIFE_MAIL_ID;
-    throw new Error(`Unexpected preferredMethodGovernmentOfCanada [${preferredMethodGovernmentOfCanada}]`);
+    if (preferredMethodGovernmentOfCanada === 'mail') return COMMUNICATION_METHOD_GC_MAIL_ID;
+    return preferredMethodGovernmentOfCanada;
   }
 
   private toBenefitApplicationCategoryCode(typeOfApplication: TypeOfApplicationDto) {

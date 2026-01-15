@@ -84,8 +84,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
     contactInformationEmail: state.email,
-    communicationSunLifePreference: state.communicationPreferences.value.preferredMethod,
-    communicationGOCPreference: state.communicationPreferences.value.preferredNotificationMethod,
+    communicationSunLifePreference: appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale),
+    communicationGOCPreference: appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale),
     previouslyEnrolled: state.newOrExistingMember,
   };
 

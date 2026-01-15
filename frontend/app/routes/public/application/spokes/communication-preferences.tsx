@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
@@ -25,9 +26,6 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-
-export const PREFERRED_SUN_LIFE_METHOD = { email: 'email', mail: 'mail' } as const;
-export const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
 
 function getRouteFromTypeAndFlow(typeAndFlow: string) {
   switch (typeAndFlow) {
@@ -58,11 +56,19 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:communication-preferences.page-title') }) };
 
   const languages = appContainer.get(TYPES.LanguageService).listAndSortLocalizedLanguages(locale);
+  const gcCommunicationMethods = appContainer.get(TYPES.GCCommunicationMethodService).listLocalizedGCCommunicationMethods(locale);
+  const sunLifeCommunicationMethods = appContainer.get(TYPES.SunLifeCommunicationMethodService).listLocalizedSunLifeCommunicationMethods(locale);
+  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID } = appContainer.get(TYPES.ServerConfig);
 
   return {
     defaultState: state.communicationPreferences?.value,
     typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
     languages,
+    gcCommunicationMethods,
+    sunLifeCommunicationMethods,
+    COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
+    COMMUNICATION_METHOD_GC_DIGITAL_ID,
+    COMMUNICATION_METHOD_GC_MAIL_ID,
     meta,
   };
 }
@@ -79,6 +85,8 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
+
+  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID } = appContainer.get(TYPES.ServerConfig);
 
   // state validation schema
   const communicationPreferencesSchema = z.object({
@@ -112,7 +120,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  if (parsedDataResult.data.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email) {
+  if (parsedDataResult.data.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID) {
     return redirect(getPathById('public/application/$id/email', params));
   }
   return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
@@ -120,14 +128,18 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplicationSpokeCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, typeAndFlow } = loaderData;
+  const { defaultState, typeAndFlow, gcCommunicationMethods, sunLifeCommunicationMethods, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
   const mscaLinkAccount = <InlineLink to={t('application-spokes:communication-preferences.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
 
-  const [preferredMethod, setPreferredMethod] = useState(defaultState?.preferredMethod);
+  const [preferredMethod, setPreferredMethod] = useState(defaultState?.preferredMethod ?? defaultState?.preferredNotificationMethod);
+
+  function handleOnPreferredMethodChanged(e: React.ChangeEvent<HTMLInputElement>) {
+    setPreferredMethod(e.target.value);
+  }
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
@@ -142,9 +154,29 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
     defaultChecked: defaultState?.preferredLanguage === language.id,
   }));
 
-  function handleOnPreferredMethodChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setPreferredMethod(e.target.value);
-  }
+  const sunLifeCommunicationMethodOptions: InputRadiosProps['options'] = sunLifeCommunicationMethods.map((method) => ({
+    value: method.id,
+    children: method.name,
+    defaultChecked: defaultState?.preferredMethod === method.id,
+    onChange: handleOnPreferredMethodChanged,
+  }));
+
+  const gcCommunicationMethodOptions: InputRadiosProps['options'] = gcCommunicationMethods.map((method) => {
+    let children: ReactNode = method.name;
+
+    if (method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
+      children = <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communication-preferences.preferred-notification-method-msca" values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />;
+    } else if (method.id === COMMUNICATION_METHOD_GC_MAIL_ID) {
+      children = <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communication-preferences.preferred-notification-method-mail" values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />;
+    }
+
+    return {
+      value: method.id,
+      children,
+      defaultChecked: defaultState?.preferredNotificationMethod === method.id,
+      onChange: handleOnPreferredMethodChanged,
+    };
+  });
 
   return (
     <div className="max-w-prose">
@@ -154,52 +186,19 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
         <CsrfTokenInput />
         <div className="mb-8 space-y-6">
           <InputRadios id="preferred-language" name="preferredLanguage" legend={t('application-spokes:communication-preferences.preferred-language')} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
+          <InputRadios id="preferred-method-sunlife" legend={t('application-spokes:communication-preferences.preferred-method')} name="preferredMethod" options={sunLifeCommunicationMethodOptions} errorMessage={errors?.preferredMethod} required />
           <InputRadios
-            id="preferred-methods"
-            legend={t('application-spokes:communication-preferences.preferred-method')}
-            name="preferredMethod"
-            helpMessagePrimary={t('application-spokes:communication-preferences.preferred-method-help-message')}
-            options={[
-              {
-                value: PREFERRED_SUN_LIFE_METHOD.email,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communication-preferences.by-email" components={{ span: <span className="font-semibold" /> }} />,
-                defaultChecked: defaultState?.preferredMethod === PREFERRED_SUN_LIFE_METHOD.email,
-                onChange: handleOnPreferredMethodChanged,
-              },
-              {
-                value: PREFERRED_SUN_LIFE_METHOD.mail,
-                children: <span className="font-semibold">{t('application-spokes:communication-preferences.by-mail')}</span>,
-                defaultChecked: defaultState?.preferredMethod === PREFERRED_SUN_LIFE_METHOD.mail,
-                onChange: handleOnPreferredMethodChanged,
-              },
-            ]}
-            errorMessage={errors?.preferredMethod}
-            required
-          />
-
-          <InputRadios
-            id="preferred-notification-method"
+            id="preferred-method-gc"
             name="preferredNotificationMethod"
             legend={t('application-spokes:communication-preferences.preferred-notification-method')}
-            options={[
-              {
-                value: PREFERRED_NOTIFICATION_METHOD.msca,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communication-preferences.preferred-notification-method-msca" components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />,
-                defaultChecked: defaultState?.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.msca,
-              },
-              {
-                value: PREFERRED_NOTIFICATION_METHOD.mail,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communication-preferences.preferred-notification-method-mail" components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />,
-                defaultChecked: defaultState?.preferredNotificationMethod === PREFERRED_NOTIFICATION_METHOD.mail,
-              },
-            ]}
+            options={gcCommunicationMethodOptions}
             required
             errorMessage={errors?.preferredNotificationMethod}
           />
         </div>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Communication preferences click">
-            {preferredMethod === PREFERRED_SUN_LIFE_METHOD.email ? t('application-spokes:communication-preferences.continue') : t('application-spokes:communication-preferences.save')}
+            {preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID ? t('application-spokes:communication-preferences.continue') : t('application-spokes:communication-preferences.save')}
           </LoadingButton>
           <ButtonLink
             id="back-button"
