@@ -58,6 +58,8 @@ export async function loader({ context: { appContainer, session }, request, para
     country: countryHome?.name,
   };
 
+  const preferredLanguage = state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined;
+
   return {
     state: {
       maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined,
@@ -68,12 +70,13 @@ export async function loader({ context: { appContainer, session }, request, para
     },
     mailingAddressInfo,
     homeAddressInfo,
+    preferredLanguage,
     meta,
   };
 }
 
 export default function NewChildParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const { steps, currentStep } = useProgressStepper('new-children', 'parent-or-guardian');
 
@@ -208,7 +211,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-child:parent-or-guardian.preferred-language')}>
                 <p>{t('application-new-child:parent-or-guardian.preferred-language')}</p>
-                {state.communicationPreferences.value.preferredLanguage}
+                {preferredLanguage?.name}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-child:parent-or-guardian.preferred-method')}>
                 <p>{t('application-new-child:parent-or-guardian.preferred-method')}</p>

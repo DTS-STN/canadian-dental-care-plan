@@ -63,11 +63,12 @@ export async function loader({ context: { appContainer, session }, request, para
   };
 
   return {
-    defaultState: {
+    state: {
       phoneNumber: state.phoneNumber,
       communicationPreferences: state.communicationPreferences,
       email: state.email,
     },
+    preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     mailingAddressInfo,
     homeAddressInfo,
     meta,
@@ -75,14 +76,14 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export default function NewAdultContactInformation({ loaderData, params }: Route.ComponentProps) {
-  const { defaultState, mailingAddressInfo, homeAddressInfo } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const { steps, currentStep } = useProgressStepper('new-adult', 'contact-information');
 
   const sections = [
-    { id: 'phone-number', completed: defaultState.phoneNumber?.hasChanged === true },
+    { id: 'phone-number', completed: state.phoneNumber?.hasChanged === true },
     { id: 'address', completed: mailingAddressInfo.address !== undefined && homeAddressInfo.address !== undefined },
-    { id: 'communication-preferences', completed: defaultState.communicationPreferences?.hasChanged === true },
+    { id: 'communication-preferences', completed: state.communicationPreferences?.hasChanged === true },
   ] as const;
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
   const allSectionsCompleted = completedSections.length === sections.length;
@@ -100,10 +101,10 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
           <CardAction>{completedSections.includes('phone-number') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
-          {defaultState.phoneNumber?.hasChanged ? (
+          {state.phoneNumber?.hasChanged ? (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-adult:contact-information.phone-number')}>
-                <p>{defaultState.phoneNumber.value.primary}</p>
+                <p>{state.phoneNumber.value.primary}</p>
               </DescriptionListItem>
             </dl>
           ) : (
@@ -169,23 +170,23 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
           <CardAction>{completedSections.includes('communication-preferences') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
-          {defaultState.communicationPreferences?.hasChanged ? (
+          {state.communicationPreferences?.hasChanged ? (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-adult:contact-information.preferred-language')}>
                 <p>{t('application-new-adult:contact-information.preferred-language')}</p>
-                {defaultState.communicationPreferences.value.preferredLanguage}
+                {preferredLanguage?.name}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-adult:contact-information.preferred-method')}>
                 <p>{t('application-new-adult:contact-information.preferred-method')}</p>
-                {defaultState.communicationPreferences.value.preferredMethod}
+                {state.communicationPreferences.value.preferredMethod}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-adult:contact-information.preferred-notification-method')}>
                 <p>{t('application-new-adult:contact-information.preferred-notification-method')}</p>
-                {defaultState.communicationPreferences.value.preferredNotificationMethod}
+                {state.communicationPreferences.value.preferredNotificationMethod}
               </DescriptionListItem>
               <DescriptionListItem term={t('application-new-adult:contact-information.email')}>
                 <p>{t('application-new-adult:contact-information.email')}</p>
-                {defaultState.email}
+                {state.email}
               </DescriptionListItem>
             </dl>
           ) : (
