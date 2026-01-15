@@ -133,7 +133,7 @@ export type PublicApplicationState = ReadonlyDeep<{
     acknowledgePrivacy: boolean;
     shareData: boolean;
   };
-  typeOfApplication?: 'new' | 'renew';
+  typeOfApplication: 'new' | 'renew';
   typeOfApplicationFlow?: 'adult' | 'children' | 'family' | 'delegate';
   clientApplication?: ClientApplicationDto;
 }>;
@@ -234,8 +234,8 @@ export function getPublicApplicationState({ params, session }: LoadStateArgs): P
 interface SaveStateArgs {
   params: ApplicationStateParams;
   session: Session;
-  state: Partial<OmitStrict<PublicApplicationState, 'id' | 'lastUpdatedOn' | 'applicationYear'>>;
-  remove?: keyof OmitStrict<PublicApplicationState, 'children' | 'id' | 'lastUpdatedOn' | 'applicationYear'>;
+  state: Partial<OmitStrict<PublicApplicationState, 'id' | 'lastUpdatedOn' | 'applicationYear' | 'typeOfApplication'>>;
+  remove?: keyof OmitStrict<PublicApplicationState, 'children' | 'id' | 'lastUpdatedOn' | 'applicationYear' | 'typeOfApplication'>;
 }
 
 /**
@@ -300,6 +300,7 @@ export function startApplicationState({ applicationYear, session }: StartArgs): 
     lastUpdatedOn: new UTCDate().toISOString(),
     applicationYear,
     children: [],
+    typeOfApplication: isWithinRenewalPeriod() ? 'renew' : 'new',
   };
 
   const sessionKey = getSessionKey(initialState.id);
@@ -415,7 +416,7 @@ export function validateApplicationTypeAndFlow<TAllowedTypesAndFlows extends Rea
   const type = state.typeOfApplication;
   const flow = state.typeOfApplicationFlow;
 
-  if (!type || !flow) {
+  if (!flow) {
     const redirectUrl = getInitialTypeAndFlowUrl('entry', params);
     log.warn('Type of application or flow is not defined; redirecting to [%s]; stateId: [%s]', redirectUrl, state.id);
     throw redirectDocument(redirectUrl);

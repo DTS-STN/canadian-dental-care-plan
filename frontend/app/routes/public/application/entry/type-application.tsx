@@ -33,7 +33,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application:type-of-application.page-title') }) };
 
-  const typeAndFlow: TypeAndFlow = state.typeOfApplication && state.typeOfApplicationFlow ? `${state.typeOfApplication}-${state.typeOfApplicationFlow}` : 'entry';
+  const typeAndFlow: TypeAndFlow = state.typeOfApplicationFlow ? `${state.typeOfApplication}-${state.typeOfApplicationFlow}` : 'entry';
   const nextRouteId = getInitialTypeAndFlowUrl(typeAndFlow, params);
   return {
     defaultState: {
