@@ -2,11 +2,15 @@ import { useEffect } from 'react';
 
 import { Outlet, useNavigate } from 'react-router';
 
+import { faLaptopCode } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import type { Route } from './+types/layout';
 
 import { TYPES } from '~/.server/constants';
 import { KILLSWITCH_KEY } from '~/.server/domain/services';
 import { getLocale } from '~/.server/utils/locale.utils';
+import { DebugPayload } from '~/components/debug-payload';
 import { KillswitchDialog } from '~/components/killswitch-dialog';
 import { PublicLayout, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
@@ -22,18 +26,22 @@ export const handle = {
   transformAdobeAnalyticsUrl,
 } as const satisfies RouteHandleData;
 
-export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
+export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const locale = getLocale(request);
 
   const redisService = appContainer.find(TYPES.RedisService);
   const killswitchTimeout = (await redisService?.ttl(KILLSWITCH_KEY)) ?? 0;
 
+  // load application state debug data only in development mode
+  const { NODE_ENV } = appContainer.get(TYPES.ServerConfig);
+  const applicationStateDebugData = NODE_ENV === 'development' && params.id ? session.find(`public-application-flow-${params.id}`).unwrapUnchecked() : undefined;
+
   const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(TYPES.ClientConfig);
-  return { killswitchTimeout, locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
+  return { applicationStateDebugData, killswitchTimeout, locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
 
 export default function Layout({ loaderData, params }: Route.ComponentProps) {
-  const { killswitchTimeout, locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = loaderData;
+  const { applicationStateDebugData, killswitchTimeout, locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = loaderData;
 
   const navigate = useNavigate();
 
@@ -72,6 +80,17 @@ export default function Layout({ loaderData, params }: Route.ComponentProps) {
       <KillswitchDialog timeoutSecs={killswitchTimeout} />
       <SessionTimeout promptBeforeIdle={SESSION_TIMEOUT_PROMPT_SECONDS * 1000} timeout={SESSION_TIMEOUT_SECONDS * 1000} onSessionEnd={handleOnSessionEnd} onSessionExtend={handleOnSessionExtend} />
       <Outlet />
+      {applicationStateDebugData && (
+        <>
+          <h2 className="font-lato mt-10 flex items-center gap-2 rounded-t-md border border-orange-400 bg-orange-100 p-4 text-xl font-bold text-orange-600">
+            <FontAwesomeIcon icon={faLaptopCode} />
+            <span>Application State Debug Data</span>
+          </h2>
+          <div className="border border-t-0 border-orange-400">
+            <DebugPayload data={applicationStateDebugData} />
+          </div>
+        </>
+      )}
     </PublicLayout>
   );
 }
