@@ -134,7 +134,7 @@
     "ora": "^9.0.0",
     "patch-package": "^8.0.1",
     "playwright-teamcity-reporter": "^1.0.5",
-    "prettier": "^3.7.4",
+    "prettier": "^3.8.0",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4.1.18",
     "tailwindcss-animate": "^1.0.7",
