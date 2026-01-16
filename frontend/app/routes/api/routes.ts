@@ -7,6 +7,11 @@ export const routes = [
     path: '/.well-known/jwks.json',
   },
   {
+    id: 'api/application-state',
+    file: 'routes/api/application-state.ts',
+    path: '/api/application-state',
+  },
+  {
     id: 'api/apply-state',
     file: 'routes/api/apply-state.ts',
     path: '/api/apply-state',
