@@ -40,7 +40,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationAdultStateForReview({ params, request, session });
-  //validateApplicationTypeAndFlow(state, params, ['renew-adult']);
+  validateApplicationTypeAndFlow(state, params, ['renew-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-renew-adult:submit.page-title') }) };
