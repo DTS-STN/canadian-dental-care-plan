@@ -54,7 +54,7 @@
       "tax-filing-required": "Select whether or not you have filed your taxes"
     },
     "back-btn": "Back",
-    "continue-btn": "Continue"
+    "save-btn": "Save"
   },
   "file-your-taxes": {
     "page-title": "File your taxes",

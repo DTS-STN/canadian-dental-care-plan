@@ -337,14 +337,14 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton
             variant="primary"
-            id="continue-button"
+            id="save-button"
             name="_action"
             value={FORM_ACTION.continue}
             loading={isSubmitting}
             endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Access to other dental benefits click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Access to other dental benefits click"
           >
-            {t('application-spokes:dental-benefits.button.continue')}
+            {t('application-spokes:dental-benefits.save-btn')}
           </LoadingButton>
           <ButtonLink
             id="back-button"
@@ -355,7 +355,7 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
             startIcon={faChevronLeft}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Access to other dental benefits click"
           >
-            {t('application-spokes:dental-benefits.button.back')}
+            {t('application-spokes:dental-benefits.back-btn')}
           </ButtonLink>
         </div>
       </fetcher.Form>

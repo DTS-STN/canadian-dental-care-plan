@@ -94,8 +94,8 @@ export default function ApplicationTaxFiling({ loaderData, params }: Route.Compo
             required
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Tax filing click">
-              {t('application:tax-filing.continue-btn')}
+            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Tax filing click">
+              {t('application:tax-filing.save-btn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"

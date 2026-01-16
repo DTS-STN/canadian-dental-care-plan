@@ -239,15 +239,15 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
         </div>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton
-            id="continue-button"
+            id="save-button"
             name="_action"
             value={FORM_ACTION.continue}
             variant="primary"
             loading={isSubmitting}
             endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Marital status click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Marital status click"
           >
-            {t('application-spokes:marital-status.continue-btn')}
+            {t('application-spokes:marital-status.save-btn')}
           </LoadingButton>
           <ButtonLink
             id="back-button"

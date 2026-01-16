@@ -13,9 +13,7 @@
     "divorced": "Divorcé(e)",
     "widowed": "Veuf ou veuve",
     "back-btn": "Retour",
-    "continue-btn": "Continuer",
-    "cancel-btn": "Annuler",
-    "save-btn": "Enregistrer",
+    "save-btn": "Sauvegarder",
     "sin": "Numéro d'assurance sociale (NAS)",
     "year-of-birth": "Année de naissance",
     "confirm-checkbox": "Je confirme que mon époux/épouse ou conjoint/conjointe de fait est au courant de la communication de ses renseignements personnels et y a consenti.",
@@ -152,12 +150,8 @@
     "legend": "(FR) Do you have access to private dental insurance or coverage through any of the following:",
     "option-yes": "(FR) <strong>Yes</strong>, I have access to dental insurance or coverage",
     "option-no": "(FR) <strong>No</strong>, I do not have access to dental insurance or coverage",
-    "button": {
-      "back": "(FR) Back",
-      "continue": "(FR) Continue",
-      "cancel-btn": "(FR) Cancel",
-      "save-btn": "(FR) Save"
-    },
+    "back-btn": "Retour",
+    "save-btn": "Sauvegarder",
     "detail": {
       "additional-info": {
         "title": "(FR) What does it mean to have access to private dental insurance or coverage?",
@@ -251,12 +245,9 @@
     "has-benefits": "Bénéficiez-vous d'autres prestations pour soins dentaires dans le cadre d'un programme social fédéral, provincial ou territorial autre que le Régime canadien de soins dentaires?",
     "option-yes": "<strong>Oui</strong>, j'ai des prestations fédérales, provinciales ou territoriales",
     "option-no": "<strong>Non</strong>, je n'ai pas de prestations fédérales, provinciales ou territoriales",
-    "button": {
-      "back": "Retour",
-      "continue": "Continuer",
-      "cancel-btn": "Annuler",
-      "save-btn": "Enregistrer"
-    },
+    "back-btn": "Retour",
+    "continue-btn": "Continuer",
+    "save-btn": "Sauvegarder",
     "error-message": {
       "federal-provincial-territorial-benefit-required": "Sélectionnez si vous bénéficiez de prestations dentaires fédérales, provinciales ou territoriales"
     }
@@ -285,12 +276,8 @@
         "radio-legend": "Veuillez sélectionner le programme de protection sociale avec lequel vous êtes assuré. Si vous en avez plus d'un, veuillez sélectionner celui que vous utilisez le plus."
       }
     },
-    "button": {
-      "back": "Retour",
-      "continue": "Continuer",
-      "cancel-btn": "Annuler",
-      "save-btn": "Enregistrer"
-    },
+    "back-btn": "Retour",
+    "save-btn": "Sauvegarder",
     "error-message": {
       "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel vous êtes couvert",
       "federal-benefit-required": "Sélectionnez si vous avez la prestation dentaire fédérale",
@@ -444,9 +431,7 @@
         "no": "Non"
       },
       "back-btn": "Retour",
-      "continue-btn": "Continuer",
-      "cancel-btn": "Annuler",
-      "save-btn": "Enregistrer",
+      "save-btn": "Sauvegarder",
       "error-message": {
         "first-name-required": "Entrez le prénom de l'enfant",
         "last-name-required": "Entrez le nom de famille de l'enfant",
@@ -491,12 +476,9 @@
       "has-benefits": "Est-ce que {{childName}} bénéficie d'autres prestations pour soins dentaires dans le cadre d'un programme social fédéral, provincial ou territorial autre que le Régime canadien de soins dentaires?",
       "option-yes": "<strong>Oui</strong>, l'enfant bénéficie de prestations dentaires fédérales, provinciales ou territoriales",
       "option-no": "<strong>Non</strong>, l'enfant ne bénéficie pas de prestations dentaires fédérales, provinciales ou territoriales",
-      "button": {
-        "back": "Retour",
-        "continue": "Continuer",
-        "cancel-btn": "Annuler",
-        "save-btn": "Enregistrer"
-      },
+      "back-btn": "Retour",
+      "continue-btn": "Continuer",
+      "save-btn": "Sauvegarder",
       "error-message": {
         "federal-provincial-territorial-benefit-required": "Sélectionnez si l'enfant bénéficie de prestations dentaires fédérales, provinciales ou territoriales"
       }
@@ -525,12 +507,8 @@
           "radio-legend": "Veuillez sélectionner le programme de protection sociale avec lequel vous êtes assuré. Si vous en avez plus d'un, veuillez sélectionner celui que vous utilisez le plus."
         }
       },
-      "button": {
-        "back": "Retour",
-        "continue": "Continuer",
-        "cancel-btn": "Annuler",
-        "save-btn": "Enregistrer"
-      },
+      "back-btn": "Retour",
+      "save-btn": "Sauvegarder",
       "error-message": {
         "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel l'enfant est couvert",
         "federal-benefit-required": "Sélectionnez si l'enfant bénéficie de prestations dentaires fédérales",
@@ -545,12 +523,8 @@
       "option-yes": "<strong>Oui</strong>, cet enfant a accès à une assurance dentaire privée ou une couverture",
       "option-no": "<strong>Non</strong>, cet enfant n'a pas accès à une assurance dentaire privée ou une couverture",
       "dental-insurance-eligibility-confirmation": "Je comprends que {{childName}} n'est pas admissible au Régime canadien de soins dentaires s'il a accès à une assurance dentaire ou une couverture.",
-      "button": {
-        "back": "Retour",
-        "continue": "Continuer",
-        "cancel-btn": "Annuler",
-        "save-btn": "Enregistrer"
-      },
+      "back-btn": "Retour",
+      "save-btn": "Sauvegarder",
       "detail": {
         "additional-info": {
           "title": "Est-ce que {{childName}} a une assurance dentaire privée ou une couverture par l'entremise de l'un des suivants :",

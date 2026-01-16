@@ -170,7 +170,7 @@ export default function SpokeChildConfirmFederalProvincialTerritorialBenefits({ 
 
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Child access to other government dental benefits click">
-            {t('application-spokes:children.confirm-dental-benefits.button.continue')}
+            {federalProvincialTerritorialBenefitChangedValue === false ? t('application-spokes:children.confirm-dental-benefits.save-btn') : t('application-spokes:children.confirm-dental-benefits.continue-btn')}
           </LoadingButton>
           <ButtonLink
             id="back-button"
@@ -181,7 +181,7 @@ export default function SpokeChildConfirmFederalProvincialTerritorialBenefits({ 
             startIcon={faChevronLeft}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child access to other government dental benefits click"
           >
-            {t('application-spokes:children.confirm-dental-benefits.button.back')}
+            {t('application-spokes:children.confirm-dental-benefits.back-btn')}
           </ButtonLink>
         </div>
       </fetcher.Form>
