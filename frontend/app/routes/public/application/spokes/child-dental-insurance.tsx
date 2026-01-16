@@ -193,8 +193,8 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
             </div>
           )}
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton id="continue-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Child access to other dental insurance click">
-              {t('children.dental-insurance.button.save-btn')}
+            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Save - Child access to other dental insurance click">
+              {t('children.dental-insurance.save-btn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -205,7 +205,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
               startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Child access to other dental insurance click"
             >
-              {t('children.dental-insurance.button.back')}
+              {t('children.dental-insurance.back-btn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

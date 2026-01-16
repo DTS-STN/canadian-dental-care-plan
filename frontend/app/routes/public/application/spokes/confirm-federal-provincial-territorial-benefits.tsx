@@ -150,7 +150,7 @@ export default function ApplicationSpokeConfirmFederalProvincialTerritorialBenef
         </fieldset>
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Access to other government dental benefits click">
-            {t('application-spokes:confirm-dental-benefits.button.continue')}
+            {federalProvincialTerritorialBenefitChangedValue === false ? t('application-spokes:confirm-dental-benefits.save-btn') : t('application-spokes:confirm-dental-benefits.continue-btn')}
           </LoadingButton>
           <ButtonLink
             id="back-button"
@@ -161,7 +161,7 @@ export default function ApplicationSpokeConfirmFederalProvincialTerritorialBenef
             startIcon={faChevronLeft}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Access to other government dental benefits click"
           >
-            {t('application-spokes:confirm-dental-benefits.button.back')}
+            {t('application-spokes:confirm-dental-benefits.back-btn')}
           </ButtonLink>
         </div>
       </fetcher.Form>

@@ -225,8 +225,8 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
         )}
 
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton id="continue-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Access to other dental insurance click">
-            {t('dental-insurance.button.continue')}
+          <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Access to other dental insurance click">
+            {t('dental-insurance.save-btn')}
           </LoadingButton>
           <ButtonLink
             id="back-button"
@@ -237,7 +237,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
             startIcon={faChevronLeft}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Access to other dental insurance click"
           >
-            {t('dental-insurance.button.back')}
+            {t('dental-insurance.back-btn')}
           </ButtonLink>
         </div>
       </fetcher.Form>

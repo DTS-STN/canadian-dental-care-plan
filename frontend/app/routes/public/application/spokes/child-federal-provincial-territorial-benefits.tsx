@@ -360,14 +360,14 @@ export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, par
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton
             variant="primary"
-            id="continue-button"
+            id="save-button"
             name="_action"
             value={FORM_ACTION.continue}
             loading={isSubmitting}
             endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Child access to other federal, provincial or territorial dental benefits click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Child access to other federal, provincial or territorial dental benefits click"
           >
-            {t('application-spokes:children.dental-benefits.button.continue')}
+            {t('application-spokes:children.dental-benefits.save-btn')}
           </LoadingButton>
           <ButtonLink
             id="back-button"
@@ -378,7 +378,7 @@ export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, par
             startIcon={faChevronLeft}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child access to other federal, provincial or territorial dental benefits click"
           >
-            {t('application-spokes:children.dental-benefits.button.back')}
+            {t('application-spokes:children.dental-benefits.back-btn')}
           </ButtonLink>
         </div>
       </fetcher.Form>

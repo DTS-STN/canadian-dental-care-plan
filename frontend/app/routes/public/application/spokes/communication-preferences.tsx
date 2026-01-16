@@ -135,10 +135,15 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
 
   const mscaLinkAccount = <InlineLink to={t('application-spokes:communication-preferences.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
 
-  const [preferredMethod, setPreferredMethod] = useState(defaultState?.preferredMethod ?? defaultState?.preferredNotificationMethod);
+  const [preferredMethod, setPreferredMethod] = useState(defaultState?.preferredMethod);
+  const [preferredNotification, setPreferredNotification] = useState(defaultState?.preferredNotificationMethod);
 
   function handleOnPreferredMethodChanged(e: React.ChangeEvent<HTMLInputElement>) {
     setPreferredMethod(e.target.value);
+  }
+
+  function handleOnPreferredNotificationChanged(e: React.ChangeEvent<HTMLInputElement>) {
+    setPreferredNotification(e.target.value);
   }
 
   const errors = fetcher.data?.errors;
@@ -174,7 +179,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
       value: method.id,
       children,
       defaultChecked: defaultState?.preferredNotificationMethod === method.id,
-      onChange: handleOnPreferredMethodChanged,
+      onChange: handleOnPreferredNotificationChanged,
     };
   });
 
@@ -198,7 +203,9 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
         </div>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Communication preferences click">
-            {preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID ? t('application-spokes:communication-preferences.continue') : t('application-spokes:communication-preferences.save')}
+            {(!preferredMethod && !preferredNotification) || preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || preferredNotification === COMMUNICATION_METHOD_GC_DIGITAL_ID
+              ? t('application-spokes:communication-preferences.continue')
+              : t('application-spokes:communication-preferences.save')}
           </LoadingButton>
           <ButtonLink
             id="back-button"
