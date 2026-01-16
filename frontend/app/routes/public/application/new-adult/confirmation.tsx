@@ -319,6 +319,16 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
         </section>
 
         <section className="space-y-6">
+          <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-pref')}</h3>
+          <dl className="divide-y border-y">
+            <DescriptionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage.name}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.communicationSunLifePreference.name}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.communicationGOCPreference.name}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.email')}>{userInfo.contactInformationEmail}</DescriptionListItem>
+          </dl>
+        </section>
+
+        <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h3>
           <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>

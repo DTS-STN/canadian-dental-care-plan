@@ -45,8 +45,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  // TODO: load children state
-
   // prettier-ignore
   if (state.applicantInformation === undefined ||
     state.communicationPreferences?.hasChanged !== true ||
@@ -56,7 +54,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     state.mailingAddress === undefined ||
     state.submitTerms === undefined ||
     state.hasFiledTaxes === undefined  ||
-    state.submissionInfo === undefined
+    state.submissionInfo === undefined ||
+    state.children.some(child => child.information === undefined || child.dentalInsurance === undefined || child.hasFederalProvincialTerritorialBenefits === undefined)
     ) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
@@ -356,6 +355,16 @@ export default function NewFamilyConfirmation({ loaderData, params }: Route.Comp
                 }}
               />
             </DescriptionListItem>
+          </dl>
+        </section>
+
+        <section className="space-y-6">
+          <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-pref')}</h3>
+          <dl className="divide-y border-y">
+            <DescriptionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage.name}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.communicationSunLifePreference.name}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.communicationGOCPreference.name}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.email')}>{userInfo.contactInformationEmail}</DescriptionListItem>
           </dl>
         </section>
 
