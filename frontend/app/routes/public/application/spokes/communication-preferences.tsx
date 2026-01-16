@@ -162,7 +162,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
   const sunLifeCommunicationMethodOptions: InputRadiosProps['options'] = sunLifeCommunicationMethods.map((method) => ({
     value: method.id,
     children: method.name,
-    defaultChecked: defaultState?.preferredMethod === method.id,
+    defaultChecked: defaultState ? defaultState.preferredMethod === method.id : method.id === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
     onChange: handleOnPreferredMethodChanged,
   }));
 
@@ -178,7 +178,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
     return {
       value: method.id,
       children,
-      defaultChecked: defaultState?.preferredNotificationMethod === method.id,
+      defaultChecked: defaultState ? defaultState.preferredNotificationMethod === method.id : method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID,
       onChange: handleOnPreferredNotificationChanged,
     };
   });
