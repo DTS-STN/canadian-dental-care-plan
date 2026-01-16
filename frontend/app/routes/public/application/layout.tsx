@@ -14,8 +14,8 @@ import { DebugPayload } from '~/components/debug-payload';
 import { KillswitchDialog } from '~/components/killswitch-dialog';
 import { PublicLayout, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
-import { transformAdobeAnalyticsUrl } from '~/route-helpers/apply-route-helpers';
-import { useApiApplyState } from '~/utils/api-apply-state-utils';
+import { transformAdobeAnalyticsUrl } from '~/route-helpers/application-route-helpers';
+import { useApiApplicationState } from '~/utils/api-application-state-utils';
 import { useApiSession } from '~/utils/api-session-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -56,7 +56,7 @@ export default function Layout({ loaderData, params }: Route.ComponentProps) {
     }
   }, [navigate, path]);
 
-  const apiApplyState = useApiApplyState();
+  const apiApplicationState = useApiApplicationState();
   const apiSession = useApiSession();
 
   async function handleOnSessionEnd() {
@@ -64,10 +64,10 @@ export default function Layout({ loaderData, params }: Route.ComponentProps) {
   }
 
   async function handleOnSessionExtend() {
-    // extends the apply state if 'id' param exists
+    // extends the application state if 'id' param exists
     const id = params.id;
     if (typeof id === 'string') {
-      await apiApplyState.submit({ action: 'extend', id });
+      await apiApplicationState.submit({ action: 'extend', id });
       return;
     }
 
