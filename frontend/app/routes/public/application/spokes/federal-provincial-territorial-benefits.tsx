@@ -10,8 +10,7 @@ import { z } from 'zod';
 import type { Route } from './+types/federal-provincial-territorial-benefits';
 
 import { TYPES } from '~/.server/constants';
-import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/apply-route-helpers';
-import { saveApplyState } from '~/.server/routes/helpers/apply-route-helpers';
+import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -67,7 +66,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:dental-benefits.title') }) };
 
   return {
-    defaultState: state.dentalBenefits,
+    defaultState: state.dentalBenefits?.value,
     federalSocialPrograms,
     meta,
     provincialTerritorialSocialPrograms,
@@ -89,11 +88,14 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   if (formAction === FORM_ACTION.cancel) {
     if (state.hasFederalProvincialTerritorialBenefits) {
-      saveApplyState({
+      savePublicApplicationState({
         params,
         session,
         state: {
-          hasFederalProvincialTerritorialBenefits: !!state.dentalBenefits,
+          hasFederalProvincialTerritorialBenefits: {
+            hasChanged: true,
+            value: !!state.dentalBenefits?.value,
+          },
         },
       });
     }
@@ -173,8 +175,11 @@ export async function action({ context: { appContainer, session }, params, reque
     session,
     state: {
       dentalBenefits: {
-        ...parsedFederalBenefitsResult.data,
-        ...parsedProvincialTerritorialBenefitsResult.data,
+        hasChanged: true,
+        value: {
+          ...parsedFederalBenefitsResult.data,
+          ...parsedProvincialTerritorialBenefitsResult.data,
+        },
       },
     },
   });

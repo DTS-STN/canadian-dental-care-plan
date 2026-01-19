@@ -75,7 +75,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   return {
-    defaultState: childState.dentalBenefits,
+    defaultState: childState.dentalBenefits?.value,
     federalSocialPrograms,
     meta,
     provincialTerritorialSocialPrograms,
@@ -108,7 +108,10 @@ export async function action({ context: { appContainer, session }, params, reque
             if (child.id !== childState.id) return child;
             return {
               ...child,
-              hasFederalProvincialTerritorialBenefits: !!state.dentalBenefits,
+              hasFederalProvincialTerritorialBenefits: {
+                hasChanged: true,
+                value: !!state.dentalBenefits?.value,
+              },
             };
           }),
         },
@@ -193,8 +196,11 @@ export async function action({ context: { appContainer, session }, params, reque
         return {
           ...child,
           dentalBenefits: {
-            ...parsedFederalBenefitsResult.data,
-            ...parsedProvincialTerritorialBenefitsResult.data,
+            hasChanged: true,
+            value: {
+              ...parsedFederalBenefitsResult.data,
+              ...parsedProvincialTerritorialBenefitsResult.data,
+            },
           },
         };
       }),

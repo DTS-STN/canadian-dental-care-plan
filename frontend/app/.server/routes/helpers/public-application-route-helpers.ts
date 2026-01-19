@@ -37,14 +37,14 @@ export type PublicApplicationState = ReadonlyDeep<{
   };
   children: {
     id: string;
-    hasFederalProvincialTerritorialBenefits?: boolean;
-    dentalBenefits?: {
+    hasFederalProvincialTerritorialBenefits?: DeclaredChange<boolean>;
+    dentalBenefits?: DeclaredChange<{
       hasFederalBenefits: boolean;
       federalSocialProgram?: string;
       hasProvincialTerritorialBenefits: boolean;
       provincialTerritorialSocialProgram?: string;
       province?: string;
-    };
+    }>;
     dentalInsurance?: {
       hasDentalInsurance: boolean;
       dentalInsuranceEligibilityConfirmation?: boolean;
@@ -69,15 +69,15 @@ export type PublicApplicationState = ReadonlyDeep<{
     verificationAttempts: number;
   };
   emailVerified?: boolean;
-  hasFederalProvincialTerritorialBenefits?: boolean;
+  hasFederalProvincialTerritorialBenefits?: DeclaredChange<boolean>;
   maritalStatus?: string;
-  dentalBenefits?: {
+  dentalBenefits?: DeclaredChange<{
     hasFederalBenefits: boolean;
     federalSocialProgram?: string;
     hasProvincialTerritorialBenefits: boolean;
     provincialTerritorialSocialProgram?: string;
     province?: string;
-  };
+  }>;
   dentalInsurance?: {
     hasDentalInsurance: boolean;
     dentalInsuranceEligibilityConfirmation: boolean;
@@ -150,9 +150,11 @@ export type DeclaredChangeCommunicationPreferencesState = NonNullable<NonNullabl
 export type CommunicationPreferencesState = NonNullable<NonNullable<PublicApplicationState['communicationPreferences']>['value']>;
 export type DeclaredChangePhoneNumberState = NonNullable<NonNullable<PublicApplicationState['phoneNumber']>>;
 export type PhoneNumberState = NonNullable<NonNullable<PublicApplicationState['phoneNumber']>['value']>;
-export type DentalFederalBenefitsState = Pick<NonNullable<PublicApplicationState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
+export type DeclaredChangeDentalFederalBenefitsState = NonNullable<PublicApplicationState['dentalBenefits']>;
+export type DentalFederalBenefitsState = Pick<NonNullable<NonNullable<PublicApplicationState['dentalBenefits']>['value']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type DentalInsuranceState = NonNullable<PublicApplicationState['dentalInsurance']>;
-export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<PublicApplicationState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
+export type DeclaredChangeDentalProvincialTerritorialBenefitsState = NonNullable<PublicApplicationState['dentalBenefits']>;
+export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<NonNullable<PublicApplicationState['dentalBenefits']>['value']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type HomeAddressState = NonNullable<PublicApplicationState['homeAddress']>;
 export type MailingAddressState = NonNullable<PublicApplicationState['mailingAddress']>;
 export type NewOrExistingMemberState = NonNullable<PublicApplicationState['newOrExistingMember']>;
@@ -460,7 +462,7 @@ export function getInitialTypeAndFlowUrl(typeAndFlow: TypeAndFlow, params: Param
       return getPathById('public/application/$id/application-delegate', params);
     }
     case 'renew-adult': {
-      return getPathById('public/application/$id/renew-adult/contact-information');
+      return getPathById('public/application/$id/renew-adult/contact-information', params);
     }
     case 'renew-children': {
       throw new Error('Not implemented yet: "renew-children" case');

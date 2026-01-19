@@ -45,7 +45,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:confirm-dental-benefits.title') }) };
 
   return {
-    defaultState: state.hasFederalProvincialTerritorialBenefits,
+    defaultState: state.hasFederalProvincialTerritorialBenefits?.value,
     typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
     meta,
   };
@@ -88,8 +88,19 @@ export async function action({ context: { appContainer, session }, params, reque
     params,
     session,
     state: {
-      hasFederalProvincialTerritorialBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits,
-      dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits ? state.dentalBenefits : undefined,
+      hasFederalProvincialTerritorialBenefits: {
+        hasChanged: true,
+        value: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits,
+      },
+      dentalBenefits:
+        parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits && state.dentalBenefits?.hasChanged
+          ? {
+              hasChanged: true,
+              value: state.dentalBenefits.value,
+            }
+          : {
+              hasChanged: false,
+            },
     },
   });
 

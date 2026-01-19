@@ -160,7 +160,7 @@ export function validatePublicApplicationAdultStateForReview({ params, state }: 
     throw redirect(getPathById('public/application/$id/new-adult/confirm-federal-provincial-territorial-benefits', params));
   }
 
-  if (dentalBenefits === undefined && hasFederalProvincialTerritorialBenefits === true) {
+  if (dentalBenefits === undefined && hasFederalProvincialTerritorialBenefits.value === true) {
     throw redirect(getPathById('public/application/$id/new-adult/federal-provincial-territorial-benefits', params));
   }
 

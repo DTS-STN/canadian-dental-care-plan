@@ -51,7 +51,8 @@
     "yes": "Yes",
     "no": "No",
     "contact-information": "Your contact information",
-    "submit": "Submit"
+    "submit": "Submit",
+    "no-change": "No update."
   },
   "submit": {
     "page-title": "Submit your application",

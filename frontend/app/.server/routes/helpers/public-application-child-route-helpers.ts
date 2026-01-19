@@ -239,7 +239,7 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       throw redirect(getPathById('public/application/$id/new-children/childrens-application', params));
     }
 
-    if (dentalBenefits === undefined && hasFederalProvincialTerritorialBenefits === true) {
+    if (dentalBenefits === undefined && hasFederalProvincialTerritorialBenefits.value === true) {
       throw redirect(getPathById('public/application/$id/new-children/childrens-application', params));
     }
 
