@@ -161,6 +161,7 @@ export const pageIds = {
         contactInformation: 'CDCP-RENW-RAD-0001',
         dentalInsurance: 'CDCP-RENW-RAD-0002',
         submit: 'CDCP-RENW-RAD-0003',
+        confirmation: 'CDCP-RENW-RAD-0004',
       },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',

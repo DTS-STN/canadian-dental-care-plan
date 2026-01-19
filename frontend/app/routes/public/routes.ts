@@ -108,6 +108,11 @@ export const routes = [
             file: 'routes/public/application/renew-adult/submit.tsx',
             paths: { en: '/:lang/application/:id/renew-adult/submit', fr: '/:lang/demandes/:id/renouveler-adulte/submit' },
           },
+          {
+            id: 'public/application/$id/renew-adult/confirmation',
+            file: 'routes/public/application/renew-adult/confirmation.tsx',
+            paths: { en: '/:lang/application/:id/renew-adult/confirmation', fr: '/:lang/demandes/:id/renew-adult/confirmation' },
+          },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },
