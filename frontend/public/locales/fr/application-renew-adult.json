@@ -149,5 +149,13 @@
       "info": "Vous pouvez nous aider à améliorer le Régime canadien de soins dentaires en participant à un court sondage. Cela ne vous prendra que 3 à 5 minutes. Le sondage s'ouvrira dans une nouvelle fenêtre.",
       "button": "Participez au court sondage"
     }
+  },
+  "exit-application": {
+    "page-title": "Quitter la demande",
+    "are-you-sure": "Êtes-vous certain de vouloir quitter cette demande? Si vous cliquez sur «\u00a0Quitter\u00a0», le formulaire sera réinitialisé et vos renseignements seront perdus.",
+    "click-back": "Cliquez sur «\u00a0Retour\u00a0» pour retourner au formulaire.",
+    "back-btn": "Retour",
+    "exit-btn": "Quitter",
+    "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   }
 }

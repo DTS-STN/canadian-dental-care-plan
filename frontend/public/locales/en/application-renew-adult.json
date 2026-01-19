@@ -149,5 +149,13 @@
       "info": "You can help us improve the Canada Dental Care Plan with a short survey. This will take just 3 to 5 minutes of your time. The survey will open in a new window.",
       "button": "Take the survey"
     }
+  },
+  "exit-application": {
+    "page-title": "Exiting the application",
+    "are-you-sure": "Are you sure you want to exit this application? If you click \"Exit\", the form will reset and the information will be lost.",
+    "click-back": "Click \"Back\" to return to the form.",
+    "back-btn": "Back",
+    "exit-btn": "Exit",
+    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   }
 }
