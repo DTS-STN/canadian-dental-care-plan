@@ -1,0 +1,165 @@
+import { data, redirect, useFetcher } from 'react-router';
+
+import { UTCDate } from '@date-fns/utc';
+import { Trans, useTranslation } from 'react-i18next';
+import { z } from 'zod';
+
+import type { Route } from './+types/submit';
+
+import { TYPES } from '~/.server/constants';
+import { loadPublicApplicationAdultStateForReview } from '~/.server/routes/helpers/public-application-adult-route-helpers';
+import { savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getFixedT } from '~/.server/utils/locale.utils';
+import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { useErrorSummary } from '~/components/error-summary';
+import { InlineLink } from '~/components/inline-link';
+import { InputCheckbox } from '~/components/input-checkbox';
+import { NavigationButton, NavigationButtonLink } from '~/components/navigation-buttons';
+import { ProgressStepper } from '~/components/progress-stepper';
+import { useProgressStepper } from '~/hooks/use-progress-stepper';
+import { pageIds } from '~/page-ids';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
+import { getTitleMetaTags } from '~/utils/seo-utils';
+
+const CHECKBOX_VALUE = {
+  yes: 'yes',
+} as const;
+
+export const handle = {
+  i18nNamespaces: getTypedI18nNamespaces('application', 'application-renew-adult', 'gcweb'),
+  pageIdentifier: pageIds.public.application.renewAdult.submit,
+  pageTitleI18nKey: 'application-renew-adult:submit.page-heading',
+} as const satisfies RouteHandleData;
+
+export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
+
+export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
+  const state = loadPublicApplicationAdultStateForReview({ params, request, session });
+  validateApplicationTypeAndFlow(state, params, ['renew-adult']);
+
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-renew-adult:submit.page-title') }) };
+  return {
+    state: {
+      applicantName: `${state.applicantInformation.firstName} ${state.applicantInformation.lastName}`,
+      acknowledgeInfo: state.submitTerms?.acknowledgeInfo,
+      acknowledgeCriteria: state.submitTerms?.acknowledgeCriteria,
+    },
+    meta,
+  };
+}
+
+export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
+  const state = loadPublicApplicationAdultStateForReview({ params, request, session });
+  validateApplicationTypeAndFlow(state, params, ['renew-adult']);
+
+  const formData = await request.formData();
+  const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  securityHandler.validateCsrfToken({ formData, session });
+
+  const submitTermsSchema = z
+    .object({
+      acknowledgeInfo: z.string().trim().nonempty(t('application-renew-adult:submit.error-message.acknowledge-info-required')),
+      acknowledgeCriteria: z.string().trim().nonempty(t('application-renew-adult:submit.error-message.acknowledge-criteria-required')),
+    })
+    .transform((val) => ({
+      acknowledgeInfo: val.acknowledgeInfo === CHECKBOX_VALUE.yes,
+      acknowledgeCriteria: val.acknowledgeCriteria === CHECKBOX_VALUE.yes,
+    }));
+
+  const parsedDataResult = submitTermsSchema.safeParse({
+    acknowledgeInfo: formData.get('acknowledgeInfo') ?? '',
+    acknowledgeCriteria: formData.get('acknowledgeCriteria') ?? '',
+  });
+
+  if (!parsedDataResult.success) {
+    return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
+  }
+
+  const benefitApplicationDto = appContainer.get(TYPES.HubSpokeBenefitApplicationStateMapper).mapApplicationAdultStateToBenefitApplicationDto(state);
+  const confirmationCode = await appContainer.get(TYPES.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
+  const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
+  savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
+
+  return redirect(getPathById('public/application/$id/renew-adult/submit', params));
+}
+
+export default function RenewAdultSubmit({ loaderData, params }: Route.ComponentProps) {
+  const { state } = loaderData;
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { steps, currentStep } = useProgressStepper('renew-adult', 'submit');
+
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
+
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    acknowledgeInfo: 'input-checkbox-acknowledge-info',
+    acknowledgeCriteria: 'input-checkbox-acknowledge-criteria',
+  });
+
+  const eligibilityLink = <InlineLink to={t('application-renew-adult:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
+
+  return (
+    <div className="max-w-prose space-y-8">
+      <errorSummary.ErrorSummary />
+      <ProgressStepper steps={steps} currentStep={currentStep} />
+      <div className="space-y-8">
+        <section className="space-y-4">
+          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-renew-adult:submit.overview')}</h2>
+          <div>
+            <p>{t('application-renew-adult:submit.you-are-submitting')}</p>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{state.applicantName}</li>
+            </ul>
+          </div>
+        </section>
+        <section className="space-y-4">
+          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-renew-adult:submit.review-your-application')}</h2>
+          <p>{t('application-renew-adult:submit.please-review')}</p>
+          <ButtonLink variant="primary" routeId="public/application/$id/renew-adult/contact-information" params={params}>
+            {t('application-renew-adult:submit.review-application')}
+          </ButtonLink>
+        </section>
+        <section className="space-y-4">
+          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-renew-adult:submit.submit-your-application')}</h2>
+          <p>{t('application-renew-adult:submit.by-submitting')}</p>
+          <p>
+            <Trans ns={handle.i18nNamespaces} i18nKey="application-renew-adult:submit.review-eligibility-criteria" components={{ eligibilityLink }} />
+          </p>
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <div className="space-y-2">
+              <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} defaultChecked={state.acknowledgeInfo} errorMessage={errors?.acknowledgeInfo} required>
+                {t('application-renew-adult:submit.info-is-correct')}
+              </InputCheckbox>
+              <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} defaultChecked={state.acknowledgeCriteria} errorMessage={errors?.acknowledgeCriteria} required>
+                {t('application-renew-adult:submit.i-understand')}
+              </InputCheckbox>
+            </div>
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
+                {t('application-renew-adult:submit.submit')}
+              </NavigationButton>
+              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/renew-adult/dental-insurance" params={params}>
+                {t('application-renew-adult:submit.dental-insurance')}
+              </NavigationButtonLink>
+            </div>
+          </fetcher.Form>
+        </section>
+      </div>
+      <div className="mt-8">
+        <InlineLink routeId="public/application/$id/renew-adult/submit" params={params}>
+          {t('application-renew-adult:submit.exit-application')}
+        </InlineLink>
+      </div>
+    </div>
+  );
+}

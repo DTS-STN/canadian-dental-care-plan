@@ -103,6 +103,11 @@ export const routes = [
             file: 'routes/public/application/renew-adult/dental-insurance.tsx',
             paths: { en: '/:lang/application/:id/renew-adult/dental-insurance', fr: '/:lang/demandes/:id/renouveler-adulte/assurance-dentaire' },
           },
+          {
+            id: 'public/application/$id/renew-adult/submit',
+            file: 'routes/public/application/renew-adult/submit.tsx',
+            paths: { en: '/:lang/application/:id/renew-adult/submit', fr: '/:lang/demandes/:id/renouveler-adulte/submit' },
+          },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },
