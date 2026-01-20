@@ -4,7 +4,6 @@ import type { Route } from './+types/$';
 
 import { TYPES } from '~/.server/constants';
 import { createLogger } from '~/.server/logging';
-import { getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { generateCallbackUri } from '~/.server/utils/raoidc.utils';
 
@@ -57,7 +56,8 @@ function handleLoginRequest({ context: { appContainer }, request }: Pick<Route.L
 }
 
 /**
- * Handler for /auth/logout requests
+ * Handler for /auth/logout{?locale=(en|fr)} requests
+ *
  */
 async function handleLogoutRequest({ context: { appContainer, session }, request }: Pick<Route.LoaderArgs, 'context' | 'request'>) {
   const log = createLogger('auth.$/handleLogoutRequest');
@@ -74,7 +74,8 @@ async function handleLogoutRequest({ context: { appContainer, session }, request
   }
 
   const idToken: IdToken = session.get('idToken');
-  const locale = getLocale(request);
+  const detectedLocale = new URL(request.url).searchParams.get('locale');
+  const locale: AppLocale = detectedLocale === 'fr' ? 'fr' : 'en';
 
   const raoidcService = appContainer.get(TYPES.RaoidcService);
   const signoutUrl = raoidcService.generateSignoutRequest({ sessionId: idToken.sid, locale });
