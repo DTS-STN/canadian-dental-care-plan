@@ -132,7 +132,7 @@
       },
       "ApplicantEnrollmentStatus": {
         "StatusCode": {
-          "ReferenceDataID": "775170001"
+          "ReferenceDataID": "775170000"
         }
       },
       "BenefitApplicationYearIdentification": {
@@ -230,7 +230,7 @@
       },
       "ApplicantEnrollmentStatus": {
         "StatusCode": {
-          "ReferenceDataID": "775170001"
+          "ReferenceDataID": "775170000"
         }
       },
       "BenefitEligibilityStatus": {
