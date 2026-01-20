@@ -22,7 +22,7 @@ authentication process:
 
 - `/auth/login/{provider-id}`: initiates the login process
 - `/auth/callback/{provider-id}`: handles the response from the RAOIDC service
-- `/auth/logout`: initiates the logout process
+- `/auth/logout{?locale=(en|fr)}`: initiates the logout process
 
 ## Login Process
 

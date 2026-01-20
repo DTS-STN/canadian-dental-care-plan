@@ -60,7 +60,7 @@ export function AppPageTitle({ children }: PropsWithChildren) {
 }
 
 function NavigationMenu() {
-  const { t } = useTranslation(i18nNamespaces);
+  const { t, i18n } = useTranslation(i18nNamespaces);
   const { SCCH_BASE_URI } = getClientEnv();
 
   return (
@@ -99,7 +99,7 @@ function NavigationMenu() {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to="/auth/logout" className="flex items-center justify-between gap-2" data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:signOut">
+            <Link to={'/auth/logout?locale' + i18n.language} className="flex items-center justify-between gap-2" data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:signOut">
               {t('gcweb:header.menu-sign-out.text')} <FontAwesomeIcon icon={faArrowRightFromBracket} className="size-4 shrink-0" />
             </Link>
           </DropdownMenuItem>

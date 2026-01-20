@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 
 import { Outlet, useNavigate } from 'react-router';
 
+import { useTranslation } from 'react-i18next';
+
 import type { Route } from './+types/layout';
 
 import { TYPES } from '~/.server/constants';
@@ -35,9 +37,8 @@ export async function loader({ context: { appContainer, session }, request }: Ro
 
 export default function Layout({ loaderData, params }: Route.ComponentProps) {
   const { killswitchTimeout, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = loaderData;
-
   const navigate = useNavigate();
-
+  const { i18n } = useTranslation();
   const path = getPathById('protected/apply/index', params);
 
   useEffect(() => {
@@ -53,7 +54,7 @@ export default function Layout({ loaderData, params }: Route.ComponentProps) {
   const apiSession = useApiSession();
 
   async function handleOnSessionEnd() {
-    await navigate('/auth/logout');
+    await navigate('/auth/logout?locale=' + i18n.language);
   }
 
   async function handleOnSessionExtend() {
