@@ -99,7 +99,14 @@ function NavigationMenu() {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to={'/auth/logout?locale' + i18n.language} className="flex items-center justify-between gap-2" data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:signOut">
+            <Link
+              to={{
+                pathname: '/auth/logout',
+                search: '?locale=' + i18n.language,
+              }}
+              className="flex items-center justify-between gap-2"
+              data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:signOut"
+            >
               {t('gcweb:header.menu-sign-out.text')} <FontAwesomeIcon icon={faArrowRightFromBracket} className="size-4 shrink-0" />
             </Link>
           </DropdownMenuItem>
