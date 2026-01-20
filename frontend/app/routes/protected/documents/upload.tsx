@@ -75,10 +75,18 @@ export async function loader({ context: { appContainer, session }, params, reque
   const locale = getLocale(request);
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const applicants: Array<{ clientId: string; name: string }> = [
-    { clientId: clientApplication.applicantInformation.clientId, name: `${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`.trim() },
+  const applicants: Array<{ clientId: string; clientNumber: string; name: string }> = [
+    {
+      clientId: clientApplication.applicantInformation.clientId,
+      clientNumber: clientApplication.applicantInformation.clientNumber,
+      name: `${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`.trim(),
+    },
     // TODO: Add children later when upload for children is supported
-    // ...clientApplication.children.map((c) => ({ clientId: c.information.clientId, name: `${c.information.firstName} ${c.information.lastName}`.trim() })),
+    // ...clientApplication.children.map((c) => ({
+    //   clientId: c.information.clientId,
+    //   clientNumber: c.information.clientNumber,
+    //   name: `${c.information.firstName} ${c.information.lastName}`.trim(),
+    // })),
   ];
 
   const documentTypes = await appContainer.get(TYPES.EvidentiaryDocumentTypeService).listLocalizedEvidentiaryDocumentTypes(locale);
@@ -492,7 +500,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
   const applicantOptions = useMemo<InputOptionProps[]>(() => {
     return [
       { children: t('documents:upload.select-one'), value: '', disabled: true, hidden: true }, //
-      ...applicants.map(({ clientId, name }) => ({ children: name, value: clientId })),
+      ...applicants.map(({ clientId, clientNumber, name }) => ({ children: `${name} - ${clientNumber}`, value: clientId })),
     ];
   }, [applicants, t]);
 
