@@ -152,7 +152,7 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
     await fetcher.submit(formData, { method: 'POST' });
   }
 
-  const anyChildCompleted = state.children.some((child) => child.information !== undefined && child.dentalInsurance !== undefined && child.hasFederalProvincialTerritorialBenefits !== undefined);
+  const allChildrenCompleted = state.children.every((child) => child.information !== undefined && child.dentalInsurance !== undefined && child.hasFederalProvincialTerritorialBenefits !== undefined);
 
   return (
     <div className="max-w-prose space-y-8">
@@ -299,7 +299,7 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
       </fetcher.Form>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!anyChildCompleted} variant="primary" direction="next" routeId="public/application/$id/new-family/submit" params={params}>
+        <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="public/application/$id/new-family/submit" params={params}>
           {t('application-new-family:childrens-application.submit-btn')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-family/dental-insurance" params={params}>
