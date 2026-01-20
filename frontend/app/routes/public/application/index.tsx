@@ -50,21 +50,57 @@ export default function PublicApplicationIndex({ loaderData, params }: Route.Com
   }, [navigate, path]);
 
   return (
-    <div className="max-w-prose animate-pulse">
-      <div className="space-y-6">
-        <div className="space-y-2">
-          <div className="h-5 w-full rounded-sm bg-gray-200"></div>
-          <div className="h-5 w-full rounded-sm bg-gray-200"></div>
-          <div className="h-5 w-2/3 rounded-sm bg-gray-200"></div>
+    <div className="max-w-prose animate-pulse space-y-8">
+      {/* Intro text */}
+      <div className="space-y-4">
+        <div className="h-5 w-40 rounded bg-gray-200"></div>
+        <div className="h-5 w-56 rounded bg-gray-200"></div>
+      </div>
+
+      {/* Card 1 */}
+      <div className="rounded-lg border border-gray-300">
+        <div className="space-y-8 p-6">
+          <div className="h-6 w-3/4 rounded bg-gray-300"></div>
+          <div className="space-y-3">
+            <div className="h-5 w-full rounded bg-gray-200"></div>
+            <div className="h-5 w-5/6 rounded bg-gray-200"></div>
+          </div>
         </div>
-        <div className="h-5 w-1/2 rounded-sm bg-gray-200"></div>
-        <div className="h-5 w-1/2 rounded-sm bg-gray-200"></div>
+
+        <div className="border-t border-gray-300 bg-gray-50 px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="h-6 w-6 rounded-full bg-gray-300"></div>
+            <div className="h-5 w-2/3 rounded bg-gray-200"></div>
+          </div>
+        </div>
       </div>
-      <div className="my-8 space-y-2">
-        <div className="h-5 w-full rounded-sm bg-gray-200"></div>
-        <div className="h-5 w-2/3 rounded-sm bg-gray-200"></div>
+
+      {/* Card 2 */}
+      <div className="rounded-lg border border-gray-300">
+        <div className="space-y-8 p-6">
+          <div className="h-6 w-40 rounded bg-gray-300"></div>
+          <div className="space-y-3">
+            <div className="h-5 w-full rounded bg-gray-200"></div>
+            <div className="h-5 w-5/6 rounded bg-gray-200"></div>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-300 bg-gray-50 px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="h-6 w-6 rounded-full bg-gray-300"></div>
+            <div className="h-5 w-32 rounded bg-gray-200"></div>
+          </div>
+        </div>
       </div>
-      <div className="h-10 w-2/5 rounded-sm bg-gray-200"></div>
+
+      {/* Next button */}
+      <div className="flex w-64 items-center justify-between rounded bg-gray-300 px-6 py-4">
+        <div className="space-y-3">
+          <div className="h-4 w-10 rounded bg-gray-200"></div>
+          <div className="h-5 w-32 rounded bg-gray-200"></div>
+        </div>
+        <div className="h-8 w-8 rounded-full bg-gray-200"></div>
+      </div>
     </div>
   );
 }
