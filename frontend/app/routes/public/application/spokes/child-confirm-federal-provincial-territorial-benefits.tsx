@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   return {
-    defaultState: childState.hasFederalProvincialTerritorialBenefits,
+    defaultState: childState.hasFederalProvincialTerritorialBenefits?.value,
     meta,
     childName,
     typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
@@ -105,8 +105,19 @@ export async function action({ context: { appContainer, session }, params, reque
         if (child.id !== childState.id) return child;
         return {
           ...child,
-          hasFederalProvincialTerritorialBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits,
-          dentalBenefits: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits ? state.dentalBenefits : undefined,
+          hasFederalProvincialTerritorialBenefits: {
+            hasChanged: true,
+            value: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits,
+          },
+          dentalBenefits:
+            parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits && state.dentalBenefits?.hasChanged
+              ? {
+                  hasChanged: true,
+                  value: state.dentalBenefits.value,
+                }
+              : {
+                  hasChanged: false,
+                },
         };
       }),
     },

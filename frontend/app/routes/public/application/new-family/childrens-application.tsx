@@ -56,20 +56,22 @@ export async function loader({ context: { appContainer, session }, request, para
   const children = await Promise.all(
     state.children.map(async (child) => {
       const federalGovernmentInsurancePlanProgram =
-        child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.federalSocialProgram ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale) : undefined;
+        child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.value?.federalSocialProgram
+          ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.value.federalSocialProgram, locale)
+          : undefined;
 
       const provincialTerritorialSocialProgram =
-        child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.provincialTerritorialSocialProgram
-          ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+        child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.value?.provincialTerritorialSocialProgram
+          ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
           : undefined;
 
       const dentalBenefits = {
         federalBenefit: {
-          access: child.dentalBenefits?.hasFederalBenefits,
+          access: child.dentalBenefits?.value?.hasFederalBenefits,
           benefit: federalGovernmentInsurancePlanProgram?.name,
         },
         provTerrBenefit: {
-          access: child.dentalBenefits?.hasProvincialTerritorialBenefits,
+          access: child.dentalBenefits?.value?.hasProvincialTerritorialBenefits,
           benefit: provincialTerritorialSocialProgram?.name,
         },
       };
@@ -242,7 +244,7 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
                 ) : (
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('application-new-family:childrens-application.dental-benefits-title')}>
-                      {child.hasFederalProvincialTerritorialBenefits === true ? (
+                      {child.hasFederalProvincialTerritorialBenefits.value === true ? (
                         <>
                           <p>{t('application-new-family:childrens-application.dental-benefits-yes')}</p>
                           {child.dentalBenefits?.federalBenefit.access || child.dentalBenefits?.provTerrBenefit.access ? (

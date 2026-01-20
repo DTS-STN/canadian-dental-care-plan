@@ -51,7 +51,8 @@
     "yes": "(FR) Yes",
     "no": "(FR) No",
     "contact-information": "(FR) Your contact information",
-    "submit": "(FR) Submit"
+    "submit": "(FR) Submit",
+    "no-change": "(FR) No update."
   },
   "submit": {
     "page-title": "(FR) Submit your application",

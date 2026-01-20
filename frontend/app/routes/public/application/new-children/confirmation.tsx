@@ -108,13 +108,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   const children = await Promise.all(
     state.children.map(async (child) => {
       // prettier-ignore
-      const selectFederalGovernmentInsurancePlan = child.dentalBenefits?.federalSocialProgram
-      ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.federalSocialProgram, locale)
+      const selectFederalGovernmentInsurancePlan = child.dentalBenefits?.value?.federalSocialProgram
+      ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.value.federalSocialProgram, locale)
       : undefined;
 
       // prettier-ignore
-      const selectedProvincialBenefit = child.dentalBenefits?.provincialTerritorialSocialProgram
-      ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.provincialTerritorialSocialProgram, locale)
+      const selectedProvincialBenefit = child.dentalBenefits?.value?.provincialTerritorialSocialProgram
+      ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
       : undefined;
 
       return {
@@ -127,12 +127,12 @@ export async function loader({ context: { appContainer, session }, params, reque
         dentalInsurance: {
           accessToDentalInsurance: child.dentalInsurance,
           federalBenefit: {
-            access: child.dentalBenefits?.hasFederalBenefits,
+            access: child.dentalBenefits?.value?.hasFederalBenefits,
             benefit: selectFederalGovernmentInsurancePlan?.name,
           },
           provTerrBenefit: {
-            access: child.dentalBenefits?.hasProvincialTerritorialBenefits,
-            province: child.dentalBenefits?.province,
+            access: child.dentalBenefits?.value?.hasProvincialTerritorialBenefits,
+            province: child.dentalBenefits?.value?.province,
             benefit: selectedProvincialBenefit?.name,
           },
         },

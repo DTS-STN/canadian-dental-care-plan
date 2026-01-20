@@ -189,7 +189,7 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     throw redirect(getPathById('public/application/$id/new-family/dental-insurance', params));
   }
 
-  if (dentalBenefits === undefined && hasFederalProvincialTerritorialBenefits === true) {
+  if (dentalBenefits === undefined && hasFederalProvincialTerritorialBenefits.value === true) {
     throw redirect(getPathById('public/application/$id/new-family/dental-insurance', params));
   }
 
@@ -259,7 +259,7 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       throw redirect(getPathById('public/application/$id/new-family/childrens-application', params));
     }
 
-    if (dentalBenefits === undefined && hasFederalProvincialTerritorialBenefits === true) {
+    if (dentalBenefits === undefined && hasFederalProvincialTerritorialBenefits.value === true) {
       throw redirect(getPathById('public/application/$id/new-family/childrens-application', params));
     }
 

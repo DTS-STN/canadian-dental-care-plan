@@ -36,21 +36,21 @@ export async function loader({ context: { appContainer, session }, request, para
   const locale = getLocale(request);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-adult:dental-insurance.page-title') }) };
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.federalSocialProgram
-    ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.federalSocialProgram, locale)
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.value?.federalSocialProgram
+    ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale)
     : undefined;
 
-  const selectedProvincialBenefit = state.dentalBenefits?.provincialTerritorialSocialProgram
-    ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.provincialTerritorialSocialProgram, locale)
+  const selectedProvincialBenefit = state.dentalBenefits?.value?.provincialTerritorialSocialProgram
+    ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
     : undefined;
 
   const dentalBenefits = {
     federalBenefit: {
-      access: state.dentalBenefits?.hasFederalBenefits,
+      access: state.dentalBenefits?.value?.hasFederalBenefits,
       benefit: selectedFederalGovernmentInsurancePlan?.name,
     },
     provTerrBenefit: {
-      access: state.dentalBenefits?.hasProvincialTerritorialBenefits,
+      access: state.dentalBenefits?.value?.hasProvincialTerritorialBenefits,
       benefit: selectedProvincialBenefit?.name,
     },
   };
@@ -118,7 +118,7 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
           ) : (
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('application-new-adult:dental-insurance.access-to-government-benefits')}>
-                {state.hasFederalProvincialTerritorialBenefits === true ? (
+                {state.hasFederalProvincialTerritorialBenefits.value === true ? (
                   <>
                     <p>{t('application-new-adult:dental-insurance.dental-insurance-yes')}</p>
                     {state.dentalBenefits?.federalBenefit.access || state.dentalBenefits?.provTerrBenefit.access ? (

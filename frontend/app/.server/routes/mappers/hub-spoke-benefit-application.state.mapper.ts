@@ -8,10 +8,10 @@ import type {
   ApplicationYearState,
   ChildState,
   DeclaredChangeCommunicationPreferencesState,
+  DeclaredChangeDentalFederalBenefitsState,
+  DeclaredChangeDentalProvincialTerritorialBenefitsState,
   DeclaredChangePhoneNumberState,
-  DentalFederalBenefitsState,
   DentalInsuranceState,
-  DentalProvincialTerritorialBenefitsState,
   HomeAddressState,
   MailingAddressState,
   NewOrExistingMemberState,
@@ -25,7 +25,7 @@ export interface ApplicationAdultState {
   applicantInformation: ApplicantInformationState;
   applicationYear: ApplicationYearState;
   communicationPreferences: DeclaredChangeCommunicationPreferencesState;
-  dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+  dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
   dentalInsurance: DentalInsuranceState;
   email?: string;
   homeAddress?: HomeAddressState;
@@ -45,7 +45,7 @@ export interface ApplicationFamilyState {
   applicationYear: ApplicationYearState;
   children: ChildState[];
   communicationPreferences: DeclaredChangeCommunicationPreferencesState;
-  dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+  dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
   dentalInsurance: DentalInsuranceState;
   email?: string;
   homeAddress?: HomeAddressState;
@@ -84,7 +84,7 @@ interface ToBenefitApplicationDtoArgs {
   children?: ChildState[];
   communicationPreferences: DeclaredChangeCommunicationPreferencesState;
   email?: string;
-  dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+  dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
   dentalInsurance?: DentalInsuranceState;
   livingIndependently?: boolean;
   homeAddress?: HomeAddressState;
@@ -265,17 +265,17 @@ export class DefaultHubSpokeBenefitApplicationStateMapper implements HubSpokeBen
     };
   }
 
-  private toDentalBenefits(dentalBenefitsState?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState) {
+  private toDentalBenefits(dentalBenefitsState?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState) {
     if (!dentalBenefitsState) return [];
 
     const dentalBenefits = [];
 
-    if (dentalBenefitsState.hasFederalBenefits && dentalBenefitsState.federalSocialProgram && !validator.isEmpty(dentalBenefitsState.federalSocialProgram)) {
-      dentalBenefits.push(dentalBenefitsState.federalSocialProgram);
+    if (dentalBenefitsState.value?.hasFederalBenefits && dentalBenefitsState.value.federalSocialProgram && !validator.isEmpty(dentalBenefitsState.value.federalSocialProgram)) {
+      dentalBenefits.push(dentalBenefitsState.value.federalSocialProgram);
     }
 
-    if (dentalBenefitsState.hasProvincialTerritorialBenefits && dentalBenefitsState.provincialTerritorialSocialProgram && !validator.isEmpty(dentalBenefitsState.provincialTerritorialSocialProgram)) {
-      dentalBenefits.push(dentalBenefitsState.provincialTerritorialSocialProgram);
+    if (dentalBenefitsState.value?.hasProvincialTerritorialBenefits && dentalBenefitsState.value.provincialTerritorialSocialProgram && !validator.isEmpty(dentalBenefitsState.value.provincialTerritorialSocialProgram)) {
+      dentalBenefits.push(dentalBenefitsState.value.provincialTerritorialSocialProgram);
     }
 
     return dentalBenefits;
