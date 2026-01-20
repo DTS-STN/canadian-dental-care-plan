@@ -16,7 +16,7 @@
   "upload": {
     "page-title": "Téléverser mes documents",
     "who-are-you-uploading-for": "Pour qui téléversez-vous le document",
-    "upload-document": "Téléverser mes document",
+    "upload-document": "Téléverser mes documents",
     "max-files_one": "Vous pouvez téléverser un fichier à la fois.",
     "max-files_other": "Vous pouvez téléverser jusqu'à {{count}} fichiers à la fois.",
     "max-size": "La taille maximale du fichier est de {{filesize}}. Types de fichiers acceptés\u00a0: {{extensions}}",
