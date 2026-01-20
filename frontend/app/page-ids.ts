@@ -162,6 +162,7 @@ export const pageIds = {
         dentalInsurance: 'CDCP-RENW-RAD-0002',
         submit: 'CDCP-RENW-RAD-0003',
         confirmation: 'CDCP-RENW-RAD-0004',
+        exitApplication: 'CDCP-RENW-RAD-0005',
       },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',

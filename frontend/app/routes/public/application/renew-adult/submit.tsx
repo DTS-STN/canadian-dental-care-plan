@@ -156,7 +156,7 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
         </section>
       </div>
       <div className="mt-8">
-        <InlineLink routeId="public/application/$id/renew-adult/submit" params={params}>
+        <InlineLink routeId="public/application/$id/renew-adult/exit-application" params={params}>
           {t('application-renew-adult:submit.exit-application')}
         </InlineLink>
       </div>
