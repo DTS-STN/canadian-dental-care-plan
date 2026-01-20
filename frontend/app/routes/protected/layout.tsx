@@ -1,5 +1,7 @@
 import { Outlet, isRouteErrorResponse, useNavigate, useRouteError } from 'react-router';
 
+import { useTranslation } from 'react-i18next';
+
 import type { Route } from './+types/layout';
 
 import { TYPES } from '~/.server/constants';
@@ -37,9 +39,10 @@ export default function Layout({ loaderData, params }: Route.ComponentProps) {
   const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = loaderData;
   const navigate = useNavigate();
   const apiSession = useApiSession();
+  const { i18n } = useTranslation();
 
   async function handleOnSessionEnd() {
-    await navigate('/auth/logout');
+    await navigate('/auth/logout?locale=' + i18n.language);
   }
 
   async function handleOnSessionExtend() {
