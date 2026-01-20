@@ -22,9 +22,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-export const PREFERRED_SUN_LIFE_METHOD = { email: 'email', mail: 'mail' } as const;
-export const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
-
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'application-new-adult', 'gcweb'),
   pageIdentifier: pageIds.public.application.newAdult.contactInformation,

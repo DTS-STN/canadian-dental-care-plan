@@ -86,7 +86,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
 
-  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID } = appContainer.get(TYPES.ServerConfig);
+  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 
   // state validation schema
   const communicationPreferencesSchema = z.object({
@@ -120,7 +120,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  if (parsedDataResult.data.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID) {
+  if (parsedDataResult.data.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || parsedDataResult.data.preferredNotificationMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
     return redirect(getPathById('public/application/$id/email', params));
   }
   return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
