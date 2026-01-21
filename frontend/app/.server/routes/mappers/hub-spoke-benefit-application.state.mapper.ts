@@ -10,10 +10,10 @@ import type {
   DeclaredChangeCommunicationPreferencesState,
   DeclaredChangeDentalFederalBenefitsState,
   DeclaredChangeDentalProvincialTerritorialBenefitsState,
+  DeclaredChangeHomeAddressState,
+  DeclaredChangeMailingAddressState,
   DeclaredChangePhoneNumberState,
   DentalInsuranceState,
-  HomeAddressState,
-  MailingAddressState,
   NewOrExistingMemberState,
   PartnerInformationState,
   TermsAndConditionsState,
@@ -28,10 +28,10 @@ export interface ApplicationAdultState {
   dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
   dentalInsurance: DentalInsuranceState;
   email?: string;
-  homeAddress?: HomeAddressState;
+  homeAddress?: DeclaredChangeHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
-  mailingAddress?: MailingAddressState;
+  mailingAddress?: DeclaredChangeMailingAddressState;
   maritalStatus?: string;
   newOrExistingMember?: NewOrExistingMemberState;
   partnerInformation?: PartnerInformationState;
@@ -48,10 +48,10 @@ export interface ApplicationFamilyState {
   dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
   dentalInsurance: DentalInsuranceState;
   email?: string;
-  homeAddress?: HomeAddressState;
+  homeAddress?: DeclaredChangeHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
-  mailingAddress?: MailingAddressState;
+  mailingAddress?: DeclaredChangeMailingAddressState;
   maritalStatus?: string;
   newOrExistingMember?: NewOrExistingMemberState;
   partnerInformation?: PartnerInformationState;
@@ -66,10 +66,10 @@ export interface ApplicationChildrenState {
   children: ChildState[];
   communicationPreferences: DeclaredChangeCommunicationPreferencesState;
   email?: string;
-  homeAddress?: HomeAddressState;
+  homeAddress?: DeclaredChangeHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
-  mailingAddress?: MailingAddressState;
+  mailingAddress?: DeclaredChangeMailingAddressState;
   maritalStatus?: string;
   newOrExistingMember?: NewOrExistingMemberState;
   partnerInformation?: PartnerInformationState;
@@ -87,9 +87,9 @@ interface ToBenefitApplicationDtoArgs {
   dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
   dentalInsurance?: DentalInsuranceState;
   livingIndependently?: boolean;
-  homeAddress?: HomeAddressState;
+  homeAddress?: DeclaredChangeHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress?: MailingAddressState;
+  mailingAddress?: DeclaredChangeMailingAddressState;
   maritalStatus?: string;
   newOrExistingMember?: NewOrExistingMemberState;
   partnerInformation?: PartnerInformationState;
@@ -106,9 +106,9 @@ interface ToApplicantInformationArgs {
 }
 
 interface ToHomeAddressArgs {
-  homeAddress?: HomeAddressState;
+  homeAddress?: DeclaredChangeHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress: MailingAddressState;
+  mailingAddress: DeclaredChangeMailingAddressState;
 }
 
 interface ToCommunicationPreferencesArgs {
@@ -119,9 +119,9 @@ interface ToCommunicationPreferencesArgs {
 interface ToContactInformationArgs {
   phoneNumber: DeclaredChangePhoneNumberState;
   email?: string;
-  homeAddress?: HomeAddressState;
+  homeAddress?: DeclaredChangeHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress?: MailingAddressState;
+  mailingAddress?: DeclaredChangeMailingAddressState;
 }
 
 export interface HubSpokeBenefitApplicationStateMapper {
@@ -284,32 +284,32 @@ export class DefaultHubSpokeBenefitApplicationStateMapper implements HubSpokeBen
   private toHomeAddress({ isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }: ToHomeAddressArgs) {
     if (isHomeAddressSameAsMailingAddress) {
       return {
-        homeAddress: mailingAddress.address,
-        homeCity: mailingAddress.city,
-        homeCountry: mailingAddress.country,
-        homePostalCode: mailingAddress.postalCode,
-        homeProvince: mailingAddress.province,
+        homeAddress: mailingAddress.value?.address ?? '',
+        homeCity: mailingAddress.value?.city ?? '',
+        homeCountry: mailingAddress.value?.country ?? '',
+        homePostalCode: mailingAddress.value?.postalCode ?? '',
+        homeProvince: mailingAddress.value?.province ?? '',
       };
     }
     invariant(homeAddress, 'Expected homeAddress to be defined when isHomeAddressSameAsMailingAddress is false.');
 
     return {
-      homeAddress: homeAddress.address,
-      homeCity: homeAddress.city,
-      homeCountry: homeAddress.country,
-      homePostalCode: homeAddress.postalCode,
-      homeProvince: homeAddress.province,
+      homeAddress: homeAddress.value?.address ?? '',
+      homeCity: homeAddress.value?.city ?? '',
+      homeCountry: homeAddress.value?.country ?? '',
+      homePostalCode: homeAddress.value?.postalCode ?? '',
+      homeProvince: homeAddress.value?.province ?? '',
     };
   }
 
-  private toMailingAddress(mailingAddress: MailingAddressState) {
+  private toMailingAddress(mailingAddress: DeclaredChangeMailingAddressState) {
     return {
-      mailingAddress: mailingAddress.address,
+      mailingAddress: mailingAddress.value?.address ?? '',
       mailingApartment: undefined,
-      mailingCity: mailingAddress.city,
-      mailingCountry: mailingAddress.country,
-      mailingPostalCode: mailingAddress.postalCode,
-      mailingProvince: mailingAddress.province,
+      mailingCity: mailingAddress.value?.city ?? '',
+      mailingCountry: mailingAddress.value?.country ?? '',
+      mailingPostalCode: mailingAddress.value?.postalCode ?? '',
+      mailingProvince: mailingAddress.value?.province ?? '',
     };
   }
 }

@@ -129,9 +129,12 @@ export async function action({ context: { appContainer, session }, params, reque
       params,
       session,
       state: {
-        mailingAddress,
+        mailingAddress: {
+          value: mailingAddress,
+          hasChanged: true,
+        },
         isHomeAddressSameAsMailingAddress: isCopyMailingToHome,
-        ...(homeAddress && { homeAddress }),
+        ...(homeAddress && { homeAddress: { value: homeAddress, hasChanged: true } }),
       },
     });
 
@@ -192,9 +195,12 @@ export async function action({ context: { appContainer, session }, params, reque
     params,
     session,
     state: {
-      mailingAddress,
+      mailingAddress: {
+        value: mailingAddress,
+        hasChanged: true,
+      },
       isHomeAddressSameAsMailingAddress: isCopyMailingToHome,
-      ...(homeAddress && { homeAddress }),
+      ...(homeAddress && { homeAddress: { value: homeAddress, hasChanged: true } }),
     },
   });
 
@@ -212,7 +218,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
 
   const fetcher = useEnhancedFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.mailingAddress?.country ?? CANADA_COUNTRY_ID);
+  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.mailingAddress?.value?.country ?? CANADA_COUNTRY_ID);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
   const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState.isHomeAddressSameAsMailingAddress === true);
   const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
@@ -280,7 +286,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 helpMessagePrimary={t('application-spokes:address.address-field.address-note')}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line1"
-                defaultValue={defaultState.mailingAddress?.address}
+                defaultValue={defaultState.mailingAddress?.value?.address}
                 errorMessage={errors?.address}
                 required
               />
@@ -292,7 +298,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                   label={t('application-spokes:address.address-field.city')}
                   maxLength={100}
                   autoComplete="address-level2"
-                  defaultValue={defaultState.mailingAddress?.city}
+                  defaultValue={defaultState.mailingAddress?.value?.city}
                   errorMessage={errors?.city}
                   required
                 />
@@ -303,7 +309,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                   label={isPostalCodeRequired ? t('application-spokes:address.address-field.postal-code') : t('application-spokes:address.address-field.postal-code-optional')}
                   maxLength={100}
                   autoComplete="postal-code"
-                  defaultValue={defaultState.mailingAddress?.postalCode}
+                  defaultValue={defaultState.mailingAddress?.value?.postalCode}
                   errorMessage={errors?.postalZipCode}
                   required={isPostalCodeRequired}
                 />
@@ -315,7 +321,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                   name="provinceStateId"
                   className="w-full sm:w-1/2"
                   label={t('application-spokes:address.address-field.province')}
-                  defaultValue={defaultState.mailingAddress?.province}
+                  defaultValue={defaultState.mailingAddress?.value?.province}
                   errorMessage={errors?.provinceStateId}
                   options={[dummyOption, ...mailingRegions]}
                   required
@@ -327,7 +333,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 className="w-full sm:w-1/2"
                 label={t('application-spokes:address.address-field.country')}
                 autoComplete="country"
-                defaultValue={defaultState.mailingAddress?.country}
+                defaultValue={defaultState.mailingAddress?.value?.country}
                 errorMessage={errors?.countryId}
                 options={countries}
                 onChange={mailingCountryChangeHandler}

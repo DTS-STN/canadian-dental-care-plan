@@ -87,20 +87,20 @@ export type PublicApplicationState = ReadonlyDeep<{
     socialInsuranceNumber: string;
   };
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress?: {
+  mailingAddress?: DeclaredChange<{
     address: string;
     city: string;
     country: string;
     postalCode?: string;
     province?: string;
-  };
-  homeAddress?: {
+  }>;
+  homeAddress?: DeclaredChange<{
     address: string;
     city: string;
     country: string;
     postalCode?: string;
     province?: string;
-  };
+  }>;
   phoneNumber?: DeclaredChange<{
     primary: string;
     alternate?: string;
@@ -161,6 +161,8 @@ export type SubmissionInfoState = NonNullable<PublicApplicationState['submission
 export type TermsAndConditionsState = NonNullable<PublicApplicationState['termsAndConditions']>;
 export type TypeOfApplicationState = NonNullable<PublicApplicationState['typeOfApplication']>;
 export type TypeOfApplicationFlowState = NonNullable<PublicApplicationState['typeOfApplicationFlow']>;
+export type DeclaredChangeHomeAddressState = NonNullable<PublicApplicationState['homeAddress']>;
+export type DeclaredChangeMailingAddressState = NonNullable<PublicApplicationState['mailingAddress']>;
 
 /**
  * Predefined Nano ID function.

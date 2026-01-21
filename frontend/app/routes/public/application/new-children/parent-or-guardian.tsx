@@ -37,24 +37,24 @@ export async function loader({ context: { appContainer, session }, request, para
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-child:parent-or-guardian.page-title') }) };
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
-  const countryMailing = state.mailingAddress?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale) : undefined;
-  const countryHome = state.homeAddress?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province) : undefined;
+  const countryMailing = state.mailingAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale) : undefined;
+  const countryHome = state.homeAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale) : undefined;
 
   const mailingAddressInfo = {
-    address: state.mailingAddress?.address,
-    city: state.mailingAddress?.city,
+    address: state.mailingAddress?.value?.address,
+    city: state.mailingAddress?.value?.city,
     province: mailingProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.mailingAddress?.postalCode,
+    postalCode: state.mailingAddress?.value?.postalCode,
     country: countryMailing?.name,
   };
 
   const homeAddressInfo = {
-    address: state.homeAddress?.address,
-    city: state.homeAddress?.city,
+    address: state.homeAddress?.value?.address,
+    city: state.homeAddress?.value?.city,
     province: homeProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.homeAddress?.postalCode,
+    postalCode: state.homeAddress?.value?.postalCode,
     country: countryHome?.name,
   };
 

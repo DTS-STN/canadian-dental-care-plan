@@ -74,10 +74,10 @@ export async function loader({ context: { appContainer, session }, params, reque
     ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
     : undefined;
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
-  const countryMailing = await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale);
-  const countryHome = state.homeAddress?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province) : undefined;
+  const countryMailing = state.mailingAddress.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale) : undefined;
+  const countryHome = state.homeAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale) : undefined;
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -100,18 +100,18 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const mailingAddressInfo = {
-    address: state.mailingAddress.address,
-    city: state.mailingAddress.city,
+    address: state.mailingAddress.value?.address,
+    city: state.mailingAddress.value?.city,
     province: mailingProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.mailingAddress.postalCode,
-    country: countryMailing,
+    postalCode: state.mailingAddress.value?.postalCode,
+    country: countryMailing?.name,
   };
 
   const homeAddressInfo = {
-    address: state.homeAddress?.address,
-    city: state.homeAddress?.city,
+    address: state.homeAddress?.value?.address,
+    city: state.homeAddress?.value?.city,
     province: homeProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.homeAddress?.postalCode,
+    postalCode: state.homeAddress?.value?.postalCode,
     country: countryHome?.name,
   };
 
@@ -338,11 +338,11 @@ export default function NewFamilyConfirmation({ loaderData, params }: Route.Comp
             <DescriptionListItem term={t('confirm.mailing')}>
               <Address
                 address={{
-                  address: mailingAddressInfo.address,
-                  city: mailingAddressInfo.city,
+                  address: mailingAddressInfo.address ?? '',
+                  city: mailingAddressInfo.city ?? '',
                   provinceState: mailingAddressInfo.province,
                   postalZipCode: mailingAddressInfo.postalCode,
-                  country: mailingAddressInfo.country.name,
+                  country: mailingAddressInfo.country ?? '',
                 }}
               />
             </DescriptionListItem>

@@ -1,7 +1,5 @@
-/* eslint-disable unicorn/no-nested-ternary */
-import { useFetcher } from 'react-router';
+import { data, useFetcher } from 'react-router';
 
-import { invariant } from '@dts-stn/invariant';
 import { faCircleCheck, faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -31,10 +29,10 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const PREFERRED_SUN_LIFE_METHOD = { email: 'email', mail: 'mail' } as const;
 export const PREFERRED_NOTIFICATION_METHOD = { msca: 'msca', mail: 'mail' } as const;
 
-const FORM_ACTION = {
-  phoneNumber: 'phoneNumber',
-  address: 'address',
-  communicationPreference: 'communicationPreference',
+const FORM_ACTION_HAS_CHANGED = {
+  phoneNumberChanged: 'phoneNumberChanged',
+  addressChanged: 'addressChanged',
+  communicationPreferenceChanged: 'communicationPreferenceChanged',
 } as const;
 
 export const handle = {
@@ -46,7 +44,6 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  // TODO: Update when renew-adult state route helper is implemented
   const state = getPublicApplicationState({ params, session });
   // validateApplicationTypeAndFlow(state, params, ['renew-adult']);
 
@@ -54,34 +51,35 @@ export async function loader({ context: { appContainer, session }, request, para
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-renew-adult:contact-information.page-title') }) };
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.province) : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.province) : undefined;
-  const countryMailing = state.mailingAddress?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.country, locale) : undefined;
-  const countryHome = state.homeAddress?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.country, locale) : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province) : undefined;
+  const countryMailing = state.mailingAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale) : undefined;
+  const countryHome = state.homeAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale) : undefined;
 
   const mailingAddressInfo = {
-    address: state.mailingAddress?.address,
-    city: state.mailingAddress?.city,
+    address: state.mailingAddress?.value?.address,
+    city: state.mailingAddress?.value?.city,
     province: mailingProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.mailingAddress?.postalCode,
+    postalCode: state.mailingAddress?.value?.postalCode,
     country: countryMailing?.name,
+    hasChange: state.mailingAddress?.hasChanged,
   };
 
   const homeAddressInfo = {
-    address: state.homeAddress?.address,
-    city: state.homeAddress?.city,
+    address: state.homeAddress?.value?.address,
+    city: state.homeAddress?.value?.city,
     province: homeProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.homeAddress?.postalCode,
+    postalCode: state.homeAddress?.value?.postalCode,
     country: countryHome?.name,
+    hasChanged: state.homeAddress?.hasChanged,
   };
 
   return {
-    defaultState: {
+    state: {
       phoneNumber: state.phoneNumber,
       communicationPreferences: state.communicationPreferences,
       email: state.email,
     },
-    clientApplication: state.clientApplication,
     mailingAddressInfo,
     homeAddressInfo,
     meta,
@@ -94,66 +92,54 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
+  const formAction = z.enum(FORM_ACTION_HAS_CHANGED).parse(formData.get('_action'));
 
-  const state = getPublicApplicationState({ params, session });
-
-  if (formAction === FORM_ACTION.phoneNumber) {
-    invariant(state.clientApplication?.contactInformation.phoneNumber, 'Expected state.clientApplication.contactInformation.phoneNumber to be defined');
+  if (formAction === FORM_ACTION_HAS_CHANGED.phoneNumberChanged) {
     savePublicApplicationState({
       params,
       session,
       state: {
-        phoneNumber: { hasChanged: true, value: { primary: state.clientApplication.contactInformation.phoneNumber } },
+        phoneNumber: { hasChanged: false },
       },
     });
   }
 
-  if (formAction === FORM_ACTION.address) {
-    invariant(state.clientApplication?.contactInformation.mailingAddress, 'Expected state.clientApplication.contactInformation.mailingAddress to be defined');
+  if (formAction === FORM_ACTION_HAS_CHANGED.addressChanged) {
     savePublicApplicationState({
       params,
       session,
       state: {
-        mailingAddress: {
-          address: state.clientApplication.contactInformation.mailingAddress,
-          city: state.clientApplication.contactInformation.mailingCity,
-          province: state.clientApplication.contactInformation.mailingProvince,
-          postalCode: state.clientApplication.contactInformation.mailingPostalCode,
-          country: state.clientApplication.contactInformation.mailingCountry,
+        mailingAddress: { hasChanged: false },
+        homeAddress: {
+          hasChanged: false,
         },
       },
     });
   }
 
-  if (formAction === FORM_ACTION.communicationPreference) {
-    invariant(state.clientApplication?.communicationPreferences, 'Expected state.clientApplication.communicationPreferences to be defined');
+  if (formAction === FORM_ACTION_HAS_CHANGED.communicationPreferenceChanged) {
     savePublicApplicationState({
       params,
       session,
       state: {
         communicationPreferences: {
-          hasChanged: true,
-          value: {
-            preferredLanguage: state.clientApplication.communicationPreferences.preferredLanguage,
-            preferredMethod: state.clientApplication.communicationPreferences.preferredMethodSunLife,
-            preferredNotificationMethod: state.clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada,
-          },
+          hasChanged: false,
         },
       },
     });
   }
+  return data({ success: true }, { status: 200 });
 }
 
 export default function RenewAdultContactInformation({ loaderData, params }: Route.ComponentProps) {
-  const { defaultState, mailingAddressInfo, homeAddressInfo, clientApplication } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const { steps, currentStep } = useProgressStepper('renew-adult', 'contact-information');
 
   const sections = [
-    { id: 'phone-number', completed: defaultState.phoneNumber?.value !== undefined },
+    { id: 'phone-number', completed: state.phoneNumber?.value !== undefined },
     { id: 'address', completed: mailingAddressInfo.address !== undefined && homeAddressInfo.address !== undefined },
-    { id: 'communication-preferences', completed: defaultState.communicationPreferences !== undefined },
+    { id: 'communication-preferences', completed: state.communicationPreferences !== undefined },
   ] as const;
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
   const allSectionsCompleted = completedSections.length === sections.length;
@@ -176,19 +162,23 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
               <CardAction>{completedSections.includes('phone-number') && <StatusTag status="complete" />}</CardAction>
             </CardHeader>
             <CardContent>
-              {clientApplication?.contactInformation.phoneNumber && defaultState.phoneNumber?.value === undefined ? (
-                <p>{t('application-renew-adult:contact-information.update-phone-number-help')}</p>
-              ) : defaultState.phoneNumber?.value ? (
+              {state.phoneNumber === undefined ? (
+                <p>{t('application-renew-adult:contact-information.phone-number-help')}</p>
+              ) : (
                 <dl className="border-y">
                   <DescriptionListItem term={t('application-renew-adult:contact-information.phone-number')}>
-                    <p>{defaultState.phoneNumber.value.primary}</p>
+                    {state.phoneNumber.hasChanged === false ? <p>{t('application-renew-adult:contact-information.no-change')}</p> : <p>{state.phoneNumber.value.primary}</p>}
                   </DescriptionListItem>
                 </dl>
-              ) : (
-                <p>{t('application-renew-adult:contact-information.phone-number-help')}</p>
               )}
             </CardContent>
-            {clientApplication?.contactInformation.phoneNumber && defaultState.phoneNumber?.value === undefined ? (
+            {state.phoneNumber === undefined ? (
+              <CardFooter className="border-t bg-zinc-100">
+                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={completedSections.includes('phone-number') ? faPenToSquare : faCirclePlus} size="lg">
+                  {completedSections.includes('phone-number') ? t('application-renew-adult:contact-information.edit-phone-number') : t('application-renew-adult:contact-information.add-phone-number')}
+                </ButtonLink>
+              </CardFooter>
+            ) : (
               <CardFooter className="divide-y border-t bg-zinc-100 px-0">
                 <div className="w-full px-6">
                   <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/phone-number" params={params} startIcon={faPenToSquare} size="lg">
@@ -196,16 +186,10 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
                   </ButtonLink>
                 </div>
                 <div className="w-full px-6">
-                  <Button id="complete-button" variant="link" name="_action" value={FORM_ACTION.phoneNumber} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                  <Button id="complete-button" variant="link" name="_action" value={FORM_ACTION_HAS_CHANGED.phoneNumberChanged} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
                     {t('application-renew-adult:contact-information.phone-number-unchanged')}
                   </Button>
                 </div>
-              </CardFooter>
-            ) : (
-              <CardFooter className="border-t bg-zinc-100">
-                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={completedSections.includes('phone-number') ? faPenToSquare : faCirclePlus} size="lg">
-                  {completedSections.includes('phone-number') ? t('application-renew-adult:contact-information.edit-phone-number') : t('application-renew-adult:contact-information.add-phone-number')}
-                </ButtonLink>
               </CardFooter>
             )}
           </Card>
@@ -216,38 +200,48 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
               <CardAction>{completedSections.includes('address') && <StatusTag status="complete" />}</CardAction>
             </CardHeader>
             <CardContent>
-              {clientApplication?.contactInformation.mailingAddress && clientApplication.contactInformation.homeAddress ? (
-                <p>{t('application-renew-adult:contact-information.update-address-help')}</p>
-              ) : mailingAddressInfo.address !== undefined && homeAddressInfo.address !== undefined ? (
-                <dl className="divide-y border-y">
-                  <DescriptionListItem term={t('application-renew-adult:contact-information.mailing-address')}>
-                    <Address
-                      address={{
-                        address: mailingAddressInfo.address,
-                        city: mailingAddressInfo.city ?? '',
-                        provinceState: mailingAddressInfo.province,
-                        postalZipCode: mailingAddressInfo.postalCode,
-                        country: mailingAddressInfo.country ?? '',
-                      }}
-                    />
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('application-renew-adult:contact-information.home-address')}>
-                    <Address
-                      address={{
-                        address: homeAddressInfo.address,
-                        city: homeAddressInfo.city ?? '',
-                        provinceState: homeAddressInfo.province,
-                        postalZipCode: homeAddressInfo.postalCode,
-                        country: homeAddressInfo.country ?? '',
-                      }}
-                    />
-                  </DescriptionListItem>
-                </dl>
-              ) : (
+              {mailingAddressInfo.address === undefined && homeAddressInfo.address === undefined ? (
                 <p>{t('application-renew-adult:contact-information.address-help')}</p>
+              ) : (
+                <>
+                  {mailingAddressInfo.hasChange === false && homeAddressInfo.hasChanged === false ? (
+                    <p>{t('application-renew-adult:contact-information.no-change')}</p>
+                  ) : (
+                    <dl className="divide-y border-y">
+                      <DescriptionListItem term={t('application-renew-adult:contact-information.mailing-address')}>
+                        <Address
+                          address={{
+                            address: mailingAddressInfo.address ?? '',
+                            city: mailingAddressInfo.city ?? '',
+                            provinceState: mailingAddressInfo.province,
+                            postalZipCode: mailingAddressInfo.postalCode,
+                            country: mailingAddressInfo.country ?? '',
+                          }}
+                        />
+                      </DescriptionListItem>
+                      <DescriptionListItem term={t('application-renew-adult:contact-information.home-address')}>
+                        <Address
+                          address={{
+                            address: homeAddressInfo.address ?? '',
+                            city: homeAddressInfo.city ?? '',
+                            provinceState: homeAddressInfo.province,
+                            postalZipCode: homeAddressInfo.postalCode,
+                            country: homeAddressInfo.country ?? '',
+                          }}
+                        />
+                      </DescriptionListItem>
+                    </dl>
+                  )}
+                </>
               )}
             </CardContent>
-            {clientApplication?.contactInformation.mailingAddress && clientApplication.contactInformation.homeAddress ? (
+            {mailingAddressInfo.address === undefined && homeAddressInfo.address === undefined ? (
+              <CardFooter className="border-t bg-zinc-100">
+                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus} size="lg">
+                  {completedSections.includes('address') ? t('application-renew-adult:contact-information.edit-address') : t('application-renew-adult:contact-information.add-address')}
+                </ButtonLink>
+              </CardFooter>
+            ) : (
               <CardFooter className="divide-y border-t bg-zinc-100 px-0">
                 <div className="w-full px-6">
                   <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/mailing-address" params={params} startIcon={faPenToSquare} size="lg">
@@ -255,16 +249,10 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
                   </ButtonLink>
                 </div>
                 <div className="w-full px-6">
-                  <Button id="complete-button" variant="link" className="p-0 pt-5" name="_action" value={FORM_ACTION.address} startIcon={faCircleCheck} size="lg">
+                  <Button id="complete-button" variant="link" className="p-0 pt-5" name="_action" value={FORM_ACTION_HAS_CHANGED.addressChanged} startIcon={faCircleCheck} size="lg">
                     {t('application-renew-adult:contact-information.address-unchanged')}
                   </Button>
                 </div>
-              </CardFooter>
-            ) : (
-              <CardFooter className="border-t bg-zinc-100">
-                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus} size="lg">
-                  {completedSections.includes('address') ? t('application-renew-adult:contact-information.edit-address') : t('application-renew-adult:contact-information.add-address')}
-                </ButtonLink>
               </CardFooter>
             )}
           </Card>
@@ -275,45 +263,36 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
               <CardAction>{completedSections.includes('communication-preferences') && <StatusTag status="complete" />}</CardAction>
             </CardHeader>
             <CardContent>
-              {clientApplication?.communicationPreferences ? (
-                <p>{t('application-renew-adult:contact-information.update-communication-preferences-help')}</p>
-              ) : defaultState.communicationPreferences?.value ? (
-                <dl className="divide-y border-y">
-                  <DescriptionListItem term={t('application-renew-adult:contact-information.preferred-language')}>
-                    <p>{t('application-renew-adult:contact-information.preferred-language')}</p>
-                    {defaultState.communicationPreferences.value.preferredLanguage}
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('application-renew-adult:contact-information.preferred-method')}>
-                    <p>{t('application-renew-adult:contact-information.preferred-method')}</p>
-                    {defaultState.communicationPreferences.value.preferredMethod}
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('application-renew-adult:contact-information.preferred-notification-method')}>
-                    <p>{t('application-renew-adult:contact-information.preferred-notification-method')}</p>
-                    {defaultState.communicationPreferences.value.preferredNotificationMethod}
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('application-renew-adult:contact-information.email')}>
-                    <p>{t('application-renew-adult:contact-information.email')}</p>
-                    {defaultState.email}
-                  </DescriptionListItem>
-                </dl>
-              ) : (
+              {state.communicationPreferences === undefined ? (
                 <p>{t('application-renew-adult:contact-information.communication-preferences-help')}</p>
+              ) : (
+                <>
+                  {state.communicationPreferences.hasChanged === false ? (
+                    <p>{t('application-renew-adult:contact-information.no-change')}</p>
+                  ) : (
+                    <dl className="divide-y border-y">
+                      <DescriptionListItem term={t('application-renew-adult:contact-information.preferred-language')}>
+                        <p>{t('application-renew-adult:contact-information.preferred-language')}</p>
+                        {state.communicationPreferences.value.preferredLanguage}
+                      </DescriptionListItem>
+                      <DescriptionListItem term={t('application-renew-adult:contact-information.preferred-method')}>
+                        <p>{t('application-renew-adult:contact-information.preferred-method')}</p>
+                        {state.communicationPreferences.value.preferredMethod}
+                      </DescriptionListItem>
+                      <DescriptionListItem term={t('application-renew-adult:contact-information.preferred-notification-method')}>
+                        <p>{t('application-renew-adult:contact-information.preferred-notification-method')}</p>
+                        {state.communicationPreferences.value.preferredNotificationMethod}
+                      </DescriptionListItem>
+                      <DescriptionListItem term={t('application-renew-adult:contact-information.email')}>
+                        <p>{t('application-renew-adult:contact-information.email')}</p>
+                        {state.email}
+                      </DescriptionListItem>
+                    </dl>
+                  )}
+                </>
               )}
             </CardContent>
-            {clientApplication?.communicationPreferences ? (
-              <CardFooter className="divide-y border-t bg-zinc-100 px-0">
-                <div className="w-full px-6">
-                  <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/communication-preferences" params={params} startIcon={faPenToSquare} size="lg">
-                    {t('application-renew-adult:contact-information.update-communication-preferences')}
-                  </ButtonLink>
-                </div>
-                <div className="w-full px-6">
-                  <LoadingButton id="complete-button" variant="link" name="_action" value={FORM_ACTION.communicationPreference} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
-                    {t('application-renew-adult:contact-information.communication-preferences-unchanged')}
-                  </LoadingButton>
-                </div>
-              </CardFooter>
-            ) : (
+            {state.communicationPreferences === undefined ? (
               <CardFooter className="border-t bg-zinc-100">
                 <ButtonLink
                   id="edit-button"
@@ -326,6 +305,19 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
                 >
                   {completedSections.includes('communication-preferences') ? t('application-renew-adult:contact-information.edit-communication-preferences') : t('application-renew-adult:contact-information.add-communication-preferences')}
                 </ButtonLink>
+              </CardFooter>
+            ) : (
+              <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+                <div className="w-full px-6">
+                  <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/communication-preferences" params={params} startIcon={faPenToSquare} size="lg">
+                    {t('application-renew-adult:contact-information.update-communication-preferences')}
+                  </ButtonLink>
+                </div>
+                <div className="w-full px-6">
+                  <LoadingButton id="complete-button" variant="link" name="_action" value={FORM_ACTION_HAS_CHANGED.communicationPreferenceChanged} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                    {t('application-renew-adult:contact-information.communication-preferences-unchanged')}
+                  </LoadingButton>
+                </div>
               </CardFooter>
             )}
           </Card>
