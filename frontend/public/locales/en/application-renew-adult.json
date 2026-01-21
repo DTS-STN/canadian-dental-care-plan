@@ -30,7 +30,8 @@
     "edit-communication-preferences": "Edit communication preferences",
     "communication-preferences-unchanged": "My communication preferences have not changed",
     "next-btn": "Access to dental insurance",
-    "prev-btn": "Marital status"
+    "prev-btn": "Marital status",
+    "alt-phone-number": "Alternate phone number"
   },
   "dental-insurance": {
     "page-title": "Your access to dental insurance",

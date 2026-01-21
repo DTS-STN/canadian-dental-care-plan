@@ -30,7 +30,8 @@
     "add-communication-preferences": "(FR) Add communication preferences",
     "edit-communication-preferences": "(FR) Edit communication preferences",
     "type-of-application": "(FR) Type of application",
-    "childrens-application": "(FR) Your child(ren)'s application"
+    "childrens-application": "(FR) Your child(ren)'s application",
+    "alt-phone-number": "Autre numéro de téléphone"
   },
   "submit": {
     "page-title": "(FR) Submit your application",

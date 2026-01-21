@@ -107,6 +107,11 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
               <DescriptionListItem term={t('application-renew-adult:contact-information.phone-number')}>
                 <p>{defaultState.phoneNumber.value.primary}</p>
               </DescriptionListItem>
+              {defaultState.phoneNumber.value.alternate && (
+                <DescriptionListItem term={t('application-renew-adult:contact-information.alt-phone-number')}>
+                  <p>{defaultState.phoneNumber.value.alternate}</p>
+                </DescriptionListItem>
+              )}
             </dl>
           ) : (
             <p>{t('application-renew-adult:contact-information.update-phone-number-help')}</p>

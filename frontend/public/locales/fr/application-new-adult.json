@@ -55,7 +55,8 @@
     "add-communication-preferences": "(FR) Add communication-preferences",
     "edit-communication-preferences": "(FR) Edit communication-preferences",
     "next-btn": "(FR) Access to dental insurance",
-    "prev-btn": "(FR) Marital status"
+    "prev-btn": "(FR) Marital status",
+    "alt-phone-number": "Autre numéro de téléphone"
   },
   "submit": {
     "page-title": "(FR) Submit your application",

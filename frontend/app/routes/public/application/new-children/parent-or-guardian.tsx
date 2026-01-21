@@ -143,6 +143,11 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
               <DescriptionListItem term={t('application-new-child:parent-or-guardian.phone-number')}>
                 <p>{state.phoneNumber.value.primary}</p>
               </DescriptionListItem>
+              {state.phoneNumber.value.alternate && (
+                <DescriptionListItem term={t('application-new-child:parent-or-guardian.alt-phone-number')}>
+                  <p>{state.phoneNumber.value.alternate}</p>
+                </DescriptionListItem>
+              )}
             </dl>
           ) : (
             <p>{t('application-new-child:parent-or-guardian.phone-number-help')}</p>
