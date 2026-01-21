@@ -62,7 +62,7 @@ export async function loader({ context: { appContainer, session }, request, para
     province: mailingProvinceTerritoryStateAbbr?.abbr,
     postalCode: state.mailingAddress?.value?.postalCode,
     country: countryMailing?.name,
-    hasChange: state.mailingAddress?.hasChanged,
+    hasChanged: state.mailingAddress?.hasChanged,
   };
 
   const homeAddressInfo = {
@@ -204,7 +204,7 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
                 <p>{t('application-renew-adult:contact-information.address-help')}</p>
               ) : (
                 <>
-                  {mailingAddressInfo.hasChange === false && homeAddressInfo.hasChanged === false ? (
+                  {mailingAddressInfo.hasChanged === false && homeAddressInfo.hasChanged === false ? (
                     <p>{t('application-renew-adult:contact-information.no-change')}</p>
                   ) : (
                     <dl className="divide-y border-y">
