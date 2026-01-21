@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     state.submitTerms === undefined ||
     state.hasFiledTaxes === undefined  ||
     state.submissionInfo === undefined ||
-    state.children.some(child => child.information === undefined || child.dentalInsurance === undefined || child.hasFederalProvincialTerritorialBenefits === undefined)
+    state.children.some(child => child.information === undefined || child.dentalInsurance === undefined || child.dentalBenefits?.hasChanged !== true)
     ) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
