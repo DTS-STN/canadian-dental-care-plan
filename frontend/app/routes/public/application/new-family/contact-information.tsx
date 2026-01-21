@@ -105,6 +105,11 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               <DescriptionListItem term={t('application-new-family:contact-information.phone-number')}>
                 <p>{state.phoneNumber.value.primary}</p>
               </DescriptionListItem>
+              {state.phoneNumber.value.alternate && (
+                <DescriptionListItem term={t('application-new-family:contact-information.alt-phone-number')}>
+                  <p>{state.phoneNumber.value.alternate}</p>
+                </DescriptionListItem>
+              )}
             </dl>
           ) : (
             <p>{t('application-new-family:contact-information.phone-number-help')}</p>
