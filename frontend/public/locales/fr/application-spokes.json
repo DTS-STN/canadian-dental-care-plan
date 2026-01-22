@@ -282,11 +282,11 @@
     "save-btn": "Sauvegarder"
   },
   "parent-or-guardian": {
-    "page-title": "Un parent ou un tuteur légal doit faire la demande",
-    "unable-to-apply": "(fr) You are under 18. A parent or legal guardian must apply on your behalf.",
-    "apply-for-yourself": "Si vous avez déjà fait une demande pour un enfant et que vous souhaitez maintenant faire une demande pour vous-même, vous devez vous adresser à un représentant de Service Canada. Vous pouvez contacter Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
+    "page-title": "Le parent ou le tuteur légal doit présenter la demande",
+    "unable-to-apply": "Vous avez moins de 18 ans. Un parent ou tuteur légal doit présenter la demande pour vous.",
+    "apply-for-yourself": "Si vous avez déjà présenté une demande pour un enfant et que vous souhaitez maintenant faire une demande pour vous-même, vous devez vous adresser à un représentant de Service Canada. Vous pouvez communiquer avec Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
     "back-btn": "Retour",
-    "exit-btn": "(fr) Exit application",
+    "exit-btn": "Quitter la demande",
     "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
   "phone-number": {
