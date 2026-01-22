@@ -360,13 +360,11 @@
   },
   "email": {
     "page-title": "Adresse courriel",
-    "provide-email": "(FR) Provide the email address you'd like the Government of Canada and Sun Life to use to contact you about your Canadian Dental Care Plan coverage.",
-    "verify-email": "(FR) We will need to confirm your email address.",
+    "provide-email": "Indiquez l'adresse électronique à laquelle vous souhaitez recevoir l'information au sujet de votre couverture au titre du Régime canadien de soins dentaires que vous communiqueront le gouvernement du Canada et la Sun Life.",
+    "verify-email": "Nous devrons confirmer votre adresse électronique.",
     "email-legend": "Adresse courriel",
     "back": "Retour",
     "continue": "Continuer",
-    "cancel-btn": "Annuler",
-    "save-btn": "Enregistrer",
     "error-message": {
       "email-required": "Entrez l'adresse courriel, par exemple nom@exemple.com",
       "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com"
