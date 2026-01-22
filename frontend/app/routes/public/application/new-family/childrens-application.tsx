@@ -259,7 +259,7 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
-                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/children/$childId/confirm-federal-provincial-territorial-benefits" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
                   {child.dentalBenefits === undefined ? t('application-new-family:childrens-application.add-child-dental-benefits') : t('application-new-family:childrens-application.edit-child-dental-benefits')}
                 </ButtonLink>
               </CardFooter>

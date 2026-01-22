@@ -75,6 +75,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     provincialTerritorialSocialPrograms,
     regions,
     childName,
+    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
     i18nOptions: { childName },
   };
 }
@@ -183,7 +184,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { federalSocialPrograms, provincialTerritorialSocialPrograms, regions, defaultState, childName } = loaderData;
+  const { federalSocialPrograms, provincialTerritorialSocialPrograms, regions, defaultState, childName, typeAndFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -347,7 +348,7 @@ export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, par
           <ButtonLink
             id="back-button"
             variant="secondary"
-            routeId="public/application/$id/children/$childId/confirm-federal-provincial-territorial-benefits"
+            routeId={`public/application/$id/${typeAndFlow}/childrens-application`}
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}
