@@ -465,7 +465,7 @@ export function getInitialTypeAndFlowUrl(typeAndFlow: TypeAndFlow, params: Param
       return getPathById('public/application/$id/renew-adult/contact-information', params);
     }
     case 'renew-children': {
-      throw new Error('Not implemented yet: "renew-children" case');
+      return getPathById('public/application/$id/renew-children/parent-or-guardian', params);
     }
     case 'renew-family': {
       throw new Error('Not implemented yet: "renew-family" case');

@@ -1,15 +1,18 @@
-import { faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { data, useFetcher } from 'react-router';
+
+import { faCircleCheck, faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+import z from 'zod';
 
 import type { Route } from './+types/parent-or-guardian';
 
 import { TYPES } from '~/.server/constants';
-import { loadPublicApplicationChildState } from '~/.server/routes/helpers/public-application-child-route-helpers';
-import { validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
-import { ButtonLink } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
@@ -21,6 +24,12 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
+const FORM_ACTION = {
+  PHONE_NUMBER_NOT_CHANGED: 'phone-number-not-changed',
+  ADDRESS_NOT_CHANGED: 'address-not-changed',
+  COMMUNICATION_PREFERENCES_NOT_CHANGED: 'communication-preferences-not-changed',
+} as const;
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'application-renew-child', 'gcweb'),
   pageIdentifier: pageIds.public.application.renewChild.parentOrGuardian,
@@ -30,8 +39,9 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  const state = loadPublicApplicationChildState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['new-children']);
+  // TODO: const state = loadPublicApplicationRenewChildState({ params, request, session });
+  const state = getPublicApplicationState({ params, session });
+  // validateApplicationTypeAndFlow(state, params, ['renew-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-renew-child:parent-or-guardian.page-title') }) };
@@ -48,6 +58,7 @@ export async function loader({ context: { appContainer, session }, request, para
     province: mailingProvinceTerritoryStateAbbr?.abbr,
     postalCode: state.mailingAddress?.value?.postalCode,
     country: countryMailing?.name,
+    hasChanged: state.mailingAddress?.hasChanged,
   };
 
   const homeAddressInfo = {
@@ -56,6 +67,7 @@ export async function loader({ context: { appContainer, session }, request, para
     province: homeProvinceTerritoryStateAbbr?.abbr,
     postalCode: state.homeAddress?.value?.postalCode,
     country: countryHome?.name,
+    hasChanged: state.homeAddress?.hasChanged,
   };
 
   return {
@@ -75,169 +87,249 @@ export async function loader({ context: { appContainer, session }, request, para
   };
 }
 
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const formData = await request.formData();
+
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  securityHandler.validateCsrfToken({ formData, session });
+
+  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
+
+  if (formAction === FORM_ACTION.PHONE_NUMBER_NOT_CHANGED) {
+    savePublicApplicationState({
+      params,
+      session,
+      state: {
+        phoneNumber: { hasChanged: false },
+      },
+    });
+  }
+
+  if (formAction === FORM_ACTION.ADDRESS_NOT_CHANGED) {
+    savePublicApplicationState({
+      params,
+      session,
+      state: {
+        mailingAddress: { hasChanged: false },
+        homeAddress: { hasChanged: false },
+      },
+    });
+  }
+
+  if (formAction === FORM_ACTION.COMMUNICATION_PREFERENCES_NOT_CHANGED) {
+    savePublicApplicationState({
+      params,
+      session,
+      state: {
+        communicationPreferences: {
+          hasChanged: false,
+        },
+      },
+    });
+  }
+  return data({ success: true }, { status: 200 });
+}
+
 export default function RenewChildParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const { steps, currentStep } = useProgressStepper('renew-children', 'parent-or-guardian');
 
   const sections = [
-    { id: 'marital-status', completed: state.maritalStatus !== undefined },
-    { id: 'phone-number', completed: state.phoneNumber?.hasChanged === true },
-    { id: 'address', completed: mailingAddressInfo.address !== undefined && homeAddressInfo.address !== undefined },
-    { id: 'communication-preferences', completed: state.communicationPreferences?.hasChanged === true },
+    { id: 'phone-number', completed: state.phoneNumber !== undefined },
+    { id: 'address', completed: mailingAddressInfo.hasChanged !== undefined && homeAddressInfo.hasChanged !== undefined },
+    { id: 'communication-preferences', completed: state.communicationPreferences !== undefined },
   ] as const;
+
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
   const allSectionsCompleted = completedSections.length === sections.length;
 
+  const fetcher = useFetcher<typeof action>();
+
   return (
-    <div className="max-w-prose space-y-8">
-      <ProgressStepper steps={steps} currentStep={currentStep} />
-      <div className="space-y-4">
-        <p>{t('application:required-label')}</p>
-        <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+    <fetcher.Form method="post" noValidate>
+      <CsrfTokenInput />
+      <div className="max-w-prose space-y-8">
+        <ProgressStepper steps={steps} currentStep={currentStep} />
+        <div className="space-y-4">
+          <p>{t('application:required-label')}</p>
+          <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('application-renew-child:parent-or-guardian.phone-number')}</CardTitle>
+            <CardAction>{completedSections.includes('phone-number') && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>
+            {state.phoneNumber === undefined ? (
+              <p>{t('application-renew-child:parent-or-guardian.phone-number-help')}</p>
+            ) : (
+              <dl className="border-y">
+                <DescriptionListItem term={t('application-renew-child:parent-or-guardian.phone-number')}>
+                  {state.phoneNumber.hasChanged === false ? <p>{t('application-renew-child:parent-or-guardian.no-change')}</p> : <p>{state.phoneNumber.value.primary}</p>}
+                </DescriptionListItem>
+              </dl>
+            )}
+          </CardContent>
+          {state.phoneNumber ? (
+            <CardFooter className="border-t bg-zinc-100">
+              <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={completedSections.includes('phone-number') ? faPenToSquare : faCirclePlus} size="lg">
+                {completedSections.includes('phone-number') ? t('application-renew-child:parent-or-guardian.edit-phone-number') : t('application-renew-child:parent-or-guardian.add-phone-number')}
+              </ButtonLink>
+            </CardFooter>
+          ) : (
+            <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+              <div className="w-full px-6">
+                <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/phone-number" params={params} startIcon={faPenToSquare} size="lg">
+                  {t('application-renew-child:parent-or-guardian.update-phone-number')}
+                </ButtonLink>
+              </div>
+              <div className="w-full px-6">
+                <Button id="complete-button" variant="link" name="_action" value={FORM_ACTION.PHONE_NUMBER_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                  {t('application-renew-child:parent-or-guardian.phone-number-unchanged')}
+                </Button>
+              </div>
+            </CardFooter>
+          )}
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('application-renew-child:parent-or-guardian.mailing-and-home-address')}</CardTitle>
+            <CardAction>{completedSections.includes('address') && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>
+            {mailingAddressInfo.hasChanged === undefined && homeAddressInfo.hasChanged === undefined ? (
+              <p>{t('application-renew-child:parent-or-guardian.address-help')}</p>
+            ) : (
+              <>
+                {mailingAddressInfo.hasChanged === false && homeAddressInfo.hasChanged === false ? (
+                  <p>{t('application-renew-child:parent-or-guardian.no-change')}</p>
+                ) : (
+                  <dl className="divide-y border-y">
+                    <DescriptionListItem term={t('application-renew-child:parent-or-guardian.mailing-address')}>
+                      <Address
+                        address={{
+                          address: mailingAddressInfo.address ?? '',
+                          city: mailingAddressInfo.city ?? '',
+                          provinceState: mailingAddressInfo.province,
+                          postalZipCode: mailingAddressInfo.postalCode,
+                          country: mailingAddressInfo.country ?? '',
+                        }}
+                      />
+                    </DescriptionListItem>
+                    <DescriptionListItem term={t('application-renew-child:parent-or-guardian.home-address')}>
+                      <Address
+                        address={{
+                          address: homeAddressInfo.address ?? '',
+                          city: homeAddressInfo.city ?? '',
+                          provinceState: homeAddressInfo.province,
+                          postalZipCode: homeAddressInfo.postalCode,
+                          country: homeAddressInfo.country ?? '',
+                        }}
+                      />
+                    </DescriptionListItem>
+                  </dl>
+                )}
+              </>
+            )}
+          </CardContent>
+          {mailingAddressInfo.hasChanged !== undefined && homeAddressInfo.hasChanged !== undefined ? (
+            <CardFooter className="border-t bg-zinc-100">
+              <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus} size="lg">
+                {completedSections.includes('address') ? t('application-renew-child:parent-or-guardian.edit-address') : t('application-renew-child:parent-or-guardian.add-address')}
+              </ButtonLink>
+            </CardFooter>
+          ) : (
+            <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+              <div className="w-full px-6">
+                <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/mailing-address" params={params} startIcon={faPenToSquare} size="lg">
+                  {t('application-renew-child:parent-or-guardian.update-address')}
+                </ButtonLink>
+              </div>
+              <div className="w-full px-6">
+                <Button id="complete-button" variant="link" className="p-0 pt-5" name="_action" value={FORM_ACTION.ADDRESS_NOT_CHANGED} startIcon={faCircleCheck} size="lg">
+                  {t('application-renew-child:parent-or-guardian.address-unchanged')}
+                </Button>
+              </div>
+            </CardFooter>
+          )}
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('application-renew-child:parent-or-guardian.communication-preferences')}</CardTitle>
+            <CardAction>{completedSections.includes('communication-preferences') && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>
+            {state.communicationPreferences === undefined ? (
+              <p>{t('application-renew-child:parent-or-guardian.communication-preferences-help')}</p>
+            ) : (
+              <>
+                {state.communicationPreferences.hasChanged === false ? (
+                  <p>{t('application-renew-child:parent-or-guardian.no-change')}</p>
+                ) : (
+                  <dl className="divide-y border-y">
+                    <DescriptionListItem term={t('application-renew-child:parent-or-guardian.preferred-language')}>
+                      <p>{t('application-renew-child:parent-or-guardian.preferred-language')}</p>
+                      {state.communicationPreferences.value.preferredLanguage}
+                    </DescriptionListItem>
+                    <DescriptionListItem term={t('application-renew-child:parent-or-guardian.preferred-method')}>
+                      <p>{t('application-renew-child:parent-or-guardian.preferred-method')}</p>
+                      {state.communicationPreferences.value.preferredMethod}
+                    </DescriptionListItem>
+                    <DescriptionListItem term={t('application-renew-child:parent-or-guardian.preferred-notification-method')}>
+                      <p>{t('application-renew-child:parent-or-guardian.preferred-notification-method')}</p>
+                      {state.communicationPreferences.value.preferredNotificationMethod}
+                    </DescriptionListItem>
+                    <DescriptionListItem term={t('application-renew-child:parent-or-guardian.email')}>
+                      <p>{t('application-renew-child:parent-or-guardian.email')}</p>
+                      {state.email}
+                    </DescriptionListItem>
+                  </dl>
+                )}
+              </>
+            )}
+          </CardContent>
+          {state.communicationPreferences ? (
+            <CardFooter className="border-t bg-zinc-100">
+              <ButtonLink
+                id="edit-button"
+                variant="link"
+                className="p-0"
+                routeId="public/application/$id/communication-preferences"
+                params={params}
+                startIcon={completedSections.includes('communication-preferences') ? faPenToSquare : faCirclePlus}
+                size="lg"
+              >
+                {completedSections.includes('communication-preferences') ? t('application-renew-child:parent-or-guardian.edit-communication-preferences') : t('application-renew-child:parent-or-guardian.add-communication-preferences')}
+              </ButtonLink>
+            </CardFooter>
+          ) : (
+            <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+              <div className="w-full px-6">
+                <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/communication-preferences" params={params} startIcon={faPenToSquare} size="lg">
+                  {t('application-renew-child:parent-or-guardian.update-communication-preferences')}
+                </ButtonLink>
+              </div>
+              <div className="w-full px-6">
+                <Button id="complete-button" variant="link" name="_action" value={FORM_ACTION.COMMUNICATION_PREFERENCES_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                  {t('application-renew-child:parent-or-guardian.communication-preferences-unchanged')}
+                </Button>
+              </div>
+            </CardFooter>
+          )}
+        </Card>
+
+        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-children/parent-or-guardian" params={params}>
+            {t('application-renew-child:parent-or-guardian.childrens-application')}
+          </NavigationButtonLink>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
+            {t('application-renew-child:parent-or-guardian.type-of-application')}
+          </NavigationButtonLink>
+        </div>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('application-renew-child:parent-or-guardian.marital-status')}</CardTitle>
-          <CardAction>{completedSections.includes('marital-status') && <StatusTag status="complete" />}</CardAction>
-        </CardHeader>
-        <CardContent>
-          {state.maritalStatus === undefined ? (
-            <p>{t('application-renew-child:parent-or-guardian.select-your-status')}</p>
-          ) : (
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-renew-child:parent-or-guardian.marital-status')}>
-                <p>{state.maritalStatus.name}</p>
-              </DescriptionListItem>
-              {state.partnerInformation && (
-                <>
-                  <DescriptionListItem term={t('application-renew-child:parent-or-guardian.spouse-sin')}>
-                    <p>{state.partnerInformation.socialInsuranceNumber}</p>
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('application-renew-child:parent-or-guardian.spouse-yob')}>
-                    <p>{state.partnerInformation.yearOfBirth}</p>
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('application-renew-child:parent-or-guardian.consent')}>
-                    {state.partnerInformation.confirm ? t('application-renew-child:parent-or-guardian.consent-yes') : t('application-renew-child:parent-or-guardian.consent-no')}
-                  </DescriptionListItem>
-                </>
-              )}
-            </dl>
-          )}
-        </CardContent>
-        <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={faCirclePlus} size="lg">
-            {state.maritalStatus === undefined ? t('application-renew-child:parent-or-guardian.add-marital-status') : t('application-renew-child:parent-or-guardian.edit-marital-status')}
-          </ButtonLink>
-        </CardFooter>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('application-renew-child:parent-or-guardian.phone-number')}</CardTitle>
-          <CardAction>{completedSections.includes('phone-number') && <StatusTag status="complete" />}</CardAction>
-        </CardHeader>
-        <CardContent>
-          {state.phoneNumber?.hasChanged ? (
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-renew-child:parent-or-guardian.phone-number')}>
-                <p>{state.phoneNumber.value.primary}</p>
-              </DescriptionListItem>
-              {state.phoneNumber.value.alternate && (
-                <DescriptionListItem term={t('application-renew-child:parent-or-guardian.alt-phone-number')}>
-                  <p>{state.phoneNumber.value.alternate}</p>
-                </DescriptionListItem>
-              )}
-            </dl>
-          ) : (
-            <p>{t('application-renew-child:parent-or-guardian.phone-number-help')}</p>
-          )}
-        </CardContent>
-        <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={completedSections.includes('phone-number') ? faPenToSquare : faCirclePlus} size="lg">
-            {completedSections.includes('phone-number') ? t('application-renew-child:parent-or-guardian.edit-phone-number') : t('application-renew-child:parent-or-guardian.add-phone-number')}
-          </ButtonLink>
-        </CardFooter>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('application-renew-child:parent-or-guardian.mailing-and-home-address')}</CardTitle>
-          <CardAction>{completedSections.includes('address') && <StatusTag status="complete" />}</CardAction>
-        </CardHeader>
-        <CardContent>
-          {mailingAddressInfo.address === undefined && homeAddressInfo.address === undefined ? (
-            <p>{t('application-renew-child:parent-or-guardian.address-help')}</p>
-          ) : (
-            <dl className="divide-y border-y">
-              {mailingAddressInfo.address !== undefined && (
-                <DescriptionListItem term={t('application-renew-child:parent-or-guardian.mailing-address')}>
-                  <Address
-                    address={{
-                      address: mailingAddressInfo.address,
-                      city: mailingAddressInfo.city ?? '',
-                      provinceState: mailingAddressInfo.province,
-                      postalZipCode: mailingAddressInfo.postalCode,
-                      country: mailingAddressInfo.country ?? '',
-                    }}
-                  />
-                </DescriptionListItem>
-              )}
-              {homeAddressInfo.address !== undefined && (
-                <DescriptionListItem term={t('application-renew-child:parent-or-guardian.home-address')}>
-                  <Address
-                    address={{
-                      address: homeAddressInfo.address,
-                      city: homeAddressInfo.city ?? '',
-                      provinceState: homeAddressInfo.province,
-                      postalZipCode: homeAddressInfo.postalCode,
-                      country: homeAddressInfo.country ?? '',
-                    }}
-                  />
-                </DescriptionListItem>
-              )}
-            </dl>
-          )}
-        </CardContent>
-        <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus} size="lg">
-            {completedSections.includes('address') ? t('application-renew-child:parent-or-guardian.edit-address') : t('application-renew-child:parent-or-guardian.add-address')}
-          </ButtonLink>
-        </CardFooter>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('application-renew-child:parent-or-guardian.communication-preferences')}</CardTitle>
-          <CardAction>{completedSections.includes('communication-preferences') && <StatusTag status="complete" />}</CardAction>
-        </CardHeader>
-        <CardContent>
-          {state.communicationPreferences?.hasChanged ? (
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-renew-child:parent-or-guardian.preferred-language')}>{preferredLanguage?.name}</DescriptionListItem>
-              <DescriptionListItem term={t('application-renew-child:parent-or-guardian.preferred-method')}>{preferredMethod?.name}</DescriptionListItem>
-              <DescriptionListItem term={t('application-renew-child:parent-or-guardian.preferred-notification-method')}>{preferredNotificationMethod?.name}</DescriptionListItem>
-              <DescriptionListItem term={t('application-renew-child:parent-or-guardian.email')}>{state.email}</DescriptionListItem>
-            </dl>
-          ) : (
-            <p>{t('application-renew-child:parent-or-guardian.communication-preferences-help')}</p>
-          )}
-        </CardContent>
-        <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/communication-preferences" params={params} startIcon={completedSections.includes('communication-preferences') ? faPenToSquare : faCirclePlus} size="lg">
-            {completedSections.includes('communication-preferences') ? t('application-renew-child:parent-or-guardian.edit-communication-preferences') : t('application-renew-child:parent-or-guardian.add-communication-preferences')}
-          </ButtonLink>
-        </CardFooter>
-      </Card>
-
-      <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-children/childrens-application" params={params}>
-          {t('application-renew-child:parent-or-guardian.childrens-application')}
-        </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
-          {t('application-renew-child:parent-or-guardian.type-of-application')}
-        </NavigationButtonLink>
-      </div>
-    </div>
+    </fetcher.Form>
   );
 }
