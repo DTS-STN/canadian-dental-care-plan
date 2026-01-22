@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   // prettier-ignore
   if (state.applicantInformation === undefined ||
     state.communicationPreferences?.hasChanged !== true ||
-    state.hasFederalProvincialTerritorialBenefits === undefined ||
+    state.dentalBenefits?.hasChanged !== true ||
     state.dentalInsurance === undefined ||
     state.phoneNumber?.hasChanged !== true ||
     state.mailingAddress === undefined ||
@@ -61,11 +61,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const env = appContainer.get(TYPES.ClientConfig);
   const surveyLink = locale === 'en' ? env.CDCP_SURVEY_LINK_EN : env.CDCP_SURVEY_LINK_FR;
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.value?.federalSocialProgram
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.value.federalSocialProgram
     ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale)
     : undefined;
 
-  const selectedProvincialBenefits = state.dentalBenefits?.value?.provincialTerritorialSocialProgram
+  const selectedProvincialBenefits = state.dentalBenefits.value.provincialTerritorialSocialProgram
     ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
     : undefined;
 

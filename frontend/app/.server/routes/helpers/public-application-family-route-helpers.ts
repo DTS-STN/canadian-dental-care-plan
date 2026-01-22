@@ -114,7 +114,6 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     dentalInsurance,
     email,
     emailVerified,
-    hasFederalProvincialTerritorialBenefits,
     hasFiledTaxes,
     homeAddress,
     id,
@@ -185,11 +184,7 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     throw redirect(getPathById('public/application/$id/new-family/dental-insurance', params));
   }
 
-  if (hasFederalProvincialTerritorialBenefits === undefined) {
-    throw redirect(getPathById('public/application/$id/new-family/dental-insurance', params));
-  }
-
-  if (dentalBenefits === undefined && hasFederalProvincialTerritorialBenefits.value === true) {
+  if (dentalBenefits === undefined) {
     throw redirect(getPathById('public/application/$id/new-family/dental-insurance', params));
   }
 
@@ -206,7 +201,6 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     dentalInsurance,
     email,
     emailVerified,
-    hasFederalProvincialTerritorialBenefits,
     hasFiledTaxes,
     homeAddress,
     id,
