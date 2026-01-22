@@ -516,7 +516,6 @@
       "save-btn": "Save",
       "detail": {
         "additional-info": {
-          "title": "Does {{childName}} have private dental insurance or coverage through any of the following:",
           "list": {
             "employer": "a family member's employer",
             "pension": "a family member's pension plan",
