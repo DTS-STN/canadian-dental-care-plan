@@ -295,16 +295,16 @@
     "phone-number-alt": "Autre numéro de téléphone (facultatif)",
     "back-btn": "Retour",
     "save-btn": "Sauvegarder",
-    "dont-have-number": "(FR) I don't have a phone number",
-    "need-phone-number": "(FR) You need a phone number to apply online. If you cannot be reached by phone, you can still apply for the Canadian Dental Care Plan:",
-    "service-canada": "(FR) By phone: call Service Canada at <noWrap>1-833-537-4342</noWrap>",
-    "in-person": "(FR) In-person: <findOffice>find a Service Canada office</findOffice>",
-    "office-link": "https://offices.service.canada.ca/fr",
+    "dont-have-number": "Je n'ai pas de numéro de téléphone",
+    "need-phone-number": "Vous devez avoir un numéro de téléphone pour présenter une demande en ligne. Si vous ne pouvez pas être joint(e) par téléphone, vous pouvez tout de même présenter une demande d'adhésion au Régime canadien de soins dentaires\u00a0:",
+    "service-canada": "Par téléphone\u00a0: contactez Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
+    "in-person": "En personne\u00a0: <findOffice>trouvez un bureau de Service Canada</findOffice>.",
+    "office-link": "https://bureaux.service.canada.ca/fr",
     "error-message": {
       "phone-number-valid": "Numéro de téléphone invalide",
       "phone-number-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
-      "phone-number-alt-valid": "Numéro de téléphone invalide",
-      "phone-number-alt-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-number-alt-valid": "Autre numéro de téléphone invalide",
+      "phone-number-alt-valid-international": "L'autre numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
       "phone-required": "Entrez un numéro de téléphone"
     }
   },
