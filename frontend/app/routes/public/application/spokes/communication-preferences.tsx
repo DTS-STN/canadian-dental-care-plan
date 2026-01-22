@@ -159,12 +159,20 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
     defaultChecked: defaultState?.preferredLanguage === language.id,
   }));
 
-  const sunLifeCommunicationMethodOptions: InputRadiosProps['options'] = sunLifeCommunicationMethods.map((method) => ({
-    value: method.id,
-    children: method.name,
-    defaultChecked: defaultState ? defaultState.preferredMethod === method.id : method.id === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
-    onChange: handleOnPreferredMethodChanged,
-  }));
+  const sunLifeCommunicationMethodOptions: InputRadiosProps['options'] = sunLifeCommunicationMethods.map((method) => {
+    let children: ReactNode = method.name;
+
+    if (method.id === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID) {
+      children = <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communication-preferences.by-email" values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
+    }
+
+    return {
+      value: method.id,
+      children,
+      defaultChecked: defaultState ? defaultState.preferredMethod === method.id : method.id === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
+      onChange: handleOnPreferredMethodChanged,
+    };
+  });
 
   const gcCommunicationMethodOptions: InputRadiosProps['options'] = gcCommunicationMethods.map((method) => {
     let children: ReactNode = method.name;
