@@ -57,16 +57,16 @@
     "save-btn": "Sauvegarder"
   },
   "file-your-taxes": {
-    "page-title": "Produire votre déclaration de revenus",
-    "ineligible-to-apply": "Vous n'êtes pas admissible au Régime canadien de soins dentaires pour le moment.",
-    "tax-not-filed": "Vous et votre époux/épouse ou conjoint/conjointe de fait, si vous en avez un, n'avez pas reçu votre avis de cotisation pour {{taxYear}} de l'Agence du revenu du Canada.",
-    "unable-to-assess": "(fr) We use your tax information to confirm that you meet the income and residency requirements for the Canadian Dental Care Plan.",
-    "tax-info": "Pour en savoir plus sur la façon de produire votre déclaration de revenus, consultez la page <taxInfo>Préparez-vous à faire vos impôts</taxInfo>.",
-    "apply-after": "(fr) You can apply for the plan <strong>after</strong> you or your spouse or common-law partner have <strong>filed your taxes</strong> and received your Notice of Assessment.",
+    "page-title": "Produisez votre déclaration de revenus",
+    "ineligible-to-apply": "Vous n'êtes pas admissible à présenter une demande au titre du Régime canadien de soins dentaires pour le moment.",
+    "tax-not-filed": "Vous, et votre époux ou épouse ou conjoint ou conjointe de fait, le cas échéant, n'avez pas encore reçu votre avis de cotisation pour {{taxYear}} de l'Agence du revenu du Canada.",
+    "unable-to-assess": "Nous utilisons vos renseignements fiscaux pour confirmer que vous répondez aux exigences de revenu et de résidence du Régime canadien de soins dentaires.",
+    "tax-info": "Pour en savoir plus sur la production de votre déclaration de revenus, consultez la page <taxInfo>Préparez-vous à produire une déclaration de revenus</taxInfo>.",
+    "apply-after": "Vous pouvez présenter une demande d'adhésion au régime <strong>après</strong> que vous ou votre époux, épouse, conjoint de fait ou conjointe de fait avez <strong>produit votre déclaration de revenus</strong> et reçu votre avis de cotisation.",
     "tax-info-href": "https://www.canada.ca/fr/services/impots/impot-sur-le-revenu/impot-sur-le-revenu-des-particuliers/preparez-vous-impots.html",
     "back-btn": "Retour",
-    "return-btn": "Revenir à la page principale",
-    "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+    "exit-btn": "Quitter la demande",
+    "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
   "type-of-application": {
     "page-title": "(fr) Type of application",
