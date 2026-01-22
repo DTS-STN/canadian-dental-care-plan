@@ -68,7 +68,6 @@ export type PublicApplicationState = ReadonlyDeep<{
     verificationAttempts: number;
   };
   emailVerified?: boolean;
-  hasFederalProvincialTerritorialBenefits?: DeclaredChange<boolean>;
   maritalStatus?: string;
   dentalBenefits?: DeclaredChange<{
     hasFederalBenefits: boolean;

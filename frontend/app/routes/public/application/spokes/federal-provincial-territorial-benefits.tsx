@@ -26,12 +26,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-const FORM_ACTION = {
-  continue: 'continue',
-  cancel: 'cancel',
-  save: 'save',
-} as const;
-
 const HAS_FEDERAL_BENEFITS_OPTION = {
   no: 'no',
   yes: 'yes',
@@ -71,6 +65,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     provincialTerritorialSocialPrograms,
     provinceTerritoryStates,
+    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
   };
 }
 
@@ -84,24 +79,6 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-
-  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
-  if (formAction === FORM_ACTION.cancel) {
-    if (state.hasFederalProvincialTerritorialBenefits) {
-      savePublicApplicationState({
-        params,
-        session,
-        state: {
-          hasFederalProvincialTerritorialBenefits: {
-            hasChanged: true,
-            value: !!state.dentalBenefits?.value,
-          },
-        },
-      });
-    }
-
-    return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/dental-insurance`, params));
-  }
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
@@ -189,7 +166,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, defaultState } = loaderData;
+  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, defaultState, typeAndFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -340,21 +317,13 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
           />
         </fieldset>
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton
-            variant="primary"
-            id="save-button"
-            name="_action"
-            value={FORM_ACTION.continue}
-            loading={isSubmitting}
-            endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Access to other dental benefits click"
-          >
+          <LoadingButton variant="primary" id="save-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Access to other dental benefits click">
             {t('application-spokes:dental-benefits.save-btn')}
           </LoadingButton>
           <ButtonLink
             id="back-button"
             variant="secondary"
-            routeId="public/application/$id/confirm-federal-provincial-territorial-benefits"
+            routeId={`public/application/$id/${typeAndFlow}/dental-insurance`}
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}

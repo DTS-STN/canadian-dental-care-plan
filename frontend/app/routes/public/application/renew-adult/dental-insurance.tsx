@@ -53,22 +53,22 @@ export async function loader({ context: { appContainer, session }, request, para
     ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
     : undefined;
 
-  const dentalBenefits = {
-    federalBenefit: {
-      access: state.dentalBenefits?.value?.hasFederalBenefits,
-      benefit: selectedFederalGovernmentInsurancePlan?.name,
-    },
-    provTerrBenefit: {
-      access: state.dentalBenefits?.value?.hasProvincialTerritorialBenefits,
-      benefit: selectedProvincialBenefit?.name,
-    },
-  };
-
   return {
     state: {
       dentalInsurance: state.dentalInsurance?.hasDentalInsurance,
-      hasFederalProvincialTerritorialBenefits: state.hasFederalProvincialTerritorialBenefits,
-      dentalBenefits: state.dentalBenefits ? dentalBenefits : undefined,
+      dentalBenefits: state.dentalBenefits
+        ? {
+            hasChanged: state.dentalBenefits.hasChanged,
+            federalBenefit: {
+              access: state.dentalBenefits.value?.hasFederalBenefits,
+              benefit: selectedFederalGovernmentInsurancePlan?.name,
+            },
+            provTerrBenefit: {
+              access: state.dentalBenefits.value?.hasProvincialTerritorialBenefits,
+              benefit: selectedProvincialBenefit?.name,
+            },
+          }
+        : undefined,
     },
     meta,
   };
@@ -86,15 +86,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === (FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED as string)) {
-    savePublicApplicationState({
-      params,
-      session,
-      state: {
-        hasFederalProvincialTerritorialBenefits: { hasChanged: false },
-        dentalBenefits: { hasChanged: false },
-      },
-    });
+    savePublicApplicationState({ params, session, state: { dentalBenefits: { hasChanged: false, value: undefined } } });
   }
+
   return data({ success: true }, { status: 200 });
 }
 
@@ -107,7 +101,7 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
 
   const sections = [
     { id: 'dental-insurance', completed: state.dentalInsurance !== undefined }, //
-    { id: 'dental-benefits', completed: state.hasFederalProvincialTerritorialBenefits !== undefined },
+    { id: 'dental-benefits', completed: state.dentalBenefits !== undefined },
   ] as const;
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
   const allSectionsCompleted = completedSections.length === sections.length;
@@ -150,37 +144,36 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
             <CardAction>{completedSections.includes('dental-benefits') && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
-            {state.hasFederalProvincialTerritorialBenefits === undefined ? (
-              <p>{t('application-renew-adult:dental-insurance.dental-benefits-indicate-status')}</p>
-            ) : (
+            {state.dentalBenefits ? (
               <dl className="divide-y border-y">
                 <DescriptionListItem term={t('application-renew-adult:dental-insurance.access-to-government-benefits')}>
-                  {state.hasFederalProvincialTerritorialBenefits.hasChanged === false && <p>{t('application-renew-adult:dental-insurance.no-change')}</p>}
-                  {state.hasFederalProvincialTerritorialBenefits.hasChanged === true && state.hasFederalProvincialTerritorialBenefits.value === true && (
+                  {state.dentalBenefits.hasChanged ? (
                     <>
-                      <p>{t('application-renew-adult:dental-insurance.dental-insurance-yes')}</p>
-                      {state.dentalBenefits?.federalBenefit.access || state.dentalBenefits?.provTerrBenefit.access ? (
+                      {state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
                         <>
-                          <p>{t('application-renew-adult:dental-insurance.yes')}</p>
+                          <p>{t('application-renew-adult:dental-insurance.access-to-government-benefits-yes')}</p>
                           <ul className="ml-6 list-disc">
                             {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
                             {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
                           </ul>
                         </>
                       ) : (
-                        <p>{t('application-renew-adult:dental-insurance.no')}</p>
+                        <p>{t('application-renew-adult:dental-insurance.access-to-government-benefits-no')}</p>
                       )}
                     </>
+                  ) : (
+                    <p>{t('application-renew-adult:dental-insurance.no-change')}</p>
                   )}
-                  {state.hasFederalProvincialTerritorialBenefits.hasChanged === true && state.hasFederalProvincialTerritorialBenefits.value === false && <p>{t('application-renew-adult:dental-insurance.dental-insurance-no')}</p>}
                 </DescriptionListItem>
               </dl>
+            ) : (
+              <p>{t('application-renew-adult:dental-insurance.dental-benefits-indicate-status')}</p>
             )}
           </CardContent>
           <CardFooter className="flex-col items-start border-t bg-zinc-100">
-            {state.hasFederalProvincialTerritorialBenefits === undefined ? (
+            {state.dentalBenefits === undefined ? (
               <>
-                <ButtonLink id="edit-button-update-access" variant="link" className="p-0" routeId="public/application/$id/confirm-federal-provincial-territorial-benefits" params={params} startIcon={faPenToSquare} size="lg">
+                <ButtonLink id="edit-button-update-access" variant="link" className="p-0" routeId="public/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faPenToSquare} size="lg">
                   {t('application-renew-adult:dental-insurance.update-my-access')}
                 </ButtonLink>
                 <br />
@@ -189,7 +182,7 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
                 </Button>
               </>
             ) : (
-              <ButtonLink id="edit-button-government-benefits" variant="link" className="p-0" routeId="public/application/$id/confirm-federal-provincial-territorial-benefits" params={params} startIcon={faCirclePlus} size="lg">
+              <ButtonLink id="edit-button-government-benefits" variant="link" className="p-0" routeId="public/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faCirclePlus} size="lg">
                 {t('application-renew-adult:dental-insurance.edit-access-to-government-benefits')}
               </ButtonLink>
             )}

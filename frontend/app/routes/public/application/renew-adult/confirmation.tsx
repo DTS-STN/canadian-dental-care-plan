@@ -46,8 +46,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   // prettier-ignore
   if (state.applicantInformation === undefined ||
-    state.communicationPreferences?.hasChanged !== true ||
-    state.hasFederalProvincialTerritorialBenefits === undefined ||
+    state.communicationPreferences === undefined ||
+    state.dentalBenefits === undefined ||
     state.dentalInsurance === undefined ||
     state.phoneNumber?.hasChanged !== true ||
     state.mailingAddress === undefined ||
@@ -61,11 +61,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const env = appContainer.get(TYPES.ClientConfig);
   const surveyLink = locale === 'en' ? env.CDCP_SURVEY_LINK_EN : env.CDCP_SURVEY_LINK_FR;
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.value?.federalSocialProgram
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.value?.federalSocialProgram
     ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale)
     : undefined;
 
-  const selectedProvincialBenefits = state.dentalBenefits?.value?.provincialTerritorialSocialProgram
+  const selectedProvincialBenefits = state.dentalBenefits.value?.provincialTerritorialSocialProgram
     ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
     : undefined;
 
@@ -79,13 +79,17 @@ export async function loader({ context: { appContainer, session }, params, reque
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.phoneNumber.value.primary,
     altPhoneNumber: state.phoneNumber.value.alternate,
-    preferredLanguage: appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale),
+    preferredLanguage: state.communicationPreferences.value?.preferredLanguage ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
     contactInformationEmail: state.email,
-    communicationSunLifePreference: appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale),
-    communicationGOCPreference: appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale),
+    communicationSunLifePreference: state.communicationPreferences.value?.preferredMethod
+      ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale)
+      : undefined,
+    communicationGOCPreference: state.communicationPreferences.value?.preferredNotificationMethod
+      ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale)
+      : undefined,
     previouslyEnrolled: state.newOrExistingMember,
   };
 
@@ -321,9 +325,9 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-pref')}</h3>
           <dl className="divide-y border-y">
-            <DescriptionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage.name}</DescriptionListItem>
-            <DescriptionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.communicationSunLifePreference.name}</DescriptionListItem>
-            <DescriptionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.communicationGOCPreference.name}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage?.name}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.communicationSunLifePreference?.name}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.communicationGOCPreference?.name}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.email')}>{userInfo.contactInformationEmail}</DescriptionListItem>
           </dl>
         </section>
