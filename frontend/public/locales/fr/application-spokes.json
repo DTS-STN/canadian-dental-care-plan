@@ -202,6 +202,7 @@
     "page-title": "Renseignements personnels",
     "form-instructions-sin": "(fr) Enter your name exactly as shown on your Social Insurance Number (SIN) record or Canadian Dental Care Plan (CDCP) letters.",
     "form-instructions-info": "(fr) We'll use the information you provide to confirm your identity. Any information that does not match the information on your SIN or CDCP record may cause a delay in the processing of your application.",
+    "member-id": "Numéro d'identification du membre",
     "sin": "Numéro d'assurance sociale (NAS)",
     "last-name": "Nom de famille",
     "first-name": "Prénom",
@@ -211,9 +212,12 @@
     "back-btn": "Retour",
     "save-btn": "Enregistrer",
     "help-message": {
-      "sin": "Entrez un NAS de 9 chiffres"
+      "sin": "Entrez un NAS de 9 chiffres",
+      "member-id": "Vous trouverez votre numéro d'identification du member à 11 chiffres dans le coin supérieur droit de la lettre de Service Canada ou sur votre carte de membre du Régime canadien de soins dentaires."
     },
     "error-message": {
+      "member-id-required": "(FR) Enter 11 digit member ID",
+      "member-id-valid": "(FR) Member ID must be 11 digits",
       "first-name-required": "Entrez le prénom",
       "last-name-required": "Entrez le nom de famille",
       "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",

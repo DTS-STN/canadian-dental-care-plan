@@ -1,5 +1,6 @@
 import { data, redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -7,6 +8,7 @@ import { z } from 'zod';
 import type { Route } from './+types/personal-information';
 
 import { TYPES } from '~/.server/constants';
+import type { ClientApplicationDto } from '~/.server/domain/dtos/client-application.dto';
 import type { ApplicantInformationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getAgeCategoryFromDateString, getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
@@ -22,6 +24,7 @@ import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
+import { isValidClientNumberRenewal, renewalCodeInputPatternFormat } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -29,7 +32,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
-import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
+import { extractDigits, hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
@@ -44,7 +47,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:personal-information.page-title') }) };
-  return { defaultState: state.applicantInformation, meta };
+  return {
+    defaultState: state.applicantInformation,
+    isRenewFlow: state.typeOfApplication === 'renew',
+    meta,
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -58,11 +65,17 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const applicantInformationSchema = z
     .object({
+      memberId: z
+        .string()
+        .trim()
+        .min(1, t('application-spokes:personal-information.error-message.member-id-required'))
+        .refine(isValidClientNumberRenewal, t('application-spokes:personal-information.error-message.member-id-valid'))
+        .transform((code) => extractDigits(code))
+        .optional(),
       socialInsuranceNumber: z
         .string()
         .trim()
         .min(1, t('application-spokes:personal-information.error-message.sin-required'))
-
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
             ctx.addIssue({ code: 'custom', message: t('application-spokes:personal-information.error-message.sin-valid') });
@@ -111,6 +124,7 @@ export async function action({ context: { appContainer, session }, params, reque
     }) satisfies z.ZodType<ApplicantInformationState>;
 
   const parsedDataResult = applicantInformationSchema.safeParse({
+    memberId: formData.get('memberId')?.toString(),
     socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),
     firstName: String(formData.get('firstName') ?? ''),
     lastName: String(formData.get('lastName') ?? ''),
@@ -126,11 +140,34 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
 
+  // Fetch client application data using ClientApplicationService
+  let clientApplication: ClientApplicationDto | undefined;
+  if (state.typeOfApplication === 'renew') {
+    invariant(parsedDataResult.data.memberId, 'Member ID must be defined for renewal applications');
+
+    const clientApplicationOption = await appContainer.get(TYPES.ClientApplicationService).findClientApplicationByBasicInfo({
+      clientNumber: parsedDataResult.data.memberId,
+      firstName: parsedDataResult.data.firstName,
+      lastName: parsedDataResult.data.lastName,
+      dateOfBirth: parsedDataResult.data.dateOfBirth,
+      applicationYearId: state.applicationYear.applicationYearId,
+      userId: 'anonymous',
+    });
+
+    if (clientApplicationOption.isNone()) {
+      return { status: 'not-eligible' } as const;
+    }
+
+    clientApplication = clientApplicationOption.unwrap();
+  }
+
   savePublicApplicationState({
     params,
     session,
     state: {
+      clientApplication,
       applicantInformation: {
+        memberId: parsedDataResult.data.memberId,
         firstName: parsedDataResult.data.firstName,
         lastName: parsedDataResult.data.lastName,
         dateOfBirth: parsedDataResult.data.dateOfBirth,
@@ -156,7 +193,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplicationPersonalInformation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { currentLanguage } = useCurrentLanguage();
-  const { defaultState } = loaderData;
+  const { defaultState, isRenewFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -169,6 +206,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
   const { ErrorAlert } = useErrorAlert(fetcherStatus === 'not-eligible');
 
   const errorSummary = useErrorSummary(errors, {
+    memberId: 'member-id',
     firstName: 'first-name',
     lastName: 'last-name',
     ...(currentLanguage === 'fr'
@@ -193,11 +231,20 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
-            <Collapsible id="name-instructions" summary={t('application-spokes:personal-information.single-legal-name')}>
-              <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.name-instructions" />
-              </p>
-            </Collapsible>
+            {isRenewFlow && (
+              <InputPatternField
+                id="member-id"
+                name="memberId"
+                label={t('application-spokes:personal-information.member-id')}
+                inputMode="numeric"
+                format={renewalCodeInputPatternFormat}
+                helpMessagePrimary={t('application-spokes:personal-information.help-message.member-id')}
+                helpMessagePrimaryClassName="text-black"
+                defaultValue={defaultState?.memberId ?? ''}
+                errorMessage={errors?.memberId}
+                required
+              />
+            )}
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputSanitizeField
                 id="first-name"
@@ -224,6 +271,11 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
                 required
               />
             </div>
+            <Collapsible id="name-instructions" summary={t('application-spokes:personal-information.single-legal-name')}>
+              <p>
+                <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.name-instructions" />
+              </p>
+            </Collapsible>
             <DatePickerField
               id="date-of-birth"
               names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
