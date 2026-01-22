@@ -123,6 +123,16 @@ export const routes = [
             file: 'routes/public/application/renew-children/parent-or-guardian.tsx',
             paths: { en: '/:lang/application/:id/renew-children/parent-or-guardian', fr: '/:lang/demandes/:id/renouveler-enfants/parent-ou-tuteur' },
           },
+          {
+            id: 'public/application/$id/renew-children/submit',
+            file: 'routes/public/application/renew-children/submit.tsx',
+            paths: { en: '/:lang/application/:id/renew-children/submit', fr: '/:lang/demandes/:id/renouveler-enfants/submit' },
+          },
+          {
+            id: 'public/application/$id/renew-children/exit-application',
+            file: 'routes/public/application/renew-children/exit-application.tsx',
+            paths: { en: '/:lang/application/:id/renew-children/exit-application', fr: '/:lang/demandes/:id/renouveler-enfants/quitter-demande' },
+          },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },
