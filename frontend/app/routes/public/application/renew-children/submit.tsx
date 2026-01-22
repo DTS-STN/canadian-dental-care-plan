@@ -94,7 +94,7 @@ export async function action({ context: { appContainer, session }, request, para
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
   savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
 
-  return redirect(getPathById('public/application/$id/new-children/confirmation', params));
+  return redirect(getPathById('public/application/$id/renew-children/confirmation', params));
 }
 
 export default function RenewChildrenSubmit({ loaderData, params }: Route.ComponentProps) {

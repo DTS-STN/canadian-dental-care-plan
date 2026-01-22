@@ -51,7 +51,7 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(t('application-renew-child:exit-application.exit-link'));
 }
 
-export default function NewChildrenExitApplication({ loaderData, params }: Route.ComponentProps) {
+export default function RenewChildrenExitApplication({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const fetcher = useFetcher<typeof action>();
