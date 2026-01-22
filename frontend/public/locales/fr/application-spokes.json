@@ -44,7 +44,7 @@
       "type-of-application-required": "Sélectionnez à qui s'adresse cette demande"
     },
     "back-btn": "Retour",
-    "save-btn": "Enregistrer"
+    "save-btn": "Sauvegarder"
   },
   "application-delegate": {
     "page-title": "Présenter une demande au nom d'une autre personne à titre de représentant légal ou de mandataire",
@@ -209,7 +209,7 @@
     "single-legal-name": "Si vous utilisez un seul nom légal",
     "name-instructions": "(fr) If you have only one legal name, enter it in <strong>both</strong> the first and last name fields.",
     "back-btn": "Retour",
-    "save-btn": "Enregistrer",
+    "save-btn": "Sauvegarder",
     "help-message": {
       "sin": "Entrez un NAS de 9 chiffres",
       "member-id": "Vous trouverez votre numéro d'identification du member à 11 chiffres dans le coin supérieur droit de la lettre de Service Canada ou sur votre carte de membre du Régime canadien de soins dentaires."
@@ -286,7 +286,7 @@
       "living-independently-required": "Sélectionnez si vous vivez de manière indépendente de vos parents"
     },
     "back-btn": "Retour",
-    "save-btn": "Enregistrer"
+    "save-btn": "Sauvegarder"
   },
   "parent-or-guardian": {
     "page-title": "Un parent ou un tuteur légal doit faire la demande",
@@ -301,7 +301,7 @@
     "phone-number": "Numéro de téléphone",
     "phone-number-alt": "Autre numéro de téléphone (facultatif)",
     "back-btn": "Retour",
-    "save-btn": "Enregistrer",
+    "save-btn": "Sauvegarder",
     "dont-have-number": "(FR) I don't have a phone number",
     "need-phone-number": "(FR) You need a phone number to apply online. If you cannot be reached by phone, you can still apply for the Canadian Dental Care Plan:",
     "service-canada": "(FR) By phone: call Service Canada at <noWrap>1-833-537-4342</noWrap>",
@@ -321,23 +321,24 @@
       "header": "Adresse postale"
     },
     "home-address": {
-      "page-title": "Adresse du domicile",
-      "use-mailing-address": "Mon adresse postale est la même que mon adresse du domicile"
+      "page-title": "Adresse à domicile",
+      "use-mailing-address": "Utiliser cette adresse comme adresse à domicile"
     },
     "address-field": {
-      "address": "Adresse",
-      "address-note": "Inclure le numéro d'appartement (s'il y a lieu), le numéro municipal et le nom de la rue. Par exemple\u00a0: 123, rue Main, app. 4B",
+      "address": "Adresse municipale",
+      "address-help": "Indiquez le numéro civique et le nom de rue. Par exemple\u00a0: 123, rue Main.",
+      "apartment": "Appartement, chambre, unité, immeuble (facultatif)",
+      "apartment-help": "Entrez le numéro de votre appartement, de votre chambre ou de votre immeuble, s'il y a lieu. Par exemple\u00a0: chambre 4B.",
       "country": "Pays",
       "province": "Province, territoire, état ou région",
       "city": "Ville ou municipalité",
-      "postal-code": "Code postal",
-      "postal-code-optional": "Code postal (facultatif)",
+      "postal-code": "Code postal ou de zone",
+      "postal-code-optional": "Code postal ou de zone (facultatif)",
       "select-one": "Sélectionnez une option"
     },
     "back": "Retour",
     "continue": "Continuer",
-    "cancel-btn": "Annuler",
-    "save-btn": "Enregistrer"
+    "save-btn": "Sauvegarder"
   },
   "communication-preferences": {
     "page-title": "Préférences de communication",
@@ -350,7 +351,7 @@
     "preferred-notification-method-mail": "<span>{{name}}</span><br>Vous pouvez également consulter les renseignements figurant à votre dossier du Régime canadien de soins dentaires dans <mscaLinkAccount>MDSC</mscaLinkAccount>.",
     "back": "Retour",
     "continue": "Continuer",
-    "save": "Enregistrer",
+    "save": "Sauvegarder",
     "msca-link-account": "https://www.canada.ca/fr/emploi-developpement-social/services/mon-dossier.html",
     "error-message": {
       "preferred-language-required": "Sélectionnez la langue de communication préférée",
@@ -380,7 +381,7 @@
     "back": "Retour",
     "continue": "Continuer",
     "cancel-btn": "Annuler",
-    "save-btn": "Enregistrer",
+    "save-btn": "Sauvegarder",
     "error-message": {
       "verification-code-required": "Entrez le code de vérification de 5 chiffres",
       "verification-code-max-attempts": "Vous avez saisi un code de vérification incorrect plus de 5 fois. Vous devez demander un nouveau code à l'aide du lien «\u00a0Demander un nouveau code de vérification\u00a0» ci-dessous."

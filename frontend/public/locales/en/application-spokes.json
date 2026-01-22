@@ -322,21 +322,22 @@
     },
     "home-address": {
       "page-title": "Home address",
-      "use-mailing-address": "My mailing address is the same as my home address"
+      "use-mailing-address": "Use this address as my home address"
     },
     "address-field": {
-      "address": "Address",
-      "address-note": "Include apartment number (if applicable), street number, street name. For example: 123 Main St. Suite 4B",
+      "address": "Street address",
+      "address-help": "Include street number and street name. For example: 123 Main St.",
+      "apartment": "Apartment, Suite, Unit, Building (optional)",
+      "apartment-help": "Enter your apartment, suite, or building number, if you have one. For example: Suite 4B.",
       "country": "Country",
       "province": "Province, territory, state, or region",
       "city": "City or town",
-      "postal-code": "Postal code or ZIP code",
-      "postal-code-optional": "Postal code or ZIP code (optional)",
+      "postal-code": "Postal code or ZIP",
+      "postal-code-optional": "Postal code or ZIP (optional)",
       "select-one": "Select one"
     },
     "back": "Back",
     "continue": "Continue",
-    "cancel-btn": "Cancel",
     "save-btn": "Save"
   },
   "communication-preferences": {
