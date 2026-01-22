@@ -521,7 +521,7 @@
   "dental-insurance-exit-application": {
     "page-title": "We may ask you for additional information",
     "are-you-sure": "You may be asked to provide proof that you do not have access to other dental insurance. Check the box to show you understand what's needed.",
-    "click-back": "If you want to end the session and stop your application, click \"Close application.\" Any information entered will not be saved.",
+    "click-back": "If you want to end the session and stop your application, click \"Close application\". Any information entered will not be saved.",
     "back-btn": "Back",
     "exit-btn": "Close application",
     "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
