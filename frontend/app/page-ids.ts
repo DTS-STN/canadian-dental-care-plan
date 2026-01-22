@@ -164,6 +164,9 @@ export const pageIds = {
         confirmation: 'CDCP-RENW-RAD-0004',
         exitApplication: 'CDCP-RENW-RAD-0005',
       },
+      renewChild: {
+        parentOrGuardian: 'CDCP-RENW-CH-0001',
+      },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',
         fileYourTaxes: 'CDCP-APPL-SPK-0002',

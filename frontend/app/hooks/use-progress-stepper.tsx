@@ -4,7 +4,7 @@ export type StepStatus = 'completed' | 'active' | 'inactive';
 
 export type StepId = 'marital-status' | 'contact-information' | 'dental-insurance' | 'submit' | 'parent-or-guardian' | 'childrens-application';
 
-export type FlowId = 'new-adult' | 'new-children' | 'new-family' | 'renew-adult';
+export type FlowId = 'new-adult' | 'new-children' | 'new-family' | 'renew-adult' | 'renew-children';
 
 export interface StepInfo {
   id: StepId;
@@ -31,6 +31,9 @@ export function useProgressStepper(flowId: FlowId, currentStepId: StepId) {
     },
     'renew-adult': {
       steps: ['contact-information', 'dental-insurance', 'submit'],
+    },
+    'renew-children': {
+      steps: ['parent-or-guardian', 'childrens-application', 'submit'],
     },
   };
 

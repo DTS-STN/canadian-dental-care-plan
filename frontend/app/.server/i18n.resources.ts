@@ -2,6 +2,7 @@ import applicationNewAdultEn from '~/../public/locales/en/application-new-adult.
 import applicationNewChildEn from '~/../public/locales/en/application-new-child.json';
 import applicationNewFamilyEn from '~/../public/locales/en/application-new-family.json';
 import applicationRenewAdultEn from '~/../public/locales/en/application-renew-adult.json';
+import applicationRenewChildEn from '~/../public/locales/en/application-renew-child.json';
 import applicationSpokesEn from '~/../public/locales/en/application-spokes.json';
 import applicationEn from '~/../public/locales/en/application.json';
 import applyAdultChildEn from '~/../public/locales/en/apply-adult-child.json';
@@ -31,6 +32,7 @@ import applicationNewAdultFr from '~/../public/locales/fr/application-new-adult.
 import applicationNewChildFr from '~/../public/locales/fr/application-new-child.json';
 import applicationNewFamilyFr from '~/../public/locales/fr/application-new-family.json';
 import applicationRenewAdultFr from '~/../public/locales/fr/application-renew-adult.json';
+import applicationRenewChildFr from '~/../public/locales/fr/application-renew-child.json';
 import applicationSpokesFr from '~/../public/locales/fr/application-spokes.json';
 import applicationFr from '~/../public/locales/fr/application.json';
 import applyAdultChildFr from '~/../public/locales/fr/apply-adult-child.json';
@@ -66,6 +68,7 @@ const i18nResourcesEn = {
   'application-new-child': applicationNewChildEn,
   'application-new-family': applicationNewFamilyEn,
   'application-renew-adult': applicationRenewAdultEn,
+  'application-renew-child': applicationRenewChildEn,
   'apply-adult-child': applyAdultChildEn,
   'apply-adult': applyAdultEn,
   'protected-apply-adult': protectedApplyAdultEn,
@@ -97,6 +100,7 @@ const i18nResourcesFr = {
   'application-new-child': applicationNewChildFr,
   'application-new-family': applicationNewFamilyFr,
   'application-renew-adult': applicationRenewAdultFr,
+  'application-renew-child': applicationRenewChildFr,
   'application-spokes': applicationSpokesFr,
   'apply-adult-child': applyAdultChildFr,
   'apply-adult': applyAdultFr,

@@ -118,6 +118,11 @@ export const routes = [
             file: 'routes/public/application/renew-adult/exit-application.tsx',
             paths: { en: '/:lang/application/:id/renew-adult/exit-application', fr: '/:lang/demandes/:id/renew-adult/quitter-demande' },
           },
+          {
+            id: 'public/application/$id/renew-children/parent-or-guardian',
+            file: 'routes/public/application/renew-children/parent-or-guardian.tsx',
+            paths: { en: '/:lang/application/:id/renew-children/parent-or-guardian', fr: '/:lang/demandes/:id/renouveler-enfants/parent-ou-tuteur' },
+          },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },
