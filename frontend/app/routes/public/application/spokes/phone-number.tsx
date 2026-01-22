@@ -45,7 +45,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+  validateApplicationTypeAndFlow(state, params, ['renew-adult', 'new-adult', 'new-children', 'new-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 

@@ -31,7 +31,8 @@
     "communication-preferences-unchanged": "(FR) My communication preferences have not changed",
     "next-btn": "(FR) Access to dental insurance",
     "prev-btn": "(FR) Marital status",
-    "alt-phone-number": "Autre numéro de téléphone"
+    "alt-phone-number": "Autre numéro de téléphone",
+    "no-change": "(FR) No update."
   },
   "dental-insurance": {
     "page-title": "(FR) Your access to dental insurance",

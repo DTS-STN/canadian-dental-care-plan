@@ -59,7 +59,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+  validateApplicationTypeAndFlow(state, params, ['renew-adult', 'new-adult', 'new-children', 'new-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -123,7 +123,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const canProceedToDental = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
 
   if (canProceedToDental) {
-    savePublicApplicationState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
+    savePublicApplicationState({ params, session, state: { homeAddress: { value: homeAddress, hasChanged: true }, isHomeAddressSameAsMailingAddress: false } });
     return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
   }
 
@@ -176,7 +176,7 @@ export async function action({ context: { appContainer, session }, params, reque
     } as const satisfies AddressSuggestionResponse;
   }
 
-  savePublicApplicationState({ params, session, state: { homeAddress, isHomeAddressSameAsMailingAddress: false } });
+  savePublicApplicationState({ params, session, state: { homeAddress: { value: homeAddress, hasChanged: true }, isHomeAddressSameAsMailingAddress: false } });
 
   return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
 }
@@ -192,7 +192,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
 
   const fetcher = useEnhancedFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.homeAddress?.country ?? CANADA_COUNTRY_ID);
+  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.homeAddress?.value?.country ?? CANADA_COUNTRY_ID);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
   const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
 
@@ -254,7 +254,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 helpMessagePrimaryClassName="text-black"
                 maxLength={100}
                 autoComplete="address-line1"
-                defaultValue={defaultState.homeAddress?.address}
+                defaultValue={defaultState.homeAddress?.value?.address}
                 errorMessage={errors?.address}
                 required
               />
@@ -266,7 +266,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   label={t('application-spokes:address.address-field.city')}
                   maxLength={100}
                   autoComplete="address-level2"
-                  defaultValue={defaultState.homeAddress?.city}
+                  defaultValue={defaultState.homeAddress?.value?.city}
                   errorMessage={errors?.city}
                   required
                 />
@@ -277,7 +277,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   label={isPostalCodeRequired ? t('application-spokes:address.address-field.postal-code') : t('application-spokes:address.address-field.postal-code-optional')}
                   maxLength={100}
                   autoComplete="postal-code"
-                  defaultValue={defaultState.homeAddress?.postalCode ?? ''}
+                  defaultValue={defaultState.homeAddress?.value?.postalCode ?? ''}
                   errorMessage={errors?.postalZipCode}
                   required={isPostalCodeRequired}
                 />
@@ -288,7 +288,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   name="provinceStateId"
                   className="w-full sm:w-1/2"
                   label={t('application-spokes:address.address-field.province')}
-                  defaultValue={defaultState.homeAddress?.province}
+                  defaultValue={defaultState.homeAddress?.value?.province}
                   errorMessage={errors?.provinceStateId}
                   options={[dummyOption, ...homeRegions]}
                   required
@@ -300,7 +300,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 className="w-full sm:w-1/2"
                 label={t('application-spokes:address.address-field.country')}
                 autoComplete="country"
-                defaultValue={defaultState.homeAddress?.country ?? ''}
+                defaultValue={defaultState.homeAddress?.value?.country ?? ''}
                 errorMessage={errors?.countryId}
                 options={countries}
                 onChange={homeCountryChangeHandler}
