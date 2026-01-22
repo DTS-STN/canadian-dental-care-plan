@@ -34,7 +34,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const FORM_ACTION = {
   submit: 'submit',
-  cancel: 'cancel',
   useInvalidAddress: 'use-invalid-address',
   useSelectedAddress: 'use-selected-address',
 } as const;
