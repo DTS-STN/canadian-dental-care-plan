@@ -444,11 +444,11 @@
     },
     "parent-or-guardian": {
       "page-title": "Vous devez être le parent ou le tuteur légal",
-      "must-be": "Vous devez être un parent ou un tuteur légal.",
-      "unable-to-apply": "Vous devez être le parent ou le tuteur légal. Vous ne pouvez pas présenter de demande pour cet enfant. Vous devez être le parent ou le tuteur légal d'un enfant pour présenter une demande en son nom.",
+      "must-be": "Vous devez être le parent ou le tuteur légal",
+      "unable-to-apply": "Vous ne pouvez pas présenter de demande pour cet enfant. Vous devez être le parent ou le tuteur légal d'un enfant pour présenter une demande en son nom.",
       "back-btn": "Retour",
-      "return-btn": "Procédez à faire la demande vous-même",
-      "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+      "exit-btn": "Quitter la demande",
+      "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     },
     "cannot-apply-child": {
       "page-title": "Votre enfant doit présenter une demande",

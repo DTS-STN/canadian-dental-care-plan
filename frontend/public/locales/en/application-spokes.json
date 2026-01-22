@@ -447,8 +447,8 @@
       "must-be": "You must be a parent or legal guardian.",
       "unable-to-apply": "You are not able to apply for this child. You must be a parent or legal guardian to apply on behalf of a child.",
       "back-btn": "Back",
-      "return-btn": "Return to main page",
-      "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+      "exit-btn": "Exit application",
+      "exit-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     },
     "cannot-apply-child": {
       "page-title": "Your child must apply",
