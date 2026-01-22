@@ -9,7 +9,7 @@
     "back-btn": "Back",
     "save-btn": "Save",
     "sin": "Social Insurance Number (SIN)",
-    "sin-help": "Enter the 9-digit SIN.",
+    "sin-help": "Enter the 9-digit SIN",
     "year-of-birth": "Year of birth",
     "year-of-birth-help": "Enter their year of birth. For example, 1960.",
     "confirm-checkbox": "I confirm that my spouse or common-law partner has agreed to share their personal information.",
@@ -205,11 +205,11 @@
     "save-btn": "Save",
     "help-message": {
       "sin": "Enter the 9-digit SIN",
-      "member-id": "You can find your 11-digit Member ID in the upper right corner of the letter from Service Canada or on your Canada Dental Care Plan member card."
+      "member-id": "You can find your 11-digit Member ID in the upper right corner of the letter from Service Canada or on your Canadian Dental Care Plan member card."
     },
     "error-message": {
-      "member-id-required": "Enter 11 digit member ID",
-      "member-id-valid": "Member ID must be 11 digits",
+      "member-id-required": "Enter 11-digit member ID",
+      "member-id-valid": "Member ID must be 11-digit",
       "first-name-required": "Enter first name",
       "last-name-required": "Enter last name",
       "sin-required": "Enter 9-digit SIN, for example 123 456 789",
