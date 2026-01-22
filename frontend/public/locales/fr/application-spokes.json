@@ -26,12 +26,12 @@
   },
   "type-of-application": {
     "page-title": "Type de demande",
-    "form-instructions": "Pour qui présentez-vous la demande?",
+    "form-instructions": "Pour qui présentez-vous une demande?",
     "radio-options": {
       "personal": "Je présente une demande pour <strong>moi-même</strong>",
       "child": "Je présente une demande pour <strong>mon (mes) enfant(s)</strong>",
       "personal-and-child": "Je présente une demande pour <strong>moi-même et mon (mes) enfant(s)</strong>",
-      "delegate": "Je présente une demande <strong>au nom d'une autre personne à titre de représentant légal ou mandataire</strong>"
+      "delegate": "Je présente une demande au <strong>nom d'une autre personne à titre de représentant légal ou de mandataire</strong>"
     },
     "error-message": {
       "type-of-application-required": "Sélectionnez à qui s'adresse cette demande"
