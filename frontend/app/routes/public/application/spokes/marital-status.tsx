@@ -31,12 +31,6 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 
-const FORM_ACTION = {
-  continue: 'continue',
-  cancel: 'cancel',
-  save: 'save',
-} as const;
-
 function getRouteFromTypeAndFlow(typeAndFlow: string) {
   switch (typeAndFlow) {
     case 'new-children': {
@@ -84,11 +78,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
-
-  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
-  if (formAction === FORM_ACTION.cancel) {
-    return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
-  }
 
   // state validation schema
   const maritalStatusSchema = z.object({
@@ -238,15 +227,7 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
           )}
         </div>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton
-            id="save-button"
-            name="_action"
-            value={FORM_ACTION.continue}
-            variant="primary"
-            loading={isSubmitting}
-            endIcon={faChevronRight}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Marital status click"
-          >
+          <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Marital status click">
             {t('application-spokes:marital-status.save-btn')}
           </LoadingButton>
           <ButtonLink
