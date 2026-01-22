@@ -74,7 +74,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
   const isNewOrReturningMember = yearOfBirth !== undefined && yearOfBirth >= 2006;
 
   const sections = [
-    { id: 'type-application', completed: defaultState.typeOfApplication !== undefined },
+    { id: 'type-application', completed: defaultState.typeOfApplication !== undefined && defaultState.typeOfApplication !== 'delegate' },
     { id: 'personal-information', completed: defaultState.personalInformation !== undefined },
   ];
 
