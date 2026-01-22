@@ -204,7 +204,7 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
                 format={sinInputPatternFormat}
                 label={t('application-spokes:marital-status.sin')}
                 inputMode="numeric"
-                helpMessagePrimary={t('application-spokes:marital-status.help-message.sin')}
+                helpMessagePrimary={t('application-spokes:marital-status.sin-help')}
                 helpMessagePrimaryClassName="text-black"
                 defaultValue={defaultState.socialInsuranceNumber ?? ''}
                 errorMessage={errors?.socialInsuranceNumber}
@@ -217,6 +217,8 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
                 format="####"
                 defaultValue={defaultState.yearOfBirth ?? ''}
                 label={t('application-spokes:marital-status.year-of-birth')}
+                helpMessagePrimary={t('application-spokes:marital-status.year-of-birth-help')}
+                helpMessagePrimaryClassName="text-black"
                 errorMessage={errors?.yearOfBirth}
                 required
               />
