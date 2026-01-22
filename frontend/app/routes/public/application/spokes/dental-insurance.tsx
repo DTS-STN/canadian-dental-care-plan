@@ -66,7 +66,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
 
   const formData = await request.formData();
 
