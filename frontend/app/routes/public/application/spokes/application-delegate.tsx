@@ -45,7 +45,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearPublicApplicationState({ params, session });
 
-  return redirect(t('application-spokes:application-delegate.return-btn-link'));
+  return redirect(t('application-spokes:application-delegate.exit-btn-link'));
 }
 
 export default function ApplicationDelegate({ loaderData, params }: Route.ComponentProps) {
@@ -88,7 +88,7 @@ export default function ApplicationDelegate({ loaderData, params }: Route.Compon
           {t('application-spokes:application-delegate.back-btn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Applying on behalf of someone click">
-          {t('application-spokes:application-delegate.return-btn')}
+          {t('application-spokes:application-delegate.exit-btn')}
         </LoadingButton>
       </fetcher.Form>
     </div>
