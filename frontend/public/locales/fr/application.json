@@ -45,7 +45,7 @@
   },
   "tax-filing": {
     "page-title": "Déclaration de revenus",
-    "form-instructions": "(fr) Have you received your Notice of Assessment for your {{taxYear}} Canadian income tax return? If you have a spouse or common-law partner, have they received theirs too?",
+    "form-instructions": "Avez-vous reçu votre avis de cotisation pour votre déclaration de revenus canadienne de l'année {{taxYear}}? Si vous avez un époux ou une épouse ou un conjoint ou une conjointe de fait, a-t-il ou a-t-elle également reçu le sien?",
     "radio-options": {
       "yes": "Oui",
       "no": "Non"
