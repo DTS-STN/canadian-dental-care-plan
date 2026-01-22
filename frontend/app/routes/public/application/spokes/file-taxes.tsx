@@ -42,7 +42,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   clearPublicApplicationState({ params, session });
-  return redirect(t('application:file-your-taxes.return-btn-link'));
+  return redirect(t('application:file-your-taxes.exit-btn-link'));
 }
 
 export default function ApplicationFileYourTaxes({ loaderData, params }: Route.ComponentProps) {
@@ -86,7 +86,7 @@ export default function ApplicationFileYourTaxes({ loaderData, params }: Route.C
           {t('application:file-your-taxes.back-btn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - File your taxes click">
-          {t('application:file-your-taxes.return-btn')}
+          {t('application:file-your-taxes.exit-btn')}
         </LoadingButton>
       </fetcher.Form>
     </div>
