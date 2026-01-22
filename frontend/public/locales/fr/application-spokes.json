@@ -47,14 +47,14 @@
     "save-btn": "Enregistrer"
   },
   "application-delegate": {
-    "page-title": "Présenter une demande au nom d'une autre personne à titre de délégué ou de mandataire",
-    "contact-representative": "Vous devez parler à un représentant de Service Canada si vous présentez une demande au nom d'une autre personne à titre de délégué ou de mandataire. Veuillez communiquer avec Service Canada au <noWrap>1-833-537-4342</noWrap> ou vous rendre dans un <contactServiceCanada>bureau de Service Canada</contactServiceCanada> près de chez vous.",
+    "page-title": "Présenter une demande au nom d'une autre personne à titre de représentant légal ou de mandataire",
+    "contact-representative": "Vous devez parler à un représentant de Service Canada si vous présentez une demande au nom d'une autre personne à titre de représentant légal ou de mandataire. Veuillez communiquer avec Service Canada au 1-833-537-4342 ou vous rendre dans un <contactServiceCanada>bureau de Service Canada</contactServiceCanada> près de chez vous.",
     "prepare-to-apply": "<preparingToApply>Se préparer à présenter une demande au nom de quelqu'un</preparingToApply>",
     "contact-service-canada-href": "https://bureaux.service.canada.ca/fr",
     "preparing-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#aide",
     "back-btn": "Retour",
-    "return-btn": "Revenir à la page principale",
-    "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+    "exit-btn": "Quitter la demande",
+    "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html"
   },
   "terms-conditions": {
     "page-title": "Présentation d'une demande d'adhésion au Régime canadien de soins dentaires",
