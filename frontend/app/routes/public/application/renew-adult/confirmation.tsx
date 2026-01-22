@@ -6,8 +6,8 @@ import { z } from 'zod';
 import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
-import { loadPublicApplicationAdultState } from '~/.server/routes/helpers/public-application-adult-route-helpers';
 import { clearPublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { loadPublicRenewAdultState } from '~/.server/routes/helpers/public-renew-adult-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -38,7 +38,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const state = loadPublicApplicationAdultState({ params, request, session });
+  const state = loadPublicRenewAdultState({ params, request, session });
   validateApplicationTypeAndFlow(state, params, ['renew-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     state.communicationPreferences === undefined ||
     state.dentalBenefits === undefined ||
     state.dentalInsurance === undefined ||
-    state.phoneNumber?.hasChanged !== true ||
+    state.phoneNumber === undefined ||
     state.mailingAddress === undefined ||
     state.submitTerms === undefined ||
     state.hasFiledTaxes === undefined  ||
@@ -77,8 +77,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const userInfo = {
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
-    phoneNumber: state.phoneNumber.value.primary,
-    altPhoneNumber: state.phoneNumber.value.alternate,
+    phoneNumber: state.phoneNumber.value?.primary,
+    altPhoneNumber: state.phoneNumber.value?.alternate,
     preferredLanguage: state.communicationPreferences.value?.preferredLanguage ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
@@ -135,7 +135,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const state = loadPublicApplicationAdultState({ params, request, session });
+  const state = loadPublicRenewAdultState({ params, request, session });
   validateApplicationTypeAndFlow(state, params, ['renew-adult']);
 
   const formData = await request.formData();

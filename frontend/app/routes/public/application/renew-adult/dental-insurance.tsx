@@ -8,8 +8,8 @@ import { z } from 'zod';
 import type { Route } from './+types/dental-insurance';
 
 import { TYPES } from '~/.server/constants';
-import { loadPublicApplicationAdultState } from '~/.server/routes/helpers/public-application-adult-route-helpers';
 import { savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { loadPublicRenewAdultState } from '~/.server/routes/helpers/public-renew-adult-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -38,7 +38,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  const state = loadPublicApplicationAdultState({ params, request, session });
+  const state = loadPublicRenewAdultState({ params, request, session });
   validateApplicationTypeAndFlow(state, params, ['renew-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -75,7 +75,7 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const state = loadPublicApplicationAdultState({ params, request, session });
+  const state = loadPublicRenewAdultState({ params, request, session });
   validateApplicationTypeAndFlow(state, params, ['renew-adult']);
 
   const formData = await request.formData();
@@ -190,10 +190,10 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-adult/dental-insurance" params={params}>
+          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-adult/submit" params={params}>
             {t('application-renew-adult:dental-insurance.submit')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/renew-adult/dental-insurance" params={params}>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/renew-adult/contact-information" params={params}>
             {t('application-renew-adult:dental-insurance.contact-information')}
           </NavigationButtonLink>
         </div>
