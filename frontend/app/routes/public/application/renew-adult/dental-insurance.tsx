@@ -170,23 +170,26 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
               <p>{t('application-renew-adult:dental-insurance.dental-benefits-indicate-status')}</p>
             )}
           </CardContent>
-          <CardFooter className="flex-col items-start border-t bg-zinc-100">
-            {state.dentalBenefits === undefined ? (
-              <>
-                <ButtonLink id="edit-button-update-access" variant="link" className="p-0" routeId="public/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faPenToSquare} size="lg">
-                  {t('application-renew-adult:dental-insurance.update-my-access')}
-                </ButtonLink>
-                <br />
-                <Button id="edit-button-not-changed" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} variant="link" className="p-0" startIcon={faCircleCheck} size="lg">
-                  {t('application-renew-adult:dental-insurance.access-not-changed')}
-                </Button>
-              </>
-            ) : (
+          {state.dentalBenefits ? (
+            <CardFooter className="border-t bg-zinc-100">
               <ButtonLink id="edit-button-government-benefits" variant="link" className="p-0" routeId="public/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faCirclePlus} size="lg">
                 {t('application-renew-adult:dental-insurance.edit-access-to-government-benefits')}
               </ButtonLink>
-            )}
-          </CardFooter>
+            </CardFooter>
+          ) : (
+            <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+              <div className="w-full px-6">
+                <ButtonLink id="edit-button-update-access" variant="link" className="p-0 pb-5" routeId="public/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faPenToSquare} size="lg">
+                  {t('application-renew-adult:dental-insurance.update-my-access')}
+                </ButtonLink>
+              </div>
+              <div className="w-full px-6">
+                <Button id="edit-button-not-changed" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                  {t('application-renew-adult:dental-insurance.access-not-changed')}
+                </Button>
+              </div>
+            </CardFooter>
+          )}
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
