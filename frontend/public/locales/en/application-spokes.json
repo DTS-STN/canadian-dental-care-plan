@@ -148,13 +148,12 @@
   "dental-insurance": {
     "title": "Access to private dental insurance",
     "legend": "Do you have access to private dental insurance or coverage through any of the following:",
-    "option-yes": "<strong>Yes</strong>, I have access to dental insurance or coverage",
-    "option-no": "<strong>No</strong>, I do not have access to dental insurance or coverage",
+    "option-yes": "<strong>Yes</strong>, I have access to private dental insurance or coverage",
+    "option-no": "<strong>No</strong>, I do not have access to private dental insurance or coverage",
     "back-btn": "Back",
     "save-btn": "Save",
     "detail": {
       "additional-info": {
-        "title": "What does it mean to have access to private dental insurance or coverage?",
         "list": {
           "employer": "your employer's benefits",
           "pension": "your employer's pension plan",
@@ -179,7 +178,7 @@
       "confirmation": "I understand that I may be asked to provide proof that I do not have access to dental insurance or coverage."
     },
     "error-message": {
-      "dental-insurance-required": "Select whether you have access to dental insurance",
+      "dental-insurance-required": "Select whether you have access to private dental insurance",
       "dental-insurance-eligibility-confirmation-required": "Select whether you understand that if you have private dental insurance you are not eligible for the Canadian Dental Care Plan"
     }
   },

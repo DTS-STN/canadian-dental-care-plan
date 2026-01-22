@@ -146,41 +146,40 @@
     }
   },
   "dental-insurance": {
-    "title": "(FR) Access to private dental insurance",
-    "legend": "(FR) Do you have access to private dental insurance or coverage through any of the following:",
-    "option-yes": "(FR) <strong>Yes</strong>, I have access to dental insurance or coverage",
-    "option-no": "(FR) <strong>No</strong>, I do not have access to dental insurance or coverage",
+    "title": "Accès à une assurance dentaire privée",
+    "legend": "Avez-vous accès à une assurance ou à une couverture dentaire privée par l'un des moyens suivants\u00a0:",
+    "option-yes": "<strong>Oui</strong>, j'ai accès à une assurance ou à une couverture dentaire privée",
+    "option-no": "<strong>Non</strong>, je n'ai pas accès à une assurance ou à une couverture dentaire privée",
     "back-btn": "Retour",
     "save-btn": "Sauvegarder",
     "detail": {
       "additional-info": {
-        "title": "(FR) What does it mean to have access to private dental insurance or coverage?",
         "list": {
-          "employer": "(FR) your employer's benefits",
-          "pension": "(FR) your employer's pension plan",
-          "pension-plans": "(FR) a family member's plan",
-          "organization": "(FR) a professional or student organization",
-          "company": "(FR) coverage bought privately"
+          "employer": "régime d'avantages sociaux de votre employeur",
+          "pension": "régime de retraite de votre employeur",
+          "pension-plans": "régime d'un membre de la famille",
+          "organization": "organisation professionnelle ou étudiante",
+          "company": "couverture achetée individuellement"
         },
-        "eligible": "(FR) This also applies even if you choose not to enrol in, do not use, or have to pay a premium for private dental insurance or coverage.",
-        "access": "(FR) Having access to dental coverage through the Canadian Dental Care Plan or other federal, provincial or territorial government social programs is not considered as having access to private dental insurance."
+        "eligible": "Cela s'applique également si vous choisissez de ne pas souscrire à une assurance dentaire privée, si vous ne l'utilisez pas ou si vous devez payer une prime pour cette assurance.",
+        "access": "L'accès à une couverture dentaire dans le cadre du Régime canadien de soins dentaires ou d'autres programmes sociaux fédéraux, provinciaux ou territoriaux n'est pas considéré comme un accès à une assurance dentaire privée."
       }
     },
     "yes": {
-      "alert-title": "(FR) Private dental insurance confirmation",
-      "alert-body": "(FR) If you have access to private dental insurance or coverage, you are not eligible for the Canadian Dental Care Plan. If you are a current member and continue with the application, your benefits will end immediately.",
-      "confirmation": "(FR) I understand that I am not eligible for the Canadian Dental Care Plan if I have access to dental insurance or coverage."
+      "alert-title": "Confirmation de l'assurance dentaire privée",
+      "alert-body": "Si vous avez accès à une assurance dentaire privée, vous n'êtes pas admissible au Régime canadien de soins dentaires. Si vous êtes déjà membre et que vous poursuivez la demande, votre couverture prendra fin immédiatement.",
+      "confirmation": "Je comprends que je ne suis pas admissible au Régime canadien de soins dentaires si j'ai accès à une assurance ou à une couverture dentaire privée."
     },
     "no": {
-      "alert-title": "(FR) Dental insurance confirmation",
-      "alert-body": "(FR) We'll confirm your response using any <t4Href>T4 (box 45)</t4Href> or <t4aHref>T4A (box 015)</t4aHref> documents you may have. If the document shows you have access to employer or pension sponsored dental insurance or coverage, you may be asked to provide proof that you're not covered.",
-      "alert-t4-href": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/tax-slips/understand-your-tax-slips/t4-slips/t4-statement-remuneration-paid.html",
-      "alert-t4a-href": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/tax-slips/understand-your-tax-slips/t4-slips/t4a-slip.html",
-      "confirmation": "(FR) I understand that I may be asked to provide proof that I do not have access to dental insurance or coverage."
+      "alert-title": "Confirmation de l'assurance dentaire",
+      "alert-body": "Nous confirmerons votre réponse en examinant vos feuillets <t4Href>T4 (case 45)</t4Href> ou <t4aHref>T4A (case 015)</t4aHref>. Si le document indique que vous avez accès à une assurance ou à une couverture dentaire fournie par votre employeur ou votre régime de retraite, vous pourriez devoir fournir une preuve que vous n'êtes pas couvert(e).",
+      "alert-t4-href": "https://www.canada.ca/fr/agence-revenu/services/impot/particuliers/sujets/tout-votre-declaration-revenus/declaration-revenus/remplir-declaration-revenus/feuillets-renseignements/comprendre-vos-feuillets-renseignements-fiscaux/feuillets-t4/t4-etat-remuneration-payee.html",
+      "alert-t4a-href": "https://www.canada.ca/fr/agence-revenu/services/impot/particuliers/sujets/tout-votre-declaration-revenus/declaration-revenus/remplir-declaration-revenus/feuillets-renseignements/comprendre-vos-feuillets-renseignements-fiscaux/feuillets-t4/feuillet-t4a.html",
+      "confirmation": "Je comprends qu'on pourrait me demander de fournir la preuve que je n'ai pas accès à une assurance ou à une couverture dentaire."
     },
     "error-message": {
-      "dental-insurance-required": "(FR) Select whether you have access to dental insurance",
-      "dental-insurance-eligibility-confirmation-required": "(FR) Select whether you understand that if you have private dental insurance you are not eligible for the Canadian Dental Care Plan"
+      "dental-insurance-required": "Sélectionnez si vous avez accès à une assurance dentaire privée",
+      "dental-insurance-eligibility-confirmation-required": "Sélectionnez si vous comprenez que si vous avez une assurance dentaire privée, vous n'êtes pas admissible au Régime canadien de soins dentaires"
     }
   },
   "new-or-returning-member": {
@@ -513,8 +512,8 @@
         "body": "Si {{childName}} a accès à une assurance ou à une couverture dentaire privée, il ou elle n'est pas admissible au Régime canadien de soins dentaires. Si vous poursuivez la demande et que {{childName}} est un membre actuel, sa couverture prendra fin immédiatement."
       },
       "error-message": {
-        "dental-insurance-required": "Sélectionnez si vous avez accès à une assurance dentaire",
-        "dental-insurance-eligibility-confirmation-required": "Sélectionnez si vous comprenez que si vous avez une assurance dentaire privée, vous n'êtes pas admissible au Régime canadien de soins dentaires"
+        "dental-insurance-required": "Sélectionnez si l'enfant a accès à une assurance dentaire privée",
+        "dental-insurance-eligibility-confirmation-required": "Sélectionnez si l'enfant comprend qu'il a une assurance dentaire privée, qu'il n'est pas admissible au Régime canadien de soins dentaires"
       }
     }
   },
