@@ -31,6 +31,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatAddressLine } from '~/utils/string-utils';
 
 const FORM_ACTION = {
   submit: 'submit',
@@ -69,7 +70,14 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:address.mailing-address.page-title') }) };
 
   return {
-    defaultState: state,
+    defaultState: {
+      address: state.mailingAddress?.value?.address,
+      city: state.mailingAddress?.value?.city,
+      postalCode: state.mailingAddress?.value?.postalCode,
+      province: state.mailingAddress?.value?.province,
+      country: state.mailingAddress?.value?.country,
+      isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress,
+    },
     typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
     countryList,
     regionList,
@@ -97,29 +105,32 @@ export async function action({ context: { appContainer, session }, params, reque
   const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
 
   const mailingAddressValidator = appContainer.get(TYPES.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
-  const validatedResult = await mailingAddressValidator.validateMailingAddress({
-    address: String(formData.get('address')),
-    countryId: String(formData.get('countryId')),
-    provinceStateId: formData.get('provinceStateId') ? String(formData.get('provinceStateId')) : undefined,
-    city: String(formData.get('city')),
-    postalZipCode: formData.get('postalZipCode') ? String(formData.get('postalZipCode')) : undefined,
+  const parsedDataResult = await mailingAddressValidator.validateMailingAddress({
+    address: formData.get('address')?.toString(),
+    apartment: formData.get('apartment')?.toString(),
+    countryId: formData.get('countryId')?.toString(),
+    provinceStateId: formData.get('provinceStateId')?.toString(),
+    city: formData.get('city')?.toString(),
+    postalZipCode: formData.get('postalZipCode')?.toString(),
   });
 
-  if (!validatedResult.success) {
-    return data({ errors: validatedResult.errors }, { status: 400 });
+  if (!parsedDataResult.success) {
+    return data({ errors: parsedDataResult.errors }, { status: 400 });
   }
 
+  const formattedAddress = formatAddressLine({ address: parsedDataResult.data.address, apartment: parsedDataResult.data.apartment });
+
   const mailingAddress = {
-    address: validatedResult.data.address,
-    city: validatedResult.data.city,
-    country: validatedResult.data.countryId,
-    postalCode: validatedResult.data.postalZipCode,
-    province: validatedResult.data.provinceStateId,
+    address: formattedAddress,
+    city: parsedDataResult.data.city,
+    country: parsedDataResult.data.countryId,
+    postalCode: parsedDataResult.data.postalZipCode,
+    province: parsedDataResult.data.provinceStateId,
   };
 
   const homeAddress = isCopyMailingToHome ? { ...mailingAddress } : undefined;
 
-  const isNotCanada = validatedResult.data.countryId !== clientConfig.CANADA_COUNTRY_ID;
+  const isNotCanada = parsedDataResult.data.countryId !== clientConfig.CANADA_COUNTRY_ID;
   const isUseInvalidAddressAction = formAction === FORM_ACTION.useInvalidAddress;
   const isUseSelectedAddressAction = formAction === FORM_ACTION.useSelectedAddress;
   const canProceedToDental = isNotCanada || isUseInvalidAddressAction || isUseSelectedAddressAction;
@@ -142,21 +153,21 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   // Validate Canadian address
-  invariant(validatedResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
-  invariant(validatedResult.data.provinceStateId, 'Province state is required for Canadian addresses');
+  invariant(parsedDataResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
+  invariant(parsedDataResult.data.provinceStateId, 'Province state is required for Canadian addresses');
 
-  const country = await countryService.getLocalizedCountryById(validatedResult.data.countryId, locale);
-  const provinceTerritoryState = await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(validatedResult.data.provinceStateId, locale);
+  const country = await countryService.getLocalizedCountryById(parsedDataResult.data.countryId, locale);
+  const provinceTerritoryState = await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(parsedDataResult.data.provinceStateId, locale);
 
   // Build the address object using validated data, transforming unique identifiers
   const formattedMailingAddress: CanadianAddress = {
-    address: validatedResult.data.address,
-    city: validatedResult.data.city,
-    countryId: validatedResult.data.countryId,
+    address: formattedAddress,
+    city: parsedDataResult.data.city,
+    countryId: parsedDataResult.data.countryId,
     country: country.name,
-    postalZipCode: validatedResult.data.postalZipCode,
-    provinceStateId: validatedResult.data.provinceStateId,
-    provinceState: validatedResult.data.provinceStateId && provinceTerritoryState.abbr,
+    postalZipCode: parsedDataResult.data.postalZipCode,
+    provinceStateId: parsedDataResult.data.provinceStateId,
+    provinceState: parsedDataResult.data.provinceStateId && provinceTerritoryState.abbr,
   };
 
   const addressCorrectionResult = await addressValidationService.getAddressCorrectionResult({
@@ -218,7 +229,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
 
   const fetcher = useEnhancedFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.mailingAddress?.value?.country ?? CANADA_COUNTRY_ID);
+  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.country ?? CANADA_COUNTRY_ID);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
   const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState.isHomeAddressSameAsMailingAddress === true);
   const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
@@ -226,7 +237,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'mailing-address',
-    apartment: '',
+    apartment: 'mailing-apartment',
     city: 'mailing-city',
     postalZipCode: 'mailing-postal-code',
     provinceStateId: 'mailing-province',
@@ -271,7 +282,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
   return (
     <>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('application:required-label')}</p>
+        <p className="mb-4 italic">{t('application:optional-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
@@ -283,12 +294,24 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 className="w-full"
                 label={t('application-spokes:address.address-field.address')}
                 maxLength={100}
-                helpMessagePrimary={t('application-spokes:address.address-field.address-note')}
+                helpMessagePrimary={t('application-spokes:address.address-field.address-help')}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line1"
-                defaultValue={defaultState.mailingAddress?.value?.address}
+                defaultValue={defaultState.address}
                 errorMessage={errors?.address}
                 required
+              />
+              <InputSanitizeField
+                id="mailing-apartment"
+                name="apartment"
+                className="w-full"
+                label={t('application-spokes:address.address-field.apartment')}
+                maxLength={100}
+                helpMessagePrimary={t('application-spokes:address.address-field.apartment-help')}
+                helpMessagePrimaryClassName="text-black"
+                autoComplete="address-line2"
+                defaultValue=""
+                errorMessage={errors?.apartment}
               />
               <div className="grid items-end gap-6 md:grid-cols-2">
                 <InputSanitizeField
@@ -298,7 +321,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                   label={t('application-spokes:address.address-field.city')}
                   maxLength={100}
                   autoComplete="address-level2"
-                  defaultValue={defaultState.mailingAddress?.value?.city}
+                  defaultValue={defaultState.city}
                   errorMessage={errors?.city}
                   required
                 />
@@ -309,7 +332,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                   label={isPostalCodeRequired ? t('application-spokes:address.address-field.postal-code') : t('application-spokes:address.address-field.postal-code-optional')}
                   maxLength={100}
                   autoComplete="postal-code"
-                  defaultValue={defaultState.mailingAddress?.value?.postalCode}
+                  defaultValue={defaultState.postalCode}
                   errorMessage={errors?.postalZipCode}
                   required={isPostalCodeRequired}
                 />
@@ -321,7 +344,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                   name="provinceStateId"
                   className="w-full sm:w-1/2"
                   label={t('application-spokes:address.address-field.province')}
-                  defaultValue={defaultState.mailingAddress?.value?.province}
+                  defaultValue={defaultState.province}
                   errorMessage={errors?.provinceStateId}
                   options={[dummyOption, ...mailingRegions]}
                   required
@@ -333,7 +356,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 className="w-full sm:w-1/2"
                 label={t('application-spokes:address.address-field.country')}
                 autoComplete="country"
-                defaultValue={defaultState.mailingAddress?.value?.country}
+                defaultValue={defaultState.country}
                 errorMessage={errors?.countryId}
                 options={countries}
                 onChange={mailingCountryChangeHandler}

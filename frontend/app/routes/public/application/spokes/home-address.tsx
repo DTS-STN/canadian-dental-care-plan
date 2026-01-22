@@ -31,6 +31,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatAddressLine } from '~/utils/string-utils';
 
 const FORM_ACTION = {
   submit: 'submit',
@@ -70,7 +71,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:address.home-address.page-title') }) };
 
   return {
-    defaultState: state,
+    defaultState: {
+      address: state.homeAddress?.value?.address,
+      city: state.homeAddress?.value?.city,
+      postalCode: state.homeAddress?.value?.postalCode,
+      province: state.homeAddress?.value?.province,
+      country: state.homeAddress?.value?.country,
+    },
     countryList,
     regionList,
     meta,
@@ -98,19 +105,22 @@ export async function action({ context: { appContainer, session }, params, reque
   const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
 
   const parsedDataResult = await homeAddressValidator.validateHomeAddress({
-    address: String(formData.get('address')),
-    countryId: String(formData.get('countryId')),
-    provinceStateId: formData.get('provinceStateId') ? String(formData.get('provinceStateId')) : undefined,
-    city: String(formData.get('city')),
-    postalZipCode: formData.get('postalZipCode') ? String(formData.get('postalZipCode')) : undefined,
+    address: formData.get('address')?.toString(),
+    apartment: formData.get('apartment')?.toString(),
+    countryId: formData.get('countryId')?.toString(),
+    provinceStateId: formData.get('provinceStateId')?.toString(),
+    city: formData.get('city')?.toString(),
+    postalZipCode: formData.get('postalZipCode')?.toString(),
   });
 
   if (!parsedDataResult.success) {
     return data({ errors: parsedDataResult.errors }, { status: 400 });
   }
 
+  const formattedAddress = formatAddressLine({ address: parsedDataResult.data.address, apartment: parsedDataResult.data.apartment });
+
   const homeAddress = {
-    address: parsedDataResult.data.address,
+    address: formattedAddress,
     city: parsedDataResult.data.city,
     country: parsedDataResult.data.countryId,
     postalCode: parsedDataResult.data.postalZipCode,
@@ -135,7 +145,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   // Build the address object using validated data, transforming unique identifiers
   const formattedHomeAddress: CanadianAddress = {
-    address: parsedDataResult.data.address,
+    address: formattedAddress,
     city: parsedDataResult.data.city,
     countryId: parsedDataResult.data.countryId,
     country: country.name,
@@ -192,14 +202,14 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
 
   const fetcher = useEnhancedFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.homeAddress?.value?.country ?? CANADA_COUNTRY_ID);
+  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.country ?? CANADA_COUNTRY_ID);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
   const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
 
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummary = useErrorSummary(errors, {
     address: 'home-address',
-    apartment: '',
+    apartment: 'home-apartment',
     city: 'home-city',
     postalZipCode: 'home-postal-code',
     provinceStateId: 'home-province',
@@ -239,7 +249,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
         <Progress value={55} size="lg" label={t('application:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('application:required-label')}</p>
+        <p className="mb-4 italic">{t('application:optional-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
@@ -250,13 +260,25 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 name="address"
                 className="w-full"
                 label={t('application-spokes:address.address-field.address')}
-                helpMessagePrimary={t('application-spokes:address.address-field.address-note')}
+                helpMessagePrimary={t('application-spokes:address.address-field.address-help')}
                 helpMessagePrimaryClassName="text-black"
                 maxLength={100}
                 autoComplete="address-line1"
-                defaultValue={defaultState.homeAddress?.value?.address}
+                defaultValue={defaultState.address}
                 errorMessage={errors?.address}
                 required
+              />
+              <InputSanitizeField
+                id="home-apartment"
+                name="apartment"
+                className="w-full"
+                label={t('application-spokes:address.address-field.apartment')}
+                maxLength={100}
+                helpMessagePrimary={t('application-spokes:address.address-field.apartment-help')}
+                helpMessagePrimaryClassName="text-black"
+                autoComplete="address-line2"
+                defaultValue=""
+                errorMessage={errors?.apartment}
               />
               <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
                 <InputSanitizeField
@@ -266,7 +288,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   label={t('application-spokes:address.address-field.city')}
                   maxLength={100}
                   autoComplete="address-level2"
-                  defaultValue={defaultState.homeAddress?.value?.city}
+                  defaultValue={defaultState.city}
                   errorMessage={errors?.city}
                   required
                 />
@@ -277,7 +299,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   label={isPostalCodeRequired ? t('application-spokes:address.address-field.postal-code') : t('application-spokes:address.address-field.postal-code-optional')}
                   maxLength={100}
                   autoComplete="postal-code"
-                  defaultValue={defaultState.homeAddress?.value?.postalCode ?? ''}
+                  defaultValue={defaultState.postalCode ?? ''}
                   errorMessage={errors?.postalZipCode}
                   required={isPostalCodeRequired}
                 />
@@ -288,7 +310,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   name="provinceStateId"
                   className="w-full sm:w-1/2"
                   label={t('application-spokes:address.address-field.province')}
-                  defaultValue={defaultState.homeAddress?.value?.province}
+                  defaultValue={defaultState.province}
                   errorMessage={errors?.provinceStateId}
                   options={[dummyOption, ...homeRegions]}
                   required
@@ -300,7 +322,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 className="w-full sm:w-1/2"
                 label={t('application-spokes:address.address-field.country')}
                 autoComplete="country"
-                defaultValue={defaultState.homeAddress?.value?.country ?? ''}
+                defaultValue={defaultState.country ?? ''}
                 errorMessage={errors?.countryId}
                 options={countries}
                 onChange={homeCountryChangeHandler}
