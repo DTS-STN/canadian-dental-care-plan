@@ -47,7 +47,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   clearPublicApplicationState({ params, session });
-  return redirect(t('application-spokes:children.parent-or-guardian.return-btn-link'));
+  return redirect(t('application-spokes:children.parent-or-guardian.exit-btn-link'));
 }
 
 export default function ParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
@@ -82,7 +82,7 @@ export default function ParentOrGuardian({ loaderData, params }: Route.Component
           {t('application-spokes:children.parent-or-guardian.back-btn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Child parent or guardian needs to apply click">
-          {t('application-spokes:children.parent-or-guardian.return-btn')}
+          {t('application-spokes:children.parent-or-guardian.exit-btn')}
         </LoadingButton>
       </fetcher.Form>
     </>
