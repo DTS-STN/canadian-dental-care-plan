@@ -26,12 +26,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-const FORM_ACTION = {
-  continue: 'continue',
-  cancel: 'cancel',
-  save: 'save',
-} as const;
-
 const HAS_FEDERAL_BENEFITS_OPTION = {
   no: 'no',
   yes: 'yes',
@@ -96,29 +90,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const childState = getSingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-
-  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
-  if (formAction === FORM_ACTION.cancel) {
-    if (state.hasFederalProvincialTerritorialBenefits) {
-      savePublicApplicationState({
-        params,
-        session,
-        state: {
-          children: state.children.map((child) => {
-            if (child.id !== childState.id) return child;
-            return {
-              ...child,
-              hasFederalProvincialTerritorialBenefits: {
-                hasChanged: true,
-                value: !!state.dentalBenefits?.value,
-              },
-            };
-          }),
-        },
-      });
-    }
-    return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/childrens-application`, params));
-  }
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
@@ -367,8 +338,6 @@ export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, par
           <LoadingButton
             variant="primary"
             id="save-button"
-            name="_action"
-            value={FORM_ACTION.continue}
             loading={isSubmitting}
             endIcon={faChevronRight}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Child access to other federal, provincial or territorial dental benefits click"

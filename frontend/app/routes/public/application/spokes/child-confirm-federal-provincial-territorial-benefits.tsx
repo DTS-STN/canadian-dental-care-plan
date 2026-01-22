@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   return {
-    defaultState: childState.hasFederalProvincialTerritorialBenefits?.value,
+    defaultState: childState.dentalBenefits?.hasChanged === true ? childState.dentalBenefits.value.hasFederalBenefits || childState.dentalBenefits.value.hasProvincialTerritorialBenefits : undefined,
     meta,
     childName,
     typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
@@ -97,6 +97,12 @@ export async function action({ context: { appContainer, session }, params, reque
     );
   }
 
+  // Redirect to the benefits details spoke if user answered "yes", skip updating state
+  if (parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits) {
+    return redirect(getPathById('public/application/$id/children/$childId/federal-provincial-territorial-benefits', params));
+  }
+
+  // Update state and set both benefits to false if user answered "no"
   savePublicApplicationState({
     params,
     session,
@@ -105,27 +111,17 @@ export async function action({ context: { appContainer, session }, params, reque
         if (child.id !== childState.id) return child;
         return {
           ...child,
-          hasFederalProvincialTerritorialBenefits: {
+          dentalBenefits: {
             hasChanged: true,
-            value: parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits,
+            value: {
+              hasFederalBenefits: false,
+              hasProvincialTerritorialBenefits: false,
+            },
           },
-          dentalBenefits:
-            parsedDentalBenefitsResult.data.hasFederalProvincialTerritorialBenefits && state.dentalBenefits?.hasChanged
-              ? {
-                  hasChanged: true,
-                  value: state.dentalBenefits.value,
-                }
-              : {
-                  hasChanged: false,
-                },
         };
       }),
     },
   });
-
-  if (dentalBenefits.hasFederalProvincialTerritorialBenefits === true) {
-    return redirect(getPathById('public/application/$id/children/$childId/federal-provincial-territorial-benefits', params));
-  }
 
   return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/childrens-application`, params));
 }

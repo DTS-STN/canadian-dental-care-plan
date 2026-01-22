@@ -37,7 +37,6 @@ export type PublicApplicationState = ReadonlyDeep<{
   };
   children: {
     id: string;
-    hasFederalProvincialTerritorialBenefits?: DeclaredChange<boolean>;
     dentalBenefits?: DeclaredChange<{
       hasFederalBenefits: boolean;
       federalSocialProgram?: string;
@@ -327,7 +326,7 @@ export function getAgeCategoryFromAge(age: number): AgeCategory {
 }
 
 export function isNewChildState(child: ChildState) {
-  return child.dentalInsurance === undefined || child.information === undefined || child.hasFederalProvincialTerritorialBenefits === undefined;
+  return child.dentalInsurance === undefined || child.information === undefined || child.dentalBenefits === undefined;
 }
 
 export function getChildrenState<TState extends Pick<PublicApplicationState, 'children'>>(state: TState, includesNewChildState: boolean = false) {

@@ -236,7 +236,7 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
     throw redirect(getPathById('public/application/$id/new-family/childrens-application', params));
   }
 
-  return children.map(({ id, dentalBenefits, dentalInsurance, information, hasFederalProvincialTerritorialBenefits }) => {
+  return children.map(({ id, dentalBenefits, dentalInsurance, information }) => {
     if (information === undefined) {
       throw redirect(getPathById('public/application/$id/new-family/childrens-application', params));
     }
@@ -255,11 +255,7 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       throw redirect(getPathById('public/application/$id/new-family/childrens-application', params));
     }
 
-    if (hasFederalProvincialTerritorialBenefits === undefined) {
-      throw redirect(getPathById('public/application/$id/new-family/childrens-application', params));
-    }
-
-    if (dentalBenefits === undefined && hasFederalProvincialTerritorialBenefits.value === true) {
+    if (dentalBenefits === undefined) {
       throw redirect(getPathById('public/application/$id/new-family/childrens-application', params));
     }
 
@@ -269,7 +265,6 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       dentalBenefits,
       dentalInsurance,
       information,
-      hasFederalProvincialTerritorialBenefits,
     };
   });
 }

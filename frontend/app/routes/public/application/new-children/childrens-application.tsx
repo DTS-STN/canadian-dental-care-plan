@@ -55,30 +55,29 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const children = await Promise.all(
     state.children.map(async (child) => {
-      const federalGovernmentInsurancePlanProgram =
-        child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.value?.federalSocialProgram
-          ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.value.federalSocialProgram, locale)
-          : undefined;
+      const federalGovernmentInsurancePlanProgram = child.dentalBenefits?.value?.federalSocialProgram
+        ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.value.federalSocialProgram, locale)
+        : undefined;
 
-      const provincialTerritorialSocialProgram =
-        child.hasFederalProvincialTerritorialBenefits && child.dentalBenefits?.value?.provincialTerritorialSocialProgram
-          ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
-          : undefined;
-
-      const dentalBenefits = {
-        federalBenefit: {
-          access: child.dentalBenefits?.value?.hasFederalBenefits,
-          benefit: federalGovernmentInsurancePlanProgram?.name,
-        },
-        provTerrBenefit: {
-          access: child.dentalBenefits?.value?.hasProvincialTerritorialBenefits,
-          benefit: provincialTerritorialSocialProgram?.name,
-        },
-      };
+      const provincialTerritorialSocialProgram = child.dentalBenefits?.value?.provincialTerritorialSocialProgram
+        ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
+        : undefined;
 
       return {
         ...child,
-        dentalBenefits: child.dentalBenefits ? dentalBenefits : undefined,
+        dentalBenefits:
+          child.dentalBenefits?.hasChanged === true
+            ? {
+                federalBenefit: {
+                  access: child.dentalBenefits.value.hasFederalBenefits,
+                  benefit: federalGovernmentInsurancePlanProgram?.name,
+                },
+                provTerrBenefit: {
+                  access: child.dentalBenefits.value.hasProvincialTerritorialBenefits,
+                  benefit: provincialTerritorialSocialProgram?.name,
+                },
+              }
+            : undefined,
       };
     }),
   );
@@ -152,7 +151,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
     await fetcher.submit(formData, { method: 'POST' });
   }
 
-  const allChildrenCompleted = state.children.every((child) => child.information !== undefined && child.dentalInsurance !== undefined && child.hasFederalProvincialTerritorialBenefits !== undefined);
+  const allChildrenCompleted = state.children.every((child) => child.information !== undefined && child.dentalInsurance !== undefined && child.dentalBenefits !== undefined);
 
   return (
     <div className="max-w-prose space-y-8">
@@ -164,7 +163,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
         const sections = [
           { id: 'child-information', completed: child.information !== undefined },
           { id: 'child-dental-insurance', completed: child.dentalInsurance !== undefined },
-          { id: 'child-dental-benefits', completed: child.hasFederalProvincialTerritorialBenefits !== undefined },
+          { id: 'child-dental-benefits', completed: child.dentalBenefits !== undefined },
         ] as const;
         const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
 
@@ -239,25 +238,18 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                 <CardAction>{completedSections.includes('child-dental-benefits') && <StatusTag status="complete" />}</CardAction>
               </CardHeader>
               <CardContent>
-                {child.hasFederalProvincialTerritorialBenefits === undefined ? (
+                {child.dentalBenefits === undefined ? (
                   <p>{t('application-new-child:childrens-application.child-dental-benefits-indicate-status')}</p>
                 ) : (
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('application-new-child:childrens-application.dental-benefits-title')}>
-                      {child.hasFederalProvincialTerritorialBenefits.value === true ? (
+                      {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
                         <>
                           <p>{t('application-new-child:childrens-application.dental-benefits-yes')}</p>
-                          {child.dentalBenefits?.federalBenefit.access || child.dentalBenefits?.provTerrBenefit.access ? (
-                            <>
-                              <p>{t('application-new-child:childrens-application.yes')}</p>
-                              <ul className="ml-6 list-disc">
-                                {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
-                                {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
-                              </ul>
-                            </>
-                          ) : (
-                            <p>{t('application-new-child:childrens-application.no')}</p>
-                          )}
+                          <ul className="ml-6 list-disc">
+                            {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
+                            {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
+                          </ul>
                         </>
                       ) : (
                         <p>{t('application-new-child:childrens-application.dental-benefits-no')}</p>
@@ -268,9 +260,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
                 <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/children/$childId/confirm-federal-provincial-territorial-benefits" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
-                  {child.hasFederalProvincialTerritorialBenefits === undefined
-                    ? t('application-new-child:childrens-application.add-child-dental-benefits')
-                    : t('application-new-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })}
+                  {child.dentalBenefits === undefined ? t('application-new-child:childrens-application.add-child-dental-benefits') : t('application-new-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })}
                 </ButtonLink>
               </CardFooter>
             </Card>
