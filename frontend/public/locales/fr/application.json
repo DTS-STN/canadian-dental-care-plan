@@ -4,7 +4,7 @@
   },
   "required-label": "Remplissez tous les champs.",
   "optional-label": "Remplissez tous les champs, sauf s'ils sont indiqués facultatifs.",
-  "sections-completed_one": "{{number}} sur {{count}} section remplies.",
+  "sections-completed_one": "{{number}} sur {{count}} section remplie.",
   "sections-completed_other": "{{number}} sur {{count}} sections remplies.",
   "next": "(FR) Next",
   "previous": "(FR) Previous",
