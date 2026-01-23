@@ -400,6 +400,7 @@
       "sin-yes": "Oui",
       "sin-no": "Non",
       "sin": "Entrez le NAS à 9 chiffres de l'enfant",
+      "member-id": "Identifiant de membre de l'enfant",
       "parent-legend": "Êtes-vous le parent ou le tuteur légal de cet enfant?",
       "radio-options": {
         "yes": "Oui",
@@ -407,7 +408,12 @@
       },
       "back-btn": "Retour",
       "save-btn": "Sauvegarder",
+      "help-message": {
+        "member-id": "Vous trouverez le numéro d'identification de l'enfant dans le coin supérieur droit de la lettre de Service Canada ou sur sa carte de membre du Régime canadien de soins dentaires."
+      },
       "error-message": {
+        "member-id-required": "Entrez le numéro d'identification du membre à 11 chiffres",
+        "member-id-valid": "Le numéro d'identification du membre doit comporter 11 chiffres",
         "first-name-required": "Entrez le prénom de l'enfant",
         "last-name-required": "Entrez le nom de famille de l'enfant",
         "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",

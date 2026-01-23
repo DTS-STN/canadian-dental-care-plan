@@ -27,6 +27,7 @@ import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
+import { isValidClientNumberRenewal, renewalCodeInputPatternFormat } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -34,7 +35,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
-import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
+import { extractDigits, hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
 const YES_NO_OPTION = {
   yes: 'yes',
@@ -52,7 +53,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family']);
+  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family', 'renew-children', 'renew-family']);
   const childState = getSingleChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -65,12 +66,19 @@ export async function loader({ context: { appContainer, session }, params, reque
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('application-spokes:children.information.page-title', { childName: childNumber }) }),
   };
 
-  return { meta, defaultState: childState.information, childName, isNew: childState.isNew, typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}` };
+  return {
+    meta,
+    defaultState: childState.information,
+    childName,
+    isNew: childState.isNew,
+    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
+    isRenewFlow: state.typeOfApplication === 'renew',
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family']);
+  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family', 'renew-children', 'renew-family']);
 
   const formData = await request.formData();
 
@@ -84,6 +92,13 @@ export async function action({ context: { appContainer, session }, params, reque
   // state validation schema
   const childInformationSchema = z
     .object({
+      memberId: z
+        .string()
+        .trim()
+        .min(1, t('application-spokes:children.information.error-message.member-id-required'))
+        .refine(isValidClientNumberRenewal, t('application-spokes:children.information.error-message.member-id-valid'))
+        .transform((code) => extractDigits(code))
+        .optional(),
       firstName: z
         .string()
         .trim()
@@ -110,7 +125,6 @@ export async function action({ context: { appContainer, session }, params, reque
       dateOfBirth: z.string(),
       isParent: z.boolean({ error: t('application-spokes:children.information.error-message.is-parent') }),
     })
-
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
@@ -150,7 +164,6 @@ export async function action({ context: { appContainer, session }, params, reque
       hasSocialInsuranceNumber: z.boolean({ error: t('application-spokes:children.information.error-message.has-social-insurance-number') }),
       socialInsuranceNumber: z.string().trim().optional(),
     })
-
     .superRefine((val, ctx) => {
       if (val.hasSocialInsuranceNumber) {
         if (!val.socialInsuranceNumber) {
@@ -170,6 +183,7 @@ export async function action({ context: { appContainer, session }, params, reque
     }) satisfies z.ZodType<ChildSinState>;
 
   const parsedDataResult = childInformationSchema.safeParse({
+    memberId: formData.get('memberId')?.toString(),
     firstName: String(formData.get('firstName') ?? ''),
     lastName: String(formData.get('lastName') ?? ''),
     dateOfBirthYear: formData.get('dateOfBirthYear') ? Number(formData.get('dateOfBirthYear')) : undefined,
@@ -227,7 +241,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplyFlowChildInformation({ loaderData, params }: Route.ComponentProps) {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, childName, isNew, typeAndFlow } = loaderData;
+  const { defaultState, childName, isNew, typeAndFlow, isRenewFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -235,6 +249,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
+    memberId: 'member-id',
     firstName: 'first-name',
     lastName: 'last-name',
     ...(currentLanguage === 'fr'
@@ -289,9 +304,20 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
-            <Collapsible id="name-instructions" summary={t('application-spokes:children.information.single-legal-name')}>
-              <p>{t('application-spokes:children.information.name-instructions')}</p>
-            </Collapsible>
+            {isRenewFlow && (
+              <InputPatternField
+                id="member-id"
+                name="memberId"
+                label={t('application-spokes:children.information.member-id')}
+                inputMode="numeric"
+                format={renewalCodeInputPatternFormat}
+                helpMessagePrimary={t('application-spokes:children.information.help-message.member-id')}
+                helpMessagePrimaryClassName="text-black"
+                defaultValue={defaultState?.memberId ?? ''}
+                errorMessage={errors?.memberId}
+                required
+              />
+            )}
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputSanitizeField
                 id="first-name"
@@ -318,6 +344,9 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
                 required
               />
             </div>
+            <Collapsible id="name-instructions" summary={t('application-spokes:children.information.single-legal-name')}>
+              <p>{t('application-spokes:children.information.name-instructions')}</p>
+            </Collapsible>
             <DatePickerField
               id="date-of-birth"
               names={{

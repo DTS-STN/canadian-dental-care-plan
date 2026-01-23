@@ -400,6 +400,7 @@
       "sin-yes": "Yes",
       "sin-no": "No",
       "sin": "Enter the 9-digit SIN",
+      "member-id": "Child's member ID",
       "parent-legend": "Are you the parent or legal guardian of this child?",
       "radio-options": {
         "yes": "Yes",
@@ -407,7 +408,12 @@
       },
       "back-btn": "Back",
       "save-btn": "Save",
+      "help-message": {
+        "member-id": "You can find the child's member ID in the upper right corner of the letter from Service Canada or on the child's Canadian Dental Care Plan member card."
+      },
       "error-message": {
+        "member-id-required": "Enter 11-digit member ID",
+        "member-id-valid": "Member ID must be 11-digit",
         "first-name-required": "Enter child's first name",
         "last-name-required": "Enter child's last name",
         "sin-required": "Enter 9-digit SIN, for example 123 456 789",
