@@ -168,6 +168,7 @@ export const pageIds = {
         parentOrGuardian: 'CDCP-RENW-CH-0001',
         submit: 'CDCP-RENW-CH-0002',
         exitApplication: 'CDCP-RENW-CH-0003',
+        childApplication: 'CDCP-RENW-CH-0004',
       },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',
