@@ -12,6 +12,7 @@ import type {
   ChildBenefitRenewalDto,
   ChildChangeIndicators,
   DemographicSurveyDto,
+  DentalInsuranceDto,
   ItaBenefitRenewalDto,
   ItaChangeIndicators,
   ProtectedBenefitRenewalDto,
@@ -43,7 +44,7 @@ interface ToBenefitRenewalRequestEntityArgs {
   dateOfBirth: string;
   demographicSurvey?: DemographicSurveyDto;
   dentalBenefits: readonly string[];
-  dentalInsurance?: boolean;
+  dentalInsurance?: boolean | DentalInsuranceDto;
   livingIndependently?: boolean;
   partnerInformation?: RenewalPartnerInformationDto;
   typeOfApplication: RenewalTypeOfApplicationDto;
@@ -180,7 +181,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       BenefitApplication: {
         Applicant: {
           ApplicantDetail: {
-            PrivateDentalInsuranceIndicator: dentalInsurance,
+            PrivateDentalInsuranceIndicator: typeof dentalInsurance === 'boolean' ? dentalInsurance : (dentalInsurance?.hasDentalInsurance ?? false),
             LivingIndependentlyIndicator: livingIndependently,
             PrivacyStatementIndicator: true,
             TermsAndConditionsIndicator: true,
@@ -218,7 +219,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
           ],
           PersonMaritalStatus: {
             StatusCode: {
-              ReferenceDataID: MARITAL_STATUS_CODE_MAP[applicantInformation.maritalStatus],
+              ReferenceDataID: MARITAL_STATUS_CODE_MAP[applicantInformation.maritalStatus ?? 'single'],
             },
           },
           PersonName: [
@@ -476,7 +477,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       },
       ApplicantDetail: {
         AttestParentOrGuardianIndicator: true,
-        PrivateDentalInsuranceIndicator: child.dentalInsurance,
+        PrivateDentalInsuranceIndicator: typeof child.dentalInsurance === 'boolean' ? child.dentalInsurance : child.dentalInsurance.hasDentalInsurance,
         InsurancePlan: this.toInsurancePlan(child.dentalBenefits),
       },
       BenefitApplicationDetail: this.toBenefitApplicationDetail(child.demographicSurvey),
@@ -493,18 +494,18 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     }));
   }
 
-  private toPreferredMethodCommunicationCode(preferredMethod?: string) {
+  private toPreferredMethodCommunicationCode(preferredMethod: string) {
     const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_SUNLIFE_MAIL_ID } = this.serverConfig;
     if (preferredMethod === 'email') return COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID;
     if (preferredMethod === 'mail') return COMMUNICATION_METHOD_SUNLIFE_MAIL_ID;
-    throw new Error(`Unexpected preferredMethod [${preferredMethod}]`);
+    return preferredMethod;
   }
 
-  private toPreferredMethodCommunicationGCCode(preferredMethodGovernmentOfCanada?: string) {
+  private toPreferredMethodCommunicationGCCode(preferredMethodGovernmentOfCanada: string) {
     const { COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_SUNLIFE_MAIL_ID } = this.serverConfig;
     if (preferredMethodGovernmentOfCanada === 'msca') return COMMUNICATION_METHOD_GC_DIGITAL_ID;
     if (preferredMethodGovernmentOfCanada === 'mail') return COMMUNICATION_METHOD_SUNLIFE_MAIL_ID;
-    throw new Error(`Unexpected preferredMethodGovernmentOfCanada [${preferredMethodGovernmentOfCanada}]`);
+    return preferredMethodGovernmentOfCanada;
   }
 
   private toBenefitApplicationCategoryCode(typeOfApplication: RenewalTypeOfApplicationDto) {

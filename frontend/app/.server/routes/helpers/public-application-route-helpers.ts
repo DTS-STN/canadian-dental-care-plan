@@ -49,6 +49,7 @@ export type PublicApplicationState = ReadonlyDeep<{
       dentalInsuranceEligibilityConfirmation?: boolean;
     };
     information?: {
+      memberId?: string;
       firstName: string;
       lastName: string;
       dateOfBirth: string;
