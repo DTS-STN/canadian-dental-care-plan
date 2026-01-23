@@ -7,6 +7,9 @@ export interface DescriptionListItemProps extends PropsWithChildren {
   term: ReactNode;
 }
 
+/**
+ * @deprecated Please use <DefinitionListItem> wrapped with <DefinitionList> instead.
+ */
 export function DescriptionListItem({ className, children, term }: DescriptionListItemProps) {
   return (
     <div className={cn('py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6', className)}>
