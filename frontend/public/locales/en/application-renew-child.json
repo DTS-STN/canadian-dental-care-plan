@@ -33,5 +33,35 @@
     "childrens-application": "Your child(ren)'s application",
     "alt-phone-number": "Alternate phone number",
     "no-change": "No update."
+  },
+  "submit": {
+    "page-title": "Submit your application",
+    "page-heading": "Submit your application",
+    "overview": "Overview of applicants",
+    "you-are-submitting": "You are submitting an application for the following people:",
+    "review-your-application": "Review your application",
+    "please-review": "Please review your application to make sure all the information is correct.",
+    "review-application": "Review application",
+    "submit-your-application": "Submit your application",
+    "by-submitting": "By submitting the application, you're confirming that all information you've shared is correct. This information will be verified against your Social Insurance Number (SIN) and Canada Revenue Agency (CRA) records. If any information provided is incorrect, you could lose your coverage.",
+    "review-eligibility-criteria": "Please review the Canadian Dental Care Plan (CDCP) <eligibilityLink>eligibility criteria</eligibilityLink> and confirm that you meet all requirements. If you are found to be ineligible for the CDCP at any time during the benefit year, you may need to repay the full costs of dental care you received under the plan.",
+    "do-you-qualify.href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/qualify.html",
+    "info-is-correct": "I confirm that all the information provided in the application is correct, and understand that it will be verified against my tax information.",
+    "i-understand": "I understand the CDCP eligibility criteria, and I acknowledge that if I am found to be ineligible at any point during the benefit year, based on incorrect information I provided, I will need to repay the cost of any dental care received under the plan.",
+    "error-message": {
+      "acknowledge-info-required": "You must confirm that all information provided is correct to proceed",
+      "acknowledge-criteria-required": "You must confirm that you understand the eligibility criteria to proceed"
+    },
+    "dental-insurance": "Dental-insurance",
+    "submit": "Submit",
+    "exit-application": "Exit application"
+  },
+  "exit-application": {
+    "page-title": "Exiting the application",
+    "are-you-sure": "Are you sure you want to exit this application? If you click \"Exit\", the form will reset and the information will be lost.",
+    "click-back": "Click \"Back\" to return to the form.",
+    "back-btn": "Back",
+    "exit-btn": "Exit",
+    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   }
 }
