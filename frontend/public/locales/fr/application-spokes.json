@@ -192,9 +192,9 @@
   },
   "personal-information": {
     "page-title": "Renseignements personnels",
+    "member-id": "Numéro d'identification du membre",
     "form-instructions-sin": "Entrez votre nom exactement tel qu'il apparaît sur votre carte d'assurance sociale ou sur les lettres du Régime canadien de soins dentaires (RCSD).",
     "form-instructions-info": "Nous utiliserons les renseignements que vous avez fournis pour vérifier votre identité. Tout écart entre les renseignements et votre numéro d'assurance sociale ou l'information figurant à votre dossier du RCSD pourrait retarder le traitement de votre demande.",
-    "member-id": "Numéro d'identification du membre",
     "sin": "Numéro d'assurance sociale (NAS)",
     "last-name": "Nom de famille",
     "first-name": "Prénom",
