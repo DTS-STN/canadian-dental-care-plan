@@ -2,29 +2,29 @@ import type { ReadonlyDeep } from 'type-fest';
 
 export type AdultBenefitRenewalDto = BenefitRenewalDto &
   ReadonlyDeep<{
-    changeIndicators: AdultChangeIndicators;
+    changeIndicators?: AdultChangeIndicators;
   }>;
 
 export type AdultChangeIndicators = ReadonlyDeep<{
-  hasAddressChanged: boolean;
-  hasMaritalStatusChanged: boolean;
+  hasAddressChanged?: boolean;
+  hasMaritalStatusChanged?: boolean;
   hasPhoneChanged: boolean;
 }>;
 
 export type AdultChildBenefitRenewalDto = BenefitRenewalDto &
   ReadonlyDeep<{
-    changeIndicators: AdultChildChangeIndicators;
+    changeIndicators?: AdultChildChangeIndicators;
   }>;
 
 export type AdultChildChangeIndicators = ReadonlyDeep<{
-  hasAddressChanged: boolean;
-  hasMaritalStatusChanged: boolean;
+  hasAddressChanged?: boolean;
+  hasMaritalStatusChanged?: boolean;
   hasPhoneChanged: boolean;
 }>;
 
 export type ItaBenefitRenewalDto = BenefitRenewalDto &
   ReadonlyDeep<{
-    changeIndicators: ItaChangeIndicators;
+    changeIndicators?: ItaChangeIndicators;
   }>;
 
 export type ItaChangeIndicators = ReadonlyDeep<{
@@ -33,12 +33,12 @@ export type ItaChangeIndicators = ReadonlyDeep<{
 
 export type ChildBenefitRenewalDto = BenefitRenewalDto &
   ReadonlyDeep<{
-    changeIndicators: ChildChangeIndicators;
+    changeIndicators?: ChildChangeIndicators;
   }>;
 
 export type ChildChangeIndicators = ReadonlyDeep<{
-  hasAddressChanged: boolean;
-  hasMaritalStatusChanged: boolean;
+  hasAddressChanged?: boolean;
+  hasMaritalStatusChanged?: boolean;
   hasPhoneChanged: boolean;
 }>;
 
@@ -52,7 +52,7 @@ export type BenefitRenewalDto = ReadonlyDeep<{
   contactInformation: RenewalContactInformationDto;
   dateOfBirth: string;
   dentalBenefits: string[];
-  dentalInsurance?: boolean;
+  dentalInsurance?: boolean | DentalInsuranceDto; //TODO: remove boolean once online application has been removed in favour of hub/spoke;
   demographicSurvey?: DemographicSurveyDto;
   partnerInformation?: RenewalPartnerInformationDto;
   typeOfApplication: RenewalTypeOfApplicationDto;
@@ -66,7 +66,7 @@ export type RenewalApplicantInformationDto = ReadonlyDeep<{
   clientNumber: string;
   firstName: string;
   lastName: string;
-  maritalStatus: string;
+  maritalStatus?: string;
   socialInsuranceNumber: string;
 }>;
 
@@ -74,7 +74,7 @@ export type RenewalChildDto = ReadonlyDeep<{
   clientId: string;
   clientNumber: string;
   dentalBenefits: string[];
-  dentalInsurance: boolean;
+  dentalInsurance: boolean | DentalInsuranceDto; //TODO: remove boolean once online application has been removed in favour of hub/spoke;
   demographicSurvey?: DemographicSurveyDto;
   information: {
     firstName: string;
@@ -128,4 +128,9 @@ export type DemographicSurveyDto = ReadonlyDeep<{
   anotherEthnicGroup?: string;
   locationBornStatus?: string;
   genderStatus?: string;
+}>;
+
+type DentalInsuranceDto = ReadonlyDeep<{
+  hasDentalInsurance: boolean;
+  dentalInsuranceEligibilityConfirmation?: boolean;
 }>;
