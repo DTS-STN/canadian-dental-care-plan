@@ -310,7 +310,7 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-children/parent-or-guardian" params={params}>
+          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-children/childrens-application" params={params}>
             {t('application-renew-child:parent-or-guardian.childrens-application')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>

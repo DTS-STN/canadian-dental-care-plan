@@ -13,7 +13,7 @@ import type { Route } from './+types/childrens-application';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationChildState } from '~/.server/routes/helpers/public-application-child-route-helpers';
-import { savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -45,7 +45,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationChildState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-children']);
+  //validateApplicationTypeAndFlow(state, params, ['renew-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -93,7 +93,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicApplicationChildState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-children']);
+  //validateApplicationTypeAndFlow(state, params, ['renew-children']);
 
   const formData = await request.formData();
 
@@ -275,12 +275,12 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
-                <div className="w-full px-6">
-                  <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits" params={params} startIcon={faPenToSquare} size="lg">
+                <div className="w-full">
+                  <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/renew-children/childrens-application" params={params} startIcon={faPenToSquare} size="lg">
                     {t('application-renew-child:childrens-application.update-dental-benefits')}
                   </ButtonLink>
                 </div>
-                <div className="w-full px-6">
+                <div className="w-full">
                   <Button id="complete-button" variant="link" className="p-0 pt-5" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} startIcon={faCircleCheck} size="lg">
                     {t('application-renew-child:childrens-application.benefits-not-changed')}
                   </Button>
