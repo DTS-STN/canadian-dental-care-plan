@@ -33,7 +33,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-const FORM_ACTION = { add: 'add', remove: 'remove', DENTAL_BENEFITS_NOT_CHANGED: 'address-not-changed' } as const;
+const FORM_ACTION = { add: 'add', remove: 'remove', DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-renew-child', 'application', 'gcweb'),
@@ -276,7 +276,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
                 <div className="w-full">
-                  <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/renew-children/childrens-application" params={params} startIcon={faPenToSquare} size="lg">
+                  <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits" params={{ ...params, childId: child.id }} startIcon={faPenToSquare} size="lg">
                     {t('application-renew-child:childrens-application.update-dental-benefits')}
                   </ButtonLink>
                 </div>
