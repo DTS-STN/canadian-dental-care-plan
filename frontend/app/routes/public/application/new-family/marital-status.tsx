@@ -10,7 +10,6 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
-import { DescriptionListItem } from '~/components/description-list-item';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
@@ -78,15 +77,15 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
               </DefinitionListItem>
               {state.partnerInformation && (
                 <>
-                  <DescriptionListItem term={t('application-new-family:marital-status.spouse-sin')}>
+                  <DefinitionListItem term={t('application-new-family:marital-status.spouse-sin')}>
                     <p>{state.partnerInformation.socialInsuranceNumber}</p>
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('application-new-family:marital-status.spouse-yob')}>
+                  </DefinitionListItem>
+                  <DefinitionListItem term={t('application-new-family:marital-status.spouse-yob')}>
                     <p>{state.partnerInformation.yearOfBirth}</p>
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('application-new-family:marital-status.consent')}>
+                  </DefinitionListItem>
+                  <DefinitionListItem term={t('application-new-family:marital-status.consent')}>
                     {state.partnerInformation.confirm ? t('application-new-family:marital-status.consent-yes') : t('application-new-family:marital-status.consent-no')}
-                  </DescriptionListItem>
+                  </DefinitionListItem>
                 </>
               )}
             </DefinitionList>

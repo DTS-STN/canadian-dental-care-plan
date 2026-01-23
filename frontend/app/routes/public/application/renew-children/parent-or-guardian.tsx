@@ -13,7 +13,7 @@ import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { DescriptionListItem } from '~/components/description-list-item';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
@@ -164,11 +164,11 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
             {state.phoneNumber === undefined ? (
               <p>{t('application-renew-child:parent-or-guardian.phone-number-help')}</p>
             ) : (
-              <dl className="border-y">
-                <DescriptionListItem term={t('application-renew-child:parent-or-guardian.phone-number')}>
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('application-renew-child:parent-or-guardian.phone-number')}>
                   {state.phoneNumber.hasChanged === false ? <p>{t('application-renew-child:parent-or-guardian.no-change')}</p> : <p>{state.phoneNumber.value.primary}</p>}
-                </DescriptionListItem>
-              </dl>
+                </DefinitionListItem>
+              </DefinitionList>
             )}
           </CardContent>
           {state.phoneNumber ? (
@@ -206,8 +206,8 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
                 {mailingAddressInfo.hasChanged === false && homeAddressInfo.hasChanged === false ? (
                   <p>{t('application-renew-child:parent-or-guardian.no-change')}</p>
                 ) : (
-                  <dl className="divide-y border-y">
-                    <DescriptionListItem term={t('application-renew-child:parent-or-guardian.mailing-address')}>
+                  <DefinitionList layout="single-column">
+                    <DefinitionListItem term={t('application-renew-child:parent-or-guardian.mailing-address')}>
                       <Address
                         address={{
                           address: mailingAddressInfo.address ?? '',
@@ -217,8 +217,8 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
                           country: mailingAddressInfo.country ?? '',
                         }}
                       />
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('application-renew-child:parent-or-guardian.home-address')}>
+                    </DefinitionListItem>
+                    <DefinitionListItem term={t('application-renew-child:parent-or-guardian.home-address')}>
                       <Address
                         address={{
                           address: homeAddressInfo.address ?? '',
@@ -228,8 +228,8 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
                           country: homeAddressInfo.country ?? '',
                         }}
                       />
-                    </DescriptionListItem>
-                  </dl>
+                    </DefinitionListItem>
+                  </DefinitionList>
                 )}
               </>
             )}
@@ -269,24 +269,12 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
                 {state.communicationPreferences.hasChanged === false ? (
                   <p>{t('application-renew-child:parent-or-guardian.no-change')}</p>
                 ) : (
-                  <dl className="divide-y border-y">
-                    <DescriptionListItem term={t('application-renew-child:parent-or-guardian.preferred-language')}>
-                      <p>{t('application-renew-child:parent-or-guardian.preferred-language')}</p>
-                      {state.communicationPreferences.value.preferredLanguage}
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('application-renew-child:parent-or-guardian.preferred-method')}>
-                      <p>{t('application-renew-child:parent-or-guardian.preferred-method')}</p>
-                      {state.communicationPreferences.value.preferredMethod}
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('application-renew-child:parent-or-guardian.preferred-notification-method')}>
-                      <p>{t('application-renew-child:parent-or-guardian.preferred-notification-method')}</p>
-                      {state.communicationPreferences.value.preferredNotificationMethod}
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('application-renew-child:parent-or-guardian.email')}>
-                      <p>{t('application-renew-child:parent-or-guardian.email')}</p>
-                      {state.email}
-                    </DescriptionListItem>
-                  </dl>
+                  <DefinitionList layout="single-column">
+                    <DefinitionListItem term={t('application-renew-child:parent-or-guardian.preferred-language')}>{state.communicationPreferences.value.preferredLanguage}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-renew-child:parent-or-guardian.preferred-method')}>{state.communicationPreferences.value.preferredMethod}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-renew-child:parent-or-guardian.preferred-notification-method')}>{state.communicationPreferences.value.preferredNotificationMethod}</DefinitionListItem>
+                    {state.email && <DefinitionListItem term={t('application-renew-child:parent-or-guardian.email')}>{state.email}</DefinitionListItem>}
+                  </DefinitionList>
                 )}
               </>
             )}
