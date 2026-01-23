@@ -14,7 +14,6 @@ import type {
   DeclaredChangeMailingAddressState,
   DeclaredChangePhoneNumberState,
   DentalInsuranceState,
-  NewOrExistingMemberState,
   PartnerInformationState,
   TermsAndConditionsState,
   TypeOfApplicationFlowState,
@@ -33,7 +32,6 @@ export interface ApplicationAdultState {
   livingIndependently?: boolean;
   mailingAddress?: DeclaredChangeMailingAddressState;
   maritalStatus?: string;
-  newOrExistingMember?: NewOrExistingMemberState;
   partnerInformation?: PartnerInformationState;
   phoneNumber: DeclaredChangePhoneNumberState;
   termsAndConditions: TermsAndConditionsState;
@@ -53,7 +51,6 @@ export interface ApplicationFamilyState {
   livingIndependently?: boolean;
   mailingAddress?: DeclaredChangeMailingAddressState;
   maritalStatus?: string;
-  newOrExistingMember?: NewOrExistingMemberState;
   partnerInformation?: PartnerInformationState;
   phoneNumber: DeclaredChangePhoneNumberState;
   termsAndConditions: TermsAndConditionsState;
@@ -71,7 +68,6 @@ export interface ApplicationChildrenState {
   livingIndependently?: boolean;
   mailingAddress?: DeclaredChangeMailingAddressState;
   maritalStatus?: string;
-  newOrExistingMember?: NewOrExistingMemberState;
   partnerInformation?: PartnerInformationState;
   phoneNumber: DeclaredChangePhoneNumberState;
   termsAndConditions: TermsAndConditionsState;
@@ -91,7 +87,6 @@ interface ToBenefitApplicationDtoArgs {
   isHomeAddressSameAsMailingAddress?: boolean;
   mailingAddress?: DeclaredChangeMailingAddressState;
   maritalStatus?: string;
-  newOrExistingMember?: NewOrExistingMemberState;
   partnerInformation?: PartnerInformationState;
   phoneNumber: DeclaredChangePhoneNumberState;
   termsAndConditions: TermsAndConditionsState;
@@ -102,7 +97,6 @@ interface ToBenefitApplicationDtoArgs {
 interface ToApplicantInformationArgs {
   applicantInformation: ApplicantInformationState;
   maritalStatus?: string;
-  newOrExistingMember?: NewOrExistingMemberState;
 }
 
 interface ToHomeAddressArgs {
@@ -180,7 +174,6 @@ export class DefaultHubSpokeBenefitApplicationStateMapper implements HubSpokeBen
     isHomeAddressSameAsMailingAddress,
     livingIndependently,
     mailingAddress,
-    newOrExistingMember,
     partnerInformation,
     phoneNumber,
     termsAndConditions,
@@ -190,7 +183,6 @@ export class DefaultHubSpokeBenefitApplicationStateMapper implements HubSpokeBen
       applicantInformation: this.toApplicantInformation({
         applicantInformation,
         maritalStatus,
-        newOrExistingMember,
       }),
       applicationYearId: applicationYear.applicationYearId,
       children: this.toChildren(children),
@@ -208,12 +200,11 @@ export class DefaultHubSpokeBenefitApplicationStateMapper implements HubSpokeBen
     };
   }
 
-  private toApplicantInformation({ applicantInformation, maritalStatus, newOrExistingMember }: ToApplicantInformationArgs): ApplicantInformationDto {
+  private toApplicantInformation({ applicantInformation, maritalStatus }: ToApplicantInformationArgs): ApplicantInformationDto {
     invariant(maritalStatus, 'Expected maritalStatus to be defined');
     return {
       ...applicantInformation,
       maritalStatus,
-      clientNumber: newOrExistingMember?.memberId,
     };
   }
 

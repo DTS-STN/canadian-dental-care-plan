@@ -175,21 +175,6 @@
       "dental-insurance-eligibility-confirmation-required": "Sélectionnez si vous comprenez que si vous avez une assurance dentaire privée, vous n'êtes pas admissible au Régime canadien de soins dentaires"
     }
   },
-  "new-or-returning-member": {
-    "page-title": "(fr) New or returning member",
-    "previously-enrolled": "(fr) Are you currently, or have you ever been enrolled in the Canadian Dental Care Plan?",
-    "yes": "Oui",
-    "no": "Non",
-    "member-id": "(fr) Canadian Dental Care Plan Member ID",
-    "member-id-description": "(fr) You can find your 11-digit Member ID in the upper right corner of the letter from Service Canada or on your Canadian Dental Care Plan member card.",
-    "save-btn": "(fr) Save",
-    "back-btn": "(fr) Back",
-    "error-message": {
-      "is-new-or-existing-member-required": "(fr) Select whether you have ever been enrolled in the Canadian Dental Care Plan",
-      "member-id-required": "(fr) Enter 11-digit Member ID",
-      "member-id-valid": "(fr) Member ID must be 11 digits"
-    }
-  },
   "personal-information": {
     "page-title": "Renseignements personnels",
     "member-id": "Numéro d'identification du membre",

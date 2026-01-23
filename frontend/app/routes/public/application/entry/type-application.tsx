@@ -39,7 +39,6 @@ export async function loader({ context: { appContainer, session }, request, para
     defaultState: {
       typeOfApplication: state.typeOfApplicationFlow,
       personalInformation: state.applicantInformation,
-      newOrReturningMember: state.newOrExistingMember,
     },
     nextRouteId,
     meta,
@@ -69,18 +68,10 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
 
   const formattedDate = defaultState.personalInformation ? format(parseISO(defaultState.personalInformation.dateOfBirth), 'MMMM d, yyyy') : undefined;
 
-  const yearOfBirth = defaultState.personalInformation ? parseISO(defaultState.personalInformation.dateOfBirth).getFullYear() : undefined;
-
-  const isNewOrReturningMember = yearOfBirth !== undefined && yearOfBirth >= 2006;
-
   const sections = [
     { id: 'type-application', completed: defaultState.typeOfApplication !== undefined && defaultState.typeOfApplication !== 'delegate' },
     { id: 'personal-information', completed: defaultState.personalInformation !== undefined },
   ];
-
-  if (isNewOrReturningMember) {
-    sections.push({ id: 'new-or-returning-member', completed: defaultState.newOrReturningMember !== undefined });
-  }
 
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
   const allSectionsCompleted = completedSections.length === sections.length;
@@ -147,22 +138,6 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           </ButtonLink>
         </CardFooter>
       </Card>
-
-      {isNewOrReturningMember && (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('application:type-of-application.new-or-returning-heading')}</CardTitle>
-            <CardAction>{completedSections.includes('new-or-returning-member') && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          {/* TODO: Need to confirm the value to be displayed for new or returning member*/}
-          <CardContent>{defaultState.newOrReturningMember === undefined ? <p>{t('application:type-of-application.new-or-returning-description')}</p> : <p>{defaultState.newOrReturningMember.isNewOrExistingMember}</p>}</CardContent>
-          <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus} size="lg">
-              {defaultState.newOrReturningMember === undefined ? t('application:type-of-application.add-answer') : t('application:type-of-application.edit-answer')}
-            </ButtonLink>
-          </CardFooter>
-        </Card>
-      )}
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId}>

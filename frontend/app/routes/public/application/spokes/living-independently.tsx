@@ -71,7 +71,7 @@ export async function action({ context: { appContainer, session }, params, reque
   savePublicApplicationState({ params, session, state: { livingIndependently: isLivingindependently } });
 
   if (isLivingindependently) {
-    return redirect(getPathById('public/application/$id/new-or-returning-member', params));
+    return redirect(getPathById('public/application/$id/personal-information', params));
   }
 
   return redirect(getPathById('public/application/$id/parent-or-guardian', params));

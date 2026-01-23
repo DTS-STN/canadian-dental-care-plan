@@ -106,10 +106,6 @@ export type PublicApplicationState = ReadonlyDeep<{
     primary: string;
     alternate?: string;
   }>;
-  newOrExistingMember?: {
-    isNewOrExistingMember: boolean;
-    memberId?: string;
-  };
   submitTerms?: {
     acknowledgeInfo: boolean;
     acknowledgeCriteria: boolean;
@@ -156,7 +152,6 @@ export type DeclaredChangeDentalProvincialTerritorialBenefitsState = NonNullable
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<NonNullable<PublicApplicationState['dentalBenefits']>['value']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type HomeAddressState = NonNullable<PublicApplicationState['homeAddress']>;
 export type MailingAddressState = NonNullable<PublicApplicationState['mailingAddress']>;
-export type NewOrExistingMemberState = NonNullable<PublicApplicationState['newOrExistingMember']>;
 export type PartnerInformationState = NonNullable<PublicApplicationState['partnerInformation']>;
 export type SubmissionInfoState = NonNullable<PublicApplicationState['submissionInfo']>;
 export type TermsAndConditionsState = NonNullable<PublicApplicationState['termsAndConditions']>;
