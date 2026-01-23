@@ -9,7 +9,7 @@ import { getInitialTypeAndFlowUrl, getPublicApplicationState } from '~/.server/r
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
-import { DescriptionListItem } from '~/components/description-list-item';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
 import { pageIds } from '~/page-ids';
@@ -100,11 +100,11 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           {defaultState.typeOfApplication === undefined ? (
             <p>{t('application:type-of-application.type-application-description')}</p>
           ) : (
-            <dl className="divide-hidden">
-              <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.type-application-legend')}>
-                <p>{getTypeOfApplication(defaultState.typeOfApplication)}</p>
-              </DescriptionListItem>
-            </dl>
+            <DefinitionList layout="single-column">
+              <DefinitionListItem className="sm:grid-cols-none" term={t('application:type-of-application.type-application-legend')}>
+                {getTypeOfApplication(defaultState.typeOfApplication)}
+              </DefinitionListItem>
+            </DefinitionList>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
@@ -123,22 +123,22 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           {defaultState.personalInformation === undefined ? (
             <p>{t('application:type-of-application.personal-info-description')}</p>
           ) : (
-            <dl className="divide-y border-y">
+            <DefinitionList layout="single-column">
               {defaultState.personalInformation.memberId && (
-                <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.member-id')}>
-                  <p>{defaultState.personalInformation.memberId}</p>
-                </DescriptionListItem>
+                <DefinitionListItem className="sm:grid-cols-none" term={t('application:type-of-application.member-id')}>
+                  {defaultState.personalInformation.memberId}
+                </DefinitionListItem>
               )}
-              <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.full-name')}>
-                <p>{`${defaultState.personalInformation.firstName} ${defaultState.personalInformation.lastName}`}</p>
-              </DescriptionListItem>
-              <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.date-of-birth')}>
-                <p>{formattedDate}</p>
-              </DescriptionListItem>
-              <DescriptionListItem className="sm:grid-cols-none" term={t('application:type-of-application.sin')}>
-                <p>{defaultState.personalInformation.socialInsuranceNumber}</p>
-              </DescriptionListItem>
-            </dl>
+              <DefinitionListItem className="sm:grid-cols-none" term={t('application:type-of-application.full-name')}>
+                {`${defaultState.personalInformation.firstName} ${defaultState.personalInformation.lastName}`}
+              </DefinitionListItem>
+              <DefinitionListItem className="sm:grid-cols-none" term={t('application:type-of-application.date-of-birth')}>
+                {formattedDate}
+              </DefinitionListItem>
+              <DefinitionListItem className="sm:grid-cols-none" term={t('application:type-of-application.sin')}>
+                {defaultState.personalInformation.socialInsuranceNumber}
+              </DefinitionListItem>
+            </DefinitionList>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
