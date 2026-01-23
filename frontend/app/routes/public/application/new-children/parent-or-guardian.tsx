@@ -10,7 +10,7 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
-import { DescriptionListItem } from '~/components/description-list-item';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
@@ -105,24 +105,24 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
           {state.maritalStatus === undefined ? (
             <p>{t('application-new-child:parent-or-guardian.select-your-status')}</p>
           ) : (
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-new-child:parent-or-guardian.marital-status')}>
+            <DefinitionList layout="single-column">
+              <DefinitionListItem term={t('application-new-child:parent-or-guardian.marital-status')}>
                 <p>{state.maritalStatus.name}</p>
-              </DescriptionListItem>
+              </DefinitionListItem>
               {state.partnerInformation && (
                 <>
-                  <DescriptionListItem term={t('application-new-child:parent-or-guardian.spouse-sin')}>
+                  <DefinitionListItem term={t('application-new-child:parent-or-guardian.spouse-sin')}>
                     <p>{state.partnerInformation.socialInsuranceNumber}</p>
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('application-new-child:parent-or-guardian.spouse-yob')}>
+                  </DefinitionListItem>
+                  <DefinitionListItem term={t('application-new-child:parent-or-guardian.spouse-yob')}>
                     <p>{state.partnerInformation.yearOfBirth}</p>
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('application-new-child:parent-or-guardian.consent')}>
+                  </DefinitionListItem>
+                  <DefinitionListItem term={t('application-new-child:parent-or-guardian.consent')}>
                     {state.partnerInformation.confirm ? t('application-new-child:parent-or-guardian.consent-yes') : t('application-new-child:parent-or-guardian.consent-no')}
-                  </DescriptionListItem>
+                  </DefinitionListItem>
                 </>
               )}
-            </dl>
+            </DefinitionList>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
@@ -139,16 +139,16 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
         </CardHeader>
         <CardContent>
           {state.phoneNumber?.hasChanged ? (
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-new-child:parent-or-guardian.phone-number')}>
+            <DefinitionList layout="single-column">
+              <DefinitionListItem term={t('application-new-child:parent-or-guardian.phone-number')}>
                 <p>{state.phoneNumber.value.primary}</p>
-              </DescriptionListItem>
+              </DefinitionListItem>
               {state.phoneNumber.value.alternate && (
-                <DescriptionListItem term={t('application-new-child:parent-or-guardian.alt-phone-number')}>
+                <DefinitionListItem term={t('application-new-child:parent-or-guardian.alt-phone-number')}>
                   <p>{state.phoneNumber.value.alternate}</p>
-                </DescriptionListItem>
+                </DefinitionListItem>
               )}
-            </dl>
+            </DefinitionList>
           ) : (
             <p>{t('application-new-child:parent-or-guardian.phone-number-help')}</p>
           )}
@@ -169,9 +169,9 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
           {mailingAddressInfo.address === undefined && homeAddressInfo.address === undefined ? (
             <p>{t('application-new-child:parent-or-guardian.address-help')}</p>
           ) : (
-            <dl className="divide-y border-y">
+            <DefinitionList layout="single-column">
               {mailingAddressInfo.address !== undefined && (
-                <DescriptionListItem term={t('application-new-child:parent-or-guardian.mailing-address')}>
+                <DefinitionListItem term={t('application-new-child:parent-or-guardian.mailing-address')}>
                   <Address
                     address={{
                       address: mailingAddressInfo.address,
@@ -181,10 +181,10 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
                       country: mailingAddressInfo.country ?? '',
                     }}
                   />
-                </DescriptionListItem>
+                </DefinitionListItem>
               )}
               {homeAddressInfo.address !== undefined && (
-                <DescriptionListItem term={t('application-new-child:parent-or-guardian.home-address')}>
+                <DefinitionListItem term={t('application-new-child:parent-or-guardian.home-address')}>
                   <Address
                     address={{
                       address: homeAddressInfo.address,
@@ -194,9 +194,9 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
                       country: homeAddressInfo.country ?? '',
                     }}
                   />
-                </DescriptionListItem>
+                </DefinitionListItem>
               )}
-            </dl>
+            </DefinitionList>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
@@ -213,12 +213,12 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
         </CardHeader>
         <CardContent>
           {state.communicationPreferences?.hasChanged ? (
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-new-child:parent-or-guardian.preferred-language')}>{preferredLanguage?.name}</DescriptionListItem>
-              <DescriptionListItem term={t('application-new-child:parent-or-guardian.preferred-method')}>{preferredMethod?.name}</DescriptionListItem>
-              <DescriptionListItem term={t('application-new-child:parent-or-guardian.preferred-notification-method')}>{preferredNotificationMethod?.name}</DescriptionListItem>
-              <DescriptionListItem term={t('application-new-child:parent-or-guardian.email')}>{state.email}</DescriptionListItem>
-            </dl>
+            <DefinitionList layout="single-column">
+              <DefinitionListItem term={t('application-new-child:parent-or-guardian.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
+              <DefinitionListItem term={t('application-new-child:parent-or-guardian.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
+              <DefinitionListItem term={t('application-new-child:parent-or-guardian.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
+              <DefinitionListItem term={t('application-new-child:parent-or-guardian.email')}>{state.email}</DefinitionListItem>
+            </DefinitionList>
           ) : (
             <p>{t('application-new-child:parent-or-guardian.communication-preferences-help')}</p>
           )}
