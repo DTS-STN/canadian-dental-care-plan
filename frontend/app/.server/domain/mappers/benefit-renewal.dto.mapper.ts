@@ -23,7 +23,7 @@ import type {
   RenewalPartnerInformationDto,
   RenewalTypeOfApplicationDto,
 } from '~/.server/domain/dtos';
-import type { BenefitRenewalRequestEntity } from '~/.server/domain/entities';
+import type { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '~/.server/domain/entities';
 import { parseDateString } from '~/utils/date-utils';
 
 export interface BenefitRenewalDtoMapper {
@@ -32,6 +32,7 @@ export interface BenefitRenewalDtoMapper {
   mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(itaBenefitRenewalDto: ItaBenefitRenewalDto): BenefitRenewalRequestEntity;
   mapChildBenefitRenewalDtoToBenefitRenewalRequestEntity(childBenefitRenewalDto: ChildBenefitRenewalDto): BenefitRenewalRequestEntity;
   mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedRenewDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity;
+  mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity: BenefitRenewalResponseEntity): string;
 }
 
 interface ToBenefitRenewalRequestEntityArgs {
@@ -513,5 +514,9 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     if (typeOfApplication === 'adult') return APPLICANT_CATEGORY_CODE_INDIVIDUAL;
     if (typeOfApplication === 'adult-child') return APPLICANT_CATEGORY_CODE_FAMILY;
     return APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY;
+  }
+
+  mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity: BenefitRenewalResponseEntity): string {
+    return benefitRenewalResponseEntity.BenefitApplication.BenefitApplicationIdentification[0].IdentificationID;
   }
 }

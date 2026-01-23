@@ -19,35 +19,35 @@ export interface BenefitRenewalService {
    *
    * @param adultBenefitRenewalDto The adult benefit renewal request dto
    */
-  createAdultBenefitRenewal(adultBenefitRenewalDto: AdultBenefitRenewalDto): Promise<void>;
+  createAdultBenefitRenewal(adultBenefitRenewalDto: AdultBenefitRenewalDto): Promise<string>;
 
   /**
    * Submits an adult child benefit renewal request.
    *
    * @param adultChildBenefitRenewalDto The adult child benefit renewal request dto
    */
-  createAdultChildBenefitRenewal(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): Promise<void>;
+  createAdultChildBenefitRenewal(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): Promise<string>;
 
   /**
    * Submits an ITA benefit renewal request.
    *
    * @param adultChildBenefitRenewalDto The adult child benefit renewal request dto
    */
-  createItaBenefitRenewal(itaBenefitRenewalDto: ItaBenefitRenewalDto): Promise<void>;
+  createItaBenefitRenewal(itaBenefitRenewalDto: ItaBenefitRenewalDto): Promise<string>;
 
   /**
    * Submits a child benefit renewal request.
    *
    * @param childBenefitRenewalDto The child benefit renewal request dto
    */
-  createChildBenefitRenewal(childBenefitRenewalDto: ChildBenefitRenewalDto): Promise<void>;
+  createChildBenefitRenewal(childBenefitRenewalDto: ChildBenefitRenewalDto): Promise<string>;
 
   /**
    * Submits benefit renewal request for protected route.
    *
    * @param protectedBenefitRenewalDto The protected route benefit renewal request dto
    */
-  createProtectedBenefitRenewal(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): Promise<void>;
+  createProtectedBenefitRenewal(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): Promise<string>;
 }
 
 @injectable()
@@ -84,7 +84,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     this.log.debug('DefaultBenefitRenewalService initiated.');
   }
 
-  async createAdultBenefitRenewal(adultBenefitRenewalDto: AdultBenefitRenewalDto): Promise<void> {
+  async createAdultBenefitRenewal(adultBenefitRenewalDto: AdultBenefitRenewalDto): Promise<string> {
     this.log.trace('Creating adult benefit renewal for request [%j]', adultBenefitRenewalDto);
 
     const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
@@ -98,9 +98,11 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
 
     try {
       const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapAdultBenefitRenewalDtoToBenefitRenewalRequestEntity(adultBenefitRenewalDto);
-      await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
+      const benefitRenewalResponseEntity = await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
+      const applicationCode = this.benefitRenewalDtoMapper.mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity);
 
-      this.log.trace('Successfully created adult benefit renewal for request [%j]', adultBenefitRenewalDto);
+      this.log.trace('Returning application code: [%s]', applicationCode);
+      return applicationCode;
     } catch (error) {
       if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
         this.log.error('Received XAPI_TOO_MANY_REQUESTS; killswitch engage!');
@@ -111,7 +113,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     }
   }
 
-  async createAdultChildBenefitRenewal(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): Promise<void> {
+  async createAdultChildBenefitRenewal(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): Promise<string> {
     this.log.trace('Creating adult child benefit renewal for request [%j]', adultChildBenefitRenewalDto);
 
     const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
@@ -125,9 +127,11 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
 
     try {
       const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(adultChildBenefitRenewalDto);
-      await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
+      const benefitRenewalResponseEntity = await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
+      const applicationCode = this.benefitRenewalDtoMapper.mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity);
 
-      this.log.trace('Successfully created adult child benefit renewal for request [%j]', adultChildBenefitRenewalDto);
+      this.log.trace('Returning application code: [%s]', applicationCode);
+      return applicationCode;
     } catch (error) {
       if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
         this.log.warn('Received XAPI_TOO_MANY_REQUESTS; killswitch engage!');
@@ -138,7 +142,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     }
   }
 
-  async createItaBenefitRenewal(itaBenefitRenewalDto: ItaBenefitRenewalDto): Promise<void> {
+  async createItaBenefitRenewal(itaBenefitRenewalDto: ItaBenefitRenewalDto): Promise<string> {
     this.log.trace('Creating ITA benefit renewal for request [%j]', itaBenefitRenewalDto);
 
     const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
@@ -152,9 +156,11 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
 
     try {
       const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(itaBenefitRenewalDto);
-      await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
+      const benefitRenewalResponseEntity = await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
+      const applicationCode = this.benefitRenewalDtoMapper.mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity);
 
-      this.log.trace('Successfully created ITA benefit renewal for request [%j]', itaBenefitRenewalDto);
+      this.log.trace('Returning application code: [%s]', applicationCode);
+      return applicationCode;
     } catch (error) {
       if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
         this.log.warn('Received XAPI_TOO_MANY_REQUESTS; killswitch engage!');
@@ -165,7 +171,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     }
   }
 
-  async createChildBenefitRenewal(childBenefitRenewalDto: ChildBenefitRenewalDto): Promise<void> {
+  async createChildBenefitRenewal(childBenefitRenewalDto: ChildBenefitRenewalDto): Promise<string> {
     this.log.trace('Creating child benefit renewal for request [%j]', childBenefitRenewalDto);
 
     const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
@@ -179,9 +185,11 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
 
     try {
       const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapChildBenefitRenewalDtoToBenefitRenewalRequestEntity(childBenefitRenewalDto);
-      await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
+      const benefitRenewalResponseEntity = await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
+      const applicationCode = this.benefitRenewalDtoMapper.mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity);
 
-      this.log.trace('Successfully created child benefit renewal for request [%j]', childBenefitRenewalDto);
+      this.log.trace('Returning application code: [%s]', applicationCode);
+      return applicationCode;
     } catch (error) {
       if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
         this.log.warn('Received XAPI_TOO_MANY_REQUESTS; killswitch engage!');
@@ -192,7 +200,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     }
   }
 
-  async createProtectedBenefitRenewal(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): Promise<void> {
+  async createProtectedBenefitRenewal(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): Promise<string> {
     this.log.trace('Creating protected benefit renewal for request [%j]', protectedBenefitRenewalDto);
 
     const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
@@ -206,9 +214,11 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
 
     try {
       const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedBenefitRenewalDto);
-      await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
+      const benefitRenewalResponseEntity = await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
+      const applicationCode = this.benefitRenewalDtoMapper.mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity);
 
-      this.log.trace('Successfully created protected benefit renewal for request [%j]', protectedBenefitRenewalDto);
+      this.log.trace('Returning application code: [%s]', applicationCode);
+      return applicationCode;
     } catch (error) {
       if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
         this.log.warn('Received XAPI_TOO_MANY_REQUESTS; killswitch engage!');
