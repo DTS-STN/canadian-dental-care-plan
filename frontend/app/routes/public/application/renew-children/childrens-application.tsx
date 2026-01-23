@@ -44,7 +44,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationChildState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-children']);
+  //validateApplicationTypeAndFlow(state, params, ['renew-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -92,7 +92,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicApplicationChildState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-children']);
+  //validateApplicationTypeAndFlow(state, params, ['renew-children']);
 
   const formData = await request.formData();
 
@@ -203,7 +203,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
-                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/children/$childId/information" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/renew-children/childrens-application" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
                   {child.information === undefined ? t('application-renew-child:childrens-application.add-child-information') : t('application-renew-child:childrens-application.edit-child-information', { childNumber: index + 1 })}
                 </ButtonLink>
               </CardFooter>
@@ -226,8 +226,8 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
-                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/children/$childId/dental-insurance" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
-                  {child.dentalInsurance === undefined ? t('application-renew-child:childrens-application.add-child-dental-insurance') : t('application-renew-child:childrens-application.edit-child-dental-insurance', { childNumber: index + 1 })}
+                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/renew-children/childrens-application" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+                  {child.dentalInsurance === undefined ? t('application-renew-child:childrens-application.add-child-dental-insurance') : t('application-renew-child:childrens-application.edit-child-dental-insurance')}
                 </ButtonLink>
               </CardFooter>
             </Card>
@@ -259,8 +259,8 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
-                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
-                  {child.dentalBenefits === undefined ? t('application-renew-child:childrens-application.add-child-dental-benefits') : t('application-renew-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })}
+                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/renew-children/childrens-application" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+                  {child.dentalBenefits === undefined ? t('application-renew-child:childrens-application.add-child-dental-benefits') : t('application-renew-child:childrens-application.edit-child-dental-benefits')}
                 </ButtonLink>
               </CardFooter>
             </Card>
@@ -291,7 +291,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
       </fetcher.Form>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-children/submit" params={params}>
+        <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-children/childrens-application" params={params}>
           {t('application-renew-child:childrens-application.submit-btn')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/renew-children/parent-or-guardian" params={params}>
