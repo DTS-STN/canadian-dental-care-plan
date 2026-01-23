@@ -78,7 +78,7 @@
     "add-child-dental-benefits": "(FR) Add answer",
     "child-information-indicate-status": "(FR) Enter your child's name, date of birth, and Social Insurance Number (SIN).",
     "child-dental-insurance-indicate-status": "(FR) Indicate if your child has access to private dental insurance.",
-    "child-dental-benefits-indicate-status": "(FR) Indicate if your child has access to government dental benefits.",
+    "child-dental-benefits-indicate-status": "(FR) Would you like to update your child's access to other government dental benefits?",
     "member-id-title": "Numéro d'identification du membre",
     "full-name-title": "Nom complet",
     "dob-title": "Date de naissance",
@@ -95,6 +95,8 @@
     "back-btn": "Renseignements sur le parent ou le tuteur légal",
     "submit-btn": "Soumettre la demande",
     "add-child": "Ajouter un enfant",
-    "remove-child": "Retirer l'enfant"
+    "remove-child": "Retirer l'enfant",
+    "update-dental-benefits": "(FR) Update my child's access government dental benefits",
+    "benefits-not-changed": "(FR) My child's access to government dental benefits has not changed"
   }
 }

@@ -3,6 +3,7 @@ import type { SyntheticEvent } from 'react';
 import { redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
+import { faCircleCheck, faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import { randomUUID } from 'node:crypto';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +33,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-const FORM_ACTION = { add: 'add', remove: 'remove' } as const;
+const FORM_ACTION = { add: 'add', remove: 'remove', DENTAL_BENEFITS_NOT_CHANGED: 'address-not-changed' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-renew-child', 'application', 'gcweb'),
@@ -110,6 +111,21 @@ export async function action({ context: { appContainer, session }, params, reque
       session,
       state: {
         children: children,
+      },
+    });
+  }
+
+  if (formAction === FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED) {
+    const childId = formData.get('childId');
+    savePublicApplicationState({
+      params,
+      session,
+      state: {
+        children: state.children.map((child) => {
+          if (child.id !== childId) return child;
+          //TODO: update to hasChanged when available
+          return { ...child, dentalBenefits: child.dentalBenefits };
+        }),
       },
     });
   }
@@ -203,7 +219,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
-                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/renew-children/childrens-application" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/children/$childId/information" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
                   {child.information === undefined ? t('application-renew-child:childrens-application.add-child-information') : t('application-renew-child:childrens-application.edit-child-information', { childNumber: index + 1 })}
                 </ButtonLink>
               </CardFooter>
@@ -226,7 +242,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
-                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/renew-children/childrens-application" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/children/$childId/dental-insurance" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
                   {child.dentalInsurance === undefined ? t('application-renew-child:childrens-application.add-child-dental-insurance') : t('application-renew-child:childrens-application.edit-child-dental-insurance')}
                 </ButtonLink>
               </CardFooter>
@@ -259,9 +275,16 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
-                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/renew-children/childrens-application" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
-                  {child.dentalBenefits === undefined ? t('application-renew-child:childrens-application.add-child-dental-benefits') : t('application-renew-child:childrens-application.edit-child-dental-benefits')}
-                </ButtonLink>
+                <div className="w-full px-6">
+                  <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits" params={params} startIcon={faPenToSquare} size="lg">
+                    {t('application-renew-child:childrens-application.update-dental-benefits')}
+                  </ButtonLink>
+                </div>
+                <div className="w-full px-6">
+                  <Button id="complete-button" variant="link" className="p-0 pt-5" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} startIcon={faCircleCheck} size="lg">
+                    {t('application-renew-child:childrens-application.benefits-not-changed')}
+                  </Button>
+                </div>
               </CardFooter>
             </Card>
             <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>

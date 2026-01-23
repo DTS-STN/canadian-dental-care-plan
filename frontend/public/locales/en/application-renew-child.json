@@ -78,7 +78,7 @@
     "add-child-dental-benefits": "Add answer",
     "child-information-indicate-status": "Enter your child's name, date of birth, and Social Insurance Number (SIN).",
     "child-dental-insurance-indicate-status": "Indicate if your child has access to private dental insurance.",
-    "child-dental-benefits-indicate-status": "Indicate if your child has access to government dental benefits.",
+    "child-dental-benefits-indicate-status": "Would you like to update your child's access to other government dental benefits?",
     "member-id-title": "Member ID",
     "full-name-title": "Full name",
     "dob-title": "Date of birth",
@@ -95,6 +95,8 @@
     "back-btn": "Parent or legal guardian information",
     "submit-btn": "Submit",
     "add-child": "Add a child",
-    "remove-child": "Remove child"
+    "remove-child": "Remove child",
+    "update-dental-benefits": "Update my child's access government dental benefits",
+    "benefits-not-changed": "My child's access to government dental benefits has not changed"
   }
 }
