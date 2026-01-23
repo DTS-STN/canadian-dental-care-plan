@@ -13,7 +13,7 @@ import type { Route } from './+types/childrens-application';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationChildState } from '~/.server/routes/helpers/public-application-child-route-helpers';
-import { savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -45,7 +45,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationChildState({ params, request, session });
-  //validateApplicationTypeAndFlow(state, params, ['renew-children']);
+  validateApplicationTypeAndFlow(state, params, ['renew-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -93,7 +93,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicApplicationChildState({ params, request, session });
-  //validateApplicationTypeAndFlow(state, params, ['renew-children']);
+  validateApplicationTypeAndFlow(state, params, ['renew-children']);
 
   const formData = await request.formData();
 
@@ -167,7 +167,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
     await fetcher.submit(formData, { method: 'POST' });
   }
 
-  const allChildrenCompleted = state.children.every((child) => child.information !== undefined && child.dentalInsurance !== undefined && child.dentalBenefits !== undefined);
+  const allChildrenCompleted = state.children.length > 0 && state.children.every((child) => child.information !== undefined && child.dentalInsurance !== undefined && child.dentalBenefits !== undefined);
 
   return (
     <div className="max-w-prose space-y-8">
@@ -201,7 +201,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                 ) : (
                   <DefinitionList layout="single-column">
                     <DefinitionListItem term={t('application-renew-child:childrens-application.member-id-title')}>
-                      <p>{child.id}</p>
+                      <p>{child.information.memberId}</p>
                     </DefinitionListItem>
                     <DefinitionListItem term={t('application-renew-child:childrens-application.full-name-title')}>
                       <p>{childName}</p>

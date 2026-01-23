@@ -151,7 +151,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
     await fetcher.submit(formData, { method: 'POST' });
   }
 
-  const allChildrenCompleted = state.children.every((child) => child.information !== undefined && child.dentalInsurance !== undefined && child.dentalBenefits !== undefined);
+  const allChildrenCompleted = state.children.length > 0 && state.children.every((child) => child.information !== undefined && child.dentalInsurance !== undefined && child.dentalBenefits !== undefined);
 
   return (
     <div className="max-w-prose space-y-8">
