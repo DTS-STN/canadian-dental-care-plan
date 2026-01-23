@@ -78,6 +78,9 @@ export async function loader({ context: { appContainer, session }, request, para
       communicationPreferences: state.communicationPreferences,
       email: state.email,
     },
+    preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
+    preferredMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale) : undefined,
+    preferredNotificationMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale) : undefined,
     mailingAddressInfo,
     homeAddressInfo,
     meta,
@@ -131,7 +134,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function RenewAdultContactInformation({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const { steps, currentStep } = useProgressStepper('renew-adult', 'contact-information');
 
@@ -269,9 +272,9 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
                   <p>{t('application-renew-adult:contact-information.no-change')}</p>
                 ) : (
                   <DefinitionList layout="single-column">
-                    <DefinitionListItem term={t('application-renew-adult:contact-information.preferred-language')}>{state.communicationPreferences.value.preferredLanguage}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-renew-adult:contact-information.preferred-method')}>{state.communicationPreferences.value.preferredMethod}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-renew-adult:contact-information.preferred-notification-method')}>{state.communicationPreferences.value.preferredNotificationMethod}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-renew-adult:contact-information.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-renew-adult:contact-information.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-renew-adult:contact-information.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
                     {state.email && <DefinitionListItem term={t('application-renew-adult:contact-information.email')}>{state.email}</DefinitionListItem>}
                   </DefinitionList>
                 )}
