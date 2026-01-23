@@ -14,7 +14,6 @@
     "dental-insurance": "(FR) Access to dental insurance",
     "type-of-application": "(FR) Type of application",
     "personal-information": "(FR) Personal information",
-    "new-or-returning-member": "(FR) New or returning member",
     "submit": "(FR) Submit",
     "parent-or-guardian": "(FR) Parent or legal guardian information",
     "childrens-application": "(FR) Your child(ren)'s application"
@@ -79,8 +78,6 @@
     "full-name": "Nom complet",
     "date-of-birth": "Date de naissance",
     "sin": "Numéro d'assurance sociale (NAS)",
-    "new-or-returning-heading": "(fr) New or returning member",
-    "new-or-returning-description": "(fr) Select whether or not you have a Member ID.",
     "application": "Application",
     "before-you-start": "Avant de commencer votre demande",
     "add-answer": "Ajouter une réponse",

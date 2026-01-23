@@ -14,7 +14,6 @@
     "dental-insurance": "Access to dental insurance",
     "type-of-application": "Type of application",
     "personal-information": "Personal information",
-    "new-or-returning-member": "New or returning member",
     "submit": "Submit",
     "parent-or-guardian": "Parent or legal guardian information",
     "childrens-application": "Your child(ren)'s application"
@@ -79,8 +78,6 @@
     "full-name": "Full name",
     "date-of-birth": "Date of birth",
     "sin": "Social Insurance Number (SIN)",
-    "new-or-returning-heading": "New or returning member",
-    "new-or-returning-description": "Select whether or not you have a Member ID.",
     "application": "Application",
     "before-you-start": "Before you start your application",
     "add-answer": "Add answer",
