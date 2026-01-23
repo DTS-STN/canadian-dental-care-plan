@@ -18,7 +18,7 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { DescriptionListItem } from '~/components/description-list-item';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
@@ -199,23 +199,23 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                 {child.information === undefined ? (
                   <p>{t('application-renew-child:childrens-application.child-information-indicate-status')}</p>
                 ) : (
-                  <dl className="divide-y border-y">
-                    <DescriptionListItem term={t('application-renew-child:childrens-application.member-id-title')}>
+                  <DefinitionList layout="single-column">
+                    <DefinitionListItem term={t('application-renew-child:childrens-application.member-id-title')}>
                       <p>{child.id}</p>
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('application-renew-child:childrens-application.full-name-title')}>
+                    </DefinitionListItem>
+                    <DefinitionListItem term={t('application-renew-child:childrens-application.full-name-title')}>
                       <p>{childName}</p>
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('application-renew-child:childrens-application.dob-title')}>
+                    </DefinitionListItem>
+                    <DefinitionListItem term={t('application-renew-child:childrens-application.dob-title')}>
                       <p>{dateOfBirth}</p>
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('application-renew-child:childrens-application.sin-title')}>
+                    </DefinitionListItem>
+                    <DefinitionListItem term={t('application-renew-child:childrens-application.sin-title')}>
                       <p>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</p>
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('application-renew-child:childrens-application.parent-guardian-title')}>
+                    </DefinitionListItem>
+                    <DefinitionListItem term={t('application-renew-child:childrens-application.parent-guardian-title')}>
                       <p>{child.information.isParent ? t('application-renew-child:childrens-application.yes') : t('application-renew-child:childrens-application.no')}</p>
-                    </DescriptionListItem>
-                  </dl>
+                    </DefinitionListItem>
+                  </DefinitionList>
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
@@ -234,11 +234,11 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                 {child.dentalInsurance === undefined ? (
                   <p>{t('application-renew-child:childrens-application.child-dental-insurance-indicate-status')}</p>
                 ) : (
-                  <dl className="divide-y border-y">
-                    <DescriptionListItem term={t('application-renew-child:childrens-application.dental-insurance-title')}>
+                  <DefinitionList layout="single-column">
+                    <DefinitionListItem term={t('application-renew-child:childrens-application.dental-insurance-title')}>
                       <p>{child.dentalInsurance.hasDentalInsurance ? t('application-renew-child:childrens-application.dental-insurance-yes') : t('application-renew-child:childrens-application.dental-insurance-no')}</p>
-                    </DescriptionListItem>
-                  </dl>
+                    </DefinitionListItem>
+                  </DefinitionList>
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
@@ -257,21 +257,21 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                 {child.dentalBenefits === undefined ? (
                   <p>{t('application-renew-child:childrens-application.child-dental-benefits-indicate-status')}</p>
                 ) : (
-                  <dl className="divide-y border-y">
-                    <DescriptionListItem term={t('application-renew-child:childrens-application.dental-benefits-title')}>
+                  <DefinitionList layout="single-column">
+                    <DefinitionListItem term={t('application-renew-child:childrens-application.dental-benefits-title')}>
                       {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
-                        <>
+                        <div className="space-y-3">
                           <p>{t('application-renew-child:childrens-application.dental-benefits-yes')}</p>
-                          <ul className="ml-6 list-disc">
+                          <ul className="list-disc space-y-1 pl-7">
                             {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
                             {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
                           </ul>
-                        </>
+                        </div>
                       ) : (
                         <p>{t('application-renew-child:childrens-application.dental-benefits-no')}</p>
                       )}
-                    </DescriptionListItem>
-                  </dl>
+                    </DefinitionListItem>
+                  </DefinitionList>
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
