@@ -15,7 +15,7 @@ import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { DescriptionListItem } from '~/components/description-list-item';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { LoadingButton } from '~/components/loading-button';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
@@ -163,11 +163,11 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
             {state.phoneNumber === undefined ? (
               <p>{t('application-renew-adult:contact-information.phone-number-help')}</p>
             ) : (
-              <dl className="border-y">
-                <DescriptionListItem term={t('application-renew-adult:contact-information.phone-number')}>
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('application-renew-adult:contact-information.phone-number')}>
                   {state.phoneNumber.hasChanged === false ? <p>{t('application-renew-adult:contact-information.no-change')}</p> : <p>{state.phoneNumber.value.primary}</p>}
-                </DescriptionListItem>
-              </dl>
+                </DefinitionListItem>
+              </DefinitionList>
             )}
           </CardContent>
           {state.phoneNumber ? (
@@ -205,8 +205,8 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
                 {mailingAddressInfo.hasChanged === false && homeAddressInfo.hasChanged === false ? (
                   <p>{t('application-renew-adult:contact-information.no-change')}</p>
                 ) : (
-                  <dl className="divide-y border-y">
-                    <DescriptionListItem term={t('application-renew-adult:contact-information.mailing-address')}>
+                  <DefinitionList layout="single-column">
+                    <DefinitionListItem term={t('application-renew-adult:contact-information.mailing-address')}>
                       <Address
                         address={{
                           address: mailingAddressInfo.address ?? '',
@@ -216,8 +216,8 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
                           country: mailingAddressInfo.country ?? '',
                         }}
                       />
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('application-renew-adult:contact-information.home-address')}>
+                    </DefinitionListItem>
+                    <DefinitionListItem term={t('application-renew-adult:contact-information.home-address')}>
                       <Address
                         address={{
                           address: homeAddressInfo.address ?? '',
@@ -227,8 +227,8 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
                           country: homeAddressInfo.country ?? '',
                         }}
                       />
-                    </DescriptionListItem>
-                  </dl>
+                    </DefinitionListItem>
+                  </DefinitionList>
                 )}
               </>
             )}
@@ -268,24 +268,12 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
                 {state.communicationPreferences.hasChanged === false ? (
                   <p>{t('application-renew-adult:contact-information.no-change')}</p>
                 ) : (
-                  <dl className="divide-y border-y">
-                    <DescriptionListItem term={t('application-renew-adult:contact-information.preferred-language')}>
-                      <p>{t('application-renew-adult:contact-information.preferred-language')}</p>
-                      {state.communicationPreferences.value.preferredLanguage}
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('application-renew-adult:contact-information.preferred-method')}>
-                      <p>{t('application-renew-adult:contact-information.preferred-method')}</p>
-                      {state.communicationPreferences.value.preferredMethod}
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('application-renew-adult:contact-information.preferred-notification-method')}>
-                      <p>{t('application-renew-adult:contact-information.preferred-notification-method')}</p>
-                      {state.communicationPreferences.value.preferredNotificationMethod}
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('application-renew-adult:contact-information.email')}>
-                      <p>{t('application-renew-adult:contact-information.email')}</p>
-                      {state.email}
-                    </DescriptionListItem>
-                  </dl>
+                  <DefinitionList layout="single-column">
+                    <DefinitionListItem term={t('application-renew-adult:contact-information.preferred-language')}>{state.communicationPreferences.value.preferredLanguage}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-renew-adult:contact-information.preferred-method')}>{state.communicationPreferences.value.preferredMethod}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-renew-adult:contact-information.preferred-notification-method')}>{state.communicationPreferences.value.preferredNotificationMethod}</DefinitionListItem>
+                    {state.email && <DefinitionListItem term={t('application-renew-adult:contact-information.email')}>{state.email}</DefinitionListItem>}
+                  </DefinitionList>
                 )}
               </>
             )}
