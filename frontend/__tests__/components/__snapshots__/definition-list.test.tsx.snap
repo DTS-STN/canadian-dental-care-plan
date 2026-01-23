@@ -1,13 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DefinitionList > renders layout (single-column) > expected html 1`] = `
+exports[`DefinitionList > renders layout (single-column) and border (false) 1`] = `
 <div>
   <dl
-    class="group divide-y border-y"
+    class="group data-[border=false]:space-y-6 data-[border=true]:divide-y data-[border=true]:border-y"
+    data-border="false"
     data-layout="single-column"
   >
     <div
-      class="grid gap-3 py-4 group-data-[layout=two-column]:sm:grid-cols-3 group-data-[layout=two-column]:sm:gap-4 group-data-[layout=two-column]:sm:py-6"
+      class="grid gap-2 group-data-[border=true]:py-4 group-data-[layout=two-column]:sm:grid-cols-3 group-data-[layout=two-column]:sm:gap-4 group-data-[layout=two-column]:group-data-[border=true]:sm:py-6"
     >
       <dt
         class="font-semibold"
@@ -21,7 +22,7 @@ exports[`DefinitionList > renders layout (single-column) > expected html 1`] = `
       </dd>
     </div>
     <div
-      class="grid gap-3 py-4 group-data-[layout=two-column]:sm:grid-cols-3 group-data-[layout=two-column]:sm:gap-4 group-data-[layout=two-column]:sm:py-6"
+      class="grid gap-2 group-data-[border=true]:py-4 group-data-[layout=two-column]:sm:grid-cols-3 group-data-[layout=two-column]:sm:gap-4 group-data-[layout=two-column]:group-data-[border=true]:sm:py-6"
     >
       <dt
         class="font-semibold"
@@ -38,14 +39,15 @@ exports[`DefinitionList > renders layout (single-column) > expected html 1`] = `
 </div>
 `;
 
-exports[`DefinitionList > renders layout (two-column) > expected html 1`] = `
+exports[`DefinitionList > renders layout (single-column) and border (true) 1`] = `
 <div>
   <dl
-    class="group divide-y border-y"
-    data-layout="two-column"
+    class="group data-[border=false]:space-y-6 data-[border=true]:divide-y data-[border=true]:border-y"
+    data-border="true"
+    data-layout="single-column"
   >
     <div
-      class="grid gap-3 py-4 group-data-[layout=two-column]:sm:grid-cols-3 group-data-[layout=two-column]:sm:gap-4 group-data-[layout=two-column]:sm:py-6"
+      class="grid gap-2 group-data-[border=true]:py-4 group-data-[layout=two-column]:sm:grid-cols-3 group-data-[layout=two-column]:sm:gap-4 group-data-[layout=two-column]:group-data-[border=true]:sm:py-6"
     >
       <dt
         class="font-semibold"
@@ -59,7 +61,7 @@ exports[`DefinitionList > renders layout (two-column) > expected html 1`] = `
       </dd>
     </div>
     <div
-      class="grid gap-3 py-4 group-data-[layout=two-column]:sm:grid-cols-3 group-data-[layout=two-column]:sm:gap-4 group-data-[layout=two-column]:sm:py-6"
+      class="grid gap-2 group-data-[border=true]:py-4 group-data-[layout=two-column]:sm:grid-cols-3 group-data-[layout=two-column]:sm:gap-4 group-data-[layout=two-column]:group-data-[border=true]:sm:py-6"
     >
       <dt
         class="font-semibold"
@@ -76,14 +78,15 @@ exports[`DefinitionList > renders layout (two-column) > expected html 1`] = `
 </div>
 `;
 
-exports[`DefinitionList > renders layout (undefined) > expected html 1`] = `
+exports[`DefinitionList > renders layout (two-column) and border (false) 1`] = `
 <div>
   <dl
-    class="group divide-y border-y"
+    class="group data-[border=false]:space-y-6 data-[border=true]:divide-y data-[border=true]:border-y"
+    data-border="false"
     data-layout="two-column"
   >
     <div
-      class="grid gap-3 py-4 group-data-[layout=two-column]:sm:grid-cols-3 group-data-[layout=two-column]:sm:gap-4 group-data-[layout=two-column]:sm:py-6"
+      class="grid gap-2 group-data-[border=true]:py-4 group-data-[layout=two-column]:sm:grid-cols-3 group-data-[layout=two-column]:sm:gap-4 group-data-[layout=two-column]:group-data-[border=true]:sm:py-6"
     >
       <dt
         class="font-semibold"
@@ -97,7 +100,46 @@ exports[`DefinitionList > renders layout (undefined) > expected html 1`] = `
       </dd>
     </div>
     <div
-      class="grid gap-3 py-4 group-data-[layout=two-column]:sm:grid-cols-3 group-data-[layout=two-column]:sm:gap-4 group-data-[layout=two-column]:sm:py-6"
+      class="grid gap-2 group-data-[border=true]:py-4 group-data-[layout=two-column]:sm:grid-cols-3 group-data-[layout=two-column]:sm:gap-4 group-data-[layout=two-column]:group-data-[border=true]:sm:py-6"
+    >
+      <dt
+        class="font-semibold"
+      >
+        Term 2
+      </dt>
+      <dd
+        class="group-data-[layout=two-column]:sm:col-span-2"
+      >
+        Description 2
+      </dd>
+    </div>
+  </dl>
+</div>
+`;
+
+exports[`DefinitionList > renders layout (two-column) and border (true) 1`] = `
+<div>
+  <dl
+    class="group data-[border=false]:space-y-6 data-[border=true]:divide-y data-[border=true]:border-y"
+    data-border="true"
+    data-layout="two-column"
+  >
+    <div
+      class="grid gap-2 group-data-[border=true]:py-4 group-data-[layout=two-column]:sm:grid-cols-3 group-data-[layout=two-column]:sm:gap-4 group-data-[layout=two-column]:group-data-[border=true]:sm:py-6"
+    >
+      <dt
+        class="font-semibold"
+      >
+        Term 1
+      </dt>
+      <dd
+        class="group-data-[layout=two-column]:sm:col-span-2"
+      >
+        Description 1
+      </dd>
+    </div>
+    <div
+      class="grid gap-2 group-data-[border=true]:py-4 group-data-[layout=two-column]:sm:grid-cols-3 group-data-[layout=two-column]:sm:gap-4 group-data-[layout=two-column]:group-data-[border=true]:sm:py-6"
     >
       <dt
         class="font-semibold"

@@ -2,22 +2,21 @@ import { render } from '@testing-library/react';
 
 import { describe, expect, it } from 'vitest';
 
-import { DefinitionList, DefinitionListDescription, DefinitionListGroup, DefinitionListTerm } from '~/components/definition-list';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 
 describe('DefinitionList', () => {
-  it.each([[undefined], ['single-column'], ['two-column']] as const)('renders layout (%s)', (layout) => {
+  it.each([
+    ['single-column', false], //
+    ['single-column', true],
+    ['two-column', false],
+    ['two-column', true],
+  ] as const)('renders layout (%s) and border (%s)', (layout, border) => {
     const { container } = render(
-      <DefinitionList className="divide-y border-y" layout={layout}>
-        <DefinitionListGroup>
-          <DefinitionListTerm>Term 1</DefinitionListTerm>
-          <DefinitionListDescription>Description 1</DefinitionListDescription>
-        </DefinitionListGroup>
-        <DefinitionListGroup>
-          <DefinitionListTerm>Term 2</DefinitionListTerm>
-          <DefinitionListDescription>Description 2</DefinitionListDescription>
-        </DefinitionListGroup>
+      <DefinitionList border={border} layout={layout}>
+        <DefinitionListItem term="Term 1">Description 1</DefinitionListItem>
+        <DefinitionListItem term="Term 2">Description 2</DefinitionListItem>
       </DefinitionList>,
     );
-    expect(container).toMatchSnapshot('expected html');
+    expect(container).toMatchSnapshot();
   });
 });
