@@ -15,7 +15,6 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
-import { Progress } from '~/components/progress';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -73,44 +72,39 @@ export default function ApplicationTaxFiling({ loaderData, params }: Route.Compo
   const errorSummary = useErrorSummary(errors, { hasFiledTaxes: 'input-radio-tax-filing-2023-option-0' });
 
   return (
-    <>
-      <div className="my-6 sm:my-8">
-        <Progress value={10} size="lg" label={t('application:progress.label')} />
-      </div>
-      <div className="max-w-prose">
-        <p className="mb-4 italic">{t('application:required-label')}</p>
-        <errorSummary.ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <InputRadios
-            id="tax-filing-2023"
-            name="hasFiledTaxes"
-            legend={t('application:tax-filing.form-instructions', { taxYear })}
-            options={[
-              { value: TAX_FILING_OPTION.yes, children: t('application:tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
-              { value: TAX_FILING_OPTION.no, children: t('application:tax-filing.radio-options.no'), defaultChecked: defaultState === false },
-            ]}
-            errorMessage={errors?.hasFiledTaxes}
-            required
-          />
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Tax filing click">
-              {t('application:tax-filing.save-btn')}
-            </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              variant="secondary"
-              routeId="public/application/$id/eligibility-requirements"
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Tax filing click"
-            >
-              {t('application:tax-filing.back-btn')}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </div>
-    </>
+    <div className="max-w-prose">
+      <p className="mb-4 italic">{t('application:required-label')}</p>
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <InputRadios
+          id="tax-filing-2023"
+          name="hasFiledTaxes"
+          legend={t('application:tax-filing.form-instructions', { taxYear })}
+          options={[
+            { value: TAX_FILING_OPTION.yes, children: t('application:tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
+            { value: TAX_FILING_OPTION.no, children: t('application:tax-filing.radio-options.no'), defaultChecked: defaultState === false },
+          ]}
+          errorMessage={errors?.hasFiledTaxes}
+          required
+        />
+        <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <LoadingButton variant="primary" id="save-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Tax filing click">
+            {t('application:tax-filing.save-btn')}
+          </LoadingButton>
+          <ButtonLink
+            id="back-button"
+            variant="secondary"
+            routeId="public/application/$id/eligibility-requirements"
+            params={params}
+            disabled={isSubmitting}
+            startIcon={faChevronLeft}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Tax filing click"
+          >
+            {t('application:tax-filing.back-btn')}
+          </ButtonLink>
+        </div>
+      </fetcher.Form>
+    </div>
   );
 }
