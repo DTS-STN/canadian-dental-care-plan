@@ -11,7 +11,7 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
-import { DescriptionListItem } from '~/components/description-list-item';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
@@ -101,16 +101,16 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
         </CardHeader>
         <CardContent>
           {state.phoneNumber?.hasChanged ? (
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-new-family:contact-information.phone-number')}>
+            <DefinitionList layout="single-column">
+              <DefinitionListItem term={t('application-new-family:contact-information.phone-number')}>
                 <p>{state.phoneNumber.value.primary}</p>
-              </DescriptionListItem>
+              </DefinitionListItem>
               {state.phoneNumber.value.alternate && (
-                <DescriptionListItem term={t('application-new-family:contact-information.alt-phone-number')}>
+                <DefinitionListItem term={t('application-new-family:contact-information.alt-phone-number')}>
                   <p>{state.phoneNumber.value.alternate}</p>
-                </DescriptionListItem>
+                </DefinitionListItem>
               )}
-            </dl>
+            </DefinitionList>
           ) : (
             <p>{t('application-new-family:contact-information.phone-number-help')}</p>
           )}
@@ -131,9 +131,9 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
           {mailingAddressInfo.address === undefined && homeAddressInfo.address === undefined ? (
             <p>{t('application-new-family:contact-information.address-help')}</p>
           ) : (
-            <dl className="divide-y border-y">
+            <DefinitionList layout="single-column">
               {mailingAddressInfo.address !== undefined && (
-                <DescriptionListItem term={t('application-new-family:contact-information.mailing-address')}>
+                <DefinitionListItem term={t('application-new-family:contact-information.mailing-address')}>
                   <Address
                     address={{
                       address: mailingAddressInfo.address,
@@ -143,10 +143,10 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
                       country: mailingAddressInfo.country ?? '',
                     }}
                   />
-                </DescriptionListItem>
+                </DefinitionListItem>
               )}
               {homeAddressInfo.address !== undefined && (
-                <DescriptionListItem term={t('application-new-family:contact-information.home-address')}>
+                <DefinitionListItem term={t('application-new-family:contact-information.home-address')}>
                   <Address
                     address={{
                       address: homeAddressInfo.address,
@@ -156,9 +156,9 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
                       country: homeAddressInfo.country ?? '',
                     }}
                   />
-                </DescriptionListItem>
+                </DefinitionListItem>
               )}
-            </dl>
+            </DefinitionList>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
@@ -175,12 +175,12 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
         </CardHeader>
         <CardContent>
           {state.communicationPreferences?.hasChanged ? (
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-new-family:contact-information.preferred-language')}>{preferredLanguage?.name}</DescriptionListItem>
-              <DescriptionListItem term={t('application-new-family:contact-information.preferred-method')}>{preferredMethod?.name}</DescriptionListItem>
-              <DescriptionListItem term={t('application-new-family:contact-information.preferred-notification-method')}>{preferredNotificationMethod?.name}</DescriptionListItem>
-              <DescriptionListItem term={t('application-new-family:contact-information.email')}>{state.email}</DescriptionListItem>
-            </dl>
+            <DefinitionList layout="single-column">
+              <DefinitionListItem term={t('application-new-family:contact-information.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
+              <DefinitionListItem term={t('application-new-family:contact-information.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
+              <DefinitionListItem term={t('application-new-family:contact-information.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
+              <DefinitionListItem term={t('application-new-family:contact-information.email')}>{state.email}</DefinitionListItem>
+            </DefinitionList>
           ) : (
             <p>{t('application-new-family:contact-information.communication-preferences-help')}</p>
           )}

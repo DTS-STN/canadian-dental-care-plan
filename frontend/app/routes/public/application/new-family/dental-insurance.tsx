@@ -9,7 +9,7 @@ import { validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
-import { DescriptionListItem } from '~/components/description-list-item';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
@@ -93,11 +93,11 @@ export default function NewFamilyDentalInsurance({ loaderData, params }: Route.C
           {state.dentalInsurance === undefined ? (
             <p>{t('application-new-family:dental-insurance.dental-insurance-indicate-status')}</p>
           ) : (
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-new-family:dental-insurance.access-to-dental-insurance-or-coverage')}>
+            <DefinitionList layout="single-column">
+              <DefinitionListItem term={t('application-new-family:dental-insurance.access-to-dental-insurance-or-coverage')}>
                 <p>{state.dentalInsurance ? t('application-new-family:dental-insurance.dental-insurance-yes') : t('application-new-family:dental-insurance.dental-insurance-no')}</p>
-              </DescriptionListItem>
-            </dl>
+              </DefinitionListItem>
+            </DefinitionList>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
@@ -114,21 +114,21 @@ export default function NewFamilyDentalInsurance({ loaderData, params }: Route.C
         </CardHeader>
         <CardContent>
           {state.dentalBenefits ? (
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-new-family:dental-insurance.access-to-government-benefits')}>
+            <DefinitionList layout="single-column">
+              <DefinitionListItem term={t('application-new-family:dental-insurance.access-to-government-benefits')}>
                 {state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
-                  <>
+                  <div className="space-y-3">
                     <p>{t('application-new-family:dental-insurance.access-to-government-benefits-yes')}</p>
-                    <ul className="ml-6 list-disc">
+                    <ul className="list-disc space-y-1 pl-7">
                       {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
                       {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
                     </ul>
-                  </>
+                  </div>
                 ) : (
                   <p>{t('application-new-family:dental-insurance.access-to-government-benefits-no')}</p>
                 )}
-              </DescriptionListItem>
-            </dl>
+              </DefinitionListItem>
+            </DefinitionList>
           ) : (
             <p>{t('application-new-family:dental-insurance.dental-benefits-indicate-status')}</p>
           )}

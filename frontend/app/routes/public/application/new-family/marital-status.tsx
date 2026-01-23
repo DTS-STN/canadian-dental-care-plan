@@ -9,6 +9,7 @@ import { validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
@@ -71,10 +72,10 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
           {state.maritalStatus === undefined ? (
             <p>{t('application-new-family:marital-status.select-your-status')}</p>
           ) : (
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-new-family:marital-status.marital-status')}>
+            <DefinitionList layout="single-column">
+              <DefinitionListItem term={t('application-new-family:marital-status.marital-status')}>
                 <p>{state.maritalStatus.name}</p>
-              </DescriptionListItem>
+              </DefinitionListItem>
               {state.partnerInformation && (
                 <>
                   <DescriptionListItem term={t('application-new-family:marital-status.spouse-sin')}>
@@ -88,7 +89,7 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
                   </DescriptionListItem>
                 </>
               )}
-            </dl>
+            </DefinitionList>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
