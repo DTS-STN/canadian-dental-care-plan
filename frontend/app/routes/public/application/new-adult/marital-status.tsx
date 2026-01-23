@@ -9,7 +9,7 @@ import { validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
-import { DescriptionListItem } from '~/components/description-list-item';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
@@ -71,24 +71,18 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
           {state.maritalStatus === undefined ? (
             <p>{t('application-new-adult:marital-status.select-your-status')}</p>
           ) : (
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('application-new-adult:marital-status.marital-status')}>
-                <p>{state.maritalStatus.name}</p>
-              </DescriptionListItem>
+            <DefinitionList layout="single-column">
+              <DefinitionListItem term={t('application-new-adult:marital-status.marital-status')}>{state.maritalStatus.name}</DefinitionListItem>
               {state.partnerInformation && (
                 <>
-                  <DescriptionListItem term={t('application-new-adult:marital-status.spouse-sin')}>
-                    <p>{state.partnerInformation.socialInsuranceNumber}</p>
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('application-new-adult:marital-status.spouse-yob')}>
-                    <p>{state.partnerInformation.yearOfBirth}</p>
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('application-new-adult:marital-status.consent')}>
+                  <DefinitionListItem term={t('application-new-adult:marital-status.spouse-sin')}>{state.partnerInformation.socialInsuranceNumber}</DefinitionListItem>
+                  <DefinitionListItem term={t('application-new-adult:marital-status.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
+                  <DefinitionListItem term={t('application-new-adult:marital-status.consent')}>
                     {state.partnerInformation.confirm ? t('application-new-adult:marital-status.consent-yes') : t('application-new-adult:marital-status.consent-no')}
-                  </DescriptionListItem>
+                  </DefinitionListItem>
                 </>
               )}
-            </dl>
+            </DefinitionList>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
