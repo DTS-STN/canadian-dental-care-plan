@@ -84,9 +84,8 @@ export async function action({ context: { appContainer, session }, request, para
   }
 
   const benefitApplicationDto = appContainer.get(TYPES.HubSpokeBenefitRenewalStateMapper).mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(state);
-  await appContainer.get(TYPES.BenefitRenewalService).createAdultBenefitRenewal(benefitApplicationDto);
-  // TODO fetch confirmation code (createAdultBenefitRenewal returns void)
-  const submissionInfo = { confirmationCode: '1234567890123', submittedOn: new UTCDate().toISOString() };
+  const confirmationCode = await appContainer.get(TYPES.BenefitRenewalService).createAdultBenefitRenewal(benefitApplicationDto);
+  const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
   savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
 
   return redirect(getPathById('public/application/$id/renew-adult/submit', params));
