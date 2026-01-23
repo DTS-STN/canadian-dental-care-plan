@@ -2,9 +2,6 @@
   "index": {
     "page-title": "Apply"
   },
-  "progress": {
-    "label": "Application progress"
-  },
   "required-label": "Complete all fields.",
   "optional-label": "Complete all fields unless marked as optional.",
   "sections-completed_one": "{{number}} out of {{count}} section completed",

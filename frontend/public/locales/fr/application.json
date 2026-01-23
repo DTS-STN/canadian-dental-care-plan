@@ -2,9 +2,6 @@
   "index": {
     "page-title": "Présenter une demande"
   },
-  "progress": {
-    "label": "Progression de la demande"
-  },
   "required-label": "Remplissez tous les champs.",
   "optional-label": "Remplissez tous les champs, sauf s'ils sont indiqués facultatifs.",
   "sections-completed_one": "(FR) {{number}} out of {{count}} section completed",

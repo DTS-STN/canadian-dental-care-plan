@@ -22,7 +22,6 @@ import type { InputOptionProps } from '~/components/input-option';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
-import { Progress } from '~/components/progress';
 import { useEnhancedFetcher } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
@@ -244,132 +243,127 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
 
   const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedHomeCountry);
   return (
-    <>
-      <div className="my-6 sm:my-8">
-        <Progress value={55} size="lg" label={t('application:progress.label')} />
-      </div>
-      <div className="max-w-prose">
-        <p className="mb-4 italic">{t('application:optional-label')}</p>
-        <errorSummary.ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <fieldset className="mb-8">
-            <div className="space-y-6">
+    <div className="max-w-prose">
+      <p className="mb-4 italic">{t('application:optional-label')}</p>
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <fieldset className="mb-8">
+          <div className="space-y-6">
+            <InputSanitizeField
+              id="home-address"
+              name="address"
+              className="w-full"
+              label={t('application-spokes:address.address-field.address')}
+              helpMessagePrimary={t('application-spokes:address.address-field.address-help')}
+              helpMessagePrimaryClassName="text-black"
+              maxLength={100}
+              autoComplete="address-line1"
+              defaultValue={defaultState.address}
+              errorMessage={errors?.address}
+              required
+            />
+            <InputSanitizeField
+              id="home-apartment"
+              name="apartment"
+              className="w-full"
+              label={t('application-spokes:address.address-field.apartment')}
+              maxLength={100}
+              helpMessagePrimary={t('application-spokes:address.address-field.apartment-help')}
+              helpMessagePrimaryClassName="text-black"
+              autoComplete="address-line2"
+              defaultValue=""
+              errorMessage={errors?.apartment}
+            />
+            <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
               <InputSanitizeField
-                id="home-address"
-                name="address"
+                id="home-city"
+                name="city"
                 className="w-full"
-                label={t('application-spokes:address.address-field.address')}
-                helpMessagePrimary={t('application-spokes:address.address-field.address-help')}
-                helpMessagePrimaryClassName="text-black"
+                label={t('application-spokes:address.address-field.city')}
                 maxLength={100}
-                autoComplete="address-line1"
-                defaultValue={defaultState.address}
-                errorMessage={errors?.address}
+                autoComplete="address-level2"
+                defaultValue={defaultState.city}
+                errorMessage={errors?.city}
                 required
               />
               <InputSanitizeField
-                id="home-apartment"
-                name="apartment"
+                id="home-postal-code"
+                name="postalZipCode"
                 className="w-full"
-                label={t('application-spokes:address.address-field.apartment')}
+                label={isPostalCodeRequired ? t('application-spokes:address.address-field.postal-code') : t('application-spokes:address.address-field.postal-code-optional')}
                 maxLength={100}
-                helpMessagePrimary={t('application-spokes:address.address-field.apartment-help')}
-                helpMessagePrimaryClassName="text-black"
-                autoComplete="address-line2"
-                defaultValue=""
-                errorMessage={errors?.apartment}
-              />
-              <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
-                <InputSanitizeField
-                  id="home-city"
-                  name="city"
-                  className="w-full"
-                  label={t('application-spokes:address.address-field.city')}
-                  maxLength={100}
-                  autoComplete="address-level2"
-                  defaultValue={defaultState.city}
-                  errorMessage={errors?.city}
-                  required
-                />
-                <InputSanitizeField
-                  id="home-postal-code"
-                  name="postalZipCode"
-                  className="w-full"
-                  label={isPostalCodeRequired ? t('application-spokes:address.address-field.postal-code') : t('application-spokes:address.address-field.postal-code-optional')}
-                  maxLength={100}
-                  autoComplete="postal-code"
-                  defaultValue={defaultState.postalCode ?? ''}
-                  errorMessage={errors?.postalZipCode}
-                  required={isPostalCodeRequired}
-                />
-              </div>
-              {homeRegions.length > 0 && (
-                <InputSelect
-                  id="home-province"
-                  name="provinceStateId"
-                  className="w-full sm:w-1/2"
-                  label={t('application-spokes:address.address-field.province')}
-                  defaultValue={defaultState.province}
-                  errorMessage={errors?.provinceStateId}
-                  options={[dummyOption, ...homeRegions]}
-                  required
-                />
-              )}
-              <InputSelect
-                id="home-country"
-                name="countryId"
-                className="w-full sm:w-1/2"
-                label={t('application-spokes:address.address-field.country')}
-                autoComplete="country"
-                defaultValue={defaultState.country ?? ''}
-                errorMessage={errors?.countryId}
-                options={countries}
-                onChange={homeCountryChangeHandler}
-                required
+                autoComplete="postal-code"
+                defaultValue={defaultState.postalCode ?? ''}
+                errorMessage={errors?.postalZipCode}
+                required={isPostalCodeRequired}
               />
             </div>
-          </fieldset>
-          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
-              <DialogTrigger asChild>
-                <LoadingButton
-                  aria-expanded={undefined}
-                  variant="primary"
-                  id="continue-button"
-                  type="submit"
-                  name="_action"
-                  value={FORM_ACTION.submit}
-                  loading={isSubmitting}
-                  endIcon={faChevronRight}
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Home address click"
-                >
-                  {t('application-spokes:address.save-btn')}
-                </LoadingButton>
-              </DialogTrigger>
-              {!fetcher.isSubmitting && addressDialogContent && (
-                <>
-                  {addressDialogContent.status === 'address-suggestion' && (
-                    <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
-                  )}
-                  {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent addressContext="home-address" invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
-                </>
-              )}
-            </Dialog>
-            <ButtonLink
-              id="back-button"
-              variant="secondary"
-              routeId={`public/application/$id/mailing-address`}
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Home address click"
-            >
-              {t('application-spokes:address.back')}
-            </ButtonLink>
+            {homeRegions.length > 0 && (
+              <InputSelect
+                id="home-province"
+                name="provinceStateId"
+                className="w-full sm:w-1/2"
+                label={t('application-spokes:address.address-field.province')}
+                defaultValue={defaultState.province}
+                errorMessage={errors?.provinceStateId}
+                options={[dummyOption, ...homeRegions]}
+                required
+              />
+            )}
+            <InputSelect
+              id="home-country"
+              name="countryId"
+              className="w-full sm:w-1/2"
+              label={t('application-spokes:address.address-field.country')}
+              autoComplete="country"
+              defaultValue={defaultState.country ?? ''}
+              errorMessage={errors?.countryId}
+              options={countries}
+              onChange={homeCountryChangeHandler}
+              required
+            />
           </div>
-        </fetcher.Form>
-      </div>
-    </>
+        </fieldset>
+        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
+            <DialogTrigger asChild>
+              <LoadingButton
+                aria-expanded={undefined}
+                variant="primary"
+                id="continue-button"
+                type="submit"
+                name="_action"
+                value={FORM_ACTION.submit}
+                loading={isSubmitting}
+                endIcon={faChevronRight}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Home address click"
+              >
+                {t('application-spokes:address.save-btn')}
+              </LoadingButton>
+            </DialogTrigger>
+            {!fetcher.isSubmitting && addressDialogContent && (
+              <>
+                {addressDialogContent.status === 'address-suggestion' && (
+                  <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
+                )}
+                {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent addressContext="home-address" invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
+              </>
+            )}
+          </Dialog>
+          <ButtonLink
+            id="back-button"
+            variant="secondary"
+            routeId={`public/application/$id/mailing-address`}
+            params={params}
+            disabled={isSubmitting}
+            startIcon={faChevronLeft}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Home address click"
+          >
+            {t('application-spokes:address.back')}
+          </ButtonLink>
+        </div>
+      </fetcher.Form>
+    </div>
   );
 }
