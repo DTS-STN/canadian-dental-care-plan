@@ -48,7 +48,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family']);
+  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family', 'renew-children']);
   const childState = getSingleChildState({ params, request, session });
 
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
@@ -82,7 +82,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family']);
+  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family', 'renew-children']);
 
   const formData = await request.formData();
 
