@@ -7,7 +7,8 @@ import z from 'zod';
 import type { Route } from './+types/parent-or-guardian';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { loadPublicRenewChildState } from '~/.server/routes/helpers/public-renew-child-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -39,9 +40,8 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  // TODO: const state = loadPublicApplicationRenewChildState({ params, request, session });
-  const state = getPublicApplicationState({ params, session });
-  // validateApplicationTypeAndFlow(state, params, ['renew-children']);
+  const state = loadPublicRenewChildState({ params, request, session });
+  validateApplicationTypeAndFlow(state, params, ['renew-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-renew-child:parent-or-guardian.page-title') }) };
@@ -88,6 +88,9 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const state = loadPublicRenewChildState({ params, request, session });
+  validateApplicationTypeAndFlow(state, params, ['renew-children']);
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
