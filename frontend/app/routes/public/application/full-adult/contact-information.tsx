@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import type { Route } from './+types/contact-information';
 
 import { TYPES } from '~/.server/constants';
-import { loadPublicApplicationAdultState } from '~/.server/routes/helpers/public-application-adult-route-helpers';
+import { loadPublicApplicationFullAdultState } from '~/.server/routes/helpers/public-application-full-adult-route-helpers';
 import { validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
@@ -31,7 +31,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  const state = loadPublicApplicationAdultState({ params, request, session });
+  const state = loadPublicApplicationFullAdultState({ params, request, session });
   validateApplicationFlow(state, params, ['full-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);

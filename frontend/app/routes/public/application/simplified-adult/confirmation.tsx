@@ -7,7 +7,7 @@ import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { clearPublicApplicationState, getEligibilityStatus, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
-import { loadPublicRenewAdultState } from '~/.server/routes/helpers/public-renew-adult-route-helpers';
+import { loadPublicApplicationSimplifiedAdultState } from '~/.server/routes/helpers/public-application-simplified-adult-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -39,7 +39,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const state = loadPublicRenewAdultState({ params, request, session });
+  const state = loadPublicApplicationSimplifiedAdultState({ params, request, session });
   validateApplicationFlow(state, params, ['simplified-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -136,7 +136,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const state = loadPublicRenewAdultState({ params, request, session });
+  const state = loadPublicApplicationSimplifiedAdultState({ params, request, session });
   validateApplicationFlow(state, params, ['simplified-adult']);
 
   const formData = await request.formData();

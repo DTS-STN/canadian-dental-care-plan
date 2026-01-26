@@ -2,33 +2,33 @@ import { redirect } from 'react-router';
 
 import { createLogger } from '~/.server/logging';
 import type { ApplicationStateParams, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getAgeCategoryFromDateString, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
-interface LoadPublicRenewAdultStateArgs {
+interface LoadPublicApplicationFullAdultStateArgs {
   params: ApplicationStateParams;
   request: Request;
   session: Session;
 }
 
 /**
- * Loads public renew adult state.
+ * Loads public application full adult state.
  * @param args - The arguments.
  * @returns The loaded adult state.
  */
-export function loadPublicRenewAdultState({ params, request, session }: LoadPublicRenewAdultStateArgs) {
-  const log = createLogger('public-renew-adult-route-helpers.server/loadPublicRenewAdultState');
+export function loadPublicApplicationFullAdultState({ params, request, session }: LoadPublicApplicationFullAdultStateArgs) {
+  const log = createLogger('public-application-full-adult-route-helpers/loadPublicApplicationFullAdultState');
   const { pathname } = new URL(request.url);
   const applicationState = getPublicApplicationState({ params, session });
 
-  if (applicationState.typeOfApplication !== 'adult') {
+  if (applicationState.inputModel !== 'full' || applicationState.typeOfApplication !== 'adult') {
     throw redirect(getPathById('public/application/$id/type-application', params));
   }
 
   // Redirect to the confirmation page if the application has been submitted and
   // the current route is not the confirmation page.
-  const confirmationRouteUrl = getPathById('public/application/$id/simplified-adult/confirmation', params);
+  const confirmationRouteUrl = getPathById('public/application/$id/full-adult/confirmation', params);
   if (applicationState.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has been submitted; sessionId: [%s], ', confirmationRouteUrl, applicationState.id);
     throw redirect(confirmationRouteUrl);
@@ -45,33 +45,32 @@ export function loadPublicRenewAdultState({ params, request, session }: LoadPubl
   return applicationState;
 }
 
-interface LoadPublicRenewAdultStateForReviewArgs {
+interface LoadPublicApplicationFullAdultStateForReviewArgs {
   params: ApplicationStateParams;
   request: Request;
   session: Session;
 }
 
 /**
- * Loads the adult state for the review page. It validates the state and throws a redirect if invalid.
+ * Loads the full adult state for the review page. It validates the state and throws a redirect if invalid.
  * @param args - The arguments.
  * @returns The validated adult state.
  */
-export function loadPublicRenewAdultStateForReview({ params, request, session }: LoadPublicRenewAdultStateForReviewArgs) {
-  const state = loadPublicRenewAdultState({ params, request, session });
-  return validatePublicRenewAdultStateForReview({ params, state });
+export function loadPublicApplicationFullAdultStateForReview({ params, request, session }: LoadPublicApplicationFullAdultStateForReviewArgs) {
+  const state = loadPublicApplicationFullAdultState({ params, request, session });
+  return validatePublicApplicationFullAdultStateForReview({ params, state });
 }
 
-interface ValidatePublicRenewAdultStateForReviewArgs {
+interface ValidatePublicApplicationFullAdultStateForReviewArgs {
   params: ApplicationStateParams;
   state: PublicApplicationState;
 }
 
-export function validatePublicRenewAdultStateForReview({ params, state }: ValidatePublicRenewAdultStateForReviewArgs) {
+export function validatePublicApplicationFullAdultStateForReview({ params, state }: ValidatePublicApplicationFullAdultStateForReviewArgs) {
   const {
+    context,
     applicantInformation,
     applicationYear,
-    clientApplication,
-    context,
     communicationPreferences,
     phoneNumber,
     dentalBenefits,
@@ -94,10 +93,6 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     children,
   } = state;
 
-  if (clientApplication === undefined) {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
-  }
-
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
   }
@@ -110,7 +105,7 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
-  if (inputModel !== 'simplified') {
+  if (inputModel !== 'full') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
@@ -140,31 +135,38 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
+  if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
+    throw redirect(getPathById('public/application/$id/full-adult/marital-status', params));
+  }
+
+  if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
+    throw redirect(getPathById('public/application/$id/full-adult/marital-status', params));
+  }
+
   if (phoneNumber === undefined) {
-    throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
+    throw redirect(getPathById('public/application/$id/full-adult/contact-information', params));
   }
 
   if (mailingAddress === undefined) {
-    throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
+    throw redirect(getPathById('public/application/$id/full-adult/contact-information', params));
   }
 
   if (communicationPreferences === undefined) {
-    throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
+    throw redirect(getPathById('public/application/$id/full-adult/contact-information', params));
   }
 
   if (dentalInsurance === undefined) {
-    throw redirect(getPathById('public/application/$id/simplified-adult/dental-insurance', params));
+    throw redirect(getPathById('public/application/$id/full-adult/dental-insurance', params));
   }
 
   if (dentalBenefits === undefined) {
-    throw redirect(getPathById('public/application/$id/simplified-adult/federal-provincial-territorial-benefits', params));
+    throw redirect(getPathById('public/application/$id/full-adult/federal-provincial-territorial-benefits', params));
   }
 
   return {
     ageCategory,
     applicantInformation,
     applicationYear,
-    clientApplication,
     context,
     communicationPreferences,
     phoneNumber,
