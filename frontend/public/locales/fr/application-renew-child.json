@@ -170,6 +170,7 @@
     "close-application": "Fermer la demande",
     "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html",
     "status-checker-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
+    "eligibility": "Admissibilité",
     "modal": {
       "header": "Fermer la demande",
       "info": "En fermant cette demande, vous mettrez fin à votre session et les informations saisies seront effacées de votre navigateur. Assurez-vous d'avoir une copie de votre code de demande.",

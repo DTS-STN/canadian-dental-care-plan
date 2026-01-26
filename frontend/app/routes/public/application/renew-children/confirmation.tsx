@@ -6,7 +6,7 @@ import { z } from 'zod';
 import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
-import { clearPublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { clearPublicApplicationState, getEligibilityStatus, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicRenewChildState } from '~/.server/routes/helpers/public-renew-child-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
@@ -15,6 +15,7 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
+import { Eligibility } from '~/components/eligibility';
 import { InlineLink } from '~/components/inline-link';
 import { ProgressStepper } from '~/components/progress-stepper';
 import { useCurrentLanguage } from '~/hooks';
@@ -120,6 +121,10 @@ export async function loader({ context: { appContainer, session }, params, reque
       ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
       : undefined;
 
+      const childDentalInsurance = state.clientApplication?.children.find((c) => c.information.clientId === child.id)?.dentalInsurance;
+
+      const eligibility = child.dentalInsurance ? getEligibilityStatus(child.dentalInsurance.hasDentalInsurance, childDentalInsurance) : undefined;
+
       return {
         id: child.id,
         firstName: child.information?.firstName,
@@ -139,6 +144,7 @@ export async function loader({ context: { appContainer, session }, params, reque
             benefit: selectedProvincialBenefit?.name,
           },
         },
+        eligibility,
       };
     }),
   );
@@ -187,6 +193,21 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
   return (
     <div className="max-w-prose space-y-10">
       <ProgressStepper steps={steps} currentStep={4} />
+
+      <section className="space-y-6">
+        <h3 className="font-lato text-2xl font-bold">{t('confirm.eligibility')}</h3>
+        {children.map(
+          (child) =>
+            child.eligibility && (
+              <DefinitionList border key={child.id}>
+                <DefinitionListItem term={`${child.firstName} ${child.lastName}`}>
+                  <Eligibility type={child.eligibility} />
+                </DefinitionListItem>
+              </DefinitionList>
+            ),
+        )}
+      </section>
+
       <div className="space-y-4">
         <p className="text-2xl">
           <strong>{t('confirm.app-code-is')}</strong>
