@@ -216,6 +216,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       livingIndependently: applicant.ApplicantDetail.LivingIndependentlyIndicator,
       partnerInformation,
       typeOfApplication: this.toBenefitApplicationCategoryCode(clientApplicationEntity.BenefitApplication.BenefitApplicationCategoryCode.ReferenceDataID),
+      t4DentalIndicator: applicant.ApplicantEarning.at(0)?.PrivateDentalInsuranceIndicator,
     };
   }
 

@@ -13,6 +13,7 @@ export type ClientApplicationDto = ReadonlyDeep<{
   livingIndependently?: boolean;
   partnerInformation?: ClientPartnerInformationDto;
   typeOfApplication: string;
+  t4DentalIndicator?: boolean;
 }>;
 
 export type ClientApplicantInformationDto = Readonly<{

@@ -105,6 +105,26 @@ describe('DefaultClientApplicationService', () => {
           PreviousTaxesFiledIndicator: true,
           PrivateDentalInsuranceIndicator: true,
         },
+        ApplicantEarning: [
+          {
+            BenefitEligibilityStatus: {
+              StatusCode: {
+                ReferenceDataID: '775170001',
+              },
+            },
+            Coverage: [
+              {
+                CoverageCategoryCode: {
+                  ReferenceDataName: 'Co-Pay Tier (TPC)',
+                  CoverageTierCode: {
+                    ReferenceDataID: 'c12531e1-ef6d-49f9-9737-c32271fbba79',
+                  },
+                },
+              },
+            ],
+            PrivateDentalInsuranceIndicator: true,
+          },
+        ],
         ClientIdentification: [
           {
             IdentificationID: '4f35f70b-2f83-ee11-8179-000d3a09d000',
@@ -192,6 +212,7 @@ describe('DefaultClientApplicationService', () => {
     hasFiledTaxes: true,
     isInvitationToApplyClient: false,
     typeOfApplication: '111111111',
+    t4DentalIndicator: true,
   };
 
   describe('findClientApplicationBySin', () => {

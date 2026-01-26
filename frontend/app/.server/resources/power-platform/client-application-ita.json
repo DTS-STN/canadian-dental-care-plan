@@ -79,6 +79,26 @@
         "PreviousTaxesFiledIndicator": false,
         "PrivateDentalInsuranceIndicator": false
       },
+      "ApplicantEarning": [
+        {
+          "BenefitEligibilityStatus": {
+            "StatusCode": {
+              "ReferenceDataID": "775170001"
+            }
+          },
+          "Coverage": [
+            {
+              "CoverageCategoryCode": {
+                "ReferenceDataName": "Co-Pay Tier (TPC)",
+                "CoverageTierCode": {
+                  "ReferenceDataID": "c12531e1-ef6d-49f9-9737-c32271fbba79"
+                }
+              }
+            }
+          ],
+          "PrivateDentalInsuranceIndicator": true
+        }
+      ],
       "ClientIdentification": [
         {
           "IdentificationID": "1e97fe42-0263-ee11-8df0-000d3a09df08",
