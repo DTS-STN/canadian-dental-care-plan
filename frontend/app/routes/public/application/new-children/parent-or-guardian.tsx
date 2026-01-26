@@ -85,7 +85,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
       id: 'marital-status',
       completed:
         state.maritalStatus !== undefined && // marital status selected
-        (!state.partnerInformation || // martial status has not partner information
+        (!state.partnerInformation || // marital status has no partner information
           state.partnerInformation.confirm === true), // marital status has partner information with consent given
     },
     { id: 'phone-number', completed: state.phoneNumber?.hasChanged === true },

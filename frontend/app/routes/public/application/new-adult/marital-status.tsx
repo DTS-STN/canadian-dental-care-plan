@@ -54,7 +54,7 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
       id: 'marital-status',
       completed:
         state.maritalStatus !== undefined && // marital status selected
-        (!state.partnerInformation || // martial status has not partner information
+        (!state.partnerInformation || // marital status has no partner information
           state.partnerInformation.confirm === true), // marital status has partner information with consent given
     },
   ] as const;

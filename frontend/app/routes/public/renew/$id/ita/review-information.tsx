@@ -239,7 +239,7 @@ export default function RenewItaReviewInformation({ loaderData, params }: Route.
               <DescriptionListItem term={t('renew-ita:review-information.marital-title')}>
                 <p>{userInfo.maritalStatus ? t(`renew-ita:${maritalStatusMap[userInfo.maritalStatus as keyof typeof maritalStatusMap]}`) : ''}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-martial-status" routeId="public/renew/$id/ita/marital-status" params={params}>
+                  <InlineLink id="change-marital-status" routeId="public/renew/$id/ita/marital-status" params={params}>
                     {t('renew-ita:review-information.marital-change')}
                   </InlineLink>
                 </div>

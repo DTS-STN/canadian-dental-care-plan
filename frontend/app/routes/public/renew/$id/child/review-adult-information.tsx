@@ -205,7 +205,7 @@ export default function RenewChildReviewAdultInformation({ loaderData, params }:
               <DescriptionListItem term={t('renew-child:review-adult-information.marital-title')}>
                 <p>{userInfo.maritalStatus ? t(`renew-child:${maritalStatusMap[userInfo.maritalStatus as keyof typeof maritalStatusMap]}`) : ''}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-martial-status" routeId="public/renew/$id/child/confirm-marital-status" params={params}>
+                  <InlineLink id="change-marital-status" routeId="public/renew/$id/child/confirm-marital-status" params={params}>
                     {t('renew-child:review-adult-information.marital-change')}
                   </InlineLink>
                 </div>

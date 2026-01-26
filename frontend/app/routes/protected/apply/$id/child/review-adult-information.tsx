@@ -232,7 +232,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
               <DescriptionListItem term={t('protected-apply-child:review-adult-information.marital-title')}>
                 <p>{userInfo.maritalStatus ? t(`protected-apply-child:${maritalStatusMap[userInfo.maritalStatus as keyof typeof maritalStatusMap]}`) : ''}</p>
                 <p className="mt-4">
-                  <InlineLink id="change-martial-status" routeId="protected/apply/$id/child/marital-status" params={params}>
+                  <InlineLink id="change-marital-status" routeId="protected/apply/$id/child/marital-status" params={params}>
                     {t('protected-apply-child:review-adult-information.marital-change')}
                   </InlineLink>
                 </p>
