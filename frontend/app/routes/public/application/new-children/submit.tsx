@@ -157,7 +157,7 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
                 {t('application-new-child:submit.submit')}
               </NavigationButton>
               <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-children/childrens-application" params={params}>
-                {t('application-new-child:submit.dental-insurance')}
+                {t('application-new-child:submit.childrens-application')}
               </NavigationButtonLink>
             </div>
           </fetcher.Form>
