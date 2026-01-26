@@ -22,7 +22,7 @@ export function loadPublicApplicationAdultState({ params, request, session }: Lo
   const { pathname } = new URL(request.url);
   const applicationState = getPublicApplicationState({ params, session });
 
-  if (applicationState.typeOfApplicationFlow !== 'adult') {
+  if (applicationState.typeOfApplication !== 'adult') {
     throw redirect(getPathById('public/application/$id/type-application', params));
   }
 
@@ -89,7 +89,7 @@ export function validatePublicApplicationAdultStateForReview({ params, state }: 
     submissionInfo,
     termsAndConditions,
     inputModel,
-    typeOfApplicationFlow,
+    typeOfApplication: typeOfApplicationFlow,
     children,
   } = state;
 

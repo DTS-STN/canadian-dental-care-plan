@@ -147,7 +147,7 @@ export async function action({ context: { appContainer, session }, params, reque
     });
   }
 
-  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplicationFlow}/childrens-application`, params));
+  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
 }
 
 export default function RenewChildChildrensApplication({ loaderData, params }: Route.ComponentProps) {

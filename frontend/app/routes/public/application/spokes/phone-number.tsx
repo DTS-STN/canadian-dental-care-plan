@@ -7,6 +7,7 @@ import type { Route } from './+types/phone-number';
 
 import { TYPES } from '~/.server/constants';
 import { getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { ApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { phoneSchema } from '~/.server/validation/phone-schema';
@@ -24,13 +25,13 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-function getRouteFromTypeAndFlow(typeAndFlow: string) {
-  switch (typeAndFlow) {
+function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
+  switch (applicationFlow) {
     case 'new-children': {
-      return `public/application/$id/${typeAndFlow}/parent-or-guardian`;
+      return `public/application/$id/${applicationFlow}/parent-or-guardian`;
     }
     default: {
-      return `public/application/$id/${typeAndFlow}/contact-information`;
+      return `public/application/$id/${applicationFlow}/contact-information`;
     }
   }
 }
@@ -55,7 +56,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       phoneNumber: state.phoneNumber?.value?.primary,
       phoneNumberAlt: state.phoneNumber?.value?.alternate,
     },
-    typeAndFlow: `${state.inputModel}-${state.typeOfApplicationFlow}`,
+    applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
     meta,
   };
 }
@@ -71,7 +72,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const typeAndFlow = `${state.inputModel}-${state.typeOfApplicationFlow}`;
+  const applicationFlow: ApplicationFlow = `${state.inputModel}-${state.typeOfApplication}`;
 
   const phoneNumberSchema = z.object({
     phoneNumber: phoneSchema({
@@ -107,12 +108,12 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
+  return redirect(getPathById(getRouteFromApplicationFlow(applicationFlow), params));
 }
 
 export default function PhoneNumber({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, typeAndFlow } = loaderData;
+  const { defaultState, applicationFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -181,7 +182,14 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
           <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Phone number click">
             {t('application-spokes:phone-number.save-btn')}
           </LoadingButton>
-          <ButtonLink id="back-button" variant="secondary" routeId={getRouteFromTypeAndFlow(typeAndFlow)} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Phone number click">
+          <ButtonLink
+            id="back-button"
+            variant="secondary"
+            routeId={getRouteFromApplicationFlow(applicationFlow)}
+            params={params}
+            disabled={isSubmitting}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Phone number click"
+          >
             {t('application-spokes:phone-number.back-btn')}
           </ButtonLink>
         </div>

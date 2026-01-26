@@ -11,7 +11,7 @@ import type { Route } from './+types/communication-preferences';
 
 import { TYPES } from '~/.server/constants';
 import { getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
-import type { CommunicationPreferencesState } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { ApplicationFlow, CommunicationPreferencesState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -27,13 +27,13 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-function getRouteFromTypeAndFlow(typeAndFlow: string) {
-  switch (typeAndFlow) {
+function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
+  switch (applicationFlow) {
     case 'new-children': {
-      return `public/application/$id/${typeAndFlow}/parent-or-guardian`;
+      return `public/application/$id/${applicationFlow}/parent-or-guardian`;
     }
     default: {
-      return `public/application/$id/${typeAndFlow}/contact-information`;
+      return `public/application/$id/${applicationFlow}/contact-information`;
     }
   }
 }
@@ -62,7 +62,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     defaultState: state.communicationPreferences?.value,
-    typeAndFlow: `${state.inputModel}-${state.typeOfApplicationFlow}`,
+    applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
     languages,
     gcCommunicationMethods,
     sunLifeCommunicationMethods,
@@ -84,7 +84,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const typeAndFlow = `${state.inputModel}-${state.typeOfApplicationFlow}`;
+  const applicationFlow: ApplicationFlow = `${state.inputModel}-${state.typeOfApplication}`;
 
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 
@@ -123,12 +123,12 @@ export async function action({ context: { appContainer, session }, params, reque
   if (parsedDataResult.data.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || parsedDataResult.data.preferredNotificationMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
     return redirect(getPathById('public/application/$id/email', params));
   }
-  return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
+  return redirect(getPathById(getRouteFromApplicationFlow(applicationFlow), params));
 }
 
 export default function ApplicationSpokeCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, typeAndFlow, gcCommunicationMethods, sunLifeCommunicationMethods, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = loaderData;
+  const { defaultState, applicationFlow, gcCommunicationMethods, sunLifeCommunicationMethods, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -218,7 +218,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
           <ButtonLink
             id="back-button"
             variant="secondary"
-            routeId={getRouteFromTypeAndFlow(typeAndFlow)}
+            routeId={getRouteFromApplicationFlow(applicationFlow)}
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}

@@ -24,7 +24,7 @@ export function loadPublicApplicationChildState({ params, request, session }: Lo
   const { pathname } = new URL(request.url);
   const applicationState = getPublicApplicationState({ params, session });
 
-  if (applicationState.typeOfApplicationFlow !== 'children') {
+  if (applicationState.typeOfApplication !== 'children') {
     throw redirect(getPathById('public/application/$id/type-application', params));
   }
 
@@ -124,7 +124,7 @@ export function validatePublicApplicationChildStateForReview({ params, state }: 
     submissionInfo,
     termsAndConditions,
     inputModel,
-    typeOfApplicationFlow,
+    typeOfApplication: typeOfApplicationFlow,
   } = state;
 
   if (termsAndConditions === undefined) {

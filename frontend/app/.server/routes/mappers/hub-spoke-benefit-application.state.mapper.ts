@@ -16,7 +16,7 @@ import type {
   DentalInsuranceState,
   PartnerInformationState,
   TermsAndConditionsState,
-  TypeOfApplicationFlowState,
+  TypeOfApplicationState,
 } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/public-application-route-helpers';
 
@@ -35,7 +35,7 @@ export interface ApplicationAdultState {
   partnerInformation?: PartnerInformationState;
   phoneNumber: DeclaredChangePhoneNumberState;
   termsAndConditions: TermsAndConditionsState;
-  typeOfApplicationFlow: Extract<TypeOfApplicationFlowState, 'adult'>;
+  typeOfApplicationFlow: Extract<TypeOfApplicationState, 'adult'>;
 }
 
 export interface ApplicationFamilyState {
@@ -54,7 +54,7 @@ export interface ApplicationFamilyState {
   partnerInformation?: PartnerInformationState;
   phoneNumber: DeclaredChangePhoneNumberState;
   termsAndConditions: TermsAndConditionsState;
-  typeOfApplicationFlow: Extract<TypeOfApplicationFlowState, 'family'>;
+  typeOfApplicationFlow: Extract<TypeOfApplicationState, 'family'>;
 }
 
 export interface ApplicationChildrenState {
@@ -71,7 +71,7 @@ export interface ApplicationChildrenState {
   partnerInformation?: PartnerInformationState;
   phoneNumber: DeclaredChangePhoneNumberState;
   termsAndConditions: TermsAndConditionsState;
-  typeOfApplicationFlow: Extract<TypeOfApplicationFlowState, 'children'>;
+  typeOfApplicationFlow: Extract<TypeOfApplicationState, 'children'>;
 }
 
 interface ToBenefitApplicationDtoArgs {
@@ -91,7 +91,7 @@ interface ToBenefitApplicationDtoArgs {
   phoneNumber: DeclaredChangePhoneNumberState;
   termsAndConditions: TermsAndConditionsState;
   typeOfApplication: 'adult' | 'adult-child' | 'child';
-  typeOfApplicationFlow: Extract<TypeOfApplicationFlowState, 'adult' | 'family' | 'children'>;
+  typeOfApplicationFlow: Extract<TypeOfApplicationState, 'adult' | 'family' | 'children'>;
 }
 
 interface ToApplicantInformationArgs {

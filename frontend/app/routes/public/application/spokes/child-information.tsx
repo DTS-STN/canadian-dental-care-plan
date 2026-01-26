@@ -71,7 +71,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     defaultState: childState.information,
     childName,
     isNew: childState.isNew,
-    typeAndFlow: `${state.inputModel}-${state.typeOfApplicationFlow}`,
+    applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
     isRenewalContext: state.context === 'renewal',
   };
 }
@@ -235,13 +235,13 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/application/$id/children/$childId/cannot-apply-child', params));
   }
 
-  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplicationFlow}/childrens-application`, params));
+  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
 }
 
 export default function ApplyFlowChildInformation({ loaderData, params }: Route.ComponentProps) {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, childName, isNew, typeAndFlow, isRenewalContext } = loaderData;
+  const { defaultState, childName, isNew, applicationFlow, isRenewalContext } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -386,7 +386,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId={`public/application/$id/${typeAndFlow}/childrens-application`}
+              routeId={`public/application/$id/${applicationFlow}/childrens-application`}
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}

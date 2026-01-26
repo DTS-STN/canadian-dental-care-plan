@@ -11,6 +11,7 @@ import type { Route } from './+types/mailing-address';
 
 import { TYPES } from '~/.server/constants';
 import { getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { ApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
@@ -39,13 +40,13 @@ const FORM_ACTION = {
   useSelectedAddress: 'use-selected-address',
 } as const;
 
-function getRouteFromTypeAndFlow(typeAndFlow: string) {
-  switch (typeAndFlow) {
+function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
+  switch (applicationFlow) {
     case 'new-children': {
-      return `public/application/$id/${typeAndFlow}/parent-or-guardian`;
+      return `public/application/$id/${applicationFlow}/parent-or-guardian`;
     }
     default: {
-      return `public/application/$id/${typeAndFlow}/contact-information`;
+      return `public/application/$id/${applicationFlow}/contact-information`;
     }
   }
 }
@@ -78,7 +79,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       country: state.mailingAddress?.value?.country,
       isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress,
     },
-    typeAndFlow: `${state.inputModel}-${state.typeOfApplicationFlow}`,
+    applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
     countryList,
     regionList,
     meta,
@@ -102,7 +103,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   const isCopyMailingToHome = formData.get('syncAddresses') === 'true';
 
-  const typeAndFlow = `${state.inputModel}-${state.typeOfApplicationFlow}`;
+  const applicationFlow: ApplicationFlow = `${state.inputModel}-${state.typeOfApplication}`;
 
   const mailingAddressValidator = appContainer.get(TYPES.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const parsedDataResult = await mailingAddressValidator.validateMailingAddress({
@@ -149,7 +150,7 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     });
 
-    return redirect(isCopyMailingToHome ? getPathById(getRouteFromTypeAndFlow(typeAndFlow), params) : getPathById('public/application/$id/home-address', params));
+    return redirect(isCopyMailingToHome ? getPathById(getRouteFromApplicationFlow(applicationFlow), params) : getPathById('public/application/$id/home-address', params));
   }
 
   // Validate Canadian address
@@ -215,7 +216,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(isCopyMailingToHome ? getPathById(getRouteFromTypeAndFlow(typeAndFlow), params) : getPathById('public/application/$id/home-address', params));
+  return redirect(isCopyMailingToHome ? getPathById(getRouteFromApplicationFlow(applicationFlow), params) : getPathById('public/application/$id/home-address', params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {
@@ -224,7 +225,7 @@ function isAddressResponse(data: unknown): data is AddressResponse {
 
 export default function MailingAddress({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, countryList, regionList, typeAndFlow } = loaderData;
+  const { defaultState, countryList, regionList, applicationFlow } = loaderData;
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useClientEnv();
 
   const fetcher = useEnhancedFetcher<typeof action>();
@@ -399,7 +400,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId={getRouteFromTypeAndFlow(typeAndFlow)}
+              routeId={getRouteFromApplicationFlow(applicationFlow)}
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}

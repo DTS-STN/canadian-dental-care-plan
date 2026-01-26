@@ -140,7 +140,7 @@ export type PublicApplicationState = ReadonlyDeep<{
     shareData: boolean;
   };
   inputModel?: 'new' | 'renew';
-  typeOfApplicationFlow?: 'adult' | 'children' | 'family' | 'delegate';
+  typeOfApplication?: 'adult' | 'children' | 'family' | 'delegate';
   clientApplication?: ClientApplicationDto;
 }>;
 
@@ -167,7 +167,7 @@ export type PartnerInformationState = NonNullable<PublicApplicationState['partne
 export type SubmissionInfoState = NonNullable<PublicApplicationState['submissionInfo']>;
 export type TermsAndConditionsState = NonNullable<PublicApplicationState['termsAndConditions']>;
 export type InputModelState = NonNullable<PublicApplicationState['inputModel']>;
-export type TypeOfApplicationFlowState = NonNullable<PublicApplicationState['typeOfApplicationFlow']>;
+export type TypeOfApplicationState = NonNullable<PublicApplicationState['typeOfApplication']>;
 export type DeclaredChangeHomeAddressState = NonNullable<PublicApplicationState['homeAddress']>;
 export type DeclaredChangeMailingAddressState = NonNullable<PublicApplicationState['mailingAddress']>;
 
@@ -383,22 +383,22 @@ export function getEligibilityByAge(dateOfBirth: string): EligibilityResult {
 }
 
 /**
- * Extracts the input model and type of application flow from a combined string.
+ * Extracts the input model and type of application from a combined string.
  *
- * @template S - A string in the format `${InputModelState}-${TypeOfApplicationFlowState}`
+ * @template S - A string in the format `${InputModelState}-${TypeOfApplicationState}`
  *
- * @returns An object containing `inputModel` and `typeOfApplicationFlow` if the input string is valid; otherwise, `never`.
+ * @returns An object containing `inputModel` and `typeOfApplication` if the input string is valid; otherwise, `never`.
  *
  * @example
  * ```typescript
- * type Result = ExtractStateFromTypeAndFlow<'new-adult'>;
- * // Result is { inputModel: 'new'; typeOfApplicationFlow: 'adult' }
+ * type Result = ExtractStateFromApplicationFlow<'new-adult'>;
+ * // Result is { inputModel: 'new'; typeOfApplication: 'adult' }
  * ```
  */
-type ExtractStateFromTypeAndFlow<S extends string> = S extends `${infer I}-${infer F}` //
+type ExtractStateFromApplicationFlow<S extends string> = S extends `${infer I}-${infer T}` //
   ? I extends InputModelState
-    ? F extends TypeOfApplicationFlowState
-      ? { inputModel: I; typeOfApplicationFlow: F }
+    ? T extends TypeOfApplicationState
+      ? { inputModel: I; typeOfApplication: T }
       : never
     : never
   : never;
@@ -406,7 +406,7 @@ type ExtractStateFromTypeAndFlow<S extends string> = S extends `${infer I}-${inf
 /**
  * Validates the application flow based on the provided state and allowed flows.
  *
- * @template TAllowedFlows - A readonly array of allowed flow combinations in the format `${InputModelState}-${TypeOfApplicationFlowState}`.
+ * @template TAllowedFlows - A readonly array of allowed flow combinations in the format `${InputModelState}-${TypeOfApplicationState}`.
  *
  * @param state - The current public application state to validate.
  * @param params - The route parameters used for redirection if validation fails.
@@ -419,44 +419,44 @@ type ExtractStateFromTypeAndFlow<S extends string> = S extends `${infer I}-${inf
  * validateApplicationFlow(state, params, ['new-adult', 'renew-children']);
  * ```
  */
-export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${InputModelState}-${TypeOfApplicationFlowState}`>>(
+export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${InputModelState}-${TypeOfApplicationState}`>>(
   state: PublicApplicationState,
   params: Params,
   allowedFlows: TAllowedFlows,
-): asserts state is OmitStrict<PublicApplicationState, 'inputModel' | 'typeOfApplicationFlow'> & ExtractStateFromTypeAndFlow<TAllowedFlows[number]> {
+): asserts state is OmitStrict<PublicApplicationState, 'inputModel' | 'typeOfApplication'> & ExtractStateFromApplicationFlow<TAllowedFlows[number]> {
   const log = createLogger('application-route-helpers.server/validateApplicationFlow');
 
   const inputModel = state.inputModel;
-  const flow = state.typeOfApplicationFlow;
+  const type = state.typeOfApplication;
 
-  if (!inputModel || !flow) {
-    const redirectUrl = getInitialTypeAndFlowUrl('entry', params);
-    log.warn('Input model or flow is not defined in the state; redirecting to [%s], stateId: [%s]', redirectUrl, state.id);
+  if (!inputModel || !type) {
+    const redirectUrl = getInitialApplicationFlowUrl('entry', params);
+    log.warn('Input model or type is not defined in the state; redirecting to [%s], stateId: [%s]', redirectUrl, state.id);
     throw redirectDocument(redirectUrl);
   }
 
-  const flowKey = `${inputModel}-${flow}` as const;
+  const flowKey = `${inputModel}-${type}` as const;
 
   if (!allowedFlows.includes(flowKey)) {
-    const redirectUrl = getInitialTypeAndFlowUrl(flowKey, params);
+    const redirectUrl = getInitialApplicationFlowUrl(flowKey, params);
     log.warn('Flow [%s] is not allowed; allowedTypesAndFlows: [%s], redirecting to [%s], stateId: [%s]', flowKey, allowedFlows, redirectUrl, state.id);
     throw redirectDocument(redirectUrl);
   }
 }
 
-export type ApplicationFlow = 'entry' | `${InputModelState}-${TypeOfApplicationFlowState}`;
+export type ApplicationFlow = 'entry' | `${InputModelState}-${TypeOfApplicationState}`;
 
 /**
- * Determines the initial URL path based on the application type and flow state.
+ * Determines the initial URL path based on the input model and type of application.
  *
- * @param typeAndFlow - Either 'entry' for initial entry point, or a combination of application type
- *                      and flow state in the format `${TypeOfApplicationState}-${TypeOfApplicationFlowState}`
+ * @param applicationFlow - Either 'entry' for initial entry point, or a combination of input model
+ *                      and type of application in the format `${TypeOfApplicationState}-${TypeOfApplicationState}`
  * @param params - Route parameters used to generate the path, typically containing an application ID
- * @returns The URL path string for the corresponding application type and flow
- * @throws {Error} When an unknown typeAndFlow value is provided
+ * @returns The URL path string for the corresponding input model and application type
+ * @throws {Error} When an unknown applicationFlow value is provided
  */
-export function getInitialTypeAndFlowUrl(typeAndFlow: ApplicationFlow, params: Params) {
-  switch (typeAndFlow) {
+export function getInitialApplicationFlowUrl(applicationFlow: ApplicationFlow, params: Params) {
+  switch (applicationFlow) {
     case 'entry': {
       return getPathById('public/application/$id/eligibility-requirements', params);
     }
@@ -485,7 +485,7 @@ export function getInitialTypeAndFlowUrl(typeAndFlow: ApplicationFlow, params: P
       return getPathById('public/application/$id/application-delegate', params);
     }
     default: {
-      throw new Error(`Unknown typeAndFlow value: [${typeAndFlow}]`);
+      throw new Error(`Unknown applicationFlow value: [${applicationFlow}]`);
     }
   }
 }
@@ -509,7 +509,7 @@ export function getSingleChildState({ params, request, session }: getSingleChild
 
   if (!parsedChildId.success) {
     log.warn('Invalid "childId" param format; childId: [%s]', params.childId);
-    throw redirect(getPathById(`public/application/$id/${applicationState.inputModel}-${applicationState.typeOfApplicationFlow}/children/index`, params));
+    throw redirect(getPathById(`public/application/$id/${applicationState.inputModel}-${applicationState.typeOfApplication}/children/index`, params));
   }
 
   const childId = parsedChildId.data;
@@ -517,7 +517,7 @@ export function getSingleChildState({ params, request, session }: getSingleChild
 
   if (childStateIndex === -1) {
     log.warn('Apply single child has not been found; childId: [%s]', childId);
-    throw redirect(getPathById(`public/application/$id/${applicationState.inputModel}-${applicationState.typeOfApplicationFlow}/children/index`, params));
+    throw redirect(getPathById(`public/application/$id/${applicationState.inputModel}-${applicationState.typeOfApplication}/children/index`, params));
   }
 
   const childState = applicationState.children[childStateIndex];

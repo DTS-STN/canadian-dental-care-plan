@@ -59,7 +59,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('application-spokes:children.dental-insurance.title', { childName: childNumber }) }),
   };
 
-  return { meta, defaultState: childState.dentalInsurance, childName, i18nOptions: { childName }, typeAndFlow: `${state.inputModel}-${state.typeOfApplicationFlow}` };
+  return { meta, defaultState: childState.dentalInsurance, childName, i18nOptions: { childName }, applicationFlow: `${state.inputModel}-${state.typeOfApplication}` };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -110,12 +110,12 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplicationFlow}/childrens-application`, params));
+  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
 }
 
 export default function AccessToDentalInsuranceQuestion({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, childName, typeAndFlow } = loaderData;
+  const { defaultState, childName, applicationFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -199,7 +199,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId={`public/application/$id/${typeAndFlow}/childrens-application`}
+              routeId={`public/application/$id/${applicationFlow}/childrens-application`}
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}

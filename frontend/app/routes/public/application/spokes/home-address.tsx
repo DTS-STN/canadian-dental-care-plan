@@ -11,6 +11,7 @@ import type { Route } from './+types/home-address';
 
 import { TYPES } from '~/.server/constants';
 import { getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { ApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
@@ -38,13 +39,13 @@ const FORM_ACTION = {
   useSelectedAddress: 'use-selected-address',
 } as const;
 
-function getRouteFromTypeAndFlow(typeAndFlow: string) {
-  switch (typeAndFlow) {
+function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
+  switch (applicationFlow) {
     case 'new-children': {
-      return `public/application/$id/${typeAndFlow}/parent-or-guardian`;
+      return `public/application/$id/${applicationFlow}/parent-or-guardian`;
     }
     default: {
-      return `public/application/$id/${typeAndFlow}/contact-information`;
+      return `public/application/$id/${applicationFlow}/contact-information`;
     }
   }
 }
@@ -101,7 +102,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const homeAddressValidator = appContainer.get(TYPES.HomeAddressValidatorFactory).createHomeAddressValidator(locale);
 
-  const typeAndFlow = `${state.inputModel}-${state.typeOfApplicationFlow}`;
+  const applicationFlow: ApplicationFlow = `${state.inputModel}-${state.typeOfApplication}`;
 
   const parsedDataResult = await homeAddressValidator.validateHomeAddress({
     address: formData.get('address')?.toString(),
@@ -133,7 +134,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (canProceedToDental) {
     savePublicApplicationState({ params, session, state: { homeAddress: { value: homeAddress, hasChanged: true }, isHomeAddressSameAsMailingAddress: false } });
-    return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
+    return redirect(getPathById(getRouteFromApplicationFlow(applicationFlow), params));
   }
 
   invariant(parsedDataResult.data.postalZipCode, 'Postal zip code is required for Canadian addresses');
@@ -187,7 +188,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   savePublicApplicationState({ params, session, state: { homeAddress: { value: homeAddress, hasChanged: true }, isHomeAddressSameAsMailingAddress: false } });
 
-  return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
+  return redirect(getPathById(getRouteFromApplicationFlow(applicationFlow), params));
 }
 
 function isAddressResponse(data: unknown): data is AddressResponse {

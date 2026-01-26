@@ -22,7 +22,7 @@ export function loadPublicRenewAdultState({ params, request, session }: LoadPubl
   const { pathname } = new URL(request.url);
   const applicationState = getPublicApplicationState({ params, session });
 
-  if (applicationState.typeOfApplicationFlow !== 'adult') {
+  if (applicationState.typeOfApplication !== 'adult') {
     throw redirect(getPathById('public/application/$id/type-application', params));
   }
 
@@ -90,7 +90,7 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     submissionInfo,
     termsAndConditions,
     inputModel,
-    typeOfApplicationFlow,
+    typeOfApplication: typeOfApplicationFlow,
     children,
   } = state;
 
