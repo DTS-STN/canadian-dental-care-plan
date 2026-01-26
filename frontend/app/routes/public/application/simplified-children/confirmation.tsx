@@ -1,5 +1,6 @@
 import { redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -121,9 +122,8 @@ export async function loader({ context: { appContainer, session }, params, reque
       ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
       : undefined;
 
-      const childDentalInsurance = state.clientApplication?.children.find((c) => c.information.clientId === child.id)?.dentalInsurance;
-
-      const eligibility = child.dentalInsurance ? getEligibilityStatus(child.dentalInsurance.hasDentalInsurance, childDentalInsurance) : undefined;
+      invariant(child.dentalInsurance, "Child's dental insurance must be defined");
+      const eligibility = getEligibilityStatus(child.dentalInsurance.hasDentalInsurance, state.clientApplication?.t4DentalIndicator);
 
       return {
         id: child.id,
@@ -133,7 +133,7 @@ export async function loader({ context: { appContainer, session }, params, reque
         sin: child.information?.socialInsuranceNumber,
         isParent: child.information?.isParent,
         dentalInsurance: {
-          accessToDentalInsurance: child.dentalInsurance,
+          accessToDentalInsurance: child.dentalInsurance.hasDentalInsurance,
           federalBenefit: {
             access: child.dentalBenefits?.value?.hasFederalBenefits,
             benefit: selectFederalGovernmentInsurancePlan?.name,
@@ -196,16 +196,13 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
 
       <section className="space-y-6">
         <h3 className="font-lato text-2xl font-bold">{t('confirm.eligibility')}</h3>
-        {children.map(
-          (child) =>
-            child.eligibility && (
-              <DefinitionList border key={child.id}>
-                <DefinitionListItem term={`${child.firstName} ${child.lastName}`}>
-                  <Eligibility type={child.eligibility} />
-                </DefinitionListItem>
-              </DefinitionList>
-            ),
-        )}
+        {children.map((child) => (
+          <DefinitionList border key={child.id}>
+            <DefinitionListItem term={`${child.firstName} ${child.lastName}`}>
+              <Eligibility type={child.eligibility} />
+            </DefinitionListItem>
+          </DefinitionList>
+        ))}
       </section>
 
       <div className="space-y-4">

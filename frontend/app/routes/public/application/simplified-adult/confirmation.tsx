@@ -131,7 +131,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     submissionInfo: state.submissionInfo,
     surveyLink,
     userInfo,
-    eligibility: getEligibilityStatus(state.dentalInsurance.hasDentalInsurance, state.clientApplication?.dentalInsurance),
+    eligibility: getEligibilityStatus(state.dentalInsurance.hasDentalInsurance, state.clientApplication?.t4DentalIndicator),
   };
 }
 
