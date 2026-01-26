@@ -348,7 +348,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
       </fetcher.Form>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-children/childrens-application" params={params}>
+        <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-children/submit" params={params}>
           {t('application-renew-child:childrens-application.submit-btn')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/renew-children/parent-or-guardian" params={params}>

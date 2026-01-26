@@ -188,6 +188,7 @@ export function validatePublicRenewChildStateForReview({ params, state }: Valida
     applicantInformation,
     applicationYear,
     children,
+    clientApplication,
     communicationPreferences,
     phoneNumber,
     email,
