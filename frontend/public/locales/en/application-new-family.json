@@ -3,7 +3,7 @@
     "page-title": "Your marital status",
     "page-heading": "Your marital status",
     "marital-status": "Marital status",
-    "select-your-status": "Select your marital status",
+    "select-your-status": "Select your marital status.",
     "spouse-sin": "Spouse or common-law partner's Social Insurance Number (SIN)",
     "spouse-yob": "Spouse or common-law partner's year of birth",
     "consent": "Consent",
@@ -12,7 +12,7 @@
     "add-marital-status": "Add marital status",
     "edit-marital-status": "Edit marital status information",
     "type-of-application": "Type of application",
-    "contact-information": "Contact information"
+    "contact-information": "Your contact information"
   },
   "contact-information": {
     "page-title": "Your contact information",
