@@ -75,6 +75,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryHome = state.homeAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale) : undefined;
 
   const userInfo = {
+    memberId: state.applicantInformation.memberId,
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.phoneNumber.value.primary,
@@ -244,6 +245,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.applicant-title')}</h3>
           <DefinitionList border>
+            <DefinitionListItem term={t('confirm.member-id')}>{userInfo.memberId}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.dob')}>{userInfo.birthday}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.sin')}>
@@ -257,7 +259,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
           <section className="space-y-6">
             <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.dob')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.year-birth')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.sin')}>
                 <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
               </DefinitionListItem>
