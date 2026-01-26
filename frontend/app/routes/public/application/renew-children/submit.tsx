@@ -89,8 +89,8 @@ export async function action({ context: { appContainer, session }, request, para
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  const benefitApplicationDto = appContainer.get(TYPES.HubSpokeBenefitApplicationStateMapper).mapApplicationChildrenStateToBenefitApplicationDto(state);
-  const confirmationCode = await appContainer.get(TYPES.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
+  const benefitApplicationDto = appContainer.get(TYPES.HubSpokeBenefitRenewalStateMapper).mapBenefitRenewalChildStateToChildBenefitRenewalDto(state);
+  const confirmationCode = await appContainer.get(TYPES.BenefitRenewalService).createChildBenefitRenewal(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
   savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
 
