@@ -197,9 +197,9 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
       <section className="space-y-6">
         <h3 className="font-lato text-2xl font-bold">{t('confirm.eligibility')}</h3>
         {children.map(
-          (child, index) =>
+          (child) =>
             child.eligibility && (
-              <DefinitionList border key={index}>
+              <DefinitionList border key={child.id}>
                 <DefinitionListItem term={`${child.firstName} ${child.lastName}`}>
                   <Eligibility type={child.eligibility} />
                 </DefinitionListItem>
