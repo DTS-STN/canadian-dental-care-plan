@@ -108,6 +108,7 @@ export function validatePublicApplicationChildStateForReview({ params, state }: 
   const {
     applicantInformation,
     applicationYear,
+    context,
     communicationPreferences,
     phoneNumber,
     email,
@@ -183,6 +184,7 @@ export function validatePublicApplicationChildStateForReview({ params, state }: 
     applicantInformation,
     applicationYear,
     children,
+    context,
     communicationPreferences,
     phoneNumber,
     email,

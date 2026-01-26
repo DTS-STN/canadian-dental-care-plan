@@ -19,10 +19,20 @@ import type { EligibilityType } from '~/components/eligibility';
 import { getAgeFromDateString } from '~/utils/date-utils';
 import { getPathById } from '~/utils/route-utils';
 
-export type PublicApplicationStateSessionKey = `public-application-flow-${string}`;
+export type PublicApplicationStateSessionKey = `public-application-${string}`;
 
 export type PublicApplicationState = ReadonlyDeep<{
+  /**
+   * The unique identifier for the public application.
+   */
   id: string;
+
+  /**
+   * The context of the application, either 'intake' for new applications or 'renewal' for renewal applications.
+   * Immutable and set at the start of the application process based on renewal period status.
+   */
+  context: 'intake' | 'renewal';
+
   lastUpdatedOn: string;
   applicantInformation?: {
     memberId?: string;
@@ -233,8 +243,8 @@ export function getPublicApplicationState({ params, session }: LoadStateArgs): P
 interface SaveStateArgs {
   params: ApplicationStateParams;
   session: Session;
-  state: Partial<OmitStrict<PublicApplicationState, 'id' | 'lastUpdatedOn' | 'applicationYear' | 'typeOfApplication'>>;
-  remove?: keyof OmitStrict<PublicApplicationState, 'children' | 'id' | 'lastUpdatedOn' | 'applicationYear' | 'typeOfApplication'>;
+  state: Partial<OmitStrict<PublicApplicationState, 'id' | 'lastUpdatedOn' | 'applicationYear' | 'context' | 'typeOfApplication'>>;
+  remove?: keyof OmitStrict<PublicApplicationState, 'children' | 'id' | 'lastUpdatedOn' | 'applicationYear' | 'context' | 'typeOfApplication'>;
 }
 
 /**
@@ -296,6 +306,7 @@ export function startApplicationState({ applicationYear, session }: StartArgs): 
   const id = nanoid();
   const initialState: PublicApplicationState = {
     id,
+    context: isWithinRenewalPeriod() ? 'renewal' : 'intake',
     lastUpdatedOn: new UTCDate().toISOString(),
     applicationYear,
     children: [],
