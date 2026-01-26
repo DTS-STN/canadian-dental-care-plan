@@ -1,18 +1,18 @@
 {
   "marital-status": {
-    "page-title": "(FR) Your marital status",
-    "page-heading": "(FR) Your marital status",
-    "marital-status": "(FR) Marital status",
-    "select-your-status": "(FR) Select your marital status",
-    "spouse-sin": "(FR) Spouse or common-law partner's Social Insurance Number (SIN)",
-    "spouse-yob": "(FR) Spouse or common-law partner's year of birth",
-    "consent": "(FR) Consent",
-    "consent-yes": "(FR) My spouse or common-law partner has agreed to share their personal information.",
-    "consent-no": "(FR) My spouse or common-law partner has not agreed to share their personal information.",
-    "add-marital-status": "(FR) Add marital status",
-    "edit-marital-status": "(FR) Edit marital status information",
-    "type-of-application": "(FR) Type of application",
-    "contact-information": "(FR) Contact information"
+    "page-title": "Votre état civil",
+    "page-heading": "Votre état civil",
+    "marital-status": "État civil",
+    "select-your-status": "Veuillez sélectionner votre état civil.",
+    "spouse-sin": "Numéro d'assurance sociale (NAS) de l'époux ou de l'épouse ou du conjoint ou de la conjointe de fait",
+    "spouse-yob": "Année de naissance de l'époux ou de l'épouse ou du conjoint ou de la conjointe de fait",
+    "consent": "Consentement",
+    "consent-yes": "Mon époux ou épouse ou conjoint ou conjointe de fait a consenti à la communication de ses renseignements personnels.",
+    "consent-no": "Mon époux ou épouse ou conjoint ou conjointe de fait n'a pas consenti à la communication de ses renseignements personnels.",
+    "add-marital-status": "Ajouter l'état civil",
+    "edit-marital-status": "Modifier l'état civil",
+    "type-of-application": "Type de demande",
+    "contact-information": "Vos coordonnées"
   },
   "contact-information": {
     "page-title": "(FR) Your contact information",

@@ -50,7 +50,13 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
   const { steps, currentStep } = useProgressStepper('new-family', 'marital-status');
 
   const sections = [
-    { id: 'marital-status', completed: state.maritalStatus !== undefined }, //
+    {
+      id: 'marital-status',
+      completed:
+        state.maritalStatus !== undefined && // marital status selected
+        (!state.partnerInformation || // martial status has not partner information
+          state.partnerInformation.confirm === true), // marital status has partner information with consent given
+    },
   ] as const;
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
   const allSectionsCompleted = completedSections.length === sections.length;

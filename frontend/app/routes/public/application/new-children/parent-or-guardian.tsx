@@ -81,7 +81,13 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
   const { steps, currentStep } = useProgressStepper('new-children', 'parent-or-guardian');
 
   const sections = [
-    { id: 'marital-status', completed: state.maritalStatus !== undefined },
+    {
+      id: 'marital-status',
+      completed:
+        state.maritalStatus !== undefined && // marital status selected
+        (!state.partnerInformation || // martial status has not partner information
+          state.partnerInformation.confirm === true), // marital status has partner information with consent given
+    },
     { id: 'phone-number', completed: state.phoneNumber?.hasChanged === true },
     { id: 'address', completed: mailingAddressInfo.address !== undefined && homeAddressInfo.address !== undefined },
     { id: 'communication-preferences', completed: state.communicationPreferences?.hasChanged === true },
