@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:personal-information.page-title') }) };
   return {
     defaultState: state.applicantInformation,
-    isRenewFlow: state.typeOfApplication === 'renew',
+    isRenewalContext: state.context === 'renewal',
     meta,
   };
 }
@@ -142,7 +142,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   // Fetch client application data using ClientApplicationService
   let clientApplication: ClientApplicationDto | undefined;
-  if (state.typeOfApplication === 'renew') {
+  if (state.inputModel === 'renew') {
     invariant(parsedDataResult.data.memberId, 'Member ID must be defined for renewal applications');
 
     const clientApplicationOption = await appContainer.get(TYPES.ClientApplicationService).findClientApplicationByBasicInfo({
@@ -193,7 +193,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplicationPersonalInformation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { currentLanguage } = useCurrentLanguage();
-  const { defaultState, isRenewFlow } = loaderData;
+  const { defaultState, isRenewalContext } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -231,7 +231,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
-            {isRenewFlow && (
+            {isRenewalContext && (
               <InputPatternField
                 id="member-id"
                 name="memberId"

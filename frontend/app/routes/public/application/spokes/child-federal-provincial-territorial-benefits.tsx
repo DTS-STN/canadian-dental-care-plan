@@ -11,7 +11,7 @@ import type { Route } from './+types/child-federal-provincial-territorial-benefi
 
 import { TYPES } from '~/.server/constants';
 import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getPublicApplicationState, getSingleChildState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, getSingleChildState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -48,7 +48,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family', 'renew-children']);
+  validateApplicationFlow(state, params, ['new-children', 'new-family', 'renew-children']);
   const childState = getSingleChildState({ params, request, session });
 
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
@@ -75,14 +75,14 @@ export async function loader({ context: { appContainer, session }, params, reque
     provincialTerritorialSocialPrograms,
     regions,
     childName,
-    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
+    typeAndFlow: `${state.inputModel}-${state.typeOfApplicationFlow}`,
     i18nOptions: { childName },
   };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family', 'renew-children']);
+  validateApplicationFlow(state, params, ['new-children', 'new-family', 'renew-children']);
 
   const formData = await request.formData();
 
@@ -179,7 +179,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/childrens-application`, params));
+  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplicationFlow}/childrens-application`, params));
 }
 
 export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, params }: Route.ComponentProps) {

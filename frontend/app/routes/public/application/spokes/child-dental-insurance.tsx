@@ -9,7 +9,7 @@ import { z } from 'zod';
 import type { Route } from './+types/child-dental-insurance';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, getSingleChildState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, getSingleChildState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -46,7 +46,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family', 'renew-children']);
+  validateApplicationFlow(state, params, ['new-children', 'new-family', 'renew-children']);
   const childState = getSingleChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -59,12 +59,12 @@ export async function loader({ context: { appContainer, session }, params, reque
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('application-spokes:children.dental-insurance.title', { childName: childNumber }) }),
   };
 
-  return { meta, defaultState: childState.dentalInsurance, childName, i18nOptions: { childName }, typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}` };
+  return { meta, defaultState: childState.dentalInsurance, childName, i18nOptions: { childName }, typeAndFlow: `${state.inputModel}-${state.typeOfApplicationFlow}` };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family', 'renew-children']);
+  validateApplicationFlow(state, params, ['new-children', 'new-family', 'renew-children']);
 
   const formData = await request.formData();
 
@@ -110,7 +110,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/childrens-application`, params));
+  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplicationFlow}/childrens-application`, params));
 }
 
 export default function AccessToDentalInsuranceQuestion({ loaderData, params }: Route.ComponentProps) {

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/type-application';
 
-import type { TypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { ApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getInitialTypeAndFlowUrl, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -33,8 +33,8 @@ export async function loader({ context: { appContainer, session }, request, para
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application:type-of-application.page-title') }) };
 
-  const typeAndFlow: TypeAndFlow = state.typeOfApplicationFlow ? `${state.typeOfApplication}-${state.typeOfApplicationFlow}` : 'entry';
-  const nextRouteId = getInitialTypeAndFlowUrl(typeAndFlow, params);
+  const applicationFlow: ApplicationFlow = state.inputModel && state.typeOfApplicationFlow ? `${state.inputModel}-${state.typeOfApplicationFlow}` : 'entry';
+  const nextRouteId = getInitialTypeAndFlowUrl(applicationFlow, params);
   return {
     defaultState: {
       typeOfApplication: state.typeOfApplicationFlow,

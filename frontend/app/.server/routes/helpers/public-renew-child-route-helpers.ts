@@ -124,7 +124,7 @@ export function validatePublicRenewChildStateForReview({ params, state }: Valida
     partnerInformation,
     submissionInfo,
     termsAndConditions,
-    typeOfApplication,
+    inputModel,
     typeOfApplicationFlow,
   } = state;
 
@@ -141,6 +141,10 @@ export function validatePublicRenewChildStateForReview({ params, state }: Valida
   }
 
   if (typeOfApplicationFlow !== 'children') {
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
+  }
+
+  if (inputModel !== 'renew') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
@@ -205,7 +209,7 @@ export function validatePublicRenewChildStateForReview({ params, state }: Valida
     partnerInformation,
     submissionInfo,
     termsAndConditions,
-    typeOfApplication,
+    inputModel,
     typeOfApplicationFlow,
   };
 }

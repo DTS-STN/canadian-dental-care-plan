@@ -10,7 +10,7 @@ import { z } from 'zod';
 import type { Route } from './+types/home-address';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
@@ -59,7 +59,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-adult', 'new-adult', 'new-children', 'new-family']);
+  validateApplicationFlow(state, params, ['renew-adult', 'new-adult', 'new-children', 'new-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -85,7 +85,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
+  validateApplicationFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
 
   const formData = await request.formData();
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
@@ -101,7 +101,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const homeAddressValidator = appContainer.get(TYPES.HomeAddressValidatorFactory).createHomeAddressValidator(locale);
 
-  const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
+  const typeAndFlow = `${state.inputModel}-${state.typeOfApplicationFlow}`;
 
   const parsedDataResult = await homeAddressValidator.validateHomeAddress({
     address: formData.get('address')?.toString(),

@@ -89,7 +89,7 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     partnerInformation,
     submissionInfo,
     termsAndConditions,
-    typeOfApplication,
+    inputModel,
     typeOfApplicationFlow,
     children,
   } = state;
@@ -107,6 +107,10 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
   }
 
   if (typeOfApplicationFlow !== 'adult') {
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
+  }
+
+  if (inputModel !== 'renew') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
@@ -179,7 +183,7 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     partnerInformation,
     submissionInfo,
     termsAndConditions,
-    typeOfApplication,
+    inputModel,
     typeOfApplicationFlow,
     children,
   };

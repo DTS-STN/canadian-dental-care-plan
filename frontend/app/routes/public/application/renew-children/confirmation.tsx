@@ -6,7 +6,7 @@ import { z } from 'zod';
 import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
-import { clearPublicApplicationState, getEligibilityStatus, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { clearPublicApplicationState, getEligibilityStatus, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicRenewChildState } from '~/.server/routes/helpers/public-renew-child-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
@@ -41,7 +41,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadPublicRenewChildState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-children']);
+  validateApplicationFlow(state, params, ['renew-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -165,7 +165,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicRenewChildState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-children']);
+  validateApplicationFlow(state, params, ['renew-children']);
 
   const formData = await request.formData();
 

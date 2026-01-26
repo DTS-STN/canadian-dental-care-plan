@@ -9,7 +9,7 @@ import { z } from 'zod';
 import type { Route } from './+types/dental-insurance';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -45,7 +45,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-adult', 'new-adult', 'new-children', 'new-family']);
+  validateApplicationFlow(state, params, ['renew-adult', 'new-adult', 'new-children', 'new-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -59,14 +59,14 @@ export async function loader({ context: { appContainer, session }, params, reque
           dentalInsuranceEligibilityConfirmationNo: state.dentalInsurance.hasDentalInsurance === false ? state.dentalInsurance.dentalInsuranceEligibilityConfirmation : undefined,
         }
       : undefined,
-    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
+    typeAndFlow: `${state.inputModel}-${state.typeOfApplicationFlow}`,
     meta,
   };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
+  validateApplicationFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
 
   const formData = await request.formData();
 
@@ -116,7 +116,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/application/$id/dental-insurance-exit-application', params));
   }
 
-  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/dental-insurance`, params));
+  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplicationFlow}/dental-insurance`, params));
 }
 
 export default function ApplicationSpokeDentalInsurance({ loaderData, params }: Route.ComponentProps) {

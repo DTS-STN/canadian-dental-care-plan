@@ -12,7 +12,7 @@ import type { Route } from './+types/childrens-application';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationFamilyState } from '~/.server/routes/helpers/public-application-family-route-helpers';
-import { savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -44,7 +44,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationFamilyState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['new-family']);
+  validateApplicationFlow(state, params, ['new-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -92,7 +92,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicApplicationFamilyState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['new-family']);
+  validateApplicationFlow(state, params, ['new-family']);
 
   const formData = await request.formData();
 
@@ -127,7 +127,7 @@ export async function action({ context: { appContainer, session }, params, reque
     });
   }
 
-  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/childrens-application`, params));
+  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplicationFlow}/childrens-application`, params));
 }
 
 export default function NewFamilyChildrensApplication({ loaderData, params }: Route.ComponentProps) {

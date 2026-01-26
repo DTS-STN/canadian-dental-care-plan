@@ -5,7 +5,7 @@ import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationFamilyState } from '~/.server/routes/helpers/public-application-family-route-helpers';
-import { validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -30,7 +30,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationFamilyState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['new-family']);
+  validateApplicationFlow(state, params, ['new-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-family:marital-status.page-title') }) };
