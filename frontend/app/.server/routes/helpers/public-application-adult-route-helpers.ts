@@ -68,6 +68,7 @@ interface ValidatePublicApplicationAdultStateForReviewArgs {
 
 export function validatePublicApplicationAdultStateForReview({ params, state }: ValidatePublicApplicationAdultStateForReviewArgs) {
   const {
+    context,
     applicantInformation,
     applicationYear,
     communicationPreferences,
@@ -162,6 +163,7 @@ export function validatePublicApplicationAdultStateForReview({ params, state }: 
     ageCategory,
     applicantInformation,
     applicationYear,
+    context,
     communicationPreferences,
     phoneNumber,
     dentalBenefits,

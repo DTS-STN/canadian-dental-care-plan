@@ -108,6 +108,7 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
   const {
     applicantInformation,
     applicationYear,
+    context,
     communicationPreferences,
     phoneNumber,
     dentalBenefits,
@@ -194,6 +195,7 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     applicantInformation,
     applicationYear,
     children,
+    context,
     communicationPreferences,
     phoneNumber,
     dentalBenefits,
