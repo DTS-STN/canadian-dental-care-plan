@@ -7,7 +7,7 @@ import { z } from 'zod';
 import type { Route } from './+types/email';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -43,7 +43,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
+  validateApplicationFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -56,7 +56,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
+  validateApplicationFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
 
   const formData = await request.formData();
 
@@ -65,7 +65,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
+  const typeAndFlow = `${state.inputModel}-${state.typeOfApplicationFlow}`;
 
   const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.ServerConfig);
 

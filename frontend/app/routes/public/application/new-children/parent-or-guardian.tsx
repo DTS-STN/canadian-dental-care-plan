@@ -5,7 +5,7 @@ import type { Route } from './+types/parent-or-guardian';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationChildState } from '~/.server/routes/helpers/public-application-child-route-helpers';
-import { validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { ButtonLink } from '~/components/buttons';
@@ -31,7 +31,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationChildState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['new-children']);
+  validateApplicationFlow(state, params, ['new-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-child:parent-or-guardian.page-title') }) };

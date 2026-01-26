@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import type { Route } from './+types/exit-application';
 
 import { TYPES } from '~/.server/constants';
-import { clearPublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { clearPublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicRenewAdultState } from '~/.server/routes/helpers/public-renew-adult-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -28,7 +28,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadPublicRenewAdultState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-adult']);
+  validateApplicationFlow(state, params, ['renew-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-renew-adult:exit-application.page-title') }) };
@@ -37,7 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicRenewAdultState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-adult']);
+  validateApplicationFlow(state, params, ['renew-adult']);
 
   const formData = await request.formData();
 

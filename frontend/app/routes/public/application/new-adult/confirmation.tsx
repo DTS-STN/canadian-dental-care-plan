@@ -7,7 +7,7 @@ import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationAdultState } from '~/.server/routes/helpers/public-application-adult-route-helpers';
-import { clearPublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { clearPublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -39,7 +39,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadPublicApplicationAdultState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult']);
+  validateApplicationFlow(state, params, ['new-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -132,7 +132,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicApplicationAdultState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult']);
+  validateApplicationFlow(state, params, ['new-adult']);
 
   const formData = await request.formData();
 

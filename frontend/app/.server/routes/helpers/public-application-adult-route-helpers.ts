@@ -88,7 +88,7 @@ export function validatePublicApplicationAdultStateForReview({ params, state }: 
     partnerInformation,
     submissionInfo,
     termsAndConditions,
-    typeOfApplication,
+    inputModel,
     typeOfApplicationFlow,
     children,
   } = state;
@@ -102,6 +102,10 @@ export function validatePublicApplicationAdultStateForReview({ params, state }: 
   }
 
   if (typeOfApplicationFlow !== 'adult') {
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
+  }
+
+  if (inputModel !== 'new') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
@@ -181,7 +185,7 @@ export function validatePublicApplicationAdultStateForReview({ params, state }: 
     partnerInformation,
     submissionInfo,
     termsAndConditions,
-    typeOfApplication,
+    inputModel,
     typeOfApplicationFlow,
     children,
   };

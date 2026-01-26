@@ -126,7 +126,7 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     partnerInformation,
     submissionInfo,
     termsAndConditions,
-    typeOfApplication,
+    inputModel,
     typeOfApplicationFlow,
   } = state;
 
@@ -139,6 +139,10 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
   }
 
   if (typeOfApplicationFlow !== 'family') {
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
+  }
+
+  if (inputModel !== 'new') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
@@ -213,7 +217,7 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     partnerInformation,
     submissionInfo,
     termsAndConditions,
-    typeOfApplication,
+    inputModel,
     typeOfApplicationFlow,
   };
 }

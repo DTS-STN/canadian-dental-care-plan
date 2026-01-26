@@ -8,7 +8,7 @@ import type { Route } from './+types/submit';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationAdultStateForReview } from '~/.server/routes/helpers/public-application-adult-route-helpers';
-import { savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -40,15 +40,13 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationAdultStateForReview({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult']);
+  validateApplicationFlow(state, params, ['new-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-adult:submit.page-title') }) };
   return {
     state: {
       applicantName: `${state.applicantInformation.firstName} ${state.applicantInformation.lastName}`,
-      acknowledgeInfo: state.submitTerms?.acknowledgeInfo,
-      acknowledgeCriteria: state.submitTerms?.acknowledgeCriteria,
     },
     meta,
   };
@@ -56,7 +54,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
   const state = loadPublicApplicationAdultStateForReview({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult']);
+  validateApplicationFlow(state, params, ['new-adult']);
 
   const formData = await request.formData();
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -64,19 +62,14 @@ export async function action({ context: { appContainer, session }, request, para
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const submitTermsSchema = z
-    .object({
-      acknowledgeInfo: z.string().trim().nonempty(t('application-new-adult:submit.error-message.acknowledge-info-required')),
-      acknowledgeCriteria: z.string().trim().nonempty(t('application-new-adult:submit.error-message.acknowledge-criteria-required')),
-    })
-    .transform((val) => ({
-      acknowledgeInfo: val.acknowledgeInfo === CHECKBOX_VALUE.yes,
-      acknowledgeCriteria: val.acknowledgeCriteria === CHECKBOX_VALUE.yes,
-    }));
+  const submitTermsSchema = z.object({
+    acknowledgeInfo: z.literal(true, { error: t('application-new-adult:submit.error-message.acknowledge-info-required') }),
+    acknowledgeCriteria: z.literal(true, { error: t('application-new-adult:submit.error-message.acknowledge-criteria-required') }),
+  });
 
   const parsedDataResult = submitTermsSchema.safeParse({
-    acknowledgeInfo: formData.get('acknowledgeInfo') ?? '',
-    acknowledgeCriteria: formData.get('acknowledgeCriteria') ?? '',
+    acknowledgeInfo: formData.get('acknowledgeInfo')?.toString() === CHECKBOX_VALUE.yes,
+    acknowledgeCriteria: formData.get('acknowledgeCriteria')?.toString() === CHECKBOX_VALUE.yes,
   });
 
   if (!parsedDataResult.success) {
@@ -137,10 +130,10 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
           <fetcher.Form method="post" noValidate>
             <CsrfTokenInput />
             <div className="space-y-2">
-              <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} defaultChecked={state.acknowledgeInfo} errorMessage={errors?.acknowledgeInfo} required>
+              <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
                 {t('application-new-adult:submit.info-is-correct')}
               </InputCheckbox>
-              <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} defaultChecked={state.acknowledgeCriteria} errorMessage={errors?.acknowledgeCriteria} required>
+              <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
                 {t('application-new-adult:submit.i-understand')}
               </InputCheckbox>
             </div>

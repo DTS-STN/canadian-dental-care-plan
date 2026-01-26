@@ -6,7 +6,7 @@ import { z } from 'zod';
 import type { Route } from './+types/phone-number';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { phoneSchema } from '~/.server/validation/phone-schema';
@@ -45,7 +45,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-adult', 'new-adult', 'new-children', 'new-family']);
+  validateApplicationFlow(state, params, ['renew-adult', 'new-adult', 'new-children', 'new-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -55,14 +55,14 @@ export async function loader({ context: { appContainer, session }, params, reque
       phoneNumber: state.phoneNumber?.value?.primary,
       phoneNumberAlt: state.phoneNumber?.value?.alternate,
     },
-    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
+    typeAndFlow: `${state.inputModel}-${state.typeOfApplicationFlow}`,
     meta,
   };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
+  validateApplicationFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
 
   const formData = await request.formData();
 
@@ -71,7 +71,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
+  const typeAndFlow = `${state.inputModel}-${state.typeOfApplicationFlow}`;
 
   const phoneNumberSchema = z.object({
     phoneNumber: phoneSchema({

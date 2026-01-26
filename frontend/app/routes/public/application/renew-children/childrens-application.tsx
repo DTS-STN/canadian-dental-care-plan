@@ -12,7 +12,7 @@ import { z } from 'zod';
 import type { Route } from './+types/childrens-application';
 
 import { TYPES } from '~/.server/constants';
-import { savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicRenewChildState } from '~/.server/routes/helpers/public-renew-child-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -45,7 +45,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicRenewChildState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-children']);
+  validateApplicationFlow(state, params, ['renew-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -93,7 +93,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicRenewChildState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-children']);
+  validateApplicationFlow(state, params, ['renew-children']);
 
   const formData = await request.formData();
 
@@ -147,7 +147,7 @@ export async function action({ context: { appContainer, session }, params, reque
     });
   }
 
-  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/childrens-application`, params));
+  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplicationFlow}/childrens-application`, params));
 }
 
 export default function RenewChildChildrensApplication({ loaderData, params }: Route.ComponentProps) {

@@ -11,7 +11,7 @@ import type { Route } from './+types/child-information';
 
 import { TYPES } from '~/.server/constants';
 import type { ChildInformationState, ChildSinState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getAgeCategoryFromDateString, getPublicApplicationState, getSingleChildState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getAgeCategoryFromDateString, getPublicApplicationState, getSingleChildState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -53,7 +53,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family', 'renew-children', 'renew-family']);
+  validateApplicationFlow(state, params, ['new-children', 'new-family', 'renew-children', 'renew-family']);
   const childState = getSingleChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -71,14 +71,14 @@ export async function loader({ context: { appContainer, session }, params, reque
     defaultState: childState.information,
     childName,
     isNew: childState.isNew,
-    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
-    isRenewFlow: state.typeOfApplication === 'renew',
+    typeAndFlow: `${state.inputModel}-${state.typeOfApplicationFlow}`,
+    isRenewalContext: state.context === 'renewal',
   };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-children', 'new-family', 'renew-children', 'renew-family']);
+  validateApplicationFlow(state, params, ['new-children', 'new-family', 'renew-children', 'renew-family']);
 
   const formData = await request.formData();
 
@@ -235,13 +235,13 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/application/$id/children/$childId/cannot-apply-child', params));
   }
 
-  return redirect(getPathById(`public/application/$id/${state.typeOfApplication}-${state.typeOfApplicationFlow}/childrens-application`, params));
+  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplicationFlow}/childrens-application`, params));
 }
 
 export default function ApplyFlowChildInformation({ loaderData, params }: Route.ComponentProps) {
   const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, childName, isNew, typeAndFlow, isRenewFlow } = loaderData;
+  const { defaultState, childName, isNew, typeAndFlow, isRenewalContext } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -304,7 +304,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
-            {isRenewFlow && (
+            {isRenewalContext && (
               <InputPatternField
                 id="member-id"
                 name="memberId"

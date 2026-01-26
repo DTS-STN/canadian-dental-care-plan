@@ -10,7 +10,7 @@ import { z } from 'zod';
 import type { Route } from './+types/communication-preferences';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { CommunicationPreferencesState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -48,7 +48,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
+  validateApplicationFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -62,7 +62,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     defaultState: state.communicationPreferences?.value,
-    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
+    typeAndFlow: `${state.inputModel}-${state.typeOfApplicationFlow}`,
     languages,
     gcCommunicationMethods,
     sunLifeCommunicationMethods,
@@ -75,7 +75,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
+  validateApplicationFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
 
   const formData = await request.formData();
 
@@ -84,7 +84,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
+  const typeAndFlow = `${state.inputModel}-${state.typeOfApplicationFlow}`;
 
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 

@@ -8,7 +8,7 @@ import { z } from 'zod';
 import type { Route } from './+types/dental-insurance';
 
 import { TYPES } from '~/.server/constants';
-import { savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicRenewAdultState } from '~/.server/routes/helpers/public-renew-adult-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -39,7 +39,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicRenewAdultState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-adult']);
+  validateApplicationFlow(state, params, ['renew-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -76,7 +76,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicRenewAdultState({ params, request, session });
-  validateApplicationTypeAndFlow(state, params, ['renew-adult']);
+  validateApplicationFlow(state, params, ['renew-adult']);
 
   const formData = await request.formData();
 

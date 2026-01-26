@@ -11,7 +11,7 @@ import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
 import type { PartnerInformationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { applicantInformationStateHasPartner, getPublicApplicationState, savePublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { applicantInformationStateHasPartner, getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -52,7 +52,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+  validateApplicationFlow(state, params, ['new-adult', 'new-children', 'new-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const maritalStatues = appContainer.get(TYPES.MaritalStatusService).listLocalizedMaritalStatuses(locale);
   return {
     defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation },
-    typeAndFlow: `${state.typeOfApplication}-${state.typeOfApplicationFlow}`,
+    typeAndFlow: `${state.inputModel}-${state.typeOfApplicationFlow}`,
     meta,
     maritalStatues,
   };
@@ -68,7 +68,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationTypeAndFlow(state, params, ['new-adult', 'new-children', 'new-family']);
+  validateApplicationFlow(state, params, ['new-adult', 'new-children', 'new-family']);
 
   const formData = await request.formData();
 
@@ -77,7 +77,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const typeAndFlow = `${state.typeOfApplication}-${state.typeOfApplicationFlow}`;
+  const typeAndFlow = `${state.inputModel}-${state.typeOfApplicationFlow}`;
 
   // state validation schema
   const maritalStatusSchema = z.object({
