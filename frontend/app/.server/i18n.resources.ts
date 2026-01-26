@@ -1,8 +1,8 @@
-import applicationNewAdultEn from '~/../public/locales/en/application-new-adult.json';
-import applicationNewChildEn from '~/../public/locales/en/application-new-child.json';
-import applicationNewFamilyEn from '~/../public/locales/en/application-new-family.json';
-import applicationRenewAdultEn from '~/../public/locales/en/application-renew-adult.json';
-import applicationRenewChildEn from '~/../public/locales/en/application-renew-child.json';
+import applicationFullAdultEn from '~/../public/locales/en/application-full-adult.json';
+import applicationFullChildEn from '~/../public/locales/en/application-full-child.json';
+import applicationFullFamilyEn from '~/../public/locales/en/application-full-family.json';
+import applicationSimplifiedAdultEn from '~/../public/locales/en/application-simplified-adult.json';
+import applicationSimplifiedChildEn from '~/../public/locales/en/application-simplified-child.json';
 import applicationSpokesEn from '~/../public/locales/en/application-spokes.json';
 import applicationEn from '~/../public/locales/en/application.json';
 import applyAdultChildEn from '~/../public/locales/en/apply-adult-child.json';
@@ -28,11 +28,11 @@ import renewEn from '~/../public/locales/en/renew.json';
 import statusEn from '~/../public/locales/en/status.json';
 import stubLoginEn from '~/../public/locales/en/stub-login.json';
 import unableToProcessRequestEn from '~/../public/locales/en/unable-to-process-request.json';
-import applicationNewAdultFr from '~/../public/locales/fr/application-new-adult.json';
-import applicationNewChildFr from '~/../public/locales/fr/application-new-child.json';
-import applicationNewFamilyFr from '~/../public/locales/fr/application-new-family.json';
-import applicationRenewAdultFr from '~/../public/locales/fr/application-renew-adult.json';
-import applicationRenewChildFr from '~/../public/locales/fr/application-renew-child.json';
+import applicationFullAdultFr from '~/../public/locales/fr/application-full-adult.json';
+import applicationFullChildFr from '~/../public/locales/fr/application-full-child.json';
+import applicationFullFamilyFr from '~/../public/locales/fr/application-full-family.json';
+import applicationSimplifiedAdultFr from '~/../public/locales/fr/application-simplified-adult.json';
+import applicationSimplifiedChildFr from '~/../public/locales/fr/application-simplified-child.json';
 import applicationSpokesFr from '~/../public/locales/fr/application-spokes.json';
 import applicationFr from '~/../public/locales/fr/application.json';
 import applyAdultChildFr from '~/../public/locales/fr/apply-adult-child.json';
@@ -64,11 +64,11 @@ type I18nResources = typeof i18nResourcesEn;
 const i18nResourcesEn = {
   application: applicationEn,
   'application-spokes': applicationSpokesEn,
-  'application-new-adult': applicationNewAdultEn,
-  'application-new-child': applicationNewChildEn,
-  'application-new-family': applicationNewFamilyEn,
-  'application-renew-adult': applicationRenewAdultEn,
-  'application-renew-child': applicationRenewChildEn,
+  'application-full-adult': applicationFullAdultEn,
+  'application-full-child': applicationFullChildEn,
+  'application-full-family': applicationFullFamilyEn,
+  'application-simplified-adult': applicationSimplifiedAdultEn,
+  'application-simplified-child': applicationSimplifiedChildEn,
   'apply-adult-child': applyAdultChildEn,
   'apply-adult': applyAdultEn,
   'protected-apply-adult': protectedApplyAdultEn,
@@ -96,11 +96,11 @@ const i18nResourcesEn = {
 
 const i18nResourcesFr = {
   application: applicationFr,
-  'application-new-adult': applicationNewAdultFr,
-  'application-new-child': applicationNewChildFr,
-  'application-new-family': applicationNewFamilyFr,
-  'application-renew-adult': applicationRenewAdultFr,
-  'application-renew-child': applicationRenewChildFr,
+  'application-full-adult': applicationFullAdultFr,
+  'application-full-child': applicationFullChildFr,
+  'application-full-family': applicationFullFamilyFr,
+  'application-simplified-adult': applicationSimplifiedAdultFr,
+  'application-simplified-child': applicationSimplifiedChildFr,
   'application-spokes': applicationSpokesFr,
   'apply-adult-child': applyAdultChildFr,
   'apply-adult': applyAdultFr,

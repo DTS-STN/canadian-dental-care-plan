@@ -22,9 +22,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'application-new-child', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application', 'application-full-child', 'gcweb'),
   pageIdentifier: pageIds.public.application.newChild.parentOrGuardian,
-  pageTitleI18nKey: 'application-new-child:parent-or-guardian.page-heading',
+  pageTitleI18nKey: 'application-full-child:parent-or-guardian.page-heading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -34,7 +34,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['new-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-child:parent-or-guardian.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-child:parent-or-guardian.page-title') }) };
   const locale = getLocale(request);
 
   const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
@@ -104,27 +104,27 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>{t('application-new-child:parent-or-guardian.marital-status')}</CardTitle>
+          <CardTitle>{t('application-full-child:parent-or-guardian.marital-status')}</CardTitle>
           <CardAction>{completedSections.includes('marital-status') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {state.maritalStatus === undefined ? (
-            <p>{t('application-new-child:parent-or-guardian.select-your-status')}</p>
+            <p>{t('application-full-child:parent-or-guardian.select-your-status')}</p>
           ) : (
             <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-new-child:parent-or-guardian.marital-status')}>
+              <DefinitionListItem term={t('application-full-child:parent-or-guardian.marital-status')}>
                 <p>{state.maritalStatus.name}</p>
               </DefinitionListItem>
               {state.partnerInformation && (
                 <>
-                  <DefinitionListItem term={t('application-new-child:parent-or-guardian.spouse-sin')}>
+                  <DefinitionListItem term={t('application-full-child:parent-or-guardian.spouse-sin')}>
                     <p>{state.partnerInformation.socialInsuranceNumber}</p>
                   </DefinitionListItem>
-                  <DefinitionListItem term={t('application-new-child:parent-or-guardian.spouse-yob')}>
+                  <DefinitionListItem term={t('application-full-child:parent-or-guardian.spouse-yob')}>
                     <p>{state.partnerInformation.yearOfBirth}</p>
                   </DefinitionListItem>
-                  <DefinitionListItem term={t('application-new-child:parent-or-guardian.consent')}>
-                    {state.partnerInformation.confirm ? t('application-new-child:parent-or-guardian.consent-yes') : t('application-new-child:parent-or-guardian.consent-no')}
+                  <DefinitionListItem term={t('application-full-child:parent-or-guardian.consent')}>
+                    {state.partnerInformation.confirm ? t('application-full-child:parent-or-guardian.consent-yes') : t('application-full-child:parent-or-guardian.consent-no')}
                   </DefinitionListItem>
                 </>
               )}
@@ -133,51 +133,51 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
           <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={faCirclePlus} size="lg">
-            {state.maritalStatus === undefined ? t('application-new-child:parent-or-guardian.add-marital-status') : t('application-new-child:parent-or-guardian.edit-marital-status')}
+            {state.maritalStatus === undefined ? t('application-full-child:parent-or-guardian.add-marital-status') : t('application-full-child:parent-or-guardian.edit-marital-status')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>{t('application-new-child:parent-or-guardian.phone-number')}</CardTitle>
+          <CardTitle>{t('application-full-child:parent-or-guardian.phone-number')}</CardTitle>
           <CardAction>{completedSections.includes('phone-number') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {state.phoneNumber?.hasChanged ? (
             <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-new-child:parent-or-guardian.phone-number')}>
+              <DefinitionListItem term={t('application-full-child:parent-or-guardian.phone-number')}>
                 <p>{state.phoneNumber.value.primary}</p>
               </DefinitionListItem>
               {state.phoneNumber.value.alternate && (
-                <DefinitionListItem term={t('application-new-child:parent-or-guardian.alt-phone-number')}>
+                <DefinitionListItem term={t('application-full-child:parent-or-guardian.alt-phone-number')}>
                   <p>{state.phoneNumber.value.alternate}</p>
                 </DefinitionListItem>
               )}
             </DefinitionList>
           ) : (
-            <p>{t('application-new-child:parent-or-guardian.phone-number-help')}</p>
+            <p>{t('application-full-child:parent-or-guardian.phone-number-help')}</p>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
           <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={completedSections.includes('phone-number') ? faPenToSquare : faCirclePlus} size="lg">
-            {completedSections.includes('phone-number') ? t('application-new-child:parent-or-guardian.edit-phone-number') : t('application-new-child:parent-or-guardian.add-phone-number')}
+            {completedSections.includes('phone-number') ? t('application-full-child:parent-or-guardian.edit-phone-number') : t('application-full-child:parent-or-guardian.add-phone-number')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>{t('application-new-child:parent-or-guardian.mailing-and-home-address')}</CardTitle>
+          <CardTitle>{t('application-full-child:parent-or-guardian.mailing-and-home-address')}</CardTitle>
           <CardAction>{completedSections.includes('address') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {mailingAddressInfo.address === undefined && homeAddressInfo.address === undefined ? (
-            <p>{t('application-new-child:parent-or-guardian.address-help')}</p>
+            <p>{t('application-full-child:parent-or-guardian.address-help')}</p>
           ) : (
             <DefinitionList layout="single-column">
               {mailingAddressInfo.address !== undefined && (
-                <DefinitionListItem term={t('application-new-child:parent-or-guardian.mailing-address')}>
+                <DefinitionListItem term={t('application-full-child:parent-or-guardian.mailing-address')}>
                   <Address
                     address={{
                       address: mailingAddressInfo.address,
@@ -190,7 +190,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
                 </DefinitionListItem>
               )}
               {homeAddressInfo.address !== undefined && (
-                <DefinitionListItem term={t('application-new-child:parent-or-guardian.home-address')}>
+                <DefinitionListItem term={t('application-full-child:parent-or-guardian.home-address')}>
                   <Address
                     address={{
                       address: homeAddressInfo.address,
@@ -207,41 +207,41 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
           <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus} size="lg">
-            {completedSections.includes('address') ? t('application-new-child:parent-or-guardian.edit-address') : t('application-new-child:parent-or-guardian.add-address')}
+            {completedSections.includes('address') ? t('application-full-child:parent-or-guardian.edit-address') : t('application-full-child:parent-or-guardian.add-address')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>{t('application-new-child:parent-or-guardian.communication-preferences')}</CardTitle>
+          <CardTitle>{t('application-full-child:parent-or-guardian.communication-preferences')}</CardTitle>
           <CardAction>{completedSections.includes('communication-preferences') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {state.communicationPreferences?.hasChanged ? (
             <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-new-child:parent-or-guardian.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
-              <DefinitionListItem term={t('application-new-child:parent-or-guardian.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
-              <DefinitionListItem term={t('application-new-child:parent-or-guardian.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
-              <DefinitionListItem term={t('application-new-child:parent-or-guardian.email')}>{state.email}</DefinitionListItem>
+              <DefinitionListItem term={t('application-full-child:parent-or-guardian.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
+              <DefinitionListItem term={t('application-full-child:parent-or-guardian.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
+              <DefinitionListItem term={t('application-full-child:parent-or-guardian.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
+              <DefinitionListItem term={t('application-full-child:parent-or-guardian.email')}>{state.email}</DefinitionListItem>
             </DefinitionList>
           ) : (
-            <p>{t('application-new-child:parent-or-guardian.communication-preferences-help')}</p>
+            <p>{t('application-full-child:parent-or-guardian.communication-preferences-help')}</p>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
           <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/communication-preferences" params={params} startIcon={completedSections.includes('communication-preferences') ? faPenToSquare : faCirclePlus} size="lg">
-            {completedSections.includes('communication-preferences') ? t('application-new-child:parent-or-guardian.edit-communication-preferences') : t('application-new-child:parent-or-guardian.add-communication-preferences')}
+            {completedSections.includes('communication-preferences') ? t('application-full-child:parent-or-guardian.edit-communication-preferences') : t('application-full-child:parent-or-guardian.add-communication-preferences')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-children/childrens-application" params={params}>
-          {t('application-new-child:parent-or-guardian.childrens-application')}
+          {t('application-full-child:parent-or-guardian.childrens-application')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
-          {t('application-new-child:parent-or-guardian.type-of-application')}
+          {t('application-full-child:parent-or-guardian.type-of-application')}
         </NavigationButtonLink>
       </div>
     </div>

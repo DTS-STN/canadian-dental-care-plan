@@ -21,9 +21,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'application-new-family', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application', 'application-full-family', 'gcweb'),
   pageIdentifier: pageIds.public.application.newFamily.dentalInsurance,
-  pageTitleI18nKey: 'application-new-family:dental-insurance.page-heading',
+  pageTitleI18nKey: 'application-full-family:dental-insurance.page-heading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -34,7 +34,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-family:dental-insurance.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:dental-insurance.page-title') }) };
 
   const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.value?.federalSocialProgram
     ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale)
@@ -86,66 +86,66 @@ export default function NewFamilyDentalInsurance({ loaderData, params }: Route.C
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>{t('application-new-family:dental-insurance.access-to-dental-insurance')}</CardTitle>
+          <CardTitle>{t('application-full-family:dental-insurance.access-to-dental-insurance')}</CardTitle>
           <CardAction>{completedSections.includes('dental-insurance') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {state.dentalInsurance === undefined ? (
-            <p>{t('application-new-family:dental-insurance.dental-insurance-indicate-status')}</p>
+            <p>{t('application-full-family:dental-insurance.dental-insurance-indicate-status')}</p>
           ) : (
             <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-new-family:dental-insurance.access-to-dental-insurance-or-coverage')}>
-                <p>{state.dentalInsurance ? t('application-new-family:dental-insurance.dental-insurance-yes') : t('application-new-family:dental-insurance.dental-insurance-no')}</p>
+              <DefinitionListItem term={t('application-full-family:dental-insurance.access-to-dental-insurance-or-coverage')}>
+                <p>{state.dentalInsurance ? t('application-full-family:dental-insurance.dental-insurance-yes') : t('application-full-family:dental-insurance.dental-insurance-no')}</p>
               </DefinitionListItem>
             </DefinitionList>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
           <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={faCirclePlus} size="lg">
-            {state.dentalInsurance === undefined ? t('application-new-family:dental-insurance.add-answer') : t('application-new-family:dental-insurance.edit-access-to-dental-insurance')}
+            {state.dentalInsurance === undefined ? t('application-full-family:dental-insurance.add-answer') : t('application-full-family:dental-insurance.edit-access-to-dental-insurance')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>{t('application-new-family:dental-insurance.other-benefits')}</CardTitle>
+          <CardTitle>{t('application-full-family:dental-insurance.other-benefits')}</CardTitle>
           <CardAction>{completedSections.includes('dental-benefits') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {state.dentalBenefits ? (
             <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-new-family:dental-insurance.access-to-government-benefits')}>
+              <DefinitionListItem term={t('application-full-family:dental-insurance.access-to-government-benefits')}>
                 {state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
                   <div className="space-y-3">
-                    <p>{t('application-new-family:dental-insurance.access-to-government-benefits-yes')}</p>
+                    <p>{t('application-full-family:dental-insurance.access-to-government-benefits-yes')}</p>
                     <ul className="list-disc space-y-1 pl-7">
                       {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
                       {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
                     </ul>
                   </div>
                 ) : (
-                  <p>{t('application-new-family:dental-insurance.access-to-government-benefits-no')}</p>
+                  <p>{t('application-full-family:dental-insurance.access-to-government-benefits-no')}</p>
                 )}
               </DefinitionListItem>
             </DefinitionList>
           ) : (
-            <p>{t('application-new-family:dental-insurance.dental-benefits-indicate-status')}</p>
+            <p>{t('application-full-family:dental-insurance.dental-benefits-indicate-status')}</p>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
           <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faCirclePlus} size="lg">
-            {state.dentalBenefits === undefined ? t('application-new-family:dental-insurance.add-answer') : t('application-new-family:dental-insurance.edit-access-to-government-benefits')}
+            {state.dentalBenefits === undefined ? t('application-full-family:dental-insurance.add-answer') : t('application-full-family:dental-insurance.edit-access-to-government-benefits')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-family/childrens-application" params={params}>
-          {t('application-new-family:dental-insurance.childrens-application')}
+          {t('application-full-family:dental-insurance.childrens-application')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-family/contact-information" params={params}>
-          {t('application-new-family:dental-insurance.contact-information')}
+          {t('application-full-family:dental-insurance.contact-information')}
         </NavigationButtonLink>
       </div>
     </div>

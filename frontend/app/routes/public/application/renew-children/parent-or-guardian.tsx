@@ -32,9 +32,9 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'application-renew-child', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application', 'application-simplified-child', 'gcweb'),
   pageIdentifier: pageIds.public.application.renewChild.parentOrGuardian,
-  pageTitleI18nKey: 'application-renew-child:parent-or-guardian.page-heading',
+  pageTitleI18nKey: 'application-simplified-child:parent-or-guardian.page-heading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -44,7 +44,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['renew-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-renew-child:parent-or-guardian.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-child:parent-or-guardian.page-title') }) };
   const locale = getLocale(request);
 
   const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
@@ -160,16 +160,16 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-renew-child:parent-or-guardian.phone-number')}</CardTitle>
+            <CardTitle>{t('application-simplified-child:parent-or-guardian.phone-number')}</CardTitle>
             <CardAction>{completedSections.includes('phone-number') && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.phoneNumber === undefined ? (
-              <p>{t('application-renew-child:parent-or-guardian.phone-number-help')}</p>
+              <p>{t('application-simplified-child:parent-or-guardian.phone-number-help')}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-renew-child:parent-or-guardian.phone-number')}>
-                  {state.phoneNumber.hasChanged === false ? <p>{t('application-renew-child:parent-or-guardian.no-change')}</p> : <p>{state.phoneNumber.value.primary}</p>}
+                <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.phone-number')}>
+                  {state.phoneNumber.hasChanged === false ? <p>{t('application-simplified-child:parent-or-guardian.no-change')}</p> : <p>{state.phoneNumber.value.primary}</p>}
                 </DefinitionListItem>
               </DefinitionList>
             )}
@@ -177,19 +177,19 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
           {state.phoneNumber ? (
             <CardFooter className="border-t bg-zinc-100">
               <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={completedSections.includes('phone-number') ? faPenToSquare : faCirclePlus} size="lg">
-                {completedSections.includes('phone-number') ? t('application-renew-child:parent-or-guardian.edit-phone-number') : t('application-renew-child:parent-or-guardian.add-phone-number')}
+                {completedSections.includes('phone-number') ? t('application-simplified-child:parent-or-guardian.edit-phone-number') : t('application-simplified-child:parent-or-guardian.add-phone-number')}
               </ButtonLink>
             </CardFooter>
           ) : (
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
                 <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/phone-number" params={params} startIcon={faPenToSquare} size="lg">
-                  {t('application-renew-child:parent-or-guardian.update-phone-number')}
+                  {t('application-simplified-child:parent-or-guardian.update-phone-number')}
                 </ButtonLink>
               </div>
               <div className="w-full px-6">
                 <Button id="complete-button" variant="link" name="_action" value={FORM_ACTION.PHONE_NUMBER_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
-                  {t('application-renew-child:parent-or-guardian.phone-number-unchanged')}
+                  {t('application-simplified-child:parent-or-guardian.phone-number-unchanged')}
                 </Button>
               </div>
             </CardFooter>
@@ -198,19 +198,19 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-renew-child:parent-or-guardian.mailing-and-home-address')}</CardTitle>
+            <CardTitle>{t('application-simplified-child:parent-or-guardian.mailing-and-home-address')}</CardTitle>
             <CardAction>{completedSections.includes('address') && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {mailingAddressInfo.hasChanged === undefined && homeAddressInfo.hasChanged === undefined ? (
-              <p>{t('application-renew-child:parent-or-guardian.address-help')}</p>
+              <p>{t('application-simplified-child:parent-or-guardian.address-help')}</p>
             ) : (
               <>
                 {mailingAddressInfo.hasChanged === false && homeAddressInfo.hasChanged === false ? (
-                  <p>{t('application-renew-child:parent-or-guardian.no-change')}</p>
+                  <p>{t('application-simplified-child:parent-or-guardian.no-change')}</p>
                 ) : (
                   <DefinitionList layout="single-column">
-                    <DefinitionListItem term={t('application-renew-child:parent-or-guardian.mailing-address')}>
+                    <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.mailing-address')}>
                       <Address
                         address={{
                           address: mailingAddressInfo.address ?? '',
@@ -221,7 +221,7 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
                         }}
                       />
                     </DefinitionListItem>
-                    <DefinitionListItem term={t('application-renew-child:parent-or-guardian.home-address')}>
+                    <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.home-address')}>
                       <Address
                         address={{
                           address: homeAddressInfo.address ?? '',
@@ -240,19 +240,19 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
           {mailingAddressInfo.hasChanged !== undefined && homeAddressInfo.hasChanged !== undefined ? (
             <CardFooter className="border-t bg-zinc-100">
               <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus} size="lg">
-                {completedSections.includes('address') ? t('application-renew-child:parent-or-guardian.edit-address') : t('application-renew-child:parent-or-guardian.add-address')}
+                {completedSections.includes('address') ? t('application-simplified-child:parent-or-guardian.edit-address') : t('application-simplified-child:parent-or-guardian.add-address')}
               </ButtonLink>
             </CardFooter>
           ) : (
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
                 <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/mailing-address" params={params} startIcon={faPenToSquare} size="lg">
-                  {t('application-renew-child:parent-or-guardian.update-address')}
+                  {t('application-simplified-child:parent-or-guardian.update-address')}
                 </ButtonLink>
               </div>
               <div className="w-full px-6">
                 <Button id="complete-button" variant="link" className="p-0 pt-5" name="_action" value={FORM_ACTION.ADDRESS_NOT_CHANGED} startIcon={faCircleCheck} size="lg">
-                  {t('application-renew-child:parent-or-guardian.address-unchanged')}
+                  {t('application-simplified-child:parent-or-guardian.address-unchanged')}
                 </Button>
               </div>
             </CardFooter>
@@ -261,22 +261,22 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-renew-child:parent-or-guardian.communication-preferences')}</CardTitle>
+            <CardTitle>{t('application-simplified-child:parent-or-guardian.communication-preferences')}</CardTitle>
             <CardAction>{completedSections.includes('communication-preferences') && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.communicationPreferences === undefined ? (
-              <p>{t('application-renew-child:parent-or-guardian.communication-preferences-help')}</p>
+              <p>{t('application-simplified-child:parent-or-guardian.communication-preferences-help')}</p>
             ) : (
               <>
                 {state.communicationPreferences.hasChanged === false ? (
-                  <p>{t('application-renew-child:parent-or-guardian.no-change')}</p>
+                  <p>{t('application-simplified-child:parent-or-guardian.no-change')}</p>
                 ) : (
                   <DefinitionList layout="single-column">
-                    <DefinitionListItem term={t('application-renew-child:parent-or-guardian.preferred-language')}>{state.communicationPreferences.value.preferredLanguage}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-renew-child:parent-or-guardian.preferred-method')}>{state.communicationPreferences.value.preferredMethod}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-renew-child:parent-or-guardian.preferred-notification-method')}>{state.communicationPreferences.value.preferredNotificationMethod}</DefinitionListItem>
-                    {state.email && <DefinitionListItem term={t('application-renew-child:parent-or-guardian.email')}>{state.email}</DefinitionListItem>}
+                    <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.preferred-language')}>{state.communicationPreferences.value.preferredLanguage}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.preferred-method')}>{state.communicationPreferences.value.preferredMethod}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.preferred-notification-method')}>{state.communicationPreferences.value.preferredNotificationMethod}</DefinitionListItem>
+                    {state.email && <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.email')}>{state.email}</DefinitionListItem>}
                   </DefinitionList>
                 )}
               </>
@@ -293,19 +293,19 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
                 startIcon={completedSections.includes('communication-preferences') ? faPenToSquare : faCirclePlus}
                 size="lg"
               >
-                {completedSections.includes('communication-preferences') ? t('application-renew-child:parent-or-guardian.edit-communication-preferences') : t('application-renew-child:parent-or-guardian.add-communication-preferences')}
+                {completedSections.includes('communication-preferences') ? t('application-simplified-child:parent-or-guardian.edit-communication-preferences') : t('application-simplified-child:parent-or-guardian.add-communication-preferences')}
               </ButtonLink>
             </CardFooter>
           ) : (
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
                 <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/communication-preferences" params={params} startIcon={faPenToSquare} size="lg">
-                  {t('application-renew-child:parent-or-guardian.update-communication-preferences')}
+                  {t('application-simplified-child:parent-or-guardian.update-communication-preferences')}
                 </ButtonLink>
               </div>
               <div className="w-full px-6">
                 <Button id="complete-button" variant="link" name="_action" value={FORM_ACTION.COMMUNICATION_PREFERENCES_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
-                  {t('application-renew-child:parent-or-guardian.communication-preferences-unchanged')}
+                  {t('application-simplified-child:parent-or-guardian.communication-preferences-unchanged')}
                 </Button>
               </div>
             </CardFooter>
@@ -314,10 +314,10 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-children/childrens-application" params={params}>
-            {t('application-renew-child:parent-or-guardian.childrens-application')}
+            {t('application-simplified-child:parent-or-guardian.childrens-application')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
-            {t('application-renew-child:parent-or-guardian.type-of-application')}
+            {t('application-simplified-child:parent-or-guardian.type-of-application')}
           </NavigationButtonLink>
         </div>
       </div>

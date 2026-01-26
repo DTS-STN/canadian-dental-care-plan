@@ -21,9 +21,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'application-new-family', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application', 'application-full-family', 'gcweb'),
   pageIdentifier: pageIds.public.application.newFamily.maritalStatus,
-  pageTitleI18nKey: 'application-new-family:marital-status.page-heading',
+  pageTitleI18nKey: 'application-full-family:marital-status.page-heading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -33,7 +33,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['new-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-family:marital-status.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:marital-status.page-title') }) };
   const locale = getLocale(request);
   return {
     state: {
@@ -70,27 +70,27 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>{t('application-new-family:marital-status.marital-status')}</CardTitle>
+          <CardTitle>{t('application-full-family:marital-status.marital-status')}</CardTitle>
           <CardAction>{completedSections.includes('marital-status') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {state.maritalStatus === undefined ? (
-            <p>{t('application-new-family:marital-status.select-your-status')}</p>
+            <p>{t('application-full-family:marital-status.select-your-status')}</p>
           ) : (
             <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-new-family:marital-status.marital-status')}>
+              <DefinitionListItem term={t('application-full-family:marital-status.marital-status')}>
                 <p>{state.maritalStatus.name}</p>
               </DefinitionListItem>
               {state.partnerInformation && (
                 <>
-                  <DefinitionListItem term={t('application-new-family:marital-status.spouse-sin')}>
+                  <DefinitionListItem term={t('application-full-family:marital-status.spouse-sin')}>
                     <p>{state.partnerInformation.socialInsuranceNumber}</p>
                   </DefinitionListItem>
-                  <DefinitionListItem term={t('application-new-family:marital-status.spouse-yob')}>
+                  <DefinitionListItem term={t('application-full-family:marital-status.spouse-yob')}>
                     <p>{state.partnerInformation.yearOfBirth}</p>
                   </DefinitionListItem>
-                  <DefinitionListItem term={t('application-new-family:marital-status.consent')}>
-                    {state.partnerInformation.confirm ? t('application-new-family:marital-status.consent-yes') : t('application-new-family:marital-status.consent-no')}
+                  <DefinitionListItem term={t('application-full-family:marital-status.consent')}>
+                    {state.partnerInformation.confirm ? t('application-full-family:marital-status.consent-yes') : t('application-full-family:marital-status.consent-no')}
                   </DefinitionListItem>
                 </>
               )}
@@ -99,16 +99,16 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
           <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={faCirclePlus} size="lg">
-            {state.maritalStatus === undefined ? t('application-new-family:marital-status.add-marital-status') : t('application-new-family:marital-status.edit-marital-status')}
+            {state.maritalStatus === undefined ? t('application-full-family:marital-status.add-marital-status') : t('application-full-family:marital-status.edit-marital-status')}
           </ButtonLink>
         </CardFooter>
       </Card>
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-family/contact-information" params={params}>
-          {t('application-new-family:marital-status.contact-information')}
+          {t('application-full-family:marital-status.contact-information')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
-          {t('application-new-family:marital-status.type-of-application')}
+          {t('application-full-family:marital-status.type-of-application')}
         </NavigationButtonLink>
       </div>
     </div>

@@ -31,9 +31,9 @@ const CHECKBOX_VALUE = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'application-new-child', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application', 'application-full-child', 'gcweb'),
   pageIdentifier: pageIds.public.application.newChild.submit,
-  pageTitleI18nKey: 'application-new-child:submit.page-heading',
+  pageTitleI18nKey: 'application-full-child:submit.page-heading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -43,7 +43,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['new-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-child:submit.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-child:submit.page-title') }) };
 
   const children = [];
   for (const child of state.children) {
@@ -69,8 +69,8 @@ export async function action({ context: { appContainer, session }, request, para
   securityHandler.validateCsrfToken({ formData, session });
 
   const submitTermsSchema = z.object({
-    acknowledgeInfo: z.literal(true, { error: t('application-new-child:submit.error-message.acknowledge-info-required') }),
-    acknowledgeCriteria: z.literal(true, { error: t('application-new-child:submit.error-message.acknowledge-criteria-required') }),
+    acknowledgeInfo: z.literal(true, { error: t('application-full-child:submit.error-message.acknowledge-info-required') }),
+    acknowledgeCriteria: z.literal(true, { error: t('application-full-child:submit.error-message.acknowledge-criteria-required') }),
   });
 
   const parsedDataResult = submitTermsSchema.safeParse({
@@ -104,7 +104,7 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
     acknowledgeCriteria: 'input-checkbox-acknowledge-criteria',
   });
 
-  const eligibilityLink = <InlineLink to={t('application-new-child:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t('application-full-child:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose space-y-8">
@@ -112,9 +112,9 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
       <ProgressStepper steps={steps} currentStep={currentStep} />
       <div className="space-y-8">
         <section className="space-y-4">
-          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-new-child:submit.overview')}</h2>
+          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-child:submit.overview')}</h2>
           <div>
-            <p>{t('application-new-child:submit.you-are-submitting')}</p>
+            <p>{t('application-full-child:submit.you-are-submitting')}</p>
             <ul className="list-disc space-y-1 pl-7">
               {state.children.map((child, index) => (
                 <li key={index}>{child}</li>
@@ -123,34 +123,34 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
           </div>
         </section>
         <section className="space-y-4">
-          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-new-child:submit.review-your-application')}</h2>
-          <p>{t('application-new-child:submit.please-review')}</p>
+          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-child:submit.review-your-application')}</h2>
+          <p>{t('application-full-child:submit.please-review')}</p>
           <ButtonLink variant="primary" routeId="public/application/$id/new-children/parent-or-guardian" params={params}>
-            {t('application-new-child:submit.review-application')}
+            {t('application-full-child:submit.review-application')}
           </ButtonLink>
         </section>
         <section className="space-y-4">
-          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-new-child:submit.submit-your-application')}</h2>
-          <p>{t('application-new-child:submit.by-submitting')}</p>
+          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-child:submit.submit-your-application')}</h2>
+          <p>{t('application-full-child:submit.by-submitting')}</p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey="application-new-child:submit.review-eligibility-criteria" components={{ eligibilityLink }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey="application-full-child:submit.review-eligibility-criteria" components={{ eligibilityLink }} />
           </p>
           <fetcher.Form method="post" noValidate>
             <CsrfTokenInput />
             <div className="space-y-2">
               <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
-                {t('application-new-child:submit.info-is-correct')}
+                {t('application-full-child:submit.info-is-correct')}
               </InputCheckbox>
               <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
-                {t('application-new-child:submit.i-understand')}
+                {t('application-full-child:submit.i-understand')}
               </InputCheckbox>
             </div>
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
-                {t('application-new-child:submit.submit')}
+                {t('application-full-child:submit.submit')}
               </NavigationButton>
               <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-children/childrens-application" params={params}>
-                {t('application-new-child:submit.childrens-application')}
+                {t('application-full-child:submit.childrens-application')}
               </NavigationButtonLink>
             </div>
           </fetcher.Form>
@@ -158,7 +158,7 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
       </div>
       <div className="mt-8">
         <InlineLink routeId="public/application/$id/new-children/exit-application" params={params}>
-          {t('application-new-child:submit.exit-application')}
+          {t('application-full-child:submit.exit-application')}
         </InlineLink>
       </div>
     </div>

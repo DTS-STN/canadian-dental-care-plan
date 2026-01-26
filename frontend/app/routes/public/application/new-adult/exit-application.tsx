@@ -19,9 +19,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-new-adult', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application-full-adult', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.newAdult.exitApplication,
-  pageTitleI18nKey: 'application-new-adult:exit-application.page-title',
+  pageTitleI18nKey: 'application-full-adult:exit-application.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -31,7 +31,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['new-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-adult:exit-application.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-adult:exit-application.page-title') }) };
   return { meta };
 }
 
@@ -48,7 +48,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearPublicApplicationState({ params, session });
 
-  return redirect(t('application-new-adult:exit-application.exit-link'));
+  return redirect(t('application-full-adult:exit-application.exit-link'));
 }
 
 export default function NewAdultExitApplication({ loaderData, params }: Route.ComponentProps) {
@@ -60,8 +60,8 @@ export default function NewAdultExitApplication({ loaderData, params }: Route.Co
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('application-new-adult:exit-application.are-you-sure')}</p>
-        <p>{t('application-new-adult:exit-application.click-back')}</p>
+        <p>{t('application-full-adult:exit-application.are-you-sure')}</p>
+        <p>{t('application-full-adult:exit-application.click-back')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -74,10 +74,10 @@ export default function NewAdultExitApplication({ loaderData, params }: Route.Co
           startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Exiting the application click"
         >
-          {t('application-new-adult:exit-application.back-btn')}
+          {t('application-full-adult:exit-application.back-btn')}
         </ButtonLink>
         <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - Exiting the application click">
-          {t('application-new-adult:exit-application.exit-btn')}
+          {t('application-full-adult:exit-application.exit-btn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

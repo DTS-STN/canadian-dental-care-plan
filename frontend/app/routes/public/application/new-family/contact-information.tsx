@@ -23,9 +23,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'application-new-family', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application', 'application-full-family', 'gcweb'),
   pageIdentifier: pageIds.public.application.newFamily.contactInformation,
-  pageTitleI18nKey: 'application-new-family:contact-information.page-heading',
+  pageTitleI18nKey: 'application-full-family:contact-information.page-heading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -35,7 +35,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['new-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-family:contact-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:contact-information.page-title') }) };
   const locale = getLocale(request);
 
   const { getLocalizedProvinceTerritoryStateById } = appContainer.get(TYPES.ProvinceTerritoryStateService);
@@ -98,43 +98,43 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>{t('application-new-family:contact-information.phone-number')}</CardTitle>
+          <CardTitle>{t('application-full-family:contact-information.phone-number')}</CardTitle>
           <CardAction>{completedSections.includes('phone-number') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {state.phoneNumber?.hasChanged ? (
             <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-new-family:contact-information.phone-number')}>
+              <DefinitionListItem term={t('application-full-family:contact-information.phone-number')}>
                 <p>{state.phoneNumber.value.primary}</p>
               </DefinitionListItem>
               {state.phoneNumber.value.alternate && (
-                <DefinitionListItem term={t('application-new-family:contact-information.alt-phone-number')}>
+                <DefinitionListItem term={t('application-full-family:contact-information.alt-phone-number')}>
                   <p>{state.phoneNumber.value.alternate}</p>
                 </DefinitionListItem>
               )}
             </DefinitionList>
           ) : (
-            <p>{t('application-new-family:contact-information.phone-number-help')}</p>
+            <p>{t('application-full-family:contact-information.phone-number-help')}</p>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
           <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={completedSections.includes('phone-number') ? faPenToSquare : faCirclePlus} size="lg">
-            {completedSections.includes('phone-number') ? t('application-new-family:contact-information.edit-phone-number') : t('application-new-family:contact-information.add-phone-number')}
+            {completedSections.includes('phone-number') ? t('application-full-family:contact-information.edit-phone-number') : t('application-full-family:contact-information.add-phone-number')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>{t('application-new-family:contact-information.mailing-and-home-address')}</CardTitle>
+          <CardTitle>{t('application-full-family:contact-information.mailing-and-home-address')}</CardTitle>
           <CardAction>{completedSections.includes('address') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {mailingAddressInfo === undefined || homeAddressInfo === undefined ? (
-            <p>{t('application-new-family:contact-information.address-help')}</p>
+            <p>{t('application-full-family:contact-information.address-help')}</p>
           ) : (
             <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-new-family:contact-information.mailing-address')}>
+              <DefinitionListItem term={t('application-full-family:contact-information.mailing-address')}>
                 <Address
                   address={{
                     address: mailingAddressInfo.address,
@@ -145,7 +145,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
                   }}
                 />
               </DefinitionListItem>
-              <DefinitionListItem term={t('application-new-family:contact-information.home-address')}>
+              <DefinitionListItem term={t('application-full-family:contact-information.home-address')}>
                 <Address
                   address={{
                     address: homeAddressInfo.address,
@@ -161,41 +161,41 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
           <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus} size="lg">
-            {completedSections.includes('address') ? t('application-new-family:contact-information.edit-address') : t('application-new-family:contact-information.add-address')}
+            {completedSections.includes('address') ? t('application-full-family:contact-information.edit-address') : t('application-full-family:contact-information.add-address')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>{t('application-new-family:contact-information.communication-preferences')}</CardTitle>
+          <CardTitle>{t('application-full-family:contact-information.communication-preferences')}</CardTitle>
           <CardAction>{completedSections.includes('communication-preferences') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {state.communicationPreferences?.hasChanged ? (
             <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-new-family:contact-information.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
-              <DefinitionListItem term={t('application-new-family:contact-information.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
-              <DefinitionListItem term={t('application-new-family:contact-information.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
-              {state.email && <DefinitionListItem term={t('application-new-family:contact-information.email')}>{state.email}</DefinitionListItem>}
+              <DefinitionListItem term={t('application-full-family:contact-information.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
+              <DefinitionListItem term={t('application-full-family:contact-information.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
+              <DefinitionListItem term={t('application-full-family:contact-information.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
+              {state.email && <DefinitionListItem term={t('application-full-family:contact-information.email')}>{state.email}</DefinitionListItem>}
             </DefinitionList>
           ) : (
-            <p>{t('application-new-family:contact-information.communication-preferences-help')}</p>
+            <p>{t('application-full-family:contact-information.communication-preferences-help')}</p>
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
           <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/communication-preferences" params={params} startIcon={completedSections.includes('communication-preferences') ? faPenToSquare : faCirclePlus} size="lg">
-            {completedSections.includes('communication-preferences') ? t('application-new-family:contact-information.edit-communication-preferences') : t('application-new-family:contact-information.add-communication-preferences')}
+            {completedSections.includes('communication-preferences') ? t('application-full-family:contact-information.edit-communication-preferences') : t('application-full-family:contact-information.add-communication-preferences')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-family/dental-insurance" params={params}>
-          {t('application-new-family:contact-information.next-btn')}
+          {t('application-full-family:contact-information.next-btn')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-family/marital-status" params={params}>
-          {t('application-new-family:contact-information.prev-btn')}
+          {t('application-full-family:contact-information.prev-btn')}
         </NavigationButtonLink>
       </div>
     </div>

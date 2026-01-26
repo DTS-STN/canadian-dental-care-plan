@@ -31,9 +31,9 @@ const CHECKBOX_VALUE = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'application-renew-adult', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application', 'application-simplified-adult', 'gcweb'),
   pageIdentifier: pageIds.public.application.renewAdult.submit,
-  pageTitleI18nKey: 'application-renew-adult:submit.page-heading',
+  pageTitleI18nKey: 'application-simplified-adult:submit.page-heading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -43,7 +43,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['renew-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-renew-adult:submit.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-adult:submit.page-title') }) };
   return {
     state: {
       applicantName: `${state.applicantInformation.firstName} ${state.applicantInformation.lastName}`,
@@ -63,8 +63,8 @@ export async function action({ context: { appContainer, session }, request, para
   securityHandler.validateCsrfToken({ formData, session });
 
   const submitTermsSchema = z.object({
-    acknowledgeInfo: z.literal(true, { error: t('application-renew-adult:submit.error-message.acknowledge-info-required') }),
-    acknowledgeCriteria: z.literal(true, { error: t('application-renew-adult:submit.error-message.acknowledge-criteria-required') }),
+    acknowledgeInfo: z.literal(true, { error: t('application-simplified-adult:submit.error-message.acknowledge-info-required') }),
+    acknowledgeCriteria: z.literal(true, { error: t('application-simplified-adult:submit.error-message.acknowledge-criteria-required') }),
   });
 
   const parsedDataResult = submitTermsSchema.safeParse({
@@ -98,7 +98,7 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
     acknowledgeCriteria: 'input-checkbox-acknowledge-criteria',
   });
 
-  const eligibilityLink = <InlineLink to={t('application-renew-adult:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t('application-simplified-adult:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose space-y-8">
@@ -106,43 +106,43 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
       <ProgressStepper steps={steps} currentStep={currentStep} />
       <div className="space-y-8">
         <section className="space-y-4">
-          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-renew-adult:submit.overview')}</h2>
+          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-adult:submit.overview')}</h2>
           <div>
-            <p>{t('application-renew-adult:submit.you-are-submitting')}</p>
+            <p>{t('application-simplified-adult:submit.you-are-submitting')}</p>
             <ul className="list-disc space-y-1 pl-7">
               <li>{state.applicantName}</li>
             </ul>
           </div>
         </section>
         <section className="space-y-4">
-          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-renew-adult:submit.review-your-application')}</h2>
-          <p>{t('application-renew-adult:submit.please-review')}</p>
+          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-adult:submit.review-your-application')}</h2>
+          <p>{t('application-simplified-adult:submit.please-review')}</p>
           <ButtonLink variant="primary" routeId="public/application/$id/renew-adult/contact-information" params={params}>
-            {t('application-renew-adult:submit.review-application')}
+            {t('application-simplified-adult:submit.review-application')}
           </ButtonLink>
         </section>
         <section className="space-y-4">
-          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-renew-adult:submit.submit-your-application')}</h2>
-          <p>{t('application-renew-adult:submit.by-submitting')}</p>
+          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-adult:submit.submit-your-application')}</h2>
+          <p>{t('application-simplified-adult:submit.by-submitting')}</p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey="application-renew-adult:submit.review-eligibility-criteria" components={{ eligibilityLink }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey="application-simplified-adult:submit.review-eligibility-criteria" components={{ eligibilityLink }} />
           </p>
           <fetcher.Form method="post" noValidate>
             <CsrfTokenInput />
             <div className="space-y-2">
               <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
-                {t('application-renew-adult:submit.info-is-correct')}
+                {t('application-simplified-adult:submit.info-is-correct')}
               </InputCheckbox>
               <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
-                {t('application-renew-adult:submit.i-understand')}
+                {t('application-simplified-adult:submit.i-understand')}
               </InputCheckbox>
             </div>
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
-                {t('application-renew-adult:submit.submit')}
+                {t('application-simplified-adult:submit.submit')}
               </NavigationButton>
               <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/renew-adult/dental-insurance" params={params}>
-                {t('application-renew-adult:submit.dental-insurance')}
+                {t('application-simplified-adult:submit.dental-insurance')}
               </NavigationButtonLink>
             </div>
           </fetcher.Form>
@@ -150,7 +150,7 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
       </div>
       <div className="mt-8">
         <InlineLink routeId="public/application/$id/renew-adult/exit-application" params={params}>
-          {t('application-renew-adult:submit.exit-application')}
+          {t('application-simplified-adult:submit.exit-application')}
         </InlineLink>
       </div>
     </div>
