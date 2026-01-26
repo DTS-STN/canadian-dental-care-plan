@@ -30,9 +30,9 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'application-renew-adult', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application', 'application-simplified-adult', 'gcweb'),
   pageIdentifier: pageIds.public.application.renewAdult.dentalInsurance,
-  pageTitleI18nKey: 'application-renew-adult:dental-insurance.page-heading',
+  pageTitleI18nKey: 'application-simplified-adult:dental-insurance.page-heading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -43,7 +43,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-renew-adult:dental-insurance.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-adult:dental-insurance.page-title') }) };
 
   const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.value?.federalSocialProgram
     ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale)
@@ -117,75 +117,75 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-renew-adult:dental-insurance.access-to-dental-insurance')}</CardTitle>
+            <CardTitle>{t('application-simplified-adult:dental-insurance.access-to-dental-insurance')}</CardTitle>
             <CardAction>{completedSections.includes('dental-insurance') && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.dentalInsurance === undefined ? (
-              <p>{t('application-renew-adult:dental-insurance.dental-insurance-indicate-status')}</p>
+              <p>{t('application-simplified-adult:dental-insurance.dental-insurance-indicate-status')}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-renew-adult:dental-insurance.access-to-dental-insurance-or-coverage')}>
-                  <p>{state.dentalInsurance ? t('application-renew-adult:dental-insurance.dental-insurance-yes') : t('application-renew-adult:dental-insurance.dental-insurance-no')}</p>
+                <DefinitionListItem term={t('application-simplified-adult:dental-insurance.access-to-dental-insurance-or-coverage')}>
+                  <p>{state.dentalInsurance ? t('application-simplified-adult:dental-insurance.dental-insurance-yes') : t('application-simplified-adult:dental-insurance.dental-insurance-no')}</p>
                 </DefinitionListItem>
               </DefinitionList>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
             <ButtonLink id="edit-button-dental-insurance" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={faCirclePlus} size="lg">
-              {state.dentalInsurance === undefined ? t('application-renew-adult:dental-insurance.add-answer') : t('application-renew-adult:dental-insurance.edit-access-to-dental-insurance')}
+              {state.dentalInsurance === undefined ? t('application-simplified-adult:dental-insurance.add-answer') : t('application-simplified-adult:dental-insurance.edit-access-to-dental-insurance')}
             </ButtonLink>
           </CardFooter>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-renew-adult:dental-insurance.other-benefits')}</CardTitle>
+            <CardTitle>{t('application-simplified-adult:dental-insurance.other-benefits')}</CardTitle>
             <CardAction>{completedSections.includes('dental-benefits') && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.dentalBenefits ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-renew-adult:dental-insurance.access-to-government-benefits')}>
+                <DefinitionListItem term={t('application-simplified-adult:dental-insurance.access-to-government-benefits')}>
                   {state.dentalBenefits.hasChanged ? (
                     <>
                       {state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
                         <div className="space-y-3">
-                          <p>{t('application-renew-adult:dental-insurance.access-to-government-benefits-yes')}</p>
+                          <p>{t('application-simplified-adult:dental-insurance.access-to-government-benefits-yes')}</p>
                           <ul className="list-disc space-y-1 pl-7">
                             {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
                             {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
                           </ul>
                         </div>
                       ) : (
-                        <p>{t('application-renew-adult:dental-insurance.access-to-government-benefits-no')}</p>
+                        <p>{t('application-simplified-adult:dental-insurance.access-to-government-benefits-no')}</p>
                       )}
                     </>
                   ) : (
-                    <p>{t('application-renew-adult:dental-insurance.no-change')}</p>
+                    <p>{t('application-simplified-adult:dental-insurance.no-change')}</p>
                   )}
                 </DefinitionListItem>
               </DefinitionList>
             ) : (
-              <p>{t('application-renew-adult:dental-insurance.dental-benefits-indicate-status')}</p>
+              <p>{t('application-simplified-adult:dental-insurance.dental-benefits-indicate-status')}</p>
             )}
           </CardContent>
           {state.dentalBenefits ? (
             <CardFooter className="border-t bg-zinc-100">
               <ButtonLink id="edit-button-government-benefits" variant="link" className="p-0" routeId="public/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faCirclePlus} size="lg">
-                {t('application-renew-adult:dental-insurance.edit-access-to-government-benefits')}
+                {t('application-simplified-adult:dental-insurance.edit-access-to-government-benefits')}
               </ButtonLink>
             </CardFooter>
           ) : (
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
                 <ButtonLink id="edit-button-update-access" variant="link" className="p-0 pb-5" routeId="public/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faPenToSquare} size="lg">
-                  {t('application-renew-adult:dental-insurance.update-my-access')}
+                  {t('application-simplified-adult:dental-insurance.update-my-access')}
                 </ButtonLink>
               </div>
               <div className="w-full px-6">
                 <Button id="edit-button-not-changed" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
-                  {t('application-renew-adult:dental-insurance.access-not-changed')}
+                  {t('application-simplified-adult:dental-insurance.access-not-changed')}
                 </Button>
               </div>
             </CardFooter>
@@ -194,10 +194,10 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-adult/submit" params={params}>
-            {t('application-renew-adult:dental-insurance.submit')}
+            {t('application-simplified-adult:dental-insurance.submit')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/renew-adult/contact-information" params={params}>
-            {t('application-renew-adult:dental-insurance.contact-information')}
+            {t('application-simplified-adult:dental-insurance.contact-information')}
           </NavigationButtonLink>
         </div>
       </div>
