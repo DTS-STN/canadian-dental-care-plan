@@ -59,30 +59,30 @@
     "alt-phone-number": "Autre numéro de téléphone"
   },
   "submit": {
-    "page-title": "(FR) Submit your application",
-    "page-heading": "(FR) Submit your application",
-    "overview": "(FR) Overview of applicants",
-    "you-are-submitting": "(FR) You are submitting an application for the following people:",
-    "review-your-application": "(FR) Review your application",
-    "please-review": "(FR) Please review your application to make sure all the information is correct.",
-    "review-application": "(FR) Review application",
-    "submit-your-application": "(FR) Submit your application",
-    "by-submitting": "(FR) By submitting the application, you're confirming that all information you've shared is correct. This information will be verified against your Social insurance Number (SIN) and Canada Revenue Agency (CRA) records. If any information provided is incorrect, you could lose your coverage.",
-    "review-eligibility-criteria": "(FR) Please review the Canadian Dental Care Plan (CDCP) <eligibilityLink>eligibility criteria</eligibilityLink> and confirm that you meet all requirements. If you are found to be ineligible for the CDCP at any time during the benefit year, you may need to repay the full costs of dental care you received under the plan.",
+    "page-title": "Soumettre votre demande",
+    "page-heading": "Soumettre votre demande",
+    "overview": "Aperçu des demandeurs",
+    "you-are-submitting": "Vous présentez une demande pour les personnes suivantes\u00a0:",
+    "review-your-application": "Vérifier votre demande",
+    "please-review": "Veuillez vérifier votre demande pour vous assurer que tous les renseignements sont exacts.",
+    "review-application": "Vérifier la demande",
+    "submit-your-application": "Soumettre votre demande",
+    "by-submitting": "En soumettant la demande, vous confirmez que tous les renseignements fournis sont exacts. Ces renseignements seront vérifiés au moyen de votre numéro d'assurance sociale (NAS) et des dossiers de l'Agence du revenu du Canada (ARC). Si des renseignements sont incorrects, vous pourriez perdre votre couverture.",
+    "review-eligibility-criteria": "Veuillez consulter les <eligibilityLink>critères d'admissibilité</eligibilityLink> du Régime canadien de soins dentaires (RCSD) et confirmer que vous répondez à toutes les exigences. Si vous êtes jugé(e) inadmissible au RCSD à tout moment au cours de l'année de versement des prestations, vous pourriez devoir rembourser la totalité des coûts des soins dentaires reçus dans le cadre du régime.",
     "do-you-qualify.href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/admissibilite.html",
-    "info-is-correct": "(FR) I confirm that all the information provided in the application is correct, and understand that it will be verified against my tax information.",
-    "i-understand": "(FR) I understand the CDCP eligibility criteria, and I acknowledge that if I am found to be ineligible at any point during the benefit year, based on incorrect information I provided, I will need to repay the cost of any dental care received under the plan.",
+    "info-is-correct": "Je confirme que tous les renseignements fournis dans la demande sont exacts et je comprends qu'ils seront comparés avec mes renseignements fiscaux.",
+    "i-understand": "Je comprends les critères d'admissibilité du RCSD. Je reconnais que si je suis jugé(e) inadmissible à tout moment pendant l'année de versement des prestations, en raison de renseignements incorrects que j'ai moi-même fournis, je devrai rembourser les coûts des soins dentaires reçus dans le cadre du régime.",
     "error-message": {
-      "acknowledge-info-required": "(FR) You must confirm that all information provided is correct to proceed",
-      "acknowledge-criteria-required": "(FR) You must confirm that you understand the eligibility criteria to proceed"
+      "acknowledge-info-required": "Vous devez confirmer que tous les renseignements fournis sont exacts pour continuer.",
+      "acknowledge-criteria-required": "Vous devez confirmer que vous comprenez les critères d'admissibilité pour continuer."
     },
-    "dental-insurance": "(FR) Dental-insurance",
-    "submit": "(FR) Submit",
-    "exit-application": "(FR) Exit application"
+    "dental-insurance": "Votre accès à une assurance dentaire",
+    "submit": "Soumettre",
+    "exit-application": "Quitter la demande"
   },
   "exit-application": {
     "page-title": "Quitter la demande",
-    "are-you-sure": "Êtes-vous certain de vouloir quitter cette demande? Si vous cliquez sur «\u00a0Quitter\u00a0», le formulaire sera réinitialisé et vos renseignements seront perdus.",
+    "are-you-sure": "Êtes-vous certain(e) de vouloir quitter cette demande? Si vous cliquez sur «\u00a0Quitter\u00a0», le formulaire sera réinitialisé et tous les renseignements saisis seront perdus.",
     "click-back": "Cliquez sur «\u00a0Retour\u00a0» pour retourner au formulaire.",
     "back-btn": "Retour",
     "exit-btn": "Quitter",
