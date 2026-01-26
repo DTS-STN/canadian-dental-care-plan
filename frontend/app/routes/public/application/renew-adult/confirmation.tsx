@@ -6,7 +6,7 @@ import { z } from 'zod';
 import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
-import { clearPublicApplicationState, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { clearPublicApplicationState, getEligibilityStatus, validateApplicationTypeAndFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicRenewAdultState } from '~/.server/routes/helpers/public-renew-adult-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
@@ -15,6 +15,7 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
+import { Eligibility } from '~/components/eligibility';
 import { InlineLink } from '~/components/inline-link';
 import { ProgressStepper } from '~/components/progress-stepper';
 import { useProgressStepper } from '~/hooks/use-progress-stepper';
@@ -130,6 +131,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     submissionInfo: state.submissionInfo,
     surveyLink,
     userInfo,
+    eligibility: getEligibilityStatus(state.dentalInsurance.hasDentalInsurance, state.clientApplication?.dentalInsurance),
   };
 }
 
@@ -152,7 +154,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function RenewAdultConfirm({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink } = loaderData;
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, eligibility } = loaderData;
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('application-renew-adult:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
@@ -162,6 +164,16 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
   return (
     <div className="max-w-prose space-y-10">
       <ProgressStepper steps={steps} currentStep={4} />
+
+      <section className="space-y-6">
+        <h3 className="font-lato text-2xl font-bold">{t('confirm.your-eligibility')}</h3>
+        <DefinitionList border>
+          <DefinitionListItem term={`${userInfo.firstName} ${userInfo.lastName}`}>
+            <Eligibility type={eligibility} />
+          </DefinitionListItem>
+        </DefinitionList>
+      </section>
+
       <div className="space-y-4">
         <p className="text-2xl">
           <strong>{t('confirm.app-code-is')}</strong>
