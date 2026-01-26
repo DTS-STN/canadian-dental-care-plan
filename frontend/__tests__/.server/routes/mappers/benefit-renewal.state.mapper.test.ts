@@ -105,6 +105,7 @@ describe('DefaultBenefitRenewalStateMapper', () => {
       socialInsuranceNumber: '800011819',
     },
     typeOfApplication: '111111111',
+    t4DentalIndicator: true,
   };
 
   describe('mapRenewAdultChildStateToAdultChildBenefitRenewalDto', () => {

@@ -17,6 +17,22 @@ export type ClientApplicationEntity = ReadonlyDeep<{
         PreviousTaxesFiledIndicator: boolean;
         PrivateDentalInsuranceIndicator: boolean;
       };
+      ApplicantEarning: Array<{
+        BenefitEligibilityStatus: {
+          StatusCode: {
+            ReferenceDataID: string;
+          };
+        };
+        Coverage: Array<{
+          CoverageCategoryCode: {
+            ReferenceDataName: string;
+            CoverageTierCode: {
+              ReferenceDataID: string;
+            };
+          };
+        }>;
+        PrivateDentalInsuranceIndicator: boolean;
+      }>;
       ClientIdentification: Array<{
         IdentificationID: string;
         IdentificationCategoryText?: string;
