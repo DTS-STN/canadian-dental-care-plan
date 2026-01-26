@@ -82,7 +82,7 @@
   },
   "exit-application": {
     "page-title": "Quitter la demande",
-    "are-you-sure": "Êtes-vous certain de vouloir quitter cette demande? Si vous cliquez sur «\u00a0Quitter\u00a0», le formulaire sera réinitialisé et vos renseignements seront perdus.",
+    "are-you-sure": "Êtes-vous certain(e) de vouloir quitter cette demande? Si vous cliquez sur «\u00a0Quitter\u00a0», le formulaire sera réinitialisé et tous les renseignements saisis seront perdus.",
     "click-back": "Cliquez sur «\u00a0Retour\u00a0» pour retourner au formulaire.",
     "back-btn": "Retour",
     "exit-btn": "Quitter",
