@@ -39,7 +39,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadPublicApplicationAdultState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-adult']);
+  validateApplicationFlow(state, params, ['full-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -132,7 +132,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicApplicationAdultState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-adult']);
+  validateApplicationFlow(state, params, ['full-adult']);
 
   const formData = await request.formData();
 
@@ -154,7 +154,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('application-full-adult:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
-  const { steps } = useProgressStepper('new-adult', 'submit');
+  const { steps } = useProgressStepper('full-adult', 'submit');
 
   return (
     <div className="max-w-prose space-y-10">

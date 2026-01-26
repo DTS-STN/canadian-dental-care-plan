@@ -28,7 +28,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadPublicRenewChildState({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-children']);
+  validateApplicationFlow(state, params, ['simplified-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-child:exit-application.page-title') }) };
@@ -37,7 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicRenewChildState({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-children']);
+  validateApplicationFlow(state, params, ['simplified-children']);
 
   const formData = await request.formData();
 
@@ -68,7 +68,7 @@ export default function RenewChildrenExitApplication({ loaderData, params }: Rou
         <ButtonLink
           id="back-button"
           variant="secondary"
-          routeId="public/application/$id/renew-children/submit"
+          routeId="public/application/$id/simplified-children/submit"
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}

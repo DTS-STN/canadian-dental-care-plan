@@ -40,7 +40,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicRenewAdultStateForReview({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-adult']);
+  validateApplicationFlow(state, params, ['simplified-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-adult:submit.page-title') }) };
@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
   const state = loadPublicRenewAdultStateForReview({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-adult']);
+  validateApplicationFlow(state, params, ['simplified-adult']);
 
   const formData = await request.formData();
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -81,13 +81,13 @@ export async function action({ context: { appContainer, session }, request, para
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
   savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
 
-  return redirect(getPathById('public/application/$id/renew-adult/submit', params));
+  return redirect(getPathById('public/application/$id/simplified-adult/confirmation', params));
 }
 
 export default function RenewAdultSubmit({ loaderData, params }: Route.ComponentProps) {
   const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('renew-adult', 'submit');
+  const { steps, currentStep } = useProgressStepper('simplified-adult', 'submit');
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -117,7 +117,7 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
         <section className="space-y-4">
           <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-adult:submit.review-your-application')}</h2>
           <p>{t('application-simplified-adult:submit.please-review')}</p>
-          <ButtonLink variant="primary" routeId="public/application/$id/renew-adult/contact-information" params={params}>
+          <ButtonLink variant="primary" routeId="public/application/$id/simplified-adult/contact-information" params={params}>
             {t('application-simplified-adult:submit.review-application')}
           </ButtonLink>
         </section>
@@ -141,7 +141,7 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
               <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
                 {t('application-simplified-adult:submit.submit')}
               </NavigationButton>
-              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/renew-adult/dental-insurance" params={params}>
+              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/simplified-adult/dental-insurance" params={params}>
                 {t('application-simplified-adult:submit.dental-insurance')}
               </NavigationButtonLink>
             </div>
@@ -149,7 +149,7 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
         </section>
       </div>
       <div className="mt-8">
-        <InlineLink routeId="public/application/$id/renew-adult/exit-application" params={params}>
+        <InlineLink routeId="public/application/$id/simplified-adult/exit-application" params={params}>
           {t('application-simplified-adult:submit.exit-application')}
         </InlineLink>
       </div>

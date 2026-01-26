@@ -44,7 +44,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationFamilyState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-family']);
+  validateApplicationFlow(state, params, ['full-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -92,7 +92,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicApplicationFamilyState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-family']);
+  validateApplicationFlow(state, params, ['full-family']);
 
   const formData = await request.formData();
 
@@ -134,7 +134,7 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
   const { currentLanguage } = useCurrentLanguage();
   const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('new-family', 'childrens-application');
+  const { steps, currentStep } = useProgressStepper('full-family', 'childrens-application');
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -291,10 +291,10 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
       </fetcher.Form>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="public/application/$id/new-family/submit" params={params}>
+        <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="public/application/$id/full-family/submit" params={params}>
           {t('application-full-family:childrens-application.submit-btn')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-family/dental-insurance" params={params}>
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-family/dental-insurance" params={params}>
           {t('application-full-family:childrens-application.back-btn')}
         </NavigationButtonLink>
       </div>

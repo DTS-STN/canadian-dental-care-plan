@@ -40,7 +40,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadPublicRenewAdultState({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-adult']);
+  validateApplicationFlow(state, params, ['simplified-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -137,7 +137,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicRenewAdultState({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-adult']);
+  validateApplicationFlow(state, params, ['simplified-adult']);
 
   const formData = await request.formData();
 
@@ -159,7 +159,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('application-simplified-adult:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
-  const { steps } = useProgressStepper('renew-adult', 'submit');
+  const { steps } = useProgressStepper('simplified-adult', 'submit');
 
   return (
     <div className="max-w-prose space-y-10">

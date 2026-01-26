@@ -139,7 +139,7 @@ export type PublicApplicationState = ReadonlyDeep<{
     acknowledgePrivacy: boolean;
     shareData: boolean;
   };
-  inputModel?: 'new' | 'renew';
+  inputModel?: 'full' | 'simplified';
   typeOfApplication?: 'adult' | 'children' | 'family' | 'delegate';
   clientApplication?: ClientApplicationDto;
 }>;
@@ -391,8 +391,8 @@ export function getEligibilityByAge(dateOfBirth: string): EligibilityResult {
  *
  * @example
  * ```typescript
- * type Result = ExtractStateFromApplicationFlow<'new-adult'>;
- * // Result is { inputModel: 'new'; typeOfApplication: 'adult' }
+ * type Result = ExtractStateFromApplicationFlow<'full-adult'>;
+ * // Result is { inputModel: 'full'; typeOfApplication: 'adult' }
  * ```
  */
 type ExtractStateFromApplicationFlow<S extends string> = S extends `${infer I}-${infer T}` //
@@ -416,7 +416,7 @@ type ExtractStateFromApplicationFlow<S extends string> = S extends `${infer I}-$
  *
  * @example
  * ```typescript
- * validateApplicationFlow(state, params, ['new-adult', 'renew-children']);
+ * validateApplicationFlow(state, params, ['full-adult', 'simplified-children']);
  * ```
  */
 export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${InputModelState}-${TypeOfApplicationState}`>>(
@@ -460,28 +460,28 @@ export function getInitialApplicationFlowUrl(applicationFlow: ApplicationFlow, p
     case 'entry': {
       return getPathById('public/application/$id/eligibility-requirements', params);
     }
-    case 'new-adult': {
-      return getPathById('public/application/$id/new-adult/marital-status', params);
+    case 'full-adult': {
+      return getPathById('public/application/$id/full-adult/marital-status', params);
     }
-    case 'new-children': {
-      return getPathById('public/application/$id/new-children/parent-or-guardian', params);
+    case 'full-children': {
+      return getPathById('public/application/$id/full-children/parent-or-guardian', params);
     }
-    case 'new-family': {
-      return getPathById('public/application/$id/new-family/marital-status', params);
+    case 'full-family': {
+      return getPathById('public/application/$id/full-family/marital-status', params);
     }
-    case 'new-delegate': {
+    case 'full-delegate': {
       return getPathById('public/application/$id/application-delegate', params);
     }
-    case 'renew-adult': {
-      return getPathById('public/application/$id/renew-adult/contact-information', params);
+    case 'simplified-adult': {
+      return getPathById('public/application/$id/simplified-adult/contact-information', params);
     }
-    case 'renew-children': {
-      return getPathById('public/application/$id/renew-children/parent-or-guardian', params);
+    case 'simplified-children': {
+      return getPathById('public/application/$id/simplified-children/parent-or-guardian', params);
     }
-    case 'renew-family': {
-      throw new Error('Not implemented yet: "renew-family" case');
+    case 'simplified-family': {
+      throw new Error('Not implemented yet: "simplified-family" case');
     }
-    case 'renew-delegate': {
+    case 'simplified-delegate': {
       return getPathById('public/application/$id/application-delegate', params);
     }
     default: {

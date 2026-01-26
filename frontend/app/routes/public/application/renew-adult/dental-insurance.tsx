@@ -39,7 +39,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicRenewAdultState({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-adult']);
+  validateApplicationFlow(state, params, ['simplified-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -76,7 +76,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicRenewAdultState({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-adult']);
+  validateApplicationFlow(state, params, ['simplified-adult']);
 
   const formData = await request.formData();
 
@@ -97,7 +97,7 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
 
-  const { steps, currentStep } = useProgressStepper('renew-adult', 'dental-insurance');
+  const { steps, currentStep } = useProgressStepper('simplified-adult', 'dental-insurance');
 
   const sections = [
     { id: 'dental-insurance', completed: state.dentalInsurance !== undefined }, //
@@ -193,10 +193,10 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-adult/submit" params={params}>
+          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-adult/submit" params={params}>
             {t('application-simplified-adult:dental-insurance.submit')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/renew-adult/contact-information" params={params}>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/simplified-adult/contact-information" params={params}>
             {t('application-simplified-adult:dental-insurance.contact-information')}
           </NavigationButtonLink>
         </div>

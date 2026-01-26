@@ -30,7 +30,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationAdultState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-adult']);
+  validateApplicationFlow(state, params, ['full-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -68,7 +68,7 @@ export async function loader({ context: { appContainer, session }, request, para
 export default function NewAdultDentalInsurance({ loaderData, params }: Route.ComponentProps) {
   const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('new-adult', 'dental-insurance');
+  const { steps, currentStep } = useProgressStepper('full-adult', 'dental-insurance');
 
   const sections = [
     { id: 'dental-insurance', completed: state.dentalInsurance?.dentalInsuranceEligibilityConfirmation === true }, //
@@ -141,10 +141,10 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-adult/submit" params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-adult/submit" params={params}>
           {t('application-full-adult:dental-insurance.submit')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-adult/marital-status" params={params}>
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-adult/marital-status" params={params}>
           {t('application-full-adult:dental-insurance.contact-information')}
         </NavigationButtonLink>
       </div>

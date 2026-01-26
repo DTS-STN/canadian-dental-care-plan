@@ -40,7 +40,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicRenewChildStateForReview({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-children']);
+  validateApplicationFlow(state, params, ['simplified-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-child:submit.page-title') }) };
@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
   const state = loadPublicRenewChildStateForReview({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-children']);
+  validateApplicationFlow(state, params, ['simplified-children']);
 
   const formData = await request.formData();
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -87,13 +87,13 @@ export async function action({ context: { appContainer, session }, request, para
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
   savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
 
-  return redirect(getPathById('public/application/$id/renew-children/confirmation', params));
+  return redirect(getPathById('public/application/$id/simplified-children/confirmation', params));
 }
 
 export default function RenewChildrenSubmit({ loaderData, params }: Route.ComponentProps) {
   const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('renew-children', 'submit');
+  const { steps, currentStep } = useProgressStepper('simplified-children', 'submit');
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -125,7 +125,7 @@ export default function RenewChildrenSubmit({ loaderData, params }: Route.Compon
         <section className="space-y-4">
           <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-child:submit.review-your-application')}</h2>
           <p>{t('application-simplified-child:submit.please-review')}</p>
-          <ButtonLink variant="primary" routeId="public/application/$id/renew-children/parent-or-guardian" params={params}>
+          <ButtonLink variant="primary" routeId="public/application/$id/simplified-children/parent-or-guardian" params={params}>
             {t('application-simplified-child:submit.review-application')}
           </ButtonLink>
         </section>
@@ -149,7 +149,7 @@ export default function RenewChildrenSubmit({ loaderData, params }: Route.Compon
               <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
                 {t('application-simplified-child:submit.submit')}
               </NavigationButton>
-              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/renew-children/childrens-application" params={params}>
+              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/simplified-children/childrens-application" params={params}>
                 {t('application-simplified-child:submit.dental-insurance')}
               </NavigationButtonLink>
             </div>
@@ -157,7 +157,7 @@ export default function RenewChildrenSubmit({ loaderData, params }: Route.Compon
         </section>
       </div>
       <div className="mt-8">
-        <InlineLink routeId="public/application/$id/renew-children/exit-application" params={params}>
+        <InlineLink routeId="public/application/$id/simplified-children/exit-application" params={params}>
           {t('application-simplified-child:submit.exit-application')}
         </InlineLink>
       </div>

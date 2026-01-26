@@ -28,7 +28,7 @@ export function loadPublicRenewAdultState({ params, request, session }: LoadPubl
 
   // Redirect to the confirmation page if the application has been submitted and
   // the current route is not the confirmation page.
-  const confirmationRouteUrl = getPathById('public/application/$id/renew-adult/confirmation', params);
+  const confirmationRouteUrl = getPathById('public/application/$id/simplified-adult/confirmation', params);
   if (applicationState.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has been submitted; sessionId: [%s], ', confirmationRouteUrl, applicationState.id);
     throw redirect(confirmationRouteUrl);
@@ -110,7 +110,7 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
-  if (inputModel !== 'renew') {
+  if (inputModel !== 'simplified') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
@@ -141,23 +141,23 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
   }
 
   if (phoneNumber === undefined) {
-    throw redirect(getPathById('public/application/$id/renew-adult/contact-information', params));
+    throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
   }
 
   if (mailingAddress === undefined) {
-    throw redirect(getPathById('public/application/$id/renew-adult/contact-information', params));
+    throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
   }
 
   if (communicationPreferences === undefined) {
-    throw redirect(getPathById('public/application/$id/renew-adult/contact-information', params));
+    throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
   }
 
   if (dentalInsurance === undefined) {
-    throw redirect(getPathById('public/application/$id/renew-adult/dental-insurance', params));
+    throw redirect(getPathById('public/application/$id/simplified-adult/dental-insurance', params));
   }
 
   if (dentalBenefits === undefined) {
-    throw redirect(getPathById('public/application/$id/renew-adult/federal-provincial-territorial-benefits', params));
+    throw redirect(getPathById('public/application/$id/simplified-adult/federal-provincial-territorial-benefits', params));
   }
 
   return {

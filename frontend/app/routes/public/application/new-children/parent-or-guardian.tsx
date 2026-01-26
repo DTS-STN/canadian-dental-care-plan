@@ -31,7 +31,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationChildState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-children']);
+  validateApplicationFlow(state, params, ['full-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-child:parent-or-guardian.page-title') }) };
@@ -78,7 +78,7 @@ export async function loader({ context: { appContainer, session }, request, para
 export default function NewChildParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
   const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('new-children', 'parent-or-guardian');
+  const { steps, currentStep } = useProgressStepper('full-children', 'parent-or-guardian');
 
   const sections = [
     {
@@ -237,7 +237,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-children/childrens-application" params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-children/childrens-application" params={params}>
           {t('application-full-child:parent-or-guardian.childrens-application')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>

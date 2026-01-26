@@ -30,7 +30,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationFamilyState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-family']);
+  validateApplicationFlow(state, params, ['full-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -68,7 +68,7 @@ export async function loader({ context: { appContainer, session }, request, para
 export default function NewFamilyDentalInsurance({ loaderData, params }: Route.ComponentProps) {
   const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('new-family', 'dental-insurance');
+  const { steps, currentStep } = useProgressStepper('full-family', 'dental-insurance');
 
   const sections = [
     { id: 'dental-insurance', completed: state.dentalInsurance !== undefined }, //
@@ -141,10 +141,10 @@ export default function NewFamilyDentalInsurance({ loaderData, params }: Route.C
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-family/childrens-application" params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-family/childrens-application" params={params}>
           {t('application-full-family:dental-insurance.childrens-application')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-family/contact-information" params={params}>
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-family/contact-information" params={params}>
           {t('application-full-family:dental-insurance.contact-information')}
         </NavigationButtonLink>
       </div>

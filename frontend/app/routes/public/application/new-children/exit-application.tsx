@@ -28,7 +28,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadPublicApplicationChildState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-children']);
+  validateApplicationFlow(state, params, ['full-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-child:exit-application.page-title') }) };
@@ -37,7 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicApplicationChildState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-children']);
+  validateApplicationFlow(state, params, ['full-children']);
 
   const formData = await request.formData();
 
@@ -68,7 +68,7 @@ export default function NewChildrenExitApplication({ loaderData, params }: Route
         <ButtonLink
           id="back-button"
           variant="secondary"
-          routeId="public/application/$id/new-children/submit"
+          routeId="public/application/$id/full-children/submit"
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}

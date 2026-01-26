@@ -28,7 +28,7 @@ export function loadPublicApplicationAdultState({ params, request, session }: Lo
 
   // Redirect to the confirmation page if the application has been submitted and
   // the current route is not the confirmation page.
-  const confirmationRouteUrl = getPathById('public/application/$id/new-adult/confirmation', params);
+  const confirmationRouteUrl = getPathById('public/application/$id/full-adult/confirmation', params);
   if (applicationState.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has been submitted; sessionId: [%s], ', confirmationRouteUrl, applicationState.id);
     throw redirect(confirmationRouteUrl);
@@ -105,7 +105,7 @@ export function validatePublicApplicationAdultStateForReview({ params, state }: 
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
-  if (inputModel !== 'new') {
+  if (inputModel !== 'full') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
@@ -136,31 +136,31 @@ export function validatePublicApplicationAdultStateForReview({ params, state }: 
   }
 
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
-    throw redirect(getPathById('public/application/$id/new-adult/marital-status', params));
+    throw redirect(getPathById('public/application/$id/full-adult/marital-status', params));
   }
 
   if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
-    throw redirect(getPathById('public/application/$id/new-adult/marital-status', params));
+    throw redirect(getPathById('public/application/$id/full-adult/marital-status', params));
   }
 
   if (phoneNumber === undefined) {
-    throw redirect(getPathById('public/application/$id/new-adult/contact-information', params));
+    throw redirect(getPathById('public/application/$id/full-adult/contact-information', params));
   }
 
   if (mailingAddress === undefined) {
-    throw redirect(getPathById('public/application/$id/new-adult/contact-information', params));
+    throw redirect(getPathById('public/application/$id/full-adult/contact-information', params));
   }
 
   if (communicationPreferences === undefined) {
-    throw redirect(getPathById('public/application/$id/new-adult/contact-information', params));
+    throw redirect(getPathById('public/application/$id/full-adult/contact-information', params));
   }
 
   if (dentalInsurance === undefined) {
-    throw redirect(getPathById('public/application/$id/new-adult/dental-insurance', params));
+    throw redirect(getPathById('public/application/$id/full-adult/dental-insurance', params));
   }
 
   if (dentalBenefits === undefined) {
-    throw redirect(getPathById('public/application/$id/new-adult/federal-provincial-territorial-benefits', params));
+    throw redirect(getPathById('public/application/$id/full-adult/federal-provincial-territorial-benefits', params));
   }
 
   return {

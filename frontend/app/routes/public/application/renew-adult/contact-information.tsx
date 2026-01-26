@@ -43,7 +43,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicRenewAdultState({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-adult']);
+  validateApplicationFlow(state, params, ['simplified-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-adult:contact-information.page-title') }) };
@@ -89,7 +89,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicRenewAdultState({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-adult']);
+  validateApplicationFlow(state, params, ['simplified-adult']);
 
   const formData = await request.formData();
 
@@ -136,7 +136,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function RenewAdultContactInformation({ loaderData, params }: Route.ComponentProps) {
   const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('renew-adult', 'contact-information');
+  const { steps, currentStep } = useProgressStepper('simplified-adult', 'contact-information');
 
   const sections = [
     { id: 'phone-number', completed: state.phoneNumber !== undefined },
@@ -312,7 +312,7 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-adult/dental-insurance" params={params}>
+          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-adult/dental-insurance" params={params}>
             {t('application-simplified-adult:contact-information.next-btn')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>

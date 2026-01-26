@@ -40,7 +40,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationAdultStateForReview({ params, request, session });
-  validateApplicationFlow(state, params, ['new-adult']);
+  validateApplicationFlow(state, params, ['full-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-adult:submit.page-title') }) };
@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
   const state = loadPublicApplicationAdultStateForReview({ params, request, session });
-  validateApplicationFlow(state, params, ['new-adult']);
+  validateApplicationFlow(state, params, ['full-adult']);
 
   const formData = await request.formData();
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -81,13 +81,13 @@ export async function action({ context: { appContainer, session }, request, para
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
   savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
 
-  return redirect(getPathById('public/application/$id/new-adult/confirmation', params));
+  return redirect(getPathById('public/application/$id/full-adult/confirmation', params));
 }
 
 export default function NewAdultSubmit({ loaderData, params }: Route.ComponentProps) {
   const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('new-adult', 'submit');
+  const { steps, currentStep } = useProgressStepper('full-adult', 'submit');
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -117,7 +117,7 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
         <section className="space-y-4">
           <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-adult:submit.review-your-application')}</h2>
           <p>{t('application-full-adult:submit.please-review')}</p>
-          <ButtonLink variant="primary" routeId="public/application/$id/new-adult/marital-status" params={params}>
+          <ButtonLink variant="primary" routeId="public/application/$id/full-adult/marital-status" params={params}>
             {t('application-full-adult:submit.review-application')}
           </ButtonLink>
         </section>
@@ -141,7 +141,7 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
               <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
                 {t('application-full-adult:submit.submit')}
               </NavigationButton>
-              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-adult/dental-insurance" params={params}>
+              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-adult/dental-insurance" params={params}>
                 {t('application-full-adult:submit.dental-insurance')}
               </NavigationButtonLink>
             </div>
@@ -149,7 +149,7 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
         </section>
       </div>
       <div className="mt-8">
-        <InlineLink routeId="public/application/$id/new-adult/exit-application" params={params}>
+        <InlineLink routeId="public/application/$id/full-adult/exit-application" params={params}>
           {t('application-full-adult:submit.exit-application')}
         </InlineLink>
       </div>

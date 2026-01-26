@@ -40,7 +40,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationFamilyStateForReview({ params, request, session });
-  validateApplicationFlow(state, params, ['new-family']);
+  validateApplicationFlow(state, params, ['full-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:submit.page-title') }) };
@@ -61,7 +61,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
   const state = loadPublicApplicationFamilyStateForReview({ params, request, session });
-  validateApplicationFlow(state, params, ['new-family']);
+  validateApplicationFlow(state, params, ['full-family']);
 
   const formData = await request.formData();
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -88,13 +88,13 @@ export async function action({ context: { appContainer, session }, request, para
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
   savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
 
-  return redirect(getPathById('public/application/$id/new-family/confirmation', params));
+  return redirect(getPathById('public/application/$id/full-family/confirmation', params));
 }
 
 export default function NewFamilySubmit({ loaderData, params }: Route.ComponentProps) {
   const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('new-family', 'submit');
+  const { steps, currentStep } = useProgressStepper('full-family', 'submit');
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -127,7 +127,7 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
         <section className="space-y-4">
           <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.review-your-application')}</h2>
           <p>{t('application-full-family:submit.please-review')}</p>
-          <ButtonLink variant="primary" routeId="public/application/$id/new-family/marital-status" params={params}>
+          <ButtonLink variant="primary" routeId="public/application/$id/full-family/marital-status" params={params}>
             {t('application-full-family:submit.review-application')}
           </ButtonLink>
         </section>
@@ -151,7 +151,7 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
               <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
                 {t('application-full-family:submit.submit')}
               </NavigationButton>
-              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-family/confirmation" params={params}>
+              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-family/childrens-application" params={params}>
                 {t('application-full-family:submit.children-application')}
               </NavigationButtonLink>
             </div>
@@ -159,7 +159,7 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
         </section>
       </div>
       <div className="mt-8">
-        <InlineLink routeId="public/application/$id/new-family/exit-application" params={params}>
+        <InlineLink routeId="public/application/$id/full-family/exit-application" params={params}>
           {t('application-full-family:submit.exit-application')}
         </InlineLink>
       </div>

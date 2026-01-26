@@ -28,7 +28,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadPublicApplicationAdultState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-adult']);
+  validateApplicationFlow(state, params, ['full-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-adult:exit-application.page-title') }) };
@@ -37,7 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicApplicationAdultState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-adult']);
+  validateApplicationFlow(state, params, ['full-adult']);
 
   const formData = await request.formData();
 
@@ -68,7 +68,7 @@ export default function NewAdultExitApplication({ loaderData, params }: Route.Co
         <ButtonLink
           id="back-button"
           variant="secondary"
-          routeId="public/application/$id/new-adult/submit"
+          routeId="public/application/$id/full-adult/submit"
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
