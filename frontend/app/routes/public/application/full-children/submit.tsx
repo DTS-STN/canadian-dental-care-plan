@@ -7,7 +7,7 @@ import { z } from 'zod';
 import type { Route } from './+types/submit';
 
 import { TYPES } from '~/.server/constants';
-import { loadPublicApplicationChildStateForReview } from '~/.server/routes/helpers/public-application-child-route-helpers';
+import { loadPublicApplicationFullChildStateForReview } from '~/.server/routes/helpers/public-application-full-child-route-helpers';
 import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -39,7 +39,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  const state = loadPublicApplicationChildStateForReview({ params, request, session });
+  const state = loadPublicApplicationFullChildStateForReview({ params, request, session });
   validateApplicationFlow(state, params, ['full-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -59,7 +59,7 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
-  const state = loadPublicApplicationChildStateForReview({ params, request, session });
+  const state = loadPublicApplicationFullChildStateForReview({ params, request, session });
   validateApplicationFlow(state, params, ['full-children']);
 
   const formData = await request.formData();

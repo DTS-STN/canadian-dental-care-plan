@@ -3,34 +3,34 @@ import { redirect } from 'react-router';
 import { z } from 'zod';
 
 import { createLogger } from '~/.server/logging';
-import type { ApplicationStateParams, ChildrenState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { ApplicationStateParams, ChildrenState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
-interface LoadPublicApplicationChildStateArgs {
+interface LoadPublicApplicationFullFamilyStateArgs {
   params: ApplicationStateParams;
   request: Request;
   session: Session;
 }
 
 /**
- * Loads public application child state.
+ * Loads public application full family state.
  * @param args - The arguments.
- * @returns The loaded child state.
+ * @returns The loaded public application family state.
  */
-export function loadPublicApplicationChildState({ params, request, session }: LoadPublicApplicationChildStateArgs) {
-  const log = createLogger('public-application-child-route-helpers.server/loadPublicApplicationChildState');
+export function loadPublicApplicationFullFamilyState({ params, request, session }: LoadPublicApplicationFullFamilyStateArgs) {
+  const log = createLogger('public-application-full-family-route-helpers/loadPublicApplicationFullFamilyState');
   const { pathname } = new URL(request.url);
   const applicationState = getPublicApplicationState({ params, session });
 
-  if (applicationState.typeOfApplication !== 'children') {
+  if (applicationState.inputModel !== 'full' || applicationState.typeOfApplication !== 'family') {
     throw redirect(getPathById('public/application/$id/type-application', params));
   }
 
   // Redirect to the confirmation page if the application has been submitted and
   // the current route is not the confirmation page.
-  const confirmationRouteUrl = getPathById('public/application/$id/full-children/confirmation', params);
+  const confirmationRouteUrl = getPathById('public/application/$id/full-family/confirmation', params);
   if (applicationState.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has been submitted; sessionId: [%s], ', confirmationRouteUrl, applicationState.id);
     throw redirect(confirmationRouteUrl);
@@ -38,7 +38,7 @@ export function loadPublicApplicationChildState({ params, request, session }: Lo
 
   // Redirect to the first flow page if the application has not been submitted and
   // the current route is the confirmation page.
-  const typeOfApplicationRouteUrl = getPathById('public/application/$id/type-application', params);
+  const typeOfApplicationRouteUrl = getPathById('public/application/$id/type-of-application', params);
   if (!applicationState.submissionInfo && pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has not been submitted; sessionId: [%s], ', typeOfApplicationRouteUrl, applicationState.id);
     throw redirect(typeOfApplicationRouteUrl);
@@ -47,51 +47,34 @@ export function loadPublicApplicationChildState({ params, request, session }: Lo
   return applicationState;
 }
 
-interface LoadPublicApplicationChildStateForReviewArgs {
-  params: ApplicationStateParams;
-  request: Request;
-  session: Session;
-}
-
-/**
- * Loads the child state for the review page. It validates the state and throws a redirect if invalid.
- * If a redirect exception is thrown, state.editMode is set to false.
- * @param args - The arguments.
- * @returns The validated child state.
- */
-export function loadPublicApplicationChildStateForReview({ params, request, session }: LoadPublicApplicationChildStateForReviewArgs) {
-  const state = loadPublicApplicationChildState({ params, request, session });
-  return validatePublicApplicationChildStateForReview({ params, state });
-}
-
-interface LoadPublicApplicationSingleChildStateArgs {
+interface LoadPublicApplicationFullFamilySingleChildStateArgs {
   params: ApplicationStateParams & { childId: string };
   request: Request;
   session: Session;
 }
 
 /**
- * Loads single child state from apply child state.
+ * Loads single child state from public application full family state.
  * @param args - The arguments.
  * @returns The loaded child state.
  */
-export function loadPublicApplicationSingleChildState({ params, request, session }: LoadPublicApplicationSingleChildStateArgs) {
-  const log = createLogger('public-application-child-route-helpers.server/loadPublicApplicationSingleChildState');
-  const applicationState = loadPublicApplicationChildState({ params, request, session });
+export function loadPublicApplicationFullFamilyChildState({ params, request, session }: LoadPublicApplicationFullFamilySingleChildStateArgs) {
+  const log = createLogger('public-application-full-family-route-helpers/loadPublicApplicationFullFamilyChildState');
+  const applicationState = loadPublicApplicationFullFamilyState({ params, request, session });
 
   const parsedChildId = z.uuid().safeParse(params.childId);
 
   if (!parsedChildId.success) {
     log.warn('Invalid "childId" param format; childId: [%s]', params.childId);
-    throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
+    throw redirect(getPathById('public/application/$id/full-family/childrens-application', params));
   }
 
   const childId = parsedChildId.data;
   const childStateIndex = applicationState.children.findIndex(({ id }) => id === childId);
 
   if (childStateIndex === -1) {
-    log.warn('Public application single child has not been found; childId: [%s]', childId);
-    throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
+    log.warn('Apply single child has not been found; childId: [%s]', childId);
+    throw redirect(getPathById('public/application/$id/full-family/childrens-application', params));
   }
 
   const childState = applicationState.children[childStateIndex];
@@ -99,18 +82,36 @@ export function loadPublicApplicationSingleChildState({ params, request, session
   return { ...childState, childNumber: childStateIndex + 1 };
 }
 
-interface ValidateStateForReviewArgs {
+interface LoadPublicApplicationFullFamilyStateForReviewArgs {
+  params: ApplicationStateParams;
+  request: Request;
+  session: Session;
+}
+
+/**
+ * Loads the full family state for the review page. It validates the state and throws a redirect if invalid.
+ * @param args - The arguments.
+ * @returns The validated family state.
+ */
+export function loadPublicApplicationFullFamilyStateForReview({ params, request, session }: LoadPublicApplicationFullFamilyStateForReviewArgs) {
+  const state = loadPublicApplicationFullFamilyState({ params, request, session });
+  return validatePublicApplicationFamilyStateForReview({ params, state });
+}
+
+interface ValidatePublicApplicationFamilyStateForReviewArgs {
   params: ApplicationStateParams;
   state: PublicApplicationState;
 }
 
-export function validatePublicApplicationChildStateForReview({ params, state }: ValidateStateForReviewArgs) {
+export function validatePublicApplicationFamilyStateForReview({ params, state }: ValidatePublicApplicationFamilyStateForReviewArgs) {
   const {
     applicantInformation,
     applicationYear,
     context,
     communicationPreferences,
     phoneNumber,
+    dentalBenefits,
+    dentalInsurance,
     email,
     emailVerified,
     hasFiledTaxes,
@@ -118,6 +119,7 @@ export function validatePublicApplicationChildStateForReview({ params, state }: 
     id,
     isHomeAddressSameAsMailingAddress,
     lastUpdatedOn,
+    livingIndependently,
     mailingAddress,
     maritalStatus,
     partnerInformation,
@@ -135,7 +137,7 @@ export function validatePublicApplicationChildStateForReview({ params, state }: 
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
-  if (typeOfApplicationFlow !== 'children') {
+  if (typeOfApplicationFlow !== 'family') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
@@ -151,8 +153,6 @@ export function validatePublicApplicationChildStateForReview({ params, state }: 
     throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
   }
 
-  const children = validateChildrenStateForReview({ childrenState: state.children, params });
-
   if (applicantInformation === undefined) {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
@@ -164,24 +164,34 @@ export function validatePublicApplicationChildStateForReview({ params, state }: 
   }
 
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
-    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-family/marital-status', params));
   }
 
   if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
-    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-family/marital-status', params));
   }
 
   if (phoneNumber === undefined) {
-    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-family/contact-information', params));
   }
 
   if (mailingAddress === undefined) {
-    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-family/contact-information', params));
   }
 
   if (communicationPreferences === undefined) {
-    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-family/contact-information', params));
   }
+
+  if (dentalInsurance === undefined) {
+    throw redirect(getPathById('public/application/$id/full-family/dental-insurance', params));
+  }
+
+  if (dentalBenefits === undefined) {
+    throw redirect(getPathById('public/application/$id/full-family/dental-insurance', params));
+  }
+
+  const children = validateChildrenStateForReview({ childrenState: state.children, params });
 
   return {
     ageCategory,
@@ -191,6 +201,8 @@ export function validatePublicApplicationChildStateForReview({ params, state }: 
     context,
     communicationPreferences,
     phoneNumber,
+    dentalBenefits,
+    dentalInsurance,
     email,
     emailVerified,
     hasFiledTaxes,
@@ -198,6 +210,7 @@ export function validatePublicApplicationChildStateForReview({ params, state }: 
     id,
     isHomeAddressSameAsMailingAddress,
     lastUpdatedOn,
+    livingIndependently,
     mailingAddress,
     maritalStatus,
     partnerInformation,
@@ -217,16 +230,16 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
   const children = getChildrenState({ children: childrenState });
 
   if (children.length === 0) {
-    throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
+    throw redirect(getPathById('public/application/$id/full-family/childrens-application', params));
   }
 
   return children.map(({ id, dentalBenefits, dentalInsurance, information }) => {
     if (information === undefined) {
-      throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
+      throw redirect(getPathById('public/application/$id/full-family/childrens-application', params));
     }
 
     if (!information.isParent) {
-      throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
+      throw redirect(getPathById('public/application/$id/full-family/childrens-application', params));
     }
 
     const ageCategory = getAgeCategoryFromDateString(information.dateOfBirth);
@@ -236,18 +249,18 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
     }
 
     if (dentalInsurance === undefined) {
-      throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
+      throw redirect(getPathById('public/application/$id/full-family/childrens-application', params));
     }
 
     if (dentalBenefits === undefined) {
-      throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
+      throw redirect(getPathById('public/application/$id/full-family/childrens-application', params));
     }
 
     return {
       ageCategory,
+      id,
       dentalBenefits,
       dentalInsurance,
-      id,
       information,
     };
   });

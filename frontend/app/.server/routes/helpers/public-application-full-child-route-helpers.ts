@@ -8,29 +8,29 @@ import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getC
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
-interface LoadPublicRenewChildStateArgs {
+interface LoadPublicApplicationFullChildStateArgs {
   params: ApplicationStateParams;
   request: Request;
   session: Session;
 }
 
 /**
- * Loads public renew child state.
+ * Loads public application full child state.
  * @param args - The arguments.
  * @returns The loaded child state.
  */
-export function loadPublicRenewChildState({ params, request, session }: LoadPublicRenewChildStateArgs) {
-  const log = createLogger('public-renew-child-route-helpers.server/loadPublicRenewChildState');
+export function loadPublicApplicationFullChildState({ params, request, session }: LoadPublicApplicationFullChildStateArgs) {
+  const log = createLogger('public-application-full-child-route-helpers/loadPublicApplicationFullChildState');
   const { pathname } = new URL(request.url);
   const applicationState = getPublicApplicationState({ params, session });
 
-  if (applicationState.typeOfApplication !== 'children') {
+  if (applicationState.inputModel !== 'full' || applicationState.typeOfApplication !== 'children') {
     throw redirect(getPathById('public/application/$id/type-application', params));
   }
 
   // Redirect to the confirmation page if the application has been submitted and
   // the current route is not the confirmation page.
-  const confirmationRouteUrl = getPathById('public/application/$id/simplified-children/confirmation', params);
+  const confirmationRouteUrl = getPathById('public/application/$id/full-children/confirmation', params);
   if (applicationState.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has been submitted; sessionId: [%s], ', confirmationRouteUrl, applicationState.id);
     throw redirect(confirmationRouteUrl);
@@ -47,43 +47,42 @@ export function loadPublicRenewChildState({ params, request, session }: LoadPubl
   return applicationState;
 }
 
-interface LoadPublicRenewChildStateForReviewArgs {
+interface LoadPublicApplicationFullChildStateForReviewArgs {
   params: ApplicationStateParams;
   request: Request;
   session: Session;
 }
 
 /**
- * Loads the child state for the review page. It validates the state and throws a redirect if invalid.
- * If a redirect exception is thrown, state.editMode is set to false.
+ * Loads the full child state for the review page. It validates the state and throws a redirect if invalid.
  * @param args - The arguments.
  * @returns The validated child state.
  */
-export function loadPublicRenewChildStateForReview({ params, request, session }: LoadPublicRenewChildStateForReviewArgs) {
-  const state = loadPublicRenewChildState({ params, request, session });
-  return validatePublicRenewChildStateForReview({ params, state });
+export function loadPublicApplicationFullChildStateForReview({ params, request, session }: LoadPublicApplicationFullChildStateForReviewArgs) {
+  const state = loadPublicApplicationFullChildState({ params, request, session });
+  return validatePublicApplicationFullChildStateForReview({ params, state });
 }
 
-interface LoadPublicRenewSingleChildStateArgs {
+interface LoadPublicApplicationSingleFullChildStateArgs {
   params: ApplicationStateParams & { childId: string };
   request: Request;
   session: Session;
 }
 
 /**
- * Loads single child state from renew child state.
+ * Loads single full child state from apply full child state.
  * @param args - The arguments.
  * @returns The loaded child state.
  */
-export function loadPublicRenewSingleChildState({ params, request, session }: LoadPublicRenewSingleChildStateArgs) {
-  const log = createLogger('public-renew-child-route-helpers.server/loadPublicRenewSingleChildState');
-  const applicationState = loadPublicRenewChildState({ params, request, session });
+export function loadPublicApplicationSingleFullChildState({ params, request, session }: LoadPublicApplicationSingleFullChildStateArgs) {
+  const log = createLogger('public-application-full-child-route-helpers/loadPublicApplicationSingleFullChildState');
+  const applicationState = loadPublicApplicationFullChildState({ params, request, session });
 
   const parsedChildId = z.uuid().safeParse(params.childId);
 
   if (!parsedChildId.success) {
     log.warn('Invalid "childId" param format; childId: [%s]', params.childId);
-    throw redirect(getPathById('public/application/$id/simplified-children/childrens-application', params));
+    throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
   }
 
   const childId = parsedChildId.data;
@@ -91,7 +90,7 @@ export function loadPublicRenewSingleChildState({ params, request, session }: Lo
 
   if (childStateIndex === -1) {
     log.warn('Public application single child has not been found; childId: [%s]', childId);
-    throw redirect(getPathById('public/application/$id/simplified-children/childrens-application', params));
+    throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
   }
 
   const childState = applicationState.children[childStateIndex];
@@ -99,16 +98,15 @@ export function loadPublicRenewSingleChildState({ params, request, session }: Lo
   return { ...childState, childNumber: childStateIndex + 1 };
 }
 
-interface ValidateStateForReviewArgs {
+interface ValidatePublicApplicationFullChildStateForReviewArgs {
   params: ApplicationStateParams;
   state: PublicApplicationState;
 }
 
-export function validatePublicRenewChildStateForReview({ params, state }: ValidateStateForReviewArgs) {
+export function validatePublicApplicationFullChildStateForReview({ params, state }: ValidatePublicApplicationFullChildStateForReviewArgs) {
   const {
     applicantInformation,
     applicationYear,
-    clientApplication,
     context,
     communicationPreferences,
     phoneNumber,
@@ -128,10 +126,6 @@ export function validatePublicRenewChildStateForReview({ params, state }: Valida
     typeOfApplication: typeOfApplicationFlow,
   } = state;
 
-  if (clientApplication === undefined) {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
-  }
-
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
   }
@@ -144,7 +138,7 @@ export function validatePublicRenewChildStateForReview({ params, state }: Valida
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
-  if (inputModel !== 'simplified') {
+  if (inputModel !== 'full') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
@@ -169,23 +163,23 @@ export function validatePublicRenewChildStateForReview({ params, state }: Valida
   }
 
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
-    throw redirect(getPathById('public/application/$id/simplified-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
   if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
-    throw redirect(getPathById('public/application/$id/simplified-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
   if (phoneNumber === undefined) {
-    throw redirect(getPathById('public/application/$id/simplified-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
   if (mailingAddress === undefined) {
-    throw redirect(getPathById('public/application/$id/simplified-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
   if (communicationPreferences === undefined) {
-    throw redirect(getPathById('public/application/$id/simplified-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
   return {
@@ -193,7 +187,6 @@ export function validatePublicRenewChildStateForReview({ params, state }: Valida
     applicantInformation,
     applicationYear,
     children,
-    clientApplication,
     context,
     communicationPreferences,
     phoneNumber,
@@ -223,16 +216,16 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
   const children = getChildrenState({ children: childrenState });
 
   if (children.length === 0) {
-    throw redirect(getPathById('public/application/$id/simplified-children/childrens-application', params));
+    throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
   }
 
   return children.map(({ id, dentalBenefits, dentalInsurance, information }) => {
     if (information === undefined) {
-      throw redirect(getPathById('public/application/$id/simplified-children/childrens-application', params));
+      throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
     }
 
     if (!information.isParent) {
-      throw redirect(getPathById('public/application/$id/simplified-children/childrens-application', params));
+      throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
     }
 
     const ageCategory = getAgeCategoryFromDateString(information.dateOfBirth);
@@ -242,11 +235,11 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
     }
 
     if (dentalInsurance === undefined) {
-      throw redirect(getPathById('public/application/$id/simplified-children/childrens-application', params));
+      throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
     }
 
     if (dentalBenefits === undefined) {
-      throw redirect(getPathById('public/application/$id/simplified-children/childrens-application', params));
+      throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
     }
 
     return {
