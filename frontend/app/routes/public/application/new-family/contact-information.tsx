@@ -38,26 +38,28 @@ export async function loader({ context: { appContainer, session }, request, para
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-new-family:contact-information.page-title') }) };
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province) : undefined;
-  const countryMailing = state.mailingAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale) : undefined;
-  const countryHome = state.homeAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale) : undefined;
+  const { getLocalizedProvinceTerritoryStateById } = appContainer.get(TYPES.ProvinceTerritoryStateService);
+  const { getLocalizedCountryById } = appContainer.get(TYPES.CountryService);
 
-  const mailingAddressInfo = {
-    address: state.mailingAddress?.value?.address,
-    city: state.mailingAddress?.value?.city,
-    province: mailingProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.mailingAddress?.value?.postalCode,
-    country: countryMailing?.name,
-  };
+  const mailingAddressInfo = state.mailingAddress?.hasChanged
+    ? {
+        address: state.mailingAddress.value.address,
+        city: state.mailingAddress.value.city,
+        province: state.mailingAddress.value.province ? await getLocalizedProvinceTerritoryStateById(state.mailingAddress.value.province, locale) : undefined,
+        postalCode: state.mailingAddress.value.postalCode,
+        country: await getLocalizedCountryById(state.mailingAddress.value.country, locale),
+      }
+    : undefined;
 
-  const homeAddressInfo = {
-    address: state.homeAddress?.value?.address,
-    city: state.homeAddress?.value?.city,
-    province: homeProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.homeAddress?.value?.postalCode,
-    country: countryHome?.name,
-  };
+  const homeAddressInfo = state.homeAddress?.hasChanged
+    ? {
+        address: state.homeAddress.value.address,
+        city: state.homeAddress.value.city,
+        province: state.homeAddress.value.province ? await getLocalizedProvinceTerritoryStateById(state.homeAddress.value.province, locale) : undefined,
+        postalCode: state.homeAddress.value.postalCode,
+        country: await getLocalizedCountryById(state.homeAddress.value.country, locale),
+      }
+    : undefined;
 
   return {
     state: {
@@ -81,7 +83,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
 
   const sections = [
     { id: 'phone-number', completed: state.phoneNumber?.hasChanged === true },
-    { id: 'address', completed: mailingAddressInfo.address !== undefined && homeAddressInfo.address !== undefined },
+    { id: 'address', completed: mailingAddressInfo !== undefined && homeAddressInfo !== undefined },
     { id: 'communication-preferences', completed: state.communicationPreferences?.hasChanged === true },
   ] as const;
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
@@ -128,36 +130,32 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
           <CardAction>{completedSections.includes('address') && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
-          {mailingAddressInfo.address === undefined && homeAddressInfo.address === undefined ? (
+          {mailingAddressInfo === undefined || homeAddressInfo === undefined ? (
             <p>{t('application-new-family:contact-information.address-help')}</p>
           ) : (
             <DefinitionList layout="single-column">
-              {mailingAddressInfo.address !== undefined && (
-                <DefinitionListItem term={t('application-new-family:contact-information.mailing-address')}>
-                  <Address
-                    address={{
-                      address: mailingAddressInfo.address,
-                      city: mailingAddressInfo.city ?? '',
-                      provinceState: mailingAddressInfo.province,
-                      postalZipCode: mailingAddressInfo.postalCode,
-                      country: mailingAddressInfo.country ?? '',
-                    }}
-                  />
-                </DefinitionListItem>
-              )}
-              {homeAddressInfo.address !== undefined && (
-                <DefinitionListItem term={t('application-new-family:contact-information.home-address')}>
-                  <Address
-                    address={{
-                      address: homeAddressInfo.address,
-                      city: homeAddressInfo.city ?? '',
-                      provinceState: homeAddressInfo.province,
-                      postalZipCode: homeAddressInfo.postalCode,
-                      country: homeAddressInfo.country ?? '',
-                    }}
-                  />
-                </DefinitionListItem>
-              )}
+              <DefinitionListItem term={t('application-new-family:contact-information.mailing-address')}>
+                <Address
+                  address={{
+                    address: mailingAddressInfo.address,
+                    city: mailingAddressInfo.city,
+                    provinceState: mailingAddressInfo.province?.abbr,
+                    postalZipCode: mailingAddressInfo.postalCode,
+                    country: mailingAddressInfo.country.name,
+                  }}
+                />
+              </DefinitionListItem>
+              <DefinitionListItem term={t('application-new-family:contact-information.home-address')}>
+                <Address
+                  address={{
+                    address: homeAddressInfo.address,
+                    city: homeAddressInfo.city,
+                    provinceState: homeAddressInfo.province?.abbr,
+                    postalZipCode: homeAddressInfo.postalCode,
+                    country: homeAddressInfo.country.name,
+                  }}
+                />
+              </DefinitionListItem>
             </DefinitionList>
           )}
         </CardContent>
@@ -179,7 +177,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               <DefinitionListItem term={t('application-new-family:contact-information.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
               <DefinitionListItem term={t('application-new-family:contact-information.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
               <DefinitionListItem term={t('application-new-family:contact-information.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
-              <DefinitionListItem term={t('application-new-family:contact-information.email')}>{state.email}</DefinitionListItem>
+              {state.email && <DefinitionListItem term={t('application-new-family:contact-information.email')}>{state.email}</DefinitionListItem>}
             </DefinitionList>
           ) : (
             <p>{t('application-new-family:contact-information.communication-preferences-help')}</p>
