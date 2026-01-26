@@ -41,7 +41,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicRenewChildState({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-children']);
+  validateApplicationFlow(state, params, ['simplified-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-child:parent-or-guardian.page-title') }) };
@@ -89,7 +89,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicRenewChildState({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-children']);
+  validateApplicationFlow(state, params, ['simplified-children']);
 
   const formData = await request.formData();
 
@@ -136,7 +136,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function RenewChildParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
   const { state, mailingAddressInfo, homeAddressInfo } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('renew-children', 'parent-or-guardian');
+  const { steps, currentStep } = useProgressStepper('simplified-children', 'parent-or-guardian');
 
   const sections = [
     { id: 'phone-number', completed: state.phoneNumber !== undefined },
@@ -313,7 +313,7 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-children/childrens-application" params={params}>
+          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-children/childrens-application" params={params}>
             {t('application-simplified-child:parent-or-guardian.childrens-application')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>

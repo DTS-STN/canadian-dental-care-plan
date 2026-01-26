@@ -32,7 +32,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationFamilyState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-family']);
+  validateApplicationFlow(state, params, ['full-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:contact-information.page-title') }) };
@@ -79,7 +79,7 @@ export async function loader({ context: { appContainer, session }, request, para
 export default function NewFamilyContactInformation({ loaderData, params }: Route.ComponentProps) {
   const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('new-family', 'contact-information');
+  const { steps, currentStep } = useProgressStepper('full-family', 'contact-information');
 
   const sections = [
     { id: 'phone-number', completed: state.phoneNumber?.hasChanged === true },
@@ -191,10 +191,10 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-family/dental-insurance" params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-family/dental-insurance" params={params}>
           {t('application-full-family:contact-information.next-btn')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-family/marital-status" params={params}>
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-family/marital-status" params={params}>
           {t('application-full-family:contact-information.prev-btn')}
         </NavigationButtonLink>
       </div>

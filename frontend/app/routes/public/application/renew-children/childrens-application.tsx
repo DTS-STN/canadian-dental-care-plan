@@ -45,7 +45,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicRenewChildState({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-children']);
+  validateApplicationFlow(state, params, ['simplified-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -93,7 +93,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicRenewChildState({ params, request, session });
-  validateApplicationFlow(state, params, ['renew-children']);
+  validateApplicationFlow(state, params, ['simplified-children']);
 
   const formData = await request.formData();
 
@@ -154,7 +154,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
   const { currentLanguage } = useCurrentLanguage();
   const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('renew-children', 'childrens-application');
+  const { steps, currentStep } = useProgressStepper('simplified-children', 'childrens-application');
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -348,10 +348,10 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
       </fetcher.Form>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="public/application/$id/renew-children/submit" params={params}>
+        <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-children/submit" params={params}>
           {t('application-simplified-child:childrens-application.submit-btn')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/renew-children/parent-or-guardian" params={params}>
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/simplified-children/parent-or-guardian" params={params}>
           {t('application-simplified-child:childrens-application.back-btn')}
         </NavigationButtonLink>
       </div>

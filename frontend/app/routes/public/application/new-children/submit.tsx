@@ -40,7 +40,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationChildStateForReview({ params, request, session });
-  validateApplicationFlow(state, params, ['new-children']);
+  validateApplicationFlow(state, params, ['full-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-child:submit.page-title') }) };
@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
   const state = loadPublicApplicationChildStateForReview({ params, request, session });
-  validateApplicationFlow(state, params, ['new-children']);
+  validateApplicationFlow(state, params, ['full-children']);
 
   const formData = await request.formData();
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -87,13 +87,13 @@ export async function action({ context: { appContainer, session }, request, para
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
   savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
 
-  return redirect(getPathById('public/application/$id/new-children/confirmation', params));
+  return redirect(getPathById('public/application/$id/full-children/confirmation', params));
 }
 
 export default function NewChildrenSubmit({ loaderData, params }: Route.ComponentProps) {
   const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('new-children', 'submit');
+  const { steps, currentStep } = useProgressStepper('full-children', 'submit');
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -125,7 +125,7 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
         <section className="space-y-4">
           <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-child:submit.review-your-application')}</h2>
           <p>{t('application-full-child:submit.please-review')}</p>
-          <ButtonLink variant="primary" routeId="public/application/$id/new-children/parent-or-guardian" params={params}>
+          <ButtonLink variant="primary" routeId="public/application/$id/full-children/parent-or-guardian" params={params}>
             {t('application-full-child:submit.review-application')}
           </ButtonLink>
         </section>
@@ -149,7 +149,7 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
               <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
                 {t('application-full-child:submit.submit')}
               </NavigationButton>
-              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/new-children/childrens-application" params={params}>
+              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-children/childrens-application" params={params}>
                 {t('application-full-child:submit.childrens-application')}
               </NavigationButtonLink>
             </div>
@@ -157,7 +157,7 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
         </section>
       </div>
       <div className="mt-8">
-        <InlineLink routeId="public/application/$id/new-children/exit-application" params={params}>
+        <InlineLink routeId="public/application/$id/full-children/exit-application" params={params}>
           {t('application-full-child:submit.exit-application')}
         </InlineLink>
       </div>

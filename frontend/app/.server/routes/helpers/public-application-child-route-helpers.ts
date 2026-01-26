@@ -30,7 +30,7 @@ export function loadPublicApplicationChildState({ params, request, session }: Lo
 
   // Redirect to the confirmation page if the application has been submitted and
   // the current route is not the confirmation page.
-  const confirmationRouteUrl = getPathById('public/application/$id/new-children/confirmation', params);
+  const confirmationRouteUrl = getPathById('public/application/$id/full-children/confirmation', params);
   if (applicationState.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has been submitted; sessionId: [%s], ', confirmationRouteUrl, applicationState.id);
     throw redirect(confirmationRouteUrl);
@@ -83,7 +83,7 @@ export function loadPublicApplicationSingleChildState({ params, request, session
 
   if (!parsedChildId.success) {
     log.warn('Invalid "childId" param format; childId: [%s]', params.childId);
-    throw redirect(getPathById('public/application/$id/new-children/childrens-application', params));
+    throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
   }
 
   const childId = parsedChildId.data;
@@ -91,7 +91,7 @@ export function loadPublicApplicationSingleChildState({ params, request, session
 
   if (childStateIndex === -1) {
     log.warn('Public application single child has not been found; childId: [%s]', childId);
-    throw redirect(getPathById('public/application/$id/new-children/childrens-application', params));
+    throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
   }
 
   const childState = applicationState.children[childStateIndex];
@@ -139,7 +139,7 @@ export function validatePublicApplicationChildStateForReview({ params, state }: 
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
-  if (inputModel !== 'new') {
+  if (inputModel !== 'full') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
@@ -164,23 +164,23 @@ export function validatePublicApplicationChildStateForReview({ params, state }: 
   }
 
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
-    throw redirect(getPathById('public/application/$id/new-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
   if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
-    throw redirect(getPathById('public/application/$id/new-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
   if (phoneNumber === undefined) {
-    throw redirect(getPathById('public/application/$id/new-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
   if (mailingAddress === undefined) {
-    throw redirect(getPathById('public/application/$id/new-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
   if (communicationPreferences === undefined) {
-    throw redirect(getPathById('public/application/$id/new-children/parent-or-guardian', params));
+    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
   return {
@@ -217,16 +217,16 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
   const children = getChildrenState({ children: childrenState });
 
   if (children.length === 0) {
-    throw redirect(getPathById('public/application/$id/new-children/childrens-application', params));
+    throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
   }
 
   return children.map(({ id, dentalBenefits, dentalInsurance, information }) => {
     if (information === undefined) {
-      throw redirect(getPathById('public/application/$id/new-children/childrens-application', params));
+      throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
     }
 
     if (!information.isParent) {
-      throw redirect(getPathById('public/application/$id/new-children/childrens-application', params));
+      throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
     }
 
     const ageCategory = getAgeCategoryFromDateString(information.dateOfBirth);
@@ -236,11 +236,11 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
     }
 
     if (dentalInsurance === undefined) {
-      throw redirect(getPathById('public/application/$id/new-children/childrens-application', params));
+      throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
     }
 
     if (dentalBenefits === undefined) {
-      throw redirect(getPathById('public/application/$id/new-children/childrens-application', params));
+      throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
     }
 
     return {

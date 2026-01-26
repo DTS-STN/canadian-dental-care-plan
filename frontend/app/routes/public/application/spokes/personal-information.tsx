@@ -142,7 +142,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   // Fetch client application data using ClientApplicationService
   let clientApplication: ClientApplicationDto | undefined;
-  if (state.inputModel === 'renew') {
+  if (state.context === 'renewal') {
     invariant(parsedDataResult.data.memberId, 'Member ID must be defined for renewal applications');
 
     const clientApplicationOption = await appContainer.get(TYPES.ClientApplicationService).findClientApplicationByBasicInfo({

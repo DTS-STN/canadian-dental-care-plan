@@ -37,7 +37,7 @@ const MAX_ATTEMPTS = 5;
 
 function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
   switch (applicationFlow) {
-    case 'new-children': {
+    case 'full-children': {
       return `public/application/$id/${applicationFlow}/parent-or-guardian`;
     }
     default: {
@@ -56,7 +56,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
+  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -69,7 +69,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['new-adult', 'new-children', 'new-family', 'renew-adult']);
+  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult']);
 
   const formData = await request.formData();
 

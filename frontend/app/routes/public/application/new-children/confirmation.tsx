@@ -40,7 +40,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = loadPublicApplicationChildState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-children']);
+  validateApplicationFlow(state, params, ['full-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -155,7 +155,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = loadPublicApplicationChildState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-children']);
+  validateApplicationFlow(state, params, ['full-children']);
 
   const formData = await request.formData();
 
@@ -177,7 +177,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('application-full-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
-  const { steps } = useProgressStepper('new-children', 'submit');
+  const { steps } = useProgressStepper('full-children', 'submit');
   const { currentLanguage } = useCurrentLanguage();
 
   return (

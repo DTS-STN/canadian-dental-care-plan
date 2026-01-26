@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next';
 
+import type { ApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+
 export type StepStatus = 'completed' | 'active' | 'inactive';
 
 export type StepId = 'marital-status' | 'contact-information' | 'dental-insurance' | 'submit' | 'parent-or-guardian' | 'childrens-application';
 
-export type FlowId = 'new-adult' | 'new-children' | 'new-family' | 'renew-adult' | 'renew-children';
+export type FlowId = ExtractStrict<ApplicationFlow, 'full-adult' | 'full-children' | 'full-family' | 'simplified-adult' | 'simplified-children'>;
 
 export interface StepInfo {
   id: StepId;
@@ -20,19 +22,19 @@ export function useProgressStepper(flowId: FlowId, currentStepId: StepId) {
   const { t } = useTranslation('application');
 
   const flows: Record<FlowId, FlowConfig> = {
-    'new-adult': {
+    'full-adult': {
       steps: ['marital-status', 'contact-information', 'dental-insurance', 'submit'],
     },
-    'new-children': {
+    'full-children': {
       steps: ['parent-or-guardian', 'childrens-application', 'submit'],
     },
-    'new-family': {
+    'full-family': {
       steps: ['marital-status', 'contact-information', 'dental-insurance', 'childrens-application', 'submit'],
     },
-    'renew-adult': {
+    'simplified-adult': {
       steps: ['contact-information', 'dental-insurance', 'submit'],
     },
-    'renew-children': {
+    'simplified-children': {
       steps: ['parent-or-guardian', 'childrens-application', 'submit'],
     },
   };

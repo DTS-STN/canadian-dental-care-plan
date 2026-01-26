@@ -30,7 +30,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = loadPublicApplicationFamilyState({ params, request, session });
-  validateApplicationFlow(state, params, ['new-family']);
+  validateApplicationFlow(state, params, ['full-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:marital-status.page-title') }) };
@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, request, para
 export default function NewFamilyMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('new-family', 'marital-status');
+  const { steps, currentStep } = useProgressStepper('full-family', 'marital-status');
 
   const sections = [
     {
@@ -104,7 +104,7 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
         </CardFooter>
       </Card>
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/new-family/contact-information" params={params}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-family/contact-information" params={params}>
           {t('application-full-family:marital-status.contact-information')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
