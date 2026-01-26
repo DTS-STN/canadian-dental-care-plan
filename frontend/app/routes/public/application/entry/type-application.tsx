@@ -37,6 +37,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const nextRouteId = getInitialApplicationFlowUrl(applicationFlow, params);
   return {
     defaultState: {
+      inputModel: state.inputModel,
       typeOfApplication: state.typeOfApplication,
       personalInformation: state.applicantInformation,
     },
@@ -70,7 +71,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
 
   const sections = [
     { id: 'type-application', completed: defaultState.typeOfApplication !== undefined && defaultState.typeOfApplication !== 'delegate' },
-    { id: 'personal-information', completed: defaultState.personalInformation !== undefined },
+    { id: 'personal-information', completed: defaultState.inputModel !== undefined && defaultState.personalInformation !== undefined },
   ];
 
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
