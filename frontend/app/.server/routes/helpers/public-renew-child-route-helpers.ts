@@ -24,7 +24,7 @@ export function loadPublicRenewChildState({ params, request, session }: LoadPubl
   const { pathname } = new URL(request.url);
   const applicationState = getPublicApplicationState({ params, session });
 
-  if (applicationState.typeOfApplicationFlow !== 'children') {
+  if (applicationState.typeOfApplication !== 'children') {
     throw redirect(getPathById('public/application/$id/type-application', params));
   }
 
@@ -125,7 +125,7 @@ export function validatePublicRenewChildStateForReview({ params, state }: Valida
     submissionInfo,
     termsAndConditions,
     inputModel,
-    typeOfApplicationFlow,
+    typeOfApplication: typeOfApplicationFlow,
   } = state;
 
   if (clientApplication === undefined) {

@@ -65,7 +65,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     provincialTerritorialSocialPrograms,
     provinceTerritoryStates,
-    typeAndFlow: `${state.inputModel}-${state.typeOfApplicationFlow}`,
+    applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
   };
 }
 
@@ -161,12 +161,12 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplicationFlow}/dental-insurance`, params));
+  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplication}/dental-insurance`, params));
 }
 
 export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, defaultState, typeAndFlow } = loaderData;
+  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, defaultState, applicationFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -323,7 +323,7 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
           <ButtonLink
             id="back-button"
             variant="secondary"
-            routeId={`public/application/$id/${typeAndFlow}/dental-insurance`}
+            routeId={`public/application/$id/${applicationFlow}/dental-insurance`}
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}

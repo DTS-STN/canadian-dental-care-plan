@@ -10,7 +10,7 @@ import { z } from 'zod';
 import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
-import type { PartnerInformationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { ApplicationFlow, PartnerInformationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { applicantInformationStateHasPartner, getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -31,13 +31,13 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 
-function getRouteFromTypeAndFlow(typeAndFlow: string) {
-  switch (typeAndFlow) {
+function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
+  switch (applicationFlow) {
     case 'new-children': {
-      return `public/application/$id/${typeAndFlow}/parent-or-guardian`;
+      return `public/application/$id/${applicationFlow}/parent-or-guardian`;
     }
     default: {
-      return `public/application/$id/${typeAndFlow}/marital-status`;
+      return `public/application/$id/${applicationFlow}/marital-status`;
     }
   }
 }
@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const maritalStatues = appContainer.get(TYPES.MaritalStatusService).listLocalizedMaritalStatuses(locale);
   return {
     defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation },
-    typeAndFlow: `${state.inputModel}-${state.typeOfApplicationFlow}`,
+    applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
     meta,
     maritalStatues,
   };
@@ -77,7 +77,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const typeAndFlow = `${state.inputModel}-${state.typeOfApplicationFlow}`;
+  const applicationFlow: ApplicationFlow = `${state.inputModel}-${state.typeOfApplication}`;
 
   // state validation schema
   const maritalStatusSchema = z.object({
@@ -143,12 +143,12 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById(getRouteFromTypeAndFlow(typeAndFlow), params));
+  return redirect(getPathById(getRouteFromApplicationFlow(applicationFlow), params));
 }
 
 export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, maritalStatues, typeAndFlow } = loaderData;
+  const { defaultState, maritalStatues, applicationFlow } = loaderData;
   const { MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -235,7 +235,7 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
           <ButtonLink
             id="back-button"
             variant="secondary"
-            routeId={getRouteFromTypeAndFlow(typeAndFlow)}
+            routeId={getRouteFromApplicationFlow(applicationFlow)}
             params={params}
             disabled={isSubmitting}
             startIcon={faChevronLeft}

@@ -38,7 +38,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:type-of-application.page-title') }) };
 
-  return { meta, defaultState: state.typeOfApplicationFlow };
+  return { meta, defaultState: state.typeOfApplication };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -60,7 +60,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  savePublicApplicationState({ params, session, state: { typeOfApplicationFlow: parsedDataResult.data.typeOfApplication } });
+  savePublicApplicationState({ params, session, state: { typeOfApplication: parsedDataResult.data.typeOfApplication } });
 
   if (parsedDataResult.data.typeOfApplication === APPLICANT_TYPE.delegate) {
     return redirect(getPathById('public/application/$id/application-delegate', params));
