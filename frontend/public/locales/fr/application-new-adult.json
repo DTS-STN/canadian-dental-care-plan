@@ -98,7 +98,7 @@
     "whats-next": "Vous recevrez une lettre confirmant votre admissibilité",
     "begin-process": "Nous avons reçu votre demande. Une lettre vous sera envoyée dans les 30 jours ouvrables pour vous informer de votre admissibilité au régime.",
     "check-status": "Consulter l'état de votre demande",
-    "cdcp-checker": "Vous pouvez consulter le <cdcpLink>Vérificateur de l'état d'une demande du Régime canadien de soins dentaires</cdcpLink> ou composer le <noWrap>18335374342</noWrap> pour suivre l'état de votre demande.",
+    "cdcp-checker": "Vous pouvez consulter le <cdcpLink>Vérificateur de l'état d'une demande du Régime canadien de soins dentaires</cdcpLink> ou composer le <noWrap>1-833-537-4342</noWrap> pour suivre l'état de votre demande.",
     "use-code": "Vous aurez besoin de votre code de demande ou de votre numéro d'identification du membre.",
     "get-updates-title": "Obtenez des mises à jour rapidement et en toute sécurité",
     "get-updates-text": "<mscaLinkAccount>Mon dossier Service Canada (MDSC)</mscaLinkAccount> est le moyen le plus rapide de recevoir des renseignements importants sur le Régime canadien de soins dentaires.",
@@ -137,9 +137,6 @@
     "french": "Français",
     "sun-life-comm-pref-title": "Préférence de communication de Sun Life",
     "goc-comm-pref-title": "Préférence de communication du gouvernement du Canada",
-    "preferred-notification-method-email": "Par courriel",
-    "preferred-notification-method-msca": "En ligne, sur Mon dossier Service Canada (MDSC)",
-    "preferred-notification-method-mail": "Par la poste",
     "email": "Adresse courriel",
     "dental-insurance": "Accès à une assurance dentaire",
     "dental-benefit-has-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
@@ -153,7 +150,7 @@
     "modal": {
       "header": "Fermer la demande",
       "info": "En fermant cette demande, vous mettrez fin à votre session et les informations saisies seront effacées de votre navigateur. Assurez-vous d'avoir une copie de votre code de demande.",
-      "are-you-sure": "Êtes-vous sûr de vouloir fermer la demande\u00a0?",
+      "are-you-sure": "Êtes-vous sûr de vouloir fermer la demande?",
       "back-btn": "Retour",
       "close-btn": "Fermer la demande"
     },
