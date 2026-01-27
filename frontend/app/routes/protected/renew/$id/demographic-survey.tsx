@@ -36,7 +36,7 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
   pageTitleI18nKey: 'protected-renew:demographic-survey.page-title',
   pageIdentifier: pageIds.protected.renew.demographicSurvey,
 } as const satisfies RouteHandleData;
@@ -241,7 +241,7 @@ export default function ProtectedDemographicSurveyQuestions({ loaderData, params
           <Button name="_action" value={FORM_ACTION.save} variant="alternative" endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Renew Application Form-Protected:Prefer not to answer - Voluntary demographic questions click">
             {t('protected-renew:demographic-survey.prefer-not-to-answer-btn')}
           </Button>
-          <p className="mb-4 italic">{t('renew:all-questions-optional-label')}</p>
+          <p className="mb-4 italic">{t('protected-renew:all-questions-optional-label')}</p>
           <InputRadios id="indigenous-status" name="indigenousStatus" legend={t('protected-renew:demographic-survey.indigenous-status')} options={indigenousStatusOptions} errorMessage={errors?.indigenousStatus} required />
           <InputRadios
             id="disability-status"

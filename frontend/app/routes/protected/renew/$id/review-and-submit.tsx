@@ -34,7 +34,7 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.reviewSubmit,
   pageTitleI18nKey: 'protected-renew:review-submit.page-title',
 } as const satisfies RouteHandleData;

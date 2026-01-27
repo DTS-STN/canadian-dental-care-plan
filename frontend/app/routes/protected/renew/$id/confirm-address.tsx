@@ -33,7 +33,7 @@ const ADDRESS_RADIO_OPTIONS = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.confirmAddress,
   pageTitleI18nKey: 'protected-renew:confirm-address.page-title',
 } as const satisfies RouteHandleData;
@@ -126,7 +126,7 @@ export default function ProtectedRenewProtectedConfirmAddress({ loaderData, para
 
   return (
     <div className="max-w-prose">
-      <p className="Protectedlic mb-4">{t('renew:required-label')}</p>
+      <p className="Protectedlic mb-4">{t('protected-renew:required-label')}</p>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />

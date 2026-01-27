@@ -41,7 +41,7 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.confirmHomeAddress,
   pageTitleI18nKey: 'protected-renew:update-address.home-address.page-title',
 } as const satisfies RouteHandleData;
@@ -250,7 +250,7 @@ export default function ProtectedRenewConfirmHomeAddress({ loaderData, params }:
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('renew:required-label')}</p>
+      <p className="mb-4 italic">{t('protected-renew:required-label')}</p>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />

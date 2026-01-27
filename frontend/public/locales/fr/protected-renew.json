@@ -1,4 +1,11 @@
 {
+  "progress": {
+    "label": "Progression de la demande"
+  },
+  "required-label": "Remplissez tous les champs.",
+  "optional-label": "Remplissez tous les champs, sauf s'ils sont indiqués facultatifs.",
+  "all-optional-label": "Tous les champs sont facultatifs.",
+  "all-questions-optional-label": "Toutes les questions sont facultatives.",
   "index": {
     "page-title": "Renouvellement du Régime canadien de soins dentaires"
   },

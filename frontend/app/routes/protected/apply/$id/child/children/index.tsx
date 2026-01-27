@@ -36,7 +36,7 @@ import { formatSin } from '~/utils/sin-utils';
 const FORM_ACTION = { add: 'add', continue: 'continue', remove: 'remove' } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'protected-apply', 'gcweb'),
   pageIdentifier: pageIds.protected.apply.child.childSummary,
   pageTitleI18nKey: 'protected-apply-child:children.index.page-title',
 } as const satisfies RouteHandleData;
@@ -137,7 +137,7 @@ export default function ApplyFlowChildSummary({ loaderData, params }: Route.Comp
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={30} size="lg" label={t('apply:progress.label')} />
+        <Progress value={30} size="lg" label={t('protected-apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p>{t('protected-apply-child:children.index.in-this-section')}</p>

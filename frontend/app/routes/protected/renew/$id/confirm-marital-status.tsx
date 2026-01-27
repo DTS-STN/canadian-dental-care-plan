@@ -11,7 +11,7 @@ import type { Route } from './+types/confirm-marital-status';
 
 import { TYPES } from '~/.server/constants';
 import { isInvitationToApplyClient, loadProtectedRenewState, renewStateHasPartner, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import type { PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
+import type { ProtectedPartnerInformationState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -46,7 +46,7 @@ const MARITAL_STATUS = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
   pageIdentifier: pageIds.public.renew.adultChild.confirmMaritalStatus,
   pageTitleI18nKey: 'protected-renew:marital-status.page-title',
 } as const satisfies RouteHandleData;
@@ -132,7 +132,7 @@ export async function action({ context: { appContainer, session }, params, reque
           ctx.addIssue({ code: 'custom', message: t('protected-renew:marital-status.error-message.sin-unique') });
         }
       }),
-  }) satisfies z.ZodType<PartnerInformationState>;
+  }) satisfies z.ZodType<ProtectedPartnerInformationState>;
 
   const maritalStatusData = {
     maritalStatus: formData.get('maritalStatus') ? String(formData.get('maritalStatus')) : undefined,
@@ -239,7 +239,7 @@ export default function ProtectedRenewMaritalStatus({ loaderData, params }: Rout
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('renew:required-label')}</p>
+      <p className="mb-4 italic">{t('protected-renew:required-label')}</p>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />

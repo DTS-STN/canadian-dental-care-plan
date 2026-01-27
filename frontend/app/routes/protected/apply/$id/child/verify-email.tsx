@@ -40,7 +40,7 @@ const FORM_ACTION = {
 const MAX_ATTEMPTS = 5;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'protected-apply', 'gcweb'),
   pageIdentifier: pageIds.protected.apply.child.verifyEmail,
   pageTitleI18nKey: 'protected-apply-child:verify-email.page-title',
 } as const satisfies RouteHandleData;
@@ -218,7 +218,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={86} size="lg" label={t('apply:progress.label')} />
+        <Progress value={86} size="lg" label={t('protected-apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         <ErrorAlert>
@@ -234,7 +234,7 @@ export default function ApplyFlowVerifyEmail({ loaderData, params }: Route.Compo
             <p className="mb-8">
               <Trans ns={handle.i18nNamespaces} i18nKey="protected-apply-child:verify-email.unable-to-verify" components={{ communicationLink }} />
             </p>
-            <p className="mb-4 italic">{t('apply:required-label')}</p>
+            <p className="mb-4 italic">{t('protected-apply:required-label')}</p>
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputField
                 id="verification-code"

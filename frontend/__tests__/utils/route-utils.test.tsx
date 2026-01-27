@@ -165,7 +165,7 @@ describe('useI18nNamespaces()', () => {
     const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
-        handle: { i18nNamespaces: ['apply'] } satisfies RouteHandleData,
+        handle: { i18nNamespaces: ['common'] } satisfies RouteHandleData,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useI18nNamespaces())}</div>,
@@ -179,7 +179,7 @@ describe('useI18nNamespaces()', () => {
     render(<RoutesStub />);
 
     const element = await waitFor(async () => await screen.findByTestId('data'));
-    expect(element.textContent).toEqual('["apply","gcweb"]');
+    expect(element.textContent).toEqual('["common","gcweb"]');
   });
 });
 
@@ -291,11 +291,11 @@ describe('usePageTitle()', () => {
     const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
-        handle: { pageTitleI18nKey: 'apply:index.page-title' } satisfies RouteHandleData,
+        handle: { pageTitleI18nKey: 'protected-apply:index.page-title' } satisfies RouteHandleData,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(usePageTitleI18nKey())}</div>,
-            handle: { pageTitleI18nKey: 'apply:index.page-title' } satisfies RouteHandleData,
+            handle: { pageTitleI18nKey: 'protected-apply:index.page-title' } satisfies RouteHandleData,
             path: '/',
           },
         ],
@@ -305,6 +305,6 @@ describe('usePageTitle()', () => {
     render(<RoutesStub />);
 
     const element = await waitFor(async () => await screen.findByTestId('data'));
-    expect(element.textContent).toEqual('"apply:index.page-title"');
+    expect(element.textContent).toEqual('"protected-apply:index.page-title"');
   });
 });

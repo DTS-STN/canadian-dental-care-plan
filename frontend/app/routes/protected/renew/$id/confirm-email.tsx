@@ -26,7 +26,7 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.confirmEmail,
   pageTitleI18nKey: 'protected-renew:confirm-email.page-title',
 } as const satisfies RouteHandleData;
@@ -189,7 +189,7 @@ export default function ProtectedRenewConfirmEmail({ loaderData, params }: Route
         <fieldset className="mb-6">
           <p className="mb-4">{t('protected-renew:confirm-email.provide-email')}</p>
           <p className="mb-8">{t('protected-renew:confirm-email.verify-email')}</p>
-          <p className="mb-4 italic">{t('renew:required-label')}</p>
+          <p className="mb-4 italic">{t('protected-renew:required-label')}</p>
           <div className="grid items-end gap-6 md:grid-cols-2">
             <InputField
               id="email"

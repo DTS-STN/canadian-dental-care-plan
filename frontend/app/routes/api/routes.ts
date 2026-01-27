@@ -37,11 +37,6 @@ export const routes = [
     path: '/api/readyz',
   },
   {
-    id: 'api/renew-state',
-    file: 'routes/api/renew-state.ts',
-    path: '/api/renew-state',
-  },
-  {
     id: 'api/session',
     file: 'routes/api/session.ts',
     path: '/api/session',

@@ -38,7 +38,7 @@ const FORM_ACTION = {
 const MAX_ATTEMPTS = 5;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.verifyEmail,
   pageTitleI18nKey: 'protected-renew:verify-email.page-title',
 } as const satisfies RouteHandleData;
@@ -239,7 +239,7 @@ export default function ProtectedRenewVerifyEmail({ loaderData, params }: Route.
           <p className="mb-8">
             <Trans ns={handle.i18nNamespaces} i18nKey="protected-renew:verify-email.unable-to-verify" components={{ communicationLink }} />
           </p>
-          <p className="mb-4 italic">{t('renew:required-label')}</p>
+          <p className="mb-4 italic">{t('protected-renew:required-label')}</p>
           <div className="grid items-end gap-6 md:grid-cols-2">
             <InputField
               id="verification-code"

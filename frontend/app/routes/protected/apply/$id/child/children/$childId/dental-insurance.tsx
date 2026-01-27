@@ -26,7 +26,7 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'protected-apply', 'gcweb'),
   pageIdentifier: pageIds.protected.apply.child.childDentalInsurance,
   pageTitleI18nKey: 'protected-apply-child:children.dental-insurance.title',
 };
@@ -155,10 +155,10 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={30} size="lg" label={t('apply:progress.label')} />
+        <Progress value={30} size="lg" label={t('protected-apply:progress.label')} />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('apply:required-label')}</p>
+        <p className="mb-4 italic">{t('protected-apply:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />

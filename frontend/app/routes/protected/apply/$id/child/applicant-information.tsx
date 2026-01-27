@@ -41,7 +41,7 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'protected-apply', 'gcweb'),
   pageIdentifier: pageIds.protected.apply.child.applicantInformation,
   pageTitleI18nKey: 'protected-apply-child:applicant-information.page-title',
 } as const satisfies RouteHandleData;
@@ -238,12 +238,12 @@ export default function ApplyFlowApplicationInformation({ loaderData, params }: 
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={40} size="lg" label={t('apply:progress.label')} />
+        <Progress value={40} size="lg" label={t('protected-apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4">{t('applicant-information.form-instructions-sin')}</p>
         <p className="mb-6">{t('applicant-information.form-instructions-info')}</p>
-        <p className="mb-4 italic">{t('apply:required-label')}</p>
+        <p className="mb-4 italic">{t('protected-apply:required-label')}</p>
         <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />

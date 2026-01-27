@@ -31,7 +31,7 @@ import { formatSin } from '~/utils/sin-utils';
 export const applyIdParamSchema = z.uuid();
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'protected-apply', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'protected-apply', 'gcweb'),
   pageIdentifier: pageIds.protected.apply.child.confirmation,
   pageTitleI18nKey: 'protected-apply-child:confirm.page-title',
 } as const satisfies RouteHandleData;
