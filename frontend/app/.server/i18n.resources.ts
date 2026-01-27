@@ -6,9 +6,6 @@ import applicationSimplifiedChildEn from '~/../public/locales/en/application-sim
 import applicationSimplifiedFamilyEn from '~/../public/locales/en/application-simplified-family.json';
 import applicationSpokesEn from '~/../public/locales/en/application-spokes.json';
 import applicationEn from '~/../public/locales/en/application.json';
-import applyAdultChildEn from '~/../public/locales/en/apply-adult-child.json';
-import applyAdultEn from '~/../public/locales/en/apply-adult.json';
-import applyChildEn from '~/../public/locales/en/apply-child.json';
 import applyEn from '~/../public/locales/en/apply.json';
 import commonEn from '~/../public/locales/en/common.json';
 import dataUnavailableEn from '~/../public/locales/en/data-unavailable.json';
@@ -37,9 +34,6 @@ import applicationSimplifiedChildFr from '~/../public/locales/fr/application-sim
 import applicationSimplifiedFamilyFr from '~/../public/locales/fr/application-simplified-family.json';
 import applicationSpokesFr from '~/../public/locales/fr/application-spokes.json';
 import applicationFr from '~/../public/locales/fr/application.json';
-import applyAdultChildFr from '~/../public/locales/fr/apply-adult-child.json';
-import applyAdultFr from '~/../public/locales/fr/apply-adult.json';
-import applyChildFr from '~/../public/locales/fr/apply-child.json';
 import applyFr from '~/../public/locales/fr/apply.json';
 import commonFr from '~/../public/locales/fr/common.json';
 import dataUnavailableFr from '~/../public/locales/fr/data-unavailable.json';
@@ -72,10 +66,6 @@ const i18nResourcesEn = {
   'application-simplified-adult': applicationSimplifiedAdultEn,
   'application-simplified-child': applicationSimplifiedChildEn,
   'application-simplified-family': applicationSimplifiedFamilyEn,
-  'apply-adult-child': applyAdultChildEn,
-  'apply-adult': applyAdultEn,
-  'protected-apply-adult': protectedApplyAdultEn,
-  'apply-child': applyChildEn,
   apply: applyEn,
   common: commonEn,
   'data-unavailable': dataUnavailableEn,
@@ -83,6 +73,7 @@ const i18nResourcesEn = {
   gcweb: gcwebEn,
   letters: lettersEn,
   'protected-apply': protectedApplyEn,
+  'protected-apply-adult': protectedApplyAdultEn,
   'protected-apply-adult-child': protectedApplyAdultChildEn,
   'protected-apply-child': protectedApplyChildEn,
   'protected-renew': protectedRenewEn,
@@ -106,10 +97,6 @@ const i18nResourcesFr = {
   'application-simplified-child': applicationSimplifiedChildFr,
   'application-simplified-family': applicationSimplifiedFamilyFr,
   'application-spokes': applicationSpokesFr,
-  'apply-adult-child': applyAdultChildFr,
-  'apply-adult': applyAdultFr,
-  'protected-apply-adult': protectedApplyAdultFr,
-  'apply-child': applyChildFr,
   apply: applyFr,
   common: commonFr,
   'data-unavailable': dataUnavailableFr,
@@ -117,6 +104,7 @@ const i18nResourcesFr = {
   gcweb: gcwebFr,
   letters: lettersFr,
   'protected-apply': protectedApplyFr,
+  'protected-apply-adult': protectedApplyAdultFr,
   'protected-apply-adult-child': protectedApplyAdultChildFr,
   'protected-apply-child': protectedApplyChildFr,
   'protected-renew': protectedRenewFr,
