@@ -15,6 +15,10 @@ test.describe('Children application', () => {
     await page.getByRole('checkbox', { name: 'I consent to the sharing of data' }).check();
     await page.getByRole('button', { name: 'Continue' }).click();
 
+    await applyPage.isLoaded('new-or-returning');
+    await page.getByRole('radio', { name: 'No', exact: true }).check();
+    await page.getByRole('button', { name: 'Continue' }).click();
+
     await applyPage.isLoaded('tax-filing');
     await page.getByRole('radio', { name: 'Yes', exact: true }).check();
     await page.getByRole('button', { name: 'Continue' }).click();
