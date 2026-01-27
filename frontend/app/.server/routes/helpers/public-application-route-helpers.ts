@@ -442,6 +442,12 @@ export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${I
     log.warn('Flow [%s] is not allowed; allowedTypesAndFlows: [%s], redirecting to [%s], stateId: [%s]', flowKey, allowedFlows, redirectUrl, state.id);
     throw redirectDocument(redirectUrl);
   }
+
+  if (inputModel === 'simplified' && state.clientApplication === undefined) {
+    const redirectUrl = getInitialApplicationFlowUrl('entry', params);
+    log.warn("Input model is 'simplified' but clientApplication is not defined in state; redirecting to [%s], stateId: [%s]", redirectUrl, state.id);
+    throw redirectDocument(redirectUrl);
+  }
 }
 
 export type ApplicationFlow = 'entry' | `${InputModelState}-${TypeOfApplicationState}`;
