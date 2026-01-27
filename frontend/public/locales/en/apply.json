@@ -159,5 +159,17 @@
     },
     "back-btn": "Back",
     "continue-btn": "Continue"
+  },
+  "renewal-soon": {
+    "page-title": "Renewal applications opening soon",
+    "able-to-renew": "You will be able to renew your benefits for 2026\u20112027 starting this spring. <cdcpLink>Check back soon</cdcpLink> for more information on the renewal process.",
+    "able-to-renew-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html",
+    "get-ready": "To get ready:",
+    "file-tax-return": "File your 2025 income tax return.",
+    "spouse-or-common-do-same": "Make sure your spouse or common\u2011law partner (if you have one) does the same.",
+    "wait-notice-assessment": "Wait until you receive your Notice of Assessment(s).",
+    "back-btn": "Back",
+    "exit-btn": "Exit application",
+    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   }
 }

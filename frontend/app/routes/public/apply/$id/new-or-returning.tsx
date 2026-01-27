@@ -61,7 +61,7 @@ export async function action({ context: { appContainer, session }, params, reque
   saveApplyState({ params, session, state: { isRenewingCoverage: parsedDataResult.data.isRenewingCoverage } });
 
   if (parsedDataResult.data.isRenewingCoverage) {
-    return redirect(getPathById('public/apply/$id/file-taxes', params));
+    return redirect(getPathById('public/apply/$id/renewal-soon', params));
   }
 
   return redirect(getPathById('public/apply/$id/tax-filing', params));

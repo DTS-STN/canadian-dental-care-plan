@@ -192,6 +192,7 @@ export const routes = [
           { id: 'public/apply/$id/index', file: 'routes/public/apply/$id/index.tsx', paths: { en: '/:lang/apply/:id', fr: '/:lang/demander/:id' } },
           { id: 'public/apply/$id/terms-and-conditions', file: 'routes/public/apply/$id/terms-and-conditions.tsx', paths: { en: '/:lang/apply/:id/terms-and-conditions', fr: '/:lang/demander/:id/conditions-utilisation' } },
           { id: 'public/apply/$id/new-or-returning', file: 'routes/public/apply/$id/new-or-returning.tsx', paths: { en: '/:lang/apply/:id/new-or-returning', fr: '/:lang/demander/:id/nouveau-ou-existant' } },
+          { id: 'public/apply/$id/renewal-soon', file: 'routes/public/apply/$id/renewal-soon.tsx', paths: { en: '/:lang/apply/:id/renewal-soon', fr: '/:lang/demander/:id/renouvellement-sous-peu' } },
           { id: 'public/apply/$id/tax-filing', file: 'routes/public/apply/$id/tax-filing.tsx', paths: { en: '/:lang/apply/:id/tax-filing', fr: '/:lang/demander/:id/declaration-impot' } },
           { id: 'public/apply/$id/file-taxes', file: 'routes/public/apply/$id/file-taxes.tsx', paths: { en: '/:lang/apply/:id/file-taxes', fr: '/:lang/demander/:id/produire-declaration-revenus' } },
           { id: 'public/apply/$id/type-application', file: 'routes/public/apply/$id/type-application.tsx', paths: { en: '/:lang/apply/:id/type-application', fr: '/:lang/demander/:id/type-demande' } },
