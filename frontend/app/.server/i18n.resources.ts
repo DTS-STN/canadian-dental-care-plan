@@ -6,7 +6,6 @@ import applicationSimplifiedChildEn from '~/../public/locales/en/application-sim
 import applicationSimplifiedFamilyEn from '~/../public/locales/en/application-simplified-family.json';
 import applicationSpokesEn from '~/../public/locales/en/application-spokes.json';
 import applicationEn from '~/../public/locales/en/application.json';
-import applyEn from '~/../public/locales/en/apply.json';
 import commonEn from '~/../public/locales/en/common.json';
 import dataUnavailableEn from '~/../public/locales/en/data-unavailable.json';
 import documentsEn from '~/../public/locales/en/documents.json';
@@ -29,7 +28,6 @@ import applicationSimplifiedChildFr from '~/../public/locales/fr/application-sim
 import applicationSimplifiedFamilyFr from '~/../public/locales/fr/application-simplified-family.json';
 import applicationSpokesFr from '~/../public/locales/fr/application-spokes.json';
 import applicationFr from '~/../public/locales/fr/application.json';
-import applyFr from '~/../public/locales/fr/apply.json';
 import commonFr from '~/../public/locales/fr/common.json';
 import dataUnavailableFr from '~/../public/locales/fr/data-unavailable.json';
 import documentsFr from '~/../public/locales/fr/documents.json';
@@ -56,7 +54,6 @@ const i18nResourcesEn = {
   'application-simplified-adult': applicationSimplifiedAdultEn,
   'application-simplified-child': applicationSimplifiedChildEn,
   'application-simplified-family': applicationSimplifiedFamilyEn,
-  apply: applyEn,
   common: commonEn,
   'data-unavailable': dataUnavailableEn,
   documents: documentsEn,
@@ -82,7 +79,6 @@ const i18nResourcesFr = {
   'application-simplified-child': applicationSimplifiedChildFr,
   'application-simplified-family': applicationSimplifiedFamilyFr,
   'application-spokes': applicationSpokesFr,
-  apply: applyFr,
   common: commonFr,
   'data-unavailable': dataUnavailableFr,
   documents: documentsFr,

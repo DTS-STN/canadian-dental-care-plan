@@ -31,7 +31,7 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'protected-apply', 'gcweb'),
   pageIdentifier: pageIds.protected.apply.child.phoneNumber,
   pageTitleI18nKey: 'protected-apply-child:phone-number.page-title',
 } as const satisfies RouteHandleData;
@@ -119,7 +119,7 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={70} size="lg" label={t('apply:progress.label')} />
+        <Progress value={70} size="lg" label={t('protected-apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         <errorSummary.ErrorSummary />
@@ -127,7 +127,7 @@ export default function ApplyFlowPhoneNumber({ loaderData, params }: Route.Compo
           <CsrfTokenInput />
           <div className="mb-6">
             <p className="mb-4">{t('protected-apply-child:phone-number.help-message')}</p>
-            <p className="mb-4 italic">{t('apply:optional-label')}</p>
+            <p className="mb-4 italic">{t('protected-apply:optional-label')}</p>
             <div className="grid items-end gap-6">
               <InputPhoneField
                 id="phone-number"

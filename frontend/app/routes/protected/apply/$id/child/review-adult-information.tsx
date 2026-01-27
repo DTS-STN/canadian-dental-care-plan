@@ -44,7 +44,7 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-apply-child', 'protected-apply', 'gcweb'),
   pageIdentifier: pageIds.protected.apply.child.reviewAdultInformation,
   pageTitleI18nKey: 'protected-apply-child:review-adult-information.page-title',
 } as const satisfies RouteHandleData;
@@ -197,7 +197,7 @@ export default function ReviewInformation({ loaderData, params }: Route.Componen
   return (
     <>
       <div className="my-6 sm:my-8">
-        <Progress value={99} size="lg" label={t('apply:progress.label')} />
+        <Progress value={99} size="lg" label={t('protected-apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="my-4 text-lg">{t('protected-apply-child:review-adult-information.read-carefully')}</p>
