@@ -8,7 +8,7 @@ import type { Route } from './+types/submit';
 
 import { TYPES } from '~/.server/constants';
 import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
-import { loadPublicApplicationSimplifiedChildStateForReview } from '~/.server/routes/helpers/public-application-simplified-child-route-helpers';
+import { loadPublicApplicationSimplifiedFamilyStateForReview } from '~/.server/routes/helpers/public-application-simplified-family-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -39,7 +39,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  const state = loadPublicApplicationSimplifiedChildStateForReview({ params, request, session });
+  const state = loadPublicApplicationSimplifiedFamilyStateForReview({ params, request, session });
   validateApplicationFlow(state, params, ['simplified-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export async function action({ context: { appContainer, session }, request, params }: Route.ActionArgs) {
-  const state = loadPublicApplicationSimplifiedChildStateForReview({ params, request, session });
+  const state = loadPublicApplicationSimplifiedFamilyStateForReview({ params, request, session });
   validateApplicationFlow(state, params, ['simplified-family']);
 
   const formData = await request.formData();
@@ -127,7 +127,7 @@ export default function SimplifiedFamilySubmit({ loaderData, params }: Route.Com
         <section className="space-y-4">
           <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-family:submit.review-your-application')}</h2>
           <p>{t('application-simplified-family:submit.please-review')}</p>
-          <ButtonLink variant="primary" routeId="public/application/$id/simplified-family/parent-or-guardian" params={params}>
+          <ButtonLink variant="primary" routeId="public/application/$id/simplified-family/contact-information" params={params}>
             {t('application-simplified-family:submit.review-application')}
           </ButtonLink>
         </section>
