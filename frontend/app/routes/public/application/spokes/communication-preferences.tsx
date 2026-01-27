@@ -32,6 +32,9 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
     case 'full-children': {
       return `public/application/$id/${applicationFlow}/parent-or-guardian`;
     }
+    case 'simplified-children': {
+      return `public/application/$id/${applicationFlow}/parent-or-guardian`;
+    }
     default: {
       return `public/application/$id/${applicationFlow}/contact-information`;
     }
@@ -75,7 +78,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family']);
+  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family', 'simplified-children']);
 
   const formData = await request.formData();
 

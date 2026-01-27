@@ -30,6 +30,9 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
     case 'full-children': {
       return `public/application/$id/${applicationFlow}/parent-or-guardian`;
     }
+    case 'simplified-children': {
+      return `public/application/$id/${applicationFlow}/parent-or-guardian`;
+    }
     default: {
       return `public/application/$id/${applicationFlow}/contact-information`;
     }
@@ -46,7 +49,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['simplified-adult', 'full-adult', 'full-children', 'full-family', 'simplified-family']);
+  validateApplicationFlow(state, params, ['simplified-adult', 'full-adult', 'full-children', 'full-family', 'simplified-family', 'simplified-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -63,7 +66,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
+<<<<<<< HEAD
   validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family']);
+=======
+  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-children']);
+>>>>>>> simplified children navigation
 
   const formData = await request.formData();
 
