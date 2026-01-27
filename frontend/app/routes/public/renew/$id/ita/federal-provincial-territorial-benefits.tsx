@@ -10,8 +10,8 @@ import { z } from 'zod';
 import type { Route } from './+types/federal-provincial-territorial-benefits';
 
 import { TYPES } from '~/.server/constants';
-import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/apply-route-helpers';
 import { loadRenewItaState } from '~/.server/routes/helpers/renew-ita-route-helpers';
+import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/renew-route-helpers';
 import { saveRenewState } from '~/.server/routes/helpers/renew-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';

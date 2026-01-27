@@ -8,8 +8,8 @@ import { z } from 'zod';
 import type { Route } from './+types/applicant-information';
 
 import { TYPES } from '~/.server/constants';
-import type { ApplicantInformationState } from '~/.server/routes/helpers/apply-route-helpers';
 import { loadProtectedApplyAdultChildState } from '~/.server/routes/helpers/protected-apply-adult-child-route-helpers';
+import type { ApplicantInformationState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getAgeCategoryFromDateString, saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
