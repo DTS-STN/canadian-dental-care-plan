@@ -163,6 +163,36 @@ export const routes = [
             file: 'routes/public/application/simplified-children/confirmation.tsx',
             paths: { en: '/:lang/application/:id/simplified/children/confirmation', fr: '/:lang/demande/:id/simplifie/enfants/confirmation' },
           },
+          {
+            id: 'public/application/$id/simplified-family/contact-information',
+            file: 'routes/public/application/simplified-family/contact-information.tsx',
+            paths: { en: '/:lang/application/:id/simplified/family/contact-information', fr: '/:lang/demande/:id/simplifie/famille/coordonnees' },
+          },
+          {
+            id: 'public/application/$id/simplified-family/dental-insurance',
+            file: 'routes/public/application/simplified-family/dental-insurance.tsx',
+            paths: { en: '/:lang/application/:id/simplified/family/dental-insurance', fr: '/:lang/demande/:id/simplifie/famille/assurance-dentaire' },
+          },
+          {
+            id: 'public/application/$id/simplified-family/childrens-application',
+            file: 'routes/public/application/simplified-family/childrens-application.tsx',
+            paths: { en: '/:lang/application/:id/simplified/family/childrens-application', fr: '/:lang/demande/:id/simplifie/famille/application-enfants' },
+          },
+          {
+            id: 'public/application/$id/simplified-family/submit',
+            file: 'routes/public/application/simplified-family/submit.tsx',
+            paths: { en: '/:lang/application/:id/simplified/family/submit', fr: '/:lang/demande/:id/simplifie/famille/submit' },
+          },
+          {
+            id: 'public/application/$id/simplified-family/confirmation',
+            file: 'routes/public/application/simplified-family/confirmation.tsx',
+            paths: { en: '/:lang/application/:id/simplified/family/confirmation', fr: '/:lang/demande/:id/simplifie/famille/confirmation' },
+          },
+          {
+            id: 'public/application/$id/simplified-family/exit-application',
+            file: 'routes/public/application/simplified-family/exit-application.tsx',
+            paths: { en: '/:lang/application/:id/simplified/family/exit-application', fr: '/:lang/demande/:id/simplifie/famille/quitter-demande' },
+          },
 
           // spokes
           { id: 'public/application/$id/application-delegate', file: 'routes/public/application/spokes/application-delegate.tsx', paths: { en: '/:lang/application/:id/application-delegate', fr: '/:lang/demander/:id/delegue-demande' } },

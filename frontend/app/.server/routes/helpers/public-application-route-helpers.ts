@@ -485,7 +485,7 @@ export function getInitialApplicationFlowUrl(applicationFlow: ApplicationFlow, p
       return getPathById('public/application/$id/simplified-children/parent-or-guardian', params);
     }
     case 'simplified-family': {
-      throw new Error('Not implemented yet: "simplified-family" case');
+      return getPathById('public/application/$id/simplified-family/contact-information', params);
     }
     case 'simplified-delegate': {
       return getPathById('public/application/$id/application-delegate', params);
