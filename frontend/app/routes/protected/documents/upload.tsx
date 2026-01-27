@@ -429,16 +429,7 @@ function createDocumentUploadSchema({ locale, t, allowedExtensions, maxFileSizeI
     files: z
       .record(z.string(), fileSchema) //
       .refine((value) => Object.keys(value).length > 0, t('documents:upload.error-message.file-required'))
-      .refine((value) => Object.keys(value).length <= maxFileCount, {
-        error: ({ input }) => {
-          const uploadedCount = Object.keys(input as object).length;
-          return [
-            t('documents:upload.error-message.too-many-files-remove', { count: uploadedCount - maxFileCount }),
-            t('documents:upload.error-message.too-many-files-uploaded', { count: uploadedCount }),
-            t('documents:upload.error-message.too-many-files-maximum', { count: maxFileCount }),
-          ].join(' ');
-        },
-      })
+      .refine((value) => Object.keys(value).length <= maxFileCount, t('documents:upload.error-message.too-many-files', { count: maxFileCount }))
       .superRefine((files, ctx) => {
         const seenFiles = new Set<string>();
         for (const [id, { file, fileHash }] of Object.entries(files)) {
