@@ -89,7 +89,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getPublicApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family']);
+  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family', 'simplified-children']);
 
   const formData = await request.formData();
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
