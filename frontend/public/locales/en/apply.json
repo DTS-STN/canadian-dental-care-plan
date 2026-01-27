@@ -146,5 +146,18 @@
     },
     "back-btn": "Back",
     "continue-btn": "Continue"
+  },
+  "new-or-returning": {
+    "page-title": "New or returning member",
+    "form-instructions": "Do you already have Canadian Dental Care Plan coverage and want to renew it?",
+    "radio-options": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "error-message": {
+      "new-or-returning-required": "Select whether or not you already have Canadian Dental Care Plan coverage and want to renew it"
+    },
+    "back-btn": "Back",
+    "continue-btn": "Continue"
   }
 }

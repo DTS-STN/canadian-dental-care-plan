@@ -131,7 +131,6 @@
     "return-btn": "Revenir à la page principale",
     "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
-
   "type-of-application": {
     "page-title": "Type de demande",
     "form-instructions": "Pour qui présentez-vous la demande?",
@@ -143,6 +142,19 @@
     },
     "error-message": {
       "type-of-application-required": "Sélectionnez à qui s'adresse cette demande"
+    },
+    "back-btn": "Retour",
+    "continue-btn": "Continuer"
+  },
+  "new-or-returning": {
+    "page-title": "Nouveau membre ou membre existant",
+    "form-instructions": "Vous bénéficiez déjà d'une couverture du Régime canadien de soins dentaires et souhaitez la renouveler?",
+    "radio-options": {
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "error-message": {
+      "new-or-returning-required": "Sélectionnez si vous bénéficiez déjà d'une couverture du Régime canadien de soins dentaires et souhaitez la renouveler ou non"
     },
     "back-btn": "Retour",
     "continue-btn": "Continuer"

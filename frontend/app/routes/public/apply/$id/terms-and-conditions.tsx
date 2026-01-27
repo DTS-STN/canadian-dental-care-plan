@@ -90,14 +90,8 @@ export async function action({ context: { appContainer, session }, request, para
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  saveApplyState({
-    params,
-    session,
-    state: {
-      termsAndConditions: parsedDataResult.data,
-    },
-  });
-  return redirect(getPathById('public/apply/$id/tax-filing', params));
+  saveApplyState({ params, session, state: { termsAndConditions: parsedDataResult.data } });
+  return redirect(getPathById('public/apply/$id/new-or-returning', params));
 }
 
 export default function ApplyIndex({ loaderData, params }: Route.ComponentProps) {
