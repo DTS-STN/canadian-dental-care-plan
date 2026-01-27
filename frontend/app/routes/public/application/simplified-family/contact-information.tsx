@@ -311,7 +311,7 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-family/contact-information" params={params}>
+          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-family/dental-insurance" params={params}>
             {t('application-simplified-family:contact-information.next-btn')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
