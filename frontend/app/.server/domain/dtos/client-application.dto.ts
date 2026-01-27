@@ -5,6 +5,10 @@ export type ClientApplicationDto = ReadonlyDeep<{
   children: ClientChildDto[];
   communicationPreferences: ClientCommunicationPreferencesDto;
   contactInformation: ClientContactInformationDto;
+  /**
+   * Indicates whether the applicant has a co-pay tier earning record
+   */
+  copayTierEarningRecord: boolean;
   dateOfBirth: string;
   dentalBenefits: string[];
   dentalInsurance?: boolean;
@@ -12,8 +16,8 @@ export type ClientApplicationDto = ReadonlyDeep<{
   isInvitationToApplyClient: boolean;
   livingIndependently?: boolean;
   partnerInformation?: ClientPartnerInformationDto;
-  typeOfApplication: string;
   t4DentalIndicator?: boolean;
+  typeOfApplication: string;
 }>;
 
 export type ClientApplicantInformationDto = Readonly<{

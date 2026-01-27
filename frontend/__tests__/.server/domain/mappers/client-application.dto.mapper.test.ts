@@ -1,25 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
-import type { ServerConfig } from '~/.server/configs';
 import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
 import type { ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
 import { DefaultClientApplicationDtoMapper } from '~/.server/domain/mappers';
+import type { DefaultClientApplicationDtoMapper_ServerConfig } from '~/.server/domain/mappers';
 
 describe('DefaultClientApplicationDtoMapper', () => {
-  const mockServerConfig: Pick<
-    ServerConfig,
-    | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
-    | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
-    | 'ENGLISH_LANGUAGE_CODE'
-    | 'MARITAL_STATUS_CODE_SINGLE'
-    | 'MARITAL_STATUS_CODE_MARRIED'
-    | 'MARITAL_STATUS_CODE_COMMON_LAW'
-    | 'MARITAL_STATUS_CODE_DIVORCED'
-    | 'MARITAL_STATUS_CODE_WIDOWED'
-    | 'MARITAL_STATUS_CODE_SEPARATED'
-  > = {
+  const mockServerConfig: DefaultClientApplicationDtoMapper_ServerConfig = {
     APPLICANT_CATEGORY_CODE_INDIVIDUAL: '111111111',
     APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY: '222222222',
+    COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: 'Co-Pay Tier (TPC)',
     ENGLISH_LANGUAGE_CODE: 1,
     MARITAL_STATUS_CODE_SINGLE: 'single',
     MARITAL_STATUS_CODE_MARRIED: 'married',
@@ -261,6 +251,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
           phoneNumber: '555-555-5555',
           phoneNumberAlt: '555-555-5556',
         },
+        copayTierEarningRecord: true,
         dateOfBirth: '2000-01-01',
         dentalBenefits: ['ID-123456'],
         dentalInsurance: true,
