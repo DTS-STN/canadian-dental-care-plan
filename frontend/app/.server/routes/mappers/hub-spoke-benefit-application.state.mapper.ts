@@ -16,7 +16,6 @@ import type {
   DentalInsuranceState,
   PartnerInformationState,
   TermsAndConditionsState,
-  TypeOfApplicationState,
 } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/public-application-route-helpers';
 
@@ -35,7 +34,6 @@ export interface ApplicationAdultState {
   partnerInformation?: PartnerInformationState;
   phoneNumber: DeclaredChangePhoneNumberState;
   termsAndConditions: TermsAndConditionsState;
-  typeOfApplicationFlow: Extract<TypeOfApplicationState, 'adult'>;
 }
 
 export interface ApplicationFamilyState {
@@ -54,7 +52,6 @@ export interface ApplicationFamilyState {
   partnerInformation?: PartnerInformationState;
   phoneNumber: DeclaredChangePhoneNumberState;
   termsAndConditions: TermsAndConditionsState;
-  typeOfApplicationFlow: Extract<TypeOfApplicationState, 'family'>;
 }
 
 export interface ApplicationChildrenState {
@@ -71,7 +68,6 @@ export interface ApplicationChildrenState {
   partnerInformation?: PartnerInformationState;
   phoneNumber: DeclaredChangePhoneNumberState;
   termsAndConditions: TermsAndConditionsState;
-  typeOfApplicationFlow: Extract<TypeOfApplicationState, 'children'>;
 }
 
 interface ToBenefitApplicationDtoArgs {
@@ -91,7 +87,6 @@ interface ToBenefitApplicationDtoArgs {
   phoneNumber: DeclaredChangePhoneNumberState;
   termsAndConditions: TermsAndConditionsState;
   typeOfApplication: 'adult' | 'adult-child' | 'child';
-  typeOfApplicationFlow: Extract<TypeOfApplicationState, 'adult' | 'family' | 'children'>;
 }
 
 interface ToApplicantInformationArgs {
@@ -135,8 +130,8 @@ export class DefaultHubSpokeBenefitApplicationStateMapper implements HubSpokeBen
     }
 
     return this.toBenefitApplicationDto({
-      typeOfApplication: 'adult',
       ...applicationAdultState,
+      typeOfApplication: 'adult',
       livingIndependently: ageCategory === 'youth' ? applicationAdultState.livingIndependently : undefined,
     });
   }
@@ -148,16 +143,16 @@ export class DefaultHubSpokeBenefitApplicationStateMapper implements HubSpokeBen
     }
 
     return this.toBenefitApplicationDto({
-      typeOfApplication: 'adult-child',
       ...applicationFamilyState,
+      typeOfApplication: 'adult-child',
       livingIndependently: ageCategory === 'youth' ? applicationFamilyState.livingIndependently : undefined,
     });
   }
 
   mapApplicationChildrenStateToBenefitApplicationDto(applicationChildrenState: ApplicationChildrenState): BenefitApplicationDto {
     return this.toBenefitApplicationDto({
-      typeOfApplication: 'child',
       ...applicationChildrenState,
+      typeOfApplication: 'child',
     });
   }
 

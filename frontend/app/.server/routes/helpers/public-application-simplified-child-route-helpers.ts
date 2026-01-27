@@ -124,7 +124,7 @@ export function validatePublicApplicationSimplifiedChildStateForReview({ params,
     submissionInfo,
     termsAndConditions,
     inputModel,
-    typeOfApplication: typeOfApplicationFlow,
+    typeOfApplication,
   } = state;
 
   if (clientApplication === undefined) {
@@ -135,15 +135,11 @@ export function validatePublicApplicationSimplifiedChildStateForReview({ params,
     throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
   }
 
-  if (typeOfApplicationFlow === 'delegate') {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
-  }
-
-  if (typeOfApplicationFlow !== 'children') {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
-  }
-
   if (inputModel !== 'simplified') {
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
+  }
+
+  if (typeOfApplication !== 'children') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
@@ -209,7 +205,7 @@ export function validatePublicApplicationSimplifiedChildStateForReview({ params,
     submissionInfo,
     termsAndConditions,
     inputModel,
-    typeOfApplicationFlow,
+    typeOfApplication,
   };
 }
 

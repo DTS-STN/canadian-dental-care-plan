@@ -90,7 +90,7 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     submissionInfo,
     termsAndConditions,
     inputModel,
-    typeOfApplication: typeOfApplicationFlow,
+    typeOfApplication,
     children,
   } = state;
 
@@ -102,15 +102,11 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
   }
 
-  if (typeOfApplicationFlow === 'delegate') {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
-  }
-
-  if (typeOfApplicationFlow !== 'adult') {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
-  }
-
   if (inputModel !== 'simplified') {
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
+  }
+
+  if (typeOfApplication !== 'adult') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
@@ -184,7 +180,7 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     submissionInfo,
     termsAndConditions,
     inputModel,
-    typeOfApplicationFlow,
+    typeOfApplication,
     children,
   };
 }

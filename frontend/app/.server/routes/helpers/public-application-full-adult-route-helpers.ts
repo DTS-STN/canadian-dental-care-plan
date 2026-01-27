@@ -89,7 +89,7 @@ export function validatePublicApplicationFullAdultStateForReview({ params, state
     submissionInfo,
     termsAndConditions,
     inputModel,
-    typeOfApplication: typeOfApplicationFlow,
+    typeOfApplication,
     children,
   } = state;
 
@@ -97,15 +97,11 @@ export function validatePublicApplicationFullAdultStateForReview({ params, state
     throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
   }
 
-  if (typeOfApplicationFlow === 'delegate') {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
-  }
-
-  if (typeOfApplicationFlow !== 'adult') {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
-  }
-
   if (inputModel !== 'full') {
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
+  }
+
+  if (typeOfApplication !== 'adult') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
@@ -186,7 +182,7 @@ export function validatePublicApplicationFullAdultStateForReview({ params, state
     submissionInfo,
     termsAndConditions,
     inputModel,
-    typeOfApplicationFlow,
+    typeOfApplication,
     children,
   };
 }

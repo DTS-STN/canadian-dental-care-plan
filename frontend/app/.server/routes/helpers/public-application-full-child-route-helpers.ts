@@ -123,22 +123,18 @@ export function validatePublicApplicationFullChildStateForReview({ params, state
     submissionInfo,
     termsAndConditions,
     inputModel,
-    typeOfApplication: typeOfApplicationFlow,
+    typeOfApplication,
   } = state;
 
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
   }
 
-  if (typeOfApplicationFlow === 'delegate') {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
-  }
-
-  if (typeOfApplicationFlow !== 'children') {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
-  }
-
   if (inputModel !== 'full') {
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
+  }
+
+  if (typeOfApplication !== 'children') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
@@ -203,7 +199,7 @@ export function validatePublicApplicationFullChildStateForReview({ params, state
     submissionInfo,
     termsAndConditions,
     inputModel,
-    typeOfApplicationFlow,
+    typeOfApplication,
   };
 }
 
