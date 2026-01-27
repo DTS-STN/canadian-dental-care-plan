@@ -91,19 +91,19 @@ app.all(['/:lang/protected/renew{/*splat}', '/:lang/protege/renouveler{/*splat}'
 });
 
 /**
- * Redirect Public Renewals
+ * Redirect Public Apply
  *
- * Temporarily redirects all HTTP requests for public renewal pages (English and French)
- * to the corresponding "apply" pages, until the flows are merged.
+ * Redirects all HTTP requests for public apply pages (English and French) to the corresponding "application" pages.
  *
- * TODO: Remove this redirect on the next major release when the renewal and apply functionalities are merged.
+ * TODO: Remove this redirect after the legacy "/:lang/apply" and "/:lang/demander" URLshave been deprecated
+ * and unused in production for at least 6 months.
  */
-app.all(['/:lang/renew{/*splat}', '/:lang/renouveler{/*splat}'], (req, res) => {
+app.all(['/:lang/apply{/*splat}', '/:lang/demander{/*splat}'], (req, res) => {
   const { lang } = req.params;
   const isFrench = lang === 'fr';
-  const basePath = isFrench ? 'demander' : 'apply';
+  const basePath = isFrench ? 'demande' : 'application';
   const redirectUrl = `/${lang}/${basePath}`;
-  log.info('Redirecting public renewal. request: [%s], redirectUrl: [%s]', req.originalUrl, redirectUrl);
+  log.info('Redirecting public apply. request: [%s], redirectUrl: [%s]', req.originalUrl, redirectUrl);
   res.redirect(302, redirectUrl);
 });
 
