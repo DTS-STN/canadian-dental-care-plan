@@ -12,11 +12,6 @@ export const routes = [
     path: '/api/application-state',
   },
   {
-    id: 'api/apply-state',
-    file: 'routes/api/apply-state.ts',
-    path: '/api/apply-state',
-  },
-  {
     id: 'api/buildinfo',
     file: 'routes/api/buildinfo.ts',
     path: '/api/buildinfo',

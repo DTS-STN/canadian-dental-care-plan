@@ -9,7 +9,6 @@ import { z } from 'zod';
 import type { Route } from './+types/edit-child-dental-benefits';
 
 import { TYPES } from '~/.server/constants';
-import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/apply-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -132,7 +131,7 @@ export async function action({ context: { appContainer, session }, params, reque
         ...val,
         federalSocialProgram: val.hasFederalBenefits ? val.federalSocialProgram : undefined,
       };
-    }) satisfies z.ZodType<DentalFederalBenefitsState>;
+    });
 
   const provincialTerritorialBenefitsSchema = z
     .object({
@@ -155,7 +154,7 @@ export async function action({ context: { appContainer, session }, params, reque
         province: val.hasProvincialTerritorialBenefits ? val.province : undefined,
         provincialTerritorialSocialProgram: val.hasProvincialTerritorialBenefits ? val.provincialTerritorialSocialProgram : undefined,
       };
-    }) satisfies z.ZodType<DentalProvincialTerritorialBenefitsState>;
+    });
 
   const dentalBenefits = {
     hasFederalBenefits: formData.get('hasFederalBenefits') ? formData.get('hasFederalBenefits') === HAS_FEDERAL_BENEFITS_OPTION.yes : undefined,

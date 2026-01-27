@@ -11,8 +11,8 @@ import { z } from 'zod';
 import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
-import type { PartnerInformationState } from '~/.server/routes/helpers/apply-route-helpers';
 import { loadProtectedApplyAdultChildState } from '~/.server/routes/helpers/protected-apply-adult-child-route-helpers';
+import type { PartnerInformationState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { applicantInformationStateHasPartner, saveProtectedApplyState } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';

@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import validator from 'validator';
 
 import type { ApplicantInformationDto, BenefitApplicationDto, CommunicationPreferencesDto } from '~/.server/domain/dtos';
-import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/apply-route-helpers';
+import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import type {
   ApplicantInformationState,
   ApplicationYearState,
@@ -18,7 +18,7 @@ import type {
   PartnerInformationState,
   TermsAndConditionsState,
   TypeOfApplicationState,
-} from '~/.server/routes/helpers/apply-route-helpers';
+} from '~/.server/routes/helpers/protected-apply-route-helpers';
 
 export interface ApplyAdultState {
   applicantInformation: ApplicantInformationState;

@@ -7,7 +7,6 @@ import validator from 'validator';
 import type { ApplicantDto, LetterDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
-import type { ApplyState, ApplyStateSessionKey } from '~/.server/routes/helpers/apply-route-helpers';
 import type { ProtectedApplyState, ProtectedApplyStateSessionKey } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import type { ProtectedRenewState, ProtectedRenewStateSessionKey } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import type { PublicApplicationState, PublicApplicationStateSessionKey } from '~/.server/routes/helpers/public-application-route-helpers';
@@ -23,8 +22,6 @@ import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
  */
 type SessionTypeMap = {
   [K in PublicApplicationStateSessionKey]: PublicApplicationState;
-} & {
-  [K in ApplyStateSessionKey]: ApplyState;
 } & {
   [K in ProtectedApplyStateSessionKey]: ProtectedApplyState;
 } & {
