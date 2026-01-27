@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('homepage', () => {
+test.describe('homepage', { tag: '@smoke' }, () => {
   test('should navigate to index', async ({ page }) => {
     await page.goto('/');
     await expect(page).toHaveURL('/');
