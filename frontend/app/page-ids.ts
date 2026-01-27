@@ -171,6 +171,14 @@ export const pageIds = {
         childApplication: 'CDCP-RENW-CH-0004',
         confirmation: 'CDCP-RENW-CH-0005',
       },
+      renewFamily: {
+        contactInformation: 'CDCP-RENW-FAM-0001',
+        dentalInsurance: 'CDCP-RENW-FAM-0002',
+        childApplication: 'CDCP-RENW-FAM-0003',
+        submit: 'CDCP-RENW-FAM-0004',
+        confirmation: 'CDCP-RENW-FAM-0005',
+        exitApplication: 'CDCP-RENW-FAM-0006',
+      },
       spokes: {
         taxFiling: 'CDCP-APPL-SPK-0001',
         fileYourTaxes: 'CDCP-APPL-SPK-0002',
