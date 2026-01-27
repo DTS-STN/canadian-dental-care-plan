@@ -8,12 +8,17 @@ export class InitialPage extends BasePage {
     await this.page.goto('/en/apply');
   }
 
-  async isLoaded(applyPage: 'index' | 'file-taxes' | 'tax-filing' | 'terms-and-conditions' | 'type-application', heading?: string | RegExp) {
+  async isLoaded(applyPage: 'index' | 'new-or-returning' | 'file-taxes' | 'tax-filing' | 'terms-and-conditions' | 'type-application', heading?: string | RegExp) {
     let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined;
 
     switch (applyPage) {
       case 'index': {
         pageInfo = { url: /\/en\/apply/, heading: 'Terms and conditions of use and privacy notice statement' };
+        break;
+      }
+
+      case 'new-or-returning': {
+        pageInfo = { url: /\/en\/apply/, heading: 'New or returning member' };
         break;
       }
 

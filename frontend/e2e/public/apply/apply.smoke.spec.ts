@@ -18,6 +18,12 @@ test.describe('Public Apply Flow - Minimal Scenario', { tag: '@smoke' }, () => {
       await clickContinue(page);
     });
 
+    await test.step('Should select not returning member option and proceed', async () => {
+      await applyPage.isLoaded('new-or-returning');
+      await page.getByRole('radio', { name: 'No', exact: true }).check();
+      await clickContinue(page);
+    });
+
     await test.step('Should select tax filing option and proceed', async () => {
       await applyPage.isLoaded('tax-filing');
       await page.getByRole('radio', { name: 'Yes', exact: true }).check(); // TODO all these getByRole should be extracted to a generic function in helpers utility
