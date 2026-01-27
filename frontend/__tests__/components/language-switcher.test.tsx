@@ -49,7 +49,7 @@ describe('Language Switcher', () => {
     vi.mocked(useParams).mockReturnValue({ lang: requestedLang });
     vi.mocked(useSearchParams).mockReturnValue([new URLSearchParams({ id: '1' }), vi.fn()]);
     vi.mocked(getAltLanguage).mockReturnValue(responseLang);
-    vi.mocked(useMatches).mockReturnValue([{ id: 'public/apply/index', data: {}, loaderData: {}, handle: {}, params: {}, pathname: '' }]);
+    vi.mocked(useMatches).mockReturnValue([{ id: 'public/application/index', data: {}, loaderData: {}, handle: {}, params: {}, pathname: '' }]);
 
     const RoutesStub = createRoutesStub([{ Component: () => <LanguageSwitcher data-testid="language-switcher">Français</LanguageSwitcher>, path: '/' }]);
     render(<RoutesStub />);
@@ -57,6 +57,6 @@ describe('Language Switcher', () => {
     const element = await waitFor(async () => await screen.findByTestId('language-switcher'));
 
     expect(element.textContent).toBe('Français');
-    expect(element.getAttribute('href')).toBe('/fr/demander?id=1');
+    expect(element.getAttribute('href')).toBe('/fr/demandes?id=1');
   });
 });
