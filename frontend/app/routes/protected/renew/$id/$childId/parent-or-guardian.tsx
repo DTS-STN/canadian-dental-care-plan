@@ -29,7 +29,7 @@ const PARENT_OR_GUARDIAN_OPTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.parentOrGuardian,
   pageTitleI18nKey: 'protected-renew:children.parent-or-guardian.page-title',
 } as const satisfies RouteHandleData;
@@ -123,7 +123,7 @@ export default function ProtectedRenewParentOrGuardian({ loaderData, params }: R
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('renew:required-label')}</p>
+      <p className="mb-4 italic">{t('protected-renew:required-label')}</p>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />

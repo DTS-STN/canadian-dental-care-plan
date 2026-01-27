@@ -46,7 +46,7 @@ const FORM_ACTION = {
 const PREFERRED_LANGUAGE = { english: 'english', french: 'french' } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.reviewAdultInformation,
   pageTitleI18nKey: 'protected-renew:review-adult-information.page-title',
 } as const satisfies RouteHandleData;

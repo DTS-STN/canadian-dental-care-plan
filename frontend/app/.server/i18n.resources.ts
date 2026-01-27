@@ -18,11 +18,6 @@ import protectedApplyChildEn from '~/../public/locales/en/protected-apply-child.
 import protectedApplyEn from '~/../public/locales/en/protected-apply.json';
 import protectedProfileEn from '~/../public/locales/en/protected-profile.json';
 import protectedRenewEn from '~/../public/locales/en/protected-renew.json';
-import renewAdultChildEn from '~/../public/locales/en/renew-adult-child.json';
-import renewAdultEn from '~/../public/locales/en/renew-adult.json';
-import renewChildEn from '~/../public/locales/en/renew-child.json';
-import renewItaEn from '~/../public/locales/en/renew-ita.json';
-import renewEn from '~/../public/locales/en/renew.json';
 import statusEn from '~/../public/locales/en/status.json';
 import stubLoginEn from '~/../public/locales/en/stub-login.json';
 import unableToProcessRequestEn from '~/../public/locales/en/unable-to-process-request.json';
@@ -46,11 +41,6 @@ import protectedApplyChildFr from '~/../public/locales/fr/protected-apply-child.
 import protectedApplyFr from '~/../public/locales/fr/protected-apply.json';
 import protectedProfileFr from '~/../public/locales/fr/protected-profile.json';
 import protectedRenewFr from '~/../public/locales/fr/protected-renew.json';
-import renewAdultChildFr from '~/../public/locales/fr/renew-adult-child.json';
-import renewAdultFr from '~/../public/locales/fr/renew-adult.json';
-import renewChildFr from '~/../public/locales/fr/renew-child.json';
-import renewItaFr from '~/../public/locales/fr/renew-ita.json';
-import renewFr from '~/../public/locales/fr/renew.json';
 import statusFr from '~/../public/locales/fr/status.json';
 import stubLoginFr from '~/../public/locales/fr/stub-login.json';
 import unableToProcessRequestFr from '~/../public/locales/fr/unable-to-process-request.json';
@@ -78,11 +68,6 @@ const i18nResourcesEn = {
   'protected-apply-child': protectedApplyChildEn,
   'protected-renew': protectedRenewEn,
   'protected-profile': protectedProfileEn,
-  'renew-adult-child': renewAdultChildEn,
-  'renew-child': renewChildEn,
-  'renew-ita': renewItaEn,
-  'renew-adult': renewAdultEn,
-  renew: renewEn,
   status: statusEn,
   'stub-login': stubLoginEn,
   'unable-to-process-request': unableToProcessRequestEn,
@@ -109,11 +94,6 @@ const i18nResourcesFr = {
   'protected-apply-child': protectedApplyChildFr,
   'protected-renew': protectedRenewFr,
   'protected-profile': protectedProfileFr,
-  'renew-adult-child': renewAdultChildFr,
-  'renew-child': renewChildFr,
-  'renew-ita': renewItaFr,
-  'renew-adult': renewAdultFr,
-  renew: renewFr,
   status: statusFr,
   'stub-login': stubLoginFr,
   'unable-to-process-request': unableToProcessRequestFr,

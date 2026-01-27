@@ -19,7 +19,7 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.parentOrGuardianRequired,
   pageTitleI18nKey: 'protected-renew:children.parent-or-guardian-required.page-title',
 } as const satisfies RouteHandleData;

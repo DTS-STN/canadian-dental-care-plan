@@ -31,7 +31,7 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.memberSelection,
   pageTitleI18nKey: 'protected-renew:member-selection.page-title',
 } as const satisfies RouteHandleData;

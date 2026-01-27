@@ -24,7 +24,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const PREFERRED_LANGUAGE = { english: 'english', french: 'french' } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'renew', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-renew', 'gcweb'),
   pageIdentifier: pageIds.protected.renew.confirmCommunicationPreference,
   pageTitleI18nKey: 'protected-renew:confirm-communication-preference.page-title',
 } as const satisfies RouteHandleData;
@@ -97,7 +97,7 @@ export default function ProtectedRenewConfirmCommunicationPreference({ loaderDat
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('renew:required-label')}</p>
+      <p className="mb-4 italic">{t('protected-renew:required-label')}</p>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>
         <CsrfTokenInput />

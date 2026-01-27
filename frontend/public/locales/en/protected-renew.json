@@ -1,4 +1,11 @@
 {
+  "progress": {
+    "label": "Application progress"
+  },
+  "required-label": "Complete all fields.",
+  "optional-label": "Complete all fields unless marked as optional.",
+  "all-optional-label": "All fields are optional.",
+  "all-questions-optional-label": "All questions are optional.",
   "index": {
     "page-title": "Canadian Dental Care Plan Renewal"
   },
