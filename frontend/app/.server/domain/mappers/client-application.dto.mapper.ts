@@ -12,35 +12,27 @@ export interface ClientApplicationDtoMapper {
   mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity: ClientApplicationEntity): ClientApplicationDto;
 }
 
+export type DefaultClientApplicationDtoMapper_ServerConfig = Pick<
+  ServerConfig,
+  | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
+  | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
+  | 'COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC'
+  | 'ENGLISH_LANGUAGE_CODE'
+  | 'MARITAL_STATUS_CODE_COMMON_LAW'
+  | 'MARITAL_STATUS_CODE_DIVORCED'
+  | 'MARITAL_STATUS_CODE_MARRIED'
+  | 'MARITAL_STATUS_CODE_SEPARATED'
+  | 'MARITAL_STATUS_CODE_SINGLE'
+  | 'MARITAL_STATUS_CODE_WIDOWED'
+>;
+
 @injectable()
 export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMapper {
-  private readonly serverConfig: Pick<
-    ServerConfig,
-    | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
-    | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
-    | 'ENGLISH_LANGUAGE_CODE'
-    | 'MARITAL_STATUS_CODE_SINGLE'
-    | 'MARITAL_STATUS_CODE_MARRIED'
-    | 'MARITAL_STATUS_CODE_COMMON_LAW'
-    | 'MARITAL_STATUS_CODE_DIVORCED'
-    | 'MARITAL_STATUS_CODE_WIDOWED'
-    | 'MARITAL_STATUS_CODE_SEPARATED'
-  >;
+  private readonly serverConfig: DefaultClientApplicationDtoMapper_ServerConfig;
 
   constructor(
     @inject(TYPES.ServerConfig)
-    serverConfig: Pick<
-      ServerConfig,
-      | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
-      | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
-      | 'ENGLISH_LANGUAGE_CODE'
-      | 'MARITAL_STATUS_CODE_SINGLE'
-      | 'MARITAL_STATUS_CODE_MARRIED'
-      | 'MARITAL_STATUS_CODE_COMMON_LAW'
-      | 'MARITAL_STATUS_CODE_DIVORCED'
-      | 'MARITAL_STATUS_CODE_WIDOWED'
-      | 'MARITAL_STATUS_CODE_SEPARATED'
-    >,
+    serverConfig: DefaultClientApplicationDtoMapper_ServerConfig,
   ) {
     this.serverConfig = serverConfig;
   }
@@ -208,6 +200,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       children,
       communicationPreferences,
       contactInformation,
+      copayTierEarningRecord: applicant.ApplicantEarning.some((earning) => earning.Coverage.some((coverage) => coverage.CoverageCategoryCode.ReferenceDataName === this.serverConfig.COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC)),
       dateOfBirth: applicant.PersonBirthDate.date,
       dentalBenefits: applicant.ApplicantDetail.InsurancePlan?.at(0)?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
       dentalInsurance: applicant.ApplicantDetail.PrivateDentalInsuranceIndicator,
@@ -215,8 +208,8 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       isInvitationToApplyClient: applicant.ApplicantDetail.InvitationToApplyIndicator,
       livingIndependently: applicant.ApplicantDetail.LivingIndependentlyIndicator,
       partnerInformation,
-      typeOfApplication: this.toBenefitApplicationCategoryCode(clientApplicationEntity.BenefitApplication.BenefitApplicationCategoryCode.ReferenceDataID),
       t4DentalIndicator: applicant.ApplicantEarning.at(0)?.PrivateDentalInsuranceIndicator,
+      typeOfApplication: this.toBenefitApplicationCategoryCode(clientApplicationEntity.BenefitApplication.BenefitApplicationCategoryCode.ReferenceDataID),
     };
   }
 

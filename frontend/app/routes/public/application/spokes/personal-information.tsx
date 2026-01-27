@@ -165,8 +165,9 @@ export async function action({ context: { appContainer, session }, params, reque
     clientApplication = clientApplicationOption.unwrap();
 
     // Determine input model based on client application data
-    // TODO: Update logic as per business rules, until then, we assume 'simplified' for renewals
-    inputModel = 'simplified';
+    // If copayTierEarningRecord exists, use 'simplified' model
+    // Otherwise, use 'full' model
+    inputModel = clientApplication.copayTierEarningRecord ? 'simplified' : 'full';
   }
 
   savePublicApplicationState({

@@ -131,7 +131,14 @@ export class DefaultClientApplicationRepository implements ClientApplicationRepo
 
 @injectable()
 export class MockClientApplicationRepository implements ClientApplicationRepository {
-  private readonly mockApplicantFlags: ReadonlyMap<string, Readonly<{ InvitationToApplyIndicator: boolean; PreviousTaxesFiledIndicator: boolean }>> = new Map([
+  private readonly mockApplicantFlags: ReadonlyMap<
+    string,
+    Readonly<{
+      InvitationToApplyIndicator: boolean;
+      PreviousTaxesFiledIndicator: boolean;
+      ApplicantEarning?: ClientApplicationEntity['BenefitApplication']['Applicant']['ApplicantEarning'];
+    }>
+  > = new Map([
     // by basic info
     [
       '10000000001',
@@ -145,6 +152,14 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
       {
         InvitationToApplyIndicator: false,
         PreviousTaxesFiledIndicator: true,
+      },
+    ],
+    [
+      '10000000003',
+      {
+        InvitationToApplyIndicator: false,
+        PreviousTaxesFiledIndicator: true,
+        ApplicantEarning: [],
       },
     ],
     // by sin
@@ -192,12 +207,12 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     }
 
     // Otherwise, return specific flags or the default
-    const clientApplicationFlags = this.mockApplicantFlags.get(identificationId) ?? {
+    const { InvitationToApplyIndicator, PreviousTaxesFiledIndicator, ApplicantEarning } = this.mockApplicantFlags.get(identificationId) ?? {
       InvitationToApplyIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.InvitationToApplyIndicator,
       PreviousTaxesFiledIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator,
     };
 
-    const jsonDataSource = clientApplicationFlags.InvitationToApplyIndicator ? clientApplicationItaJsonDataSource : clientApplicationJsonDataSource;
+    const jsonDataSource = InvitationToApplyIndicator ? clientApplicationItaJsonDataSource : clientApplicationJsonDataSource;
 
     const clientApplicationEntity: ClientApplicationEntity = {
       ...jsonDataSource,
@@ -216,8 +231,10 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
           },
           ApplicantDetail: {
             ...jsonDataSource.BenefitApplication.Applicant.ApplicantDetail,
-            ...clientApplicationFlags,
+            InvitationToApplyIndicator,
+            PreviousTaxesFiledIndicator,
           },
+          ApplicantEarning: ApplicantEarning ?? jsonDataSource.BenefitApplication.Applicant.ApplicantEarning,
         },
       },
     };
