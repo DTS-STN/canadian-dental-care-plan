@@ -115,6 +115,8 @@ export const routes = [
           { id: 'protected/apply/index', file: 'routes/protected/apply/index.tsx', paths: { en: '/:lang/protected/apply', fr: '/:lang/protege/demander' } },
           { id: 'protected/apply/$id/index', file: 'routes/protected/apply/$id/index.tsx', paths: { en: '/:lang/protected/apply/:id', fr: '/:lang/protege/demander/:id' } },
           { id: 'protected/apply/$id/terms-and-conditions', file: 'routes/protected/apply/$id/terms-and-conditions.tsx', paths: { en: '/:lang/protected/apply/:id/terms-and-conditions', fr: '/:lang/protege/demander/:id/conditions-utilisation' } },
+          { id: 'protected/apply/$id/new-or-returning', file: 'routes/protected/apply/$id/new-or-returning.tsx', paths: { en: '/:lang/protected/apply/:id/new-or-returning', fr: '/:lang/protege/demander/:id/nouveau-ou-existant' } },
+          { id: 'protected/apply/$id/renewal-soon', file: 'routes/protected/apply/$id/renewal-soon.tsx', paths: { en: '/:lang/protected/apply/:id/renewal-soon', fr: '/:lang/protege/demander/:id/renouvellement-sous-peu' } },
           { id: 'protected/apply/$id/tax-filing', file: 'routes/protected/apply/$id/tax-filing.tsx', paths: { en: '/:lang/protected/apply/:id/tax-filing', fr: '/:lang/protege/demander/:id/declaration-impot' } },
           { id: 'protected/apply/$id/file-taxes', file: 'routes/protected/apply/$id/file-taxes.tsx', paths: { en: '/:lang/protected/apply/:id/file-taxes', fr: '/:lang/protege/demander/:id/produire-declaration-revenus' } },
           { id: 'protected/apply/$id/type-application', file: 'routes/protected/apply/$id/type-application.tsx', paths: { en: '/:lang/protected/apply/:id/type-application', fr: '/:lang/protege/demander/:id/type-demande' } },

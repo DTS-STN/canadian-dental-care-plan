@@ -25,7 +25,11 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const RENEWING_COVERAGE_OPTION = { no: 'no', yes: 'yes' } as const;
 
-export const handle = { i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'), pageIdentifier: pageIds.public.apply.taxFiling, pageTitleI18nKey: 'apply:new-or-returning.page-title' } as const satisfies RouteHandleData;
+export const handle = {
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
+  pageIdentifier: pageIds.public.apply.newOrReturning,
+  pageTitleI18nKey: 'apply:new-or-returning.page-title',
+} as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 

@@ -122,7 +122,7 @@ export async function action({ context: { appContainer, session }, request, para
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('update-data.apply.terms-and-conditions', { userId: idToken.sub });
 
-  return redirect(getPathById('protected/apply/$id/tax-filing', params));
+  return redirect(getPathById('protected/apply/$id/new-or-returning', params));
 }
 
 export default function ProtectedApplyTermsAndConditions({ loaderData, params }: Route.ComponentProps) {

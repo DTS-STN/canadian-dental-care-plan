@@ -15,6 +15,8 @@ export const pageIds = {
       fileYourTaxes: 'CDCP-PROT-APPL-0004',
       typeOfApplication: 'CDCP-PROT-APPL-0005',
       applicationDelegate: 'CDCP-PROT-APPL-0006',
+      newOrReturning: 'CDCP-PROT-APPL-0007',
+      renewalSoon: 'CDCP-PROT-APPL-0008',
       adult: {
         applicantInformation: 'CDCP-PROT-APPL-AD-0001',
         livingIndependently: 'CDCP-PROT-APPL-AD-0002',
@@ -136,6 +138,8 @@ export const pageIds = {
       fileYourTaxes: 'CDCP-APPL-0004',
       typeOfApplication: 'CDCP-APPL-0005',
       applicationDelegate: 'CDCP-APPL-0006',
+      newOrReturning: 'CDCP-APPL-0007',
+      renewalSoon: 'CDCP-APPL-0008',
       adult: {
         applicantInformation: 'CDCP-APPL-AD-0001',
         livingIndependently: 'CDCP-APPL-AD-0002',
