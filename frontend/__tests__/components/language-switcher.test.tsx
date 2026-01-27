@@ -57,6 +57,6 @@ describe('Language Switcher', () => {
     const element = await waitFor(async () => await screen.findByTestId('language-switcher'));
 
     expect(element.textContent).toBe('Français');
-    expect(element.getAttribute('href')).toBe('/fr/demandes?id=1');
+    expect(element.getAttribute('href')).toBe('/fr/demande?id=1');
   });
 });

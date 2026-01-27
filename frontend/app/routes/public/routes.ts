@@ -10,7 +10,7 @@ export const routes = [
           {
             id: 'public/application/index',
             file: 'routes/public/application/index.tsx',
-            paths: { en: '/:lang/application', fr: '/:lang/demandes' },
+            paths: { en: '/:lang/application', fr: '/:lang/demande' },
           },
           {
             id: 'public/application/$id/eligibility-requirements',
