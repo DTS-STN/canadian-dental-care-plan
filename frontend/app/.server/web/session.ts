@@ -10,7 +10,6 @@ import type { Logger } from '~/.server/logging';
 import type { ProtectedApplyState, ProtectedApplyStateSessionKey } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import type { ProtectedRenewState, ProtectedRenewStateSessionKey } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import type { PublicApplicationState, PublicApplicationStateSessionKey } from '~/.server/routes/helpers/public-application-route-helpers';
-import type { RenewState, RenewStateSessionKey } from '~/.server/routes/helpers/renew-route-helpers';
 import type { StatusState, StatusStateSessionKey } from '~/.server/routes/helpers/status-route-helpers';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 
@@ -26,8 +25,6 @@ type SessionTypeMap = {
   [K in ProtectedApplyStateSessionKey]: ProtectedApplyState;
 } & {
   [K in ProtectedRenewStateSessionKey]: ProtectedRenewState;
-} & {
-  [K in RenewStateSessionKey]: RenewState;
 } & {
   [K in StatusStateSessionKey]: StatusState;
 } & {

@@ -11,7 +11,7 @@ import type { Route } from './+types/confirm-marital-status';
 
 import { TYPES } from '~/.server/constants';
 import { isInvitationToApplyClient, loadProtectedRenewState, renewStateHasPartner, saveProtectedRenewState } from '~/.server/routes/helpers/protected-renew-route-helpers';
-import type { PartnerInformationState } from '~/.server/routes/helpers/renew-route-helpers';
+import type { ProtectedPartnerInformationState } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -132,7 +132,7 @@ export async function action({ context: { appContainer, session }, params, reque
           ctx.addIssue({ code: 'custom', message: t('protected-renew:marital-status.error-message.sin-unique') });
         }
       }),
-  }) satisfies z.ZodType<PartnerInformationState>;
+  }) satisfies z.ZodType<ProtectedPartnerInformationState>;
 
   const maritalStatusData = {
     maritalStatus: formData.get('maritalStatus') ? String(formData.get('maritalStatus')) : undefined,

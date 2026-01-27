@@ -305,6 +305,6 @@ describe('usePageTitle()', () => {
     render(<RoutesStub />);
 
     const element = await waitFor(async () => await screen.findByTestId('data'));
-    expect(element.textContent).toEqual('"apply:index.page-title"');
+    expect(element.textContent).toEqual('"protected-apply:index.page-title"');
   });
 });
