@@ -9,7 +9,7 @@ import type { Route } from './+types/personal-information';
 
 import { TYPES } from '~/.server/constants';
 import type { ClientApplicationDto } from '~/.server/domain/dtos/client-application.dto';
-import type { ApplicantInformationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { ApplicantInformationState, InputModelState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getAgeCategoryFromDateString, getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -140,8 +140,12 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
 
+  // Determine input model based on context and data. 'intake' applications always use 'full' model
+  let inputModel: InputModelState = 'full';
+
   // Fetch client application data using ClientApplicationService
   let clientApplication: ClientApplicationDto | undefined;
+
   if (state.context === 'renewal') {
     invariant(parsedDataResult.data.memberId, 'Member ID must be defined for renewal applications');
 
@@ -159,12 +163,17 @@ export async function action({ context: { appContainer, session }, params, reque
     }
 
     clientApplication = clientApplicationOption.unwrap();
+
+    // Determine input model based on client application data
+    // TODO: Update logic as per business rules, until then, we assume 'simplified' for renewals
+    inputModel = 'simplified';
   }
 
   savePublicApplicationState({
     params,
     session,
     state: {
+      inputModel,
       clientApplication,
       applicantInformation: {
         memberId: parsedDataResult.data.memberId,
@@ -173,10 +182,6 @@ export async function action({ context: { appContainer, session }, params, reque
         dateOfBirth: parsedDataResult.data.dateOfBirth,
         socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
       },
-      ...(parsedDataResult.data.dateOfBirthYear < 2006 && {
-        // Handle marital-status back button
-        newOrExistingMember: undefined,
-      }),
     },
   });
 
