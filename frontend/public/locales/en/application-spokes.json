@@ -416,7 +416,12 @@
         "is-parent": "Select whether you are the parent or legal guardian of the child",
         "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
         "first-name-no-digits": "First name must contain letters only",
-        "last-name-no-digits": "Last name must contain letters only"
+        "last-name-no-digits": "Last name must contain letters only",
+        "alert": {
+          "heading": "We couldn't find your child's Canadian Dental Care Plan (CDCP) account with the information you entered",
+          "detail": "Check that the child's information is correct and try again. If the problem continues, call us at <noWrap>1-833-537-4342</noWrap> to update your information.",
+          "applyDate": "Note: only current CDCP members can renew benefits now. If your child is not enrolled, you can apply for the upcoming benefit year starting June 2, 2026."
+        }
       }
     },
     "parent-or-guardian": {
