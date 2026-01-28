@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -18,6 +19,7 @@ import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
+import { useErrorAlert } from '~/components/error-alert';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import type { InputRadiosProps } from '~/components/input-radios';
@@ -210,6 +212,15 @@ export async function action({ context: { appContainer, session }, params, reque
     );
   }
 
+  // validate that for a renewal the child's memberId is contained in the clientApplication
+  if (state.context === 'renewal') {
+    invariant(state.clientApplication, 'state.clientApplication must be defined for a renewal application');
+    const isChildValid = state.clientApplication.children.some((child) => child.information.clientNumber === parsedDataResult.data.memberId);
+    if (!isChildValid) {
+      return { status: 'not-eligible' } as const;
+    }
+  }
+
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
 
   savePublicApplicationState({
@@ -245,9 +256,12 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [hasSocialInsuranceNumberValue, setHasSocialInsuranceNumberValue] = useState(defaultState?.hasSocialInsuranceNumber ?? true);
 
-  const errors = fetcher.data?.errors;
+  const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
+  const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+
+  const { ErrorAlert } = useErrorAlert(fetcherStatus === 'not-eligible');
+
   const errorSummary = useErrorSummary(errors, {
     memberId: 'member-id',
     firstName: 'first-name',
@@ -260,6 +274,8 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
     hasSocialInsuranceNumber: 'input-radio-has-social-insurance-number-option-0',
     isParent: 'input-radio-is-parent-radios-option-0',
   });
+
+  const [hasSocialInsuranceNumberValue, setHasSocialInsuranceNumberValue] = useState(defaultState?.hasSocialInsuranceNumber ?? true);
 
   const handleSocialInsuranceNumberSelection: ChangeEventHandler<HTMLInputElement> = (e) => {
     setHasSocialInsuranceNumberValue(e.target.value === YES_NO_OPTION.yes);
@@ -298,6 +314,13 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
     <>
       <AppPageTitle>{t('application-spokes:children.information.page-title', { childName })}</AppPageTitle>
       <div className="max-w-prose">
+        <ErrorAlert>
+          <h2 className="mb-2 font-bold">{t('application-spokes:children.information.error-message.alert.heading')}</h2>
+          <p className="mb-2">
+            <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:children.information.error-message.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+          </p>
+          <p className="mb-2">{t('application-spokes:children.information.error-message.alert.applyDate')}</p>
+        </ErrorAlert>
         <p className="mb-4">{t('application-spokes:children.information.form-instructions-sin')}</p>
         <p className="mb-4 italic">{t('application:required-label')}</p>
         <errorSummary.ErrorSummary />
