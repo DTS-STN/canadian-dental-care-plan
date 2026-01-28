@@ -195,7 +195,7 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(t('confirm.exit-link'));
 }
 
-export default function NewFamilyConfirmation({ loaderData, params }: Route.ComponentProps) {
+export default function SimplifiedFamilyConfirmation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, children, eligibility } = loaderData;
