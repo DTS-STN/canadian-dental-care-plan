@@ -1,4 +1,4 @@
-import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import { faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/dental-insurance';
@@ -101,7 +101,7 @@ export default function NewFamilyDentalInsurance({ loaderData, params }: Route.C
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={faCirclePlus} size="lg">
+          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={completedSections.includes('dental-insurance') ? faPenToSquare : faCirclePlus} size="lg">
             {state.dentalInsurance === undefined ? t('application-full-family:dental-insurance.add-answer') : t('application-full-family:dental-insurance.edit-access-to-dental-insurance')}
           </ButtonLink>
         </CardFooter>
@@ -134,7 +134,15 @@ export default function NewFamilyDentalInsurance({ loaderData, params }: Route.C
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faCirclePlus} size="lg">
+          <ButtonLink
+            id="edit-button"
+            variant="link"
+            className="p-0"
+            routeId="public/application/$id/federal-provincial-territorial-benefits"
+            params={params}
+            startIcon={completedSections.includes('dental-benefits') ? faPenToSquare : faCirclePlus}
+            size="lg"
+          >
             {state.dentalBenefits === undefined ? t('application-full-family:dental-insurance.add-answer') : t('application-full-family:dental-insurance.edit-access-to-government-benefits')}
           </ButtonLink>
         </CardFooter>

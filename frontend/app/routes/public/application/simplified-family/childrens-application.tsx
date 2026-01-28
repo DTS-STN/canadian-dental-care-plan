@@ -223,7 +223,15 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
-                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/children/$childId/information" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+                <ButtonLink
+                  id="edit-button"
+                  variant="link"
+                  className="p-0"
+                  routeId="public/application/$id/children/$childId/information"
+                  params={{ ...params, childId: child.id }}
+                  startIcon={completedSections.includes('child-information') ? faPenToSquare : faCirclePlus}
+                  size="lg"
+                >
                   {child.information === undefined ? t('application-simplified-family:childrens-application.add-child-information') : t('application-simplified-family:childrens-application.edit-child-information', { childNumber: index + 1 })}
                 </ButtonLink>
               </CardFooter>
@@ -246,7 +254,15 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                 )}
               </CardContent>
               <CardFooter className="border-t bg-zinc-100">
-                <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/children/$childId/dental-insurance" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+                <ButtonLink
+                  id="edit-button"
+                  variant="link"
+                  className="p-0"
+                  routeId="public/application/$id/children/$childId/dental-insurance"
+                  params={{ ...params, childId: child.id }}
+                  startIcon={completedSections.includes('child-dental-insurance') ? faPenToSquare : faCirclePlus}
+                  size="lg"
+                >
                   {child.dentalInsurance === undefined ? t('application-simplified-family:childrens-application.add-child-dental-insurance') : t('application-simplified-family:childrens-application.edit-child-dental-insurance')}
                 </ButtonLink>
               </CardFooter>
@@ -295,7 +311,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                       className="p-0"
                       routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits"
                       params={{ ...params, childId: child.id }}
-                      startIcon={faCirclePlus}
+                      startIcon={completedSections.includes('child-dental-benefits') ? faPenToSquare : faCirclePlus}
                       size="lg"
                     >
                       {t('application-simplified-family:childrens-application.edit-child-dental-benefits')}

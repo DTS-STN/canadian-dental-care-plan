@@ -132,7 +132,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={faCirclePlus} size="lg">
+          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={completedSections.includes('marital-status') ? faPenToSquare : faCirclePlus} size="lg">
             {state.maritalStatus === undefined ? t('application-full-child:parent-or-guardian.add-marital-status') : t('application-full-child:parent-or-guardian.edit-marital-status')}
           </ButtonLink>
         </CardFooter>

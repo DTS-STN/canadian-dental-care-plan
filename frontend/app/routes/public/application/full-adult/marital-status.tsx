@@ -1,4 +1,4 @@
-import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import { faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/marital-status';
@@ -92,7 +92,7 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={faCirclePlus} size="lg">
+          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={completedSections.includes('marital-status') ? faPenToSquare : faCirclePlus} size="lg">
             {state.maritalStatus === undefined ? t('application-full-adult:marital-status.add-marital-status') : t('application-full-adult:marital-status.edit-marital-status')}
           </ButtonLink>
         </CardFooter>
