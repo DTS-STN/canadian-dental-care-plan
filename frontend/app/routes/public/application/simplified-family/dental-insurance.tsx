@@ -132,7 +132,7 @@ export default function RenewFamilyDentalInsurance({ loaderData, params }: Route
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button-dental-insurance" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={faCirclePlus} size="lg">
+            <ButtonLink id="edit-button-dental-insurance" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={completedSections.includes('dental-insurance') ? faPenToSquare : faCirclePlus} size="lg">
               {state.dentalInsurance === undefined ? t('application-simplified-family:dental-insurance.add-answer') : t('application-simplified-family:dental-insurance.edit-access-to-dental-insurance')}
             </ButtonLink>
           </CardFooter>
@@ -172,7 +172,15 @@ export default function RenewFamilyDentalInsurance({ loaderData, params }: Route
           </CardContent>
           {state.dentalBenefits ? (
             <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink id="edit-button-government-benefits" variant="link" className="p-0" routeId="public/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faCirclePlus} size="lg">
+              <ButtonLink
+                id="edit-button-government-benefits"
+                variant="link"
+                className="p-0"
+                routeId="public/application/$id/federal-provincial-territorial-benefits"
+                params={params}
+                startIcon={completedSections.includes('dental-benefits') ? faPenToSquare : faCirclePlus}
+                size="lg"
+              >
                 {t('application-simplified-family:dental-insurance.edit-access-to-government-benefits')}
               </ButtonLink>
             </CardFooter>
