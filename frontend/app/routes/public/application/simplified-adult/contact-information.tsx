@@ -154,6 +154,7 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
       <div className="max-w-prose space-y-8">
         <ProgressStepper steps={steps} currentStep={currentStep} />
         <div className="space-y-4">
+          <p>{t('application:confirm-information')}</p>
           <p>{t('application:required-label')}</p>
           <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
         </div>
