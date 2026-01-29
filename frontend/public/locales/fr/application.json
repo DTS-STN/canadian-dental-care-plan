@@ -15,9 +15,9 @@
     "dental-insurance": "(FR) Access to dental insurance",
     "type-of-application": "(FR) Type of application",
     "personal-information": "(FR) Personal information",
-    "submit": "(FR) Submit",
-    "parent-or-guardian": "(FR) Parent or legal guardian information",
-    "childrens-application": "(FR) Your child(ren)'s application"
+    "submit": "Soumettre",
+    "parent-or-guardian": "Renseignements sur le parent ou le tuteur légal",
+    "childrens-application": "La demande de votre/vos enfant(s)"
   },
   "eligibility-requirements": {
     "page-title": "Avant de commencer votre demande",
