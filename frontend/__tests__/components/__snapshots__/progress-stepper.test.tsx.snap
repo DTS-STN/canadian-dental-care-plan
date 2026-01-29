@@ -1,839 +1,150 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ProgressStepper > Edge Cases > should handle currentStep out of bounds 1`] = `
-<div>
-  <div
-    aria-orientation="horizontal"
-    class="w-full"
-    data-orientation="horizontal"
-    data-slot="stepper"
-    role="tablist"
-  >
-    <nav
-      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-      data-orientation="horizontal"
-      data-slot="stepper-nav"
-      data-state="11"
-    >
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="completed"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="completed"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="completed"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                data-icon="circle-check"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="completed"
-          >
-            Personal Information
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
-          data-slot="stepper-separator"
-          data-state="completed"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="completed"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="completed"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="completed"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                data-icon="circle-check"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="completed"
-          >
-            Contact Details
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-          data-slot="stepper-separator"
-          data-state="completed"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="completed"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="completed"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="completed"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                data-icon="circle-check"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="completed"
-          >
-            Preferences
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-          data-slot="stepper-separator"
-          data-state="completed"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="completed"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="completed"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="completed"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                data-icon="circle-check"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="completed"
-          >
-            Review & Submit
-          </h3>
-        </div>
-      </div>
-    </nav>
-  </div>
-</div>
-`;
-
-exports[`ProgressStepper > Edge Cases > should handle empty steps array 1`] = `
-<div>
-  <div
-    aria-orientation="horizontal"
-    class="w-full"
-    data-orientation="horizontal"
-    data-slot="stepper"
-    role="tablist"
-  >
-    <nav
-      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-      data-orientation="horizontal"
-      data-slot="stepper-nav"
-      data-state="1"
-    />
-  </div>
-</div>
-`;
-
-exports[`ProgressStepper > Edge Cases > should handle negative currentStep 1`] = `
-<div>
-  <div
-    aria-orientation="horizontal"
-    class="w-full"
-    data-orientation="horizontal"
-    data-slot="stepper"
-    role="tablist"
-  >
-    <nav
-      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-      data-orientation="horizontal"
-      data-slot="stepper-nav"
-      data-state="0"
-    >
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="completed"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="completed"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="completed"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                data-icon="circle-check"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="completed"
-          >
-            Personal Information
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
-          data-slot="stepper-separator"
-          data-state="completed"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="inactive"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="inactive"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="inactive"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                data-icon="ban"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-blue-700"
-            data-slot="stepper-title"
-            data-state="inactive"
-          >
-            Contact Details
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-          data-slot="stepper-separator"
-          data-state="inactive"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="inactive"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="inactive"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="inactive"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                data-icon="ban"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="inactive"
-          >
-            Preferences
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-          data-slot="stepper-separator"
-          data-state="inactive"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="inactive"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="inactive"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="inactive"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                data-icon="ban"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="inactive"
-          >
-            Review & Submit
-          </h3>
-        </div>
-      </div>
-    </nav>
-  </div>
-</div>
-`;
-
 exports[`ProgressStepper > ProgressStepper (Responsive) > should render the responsive stepper with all completed steps 1`] = `
 <div>
   <div
     class="print:hidden"
   >
-    <div
-      class="hidden sm:block"
+    <ol
+      class="relative flex w-full flex-col items-stretch gap-4 sm:flex-row sm:gap-2"
     >
-      <div
-        aria-orientation="horizontal"
-        class="w-full"
-        data-orientation="horizontal"
-        data-slot="stepper"
-        role="tablist"
+      <li
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
       >
-        <nav
-          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-          data-orientation="horizontal"
-          data-slot="stepper-nav"
-          data-state="4"
+        <div
+          aria-hidden="true"
+          class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-blue-700"
+        />
+        <div
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
         >
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="completed"
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-check size-2 sm:size-2.5"
+            data-icon="check"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 448 512"
           >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="completed"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="completed"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                    data-icon="circle-check"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="completed"
-              >
-                Personal Information
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
-              data-slot="stepper-separator"
-              data-state="completed"
+            <path
+              d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+              fill="currentColor"
             />
-          </div>
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="completed"
+          </svg>
+        </div>
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+        >
+          Personal Information
+          <span
+            class="sr-only"
           >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="completed"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="completed"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                    data-icon="circle-check"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="completed"
-              >
-                Contact Details
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
-              data-slot="stepper-separator"
-              data-state="completed"
-            />
-          </div>
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="completed"
-          >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="completed"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="completed"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                    data-icon="circle-check"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="completed"
-              >
-                Preferences
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
-              data-slot="stepper-separator"
-              data-state="completed"
-            />
-          </div>
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="completed"
-          >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="completed"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="completed"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                    data-icon="circle-check"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="completed"
-              >
-                Review & Submit
-              </h3>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
-    <div
-      class="sm:hidden"
-    >
-      <div
-        aria-orientation="vertical"
-        class="w-full"
-        data-orientation="vertical"
-        data-slot="stepper"
-        role="tablist"
+            common:stepper.status.completed
+          </span>
+        </span>
+      </li>
+      <li
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
       >
-        <nav
-          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-          data-orientation="vertical"
-          data-slot="stepper-nav"
-          data-state="4"
+        <div
+          aria-hidden="true"
+          class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-blue-700"
+        />
+        <div
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
         >
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="completed"
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-check size-2 sm:size-2.5"
+            data-icon="check"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 448 512"
           >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="completed"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="completed"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                    data-icon="circle-check"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="completed"
-              >
-                Personal Information
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
-              data-slot="stepper-separator"
-              data-state="completed"
+            <path
+              d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+              fill="currentColor"
             />
-          </div>
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="completed"
+          </svg>
+        </div>
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+        >
+          Contact Details
+          <span
+            class="sr-only"
           >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="completed"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="completed"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                    data-icon="circle-check"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="completed"
-              >
-                Contact Details
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
-              data-slot="stepper-separator"
-              data-state="completed"
+            common:stepper.status.completed
+          </span>
+        </span>
+      </li>
+      <li
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+      >
+        <div
+          aria-hidden="true"
+          class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-blue-700"
+        />
+        <div
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-check size-2 sm:size-2.5"
+            data-icon="check"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 448 512"
+          >
+            <path
+              d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+              fill="currentColor"
             />
-          </div>
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="completed"
+          </svg>
+        </div>
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+        >
+          Preferences
+          <span
+            class="sr-only"
           >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="completed"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="completed"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                    data-icon="circle-check"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="completed"
-              >
-                Preferences
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
-              data-slot="stepper-separator"
-              data-state="completed"
+            common:stepper.status.completed
+          </span>
+        </span>
+      </li>
+      <li
+        aria-current="true"
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+      >
+        <div
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-white text-blue-700 outline-4 outline-blue-700/10"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle size-1.5 sm:size-2"
+            data-icon="circle"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+              fill="currentColor"
             />
-          </div>
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="completed"
-          >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="completed"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="completed"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                    data-icon="circle-check"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="completed"
-              >
-                Review & Submit
-              </h3>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
+          </svg>
+        </div>
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-blue-700"
+        >
+          Review & Submit
+        </span>
+      </li>
+    </ol>
   </div>
 </div>
 `;
@@ -843,410 +154,104 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
   <div
     class="print:hidden"
   >
-    <div
-      class="hidden sm:block"
+    <ol
+      class="relative flex w-full flex-col items-stretch gap-4 sm:flex-row sm:gap-2"
     >
-      <div
-        aria-orientation="horizontal"
-        class="w-full"
-        data-orientation="horizontal"
-        data-slot="stepper"
-        role="tablist"
+      <li
+        aria-current="true"
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
       >
-        <nav
-          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-          data-orientation="horizontal"
-          data-slot="stepper-nav"
-          data-state="1"
+        <div
+          aria-hidden="true"
+          class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 bg-gray-300 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full"
+        />
+        <div
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-white text-blue-700 outline-4 outline-blue-700/10"
         >
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="active"
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle size-1.5 sm:size-2"
+            data-icon="circle"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
           >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="active"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="active"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
-                    data-icon="circle-dot"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="active"
-              >
-                Personal Information
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-              data-slot="stepper-separator"
-              data-state="active"
+            <path
+              d="M0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+              fill="currentColor"
             />
-          </div>
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="inactive"
-          >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="inactive"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="inactive"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                    data-icon="ban"
-                    data-prefix="fas"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="inactive"
-              >
-                Contact Details
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-              data-slot="stepper-separator"
-              data-state="inactive"
-            />
-          </div>
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="inactive"
-          >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="inactive"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="inactive"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                    data-icon="ban"
-                    data-prefix="fas"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="inactive"
-              >
-                Preferences
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-              data-slot="stepper-separator"
-              data-state="inactive"
-            />
-          </div>
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="inactive"
-          >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="inactive"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="inactive"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                    data-icon="ban"
-                    data-prefix="fas"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="inactive"
-              >
-                Review & Submit
-              </h3>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
-    <div
-      class="sm:hidden"
-    >
-      <div
-        aria-orientation="vertical"
-        class="w-full"
-        data-orientation="vertical"
-        data-slot="stepper"
-        role="tablist"
+          </svg>
+        </div>
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-blue-700"
+        >
+          Personal Information
+        </span>
+      </li>
+      <li
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
       >
-        <nav
-          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-          data-orientation="vertical"
-          data-slot="stepper-nav"
-          data-state="1"
+        <div
+          aria-hidden="true"
+          class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 bg-gray-300 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full"
+        />
+        <div
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
+        />
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-500"
         >
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="active"
+          Contact Details
+          <span
+            class="sr-only"
           >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="active"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="active"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
-                    data-icon="circle-dot"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="active"
-              >
-                Personal Information
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
-              data-slot="stepper-separator"
-              data-state="active"
-            />
-          </div>
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="inactive"
+            common:stepper.status.upcoming
+          </span>
+        </span>
+      </li>
+      <li
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+      >
+        <div
+          aria-hidden="true"
+          class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 bg-gray-300 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full"
+        />
+        <div
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
+        />
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-500"
+        >
+          Preferences
+          <span
+            class="sr-only"
           >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="inactive"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="inactive"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                    data-icon="ban"
-                    data-prefix="fas"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="inactive"
-              >
-                Contact Details
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
-              data-slot="stepper-separator"
-              data-state="inactive"
-            />
-          </div>
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="inactive"
+            common:stepper.status.upcoming
+          </span>
+        </span>
+      </li>
+      <li
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+      >
+        <div
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
+        />
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-500"
+        >
+          Review & Submit
+          <span
+            class="sr-only"
           >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="inactive"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="inactive"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                    data-icon="ban"
-                    data-prefix="fas"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="inactive"
-              >
-                Preferences
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
-              data-slot="stepper-separator"
-              data-state="inactive"
-            />
-          </div>
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="inactive"
-          >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="inactive"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="inactive"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                    data-icon="ban"
-                    data-prefix="fas"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="inactive"
-              >
-                Review & Submit
-              </h3>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
+            common:stepper.status.upcoming
+          </span>
+        </span>
+      </li>
+    </ol>
   </div>
 </div>
 `;
@@ -1256,410 +261,132 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
   <div
     class="print:hidden"
   >
-    <div
-      class="hidden sm:block"
+    <ol
+      class="relative flex w-full flex-col items-stretch gap-4 sm:flex-row sm:gap-2"
     >
-      <div
-        aria-orientation="horizontal"
-        class="w-full"
-        data-orientation="horizontal"
-        data-slot="stepper"
-        role="tablist"
+      <li
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
       >
-        <nav
-          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-          data-orientation="horizontal"
-          data-slot="stepper-nav"
-          data-state="3"
+        <div
+          aria-hidden="true"
+          class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-blue-700"
+        />
+        <div
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
         >
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="completed"
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-check size-2 sm:size-2.5"
+            data-icon="check"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 448 512"
           >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="completed"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="completed"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                    data-icon="circle-check"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="completed"
-              >
-                Personal Information
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
-              data-slot="stepper-separator"
-              data-state="completed"
+            <path
+              d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+              fill="currentColor"
             />
-          </div>
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="completed"
+          </svg>
+        </div>
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+        >
+          Personal Information
+          <span
+            class="sr-only"
           >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="completed"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="completed"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                    data-icon="circle-check"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-blue-700"
-                data-slot="stepper-title"
-                data-state="completed"
-              >
-                Contact Details
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-              data-slot="stepper-separator"
-              data-state="completed"
-            />
-          </div>
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="active"
-          >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="active"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="active"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
-                    data-icon="circle-dot"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="active"
-              >
-                Preferences
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-              data-slot="stepper-separator"
-              data-state="active"
-            />
-          </div>
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="inactive"
-          >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="inactive"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="inactive"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                    data-icon="ban"
-                    data-prefix="fas"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="inactive"
-              >
-                Review & Submit
-              </h3>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
-    <div
-      class="sm:hidden"
-    >
-      <div
-        aria-orientation="vertical"
-        class="w-full"
-        data-orientation="vertical"
-        data-slot="stepper"
-        role="tablist"
+            common:stepper.status.completed
+          </span>
+        </span>
+      </li>
+      <li
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
       >
-        <nav
-          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-          data-orientation="vertical"
-          data-slot="stepper-nav"
-          data-state="3"
+        <div
+          aria-hidden="true"
+          class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-blue-700"
+        />
+        <div
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
         >
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="completed"
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-check size-2 sm:size-2.5"
+            data-icon="check"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 448 512"
           >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="completed"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="completed"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                    data-icon="circle-check"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="completed"
-              >
-                Personal Information
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
-              data-slot="stepper-separator"
-              data-state="completed"
+            <path
+              d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+              fill="currentColor"
             />
-          </div>
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="completed"
+          </svg>
+        </div>
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+        >
+          Contact Details
+          <span
+            class="sr-only"
           >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="completed"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="completed"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                    data-icon="circle-check"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-blue-700"
-                data-slot="stepper-title"
-                data-state="completed"
-              >
-                Contact Details
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
-              data-slot="stepper-separator"
-              data-state="completed"
+            common:stepper.status.completed
+          </span>
+        </span>
+      </li>
+      <li
+        aria-current="true"
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+      >
+        <div
+          aria-hidden="true"
+          class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 bg-gray-300 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full"
+        />
+        <div
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-white text-blue-700 outline-4 outline-blue-700/10"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle size-1.5 sm:size-2"
+            data-icon="circle"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+              fill="currentColor"
             />
-          </div>
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="active"
+          </svg>
+        </div>
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-blue-700"
+        >
+          Preferences
+        </span>
+      </li>
+      <li
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+      >
+        <div
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
+        />
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-500"
+        >
+          Review & Submit
+          <span
+            class="sr-only"
           >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="active"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="active"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
-                    data-icon="circle-dot"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="active"
-              >
-                Preferences
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
-              data-slot="stepper-separator"
-              data-state="active"
-            />
-          </div>
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="inactive"
-          >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="inactive"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="inactive"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                    data-icon="ban"
-                    data-prefix="fas"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="inactive"
-              >
-                Review & Submit
-              </h3>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
+            common:stepper.status.upcoming
+          </span>
+        </span>
+      </li>
+    </ol>
   </div>
 </div>
 `;
@@ -1669,1346 +396,118 @@ exports[`ProgressStepper > ProgressStepper (Responsive) > should render the resp
   <div
     class="print:hidden"
   >
-    <div
-      class="hidden sm:block"
+    <ol
+      class="relative flex w-full flex-col items-stretch gap-4 sm:flex-row sm:gap-2"
     >
-      <div
-        aria-orientation="horizontal"
-        class="w-full"
-        data-orientation="horizontal"
-        data-slot="stepper"
-        role="tablist"
+      <li
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
       >
-        <nav
-          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-          data-orientation="horizontal"
-          data-slot="stepper-nav"
-          data-state="2"
+        <div
+          aria-hidden="true"
+          class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-blue-700"
+        />
+        <div
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
         >
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="completed"
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-check size-2 sm:size-2.5"
+            data-icon="check"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 448 512"
           >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="completed"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="completed"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                    data-icon="circle-check"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="completed"
-              >
-                Personal Information
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
-              data-slot="stepper-separator"
-              data-state="completed"
+            <path
+              d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+              fill="currentColor"
             />
-          </div>
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="active"
+          </svg>
+        </div>
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+        >
+          Personal Information
+          <span
+            class="sr-only"
           >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="active"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="active"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
-                    data-icon="circle-dot"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-blue-700"
-                data-slot="stepper-title"
-                data-state="active"
-              >
-                Contact Details
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-              data-slot="stepper-separator"
-              data-state="active"
+            common:stepper.status.completed
+          </span>
+        </span>
+      </li>
+      <li
+        aria-current="true"
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+      >
+        <div
+          aria-hidden="true"
+          class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 bg-gray-300 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full"
+        />
+        <div
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-white text-blue-700 outline-4 outline-blue-700/10"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-circle size-1.5 sm:size-2"
+            data-icon="circle"
+            data-prefix="fas"
+            role="img"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+              fill="currentColor"
             />
-          </div>
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="inactive"
-          >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="inactive"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="inactive"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                    data-icon="ban"
-                    data-prefix="fas"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="inactive"
-              >
-                Preferences
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-              data-slot="stepper-separator"
-              data-state="inactive"
-            />
-          </div>
-          <div
-            class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-            data-slot="stepper-item"
-            data-state="inactive"
-          >
-            <div
-              class="flex cursor-default flex-col items-center gap-2.5"
-              data-slot="stepper-trigger"
-              data-state="inactive"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="inactive"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                    data-icon="ban"
-                    data-prefix="fas"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="max-w-24 text-center text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="inactive"
-              >
-                Review & Submit
-              </h3>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
-    <div
-      class="sm:hidden"
-    >
-      <div
-        aria-orientation="vertical"
-        class="w-full"
-        data-orientation="vertical"
-        data-slot="stepper"
-        role="tablist"
-      >
-        <nav
-          class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-          data-orientation="vertical"
-          data-slot="stepper-nav"
-          data-state="2"
-        >
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="completed"
-          >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="completed"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="completed"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                    data-icon="circle-check"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="completed"
-              >
-                Personal Information
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
-              data-slot="stepper-separator"
-              data-state="completed"
-            />
-          </div>
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="active"
-          >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="active"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="active"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
-                    data-icon="circle-dot"
-                    data-prefix="far"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-blue-700"
-                data-slot="stepper-title"
-                data-state="active"
-              >
-                Contact Details
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
-              data-slot="stepper-separator"
-              data-state="active"
-            />
-          </div>
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="inactive"
-          >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="inactive"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="inactive"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                    data-icon="ban"
-                    data-prefix="fas"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="inactive"
-              >
-                Preferences
-              </h3>
-            </div>
-            <div
-              class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
-              data-slot="stepper-separator"
-              data-state="inactive"
-            />
-          </div>
-          <div
-            class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-            data-slot="stepper-item"
-            data-state="inactive"
-          >
-            <div
-              class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-              data-slot="stepper-trigger"
-              data-state="inactive"
-            >
-              <div
-                class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-                data-slot="stepper-indicator"
-                data-state="inactive"
-              >
-                <div
-                  class="absolute"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                    data-icon="ban"
-                    data-prefix="fas"
-                    role="img"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <h3
-                class="text-sm font-medium text-slate-700"
-                data-slot="stepper-title"
-                data-state="inactive"
-              >
-                Review & Submit
-              </h3>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizontal stepper with all steps 1`] = `
-<div>
-  <div
-    aria-orientation="horizontal"
-    class="w-full"
-    data-orientation="horizontal"
-    data-slot="stepper"
-    role="tablist"
-  >
-    <nav
-      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-      data-orientation="horizontal"
-      data-slot="stepper-nav"
-      data-state="2"
-    >
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="completed"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="completed"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="completed"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                data-icon="circle-check"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="completed"
-          >
-            Personal Information
-          </h3>
+          </svg>
         </div>
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-blue-700"
+        >
+          Contact Details
+        </span>
+      </li>
+      <li
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+      >
         <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
-          data-slot="stepper-separator"
-          data-state="completed"
+          aria-hidden="true"
+          class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 bg-gray-300 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full"
         />
-      </div>
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="active"
-      >
         <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="active"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="active"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
-                data-icon="circle-dot"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-blue-700"
-            data-slot="stepper-title"
-            data-state="active"
-          >
-            Contact Details
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-          data-slot="stepper-separator"
-          data-state="active"
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
         />
-      </div>
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="inactive"
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-500"
+        >
+          Preferences
+          <span
+            class="sr-only"
+          >
+            common:stepper.status.upcoming
+          </span>
+        </span>
+      </li>
+      <li
+        class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
       >
         <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="inactive"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="inactive"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                data-icon="ban"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="inactive"
-          >
-            Preferences
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-          data-slot="stepper-separator"
-          data-state="inactive"
+          aria-hidden="true"
+          class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
         />
-      </div>
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="inactive"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="inactive"
+        <span
+          class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-500"
         >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="inactive"
+          Review & Submit
+          <span
+            class="sr-only"
           >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                data-icon="ban"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="inactive"
-          >
-            Review & Submit
-          </h3>
-        </div>
-      </div>
-    </nav>
-  </div>
-</div>
-`;
-
-exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizontal stepper with different current step 1`] = `
-<div>
-  <div
-    aria-orientation="horizontal"
-    class="w-full"
-    data-orientation="horizontal"
-    data-slot="stepper"
-    role="tablist"
-  >
-    <nav
-      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-      data-orientation="horizontal"
-      data-slot="stepper-nav"
-      data-state="3"
-    >
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="completed"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="completed"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="completed"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                data-icon="circle-check"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="completed"
-          >
-            Personal Information
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-green-700"
-          data-slot="stepper-separator"
-          data-state="completed"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="completed"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="completed"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="completed"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                data-icon="circle-check"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-blue-700"
-            data-slot="stepper-title"
-            data-state="completed"
-          >
-            Contact Details
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-          data-slot="stepper-separator"
-          data-state="completed"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="active"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="active"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="active"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
-                data-icon="circle-dot"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="active"
-          >
-            Preferences
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute top-4 left-[calc(50%+1rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.125rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none bg-slate-700"
-          data-slot="stepper-separator"
-          data-state="active"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="inactive"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="inactive"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="inactive"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                data-icon="ban"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="inactive"
-          >
-            Review & Submit
-          </h3>
-        </div>
-      </div>
-    </nav>
-  </div>
-</div>
-`;
-
-exports[`ProgressStepper > ProgressStepperHorizontal > should render the horizontal stepper with single step 1`] = `
-<div>
-  <div
-    aria-orientation="horizontal"
-    class="w-full"
-    data-orientation="horizontal"
-    data-slot="stepper"
-    role="tablist"
-  >
-    <nav
-      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-      data-orientation="horizontal"
-      data-slot="stepper-nav"
-      data-state="1"
-    >
-      <div
-        class="group/step flex justify-center not-last:flex-1 group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative flex-1 items-start"
-        data-slot="stepper-item"
-        data-state="completed"
-      >
-        <div
-          class="flex cursor-default flex-col items-center gap-2.5"
-          data-slot="stepper-trigger"
-          data-state="completed"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="completed"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                data-icon="circle-check"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="max-w-24 text-center text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="completed"
-          >
-            Personal Information
-          </h3>
-        </div>
-      </div>
-    </nav>
-  </div>
-</div>
-`;
-
-exports[`ProgressStepper > ProgressStepperVertical > should render the vertical stepper with all steps 1`] = `
-<div>
-  <div
-    aria-orientation="vertical"
-    class="w-full"
-    data-orientation="vertical"
-    data-slot="stepper"
-    role="tablist"
-  >
-    <nav
-      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-      data-orientation="vertical"
-      data-slot="stepper-nav"
-      data-state="2"
-    >
-      <div
-        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-        data-slot="stepper-item"
-        data-state="completed"
-      >
-        <div
-          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-          data-slot="stepper-trigger"
-          data-state="completed"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="completed"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                data-icon="circle-check"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="completed"
-          >
-            Personal Information
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
-          data-slot="stepper-separator"
-          data-state="completed"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-        data-slot="stepper-item"
-        data-state="active"
-      >
-        <div
-          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-          data-slot="stepper-trigger"
-          data-state="active"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="active"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
-                data-icon="circle-dot"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="text-sm font-medium text-blue-700"
-            data-slot="stepper-title"
-            data-state="active"
-          >
-            Contact Details
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
-          data-slot="stepper-separator"
-          data-state="active"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-        data-slot="stepper-item"
-        data-state="inactive"
-      >
-        <div
-          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-          data-slot="stepper-trigger"
-          data-state="inactive"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="inactive"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                data-icon="ban"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="inactive"
-          >
-            Preferences
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
-          data-slot="stepper-separator"
-          data-state="inactive"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-        data-slot="stepper-item"
-        data-state="inactive"
-      >
-        <div
-          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-          data-slot="stepper-trigger"
-          data-state="inactive"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="inactive"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                data-icon="ban"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="inactive"
-          >
-            Review & Submit
-          </h3>
-        </div>
-      </div>
-    </nav>
-  </div>
-</div>
-`;
-
-exports[`ProgressStepper > ProgressStepperVertical > should render the vertical stepper with different current step 1`] = `
-<div>
-  <div
-    aria-orientation="vertical"
-    class="w-full"
-    data-orientation="vertical"
-    data-slot="stepper"
-    role="tablist"
-  >
-    <nav
-      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-      data-orientation="vertical"
-      data-slot="stepper-nav"
-      data-state="3"
-    >
-      <div
-        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-        data-slot="stepper-item"
-        data-state="completed"
-      >
-        <div
-          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-          data-slot="stepper-trigger"
-          data-state="completed"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="completed"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                data-icon="circle-check"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="completed"
-          >
-            Personal Information
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-green-700"
-          data-slot="stepper-separator"
-          data-state="completed"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-        data-slot="stepper-item"
-        data-state="completed"
-      >
-        <div
-          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-          data-slot="stepper-trigger"
-          data-state="completed"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="completed"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                data-icon="circle-check"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="text-sm font-medium text-blue-700"
-            data-slot="stepper-title"
-            data-state="completed"
-          >
-            Contact Details
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
-          data-slot="stepper-separator"
-          data-state="completed"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-        data-slot="stepper-item"
-        data-state="active"
-      >
-        <div
-          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-          data-slot="stepper-trigger"
-          data-state="active"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="active"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-dot border-blue-700 text-blue-700 fa-xl"
-                data-icon="circle-dot"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="active"
-          >
-            Preferences
-          </h3>
-        </div>
-        <div
-          class="rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:w-0.5 absolute inset-y-0 top-8 left-4 -order-1 m-0 -translate-x-1/2 group-data-[orientation=vertical]/stepper-nav:h-[calc(100%-2rem)] bg-slate-700"
-          data-slot="stepper-separator"
-          data-state="active"
-        />
-      </div>
-      <div
-        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-        data-slot="stepper-item"
-        data-state="inactive"
-      >
-        <div
-          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-          data-slot="stepper-trigger"
-          data-state="inactive"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="inactive"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-ban border-slate-700 text-slate-700 fa-flip-horizontal fa-xl"
-                data-icon="ban"
-                data-prefix="fas"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M367.2 412.5L99.5 144.8c-22.4 31.4-35.5 69.8-35.5 111.2 0 106 86 192 192 192 41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3c22.4-31.4 35.5-69.8 35.5-111.2 0-106-86-192-192-192-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="inactive"
-          >
-            Review & Submit
-          </h3>
-        </div>
-      </div>
-    </nav>
-  </div>
-</div>
-`;
-
-exports[`ProgressStepper > ProgressStepperVertical > should render the vertical stepper with single step 1`] = `
-<div>
-  <div
-    aria-orientation="vertical"
-    class="w-full"
-    data-orientation="vertical"
-    data-slot="stepper"
-    role="tablist"
-  >
-    <nav
-      class="group/stepper-nav inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
-      data-orientation="vertical"
-      data-slot="stepper-nav"
-      data-state="1"
-    >
-      <div
-        class="group/step flex justify-center group-data-[orientation=horizontal]/stepper-nav:flex-row group-data-[orientation=vertical]/stepper-nav:flex-col relative items-start not-last:flex-1"
-        data-slot="stepper-item"
-        data-state="completed"
-      >
-        <div
-          class="inline-flex cursor-default items-center gap-2.5 pb-12 last:pb-0"
-          data-slot="stepper-trigger"
-          data-state="completed"
-        >
-          <div
-            class="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-white bg-zinc-100 text-xs text-zinc-900 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=completed]:bg-green-500 data-[state=completed]:text-white size-8 bg-transparent!"
-            data-slot="stepper-indicator"
-            data-state="completed"
-          >
-            <div
-              class="absolute"
-            >
-              <svg
-                aria-hidden="true"
-                class="svg-inline--fa fa-circle-check border-green-700 text-green-700 fa-xl"
-                data-icon="circle-check"
-                data-prefix="far"
-                role="img"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </div>
-          <h3
-            class="text-sm font-medium text-slate-700"
-            data-slot="stepper-title"
-            data-state="completed"
-          >
-            Personal Information
-          </h3>
-        </div>
-      </div>
-    </nav>
+            common:stepper.status.upcoming
+          </span>
+        </span>
+      </li>
+    </ol>
   </div>
 </div>
 `;

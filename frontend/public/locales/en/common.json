@@ -78,5 +78,11 @@
       "instructions": "You can confirm your coverage level on the invitation to renew letter sent by Service Canada. This letter can also be viewed in <mscaLink>My Service Canada Account (MSCA)</mscaLink>. No further communication will be sent."
     },
     "msca-link": "https://www.canada.ca/en/employment-social-development/services/my-account.html"
+  },
+  "stepper": {
+    "status": {
+      "completed": "completed",
+      "upcoming": "not completed"
+    }
   }
 }

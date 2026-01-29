@@ -1,0 +1,290 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Stepper > renders correctly when all steps are completed > expected html 1`] = `
+<div>
+  <ol
+    class="relative flex w-full flex-col items-stretch gap-4 sm:flex-row sm:gap-2"
+  >
+    <li
+      class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-blue-700"
+      />
+      <div
+        aria-hidden="true"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-check size-2 sm:size-2.5"
+          data-icon="check"
+          data-prefix="fas"
+          role="img"
+          viewBox="0 0 448 512"
+        >
+          <path
+            d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
+      <span
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+      >
+        Step 1
+        <span
+          class="sr-only"
+        >
+          common:stepper.status.completed
+        </span>
+      </span>
+    </li>
+    <li
+      class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-blue-700"
+      />
+      <div
+        aria-hidden="true"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-check size-2 sm:size-2.5"
+          data-icon="check"
+          data-prefix="fas"
+          role="img"
+          viewBox="0 0 448 512"
+        >
+          <path
+            d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
+      <span
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+      >
+        Step 2
+        <span
+          class="sr-only"
+        >
+          common:stepper.status.completed
+        </span>
+      </span>
+    </li>
+    <li
+      class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+    >
+      <div
+        aria-hidden="true"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-check size-2 sm:size-2.5"
+          data-icon="check"
+          data-prefix="fas"
+          role="img"
+          viewBox="0 0 448 512"
+        >
+          <path
+            d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
+      <span
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+      >
+        Step 3
+        <span
+          class="sr-only"
+        >
+          common:stepper.status.completed
+        </span>
+      </span>
+    </li>
+  </ol>
+</div>
+`;
+
+exports[`Stepper > renders correctly with active step 1 > expected html 1`] = `
+<div>
+  <ol
+    class="relative flex w-full flex-col items-stretch gap-4 sm:flex-row sm:gap-2"
+  >
+    <li
+      aria-current="true"
+      class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 bg-gray-300 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full"
+      />
+      <div
+        aria-hidden="true"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-white text-blue-700 outline-4 outline-blue-700/10"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-circle size-1.5 sm:size-2"
+          data-icon="circle"
+          data-prefix="fas"
+          role="img"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
+      <span
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-blue-700"
+      >
+        Step 1
+      </span>
+    </li>
+    <li
+      class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 bg-gray-300 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full"
+      />
+      <div
+        aria-hidden="true"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
+      />
+      <span
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-500"
+      >
+        Step 2
+        <span
+          class="sr-only"
+        >
+          common:stepper.status.upcoming
+        </span>
+      </span>
+    </li>
+    <li
+      class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+    >
+      <div
+        aria-hidden="true"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
+      />
+      <span
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-500"
+      >
+        Step 3
+        <span
+          class="sr-only"
+        >
+          common:stepper.status.upcoming
+        </span>
+      </span>
+    </li>
+  </ol>
+</div>
+`;
+
+exports[`Stepper > renders correctly with active step 2 > expected html 1`] = `
+<div>
+  <ol
+    class="relative flex w-full flex-col items-stretch gap-4 sm:flex-row sm:gap-2"
+  >
+    <li
+      class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-blue-700"
+      />
+      <div
+        aria-hidden="true"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-check size-2 sm:size-2.5"
+          data-icon="check"
+          data-prefix="fas"
+          role="img"
+          viewBox="0 0 448 512"
+        >
+          <path
+            d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
+      <span
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+      >
+        Step 1
+        <span
+          class="sr-only"
+        >
+          common:stepper.status.completed
+        </span>
+      </span>
+    </li>
+    <li
+      aria-current="true"
+      class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 bg-gray-300 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full"
+      />
+      <div
+        aria-hidden="true"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-white text-blue-700 outline-4 outline-blue-700/10"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-circle size-1.5 sm:size-2"
+          data-icon="circle"
+          data-prefix="fas"
+          role="img"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
+      <span
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-blue-700"
+      >
+        Step 2
+      </span>
+    </li>
+    <li
+      class="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col"
+    >
+      <div
+        aria-hidden="true"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
+      />
+      <span
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-500"
+      >
+        Step 3
+        <span
+          class="sr-only"
+        >
+          common:stepper.status.upcoming
+        </span>
+      </span>
+    </li>
+  </ol>
+</div>
+`;

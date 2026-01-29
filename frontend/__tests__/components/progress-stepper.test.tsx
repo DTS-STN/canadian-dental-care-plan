@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 
 import { describe, expect, it } from 'vitest';
 
-import { ProgressStepper, ProgressStepperHorizontal, ProgressStepperVertical } from '~/components/progress-stepper';
+import { ProgressStepper } from '~/components/progress-stepper';
 
 describe('ProgressStepper', () => {
   const mockSteps = [
@@ -27,42 +27,6 @@ describe('ProgressStepper', () => {
       description: 'Review & Submit',
     },
   ];
-
-  describe('ProgressStepperHorizontal', () => {
-    it('should render the horizontal stepper with all steps', () => {
-      const { container } = render(<ProgressStepperHorizontal steps={mockSteps} currentStep={1} />);
-      expect(container).toMatchSnapshot();
-    });
-
-    it('should render the horizontal stepper with different current step', () => {
-      const { container } = render(<ProgressStepperHorizontal steps={mockSteps} currentStep={2} />);
-      expect(container).toMatchSnapshot();
-    });
-
-    it('should render the horizontal stepper with single step', () => {
-      const singleStep = [mockSteps[0]];
-      const { container } = render(<ProgressStepperHorizontal steps={singleStep} currentStep={0} />);
-      expect(container).toMatchSnapshot();
-    });
-  });
-
-  describe('ProgressStepperVertical', () => {
-    it('should render the vertical stepper with all steps', () => {
-      const { container } = render(<ProgressStepperVertical steps={mockSteps} currentStep={1} />);
-      expect(container).toMatchSnapshot();
-    });
-
-    it('should render the vertical stepper with different current step', () => {
-      const { container } = render(<ProgressStepperVertical steps={mockSteps} currentStep={2} />);
-      expect(container).toMatchSnapshot();
-    });
-
-    it('should render the vertical stepper with single step', () => {
-      const singleStep = [mockSteps[0]];
-      const { container } = render(<ProgressStepperVertical steps={singleStep} currentStep={0} />);
-      expect(container).toMatchSnapshot();
-    });
-  });
 
   describe('ProgressStepper (Responsive)', () => {
     it('should render the responsive stepper wrapper', () => {
@@ -90,23 +54,6 @@ describe('ProgressStepper', () => {
         status: 'inactive' as const,
       }));
       const { container } = render(<ProgressStepper steps={inactiveSteps} currentStep={0} />);
-      expect(container).toMatchSnapshot();
-    });
-  });
-
-  describe('Edge Cases', () => {
-    it('should handle empty steps array', () => {
-      const { container } = render(<ProgressStepperHorizontal steps={[]} currentStep={0} />);
-      expect(container).toMatchSnapshot();
-    });
-
-    it('should handle currentStep out of bounds', () => {
-      const { container } = render(<ProgressStepperHorizontal steps={mockSteps} currentStep={10} />);
-      expect(container).toMatchSnapshot();
-    });
-
-    it('should handle negative currentStep', () => {
-      const { container } = render(<ProgressStepperHorizontal steps={mockSteps} currentStep={-1} />);
       expect(container).toMatchSnapshot();
     });
   });
