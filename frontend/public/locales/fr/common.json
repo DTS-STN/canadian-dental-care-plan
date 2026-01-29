@@ -78,5 +78,11 @@
       "instructions": "Vous pouvez vérifier votre niveau de couverture dans la lettre d'invitation au renouvellement envoyée par Service Canada. Cette lettre peut également être consultée dans <mscaLink>Mon dossier Service Canada (MDSC)</mscaLink>. Aucune autre communication ne sera envoyée."
     },
     "msca-link": "https://www.canada.ca/en/employment-social-development/services/my-account.html"
+  },
+  "stepper": {
+    "status": {
+      "completed": "\u0020completé",
+      "upcoming": "\u0020non complété"
+    }
   }
 }
