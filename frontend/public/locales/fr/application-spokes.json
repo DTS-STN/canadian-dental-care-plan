@@ -420,7 +420,7 @@
         "alert": {
           "heading": "Nous n'avons pas trouvé le compte du Régime canadien de soins dentaires (RCSD) de votre enfant avec les renseignements que vous avez saisis.",
           "detail": "Vérifiez que les renseignements concernant l'enfant sont corrects et réessayez. Si le problème persiste, appelez-nous au <noWrap>1-833-537-4342</noWrap> pour mettre à jour vos renseignements.",
-          "applyDate": "Remarque \u0a00: seuls les participants actuels de RCSD peuvent renouveler leur adhésion dès maintenant. Si votre enfant ne participe pas déjà au RCSD, vous pourrez présenter une demande d'adhésion pour la prochaine année de couverture à compter du 2 juin 2026."
+          "applyDate": "Remarque \u00a0: seuls les participants actuels de RCSD peuvent renouveler leur adhésion dès maintenant. Si votre enfant ne participe pas déjà au RCSD, vous pourrez présenter une demande d'adhésion pour la prochaine année de couverture à compter du 2 juin 2026."
         }
       }
     },
