@@ -1,4 +1,9 @@
 {
+  "progress-stepper": {
+    "parent-or-guardian": "Renseignements sur le parent ou le tuteur légal",
+    "childrens-application": "La demande de votre/vos enfant(s)",
+    "submit": "Soumettre"
+  },
   "parent-or-guardian": {
     "page-title": "Renseignements sur le parent ou le tuteur légal",
     "page-heading": "Renseignements sur le parent ou le tuteur légal",

@@ -16,9 +16,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
-import { ProgressStepper } from '~/components/progress-stepper';
 import { useCurrentLanguage } from '~/hooks';
-import { useProgressStepper } from '~/hooks/use-progress-stepper';
 import { pageIds } from '~/page-ids';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
@@ -177,12 +175,10 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('application-full-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
-  const { steps } = useProgressStepper('full-children', 'submit');
   const { currentLanguage } = useCurrentLanguage();
 
   return (
     <div className="max-w-prose space-y-10">
-      <ProgressStepper steps={steps} currentStep={4} />
       <div className="space-y-4">
         <p className="text-2xl">
           <strong>{t('confirm.app-code-is')}</strong>
