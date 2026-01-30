@@ -18,9 +18,8 @@ import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { NavigationButton, NavigationButtonLink } from '~/components/navigation-buttons';
-import { ProgressStepper } from '~/components/progress-stepper';
-import { useProgressStepper } from '~/hooks/use-progress-stepper';
 import { pageIds } from '~/page-ids';
+import { ProgressStepper } from '~/routes/public/application/full-family/progress-stepper';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -103,7 +102,6 @@ export async function action({ context: { appContainer, session }, request, para
 export default function NewFamilySubmit({ loaderData, params }: Route.ComponentProps) {
   const { state, payload } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('full-family', 'submit');
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -118,9 +116,9 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
 
   return (
     <>
+      <ProgressStepper activeStep="submit" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <errorSummary.ErrorSummary />
-        <ProgressStepper steps={steps} currentStep={currentStep} />
         <div className="space-y-8">
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.overview')}</h2>

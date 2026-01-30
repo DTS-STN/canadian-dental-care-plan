@@ -1,4 +1,10 @@
 {
+  "progress-stepper": {
+    "contact-information": "Your contact information",
+    "dental-insurance": "Your access to dental insurance",
+    "childrens-application": "Your child(ren)'s application",
+    "submit": "Submit"
+  },
   "contact-information": {
     "page-title": "Your contact information",
     "page-heading": "Your contact information",

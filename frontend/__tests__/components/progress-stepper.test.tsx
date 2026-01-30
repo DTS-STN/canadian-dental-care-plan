@@ -5,56 +5,29 @@ import { describe, expect, it } from 'vitest';
 import { ProgressStepper } from '~/components/progress-stepper';
 
 describe('ProgressStepper', () => {
-  const mockSteps = [
-    {
-      id: 'personal',
-      status: 'completed' as const,
-      description: 'Personal Information',
-    },
-    {
-      id: 'contact',
-      status: 'active' as const,
-      description: 'Contact Details',
-    },
-    {
-      id: 'preferences',
-      status: 'inactive' as const,
-      description: 'Preferences',
-    },
-    {
-      id: 'review',
-      status: 'inactive' as const,
-      description: 'Review & Submit',
-    },
+  const defaultSteps = [
+    { id: 'first-step', label: 'First Step' },
+    { id: 'second-step', label: 'Second Step' },
+    { id: 'third-step', label: 'Third Step' },
   ];
 
-  describe('ProgressStepper (Responsive)', () => {
-    it('should render the responsive stepper wrapper', () => {
-      const { container } = render(<ProgressStepper steps={mockSteps} currentStep={1} />);
-      expect(container).toMatchSnapshot();
-    });
+  it('renders correctly with the first step active', () => {
+    const { container } = render(<ProgressStepper steps={defaultSteps} activeStep="first-step" />);
+    expect(container).toMatchSnapshot('expected html');
+  });
 
-    it('should render the responsive stepper with different current step', () => {
-      const { container } = render(<ProgressStepper steps={mockSteps} currentStep={2} />);
-      expect(container).toMatchSnapshot();
-    });
+  it('renders correctly with the second step active', () => {
+    const { container } = render(<ProgressStepper steps={defaultSteps} activeStep="second-step" />);
+    expect(container).toMatchSnapshot('expected html');
+  });
 
-    it('should render the responsive stepper with all completed steps', () => {
-      const completedSteps = mockSteps.map((step) => ({
-        ...step,
-        status: 'completed' as const,
-      }));
-      const { container } = render(<ProgressStepper steps={completedSteps} currentStep={3} />);
-      expect(container).toMatchSnapshot();
-    });
+  it('renders correctly with the last step active', () => {
+    const { container } = render(<ProgressStepper steps={defaultSteps} activeStep="third-step" />);
+    expect(container).toMatchSnapshot('expected html');
+  });
 
-    it('should render the responsive stepper with all inactive steps', () => {
-      const inactiveSteps = mockSteps.map((step) => ({
-        ...step,
-        status: 'inactive' as const,
-      }));
-      const { container } = render(<ProgressStepper steps={inactiveSteps} currentStep={0} />);
-      expect(container).toMatchSnapshot();
-    });
+  it('renders correctly when all steps are completed (activeStep not found)', () => {
+    const { container } = render(<ProgressStepper steps={defaultSteps} activeStep="confirmation" />);
+    expect(container).toMatchSnapshot('expected html');
   });
 });

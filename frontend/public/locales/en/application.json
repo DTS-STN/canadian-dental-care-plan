@@ -9,16 +9,6 @@
   "confirm-information": "Please confirm the information we have on file for you.",
   "next": "Next",
   "previous": "Previous",
-  "progress-stepper": {
-    "marital-status": "Marital status",
-    "contact-information": "Contact information",
-    "dental-insurance": "Access to dental insurance",
-    "type-of-application": "Type of application",
-    "personal-information": "Personal information",
-    "submit": "Submit",
-    "parent-or-guardian": "Parent or legal guardian information",
-    "childrens-application": "Your child(ren)'s application"
-  },
   "eligibility-requirements": {
     "page-title": "Before you start your application",
     "page-heading": "Before you start your application",

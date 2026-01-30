@@ -1,4 +1,10 @@
 {
+  "progress-stepper": {
+    "marital-status": "État civil",
+    "contact-information": "Coordonnées",
+    "dental-insurance": "Accès à une assurance dentaire",
+    "submit": "Soumettre"
+  },
   "marital-status": {
     "page-title": "Votre état civil",
     "page-heading": "Votre état civil",

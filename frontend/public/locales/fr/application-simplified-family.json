@@ -1,4 +1,10 @@
 {
+  "progress-stepper": {
+    "contact-information": "Vos coordonnées",
+    "dental-insurance": "Votre accès à une assurance dentaire",
+    "childrens-application": "La demande de votre/vos enfant(s)",
+    "submit": "Soumettre"
+  },
   "contact-information": {
     "page-title": "Vos coordonnées",
     "page-heading": "Vos coordonnées",

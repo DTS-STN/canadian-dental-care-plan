@@ -19,11 +19,10 @@ import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
-import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
 import { useCurrentLanguage } from '~/hooks';
-import { useProgressStepper } from '~/hooks/use-progress-stepper';
 import { pageIds } from '~/page-ids';
+import { ProgressStepper } from '~/routes/public/application/full-children/progress-stepper';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -134,7 +133,6 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
   const { currentLanguage } = useCurrentLanguage();
   const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('full-children', 'childrens-application');
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -154,174 +152,176 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
   const allChildrenCompleted = state.children.length > 0 && state.children.every((child) => child.information !== undefined && child.dentalInsurance !== undefined && child.dentalBenefits !== undefined);
 
   return (
-    <div className="max-w-prose space-y-8">
-      <ProgressStepper steps={steps} currentStep={currentStep} />
-      {state.children.map((child, index) => {
-        const childName = `${child.information?.firstName} ${child.information?.lastName}`;
-        const dateOfBirth = child.information?.dateOfBirth ? toLocaleDateString(parseDateString(child.information.dateOfBirth), currentLanguage) : '';
+    <>
+      <ProgressStepper activeStep="childrens-application" className="mb-8" />
+      <div className="max-w-prose space-y-8">
+        {state.children.map((child, index) => {
+          const childName = `${child.information?.firstName} ${child.information?.lastName}`;
+          const dateOfBirth = child.information?.dateOfBirth ? toLocaleDateString(parseDateString(child.information.dateOfBirth), currentLanguage) : '';
 
-        const sections = [
-          { id: 'child-information', completed: child.information !== undefined },
-          { id: 'child-dental-insurance', completed: child.dentalInsurance !== undefined },
-          { id: 'child-dental-benefits', completed: child.dentalBenefits !== undefined },
-        ] as const;
-        const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
+          const sections = [
+            { id: 'child-information', completed: child.information !== undefined },
+            { id: 'child-dental-insurance', completed: child.dentalInsurance !== undefined },
+            { id: 'child-dental-benefits', completed: child.dentalBenefits !== undefined },
+          ] as const;
+          const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
 
-        return (
-          <div key={child.id}>
-            <h2 className="font-lato mb-4 text-2xl font-bold">{t('application-full-child:childrens-application.child-title', { childNumber: index + 1 })}</h2>
-            <div className="space-y-4">
-              <p>{t('application:required-label')}</p>
-              <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+          return (
+            <div key={child.id}>
+              <h2 className="font-lato mb-4 text-2xl font-bold">{t('application-full-child:childrens-application.child-title', { childNumber: index + 1 })}</h2>
+              <div className="space-y-4">
+                <p>{t('application:required-label')}</p>
+                <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+              </div>
+              <Card className="my-2">
+                <CardHeader>
+                  <CardTitle>{t('application-full-child:childrens-application.child-information-card-title', { childNumber: index + 1 })}</CardTitle>
+                  <CardAction>{completedSections.includes('child-information') && <StatusTag status="complete" />}</CardAction>
+                </CardHeader>
+                <CardContent>
+                  {child.information === undefined ? (
+                    <p>{t('application-full-child:childrens-application.child-information-indicate-status')}</p>
+                  ) : (
+                    <DefinitionList layout="single-column">
+                      <DefinitionListItem term={t('application-full-child:childrens-application.member-id-title')}>
+                        <p>{child.id}</p>
+                      </DefinitionListItem>
+                      <DefinitionListItem term={t('application-full-child:childrens-application.full-name-title')}>
+                        <p>{childName}</p>
+                      </DefinitionListItem>
+                      <DefinitionListItem term={t('application-full-child:childrens-application.dob-title')}>
+                        <p>{dateOfBirth}</p>
+                      </DefinitionListItem>
+                      <DefinitionListItem term={t('application-full-child:childrens-application.sin-title')}>
+                        <p>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</p>
+                      </DefinitionListItem>
+                      <DefinitionListItem term={t('application-full-child:childrens-application.parent-guardian-title')}>
+                        <p>{child.information.isParent ? t('application-full-child:childrens-application.yes') : t('application-full-child:childrens-application.no')}</p>
+                      </DefinitionListItem>
+                    </DefinitionList>
+                  )}
+                </CardContent>
+                <CardFooter className="border-t bg-zinc-100">
+                  <ButtonLink
+                    id="edit-button"
+                    variant="link"
+                    className="p-0"
+                    routeId="public/application/$id/children/$childId/information"
+                    params={{ ...params, childId: child.id }}
+                    startIcon={completedSections.includes('child-information') ? faPenToSquare : faCirclePlus}
+                    size="lg"
+                  >
+                    {child.information === undefined ? t('application-full-child:childrens-application.add-child-information') : t('application-full-child:childrens-application.edit-child-information', { childNumber: index + 1 })}
+                  </ButtonLink>
+                </CardFooter>
+              </Card>
+
+              <Card className="my-2">
+                <CardHeader>
+                  <CardTitle>{t('application-full-child:childrens-application.child-dental-insurance-card-title')}</CardTitle>
+                  <CardAction>{completedSections.includes('child-dental-insurance') && <StatusTag status="complete" />}</CardAction>
+                </CardHeader>
+                <CardContent>
+                  {child.dentalInsurance === undefined ? (
+                    <p>{t('application-full-child:childrens-application.child-dental-insurance-indicate-status')}</p>
+                  ) : (
+                    <DefinitionList layout="single-column">
+                      <DefinitionListItem term={t('application-full-child:childrens-application.dental-insurance-title')}>
+                        <p>{child.dentalInsurance.hasDentalInsurance ? t('application-full-child:childrens-application.dental-insurance-yes') : t('application-full-child:childrens-application.dental-insurance-no')}</p>
+                      </DefinitionListItem>
+                    </DefinitionList>
+                  )}
+                </CardContent>
+                <CardFooter className="border-t bg-zinc-100">
+                  <ButtonLink
+                    id="edit-button"
+                    variant="link"
+                    className="p-0"
+                    routeId="public/application/$id/children/$childId/dental-insurance"
+                    params={{ ...params, childId: child.id }}
+                    startIcon={completedSections.includes('child-dental-insurance') ? faPenToSquare : faCirclePlus}
+                    size="lg"
+                  >
+                    {child.dentalInsurance === undefined ? t('application-full-child:childrens-application.add-child-dental-insurance') : t('application-full-child:childrens-application.edit-child-dental-insurance', { childNumber: index + 1 })}
+                  </ButtonLink>
+                </CardFooter>
+              </Card>
+
+              <Card className="my-2">
+                <CardHeader>
+                  <CardTitle>{t('application-full-child:childrens-application.child-dental-benefits-card-title')}</CardTitle>
+                  <CardAction>{completedSections.includes('child-dental-benefits') && <StatusTag status="complete" />}</CardAction>
+                </CardHeader>
+                <CardContent>
+                  {child.dentalBenefits === undefined ? (
+                    <p>{t('application-full-child:childrens-application.child-dental-benefits-indicate-status')}</p>
+                  ) : (
+                    <DefinitionList layout="single-column">
+                      <DefinitionListItem term={t('application-full-child:childrens-application.dental-benefits-title')}>
+                        {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
+                          <div className="space-y-3">
+                            <p>{t('application-full-child:childrens-application.dental-benefits-yes')}</p>
+                            <ul className="list-disc space-y-1 pl-7">
+                              {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
+                              {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
+                            </ul>
+                          </div>
+                        ) : (
+                          <p>{t('application-full-child:childrens-application.dental-benefits-no')}</p>
+                        )}
+                      </DefinitionListItem>
+                    </DefinitionList>
+                  )}
+                </CardContent>
+                <CardFooter className="border-t bg-zinc-100">
+                  <ButtonLink
+                    id="edit-button"
+                    variant="link"
+                    className="p-0"
+                    routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits"
+                    params={{ ...params, childId: child.id }}
+                    startIcon={completedSections.includes('child-dental-benefits') ? faPenToSquare : faCirclePlus}
+                    size="lg"
+                  >
+                    {child.dentalBenefits === undefined ? t('application-full-child:childrens-application.add-child-dental-benefits') : t('application-full-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })}
+                  </ButtonLink>
+                </CardFooter>
+              </Card>
+              <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+                <CsrfTokenInput />
+                <input type="hidden" name="childId" value={child.id} />
+                <Button
+                  id="remove-child"
+                  className="my-5"
+                  name="_action"
+                  value={FORM_ACTION.remove}
+                  disabled={isSubmitting}
+                  variant="secondary"
+                  size="sm"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Remove child - Child(ren) application click"
+                >
+                  {t('application-full-child:childrens-application.remove-child')}
+                </Button>
+              </fetcher.Form>
             </div>
-            <Card className="my-2">
-              <CardHeader>
-                <CardTitle>{t('application-full-child:childrens-application.child-information-card-title', { childNumber: index + 1 })}</CardTitle>
-                <CardAction>{completedSections.includes('child-information') && <StatusTag status="complete" />}</CardAction>
-              </CardHeader>
-              <CardContent>
-                {child.information === undefined ? (
-                  <p>{t('application-full-child:childrens-application.child-information-indicate-status')}</p>
-                ) : (
-                  <DefinitionList layout="single-column">
-                    <DefinitionListItem term={t('application-full-child:childrens-application.member-id-title')}>
-                      <p>{child.id}</p>
-                    </DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:childrens-application.full-name-title')}>
-                      <p>{childName}</p>
-                    </DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:childrens-application.dob-title')}>
-                      <p>{dateOfBirth}</p>
-                    </DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:childrens-application.sin-title')}>
-                      <p>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</p>
-                    </DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:childrens-application.parent-guardian-title')}>
-                      <p>{child.information.isParent ? t('application-full-child:childrens-application.yes') : t('application-full-child:childrens-application.no')}</p>
-                    </DefinitionListItem>
-                  </DefinitionList>
-                )}
-              </CardContent>
-              <CardFooter className="border-t bg-zinc-100">
-                <ButtonLink
-                  id="edit-button"
-                  variant="link"
-                  className="p-0"
-                  routeId="public/application/$id/children/$childId/information"
-                  params={{ ...params, childId: child.id }}
-                  startIcon={completedSections.includes('child-information') ? faPenToSquare : faCirclePlus}
-                  size="lg"
-                >
-                  {child.information === undefined ? t('application-full-child:childrens-application.add-child-information') : t('application-full-child:childrens-application.edit-child-information', { childNumber: index + 1 })}
-                </ButtonLink>
-              </CardFooter>
-            </Card>
+          );
+        })}
+        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+          <CsrfTokenInput />
+          <Button variant="primary" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Add child - Child(ren) application click">
+            {t('application-full-child:childrens-application.add-child')}
+          </Button>
+        </fetcher.Form>
 
-            <Card className="my-2">
-              <CardHeader>
-                <CardTitle>{t('application-full-child:childrens-application.child-dental-insurance-card-title')}</CardTitle>
-                <CardAction>{completedSections.includes('child-dental-insurance') && <StatusTag status="complete" />}</CardAction>
-              </CardHeader>
-              <CardContent>
-                {child.dentalInsurance === undefined ? (
-                  <p>{t('application-full-child:childrens-application.child-dental-insurance-indicate-status')}</p>
-                ) : (
-                  <DefinitionList layout="single-column">
-                    <DefinitionListItem term={t('application-full-child:childrens-application.dental-insurance-title')}>
-                      <p>{child.dentalInsurance.hasDentalInsurance ? t('application-full-child:childrens-application.dental-insurance-yes') : t('application-full-child:childrens-application.dental-insurance-no')}</p>
-                    </DefinitionListItem>
-                  </DefinitionList>
-                )}
-              </CardContent>
-              <CardFooter className="border-t bg-zinc-100">
-                <ButtonLink
-                  id="edit-button"
-                  variant="link"
-                  className="p-0"
-                  routeId="public/application/$id/children/$childId/dental-insurance"
-                  params={{ ...params, childId: child.id }}
-                  startIcon={completedSections.includes('child-dental-insurance') ? faPenToSquare : faCirclePlus}
-                  size="lg"
-                >
-                  {child.dentalInsurance === undefined ? t('application-full-child:childrens-application.add-child-dental-insurance') : t('application-full-child:childrens-application.edit-child-dental-insurance', { childNumber: index + 1 })}
-                </ButtonLink>
-              </CardFooter>
-            </Card>
-
-            <Card className="my-2">
-              <CardHeader>
-                <CardTitle>{t('application-full-child:childrens-application.child-dental-benefits-card-title')}</CardTitle>
-                <CardAction>{completedSections.includes('child-dental-benefits') && <StatusTag status="complete" />}</CardAction>
-              </CardHeader>
-              <CardContent>
-                {child.dentalBenefits === undefined ? (
-                  <p>{t('application-full-child:childrens-application.child-dental-benefits-indicate-status')}</p>
-                ) : (
-                  <DefinitionList layout="single-column">
-                    <DefinitionListItem term={t('application-full-child:childrens-application.dental-benefits-title')}>
-                      {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
-                        <div className="space-y-3">
-                          <p>{t('application-full-child:childrens-application.dental-benefits-yes')}</p>
-                          <ul className="list-disc space-y-1 pl-7">
-                            {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
-                            {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
-                          </ul>
-                        </div>
-                      ) : (
-                        <p>{t('application-full-child:childrens-application.dental-benefits-no')}</p>
-                      )}
-                    </DefinitionListItem>
-                  </DefinitionList>
-                )}
-              </CardContent>
-              <CardFooter className="border-t bg-zinc-100">
-                <ButtonLink
-                  id="edit-button"
-                  variant="link"
-                  className="p-0"
-                  routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits"
-                  params={{ ...params, childId: child.id }}
-                  startIcon={completedSections.includes('child-dental-benefits') ? faPenToSquare : faCirclePlus}
-                  size="lg"
-                >
-                  {child.dentalBenefits === undefined ? t('application-full-child:childrens-application.add-child-dental-benefits') : t('application-full-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })}
-                </ButtonLink>
-              </CardFooter>
-            </Card>
-            <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
-              <CsrfTokenInput />
-              <input type="hidden" name="childId" value={child.id} />
-              <Button
-                id="remove-child"
-                className="my-5"
-                name="_action"
-                value={FORM_ACTION.remove}
-                disabled={isSubmitting}
-                variant="secondary"
-                size="sm"
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Remove child - Child(ren) application click"
-              >
-                {t('application-full-child:childrens-application.remove-child')}
-              </Button>
-            </fetcher.Form>
-          </div>
-        );
-      })}
-      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
-        <CsrfTokenInput />
-        <Button variant="primary" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Add child - Child(ren) application click">
-          {t('application-full-child:childrens-application.add-child')}
-        </Button>
-      </fetcher.Form>
-
-      <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="public/application/$id/full-children/submit" params={params}>
-          {t('application-full-child:childrens-application.submit-btn')}
-        </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-children/parent-or-guardian" params={params}>
-          {t('application-full-child:childrens-application.back-btn')}
-        </NavigationButtonLink>
+        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="public/application/$id/full-children/submit" params={params}>
+            {t('application-full-child:childrens-application.submit-btn')}
+          </NavigationButtonLink>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-children/parent-or-guardian" params={params}>
+            {t('application-full-child:childrens-application.back-btn')}
+          </NavigationButtonLink>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

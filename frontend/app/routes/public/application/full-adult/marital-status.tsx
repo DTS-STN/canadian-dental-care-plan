@@ -11,10 +11,9 @@ import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
-import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
-import { useProgressStepper } from '~/hooks/use-progress-stepper';
 import { pageIds } from '~/page-ids';
+import { ProgressStepper } from '~/routes/public/application/full-adult/progress-stepper';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -47,7 +46,6 @@ export async function loader({ context: { appContainer, session }, request, para
 export default function NewAdultMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('full-adult', 'marital-status');
 
   const sections = [
     {
@@ -62,49 +60,51 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
   const allSectionsCompleted = completedSections.length === sections.length;
 
   return (
-    <div className="max-w-prose space-y-8">
-      <ProgressStepper steps={steps} currentStep={currentStep} />
-      <div className="space-y-4">
-        <p>{t('application:required-label')}</p>
-        <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+    <>
+      <ProgressStepper activeStep="marital-status" className="mb-8" />
+      <div className="max-w-prose space-y-8">
+        <div className="space-y-4">
+          <p>{t('application:required-label')}</p>
+          <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('application-full-adult:marital-status.marital-status')}</CardTitle>
+            <CardAction>{completedSections.includes('marital-status') && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>
+            {state.maritalStatus === undefined ? (
+              <p>{t('application-full-adult:marital-status.select-your-status')}</p>
+            ) : (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('application-full-adult:marital-status.marital-status')}>{state.maritalStatus.name}</DefinitionListItem>
+                {state.partnerInformation && (
+                  <>
+                    <DefinitionListItem term={t('application-full-adult:marital-status.spouse-sin')}>{state.partnerInformation.socialInsuranceNumber}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-adult:marital-status.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-adult:marital-status.consent')}>
+                      {state.partnerInformation.confirm ? t('application-full-adult:marital-status.consent-yes') : t('application-full-adult:marital-status.consent-no')}
+                    </DefinitionListItem>
+                  </>
+                )}
+              </DefinitionList>
+            )}
+          </CardContent>
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={completedSections.includes('marital-status') ? faPenToSquare : faCirclePlus} size="lg">
+              {state.maritalStatus === undefined ? t('application-full-adult:marital-status.add-marital-status') : t('application-full-adult:marital-status.edit-marital-status')}
+            </ButtonLink>
+          </CardFooter>
+        </Card>
+        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-adult/contact-information" params={params}>
+            {t('application-full-adult:marital-status.contact-information')}
+          </NavigationButtonLink>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
+            {t('application-full-adult:marital-status.type-of-application')}
+          </NavigationButtonLink>
+        </div>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('application-full-adult:marital-status.marital-status')}</CardTitle>
-          <CardAction>{completedSections.includes('marital-status') && <StatusTag status="complete" />}</CardAction>
-        </CardHeader>
-        <CardContent>
-          {state.maritalStatus === undefined ? (
-            <p>{t('application-full-adult:marital-status.select-your-status')}</p>
-          ) : (
-            <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-full-adult:marital-status.marital-status')}>{state.maritalStatus.name}</DefinitionListItem>
-              {state.partnerInformation && (
-                <>
-                  <DefinitionListItem term={t('application-full-adult:marital-status.spouse-sin')}>{state.partnerInformation.socialInsuranceNumber}</DefinitionListItem>
-                  <DefinitionListItem term={t('application-full-adult:marital-status.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                  <DefinitionListItem term={t('application-full-adult:marital-status.consent')}>
-                    {state.partnerInformation.confirm ? t('application-full-adult:marital-status.consent-yes') : t('application-full-adult:marital-status.consent-no')}
-                  </DefinitionListItem>
-                </>
-              )}
-            </DefinitionList>
-          )}
-        </CardContent>
-        <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={completedSections.includes('marital-status') ? faPenToSquare : faCirclePlus} size="lg">
-            {state.maritalStatus === undefined ? t('application-full-adult:marital-status.add-marital-status') : t('application-full-adult:marital-status.edit-marital-status')}
-          </ButtonLink>
-        </CardFooter>
-      </Card>
-      <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-adult/contact-information" params={params}>
-          {t('application-full-adult:marital-status.contact-information')}
-        </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
-          {t('application-full-adult:marital-status.type-of-application')}
-        </NavigationButtonLink>
-      </div>
-    </div>
+    </>
   );
 }

@@ -1,4 +1,11 @@
 {
+  "progress-stepper": {
+    "marital-status": "Your marital status",
+    "contact-information": "Your contact information",
+    "dental-insurance": "Your access to dental insurance",
+    "childrens-application": "Your child(ren)'s application",
+    "submit": "Submit"
+  },
   "marital-status": {
     "page-title": "Your marital status",
     "page-heading": "Your marital status",
