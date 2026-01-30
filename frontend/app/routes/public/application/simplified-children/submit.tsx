@@ -160,7 +160,7 @@ export default function RenewChildrenSubmit({ loaderData, params }: Route.Compon
                   {t('application-simplified-child:submit.submit')}
                 </NavigationButton>
                 <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/simplified-children/childrens-application" params={params}>
-                  {t('application-simplified-child:submit.dental-insurance')}
+                  {t('application-simplified-child:submit.childrens-application')}
                 </NavigationButtonLink>
               </div>
             </fetcher.Form>

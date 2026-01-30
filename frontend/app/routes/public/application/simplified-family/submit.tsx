@@ -162,7 +162,7 @@ export default function SimplifiedFamilySubmit({ loaderData, params }: Route.Com
                   {t('application-simplified-family:submit.submit')}
                 </NavigationButton>
                 <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/simplified-family/childrens-application" params={params}>
-                  {t('application-simplified-family:submit.dental-insurance')}
+                  {t('application-simplified-family:submit.childrens-application')}
                 </NavigationButtonLink>
               </div>
             </fetcher.Form>
