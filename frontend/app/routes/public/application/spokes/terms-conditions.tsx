@@ -110,17 +110,30 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
     doNotConsent: 'input-checkbox-do-not-consent',
   });
 
+  const esdcPib = <InlineLink to={t('application-spokes:terms-conditions.links.esdc-pib')} className="external-link" newTabIndicator target="_blank" />;
+  const hcPib = <InlineLink to={t('application-spokes:terms-conditions.links.hc-pib')} className="external-link" newTabIndicator target="_blank" />;
+
   const canadaTermsConditions = <InlineLink to={t('application-spokes:terms-conditions.links.canada-ca-terms-and-conditions')} className="external-link" newTabIndicator target="_blank" />;
+  const contactServiceCanada = <InlineLink to={t('application-spokes:terms-conditions.links.service-canada')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityRequirements = <InlineLink to={t('application-spokes:terms-conditions.links.eligibility-requirements')} className="external-link" newTabIndicator target="_blank" />;
   const fileacomplaint = <InlineLink to={t('application-spokes:terms-conditions.links.file-complaint')} className="external-link" newTabIndicator target="_blank" />;
   const hcaptchaTermsOfService = <InlineLink to={t('application-spokes:terms-conditions.links.hcaptcha')} className="external-link" newTabIndicator target="_blank" />;
   const infosource = <InlineLink to={t('application-spokes:terms-conditions.links.info-source')} className="external-link" newTabIndicator target="_blank" />;
   const microsoftDataPrivacyPolicy = <InlineLink to={t('application-spokes:terms-conditions.links.microsoft-data-privacy-policy')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpPrivacyPolicy = <InlineLink to={t('application-spokes:terms-conditions.links.cdcp-privacy-policy')} className="external-link" newTabIndicator target="_blank" />;
   const cite = <cite />;
 
   return (
     <div className="max-w-prose">
       <div className="space-y-6">
-        <p>{t('application-spokes:terms-conditions.intro-text')}</p>
+        <p className="font-bold">{t('application-spokes:terms-conditions.before-you-begin')}</p>
+        <ul className="list-disc space-y-1 pl-7">
+          <li>
+            <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:terms-conditions.review-confirm" components={{ eligibilityRequirements }} />
+          </li>
+          <li>{t('application-spokes:terms-conditions.resolve-actions')}</li>
+          <li>{t('application-spokes:terms-conditions.review-statements')}</li>
+        </ul>
         <errorSummary.ErrorSummary />
         <Collapsible summary={t('application-spokes:terms-conditions.terms-and-conditions-of-use.summary')}>
           <div className="space-y-6">
@@ -128,17 +141,14 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               <p>
                 <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:terms-conditions.terms-and-conditions-of-use.online-application-legal-terms" components={{ canadaTermsConditions }} />
               </p>
-              <p>{t('application-spokes:terms-conditions.terms-and-conditions-of-use.online-application-access-terms')}</p>
-              <p>{t('application-spokes:terms-conditions.terms-and-conditions-of-use.online-application-usage-terms')}</p>
-              <p>{t('application-spokes:terms-conditions.terms-and-conditions-of-use.online-application-outage')}</p>
-              <p>{t('application-spokes:terms-conditions.terms-and-conditions-of-use.online-application-timeout')}</p>
-              <p>{t('application-spokes:terms-conditions.terms-and-conditions-of-use.terms-rejection-policy')}</p>
               <p>{t('application-spokes:terms-conditions.terms-and-conditions-of-use.esdc-definition-clarification')}</p>
             </div>
             <section className="space-y-4">
               <h2 className="font-lato text-lg font-bold"> {t('application-spokes:terms-conditions.terms-and-conditions-of-use.online-application.heading')}</h2>
               <ul className="list-disc space-y-1 pl-7">
                 <li>{t('application-spokes:terms-conditions.terms-and-conditions-of-use.online-application.self-agreement')}</li>
+                <li>{t('application-spokes:terms-conditions.terms-and-conditions-of-use.online-application.timeout')}</li>
+                <li>{t('application-spokes:terms-conditions.terms-and-conditions-of-use.online-application.incorrect-information')}</li>
                 <li>{t('application-spokes:terms-conditions.terms-and-conditions-of-use.online-application.on-behalf-of-someone-else')}</li>
                 <li>{t('application-spokes:terms-conditions.terms-and-conditions-of-use.online-application.at-your-own-risk')}</li>
                 <li>
@@ -150,7 +160,6 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               </ul>
             </section>
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold">{t('application-spokes:terms-conditions.terms-and-conditions-of-use.changes-to-these-terms-of-use.heading')}</h2>
               <p>{t('application-spokes:terms-conditions.terms-and-conditions-of-use.changes-to-these-terms-of-use.esdc-terms-amendment-policy')}</p>
             </section>
           </div>
@@ -161,7 +170,12 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
             <section className="space-y-4">
               <h2 className="font-lato text-lg font-bold"> {t('application-spokes:terms-conditions.privacy-notice-statement.personal-information.heading')}</h2>
               <p>{t('application-spokes:terms-conditions.privacy-notice-statement.personal-information.service-canada-application-administration')}</p>
+              <p>{t('application-spokes:terms-conditions.privacy-notice-statement.personal-information.service-canada-information-collection')}</p>
+              <p>
+                <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:terms-conditions.privacy-notice-statement.personal-information.participation" components={{ contactServiceCanada }} />
+              </p>
               <p>{t('application-spokes:terms-conditions.privacy-notice-statement.personal-information.policy-analysis')}</p>
+              <p>{t('application-spokes:terms-conditions.privacy-notice-statement.personal-information.digital-communications')}</p>
               <p>
                 <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:terms-conditions.privacy-notice-statement.personal-information.collection-use" components={{ cite }} />
               </p>
@@ -173,14 +187,24 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               <h2 className="font-lato text-lg font-bold"> {t('application-spokes:terms-conditions.privacy-notice-statement.how-we-protect-your-privacy.heading')}</h2>
               <p>{t('application-spokes:terms-conditions.privacy-notice-statement.how-we-protect-your-privacy.personal-information-rights-and-access')}</p>
               <ul className="list-disc space-y-1 pl-7">
-                <li>{t('application-spokes:terms-conditions.privacy-notice-statement.how-we-protect-your-privacy.personal-information-banks.hc-ppu-440')}</li>
-                <li>{t('application-spokes:terms-conditions.privacy-notice-statement.how-we-protect-your-privacy.personal-information-banks.esdc-ppu-712')}</li>
+                <li>
+                  <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:terms-conditions.privacy-notice-statement.how-we-protect-your-privacy.personal-information-banks.hc-ppu-440" components={{ hcPib }} />
+                </li>
+                <li>
+                  <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:terms-conditions.privacy-notice-statement.how-we-protect-your-privacy.personal-information-banks.esdc-ppu-712" components={{ esdcPib }} />
+                </li>
               </ul>
               <p>
                 <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:terms-conditions.privacy-notice-statement.how-we-protect-your-privacy.info-source-access" components={{ infosource }} />
               </p>
               <p>
+                <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:terms-conditions.privacy-notice-statement.how-we-protect-your-privacy.privacy-contact" components={{ contactServiceCanada }} />
+              </p>
+              <p>
                 <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:terms-conditions.privacy-notice-statement.how-we-protect-your-privacy.personal-information-handling-complaint-process" components={{ fileacomplaint }} />
+              </p>
+              <p>
+                <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:terms-conditions.privacy-notice-statement.how-we-protect-your-privacy.privacy-protection" components={{ cdcpPrivacyPolicy }} />
               </p>
             </section>
           </div>
@@ -190,21 +214,19 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
             <section className="space-y-4">
               <h2 className="font-lato text-lg font-bold"> {t('application-spokes:terms-conditions.sharing-your-information.government-of-canada-and-sun-life.heading')}</h2>
               <p>{t('application-spokes:terms-conditions.sharing-your-information.government-of-canada-and-sun-life.share-info')}</p>
+              <p>{t('application-spokes:terms-conditions.sharing-your-information.government-of-canada-and-sun-life.policy-analysis')}</p>
+              <p>{t('application-spokes:terms-conditions.sharing-your-information.government-of-canada-and-sun-life.send-letters')}</p>
               <p>{t('application-spokes:terms-conditions.sharing-your-information.government-of-canada-and-sun-life.disclose-info')}</p>
               <p>{t('application-spokes:terms-conditions.sharing-your-information.government-of-canada-and-sun-life.sun-life-authorization')}</p>
             </section>
             <section className="space-y-4">
               <h2 className="font-lato text-lg font-bold"> {t('application-spokes:terms-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.heading')}</h2>
-              <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:terms-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.enrol-consent" components={{ cite }} />
-              </p>
+              <p>{t('application-spokes:terms-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.enrol-consent')}</p>
               <p>{t('application-spokes:terms-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.considered-minor')}</p>
-              <p>{t('application-spokes:terms-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.analysis')}</p>
             </section>
           </div>
         </Collapsible>
       </div>
-      <p className="my-8">{t('application-spokes:terms-conditions.apply.application-participation')}</p>
       <p className="my-8" id="application-consent">
         {t('application-spokes:terms-conditions.apply.application-consent')}
       </p>
