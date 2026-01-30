@@ -9,16 +9,6 @@
   "confirm-information": "Veuillez confirmer l'exactitude des renseignements figurant à votre dossier.",
   "next": "Suivant",
   "previous": "Précédent",
-  "progress-stepper": {
-    "marital-status": "État civil",
-    "contact-information": "Coordonnées",
-    "dental-insurance": "Accès à une assurance dentaire",
-    "type-of-application": "Type de demande",
-    "personal-information": "Renseignements personnels",
-    "submit": "Soumettre",
-    "parent-or-guardian": "Renseignements sur le parent ou le tuteur légal",
-    "childrens-application": "La demande de votre/vos enfant(s)"
-  },
   "eligibility-requirements": {
     "page-title": "Avant de commencer votre demande",
     "page-heading": "Avant de commencer votre demande",
