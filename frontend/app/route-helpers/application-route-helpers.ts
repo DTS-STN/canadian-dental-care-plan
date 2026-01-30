@@ -13,3 +13,21 @@ export function transformAdobeAnalyticsUrl(url: string | URL) {
   if (!applyRouteRegex.test(urlObj.pathname)) return urlObj;
   return new URL(removePathSegment(urlObj, 2));
 }
+
+/**
+ * Transforms URLs for the "children" spoke routes by removing dynamic path segments to sanitize analytics data.
+ *
+ * @param url The URL string or URL object to transform.
+ * @returns A new URL object with dynamic path segments removed if the URL matches the expected pattern;
+ *          otherwise, returns the original URL object.
+ */
+export function transformChildrenRouteAdobeAnalyticsUrl(url: string | URL) {
+  const urlObj = new URL(url);
+  const protectedApplyRouteRegex = /^\/(en|fr)\/(application|demande)\/.*\/(children|enfants)\//i;
+  if (!protectedApplyRouteRegex.test(urlObj.pathname)) return urlObj;
+  // remove application state id
+  let transformedUrl = removePathSegment(urlObj, 2);
+  // remove application children state id
+  transformedUrl = removePathSegment(transformedUrl, 3);
+  return new URL(transformedUrl);
+}
