@@ -23,8 +23,8 @@ export function transformAdobeAnalyticsUrl(url: string | URL) {
  */
 export function transformChildrenRouteAdobeAnalyticsUrl(url: string | URL) {
   const urlObj = new URL(url);
-  const protectedApplyRouteRegex = /^\/(en|fr)\/(application|demande)\/.*\/(children|enfants)\//i;
-  if (!protectedApplyRouteRegex.test(urlObj.pathname)) return urlObj;
+  const applyRouteRegex = /^\/(en|fr)\/(application|demande)\/.*\/(children|enfants)\//i;
+  if (!applyRouteRegex.test(urlObj.pathname)) return urlObj;
   // remove application state id
   let transformedUrl = removePathSegment(urlObj, 2);
   // remove application children state id
