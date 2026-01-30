@@ -16,10 +16,9 @@ import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
-import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
-import { useProgressStepper } from '~/hooks/use-progress-stepper';
 import { pageIds } from '~/page-ids';
+import { ProgressStepper } from '~/routes/public/application/simplified-adult/progress-stepper';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -97,8 +96,6 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
 
-  const { steps, currentStep } = useProgressStepper('simplified-adult', 'dental-insurance');
-
   const sections = [
     { id: 'dental-insurance', completed: state.dentalInsurance !== undefined }, //
     { id: 'dental-benefits', completed: state.dentalBenefits !== undefined },
@@ -110,7 +107,7 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
     <fetcher.Form method="post" noValidate>
       <CsrfTokenInput />
       <div className="max-w-prose space-y-8">
-        <ProgressStepper steps={steps} currentStep={currentStep} />
+        <ProgressStepper activeStep="dental-insurance" />
         <div className="space-y-4">
           <p>{t('application:required-label')}</p>
           <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>

@@ -1,4 +1,9 @@
 {
+  "progress-stepper": {
+    "contact-information": "Coordonnées",
+    "dental-insurance": "Accès à une assurance dentaire",
+    "submit": "Soumettre"
+  },
   "contact-information": {
     "page-title": "Vos coordonnées",
     "page-heading": "Vos coordonnées",
