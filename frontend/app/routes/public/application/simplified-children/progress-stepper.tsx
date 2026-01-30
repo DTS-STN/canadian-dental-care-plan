@@ -9,10 +9,6 @@ const applicationSimplifiedChildrenSteps = ['parent-or-guardian', 'childrens-app
 type ApplicationSimplifiedChildrenSteps = (typeof applicationSimplifiedChildrenSteps)[number];
 
 type ProgressStepperProps = OmitStrict<ComponentProps<typeof ReusableProgressStepper>, 'activeStep' | 'steps'> & {
-  /**
-   * The active step of the application.
-   * Use 'confirmation' to indicate that all steps are completed.
-   */
   activeStep: ApplicationSimplifiedChildrenSteps;
 };
 
