@@ -13,6 +13,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { DebugPayload } from '~/components/debug-payload';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -50,12 +51,20 @@ export async function loader({ context: { appContainer, session }, request, para
     children.push(`${child.information.firstName} ${child.information.lastName}`);
   }
 
+  const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
+
+  const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
+  const benefitApplicationDtoMapper = appContainer.get(TYPES.BenefitApplicationDtoMapper);
+  const benefitApplicationStateMapper = appContainer.get(TYPES.HubSpokeBenefitApplicationStateMapper);
+  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplicationFamilyStateToBenefitApplicationDto(state));
+
   return {
     state: {
       applicantName: `${state.applicantInformation.firstName} ${state.applicantInformation.lastName}`,
       children,
     },
     meta,
+    payload,
   };
 }
 
@@ -92,7 +101,7 @@ export async function action({ context: { appContainer, session }, request, para
 }
 
 export default function NewFamilySubmit({ loaderData, params }: Route.ComponentProps) {
-  const { state } = loaderData;
+  const { state, payload } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const { steps, currentStep } = useProgressStepper('full-family', 'submit');
 
@@ -108,61 +117,68 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
   const eligibilityLink = <InlineLink to={t('application-full-family:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
-    <div className="max-w-prose space-y-8">
-      <errorSummary.ErrorSummary />
-      <ProgressStepper steps={steps} currentStep={currentStep} />
-      <div className="space-y-8">
-        <section className="space-y-4">
-          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.overview')}</h2>
-          <div>
-            <p>{t('application-full-family:submit.you-are-submitting')}</p>
-            <ul className="list-disc space-y-1 pl-7">
-              <li>{state.applicantName}</li>
-              {state.children.map((child, index) => (
-                <li key={index}>{child}</li>
-              ))}
-            </ul>
-          </div>
-        </section>
-        <section className="space-y-4">
-          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.review-your-application')}</h2>
-          <p>{t('application-full-family:submit.please-review')}</p>
-          <ButtonLink variant="primary" routeId="public/application/$id/full-family/marital-status" params={params}>
-            {t('application-full-family:submit.review-application')}
-          </ButtonLink>
-        </section>
-        <section className="space-y-4">
-          <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.submit-your-application')}</h2>
-          <p>{t('application-full-family:submit.by-submitting')}</p>
-          <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey="application-full-family:submit.review-eligibility-criteria" components={{ eligibilityLink }} />
-          </p>
-          <fetcher.Form method="post" noValidate>
-            <CsrfTokenInput />
-            <div className="space-y-2">
-              <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
-                {t('application-full-family:submit.info-is-correct')}
-              </InputCheckbox>
-              <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
-                {t('application-full-family:submit.i-understand')}
-              </InputCheckbox>
+    <>
+      <div className="max-w-prose space-y-8">
+        <errorSummary.ErrorSummary />
+        <ProgressStepper steps={steps} currentStep={currentStep} />
+        <div className="space-y-8">
+          <section className="space-y-4">
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.overview')}</h2>
+            <div>
+              <p>{t('application-full-family:submit.you-are-submitting')}</p>
+              <ul className="list-disc space-y-1 pl-7">
+                <li>{state.applicantName}</li>
+                {state.children.map((child, index) => (
+                  <li key={index}>{child}</li>
+                ))}
+              </ul>
             </div>
-            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
-                {t('application-full-family:submit.submit')}
-              </NavigationButton>
-              <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-family/childrens-application" params={params}>
-                {t('application-full-family:submit.children-application')}
-              </NavigationButtonLink>
-            </div>
-          </fetcher.Form>
-        </section>
+          </section>
+          <section className="space-y-4">
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.review-your-application')}</h2>
+            <p>{t('application-full-family:submit.please-review')}</p>
+            <ButtonLink variant="primary" routeId="public/application/$id/full-family/marital-status" params={params}>
+              {t('application-full-family:submit.review-application')}
+            </ButtonLink>
+          </section>
+          <section className="space-y-4">
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.submit-your-application')}</h2>
+            <p>{t('application-full-family:submit.by-submitting')}</p>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey="application-full-family:submit.review-eligibility-criteria" components={{ eligibilityLink }} />
+            </p>
+            <fetcher.Form method="post" noValidate>
+              <CsrfTokenInput />
+              <div className="space-y-2">
+                <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
+                  {t('application-full-family:submit.info-is-correct')}
+                </InputCheckbox>
+                <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
+                  {t('application-full-family:submit.i-understand')}
+                </InputCheckbox>
+              </div>
+              <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+                <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
+                  {t('application-full-family:submit.submit')}
+                </NavigationButton>
+                <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-family/childrens-application" params={params}>
+                  {t('application-full-family:submit.children-application')}
+                </NavigationButtonLink>
+              </div>
+            </fetcher.Form>
+          </section>
+        </div>
+        <div className="mt-8">
+          <InlineLink routeId="public/application/$id/full-family/exit-application" params={params}>
+            {t('application-full-family:submit.exit-application')}
+          </InlineLink>
+        </div>
       </div>
-      <div className="mt-8">
-        <InlineLink routeId="public/application/$id/full-family/exit-application" params={params}>
-          {t('application-full-family:submit.exit-application')}
-        </InlineLink>
-      </div>
-    </div>
+      {payload && (
+        <div className="mt-8">
+          <DebugPayload data={payload} enableCopy />
+        </div>
+      )}
+    </>
   );
 }
