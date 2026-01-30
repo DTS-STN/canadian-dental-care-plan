@@ -76,84 +76,86 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
   const allSectionsCompleted = completedSections.length === sections.length;
 
   return (
-    <div className="max-w-prose space-y-8">
-      <ProgressStepper activeStep="dental-insurance" />
-      <div className="space-y-4">
-        <p>{t('application:required-label')}</p>
-        <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
-      </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('application-full-adult:dental-insurance.access-to-dental-insurance')}</CardTitle>
-          <CardAction>{completedSections.includes('dental-insurance') && <StatusTag status="complete" />}</CardAction>
-        </CardHeader>
-        <CardContent>
-          {state.dentalInsurance?.dentalInsuranceEligibilityConfirmation === true ? (
-            <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-full-adult:dental-insurance.access-to-dental-insurance-or-coverage')}>
-                {state.dentalInsurance.hasDentalInsurance ? t('application-full-adult:dental-insurance.dental-insurance-yes') : t('application-full-adult:dental-insurance.dental-insurance-no')}
-              </DefinitionListItem>
-            </DefinitionList>
-          ) : (
-            <p>{t('application-full-adult:dental-insurance.dental-insurance-indicate-status')}</p>
-          )}
-        </CardContent>
-        <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={completedSections.includes('dental-insurance') ? faPenToSquare : faCirclePlus} size="lg">
-            {state.dentalInsurance === undefined ? t('application-full-adult:dental-insurance.add-answer') : t('application-full-adult:dental-insurance.edit-access-to-dental-insurance')}
-          </ButtonLink>
-        </CardFooter>
-      </Card>
+    <>
+      <ProgressStepper activeStep="dental-insurance" className="mb-8" />
+      <div className="max-w-prose space-y-8">
+        <div className="space-y-4">
+          <p>{t('application:required-label')}</p>
+          <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('application-full-adult:dental-insurance.access-to-dental-insurance')}</CardTitle>
+            <CardAction>{completedSections.includes('dental-insurance') && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>
+            {state.dentalInsurance?.dentalInsuranceEligibilityConfirmation === true ? (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('application-full-adult:dental-insurance.access-to-dental-insurance-or-coverage')}>
+                  {state.dentalInsurance.hasDentalInsurance ? t('application-full-adult:dental-insurance.dental-insurance-yes') : t('application-full-adult:dental-insurance.dental-insurance-no')}
+                </DefinitionListItem>
+              </DefinitionList>
+            ) : (
+              <p>{t('application-full-adult:dental-insurance.dental-insurance-indicate-status')}</p>
+            )}
+          </CardContent>
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={completedSections.includes('dental-insurance') ? faPenToSquare : faCirclePlus} size="lg">
+              {state.dentalInsurance === undefined ? t('application-full-adult:dental-insurance.add-answer') : t('application-full-adult:dental-insurance.edit-access-to-dental-insurance')}
+            </ButtonLink>
+          </CardFooter>
+        </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('application-full-adult:dental-insurance.other-benefits')}</CardTitle>
-          <CardAction>{completedSections.includes('dental-benefits') && <StatusTag status="complete" />}</CardAction>
-        </CardHeader>
-        <CardContent>
-          {state.dentalBenefits ? (
-            <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-full-adult:dental-insurance.access-to-government-benefits')}>
-                {state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
-                  <div className="space-y-3">
-                    <p>{t('application-full-adult:dental-insurance.access-to-government-benefits-yes')}</p>
-                    <ul className="list-disc space-y-1 pl-7">
-                      {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
-                      {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
-                    </ul>
-                  </div>
-                ) : (
-                  <p>{t('application-full-adult:dental-insurance.access-to-government-benefits-no')}</p>
-                )}
-              </DefinitionListItem>
-            </DefinitionList>
-          ) : (
-            <p>{t('application-full-adult:dental-insurance.dental-benefits-indicate-status')}</p>
-          )}
-        </CardContent>
-        <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink
-            id="edit-button"
-            variant="link"
-            className="p-0"
-            routeId="public/application/$id/federal-provincial-territorial-benefits"
-            params={params}
-            startIcon={completedSections.includes('dental-benefits') ? faPenToSquare : faCirclePlus}
-            size="lg"
-          >
-            {state.dentalBenefits === undefined ? t('application-full-adult:dental-insurance.add-answer') : t('application-full-adult:dental-insurance.edit-access-to-government-benefits')}
-          </ButtonLink>
-        </CardFooter>
-      </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('application-full-adult:dental-insurance.other-benefits')}</CardTitle>
+            <CardAction>{completedSections.includes('dental-benefits') && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>
+            {state.dentalBenefits ? (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('application-full-adult:dental-insurance.access-to-government-benefits')}>
+                  {state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
+                    <div className="space-y-3">
+                      <p>{t('application-full-adult:dental-insurance.access-to-government-benefits-yes')}</p>
+                      <ul className="list-disc space-y-1 pl-7">
+                        {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
+                        {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
+                      </ul>
+                    </div>
+                  ) : (
+                    <p>{t('application-full-adult:dental-insurance.access-to-government-benefits-no')}</p>
+                  )}
+                </DefinitionListItem>
+              </DefinitionList>
+            ) : (
+              <p>{t('application-full-adult:dental-insurance.dental-benefits-indicate-status')}</p>
+            )}
+          </CardContent>
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink
+              id="edit-button"
+              variant="link"
+              className="p-0"
+              routeId="public/application/$id/federal-provincial-territorial-benefits"
+              params={params}
+              startIcon={completedSections.includes('dental-benefits') ? faPenToSquare : faCirclePlus}
+              size="lg"
+            >
+              {state.dentalBenefits === undefined ? t('application-full-adult:dental-insurance.add-answer') : t('application-full-adult:dental-insurance.edit-access-to-government-benefits')}
+            </ButtonLink>
+          </CardFooter>
+        </Card>
 
-      <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-adult/submit" params={params}>
-          {t('application-full-adult:dental-insurance.submit')}
-        </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-adult/marital-status" params={params}>
-          {t('application-full-adult:dental-insurance.contact-information')}
-        </NavigationButtonLink>
+        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-adult/submit" params={params}>
+            {t('application-full-adult:dental-insurance.submit')}
+          </NavigationButtonLink>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-adult/marital-status" params={params}>
+            {t('application-full-adult:dental-insurance.contact-information')}
+          </NavigationButtonLink>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

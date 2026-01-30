@@ -106,8 +106,8 @@ export default function RenewFamilyDentalInsurance({ loaderData, params }: Route
   return (
     <fetcher.Form method="post" noValidate>
       <CsrfTokenInput />
+      <ProgressStepper activeStep="dental-insurance" className="mb-8" />
       <div className="max-w-prose space-y-8">
-        <ProgressStepper activeStep="dental-insurance" />
         <div className="space-y-4">
           <p>{t('application:required-label')}</p>
           <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>

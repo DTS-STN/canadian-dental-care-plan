@@ -88,8 +88,9 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
   const allSectionsCompleted = completedSections.length === sections.length;
 
   return (
-    <div className="max-w-prose space-y-8">
-      <ProgressStepper activeStep="contact-information" />
+    <>
+      <ProgressStepper activeStep="contact-information" className="mb-8" />
+      <div className="max-w-prose space-y-8">
       <div className="space-y-4">
         <p>{t('application:required-label')}</p>
         <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
@@ -196,6 +197,6 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
           {t('application-full-family:contact-information.prev-btn')}
         </NavigationButtonLink>
       </div>
-    </div>
+    </>
   );
 }

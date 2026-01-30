@@ -85,112 +85,114 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
   const allSectionsCompleted = completedSections.length === sections.length;
 
   return (
-    <div className="max-w-prose space-y-8">
-      <ProgressStepper activeStep="contact-information" />
-      <div className="space-y-4">
-        <p>{t('application:required-label')}</p>
-        <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+    <>
+      <ProgressStepper activeStep="contact-information" className="mb-8" />
+      <div className="max-w-prose space-y-8">
+        <div className="space-y-4">
+          <p>{t('application:required-label')}</p>
+          <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('application-full-adult:contact-information.phone-number')}</CardTitle>
+            <CardAction>{completedSections.includes('phone-number') && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>
+            {state.phoneNumber?.hasChanged ? (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('application-full-adult:contact-information.phone-number')}>{state.phoneNumber.value.primary}</DefinitionListItem>
+                {state.phoneNumber.value.alternate && <DefinitionListItem term={t('application-full-adult:contact-information.alt-phone-number')}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
+              </DefinitionList>
+            ) : (
+              <p>{t('application-full-adult:contact-information.phone-number-help')}</p>
+            )}
+          </CardContent>
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={completedSections.includes('phone-number') ? faPenToSquare : faCirclePlus} size="lg">
+              {completedSections.includes('phone-number') ? t('application-full-adult:contact-information.edit-phone-number') : t('application-full-adult:contact-information.add-phone-number')}
+            </ButtonLink>
+          </CardFooter>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('application-full-adult:contact-information.mailing-and-home-address')}</CardTitle>
+            <CardAction>{completedSections.includes('address') && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>
+            {mailingAddressInfo.address === undefined && homeAddressInfo.address === undefined ? (
+              <p>{t('application-full-adult:contact-information.address-help')}</p>
+            ) : (
+              <DefinitionList layout="single-column">
+                {mailingAddressInfo.address !== undefined && (
+                  <DefinitionListItem term={t('application-full-adult:contact-information.mailing-address')}>
+                    <Address
+                      address={{
+                        address: mailingAddressInfo.address,
+                        city: mailingAddressInfo.city ?? '',
+                        provinceState: mailingAddressInfo.province,
+                        postalZipCode: mailingAddressInfo.postalCode,
+                        country: mailingAddressInfo.country ?? '',
+                      }}
+                    />
+                  </DefinitionListItem>
+                )}
+                {homeAddressInfo.address !== undefined && (
+                  <DefinitionListItem term={t('application-full-adult:contact-information.home-address')}>
+                    <Address
+                      address={{
+                        address: homeAddressInfo.address,
+                        city: homeAddressInfo.city ?? '',
+                        provinceState: homeAddressInfo.province,
+                        postalZipCode: homeAddressInfo.postalCode,
+                        country: homeAddressInfo.country ?? '',
+                      }}
+                    />
+                  </DefinitionListItem>
+                )}
+              </DefinitionList>
+            )}
+          </CardContent>
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus} size="lg">
+              {completedSections.includes('address') ? t('application-full-adult:contact-information.edit-address') : t('application-full-adult:contact-information.add-address')}
+            </ButtonLink>
+          </CardFooter>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('application-full-adult:contact-information.communication-preferences')}</CardTitle>
+            <CardAction>{completedSections.includes('communication-preferences') && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>
+            {state.communicationPreferences?.hasChanged ? (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('application-full-adult:contact-information.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
+                <DefinitionListItem term={t('application-full-adult:contact-information.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
+                <DefinitionListItem term={t('application-full-adult:contact-information.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
+                {state.email && <DefinitionListItem term={t('application-full-adult:contact-information.email')}>{state.email}</DefinitionListItem>}
+              </DefinitionList>
+            ) : (
+              <p>{t('application-full-adult:contact-information.communication-preferences-help')}</p>
+            )}
+          </CardContent>
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/communication-preferences" params={params} startIcon={completedSections.includes('communication-preferences') ? faPenToSquare : faCirclePlus} size="lg">
+              {completedSections.includes('communication-preferences') ? t('application-full-adult:contact-information.edit-communication-preferences') : t('application-full-adult:contact-information.add-communication-preferences')}
+            </ButtonLink>
+          </CardFooter>
+        </Card>
+
+        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-adult/dental-insurance" params={params}>
+            {t('application-full-adult:contact-information.next-btn')}
+          </NavigationButtonLink>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-adult/marital-status" params={params}>
+            {t('application-full-adult:contact-information.prev-btn')}
+          </NavigationButtonLink>
+        </div>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('application-full-adult:contact-information.phone-number')}</CardTitle>
-          <CardAction>{completedSections.includes('phone-number') && <StatusTag status="complete" />}</CardAction>
-        </CardHeader>
-        <CardContent>
-          {state.phoneNumber?.hasChanged ? (
-            <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-full-adult:contact-information.phone-number')}>{state.phoneNumber.value.primary}</DefinitionListItem>
-              {state.phoneNumber.value.alternate && <DefinitionListItem term={t('application-full-adult:contact-information.alt-phone-number')}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
-            </DefinitionList>
-          ) : (
-            <p>{t('application-full-adult:contact-information.phone-number-help')}</p>
-          )}
-        </CardContent>
-        <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={completedSections.includes('phone-number') ? faPenToSquare : faCirclePlus} size="lg">
-            {completedSections.includes('phone-number') ? t('application-full-adult:contact-information.edit-phone-number') : t('application-full-adult:contact-information.add-phone-number')}
-          </ButtonLink>
-        </CardFooter>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('application-full-adult:contact-information.mailing-and-home-address')}</CardTitle>
-          <CardAction>{completedSections.includes('address') && <StatusTag status="complete" />}</CardAction>
-        </CardHeader>
-        <CardContent>
-          {mailingAddressInfo.address === undefined && homeAddressInfo.address === undefined ? (
-            <p>{t('application-full-adult:contact-information.address-help')}</p>
-          ) : (
-            <DefinitionList layout="single-column">
-              {mailingAddressInfo.address !== undefined && (
-                <DefinitionListItem term={t('application-full-adult:contact-information.mailing-address')}>
-                  <Address
-                    address={{
-                      address: mailingAddressInfo.address,
-                      city: mailingAddressInfo.city ?? '',
-                      provinceState: mailingAddressInfo.province,
-                      postalZipCode: mailingAddressInfo.postalCode,
-                      country: mailingAddressInfo.country ?? '',
-                    }}
-                  />
-                </DefinitionListItem>
-              )}
-              {homeAddressInfo.address !== undefined && (
-                <DefinitionListItem term={t('application-full-adult:contact-information.home-address')}>
-                  <Address
-                    address={{
-                      address: homeAddressInfo.address,
-                      city: homeAddressInfo.city ?? '',
-                      provinceState: homeAddressInfo.province,
-                      postalZipCode: homeAddressInfo.postalCode,
-                      country: homeAddressInfo.country ?? '',
-                    }}
-                  />
-                </DefinitionListItem>
-              )}
-            </DefinitionList>
-          )}
-        </CardContent>
-        <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus} size="lg">
-            {completedSections.includes('address') ? t('application-full-adult:contact-information.edit-address') : t('application-full-adult:contact-information.add-address')}
-          </ButtonLink>
-        </CardFooter>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('application-full-adult:contact-information.communication-preferences')}</CardTitle>
-          <CardAction>{completedSections.includes('communication-preferences') && <StatusTag status="complete" />}</CardAction>
-        </CardHeader>
-        <CardContent>
-          {state.communicationPreferences?.hasChanged ? (
-            <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-full-adult:contact-information.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
-              <DefinitionListItem term={t('application-full-adult:contact-information.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
-              <DefinitionListItem term={t('application-full-adult:contact-information.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
-              {state.email && <DefinitionListItem term={t('application-full-adult:contact-information.email')}>{state.email}</DefinitionListItem>}
-            </DefinitionList>
-          ) : (
-            <p>{t('application-full-adult:contact-information.communication-preferences-help')}</p>
-          )}
-        </CardContent>
-        <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/communication-preferences" params={params} startIcon={completedSections.includes('communication-preferences') ? faPenToSquare : faCirclePlus} size="lg">
-            {completedSections.includes('communication-preferences') ? t('application-full-adult:contact-information.edit-communication-preferences') : t('application-full-adult:contact-information.add-communication-preferences')}
-          </ButtonLink>
-        </CardFooter>
-      </Card>
-
-      <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-adult/dental-insurance" params={params}>
-          {t('application-full-adult:contact-information.next-btn')}
-        </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-adult/marital-status" params={params}>
-          {t('application-full-adult:contact-information.prev-btn')}
-        </NavigationButtonLink>
-      </div>
-    </div>
+    </>
   );
 }

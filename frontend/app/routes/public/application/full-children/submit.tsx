@@ -115,9 +115,9 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
 
   return (
     <>
+      <ProgressStepper activeStep="submit" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <errorSummary.ErrorSummary />
-        <ProgressStepper activeStep="submit" />
         <div className="space-y-8">
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-child:submit.overview')}</h2>

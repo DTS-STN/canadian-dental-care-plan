@@ -149,8 +149,8 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
   return (
     <fetcher.Form method="post" noValidate>
       <CsrfTokenInput />
+      <ProgressStepper activeStep="contact-information" className="mb-8" />
       <div className="max-w-prose space-y-8">
-        <ProgressStepper activeStep="contact-information" />
         <div className="space-y-4">
           <p>{t('application:confirm-information')}</p>
           <p>{t('application:required-label')}</p>
