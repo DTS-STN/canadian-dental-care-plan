@@ -20,11 +20,10 @@ import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
-import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
 import { useCurrentLanguage } from '~/hooks';
-import { useProgressStepper } from '~/hooks/use-progress-stepper';
 import { pageIds } from '~/page-ids';
+import { ProgressStepper } from '~/routes/public/application/simplified-children/progress-stepper';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -154,7 +153,6 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
   const { currentLanguage } = useCurrentLanguage();
   const { state } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('simplified-children', 'childrens-application');
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -175,7 +173,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
 
   return (
     <div className="max-w-prose space-y-8">
-      <ProgressStepper steps={steps} currentStep={currentStep} />
+      <ProgressStepper activeStep="childrens-application" />
       {state.children.map((child, index) => {
         const childName = `${child.information?.firstName} ${child.information?.lastName}`;
         const dateOfBirth = child.information?.dateOfBirth ? toLocaleDateString(parseDateString(child.information.dateOfBirth), currentLanguage) : '';

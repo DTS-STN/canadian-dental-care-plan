@@ -1,4 +1,9 @@
 {
+  "progress-stepper": {
+    "parent-or-guardian": "Parent or legal guardian information",
+    "childrens-application": "Your child(ren)'s application",
+    "submit": "Submit"
+  },
   "parent-or-guardian": {
     "page-title": "Parent or legal guardian information",
     "page-heading": "Parent or legal guardian information",
