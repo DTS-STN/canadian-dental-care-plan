@@ -13,10 +13,9 @@ import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
-import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
-import { useProgressStepper } from '~/hooks/use-progress-stepper';
 import { pageIds } from '~/page-ids';
+import { ProgressStepper } from '~/routes/public/application/full-adult/progress-stepper';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -76,7 +75,6 @@ export async function loader({ context: { appContainer, session }, request, para
 export default function NewAdultContactInformation({ loaderData, params }: Route.ComponentProps) {
   const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('full-adult', 'contact-information');
 
   const sections = [
     { id: 'phone-number', completed: state.phoneNumber?.hasChanged === true },
@@ -88,7 +86,7 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
 
   return (
     <div className="max-w-prose space-y-8">
-      <ProgressStepper steps={steps} currentStep={currentStep} />
+      <ProgressStepper activeStep="contact-information" />
       <div className="space-y-4">
         <p>{t('application:required-label')}</p>
         <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
