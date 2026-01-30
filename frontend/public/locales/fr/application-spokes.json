@@ -90,8 +90,8 @@
         "heading": "Droits applicables et comment communiquer avec nous",
         "personal-information-rights-and-access": "Tout le monde a droit à la protection de ses renseignements personnels, à l'accès à ceux-ci et, s'il y a lieu, à leur correction. Ils sont conservés dans les fichiers de renseignements personnels (FRP) suivants\u00a0:",
         "personal-information-banks": {
-          "esdc-ppu-712": "<esdcPib>Le FRP du RCSD de SC</esdcPib> (HC PPU 440)",
-          "hc-ppu-440": "<hcPib>FRP du RCSD d'EDSC</hcPib> (ESDC PPU 712)"
+          "esdc-ppu-712": "<hcPib>FRP du RCSD d'EDSC</hcPib> (ESDC PPU 712)",
+          "hc-ppu-440": "<esdcPib>Le FRP du RCSD de SC</esdcPib> (HC PPU 440)"
         },
         "info-source-access": "Vous pouvez apprendre comment accéder à cette information dans la publication du gouvernement intitulée Info Source. Vous pouvez également accéder à Info Source en ligne dans n'importe quel Centre Service Canada.",
         "privacy-contact": "Pour toute question relative à la protection des renseignements personnels concernant une demande, <contactServiceCanada>contactez Service Canada</contactServiceCanada> en composant le 1-833-537-4342.",
