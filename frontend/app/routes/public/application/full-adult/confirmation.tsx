@@ -1,7 +1,6 @@
 import { redirect, useFetcher } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
-import { z } from 'zod';
 
 import type { Route } from './+types/confirmation';
 
@@ -26,8 +25,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
-
-export const applyIdParamSchema = z.uuid();
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-full-adult', 'application', 'gcweb'),
