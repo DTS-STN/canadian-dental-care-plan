@@ -29,6 +29,7 @@ import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
+import { transformChildrenRouteAdobeAnalyticsUrl } from '~/route-helpers/application-route-helpers';
 import { isValidClientNumberRenewal, renewalCodeInputPatternFormat } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -47,6 +48,7 @@ const YES_NO_OPTION = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.childInformation,
+  transformAdobeAnalyticsUrl: transformChildrenRouteAdobeAnalyticsUrl,
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {

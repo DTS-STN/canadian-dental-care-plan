@@ -20,6 +20,7 @@ import { InputCheckbox } from '~/components/input-checkbox';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
+import { transformChildrenRouteAdobeAnalyticsUrl } from '~/route-helpers/application-route-helpers';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -38,6 +39,7 @@ export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.childDentalInsurance,
   pageTitleI18nKey: 'application-spokes:children.dental-insurance.title',
+  transformAdobeAnalyticsUrl: transformChildrenRouteAdobeAnalyticsUrl,
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {

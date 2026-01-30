@@ -14,6 +14,7 @@ import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
+import { transformChildrenRouteAdobeAnalyticsUrl } from '~/route-helpers/application-route-helpers';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -23,6 +24,7 @@ export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.childParentOrGuardian,
   pageTitleI18nKey: 'application-spokes:children.parent-or-guardian.page-title',
+  transformAdobeAnalyticsUrl: transformChildrenRouteAdobeAnalyticsUrl,
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
