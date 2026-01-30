@@ -3,12 +3,12 @@ import { useMemo } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { Stepper } from '~/components/stepper';
+import { ProgressStepper as ReusableProgressStepper } from '~/components/progress-stepper';
 
 const applicationFullChildSteps = ['parent-or-guardian', 'childrens-application', 'submit'] as const;
 type ApplicationFullChildSteps = (typeof applicationFullChildSteps)[number];
 
-type ProgressStepperProps = OmitStrict<ComponentProps<typeof Stepper>, 'activeStep' | 'steps'> & {
+type ProgressStepperProps = OmitStrict<ComponentProps<typeof ReusableProgressStepper>, 'activeStep' | 'steps'> & {
   /**
    * The active step of the application.
    */
@@ -17,12 +17,6 @@ type ProgressStepperProps = OmitStrict<ComponentProps<typeof Stepper>, 'activeSt
 
 export function ProgressStepper({ activeStep, ...props }: ProgressStepperProps): JSX.Element {
   const { t } = useTranslation(['application-full-child']);
-
-  const activeStepIndex = applicationFullChildSteps.indexOf(activeStep);
-
-  // We pass -1 to the Stepper component to indicate that all steps are completed.
-  // Otherwise, we add 1 to the index because the Stepper component uses 1-based indexing.
-  const resolvedActiveStepIndex = activeStepIndex === -1 ? activeStepIndex : activeStepIndex + 1;
 
   const steps = useMemo(
     function () {
@@ -34,5 +28,5 @@ export function ProgressStepper({ activeStep, ...props }: ProgressStepperProps):
     [t],
   );
 
-  return <Stepper steps={steps} activeStep={resolvedActiveStepIndex} {...props} />;
+  return <ReusableProgressStepper steps={steps} activeStep={activeStep} {...props} />;
 }
