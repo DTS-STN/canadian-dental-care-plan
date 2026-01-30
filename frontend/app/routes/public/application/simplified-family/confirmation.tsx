@@ -18,9 +18,7 @@ import { DefinitionList, DefinitionListItem } from '~/components/definition-list
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { Eligibility } from '~/components/eligibility';
 import { InlineLink } from '~/components/inline-link';
-import { ProgressStepper } from '~/components/progress-stepper';
 import { useCurrentLanguage } from '~/hooks';
-import { useProgressStepper } from '~/hooks/use-progress-stepper';
 import { pageIds } from '~/page-ids';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
@@ -207,13 +205,10 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('application-simplified-family:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
-  const { steps } = useProgressStepper('simplified-family', 'submit');
   const { currentLanguage } = useCurrentLanguage();
 
   return (
     <div className="max-w-prose space-y-10">
-      <ProgressStepper steps={steps} currentStep={5} />
-
       <section className="space-y-6">
         <h3 className="font-lato text-2xl font-bold">{t('confirm.your-eligibility')}</h3>
         <DefinitionList border>

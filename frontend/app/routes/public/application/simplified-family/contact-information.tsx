@@ -18,10 +18,9 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { LoadingButton } from '~/components/loading-button';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
-import { ProgressStepper } from '~/components/progress-stepper';
 import { StatusTag } from '~/components/status-tag';
-import { useProgressStepper } from '~/hooks/use-progress-stepper';
 import { pageIds } from '~/page-ids';
+import { ProgressStepper } from '~/routes/public/application/simplified-family/progress-stepper';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -136,7 +135,6 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function RenewFamilyContactInformation({ loaderData, params }: Route.ComponentProps) {
   const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { steps, currentStep } = useProgressStepper('simplified-family', 'contact-information');
 
   const sections = [
     { id: 'phone-number', completed: state.phoneNumber !== undefined },
@@ -152,7 +150,7 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
     <fetcher.Form method="post" noValidate>
       <CsrfTokenInput />
       <div className="max-w-prose space-y-8">
-        <ProgressStepper steps={steps} currentStep={currentStep} />
+        <ProgressStepper activeStep="contact-information" />
         <div className="space-y-4">
           <p>{t('application:confirm-information')}</p>
           <p>{t('application:required-label')}</p>
