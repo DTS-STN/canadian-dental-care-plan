@@ -15,6 +15,8 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
         TermsAndConditionsIndicator: boolean;
         PrivacyStatementIndicator: boolean;
         SharingConsentIndicator: boolean;
+        EligibilityAttestationIndicator: boolean;
+        AccuracyConfirmationIndicator: boolean;
         InsurancePlan?: {
           InsurancePlanIdentification?: {
             IdentificationID?: string;

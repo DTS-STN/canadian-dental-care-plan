@@ -118,6 +118,8 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
             PrivacyStatementIndicator: termsAndConditions.acknowledgePrivacy,
             TermsAndConditionsIndicator: termsAndConditions.acknowledgeTerms,
             SharingConsentIndicator: termsAndConditions.shareData,
+            EligibilityAttestationIndicator: true,
+            AccuracyConfirmationIndicator: true,
             ApplicantEmailVerifiedIndicator: communicationPreferences.emailVerified,
             InsurancePlan: this.toInsurancePlan(dentalBenefits),
           },
