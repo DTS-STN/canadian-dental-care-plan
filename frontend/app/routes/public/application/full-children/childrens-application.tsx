@@ -242,7 +242,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                     startIcon={completedSections.includes('child-dental-insurance') ? faPenToSquare : faCirclePlus}
                     size="lg"
                   >
-                    {child.dentalInsurance === undefined ? t('application-full-child:childrens-application.add-child-dental-insurance') : t('application-full-child:childrens-application.edit-child-dental-insurance', { childNumber: index + 1 })}
+                    {child.dentalInsurance === undefined ? t('application-full-child:childrens-application.add-answer') : t('application-full-child:childrens-application.edit-child-dental-insurance', { childNumber: index + 1 })}
                   </ButtonLink>
                 </CardFooter>
               </Card>
@@ -283,7 +283,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                     startIcon={completedSections.includes('child-dental-benefits') ? faPenToSquare : faCirclePlus}
                     size="lg"
                   >
-                    {child.dentalBenefits === undefined ? t('application-full-child:childrens-application.add-child-dental-benefits') : t('application-full-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })}
+                    {child.dentalBenefits === undefined ? t('application-full-child:childrens-application.add-answer') : t('application-full-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })}
                   </ButtonLink>
                 </CardFooter>
               </Card>
