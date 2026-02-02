@@ -342,19 +342,17 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
                 <div>
                   <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-full-child:confirm.page-sub-title', { child: child.firstName })}</h3>
                   <DefinitionList border>
-                    <DefinitionListItem term={t('application-full-child:confirm.full-name-title')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:confirm.dob-title')}>{dateOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:confirm.sin-title')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-child:confirm.full-name')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-child:confirm.dob')}>{dateOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-child:confirm.sin')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
                     <DefinitionListItem term={t('application-full-child:confirm.is-parent')}>{child.isParent ? t('application-full-child:confirm.yes') : t('application-full-child:confirm.no')}</DefinitionListItem>
                   </DefinitionList>
                 </div>
                 <div>
                   <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-full-child:confirm.dental-title', { child: child.firstName })}</h3>
                   <DefinitionList border>
-                    <DefinitionListItem term={t('application-full-child:confirm.dental-insurance-title')}>
-                      {child.dentalInsurance.accessToDentalInsurance ? t('application-full-child:confirm.yes') : t('application-full-child:confirm.no')}
-                    </DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:confirm.dental-benefit-title')}>
+                    <DefinitionListItem term={t('application-full-child:confirm.dental-private')}>{child.dentalInsurance.accessToDentalInsurance ? t('application-full-child:confirm.yes') : t('application-full-child:confirm.no')}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-child:confirm.dental-public')}>
                       {child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access ? (
                         <div className="space-y-3">
                           <p>{t('application-full-child:confirm.yes')}</p>
