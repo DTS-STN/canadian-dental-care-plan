@@ -222,7 +222,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
           ],
           PersonMaritalStatus: {
             StatusCode: {
-              ReferenceDataID: MARITAL_STATUS_CODE_MAP[applicantInformation.maritalStatus ?? 'single'],
+              ReferenceDataID: MARITAL_STATUS_CODE_MAP[applicantInformation.maritalStatus ?? 'single'] ?? applicantInformation.maritalStatus,
             },
           },
           PersonName: [

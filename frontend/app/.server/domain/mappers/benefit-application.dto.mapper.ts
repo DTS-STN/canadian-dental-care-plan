@@ -142,7 +142,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
           ],
           PersonMaritalStatus: {
             StatusCode: {
-              ReferenceDataID: MARITAL_STATUS_CODE_MAP[applicantInformation.maritalStatus],
+              ReferenceDataID: MARITAL_STATUS_CODE_MAP[applicantInformation.maritalStatus] ?? applicantInformation.maritalStatus,
             },
           },
           PersonName: [
