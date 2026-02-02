@@ -9,6 +9,8 @@ export type BenefitApplicationRequestEntity = ReadonlyDeep<{
         TermsAndConditionsIndicator: boolean;
         PrivacyStatementIndicator: boolean;
         SharingConsentIndicator: boolean;
+        EligibilityAttestationIndicator: boolean;
+        AccuracyConfirmationIndicator: boolean;
         ApplicantEmailVerifiedIndicator?: boolean;
         InsurancePlan?: {
           InsurancePlanIdentification?: {
