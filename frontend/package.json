@@ -55,7 +55,7 @@
     "date-fns": "^4.1.0",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
-    "fast-xml-parser": "^5.3.3",
+    "fast-xml-parser": "^5.3.4",
     "filesize": "^11.0.13",
     "i18next": "^25.8.0",
     "i18next-http-backend": "^3.0.2",
