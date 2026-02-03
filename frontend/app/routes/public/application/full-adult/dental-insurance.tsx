@@ -151,7 +151,7 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
           <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-adult/submit" params={params}>
             {t('application-full-adult:dental-insurance.submit')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-adult/marital-status" params={params}>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-adult/contact-information" params={params}>
             {t('application-full-adult:dental-insurance.contact-information')}
           </NavigationButtonLink>
         </div>
