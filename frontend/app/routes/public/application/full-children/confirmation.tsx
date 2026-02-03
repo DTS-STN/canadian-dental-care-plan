@@ -65,6 +65,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryHome = state.homeAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale) : undefined;
 
   const userInfo = {
+    memberId: state.applicantInformation.memberId,
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.phoneNumber.value.primary,
@@ -112,6 +113,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       : undefined;
 
       return {
+        memberId: child.information?.memberId,
         id: child.id,
         firstName: child.information?.firstName,
         lastName: child.information?.lastName,
@@ -262,6 +264,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.applicant-title')}</h3>
           <DefinitionList border>
+            <DefinitionListItem term={t('confirm.member-id')}>{userInfo.memberId}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.dob')}>{userInfo.birthday}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.sin')}>
@@ -275,7 +278,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
           <section className="space-y-6">
             <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.dob')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.year-birth')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.sin')}>
                 <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
               </DefinitionListItem>
@@ -342,19 +345,18 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
                 <div>
                   <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-full-child:confirm.page-sub-title', { child: child.firstName })}</h3>
                   <DefinitionList border>
-                    <DefinitionListItem term={t('application-full-child:confirm.full-name-title')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:confirm.dob-title')}>{dateOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:confirm.sin-title')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
+                    <DefinitionListItem term={t('confirm.member-id')}>{child.memberId}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-child:confirm.full-name')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-child:confirm.dob')}>{dateOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-child:confirm.sin')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
                     <DefinitionListItem term={t('application-full-child:confirm.is-parent')}>{child.isParent ? t('application-full-child:confirm.yes') : t('application-full-child:confirm.no')}</DefinitionListItem>
                   </DefinitionList>
                 </div>
                 <div>
                   <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-full-child:confirm.dental-title', { child: child.firstName })}</h3>
                   <DefinitionList border>
-                    <DefinitionListItem term={t('application-full-child:confirm.dental-insurance-title')}>
-                      {child.dentalInsurance.accessToDentalInsurance ? t('application-full-child:confirm.yes') : t('application-full-child:confirm.no')}
-                    </DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:confirm.dental-benefit-title')}>
+                    <DefinitionListItem term={t('application-full-child:confirm.dental-private')}>{child.dentalInsurance.accessToDentalInsurance ? t('application-full-child:confirm.yes') : t('application-full-child:confirm.no')}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-child:confirm.dental-public')}>
                       {child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access ? (
                         <div className="space-y-3">
                           <p>{t('application-full-child:confirm.yes')}</p>
