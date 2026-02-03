@@ -20,7 +20,7 @@ export const routes = [
           {
             id: 'public/application/$id/type-of-application',
             file: 'routes/public/application/entry/type-application.tsx',
-            paths: { en: '/:lang/application/:id/type-of-application', fr: '/:lang/demande/:id/type-of-application' },
+            paths: { en: '/:lang/application/:id/type-of-application', fr: '/:lang/demande/:id/type-de-demande' },
           },
           {
             id: 'public/application/$id/full-adult/marital-status',
@@ -40,7 +40,7 @@ export const routes = [
           {
             id: 'public/application/$id/full-adult/submit',
             file: 'routes/public/application/full-adult/submit.tsx',
-            paths: { en: '/:lang/application/:id/full/adult/submit', fr: '/:lang/demande/:id/complete/adulte/submit' },
+            paths: { en: '/:lang/application/:id/full/adult/submit', fr: '/:lang/demande/:id/complete/adulte/soumettre' },
           },
           {
             id: 'public/application/$id/full-adult/exit-application',
@@ -61,7 +61,7 @@ export const routes = [
           {
             id: 'public/application/$id/full-children/submit',
             file: 'routes/public/application/full-children/submit.tsx',
-            paths: { en: '/:lang/application/:id/full/children/submit', fr: '/:lang/demande/:id/complete/enfants/submit' },
+            paths: { en: '/:lang/application/:id/full/children/submit', fr: '/:lang/demande/:id/complete/enfants/soumettre' },
           },
           {
             id: 'public/application/$id/full-children/exit-application',
@@ -76,7 +76,7 @@ export const routes = [
           {
             id: 'public/application/$id/full-children/childrens-application',
             file: 'routes/public/application/full-children/childrens-application.tsx',
-            paths: { en: '/:lang/application/:id/full/children/childrens-application', fr: '/:lang/demande/:id/complete/enfants/application-enfants' },
+            paths: { en: '/:lang/application/:id/full/children/childrens-application', fr: '/:lang/demande/:id/complete/enfants/demande-enfants' },
           },
           {
             id: 'public/application/$id/full-family/marital-status',
@@ -96,7 +96,7 @@ export const routes = [
           {
             id: 'public/application/$id/full-family/childrens-application',
             file: 'routes/public/application/full-family/childrens-application.tsx',
-            paths: { en: '/:lang/application/:id/full/family/childrens-application', fr: '/:lang/demande/:id/complete/famille/application-enfants' },
+            paths: { en: '/:lang/application/:id/full/family/childrens-application', fr: '/:lang/demande/:id/complete/famille/demande-enfants' },
           },
           {
             id: 'public/application/$id/full-family/confirmation',
@@ -106,7 +106,7 @@ export const routes = [
           {
             id: 'public/application/$id/full-family/submit',
             file: 'routes/public/application/full-family/submit.tsx',
-            paths: { en: '/:lang/application/:id/full/family/submit', fr: '/:lang/demande/:id/complete/famille/submit' },
+            paths: { en: '/:lang/application/:id/full/family/submit', fr: '/:lang/demande/:id/complete/famille/soumettre' },
           },
           {
             id: 'public/application/$id/full-family/exit-application',
@@ -126,7 +126,7 @@ export const routes = [
           {
             id: 'public/application/$id/simplified-adult/submit',
             file: 'routes/public/application/simplified-adult/submit.tsx',
-            paths: { en: '/:lang/application/:id/simplified/adult/submit', fr: '/:lang/demande/:id/simplifie/adulte/submit' },
+            paths: { en: '/:lang/application/:id/simplified/adult/submit', fr: '/:lang/demande/:id/simplifie/adulte/soumettre' },
           },
           {
             id: 'public/application/$id/simplified-adult/confirmation',
@@ -146,7 +146,7 @@ export const routes = [
           {
             id: 'public/application/$id/simplified-children/submit',
             file: 'routes/public/application/simplified-children/submit.tsx',
-            paths: { en: '/:lang/application/:id/simplified/children/submit', fr: '/:lang/demande/:id/simplifie/enfants/submit' },
+            paths: { en: '/:lang/application/:id/simplified/children/submit', fr: '/:lang/demande/:id/simplifie/enfants/soumettre' },
           },
           {
             id: 'public/application/$id/simplified-children/exit-application',
@@ -156,7 +156,7 @@ export const routes = [
           {
             id: 'public/application/$id/simplified-children/childrens-application',
             file: 'routes/public/application/simplified-children/childrens-application.tsx',
-            paths: { en: '/:lang/application/:id/simplified/children/childrens-application', fr: '/:lang/demande/:id/simplifie/enfants/application-enfants' },
+            paths: { en: '/:lang/application/:id/simplified/children/childrens-application', fr: '/:lang/demande/:id/simplifie/enfants/demande-enfants' },
           },
           {
             id: 'public/application/$id/simplified-children/confirmation',
@@ -176,12 +176,12 @@ export const routes = [
           {
             id: 'public/application/$id/simplified-family/childrens-application',
             file: 'routes/public/application/simplified-family/childrens-application.tsx',
-            paths: { en: '/:lang/application/:id/simplified/family/childrens-application', fr: '/:lang/demande/:id/simplifie/famille/application-enfants' },
+            paths: { en: '/:lang/application/:id/simplified/family/childrens-application', fr: '/:lang/demande/:id/simplifie/famille/demande-enfants' },
           },
           {
             id: 'public/application/$id/simplified-family/submit',
             file: 'routes/public/application/simplified-family/submit.tsx',
-            paths: { en: '/:lang/application/:id/simplified/family/submit', fr: '/:lang/demande/:id/simplifie/famille/submit' },
+            paths: { en: '/:lang/application/:id/simplified/family/submit', fr: '/:lang/demande/:id/simplifie/famille/soumettre' },
           },
           {
             id: 'public/application/$id/simplified-family/confirmation',
