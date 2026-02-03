@@ -232,7 +232,6 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
         <p className="mt-4">{t('confirm.get-updates-info')}</p>
         <ul className="list-disc space-y-1 pl-7">
           <li>{t('confirm.view')}</li>
-          <li>{t('confirm.upload')}</li>
           <li>{t('confirm.update')}</li>
           <li>{t('confirm.access')}</li>
         </ul>
