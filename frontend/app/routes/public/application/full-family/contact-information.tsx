@@ -37,16 +37,13 @@ export async function loader({ context: { appContainer, session }, request, para
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:contact-information.page-title') }) };
   const locale = getLocale(request);
 
-  const { getLocalizedProvinceTerritoryStateById } = appContainer.get(TYPES.ProvinceTerritoryStateService);
-  const { getLocalizedCountryById } = appContainer.get(TYPES.CountryService);
-
   const mailingAddressInfo = state.mailingAddress?.hasChanged
     ? {
         address: state.mailingAddress.value.address,
         city: state.mailingAddress.value.city,
-        province: state.mailingAddress.value.province ? await getLocalizedProvinceTerritoryStateById(state.mailingAddress.value.province, locale) : undefined,
+        province: state.mailingAddress.value.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getLocalizedProvinceTerritoryStateById(state.mailingAddress.value.province, locale) : undefined,
         postalCode: state.mailingAddress.value.postalCode,
-        country: await getLocalizedCountryById(state.mailingAddress.value.country, locale),
+        country: await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale),
       }
     : undefined;
 
@@ -54,9 +51,9 @@ export async function loader({ context: { appContainer, session }, request, para
     ? {
         address: state.homeAddress.value.address,
         city: state.homeAddress.value.city,
-        province: state.homeAddress.value.province ? await getLocalizedProvinceTerritoryStateById(state.homeAddress.value.province, locale) : undefined,
+        province: state.homeAddress.value.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getLocalizedProvinceTerritoryStateById(state.homeAddress.value.province, locale) : undefined,
         postalCode: state.homeAddress.value.postalCode,
-        country: await getLocalizedCountryById(state.homeAddress.value.country, locale),
+        country: await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale),
       }
     : undefined;
 
