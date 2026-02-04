@@ -31,7 +31,7 @@ export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
  * see: https://wet-boew.github.io/GCWeb/templates/application/application-docs-en.html
  */
 export function ProtectedLayout({ children }: PropsWithChildren) {
-  const { i18n } = useTranslation(i18nNamespaces);
+  const { i18n } = useTranslation();
   const pageTitleI18nKey = usePageTitleI18nKey();
   const i18nOptions = usePageTitleI18nOptions();
   const pageTitle = pageTitleI18nKey ? translateFromKey(i18n, pageTitleI18nKey, i18nOptions) : undefined;
