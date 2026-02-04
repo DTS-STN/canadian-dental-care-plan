@@ -45,14 +45,10 @@ if (isProduction) {
   log.info('    ✓ static assets middleware (production)');
   log.info('      ✓ caching /assets for 1y');
   app.use('/assets', express.static('./build/client/assets', { immutable: true, maxAge: '1y' }));
-  log.info('      ✓ caching /locales for 1d');
-  app.use('/locales', express.static('./build/client/locales', { maxAge: '1d' }));
   log.info('      ✓ caching remaining static content for 1y');
   app.use(express.static('./build/client', { maxAge: '1y' }));
 } else {
   log.info('    ✓ static assets middleware (development)');
-  log.info('      ✓ caching /locales for 1m');
-  app.use('/locales', express.static('public/locales', { maxAge: '1m' }));
   log.info('      ✓ caching remaining static content for 1h');
   app.use(express.static('./build/client', { maxAge: '1h' }));
 }
