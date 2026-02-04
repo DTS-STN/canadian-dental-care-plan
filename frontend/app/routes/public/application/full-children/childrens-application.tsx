@@ -149,7 +149,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
     await fetcher.submit(formData, { method: 'POST' });
   }
 
-  const allChildrenCompleted = state.children.length > 0 && state.children.every((child) => child.information !== undefined && child.dentalInsurance !== undefined && child.dentalBenefits !== undefined);
+  const allChildrenCompleted = state.children.length > 0 && state.children.every((child) => child.information !== undefined && child.information.dateOfBirth !== '' && child.dentalInsurance !== undefined && child.dentalBenefits !== undefined);
 
   return (
     <>
@@ -160,7 +160,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
           const dateOfBirth = child.information?.dateOfBirth ? toLocaleDateString(parseDateString(child.information.dateOfBirth), currentLanguage) : '';
 
           const sections = [
-            { id: 'child-information', completed: child.information !== undefined },
+            { id: 'child-information', completed: child.information !== undefined && child.information.dateOfBirth !== '' },
             { id: 'child-dental-insurance', completed: child.dentalInsurance !== undefined },
             { id: 'child-dental-benefits', completed: child.dentalBenefits !== undefined },
           ] as const;

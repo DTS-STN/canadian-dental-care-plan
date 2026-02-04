@@ -220,6 +220,10 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
     }
 
+    if (information.dateOfBirth === '') {
+      throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
+    }
+
     if (!information.isParent) {
       throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
     }
