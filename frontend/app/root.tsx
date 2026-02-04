@@ -18,7 +18,7 @@ import indexStyleSheet from '~/index.css?url';
 import tailwindStyleSheet from '~/tailwind.css?url';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import type { FeatureName } from '~/utils/env-utils';
-import { useI18nNamespaces, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
+import { useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
 import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
 
 // see: https://docs.fontawesome.com/web/dig-deeper/security#content-security-policy
@@ -94,8 +94,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
 
   const { nonce } = useContext(NonceContext);
   const location = useLocation();
-  const ns = useI18nNamespaces();
-  const { i18n } = useTranslation(ns);
+  const { i18n } = useTranslation();
   const canonicalURL = useCanonicalURL(origin);
   const alternateLanguages = useAlternateLanguages(origin);
   const transformAdobeAnalyticsUrl = useTransformAdobeAnalyticsUrl();
@@ -180,9 +179,9 @@ export function useFeature(feature: FeatureName) {
 }
 
 export function ErrorBoundary() {
-  const { i18n } = useTranslation(['gcweb']);
-  const en = i18n.getFixedT('en');
-  const fr = i18n.getFixedT('fr');
+  const { i18n } = useTranslation();
+  const en = i18n.getFixedT('en', ['gcweb']);
+  const fr = i18n.getFixedT('fr', ['gcweb']);
 
   return (
     <>

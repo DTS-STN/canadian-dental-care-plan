@@ -1,5 +1,7 @@
 import type { RouteModules } from 'react-router';
 
+import type { FlatNamespace } from 'i18next';
+
 import type { i18nResources } from '~/.server/i18n.resources';
 import type { ClientEnv } from '~/.server/utils/env.utils';
 import type { InstanceName } from '~/.server/utils/instance-registry';
@@ -56,7 +58,7 @@ declare module 'i18next' {
    * @see https://www.i18next.com/overview/typescript
    */
   interface CustomTypeOptions {
-    defaultNS: false;
+    defaultNS: ExtractStrict<FlatNamespace, 'common'>;
     resources: (typeof i18nResources)['en'];
   }
 }
