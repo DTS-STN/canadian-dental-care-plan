@@ -78,7 +78,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     preferredLanguage: state.communicationPreferences.value?.preferredLanguage ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
-    maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
     contactInformationEmail: state.email,
     communicationSunLifePreference: state.communicationPreferences.value?.preferredMethod
       ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale)
@@ -86,6 +85,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     communicationGOCPreference: state.communicationPreferences.value?.preferredNotificationMethod
       ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale)
       : undefined,
+    memberId: state.applicantInformation.memberId,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -242,12 +242,12 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.applicant-title')}</h3>
           <DefinitionList border>
+            <DefinitionListItem term={t('confirm.memberId')}>{userInfo.memberId}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.dob')}>{userInfo.birthday}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.sin')}>
               <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
             </DefinitionListItem>
-            <DefinitionListItem term={t('confirm.marital-status')}>{userInfo.maritalStatus}</DefinitionListItem>
           </DefinitionList>
         </section>
 
