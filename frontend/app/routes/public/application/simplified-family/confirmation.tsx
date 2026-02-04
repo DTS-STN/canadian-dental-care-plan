@@ -200,7 +200,7 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, children, eligibility } = loaderData;
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('application-simplified-family:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('application-simplified-family:confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
 
   const { currentLanguage } = useCurrentLanguage();
 
@@ -228,7 +228,6 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
           <br />
           <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
         </p>
-        <p>{t('confirm.make-note')}</p>
       </div>
 
       <section>
@@ -270,23 +269,16 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
 
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>
-        <p className="mt-4">{t('confirm.begin-process')}</p>
-      </section>
-
-      <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.check-status')}</h2>
         <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.begin-process" components={{ cdcpLink, mscaLinkAccount }} />
         </p>
-        <p className="mt-4">{t('confirm.use-code')}</p>
       </section>
 
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.get-updates-title')}</h2>
-        <p className="mt-4">
+        <p className="my-4">
           <Trans ns={handle.i18nNamespaces} i18nKey={'confirm.get-updates-text'} components={{ mscaLinkAccount }} />
         </p>
-        <p className="mt-4">{t('confirm.get-updates-info')}</p>
         <ul className="list-disc space-y-1 pl-7">
           <li>{t('confirm.view')}</li>
           <li>{t('confirm.update')}</li>
