@@ -184,7 +184,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                   ) : (
                     <DefinitionList layout="single-column">
                       <DefinitionListItem term={t('application-simplified-child:childrens-application.member-id-title')}>
-                        <p>{child.id}</p>
+                        <p>{child.information.memberId}</p>
                       </DefinitionListItem>
                       <DefinitionListItem term={t('application-simplified-child:childrens-application.full-name-title')}>
                         <p>{childName}</p>
