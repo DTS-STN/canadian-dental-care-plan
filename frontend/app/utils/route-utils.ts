@@ -10,7 +10,7 @@ import type { I18nPageRoute, I18nRoute, Language } from '~/routes/routes';
 import { i18nRoutes, isI18nLayoutRoute, isI18nPageRoute } from '~/routes/routes';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByNamespaces<Namespace, KeysByTOptions<TOpt>>;
+export type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByNamespaces<Namespace, KeysByTOptions<TOpt>>;
 
 /**
  * A reducer function that coalesces two values, returning the non-null (or non-undefined) value.

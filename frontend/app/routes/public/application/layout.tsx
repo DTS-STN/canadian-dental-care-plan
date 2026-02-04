@@ -22,7 +22,20 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces(...layoutI18nNamespaces, 'common'),
+  // Declare all i18n namespaces required by this route and its descendants.
+  // Preloading them upfront ensures translations are available on initial render.
+  i18nNamespaces: getTypedI18nNamespaces(
+    ...layoutI18nNamespaces,
+    'common',
+    'application',
+    'application-full-adult',
+    'application-full-child',
+    'application-full-family',
+    'application-simplified-adult',
+    'application-simplified-child',
+    'application-simplified-family',
+    'application-spokes',
+  ),
   transformAdobeAnalyticsUrl,
 } as const satisfies RouteHandleData;
 

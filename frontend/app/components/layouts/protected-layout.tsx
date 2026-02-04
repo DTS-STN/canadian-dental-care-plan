@@ -21,8 +21,8 @@ import { useBrowserCompatiblityBanner } from '~/hooks';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { useBreadcrumbs, useI18nNamespaces, usePageTitleI18nKey, usePageTitleI18nOptions } from '~/utils/route-utils';
+import { getTypedI18nNamespaces, translateFromKey } from '~/utils/locale-utils';
+import { useBreadcrumbs, usePageTitleI18nKey, usePageTitleI18nOptions } from '~/utils/route-utils';
 
 export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
@@ -31,16 +31,17 @@ export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
  * see: https://wet-boew.github.io/GCWeb/templates/application/application-docs-en.html
  */
 export function ProtectedLayout({ children }: PropsWithChildren) {
-  const { t } = useTranslation(useI18nNamespaces());
+  const { i18n } = useTranslation();
   const pageTitleI18nKey = usePageTitleI18nKey();
   const i18nOptions = usePageTitleI18nOptions();
+  const pageTitle = pageTitleI18nKey ? translateFromKey(i18n, pageTitleI18nKey, i18nOptions) : undefined;
 
   return (
     <>
       <PageHeader />
       <PageBreadcrumbs />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
-        {pageTitleI18nKey && <AppPageTitle>{t(pageTitleI18nKey, i18nOptions)}</AppPageTitle>}
+        {pageTitle && <AppPageTitle>{pageTitle}</AppPageTitle>}
         {children}
         <PageDetails />
       </main>
@@ -144,7 +145,7 @@ function PageHeader() {
 }
 
 function PageBreadcrumbs() {
-  const { t } = useTranslation([...i18nNamespaces, ...useI18nNamespaces()]);
+  const { t, i18n } = useTranslation(i18nNamespaces);
   const breadcrumbs = useBreadcrumbs();
   const { SCCH_BASE_URI } = getClientEnv();
 
@@ -154,7 +155,7 @@ function PageBreadcrumbs() {
       items={[
         { content: t('gcweb:breadcrumbs.dashboard'), to: t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }) },
         ...breadcrumbs.map((item) => ({
-          content: t(item.labelI18nKey),
+          content: translateFromKey(i18n, item.labelI18nKey),
           routeId: item.routeId,
           to: item.to,
         })),

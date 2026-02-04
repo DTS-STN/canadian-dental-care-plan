@@ -16,11 +16,12 @@ export interface PageHeaderBrandProps {
 export function PageHeaderBrand({ headerLogoUrl }: PageHeaderBrandProps) {
   const { currentLanguage, altLanguage } = useCurrentLanguage();
   const { i18n, t } = useTranslation(['gcweb']);
+  const altT = i18n.getFixedT(altLanguage, ['gcweb']);
 
   const headerLogo = (
     <>
       <img className="h-8 w-auto" src={`/assets/sig-blk-${currentLanguage}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
-      <span className="sr-only">{<span lang={altLanguage}>{i18n.getFixedT(altLanguage)('gcweb:header.govt-of-canada.text')}</span>}</span>
+      <span className="sr-only">{<span lang={altLanguage}>{altT('gcweb:header.govt-of-canada.text')}</span>}</span>
     </>
   );
 

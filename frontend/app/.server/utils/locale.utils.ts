@@ -87,7 +87,7 @@ export async function initI18n<N extends Namespace>(locale: string | undefined, 
   await i18n.use(initReactI18next).init({
     appendNamespaceToMissingKey: true,
     debug: I18NEXT_DEBUG,
-    defaultNS: false,
+    defaultNS: 'common',
     fallbackLng: false,
     interpolation: { escapeValue: false },
     lng: locale,

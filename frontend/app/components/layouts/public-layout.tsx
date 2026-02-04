@@ -17,8 +17,8 @@ import { useBrowserCompatiblityBanner, useCurrentLanguage } from '~/hooks';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { useI18nNamespaces, usePageTitleI18nKey, usePageTitleI18nOptions } from '~/utils/route-utils';
+import { getTypedI18nNamespaces, translateFromKey } from '~/utils/locale-utils';
+import { usePageTitleI18nKey, usePageTitleI18nOptions } from '~/utils/route-utils';
 
 export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
@@ -27,16 +27,17 @@ export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
  * see: https://wet-boew.github.io/GCWeb/templates/application/application-docs-en.html
  */
 export function PublicLayout({ children }: PropsWithChildren) {
-  const { t } = useTranslation(useI18nNamespaces());
+  const { i18n } = useTranslation();
   const pageTitleI18nKey = usePageTitleI18nKey();
   const i18nOptions = usePageTitleI18nOptions();
+  const pageTitle = pageTitleI18nKey ? translateFromKey(i18n, pageTitleI18nKey, i18nOptions) : undefined;
 
   return (
     <>
       <PageHeader />
       <PageBreadcrumbs />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
-        {pageTitleI18nKey && <AppPageTitle>{t(pageTitleI18nKey, i18nOptions)}</AppPageTitle>}
+        {pageTitle && <AppPageTitle>{pageTitle}</AppPageTitle>}
         {children}
         <PageDetails />
       </main>
@@ -75,7 +76,7 @@ function PageHeader() {
 }
 
 function PageBreadcrumbs() {
-  const { t } = useTranslation([...i18nNamespaces, ...useI18nNamespaces()]);
+  const { t } = useTranslation(i18nNamespaces);
   return (
     <Breadcrumbs
       className="my-4 print:hidden"
@@ -137,9 +138,9 @@ export interface BilingualNotFoundErrorProps {
  * A 404 page that renders both languages, for when the user's language cannot be detected
  */
 export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
-  const { i18n, t } = useTranslation(['gcweb']);
-  const en = i18n.getFixedT('en');
-  const fr = i18n.getFixedT('fr');
+  const { i18n } = useTranslation();
+  const en = i18n.getFixedT('en', ['gcweb']);
+  const fr = i18n.getFixedT('fr', ['gcweb']);
 
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {
@@ -154,7 +155,7 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
           <div className="container flex items-center justify-between gap-6 py-2.5 sm:py-3.5">
             <div property="publisher" typeof="GovernmentOrganization">
               <a href="https://canada.ca/" property="url">
-                <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
+                <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt={en('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
                 <span className="sr-only">
                   / <span lang="fr">{fr('gcweb:header.govt-of-canada.text')}</span>
                 </span>
