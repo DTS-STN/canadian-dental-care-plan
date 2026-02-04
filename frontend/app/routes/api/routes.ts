@@ -46,4 +46,9 @@ export const routes = [
     file: 'routes/api/killswitch.ts',
     path: '/api/killswitch',
   },
+  {
+    id: 'api/locales',
+    file: 'routes/api/locales.ts',
+    path: '/api/locales/:lng/:ns',
+  },
 ] as const satisfies RouteConfig;

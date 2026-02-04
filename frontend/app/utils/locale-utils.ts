@@ -111,7 +111,7 @@ export function getNamespaces(routes?: ({ handle?: unknown } | undefined)[]) {
  * Initializes the client instance of i18next.
  */
 export async function initI18n(namespaces: Array<string>) {
-  const { I18NEXT_DEBUG } = getClientEnv();
+  const { BUILD_REVISION, I18NEXT_DEBUG } = getClientEnv();
   const i18n = createInstance();
 
   const languageDetector = {
@@ -125,6 +125,7 @@ export async function initI18n(namespaces: Array<string>) {
     .use(I18NextHttpBackend)
     .init({
       appendNamespaceToMissingKey: true,
+      backend: { loadPath: `/api/locales/{{lng}}/{{ns}}?v=${BUILD_REVISION}` },
       debug: I18NEXT_DEBUG,
       defaultNS: 'common',
       fallbackLng: false,
