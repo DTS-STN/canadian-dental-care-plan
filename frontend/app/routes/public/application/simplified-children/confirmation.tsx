@@ -180,14 +180,14 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo, surveyLink, children } = loaderData;
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('application-simplified-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('application-simplified-child:confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
 
   const { currentLanguage } = useCurrentLanguage();
 
   return (
     <div className="max-w-prose space-y-10">
       <section className="space-y-6">
-        <h3 className="font-lato text-2xl font-bold">{t('confirm.eligibility')}</h3>
+        <h3 className="font-lato text-2xl font-bold">{t('confirm.your-eligibility')}</h3>
         {children.map((child) => (
           <DefinitionList border key={child.id}>
             <DefinitionListItem term={`${child.firstName} ${child.lastName}`}>
@@ -249,19 +249,10 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
       </section>
 
       <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.check-status')}</h2>
-        <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
-        </p>
-        <p className="mt-4">{t('confirm.use-code')}</p>
-      </section>
-
-      <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.get-updates-title')}</h2>
-        <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey={'confirm.get-updates-text'} components={{ mscaLinkAccount }} />
+        <p className="my-4">
+          <Trans ns={handle.i18nNamespaces} i18nKey={'confirm.get-updates-text'} components={{ cdcpLink, mscaLinkAccount }} />
         </p>
-        <p className="mt-4">{t('confirm.get-updates-info')}</p>
         <ul className="list-disc space-y-1 pl-7">
           <li>{t('confirm.view')}</li>
           <li>{t('confirm.update')}</li>
@@ -362,19 +353,19 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
                 <div>
                   <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-simplified-child:confirm.page-sub-title', { child: child.firstName })}</h3>
                   <DefinitionList border>
-                    <DefinitionListItem term={t('application-simplified-child:confirm.full-name-title')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-simplified-child:confirm.dob-title')}>{dateOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-simplified-child:confirm.sin-title')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-simplified-child:confirm.full-name')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-simplified-child:confirm.dob')}>{dateOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-simplified-child:confirm.sin')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
                     <DefinitionListItem term={t('application-simplified-child:confirm.is-parent')}>{child.isParent ? t('application-simplified-child:confirm.yes') : t('application-simplified-child:confirm.no')}</DefinitionListItem>
                   </DefinitionList>
                 </div>
                 <div>
                   <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-simplified-child:confirm.dental-title', { child: child.firstName })}</h3>
                   <DefinitionList border>
-                    <DefinitionListItem term={t('application-simplified-child:confirm.dental-insurance-title')}>
+                    <DefinitionListItem term={t('application-simplified-child:confirm.dental-private')}>
                       {child.dentalInsurance.accessToDentalInsurance ? t('application-simplified-child:confirm.yes') : t('application-simplified-child:confirm.no')}
                     </DefinitionListItem>
-                    <DefinitionListItem term={t('application-simplified-child:confirm.dental-benefit-title')}>
+                    <DefinitionListItem term={t('application-simplified-child:confirm.dental-public')}>
                       {child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access ? (
                         <div className="space-y-3">
                           <p>{t('application-simplified-child:confirm.yes')}</p>
