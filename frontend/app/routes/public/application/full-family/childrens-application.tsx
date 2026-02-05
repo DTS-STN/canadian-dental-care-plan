@@ -183,9 +183,11 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
                     <p>{t('application-full-family:childrens-application.child-information-indicate-status')}</p>
                   ) : (
                     <DefinitionList layout="single-column">
-                      <DefinitionListItem term={t('application-full-family:childrens-application.member-id-title')}>
-                        <p>{child.id}</p>
-                      </DefinitionListItem>
+                      {child.information.memberId && (
+                        <DefinitionListItem term={t('application-full-family:childrens-application.member-id-title')}>
+                          <p>{child.information.memberId}</p>
+                        </DefinitionListItem>
+                      )}
                       <DefinitionListItem term={t('application-full-family:childrens-application.full-name-title')}>
                         <p>{childName}</p>
                       </DefinitionListItem>

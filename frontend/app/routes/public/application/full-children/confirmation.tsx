@@ -263,7 +263,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.applicant-title')}</h3>
           <DefinitionList border>
-            <DefinitionListItem term={t('confirm.member-id')}>{userInfo.memberId}</DefinitionListItem>
+            {userInfo.memberId && <DefinitionListItem term={t('confirm.member-id')}>{userInfo.memberId}</DefinitionListItem>}
             <DefinitionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.dob')}>{userInfo.birthday}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.sin')}>
