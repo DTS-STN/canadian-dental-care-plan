@@ -95,6 +95,7 @@ export async function initI18n<N extends Namespace>(locale: string | undefined, 
     preload: APP_LOCALES,
     react: { useSuspense: false },
     resources: i18nResources,
+    showSupportNotice: false,
   });
 
   log.debug('i18next initialization complete');
