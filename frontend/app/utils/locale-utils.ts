@@ -129,14 +129,11 @@ export async function initI18n(namespaces: Array<string>) {
       debug: I18NEXT_DEBUG,
       defaultNS: 'common',
       fallbackLng: false,
-      interpolation: {
-        escapeValue: false,
-      },
+      interpolation: { escapeValue: false },
       ns: namespaces,
       preload: APP_LOCALES,
-      react: {
-        useSuspense: false,
-      },
+      react: { useSuspense: false },
+      showSupportNotice: false,
     });
 
   return i18n;
