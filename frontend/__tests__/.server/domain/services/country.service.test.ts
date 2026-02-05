@@ -1,4 +1,4 @@
-import type { Moized } from 'moize';
+import type { Memoized, Options } from 'micro-memoize';
 import { None, Some } from 'oxide.ts';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
@@ -10,7 +10,7 @@ import type { CountryRepository } from '~/.server/domain/repositories';
 import type { CountryServiceImpl_ServiceConfig } from '~/.server/domain/services';
 import { DefaultCountryService } from '~/.server/domain/services';
 
-vi.mock('moize');
+vi.mock('micro-memoize');
 
 describe('DefaultCountryService', () => {
   const mockServerConfig: CountryServiceImpl_ServiceConfig = {
@@ -20,14 +20,14 @@ describe('DefaultCountryService', () => {
   };
 
   describe('constructor', () => {
-    it('sets the correct maxAge for moize options', () => {
+    it('sets the correct expires for memoize options', () => {
       const mockCountryDtoMapper = mock<CountryDtoMapper>();
       const mockCountryRepository = mock<CountryRepository>();
 
       const service = new DefaultCountryService(mockCountryDtoMapper, mockCountryRepository, mockServerConfig); // Act and Assert
 
-      expect((service.listCountries as Moized).options.maxAge).toBe(10_000); // 10 seconds in milliseconds
-      expect((service.getCountryById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect((service.listCountries as Memoized<typeof service.listCountries, Options<typeof service.listCountries>>).options.expires).toBe(10_000); // 10 seconds in milliseconds
+      expect((service.getCountryById as Memoized<typeof service.getCountryById, Options<typeof service.getCountryById>>).options.expires).toBe(5000); // 5 seconds in milliseconds
     });
   });
 

@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 import { None, Some } from 'oxide.ts';
 import type { Option } from 'oxide.ts';
 
@@ -95,22 +96,31 @@ export class DefaultFederalGovernmentInsurancePlanService implements FederalGove
 
     this.log.debug('Cache TTL values; allFederalGovernmentInsurancePlansCacheTTL: %d ms, federalGovernmentInsurancePlanCacheTTL: %d ms', allFederalGovernmentInsurancePlansCacheTTL, federalGovernmentInsurancePlanCacheTTL);
 
-    this.listFederalGovernmentInsurancePlans = moize(this.listFederalGovernmentInsurancePlans, {
-      maxAge: allFederalGovernmentInsurancePlansCacheTTL,
-      onCacheAdd: () => this.log.info('Creating new listFederalGovernmentInsurancePlans memo'),
+    this.listFederalGovernmentInsurancePlans = memoize(this.listFederalGovernmentInsurancePlans, {
+      async: true,
+      expires: allFederalGovernmentInsurancePlansCacheTTL,
     });
 
-    this.findFederalGovernmentInsurancePlanById = moize(this.findFederalGovernmentInsurancePlanById, {
-      maxAge: federalGovernmentInsurancePlanCacheTTL,
+    type MemoizedListFederalGovernmentInsurancePlans = Memoized<typeof this.listFederalGovernmentInsurancePlans, Options<typeof this.listFederalGovernmentInsurancePlans>>;
+    (this.listFederalGovernmentInsurancePlans as MemoizedListFederalGovernmentInsurancePlans).cache.on('add', () => this.log.info('Creating new listFederalGovernmentInsurancePlans memo'));
+
+    this.findFederalGovernmentInsurancePlanById = memoize(this.findFederalGovernmentInsurancePlanById, {
+      async: true,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new findFederalGovernmentInsurancePlanById memo'),
+      expires: federalGovernmentInsurancePlanCacheTTL,
     });
 
-    this.getFederalGovernmentInsurancePlanById = moize(this.getFederalGovernmentInsurancePlanById, {
-      maxAge: federalGovernmentInsurancePlanCacheTTL,
+    type MemoizedFindFederalGovernmentInsurancePlanById = Memoized<typeof this.findFederalGovernmentInsurancePlanById, Options<typeof this.findFederalGovernmentInsurancePlanById>>;
+    (this.findFederalGovernmentInsurancePlanById as MemoizedFindFederalGovernmentInsurancePlanById).cache.on('add', () => this.log.info('Creating new findFederalGovernmentInsurancePlanById memo'));
+
+    this.getFederalGovernmentInsurancePlanById = memoize(this.getFederalGovernmentInsurancePlanById, {
+      async: true,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getFederalGovernmentInsurancePlanById memo'),
+      expires: federalGovernmentInsurancePlanCacheTTL,
     });
+
+    type MemoizedGetFederalGovernmentInsurancePlanById = Memoized<typeof this.getFederalGovernmentInsurancePlanById, Options<typeof this.getFederalGovernmentInsurancePlanById>>;
+    (this.getFederalGovernmentInsurancePlanById as MemoizedGetFederalGovernmentInsurancePlanById).cache.on('add', () => this.log.info('Creating new getFederalGovernmentInsurancePlanById memo'));
 
     this.log.debug('DefaultFederalGovernmentInsurancePlanService initiated.');
   }

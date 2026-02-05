@@ -1,4 +1,4 @@
-import type { Moized } from 'moize';
+import type { Memoized, Options } from 'micro-memoize';
 import { None, Some } from 'oxide.ts';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
@@ -10,7 +10,7 @@ import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers';
 import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories';
 import { DefaultProvinceTerritoryStateService } from '~/.server/domain/services';
 
-vi.mock('moize');
+vi.mock('micro-memoize');
 
 describe('DefaultProvinceTerritoryStateService', () => {
   const mockServerConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'> = {
@@ -19,14 +19,14 @@ describe('DefaultProvinceTerritoryStateService', () => {
   };
 
   describe('constructor', () => {
-    it('sets the correct maxAge for moize options', () => {
+    it('sets the correct expires for memoize options', () => {
       const mockProvinceTerritoryStateDtoMapper = mock<ProvinceTerritoryStateDtoMapper>();
       const mockProvinceTerritoryStateRepository = mock<ProvinceTerritoryStateRepository>();
 
       const service = new DefaultProvinceTerritoryStateService(mockProvinceTerritoryStateDtoMapper, mockProvinceTerritoryStateRepository, mockServerConfig); // Act and Assert
 
-      expect((service.listProvinceTerritoryStates as Moized).options.maxAge).toBe(10_000); // 10 seconds in milliseconds
-      expect((service.getProvinceTerritoryStateById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect((service.listProvinceTerritoryStates as Memoized<typeof service.listProvinceTerritoryStates, Options<typeof service.listProvinceTerritoryStates>>).options.expires).toBe(10_000); // 10 seconds in milliseconds
+      expect((service.getProvinceTerritoryStateById as Memoized<typeof service.getProvinceTerritoryStateById, Options<typeof service.getProvinceTerritoryStateById>>).options.expires).toBe(5000); // 5 seconds in milliseconds
     });
   });
 

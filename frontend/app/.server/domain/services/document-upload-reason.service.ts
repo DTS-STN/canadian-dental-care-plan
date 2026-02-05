@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -75,16 +76,22 @@ export class DefaultDocumentUploadReasonService implements DocumentUploadReasonS
 
     this.log.debug('Cache TTL values; allDocumentUploadReasonsCacheTTL: %d ms, documentUploadReasonCacheTTL: %d ms', allDocumentUploadReasonsCacheTTL, documentUploadReasonCacheTTL);
 
-    this.listDocumentUploadReasons = moize(this.listDocumentUploadReasons, {
-      maxAge: allDocumentUploadReasonsCacheTTL,
-      onCacheAdd: () => this.log.info('Creating new listDocumentUploadReasons memo'),
+    this.listDocumentUploadReasons = memoize(this.listDocumentUploadReasons, {
+      async: true,
+      expires: allDocumentUploadReasonsCacheTTL,
     });
 
-    this.getDocumentUploadReasonById = moize(this.getDocumentUploadReasonById, {
-      maxAge: documentUploadReasonCacheTTL,
+    type MemoizedListDocumentUploadReasons = Memoized<typeof this.listDocumentUploadReasons, Options<typeof this.listDocumentUploadReasons>>;
+    (this.listDocumentUploadReasons as MemoizedListDocumentUploadReasons).cache.on('add', () => this.log.info('Creating new listDocumentUploadReasons memo'));
+
+    this.getDocumentUploadReasonById = memoize(this.getDocumentUploadReasonById, {
+      async: true,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getDocumentUploadReasonById memo'),
+      expires: documentUploadReasonCacheTTL,
     });
+
+    type MemoizedGetDocumentUploadReasonById = Memoized<typeof this.getDocumentUploadReasonById, Options<typeof this.getDocumentUploadReasonById>>;
+    (this.getDocumentUploadReasonById as MemoizedGetDocumentUploadReasonById).cache.on('add', () => this.log.info('Creating new getDocumentUploadReasonById memo'));
 
     this.log.debug('DefaultDocumentUploadReasonService initiated.');
   }

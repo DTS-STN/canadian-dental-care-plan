@@ -1,5 +1,5 @@
 import type { JWTPayload } from 'jose';
-import type { Moized } from 'moize';
+import type { Memoized, Options } from 'micro-memoize';
 import { subtle } from 'node:crypto';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { MockProxy } from 'vitest-mock-extended';
@@ -25,7 +25,7 @@ vi.mock('react-router', () => ({
   redirect: vi.fn((to: string) => `MockedRedirect(${to})`),
 }));
 
-vi.mock('moize');
+vi.mock('micro-memoize');
 vi.mock('~/.server/utils/crypto.utils');
 vi.mock('~/.server/utils/raoidc.utils');
 vi.mock('~/utils/string-utils');
@@ -54,7 +54,7 @@ describe('DefaultRaoidcService', () => {
   });
 
   describe('constructor', () => {
-    it('sets the correct maxAge for moize options', () => {
+    it('sets the correct expires for memoize options', () => {
       class DefaultRaoidcServiceTest extends DefaultRaoidcService {
         public readonly fetchServerMetadataTest = this.fetchServerMetadata;
       }
@@ -62,7 +62,7 @@ describe('DefaultRaoidcService', () => {
       const serviceTest = new DefaultRaoidcServiceTest(mockServerConfig, mockHttpClient);
 
       // Act and Assert
-      expect((serviceTest.fetchServerMetadataTest as Moized).options.maxAge).toBe(10_000); // 10 seconds in milliseconds
+      expect((serviceTest.fetchServerMetadataTest as Memoized<typeof serviceTest.fetchServerMetadataTest, Options<typeof serviceTest.fetchServerMetadataTest>>).options.expires).toBe(10_000); // 10 seconds in milliseconds
     });
   });
 
