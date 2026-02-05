@@ -61,7 +61,7 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
 
   return (
     <>
-      <ProgressStepper activeStep="marital-status" />
+      <ProgressStepper activeStep="marital-status" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
           <p>{t('application:required-label')}</p>
