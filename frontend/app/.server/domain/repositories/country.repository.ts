@@ -63,6 +63,7 @@ export class DefaultCountryRepository implements CountryRepository {
     url.searchParams.set('$select', 'esdc_countryid,esdc_nameenglish,esdc_namefrench,esdc_countrycodealpha3');
     url.searchParams.set('$filter', 'statecode eq 0 and esdc_enabledentalapplicationportal eq true');
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.countries.gets', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'GET',
       headers: {
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,

@@ -66,6 +66,7 @@ export class DefaultDocumentUploadReasonRepository implements DocumentUploadReas
     url.searchParams.set('$select', 'esdc_documentuploadreasonid,esdc_nameenglish,esdc_namefrench');
     url.searchParams.set('$filter', 'statecode eq 0');
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.document-upload-reasons.gets', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'GET',
       headers: {
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,

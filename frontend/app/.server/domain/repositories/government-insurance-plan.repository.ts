@@ -63,6 +63,7 @@ export class DefaultGovernmentInsurancePlanRepository implements GovernmentInsur
     url.searchParams.set('$select', 'esdc_governmentinsuranceplanid,esdc_nameenglish,esdc_namefrench,_esdc_provinceterritorystateid_value');
     url.searchParams.set('$filter', 'statecode eq 0');
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.government-insurance-plans.gets', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'GET',
       headers: {
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,

@@ -66,6 +66,7 @@ export class DefaultEvidentiaryDocumentTypeRepository implements EvidentiaryDocu
     url.searchParams.set('$select', 'esdc_value,esdc_nameenglish,esdc_namefrench');
     url.searchParams.set('$filter', 'esdc_displayonportal eq 1 and statecode eq 0');
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.evidentiary-document-types.gets', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'GET',
       headers: {
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
