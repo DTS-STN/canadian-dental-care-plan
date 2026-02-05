@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { createLogger } from '~/.server/logging';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { ApplicationStateParams, ChildrenState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
@@ -129,6 +130,8 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     typeOfApplication,
   } = state;
 
+  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
+
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
   }
@@ -176,6 +179,10 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
   }
 
   if (communicationPreferences === undefined) {
+    throw redirect(getPathById('public/application/$id/full-family/contact-information', params));
+  }
+
+  if ((communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) && !emailVerified) {
     throw redirect(getPathById('public/application/$id/full-family/contact-information', params));
   }
 
