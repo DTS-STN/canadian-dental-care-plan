@@ -84,7 +84,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   return {
     state: {
-      children: children,
+      children,
     },
     meta,
   };
