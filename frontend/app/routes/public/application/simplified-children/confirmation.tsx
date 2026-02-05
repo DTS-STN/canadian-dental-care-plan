@@ -82,6 +82,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     communicationGOCPreference: state.communicationPreferences.value?.preferredNotificationMethod
       ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale)
       : undefined,
+    memberId: state.applicantInformation.memberId,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -122,6 +123,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
       return {
         id: child.id,
+        memberId: child.information?.memberId,
         firstName: child.information?.firstName,
         lastName: child.information?.lastName,
         birthday: child.information?.dateOfBirth,
@@ -245,13 +247,15 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
 
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>
-        <p className="mt-4">{t('confirm.begin-process')}</p>
+        <p className="mt-4">
+          <Trans ns={handle.i18nNamespaces} i18nKey={'confirm.begin-process'} components={{ cdcpLink, mscaLinkAccount }} />
+        </p>
       </section>
 
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.get-updates-title')}</h2>
         <p className="my-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey={'confirm.get-updates-text'} components={{ cdcpLink, mscaLinkAccount }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey={'confirm.get-updates-text'} components={{ mscaLinkAccount }} />
         </p>
         <ul className="list-disc space-y-1 pl-7">
           <li>{t('confirm.view')}</li>
@@ -273,12 +277,12 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.applicant-title')}</h3>
           <DefinitionList border>
+            <DefinitionListItem term={t('confirm.member-id')}>{userInfo.memberId}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.dob')}>{userInfo.birthday}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.sin')}>
               <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
             </DefinitionListItem>
-            <DefinitionListItem term={t('confirm.marital-status')}>{userInfo.maritalStatus}</DefinitionListItem>
           </DefinitionList>
         </section>
 
@@ -353,6 +357,7 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
                 <div>
                   <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-simplified-child:confirm.page-sub-title', { child: child.firstName })}</h3>
                   <DefinitionList border>
+                    <DefinitionListItem term={t('application-simplified-child:confirm.member-id')}>{child.memberId}</DefinitionListItem>
                     <DefinitionListItem term={t('application-simplified-child:confirm.full-name')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
                     <DefinitionListItem term={t('application-simplified-child:confirm.dob')}>{dateOfBirth}</DefinitionListItem>
                     <DefinitionListItem term={t('application-simplified-child:confirm.sin')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
