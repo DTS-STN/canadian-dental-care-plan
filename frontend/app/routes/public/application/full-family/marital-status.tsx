@@ -60,55 +60,57 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
   const allSectionsCompleted = completedSections.length === sections.length;
 
   return (
-    <div className="max-w-prose space-y-8">
+    <>
       <ProgressStepper activeStep="marital-status" />
-      <div className="space-y-4">
-        <p>{t('application:required-label')}</p>
-        <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+      <div className="max-w-prose space-y-8">
+        <div className="space-y-4">
+          <p>{t('application:required-label')}</p>
+          <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('application-full-family:marital-status.marital-status')}</CardTitle>
+            <CardAction>{completedSections.includes('marital-status') && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>
+            {state.maritalStatus === undefined ? (
+              <p>{t('application-full-family:marital-status.select-your-status')}</p>
+            ) : (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('application-full-family:marital-status.marital-status')}>
+                  <p>{state.maritalStatus.name}</p>
+                </DefinitionListItem>
+                {state.partnerInformation && (
+                  <>
+                    <DefinitionListItem term={t('application-full-family:marital-status.spouse-sin')}>
+                      <p>{state.partnerInformation.socialInsuranceNumber}</p>
+                    </DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-family:marital-status.spouse-yob')}>
+                      <p>{state.partnerInformation.yearOfBirth}</p>
+                    </DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-family:marital-status.consent')}>
+                      {state.partnerInformation.confirm ? t('application-full-family:marital-status.consent-yes') : t('application-full-family:marital-status.consent-no')}
+                    </DefinitionListItem>
+                  </>
+                )}
+              </DefinitionList>
+            )}
+          </CardContent>
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={completedSections.includes('marital-status') ? faPenToSquare : faCirclePlus} size="lg">
+              {state.maritalStatus === undefined ? t('application-full-family:marital-status.add-marital-status') : t('application-full-family:marital-status.edit-marital-status')}
+            </ButtonLink>
+          </CardFooter>
+        </Card>
+        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-family/contact-information" params={params}>
+            {t('application-full-family:marital-status.contact-information')}
+          </NavigationButtonLink>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
+            {t('application-full-family:marital-status.type-of-application')}
+          </NavigationButtonLink>
+        </div>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('application-full-family:marital-status.marital-status')}</CardTitle>
-          <CardAction>{completedSections.includes('marital-status') && <StatusTag status="complete" />}</CardAction>
-        </CardHeader>
-        <CardContent>
-          {state.maritalStatus === undefined ? (
-            <p>{t('application-full-family:marital-status.select-your-status')}</p>
-          ) : (
-            <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application-full-family:marital-status.marital-status')}>
-                <p>{state.maritalStatus.name}</p>
-              </DefinitionListItem>
-              {state.partnerInformation && (
-                <>
-                  <DefinitionListItem term={t('application-full-family:marital-status.spouse-sin')}>
-                    <p>{state.partnerInformation.socialInsuranceNumber}</p>
-                  </DefinitionListItem>
-                  <DefinitionListItem term={t('application-full-family:marital-status.spouse-yob')}>
-                    <p>{state.partnerInformation.yearOfBirth}</p>
-                  </DefinitionListItem>
-                  <DefinitionListItem term={t('application-full-family:marital-status.consent')}>
-                    {state.partnerInformation.confirm ? t('application-full-family:marital-status.consent-yes') : t('application-full-family:marital-status.consent-no')}
-                  </DefinitionListItem>
-                </>
-              )}
-            </DefinitionList>
-          )}
-        </CardContent>
-        <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={completedSections.includes('marital-status') ? faPenToSquare : faCirclePlus} size="lg">
-            {state.maritalStatus === undefined ? t('application-full-family:marital-status.add-marital-status') : t('application-full-family:marital-status.edit-marital-status')}
-          </ButtonLink>
-        </CardFooter>
-      </Card>
-      <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-family/contact-information" params={params}>
-          {t('application-full-family:marital-status.contact-information')}
-        </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
-          {t('application-full-family:marital-status.type-of-application')}
-        </NavigationButtonLink>
-      </div>
-    </div>
+    </>
   );
 }
