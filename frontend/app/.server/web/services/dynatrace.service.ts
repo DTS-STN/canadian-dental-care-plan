@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -47,9 +48,10 @@ export class DefaultDynatraceService implements DynatraceService {
 
     this.log.debug('Cache TTL value: dynatraceRumScriptUriCacheTTL: %d ms', dynatraceRumScriptUriCacheTTL);
 
-    this.findDynatraceRumScript = moize.promise(this.findDynatraceRumScript, {
-      onCacheAdd: () => this.log.info('Creating new findDynatraceRumScript memo'),
-    });
+    this.findDynatraceRumScript = memoize(this.findDynatraceRumScript, { async: true });
+
+    type MemoizedFindDynatraceRumScript = Memoized<typeof this.findDynatraceRumScript, Options<typeof this.findDynatraceRumScript>>;
+    (this.findDynatraceRumScript as MemoizedFindDynatraceRumScript).cache.on('add', () => this.log.info('Creating new findDynatraceRumScript memo'));
 
     this.log.debug('DefaultDynatraceService initiated.');
   }

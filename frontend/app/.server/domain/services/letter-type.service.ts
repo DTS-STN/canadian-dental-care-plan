@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 import { None, match } from 'oxide.ts';
 
 import type { ServerConfig } from '~/.server/configs';
@@ -76,16 +77,22 @@ export class DefaultLetterTypeService implements LetterTypeService {
 
     this.log.debug('Cache TTL values; allLetterTypesCacheTTL: %d ms, letterTypeCacheTTL: %d ms', allLetterTypesCacheTTL, letterTypeCacheTTL);
 
-    this.listLetterTypes = moize(this.listLetterTypes, {
-      maxAge: allLetterTypesCacheTTL,
-      onCacheAdd: () => this.log.info('Creating new listLetterTypes memo'),
+    this.listLetterTypes = memoize(this.listLetterTypes, {
+      async: true,
+      expires: allLetterTypesCacheTTL,
     });
 
-    this.getLetterTypeById = moize(this.getLetterTypeById, {
-      maxAge: letterTypeCacheTTL,
+    type MemoizedListLetterTypes = Memoized<typeof this.listLetterTypes, Options<typeof this.listLetterTypes>>;
+    (this.listLetterTypes as MemoizedListLetterTypes).cache.on('add', () => this.log.info('Creating new listLetterTypes memo'));
+
+    this.getLetterTypeById = memoize(this.getLetterTypeById, {
+      async: true,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getLetterTypeById memo'),
+      expires: letterTypeCacheTTL,
     });
+
+    type MemoizedGetLetterTypeById = Memoized<typeof this.getLetterTypeById, Options<typeof this.getLetterTypeById>>;
+    (this.getLetterTypeById as MemoizedGetLetterTypeById).cache.on('add', () => this.log.info('Creating new getLetterTypeById memo'));
 
     this.log.debug('DefaultLetterTypeService initiated.');
   }

@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -90,19 +91,25 @@ export class DefaultCountryService implements CountryService {
 
     this.log.debug('Cache TTL values; allCountriesCacheTTL: %d ms, countryCacheTTL: %d ms', allCountriesCacheTTL, countryCacheTTL);
 
-    this.listCountries = moize(this.listCountries, {
-      maxAge: allCountriesCacheTTL,
-      onCacheAdd: (cache) => {
-        this.log.info('Creating new listCountries memo; keys: %s', cache.keys);
-      },
+    this.listCountries = memoize(this.listCountries, {
+      async: true,
+      expires: allCountriesCacheTTL,
     });
 
-    this.getCountryById = moize(this.getCountryById, {
-      maxAge: countryCacheTTL,
+    type MemoizedListCountries = Memoized<typeof this.listCountries, Options<typeof this.listCountries>>;
+    (this.listCountries as MemoizedListCountries).cache.on('add', ({ key }) => {
+      this.log.info('Creating new listCountries memo; keys: %s', key);
+    });
+
+    this.getCountryById = memoize(this.getCountryById, {
+      async: true,
+      expires: countryCacheTTL,
       maxSize: Infinity,
-      onCacheAdd: (cache) => {
-        this.log.info('Creating new getCountryById memo; keys: %s', cache.keys);
-      },
+    });
+
+    type MemoizedGetCountryById = Memoized<typeof this.getCountryById, Options<typeof this.getCountryById>>;
+    (this.getCountryById as MemoizedGetCountryById).cache.on('add', ({ key }) => {
+      this.log.info('Creating new getCountryById memo; keys: %s', key);
     });
 
     this.log.debug('DefaultCountryService initialized.');

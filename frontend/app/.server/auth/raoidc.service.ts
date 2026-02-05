@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 import { subtle } from 'node:crypto';
 
 import type { ServerConfig } from '~/.server/configs';
@@ -116,11 +117,14 @@ export class DefaultRaoidcService implements RaoidcService {
     // Configure caching for raoidc operations
     const raoidcMetadataCacheTTL = 1000 * this.serverConfig.AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS;
 
-    this.fetchServerMetadata = moize(this.fetchServerMetadata, {
-      maxAge: raoidcMetadataCacheTTL,
-      onCacheAdd: () => {
-        this.log.info('Creating new fetchServerMetadata memo');
-      },
+    this.fetchServerMetadata = memoize(this.fetchServerMetadata, {
+      async: true,
+      expires: raoidcMetadataCacheTTL,
+    });
+
+    type MemoizedFetchServerMetadata = Memoized<typeof this.fetchServerMetadata, Options<typeof this.fetchServerMetadata>>;
+    (this.fetchServerMetadata as MemoizedFetchServerMetadata).cache.on('add', () => {
+      this.log.info('Creating new fetchServerMetadata memo');
     });
 
     this.log.debug('DefaultRaoidcService initiated.');

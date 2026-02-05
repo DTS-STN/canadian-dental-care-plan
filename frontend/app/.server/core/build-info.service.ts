@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 
 import type { ClientConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -32,10 +33,11 @@ export class DefaultBuildInfoService implements BuildInfoService {
   }
 
   private init(): void {
-    this.getBuildInfo = moize(this.getBuildInfo, {
-      onCacheAdd: () => {
-        this.log.info('Creating new getBuildInfo memo');
-      },
+    this.getBuildInfo = memoize(this.getBuildInfo);
+
+    type MemoizedGetBuildInfo = Memoized<typeof this.getBuildInfo, Options<typeof this.getBuildInfo>>;
+    (this.getBuildInfo as MemoizedGetBuildInfo).cache.on('add', () => {
+      this.log.info('Creating new getBuildInfo memo');
     });
 
     this.log.debug('DefaultBuildInfoService initiated.');

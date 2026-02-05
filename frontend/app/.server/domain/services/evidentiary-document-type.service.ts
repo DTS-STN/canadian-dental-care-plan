@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -75,16 +76,22 @@ export class DefaultEvidentiaryDocumentTypeService implements EvidentiaryDocumen
 
     this.log.debug('Cache TTL values; allEvidentiaryDocumentTypesCacheTTL: %d ms, evidentiaryDocumentTypeCacheTTL: %d ms', allEvidentiaryDocumentTypesCacheTTL, evidentiaryDocumentTypeCacheTTL);
 
-    this.listEvidentiaryDocumentTypes = moize(this.listEvidentiaryDocumentTypes, {
-      maxAge: allEvidentiaryDocumentTypesCacheTTL,
-      onCacheAdd: () => this.log.info('Creating new listEvidentiaryDocumentTypes memo'),
+    this.listEvidentiaryDocumentTypes = memoize(this.listEvidentiaryDocumentTypes, {
+      async: true,
+      expires: allEvidentiaryDocumentTypesCacheTTL,
     });
 
-    this.getEvidentiaryDocumentTypeById = moize(this.getEvidentiaryDocumentTypeById, {
-      maxAge: evidentiaryDocumentTypeCacheTTL,
+    type MemoizedListEvidentiaryDocumentTypes = Memoized<typeof this.listEvidentiaryDocumentTypes, Options<typeof this.listEvidentiaryDocumentTypes>>;
+    (this.listEvidentiaryDocumentTypes as MemoizedListEvidentiaryDocumentTypes).cache.on('add', () => this.log.info('Creating new listEvidentiaryDocumentTypes memo'));
+
+    this.getEvidentiaryDocumentTypeById = memoize(this.getEvidentiaryDocumentTypeById, {
+      async: true,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getEvidentiaryDocumentTypeById memo'),
+      expires: evidentiaryDocumentTypeCacheTTL,
     });
+
+    type MemoizedGetEvidentiaryDocumentTypeById = Memoized<typeof this.getEvidentiaryDocumentTypeById, Options<typeof this.getEvidentiaryDocumentTypeById>>;
+    (this.getEvidentiaryDocumentTypeById as MemoizedGetEvidentiaryDocumentTypeById).cache.on('add', () => this.log.info('Creating new getEvidentiaryDocumentTypeById memo'));
 
     this.log.debug('DefaultEvidentiaryDocumentTypeService initiated.');
   }

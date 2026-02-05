@@ -1,4 +1,4 @@
-import type { Moized } from 'moize';
+import type { Memoized, Options } from 'micro-memoize';
 import { None, Some } from 'oxide.ts';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
@@ -10,7 +10,7 @@ import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositori
 import type { ClientFriendlyStatusServiceImpl_ServerConfig } from '~/.server/domain/services';
 import { DefaultClientFriendlyStatusService } from '~/.server/domain/services';
 
-vi.mock('moize');
+vi.mock('micro-memoize');
 
 describe('DefaultClientFriendlyStatusService', () => {
   const mockServerConfig: ClientFriendlyStatusServiceImpl_ServerConfig = {
@@ -18,13 +18,13 @@ describe('DefaultClientFriendlyStatusService', () => {
   };
 
   describe('constructor', () => {
-    it('sets the correct maxAge for moize options', () => {
+    it('sets the correct expires for memoize options', () => {
       const mockClientFriendlyStatusDtoMapper = mock<ClientFriendlyStatusDtoMapper>();
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
 
       const service = new DefaultClientFriendlyStatusService(mockClientFriendlyStatusDtoMapper, mockClientFriendlyStatusRepository, mockServerConfig); // Act and Assert
 
-      expect((service.getClientFriendlyStatusById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect((service.getClientFriendlyStatusById as Memoized<typeof service.getClientFriendlyStatusById, Options<typeof service.getClientFriendlyStatusById>>).options.expires).toBe(5000); // 5 seconds in milliseconds
     });
   });
 

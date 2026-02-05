@@ -1,6 +1,7 @@
 import type { HealthCheck } from '@dts-stn/health-checks';
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -34,12 +35,15 @@ export class NotificationHealthCheck implements HealthCheck {
     const healthCacheTTL = this.serverConfig.HEALTH_CACHE_TTL;
     this.log.debug('Initializing NotificationHealthCheck with cache TTL of %d ms.', healthCacheTTL);
 
-    this.check = moize.promise(this.check, {
-      maxAge: healthCacheTTL,
-      // transformArgs is required to effectively ignore the abort signal sent from @dts-stn/health-checks when caching
-      transformArgs: () => [],
-      onCacheAdd: () => this.log.info('Cached function for NotificationHealthCheck has been initialized.'),
+    this.check = memoize(this.check, {
+      async: true,
+      expires: healthCacheTTL,
+      // transformKey is required to effectively ignore the abort signal sent from @dts-stn/health-checks when caching
+      transformKey: () => [''],
     });
+
+    type MemoizedCheck = Memoized<typeof this.check, Options<typeof this.check>>;
+    (this.check as MemoizedCheck).cache.on('add', () => this.log.info('Cached function for NotificationHealthCheck has been initialized.'));
 
     this.log.debug('NotificationHealthCheck initialization complete.');
   }

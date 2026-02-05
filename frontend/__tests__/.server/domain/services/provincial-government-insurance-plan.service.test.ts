@@ -1,4 +1,4 @@
-import type { Moized } from 'moize';
+import type { Memoized, Options } from 'micro-memoize';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
@@ -9,7 +9,7 @@ import type { ProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domai
 import type { GovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import { DefaultProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
 
-vi.mock('moize');
+vi.mock('micro-memoize');
 
 describe('DefaultProvincialGovernmentInsurancePlanService', () => {
   const mockServerConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'> = {
@@ -18,14 +18,14 @@ describe('DefaultProvincialGovernmentInsurancePlanService', () => {
   };
 
   describe('constructor', () => {
-    it('sets the correct maxAge for moize options', () => {
+    it('sets the correct expires for memoize options', () => {
       const mockProvincialGovernmentInsurancePlanDtoMapper = mock<ProvincialGovernmentInsurancePlanDtoMapper>();
       const mockGovernmentInsurancePlanRepository = mock<GovernmentInsurancePlanRepository>();
 
       const service = new DefaultProvincialGovernmentInsurancePlanService(mockProvincialGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig); // Act and Assert
 
-      expect((service.listProvincialGovernmentInsurancePlans as Moized).options.maxAge).toBe(10_000); // 10 seconds in milliseconds
-      expect((service.getProvincialGovernmentInsurancePlanById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect((service.listProvincialGovernmentInsurancePlans as Memoized<typeof service.listProvincialGovernmentInsurancePlans, Options<typeof service.listProvincialGovernmentInsurancePlans>>).options.expires).toBe(10_000); // 10 seconds in milliseconds
+      expect((service.getProvincialGovernmentInsurancePlanById as Memoized<typeof service.getProvincialGovernmentInsurancePlanById, Options<typeof service.getProvincialGovernmentInsurancePlanById>>).options.expires).toBe(5000); // 5 seconds in milliseconds
     });
   });
 

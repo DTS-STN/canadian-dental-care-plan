@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 
 import { TYPES } from '~/.server/constants';
 import { createLogger } from '~/.server/logging';
@@ -32,11 +33,11 @@ export class DefaultMailingAddressValidatorFactory implements MailingAddressVali
   }
 
   private init(): void {
-    this.createMailingAddressValidator = moize(this.createMailingAddressValidator, {
-      maxSize: Infinity,
-      onCacheAdd: (cache) => {
-        this.log.info('Creating new createMailingAddressValidator memo; cache.key: %s', [...cache.keys].shift());
-      },
+    this.createMailingAddressValidator = memoize(this.createMailingAddressValidator);
+
+    type MemoizedCreateMailingAddressValidator = Memoized<typeof this.createMailingAddressValidator, Options<typeof this.createMailingAddressValidator>>;
+    (this.createMailingAddressValidator as MemoizedCreateMailingAddressValidator).cache.on('add', ({ key }) => {
+      this.log.info('Creating new createMailingAddressValidator memo; cache.key: %s', key);
     });
 
     this.log.debug('DefaultMailingAddressValidatorFactory initiated.');

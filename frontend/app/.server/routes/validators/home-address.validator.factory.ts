@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 
 import { TYPES } from '~/.server/constants';
 import { createLogger } from '~/.server/logging';
@@ -32,11 +33,11 @@ export class DefaultHomeAddressValidatorFactory implements HomeAddressValidatorF
   }
 
   private init(): void {
-    this.createHomeAddressValidator = moize(this.createHomeAddressValidator, {
-      maxSize: Infinity,
-      onCacheAdd: (cache) => {
-        this.log.info('Creating new createHomeAddressValidator memo; cache.key: %s', [...cache.keys].shift());
-      },
+    this.createHomeAddressValidator = memoize(this.createHomeAddressValidator);
+
+    type MemoizedCreateHomeAddressValidator = Memoized<typeof this.createHomeAddressValidator, Options<typeof this.createHomeAddressValidator>>;
+    (this.createHomeAddressValidator as MemoizedCreateHomeAddressValidator).cache.on('add', ({ key }) => {
+      this.log.info('Creating new createHomeAddressValidator memo; cache.key: %s', key);
     });
 
     this.log.debug('DefaultHomeAddressValidatorFactory initiated.');

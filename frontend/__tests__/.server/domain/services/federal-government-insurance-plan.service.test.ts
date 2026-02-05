@@ -1,4 +1,4 @@
-import type { Moized } from 'moize';
+import type { Memoized, Options } from 'micro-memoize';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
@@ -9,7 +9,7 @@ import type { FederalGovernmentInsurancePlanDtoMapper } from '~/.server/domain/m
 import type { GovernmentInsurancePlanRepository } from '~/.server/domain/repositories';
 import { DefaultFederalGovernmentInsurancePlanService } from '~/.server/domain/services';
 
-vi.mock('moize');
+vi.mock('micro-memoize');
 
 describe('DefaultFederalGovernmentInsurancePlanService', () => {
   const mockServerConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'> = {
@@ -18,14 +18,14 @@ describe('DefaultFederalGovernmentInsurancePlanService', () => {
   };
 
   describe('constructor', () => {
-    it('sets the correct maxAge for moize options', () => {
+    it('sets the correct expires for memoize options', () => {
       const mockFederalGovernmentInsurancePlanDtoMapper = mock<FederalGovernmentInsurancePlanDtoMapper>();
       const mockGovernmentInsurancePlanRepository = mock<GovernmentInsurancePlanRepository>();
 
       const service = new DefaultFederalGovernmentInsurancePlanService(mockFederalGovernmentInsurancePlanDtoMapper, mockGovernmentInsurancePlanRepository, mockServerConfig); // Act and Assert
 
-      expect((service.listFederalGovernmentInsurancePlans as Moized).options.maxAge).toBe(10_000); // 10 seconds in milliseconds
-      expect((service.getFederalGovernmentInsurancePlanById as Moized).options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect((service.listFederalGovernmentInsurancePlans as Memoized<typeof service.listFederalGovernmentInsurancePlans, Options<typeof service.listFederalGovernmentInsurancePlans>>).options.expires).toBe(10_000); // 10 seconds in milliseconds
+      expect((service.getFederalGovernmentInsurancePlanById as Memoized<typeof service.getFederalGovernmentInsurancePlanById, Options<typeof service.getFederalGovernmentInsurancePlanById>>).options.expires).toBe(5000); // 5 seconds in milliseconds
     });
   });
 

@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -76,11 +77,14 @@ export class DefaultClientFriendlyStatusService implements ClientFriendlyStatusS
 
     this.log.debug('Cache TTL value: clientFriendlyStatusCacheTTL: %d ms', clientFriendlyStatusCacheTTL);
 
-    this.getClientFriendlyStatusById = moize(this.getClientFriendlyStatusById, {
-      maxAge: clientFriendlyStatusCacheTTL,
+    this.getClientFriendlyStatusById = memoize(this.getClientFriendlyStatusById, {
+      async: true,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getClientFriendlyStatusById memo'),
+      expires: clientFriendlyStatusCacheTTL,
     });
+
+    type MemoizedGetClientFriendlyStatusById = Memoized<typeof this.getClientFriendlyStatusById, Options<typeof this.getClientFriendlyStatusById>>;
+    (this.getClientFriendlyStatusById as MemoizedGetClientFriendlyStatusById).cache.on('add', () => this.log.info('Creating new getClientFriendlyStatusById memo'));
 
     this.log.debug('DefaultClientFriendlyStatusService initiated.');
   }

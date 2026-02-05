@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 import { None, Some } from 'oxide.ts';
 import type { Option } from 'oxide.ts';
 
@@ -46,22 +47,31 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
 
     this.log.debug('Cache TTL values; allProvincialGovernmentInsurancePlansCacheTTL: %d ms, provincialGovernmentInsurancePlanCacheTTL: %d ms', allProvincialGovernmentInsurancePlansCacheTTL, provincialGovernmentInsurancePlanCacheTTL);
 
-    this.listProvincialGovernmentInsurancePlans = moize(this.listProvincialGovernmentInsurancePlans, {
-      maxAge: allProvincialGovernmentInsurancePlansCacheTTL,
-      onCacheAdd: () => this.log.info('Creating new listProvincialGovernmentInsurancePlans memo'),
+    this.listProvincialGovernmentInsurancePlans = memoize(this.listProvincialGovernmentInsurancePlans, {
+      async: true,
+      expires: allProvincialGovernmentInsurancePlansCacheTTL,
     });
 
-    this.findProvincialGovernmentInsurancePlanById = moize(this.findProvincialGovernmentInsurancePlanById, {
-      maxAge: provincialGovernmentInsurancePlanCacheTTL,
+    type MemoizedListProvincialGovernmentInsurancePlans = Memoized<typeof this.listProvincialGovernmentInsurancePlans, Options<typeof this.listProvincialGovernmentInsurancePlans>>;
+    (this.listProvincialGovernmentInsurancePlans as MemoizedListProvincialGovernmentInsurancePlans).cache.on('add', () => this.log.info('Creating new listProvincialGovernmentInsurancePlans memo'));
+
+    this.findProvincialGovernmentInsurancePlanById = memoize(this.findProvincialGovernmentInsurancePlanById, {
+      async: true,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new findProvincialGovernmentInsurancePlanById memo'),
+      expires: provincialGovernmentInsurancePlanCacheTTL,
     });
 
-    this.getProvincialGovernmentInsurancePlanById = moize(this.getProvincialGovernmentInsurancePlanById, {
-      maxAge: provincialGovernmentInsurancePlanCacheTTL,
+    type MemoizedFindProvincialGovernmentInsurancePlanById = Memoized<typeof this.findProvincialGovernmentInsurancePlanById, Options<typeof this.findProvincialGovernmentInsurancePlanById>>;
+    (this.findProvincialGovernmentInsurancePlanById as MemoizedFindProvincialGovernmentInsurancePlanById).cache.on('add', () => this.log.info('Creating new findProvincialGovernmentInsurancePlanById memo'));
+
+    this.getProvincialGovernmentInsurancePlanById = memoize(this.getProvincialGovernmentInsurancePlanById, {
+      async: true,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getProvincialGovernmentInsurancePlanById memo'),
+      expires: provincialGovernmentInsurancePlanCacheTTL,
     });
+
+    type MemoizedGetProvincialGovernmentInsurancePlanById = Memoized<typeof this.getProvincialGovernmentInsurancePlanById, Options<typeof this.getProvincialGovernmentInsurancePlanById>>;
+    (this.getProvincialGovernmentInsurancePlanById as MemoizedGetProvincialGovernmentInsurancePlanById).cache.on('add', () => this.log.info('Creating new getProvincialGovernmentInsurancePlanById memo'));
 
     this.log.debug('DefaultProvincialGovernmentInsurancePlanService initiated.');
   }

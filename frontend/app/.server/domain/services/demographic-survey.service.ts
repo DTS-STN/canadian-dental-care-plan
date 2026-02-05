@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -265,71 +266,95 @@ export class DefaultDemographicSurveyServiceService implements DemographicSurvey
 
     this.log.debug(`Cache TTL value: demographicSurveyCacheTTL: %d ms`, demographicSurveyCacheTTL);
 
-    this.listIndigenousStatuses = moize(this.listIndigenousStatuses, {
-      maxAge: demographicSurveyCacheTTL,
-      onCacheAdd: () => this.log.info('Creating new listIndigenousStatuses memo'),
+    this.listIndigenousStatuses = memoize(this.listIndigenousStatuses, {
+      expires: demographicSurveyCacheTTL,
     });
 
-    this.getIndigenousStatusById = moize(this.getIndigenousStatusById, {
-      maxAge: demographicSurveyCacheTTL,
+    type MemoizedListIndigenousStatuses = Memoized<typeof this.listIndigenousStatuses, Options<typeof this.listIndigenousStatuses>>;
+    (this.listIndigenousStatuses as MemoizedListIndigenousStatuses).cache.on('add', () => this.log.info('Creating new listIndigenousStatuses memo'));
+
+    this.getIndigenousStatusById = memoize(this.getIndigenousStatusById, {
+      expires: demographicSurveyCacheTTL,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getIndigenousStatusById memo'),
     });
 
-    this.listFirstNations = moize(this.listFirstNations, {
-      maxAge: demographicSurveyCacheTTL,
-      onCacheAdd: () => this.log.info('Creating new listFirstNations memo'),
+    type MemoizedGetIndigenousStatusById = Memoized<typeof this.getIndigenousStatusById, Options<typeof this.getIndigenousStatusById>>;
+    (this.getIndigenousStatusById as MemoizedGetIndigenousStatusById).cache.on('add', () => this.log.info('Creating new getIndigenousStatusById memo'));
+
+    this.listFirstNations = memoize(this.listFirstNations, {
+      expires: demographicSurveyCacheTTL,
     });
 
-    this.getFirstNationsById = moize(this.getFirstNationsById, {
-      maxAge: demographicSurveyCacheTTL,
+    type MemoizedListFirstNations = Memoized<typeof this.listFirstNations, Options<typeof this.listFirstNations>>;
+    (this.listFirstNations as MemoizedListFirstNations).cache.on('add', () => this.log.info('Creating new listFirstNations memo'));
+
+    this.getFirstNationsById = memoize(this.getFirstNationsById, {
+      expires: demographicSurveyCacheTTL,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getFirstNationsById memo'),
     });
 
-    this.listDisabilityStatuses = moize(this.listDisabilityStatuses, {
-      maxAge: demographicSurveyCacheTTL,
-      onCacheAdd: () => this.log.info('Creating new listDisabilityStatuses memo'),
+    type MemoizedGetFirstNationsById = Memoized<typeof this.getFirstNationsById, Options<typeof this.getFirstNationsById>>;
+    (this.getFirstNationsById as MemoizedGetFirstNationsById).cache.on('add', () => this.log.info('Creating new getFirstNationsById memo'));
+
+    this.listDisabilityStatuses = memoize(this.listDisabilityStatuses, {
+      expires: demographicSurveyCacheTTL,
     });
 
-    this.getDisabilityStatusById = moize(this.getDisabilityStatusById, {
-      maxAge: demographicSurveyCacheTTL,
+    type MemoizedListDisabilityStatuses = Memoized<typeof this.listDisabilityStatuses, Options<typeof this.listDisabilityStatuses>>;
+    (this.listDisabilityStatuses as MemoizedListDisabilityStatuses).cache.on('add', () => this.log.info('Creating new listDisabilityStatuses memo'));
+
+    this.getDisabilityStatusById = memoize(this.getDisabilityStatusById, {
+      expires: demographicSurveyCacheTTL,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getDisabilityStatusById memo'),
     });
 
-    this.listEthnicGroups = moize(this.listEthnicGroups, {
-      maxAge: demographicSurveyCacheTTL,
-      onCacheAdd: () => this.log.info('Creating new listEthnicGroups memo'),
+    type MemoizedGetDisabilityStatusById = Memoized<typeof this.getDisabilityStatusById, Options<typeof this.getDisabilityStatusById>>;
+    (this.getDisabilityStatusById as MemoizedGetDisabilityStatusById).cache.on('add', () => this.log.info('Creating new getDisabilityStatusById memo'));
+
+    this.listEthnicGroups = memoize(this.listEthnicGroups, {
+      expires: demographicSurveyCacheTTL,
     });
 
-    this.getEthnicGroupById = moize(this.getEthnicGroupById, {
-      maxAge: demographicSurveyCacheTTL,
+    type MemoizedListEthnicGroups = Memoized<typeof this.listEthnicGroups, Options<typeof this.listEthnicGroups>>;
+    (this.listEthnicGroups as MemoizedListEthnicGroups).cache.on('add', () => this.log.info('Creating new listEthnicGroups memo'));
+
+    this.getEthnicGroupById = memoize(this.getEthnicGroupById, {
+      expires: demographicSurveyCacheTTL,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getEthnicGroupById memo'),
     });
 
-    this.listLocationBornStatuses = moize(this.listLocationBornStatuses, {
-      maxAge: demographicSurveyCacheTTL,
-      onCacheAdd: () => this.log.info('Creating new listLocationBornStatuses memo'),
+    type MemoizedGetEthnicGroupById = Memoized<typeof this.getEthnicGroupById, Options<typeof this.getEthnicGroupById>>;
+    (this.getEthnicGroupById as MemoizedGetEthnicGroupById).cache.on('add', () => this.log.info('Creating new getEthnicGroupById memo'));
+
+    this.listLocationBornStatuses = memoize(this.listLocationBornStatuses, {
+      expires: demographicSurveyCacheTTL,
     });
 
-    this.getLocationBornStatusById = moize(this.getLocationBornStatusById, {
-      maxAge: demographicSurveyCacheTTL,
+    type MemoizedListLocationBornStatuses = Memoized<typeof this.listLocationBornStatuses, Options<typeof this.listLocationBornStatuses>>;
+    (this.listLocationBornStatuses as MemoizedListLocationBornStatuses).cache.on('add', () => this.log.info('Creating new listLocationBornStatuses memo'));
+
+    this.getLocationBornStatusById = memoize(this.getLocationBornStatusById, {
+      expires: demographicSurveyCacheTTL,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getLocationBornStatusById memo'),
     });
 
-    this.listGenderStatuses = moize(this.listGenderStatuses, {
-      maxAge: demographicSurveyCacheTTL,
-      onCacheAdd: () => this.log.info('Creating new listGenderStatuses memo'),
+    type MemoizedGetLocationBornStatusById = Memoized<typeof this.getLocationBornStatusById, Options<typeof this.getLocationBornStatusById>>;
+    (this.getLocationBornStatusById as MemoizedGetLocationBornStatusById).cache.on('add', () => this.log.info('Creating new getLocationBornStatusById memo'));
+
+    this.listGenderStatuses = memoize(this.listGenderStatuses, {
+      expires: demographicSurveyCacheTTL,
     });
 
-    this.getGenderStatusById = moize(this.getGenderStatusById, {
-      maxAge: demographicSurveyCacheTTL,
+    type MemoizedListGenderStatuses = Memoized<typeof this.listGenderStatuses, Options<typeof this.listGenderStatuses>>;
+    (this.listGenderStatuses as MemoizedListGenderStatuses).cache.on('add', () => this.log.info('Creating new listGenderStatuses memo'));
+
+    this.getGenderStatusById = memoize(this.getGenderStatusById, {
+      expires: demographicSurveyCacheTTL,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getGenderStatusById memo'),
     });
+
+    type MemoizedGetGenderStatusById = Memoized<typeof this.getGenderStatusById, Options<typeof this.getGenderStatusById>>;
+    (this.getGenderStatusById as MemoizedGetGenderStatusById).cache.on('add', () => this.log.info('Creating new getGenderStatusById memo'));
 
     this.log.debug('DefaultDemographicSurveyServiceService initiated.');
   }

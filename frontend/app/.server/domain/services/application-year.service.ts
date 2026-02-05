@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -50,19 +51,23 @@ export class DefaultApplicationYearService implements ApplicationYearService {
   private init(): void {
     this.log.debug('Cache TTL value: %d ms', 1000 * this.serverConfig.LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS);
 
-    this.getIntakeApplicationYear = moize(this.getIntakeApplicationYear, {
-      matchesKey: (cacheKey, key) => cacheKey.every((item, idx) => item.date === key[idx].date),
-      maxAge: this.serverConfig.LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS * 1000,
+    this.getIntakeApplicationYear = memoize(this.getIntakeApplicationYear, {
+      isKeyEqual: (cacheKey, key) => cacheKey.every((item, idx) => item.date === key[idx].date),
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getIntakeApplicationYear memo'),
+      expires: this.serverConfig.LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS * 1000,
     });
 
-    this.getRenewalApplicationYear = moize(this.getRenewalApplicationYear, {
-      matchesKey: (cacheKey, key) => cacheKey.every((item, idx) => item.date === key[idx].date),
-      maxAge: this.serverConfig.LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS * 1000,
+    type MemoizedGetIntakeApplicationYear = Memoized<typeof this.getIntakeApplicationYear, Options<typeof this.getIntakeApplicationYear>>;
+    (this.getIntakeApplicationYear as MemoizedGetIntakeApplicationYear).cache.on('add', () => this.log.info('Creating new getIntakeApplicationYear memo'));
+
+    this.getRenewalApplicationYear = memoize(this.getRenewalApplicationYear, {
+      isKeyEqual: (cacheKey, key) => cacheKey.every((item, idx) => item.date === key[idx].date),
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getRenewalApplicationYear memo'),
+      expires: this.serverConfig.LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS * 1000,
     });
+
+    type MemoizedGetRenewalApplicationYear = Memoized<typeof this.getRenewalApplicationYear, Options<typeof this.getRenewalApplicationYear>>;
+    (this.getRenewalApplicationYear as MemoizedGetRenewalApplicationYear).cache.on('add', () => this.log.info('Creating new getRenewalApplicationYear memo'));
 
     this.log.debug('DefaultApplicationYearService initiated.');
   }

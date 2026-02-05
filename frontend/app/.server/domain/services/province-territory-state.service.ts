@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import moize from 'moize';
+import { memoize } from 'micro-memoize';
+import type { Memoized, Options } from 'micro-memoize';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -101,22 +102,31 @@ export class DefaultProvinceTerritoryStateService implements ProvinceTerritorySt
 
     this.log.debug('Cache TTL values; allProvinceTerritoryStatesCacheTTL: %d ms, provinceTerritoryStateCacheTTL: %d ms', allProvinceTerritoryStatesCacheTTL, provinceTerritoryStateCacheTTL);
 
-    this.listProvinceTerritoryStates = moize(this.listProvinceTerritoryStates, {
-      maxAge: allProvinceTerritoryStatesCacheTTL,
-      onCacheAdd: () => this.log.info('Creating new listProvinceTerritoryStates memo'),
+    this.listProvinceTerritoryStates = memoize(this.listProvinceTerritoryStates, {
+      async: true,
+      expires: allProvinceTerritoryStatesCacheTTL,
     });
 
-    this.getProvinceTerritoryStateById = moize(this.getProvinceTerritoryStateById, {
-      maxAge: provinceTerritoryStateCacheTTL,
+    type MemoizedListProvinceTerritoryStates = Memoized<typeof this.listProvinceTerritoryStates, Options<typeof this.listProvinceTerritoryStates>>;
+    (this.listProvinceTerritoryStates as MemoizedListProvinceTerritoryStates).cache.on('add', () => this.log.info('Creating new listProvinceTerritoryStates memo'));
 
+    this.getProvinceTerritoryStateById = memoize(this.getProvinceTerritoryStateById, {
+      async: true,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateById memo'),
+      expires: provinceTerritoryStateCacheTTL,
     });
-    this.getProvinceTerritoryStateByCode = moize(this.getProvinceTerritoryStateByCode, {
-      maxAge: provinceTerritoryStateCacheTTL,
+
+    type MemoizedGetProvinceTerritoryStateById = Memoized<typeof this.getProvinceTerritoryStateById, Options<typeof this.getProvinceTerritoryStateById>>;
+    (this.getProvinceTerritoryStateById as MemoizedGetProvinceTerritoryStateById).cache.on('add', () => this.log.info('Creating new getProvinceTerritoryStateById memo'));
+
+    this.getProvinceTerritoryStateByCode = memoize(this.getProvinceTerritoryStateByCode, {
+      async: true,
       maxSize: Infinity,
-      onCacheAdd: () => this.log.info('Creating new getProvinceTerritoryStateByCode memo'),
+      expires: provinceTerritoryStateCacheTTL,
     });
+
+    type MemoizedGetProvinceTerritoryStateByCode = Memoized<typeof this.getProvinceTerritoryStateByCode, Options<typeof this.getProvinceTerritoryStateByCode>>;
+    (this.getProvinceTerritoryStateByCode as MemoizedGetProvinceTerritoryStateByCode).cache.on('add', () => this.log.info('Creating new getProvinceTerritoryStateByCode memo'));
 
     this.log.debug('DefaultProvinceTerritoryStateService initiated.');
   }
