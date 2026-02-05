@@ -57,6 +57,12 @@ export async function loader({ context: { appContainer, session }, request, para
     country: countryHome?.name,
   };
 
+  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
+  const isEmailVerified =
+    state.communicationPreferences?.hasChanged && (state.communicationPreferences.value.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || state.communicationPreferences.value.preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID)
+      ? state.emailVerified
+      : true;
+
   return {
     state: {
       phoneNumber: state.phoneNumber,
@@ -66,6 +72,7 @@ export async function loader({ context: { appContainer, session }, request, para
     preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     preferredMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale) : undefined,
     preferredNotificationMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale) : undefined,
+    isEmailVerified,
     mailingAddressInfo,
     homeAddressInfo,
     meta,
@@ -73,13 +80,13 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export default function NewAdultContactInformation({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, isEmailVerified } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const sections = [
     { id: 'phone-number', completed: state.phoneNumber?.hasChanged === true },
     { id: 'address', completed: mailingAddressInfo.address !== undefined && homeAddressInfo.address !== undefined },
-    { id: 'communication-preferences', completed: state.communicationPreferences?.hasChanged === true },
+    { id: 'communication-preferences', completed: state.communicationPreferences?.hasChanged === true && isEmailVerified },
   ] as const;
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
   const allSectionsCompleted = completedSections.length === sections.length;
