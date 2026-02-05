@@ -71,6 +71,8 @@
     "edit-child-information": "Edit child {{childNumber}} information",
     "edit-child-dental-insurance": "Edit access to private dental insurance",
     "edit-child-dental-benefits": "Edit access to government dental benefits",
+    "update-dental-benefits": "Update my child's access to government dental benefits",
+    "benefits-not-changed": "My child's access to government dental benefits has not changed",
     "add-child-information": "Add applicant information",
     "add-answer": "Add answer",
     "child-information-indicate-status": "Enter your child's name, date of birth, and Social Insurance Number (SIN).",
@@ -89,7 +91,7 @@
     "dental-insurance-no": "No, this child does not have access to private dental insurance or coverage",
     "dental-benefits-yes": "Yes, this child has federal, provincial, or territorial benefits",
     "dental-benefits-no": "No, this child does not have federal, provincial, or territorial benefits",
-    "back-btn": "Parent or legal guardian information",
+    "back-btn": "Your access to dental insurance",
     "submit-btn": "Submit",
     "add-child": "Add a child",
     "remove-child": "Remove child"

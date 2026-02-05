@@ -71,6 +71,8 @@
     "edit-child-information": "Modifier les renseignements sur l'enfant {{childNumber}}",
     "edit-child-dental-insurance": "Modifier la réponse sur l'accès à une assurance dentaire privée",
     "edit-child-dental-benefits": "Modifier la réponse sur l'accès aux prestations dentaires gouvernementales",
+    "update-dental-benefits": "Mettre à jour l'accès de mon enfant aux prestations dentaires gouvernementales",
+    "benefits-not-changed": "L'accès de mon enfant aux prestations dentaires gouvernementales n'a pas changé",
     "add-child-information": "Ajouter les renseignements du demandeur",
     "add-answer": "Ajouter une réponse",
     "child-information-indicate-status": "Entrez le nom, la date de naissance et le numéro d'identification du membre de votre enfant.",
@@ -89,7 +91,7 @@
     "dental-insurance-no": "Non, l'enfant n'a pas accès à une assurance ou une couverture dentaire",
     "dental-benefits-yes": "Oui, l'enfant bénéficie de prestations dentaires fédérales, provinciales ou territoriales",
     "dental-benefits-no": "Non, l'enfant ne bénéficie pas de prestations dentaires fédérales, provinciales ou territoriales",
-    "back-btn": "Renseignements sur le parent ou le tuteur légal",
+    "back-btn": "Votre accès à une assurance dentaire",
     "submit-btn": "Soumettre la demande",
     "add-child": "Ajouter un enfant",
     "remove-child": "Retirer l'enfant"

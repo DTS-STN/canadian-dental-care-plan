@@ -78,6 +78,8 @@
     "edit-child-information": "Edit child {{childNumber}} information",
     "edit-child-dental-insurance": "Edit access to private dental insurance",
     "edit-child-dental-benefits": "Edit access to government dental benefits",
+    "update-dental-benefits": "Update my child's access to government dental benefits",
+    "benefits-not-changed": "My child's access to government dental benefits has not changed",
     "add-child-information": "Add applicant information",
     "add-answer": "Add answer",
     "child-information-indicate-status": "Enter your child's name, date of birth, and Social Insurance Number (SIN).",

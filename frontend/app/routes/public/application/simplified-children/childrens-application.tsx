@@ -1,8 +1,9 @@
 import type { SyntheticEvent } from 'react';
 
-import { redirect, useFetcher } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
+import { faCircleCheck } from '@fortawesome/free-regular-svg-icons';
 import { faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { randomUUID } from 'node:crypto';
 import { useTranslation } from 'react-i18next';
@@ -31,7 +32,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-const FORM_ACTION = { add: 'add', remove: 'remove' } as const;
+const FORM_ACTION = { add: 'add', remove: 'remove', DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-simplified-child', 'application', 'gcweb'),
@@ -124,6 +125,25 @@ export async function action({ context: { appContainer, session }, params, reque
         children: children,
       },
     });
+  }
+
+  if (formAction === FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED) {
+    const childId = formData.get('childId');
+    savePublicApplicationState({
+      params,
+      session,
+      state: {
+        children: state.children.map((child) => {
+          if (child.id !== childId) return child;
+          return {
+            ...child,
+            dentalBenefits: { hasChanged: false },
+          };
+        }),
+      },
+    });
+
+    return data({ success: true }, { status: 200 });
   }
 
   return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
@@ -273,19 +293,42 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                     </DefinitionList>
                   )}
                 </CardContent>
-                <CardFooter className="border-t bg-zinc-100">
-                  <ButtonLink
-                    id="edit-button"
-                    variant="link"
-                    className="p-0"
-                    routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits"
-                    params={{ ...params, childId: child.id }}
-                    startIcon={completedSections.includes('child-dental-benefits') ? faPenToSquare : faCirclePlus}
-                    size="lg"
-                  >
-                    {child.dentalBenefits === undefined ? t('application-simplified-child:childrens-application.add-answer') : t('application-simplified-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })}
-                  </ButtonLink>
-                </CardFooter>
+                {child.dentalBenefits ? (
+                  <CardFooter className="border-t bg-zinc-100">
+                    <ButtonLink
+                      id="edit-button-government-benefits"
+                      variant="link"
+                      className="p-0"
+                      routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits"
+                      params={{ ...params, childId: child.id }}
+                      startIcon={completedSections.includes('child-dental-benefits') ? faPenToSquare : faCirclePlus}
+                      size="lg"
+                    >
+                      {t('application-simplified-child:childrens-application.edit-child-dental-benefits')}
+                    </ButtonLink>
+                  </CardFooter>
+                ) : (
+                  <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+                    <div className="w-full px-6">
+                      <ButtonLink
+                        id="edit-button-update-access"
+                        variant="link"
+                        className="p-0 pb-5"
+                        routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits"
+                        params={{ ...params, childId: child.id }}
+                        startIcon={faPenToSquare}
+                        size="lg"
+                      >
+                        {t('application-simplified-child:childrens-application.update-dental-benefits')}
+                      </ButtonLink>
+                    </div>
+                    <div className="w-full px-6">
+                      <Button id="edit-button-not-changed" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                        {t('application-simplified-child:childrens-application.benefits-not-changed')}
+                      </Button>
+                    </div>
+                  </CardFooter>
+                )}
               </Card>
               <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
                 <CsrfTokenInput />
