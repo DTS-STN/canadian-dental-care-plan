@@ -298,7 +298,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                   disabled={isSubmitting}
                   variant="secondary"
                   size="sm"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Remove child - Child(ren) application click"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Child:Remove child - Child(ren) application click"
                 >
                   {t('application-simplified-child:childrens-application.remove-child')}
                 </Button>
@@ -308,7 +308,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
         })}
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
           <CsrfTokenInput />
-          <Button variant="primary" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Add child - Child(ren) application click">
+          <Button variant="primary" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Child:Add child - Child(ren) application click">
             {t('application-simplified-child:childrens-application.add-child')}
           </Button>
         </fetcher.Form>
