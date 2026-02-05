@@ -75,6 +75,7 @@ export class DefaultEvidentiaryDocumentRepository implements EvidentiaryDocument
     url.searchParams.set('$filter', `statuscode eq 1 and _esdc_clientid_value eq '${findEvidentiaryDocumentsRequest.clientID}'`);
 
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.evidentiary-documents.gets', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'GET',
       headers: {
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
@@ -131,6 +132,7 @@ export class DefaultEvidentiaryDocumentRepository implements EvidentiaryDocument
     };
 
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.evidentiary-documents.upload', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'POST',
       headers: {
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,

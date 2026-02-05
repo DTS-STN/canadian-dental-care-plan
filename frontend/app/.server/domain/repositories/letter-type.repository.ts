@@ -64,6 +64,7 @@ export class DefaultLetterTypeRepository implements LetterTypeRepository {
     url.searchParams.set('$filter', 'esdc_displayonportal eq 1 and statecode eq 0');
     url.searchParams.set('$expand', 'esdc_ParentId($select=esdc_portalnameenglish,esdc_portalnamefrench)');
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.letter-types.gets', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'GET',
       headers: {
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
