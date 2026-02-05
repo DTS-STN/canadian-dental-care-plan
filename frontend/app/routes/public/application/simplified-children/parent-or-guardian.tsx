@@ -69,6 +69,12 @@ export async function loader({ context: { appContainer, session }, request, para
     hasChanged: state.homeAddress?.hasChanged,
   };
 
+  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
+  const isEmailVerified =
+    state.communicationPreferences?.hasChanged && (state.communicationPreferences.value.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || state.communicationPreferences.value.preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID)
+      ? state.emailVerified
+      : true;
+
   return {
     state: {
       maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined,
@@ -82,6 +88,7 @@ export async function loader({ context: { appContainer, session }, request, para
     preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     preferredMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale) : undefined,
     preferredNotificationMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale) : undefined,
+    isEmailVerified,
     meta,
   };
 }
@@ -133,13 +140,13 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function RenewChildParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo, isEmailVerified } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const sections = [
     { id: 'phone-number', completed: state.phoneNumber !== undefined },
     { id: 'address', completed: mailingAddressInfo.hasChanged !== undefined && homeAddressInfo.hasChanged !== undefined },
-    { id: 'communication-preferences', completed: state.communicationPreferences !== undefined },
+    { id: 'communication-preferences', completed: state.communicationPreferences !== undefined && isEmailVerified },
   ] as const;
 
   const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
