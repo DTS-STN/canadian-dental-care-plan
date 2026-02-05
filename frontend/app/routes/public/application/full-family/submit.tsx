@@ -156,10 +156,10 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
                 </InputCheckbox>
               </div>
               <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-                <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
+                <NavigationButton loading={isSubmitting} variant="primary" direction="next">
                   {t('application-full-family:submit.submit')}
                 </NavigationButton>
-                <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-family/childrens-application" params={params}>
+                <NavigationButtonLink disabled={isSubmitting} variant="secondary" direction="previous" routeId="public/application/$id/full-family/childrens-application" params={params}>
                   {t('application-full-family:submit.children-application')}
                 </NavigationButtonLink>
               </div>

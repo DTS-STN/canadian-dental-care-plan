@@ -154,10 +154,10 @@ export default function RenewChildrenSubmit({ loaderData, params }: Route.Compon
                 </InputCheckbox>
               </div>
               <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-                <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
+                <NavigationButton loading={isSubmitting} variant="primary" direction="next">
                   {t('application-simplified-child:submit.submit')}
                 </NavigationButton>
-                <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/simplified-children/childrens-application" params={params}>
+                <NavigationButtonLink disabled={isSubmitting} variant="secondary" direction="previous" routeId="public/application/$id/simplified-children/childrens-application" params={params}>
                   {t('application-simplified-child:submit.childrens-application')}
                 </NavigationButtonLink>
               </div>

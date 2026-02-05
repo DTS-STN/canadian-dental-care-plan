@@ -147,10 +147,10 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
                 </InputCheckbox>
               </div>
               <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-                <NavigationButton disabled={isSubmitting} variant="primary" direction="next">
+                <NavigationButton loading={isSubmitting} variant="primary" direction="next">
                   {t('application-simplified-adult:submit.submit')}
                 </NavigationButton>
-                <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/simplified-adult/dental-insurance" params={params}>
+                <NavigationButtonLink disabled={isSubmitting} variant="secondary" direction="previous" routeId="public/application/$id/simplified-adult/dental-insurance" params={params}>
                   {t('application-simplified-adult:submit.dental-insurance')}
                 </NavigationButtonLink>
               </div>
