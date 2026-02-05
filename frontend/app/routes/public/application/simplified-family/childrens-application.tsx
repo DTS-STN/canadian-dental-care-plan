@@ -3,8 +3,8 @@ import type { SyntheticEvent } from 'react';
 import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import { faCircleCheck } from '@fortawesome/free-regular-svg-icons';
-import { faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faPenToSquare } from '@fortawesome/free-regular-svg-icons';
+import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import { randomUUID } from 'node:crypto';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -262,7 +262,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                     startIcon={completedSections.includes('child-dental-insurance') ? faPenToSquare : faCirclePlus}
                     size="lg"
                   >
-                    {child.dentalInsurance === undefined ? t('application-simplified-family:childrens-application.add-answer') : t('application-simplified-family:childrens-application.edit-child-dental-insurance', { childNumber: index + 1 })}
+                    {child.dentalInsurance === undefined ? t('application-simplified-family:childrens-application.add-answer') : t('application-simplified-family:childrens-application.edit-child-dental-insurance')}
                   </ButtonLink>
                 </CardFooter>
               </Card>
