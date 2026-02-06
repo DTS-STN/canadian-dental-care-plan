@@ -13,6 +13,7 @@ import { DefinitionList, DefinitionListItem } from '~/components/definition-list
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
 import { pageIds } from '~/page-ids';
+import { formatClientNumber } from '~/utils/application-code-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -118,7 +119,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             <DefinitionList layout="single-column">
               {defaultState.personalInformation.memberId && (
                 <DefinitionListItem className="sm:grid-cols-none" term={t('application:type-of-application.member-id')}>
-                  {defaultState.personalInformation.memberId}
+                  {formatClientNumber(defaultState.personalInformation.memberId)}
                 </DefinitionListItem>
               )}
               <DefinitionListItem className="sm:grid-cols-none" term={t('application:type-of-application.full-name')}>
