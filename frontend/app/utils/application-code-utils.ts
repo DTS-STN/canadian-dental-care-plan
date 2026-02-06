@@ -65,3 +65,14 @@ export function formatSubmissionApplicationCode(applicationCode: string) {
   const strippedCode = applicationCode.replaceAll(' ', '');
   return /^\d{13}$/.test(strippedCode) ? (strippedCode.match(/....$|.../g) ?? []).join(' ') : applicationCode;
 }
+
+/**
+ * Formats an 11-digit client number into the pattern "XXX XXXX XXXX"
+ *
+ * @param clientNumber - The client number to format. Should be 11 digits for proper formatting.
+ * @returns The formatted client number as "XXX XXXX XXXX" if valid, otherwise returns the original input.
+ */
+export function formatClientNumber(clientNumber: string) {
+  const strippedClientNumber = clientNumber.replaceAll(' ', '');
+  return /^\d{11}$/.test(strippedClientNumber) ? (strippedClientNumber.match(/^...|..../g) ?? []).join(' ') : clientNumber;
+}

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { formatSubmissionApplicationCode, isValidCodeOrNumber } from '~/utils/application-code-utils';
+import { formatClientNumber, formatSubmissionApplicationCode, isValidCodeOrNumber } from '~/utils/application-code-utils';
 
 describe('~/utils/application-code-utils.ts', () => {
   afterEach(() => {
@@ -40,6 +40,61 @@ describe('~/utils/application-code-utils.ts', () => {
 
     it('should return the input if the application code is invalid', () => {
       expect(formatSubmissionApplicationCode('123 abc')).toEqual('123 abc');
+    });
+  });
+
+  describe('formatClientNumber()', () => {
+    it('should format 11-digit client number', () => {
+      expect(formatClientNumber('12345678901')).toEqual('123 4567 8901');
+    });
+
+    it('should format 11-digit client number with existing whitespace', () => {
+      expect(formatClientNumber('123 456 789 01')).toEqual('123 4567 8901');
+    });
+
+    it('should format 11-digit client number with irregular whitespace', () => {
+      expect(formatClientNumber('123  456   78901')).toEqual('123 4567 8901');
+    });
+
+    it('should return the input for 13-digit numbers (confirmation numbers)', () => {
+      expect(formatClientNumber('1234567890123')).toEqual('1234567890123');
+      expect(formatClientNumber('123 456 789 0123')).toEqual('123 456 789 0123');
+    });
+
+    it('should return the input for 6-digit numbers (application codes)', () => {
+      expect(formatClientNumber('123456')).toEqual('123456');
+      expect(formatClientNumber('123 456')).toEqual('123 456');
+    });
+
+    it('should return the input for numbers with invalid length', () => {
+      expect(formatClientNumber('12345')).toEqual('12345');
+      expect(formatClientNumber('1234567')).toEqual('1234567');
+      expect(formatClientNumber('123456789012')).toEqual('123456789012');
+      expect(formatClientNumber('12345678901234')).toEqual('12345678901234');
+    });
+
+    it('should return the input for non-digit characters', () => {
+      expect(formatClientNumber('123abc')).toEqual('123abc');
+      expect(formatClientNumber('123 456 789 ab')).toEqual('123 456 789 ab');
+    });
+
+    it('should handle empty string', () => {
+      expect(formatClientNumber('')).toEqual('');
+    });
+
+    it('should handle partial client numbers', () => {
+      expect(formatClientNumber('123')).toEqual('123');
+      expect(formatClientNumber('1234')).toEqual('1234');
+      expect(formatClientNumber('12345')).toEqual('12345');
+      expect(formatClientNumber('123456')).toEqual('123456');
+      expect(formatClientNumber('1234567')).toEqual('1234567');
+      expect(formatClientNumber('12345678')).toEqual('12345678');
+      expect(formatClientNumber('123456789')).toEqual('123456789');
+      expect(formatClientNumber('1234567890')).toEqual('1234567890');
+    });
+
+    it('should preserve formatting for already properly formatted client numbers', () => {
+      expect(formatClientNumber('123 4567 8901')).toEqual('123 4567 8901');
     });
   });
 });
