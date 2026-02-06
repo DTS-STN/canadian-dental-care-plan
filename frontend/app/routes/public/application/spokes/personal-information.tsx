@@ -2,6 +2,7 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { addDays } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -11,7 +12,7 @@ import { TYPES } from '~/.server/constants';
 import type { ClientApplicationDto } from '~/.server/domain/dtos/client-application.dto';
 import type { ApplicantInformationState, InputModelState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getAgeCategoryFromDateString, getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
@@ -25,7 +26,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { isValidClientNumberRenewal, renewalCodeInputPatternFormat } from '~/utils/application-code-utils';
-import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
+import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -62,6 +63,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
+  const { RENEWAL_PERIOD_END_DATE } = appContainer.get(TYPES.ServerConfig);
 
   const applicantInformationSchema = z
     .object({
@@ -159,7 +162,8 @@ export async function action({ context: { appContainer, session }, params, reque
     });
 
     if (clientApplicationOption.isNone()) {
-      return { status: 'not-eligible' } as const;
+      const startDate = toLocaleDateString(addDays(RENEWAL_PERIOD_END_DATE, 1), locale);
+      return { status: 'client-not-found', startDate } as const;
     }
 
     clientApplication = clientApplicationOption.unwrap();
@@ -209,7 +213,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
 
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
 
-  const { ErrorAlert } = useErrorAlert(fetcherStatus === 'not-eligible');
+  const { ErrorAlert } = useErrorAlert(fetcherStatus === 'client-not-found');
 
   const errorSummary = useErrorSummary(errors, {
     memberId: 'member-id',
@@ -227,8 +231,12 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
       <div className="max-w-prose">
         <ErrorAlert>
           <h2 className="mb-2 font-bold">{t('application-spokes:personal-information.error-message.alert.heading')}</h2>
-          <p className="mb-2">{t('application-spokes:personal-information.error-message.alert.detail')}</p>
-          <p className="mb-2">{t('application-spokes:personal-information.error-message.alert.applyDate', { startDate: fetcherEligibilityStartDate })}</p>
+          <p className="mb-2">
+            <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.error-message.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+          </p>
+          <p className="mb-2">
+            <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.error-message.alert.applyDate" values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
+          </p>
         </ErrorAlert>
         <errorSummary.ErrorSummary />
         <p className="mb-4">{t('application-spokes:personal-information.form-instructions-sin')}</p>
