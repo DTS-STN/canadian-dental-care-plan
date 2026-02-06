@@ -322,11 +322,15 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                         {t('application-simplified-child:childrens-application.update-dental-benefits')}
                       </ButtonLink>
                     </div>
-                    <div className="w-full px-6">
-                      <Button id="edit-button-not-changed" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
-                        {t('application-simplified-child:childrens-application.benefits-not-changed')}
-                      </Button>
-                    </div>
+                    <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+                      <CsrfTokenInput />
+                      <input type="hidden" name="childId" value={child.id} />
+                      <div className="w-full px-6">
+                        <Button id="edit-button-not-changed" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} disabled={isSubmitting} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                          {t('application-simplified-child:childrens-application.benefits-not-changed')}
+                        </Button>
+                      </div>
+                    </fetcher.Form>
                   </CardFooter>
                 )}
               </Card>
