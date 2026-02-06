@@ -101,7 +101,8 @@
     "back-btn": "Parent or legal guardian information",
     "submit-btn": "Submit",
     "add-child": "Add a child",
-    "remove-child": "Remove child"
+    "remove-child": "Remove child",
+    "no-change": "No update."
   },
   "confirm": {
     "page-title": "Application successfully submitted",

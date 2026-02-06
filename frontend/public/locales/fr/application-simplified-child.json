@@ -103,7 +103,8 @@
     "back-btn": "Renseignements sur le parent ou le tuteur légal",
     "submit-btn": "Soumettre la demande",
     "add-child": "Ajouter un enfant",
-    "remove-child": "Retirer l'enfant"
+    "remove-child": "Retirer l'enfant",
+    "no-change": "Pas de mise à jour."
   },
   "confirm": {
     "page-title": "Demande soumise avec succès",

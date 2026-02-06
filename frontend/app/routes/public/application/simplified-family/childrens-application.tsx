@@ -65,19 +65,19 @@ export async function loader({ context: { appContainer, session }, request, para
 
       return {
         ...child,
-        dentalBenefits:
-          child.dentalBenefits?.hasChanged === true
-            ? {
-                federalBenefit: {
-                  access: child.dentalBenefits.value.hasFederalBenefits,
-                  benefit: federalGovernmentInsurancePlanProgram?.name,
-                },
-                provTerrBenefit: {
-                  access: child.dentalBenefits.value.hasProvincialTerritorialBenefits,
-                  benefit: provincialTerritorialSocialProgram?.name,
-                },
-              }
-            : undefined,
+        dentalBenefits: child.dentalBenefits
+          ? {
+              hasChanged: child.dentalBenefits.hasChanged,
+              federalBenefit: {
+                access: child.dentalBenefits.value?.hasFederalBenefits,
+                benefit: federalGovernmentInsurancePlanProgram?.name,
+              },
+              provTerrBenefit: {
+                access: child.dentalBenefits.value?.hasProvincialTerritorialBenefits,
+                benefit: provincialTerritorialSocialProgram?.name,
+              },
+            }
+          : undefined,
       };
     }),
   );
@@ -278,16 +278,22 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                   ) : (
                     <DefinitionList layout="single-column">
                       <DefinitionListItem term={t('application-simplified-family:childrens-application.dental-benefits-title')}>
-                        {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
-                          <div className="space-y-3">
-                            <p>{t('application-simplified-family:childrens-application.dental-benefits-yes')}</p>
-                            <ul className="list-disc space-y-1 pl-7">
-                              {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
-                              {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
-                            </ul>
-                          </div>
+                        {child.dentalBenefits.hasChanged ? (
+                          <>
+                            {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
+                              <div className="space-y-3">
+                                <p>{t('application-simplified-family:childrens-application.dental-benefits-yes')}</p>
+                                <ul className="list-disc space-y-1 pl-7">
+                                  {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
+                                  {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
+                                </ul>
+                              </div>
+                            ) : (
+                              <p>{t('application-simplified-family:childrens-application.dental-benefits-no')}</p>
+                            )}
+                          </>
                         ) : (
-                          <p>{t('application-simplified-family:childrens-application.dental-benefits-no')}</p>
+                          <p>{t('application-simplified-family:childrens-application.no-change')}</p>
                         )}
                       </DefinitionListItem>
                     </DefinitionList>
@@ -322,11 +328,15 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                         {t('application-simplified-family:childrens-application.update-dental-benefits')}
                       </ButtonLink>
                     </div>
-                    <div className="w-full px-6">
-                      <Button id="edit-button-not-changed" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
-                        {t('application-simplified-family:childrens-application.benefits-not-changed')}
-                      </Button>
-                    </div>
+                    <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+                      <CsrfTokenInput />
+                      <input type="hidden" name="childId" value={child.id} />
+                      <div className="w-full px-6">
+                        <Button id="edit-button-not-changed" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} disabled={isSubmitting} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                          {t('application-simplified-family:childrens-application.benefits-not-changed')}
+                        </Button>
+                      </div>
+                    </fetcher.Form>
                   </CardFooter>
                 )}
               </Card>

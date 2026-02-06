@@ -94,7 +94,8 @@
     "back-btn": "Your access to dental insurance",
     "submit-btn": "Submit",
     "add-child": "Add a child",
-    "remove-child": "Remove child"
+    "remove-child": "Remove child",
+    "no-change": "No update."
   },
   "submit": {
     "page-title": "Submit your application",
