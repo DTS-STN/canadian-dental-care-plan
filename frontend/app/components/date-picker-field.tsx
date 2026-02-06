@@ -271,11 +271,13 @@ function DatePickerYear({ ariaErrorMessage, className, defaultValue, disabled, i
         disabled={disabled}
         id={inputId}
         min={1900}
+        max={9999}
+        maxLength={4}
         name={name}
         required={required}
         type="text"
         inputMode="numeric"
-        pattern="[0-9]*"
+        pattern="[0-9]{4}"
       />
     </div>
   );
@@ -313,11 +315,12 @@ function DatePickerDay({ ariaErrorMessage, className, defaultValue, disabled, id
         id={inputId}
         max={31}
         min={1}
+        maxLength={2}
         name={name}
         required={required}
         type="text"
         inputMode="numeric"
-        pattern="[0-9]*"
+        pattern="[0-9]{1,2}"
       />
     </div>
   );
