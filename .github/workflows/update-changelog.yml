@@ -1,0 +1,49 @@
+name: Update CHANGELOG
+
+on:
+  push:
+    tags:
+      - 'v*'
+  delete:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  changelog:
+    name: Generate CHANGELOG
+    runs-on: ubuntu-latest
+    # Run loop logic:
+    # 1. If push tag: Run
+    # 2. If workflow_dispatch: Run
+    # 3. If delete: Only run if it was a tag deletion
+    if: |
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'delete' && github.event.ref_type == 'tag')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate CHANGELOG
+        uses: orhun/git-cliff-action@v3
+        id: git-cliff
+        with:
+          config: cliff.toml
+          args: --verbose
+        env:
+          OUTPUT: CHANGELOG.md
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore(release): update CHANGELOG"
+          title: "chore(release): update CHANGELOG"
+          body: "Automated changes by [git-cliff](https://github.com/orhun/git-cliff) triggered by release tag update."
+          branch: "chore/update-changelog"
+          base: "main"
+          delete-branch: true
