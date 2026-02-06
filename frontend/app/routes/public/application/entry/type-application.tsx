@@ -18,6 +18,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatSin } from '~/utils/sin-utils';
 
 const APPLICANT_TYPE = { adult: 'adult', family: 'family', children: 'children' } as const;
 
@@ -129,7 +130,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
                 {formattedDate}
               </DefinitionListItem>
               <DefinitionListItem className="sm:grid-cols-none" term={t('application:type-of-application.sin')}>
-                {defaultState.personalInformation.socialInsuranceNumber}
+                {formatSin(defaultState.personalInformation.socialInsuranceNumber)}
               </DefinitionListItem>
             </DefinitionList>
           )}

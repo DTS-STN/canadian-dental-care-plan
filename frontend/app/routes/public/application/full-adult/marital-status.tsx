@@ -18,6 +18,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'application-full-adult', 'gcweb'),
@@ -80,7 +81,7 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
                 <DefinitionListItem term={t('application-full-adult:marital-status.marital-status')}>{state.maritalStatus.name}</DefinitionListItem>
                 {state.partnerInformation && (
                   <>
-                    <DefinitionListItem term={t('application-full-adult:marital-status.spouse-sin')}>{state.partnerInformation.socialInsuranceNumber}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-adult:marital-status.spouse-sin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
                     <DefinitionListItem term={t('application-full-adult:marital-status.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
                     <DefinitionListItem term={t('application-full-adult:marital-status.consent')}>
                       {state.partnerInformation.confirm ? t('application-full-adult:marital-status.consent-yes') : t('application-full-adult:marital-status.consent-no')}

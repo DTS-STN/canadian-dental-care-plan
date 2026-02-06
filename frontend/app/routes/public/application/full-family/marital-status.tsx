@@ -18,6 +18,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'application-full-family', 'gcweb'),
@@ -83,7 +84,7 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
                 {state.partnerInformation && (
                   <>
                     <DefinitionListItem term={t('application-full-family:marital-status.spouse-sin')}>
-                      <p>{state.partnerInformation.socialInsuranceNumber}</p>
+                      <p>{formatSin(state.partnerInformation.socialInsuranceNumber)}</p>
                     </DefinitionListItem>
                     <DefinitionListItem term={t('application-full-family:marital-status.spouse-yob')}>
                       <p>{state.partnerInformation.yearOfBirth}</p>
