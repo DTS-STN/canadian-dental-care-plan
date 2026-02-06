@@ -94,7 +94,8 @@
     "back-btn": "Votre accès à une assurance dentaire",
     "submit-btn": "Soumettre la demande",
     "add-child": "Ajouter un enfant",
-    "remove-child": "Retirer l'enfant"
+    "remove-child": "Retirer l'enfant",
+    "no-change": "Pas de mise à jour."
   },
   "submit": {
     "page-title": "Soumettre votre demande",

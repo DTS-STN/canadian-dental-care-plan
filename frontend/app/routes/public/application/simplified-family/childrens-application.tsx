@@ -65,19 +65,19 @@ export async function loader({ context: { appContainer, session }, request, para
 
       return {
         ...child,
-        dentalBenefits:
-          child.dentalBenefits?.hasChanged === true
-            ? {
-                federalBenefit: {
-                  access: child.dentalBenefits.value.hasFederalBenefits,
-                  benefit: federalGovernmentInsurancePlanProgram?.name,
-                },
-                provTerrBenefit: {
-                  access: child.dentalBenefits.value.hasProvincialTerritorialBenefits,
-                  benefit: provincialTerritorialSocialProgram?.name,
-                },
-              }
-            : undefined,
+        dentalBenefits: child.dentalBenefits
+          ? {
+              hasChanged: child.dentalBenefits.hasChanged,
+              federalBenefit: {
+                access: child.dentalBenefits.value?.hasFederalBenefits,
+                benefit: federalGovernmentInsurancePlanProgram?.name,
+              },
+              provTerrBenefit: {
+                access: child.dentalBenefits.value?.hasProvincialTerritorialBenefits,
+                benefit: provincialTerritorialSocialProgram?.name,
+              },
+            }
+          : undefined,
       };
     }),
   );
@@ -278,16 +278,22 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                   ) : (
                     <DefinitionList layout="single-column">
                       <DefinitionListItem term={t('application-simplified-family:childrens-application.dental-benefits-title')}>
-                        {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
-                          <div className="space-y-3">
-                            <p>{t('application-simplified-family:childrens-application.dental-benefits-yes')}</p>
-                            <ul className="list-disc space-y-1 pl-7">
-                              {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
-                              {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
-                            </ul>
-                          </div>
+                        {child.dentalBenefits.hasChanged ? (
+                          <>
+                            {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
+                              <div className="space-y-3">
+                                <p>{t('application-simplified-family:childrens-application.dental-benefits-yes')}</p>
+                                <ul className="list-disc space-y-1 pl-7">
+                                  {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
+                                  {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
+                                </ul>
+                              </div>
+                            ) : (
+                              <p>{t('application-simplified-family:childrens-application.dental-benefits-no')}</p>
+                            )}
+                          </>
                         ) : (
-                          <p>{t('application-simplified-family:childrens-application.dental-benefits-no')}</p>
+                          <p>{t('application-simplified-family:childrens-application.no-change')}</p>
                         )}
                       </DefinitionListItem>
                     </DefinitionList>
