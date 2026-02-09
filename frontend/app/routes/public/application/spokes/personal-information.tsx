@@ -45,11 +45,16 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
+
+  if (state.context === 'renewal' && state.applicantInformation !== undefined) {
+    return redirect(getPathById(`public/application/$id/type-of-application`, params));
+  }
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:personal-information.page-title') }) };
   return {
-    defaultState: state.applicantInformation,
+    state: state.applicantInformation,
     isRenewalContext: state.context === 'renewal',
     meta,
   };
@@ -203,7 +208,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplicationPersonalInformation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { currentLanguage } = useCurrentLanguage();
-  const { defaultState, isRenewalContext } = loaderData;
+  const { state, isRenewalContext } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -254,7 +259,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
                 format={renewalCodeInputPatternFormat}
                 helpMessagePrimary={t('application-spokes:personal-information.help-message.member-id')}
                 helpMessagePrimaryClassName="text-black"
-                defaultValue={defaultState?.memberId ?? ''}
+                defaultValue={state?.memberId ?? ''}
                 errorMessage={errors?.memberId}
                 required
               />
@@ -268,8 +273,8 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
                 maxLength={100}
                 aria-description={t('application-spokes:personal-information.name-instructions')}
                 autoComplete="given-name"
+                defaultValue={state?.firstName ?? ''}
                 errorMessage={errors?.firstName}
-                defaultValue={defaultState?.firstName ?? ''}
                 required
               />
               <InputSanitizeField
@@ -280,7 +285,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
                 maxLength={100}
                 aria-description={t('application-spokes:personal-information.name-instructions')}
                 autoComplete="family-name"
-                defaultValue={defaultState?.lastName ?? ''}
+                defaultValue={state?.lastName ?? ''}
                 errorMessage={errors?.lastName}
                 required
               />
@@ -293,7 +298,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
             <DatePickerField
               id="date-of-birth"
               names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
-              defaultValue={defaultState?.dateOfBirth ?? ''}
+              defaultValue={state?.dateOfBirth ?? ''}
               legend={t('application-spokes:personal-information.dob')}
               errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
               required
@@ -306,7 +311,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               inputMode="numeric"
               helpMessagePrimary={t('application-spokes:personal-information.help-message.sin')}
               helpMessagePrimaryClassName="text-black"
-              defaultValue={defaultState?.socialInsuranceNumber ?? ''}
+              defaultValue={state?.socialInsuranceNumber ?? ''}
               errorMessage={errors?.socialInsuranceNumber}
               required
             />

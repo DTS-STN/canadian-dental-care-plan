@@ -1,4 +1,4 @@
-import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import { faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { format, parseISO } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -43,13 +43,14 @@ export async function loader({ context: { appContainer, session }, request, para
       typeOfApplication: state.typeOfApplication,
       personalInformation: state.applicantInformation,
     },
+    isRenewalContext: state.context === 'renewal',
     nextRouteId,
     meta,
   };
 }
 
 export default function TypeOfApplication({ loaderData, params }: Route.ComponentProps) {
-  const { defaultState, nextRouteId } = loaderData;
+  const { defaultState, isRenewalContext, nextRouteId } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   function getTypeOfApplication(typeOfApplication: string) {
@@ -102,7 +103,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/type-application" params={params} startIcon={faCirclePlus} size="lg">
+          <ButtonLink id="type-of-application-edit-button" variant="link" className="p-0" routeId="public/application/$id/type-application" params={params} startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus} size="lg">
             {defaultState.typeOfApplication === undefined ? t('application:type-of-application.add-type-application') : t('application:type-of-application.edit-type-application')}
           </ButtonLink>
         </CardFooter>
@@ -135,11 +136,20 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             </DefinitionList>
           )}
         </CardContent>
-        <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/personal-information" params={params} startIcon={faCirclePlus} size="lg">
-            {defaultState.personalInformation === undefined ? t('application:type-of-application.add-personal-information') : t('application:type-of-application.edit-personal-information')}
-          </ButtonLink>
-        </CardFooter>
+        {isRenewalContext && !completedSections.includes('personal-information') && (
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink id="personal-information-edit-button" variant="link" className="p-0" routeId="public/application/$id/personal-information" params={params} startIcon={faCirclePlus} size="lg">
+              {t('application:type-of-application.add-personal-information')}
+            </ButtonLink>
+          </CardFooter>
+        )}
+        {!isRenewalContext && (
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink id="personal-information-edit-button" variant="link" className="p-0" routeId="public/application/$id/personal-information" params={params} startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus} size="lg">
+              {defaultState.personalInformation === undefined ? t('application:type-of-application.add-personal-information') : t('application:type-of-application.edit-personal-information')}
+            </ButtonLink>
+          </CardFooter>
+        )}
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
