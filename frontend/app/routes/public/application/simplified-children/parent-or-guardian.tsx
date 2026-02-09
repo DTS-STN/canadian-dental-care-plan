@@ -9,6 +9,7 @@ import type { Route } from './+types/parent-or-guardian';
 import { TYPES } from '~/.server/constants';
 import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicApplicationSimplifiedChildState } from '~/.server/routes/helpers/public-application-simplified-child-route-helpers';
+import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/public-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -69,12 +70,6 @@ export async function loader({ context: { appContainer, session }, request, para
     hasChanged: state.homeAddress?.hasChanged,
   };
 
-  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
-  const isEmailVerified =
-    state.communicationPreferences?.hasChanged && (state.communicationPreferences.value.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || state.communicationPreferences.value.preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID)
-      ? state.emailVerified
-      : true;
-
   return {
     state: {
       maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined,
@@ -88,7 +83,11 @@ export async function loader({ context: { appContainer, session }, request, para
     preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     preferredMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale) : undefined,
     preferredNotificationMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale) : undefined,
-    isEmailVerified,
+    sections: {
+      phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
+      address: { completed: isAddressSectionCompleted(state) },
+      communicationPreferences: { completed: isCommunicationPreferencesSectionCompleted(state) },
+    },
     meta,
   };
 }
@@ -140,17 +139,11 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function RenewChildParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo, isEmailVerified } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  const sections = [
-    { id: 'phone-number', completed: state.phoneNumber !== undefined },
-    { id: 'address', completed: mailingAddressInfo.hasChanged !== undefined && homeAddressInfo.hasChanged !== undefined },
-    { id: 'communication-preferences', completed: state.communicationPreferences !== undefined && isEmailVerified },
-  ] as const;
-
-  const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
-  const allSectionsCompleted = completedSections.length === sections.length;
+  const isAllSectionsCompleted = Object.values(sections).every((section) => section.completed);
+  const completedSectionsCount = Object.values(sections).filter((section) => section.completed).length;
 
   const fetcher = useFetcher<typeof action>();
 
@@ -162,12 +155,12 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
         <div className="space-y-4">
           <p>{t('application:confirm-information')}</p>
           <p>{t('application:required-label')}</p>
-          <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+          <p>{t('application:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle>{t('application-simplified-child:parent-or-guardian.phone-number')}</CardTitle>
-            <CardAction>{completedSections.includes('phone-number') && <StatusTag status="complete" />}</CardAction>
+            <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.phoneNumber === undefined ? (
@@ -182,8 +175,8 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
           </CardContent>
           {state.phoneNumber ? (
             <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={completedSections.includes('phone-number') ? faPenToSquare : faCirclePlus} size="lg">
-                {completedSections.includes('phone-number') ? t('application-simplified-child:parent-or-guardian.edit-phone-number') : t('application-simplified-child:parent-or-guardian.add-phone-number')}
+              <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={sections.phoneNumber.completed ? faPenToSquare : faCirclePlus} size="lg">
+                {sections.phoneNumber.completed ? t('application-simplified-child:parent-or-guardian.edit-phone-number') : t('application-simplified-child:parent-or-guardian.add-phone-number')}
               </ButtonLink>
             </CardFooter>
           ) : (
@@ -205,7 +198,7 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
         <Card>
           <CardHeader>
             <CardTitle>{t('application-simplified-child:parent-or-guardian.mailing-and-home-address')}</CardTitle>
-            <CardAction>{completedSections.includes('address') && <StatusTag status="complete" />}</CardAction>
+            <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {mailingAddressInfo.hasChanged === undefined && homeAddressInfo.hasChanged === undefined ? (
@@ -245,8 +238,8 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
           </CardContent>
           {mailingAddressInfo.hasChanged !== undefined && homeAddressInfo.hasChanged !== undefined ? (
             <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus} size="lg">
-                {completedSections.includes('address') ? t('application-simplified-child:parent-or-guardian.edit-address') : t('application-simplified-child:parent-or-guardian.add-address')}
+              <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={sections.address.completed ? faPenToSquare : faCirclePlus} size="lg">
+                {sections.address.completed ? t('application-simplified-child:parent-or-guardian.edit-address') : t('application-simplified-child:parent-or-guardian.add-address')}
               </ButtonLink>
             </CardFooter>
           ) : (
@@ -268,7 +261,7 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
         <Card>
           <CardHeader>
             <CardTitle>{t('application-simplified-child:parent-or-guardian.communication-preferences')}</CardTitle>
-            <CardAction>{completedSections.includes('communication-preferences') && <StatusTag status="complete" />}</CardAction>
+            <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.communicationPreferences === undefined ? (
@@ -290,16 +283,8 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
           </CardContent>
           {state.communicationPreferences ? (
             <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink
-                id="edit-button"
-                variant="link"
-                className="p-0"
-                routeId="public/application/$id/communication-preferences"
-                params={params}
-                startIcon={completedSections.includes('communication-preferences') ? faPenToSquare : faCirclePlus}
-                size="lg"
-              >
-                {completedSections.includes('communication-preferences') ? t('application-simplified-child:parent-or-guardian.edit-communication-preferences') : t('application-simplified-child:parent-or-guardian.add-communication-preferences')}
+              <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/communication-preferences" params={params} startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus} size="lg">
+                {sections.communicationPreferences.completed ? t('application-simplified-child:parent-or-guardian.edit-communication-preferences') : t('application-simplified-child:parent-or-guardian.add-communication-preferences')}
               </ButtonLink>
             </CardFooter>
           ) : (
@@ -319,7 +304,7 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-children/childrens-application" params={params}>
+          <NavigationButtonLink disabled={!isAllSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-children/childrens-application" params={params}>
             {t('application-simplified-child:parent-or-guardian.childrens-application')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>

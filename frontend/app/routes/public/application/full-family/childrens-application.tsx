@@ -11,6 +11,7 @@ import type { Route } from './+types/childrens-application';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationFullFamilyState } from '~/.server/routes/helpers/public-application-full-family-route-helpers';
+import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildInformationSectionCompleted } from '~/.server/routes/helpers/public-application-full-section-checks';
 import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { generateId } from '~/.server/utils/id.utils';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -85,6 +86,14 @@ export async function loader({ context: { appContainer, session }, request, para
     state: {
       children: children,
     },
+    childrenSections: state.children.map((child) => ({
+      id: child.id,
+      sections: {
+        childInformation: { completed: isChildInformationSectionCompleted(child) },
+        childDentalInsurance: { completed: isChildDentalInsuranceSectionCompleted(child) },
+        childDentalBenefits: { completed: isChildDentalBenefitsSectionCompleted(child) },
+      },
+    })),
     meta,
   };
 }
@@ -131,7 +140,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function NewFamilyChildrensApplication({ loaderData, params }: Route.ComponentProps) {
   const { currentLanguage } = useCurrentLanguage();
-  const { state } = loaderData;
+  const { state, childrenSections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const fetcher = useFetcher<typeof action>();
@@ -149,7 +158,7 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
     await fetcher.submit(formData, { method: 'POST' });
   }
 
-  const allChildrenCompleted = state.children.length > 0 && state.children.every((child) => child.information !== undefined && child.information.dateOfBirth !== '' && child.dentalInsurance !== undefined && child.dentalBenefits !== undefined);
+  const allChildrenCompleted = state.children.length > 0 && childrenSections.every((child) => Object.values(child.sections).every((section) => section.completed));
 
   return (
     <>
@@ -159,24 +168,22 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
           const childName = `${child.information?.firstName} ${child.information?.lastName}`;
           const dateOfBirth = child.information?.dateOfBirth ? toLocaleDateString(parseDateString(child.information.dateOfBirth), currentLanguage) : '';
 
-          const sections = [
-            { id: 'child-information', completed: child.information !== undefined && child.information.dateOfBirth !== '' },
-            { id: 'child-dental-insurance', completed: child.dentalInsurance !== undefined },
-            { id: 'child-dental-benefits', completed: child.dentalBenefits !== undefined },
-          ] as const;
-          const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
+          const sections = childrenSections.find((c) => c.id === child.id)?.sections;
+          invariant(sections, 'Expected sections to be defined for child');
+          const sectionCompletedCount = Object.values(sections).filter((section) => section.completed).length;
+          const sectionsCount = Object.values(sections).length;
 
           return (
             <div key={child.id}>
               <h2 className="font-lato mb-4 text-2xl font-bold">{t('application-full-family:childrens-application.child-title', { childNumber: index + 1 })}</h2>
               <div className="space-y-4">
                 <p>{t('application:required-label')}</p>
-                <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+                <p>{t('application:sections-completed', { number: sectionCompletedCount, count: sectionsCount })}</p>
               </div>
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle>{t('application-full-family:childrens-application.child-information-card-title', { childNumber: index + 1 })}</CardTitle>
-                  <CardAction>{completedSections.includes('child-information') && <StatusTag status="complete" />}</CardAction>
+                  <CardAction>{sections.childInformation.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.information === undefined ? (
@@ -210,7 +217,7 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
                     className="p-0"
                     routeId="public/application/$id/children/$childId/information"
                     params={{ ...params, childId: child.id }}
-                    startIcon={completedSections.includes('child-information') ? faPenToSquare : faCirclePlus}
+                    startIcon={sections.childInformation.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
                   >
                     {child.information === undefined ? t('application-full-family:childrens-application.add-child-information') : t('application-full-family:childrens-application.edit-child-information', { childNumber: index + 1 })}
@@ -221,7 +228,7 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle>{t('application-full-family:childrens-application.child-dental-insurance-card-title')}</CardTitle>
-                  <CardAction>{completedSections.includes('child-dental-insurance') && <StatusTag status="complete" />}</CardAction>
+                  <CardAction>{sections.childDentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.dentalInsurance === undefined ? (
@@ -241,7 +248,7 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
                     className="p-0"
                     routeId="public/application/$id/children/$childId/dental-insurance"
                     params={{ ...params, childId: child.id }}
-                    startIcon={completedSections.includes('child-dental-insurance') ? faPenToSquare : faCirclePlus}
+                    startIcon={sections.childDentalInsurance.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
                   >
                     {child.dentalInsurance === undefined ? t('application-full-family:childrens-application.add-child-dental-insurance') : t('application-full-family:childrens-application.edit-child-dental-insurance')}
@@ -252,7 +259,7 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle>{t('application-full-family:childrens-application.child-dental-benefits-card-title')}</CardTitle>
-                  <CardAction>{completedSections.includes('child-dental-benefits') && <StatusTag status="complete" />}</CardAction>
+                  <CardAction>{sections.childDentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.dentalBenefits === undefined ? (
@@ -282,7 +289,7 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
                     className="p-0"
                     routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits"
                     params={{ ...params, childId: child.id }}
-                    startIcon={completedSections.includes('child-dental-benefits') ? faPenToSquare : faCirclePlus}
+                    startIcon={sections.childDentalBenefits.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
                   >
                     {child.dentalBenefits === undefined ? t('application-full-family:childrens-application.add-child-dental-benefits') : t('application-full-family:childrens-application.edit-child-dental-benefits')}
