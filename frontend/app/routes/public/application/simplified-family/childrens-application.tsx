@@ -5,7 +5,6 @@ import { data, redirect, useFetcher } from 'react-router';
 import { invariant } from '@dts-stn/invariant';
 import { faCircleCheck, faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
-import { randomUUID } from 'node:crypto';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -14,6 +13,7 @@ import type { Route } from './+types/childrens-application';
 import { TYPES } from '~/.server/constants';
 import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicApplicationSimplifiedFamilyState } from '~/.server/routes/helpers/public-application-simplified-family-route-helpers';
+import { generateId } from '~/.server/utils/id.utils';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -102,7 +102,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === FORM_ACTION.add) {
-    const childId = randomUUID();
+    const childId = generateId();
     const children = [...state.children, { id: childId }];
 
     savePublicApplicationState({
