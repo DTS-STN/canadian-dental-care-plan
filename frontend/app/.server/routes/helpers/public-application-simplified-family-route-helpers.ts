@@ -4,7 +4,6 @@ import { createLogger } from '~/.server/logging';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { ApplicationStateParams, ChildrenState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
-import { isValidId } from '~/.server/utils/id.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
@@ -45,39 +44,6 @@ export function loadPublicApplicationSimplifiedFamilyState({ params, request, se
   }
 
   return applicationState;
-}
-
-interface LoadPublicApplicationSimplifiedFamilySingleChildStateArgs {
-  params: ApplicationStateParams & { childId: string };
-  request: Request;
-  session: Session;
-}
-
-/**
- * Loads single child state from public application simplified family state.
- * @param args - The arguments.
- * @returns The loaded child state.
- */
-export function loadPublicApplicationSimplifiedFamilyChildState({ params, request, session }: LoadPublicApplicationSimplifiedFamilySingleChildStateArgs) {
-  const log = createLogger('public-application-simplified-family-route-helpers/loadPublicApplicationSimplifiedFamilyChildState');
-  const applicationState = loadPublicApplicationSimplifiedFamilyState({ params, request, session });
-  const childId = params.childId;
-
-  if (!isValidId(childId)) {
-    log.warn('Invalid "childId" param format; childId: [%s]', childId);
-    throw redirect(getPathById('public/application/$id/simplified-family/childrens-application', params));
-  }
-
-  const childStateIndex = applicationState.children.findIndex(({ id }) => id === childId);
-
-  if (childStateIndex === -1) {
-    log.warn('Simplified family single child has not been found; childId: [%s]', childId);
-    throw redirect(getPathById('public/application/$id/simplified-family/childrens-application', params));
-  }
-
-  const childState = applicationState.children[childStateIndex];
-
-  return { ...childState, childNumber: childStateIndex + 1 };
 }
 
 interface LoadPublicApplicationSimplifiedFamilyStateForReviewArgs {
