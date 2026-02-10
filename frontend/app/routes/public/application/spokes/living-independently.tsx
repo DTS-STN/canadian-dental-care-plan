@@ -12,7 +12,8 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
@@ -85,52 +86,53 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
   const isSubmitting = fetcher.state !== 'idle';
 
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, { livingIndependently: 'input-radio-living-independently-option-0' });
 
   return (
     <>
       <div className="max-w-prose">
         <p className="mb-6">{t('application-spokes:living-independently.description')}</p>
         <p className="mb-4 italic">{t('application:required-label')}</p>
-        <errorSummary.ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <InputRadios
-            id="living-independently"
-            name="livingIndependently"
-            legend={t('application-spokes:living-independently.form-instructions')}
-            options={[
-              {
-                value: LIVING_INDEPENDENTLY_OPTION.yes,
-                children: t('application-spokes:living-independently.radio-options.yes'),
-                defaultChecked: defaultState === true,
-              },
-              {
-                value: LIVING_INDEPENDENTLY_OPTION.no,
-                children: t('application-spokes:living-independently.radio-options.no'),
-                defaultChecked: defaultState === false,
-              },
-            ]}
-            required
-            errorMessage={errors?.livingIndependently}
-          />
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Living independently click">
-              {t('application-spokes:living-independently.save-btn')}
-            </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              variant="secondary"
-              routeId="public/application/$id/personal-information"
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Living independently click"
-            >
-              {t('application-spokes:living-independently.back-btn')}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <InputRadios
+              id="living-independently"
+              name="livingIndependently"
+              legend={t('application-spokes:living-independently.form-instructions')}
+              options={[
+                {
+                  value: LIVING_INDEPENDENTLY_OPTION.yes,
+                  children: t('application-spokes:living-independently.radio-options.yes'),
+                  defaultChecked: defaultState === true,
+                },
+                {
+                  value: LIVING_INDEPENDENTLY_OPTION.no,
+                  children: t('application-spokes:living-independently.radio-options.no'),
+                  defaultChecked: defaultState === false,
+                },
+              ]}
+              required
+              errorMessage={errors?.livingIndependently}
+            />
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Living independently click">
+                {t('application-spokes:living-independently.save-btn')}
+              </LoadingButton>
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId="public/application/$id/personal-information"
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Living independently click"
+              >
+                {t('application-spokes:living-independently.back-btn')}
+              </ButtonLink>
+            </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
       </div>
     </>
   );

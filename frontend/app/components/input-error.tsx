@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { ComponentProps } from 'react';
 
-import { useErrorSummaryContext } from '~/components/future-error-summary-context';
+import { useErrorSummaryContext } from '~/components/error-summary-context';
 import { cn } from '~/utils/tw-utils';
 
 export interface InputErrorProps extends OmitStrict<ComponentProps<'div'>, 'children'> {

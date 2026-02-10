@@ -14,7 +14,8 @@ import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DebugPayload } from '~/components/debug-payload';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { NavigationButton, NavigationButtonLink } from '~/components/navigation-buttons';
@@ -96,23 +97,17 @@ export async function action({ context: { appContainer, session }, request, para
 export default function NewAdultSubmit({ loaderData, params }: Route.ComponentProps) {
   const { state, payload } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, {
-    acknowledgeInfo: 'input-checkbox-acknowledge-info',
-    acknowledgeCriteria: 'input-checkbox-acknowledge-criteria',
-  });
 
   const eligibilityLink = <InlineLink to={t('application-full-adult:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
-    <>
+    <ErrorSummaryProvider actionData={fetcher.data}>
       <ProgressStepper activeStep="submit" className="mb-8" />
       <div className="max-w-prose space-y-8">
-        <errorSummary.ErrorSummary />
+        <ErrorSummary />
         <div className="space-y-8">
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-adult:submit.overview')}</h2>
@@ -168,6 +163,6 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
           <DebugPayload data={payload} enableCopy />
         </div>
       )}
-    </>
+    </ErrorSummaryProvider>
   );
 }

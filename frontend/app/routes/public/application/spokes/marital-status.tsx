@@ -16,7 +16,8 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputPatternField } from '~/components/input-pattern-field';
 import type { InputRadiosProps } from '~/components/input-radios';
@@ -156,12 +157,6 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
   const [selectedMaritalStatus, setSelectedMaritalStatus] = useState(defaultState.maritalStatus);
 
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, {
-    maritalStatus: 'input-radio-marital-status-option-0',
-    socialInsuranceNumber: 'social-insurance-number',
-    yearOfBirth: 'year-of-birth',
-    confirm: 'input-checkbox-confirm',
-  });
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setSelectedMaritalStatus(e.target.value);
@@ -179,72 +174,74 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
   return (
     <div className="max-w-prose">
       <p className="mb-4 italic">{t('application:required-label')}</p>
-      <errorSummary.ErrorSummary />
-      <fetcher.Form method="post" noValidate>
-        <CsrfTokenInput />
-        <div className="mb-8 space-y-6">
-          <InputRadios
-            id="marital-status"
-            name="maritalStatus"
-            legend={t('application-spokes:marital-status.marital-status')}
-            helpMessagePrimary={t('application-spokes:marital-status.primary-help-message')}
-            options={maritalStatusOptions}
-            errorMessage={errors?.maritalStatus}
-            required
-          />
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <div className="mb-8 space-y-6">
+            <InputRadios
+              id="marital-status"
+              name="maritalStatus"
+              legend={t('application-spokes:marital-status.marital-status')}
+              helpMessagePrimary={t('application-spokes:marital-status.primary-help-message')}
+              options={maritalStatusOptions}
+              errorMessage={errors?.maritalStatus}
+              required
+            />
 
-          {(selectedMaritalStatus === MARITAL_STATUS_CODE_COMMON_LAW || selectedMaritalStatus === MARITAL_STATUS_CODE_MARRIED) && (
-            <>
-              <h2 className="font-lato mb-6 text-2xl font-bold">{t('application-spokes:marital-status.spouse-or-commonlaw')}</h2>
-              <p className="mb-4">{t('application-spokes:marital-status.provide-sin')}</p>
-              <p className="mb-6">{t('application-spokes:marital-status.required-information')}</p>
-              <InputPatternField
-                id="social-insurance-number"
-                name="socialInsuranceNumber"
-                format={sinInputPatternFormat}
-                label={t('application-spokes:marital-status.sin')}
-                inputMode="numeric"
-                helpMessagePrimary={t('application-spokes:marital-status.sin-help')}
-                helpMessagePrimaryClassName="text-black"
-                defaultValue={defaultState.socialInsuranceNumber ?? ''}
-                errorMessage={errors?.socialInsuranceNumber}
-                required
-              />
-              <InputPatternField
-                id="year-of-birth"
-                name="yearOfBirth"
-                inputMode="numeric"
-                format="####"
-                defaultValue={defaultState.yearOfBirth ?? ''}
-                label={t('application-spokes:marital-status.year-of-birth')}
-                helpMessagePrimary={t('application-spokes:marital-status.year-of-birth-help')}
-                helpMessagePrimaryClassName="text-black"
-                errorMessage={errors?.yearOfBirth}
-                required
-              />
-              <InputCheckbox id="confirm" name="confirm" value="yes" errorMessage={errors?.confirm} defaultChecked={defaultState.confirm === true} required>
-                {t('application-spokes:marital-status.confirm-checkbox')}
-              </InputCheckbox>
-            </>
-          )}
-        </div>
-        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Marital status click">
-            {t('application-spokes:marital-status.save-btn')}
-          </LoadingButton>
-          <ButtonLink
-            id="back-button"
-            variant="secondary"
-            routeId={getRouteFromApplicationFlow(applicationFlow)}
-            params={params}
-            disabled={isSubmitting}
-            startIcon={faChevronLeft}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Marital status click"
-          >
-            {t('application-spokes:marital-status.back-btn')}
-          </ButtonLink>
-        </div>
-      </fetcher.Form>
+            {(selectedMaritalStatus === MARITAL_STATUS_CODE_COMMON_LAW || selectedMaritalStatus === MARITAL_STATUS_CODE_MARRIED) && (
+              <>
+                <h2 className="font-lato mb-6 text-2xl font-bold">{t('application-spokes:marital-status.spouse-or-commonlaw')}</h2>
+                <p className="mb-4">{t('application-spokes:marital-status.provide-sin')}</p>
+                <p className="mb-6">{t('application-spokes:marital-status.required-information')}</p>
+                <InputPatternField
+                  id="social-insurance-number"
+                  name="socialInsuranceNumber"
+                  format={sinInputPatternFormat}
+                  label={t('application-spokes:marital-status.sin')}
+                  inputMode="numeric"
+                  helpMessagePrimary={t('application-spokes:marital-status.sin-help')}
+                  helpMessagePrimaryClassName="text-black"
+                  defaultValue={defaultState.socialInsuranceNumber ?? ''}
+                  errorMessage={errors?.socialInsuranceNumber}
+                  required
+                />
+                <InputPatternField
+                  id="year-of-birth"
+                  name="yearOfBirth"
+                  inputMode="numeric"
+                  format="####"
+                  defaultValue={defaultState.yearOfBirth ?? ''}
+                  label={t('application-spokes:marital-status.year-of-birth')}
+                  helpMessagePrimary={t('application-spokes:marital-status.year-of-birth-help')}
+                  helpMessagePrimaryClassName="text-black"
+                  errorMessage={errors?.yearOfBirth}
+                  required
+                />
+                <InputCheckbox id="confirm" name="confirm" value="yes" errorMessage={errors?.confirm} defaultChecked={defaultState.confirm === true} required>
+                  {t('application-spokes:marital-status.confirm-checkbox')}
+                </InputCheckbox>
+              </>
+            )}
+          </div>
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Marital status click">
+              {t('application-spokes:marital-status.save-btn')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              variant="secondary"
+              routeId={getRouteFromApplicationFlow(applicationFlow)}
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Marital status click"
+            >
+              {t('application-spokes:marital-status.back-btn')}
+            </ButtonLink>
+          </div>
+        </fetcher.Form>
+      </ErrorSummaryProvider>
     </div>
   );
 }

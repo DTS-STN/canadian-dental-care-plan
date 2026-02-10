@@ -4,7 +4,7 @@ import type { ComponentPropsWithoutRef, JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AnchorLink } from '~/components/anchor-link';
-import { useErrorSummaryContext } from '~/components/future-error-summary-context';
+import { useErrorSummaryContext } from '~/components/error-summary-context';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { cn } from '~/utils/tw-utils';
 
@@ -28,6 +28,15 @@ export function ErrorSummary({ className, ...props }: OmitStrict<ComponentPropsW
   const errorSummaryContext = useErrorSummaryContext();
   const summaryRef = useRef<HTMLDivElement>(null);
   const errors = errorSummaryContext?.errors;
+
+  // Log a warning if the component is used outside of an ErrorSummaryProvider
+  // This helps developers understand that they need to wrap their component tree with ErrorSummaryProvider
+  // for the ErrorSummary component to function properly
+  useEffect(() => {
+    if (!errorSummaryContext) {
+      console.warn('ErrorSummary component must be used within an ErrorSummaryProvider. Please wrap your component tree with ErrorSummaryProvider to use this component.');
+    }
+  }, [errorSummaryContext]);
 
   useEffect(() => {
     if (errors && errors.length > 0 && summaryRef.current) {

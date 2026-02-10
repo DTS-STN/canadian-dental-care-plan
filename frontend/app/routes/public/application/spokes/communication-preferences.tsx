@@ -16,7 +16,8 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
 import type { InputRadiosProps } from '~/components/input-radios';
@@ -150,11 +151,6 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
   }
 
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, {
-    preferredLanguage: 'input-radio-preferred-language-option-0',
-    preferredMethod: 'input-radio-preferred-methods-option-0',
-    preferredNotificationMethod: 'input-radio-preferred-notification-method-option-0',
-  });
 
   const preferredLanguageOptions: InputRadiosProps['options'] = loaderData.languages.map((language) => ({
     value: language.id,
@@ -195,40 +191,42 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
   });
 
   return (
-    <div className="max-w-prose">
-      <p className="mb-4 italic">{t('application:required-label')}</p>
-      <errorSummary.ErrorSummary />
-      <fetcher.Form method="post" noValidate>
-        <CsrfTokenInput />
-        <div className="mb-8 space-y-6">
-          <InputRadios id="preferred-language" name="preferredLanguage" legend={t('application-spokes:communication-preferences.preferred-language')} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
-          <InputRadios id="preferred-method-sunlife" legend={t('application-spokes:communication-preferences.preferred-method')} name="preferredMethod" options={sunLifeCommunicationMethodOptions} errorMessage={errors?.preferredMethod} required />
-          <InputRadios
-            id="preferred-method-gc"
-            name="preferredNotificationMethod"
-            legend={t('application-spokes:communication-preferences.preferred-notification-method')}
-            options={gcCommunicationMethodOptions}
-            required
-            errorMessage={errors?.preferredNotificationMethod}
-          />
-        </div>
-        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Communication preferences click">
-            {preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || preferredNotification === COMMUNICATION_METHOD_GC_DIGITAL_ID ? t('application-spokes:communication-preferences.continue') : t('application-spokes:communication-preferences.save')}
-          </LoadingButton>
-          <ButtonLink
-            id="back-button"
-            variant="secondary"
-            routeId={getRouteFromApplicationFlow(applicationFlow)}
-            params={params}
-            disabled={isSubmitting}
-            startIcon={faChevronLeft}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Communication preferences click"
-          >
-            {t('application-spokes:communication-preferences.back')}
-          </ButtonLink>
-        </div>
-      </fetcher.Form>
-    </div>
+    <ErrorSummaryProvider actionData={fetcher.data}>
+      <div className="max-w-prose">
+        <p className="mb-4 italic">{t('application:required-label')}</p>
+        <ErrorSummary />
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <div className="mb-8 space-y-6">
+            <InputRadios id="preferred-language" name="preferredLanguage" legend={t('application-spokes:communication-preferences.preferred-language')} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
+            <InputRadios id="preferred-method-sunlife" legend={t('application-spokes:communication-preferences.preferred-method')} name="preferredMethod" options={sunLifeCommunicationMethodOptions} errorMessage={errors?.preferredMethod} required />
+            <InputRadios
+              id="preferred-method-gc"
+              name="preferredNotificationMethod"
+              legend={t('application-spokes:communication-preferences.preferred-notification-method')}
+              options={gcCommunicationMethodOptions}
+              required
+              errorMessage={errors?.preferredNotificationMethod}
+            />
+          </div>
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Communication preferences click">
+              {preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || preferredNotification === COMMUNICATION_METHOD_GC_DIGITAL_ID ? t('application-spokes:communication-preferences.continue') : t('application-spokes:communication-preferences.save')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              variant="secondary"
+              routeId={getRouteFromApplicationFlow(applicationFlow)}
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Communication preferences click"
+            >
+              {t('application-spokes:communication-preferences.back')}
+            </ButtonLink>
+          </div>
+        </fetcher.Form>
+      </div>
+    </ErrorSummaryProvider>
   );
 }

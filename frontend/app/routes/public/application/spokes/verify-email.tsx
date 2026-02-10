@@ -16,7 +16,8 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
 import { useErrorAlert } from '~/components/error-alert';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
 import { LoadingButton } from '~/components/loading-button';
@@ -181,7 +182,6 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
 
   const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
-  const errorSummary = useErrorSummary(errors, { verificationCode: 'verification-code' });
   const { ErrorAlert } = useErrorAlert(fetcherStatus === 'verification-code-mismatch');
 
   const communicationLink = <InlineLink routeId="public/application/$id/communication-preferences" params={params} />;
@@ -198,69 +198,71 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
         <h2 className="mb-2 font-bold">{t('application-spokes:verify-email.verification-code-alert.heading')}</h2>
         <p className="mb-2">{t('application-spokes:verify-email.verification-code-alert.detail')}</p>
       </ErrorAlert>
-      <errorSummary.ErrorSummary />
-      <fetcher.Form method="post" noValidate>
-        <CsrfTokenInput />
-        <fieldset className="mb-6">
-          <p className="mb-4">{t('application-spokes:verify-email.verification-code', { email: defaultState })}</p>
-          <p className="mb-4">{t('application-spokes:verify-email.request-new')}</p>
-          <p className="mb-8">
-            <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:verify-email.unable-to-verify" components={{ communicationLink }} />
-          </p>
-          <p className="mb-4 italic">{t('application:required-label')}</p>
-          <div className="grid items-end gap-6 md:grid-cols-2">
-            <InputField
-              id="verification-code"
-              name="verificationCode"
-              className="w-full"
-              errorMessage={errors?.verificationCode}
-              label={t('application-spokes:verify-email.verification-code-label')}
-              aria-describedby="verification-code"
-              inputMode="numeric"
-              required
-            />
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <fieldset className="mb-6">
+            <p className="mb-4">{t('application-spokes:verify-email.verification-code', { email: defaultState })}</p>
+            <p className="mb-4">{t('application-spokes:verify-email.request-new')}</p>
+            <p className="mb-8">
+              <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:verify-email.unable-to-verify" components={{ communicationLink }} />
+            </p>
+            <p className="mb-4 italic">{t('application:required-label')}</p>
+            <div className="grid items-end gap-6 md:grid-cols-2">
+              <InputField
+                id="verification-code"
+                name="verificationCode"
+                className="w-full"
+                errorMessage={errors?.verificationCode}
+                label={t('application-spokes:verify-email.verification-code-label')}
+                aria-describedby="verification-code"
+                inputMode="numeric"
+                required
+              />
+            </div>
+            <LoadingButton
+              id="request-button"
+              type="button"
+              name="_action"
+              variant="link"
+              className="no-underline hover:underline"
+              disabled={isSubmitting}
+              loading={isSubmitting && submittedAction === FORM_ACTION.request}
+              value={FORM_ACTION.request}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Request new verification code - Verify email click"
+              onClick={async () => {
+                const formData = new FormData();
+                formData.append('_action', FORM_ACTION.request);
+
+                const csrfTokenInput = document.querySelector('input[name="_csrf"]') as HTMLInputElement;
+                formData.append('_csrf', csrfTokenInput.value);
+
+                await fetcher.submit(formData, { method: 'post' });
+              }}
+            >
+              {t('application-spokes:verify-email.request-new-code')}
+            </LoadingButton>
+          </fieldset>
+
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton
+              variant="primary"
+              id="continue-button"
+              name="_action"
+              value={FORM_ACTION.submit}
+              disabled={isSubmitting}
+              loading={isSubmitting && submittedAction === FORM_ACTION.submit}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Verify email"
+            >
+              {t('application-spokes:verify-email.continue')}
+            </LoadingButton>
+            <ButtonLink id="back-button" variant="secondary" routeId="public/application/$id/email" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Verify email click">
+              {t('application-spokes:verify-email.back')}
+            </ButtonLink>
           </div>
-          <LoadingButton
-            id="request-button"
-            type="button"
-            name="_action"
-            variant="link"
-            className="no-underline hover:underline"
-            disabled={isSubmitting}
-            loading={isSubmitting && submittedAction === FORM_ACTION.request}
-            value={FORM_ACTION.request}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Request new verification code - Verify email click"
-            onClick={async () => {
-              const formData = new FormData();
-              formData.append('_action', FORM_ACTION.request);
-
-              const csrfTokenInput = document.querySelector('input[name="_csrf"]') as HTMLInputElement;
-              formData.append('_csrf', csrfTokenInput.value);
-
-              await fetcher.submit(formData, { method: 'post' });
-            }}
-          >
-            {t('application-spokes:verify-email.request-new-code')}
-          </LoadingButton>
-        </fieldset>
-
-        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton
-            variant="primary"
-            id="continue-button"
-            name="_action"
-            value={FORM_ACTION.submit}
-            disabled={isSubmitting}
-            loading={isSubmitting && submittedAction === FORM_ACTION.submit}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Verify email"
-          >
-            {t('application-spokes:verify-email.continue')}
-          </LoadingButton>
-          <ButtonLink id="back-button" variant="secondary" routeId="public/application/$id/email" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Verify email click">
-            {t('application-spokes:verify-email.back')}
-          </ButtonLink>
-        </div>
-      </fetcher.Form>
+        </fetcher.Form>{' '}
+      </ErrorSummaryProvider>{' '}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent>
           <DialogHeader>

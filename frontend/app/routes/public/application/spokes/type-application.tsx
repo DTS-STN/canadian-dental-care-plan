@@ -12,7 +12,8 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
@@ -77,13 +78,12 @@ export default function ApplicationTypeOfApplication({ loaderData, params }: Rou
   const isSubmitting = fetcher.state !== 'idle';
 
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, { typeOfApplication: 'input-radio-type-of-application-option-0' });
 
   return (
-    <>
-      <div className="max-w-prose">
-        <p className="mt-8 mb-4 italic">{t('application:required-label')}</p>
-        <errorSummary.ErrorSummary />
+    <div className="max-w-prose">
+      <p className="mt-8 mb-4 italic">{t('application:required-label')}</p>
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <InputRadios
@@ -116,7 +116,7 @@ export default function ApplicationTypeOfApplication({ loaderData, params }: Rou
             </ButtonLink>
           </div>
         </fetcher.Form>
-      </div>
-    </>
+      </ErrorSummaryProvider>
+    </div>
   );
 }

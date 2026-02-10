@@ -20,14 +20,14 @@ import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorAlert } from '~/components/error-alert';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
-import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { transformChildrenRouteAdobeAnalyticsUrl } from '~/route-helpers/application-route-helpers';
 import { isValidClientNumberRenewal, renewalCodeInputPatternFormat } from '~/utils/application-code-utils';
@@ -252,7 +252,6 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyFlowChildInformation({ loaderData, params }: Route.ComponentProps) {
-  const { currentLanguage } = useCurrentLanguage();
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, childName, isNew, applicationFlow, isRenewalContext } = loaderData;
 
@@ -263,19 +262,6 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
 
   const { ErrorAlert } = useErrorAlert(fetcherStatus === 'not-eligible');
-
-  const errorSummary = useErrorSummary(errors, {
-    memberId: 'member-id',
-    firstName: 'first-name',
-    lastName: 'last-name',
-    ...(currentLanguage === 'fr'
-      ? { dateOfBirth: 'date-picker-date-of-birth-day', dateOfBirthDay: 'date-picker-date-of-birth-day', dateOfBirthMonth: 'date-picker-date-of-birth-month' }
-      : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
-    dateOfBirthYear: 'date-picker-date-of-birth-year',
-    socialInsuranceNumber: 'social-insurance-number',
-    hasSocialInsuranceNumber: 'input-radio-has-social-insurance-number-option-0',
-    isParent: 'input-radio-is-parent-radios-option-0',
-  });
 
   const [hasSocialInsuranceNumberValue, setHasSocialInsuranceNumberValue] = useState(defaultState?.hasSocialInsuranceNumber ?? true);
 
@@ -313,7 +299,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
   ];
 
   return (
-    <>
+    <ErrorSummaryProvider actionData={fetcher.data}>
       <AppPageTitle>{t('application-spokes:children.information.page-title', { childName })}</AppPageTitle>
       <div className="max-w-prose">
         <ErrorAlert>
@@ -325,7 +311,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
         </ErrorAlert>
         <p className="mb-4">{t('application-spokes:children.information.form-instructions-sin')}</p>
         <p className="mb-4 italic">{t('application:required-label')}</p>
-        <errorSummary.ErrorSummary />
+        <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
@@ -422,6 +408,6 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
           </div>
         </fetcher.Form>
       </div>
-    </>
+    </ErrorSummaryProvider>
   );
 }

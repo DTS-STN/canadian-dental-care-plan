@@ -19,7 +19,8 @@ import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorAlert } from '~/components/error-alert';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
@@ -220,17 +221,6 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
 
   const { ErrorAlert } = useErrorAlert(fetcherStatus === 'client-not-found');
 
-  const errorSummary = useErrorSummary(errors, {
-    memberId: 'member-id',
-    firstName: 'first-name',
-    lastName: 'last-name',
-    ...(currentLanguage === 'fr'
-      ? { dateOfBirth: 'date-picker-date-of-birth-day', dateOfBirthDay: 'date-picker-date-of-birth-day', dateOfBirthMonth: 'date-picker-date-of-birth-month' }
-      : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
-    dateOfBirthYear: 'date-picker-date-of-birth-year',
-    socialInsuranceNumber: 'social-insurance-number',
-  });
-
   return (
     <>
       <div className="max-w-prose">
@@ -243,96 +233,98 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
             <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.error-message.alert.applyDate" values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
           </p>
         </ErrorAlert>
-        <errorSummary.ErrorSummary />
-        <p className="mb-4">{t('application-spokes:personal-information.form-instructions-sin')}</p>
-        <p className="mb-6">{t('application-spokes:personal-information.form-instructions-info')}</p>
-        <p className="mb-4 italic">{t('application:required-label')}</p>
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <div className="mb-8 space-y-6">
-            {isRenewalContext && (
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <p className="mb-4">{t('application-spokes:personal-information.form-instructions-sin')}</p>
+          <p className="mb-6">{t('application-spokes:personal-information.form-instructions-info')}</p>
+          <p className="mb-4 italic">{t('application:required-label')}</p>
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <div className="mb-8 space-y-6">
+              {isRenewalContext && (
+                <InputPatternField
+                  id="member-id"
+                  name="memberId"
+                  label={t('application-spokes:personal-information.member-id')}
+                  inputMode="numeric"
+                  format={renewalCodeInputPatternFormat}
+                  helpMessagePrimary={t('application-spokes:personal-information.help-message.member-id')}
+                  helpMessagePrimaryClassName="text-black"
+                  defaultValue={state?.memberId ?? ''}
+                  errorMessage={errors?.memberId}
+                  required
+                />
+              )}
+              <div className="grid items-end gap-6 md:grid-cols-2">
+                <InputSanitizeField
+                  id="first-name"
+                  name="firstName"
+                  label={t('application-spokes:personal-information.first-name')}
+                  className="w-full"
+                  maxLength={100}
+                  aria-description={t('application-spokes:personal-information.name-instructions')}
+                  autoComplete="given-name"
+                  defaultValue={state?.firstName ?? ''}
+                  errorMessage={errors?.firstName}
+                  required
+                />
+                <InputSanitizeField
+                  id="last-name"
+                  name="lastName"
+                  label={t('application-spokes:personal-information.last-name')}
+                  className="w-full"
+                  maxLength={100}
+                  aria-description={t('application-spokes:personal-information.name-instructions')}
+                  autoComplete="family-name"
+                  defaultValue={state?.lastName ?? ''}
+                  errorMessage={errors?.lastName}
+                  required
+                />
+              </div>
+              <Collapsible id="name-instructions" summary={t('application-spokes:personal-information.single-legal-name')}>
+                <p>
+                  <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.name-instructions" />
+                </p>
+              </Collapsible>
+              <DatePickerField
+                id="date-of-birth"
+                names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
+                defaultValue={state?.dateOfBirth ?? ''}
+                legend={t('application-spokes:personal-information.dob')}
+                errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
+                required
+              />
               <InputPatternField
-                id="member-id"
-                name="memberId"
-                label={t('application-spokes:personal-information.member-id')}
+                id="social-insurance-number"
+                name="socialInsuranceNumber"
+                format={sinInputPatternFormat}
+                label={t('application-spokes:personal-information.sin')}
                 inputMode="numeric"
-                format={renewalCodeInputPatternFormat}
-                helpMessagePrimary={t('application-spokes:personal-information.help-message.member-id')}
+                helpMessagePrimary={t('application-spokes:personal-information.help-message.sin')}
                 helpMessagePrimaryClassName="text-black"
-                defaultValue={state?.memberId ?? ''}
-                errorMessage={errors?.memberId}
-                required
-              />
-            )}
-            <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputSanitizeField
-                id="first-name"
-                name="firstName"
-                label={t('application-spokes:personal-information.first-name')}
-                className="w-full"
-                maxLength={100}
-                aria-description={t('application-spokes:personal-information.name-instructions')}
-                autoComplete="given-name"
-                defaultValue={state?.firstName ?? ''}
-                errorMessage={errors?.firstName}
-                required
-              />
-              <InputSanitizeField
-                id="last-name"
-                name="lastName"
-                label={t('application-spokes:personal-information.last-name')}
-                className="w-full"
-                maxLength={100}
-                aria-description={t('application-spokes:personal-information.name-instructions')}
-                autoComplete="family-name"
-                defaultValue={state?.lastName ?? ''}
-                errorMessage={errors?.lastName}
+                defaultValue={state?.socialInsuranceNumber ?? ''}
+                errorMessage={errors?.socialInsuranceNumber}
                 required
               />
             </div>
-            <Collapsible id="name-instructions" summary={t('application-spokes:personal-information.single-legal-name')}>
-              <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.name-instructions" />
-              </p>
-            </Collapsible>
-            <DatePickerField
-              id="date-of-birth"
-              names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
-              defaultValue={state?.dateOfBirth ?? ''}
-              legend={t('application-spokes:personal-information.dob')}
-              errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
-              required
-            />
-            <InputPatternField
-              id="social-insurance-number"
-              name="socialInsuranceNumber"
-              format={sinInputPatternFormat}
-              label={t('application-spokes:personal-information.sin')}
-              inputMode="numeric"
-              helpMessagePrimary={t('application-spokes:personal-information.help-message.sin')}
-              helpMessagePrimaryClassName="text-black"
-              defaultValue={state?.socialInsuranceNumber ?? ''}
-              errorMessage={errors?.socialInsuranceNumber}
-              required
-            />
-          </div>
-          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Applicant information click">
-              {t('application-spokes:personal-information.save-btn')}
-            </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              variant="secondary"
-              routeId={`public/application/$id/type-of-application`}
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Applicant information click"
-            >
-              {t('application-spokes:personal-information.back-btn')}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Applicant information click">
+                {t('application-spokes:personal-information.save-btn')}
+              </LoadingButton>
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId={`public/application/$id/type-of-application`}
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Applicant information click"
+              >
+                {t('application-spokes:personal-information.back-btn')}
+              </ButtonLink>
+            </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
       </div>
     </>
   );
