@@ -4,7 +4,6 @@ import type { Params } from 'react-router';
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';
 import { omit } from 'moderndash';
-import { customAlphabet, urlAlphabet } from 'nanoid';
 import type { ReadonlyDeep } from 'type-fest';
 import { z } from 'zod';
 
@@ -12,6 +11,7 @@ import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
 import type { DeclaredChange } from '~/.server/routes/helpers/declared-change-type';
 import { getEnv } from '~/.server/utils/env.utils';
+import { generateId, isValidId } from '~/.server/utils/id.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
@@ -172,22 +172,12 @@ export type DeclaredChangeHomeAddressState = NonNullable<PublicApplicationState[
 export type DeclaredChangeMailingAddressState = NonNullable<PublicApplicationState['mailingAddress']>;
 
 /**
- * Predefined Nano ID function.
- */
-const nanoid = customAlphabet(urlAlphabet, 10);
-
-/**
- * Schema for validating Nano ID.
- */
-const idSchema = z.string().regex(/^[a-zA-Z0-9_-]+$/);
-
-/**
  * Gets the public application flow session key.
  * @param id - The public application flow ID.
  * @returns The public application flow session key.
  */
 function getSessionKey(id: string): PublicApplicationStateSessionKey {
-  return `public-application-flow-${idSchema.parse(id)}`;
+  return `public-application-flow-${id}`;
 }
 
 export type ApplicationStateParams = {
@@ -210,14 +200,14 @@ export function getPublicApplicationState({ params, session }: LoadStateArgs): P
   const locale = getLocaleFromParams(params);
   const cdcpWebsiteApplicationUrl = getCdcpWebsiteApplyUrl(locale);
 
-  const parsedId = idSchema.safeParse(params.id);
+  const id = params.id;
 
-  if (!parsedId.success) {
+  if (!isValidId(id)) {
     log.warn('Invalid "id" param format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteApplicationUrl, params.id, session.id);
     throw redirectDocument(cdcpWebsiteApplicationUrl);
   }
 
-  const sessionKey = getSessionKey(parsedId.data);
+  const sessionKey = getSessionKey(id);
 
   if (!session.has(sessionKey)) {
     log.warn('Application session state has not been found; redirecting to [%s]; sessionKey: [%s], sessionId: [%s]', cdcpWebsiteApplicationUrl, sessionKey, session.id);
@@ -303,7 +293,7 @@ interface StartArgs {
 export function startApplicationState({ applicationYear, session }: StartArgs): PublicApplicationState {
   const log = createLogger('application-route-helpers.server/startApplicationState');
 
-  const id = nanoid();
+  const id = generateId();
   const initialState: PublicApplicationState = {
     id,
     context: isWithinRenewalPeriod() ? 'renewal' : 'intake',
