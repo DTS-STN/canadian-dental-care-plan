@@ -1,11 +1,10 @@
 import { redirect } from 'react-router';
 
-import { z } from 'zod';
-
 import { createLogger } from '~/.server/logging';
 import type { ApplicationStateParams, ChildrenState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
+import { isValidId } from '~/.server/utils/id.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
@@ -78,15 +77,13 @@ interface LoadPublicApplicationSingleFullChildStateArgs {
 export function loadPublicApplicationSingleFullChildState({ params, request, session }: LoadPublicApplicationSingleFullChildStateArgs) {
   const log = createLogger('public-application-full-child-route-helpers/loadPublicApplicationSingleFullChildState');
   const applicationState = loadPublicApplicationFullChildState({ params, request, session });
+  const childId = params.childId;
 
-  const parsedChildId = z.uuid().safeParse(params.childId);
-
-  if (!parsedChildId.success) {
-    log.warn('Invalid "childId" param format; childId: [%s]', params.childId);
+  if (!isValidId(childId)) {
+    log.warn('Invalid "childId" param format; childId: [%s]', childId);
     throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
   }
 
-  const childId = parsedChildId.data;
   const childStateIndex = applicationState.children.findIndex(({ id }) => id === childId);
 
   if (childStateIndex === -1) {
