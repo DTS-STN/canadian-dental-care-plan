@@ -4,8 +4,6 @@
   },
   "required-label": "Complete all fields.",
   "optional-label": "Complete all fields unless marked as optional.",
-  "sections-completed_one": "{{number}} out of {{count}} section completed",
-  "sections-completed_other": "{{number}} out of {{count}} sections completed",
   "confirm-information": "Please confirm the information we have on file for you.",
   "next": "Next",
   "previous": "Previous",

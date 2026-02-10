@@ -36,7 +36,7 @@ import { formatSin } from '~/utils/sin-utils';
 const FORM_ACTION = { add: 'add', remove: 'remove', DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed' } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-simplified-child', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application-simplified-child', 'application', 'gcweb', 'common'),
   pageIdentifier: pageIds.public.application.renewChild.childApplication,
   pageTitleI18nKey: 'application-simplified-child:childrens-application.page-title',
 } as const satisfies RouteHandleData;
@@ -206,7 +206,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
               <h2 className="font-lato mb-4 text-2xl font-bold">{t('application-simplified-child:childrens-application.child-title', { childNumber: index + 1 })}</h2>
               <div className="space-y-4">
                 <p>{t('application:required-label')}</p>
-                <p>{t('application:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
+                <p>{t('common:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
               </div>
               <Card className="my-2">
                 <CardHeader>

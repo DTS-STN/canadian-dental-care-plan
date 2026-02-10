@@ -35,7 +35,7 @@ import { formatSin } from '~/utils/sin-utils';
 const FORM_ACTION = { add: 'add', remove: 'remove' } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-full-family', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application-full-family', 'application', 'gcweb', 'common'),
   pageIdentifier: pageIds.public.application.newFamily.childApplication,
   pageTitleI18nKey: 'application-full-family:childrens-application.page-title',
 } as const satisfies RouteHandleData;
@@ -178,7 +178,7 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
               <h2 className="font-lato mb-4 text-2xl font-bold">{t('application-full-family:childrens-application.child-title', { childNumber: index + 1 })}</h2>
               <div className="space-y-4">
                 <p>{t('application:required-label')}</p>
-                <p>{t('application:sections-completed', { number: sectionCompletedCount, count: sectionsCount })}</p>
+                <p>{t('common:sections-completed', { number: sectionCompletedCount, count: sectionsCount })}</p>
               </div>
               <Card className="my-2">
                 <CardHeader>

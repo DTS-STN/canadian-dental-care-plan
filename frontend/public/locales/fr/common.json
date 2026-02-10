@@ -84,5 +84,7 @@
       "completed": "\u0020completé",
       "upcoming": "\u0020non complété"
     }
-  }
+  },
+  "sections-completed_one": "{{number}} sur {{count}} section remplie.",
+  "sections-completed_other": "{{number}} sur {{count}} sections remplies."
 }

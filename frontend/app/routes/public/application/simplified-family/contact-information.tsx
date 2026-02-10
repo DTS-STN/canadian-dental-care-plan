@@ -20,6 +20,7 @@ import { DefinitionList, DefinitionListItem } from '~/components/definition-list
 import { LoadingButton } from '~/components/loading-button';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
+import { useSectionsStatus } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/public/application/simplified-family/progress-stepper';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -142,8 +143,7 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
   const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  const isAllSectionsCompleted = Object.values(sections).every((section) => section.completed);
-  const completedSectionsCount = Object.values(sections).filter((section) => section.completed).length;
+  const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 
   const fetcher = useFetcher<typeof action>();
 
@@ -155,7 +155,7 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
         <div className="space-y-4">
           <p>{t('application:confirm-information')}</p>
           <p>{t('application:required-label')}</p>
-          <p>{t('application:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
+          <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
@@ -304,7 +304,7 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!isAllSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-family/dental-insurance" params={params}>
+          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-family/dental-insurance" params={params}>
             {t('application-simplified-family:contact-information.next-btn')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
