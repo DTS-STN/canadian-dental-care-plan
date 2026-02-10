@@ -13,6 +13,7 @@ import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
+import { useSectionsStatus } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { formatClientNumber } from '~/utils/application-code-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -77,15 +78,13 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
 
   const formattedDate = defaultState.personalInformation ? format(parseISO(defaultState.personalInformation.dateOfBirth), 'MMMM d, yyyy') : undefined;
 
-  const sectionCompletedCount = Object.values(sections).filter((section) => section.completed).length;
-  const sectionsCount = Object.values(sections).length;
-  const allSectionsCompleted = sectionCompletedCount === sectionsCount;
+  const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 
   return (
     <div className="max-w-prose space-y-8">
       <div className="space-y-4">
         <p>{t('application:required-label')}</p>
-        <p>{t('application:sections-completed', { number: sectionCompletedCount, count: sectionsCount })}</p>
+        <p>{completedSectionsLabel}</p>
       </div>
       <Card>
         <CardHeader>

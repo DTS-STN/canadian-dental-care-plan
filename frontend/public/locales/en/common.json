@@ -84,5 +84,7 @@
       "completed": "completed",
       "upcoming": "not completed"
     }
-  }
+  },
+  "sections-completed_one": "{{number}} out of {{count}} section completed",
+  "sections-completed_other": "{{number}} out of {{count}} sections completed"
 }

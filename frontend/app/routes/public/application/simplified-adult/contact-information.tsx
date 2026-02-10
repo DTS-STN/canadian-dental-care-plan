@@ -20,6 +20,7 @@ import { DefinitionList, DefinitionListItem } from '~/components/definition-list
 import { LoadingButton } from '~/components/loading-button';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
+import { useSectionsStatus } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/public/application/simplified-adult/progress-stepper';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -142,9 +143,7 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
   const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  const sectionCompletedCount = Object.values(sections).filter((section) => section.completed).length;
-  const sectionsCount = Object.values(sections).length;
-  const allSectionsCompleted = sectionCompletedCount === sectionsCount;
+  const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 
   const fetcher = useFetcher<typeof action>();
 
@@ -156,7 +155,7 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
         <div className="space-y-4">
           <p>{t('application:confirm-information')}</p>
           <p>{t('application:required-label')}</p>
-          <p>{t('application:sections-completed', { number: sectionCompletedCount, count: sectionsCount })}</p>
+          <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>

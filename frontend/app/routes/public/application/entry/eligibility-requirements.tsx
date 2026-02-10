@@ -10,6 +10,7 @@ import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
+import { useSectionsStatus } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -45,15 +46,13 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
   const { state, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  const sectionCompletedCount = Object.values(sections).filter((section) => section.completed).length;
-  const sectionsCount = Object.values(sections).length;
-  const allSectionsCompleted = sectionCompletedCount === sectionsCount;
+  const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 
   return (
     <div className="max-w-prose space-y-8">
       <div className="space-y-4">
         <p>{t('application:required-label')}</p>
-        <p>{t('application:sections-completed', { number: sectionCompletedCount, count: sectionsCount })}</p>
+        <p>{completedSectionsLabel}</p>
       </div>
       <Card>
         <CardHeader>
