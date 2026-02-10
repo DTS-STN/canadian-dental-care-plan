@@ -128,11 +128,13 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
     />
   );
 
+  const allErrorMessageFieldId = currentLanguage === 'fr' ? `date-picker-${id}-day` : `date-picker-${id}-month`;
+
   const datePickerErrorMessages = {
-    all: typeof errorMessages?.all === 'string' ? <InputError id={inputErrorIdAll}>{errorMessages.all}</InputError> : undefined,
-    month: typeof errorMessages?.month === 'string' ? <InputError id={inputErrorIdMonth}>{errorMessages.month}</InputError> : undefined,
-    day: typeof errorMessages?.day === 'string' ? <InputError id={inputErrorIdDay}>{errorMessages.day}</InputError> : undefined,
-    year: typeof errorMessages?.year === 'string' ? <InputError id={inputErrorIdYear}>{errorMessages.year}</InputError> : undefined,
+    all: typeof errorMessages?.all === 'string' ? <InputError id={inputErrorIdAll} fieldId={allErrorMessageFieldId} message={errorMessages.all} /> : undefined,
+    month: typeof errorMessages?.month === 'string' ? <InputError id={inputErrorIdMonth} fieldId={`date-picker-${id}-month`} message={errorMessages.month} /> : undefined,
+    day: typeof errorMessages?.day === 'string' ? <InputError id={inputErrorIdDay} fieldId={`date-picker-${id}-day`} message={errorMessages.day} /> : undefined,
+    year: typeof errorMessages?.year === 'string' ? <InputError id={inputErrorIdYear} fieldId={`date-picker-${id}-year`} message={errorMessages.year} /> : undefined,
   };
 
   return (

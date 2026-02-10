@@ -22,11 +22,7 @@ export function InputCheckbox({ errorMessage, append, appendClassName, children,
   const inputLabelId = `${inputCheckboxId}-label`;
   return (
     <div className={className}>
-      {errorMessage && (
-        <InputError id={inputErrorId} className="my-2">
-          {errorMessage}
-        </InputError>
-      )}
+      {errorMessage && <InputError id={inputErrorId} fieldId={inputCheckboxId} message={errorMessage} className="my-2" />}
       <div className="flex items-start">
         <input
           type="checkbox"

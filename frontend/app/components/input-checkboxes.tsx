@@ -36,7 +36,7 @@ export function InputCheckboxes({ errorMessage, helpMessagePrimary, helpMessageP
   return (
     <fieldset id={inputWrapperId} className="space-y-2" aria-labelledby={inputLegendId} aria-describedby={ariaDescribedbyIds}>
       <InputLegend id={inputLegendId}>{legend}</InputLegend>
-      {errorMessage && <InputError id={inputErrorId}>{errorMessage}</InputError>}
+      {errorMessage && <InputError id={inputErrorId} fieldId={`${id}-option-0`} message={errorMessage} />}
       {helpMessagePrimary && (
         <InputHelp id={inputHelpMessagePrimaryId} className={helpMessagePrimaryClassName}>
           {helpMessagePrimary}

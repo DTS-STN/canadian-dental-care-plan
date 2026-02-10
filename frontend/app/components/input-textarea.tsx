@@ -30,11 +30,7 @@ export function InputTextarea(props: InputTextareaProps) {
       <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
         {label}
       </InputLabel>
-      {errorMessage && (
-        <InputError id={inputErrorId} className="mb-2">
-          {errorMessage}
-        </InputError>
-      )}
+      {errorMessage && <InputError id={inputErrorId} fieldId={id} message={errorMessage} className="mb-2" />}
       <textarea
         aria-describedby={ariaDescribedbyIds}
         aria-errormessage={errorMessage && inputErrorId}

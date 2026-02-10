@@ -25,11 +25,12 @@ import { cn } from '~/utils/tw-utils';
  */
 export function ErrorSummary({ className, ...props }: OmitStrict<ComponentPropsWithoutRef<'section'>, 'children' | 'tabIndex'>): JSX.Element | undefined {
   const { t } = useTranslation(['gcweb']);
-  const { errors } = useErrorSummaryContext();
+  const errorSummaryContext = useErrorSummaryContext();
   const summaryRef = useRef<HTMLDivElement>(null);
+  const errors = errorSummaryContext?.errors;
 
   useEffect(() => {
-    if (errors.length > 0 && summaryRef.current) {
+    if (errors && errors.length > 0 && summaryRef.current) {
       summaryRef.current.scrollIntoView({ behavior: 'smooth' });
       summaryRef.current.focus();
 
@@ -40,7 +41,7 @@ export function ErrorSummary({ className, ...props }: OmitStrict<ComponentPropsW
     }
   }, [errors]);
 
-  if (errors.length === 0) {
+  if (!errors || errors.length === 0) {
     return undefined;
   }
 

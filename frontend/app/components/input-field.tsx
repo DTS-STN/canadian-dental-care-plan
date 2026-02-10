@@ -39,11 +39,7 @@ export function InputField(props: InputFieldProps) {
       <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
         {label}
       </InputLabel>
-      {errorMessage && (
-        <InputError id={inputErrorId} className="mb-2">
-          {errorMessage}
-        </InputError>
-      )}
+      {errorMessage && <InputError id={inputErrorId} fieldId={id} message={errorMessage} className="mb-2" />}
       {helpMessagePrimary && (
         <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)}>
           {helpMessagePrimary}
