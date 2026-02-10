@@ -144,7 +144,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
       </InputLegend>
       {(datePickerErrorMessages.all !== undefined || datePickerErrorMessages.year !== undefined || datePickerErrorMessages.month !== undefined || datePickerErrorMessages.day !== undefined) && (
         <div className="mb-2 space-y-2">
-          {datePickerErrorMessages.all && <p>{datePickerErrorMessages.all}</p>}
+          {datePickerErrorMessages.all}
           {currentLanguage === 'fr' ? (
             <>
               {datePickerErrorMessages.day}
