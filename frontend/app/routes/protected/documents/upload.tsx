@@ -20,12 +20,12 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { FileUpload, FileUploadItem, FileUploadItemDelete, FileUploadList, FileUploadTrigger } from '~/components/file-upload';
 import type { FileState } from '~/components/file-upload';
-import { ErrorMessage } from '~/components/future-error-message';
 import { ErrorSummary } from '~/components/future-error-summary';
 import { ErrorSummaryProvider } from '~/components/future-error-summary-context';
-import { InputSelect } from '~/components/future-input-select';
+import { InputError } from '~/components/input-error';
 import { InputLegend } from '~/components/input-legend';
 import type { InputOptionProps } from '~/components/input-option';
+import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
@@ -481,7 +481,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
     });
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     formData.delete('file_id');
@@ -528,7 +528,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                   extensions: DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(', '),
                 })}
               </p>
-              {filesError && <ErrorMessage id="files-error" className="mb-2" fieldId="fileUploadTrigger" message={filesError} />}
+              {filesError && <InputError id="files-error" className="mb-2" fieldId="fileUploadTrigger" message={filesError} />}
               <FileUpload id="file-upload" label={t('documents:upload.upload-document')} value={filesWithTypes} onValueChange={handleFileChange} accept={DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(',')} className="gap-4 sm:gap-6">
                 <div>
                   <FileUploadTrigger asChild>
@@ -549,7 +549,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                         className={cn('flex-col items-stretch gap-3 sm:gap-4', fileError && 'border-red-500 focus:border-red-500 focus:ring-3 focus:ring-red-500 focus:outline-hidden')}
                         tabIndex={-1}
                       >
-                        {fileError && <ErrorMessage id={`file-error-${id}`} fieldId={`file-upload-item-${id}`} message={fileError} />}
+                        {fileError && <InputError id={`file-error-${id}`} fieldId={`file-upload-item-${id}`} message={fileError} />}
                         <dl className="space-y-3 sm:space-y-4">
                           <div className="space-y-2">
                             <dt className="font-semibold">{t('documents:upload.file-name')}</dt>
