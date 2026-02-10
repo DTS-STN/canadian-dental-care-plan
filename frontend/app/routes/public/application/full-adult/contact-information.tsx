@@ -39,32 +39,25 @@ export async function loader({ context: { appContainer, session }, request, para
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-adult:contact-information.page-title') }) };
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province) : undefined;
-  const countryMailing = state.mailingAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale) : undefined;
-  const countryHome = state.homeAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale) : undefined;
-  const mailingAddressInfo = {
-    address: state.mailingAddress?.value?.address,
-    city: state.mailingAddress?.value?.city,
-    province: mailingProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.mailingAddress?.value?.postalCode,
-    country: countryMailing?.name,
-  };
+  const mailingAddressInfo = state.mailingAddress?.hasChanged
+    ? {
+        address: state.mailingAddress.value.address,
+        city: state.mailingAddress.value.city,
+        province: state.mailingAddress.value.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getLocalizedProvinceTerritoryStateById(state.mailingAddress.value.province, locale) : undefined,
+        postalCode: state.mailingAddress.value.postalCode,
+        country: await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale),
+      }
+    : undefined;
 
-  const homeAddressInfo = {
-    address: state.homeAddress?.value?.address,
-    city: state.homeAddress?.value?.city,
-    province: homeProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.homeAddress?.value?.postalCode,
-    country: countryHome?.name,
-  };
-
-  // define the sections and their completion status
-  const sections = {
-    phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
-    address: { completed: isAddressSectionCompleted(state) },
-    communicationPreferences: { completed: isCommunicationPreferencesSectionCompleted(state) },
-  };
+  const homeAddressInfo = state.homeAddress?.hasChanged
+    ? {
+        address: state.homeAddress.value.address,
+        city: state.homeAddress.value.city,
+        province: state.homeAddress.value.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getLocalizedProvinceTerritoryStateById(state.homeAddress.value.province, locale) : undefined,
+        postalCode: state.homeAddress.value.postalCode,
+        country: await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale),
+      }
+    : undefined;
 
   return {
     state: {
@@ -72,12 +65,16 @@ export async function loader({ context: { appContainer, session }, request, para
       communicationPreferences: state.communicationPreferences,
       email: state.email,
     },
+    mailingAddressInfo,
+    homeAddressInfo,
     preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     preferredMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale) : undefined,
     preferredNotificationMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale) : undefined,
-    mailingAddressInfo,
-    homeAddressInfo,
-    sections,
+    sections: {
+      phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
+      address: { completed: isAddressSectionCompleted(state) },
+      communicationPreferences: { completed: isCommunicationPreferencesSectionCompleted(state) },
+    },
     meta,
   };
 }
@@ -124,36 +121,32 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
-            {mailingAddressInfo.address === undefined && homeAddressInfo.address === undefined ? (
+            {mailingAddressInfo === undefined || homeAddressInfo === undefined ? (
               <p>{t('application-full-adult:contact-information.address-help')}</p>
             ) : (
               <DefinitionList layout="single-column">
-                {mailingAddressInfo.address !== undefined && (
-                  <DefinitionListItem term={t('application-full-adult:contact-information.mailing-address')}>
-                    <Address
-                      address={{
-                        address: mailingAddressInfo.address,
-                        city: mailingAddressInfo.city ?? '',
-                        provinceState: mailingAddressInfo.province,
-                        postalZipCode: mailingAddressInfo.postalCode,
-                        country: mailingAddressInfo.country ?? '',
-                      }}
-                    />
-                  </DefinitionListItem>
-                )}
-                {homeAddressInfo.address !== undefined && (
-                  <DefinitionListItem term={t('application-full-adult:contact-information.home-address')}>
-                    <Address
-                      address={{
-                        address: homeAddressInfo.address,
-                        city: homeAddressInfo.city ?? '',
-                        provinceState: homeAddressInfo.province,
-                        postalZipCode: homeAddressInfo.postalCode,
-                        country: homeAddressInfo.country ?? '',
-                      }}
-                    />
-                  </DefinitionListItem>
-                )}
+                <DefinitionListItem term={t('application-full-adult:contact-information.mailing-address')}>
+                  <Address
+                    address={{
+                      address: mailingAddressInfo.address,
+                      city: mailingAddressInfo.city,
+                      provinceState: mailingAddressInfo.province?.abbr,
+                      postalZipCode: mailingAddressInfo.postalCode,
+                      country: mailingAddressInfo.country.name,
+                    }}
+                  />
+                </DefinitionListItem>
+                <DefinitionListItem term={t('application-full-adult:contact-information.home-address')}>
+                  <Address
+                    address={{
+                      address: homeAddressInfo.address,
+                      city: homeAddressInfo.city,
+                      provinceState: homeAddressInfo.province?.abbr,
+                      postalZipCode: homeAddressInfo.postalCode,
+                      country: homeAddressInfo.country.name,
+                    }}
+                  />
+                </DefinitionListItem>
               </DefinitionList>
             )}
           </CardContent>
