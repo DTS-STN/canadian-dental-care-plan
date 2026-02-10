@@ -95,7 +95,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     city: state.mailingAddress.value?.city,
     province: mailingProvinceTerritoryStateAbbr?.abbr,
     postalCode: state.mailingAddress.value?.postalCode,
-    country: countryMailing,
+    country: countryMailing?.name,
   };
 
   const homeAddressInfo = {
@@ -320,7 +320,7 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
                   city: mailingAddressInfo.city ?? '',
                   provinceState: mailingAddressInfo.province,
                   postalZipCode: mailingAddressInfo.postalCode,
-                  country: mailingAddressInfo.country?.name ?? '',
+                  country: mailingAddressInfo.country ?? '',
                 }}
               />
             </DefinitionListItem>

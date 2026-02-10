@@ -45,7 +45,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     state.dentalBenefits?.hasChanged !== true ||
     state.dentalInsurance === undefined ||
     state.phoneNumber?.hasChanged !== true ||
-    state.mailingAddress === undefined ||
+    state.mailingAddress?.hasChanged !== true ||
+    state.homeAddress?.hasChanged !== true ||
     state.submitTerms === undefined ||
     state.hasFiledTaxes === undefined  ||
     state.submissionInfo === undefined
@@ -64,10 +65,10 @@ export async function loader({ context: { appContainer, session }, params, reque
     ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
     : undefined;
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province) : undefined;
-  const countryMailing = state.mailingAddress.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale) : undefined;
-  const countryHome = state.homeAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale) : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress.value.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress.value.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province) : undefined;
+  const countryMailing = await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale);
+  const countryHome = await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale);
 
   const userInfo = {
     memberId: state.applicantInformation.memberId,
@@ -90,19 +91,19 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const mailingAddressInfo = {
-    address: state.mailingAddress.value?.address,
-    city: state.mailingAddress.value?.city,
+    address: state.mailingAddress.value.address,
+    city: state.mailingAddress.value.city,
     province: mailingProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.mailingAddress.value?.postalCode,
-    country: countryMailing,
+    postalCode: state.mailingAddress.value.postalCode,
+    country: countryMailing.name,
   };
 
   const homeAddressInfo = {
-    address: state.homeAddress?.value?.address,
-    city: state.homeAddress?.value?.city,
+    address: state.homeAddress.value.address,
+    city: state.homeAddress.value.city,
     province: homeProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.homeAddress?.value?.postalCode,
-    country: countryHome?.name,
+    postalCode: state.homeAddress.value.postalCode,
+    country: countryHome.name,
   };
 
   const dentalInsurance = {
@@ -276,22 +277,22 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
             <DefinitionListItem term={t('confirm.mailing')}>
               <Address
                 address={{
-                  address: mailingAddressInfo.address ?? '',
-                  city: mailingAddressInfo.city ?? '',
+                  address: mailingAddressInfo.address,
+                  city: mailingAddressInfo.city,
                   provinceState: mailingAddressInfo.province,
                   postalZipCode: mailingAddressInfo.postalCode,
-                  country: mailingAddressInfo.country?.name ?? '',
+                  country: mailingAddressInfo.country,
                 }}
               />
             </DefinitionListItem>
             <DefinitionListItem term={t('confirm.home')}>
               <Address
                 address={{
-                  address: homeAddressInfo.address ?? '',
-                  city: homeAddressInfo.city ?? '',
+                  address: homeAddressInfo.address,
+                  city: homeAddressInfo.city,
                   provinceState: homeAddressInfo.province,
                   postalZipCode: homeAddressInfo.postalCode,
-                  country: homeAddressInfo.country ?? '',
+                  country: homeAddressInfo.country,
                 }}
               />
             </DefinitionListItem>
