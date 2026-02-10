@@ -13,12 +13,12 @@ export class InitialPage extends BasePage {
 
     switch (applyPage) {
       case 'index': {
-        pageInfo = { url: /\/en\/apply/, heading: 'Terms and conditions of use and privacy notice statement' };
+        pageInfo = { url: /\/en\/protected\/apply/, heading: 'Terms and conditions of use and privacy notice statement' };
         break;
       }
 
       case 'new-or-returning': {
-        pageInfo = { url: /\/en\/apply/, heading: 'New or returning member' };
+        pageInfo = { url: /\/en\/protected\/apply\/[a-f0-9-]+\/new-or-returning/, heading: 'New or returning member' };
         break;
       }
 

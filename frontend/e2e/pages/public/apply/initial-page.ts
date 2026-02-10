@@ -18,7 +18,7 @@ export class InitialPage extends BasePage {
       }
 
       case 'new-or-returning': {
-        pageInfo = { url: /\/en\/apply/, heading: 'New or returning member' };
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/new-or-returning/, heading: 'New or returning member' };
         break;
       }
 
