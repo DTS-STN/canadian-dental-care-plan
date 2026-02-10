@@ -10,6 +10,7 @@ import type { Route } from './+types/dental-insurance';
 import { TYPES } from '~/.server/constants';
 import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicApplicationSimplifiedAdultState } from '~/.server/routes/helpers/public-application-simplified-adult-route-helpers';
+import { isDentalBenefitsSectionCompleted, isDentalInsuranceSectionCompleted } from '~/.server/routes/helpers/public-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -52,6 +53,15 @@ export async function loader({ context: { appContainer, session }, request, para
     ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
     : undefined;
 
+  const sections = {
+    dentalInsurance: {
+      completed: isDentalInsuranceSectionCompleted(state),
+    },
+    dentalBenefits: {
+      completed: isDentalBenefitsSectionCompleted(state),
+    },
+  };
+
   return {
     state: {
       dentalInsurance: state.dentalInsurance?.hasDentalInsurance,
@@ -69,6 +79,7 @@ export async function loader({ context: { appContainer, session }, request, para
           }
         : undefined,
     },
+    sections,
     meta,
   };
 }
@@ -92,16 +103,12 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function RenewAdultDentalInsurance({ loaderData, params }: Route.ComponentProps) {
-  const { state } = loaderData;
+  const { state, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
 
-  const sections = [
-    { id: 'dental-insurance', completed: state.dentalInsurance !== undefined }, //
-    { id: 'dental-benefits', completed: state.dentalBenefits !== undefined },
-  ] as const;
-  const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
-  const allSectionsCompleted = completedSections.length === sections.length;
+  const isAllSectionsCompleted = Object.values(sections).every((section) => section.completed);
+  const completedSectionsCount = Object.values(sections).filter((section) => section.completed).length;
 
   return (
     <fetcher.Form method="post" noValidate>
@@ -110,12 +117,12 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
           <p>{t('application:required-label')}</p>
-          <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+          <p>{t('application:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle>{t('application-simplified-adult:dental-insurance.access-to-dental-insurance')}</CardTitle>
-            <CardAction>{completedSections.includes('dental-insurance') && <StatusTag status="complete" />}</CardAction>
+            <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.dentalInsurance === undefined ? (
@@ -129,7 +136,7 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button-dental-insurance" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={completedSections.includes('dental-insurance') ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink id="edit-button-dental-insurance" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus} size="lg">
               {state.dentalInsurance === undefined ? t('application-simplified-adult:dental-insurance.add-answer') : t('application-simplified-adult:dental-insurance.edit-access-to-dental-insurance')}
             </ButtonLink>
           </CardFooter>
@@ -138,7 +145,7 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
         <Card>
           <CardHeader>
             <CardTitle>{t('application-simplified-adult:dental-insurance.other-benefits')}</CardTitle>
-            <CardAction>{completedSections.includes('dental-benefits') && <StatusTag status="complete" />}</CardAction>
+            <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.dentalBenefits ? (
@@ -175,7 +182,7 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
                 className="p-0"
                 routeId="public/application/$id/federal-provincial-territorial-benefits"
                 params={params}
-                startIcon={completedSections.includes('dental-benefits') ? faPenToSquare : faCirclePlus}
+                startIcon={sections.dentalBenefits.completed ? faPenToSquare : faCirclePlus}
                 size="lg"
               >
                 {t('application-simplified-adult:dental-insurance.edit-access-to-government-benefits')}
@@ -198,7 +205,7 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-adult/submit" params={params}>
+          <NavigationButtonLink disabled={!isAllSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-adult/submit" params={params}>
             {t('application-simplified-adult:dental-insurance.submit')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/simplified-adult/contact-information" params={params}>

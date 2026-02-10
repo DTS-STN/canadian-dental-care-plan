@@ -5,6 +5,7 @@ import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationFullFamilyState } from '~/.server/routes/helpers/public-application-full-family-route-helpers';
+import { isMaritalStatusSectionCompleted } from '~/.server/routes/helpers/public-application-full-section-checks';
 import { validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -40,25 +41,20 @@ export async function loader({ context: { appContainer, session }, request, para
       maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined,
       partnerInformation: state.partnerInformation,
     },
+    sections: {
+      maritalStatus: { completed: isMaritalStatusSectionCompleted(state) },
+    },
     meta,
   };
 }
 
 export default function NewFamilyMaritalStatus({ loaderData, params }: Route.ComponentProps) {
-  const { state } = loaderData;
+  const { state, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  const sections = [
-    {
-      id: 'marital-status',
-      completed:
-        state.maritalStatus !== undefined && // marital status selected
-        (!state.partnerInformation || // marital status has no partner information
-          state.partnerInformation.confirm === true), // marital status has partner information with consent given
-    },
-  ] as const;
-  const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
-  const allSectionsCompleted = completedSections.length === sections.length;
+  const sectionCompletedCount = Object.values(sections).filter((section) => section.completed).length;
+  const sectionsCount = Object.values(sections).length;
+  const allSectionsCompleted = sectionCompletedCount === sectionsCount;
 
   return (
     <>
@@ -66,12 +62,12 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
           <p>{t('application:required-label')}</p>
-          <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+          <p>{t('application:sections-completed', { number: sectionCompletedCount, count: sectionsCount })}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle>{t('application-full-family:marital-status.marital-status')}</CardTitle>
-            <CardAction>{completedSections.includes('marital-status') && <StatusTag status="complete" />}</CardAction>
+            <CardAction>{sections.maritalStatus.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.maritalStatus === undefined ? (
@@ -98,7 +94,7 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={completedSections.includes('marital-status') ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={sections.maritalStatus.completed ? faPenToSquare : faCirclePlus} size="lg">
               {state.maritalStatus === undefined ? t('application-full-family:marital-status.add-marital-status') : t('application-full-family:marital-status.edit-marital-status')}
             </ButtonLink>
           </CardFooter>

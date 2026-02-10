@@ -5,6 +5,7 @@ import type { Route } from './+types/dental-insurance';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationFullAdultState } from '~/.server/routes/helpers/public-application-full-adult-route-helpers';
+import { isDentalBenefitsSectionCompleted, isDentalInsuranceSectionCompleted } from '~/.server/routes/helpers/public-application-full-section-checks';
 import { validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -60,20 +61,21 @@ export async function loader({ context: { appContainer, session }, request, para
             }
           : undefined,
     },
+    sections: {
+      dentalInsurance: { completed: isDentalInsuranceSectionCompleted(state) },
+      dentalBenefits: { completed: isDentalBenefitsSectionCompleted(state) },
+    },
     meta,
   };
 }
 
 export default function NewAdultDentalInsurance({ loaderData, params }: Route.ComponentProps) {
-  const { state } = loaderData;
+  const { state, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  const sections = [
-    { id: 'dental-insurance', completed: state.dentalInsurance?.dentalInsuranceEligibilityConfirmation === true }, //
-    { id: 'dental-benefits', completed: state.dentalBenefits !== undefined },
-  ] as const;
-  const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
-  const allSectionsCompleted = completedSections.length === sections.length;
+  const sectionCompletedCount = Object.values(sections).filter((section) => section.completed).length;
+  const sectionsCount = Object.values(sections).length;
+  const allSectionsCompleted = sectionCompletedCount === sectionsCount;
 
   return (
     <>
@@ -81,12 +83,12 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
           <p>{t('application:required-label')}</p>
-          <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+          <p>{t('application:sections-completed', { number: sectionCompletedCount, count: sectionsCount })}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle>{t('application-full-adult:dental-insurance.access-to-dental-insurance')}</CardTitle>
-            <CardAction>{completedSections.includes('dental-insurance') && <StatusTag status="complete" />}</CardAction>
+            <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.dentalInsurance?.dentalInsuranceEligibilityConfirmation === true ? (
@@ -100,7 +102,7 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={completedSections.includes('dental-insurance') ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus} size="lg">
               {state.dentalInsurance === undefined ? t('application-full-adult:dental-insurance.add-answer') : t('application-full-adult:dental-insurance.edit-access-to-dental-insurance')}
             </ButtonLink>
           </CardFooter>
@@ -109,7 +111,7 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
         <Card>
           <CardHeader>
             <CardTitle>{t('application-full-adult:dental-insurance.other-benefits')}</CardTitle>
-            <CardAction>{completedSections.includes('dental-benefits') && <StatusTag status="complete" />}</CardAction>
+            <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.dentalBenefits ? (
@@ -133,15 +135,7 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink
-              id="edit-button"
-              variant="link"
-              className="p-0"
-              routeId="public/application/$id/federal-provincial-territorial-benefits"
-              params={params}
-              startIcon={completedSections.includes('dental-benefits') ? faPenToSquare : faCirclePlus}
-              size="lg"
-            >
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={sections.dentalBenefits.completed ? faPenToSquare : faCirclePlus} size="lg">
               {state.dentalBenefits === undefined ? t('application-full-adult:dental-insurance.add-answer') : t('application-full-adult:dental-insurance.edit-access-to-government-benefits')}
             </ButtonLink>
           </CardFooter>

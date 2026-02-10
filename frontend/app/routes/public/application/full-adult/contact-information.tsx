@@ -6,6 +6,7 @@ import type { Route } from './+types/contact-information';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationFullAdultState } from '~/.server/routes/helpers/public-application-full-adult-route-helpers';
+import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/public-application-full-section-checks';
 import { validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
@@ -57,11 +58,12 @@ export async function loader({ context: { appContainer, session }, request, para
     country: countryHome?.name,
   };
 
-  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
-  const isEmailVerified =
-    state.communicationPreferences?.hasChanged && (state.communicationPreferences.value.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || state.communicationPreferences.value.preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID)
-      ? state.emailVerified
-      : true;
+  // define the sections and their completion status
+  const sections = {
+    phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
+    address: { completed: isAddressSectionCompleted(state) },
+    communicationPreferences: { completed: isCommunicationPreferencesSectionCompleted(state) },
+  };
 
   return {
     state: {
@@ -72,24 +74,20 @@ export async function loader({ context: { appContainer, session }, request, para
     preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     preferredMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale) : undefined,
     preferredNotificationMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale) : undefined,
-    isEmailVerified,
     mailingAddressInfo,
     homeAddressInfo,
+    sections,
     meta,
   };
 }
 
 export default function NewAdultContactInformation({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, isEmailVerified } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  const sections = [
-    { id: 'phone-number', completed: state.phoneNumber?.hasChanged === true },
-    { id: 'address', completed: mailingAddressInfo.address !== undefined && homeAddressInfo.address !== undefined },
-    { id: 'communication-preferences', completed: state.communicationPreferences?.hasChanged === true && isEmailVerified },
-  ] as const;
-  const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
-  const allSectionsCompleted = completedSections.length === sections.length;
+  const sectionCompletedCount = Object.values(sections).filter((section) => section.completed).length;
+  const sectionsCount = Object.values(sections).length;
+  const allSectionsCompleted = sectionCompletedCount === sectionsCount;
 
   return (
     <>
@@ -97,12 +95,12 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
           <p>{t('application:required-label')}</p>
-          <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+          <p>{t('application:sections-completed', { number: sectionCompletedCount, count: sectionsCount })}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle>{t('application-full-adult:contact-information.phone-number')}</CardTitle>
-            <CardAction>{completedSections.includes('phone-number') && <StatusTag status="complete" />}</CardAction>
+            <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.phoneNumber?.hasChanged ? (
@@ -115,8 +113,8 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={completedSections.includes('phone-number') ? faPenToSquare : faCirclePlus} size="lg">
-              {completedSections.includes('phone-number') ? t('application-full-adult:contact-information.edit-phone-number') : t('application-full-adult:contact-information.add-phone-number')}
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={sections.phoneNumber.completed ? faPenToSquare : faCirclePlus} size="lg">
+              {sections.phoneNumber.completed ? t('application-full-adult:contact-information.edit-phone-number') : t('application-full-adult:contact-information.add-phone-number')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -124,7 +122,7 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
         <Card>
           <CardHeader>
             <CardTitle>{t('application-full-adult:contact-information.mailing-and-home-address')}</CardTitle>
-            <CardAction>{completedSections.includes('address') && <StatusTag status="complete" />}</CardAction>
+            <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {mailingAddressInfo.address === undefined && homeAddressInfo.address === undefined ? (
@@ -161,8 +159,8 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={completedSections.includes('address') ? faPenToSquare : faCirclePlus} size="lg">
-              {completedSections.includes('address') ? t('application-full-adult:contact-information.edit-address') : t('application-full-adult:contact-information.add-address')}
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={sections.address.completed ? faPenToSquare : faCirclePlus} size="lg">
+              {sections.address.completed ? t('application-full-adult:contact-information.edit-address') : t('application-full-adult:contact-information.add-address')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -170,7 +168,7 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
         <Card>
           <CardHeader>
             <CardTitle>{t('application-full-adult:contact-information.communication-preferences')}</CardTitle>
-            <CardAction>{completedSections.includes('communication-preferences') && <StatusTag status="complete" />}</CardAction>
+            <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.communicationPreferences?.hasChanged ? (
@@ -185,8 +183,8 @@ export default function NewAdultContactInformation({ loaderData, params }: Route
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/communication-preferences" params={params} startIcon={completedSections.includes('communication-preferences') ? faPenToSquare : faCirclePlus} size="lg">
-              {completedSections.includes('communication-preferences') ? t('application-full-adult:contact-information.edit-communication-preferences') : t('application-full-adult:contact-information.add-communication-preferences')}
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/communication-preferences" params={params} startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus} size="lg">
+              {sections.communicationPreferences.completed ? t('application-full-adult:contact-information.edit-communication-preferences') : t('application-full-adult:contact-information.add-communication-preferences')}
             </ButtonLink>
           </CardFooter>
         </Card>

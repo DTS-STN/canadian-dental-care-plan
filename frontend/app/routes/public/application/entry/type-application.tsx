@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/type-application';
 
+import { isPersonalInformationSectionCompleted, isTypeOfApplicationSectionCompleted } from '~/.server/routes/helpers/public-application-entry-section-checks';
 import type { ApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getInitialApplicationFlowUrl, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
@@ -45,12 +46,16 @@ export async function loader({ context: { appContainer, session }, request, para
     },
     isRenewalContext: state.context === 'renewal',
     nextRouteId,
+    sections: {
+      typeOfApplication: { completed: isTypeOfApplicationSectionCompleted(state) },
+      personalInformation: { completed: isPersonalInformationSectionCompleted(state) },
+    },
     meta,
   };
 }
 
 export default function TypeOfApplication({ loaderData, params }: Route.ComponentProps) {
-  const { defaultState, isRenewalContext, nextRouteId } = loaderData;
+  const { defaultState, isRenewalContext, nextRouteId, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   function getTypeOfApplication(typeOfApplication: string) {
@@ -72,24 +77,20 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
 
   const formattedDate = defaultState.personalInformation ? format(parseISO(defaultState.personalInformation.dateOfBirth), 'MMMM d, yyyy') : undefined;
 
-  const sections = [
-    { id: 'type-application', completed: defaultState.typeOfApplication !== undefined && defaultState.typeOfApplication !== 'delegate' },
-    { id: 'personal-information', completed: defaultState.inputModel !== undefined && defaultState.personalInformation !== undefined },
-  ];
-
-  const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
-  const allSectionsCompleted = completedSections.length === sections.length;
+  const sectionCompletedCount = Object.values(sections).filter((section) => section.completed).length;
+  const sectionsCount = Object.values(sections).length;
+  const allSectionsCompleted = sectionCompletedCount === sectionsCount;
 
   return (
     <div className="max-w-prose space-y-8">
       <div className="space-y-4">
         <p>{t('application:required-label')}</p>
-        <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+        <p>{t('application:sections-completed', { number: sectionCompletedCount, count: sectionsCount })}</p>
       </div>
       <Card>
         <CardHeader>
           <CardTitle>{t('application:type-of-application.type-application-heading')}</CardTitle>
-          <CardAction>{completedSections.includes('type-application') && <StatusTag status="complete" />}</CardAction>
+          <CardAction>{sections.typeOfApplication.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {defaultState.typeOfApplication === undefined ? (
@@ -112,7 +113,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
       <Card>
         <CardHeader>
           <CardTitle>{t('application:type-of-application.personal-info-heading')}</CardTitle>
-          <CardAction>{completedSections.includes('personal-information') && <StatusTag status="complete" />}</CardAction>
+          <CardAction>{sections.personalInformation.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {defaultState.personalInformation === undefined ? (
@@ -136,7 +137,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             </DefinitionList>
           )}
         </CardContent>
-        {isRenewalContext && !completedSections.includes('personal-information') && (
+        {isRenewalContext && !sections.personalInformation.completed && (
           <CardFooter className="border-t bg-zinc-100">
             <ButtonLink id="personal-information-edit-button" variant="link" className="p-0" routeId="public/application/$id/personal-information" params={params} startIcon={faCirclePlus} size="lg">
               {t('application:type-of-application.add-personal-information')}

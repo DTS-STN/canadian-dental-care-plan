@@ -13,6 +13,7 @@ import type { Route } from './+types/childrens-application';
 import { TYPES } from '~/.server/constants';
 import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicApplicationSimplifiedChildState } from '~/.server/routes/helpers/public-application-simplified-child-route-helpers';
+import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildInformationSectionCompleted } from '~/.server/routes/helpers/public-application-simplified-section-checks';
 import { generateId } from '~/.server/utils/id.utils';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -87,6 +88,23 @@ export async function loader({ context: { appContainer, session }, request, para
       children,
     },
     meta,
+    // convert it into map with child id as key for easier access in the component
+    childrenSections: Object.fromEntries(
+      state.children.map((child) => [
+        child.id,
+        {
+          childInformation: {
+            completed: isChildInformationSectionCompleted(child),
+          },
+          dentalInsurance: {
+            completed: isChildDentalInsuranceSectionCompleted(child),
+          },
+          dentalBenefits: {
+            completed: isChildDentalBenefitsSectionCompleted(child),
+          },
+        },
+      ]),
+    ),
   };
 }
 
@@ -151,7 +169,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewChildChildrensApplication({ loaderData, params }: Route.ComponentProps) {
   const { currentLanguage } = useCurrentLanguage();
-  const { state } = loaderData;
+  const { state, childrenSections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const fetcher = useFetcher<typeof action>();
@@ -169,7 +187,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
     await fetcher.submit(formData, { method: 'POST' });
   }
 
-  const allChildrenCompleted = state.children.length > 0 && state.children.every((child) => child.information !== undefined && child.information.dateOfBirth !== '' && child.dentalInsurance !== undefined && child.dentalBenefits !== undefined);
+  const allChildrenCompleted = Object.keys(childrenSections).length > 0 && Object.values(childrenSections).every((sections) => Object.values(sections).every((section) => section.completed));
 
   return (
     <>
@@ -179,24 +197,21 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
           const childName = `${child.information?.firstName} ${child.information?.lastName}`;
           const dateOfBirth = child.information?.dateOfBirth ? toLocaleDateString(parseDateString(child.information.dateOfBirth), currentLanguage) : '';
 
-          const sections = [
-            { id: 'child-information', completed: child.information !== undefined && child.information.dateOfBirth !== '' },
-            { id: 'child-dental-insurance', completed: child.dentalInsurance !== undefined },
-            { id: 'child-dental-benefits', completed: child.dentalBenefits !== undefined },
-          ] as const;
-          const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
+          const sections = childrenSections[child.id];
+          invariant(sections, `Expected child sections to be defined for child ${child.id}`);
+          const completedSectionsCount = Object.values(sections).filter((section) => section.completed).length;
 
           return (
             <div key={child.id}>
               <h2 className="font-lato mb-4 text-2xl font-bold">{t('application-simplified-child:childrens-application.child-title', { childNumber: index + 1 })}</h2>
               <div className="space-y-4">
                 <p>{t('application:required-label')}</p>
-                <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+                <p>{t('application:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
               </div>
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle>{t('application-simplified-child:childrens-application.child-information-card-title', { childNumber: index + 1 })}</CardTitle>
-                  <CardAction>{completedSections.includes('child-information') && <StatusTag status="complete" />}</CardAction>
+                  <CardAction>{sections.childInformation.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.information === undefined ? (
@@ -228,7 +243,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                     className="p-0"
                     routeId="public/application/$id/children/$childId/information"
                     params={{ ...params, childId: child.id }}
-                    startIcon={completedSections.includes('child-information') ? faPenToSquare : faCirclePlus}
+                    startIcon={sections.childInformation.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
                   >
                     {child.information === undefined ? t('application-simplified-child:childrens-application.add-child-information') : t('application-simplified-child:childrens-application.edit-child-information', { childNumber: index + 1 })}
@@ -239,7 +254,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle>{t('application-simplified-child:childrens-application.child-dental-insurance-card-title')}</CardTitle>
-                  <CardAction>{completedSections.includes('child-dental-insurance') && <StatusTag status="complete" />}</CardAction>
+                  <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.dentalInsurance === undefined ? (
@@ -259,7 +274,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                     className="p-0"
                     routeId="public/application/$id/children/$childId/dental-insurance"
                     params={{ ...params, childId: child.id }}
-                    startIcon={completedSections.includes('child-dental-insurance') ? faPenToSquare : faCirclePlus}
+                    startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
                   >
                     {child.dentalInsurance === undefined ? t('application-simplified-child:childrens-application.add-answer') : t('application-simplified-child:childrens-application.edit-child-dental-insurance')}
@@ -270,7 +285,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle>{t('application-simplified-child:childrens-application.child-dental-benefits-card-title')}</CardTitle>
-                  <CardAction>{completedSections.includes('child-dental-benefits') && <StatusTag status="complete" />}</CardAction>
+                  <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.dentalBenefits === undefined ? (
@@ -307,7 +322,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                       className="p-0"
                       routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits"
                       params={{ ...params, childId: child.id }}
-                      startIcon={completedSections.includes('child-dental-benefits') ? faPenToSquare : faCirclePlus}
+                      startIcon={sections.dentalBenefits.completed ? faPenToSquare : faCirclePlus}
                       size="lg"
                     >
                       {t('application-simplified-child:childrens-application.edit-child-dental-benefits')}

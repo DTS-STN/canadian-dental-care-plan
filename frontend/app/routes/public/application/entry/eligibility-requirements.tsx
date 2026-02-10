@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/eligibility-requirements';
 
+import { isTaxFilingSectionCompleted, isTermsAndConditionsSectionCompleted } from '~/.server/routes/helpers/public-application-entry-section-checks';
 import { getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -32,37 +33,32 @@ export async function loader({ context: { appContainer, session }, request, para
       termsAndConditions: state.termsAndConditions,
       hasFiledTaxes: state.hasFiledTaxes,
     },
+    sections: {
+      termsAndConditions: { completed: isTermsAndConditionsSectionCompleted(state) },
+      taxFiling: { completed: isTaxFilingSectionCompleted(state) },
+    },
     meta,
   };
 }
 
 export default function ApplyIndex({ loaderData, params }: Route.ComponentProps) {
-  const { state } = loaderData;
+  const { state, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  const sections = [
-    {
-      id: 'terms-and-conditions',
-      completed:
-        state.termsAndConditions?.acknowledgePrivacy === true && //
-        state.termsAndConditions.acknowledgeTerms === true &&
-        state.termsAndConditions.shareData === true,
-    },
-    { id: 'tax-filing', completed: state.hasFiledTaxes === true },
-  ] as const;
-  const completedSections = sections.filter((section) => section.completed).map((section) => section.id);
-  const allSectionsCompleted = completedSections.length === sections.length;
+  const sectionCompletedCount = Object.values(sections).filter((section) => section.completed).length;
+  const sectionsCount = Object.values(sections).length;
+  const allSectionsCompleted = sectionCompletedCount === sectionsCount;
 
   return (
     <div className="max-w-prose space-y-8">
       <div className="space-y-4">
         <p>{t('application:required-label')}</p>
-        <p>{t('application:sections-completed', { number: completedSections.length, count: sections.length })}</p>
+        <p>{t('application:sections-completed', { number: sectionCompletedCount, count: sectionsCount })}</p>
       </div>
       <Card>
         <CardHeader>
           <CardTitle>{t('application:eligibility-requirements.terms-conditions-section.title')}</CardTitle>
-          <CardAction>{completedSections.includes('terms-and-conditions') && <StatusTag status="complete" />}</CardAction>
+          <CardAction>{sections.termsAndConditions.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {state.termsAndConditions === undefined ? (
@@ -82,10 +78,10 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
             className="p-0"
             routeId="public/application/$id/terms-conditions"
             params={params}
-            startIcon={completedSections.includes('terms-and-conditions') ? faPenToSquare : faCircleCheck}
+            startIcon={sections.termsAndConditions.completed ? faPenToSquare : faCircleCheck}
             size="lg"
           >
-            {completedSections.includes('terms-and-conditions') //
+            {sections.termsAndConditions.completed //
               ? t('application:eligibility-requirements.terms-conditions-section.edit-button')
               : t('application:eligibility-requirements.terms-conditions-section.add-button')}
           </ButtonLink>
@@ -94,7 +90,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
       <Card>
         <CardHeader>
           <CardTitle>{t('application:eligibility-requirements.tax-filing-section.title')}</CardTitle>
-          <CardAction>{completedSections.includes('tax-filing') && <StatusTag status="complete" />}</CardAction>
+          <CardAction>{sections.taxFiling.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           <p>
@@ -110,10 +106,10 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
             className="p-0"
             routeId="public/application/$id/tax-filing"
             params={params}
-            startIcon={completedSections.includes('tax-filing') ? faPenToSquare : faCircleCheck}
+            startIcon={sections.taxFiling.completed ? faPenToSquare : faCircleCheck}
             size="lg"
           >
-            {completedSections.includes('tax-filing') //
+            {sections.taxFiling.completed //
               ? t('application:eligibility-requirements.tax-filing-section.edit-button')
               : t('application:eligibility-requirements.tax-filing-section.add-button')}
           </ButtonLink>
