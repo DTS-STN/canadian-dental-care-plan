@@ -12,7 +12,8 @@ import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { LoadingButton } from '~/components/loading-button';
@@ -103,12 +104,6 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
   const isSubmitting = fetcher.state !== 'idle';
 
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, {
-    acknowledgeTerms: 'input-checkbox-acknowledge-terms',
-    acknowledgePrivacy: 'input-checkbox-acknowledge-privacy',
-    shareData: 'input-checkbox-share-data',
-    doNotConsent: 'input-checkbox-do-not-consent',
-  });
 
   const esdcPib = <InlineLink to={t('application-spokes:terms-conditions.links.esdc-pib')} className="external-link" newTabIndicator target="_blank" />;
   const hcPib = <InlineLink to={t('application-spokes:terms-conditions.links.hc-pib')} className="external-link" newTabIndicator target="_blank" />;
@@ -134,7 +129,6 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
           <li>{t('application-spokes:terms-conditions.resolve-actions')}</li>
           <li>{t('application-spokes:terms-conditions.review-statements')}</li>
         </ul>
-        <errorSummary.ErrorSummary />
         <Collapsible summary={t('application-spokes:terms-conditions.terms-and-conditions-of-use.summary')}>
           <div className="space-y-6">
             <div className="space-y-4">
@@ -230,38 +224,41 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
       <p className="my-8" id="application-consent">
         {t('application-spokes:terms-conditions.apply.application-consent')}
       </p>
-      <fetcher.Form method="post" noValidate>
-        <CsrfTokenInput />
-        <div className="space-y-2">
-          <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.acknowledgeTerms} errorMessage={errors?.acknowledgeTerms} required>
-            {t('application-spokes:terms-conditions.checkboxes.acknowledge-terms')}
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <ErrorSummary />
+          <div className="space-y-2">
+            <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.acknowledgeTerms} errorMessage={errors?.acknowledgeTerms} required>
+              {t('application-spokes:terms-conditions.checkboxes.acknowledge-terms')}
+            </InputCheckbox>
+            <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.acknowledgePrivacy} errorMessage={errors?.acknowledgePrivacy} required>
+              {t('application-spokes:terms-conditions.checkboxes.acknowledge-privacy')}
+            </InputCheckbox>
+            <InputCheckbox id="share-data" name="shareData" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.shareData} errorMessage={errors?.shareData} required>
+              {t('application-spokes:terms-conditions.checkboxes.share-data')}
+            </InputCheckbox>
+          </div>
+          <InputCheckbox id="do-not-consent" name="doNotConsent" value={CHECKBOX_VALUE.yes} className="my-8" errorMessage={errors?.doNotConsent}>
+            <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:terms-conditions.checkboxes.do-not-consent" />
           </InputCheckbox>
-          <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.acknowledgePrivacy} errorMessage={errors?.acknowledgePrivacy} required>
-            {t('application-spokes:terms-conditions.checkboxes.acknowledge-privacy')}
-          </InputCheckbox>
-          <InputCheckbox id="share-data" name="shareData" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.shareData} errorMessage={errors?.shareData} required>
-            {t('application-spokes:terms-conditions.checkboxes.share-data')}
-          </InputCheckbox>
-        </div>
-        <InputCheckbox id="do-not-consent" name="doNotConsent" value={CHECKBOX_VALUE.yes} className="my-8" errorMessage={errors?.doNotConsent}>
-          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:terms-conditions.checkboxes.do-not-consent" />
-        </InputCheckbox>
-        <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton aria-describedby="application-consent" variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Terms and Conditions click">
-            {t('application-spokes:terms-conditions.apply.continue-button')}
-          </LoadingButton>
-          <ButtonLink
-            id="back-button"
-            variant="secondary"
-            routeId="public/application/$id/eligibility-requirements"
-            params={params}
-            disabled={isSubmitting}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Terms and Conditions click"
-          >
-            {t('application-spokes:terms-conditions.apply.back-button')}
-          </ButtonLink>
-        </div>
-      </fetcher.Form>
+          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton aria-describedby="application-consent" variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Terms and Conditions click">
+              {t('application-spokes:terms-conditions.apply.continue-button')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              variant="secondary"
+              routeId="public/application/$id/eligibility-requirements"
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Terms and Conditions click"
+            >
+              {t('application-spokes:terms-conditions.apply.back-button')}
+            </ButtonLink>
+          </div>
+        </fetcher.Form>
+      </ErrorSummaryProvider>
     </div>
   );
 }

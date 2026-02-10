@@ -15,7 +15,8 @@ import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
@@ -123,7 +124,6 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
   const isSubmitting = fetcher.state !== 'idle';
 
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, { hasDentalInsurance: 'input-radio-dental-insurance-option-0' });
 
   const [hasDentalInsurance, setHasDentalInsurance] = useState(defaultState?.hasDentalInsurance);
 
@@ -145,10 +145,10 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
   );
 
   return (
-    <>
+    <ErrorSummaryProvider actionData={fetcher.data}>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('application:required-label')}</p>
-        <errorSummary.ErrorSummary />
+        <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="my-6">
@@ -212,6 +212,6 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
           </div>
         </fetcher.Form>
       </div>
-    </>
+    </ErrorSummaryProvider>
   );
 }

@@ -14,7 +14,8 @@ import { phoneSchema } from '~/.server/validation/phone-schema';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputPhoneField } from '~/components/input-phone-field';
 import { LoadingButton } from '~/components/loading-button';
@@ -123,80 +124,77 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
 
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
 
-  const errorSummary = useErrorSummary(errors, {
-    phoneNumber: 'phone-number',
-    phoneNumberAlt: 'phone-number-alt',
-  });
-
   const findOffice = <InlineLink to={t('application-spokes:phone-number.office-link')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose">
-      <errorSummary.ErrorSummary />
-      <fetcher.Form method="post" noValidate>
-        <CsrfTokenInput />
-        <div className="mb-6">
-          <p className="mb-4 italic">{t('application:optional-label')}</p>
-          <div className="grid items-end gap-6">
-            <InputPhoneField
-              id="phone-number"
-              name="phoneNumber"
-              type="tel"
-              inputMode="tel"
-              className="w-full"
-              autoComplete="tel"
-              defaultValue={defaultState.phoneNumber ?? ''}
-              errorMessage={errors?.phoneNumber}
-              label={t('application-spokes:phone-number.phone-number')}
-              maxLength={100}
-              aria-describedby="adding-phone"
-            />
-            <InputPhoneField
-              id="phone-number-alt"
-              name="phoneNumberAlt"
-              type="tel"
-              inputMode="tel"
-              className="w-full"
-              autoComplete="tel"
-              defaultValue={defaultState.phoneNumberAlt ?? ''}
-              errorMessage={errors?.phoneNumberAlt}
-              label={t('application-spokes:phone-number.phone-number-alt')}
-              maxLength={100}
-              aria-describedby="adding-phone"
-            />
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <div className="mb-6">
+            <p className="mb-4 italic">{t('application:optional-label')}</p>
+            <div className="grid items-end gap-6">
+              <InputPhoneField
+                id="phone-number"
+                name="phoneNumber"
+                type="tel"
+                inputMode="tel"
+                className="w-full"
+                autoComplete="tel"
+                defaultValue={defaultState.phoneNumber ?? ''}
+                errorMessage={errors?.phoneNumber}
+                label={t('application-spokes:phone-number.phone-number')}
+                maxLength={100}
+                aria-describedby="adding-phone"
+              />
+              <InputPhoneField
+                id="phone-number-alt"
+                name="phoneNumberAlt"
+                type="tel"
+                inputMode="tel"
+                className="w-full"
+                autoComplete="tel"
+                defaultValue={defaultState.phoneNumberAlt ?? ''}
+                errorMessage={errors?.phoneNumberAlt}
+                label={t('application-spokes:phone-number.phone-number-alt')}
+                maxLength={100}
+                aria-describedby="adding-phone"
+              />
+            </div>
           </div>
-        </div>
-        <Collapsible summary={t('application-spokes:phone-number.dont-have-number')}>
-          <div className="space-y-6">
-            <section className="space-y-4">
-              <p>{t('application-spokes:phone-number.need-phone-number')}</p>
-              <ul className="list-disc space-y-1 pl-7">
-                <li>
-                  <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:phone-number.service-canada" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
-                </li>
-                <li>
-                  <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:phone-number.in-person" components={{ findOffice }} />
-                </li>
-              </ul>
-            </section>
+          <Collapsible summary={t('application-spokes:phone-number.dont-have-number')}>
+            <div className="space-y-6">
+              <section className="space-y-4">
+                <p>{t('application-spokes:phone-number.need-phone-number')}</p>
+                <ul className="list-disc space-y-1 pl-7">
+                  <li>
+                    <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:phone-number.service-canada" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+                  </li>
+                  <li>
+                    <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:phone-number.in-person" components={{ findOffice }} />
+                  </li>
+                </ul>
+              </section>
+            </div>
+          </Collapsible>
+          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Phone number click">
+              {t('application-spokes:phone-number.save-btn')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              variant="secondary"
+              routeId={getRouteFromApplicationFlow(applicationFlow)}
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Phone number click"
+            >
+              {t('application-spokes:phone-number.back-btn')}
+            </ButtonLink>
           </div>
-        </Collapsible>
-        <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Phone number click">
-            {t('application-spokes:phone-number.save-btn')}
-          </LoadingButton>
-          <ButtonLink
-            id="back-button"
-            variant="secondary"
-            routeId={getRouteFromApplicationFlow(applicationFlow)}
-            params={params}
-            disabled={isSubmitting}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Phone number click"
-          >
-            {t('application-spokes:phone-number.back-btn')}
-          </ButtonLink>
-        </div>
-      </fetcher.Form>
+        </fetcher.Form>
+      </ErrorSummaryProvider>
     </div>
   );
 }

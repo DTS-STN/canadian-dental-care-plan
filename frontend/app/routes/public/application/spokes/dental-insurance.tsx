@@ -15,7 +15,8 @@ import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputRadios } from '~/components/input-radios';
@@ -129,11 +130,6 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
   const [hasDentalInsurance, setHasDentalInsurance] = useState(defaultState?.hasDentalInsurance);
 
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, {
-    hasDentalInsurance: 'input-radio-has-dental-insurance-option-0',
-    dentalInsuranceEligibilityConfirmationYes: 'input-checkbox-dental-insurance-eligibility-confirmation-yes',
-    dentalInsuranceEligibilityConfirmationNo: 'input-checkbox-dental-insurance-eligibility-confirmation-no',
-  });
 
   function handleOnHasDentalInsuranceChanged(e: React.ChangeEvent<HTMLInputElement>) {
     setHasDentalInsurance(e.target.value === HAS_DENTAL_INSURANCE_OPTION.yes);
@@ -157,90 +153,92 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
   const t4aHref = <InlineLink to={t('application-spokes:dental-insurance.no.alert-t4a-href')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
-    <div className="max-w-prose">
-      <p className="mb-4 italic">{t('application:required-label')}</p>
-      <errorSummary.ErrorSummary />
-      <fetcher.Form method="post" noValidate>
-        <CsrfTokenInput />
-        <div className="my-6">
-          <InputRadios
-            id="has-dental-insurance"
-            name="hasDentalInsurance"
-            legend={t('dental-insurance.legend')}
-            options={[
-              {
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.option-yes" />,
-                value: HAS_DENTAL_INSURANCE_OPTION.yes,
-                defaultChecked: defaultState?.hasDentalInsurance === true,
-                onChange: handleOnHasDentalInsuranceChanged,
-              },
-              {
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.option-no" />,
-                value: HAS_DENTAL_INSURANCE_OPTION.no,
-                defaultChecked: defaultState?.hasDentalInsurance === false,
-                onChange: handleOnHasDentalInsuranceChanged,
-              },
-            ]}
-            helpMessagePrimary={helpMessage}
-            helpMessagePrimaryClassName="text-black"
-            errorMessage={errors?.hasDentalInsurance}
-            required
-          />
-        </div>
-        {hasDentalInsurance === true && (
-          <div className="mb-4 space-y-4">
-            <ContextualAlert type="info">
-              <h3 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.yes.alert-title')}</h3>
-              <p>{t('dental-insurance.yes.alert-body')}</p>
-            </ContextualAlert>
-            <InputCheckbox
-              id="dental-insurance-eligibility-confirmation-yes"
-              name="dentalInsuranceEligibilityConfirmationYes"
-              value={CHECKBOX_VALUE.yes}
-              defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmationYes}
-              errorMessage={errors?.dentalInsuranceEligibilityConfirmationYes}
+    <ErrorSummaryProvider actionData={fetcher.data}>
+      <div className="max-w-prose">
+        <p className="mb-4 italic">{t('application:required-label')}</p>
+        <ErrorSummary />
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <div className="my-6">
+            <InputRadios
+              id="has-dental-insurance"
+              name="hasDentalInsurance"
+              legend={t('dental-insurance.legend')}
+              options={[
+                {
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.option-yes" />,
+                  value: HAS_DENTAL_INSURANCE_OPTION.yes,
+                  defaultChecked: defaultState?.hasDentalInsurance === true,
+                  onChange: handleOnHasDentalInsuranceChanged,
+                },
+                {
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.option-no" />,
+                  value: HAS_DENTAL_INSURANCE_OPTION.no,
+                  defaultChecked: defaultState?.hasDentalInsurance === false,
+                  onChange: handleOnHasDentalInsuranceChanged,
+                },
+              ]}
+              helpMessagePrimary={helpMessage}
+              helpMessagePrimaryClassName="text-black"
+              errorMessage={errors?.hasDentalInsurance}
               required
-            >
-              {t('dental-insurance.yes.confirmation')}
-            </InputCheckbox>
+            />
           </div>
-        )}
-        {hasDentalInsurance === false && (
-          <div className="mb-4 space-y-4">
-            <ContextualAlert type="info">
-              <h3 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.no.alert-title')}</h3>
-              <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:dental-insurance.no.alert-body" components={{ t4Href, t4aHref }} />
-            </ContextualAlert>
-            <InputCheckbox
-              id="dental-insurance-eligibility-confirmation-no"
-              name="dentalInsuranceEligibilityConfirmationNo"
-              value={CHECKBOX_VALUE.yes}
-              defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmationNo}
-              errorMessage={errors?.dentalInsuranceEligibilityConfirmationNo}
-              required
-            >
-              {t('dental-insurance.no.confirmation')}
-            </InputCheckbox>
-          </div>
-        )}
+          {hasDentalInsurance === true && (
+            <div className="mb-4 space-y-4">
+              <ContextualAlert type="info">
+                <h3 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.yes.alert-title')}</h3>
+                <p>{t('dental-insurance.yes.alert-body')}</p>
+              </ContextualAlert>
+              <InputCheckbox
+                id="dental-insurance-eligibility-confirmation-yes"
+                name="dentalInsuranceEligibilityConfirmationYes"
+                value={CHECKBOX_VALUE.yes}
+                defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmationYes}
+                errorMessage={errors?.dentalInsuranceEligibilityConfirmationYes}
+                required
+              >
+                {t('dental-insurance.yes.confirmation')}
+              </InputCheckbox>
+            </div>
+          )}
+          {hasDentalInsurance === false && (
+            <div className="mb-4 space-y-4">
+              <ContextualAlert type="info">
+                <h3 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.no.alert-title')}</h3>
+                <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:dental-insurance.no.alert-body" components={{ t4Href, t4aHref }} />
+              </ContextualAlert>
+              <InputCheckbox
+                id="dental-insurance-eligibility-confirmation-no"
+                name="dentalInsuranceEligibilityConfirmationNo"
+                value={CHECKBOX_VALUE.yes}
+                defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmationNo}
+                errorMessage={errors?.dentalInsuranceEligibilityConfirmationNo}
+                required
+              >
+                {t('dental-insurance.no.confirmation')}
+              </InputCheckbox>
+            </div>
+          )}
 
-        <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Access to other dental insurance click">
-            {t('dental-insurance.save-btn')}
-          </LoadingButton>
-          <ButtonLink
-            id="back-button"
-            variant="secondary"
-            routeId={`public/application/$id/${applicationFlow}/dental-insurance`}
-            params={params}
-            disabled={isSubmitting}
-            startIcon={faChevronLeft}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Access to other dental insurance click"
-          >
-            {t('dental-insurance.back-btn')}
-          </ButtonLink>
-        </div>
-      </fetcher.Form>
-    </div>
+          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Access to other dental insurance click">
+              {t('dental-insurance.save-btn')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              variant="secondary"
+              routeId={`public/application/$id/${applicationFlow}/dental-insurance`}
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Access to other dental insurance click"
+            >
+              {t('dental-insurance.back-btn')}
+            </ButtonLink>
+          </div>
+        </fetcher.Form>
+      </div>
+    </ErrorSummaryProvider>
   );
 }

@@ -13,7 +13,8 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InputField } from '~/components/input-field';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
@@ -138,28 +139,28 @@ export default function ApplicationEmail({ loaderData, params }: Route.Component
 
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
 
-  const errorSummary = useErrorSummary(errors, { email: 'email' });
-
   return (
     <div className="max-w-prose">
-      <errorSummary.ErrorSummary />
-      <fetcher.Form method="post" noValidate>
-        <CsrfTokenInput />
-        <p className="mb-4">{t('application-spokes:email.provide-email')}</p>
-        <p className="mb-8">{t('application-spokes:email.verify-email')}</p>
-        <p className="mb-4 italic">{t('application:required-label')}</p>
-        <div className="mb-6">
-          <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t('application-spokes:email.email-legend')} maxLength={64} required />
-        </div>
-        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Email click">
-            {t('application-spokes:email.continue')}
-          </LoadingButton>
-          <ButtonLink id="back-button" variant="secondary" routeId="public/application/$id/communication-preferences" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Email click">
-            {t('application-spokes:email.back')}
-          </ButtonLink>
-        </div>
-      </fetcher.Form>
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <p className="mb-4">{t('application-spokes:email.provide-email')}</p>
+          <p className="mb-8">{t('application-spokes:email.verify-email')}</p>
+          <p className="mb-4 italic">{t('application:required-label')}</p>
+          <div className="mb-6">
+            <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t('application-spokes:email.email-legend')} maxLength={64} required />
+          </div>
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Email click">
+              {t('application-spokes:email.continue')}
+            </LoadingButton>
+            <ButtonLink id="back-button" variant="secondary" routeId="public/application/$id/communication-preferences" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Email click">
+              {t('application-spokes:email.back')}
+            </ButtonLink>
+          </div>
+        </fetcher.Form>
+      </ErrorSummaryProvider>
     </div>
   );
 }
