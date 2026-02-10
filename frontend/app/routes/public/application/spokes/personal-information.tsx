@@ -24,7 +24,6 @@ import { ErrorSummary } from '~/components/future-error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
-import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { isValidClientNumberRenewal, renewalCodeInputPatternFormat } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString, toLocaleDateString } from '~/utils/date-utils';
@@ -208,7 +207,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplicationPersonalInformation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { currentLanguage } = useCurrentLanguage();
   const { state, isRenewalContext } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
