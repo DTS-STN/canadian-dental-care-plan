@@ -5,7 +5,6 @@ import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';
 import { omit } from 'moderndash';
 import type { ReadonlyDeep } from 'type-fest';
-import { z } from 'zod';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
@@ -500,15 +499,13 @@ interface getSingleChildStateArgs {
 export function getSingleChildState({ params, request, session }: getSingleChildStateArgs) {
   const log = createLogger('public-application-route-helpers.server/publicApplicationSingleChildState');
   const applicationState = getPublicApplicationState({ params, session });
+  const childId = params.childId;
 
-  const parsedChildId = z.uuid().safeParse(params.childId);
-
-  if (!parsedChildId.success) {
-    log.warn('Invalid "childId" param format; childId: [%s]', params.childId);
+  if (!isValidId(childId)) {
+    log.warn('Invalid "childId" param format; childId: [%s]', childId);
     throw redirect(getPathById(`public/application/$id/${applicationState.inputModel}-${applicationState.typeOfApplication}/children/index`, params));
   }
 
-  const childId = parsedChildId.data;
   const childStateIndex = applicationState.children.findIndex(({ id }) => id === childId);
 
   if (childStateIndex === -1) {
