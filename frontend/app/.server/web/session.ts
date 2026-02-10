@@ -37,11 +37,24 @@ type SessionTypeMap = {
   lastAccessTime: string;
   letters: ReadonlyArray<LetterDto>;
   userInfoToken: UserinfoToken;
-  profileEmailVerificationState: {
-    pendingEmail: string;
+  profileEmailAddressFlowState: {
+    emailAddress: string;
     verificationCode: string;
     verificationAttempts: number;
-  };
+  } & (
+    | {
+        context?: 'contact';
+        preferredLanguage?: undefined;
+        preferredMethodSunLife?: undefined;
+        preferredMethodGovernmentOfCanada?: undefined;
+      }
+    | {
+        context: 'communication-preferences';
+        preferredLanguage: string;
+        preferredMethodSunLife: string;
+        preferredMethodGovernmentOfCanada: string;
+      }
+  );
 };
 
 /**

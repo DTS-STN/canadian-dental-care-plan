@@ -1,39 +1,61 @@
 {
+  "@odata.context": "https://canadadental-uat.crm3.dynamics.com/api/data/v9.2/$metadata#esdc_evidentiarydocumenttypes(esdc_evidentiarydocumenttypeid,esdc_value,esdc_nameenglish,esdc_namefrench)",
   "value": [
     {
-      "esdc_value": "002",
+      "@odata.etag": "W/\"258946848\"",
+      "esdc_namefrench": "Record of Employment (ROE) [FR]",
+      "esdc_evidentiarydocumenttypeid": "e6706125-9e9f-f011-bbd2-7ced8d05477c",
       "esdc_nameenglish": "Record of Employment (ROE)",
-      "esdc_namefrench": "Relevé d'emploi (RE)"
+      "esdc_value": "002"
     },
     {
-      "esdc_value": "003",
+      "@odata.etag": "W/\"258946851\"",
+      "esdc_namefrench": "T4/T4A [FR]",
+      "esdc_evidentiarydocumenttypeid": "366fffa1-9e9f-f011-bbd2-7ced8d05477c",
       "esdc_nameenglish": "T4/T4A",
-      "esdc_namefrench": "T4/T4A"
+      "esdc_value": "003"
     },
     {
-      "esdc_value": "004",
+      "@odata.etag": "W/\"258946853\"",
+      "esdc_namefrench": "Employer Letter [FR]",
+      "esdc_evidentiarydocumenttypeid": "de3c6d3c-9f9f-f011-bbd2-7ced8d05477c",
       "esdc_nameenglish": "Employer Letter",
-      "esdc_namefrench": "Lettre de l'employeur"
+      "esdc_value": "004"
     },
     {
-      "esdc_value": "005",
+      "@odata.etag": "W/\"258946855\"",
+      "esdc_namefrench": "Benefit Provider Letter [FR]",
+      "esdc_evidentiarydocumenttypeid": "70a54c5a-9f9f-f011-bbd2-7ced8d05477c",
       "esdc_nameenglish": "Benefit Provider Letter",
-      "esdc_namefrench": "Lettre du fournisseur de prestations"
+      "esdc_value": "005"
     },
     {
-      "esdc_value": "006",
+      "@odata.etag": "W/\"258946857\"",
+      "esdc_namefrench": "Employer/Benefit Provider Email [FR]",
+      "esdc_evidentiarydocumenttypeid": "31cb26b3-9f9f-f011-bbd2-7ced8d05477c",
       "esdc_nameenglish": "Employer/Benefit Provider Email",
-      "esdc_namefrench": "Courriel de l'employeur/fournisseur de prestations"
+      "esdc_value": "006"
     },
     {
-      "esdc_value": "997",
+      "@odata.etag": "W/\"258946859\"",
+      "esdc_namefrench": "Notice of Eligibility [FR]",
+      "esdc_evidentiarydocumenttypeid": "9f9d1cc5-9f9f-f011-bbd2-7ced8d05477c",
+      "esdc_nameenglish": "Notice of Eligibility",
+      "esdc_value": "100"
+    },
+    {
+      "@odata.etag": "W/\"258946861\"",
+      "esdc_namefrench": "Multiple evidence items [FR]",
+      "esdc_evidentiarydocumenttypeid": "93b9c6c5-a09f-f011-bbd2-7ced8d05477c",
       "esdc_nameenglish": "Multiple evidence items",
-      "esdc_namefrench": "Éléments de preuve multiples"
+      "esdc_value": "997"
     },
     {
-      "esdc_value": "998",
+      "@odata.etag": "W/\"258946863\"",
+      "esdc_namefrench": "Other [FR]",
+      "esdc_evidentiarydocumenttypeid": "27c7afd7-a09f-f011-bbd2-7ced8d05477c",
       "esdc_nameenglish": "Other",
-      "esdc_namefrench": "Autre"
+      "esdc_value": "998"
     }
   ]
 }

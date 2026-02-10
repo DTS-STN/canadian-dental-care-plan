@@ -13,12 +13,14 @@ import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { InputPatternField } from '~/components/input-pattern-field';
 import { InputSelect } from '~/components/input-select';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('stub-login', 'gcweb'),
@@ -54,10 +56,10 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const stubLoginSchema = z.object({
-    sin: z.string().trim().min(1, t('stub-login:index.error-message.sin-required')),
-    destinationRouteId: z.string().trim().min(1, t('stub-login:index.error-message.destination-required')),
-    sid: z.string().trim().min(1, t('stub-login:index.error-message.sid-required')),
-    sub: z.string().trim().min(1, t('stub-login:index.error-message.sub-required')),
+    sin: z.string().trim().nonempty(t('stub-login:index.error-message.sin-required')).refine(isValidSin, t('stub-login:index.error-message.sin-invalid')),
+    destinationRouteId: z.string().trim().nonempty(t('stub-login:index.error-message.destination-required')),
+    sid: z.string().trim().nonempty(t('stub-login:index.error-message.sid-required')),
+    sub: z.string().trim().nonempty(t('stub-login:index.error-message.sub-required')),
   });
 
   const formData = await request.formData();
@@ -73,7 +75,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  const sin = parsedDataResult.data.sin;
+  const sin = parsedDataResult.data.sin.replaceAll(/\s+/g, ''); // Remove any spaces
   const sid = parsedDataResult.data.sid;
   const sub = parsedDataResult.data.sub;
 
@@ -140,31 +142,55 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
     <div className="max-w-prose">
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate className="space-y-6">
-        <InputField id="sin" name="sin" label={t('stub-login:index.sin')} required inputMode="numeric" defaultValue={defaultValues.sin} />
+        <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('stub-login:index.sin')} required inputMode="numeric" defaultValue={defaultValues.sin} errorMessage={errors?.sin} />
         <InputSelect
           id="destination-page"
           name="destinationRouteId"
           label={t('stub-login:index.destination')}
+          errorMessage={errors?.destinationRouteId}
+          defaultValue=""
+          required
           options={[
-            {
-              children: 'Letters',
-              value: 'protected/letters/index',
-            },
+            { children: 'Select a destination', value: '', disabled: true, hidden: true },
             {
               children: 'Apply',
               value: 'protected/apply/index',
             },
             {
-              children: 'Renew my coverage',
-              value: 'protected/renew/index',
+              children: 'Documents',
+              value: 'protected/documents/index',
+            },
+            {
+              children: 'Letters',
+              value: 'protected/letters/index',
+            },
+            {
+              children: 'Member Eligibility',
+              value: 'protected/profile/eligibility',
+            },
+            {
+              children: 'Profile - Applicant Information',
+              value: 'protected/profile/applicant-information',
+            },
+            {
+              children: 'Profile - Communication Preferences',
+              value: 'protected/profile/communication-preferences',
+            },
+            {
+              children: 'Profile - Contact Information',
+              value: 'protected/profile/contact-information',
+            },
+            {
+              children: 'Profile - Dental Benefits',
+              value: 'protected/profile/dental-benefits',
             },
           ]}
         />
         <fieldset>
           <legend className="mb-2 text-xl font-semibold">{t('stub-login:index.raoidc')}</legend>
           <div className="space-y-6">
-            <InputField id="sid" name="sid" className="w-full" inputMode="text" label={t('stub-login:index.sid')} defaultValue={defaultValues.sid} />
-            <InputField id="sub" name="sub" className="w-full" inputMode="text" label={t('stub-login:index.sub')} defaultValue={defaultValues.sub} />
+            <InputField id="sid" name="sid" className="w-full" inputMode="text" label={t('stub-login:index.sid')} defaultValue={defaultValues.sid} errorMessage={errors?.sid} />
+            <InputField id="sub" name="sub" className="w-full" inputMode="text" label={t('stub-login:index.sub')} defaultValue={defaultValues.sub} errorMessage={errors?.sub} />
           </div>
         </fieldset>
         <Button variant="primary" id="login-button">

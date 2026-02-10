@@ -74,3 +74,31 @@ export function getFileExtension(filename: string): string {
   }
   return filename.slice(lastDotIndex);
 }
+
+/**
+ * Converts an ArrayBuffer to a Base64-encoded string.
+ *
+ * @param fileBuffer - The ArrayBuffer to convert
+ * @returns A Base64-encoded string representation of the input buffer
+ *
+ * @example
+ * ```typescript
+ * const buffer = new Uint8Array([72, 101, 108, 108, 111]).buffer; // "Hello"
+ * const base64String = arrayBufferToBase64(buffer); // "SGVsbG8="
+ * ```
+ */
+export function arrayBufferToBase64(fileBuffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(fileBuffer);
+
+  // Node.js or browser with polyfilled Buffer
+  if (typeof Buffer !== 'undefined') {
+    return Buffer.from(bytes).toString('base64');
+  }
+
+  // Browser-safe fallback (no Buffer available)
+  let binary = '';
+  for (const byte of bytes) {
+    binary += String.fromCodePoint(byte);
+  }
+  return btoa(binary);
+}

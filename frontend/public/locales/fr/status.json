@@ -48,10 +48,10 @@
   },
   "form": {
     "complete-fields": "Remplissez tous les champs.",
-    "radio-legend": "Vérifiez-vous le statut pour vous-même ou pour votre enfant?",
+    "radio-legend": "Vérifiez-vous l'état pour vous-même ou pour votre enfant?",
     "radio-text": {
-      "myself": "Je vérifie le statut pour <strong>moi-même</strong>",
-      "child": "Je vérifie le statut de <strong>mon enfant</strong>"
+      "myself": "Je vérifie l'état pour <strong>moi-même</strong>",
+      "child": "Je vérifie l'état de <strong>mon enfant</strong>"
     },
     "application-code-label": "Votre code de demande ou votre numéro du client",
     "application-code-description": "This code or number is found in the upper right-hand corner of the letter you received from Service Canada",
@@ -59,7 +59,7 @@
     "continue": "Continuer",
     "submit": "Vérifier l'état de votre demande",
     "error-message": {
-      "selection-required": "Choisissez si vous vérifiez le statut pour vous-même ou pour votre enfant"
+      "selection-required": "Choisissez si vous vérifiez l'état pour vous-même ou pour votre enfant"
     }
   },
   "myself": {

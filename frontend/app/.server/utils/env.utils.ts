@@ -23,7 +23,7 @@ function tryOrElseFalse(fn: () => void) {
   }
 }
 
-const validMockNames = ['cct', 'code-tables', 'document-upload', 'gc-notify', 'power-platform', 'profile', 'raoidc', 'status-check', 'verification-code', 'wsaddress'] as const;
+const validMockNames = ['cct', 'code-tables', 'document-upload', 'evidentiary-document', 'gc-notify', 'power-platform', 'profile', 'raoidc', 'status-check', 'verification-code', 'wsaddress'] as const;
 export type MockName = (typeof validMockNames)[number];
 
 // refiners
@@ -95,7 +95,7 @@ const serverEnv = clientEnvSchema.extend({
   INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY: z.string().trim().transform(emptyToUndefined).optional(),
 
   // Enterprise Wide Document Upload settings
-  EWDU_ENCAPSULATION_USERNAME: z.string().optional(),
+  EWDU_ENCAPSULATION_USERNAME: z.string().default('CDCP'),
   EWDU_ENCAPSULATION_PASSWORD: z.string().optional(),
   EWDU_PROGRAM_ACTIVITY_ID: z.string().default('CDCP'),
   EWDU_RECORD_SOURCE_MSCA: z.string().default('775170004'),
@@ -109,7 +109,7 @@ const serverEnv = clientEnvSchema.extend({
   AUTH_LOGOUT_REDIRECT_URL: z.url(),
   AUTH_RAOIDC_BASE_URL: z.string().trim().min(1),
   AUTH_RAOIDC_CLIENT_ID: z.string().trim().min(1),
-  AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
+  AUTH_RAOIDC_METADATA_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
   AUTH_RASCL_LOGOUT_URL: z.string().trim().min(1),
 
   // GC Notify settings (@see https://documentation.notification.canada.ca/en/)
@@ -158,23 +158,24 @@ const serverEnv = clientEnvSchema.extend({
   MOCK_AUTH_ALLOWED_REDIRECTS: z.string().transform(emptyToUndefined).transform(csvToArray).default(['http://localhost:3000/auth/callback/raoidc']),
 
   // cache duration settings
-  LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_ALL_DOCUMENT_UPLOAD_REASONS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_ALL_EVIDENTIARY_DOCUMENT_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_DOCUMENT_UPLOAD_REASON_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_EVIDENTIARY_DOCUMENT_TYPE_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
+  LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_ALL_DOCUMENT_UPLOAD_REASONS_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_ALL_EVIDENTIARY_DOCUMENT_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_ALL_LETTER_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_APPLICATION_YEAR_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_CLIENT_ELIGIBILITY_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_DEMOGRAPHIC_SURVEY_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_DOCUMENT_UPLOAD_REASON_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_EVIDENTIARY_DOCUMENT_TYPE_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_LETTER_TYPE_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
+  LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS: z.coerce.number().default(10 * 60),
 
   // OpenTelemetry/Dynatrace settings
   OTEL_LOG_LEVEL: z.string().refine((val) => otelLogLevels.has(val)).default('info'),

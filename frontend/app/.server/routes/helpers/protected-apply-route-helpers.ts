@@ -18,6 +18,7 @@ export type ProtectedApplyState = ReadonlyDeep<{
   id: string;
   editMode: boolean;
   lastUpdatedOn: string;
+  isRenewingCoverage?: boolean;
   editModeApplicantInformation?: {
     firstName: string;
     lastName: string;

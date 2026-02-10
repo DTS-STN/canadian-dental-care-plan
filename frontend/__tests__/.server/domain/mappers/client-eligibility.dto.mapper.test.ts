@@ -10,8 +10,8 @@ describe('DefaultClientEligibilityDtoMapper', () => {
   beforeEach(() => {
     const serverConfig = {
       COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: 'Co-Pay Tier (TPC)',
-      ELIGIBLE_STATUS_CODE_ELIGIBLE: 'status-001',
-      ELIGIBLE_STATUS_CODE_INELIGIBLE: 'status-002',
+      ELIGIBILITY_STATUS_CODE_ELIGIBLE: 'status-001',
+      ELIGIBILITY_STATUS_CODE_INELIGIBLE: 'status-002',
     };
     mapper = new DefaultClientEligibilityDtoMapper(serverConfig);
   });
@@ -118,10 +118,11 @@ describe('DefaultClientEligibilityDtoMapper', () => {
             taxationYear: 2023,
           },
         ],
+        eligibilityStatusCode: 'status-001',
+        eligibilityStatusCodeNextYear: 'status-001',
+        enrollmentStatusCode: 'enrollment-status-001',
         firstName: 'John',
         lastName: 'Doe',
-        statusCode: 'status-001',
-        statusCodeNextYear: 'status-001',
       });
     });
   });

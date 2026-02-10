@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { DocumentScanResponseEntity, DocumentUploadRequestEntity, DocumentUploadResponseEntity } from '~/.server/domain/entities';
+import type { DocumentScanRequestEntity, DocumentScanResponseEntity, DocumentUploadRequestEntity, DocumentUploadResponseEntity } from '~/.server/domain/entities';
 import type { HttpClient } from '~/.server/http';
 import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
@@ -27,7 +27,7 @@ export interface DocumentUploadRepository {
    * @param scanDocumentRequestEntity The document scan request entity
    * @returns A Promise that resolves to the document scan response entity.
    */
-  scanDocument(scanDocumentRequestEntity: DocumentUploadRequestEntity): Promise<DocumentScanResponseEntity>;
+  scanDocument(scanDocumentRequestEntity: DocumentScanRequestEntity): Promise<DocumentScanResponseEntity>;
 
   /**
    * Retrieves metadata associated with the document upload repository.
@@ -69,18 +69,19 @@ export class DefaultDocumentUploadRepository implements DocumentUploadRepository
     this.baseUrl = `${this.serverConfig.INTEROP_API_BASE_URI}/client-correspondence/document-upload/cct/v1/api`;
   }
 
-  async uploadDocument(documentUploadRequestEntity: DocumentUploadRequestEntity): Promise<DocumentUploadResponseEntity> {
-    this.log.trace('Uploading document for fileName [%s]', documentUploadRequestEntity.fileName);
-
-    const url = `${this.baseUrl}/ScanAndSave`;
-
-    const uploadRequest = {
+  private addCredentialsToRequestBody<T extends object>(requestBody: T): T & { username: string; password?: string; programActivityIdentificationID: string } {
+    return {
+      ...requestBody,
       username: this.serverConfig.EWDU_ENCAPSULATION_USERNAME,
       password: this.serverConfig.EWDU_ENCAPSULATION_PASSWORD,
-      fileName: documentUploadRequestEntity.fileName,
-      binary: documentUploadRequestEntity.binary,
-      ProgramActivityIdentificationID: this.serverConfig.EWDU_PROGRAM_ACTIVITY_ID,
+      programActivityIdentificationID: this.serverConfig.EWDU_PROGRAM_ACTIVITY_ID,
     };
+  }
+
+  async uploadDocument(documentUploadRequestEntity: DocumentUploadRequestEntity): Promise<DocumentUploadResponseEntity> {
+    this.log.trace('Uploading document for filename [%s]', documentUploadRequestEntity.filename);
+
+    const url = `${this.baseUrl}/ScanAndSave`;
 
     const response = await this.httpClient.instrumentedFetch('http.client.document-scan-api.scan-and-save.posts', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
@@ -89,7 +90,7 @@ export class DefaultDocumentUploadRepository implements DocumentUploadRepository
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
-      body: JSON.stringify(uploadRequest),
+      body: JSON.stringify(this.addCredentialsToRequestBody(documentUploadRequestEntity)),
       retryOptions: {
         retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
         backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,
@@ -107,7 +108,7 @@ export class DefaultDocumentUploadRepository implements DocumentUploadRepository
         status: response.status,
         statusText: response.statusText,
         url: url,
-        fileName: documentUploadRequestEntity.fileName,
+        filename: documentUploadRequestEntity.filename,
         responseBody: await response.text(),
       });
 
@@ -125,17 +126,10 @@ export class DefaultDocumentUploadRepository implements DocumentUploadRepository
     return documentUploadResponseEntity;
   }
 
-  async scanDocument(scanDocumentRequestEntity: DocumentUploadRequestEntity): Promise<DocumentScanResponseEntity> {
-    this.log.trace('Scanning document for fileName [%s]', scanDocumentRequestEntity.fileName);
+  async scanDocument(scanDocumentRequestEntity: DocumentScanRequestEntity): Promise<DocumentScanResponseEntity> {
+    this.log.trace('Scanning document for filename [%s]', scanDocumentRequestEntity.filename);
 
     const url = `${this.baseUrl}/Scan`;
-
-    const scanRequest = {
-      username: this.serverConfig.EWDU_ENCAPSULATION_USERNAME,
-      password: this.serverConfig.EWDU_ENCAPSULATION_PASSWORD,
-      fileName: scanDocumentRequestEntity.fileName,
-      binary: scanDocumentRequestEntity.binary,
-    };
 
     const response = await this.httpClient.instrumentedFetch('http.client.document-scan-api.scan.posts', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
@@ -144,7 +138,7 @@ export class DefaultDocumentUploadRepository implements DocumentUploadRepository
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
-      body: JSON.stringify(scanRequest),
+      body: JSON.stringify(this.addCredentialsToRequestBody(scanDocumentRequestEntity)),
       retryOptions: {
         retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
         backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,
@@ -162,7 +156,7 @@ export class DefaultDocumentUploadRepository implements DocumentUploadRepository
         status: response.status,
         statusText: response.statusText,
         url: url,
-        fileName: scanDocumentRequestEntity.fileName,
+        filename: scanDocumentRequestEntity.filename,
         responseBody: await response.text(),
       });
 
@@ -174,7 +168,7 @@ export class DefaultDocumentUploadRepository implements DocumentUploadRepository
     if (documentScanResponseEntity.Error) {
       this.log.warn('Document scan completed with error: [%j]', documentScanResponseEntity.Error);
     } else {
-      this.log.trace('Successfully scanned document. DocumentFileName: [%s]', scanDocumentRequestEntity.fileName);
+      this.log.trace('Successfully scanned document. DocumentFileName: [%s]', scanDocumentRequestEntity.filename);
     }
 
     return documentScanResponseEntity;
@@ -187,7 +181,7 @@ export class DefaultDocumentUploadRepository implements DocumentUploadRepository
   }
 
   async checkHealth(): Promise<void> {
-    await this.scanDocument({ fileName: '', binary: '', userId: '' });
+    await this.scanDocument({ filename: '', binary: '' });
   }
 }
 
@@ -200,31 +194,26 @@ export class MockDocumentUploadRepository implements DocumentUploadRepository {
   }
 
   async uploadDocument(documentUploadRequestEntity: DocumentUploadRequestEntity): Promise<DocumentUploadResponseEntity> {
-    this.log.debug('Uploading document for fileName [%s]', documentUploadRequestEntity.fileName);
+    this.log.debug('Uploading document for filename [%s]', documentUploadRequestEntity.filename);
 
-    this.log.debug('Successfully uploaded document: [%s]', documentUploadRequestEntity.fileName);
+    this.log.debug('Successfully uploaded document: [%s]', documentUploadRequestEntity.filename);
 
     return await Promise.resolve({
+      DocumentFileName: documentUploadRequestEntity.filename,
       Error: null,
-      DocumentFileName: documentUploadRequestEntity.fileName,
     });
   }
 
-  async scanDocument(scanDocumentRequestEntity: DocumentUploadRequestEntity): Promise<DocumentScanResponseEntity> {
-    this.log.debug('Scanning document for fileName [%s]', scanDocumentRequestEntity.fileName);
+  async scanDocument(scanDocumentRequestEntity: DocumentScanRequestEntity): Promise<DocumentScanResponseEntity> {
+    this.log.debug('Scanning document for filename [%s]', scanDocumentRequestEntity.filename);
 
     this.log.debug('Successfully scanned document. File is safe.');
 
-    return await Promise.resolve({
-      Error: null,
-      Percent: '100',
-    });
+    return await Promise.resolve({ DataId: 'mock-data-id-12345', Error: null });
   }
 
   getMetadata(): Record<string, string> {
-    return {
-      mockEnabled: 'true',
-    };
+    return { mockEnabled: 'true' };
   }
 
   async checkHealth(): Promise<void> {

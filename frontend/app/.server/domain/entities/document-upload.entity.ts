@@ -1,31 +1,27 @@
-export type DocumentUploadResponseEntity = Readonly<{
-  Error: DocumentUploadErrorEntity | null;
-  DocumentFileName: string | null;
-}>;
+export type DocumentUploadResponseEntity = Readonly<
+  | { DocumentFileName: string; Error: null } //
+  | { DocumentFileName: null; Error: DocumentUploadErrorEntity }
+>;
 
 export type DocumentUploadErrorEntity = Readonly<{
   ErrorCode: string;
   ErrorMessage: string;
 }>;
 
-export type DocumentScanResponseEntity = Readonly<{
-  Error: DocumentUploadErrorEntity | null;
-  Percent: string | null;
-}>;
+export type DocumentScanResponseEntity = Readonly<
+  | { DataId: string; Error: null } //
+  | { DataId: null; Error: DocumentUploadErrorEntity }
+>;
 
 export type DocumentUploadRequestEntity = Readonly<{
-  fileName: string;
+  filename: string;
   binary: string;
-  ApplicationProfileName?: string;
-  DocumentCategoryText?: string;
-  CaseNumberText?: string;
-  SubjectPersonIdentificationID?: string;
-  OriginalDocumentCreationDate?: string;
-  userId: string;
+  subjectPersonIdentificationID: string;
+  documentCategoryText: string;
+  originalDocumentCreationDate: string;
 }>;
 
 export type DocumentScanRequestEntity = Readonly<{
-  fileName: string;
+  filename: string;
   binary: string;
-  userId: string;
 }>;

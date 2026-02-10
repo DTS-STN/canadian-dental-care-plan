@@ -9,6 +9,7 @@
     "login": "Login",
     "error-message": {
       "sin-required": "Enter a SIN",
+      "sin-invalid": "Enter a valid SIN",
       "destination-required": "Select a destination page",
       "sid-required": "Enter a sid",
       "sub-required": "Enter a sub"

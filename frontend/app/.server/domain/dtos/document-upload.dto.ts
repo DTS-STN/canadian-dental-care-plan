@@ -2,41 +2,40 @@
  * Represents a Data Transfer Object (DTO) for Document Upload request.
  */
 export type DocumentUploadRequestDto = Readonly<{
+  /** Client number identifier */
+  clientNumber: string;
+
   /** Original file name provided by user */
   fileName: string;
 
   /** Base64 encoded bytes from the file being uploaded */
   binary: string;
 
-  /** Name of the application uploading */
-  ApplicationProfileName?: string;
+  /** Evidentiary document type identifier */
+  evidentiaryDocumentTypeId: string;
 
-  /** Category of document being uploaded to the repository */
-  DocumentCategoryText?: string;
-
-  /** The identification of the case associated with the document */
-  CaseNumberText?: string;
-
-  /** The identification of the person who is the main subject of/in the uploaded document */
-  SubjectPersonIdentificationID?: string;
-
-  /** The original document creation date as provided by the partner system. Format UTC ISO 8601 */
-  OriginalDocumentCreationDate?: string;
+  /** Upload date */
+  uploadDate: Date;
 
   /** A unique identifier for the user making the request - used for auditing */
   userId: string;
 }>;
 
 /**
- * Represents a Data Transfer Object (DTO) for Document Upload response.
+ * Represents the response from a document upload operation.
+ *
+ * This is a discriminated union type that represents either a successful upload
+ * or an error state, but never both simultaneously.
+ *
+ * @remarks
+ * The type uses a discriminated union pattern where:
+ * - On success: `DocumentFileName` contains the filename and `Error` is undefined
+ * - On failure: `DocumentFileName` is undefined and `Error` contains error details
  */
-export type DocumentUploadResponseDto = Readonly<{
-  /** Error information if the operation failed */
-  Error: DocumentUploadErrorDto | null;
-
-  /** The generated document file name if successful */
-  DocumentFileName: string | null;
-}>;
+export type DocumentUploadResponseDto = Readonly<
+  | { DocumentFileName: string; Error?: undefined } //
+  | { DocumentFileName?: undefined; Error: DocumentUploadErrorDto }
+>;
 
 /**
  * Represents a Data Transfer Object (DTO) for Document Upload error.
@@ -64,12 +63,16 @@ export type DocumentScanRequestDto = Readonly<{
 }>;
 
 /**
- * Represents a Data Transfer Object (DTO) for Document Scan response.
+ * Represents the response from a document scan operation.
+ *
+ * This is a discriminated union type that can represent either a successful scan result
+ * or an error state.
+ *
+ * @remarks
+ * - On success: Contains a `DataId` string and `Error` is undefined
+ * - On failure: Contains an `Error` object of type `DocumentUploadErrorDto` and `DataId` is undefined
  */
-export type DocumentScanResponseDto = Readonly<{
-  /** Error information if the operation failed */
-  Error: DocumentUploadErrorDto | null;
-
-  /** Scan completion percentage (100 = completed) */
-  Percent: string | null;
-}>;
+export type DocumentScanResponseDto = Readonly<
+  | { DataId: string; Error?: undefined } //
+  | { DataId?: undefined; Error: DocumentUploadErrorDto }
+>;

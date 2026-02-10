@@ -82,16 +82,19 @@ export const clientEnvSchema = z.object({
   CDCP_SURVEY_LINK_FR: z.url().default('https://forms-formulaires.alpha.canada.ca/fr/id/cmdsycga6008qx701dw5x5n9c'),
 
   // Document upload configs
-  DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS: z.string().trim().toLowerCase().default('.docx,.ppt,.txt,.pdf,.jpg,.jpeg,.png')
+  DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS: z.string().trim().toLowerCase().default('.docx,.pptx,.txt,.pdf,.jpg,.jpeg,.png')
     .transform(csvToArray)
     .transform((val) => [...new Set(val)]) // remove duplicates
     .pipe(z.array(z.string().refine(isValidExtension)).min(1)),
-  DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB: z.coerce.number().positive().default(10),
+  DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB: z.coerce.number().positive().default(5),
   DOCUMENT_UPLOAD_MAX_FILE_COUNT:z.coerce.number().positive().default(10),
 
   // Eligibility Status Codes
-  ELIGIBLE_STATUS_CODE_ELIGIBLE: z.string().trim().min(1).default('775170000'),
-  ELIGIBLE_STATUS_CODE_INELIGIBLE: z.string().trim().min(1).default('775170001'),
+  ELIGIBILITY_STATUS_CODE_ELIGIBLE: z.string().trim().min(1).default('775170000'),
+  ELIGIBILITY_STATUS_CODE_INELIGIBLE: z.string().trim().min(1).default('775170001'),
+
+  // Enrollment Status Codes
+  ENROLLMENT_STATUS_CODE_ENROLLED: z.string().trim().min(1).default('775170000'),
 
   // Coverage Category Code
   COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: z.string().trim().min(1).default('Co-Pay Tier (TPC)'),

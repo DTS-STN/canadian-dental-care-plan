@@ -2,6 +2,7 @@
   "required-label": "Remplissez tous les champs.",
   "optional-label": "Remplissez tous les champs, sauf s'ils sont indiqués facultatifs.",
   "all-optional-label": "Tous les champs sont facultatifs.",
+  "none": "Aucun",
   "eligibility": {
     "page-title": "Admissibilité des membres",
     "details": "Les membres doivent toujours vérifier leur couverture et confirmer avec leur professionnel de la santé bucco-dentaire quels frais, le cas échéant, ne seront pas couverts par le Régime canadien de soins dentaires avant de recevoir des soins.",
@@ -64,7 +65,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Enregistrer"
+      "save-btn": "Sauvegarder"
     },
     "error-message": {
       "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel vous êtes couvert",
@@ -104,7 +105,7 @@
       "back": "Retour",
       "continue": "Continuer",
       "cancel-btn": "Annuler",
-      "save-btn": "Enregistrer"
+      "save-btn": "Sauvegarder"
     },
     "error-message": {
       "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel l'enfant est couvert",
@@ -130,12 +131,11 @@
     "preferred-method-gc": "Comment souhaitez-vous recevoir des mises à jour du gouvernement du Canada concernant le Plan canadien de soins dentaires?",
     "preferred-method-sunlife": "Comment aimeriez-vous que la Sun Life communique avec vous?",
     "back": "Retour",
+    "continue": "Continuer",
     "save": "Sauvegarder",
     "error-message": {
       "preferred-language-required": "Sélectionnez la langue de communication préférée",
-      "preferred-method-gc-email-verified": "Une adresse courriel vérifiée est requise pour recevoir les communications du gouvernement du Canada par voie numérique.",
       "preferred-method-gc-required": "Sélectionnez votre moyen de communication préféré avec le gouvernement du Canada",
-      "preferred-method-sunlife-email-verified": "Une adresse courriel vérifiée est requise pour recevoir les communications de Sun Life par voie numérique.",
       "preferred-method-sunlife-required": "Sélectionnez votre moyen de communication préféré avec la Sun Life"
     }
   },
@@ -167,6 +167,10 @@
     "update-email-link-text": "Modifier l'adresse courriel",
     "update-mailing-address-link-text": "Modifier l'adresse postale",
     "update-home-address-link-text": "Modifier l'adresse du domicile",
+    "email-verification-status": {
+      "unverified": "Non vérifiée",
+      "verified": "Vérifiée"
+    },
     "return-button": "Retour au tableau de bord"
   },
   "email": {
@@ -218,7 +222,7 @@
     "country": "Pays",
     "use-mailing-address": "Utiliser cette adresse comme adresse de mon domicile.",
     "back-btn": "Retour",
-    "save-btn": "Enregistrer",
+    "save-btn": "Sauvegarder",
     "continue-btn": "Continuer",
     "select-one": "Sélectionnez une option"
   },
@@ -234,7 +238,7 @@
     "province": "Province, territoire, état ou région",
     "country": "Pays",
     "back-btn": "Retour",
-    "save-btn": "Enregistrer",
+    "save-btn": "Sauvegarder",
     "select-one": "Sélectionnez une option"
   }
 }

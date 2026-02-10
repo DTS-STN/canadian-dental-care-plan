@@ -16,6 +16,11 @@ test.describe('Adult-Child category', () => {
     await applyPage.acceptLegalCheckboxes(page);
     await clickContinue(page);
 
+    // New or Returning Section
+    await applyPage.isLoaded('new-or-returning');
+    await page.getByRole('radio', { name: 'No', exact: true }).check();
+    await clickContinue(page);
+
     // Tax Filing Section
     await applyPage.isLoaded('tax-filing');
     await page.getByRole('radio', { name: 'Yes', exact: true }).check();

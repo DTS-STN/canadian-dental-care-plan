@@ -35,7 +35,7 @@ export class DefaultEvidentiaryDocumentDtoMapper implements EvidentiaryDocumentD
     return {
       id: evidentiaryDocumentEntity.id,
       fileName: evidentiaryDocumentEntity.fileName,
-      clientID: evidentiaryDocumentEntity.clientID,
+      clientId: evidentiaryDocumentEntity.clientId,
       documentTypeId: evidentiaryDocumentEntity.documentTypeId,
       mscaUploadDate: evidentiaryDocumentEntity.mscaUploadDate,
       healthCanadaTransferDate: evidentiaryDocumentEntity.healthCanadaTransferDate,
@@ -51,10 +51,10 @@ export class DefaultEvidentiaryDocumentDtoMapper implements EvidentiaryDocumentD
   mapCreateEvidentiaryDocumentMetadataDtoToEntity(uploadDto: CreateEvidentiaryDocumentMetadataDto): UploadEvidentiaryDocumentMetadataEntity {
     return {
       fileName: uploadDto.fileName,
-      documentTypeId: uploadDto.documentTypeId,
+      documentTypeId: uploadDto.evidentiaryDocumentTypeId,
       documentUploadReasonId: uploadDto.documentUploadReasonId,
       recordSource: uploadDto.recordSource,
-      uploadDate: uploadDto.uploadDate,
+      uploadDate: uploadDto.uploadDate.toISOString(),
       healthCanadaTransferDate: uploadDto.healthCanadaTransferDate,
     };
   }
@@ -65,14 +65,9 @@ export class DefaultEvidentiaryDocumentDtoMapper implements EvidentiaryDocumentD
 
   mapCreateEvidentiaryDocumentMetadataResponseEntityToDto(responseEntity: CreateEvidentiaryDocumentMetadataResponseEntity): CreateEvidentiaryDocumentMetadataResponseDto {
     return {
-      processed: responseEntity.esdc.esdc_processed,
-      requestContext: {
-        simulate: responseEntity.esdc.RequestContext.esdc_simulate,
-        debug: responseEntity.esdc.RequestContext.esdc_debug,
-      },
       evidentiaryDocuments: responseEntity.esdc_evidentiarydocuments.map((doc) => ({
         fileName: doc.esdc_filename,
-        documentTypeId: doc['_esdc_documenttypeid_value'],
+        evidentiaryDocumentTypeId: doc['_esdc_documenttypeid_value'],
         documentUploadReasonId: doc['_esdc_documentuploadreasonid_value'],
         uploadDate: doc.esdc_uploaddate,
         healthCanadaTransferDate: doc.esdc_hctransferdate,

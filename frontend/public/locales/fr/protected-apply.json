@@ -147,5 +147,30 @@
     },
     "back-btn": "Retour",
     "continue-btn": "Continuer"
+  },
+  "new-or-returning": {
+    "page-title": "Nouveau membre ou membre existant",
+    "form-instructions": "Vous bénéficiez déjà d'une couverture du Régime canadien de soins dentaires et souhaitez la renouveler?",
+    "radio-options": {
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "error-message": {
+      "new-or-returning-required": "Sélectionnez si vous bénéficiez déjà d'une couverture du Régime canadien de soins dentaires et souhaitez la renouveler ou non"
+    },
+    "back-btn": "Retour",
+    "continue-btn": "Continuer"
+  },
+  "renewal-soon": {
+    "page-title": "L'ouverture des demandes de renouvellement aura lieu sous peu",
+    "able-to-renew": "Vous pourrez renouveler vos prestations pour 2026\u20112027 à compter du printemps. <cdcpLink>Revenez bientôt</cdcpLink> pour obtenir plus d'informations sur le processus de renouvellement.",
+    "able-to-renew-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html",
+    "get-ready": "Pour vous préparer\u00a0:",
+    "file-tax-return": "Produisez votre déclaration de revenus de 2025",
+    "spouse-or-common-do-same": "Assurez-vous que votre époux, votre épouse ou votre conjoint(e) de fait (s'il y a lieu) fasse de même",
+    "wait-notice-assessment": "Attendez de recevoir votre ou vos avis de cotisation",
+    "back-btn": "Retour",
+    "exit-btn": "Quitter la demande",
+    "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   }
 }

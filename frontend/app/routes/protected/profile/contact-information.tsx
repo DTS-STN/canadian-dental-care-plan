@@ -1,3 +1,5 @@
+import { faCheckCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/contact-information';
@@ -6,6 +8,7 @@ import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import type { AddressDetails } from '~/components/address';
+import { Badge } from '~/components/badge';
 import { ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
@@ -66,6 +69,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     phoneNumber: clientApplication.contactInformation.phoneNumber,
     altPhoneNumber: clientApplication.contactInformation.phoneNumberAlt,
     emailAddress: clientApplication.contactInformation.email,
+    emailAddressVerified: clientApplication.contactInformation.emailVerified,
     mailingAddressDetails,
     homeAddressDetails,
     SCCH_BASE_URI,
@@ -76,14 +80,16 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
   const { t } = useTranslation(handle.i18nNamespaces);
   const { phoneNumber, altPhoneNumber, emailAddress, mailingAddressDetails, homeAddressDetails, SCCH_BASE_URI } = loaderData;
 
+  const emailVerificationStatus = loaderData.emailAddress ? (loaderData.emailAddressVerified ? 'verified' : 'unverified') : undefined;
+
   return (
     <div className="max-w-prose space-y-10">
       <dl className="divide-y border-y">
         <DescriptionListItem term={t('protected-profile:contact-information.phone-number')} className="border-none pb-0 sm:pb-0">
-          <p>{phoneNumber}</p>
+          <p>{phoneNumber ?? t('protected-profile:none')}</p>
         </DescriptionListItem>
         <DescriptionListItem term={t('protected-profile:contact-information.alt-phone-number')}>
-          <p>{altPhoneNumber}</p>
+          <p>{altPhoneNumber ?? t('protected-profile:none')}</p>
           <div className="mt-4 sm:mt-6">
             <InlineLink id="update-contact-information-phone" routeId="protected/profile/contact/phone" params={params}>
               {t('protected-profile:contact-information.update-phone-link-text')}
@@ -91,7 +97,15 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
           </div>
         </DescriptionListItem>
         <DescriptionListItem term={t('protected-profile:contact-information.email')}>
-          <p>{emailAddress}</p>
+          <p>{emailAddress ?? t('protected-profile:none')}</p>
+          {emailVerificationStatus && (
+            <Badge asChild size="lg" variant={emailVerificationStatus === 'unverified' ? 'warning' : 'success'}>
+              <p>
+                <FontAwesomeIcon icon={emailVerificationStatus === 'unverified' ? faExclamationTriangle : faCheckCircle} />
+                {t(`protected-profile:contact-information.email-verification-status.${emailVerificationStatus}`)}
+              </p>
+            </Badge>
+          )}
           <div className="mt-4 sm:mt-6">
             <InlineLink id="update-contact-information-email" routeId="protected/profile/contact/email-address" params={params}>
               {t('protected-profile:contact-information.update-email-link-text')}

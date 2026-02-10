@@ -2,6 +2,7 @@
   "required-label": "Complete all fields.",
   "optional-label": "Complete all fields unless marked as optional.",
   "all-optional-label": "All fields are optional.",
+  "none": "None",
   "eligibility": {
     "page-title": "Member eligibility",
     "details": "Members should always verify their coverage and confirm what costs, if any, will not be covered by the Canadian Dental Care Plan with their oral health provider before receiving care.",
@@ -130,12 +131,11 @@
     "preferred-method-gc-mail": "<span>{{name}}</span><br>You can also view your Canadian Dental Care Plan information in MSCA.",
     "preferred-method-sunlife": "How would you like Sun Life to communicate with you?",
     "back": "Back",
+    "continue": "Continue",
     "save": "Save",
     "error-message": {
       "preferred-language-required": "Select preferred language of communication",
-      "preferred-method-gc-email-verified": "A verified email address is required to receive communications from the Government of Canada digitally.",
       "preferred-method-gc-required": "Select preferred method of communication for the Government of Canada",
-      "preferred-method-sunlife-email-verified": "A verified email address is required to receive communications from Sun Life digitally.",
       "preferred-method-sunlife-required": "Select preferred method of communication for Sun Life"
     }
   },
@@ -167,6 +167,10 @@
     "update-email-link-text": "Change or add email address",
     "update-mailing-address-link-text": "Change mailing address",
     "update-home-address-link-text": "Change home address",
+    "email-verification-status": {
+      "unverified": "Unverified",
+      "verified": "Verified"
+    },
     "return-button": "Return to dashboard"
   },
   "email": {

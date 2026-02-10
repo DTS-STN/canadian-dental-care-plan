@@ -31,31 +31,28 @@ function useDirection(dirProp?: Direction): Direction {
   return dirProp ?? contextDir ?? 'ltr';
 }
 
-interface FileState {
-  file: File;
-  progress: number;
-  error?: string;
-  status: 'idle' | 'uploading' | 'error' | 'success';
+export interface FileState {
+  /** Unique identifier for the file */
+  readonly id: string;
+  /** The actual File object */
+  readonly file: File;
 }
 
 interface StoreState {
-  files: Map<File, FileState>;
+  files: Map<string, File>;
   dragOver: boolean;
   invalid: boolean;
 }
 
 type StoreAction =
-  | { type: 'ADD_FILES'; files: File[] }
-  | { type: 'SET_FILES'; files: File[] }
-  | { type: 'SET_PROGRESS'; file: File; progress: number }
-  | { type: 'SET_SUCCESS'; file: File }
-  | { type: 'SET_ERROR'; file: File; error: string }
-  | { type: 'REMOVE_FILE'; file: File }
+  | { type: 'ADD_FILES'; files: ReadonlyArray<File> } //
+  | { type: 'SET_FILES'; files: ReadonlyArray<FileState> }
+  | { type: 'REMOVE_FILE'; id: string }
   | { type: 'SET_DRAG_OVER'; dragOver: boolean }
   | { type: 'SET_INVALID'; invalid: boolean }
   | { type: 'CLEAR' };
 
-function createStore(listeners: Set<() => void>, files: Map<File, FileState>, urlCache: WeakMap<File, string>, invalid: boolean, onValueChange?: (files: File[]) => void) {
+function createStore(listeners: Set<() => void>, files: Map<string, File>, invalid: boolean, onValueChange: (files: ReadonlyArray<FileState>) => void) {
   let state: StoreState = {
     files,
     dragOver: false,
@@ -66,22 +63,16 @@ function createStore(listeners: Set<() => void>, files: Map<File, FileState>, ur
     switch (action.type) {
       case 'ADD_FILES': {
         for (const file of action.files) {
-          files.set(file, {
-            file,
-            progress: 0,
-            status: 'idle',
-          });
+          files.set(crypto.randomUUID(), file);
         }
 
-        if (onValueChange) {
-          const fileList = [...files.values()].map((fileState) => fileState.file);
-          onValueChange(fileList);
-        }
+        const fileList = [...files].map(([id, file]) => ({ id, file }));
+        onValueChange(fileList);
         return { ...state, files };
       }
 
       case 'SET_FILES': {
-        const newFileSet = new Set(action.files);
+        const newFileSet = new Map(action.files.map((f) => [f.id, f.file]));
         for (const existingFile of files.keys()) {
           if (!newFileSet.has(existingFile)) {
             files.delete(existingFile);
@@ -89,70 +80,19 @@ function createStore(listeners: Set<() => void>, files: Map<File, FileState>, ur
         }
 
         for (const file of action.files) {
-          const existingState = files.get(file);
+          const existingState = files.get(file.id);
           if (!existingState) {
-            files.set(file, {
-              file,
-              progress: 0,
-              status: 'idle',
-            });
+            files.set(file.id, file.file);
           }
-        }
-        return { ...state, files };
-      }
-
-      case 'SET_PROGRESS': {
-        const fileState = files.get(action.file);
-        if (fileState) {
-          files.set(action.file, {
-            ...fileState,
-            progress: action.progress,
-            status: 'uploading',
-          });
-        }
-        return { ...state, files };
-      }
-
-      case 'SET_SUCCESS': {
-        const fileState = files.get(action.file);
-        if (fileState) {
-          files.set(action.file, {
-            ...fileState,
-            progress: 100,
-            status: 'success',
-          });
-        }
-        return { ...state, files };
-      }
-
-      case 'SET_ERROR': {
-        const fileState = files.get(action.file);
-        if (fileState) {
-          files.set(action.file, {
-            ...fileState,
-            error: action.error,
-            status: 'error',
-          });
         }
         return { ...state, files };
       }
 
       case 'REMOVE_FILE': {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (urlCache) {
-          const cachedUrl = urlCache.get(action.file);
-          if (cachedUrl) {
-            URL.revokeObjectURL(cachedUrl);
-            urlCache.delete(action.file);
-          }
-        }
+        files.delete(action.id);
 
-        files.delete(action.file);
-
-        if (onValueChange) {
-          const fileList = [...files.values()].map((fileState) => fileState.file);
-          onValueChange(fileList);
-        }
+        const fileList = [...files].map(([id, file]) => ({ id, file }));
+        onValueChange(fileList);
         return { ...state, files };
       }
 
@@ -165,21 +105,8 @@ function createStore(listeners: Set<() => void>, files: Map<File, FileState>, ur
       }
 
       case 'CLEAR': {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (urlCache) {
-          for (const file of files.keys()) {
-            const cachedUrl = urlCache.get(file);
-            if (cachedUrl) {
-              URL.revokeObjectURL(cachedUrl);
-              urlCache.delete(file);
-            }
-          }
-        }
-
         files.clear();
-        if (onValueChange) {
-          onValueChange([]);
-        }
+        onValueChange([]);
         return { ...state, files, invalid: false };
       }
 
@@ -247,7 +174,6 @@ interface FileUploadContextValue {
   disabled: boolean;
   dir: Direction;
   inputRef: React.RefObject<HTMLInputElement | null>;
-  urlCache: WeakMap<File, string>;
 }
 
 const FileUploadContext = React.createContext<FileUploadContextValue | null>(null);
@@ -261,24 +187,9 @@ function useFileUploadContext(consumerName: string) {
 }
 
 interface FileUploadRootProps extends Omit<React.ComponentProps<'div'>, 'defaultValue' | 'onChange'> {
-  value?: File[];
-  defaultValue?: File[];
-  onValueChange?: (files: File[]) => void;
-  onAccept?: (files: File[]) => void;
-  onFileAccept?: (file: File) => void;
-  onFileReject?: (file: File, message: string) => void;
-  onFileValidate?: (file: File) => string | null | undefined;
-  onUpload?: (
-    files: File[],
-    options: {
-      onProgress: (file: File, progress: number) => void;
-      onSuccess: (file: File) => void;
-      onError: (file: File, error: Error) => void;
-    },
-  ) => Promise<void> | void;
+  value: FileState[];
+  onValueChange: (files: ReadonlyArray<FileState>) => void;
   accept?: string;
-  maxFiles?: number;
-  maxSize?: number;
   dir?: Direction;
   label?: string;
   name?: string;
@@ -290,30 +201,7 @@ interface FileUploadRootProps extends Omit<React.ComponentProps<'div'>, 'default
 }
 
 function FileUploadRoot(props: FileUploadRootProps) {
-  const {
-    value,
-    defaultValue,
-    onValueChange,
-    onAccept,
-    onFileAccept,
-    onFileReject,
-    onFileValidate,
-    onUpload,
-    accept,
-    maxFiles,
-    maxSize,
-    dir: dirProp,
-    label,
-    name,
-    asChild,
-    disabled = false,
-    invalid = false,
-    multiple = false,
-    required = false,
-    children,
-    className,
-    ...rootProps
-  } = props;
+  const { value, onValueChange, accept, dir: dirProp, label, name, asChild, disabled = false, invalid = false, multiple = false, required = false, children, className, ...rootProps } = props;
 
   const inputId = React.useId();
   const dropzoneId = React.useId();
@@ -322,197 +210,27 @@ function FileUploadRoot(props: FileUploadRootProps) {
 
   const dir = useDirection(dirProp);
   const listeners = useLazyRef(() => new Set<() => void>()).current;
-  const files = useLazyRef<Map<File, FileState>>(() => new Map()).current;
-  const urlCache = useLazyRef(() => new WeakMap<File, string>()).current;
+  const files = useLazyRef<Map<string, File>>(() => new Map()).current;
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const isControlled = value !== undefined;
 
-  const store = React.useMemo(() => createStore(listeners, files, urlCache, invalid, onValueChange), [listeners, files, invalid, onValueChange, urlCache]);
-
-  const acceptTypes = React.useMemo(() => accept?.split(',').map((t) => t.trim()) ?? null, [accept]);
-
-  const onProgress = useLazyRef(() => {
-    let frame = 0;
-    return (file: File, progress: number) => {
-      if (frame) return;
-      frame = requestAnimationFrame(() => {
-        frame = 0;
-        store.dispatch({
-          type: 'SET_PROGRESS',
-          file,
-          progress: Math.min(Math.max(0, progress), 100),
-        });
-      });
-    };
-  }).current;
+  const store = React.useMemo(() => createStore(listeners, files, invalid, onValueChange), [listeners, files, invalid, onValueChange]);
 
   React.useEffect(() => {
-    if (isControlled) {
-      store.dispatch({ type: 'SET_FILES', files: value });
-    } else if (defaultValue && defaultValue.length > 0 && store.getState().files.size === 0) {
-      store.dispatch({ type: 'SET_FILES', files: defaultValue });
-    }
-  }, [value, defaultValue, isControlled, store]);
-
-  React.useEffect(() => {
-    return () => {
-      for (const file of files.keys()) {
-        const cachedUrl = urlCache.get(file);
-        if (cachedUrl) {
-          URL.revokeObjectURL(cachedUrl);
-        }
-      }
-    };
-  }, [files, urlCache]);
-
-  const onFilesUpload = React.useCallback(
-    async (files: File[]) => {
-      try {
-        for (const file of files) {
-          store.dispatch({ type: 'SET_PROGRESS', file, progress: 0 });
-        }
-
-        if (onUpload) {
-          await onUpload(files, {
-            onProgress,
-            onSuccess: (file) => {
-              store.dispatch({ type: 'SET_SUCCESS', file });
-            },
-            onError: (file, error) => {
-              store.dispatch({
-                type: 'SET_ERROR',
-                file,
-                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                error: error.message ?? 'Upload failed',
-              });
-            },
-          });
-        } else {
-          for (const file of files) {
-            store.dispatch({ type: 'SET_SUCCESS', file });
-          }
-        }
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Upload failed';
-        for (const file of files) {
-          store.dispatch({
-            type: 'SET_ERROR',
-            file,
-            error: errorMessage,
-          });
-        }
-      }
-    },
-    [store, onUpload, onProgress],
-  );
+    store.dispatch({ type: 'SET_FILES', files: value });
+  }, [value, store]);
 
   const onFilesChange = React.useCallback(
-    (originalFiles: File[]) => {
+    (files: File[]) => {
       if (disabled) return;
 
-      let filesToProcess = [...originalFiles];
-      let invalid = false;
+      if (files.length > 0) {
+        store.dispatch({ type: 'ADD_FILES', files });
 
-      if (maxFiles) {
-        const currentCount = store.getState().files.size;
-        const remainingSlotCount = Math.max(0, maxFiles - currentCount);
-
-        if (remainingSlotCount < filesToProcess.length) {
-          const rejectedFiles = filesToProcess.slice(remainingSlotCount);
-          invalid = true;
-
-          filesToProcess = filesToProcess.slice(0, remainingSlotCount);
-
-          for (const file of rejectedFiles) {
-            let rejectionMessage = `Maximum ${maxFiles} files allowed`;
-
-            if (onFileValidate) {
-              const validationMessage = onFileValidate(file);
-              if (validationMessage) {
-                rejectionMessage = validationMessage;
-              }
-            }
-
-            onFileReject?.(file, rejectionMessage);
-          }
-        }
-      }
-
-      const acceptedFiles: File[] = [];
-      const rejectedFiles: { file: File; message: string }[] = [];
-
-      for (const file of filesToProcess) {
-        let rejected = false;
-        let rejectionMessage = '';
-
-        if (onFileValidate) {
-          const validationMessage = onFileValidate(file);
-          if (validationMessage) {
-            rejectionMessage = validationMessage;
-            onFileReject?.(file, rejectionMessage);
-            rejected = true;
-            invalid = true;
-            continue;
-          }
-        }
-
-        if (acceptTypes) {
-          const fileType = file.type;
-          const fileExtension = `.${file.name.split('.').pop()}`;
-
-          if (!acceptTypes.some((type) => type === fileType || type === fileExtension || (type.includes('/*') && fileType.startsWith(type.replace('/*', '/'))))) {
-            rejectionMessage = 'File type not accepted';
-            onFileReject?.(file, rejectionMessage);
-            rejected = true;
-            invalid = true;
-          }
-        }
-
-        if (maxSize && file.size > maxSize) {
-          rejectionMessage = 'File too large';
-          onFileReject?.(file, rejectionMessage);
-          rejected = true;
-          invalid = true;
-        }
-
-        if (rejected) {
-          rejectedFiles.push({ file, message: rejectionMessage });
-        } else {
-          acceptedFiles.push(file);
-        }
-      }
-
-      if (invalid) {
-        store.dispatch({ type: 'SET_INVALID', invalid });
-        setTimeout(() => {
-          store.dispatch({ type: 'SET_INVALID', invalid: false });
-        }, 2000);
-      }
-
-      if (acceptedFiles.length > 0) {
-        store.dispatch({ type: 'ADD_FILES', files: acceptedFiles });
-
-        if (isControlled && onValueChange) {
-          const currentFiles = [...store.getState().files.values()].map((f) => f.file);
-          onValueChange([...currentFiles]);
-        }
-
-        if (onAccept) {
-          onAccept(acceptedFiles);
-        }
-
-        for (const file of acceptedFiles) {
-          onFileAccept?.(file);
-        }
-
-        if (onUpload) {
-          requestAnimationFrame(() => {
-            void onFilesUpload(acceptedFiles);
-          });
-        }
+        const currentFiles = [...store.getState().files].map(([id, file]) => ({ id, file }));
+        onValueChange([...currentFiles]);
       }
     },
-    [store, isControlled, onValueChange, onAccept, onFileAccept, onUpload, onFilesUpload, maxFiles, onFileValidate, onFileReject, acceptTypes, maxSize, disabled],
+    [store, onValueChange, disabled],
   );
 
   const onInputChange = React.useCallback(
@@ -533,9 +251,8 @@ function FileUploadRoot(props: FileUploadRootProps) {
       dir,
       disabled,
       inputRef,
-      urlCache,
     }),
-    [dropzoneId, inputId, listId, labelId, dir, disabled, urlCache],
+    [dropzoneId, inputId, listId, labelId, dir, disabled],
   );
 
   const RootPrimitive = asChild ? Slot : 'div';
@@ -814,11 +531,9 @@ function FileUploadList(props: FileUploadListProps) {
 
 interface FileUploadItemContextValue {
   id: string;
-  fileState: FileState | undefined;
+  file: FileState | undefined;
   nameId: string;
   sizeId: string;
-  statusId: string;
-  messageId: string;
 }
 
 const FileUploadItemContext = React.createContext<FileUploadItemContextValue | null>(null);
@@ -832,7 +547,7 @@ function useFileUploadItemContext(consumerName: string) {
 }
 
 interface FileUploadItemProps extends React.ComponentProps<'div'> {
-  value: File;
+  value: string;
   asChild?: boolean;
 }
 
@@ -840,13 +555,14 @@ function FileUploadItem(props: FileUploadItemProps) {
   const { value, asChild, className, ...itemProps } = props;
 
   const id = React.useId();
-  const statusId = `${id}-status`;
   const nameId = `${id}-name`;
   const sizeId = `${id}-size`;
-  const messageId = `${id}-message`;
 
   const context = useFileUploadContext(ITEM_NAME);
-  const fileState = useStore((state) => state.files.get(value));
+  const file = useStore((state) => {
+    const f = state.files.get(value);
+    return f ? { id: value, file: f } : undefined;
+  });
   const fileCount = useStore((state) => state.files.size);
   const fileIndex = useStore((state) => {
     const files = [...state.files.keys()];
@@ -856,19 +572,14 @@ function FileUploadItem(props: FileUploadItemProps) {
   const itemContext = React.useMemo(
     () => ({
       id,
-      fileState,
+      file,
       nameId,
       sizeId,
-      statusId,
-      messageId,
     }),
-    [id, fileState, statusId, nameId, sizeId, messageId],
+    [id, file, nameId, sizeId],
   );
 
-  if (!fileState) return null;
-
-  // eslint-disable-next-line unicorn/no-nested-ternary
-  const statusText = fileState.error ? `Error: ${fileState.error}` : fileState.status === 'uploading' ? `Uploading: ${fileState.progress}% complete` : fileState.status === 'success' ? 'Upload complete' : 'Ready to upload';
+  if (!file) return null;
 
   const ItemPrimitive = asChild ? Slot : 'div';
 
@@ -879,7 +590,7 @@ function FileUploadItem(props: FileUploadItemProps) {
         id={id}
         aria-setsize={fileCount}
         aria-posinset={fileIndex}
-        aria-describedby={`${nameId} ${sizeId} ${statusId} ${fileState.error ? messageId : ''}`}
+        aria-describedby={`${nameId} ${sizeId}`}
         aria-labelledby={nameId}
         data-slot="file-upload-item"
         dir={context.dir}
@@ -887,9 +598,6 @@ function FileUploadItem(props: FileUploadItemProps) {
         className={cn('relative flex items-center gap-2.5 rounded-md border p-3', className)}
       >
         {props.children}
-        <span id={statusId} className="sr-only">
-          {statusText}
-        </span>
       </ItemPrimitive>
     </FileUploadItemContext.Provider>
   );
@@ -947,13 +655,13 @@ function FileUploadItemPreview(props: FileUploadItemPreviewProps) {
 
   const itemContext = useFileUploadItemContext(ITEM_PREVIEW_NAME);
 
-  if (!itemContext.fileState) return null;
+  if (!itemContext.file) return null;
 
   const ItemPreviewPrimitive = asChild ? Slot : 'div';
 
   return (
     <ItemPreviewPrimitive aria-labelledby={itemContext.nameId} data-slot="file-upload-preview" {...previewProps} className={cn('relative flex shrink-0 items-center justify-center overflow-hidden [&>svg]:size-10', className)}>
-      {getFileIcon(itemContext.fileState.file)}
+      {getFileIcon(itemContext.file.file)}
       {children}
     </ItemPreviewPrimitive>
   );
@@ -970,7 +678,7 @@ function FileUploadItemMetadata(props: FileUploadItemMetadataProps) {
   const context = useFileUploadContext(ITEM_METADATA_NAME);
   const itemContext = useFileUploadItemContext(ITEM_METADATA_NAME);
 
-  if (!itemContext.fileState) return null;
+  if (!itemContext.file) return null;
 
   const ItemMetadataPrimitive = asChild ? Slot : 'div';
 
@@ -979,16 +687,11 @@ function FileUploadItemMetadata(props: FileUploadItemMetadataProps) {
       {children ?? (
         <>
           <span id={itemContext.nameId} className={cn('truncate font-semibold', size === 'sm' && 'leading-snug')}>
-            {itemContext.fileState.file.name}
+            {itemContext.file.file.name}
           </span>
           <span id={itemContext.sizeId} className={cn('zinc-500 truncate text-sm', size === 'sm' && 'leading-snug')}>
-            {formatBytes(itemContext.fileState.file.size)}
+            {formatBytes(itemContext.file.file.size)}
           </span>
-          {itemContext.fileState.error && (
-            <span id={itemContext.messageId} className="text-xs text-red-700">
-              {itemContext.fileState.error}
-            </span>
-          )}
         </>
       )}
     </ItemMetadataPrimitive>
@@ -1009,17 +712,17 @@ function FileUploadItemDelete(props: FileUploadItemDeleteProps) {
     (event: React.MouseEvent<HTMLButtonElement>) => {
       onClickProp?.(event);
 
-      if (!itemContext.fileState || event.defaultPrevented) return;
+      if (!itemContext.file || event.defaultPrevented) return;
 
       store.dispatch({
         type: 'REMOVE_FILE',
-        file: itemContext.fileState.file,
+        id: itemContext.file.id,
       });
     },
-    [store, itemContext.fileState, onClickProp],
+    [store, itemContext.file, onClickProp],
   );
 
-  if (!itemContext.fileState) return null;
+  if (!itemContext.file) return null;
 
   const ItemDeletePrimitive = asChild ? Slot : 'button';
 

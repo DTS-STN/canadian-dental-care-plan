@@ -50,7 +50,7 @@ export class DefaultEvidentiaryDocumentService implements EvidentiaryDocumentSer
   }
 
   async listEvidentiaryDocuments(listEvidentiaryDocumentsRequest: ListEvidentiaryDocumentsRequest): Promise<ReadonlyArray<EvidentiaryDocumentDto>> {
-    this.log.debug('Get all evidentiary documents for client: %s; userId: %s', listEvidentiaryDocumentsRequest.clientID, listEvidentiaryDocumentsRequest.userId);
+    this.log.debug('Get all evidentiary documents for client: %s; userId: %s', listEvidentiaryDocumentsRequest.clientId, listEvidentiaryDocumentsRequest.userId);
     this.log.trace('Get all evidentiary documents for request [%j]', listEvidentiaryDocumentsRequest);
 
     const findEvidentiaryDocumentsRequest = listEvidentiaryDocumentsRequest;
@@ -63,7 +63,7 @@ export class DefaultEvidentiaryDocumentService implements EvidentiaryDocumentSer
   }
 
   async listLocalizedEvidentiaryDocuments(listEvidentiaryDocumentsRequest: ListEvidentiaryDocumentsRequest, locale: AppLocale): Promise<ReadonlyArray<EvidentiaryDocumentLocalizedDto>> {
-    this.log.debug('Get all localized evidentiary documents for client: %s; userId: %s; locale: %s', listEvidentiaryDocumentsRequest.clientID, listEvidentiaryDocumentsRequest.userId, locale);
+    this.log.debug('Get all localized evidentiary documents for client: %s; userId: %s; locale: %s', listEvidentiaryDocumentsRequest.clientId, listEvidentiaryDocumentsRequest.userId, locale);
 
     const evidentiaryDocumentDtos = await this.listEvidentiaryDocuments(listEvidentiaryDocumentsRequest);
     const localizedEvidentiaryDocumentDtos = this.evidentiaryDocumentDtoMapper.mapEvidentiaryDocumentDtosToEvidentiaryDocumentLocalizedDtos(evidentiaryDocumentDtos, locale);
@@ -73,16 +73,14 @@ export class DefaultEvidentiaryDocumentService implements EvidentiaryDocumentSer
   }
 
   async createEvidentiaryDocumentMetadata(createEvidentiaryDocumentMetadataRequest: CreateEvidentiaryDocumentMetadataRequest): Promise<CreateEvidentiaryDocumentMetadataResponseDto> {
-    this.log.debug('Upload evidentiary document metadata for client: %s; userId: %s', createEvidentiaryDocumentMetadataRequest.clientID, createEvidentiaryDocumentMetadataRequest.userId);
+    this.log.debug('Upload evidentiary document metadata for client: %s; userId: %s', createEvidentiaryDocumentMetadataRequest.clientId, createEvidentiaryDocumentMetadataRequest.userId);
     this.log.trace('Upload evidentiary document metadata for request [%j]', createEvidentiaryDocumentMetadataRequest);
 
     const documentEntities = this.evidentiaryDocumentDtoMapper.mapCreateEvidentiaryDocumentMetadataDtosToEntities(createEvidentiaryDocumentMetadataRequest.documents);
 
     const repositoryRequest = {
-      clientID: createEvidentiaryDocumentMetadataRequest.clientID,
+      clientId: createEvidentiaryDocumentMetadataRequest.clientId,
       userId: createEvidentiaryDocumentMetadataRequest.userId,
-      simulate: createEvidentiaryDocumentMetadataRequest.simulate,
-      debug: createEvidentiaryDocumentMetadataRequest.debug,
       documents: documentEntities,
     };
 

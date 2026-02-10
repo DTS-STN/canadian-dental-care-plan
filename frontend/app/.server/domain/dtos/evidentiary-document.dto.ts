@@ -6,7 +6,7 @@ import type { ReadonlyDeep } from 'type-fest';
 export type EvidentiaryDocumentDto = ReadonlyDeep<{
   id: string;
   fileName: string;
-  clientID: string;
+  clientId: string;
   documentTypeId: string;
   mscaUploadDate: string; // ISO 8601 date string
   healthCanadaTransferDate?: string; // ISO 8601 date string
@@ -28,7 +28,7 @@ export type EvidentiaryDocumentDto = ReadonlyDeep<{
 export type EvidentiaryDocumentLocalizedDto = ReadonlyDeep<{
   id: string;
   fileName: string;
-  clientID: string;
+  clientId: string;
   documentTypeId: string;
   mscaUploadDate: string; // ISO 8601 date string
   healthCanadaTransferDate?: string; // ISO 8601 date string
@@ -48,10 +48,10 @@ export type EvidentiaryDocumentLocalizedDto = ReadonlyDeep<{
  */
 export type CreateEvidentiaryDocumentMetadataDto = ReadonlyDeep<{
   fileName: string;
-  documentTypeId: string;
+  evidentiaryDocumentTypeId: string;
   documentUploadReasonId: string;
   recordSource: number; // Online = 775170001, MSCA = 775170004
-  uploadDate: string; // ISO 8601 date string
+  uploadDate: Date;
   healthCanadaTransferDate?: string; // ISO 8601 date string
 }>;
 
@@ -59,14 +59,9 @@ export type CreateEvidentiaryDocumentMetadataDto = ReadonlyDeep<{
  * DTO representing the response from uploading document metadata
  */
 export type CreateEvidentiaryDocumentMetadataResponseDto = ReadonlyDeep<{
-  processed: boolean;
-  requestContext: {
-    simulate: boolean;
-    debug: boolean;
-  };
   evidentiaryDocuments: ReadonlyArray<{
     fileName: string;
-    documentTypeId: string;
+    evidentiaryDocumentTypeId: string;
     documentUploadReasonId: string;
     uploadDate: string;
     healthCanadaTransferDate?: string;
@@ -80,7 +75,7 @@ export type CreateEvidentiaryDocumentMetadataResponseDto = ReadonlyDeep<{
  */
 export type ListEvidentiaryDocumentsRequest = Readonly<{
   /** The client ID of the applicant. */
-  clientID: string;
+  clientId: string;
 
   /** A unique identifier for the applicant - used for auditing */
   userId: string;
@@ -91,16 +86,10 @@ export type ListEvidentiaryDocumentsRequest = Readonly<{
  */
 export type CreateEvidentiaryDocumentMetadataRequest = Readonly<{
   /** The client ID of the applicant. */
-  clientID: string;
+  clientId: string;
 
   /** A unique identifier for the applicant - used for auditing */
   userId: string;
-
-  /** Whether to simulate the upload */
-  simulate: boolean;
-
-  /** Whether to enable debug mode */
-  debug: boolean;
 
   /** The documents to upload */
   documents: ReadonlyArray<CreateEvidentiaryDocumentMetadataDto>;

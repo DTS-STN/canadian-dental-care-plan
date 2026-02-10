@@ -5,10 +5,13 @@ export type EvidentiaryDocumentTypeDto = Readonly<{
   /** Unique identifier for the evidentiary document type. */
   id: string;
 
-  /** EvidentiaryDocument type in English. */
+  /** ESDC value code for the evidentiary document type. */
+  code: string;
+
+  /** Evidentiary document type in English. */
   nameEn: string;
 
-  /** EvidentiaryDocument type in French. */
+  /** Evidentiary document type in French. */
   nameFr: string;
 }>;
 
