@@ -4,7 +4,6 @@ import { createLogger } from '~/.server/logging';
 import type { ApplicationStateParams, ChildrenState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
-import { isValidId } from '~/.server/utils/id.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
@@ -61,39 +60,6 @@ interface LoadPublicApplicationFullChildStateForReviewArgs {
 export function loadPublicApplicationFullChildStateForReview({ params, request, session }: LoadPublicApplicationFullChildStateForReviewArgs) {
   const state = loadPublicApplicationFullChildState({ params, request, session });
   return validatePublicApplicationFullChildStateForReview({ params, state });
-}
-
-interface LoadPublicApplicationSingleFullChildStateArgs {
-  params: ApplicationStateParams & { childId: string };
-  request: Request;
-  session: Session;
-}
-
-/**
- * Loads single full child state from apply full child state.
- * @param args - The arguments.
- * @returns The loaded child state.
- */
-export function loadPublicApplicationSingleFullChildState({ params, request, session }: LoadPublicApplicationSingleFullChildStateArgs) {
-  const log = createLogger('public-application-full-child-route-helpers/loadPublicApplicationSingleFullChildState');
-  const applicationState = loadPublicApplicationFullChildState({ params, request, session });
-  const childId = params.childId;
-
-  if (!isValidId(childId)) {
-    log.warn('Invalid "childId" param format; childId: [%s]', childId);
-    throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
-  }
-
-  const childStateIndex = applicationState.children.findIndex(({ id }) => id === childId);
-
-  if (childStateIndex === -1) {
-    log.warn('Public application single child has not been found; childId: [%s]', childId);
-    throw redirect(getPathById('public/application/$id/full-children/childrens-application', params));
-  }
-
-  const childState = applicationState.children[childStateIndex];
-
-  return { ...childState, childNumber: childStateIndex + 1 };
 }
 
 interface ValidatePublicApplicationFullChildStateForReviewArgs {
