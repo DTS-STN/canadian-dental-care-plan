@@ -261,8 +261,8 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
               {t('application-spokes:verify-email.back')}
             </ButtonLink>
           </div>
-        </fetcher.Form>{' '}
-      </ErrorSummaryProvider>{' '}
+        </fetcher.Form>
+      </ErrorSummaryProvider>
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent>
           <DialogHeader>
