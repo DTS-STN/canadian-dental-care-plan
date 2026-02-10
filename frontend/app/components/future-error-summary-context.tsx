@@ -33,9 +33,7 @@ const ErrorSummaryContext = createContext<ErrorSummaryContextValue | undefined>(
  * @throws {Error} If the hook is used outside of an `ErrorSummaryProvider`.
  */
 export const useErrorSummaryContext = () => {
-  const ctx = useContext(ErrorSummaryContext);
-  if (!ctx) throw new Error('useErrorSummaryContext must be used within ErrorSummaryProvider');
-  return ctx;
+  return useContext(ErrorSummaryContext);
 };
 
 export interface ErrorSummaryProviderProps {
@@ -116,11 +114,17 @@ export function ErrorSummaryProvider({ children, actionData }: ErrorSummaryProvi
  * ```
  */
 function ErrorSummaryCommitter(): undefined {
-  const { commitErrors } = useErrorSummaryContext();
+  const errorSummaryContext = useErrorSummaryContext();
+
+  useEffect(() => {
+    if (!errorSummaryContext) {
+      console.warn('Warning: ErrorSummaryCommitter is used outside of an ErrorSummaryProvider.');
+    }
+  }, [errorSummaryContext]);
 
   // Intentionally no dependency array to commit errors on every render
   useEffect(() => {
-    commitErrors();
+    errorSummaryContext?.commitErrors();
   });
 
   // This component does not render anything

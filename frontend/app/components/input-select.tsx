@@ -33,11 +33,7 @@ export function InputSelect(props: InputSelectProps) {
       <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
         {label}
       </InputLabel>
-      {errorMessage && (
-        <InputError id={inputErrorId} className="mb-2">
-          {errorMessage}
-        </InputError>
-      )}
+      {errorMessage && <InputError id={inputErrorId} fieldId={id} message={errorMessage} className="mb-2" />}
       <select
         aria-describedby={ariaDescribedbyIds}
         aria-errormessage={errorMessage && inputErrorId}

@@ -19,12 +19,12 @@ export interface ErrorMessageProps extends OmitStrict<ComponentProps<'div'>, 'ch
  * @returns A JSX element rendering the error message with `role="alert"`.
  */
 export function ErrorMessage({ className, fieldId, message, ...props }: ErrorMessageProps): JSX.Element {
-  const { pushError } = useErrorSummaryContext();
+  const errorSummaryContext = useErrorSummaryContext();
 
   // Register the error message with the context
   // Intentionally no dependency array to push error on every render
   useEffect(() => {
-    pushError({ fieldId, message });
+    errorSummaryContext?.pushError({ fieldId, message });
   });
 
   return (
