@@ -14,7 +14,7 @@ import { DebugPayload } from '~/components/debug-payload';
 import { KillswitchDialog } from '~/components/killswitch-dialog';
 import { PublicLayout, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
-import { transformAdobeAnalyticsUrl } from '~/route-helpers/application-route-helpers';
+import { transformAdobeAnalyticsUrl } from '~/route-helpers/adobe-analytics-route-helpers';
 import { useApiApplicationState } from '~/utils/api-application-state-utils';
 import { useApiSession } from '~/utils/api-session-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';

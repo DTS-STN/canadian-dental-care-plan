@@ -18,10 +18,11 @@ import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { transformEditChildDentalBenefitsAdobeAnalyticsUrl as transformAdobeAnalyticsUrl } from '~/route-helpers/protected-profile-route-helper';
+import { transformAdobeAnalyticsUrl } from '~/route-helpers/adobe-analytics-route-helpers';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const FORM_ACTION = {
@@ -43,10 +44,10 @@ const HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION = {
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'protected-profile:edit-child-dental-benefits.breadcrumb', routeId: 'protected/profile/dental-benefits' }],
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
-  transformAdobeAnalyticsUrl,
+  transformAdobeAnalyticsUrl: (url) => transformAdobeAnalyticsUrl(url, 'childId'),
   pageIdentifier: pageIds.protected.profile.editChildDentalBenefits,
   pageTitleI18nKey: 'protected-profile:edit-child-dental-benefits.title',
-};
+} as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
   return getTitleMetaTags(loaderData.meta.title, loaderData.meta.dcTermsTitle);
