@@ -16,13 +16,13 @@ describe('DefaultApplicationYearRepository', () => {
       expect(result).toEqual({
         BenefitApplicationYear: {
           BenefitApplicationYearIdentification: {
-            IdentificationID: '9bb21bc9-028c-ef11-8a69-000d3a0a1a29',
+            IdentificationID: '2c328e64-cec0-f011-8544-7ced8d05d4ca',
           },
           BenefitApplicationYearTaxYear: {
-            YearDate: '2024',
+            YearDate: '2025',
           },
           DependentEligibilityEndDate: {
-            date: '2025-06-01',
+            date: '2026-06-01',
           },
         },
       });
@@ -37,13 +37,13 @@ describe('DefaultApplicationYearRepository', () => {
       expect(result).toEqual({
         BenefitApplicationYear: {
           BenefitApplicationYearIdentification: {
-            IdentificationID: '9bb21bc9-028c-ef11-8a69-000d3a0a1a29',
+            IdentificationID: '2c328e64-cec0-f011-8544-7ced8d05d4ca',
           },
           BenefitApplicationYearTaxYear: {
-            YearDate: '2024',
+            YearDate: '2025',
           },
           DependentEligibilityEndDate: {
-            date: '2025-06-01',
+            date: '2026-06-01',
           },
         },
       });
