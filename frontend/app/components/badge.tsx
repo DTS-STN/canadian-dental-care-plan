@@ -20,8 +20,8 @@ const badgeVariants = cva(
         default: 'border-gray-300 bg-white text-black [a&]:hover:bg-gray-100',
         gray: 'bg-gray-600 text-white [a&]:hover:bg-gray-600/90',
         info: 'bg-blue-600 text-white [a&]:hover:bg-blue-600/90',
-        success: 'bg-green-600 text-white [a&]:hover:bg-green-600/90',
-        warning: 'bg-yellow-600 text-white [a&]:hover:bg-yellow-600/90',
+        success: 'bg-green-700 text-white [a&]:hover:bg-green-700/90',
+        warning: 'bg-yellow-700 text-white [a&]:hover:bg-yellow-700/90',
       },
     },
     defaultVariants: {
