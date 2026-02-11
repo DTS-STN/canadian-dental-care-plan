@@ -4,6 +4,7 @@ import { Outlet, useNavigate } from 'react-router';
 
 import { faLaptopCode } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/layout';
 
@@ -15,7 +16,7 @@ import { KillswitchDialog } from '~/components/killswitch-dialog';
 import { i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/protected-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { transformAdobeAnalyticsUrl } from '~/route-helpers/application-route-helpers';
-import { useApiApplicationState } from '~/utils/api-application-state-utils';
+import { useApiProtectedApplicationState } from '~/utils/api-protected-application-state.utils';
 import { useApiSession } from '~/utils/api-session-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -54,10 +55,9 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export default function Layout({ loaderData, params }: Route.ComponentProps) {
-  const { applicationStateDebugData, killswitchTimeout, locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = loaderData;
-
+  const { applicationStateDebugData, killswitchTimeout, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = loaderData;
   const navigate = useNavigate();
-
+  const { i18n } = useTranslation();
   const path = getPathById('protected/application/index', params);
 
   useEffect(() => {
@@ -69,18 +69,18 @@ export default function Layout({ loaderData, params }: Route.ComponentProps) {
     }
   }, [navigate, path]);
 
-  const apiApplicationState = useApiApplicationState();
+  const apiProtectedApplicationState = useApiProtectedApplicationState();
   const apiSession = useApiSession();
 
   async function handleOnSessionEnd() {
-    await apiSession.submit({ action: 'end', locale, redirectTo: 'cdcp-website-apply' });
+    await navigate('/auth/logout?locale=' + i18n.language);
   }
 
   async function handleOnSessionExtend() {
     // extends the application state if 'id' param exists
     const id = params.id;
     if (typeof id === 'string') {
-      await apiApplicationState.submit({ action: 'extend', id });
+      await apiProtectedApplicationState.submit({ action: 'extend', id });
       return;
     }
 
