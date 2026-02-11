@@ -78,7 +78,7 @@ export default function ApplicationTaxFiling({ loaderData, params }: Route.Compo
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <InputRadios
-            id="tax-filing-2023"
+            id="tax-filing"
             name="hasFiledTaxes"
             legend={t('application:tax-filing.form-instructions', { taxYear })}
             options={[

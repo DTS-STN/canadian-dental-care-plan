@@ -85,7 +85,7 @@ export default function ProtectedApplyFlowTaxFiling({ loaderData, params }: Rout
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, { hasFiledTaxes: 'input-radio-tax-filing-2023-option-0' });
+  const errorSummary = useErrorSummary(errors, { hasFiledTaxes: 'input-radio-tax-filing-option-0' });
 
   return (
     <>
@@ -98,7 +98,7 @@ export default function ProtectedApplyFlowTaxFiling({ loaderData, params }: Rout
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <InputRadios
-            id="tax-filing-2023"
+            id="tax-filing"
             name="hasFiledTaxes"
             legend={t('protected-apply:tax-filing.form-instructions', { taxYear })}
             options={[
