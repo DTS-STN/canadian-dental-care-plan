@@ -1,11 +1,14 @@
+import { invariant } from '@dts-stn/invariant';
 import { faCircleCheck, faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/eligibility-requirements';
 
+import { TYPES } from '~/.server/constants';
 import { isTaxFilingSectionCompleted, isTermsAndConditionsSectionCompleted } from '~/.server/routes/helpers/protected-application-entry-section-checks';
 import { getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
@@ -26,6 +29,15 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+
+  const userInfoToken = session.get('userInfoToken');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('page-view.application.entry.eligibility-requirements', { userId: idToken.sub });
+
   const state = getProtectedApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:eligibility-requirements.page-title') }) };
