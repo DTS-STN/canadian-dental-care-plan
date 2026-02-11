@@ -3,6 +3,7 @@
  */
 export type ApplicationYearResultDto = Readonly<{
   applicationYearId: string;
+  applicationYear: string;
   taxYear: string;
   dependentEligibilityEndDate: string;
 }>;

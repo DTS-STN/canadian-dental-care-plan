@@ -38,12 +38,14 @@ describe('DefaultApplicationYearService', () => {
 
   const mockIntakeApplicationYearResultDto: ApplicationYearResultDto = {
     applicationYearId: '9bb21bc9-028c-ef11-8a69-000d3a0a1a29',
+    applicationYear: '2025',
     taxYear: '2024',
     dependentEligibilityEndDate: '2025-06-01',
   };
 
   const mockRenewalApplicationYearResultDto: ApplicationYearResultDto = {
     applicationYearId: '9bb21bc9-028c-ef11-8a69-000d3a0a1a29',
+    applicationYear: '2025',
     taxYear: '2024',
     dependentEligibilityEndDate: '2025-06-30',
   };
