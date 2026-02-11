@@ -142,7 +142,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               <p>{t('protected-application-spokes:terms-conditions.terms-and-conditions-of-use.esdc-definition-clarification')}</p>
             </div>
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold"> {t('protected-application-spokes:terms-conditions.terms-and-conditions-of-use.online-application.heading')}</h2>
+              <h2 className="font-lato text-lg font-bold">{t('protected-application-spokes:terms-conditions.terms-and-conditions-of-use.online-application.heading')}</h2>
               <ul className="list-disc space-y-1 pl-7">
                 <li>{t('protected-application-spokes:terms-conditions.terms-and-conditions-of-use.online-application.self-agreement')}</li>
                 <li>{t('protected-application-spokes:terms-conditions.terms-and-conditions-of-use.online-application.timeout')}</li>
@@ -166,7 +166,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
         <Collapsible summary={t('protected-application-spokes:terms-conditions.privacy-notice-statement.summary')}>
           <div className="space-y-6">
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold"> {t('protected-application-spokes:terms-conditions.privacy-notice-statement.personal-information.heading')}</h2>
+              <h2 className="font-lato text-lg font-bold">{t('protected-application-spokes:terms-conditions.privacy-notice-statement.personal-information.heading')}</h2>
               <p>{t('protected-application-spokes:terms-conditions.privacy-notice-statement.personal-information.service-canada-application-administration')}</p>
               <p>{t('protected-application-spokes:terms-conditions.privacy-notice-statement.personal-information.service-canada-information-collection')}</p>
               <p>
@@ -182,7 +182,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               </p>
             </section>
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold"> {t('protected-application-spokes:terms-conditions.privacy-notice-statement.how-we-protect-your-privacy.heading')}</h2>
+              <h2 className="font-lato text-lg font-bold">{t('protected-application-spokes:terms-conditions.privacy-notice-statement.how-we-protect-your-privacy.heading')}</h2>
               <p>{t('protected-application-spokes:terms-conditions.privacy-notice-statement.how-we-protect-your-privacy.personal-information-rights-and-access')}</p>
               <ul className="list-disc space-y-1 pl-7">
                 <li>
@@ -210,7 +210,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
         <Collapsible summary={t('protected-application-spokes:terms-conditions.sharing-your-information.summary')}>
           <div className="space-y-6">
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold"> {t('protected-application-spokes:terms-conditions.sharing-your-information.government-of-canada-and-sun-life.heading')}</h2>
+              <h2 className="font-lato text-lg font-bold">{t('protected-application-spokes:terms-conditions.sharing-your-information.government-of-canada-and-sun-life.heading')}</h2>
               <p>{t('protected-application-spokes:terms-conditions.sharing-your-information.government-of-canada-and-sun-life.share-info')}</p>
               <p>{t('protected-application-spokes:terms-conditions.sharing-your-information.government-of-canada-and-sun-life.policy-analysis')}</p>
               <p>{t('protected-application-spokes:terms-conditions.sharing-your-information.government-of-canada-and-sun-life.send-letters')}</p>
@@ -218,7 +218,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               <p>{t('protected-application-spokes:terms-conditions.sharing-your-information.government-of-canada-and-sun-life.sun-life-authorization')}</p>
             </section>
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold"> {t('protected-application-spokes:terms-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.heading')}</h2>
+              <h2 className="font-lato text-lg font-bold">{t('protected-application-spokes:terms-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.heading')}</h2>
               <p>{t('protected-application-spokes:terms-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.enrol-consent')}</p>
               <p>{t('protected-application-spokes:terms-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.considered-minor')}</p>
             </section>
