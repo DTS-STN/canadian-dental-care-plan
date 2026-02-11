@@ -58,12 +58,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:marital-status.page-title') }) };
-  const maritalStatues = appContainer.get(TYPES.MaritalStatusService).listLocalizedMaritalStatuses(locale);
+  const maritalStatuses = appContainer.get(TYPES.MaritalStatusService).listLocalizedMaritalStatuses(locale);
   return {
     defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation },
     applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
     meta,
-    maritalStatues,
+    maritalStatuses,
   };
 }
 
@@ -149,7 +149,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, maritalStatues, applicationFlow } = loaderData;
+  const { defaultState, maritalStatuses, applicationFlow } = loaderData;
   const { MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -163,13 +163,13 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
   };
 
   const maritalStatusOptions = useMemo<InputRadiosProps['options']>(() => {
-    return maritalStatues.map(({ id, name }) => ({
+    return maritalStatuses.map(({ id, name }) => ({
       value: id,
       children: name,
       defaultChecked: defaultState.maritalStatus === id,
       onChange: handleChange,
     }));
-  }, [defaultState, maritalStatues]);
+  }, [defaultState, maritalStatuses]);
 
   return (
     <div className="max-w-prose">
