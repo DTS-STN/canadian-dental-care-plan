@@ -13,7 +13,8 @@ import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Collapsible } from '~/components/collapsible';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
@@ -87,7 +88,6 @@ export default function StatusChecker({ loaderData, params }: Route.ComponentPro
   const { captchaRef } = useHCaptcha();
   const fetcher = useEnhancedFetcher<typeof action>();
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, { checkFor: 'input-radio-status-check-option-0' });
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -170,30 +170,32 @@ export default function StatusChecker({ loaderData, params }: Route.ComponentPro
         </div>
       </Collapsible>
       <p className="mb-4 italic">{t('status:form.complete-fields')}</p>
-      <errorSummary.ErrorSummary />
-      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
-        {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
-        <InputRadios
-          id="status-check-for"
-          name="statusCheckFor"
-          legend={t('status:form.radio-legend')}
-          options={[
-            {
-              children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-text.myself" />,
-              value: CHECK_FOR.myself,
-            },
-            {
-              children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-text.child" />,
-              value: CHECK_FOR.child,
-            },
-          ]}
-          required
-          errorMessage={errors?.checkFor}
-        />
-        <LoadingButton variant="primary" id="submit" loading={fetcher.isSubmitting} className="my-8" data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
-          {t('status:form.continue')}
-        </LoadingButton>
-      </fetcher.Form>
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
+        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
+          {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
+          <InputRadios
+            id="status-check-for"
+            name="statusCheckFor"
+            legend={t('status:form.radio-legend')}
+            options={[
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-text.myself" />,
+                value: CHECK_FOR.myself,
+              },
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-text.child" />,
+                value: CHECK_FOR.child,
+              },
+            ]}
+            required
+            errorMessage={errors?.checkFor}
+          />
+          <LoadingButton variant="primary" id="submit" loading={fetcher.isSubmitting} className="my-8" data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+            {t('status:form.continue')}
+          </LoadingButton>
+        </fetcher.Form>
+      </ErrorSummaryProvider>
     </div>
   );
 }

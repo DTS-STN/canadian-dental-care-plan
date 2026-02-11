@@ -15,7 +15,8 @@ import { getStatusResultUrl, saveStatusState, startStatusState } from '~/.server
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { LoadingButton } from '~/components/loading-button';
 import { useEnhancedFetcher } from '~/hooks';
@@ -115,7 +116,6 @@ export default function StatusCheckerMyself({ loaderData, params }: Route.Compon
 
   const fetcher = useEnhancedFetcher<typeof action>();
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
-  const errorSummary = useErrorSummary(errors, { code: 'code', sin: 'sin' });
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -138,32 +138,34 @@ export default function StatusCheckerMyself({ loaderData, params }: Route.Compon
   return (
     <div className="max-w-prose">
       <p className="mb-4 italic">{t('status:myself.form.complete-fields')}</p>
-      <errorSummary.ErrorSummary />
-      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
-        {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
-        <div className="mb-8 space-y-6">
-          <InputPatternField
-            id="code"
-            name="code"
-            format={applicationCodeInputPatternFormat}
-            label={t('status:myself.form.application-code-label')}
-            inputMode="numeric"
-            helpMessagePrimary={t('status:myself.form.application-code-description')}
-            required
-            errorMessage={errors?.code}
-            defaultValue=""
-          />
-          <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={fetcher.isSubmitting}>
-            {t('status:myself.form.back-btn')}
-          </ButtonLink>
-          <LoadingButton variant="primary" id="submit" loading={fetcher.isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
-            {t('status:myself.form.submit')}
-          </LoadingButton>
-        </div>
-      </fetcher.Form>
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
+        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
+          {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
+          <div className="mb-8 space-y-6">
+            <InputPatternField
+              id="code"
+              name="code"
+              format={applicationCodeInputPatternFormat}
+              label={t('status:myself.form.application-code-label')}
+              inputMode="numeric"
+              helpMessagePrimary={t('status:myself.form.application-code-description')}
+              required
+              errorMessage={errors?.code}
+              defaultValue=""
+            />
+            <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={fetcher.isSubmitting}>
+              {t('status:myself.form.back-btn')}
+            </ButtonLink>
+            <LoadingButton variant="primary" id="submit" loading={fetcher.isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+              {t('status:myself.form.submit')}
+            </LoadingButton>
+          </div>
+        </fetcher.Form>
+      </ErrorSummaryProvider>
     </div>
   );
 }
