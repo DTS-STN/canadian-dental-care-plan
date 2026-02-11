@@ -1,8 +1,9 @@
 export const pageIds = {
   protected: {
     application: {
-      index: 'CDCP-APPL-0001',
-      eligibilityRequirements: 'CDCP-APPL-0002',
+      index: 'CDCP-PROT-APPL-0001',
+      eligibilityRequirements: 'CDCP-PROT-APPL-0002',
+      typeOfApplication: 'CDCP-PROT-APPL-0003',
       spokes: {
         taxFiling: 'CDCP-PROT-APPL-SPK-0001',
         fileYourTaxes: 'CDCP-PROT-APPL-SPK-0002',
