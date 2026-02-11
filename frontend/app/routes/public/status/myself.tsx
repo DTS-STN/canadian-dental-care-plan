@@ -1,5 +1,3 @@
-import type { FormEvent } from 'react';
-
 import { data, redirect } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -117,7 +115,7 @@ export default function StatusCheckerMyself({ loaderData, params }: Route.Compon
   const fetcher = useEnhancedFetcher<typeof action>();
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
