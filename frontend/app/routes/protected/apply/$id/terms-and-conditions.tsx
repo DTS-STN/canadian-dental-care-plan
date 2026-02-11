@@ -166,7 +166,7 @@ export default function ProtectedApplyTermsAndConditions({ loaderData, params }:
               <p>{t('protected-apply:terms-and-conditions.terms-and-conditions-of-use.esdc-definition-clarification')}</p>
             </div>
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold"> {t('protected-apply:terms-and-conditions.terms-and-conditions-of-use.online-application.heading')}</h2>
+              <h2 className="font-lato text-lg font-bold">{t('protected-apply:terms-and-conditions.terms-and-conditions-of-use.online-application.heading')}</h2>
               <ul className="list-disc space-y-1 pl-7">
                 <li>{t('protected-apply:terms-and-conditions.terms-and-conditions-of-use.online-application.self-agreement')}</li>
                 <li>{t('protected-apply:terms-and-conditions.terms-and-conditions-of-use.online-application.on-behalf-of-someone-else')}</li>
@@ -189,7 +189,7 @@ export default function ProtectedApplyTermsAndConditions({ loaderData, params }:
         <Collapsible summary={t('protected-apply:terms-and-conditions.privacy-notice-statement.summary')}>
           <div className="space-y-6">
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold"> {t('protected-apply:terms-and-conditions.privacy-notice-statement.personal-information.heading')}</h2>
+              <h2 className="font-lato text-lg font-bold">{t('protected-apply:terms-and-conditions.privacy-notice-statement.personal-information.heading')}</h2>
               <p>{t('protected-apply:terms-and-conditions.privacy-notice-statement.personal-information.service-canada-application-administration')}</p>
               <p>{t('protected-apply:terms-and-conditions.privacy-notice-statement.personal-information.policy-analysis')}</p>
               <p>
@@ -200,7 +200,7 @@ export default function ProtectedApplyTermsAndConditions({ loaderData, params }:
               </p>
             </section>
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold"> {t('protected-apply:terms-and-conditions.privacy-notice-statement.how-we-protect-your-privacy.heading')}</h2>
+              <h2 className="font-lato text-lg font-bold">{t('protected-apply:terms-and-conditions.privacy-notice-statement.how-we-protect-your-privacy.heading')}</h2>
               <p>{t('protected-apply:terms-and-conditions.privacy-notice-statement.how-we-protect-your-privacy.personal-information-rights-and-access')}</p>
               <ul className="list-disc space-y-1 pl-7">
                 <li>{t('protected-apply:terms-and-conditions.privacy-notice-statement.how-we-protect-your-privacy.personal-information-banks.hc-ppu-440')}</li>
@@ -218,13 +218,13 @@ export default function ProtectedApplyTermsAndConditions({ loaderData, params }:
         <Collapsible summary={t('protected-apply:terms-and-conditions.sharing-your-information.summary')}>
           <div className="space-y-6">
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold"> {t('protected-apply:terms-and-conditions.sharing-your-information.government-of-canada-and-sun-life.heading')}</h2>
+              <h2 className="font-lato text-lg font-bold">{t('protected-apply:terms-and-conditions.sharing-your-information.government-of-canada-and-sun-life.heading')}</h2>
               <p>{t('protected-apply:terms-and-conditions.sharing-your-information.government-of-canada-and-sun-life.share-info')}</p>
               <p>{t('protected-apply:terms-and-conditions.sharing-your-information.government-of-canada-and-sun-life.disclose-info')}</p>
               <p>{t('protected-apply:terms-and-conditions.sharing-your-information.government-of-canada-and-sun-life.sun-life-authorization')}</p>
             </section>
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold"> {t('protected-apply:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.heading')}</h2>
+              <h2 className="font-lato text-lg font-bold">{t('protected-apply:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.heading')}</h2>
               <p>
                 <Trans ns={handle.i18nNamespaces} i18nKey="protected-apply:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.enrol-consent" components={{ cite }} />
               </p>
