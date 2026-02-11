@@ -1,0 +1,352 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import {
+  isAddressSectionCompleted,
+  isChildDentalBenefitsSectionCompleted,
+  isChildDentalInsuranceSectionCompleted,
+  isChildInformationSectionCompleted,
+  isCommunicationPreferencesSectionCompleted,
+  isDentalBenefitsSectionCompleted,
+  isDentalInsuranceSectionCompleted,
+  isMaritalStatusSectionCompleted,
+  isPhoneNumberSectionCompleted,
+} from '~/.server/routes/helpers/protected-application-full-section-checks';
+import { getEnv } from '~/.server/utils/env.utils';
+
+vi.mock('~/.server/utils/env.utils');
+
+describe('protected-application-full-section-checks', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('isPhoneNumberSectionCompleted', () => {
+    it('should return true when phoneNumber.hasChanged is true', () => {
+      expect(
+        isPhoneNumberSectionCompleted({
+          phoneNumber: {
+            hasChanged: true,
+            value: {
+              primary: '123-456-7890',
+              alternate: '098-765-4321',
+            },
+          },
+        }),
+      ).toBe(true);
+    });
+
+    it('should return false when phoneNumber.hasChanged is false', () => {
+      expect(isPhoneNumberSectionCompleted({ phoneNumber: { hasChanged: false } })).toBe(false);
+    });
+
+    it('should return false when phoneNumber is undefined', () => {
+      expect(isPhoneNumberSectionCompleted({ phoneNumber: undefined })).toBe(false);
+    });
+  });
+
+  describe('isAddressSectionCompleted', () => {
+    it('should return true when both addresses have changed', () => {
+      expect(
+        isAddressSectionCompleted({
+          mailingAddress: {
+            hasChanged: true,
+            value: {
+              address: '123 Main St',
+              city: 'Anytown',
+              province: 'ON',
+              postalCode: 'A1A 1A1',
+              country: 'CAN',
+            },
+          },
+          homeAddress: {
+            hasChanged: true,
+            value: {
+              address: '123 Main St',
+              city: 'Anytown',
+              province: 'ON',
+              postalCode: 'A1A 1A1',
+              country: 'CAN',
+            },
+          },
+          isHomeAddressSameAsMailingAddress: true,
+        }),
+      ).toBe(true);
+    });
+
+    it('should return false when mailing address has not changed', () => {
+      expect(
+        isAddressSectionCompleted({
+          mailingAddress: { hasChanged: false },
+          homeAddress: {
+            hasChanged: true,
+            value: {
+              address: '123 Main St',
+              city: 'Anytown',
+              province: 'ON',
+              postalCode: 'A1A 1A1',
+              country: 'CAN',
+            },
+          },
+        }),
+      ).toBe(false);
+    });
+
+    it('should return false when home address has not changed', () => {
+      expect(
+        isAddressSectionCompleted({
+          mailingAddress: {
+            hasChanged: true,
+            value: {
+              address: '123 Main St',
+              city: 'Anytown',
+              province: 'ON',
+              postalCode: 'A1A 1A1',
+              country: 'CAN',
+            },
+          },
+          homeAddress: { hasChanged: false },
+        }),
+      ).toBe(false);
+    });
+  });
+
+  describe('isCommunicationPreferencesSectionCompleted', () => {
+    it('should return false when communication preferences have not changed', () => {
+      expect(
+        isCommunicationPreferencesSectionCompleted({
+          communicationPreferences: { hasChanged: false },
+          email: undefined,
+          emailVerified: undefined,
+        }),
+      ).toBe(false);
+    });
+
+    it('should return true when email not required and preferences set', () => {
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
+        COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID: 'sunlife',
+        COMMUNICATION_METHOD_GC_DIGITAL_ID: 'gc-digital',
+      });
+
+      expect(
+        isCommunicationPreferencesSectionCompleted({
+          communicationPreferences: {
+            hasChanged: true,
+            value: {
+              preferredMethod: 'mail',
+              preferredLanguage: 'en',
+              preferredNotificationMethod: 'mail',
+            },
+          },
+          email: undefined,
+          emailVerified: false,
+        }),
+      ).toBe(true);
+    });
+
+    it('should return true when email required and provided with verification', () => {
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
+        COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID: 'sunlife',
+        COMMUNICATION_METHOD_GC_DIGITAL_ID: 'gc-digital',
+      });
+
+      expect(
+        isCommunicationPreferencesSectionCompleted({
+          communicationPreferences: {
+            hasChanged: true,
+            value: {
+              preferredMethod: 'sunlife',
+              preferredLanguage: 'en',
+              preferredNotificationMethod: 'mail',
+            },
+          },
+          email: 'test@example.com',
+          emailVerified: true,
+        }),
+      ).toBe(true);
+    });
+
+    it('should return false when email required but not verified', () => {
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
+        COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID: 'sunlife',
+        COMMUNICATION_METHOD_GC_DIGITAL_ID: 'gc-digital',
+      });
+
+      expect(
+        isCommunicationPreferencesSectionCompleted({
+          communicationPreferences: {
+            hasChanged: true,
+            value: {
+              preferredMethod: 'mail',
+              preferredLanguage: 'en',
+              preferredNotificationMethod: 'gc-digital',
+            },
+          },
+          email: 'test@example.com',
+          emailVerified: false,
+        }),
+      ).toBe(false);
+    });
+  });
+
+  describe('isDentalInsuranceSectionCompleted', () => {
+    it('should return true when dental insurance eligibility confirmation is true', () => {
+      expect(
+        isDentalInsuranceSectionCompleted({
+          dentalInsurance: {
+            hasDentalInsurance: true,
+            dentalInsuranceEligibilityConfirmation: true,
+          },
+        }),
+      ).toBe(true);
+    });
+
+    it('should return false when dental insurance eligibility confirmation is false', () => {
+      expect(
+        isDentalInsuranceSectionCompleted({
+          dentalInsurance: {
+            hasDentalInsurance: true,
+            dentalInsuranceEligibilityConfirmation: false,
+          },
+        }),
+      ).toBe(false);
+    });
+  });
+
+  describe('isDentalBenefitsSectionCompleted', () => {
+    it('should return true when dental benefits have changed', () => {
+      expect(
+        isDentalBenefitsSectionCompleted({
+          dentalBenefits: {
+            hasChanged: true,
+            value: {
+              hasFederalBenefits: false,
+              hasProvincialTerritorialBenefits: false,
+            },
+          },
+        }),
+      ).toBe(true);
+    });
+
+    it('should return false when dental benefits have not changed', () => {
+      expect(isDentalBenefitsSectionCompleted({ dentalBenefits: { hasChanged: false } })).toBe(false);
+    });
+  });
+
+  describe('isMaritalStatusSectionCompleted', () => {
+    it('should return false when marital status is undefined', () => {
+      const state = { maritalStatus: undefined, partnerInformation: undefined };
+      expect(isMaritalStatusSectionCompleted(state)).toBe(false);
+    });
+
+    it('should return true for single status without partner information', () => {
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
+        MARITAL_STATUS_CODE_COMMON_LAW: 'common-law',
+        MARITAL_STATUS_CODE_MARRIED: 'married',
+      });
+
+      expect(
+        isMaritalStatusSectionCompleted({
+          maritalStatus: 'single',
+          partnerInformation: undefined,
+        }),
+      ).toBe(true);
+    });
+
+    it('should return true for married status with partner confirmation', () => {
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
+        MARITAL_STATUS_CODE_COMMON_LAW: 'common-law',
+        MARITAL_STATUS_CODE_MARRIED: 'married',
+      });
+
+      expect(
+        isMaritalStatusSectionCompleted({
+          maritalStatus: 'married',
+          partnerInformation: {
+            confirm: true,
+            socialInsuranceNumber: '123-456-789',
+            yearOfBirth: '1980',
+          },
+        }),
+      ).toBe(true);
+    });
+
+    it('should return false for common-law status without partner confirmation', () => {
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
+        MARITAL_STATUS_CODE_COMMON_LAW: 'common-law',
+        MARITAL_STATUS_CODE_MARRIED: 'married',
+      });
+
+      expect(isMaritalStatusSectionCompleted({ maritalStatus: 'common-law' })).toBe(false);
+    });
+  });
+
+  describe('isChildInformationSectionCompleted', () => {
+    it('should return true when child information has date of birth', () => {
+      expect(
+        isChildInformationSectionCompleted({
+          information: {
+            firstName: 'Test',
+            lastName: 'Child',
+            hasSocialInsuranceNumber: false,
+            isParent: true,
+            dateOfBirth: '2010-01-01',
+          },
+        }),
+      ).toBe(true);
+    });
+
+    it('should return false when date of birth is empty string', () => {
+      const child = {
+        information: {
+          firstName: 'Test',
+          lastName: 'Child',
+          hasSocialInsuranceNumber: false,
+          isParent: true,
+          dateOfBirth: '',
+        },
+      };
+      expect(isChildInformationSectionCompleted(child)).toBe(false);
+    });
+
+    it('should return false when information is undefined', () => {
+      expect(isChildInformationSectionCompleted({ information: undefined })).toBe(false);
+    });
+  });
+
+  describe('isChildDentalInsuranceSectionCompleted', () => {
+    it('should return true when child dental insurance is defined', () => {
+      expect(
+        isChildDentalInsuranceSectionCompleted({
+          dentalInsurance: {
+            hasDentalInsurance: false,
+            dentalInsuranceEligibilityConfirmation: true,
+          },
+        }),
+      ).toBe(true);
+    });
+
+    it('should return false when child dental insurance is undefined', () => {
+      expect(isChildDentalInsuranceSectionCompleted({ dentalInsurance: undefined })).toBe(false);
+    });
+  });
+
+  describe('isChildDentalBenefitsSectionCompleted', () => {
+    it('should return true when child dental benefits have changed', () => {
+      expect(
+        isChildDentalBenefitsSectionCompleted({
+          dentalBenefits: {
+            hasChanged: true,
+            value: {
+              hasFederalBenefits: false,
+              hasProvincialTerritorialBenefits: false,
+            },
+          },
+        }),
+      ).toBe(true);
+    });
+
+    it('should return false when child dental benefits have not changed', () => {
+      expect(isChildDentalBenefitsSectionCompleted({ dentalBenefits: { hasChanged: false } })).toBe(false);
+    });
+  });
+});
