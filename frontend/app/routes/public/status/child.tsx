@@ -19,12 +19,13 @@ import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
-import { useCurrentLanguage, useEnhancedFetcher } from '~/hooks';
+import { useEnhancedFetcher } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useClientEnv, useFeature } from '~/root';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
@@ -209,7 +210,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function StatusCheckerChild({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { currentLanguage } = useCurrentLanguage();
   const hCaptchaEnabled = useFeature('hcaptcha');
   const { HCAPTCHA_SITE_KEY } = useClientEnv();
   const { captchaRef } = useHCaptcha();
@@ -218,17 +218,6 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
 
   const fetcher = useEnhancedFetcher<typeof action>();
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
-  const errorSummary = useErrorSummary(errors, {
-    code: 'code',
-    childHasSin: 'input-radio-child-has-sin-option-0',
-    sin: 'sin',
-    firstName: 'first-name',
-    lastName: 'last-name',
-    ...(currentLanguage === 'fr'
-      ? { dateOfBirth: 'date-picker-date-of-birth-day', dateOfBirthDay: 'date-picker-date-of-birth-day', dateOfBirthMonth: 'date-picker-date-of-birth-month' }
-      : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
-    dateOfBirthYear: 'date-picker-date-of-birth-year',
-  });
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -255,83 +244,85 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
   return (
     <div className="max-w-prose">
       <p className="mb-4 italic">{t('status:child.form.complete-fields')}</p>
-      <errorSummary.ErrorSummary />
-      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
-        {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
-        <div className="mb-8 space-y-6">
-          <InputPatternField
-            id="code"
-            name="code"
-            format={applicationCodeInputPatternFormat}
-            label={t('status:child.form.application-code-label')}
-            inputMode="numeric"
-            helpMessagePrimary={t('status:child.form.application-code-description')}
-            required
-            errorMessage={errors?.code}
-            defaultValue=""
-          />
-          <InputRadios
-            id="child-has-sin"
-            name="childHasSin"
-            legend={t('status:child.form.radio-legend')}
-            options={[
-              {
-                value: CHILD_HAS_SIN.yes,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.option-yes" />,
-                onChange: handleOnChildHasSinChanged,
-              },
-              {
-                value: CHILD_HAS_SIN.no,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.option-no" />,
-                onChange: handleOnChildHasSinChanged,
-              },
-            ]}
-            errorMessage={errors?.childHasSin}
-            required
-          />
-          {childHasSinState === true && (
-            <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:child.form.sin-label')} helpMessagePrimary={t('status:child.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
-          )}
-          {childHasSinState === false && (
-            <>
-              <Collapsible summary={t('status:child.form.if-child-summary')} className="mt-8">
-                <div className="space-y-4">
-                  <p>{t('status:child.form.if-child-desc')}</p>
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
+        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
+          {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
+          <div className="mb-8 space-y-6">
+            <InputPatternField
+              id="code"
+              name="code"
+              format={applicationCodeInputPatternFormat}
+              label={t('status:child.form.application-code-label')}
+              inputMode="numeric"
+              helpMessagePrimary={t('status:child.form.application-code-description')}
+              required
+              errorMessage={errors?.code}
+              defaultValue=""
+            />
+            <InputRadios
+              id="child-has-sin"
+              name="childHasSin"
+              legend={t('status:child.form.radio-legend')}
+              options={[
+                {
+                  value: CHILD_HAS_SIN.yes,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.option-yes" />,
+                  onChange: handleOnChildHasSinChanged,
+                },
+                {
+                  value: CHILD_HAS_SIN.no,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.option-no" />,
+                  onChange: handleOnChildHasSinChanged,
+                },
+              ]}
+              errorMessage={errors?.childHasSin}
+              required
+            />
+            {childHasSinState === true && (
+              <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:child.form.sin-label')} helpMessagePrimary={t('status:child.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
+            )}
+            {childHasSinState === false && (
+              <>
+                <Collapsible summary={t('status:child.form.if-child-summary')} className="mt-8">
+                  <div className="space-y-4">
+                    <p>{t('status:child.form.if-child-desc')}</p>
+                  </div>
+                </Collapsible>
+                <div className="grid items-end gap-6 md:grid-cols-2">
+                  <InputSanitizeField id="first-name" name="firstName" label={t('status:child.form.first-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.firstName} defaultValue="" />
+                  <InputSanitizeField id="last-name" name="lastName" label={t('status:child.form.last-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.lastName} defaultValue="" />
                 </div>
-              </Collapsible>
-              <div className="grid items-end gap-6 md:grid-cols-2">
-                <InputSanitizeField id="first-name" name="firstName" label={t('status:child.form.first-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.firstName} defaultValue="" />
-                <InputSanitizeField id="last-name" name="lastName" label={t('status:child.form.last-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.lastName} defaultValue="" />
-              </div>
-              <DatePickerField
-                id="date-of-birth"
-                names={{
-                  day: 'dateOfBirthDay',
-                  month: 'dateOfBirthMonth',
-                  year: 'dateOfBirthYear',
-                }}
-                defaultValue=""
-                legend={t('status:child.form.date-of-birth-label')}
-                required
-                errorMessages={{
-                  all: errors?.dateOfBirth,
-                  year: errors?.dateOfBirthYear,
-                  month: errors?.dateOfBirthMonth,
-                  day: errors?.dateOfBirthDay,
-                }}
-              />
-            </>
-          )}
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={fetcher.isSubmitting}>
-            {t('status:child.form.back-btn')}
-          </ButtonLink>
-          <LoadingButton variant="primary" id="submit" loading={fetcher.isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
-            {t('status:child.form.submit')}
-          </LoadingButton>
-        </div>
-      </fetcher.Form>
+                <DatePickerField
+                  id="date-of-birth"
+                  names={{
+                    day: 'dateOfBirthDay',
+                    month: 'dateOfBirthMonth',
+                    year: 'dateOfBirthYear',
+                  }}
+                  defaultValue=""
+                  legend={t('status:child.form.date-of-birth-label')}
+                  required
+                  errorMessages={{
+                    all: errors?.dateOfBirth,
+                    year: errors?.dateOfBirthYear,
+                    month: errors?.dateOfBirthMonth,
+                    day: errors?.dateOfBirthDay,
+                  }}
+                />
+              </>
+            )}
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={fetcher.isSubmitting}>
+              {t('status:child.form.back-btn')}
+            </ButtonLink>
+            <LoadingButton variant="primary" id="submit" loading={fetcher.isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+              {t('status:child.form.submit')}
+            </LoadingButton>
+          </div>
+        </fetcher.Form>
+      </ErrorSummaryProvider>
     </div>
   );
 }
