@@ -55,9 +55,9 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 }
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.homeAddress,
-  pageTitleI18nKey: 'application-spokes:address.home-address.page-title',
+  pageTitleI18nKey: 'protected-application-spokes:address.home-address.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -75,7 +75,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryList = await appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:address.home-address.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:address.home-address.page-title') }) };
 
   return {
     defaultState: {
@@ -240,12 +240,12 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
 
   const homeRegions = useMemo<InputOptionProps[]>(() => homeCountryRegions.map(({ id, name }) => ({ children: name, value: id })), [homeCountryRegions]);
 
-  const dummyOption: InputOptionProps = { children: t('application-spokes:address.address-field.select-one'), value: '' };
+  const dummyOption: InputOptionProps = { children: t('protected-application-spokes:address.address-field.select-one'), value: '' };
 
   const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedHomeCountry);
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('application:optional-label')}</p>
+      <p className="mb-4 italic">{t('protected-application:optional-label')}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -256,8 +256,8 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 id="home-address"
                 name="address"
                 className="w-full"
-                label={t('application-spokes:address.address-field.address')}
-                helpMessagePrimary={t('application-spokes:address.address-field.address-help')}
+                label={t('protected-application-spokes:address.address-field.address')}
+                helpMessagePrimary={t('protected-application-spokes:address.address-field.address-help')}
                 helpMessagePrimaryClassName="text-black"
                 maxLength={100}
                 autoComplete="address-line1"
@@ -269,9 +269,9 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 id="home-apartment"
                 name="apartment"
                 className="w-full"
-                label={t('application-spokes:address.address-field.apartment')}
+                label={t('protected-application-spokes:address.address-field.apartment')}
                 maxLength={100}
-                helpMessagePrimary={t('application-spokes:address.address-field.apartment-help')}
+                helpMessagePrimary={t('protected-application-spokes:address.address-field.apartment-help')}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line2"
                 defaultValue=""
@@ -282,7 +282,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   id="home-city"
                   name="city"
                   className="w-full"
-                  label={t('application-spokes:address.address-field.city')}
+                  label={t('protected-application-spokes:address.address-field.city')}
                   maxLength={100}
                   autoComplete="address-level2"
                   defaultValue={defaultState.city}
@@ -293,7 +293,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   id="home-postal-code"
                   name="postalZipCode"
                   className="w-full"
-                  label={isPostalCodeRequired ? t('application-spokes:address.address-field.postal-code') : t('application-spokes:address.address-field.postal-code-optional')}
+                  label={isPostalCodeRequired ? t('protected-application-spokes:address.address-field.postal-code') : t('protected-application-spokes:address.address-field.postal-code-optional')}
                   maxLength={100}
                   autoComplete="postal-code"
                   defaultValue={defaultState.postalCode ?? ''}
@@ -306,7 +306,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   id="home-province"
                   name="provinceStateId"
                   className="w-full sm:w-1/2"
-                  label={t('application-spokes:address.address-field.province')}
+                  label={t('protected-application-spokes:address.address-field.province')}
                   defaultValue={defaultState.province}
                   errorMessage={errors?.provinceStateId}
                   options={[dummyOption, ...homeRegions]}
@@ -317,7 +317,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 id="home-country"
                 name="countryId"
                 className="w-full sm:w-1/2"
-                label={t('application-spokes:address.address-field.country')}
+                label={t('protected-application-spokes:address.address-field.country')}
                 autoComplete="country"
                 defaultValue={defaultState.country ?? ''}
                 errorMessage={errors?.countryId}
@@ -341,7 +341,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   endIcon={faChevronRight}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Home address click"
                 >
-                  {t('application-spokes:address.save-btn')}
+                  {t('protected-application-spokes:address.save-btn')}
                 </LoadingButton>
               </DialogTrigger>
               {!fetcher.isSubmitting && addressDialogContent && (
@@ -362,7 +362,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
               startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Home address click"
             >
-              {t('application-spokes:address.back')}
+              {t('protected-application-spokes:address.back')}
             </ButtonLink>
           </div>
         </fetcher.Form>
