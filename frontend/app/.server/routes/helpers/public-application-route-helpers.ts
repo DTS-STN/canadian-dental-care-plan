@@ -18,7 +18,7 @@ import type { EligibilityType } from '~/components/eligibility';
 import { getAgeFromDateString } from '~/utils/date-utils';
 import { getPathById } from '~/utils/route-utils';
 
-export type PublicApplicationStateSessionKey = `public-application-${string}`;
+export type PublicApplicationStateSessionKey = `public-application-flow-${string}`;
 
 export type PublicApplicationState = ReadonlyDeep<{
   /**

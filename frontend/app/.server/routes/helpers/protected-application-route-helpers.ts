@@ -18,7 +18,7 @@ import type { EligibilityType } from '~/components/eligibility';
 import { getAgeFromDateString } from '~/utils/date-utils';
 import { getPathById } from '~/utils/route-utils';
 
-export type ProtectedApplicationStateSessionKey = `protected-application-${string}`;
+export type ProtectedApplicationStateSessionKey = `protected-application-flow-${string}`;
 
 export type ProtectedApplicationState = ReadonlyDeep<{
   /**

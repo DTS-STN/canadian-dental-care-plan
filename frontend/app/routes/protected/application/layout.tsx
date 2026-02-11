@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   // load application state debug data only in development mode
   const { NODE_ENV } = appContainer.get(TYPES.ServerConfig);
-  const applicationStateDebugData = NODE_ENV === 'development' && params.id ? session.find(`public-application-flow-${params.id}`).unwrapUnchecked() : undefined;
+  const applicationStateDebugData = NODE_ENV === 'development' && params.id ? session.find(`protected-application-flow-${params.id}`).unwrapUnchecked() : undefined;
 
   const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(TYPES.ClientConfig);
   return { applicationStateDebugData, killswitchTimeout, locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
@@ -58,7 +58,7 @@ export default function Layout({ loaderData, params }: Route.ComponentProps) {
 
   const navigate = useNavigate();
 
-  const path = getPathById('public/application/index', params);
+  const path = getPathById('protected/application/index', params);
 
   useEffect(() => {
     // redirect to start if the flow has not yet been initialized

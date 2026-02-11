@@ -115,7 +115,7 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
         </CardFooter>
       </Card>
       {/* TODO update next route */}
-      <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/eligibility-requirements" params={params}>
+      <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="protected/application/$id/eligibility-requirements" params={params}>
         {t('protected-application:eligibility-requirements.next-button')}
       </NavigationButtonLink>
     </div>
