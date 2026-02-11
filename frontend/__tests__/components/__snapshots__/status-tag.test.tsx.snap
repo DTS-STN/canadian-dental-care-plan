@@ -3,7 +3,7 @@
 exports[`StatusTag > should render complete status 1`] = `
 <div>
   <span
-    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-base leading-none [&>svg]:size-3.5 bg-green-600 text-white [a&]:hover:bg-green-600/90"
+    class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none px-2 py-1 text-base leading-none [&>svg]:size-3.5 bg-green-700 text-white [a&]:hover:bg-green-700/90"
     data-slot="badge"
   >
     <svg
