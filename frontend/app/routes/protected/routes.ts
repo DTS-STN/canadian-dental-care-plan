@@ -17,6 +17,11 @@ export const routes = [
             file: 'routes/protected/application/entry/eligibility-requirements.tsx',
             paths: { en: '/:lang/protected/application/:id/eligibility-requirements', fr: '/:lang/protected/demande/:id/criteres-admissibilite' },
           },
+          {
+            id: 'protected/application/$id/type-of-application',
+            file: 'routes/protected/application/entry/type-application.tsx',
+            paths: { en: '/:lang/protected/application/:id/type-of-application', fr: '/:lang/protected/demande/:id/type-de-demande' },
+          },
           // spokes
           {
             id: 'protected/application/$id/application-delegate',

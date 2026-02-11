@@ -54,26 +54,16 @@
     "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
   "type-of-application": {
-    "page-title": "Type de demande",
-    "type-application-heading": "Type de demande",
-    "type-application-legend": "Pour qui présentez-vous une demande?",
-    "type-application-description": "Indiquez pour qui vous présentez une demande. Présentez-vous une demande pour vous-même, pour votre ou vos enfants, ou au nom de quelqu'un d'autre?",
-    "type-application-personal": "Je présente une demande pour moi-même",
-    "type-application-children": "Je présente une demande pour mon (mes) enfant(s)",
-    "type-application-family": "Je présente une demande pour moi-même et mon (mes) enfant(s)",
-    "personal-info-heading": "Renseignements personnels",
-    "personal-info-description": "Veuillez entrer votre numéro d'identification du membre, votre nom, votre date de naissance et votre numéro d'assurance sociale (NAS).",
-    "member-id": "Numéro d'identification du membre",
-    "full-name": "Nom complet",
-    "date-of-birth": "Date de naissance",
-    "sin": "Numéro d'assurance sociale (NAS)",
-    "application": "Application",
-    "before-you-start": "Avant de commencer votre demande",
-    "add-answer": "Ajouter une réponse",
-    "edit-answer": "Modifier la réponse",
-    "add-type-application": "Ajouter le type de demande",
-    "edit-type-application": "Modifier le type de demande",
-    "add-personal-information": "Ajouter des renseignements personnels",
-    "edit-personal-information": "Modifier des renseignements personnels"
+    "page-title": "(FR) Renew your Canadian Dental Care Plan benefits",
+    "type-application-heading": "(FR) Renewal selection",
+    "type-application-legend": "(FR) You wish to renew the CDCP for the following member(s):",
+    "type-application-description": "(FR) Select who you would like to renew the dental coverage for.",
+    "type-application-personal": "(FR) I am applying for myself",
+    "type-application-children": "(FR) I am applying for my child(ren)",
+    "type-application-family": "(FR) I am applying for myself and my child(ren)",
+    "application": "(FR) Application",
+    "before-you-start": "(FR) Before you apply",
+    "add-type-application": "(FR) Select member(s)",
+    "edit-type-application": "(FR) Edit selection"
   }
 }

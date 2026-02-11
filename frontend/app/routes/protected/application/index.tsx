@@ -26,7 +26,7 @@ export const handle = {
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
-export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
+export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
@@ -42,7 +42,15 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   const currentDate = getCurrentDateString(locale);
   const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
   const applicationYear = applicationYearService.getIntakeApplicationYear(currentDate);
-  const state = startApplicationState({ session, applicationYear });
+
+  const clientApplication = await securityHandler.requireClientApplication({
+    applicationYearId: applicationYear.applicationYearId,
+    params,
+    request,
+    session,
+  });
+
+  const state = startApplicationState({ session, applicationYear, clientApplication });
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:index.page-title') }) };
 

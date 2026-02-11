@@ -281,6 +281,7 @@ export function clearProtectedApplicationState({ params, session }: ClearStateAr
 
 interface StartArgs {
   applicationYear: ApplicationYearState;
+  clientApplication: ClientApplicationDto;
   session: Session;
 }
 
@@ -289,7 +290,7 @@ interface StartArgs {
  * @param args - The arguments.
  * @returns The initial application state.
  */
-export function startApplicationState({ applicationYear, session }: StartArgs): ProtectedApplicationState {
+export function startApplicationState({ applicationYear, clientApplication, session }: StartArgs): ProtectedApplicationState {
   const log = createLogger('application-route-helpers.server/startApplicationState');
 
   const id = generateId();
@@ -298,6 +299,7 @@ export function startApplicationState({ applicationYear, session }: StartArgs): 
     context: isWithinRenewalPeriod() ? 'renewal' : 'intake',
     lastUpdatedOn: new UTCDate().toISOString(),
     applicationYear,
+    clientApplication,
     children: [],
   };
 
