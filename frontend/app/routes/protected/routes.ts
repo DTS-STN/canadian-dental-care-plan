@@ -5,6 +5,22 @@ export const routes = [
     file: 'routes/protected/layout.tsx',
     children: [
       {
+        file: 'routes/protected/application/layout.tsx',
+        children: [
+          {
+            id: 'protected/application/index',
+            file: 'routes/protected/application/index.tsx',
+            paths: { en: '/:lang/protected/application', fr: '/:lang/protected/demande' },
+          },
+          {
+            id: 'protected/application/$id/eligibility-requirements',
+            file: 'routes/protected/application/entry/eligibility-requirements.tsx',
+            paths: { en: '/:lang/protected/application/:id/eligibility-requirements', fr: '/:lang/protected/demande/:id/criteres-admissibilite' },
+          },
+        ],
+      },
+
+      {
         id: 'protected/data-unavailable',
         file: 'routes/protected/data-unavailable.tsx',
         paths: { en: '/:lang/protected/data-unavailable', fr: '/:lang/protege/donnees-indisponibles' },

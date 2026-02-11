@@ -11,6 +11,7 @@ import dataUnavailableEn from '~/../public/locales/en/data-unavailable.json';
 import documentsEn from '~/../public/locales/en/documents.json';
 import gcwebEn from '~/../public/locales/en/gcweb.json';
 import lettersEn from '~/../public/locales/en/letters.json';
+import protectedApplicationEn from '~/../public/locales/en/protected-application.json';
 import protectedApplyAdultChildEn from '~/../public/locales/en/protected-apply-adult-child.json';
 import protectedApplyAdultEn from '~/../public/locales/en/protected-apply-adult.json';
 import protectedApplyChildEn from '~/../public/locales/en/protected-apply-child.json';
@@ -33,6 +34,7 @@ import dataUnavailableFr from '~/../public/locales/fr/data-unavailable.json';
 import documentsFr from '~/../public/locales/fr/documents.json';
 import gcwebFr from '~/../public/locales/fr/gcweb.json';
 import lettersFr from '~/../public/locales/fr/letters.json';
+import protectedApplicationFr from '~/../public/locales/fr/protected-application.json';
 import protectedApplyAdultChildFr from '~/../public/locales/fr/protected-apply-adult-child.json';
 import protectedApplyAdultFr from '~/../public/locales/fr/protected-apply-adult.json';
 import protectedApplyChildFr from '~/../public/locales/fr/protected-apply-child.json';
@@ -54,6 +56,7 @@ const i18nResourcesEn = {
   'application-simplified-adult': applicationSimplifiedAdultEn,
   'application-simplified-child': applicationSimplifiedChildEn,
   'application-simplified-family': applicationSimplifiedFamilyEn,
+  'protected-application': protectedApplicationEn,
   common: commonEn,
   'data-unavailable': dataUnavailableEn,
   documents: documentsEn,
@@ -79,6 +82,7 @@ const i18nResourcesFr = {
   'application-simplified-child': applicationSimplifiedChildFr,
   'application-simplified-family': applicationSimplifiedFamilyFr,
   'application-spokes': applicationSpokesFr,
+  'protected-application': protectedApplicationFr,
   common: commonFr,
   'data-unavailable': dataUnavailableFr,
   documents: documentsFr,
