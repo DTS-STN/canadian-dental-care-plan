@@ -7,21 +7,21 @@ import { isValidId } from '~/utils/id.utils';
  * which is critical for grouping analytics data for logically identical pages.
  *
  * @param url - The input URL string (absolute) or URL object to transform.
- * @param replacement - The string to replace valid IDs with. Defaults to an empty string,
+ * @param replacement - The string to replace valid IDs with. Defaults to 'id:',
  *                      which acts to remove the segment entirely from the resulting path.
  * @returns A new URL object ensuring the pathname has been sanitized.
  *
  * @example
  * // Remove ID segments (default)
  * const url = transformAdobeAnalyticsUrl('https://example.com/users/V1StGXR8_Z/details');
- * console.log(url.pathname); // Output: "/users/details"
+ * console.log(url.pathname); // Output: "/users/:id:/details"
  *
  * @example
  * // Replace ID segments with a placeholder
- * const url = transformAdobeAnalyticsUrl('https://example.com/users/V1StGXR8_Z/details', ':id:');
- * console.log(url.pathname); // Output: "/users/:id:/details"
+ * const url = transformAdobeAnalyticsUrl('https://example.com/users/V1StGXR8_Z/details', '');
+ * console.log(url.pathname); // Output: "/users/details"
  */
-export function transformAdobeAnalyticsUrl(url: string | URL, replacement: string = ''): URL {
+export function transformAdobeAnalyticsUrl(url: string | URL, replacement: string = ':id:'): URL {
   const urlObj = new URL(url);
 
   // Extract non-empty path segments

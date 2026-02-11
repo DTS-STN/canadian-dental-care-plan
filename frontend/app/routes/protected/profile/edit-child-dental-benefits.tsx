@@ -44,7 +44,7 @@ const HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION = {
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'protected-profile:edit-child-dental-benefits.breadcrumb', routeId: 'protected/profile/dental-benefits' }],
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
-  transformAdobeAnalyticsUrl: (url) => transformAdobeAnalyticsUrl(url, 'childId'),
+  transformAdobeAnalyticsUrl,
   pageIdentifier: pageIds.protected.profile.editChildDentalBenefits,
   pageTitleI18nKey: 'protected-profile:edit-child-dental-benefits.title',
 } as const satisfies RouteHandleData;
