@@ -2,11 +2,14 @@ import { useEffect } from 'react';
 
 import { useNavigate } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
+
 import type { Route } from './+types/index';
 
 import { TYPES } from '~/.server/constants';
 import { startApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { pageIds } from '~/page-ids';
 import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -24,6 +27,15 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+
+  const userInfoToken = session.get('userInfoToken');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+
+  const idToken: IdToken = session.get('idToken');
+  appContainer.get(TYPES.AuditService).createAudit('page-view.application.index', { userId: idToken.sub });
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
