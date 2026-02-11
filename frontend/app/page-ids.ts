@@ -1,5 +1,9 @@
 export const pageIds = {
   protected: {
+    application: {
+      index: 'CDCP-APPL-0001',
+      eligibilityRequirements: 'CDCP-APPL-0002',
+    },
     documents: {
       index: 'CDCP-PROT-DOCS-0001',
       upload: 'CDCP-PROT-DOCS-0002',

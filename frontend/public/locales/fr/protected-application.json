@@ -1,0 +1,79 @@
+{
+  "index": {
+    "page-title": "Présenter une demande"
+  },
+  "required-label": "Remplissez tous les champs.",
+  "optional-label": "Remplissez tous les champs, sauf s'ils sont indiqués facultatifs.",
+  "confirm-information": "Veuillez confirmer l'exactitude des renseignements figurant à votre dossier.",
+  "next": "Suivant",
+  "previous": "Précédent",
+  "eligibility-requirements": {
+    "page-title": "Avant de commencer votre demande",
+    "page-heading": "Avant de commencer votre demande",
+    "next-button": "Type de demande",
+    "terms-conditions-section": {
+      "title": "Conditions générales d'utilisation et énoncé de confidentialité",
+      "instructions": "Veuillez lire les conditions générales d'utilisation et l'énoncé de confidentialité.",
+      "acknowledge-terms": "J'ai lu les conditions générales d'utilisation",
+      "acknowledge-privacy": "J'ai lu l'énoncé de confidentialité",
+      "share-data": "Je consens à l'échange des données",
+      "add-button": "Veuillez accepter les conditions générales d'utilisation et l'énoncé de confidentialité",
+      "edit-button": "Modifier la réponse"
+    },
+    "tax-filing-section": {
+      "title": "Déclaration de revenus",
+      "instructions": "Vos renseignements fiscaux sont utilisés pour confirmer votre admissibilité au Régime canadien de soins dentaires.",
+      "have-filed-taxes": "Moi-même et mon époux ou épouse ou conjoint ou conjointe de fait (le cas échéant) avons reçu nos avis de cotisation de l'Agence du revenu du Canada.",
+      "add-button": "Confirmer la production de la déclaration de revenus",
+      "edit-button": "Modifier la réponse"
+    }
+  },
+  "tax-filing": {
+    "page-title": "Déclaration de revenus",
+    "form-instructions": "Avez-vous reçu votre avis de cotisation pour votre déclaration de revenus canadienne de l'année {{taxYear}}? Si vous avez un époux ou une épouse ou un conjoint ou une conjointe de fait, a-t-il ou a-t-elle également reçu le sien?",
+    "radio-options": {
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "error-message": {
+      "tax-filing-required": "Sélectionnez si vous avez fait votre déclaration de revenus ou non"
+    },
+    "back-btn": "Retour",
+    "save-btn": "Sauvegarder"
+  },
+  "file-your-taxes": {
+    "page-title": "Produisez votre déclaration de revenus",
+    "ineligible-to-apply": "Vous n'êtes pas admissible à présenter une demande au titre du Régime canadien de soins dentaires pour le moment.",
+    "tax-not-filed": "Vous, et votre époux ou épouse ou conjoint ou conjointe de fait, le cas échéant, n'avez pas encore reçu votre avis de cotisation pour {{taxYear}} de l'Agence du revenu du Canada.",
+    "unable-to-assess": "Nous utilisons vos renseignements fiscaux pour confirmer que vous répondez aux exigences de revenu et de résidence du Régime canadien de soins dentaires.",
+    "tax-info": "Pour en savoir plus sur la production de votre déclaration de revenus, consultez la page <taxInfo>Préparez-vous à produire une déclaration de revenus</taxInfo>.",
+    "apply-after": "Vous pouvez présenter une demande d'adhésion au régime <strong>après</strong> que vous ou votre époux, épouse, conjoint de fait ou conjointe de fait avez <strong>produit votre déclaration de revenus</strong> et reçu votre avis de cotisation.",
+    "tax-info-href": "https://www.canada.ca/fr/services/impots/impot-sur-le-revenu/impot-sur-le-revenu-des-particuliers/preparez-vous-impots.html",
+    "back-btn": "Retour",
+    "exit-btn": "Quitter la demande",
+    "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
+  "type-of-application": {
+    "page-title": "Type de demande",
+    "type-application-heading": "Type de demande",
+    "type-application-legend": "Pour qui présentez-vous une demande?",
+    "type-application-description": "Indiquez pour qui vous présentez une demande. Présentez-vous une demande pour vous-même, pour votre ou vos enfants, ou au nom de quelqu'un d'autre?",
+    "type-application-personal": "Je présente une demande pour moi-même",
+    "type-application-children": "Je présente une demande pour mon (mes) enfant(s)",
+    "type-application-family": "Je présente une demande pour moi-même et mon (mes) enfant(s)",
+    "personal-info-heading": "Renseignements personnels",
+    "personal-info-description": "Veuillez entrer votre numéro d'identification du membre, votre nom, votre date de naissance et votre numéro d'assurance sociale (NAS).",
+    "member-id": "Numéro d'identification du membre",
+    "full-name": "Nom complet",
+    "date-of-birth": "Date de naissance",
+    "sin": "Numéro d'assurance sociale (NAS)",
+    "application": "Application",
+    "before-you-start": "Avant de commencer votre demande",
+    "add-answer": "Ajouter une réponse",
+    "edit-answer": "Modifier la réponse",
+    "add-type-application": "Ajouter le type de demande",
+    "edit-type-application": "Modifier le type de demande",
+    "add-personal-information": "Ajouter des renseignements personnels",
+    "edit-personal-information": "Modifier des renseignements personnels"
+  }
+}
