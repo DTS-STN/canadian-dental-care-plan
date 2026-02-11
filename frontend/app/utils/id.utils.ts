@@ -23,6 +23,12 @@ const nanoidSchema = z
   .regex(/^[a-zA-Z0-9_-]+$/);
 
 /**
+ * Zod schema for validating the structure of a UUID v4.
+ * Ensures the string follows the standard UUID format.
+ */
+const uuidSchema = z.uuid();
+
+/**
  * Generates a unique identifier string.
  *
  * Defaults to 'nanoid' format, but can generate standard UUID v4 strings if requested.
@@ -62,7 +68,7 @@ export function generateId(format: 'nanoid' | 'uuid' = 'nanoid'): string {
  */
 export function isValidId(id: string, format?: 'nanoid' | 'uuid'): boolean {
   if (format === 'uuid') {
-    return z.uuid().safeParse(id).success;
+    return uuidSchema.safeParse(id).success;
   }
 
   if (format === 'nanoid') {
@@ -70,7 +76,7 @@ export function isValidId(id: string, format?: 'nanoid' | 'uuid'): boolean {
   }
 
   // If no specific format is requested, check if it matches any known format
-  const isUuid = z.uuid().safeParse(id).success;
+  const isUuid = uuidSchema.safeParse(id).success;
   const isNanoid = nanoidSchema.safeParse(id).success;
 
   return isUuid || isNanoid;
