@@ -71,15 +71,7 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink
-            id="edit-terms-conditions-button" //
-            variant="link"
-            className="p-0"
-            routeId="protected/application/$id/eligibility-requirements" //TODO update route
-            params={params}
-            startIcon={sections.termsAndConditions.completed ? faPenToSquare : faCircleCheck}
-            size="lg"
-          >
+          <ButtonLink id="edit-terms-conditions-button" variant="link" className="p-0" routeId="protected/application/$id/terms-conditions" params={params} startIcon={sections.termsAndConditions.completed ? faPenToSquare : faCircleCheck} size="lg">
             {sections.termsAndConditions.completed //
               ? t('protected-application:eligibility-requirements.terms-conditions-section.edit-button')
               : t('protected-application:eligibility-requirements.terms-conditions-section.add-button')}
@@ -92,25 +84,11 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
           <CardAction>{sections.taxFiling.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
-          <p>
-            {state.hasFiledTaxes === true //
-              ? t('protected-application:eligibility-requirements.tax-filing-section.have-filed-taxes')
-              : t('protected-application:eligibility-requirements.tax-filing-section.instructions')}
-          </p>
+          <p>{state.hasFiledTaxes === true ? t('protected-application:eligibility-requirements.tax-filing-section.have-filed-taxes') : t('protected-application:eligibility-requirements.tax-filing-section.instructions')}</p>
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink
-            id="edit-tax-filing-button" //
-            variant="link"
-            className="p-0"
-            routeId="protected/application/$id/eligibility-requirements" //TODO update route
-            params={params}
-            startIcon={sections.taxFiling.completed ? faPenToSquare : faCircleCheck}
-            size="lg"
-          >
-            {sections.taxFiling.completed //
-              ? t('protected-application:eligibility-requirements.tax-filing-section.edit-button')
-              : t('protected-application:eligibility-requirements.tax-filing-section.add-button')}
+          <ButtonLink id="edit-tax-filing-button" variant="link" className="p-0" routeId="protected/application/$id/tax-filing" params={params} startIcon={sections.taxFiling.completed ? faPenToSquare : faCircleCheck} size="lg">
+            {sections.taxFiling.completed ? t('protected-application:eligibility-requirements.tax-filing-section.edit-button') : t('protected-application:eligibility-requirements.tax-filing-section.add-button')}
           </ButtonLink>
         </CardFooter>
       </Card>
