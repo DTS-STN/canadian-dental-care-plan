@@ -1,0 +1,523 @@
+{
+  "marital-status": {
+    "page-title": "Marital status",
+    "marital-status": "What is your current marital status?",
+    "primary-help-message": "Make sure the information matches what is on file with the Canada Revenue Agency.",
+    "spouse-or-commonlaw": "Spouse or common-law partner information",
+    "provide-sin": "Enter your spouse or common-law partner's name exactly as shown on their Social Insurance Number (SIN) record.",
+    "required-information": "We need this information to calculate your family income. Your spouse or common-law partner must fill out their own application for the Canadian Dental Care Plan.",
+    "back-btn": "Back",
+    "save-btn": "Save",
+    "sin": "Social Insurance Number (SIN)",
+    "sin-help": "Enter the 9-digit SIN",
+    "year-of-birth": "Year of birth",
+    "year-of-birth-help": "Enter their year of birth. For example, 1960.",
+    "confirm-checkbox": "I confirm that my spouse or common-law partner has agreed to share their personal information.",
+    "error-message": {
+      "marital-status-required": "Select marital status",
+      "confirm-required": "Consent from spouse or common-law partner is required to proceed",
+      "date-of-birth-year-required": "Enter year of birth, for example 1960",
+      "yob-is-past": "Year of birth too far in the past",
+      "yob-is-future": "Year of birth must be in the past",
+      "sin-required": "Enter 9-digit SIN, for example 123 456 789",
+      "sin-valid": "Must be a valid SIN",
+      "sin-unique": "SIN must be unique"
+    }
+  },
+  "type-of-application": {
+    "page-title": "Type of application",
+    "form-instructions": "Who are you applying for?",
+    "radio-options": {
+      "personal": "I am applying for <strong>myself</strong>",
+      "delegate": "I am applying on behalf of someone else as a <strong>legal delegate or Power of Attorney</strong>",
+      "child": "I am applying for <strong>my child(ren)</strong>",
+      "personal-and-child": "I am applying for <strong>myself and my child(ren)</strong>"
+    },
+    "error-message": {
+      "type-of-application-required": "Select who this application is for"
+    },
+    "back-btn": "Back",
+    "save-btn": "Save"
+  },
+  "application-delegate": {
+    "page-title": "Applying on behalf of someone as a legal delegate or Power of Attorney",
+    "contact-representative": "You must speak to a Service Canada representative if you are applying on behalf of someone as their legal delegate or Power of Attorney. You can contact Service Canada by calling 1-833-537-4342 or by visiting a <contactServiceCanada>Service Canada Centre</contactServiceCanada> near you.",
+    "prepare-to-apply": "<preparingToApply>Preparing to apply on behalf of someone</preparingToApply>",
+    "contact-service-canada-href": "https://offices.service.canada.ca/en",
+    "preparing-to-apply-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#helping",
+    "back-btn": "Back",
+    "exit-btn": "Exit application",
+    "exit-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+  },
+  "terms-conditions": {
+    "page-title": "Terms and conditions of use and privacy notice statement",
+    "page-heading": "Terms and conditions of use and privacy notice statement",
+    "before-you-begin": "Before you begin",
+    "review-confirm": "Review and confirm that you meet all four <eligibilityRequirements>eligibility requirements</eligibilityRequirements> for the Canadian Dental Care Plan.",
+    "resolve-actions": "Resolve any required actions in letters sent to you by Service Canada regarding your Canadian Dental Care Plan account.",
+    "review-statements": "Review the statements below.",
+    "terms-and-conditions-of-use": {
+      "summary": "Terms and Conditions of Use",
+      "online-application-legal-terms": "<strong>PLEASE READ CAREFULLY.</strong> These Terms and Conditions (“Terms”) for the Canadian Dental Care Plan (“CDCP”) Online Application (“the Application”) contain information about the legal rights and responsibilities and govern your use of the Application. These Terms should be read together with the <canadaTermsConditions>Canada.ca website Terms and Conditions</canadaTermsConditions>. If there are differences, these Terms override the Canada.ca Terms and Conditions.",
+      "esdc-definition-clarification": "In these Terms, ESDC refers to the Minister of Employment and Social Development, representing His Majesty the King in Right of Canada.",
+      "online-application": {
+        "heading": "Terms of Use for the Online Application:",
+        "self-agreement": "By using this application, you confirm that you have read and agree to these Terms and the Privacy Notice. If you withdraw your agreement to these Terms at any time, you must stop use of the Application immediately.",
+        "timeout": "If you are inactive for 15 minutes, your session will end, and you will lose any information you entered.",
+        "incorrect-information": "You are responsible for ensuring that the information that you enter in the Application is correct. If you enter incorrect information and you, or the persons on behalf you are applying, are determined ineligible, the cost of any dental care received under the plan will need to be repaid.",
+        "on-behalf-of-someone-else": "If you are using the Application on behalf of a minor, by using the Application, you confirm that you have all the necessary authority to agree to the Terms on behalf of that individual, and that you agree to the Terms on behalf of the individual you are representing.",
+        "at-your-own-risk": "If you are using a shared computer or internet connection, you are using the Application at your own risk. Close the application and log out of the computer after use to protect the personal information you entered.",
+        "msdc": "ESDC uses services from Microsoft Corporation to run the Application. The Microsoft data centres used by ESDC are located in Canada in accordance with <microsoftDataPrivacyPolicy>Microsoft Corporation's Terms of Service Agreement</microsoftDataPrivacyPolicy>.",
+        "antibot": "ESDC uses hCaptcha anti-bot services for our online tools in accordance with <hcaptchaTermsOfService>hCaptcha's Terms of Service</hcaptchaTermsOfService>."
+      },
+      "changes-to-these-terms-of-use": {
+        "esdc-terms-amendment-policy": "ESDC may update these Terms without prior notice; changes take effect upon posting."
+      }
+    },
+    "privacy-notice-statement": {
+      "summary": "Privacy Notice Statement",
+      "personal-information": {
+        "heading": "Personal Information",
+        "service-canada-application-administration": "Service Canada, which is part of Employment and Social Development Canada (“ESDC”), processes Canadian Dental Care Plan (“CDCP”) member applications and renewals, answers questions from application, and provides member eligibility review-related services for the CDCP, under agreement with Health Canada (“HC”). Please note, renewals may occur either through an explicit process requiring client action, or in future years, automatically based on an eligibility reassessment.",
+        "service-canada-information-collection": "Service Canada will collect and use the personal information you include in your CDCP application, and limited personal information collected through your tax return via the Canada Revenue Agency (“CRA”) as part of the member enrolment processes mentioned above.",
+        "participation": "Participation in the CDCP is voluntary. However, if you do not provide the necessary personal information, you can not participate in the CDCP. If you are a current CDCP member and wish to withdraw from the program, <contactServiceCanada>contact Service Canada</contactServiceCanada> by calling 1-833-537-4342; for TTY (teletypewriter) service call 1-833-6262. You can also visit a Service Canada Centre.",
+        "policy-analysis": "ESDC may use or share the information you provide for policy analysis, research, monitoring and/or evaluation activities within ESDC, HC and Statistics Canada. These uses or activities will not result in any administrative decisions made about you or others who you are applying for.",
+        "digital-communications": "If you opt to receive digital communications, your email address will be used to send you notifications regarding the CDCP.",
+        "collection-use": "The collection, use, and disclosure of your personal information is authorized by the <cite>Department of Health Act</cite>, the <cite>Dental Care Measures Act</cite>, the <cite>Department of Employment and Social Development Act</cite>, the <cite>Income Tax Act</cite>, among others, and is protected by the provisions of the <cite>Privacy Act</cite>.",
+        "microsoft-policy": "ESDC carries out this application process using services from a third-party provider, Microsoft Corporation, which may be subject to foreign laws. For more information, see <microsoftDataPrivacyPolicy>Microsoft Data Privacy Policy & Privacy Principles</microsoftDataPrivacyPolicy>."
+      },
+      "how-we-protect-your-privacy": {
+        "heading": "Applicable rights and how to contact us",
+        "personal-information-rights-and-access": "Individuals have the right to the protection of, access to, and where applicable, the correction of their personal information. It is described in the following personal information banks (PIBs):",
+        "personal-information-banks": {
+          "esdc-ppu-712": "<esdcPib>ESDC's CDCP PIB</esdcPib> (ESDC PPU 712)",
+          "hc-ppu-440": "<hcPib>HC's CDCP PIB</hcPib> (HC PPU 440)"
+        },
+        "info-source-access": "You can learn how to access this information in the government publication called <infosource>Info Source</infosource>. You can also access Info Source online at any Service Canada Centre.",
+        "privacy-contact": "For privacy related questions related to an application, <contactServiceCanada>contact Service Canada</contactServiceCanada> by calling 1-833-537-4342.",
+        "personal-information-handling-complaint-process": "If you are unable to resolve a privacy issue, or do not agree with the way your personal information was handled by ESDC, you can contact the Office of the Privacy Commissioner of Canada (OPC) to <fileacomplaint>file a complaint</fileacomplaint>.",
+        "privacy-protection": "For more information about privacy protection in the CDCP, visit the CDCP <cdcpPrivacyPolicy>privacy page</cdcpPrivacyPolicy>."
+      }
+    },
+    "sharing-your-information": {
+      "summary": "Sharing your information",
+      "government-of-canada-and-sun-life": {
+        "heading": "Government of Canada and Sun Life",
+        "share-info": "Employment and Social Development Canada (“ESDC”) may share the personal information you provide with Health Canada (“HC”), and the Canada Revenue Agency (“CRA”) to validate eligibility and register individuals for the Canadian Dental Care Plan (“CDCP”).",
+        "policy-analysis": "ESDC may use or share the information you provide for policy analysis, research, monitoring and/or evaluation activities within ESDC, HC and Statistics Canada. These uses or activities will not result in any administrative decisions made about you or others who you are applying for.",
+        "send-letters": "ESDC or HC may share your personal information with Public Service and Procurement Canada for the purpose of sending CDCP letters to you.",
+        "disclose-info": "Personal information may also be shared with Sun Life, the CDCP benefits administrator, and Sun Life's agents and service providers for the purpose of underwriting, verification, administration, adjudication and investigation of claims under the CDCP.",
+        "sun-life-authorization": "Sun Life is authorized to collect, use, and share personal information to any person or organization, including oral health providers, institutions, investigative services, and the CDCP, for the purposes of program administration, audit, claims processing and verification, and patient/client safety."
+      },
+      "sharing-of-information-and-oral-health-providers": {
+        "heading": "Oral Health Providers",
+        "enrol-consent": "By enrolling yourself or others in the CDCP, you provide your consent to the oral health providers to disclose all personal information that may be required to Sun Life for the purposes of program administration, conducting claims verifications, managing claims, and patient/client safety. This information may include, but is not limited to, details of the services provided, patient clinical data, and payments. HC may also share limited personal information with oral health providers where doing so would be of clear benefit to you or those who you have applied on their behalf.",
+        "considered-minor": "If you are considered a minor in your province or territory, your information can also be shared with your parents or legal guardians."
+      }
+    },
+    "apply": {
+      "application-consent": "By continuing with this application, you confirm that you have read, understood, and agree to these Terms and Privacy Notice Statement. You also consent to the sharing of personal information you have provided for the purposes listed above.",
+      "back-button": "Back",
+      "link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
+      "continue-button": "Continue"
+    },
+    "links": {
+      "canada-ca-terms-and-conditions": "https://www.canada.ca/en/transparency/terms.html",
+      "cdcp-privacy-policy": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/privacy.html",
+      "eligibility-requirements": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/qualify.html",
+      "file-complaint": "https://www.priv.gc.ca/en/report-a-concern/",
+      "hcaptcha": "https://www.hcaptcha.com/terms",
+      "info-source": "https://www.canada.ca/en/employment-social-development/corporate/transparency/access-information/reports/infosource.html",
+      "microsoft-data-privacy-policy": "https://www.microsoft.com/en-ca/trust-center/privacy",
+      "service-canada": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html",
+      "sun-life": "https://www.sunlife.ca/en/",
+      "esdc-pib": "https://www.canada.ca/en/employment-social-development/corporate/transparency/access-information/reports/infosource-2023-2024/infosource-detailed.html#h3.5.25",
+      "hc-pib": "https://www.canada.ca/en/health-canada/corporate/about-health-canada/activities-responsibilities/access-information-privacy/info-source-federal-government-employee-information.html"
+    },
+    "checkboxes": {
+      "acknowledge-terms": "I have read, understood and agree to the Terms and Conditions.",
+      "acknowledge-privacy": "I have read, understood and agree with the Privacy Notice Statement.",
+      "share-data": "I consent to the sharing of the personal information provided.",
+      "do-not-consent": "I <strong>do not agree</strong> to the Terms and Conditions and Privacy Notice Statement and <strong>do not consent</strong> to the sharing of my information for the purposes listed above.",
+      "error-message": {
+        "acknowledge-terms-required": "You must read the Terms and Conditions to proceed",
+        "acknowledge-privacy-required": "You must read the Privacy Notice Statement to proceed",
+        "share-data-required": "You must consent to the sharing of your data to proceed",
+        "consent-required": "You must agree to the Terms and Conditions and Privacy Notice Statement, and consent to the sharing of your information. To apply for the Canadian Dental Care Plan, you must agree to the Terms and Conditions and Privacy Notice Statement. You must also consent to the sharing of your personal information for the purposes listed."
+      }
+    }
+  },
+  "dental-insurance": {
+    "title": "Access to private dental insurance",
+    "legend": "Do you have access to private dental insurance or coverage through any of the following:",
+    "option-yes": "<strong>Yes</strong>, I have access to private dental insurance or coverage",
+    "option-no": "<strong>No</strong>, I do not have access to private dental insurance or coverage",
+    "back-btn": "Back",
+    "save-btn": "Save",
+    "detail": {
+      "additional-info": {
+        "list": {
+          "employer": "your employer's benefits",
+          "pension": "your employer's pension plan",
+          "pension-plans": "a family member's plan",
+          "organization": "a professional or student organization",
+          "company": "coverage bought privately"
+        },
+        "eligible": "This also applies even if you choose not to enrol in, do not use, or have to pay a premium for private dental insurance or coverage.",
+        "access": "Having access to dental coverage through the Canadian Dental Care Plan or other federal, provincial or territorial government social programs is not considered as having access to private dental insurance."
+      }
+    },
+    "yes": {
+      "alert-title": "Private dental insurance confirmation",
+      "alert-body": "If you have access to private dental insurance or coverage, you are not eligible for the Canadian Dental Care Plan. If you are a current member and continue with the application, your benefits will end immediately.",
+      "confirmation": "I understand that I am not eligible for the Canadian Dental Care Plan if I have access to dental insurance or coverage."
+    },
+    "no": {
+      "alert-title": "Dental insurance confirmation",
+      "alert-body": "We'll confirm your response using any <t4Href>T4 (box 45)</t4Href> or <t4aHref>T4A (box 015)</t4aHref> documents you may have. If the document shows you have access to employer or pension sponsored dental insurance or coverage, you may be asked to provide proof that you're not covered.",
+      "alert-t4-href": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/tax-slips/understand-your-tax-slips/t4-slips/t4-statement-remuneration-paid.html",
+      "alert-t4a-href": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/tax-slips/understand-your-tax-slips/t4-slips/t4a-slip.html",
+      "confirmation": "I understand that I may be asked to provide proof that I do not have access to dental insurance or coverage."
+    },
+    "error-message": {
+      "dental-insurance-required": "Select whether you have access to private dental insurance",
+      "dental-insurance-eligibility-confirmation-required": "Select whether you understand that if you have private dental insurance you are not eligible for the Canadian Dental Care Plan"
+    }
+  },
+  "personal-information": {
+    "page-title": "Personal information",
+    "form-instructions-sin": "Enter your name exactly as shown on your Social Insurance Number (SIN) record or Canadian Dental Care Plan (CDCP) letters.",
+    "form-instructions-info": "We'll use the information you provide to confirm your identity. Any information that does not match the information on your SIN or CDCP record may cause a delay in the processing of your application.",
+    "member-id": "Member ID",
+    "sin": "Social Insurance Number (SIN)",
+    "last-name": "Last name",
+    "first-name": "First name",
+    "dob": "Date of birth",
+    "single-legal-name": "If you have one legal name",
+    "name-instructions": "If you have only one legal name, enter it in <strong>both</strong> the first and last name fields.",
+    "back-btn": "Back",
+    "save-btn": "Save",
+    "help-message": {
+      "sin": "Enter the 9-digit SIN",
+      "member-id": "You can find your 11-digit Member ID in the upper right corner of the letter from Service Canada or on your Canadian Dental Care Plan member card."
+    },
+    "error-message": {
+      "member-id-required": "Enter 11-digit member ID",
+      "member-id-valid": "Member ID must be 11-digit",
+      "first-name-required": "Enter first name",
+      "last-name-required": "Enter last name",
+      "sin-required": "Enter 9-digit SIN, for example 123 456 789",
+      "sin-valid": "Must be a valid SIN",
+      "sin-unique": "The Social Insurance Number (SIN) must be unique",
+      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
+      "first-name-no-digits": "First name must contain letters only",
+      "last-name-no-digits": "Last name must contain letters only",
+      "date-of-birth-day-number": "Day must be a number",
+      "date-of-birth-day-required": "Date of birth must include a day",
+      "date-of-birth-is-past": "Date of birth must be in the past",
+      "date-of-birth-is-past-valid": "Date of birth too far in the past",
+      "date-of-birth-month-required": "Date of birth must include a month",
+      "date-of-birth-valid": "Day must be valid for the given month and year",
+      "date-of-birth-year-number": "Year must be a number, for example 1950",
+      "date-of-birth-year-required": "Date of birth must include a year",
+      "alert": {
+        "heading": "We couldn't find your Canadian Dental Care Plan (CDCP) account with the information you entered.",
+        "detail": "Check that your information is correct and try again. If the problem continues, call us at <noWrap>1-833-537-4342</noWrap> to update your information.",
+        "applyDate": "<strong>Note:</strong> Only current CDCP members can renew benefits now. If you are not enrolled, you can apply for the upcoming benefit year starting {{startDate}}."
+      }
+    }
+  },
+  "dental-benefits": {
+    "title": "Other federal, provincial or territorial dental benefits",
+    "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact your eligibility for the Canadian Dental Care Plan.",
+    "select-one": "Select one",
+    "eligibility-criteria": "If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
+    "federal-benefits": {
+      "title": "Federal benefits",
+      "legend": "Do you have other dental benefits through a federal social program other than the Canadian Dental Care Plan?",
+      "option-yes": "<strong>Yes</strong>, I have federal dental benefits",
+      "option-no": "<strong>No</strong>, I do not have federal dental benefits",
+      "social-programs": {
+        "legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
+      }
+    },
+    "provincial-territorial-benefits": {
+      "title": "Provincial or territorial benefits",
+      "legend": "Do you have other dental benefits through a provincial or territorial social program other than the Canadian Dental Care Plan?",
+      "option-yes": "<strong>Yes</strong>, I have provincial or territorial dental benefits",
+      "option-no": "<strong>No</strong>, I do not have provincial or territorial dental benefits",
+      "social-programs": {
+        "input-legend": "Through which province or territory?",
+        "radio-legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
+      }
+    },
+    "back-btn": "Back",
+    "save-btn": "Save",
+    "error-message": {
+      "federal-benefit-program-required": "Select which federal program you are covered under",
+      "federal-benefit-required": "Select whether you have federal dental benefits",
+      "provincial-benefit-program-required": "Select which provincial or territorial program you are covered under",
+      "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits",
+      "provincial-territorial-required": "Select a province or territory"
+    }
+  },
+  "living-independently": {
+    "page-title": "Living independently",
+    "description": "Living independently from your parents means you are 16 or 17, do not receive financial support from your parents, and your home address is different from theirs.",
+    "form-instructions": "Do you live independently from your parents?",
+    "radio-options": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "error-message": {
+      "living-independently-required": "Select whether or not you live independently from your parents"
+    },
+    "back-btn": "Back",
+    "save-btn": "Save"
+  },
+  "parent-or-guardian": {
+    "page-title": "Parent or legal guardian needs to apply",
+    "unable-to-apply": "You are under 18. A parent or legal guardian must apply on your behalf.",
+    "apply-for-yourself": "If you have previously applied for a child, and now want to apply for yourself, you must speak to a Service Canada representative. Contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
+    "back-btn": "Back",
+    "exit-btn": "Exit application",
+    "exit-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+  },
+  "phone-number": {
+    "page-title": "Phone number",
+    "phone-number": "Phone number",
+    "phone-number-alt": "Alternate phone number (optional)",
+    "back-btn": "Back",
+    "save-btn": "Save",
+    "dont-have-number": "I don't have a phone number",
+    "need-phone-number": "You need a phone number to apply online. If you cannot be reached by phone, you can still apply for the Canadian Dental Care Plan:",
+    "service-canada": "By phone: call Service Canada at <noWrap>1-833-537-4342</noWrap>",
+    "in-person": "In-person: <findOffice>find a Service Canada office</findOffice>",
+    "office-link": "https://offices.service.canada.ca/en",
+    "error-message": {
+      "phone-number-valid": "Invalid phone number",
+      "phone-number-valid-international": "Phone number does not exist. If it's an international phone number, add '+' in front",
+      "phone-number-alt-valid": "Invalid alternate phone number",
+      "phone-number-alt-valid-international": "Alternate phone number does not exist. If it's an international phone number, add '+' in front",
+      "phone-required": "Enter a phone number"
+    }
+  },
+  "address": {
+    "mailing-address": {
+      "page-title": "Mailing address",
+      "header": "Mailing address"
+    },
+    "home-address": {
+      "page-title": "Home address",
+      "use-mailing-address": "Use this address as my home address"
+    },
+    "address-field": {
+      "address": "Street address",
+      "address-help": "Include street number and street name. For example: 123 Main St.",
+      "apartment": "Apartment, Suite, Unit, Building (optional)",
+      "apartment-help": "Enter your apartment, suite, or building number, if you have one. For example: Suite 4B.",
+      "country": "Country",
+      "province": "Province, territory, state, or region",
+      "city": "City or town",
+      "postal-code": "Postal code or ZIP",
+      "postal-code-optional": "Postal code or ZIP (optional)",
+      "select-one": "Select one"
+    },
+    "back": "Back",
+    "continue": "Continue",
+    "save-btn": "Save"
+  },
+  "communication-preferences": {
+    "page-title": "Communication preferences",
+    "preferred-method": "How would you like Sun Life to communicate with you?",
+    "preferred-method-help-message": "Sun Life will be responsible for handling member enrolment and claims processing for the Canadian Dental Care Plan.",
+    "preferred-language": "What is your preferred official language of communication?",
+    "by-email": "<span>{{name}}</span><br>Signing up for email is the fastest way to get updates.",
+    "preferred-notification-method": "How would you like to receive updates from the Government of Canada about the Canadian Dental Care Plan?",
+    "preferred-notification-method-msca": "<span>{{name}}</span><br><mscaLinkAccount>Signing up</mscaLinkAccount> for online notifications is the fastest way to get updates.",
+    "preferred-notification-method-mail": "<span>{{name}}</span><br>You can also view your Canadian Dental Care Plan information in your <mscaLinkAccount>MSCA</mscaLinkAccount>.",
+    "back": "Back",
+    "continue": "Continue",
+    "save": "Save",
+    "msca-link-account": "https://www.canada.ca/en/employment-social-development/services/my-account.html",
+    "error-message": {
+      "preferred-language-required": "Select preferred language of communication",
+      "preferred-method-required": "Select preferred method of communication for Sun Life",
+      "preferred-notification-method-required": "Select preferred method of communication for the Government of Canada"
+    }
+  },
+  "email": {
+    "page-title": "Email address",
+    "provide-email": "Provide the email address you'd like the Government of Canada and Sun Life to use to contact you about your Canadian Dental Care Plan coverage.",
+    "verify-email": "We will need to confirm your email address.",
+    "email-legend": "Email address",
+    "back": "Back",
+    "continue": "Continue",
+    "error-message": {
+      "email-required": "Enter email address, for example name@example.com",
+      "email-valid": "Enter an email address in the correct format, such as name@example.com"
+    }
+  },
+  "verify-email": {
+    "page-title": "Verification code",
+    "verification-code": "An email with a code has been sent to {{email}}. Please enter the 5-digit verification code and select “Continue”.",
+    "request-new": "It may take up to 60 seconds for the email to arrive. If you do not see it, check your junk or spam folder. If you still do not have the code, you can request a new one.",
+    "unable-to-verify": "If you are not able to confirm your email, select “Back” to change the email address or <communicationLink>modify your communication preference</communicationLink>.",
+    "verification-code-label": "Verification code",
+    "request-new-code": "Request new verification code",
+    "back": "Back",
+    "continue": "Continue",
+    "error-message": {
+      "verification-code-required": "Enter 5-digit verification code",
+      "verification-code-max-attempts": "You have entered an incorrect verification code more than 5 times. You must request a new code using the “Request new verification code” link below."
+    },
+    "verification-code-alert": {
+      "heading": "The verification code entered does not match the code that was sent to the email address provided, or the code has expired.",
+      "detail": "Please check the code and try again. If the issue continues, you can request a new code using the “Request new verification code” link below."
+    },
+    "code-sent": {
+      "heading": "New verification code",
+      "detail": "A new verification code has been sent to {{email}}."
+    }
+  },
+  "children": {
+    "child-number": "Child {{childNumber}}",
+    "information": {
+      "page-title": "{{childName}}: information",
+      "form-instructions-sin": "Provide the child's legal name as indicated on their Social Insurance Number (SIN) record, or other government documentation.",
+      "single-legal-name": "If the child has one legal name",
+      "name-instructions": "If the child uses one legal name, please enter that name in BOTH the first name and last name fields.",
+      "last-name": "Last name",
+      "first-name": "First name",
+      "date-of-birth": "Date of birth",
+      "sin-legend": "Does this child have a Social Insurance Number (SIN)?",
+      "sin-yes": "Yes",
+      "sin-no": "No",
+      "sin": "Enter the 9-digit SIN",
+      "member-id": "Child's member ID",
+      "parent-legend": "Are you the parent or legal guardian of this child?",
+      "radio-options": {
+        "yes": "Yes",
+        "no": "No"
+      },
+      "back-btn": "Back",
+      "save-btn": "Save",
+      "help-message": {
+        "member-id": "You can find the child's member ID in the upper right corner of the letter from Service Canada or on the child's Canadian Dental Care Plan member card."
+      },
+      "error-message": {
+        "member-id-required": "Enter 11-digit member ID",
+        "member-id-valid": "Member ID must be 11-digit",
+        "first-name-required": "Enter child's first name",
+        "last-name-required": "Enter child's last name",
+        "sin-required": "Enter 9-digit SIN, for example 123 456 789",
+        "sin-valid": "Must be a valid SIN",
+        "sin-unique": "SIN must be unique",
+        "date-of-birth-day-number": "Day must be a number",
+        "date-of-birth-day-required": "Date of birth must include a day",
+        "date-of-birth-is-past": "Date of birth must be in the past",
+        "date-of-birth-is-past-valid": "Date of birth too far in the past",
+        "date-of-birth-month-required": "Date of birth must include a month",
+        "date-of-birth-valid": "Day must be valid for the given month and year",
+        "date-of-birth-year-number": "Year must be a number, for example 1950",
+        "date-of-birth-year-required": "Date of birth must include a year",
+        "has-social-insurance-number": "Select whether the child has a SIN",
+        "is-parent": "Select whether you are the parent or legal guardian of the child",
+        "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
+        "first-name-no-digits": "First name must contain letters only",
+        "last-name-no-digits": "Last name must contain letters only",
+        "alert": {
+          "heading": "We couldn't find your child's Canadian Dental Care Plan (CDCP) account with the information you entered",
+          "detail": "Check that the child's information is correct and try again. If the problem continues, call us at <noWrap>1-833-537-4342</noWrap> to update your information.",
+          "applyDate": "Note: only current CDCP members can renew benefits now. If your child is not enrolled, you can apply for the upcoming benefit year starting June 2, 2026."
+        }
+      }
+    },
+    "parent-or-guardian": {
+      "page-title": "You must be a parent or legal guardian",
+      "must-be": "You must be a parent or legal guardian.",
+      "unable-to-apply": "You are not able to apply for this child. You must be a parent or legal guardian to apply on behalf of a child.",
+      "back-btn": "Back",
+      "exit-btn": "Exit application",
+      "exit-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+    },
+    "cannot-apply-child": {
+      "page-title": "Your child must apply",
+      "ineligible-to-apply": "Your child is 18 years or older. Your child must submit their own application to the Canadian Dental Care Plan.",
+      "eligibility-info": "If your child is a dependant adult and you are their legal delegate or Power of Attorney, you must speak to a Service Canada representative to apply on their behalf. You can contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
+      "back-btn": "Back",
+      "continue-btn": "Continue"
+    },
+    "dental-benefits": {
+      "title": "{{childName}}'s access to other federal, provincial or territorial dental benefits",
+      "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact the child's eligibility for the Canadian Dental Care Plan.",
+      "select-one": "Select one",
+      "eligibility-criteria": "If the child meets all the eligibility criteria, their coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
+      "federal-benefits": {
+        "title": "Federal benefits",
+        "legend": "Does {{childName}} have other dental benefits through a federal social program other than the Canadian Dental Care Plan?",
+        "option-yes": "<strong>Yes</strong>, this child has federal dental benefits",
+        "option-no": "<strong>No</strong>, this child does not have federal dental benefits",
+        "social-programs": {
+          "legend": "Please select which social program this child is covered under. If this child has more than one, please select the one this child uses the most."
+        }
+      },
+      "provincial-territorial-benefits": {
+        "title": "Provincial or territorial benefits",
+        "legend": "Does {{childName}} have other dental benefits through a provincial or territorial social program other than the Canadian Dental Care Plan?",
+        "option-yes": "<strong>Yes</strong>, this child has provincial or territorial dental benefits",
+        "option-no": "<strong>No</strong>, this child does not have provincial or territorial dental benefits",
+        "social-programs": {
+          "input-legend": "Through which province or territory?",
+          "radio-legend": "Please select which social program this child is covered under. If this child has more than one, please select the one this child uses the most."
+        }
+      },
+      "back-btn": "Back",
+      "save-btn": "Save",
+      "error-message": {
+        "federal-benefit-program-required": "Select which federal program the child is covered under",
+        "federal-benefit-required": "Select whether the child has federal dental benefits",
+        "provincial-benefit-program-required": "Select which provincial or territorial program the child is covered under",
+        "provincial-benefit-required": "Select whether the child has provincial or territorial dental benefits",
+        "provincial-territorial-required": "Select a province or territory"
+      }
+    },
+    "dental-insurance": {
+      "title": "{{childName}}'s access to private dental insurance",
+      "legend": "Does {{childName}} have private dental insurance or coverage through any of the following:",
+      "option-yes": "<strong>Yes</strong>, this child has access to private dental insurance or coverage",
+      "option-no": "<strong>No</strong>, this child does not have access to private dental insurance or coverage",
+      "dental-insurance-eligibility-confirmation": "I understand that {{childName}} is not eligible for the Canadian Dental Care Plan if they have access to dental insurance or coverage.",
+      "back-btn": "Back",
+      "save-btn": "Save",
+      "detail": {
+        "additional-info": {
+          "list": {
+            "employer": "a family member's employer",
+            "pension": "a family member's pension plan",
+            "organization": "a professional or student organization",
+            "private": "coverage bought privately"
+          },
+          "eligible": "This also applies even if they choose not to enrol in, do not use, or have to pay a premium for private dental insurance or coverage.",
+          "access": "Having access to dental coverage through the Canadian Dental Care Plan or other federal, provincial or territorial government social programs is not considered as having access to private dental insurance."
+        }
+      },
+      "alert": {
+        "title": "Private dental insurance confirmation",
+        "body": "If {{childName}} has access to private dental insurance or coverage, they are not eligible for the Canadian Dental Care Plan. If you continue with the application and {{childName}} is a current member, their benefits will end immediately."
+      },
+      "error-message": {
+        "dental-insurance-required": "Select whether you have access to dental insurance",
+        "dental-insurance-eligibility-confirmation-required": "Select whether you understand that if you have private dental insurance you are not eligible for the Canadian Dental Care Plan"
+      }
+    }
+  },
+  "dental-insurance-exit-application": {
+    "page-title": "We may ask you for additional information",
+    "are-you-sure": "You may be asked to provide proof that you do not have access to other dental insurance. Check the box to show you understand what's needed.",
+    "click-back": "If you want to end the session and stop your application, click “Close application”. Any information entered will not be saved.",
+    "back-btn": "Back",
+    "exit-btn": "Close application",
+    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+  }
+}
