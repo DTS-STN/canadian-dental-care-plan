@@ -1,0 +1,523 @@
+{
+  "marital-status": {
+    "page-title": "État civil",
+    "marital-status": "Quel est votre état civil?",
+    "primary-help-message": "Assurez-vous que l'information correspond à celle inscrite au dossier de l'Agence du revenu du Canada.",
+    "spouse-or-commonlaw": "Renseignements sur l'époux ou l'épouse ou le conjoint ou la conjointe de fait",
+    "provide-sin": "Entrez le nom de votre époux ou épouse ou conjoint ou conjointe de fait exactement tel qu'il est inscrit dans son dossier de numéro d'assurance sociale (NAS).",
+    "required-information": "Nous avons besoin de cette information pour calculer votre revenu familial. Votre époux, épouse, conjoint de fait ou conjointe de fait doit remplir sa propre demande d'adhésion au Régime canadien de soins dentaires.",
+    "back-btn": "Retour",
+    "save-btn": "Sauvegarder",
+    "sin": "Numéro d'assurance sociale (NAS)",
+    "sin-help": "Entrez son NAS à 9 chiffres.",
+    "year-of-birth": "Année de naissance",
+    "year-of-birth-help": "Entrez son année de naissance. Par exemple, 1960.",
+    "confirm-checkbox": "Je confirme que mon époux ou épouse ou mon conjoint ou ma conjointe de fait a consenti à la communication de ses renseignements personnels.",
+    "error-message": {
+      "marital-status-required": "Sélectionnez l'état civil",
+      "confirm-required": "Le consentement de l'époux/épouse ou du conjoint de fait est requis pour procéder",
+      "date-of-birth-year-required": "Entrez l'année de naissance, par exemple 1960",
+      "yob-is-past": "Année de naissance trop éloignée dans le passé",
+      "yob-is-future": "L'année de naissance doit être dans le passé",
+      "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
+      "sin-valid": "Le NAS doit être valide",
+      "sin-unique": "NAS doit être unique"
+    }
+  },
+  "type-of-application": {
+    "page-title": "Type de demande",
+    "form-instructions": "Pour qui présentez-vous une demande?",
+    "radio-options": {
+      "personal": "Je présente une demande pour <strong>moi-même</strong>",
+      "child": "Je présente une demande pour <strong>mon (mes) enfant(s)</strong>",
+      "personal-and-child": "Je présente une demande pour <strong>moi-même et mon (mes) enfant(s)</strong>",
+      "delegate": "Je présente une demande au <strong>nom d'une autre personne à titre de représentant légal ou de mandataire</strong>"
+    },
+    "error-message": {
+      "type-of-application-required": "Sélectionnez à qui s'adresse cette demande"
+    },
+    "back-btn": "Retour",
+    "save-btn": "Sauvegarder"
+  },
+  "application-delegate": {
+    "page-title": "Présenter une demande au nom d'une autre personne à titre de représentant légal ou de mandataire",
+    "contact-representative": "Vous devez parler à un représentant de Service Canada si vous présentez une demande au nom d'une autre personne à titre de représentant légal ou de mandataire. Veuillez communiquer avec Service Canada au 1-833-537-4342 ou vous rendre dans un <contactServiceCanada>bureau de Service Canada</contactServiceCanada> près de chez vous.",
+    "prepare-to-apply": "<preparingToApply>Se préparer à présenter une demande au nom de quelqu'un</preparingToApply>",
+    "contact-service-canada-href": "https://bureaux.service.canada.ca/fr",
+    "preparing-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#aide",
+    "back-btn": "Retour",
+    "exit-btn": "Quitter la demande",
+    "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html"
+  },
+  "terms-conditions": {
+    "page-title": "Conditions d'utilisation et énoncé de confidentialité",
+    "page-heading": "Conditions d'utilisation et énoncé de confidentialité",
+    "before-you-begin": "Avant de commencer",
+    "review-confirm": "Vérifiez et confirmez que vous remplissez les quatre <eligibilityRequirements>conditions d'admissibilité</eligibilityRequirements> du Régime canadien de soins dentaires.",
+    "resolve-actions": "Prenez toute mesure requise dans les lettres qui vous sont envoyées par Service Canada concernant votre compte du Régime canadien de soins dentaires.",
+    "review-statements": "Lisez les énoncés ci-dessous.",
+    "terms-and-conditions-of-use": {
+      "summary": "Conditions d'utilisation",
+      "online-application-legal-terms": "<strong>VEUILLEZ LIRE ATTENTIVEMENT.</strong> Les présentes conditions (les conditions d'utilisation) relatives à la demande en ligne du Régime canadien de soins dentaires («\u00a0RCSD\u00a0») («\u00a0la demande\u00a0») contiennent des renseignements sur les droits et responsabilités juridiques et régissent votre utilisation de la demande. Les présentes conditions d'utilisation doivent être lues en parallèle avec <canadaTermsConditions>celles du site Web Canada.ca</canadaTermsConditions>. En cas de différence, les présentes conditions d'utilisation l'emportent sur les conditions d'utilisation sur le site Canada.ca.",
+      "esdc-definition-clarification": "Aux fins des présentes conditions d'utilisation, «\u00a0EDSC\u00a0» est le ministre de l'Emploi et du Développement social du Canada représentant Sa Majesté le Roi du chef Canada.",
+      "online-application": {
+        "heading": "Conditions d'utilisation de la demande",
+        "self-agreement": "En utilisant cette demande, vous confirmez que vous avez lu et que vous acceptez les présentes conditions d'utilisation et l'énoncé de confidentialité. Si vous retirez votre accord sur ces conditions d'utilisation à tout moment, vous devez cesser immédiatement d'utiliser la demande.",
+        "timeout": "Si vous restez inactif pendant 15 minutes, votre session prendra fin et vous perdrez tous les renseignements que vous avez saisis.",
+        "incorrect-information": "Vous êtes responsable de l'exactitude des renseignements que vous saisissez dans l'application. Si vous entrez des renseignements erronés et que vous, ou les personnes au nom desquelles vous faites la demande, êtes jugé non admissible, le coût des soins dentaires reçus dans le cadre du régime devra être remboursé.",
+        "on-behalf-of-someone-else": "Si vous utilisez l'application au nom d'une personne mineure, en utilisant l'application, vous certifiez alors que vous avez toutes autorisations nécessaires pour accepter les conditions d'utilisation au nom de cette personne, et que vous acceptez les conditions au nom de la personne que vous représentez.",
+        "at-your-own-risk": "Si vous utilisez un ordinateur ou une connexion internet partagés, vous utilisez l'application à vos propres risques. Fermez l'application et déconnectez-vous de l'ordinateur après l'utilisation afin de protéger les renseignements personnels que vous aurez saisis.",
+        "msdc": "EDSC utilise les services de Microsoft Corporation pour exécuter l'application. Les centres de données Microsoft utilisés par EDSC sont situés au Canada, conformément à <microsoftDataPrivacyPolicy>l'accord sur les conditions de service de Microsoft Corporation</microsoftDataPrivacyPolicy>.",
+        "antibot": "EDSC utilise les services anti-robots hCaptcha pour ses outils en ligne, conformément aux <hcaptchaTermsOfService>conditions de service de hCaptcha</hcaptchaTermsOfService>. Les conditions de service de hCaptcha sont disponibles en anglais seulement."
+      },
+      "changes-to-these-terms-of-use": {
+        "esdc-terms-amendment-policy": "EDSC peut mettre à jour les présentes conditions d'utilisation sans préavis; les modifications prennent effet dès leur publication."
+      }
+    },
+    "privacy-notice-statement": {
+      "summary": "Énoncé de confidentialité",
+      "personal-information": {
+        "heading": "Renseignements personnels",
+        "service-canada-application-administration": "Service Canada, qui fait partie d'Emploi et Développement social Canada («\u00a0ESDC\u00a0»), traite les demandes d'adhésion et de renouvellement des membres du Régime canadien de soins dentaires («\u00a0RCSD\u00a0»), répond aux questions posées sur les demandes et fournit des services liés à l'examen de l'admissibilité des membres pour le RCSD, en vertu d'une entente avec Santé Canada («\u00a0SC\u00a0»). Veuillez noter que les renouvellements peuvent se faire soit au moyen d'un processus clair nécessitant une intervention du client, soit dans les années à venir, automatiquement en fonction d'une réévaluation de l'admissibilité.",
+        "service-canada-information-collection": "Service Canada recueillera et utilisera les renseignements personnels que vous avez fournis dans votre demande du RCSD, ainsi que des renseignements personnels limités recueillis dans votre déclaration d'impôts par l'intermédiaire de l'Agence du revenu du Canada («\u00a0ARC\u00a0») dans le cadre des processus d'inscription des membres mentionnés ci-dessus.",
+        "participation": "La participation au RCSD est volontaire. Toutefois, si vous ne fournissez pas les renseignements personnels nécessaires, vous ne pourrez pas participer au RCSD. Si vous êtes un membre actuel du RCSD et que vous souhaitez vous retirer du programme, <contactServiceCanada>communiquez avec Service Canada</contactServiceCanada> en composant le 1-833-537-4342; pour le service de téléscripteur (ATS), composez le 1-833-6262. Vous pouvez aussi vous rendre dans un Centre Service Canada.",
+        "policy-analysis": "EDSC peut utiliser ou communiquer les renseignements que vous fournissez pour les activités d'analyse des politiques, de recherche, de surveillance et d'évaluation au sein d'EDSC, de SC et de Statistique Canada. Ces utilisations ou activités n'auront aucune incidence sur les décisions administratives prises à votre sujet ou au sujet d'autres personnes pour qui vous faites la demande.",
+        "digital-communications": "Si vous choisissez de recevoir des communications numériques, votre adresse de courriel sera utilisée pour vous envoyer des avis au sujet du RCSD.",
+        "collection-use": "La collecte, l'utilisation et la divulgation de vos renseignements personnels sont autorisées en vertu de la <cite>Loi sur le ministère de la Santé</cite>, la <cite>Loi sur les mesures de soins dentaires</cite>, la <cite>Loi sur le ministère de l'Emploi et du Développement social</cite> et la <cite>Loi de l'impôt sur le revenu</cite>, entre autres, et sont protégées par les dispositions de la <cite>Loi sur la protection des renseignements personnels</cite>.",
+        "microsoft-policy": "EDSC exécute ce processus de demande en utilisant les services du fournisseur tiers Microsoft Corporation, qui peut être soumis à des lois étrangères. Vous trouverez de plus amples renseignements en consultant cette page Web\u00a0: <microsoftDataPrivacyPolicy>Politique de protection des données et principes de confidentialité de Microsoft</microsoftDataPrivacyPolicy>."
+      },
+      "how-we-protect-your-privacy": {
+        "heading": "Droits applicables et comment communiquer avec nous",
+        "personal-information-rights-and-access": "Tout le monde a droit à la protection de ses renseignements personnels, à l'accès à ceux-ci et, s'il y a lieu, à leur correction. Ils sont conservés dans les fichiers de renseignements personnels (FRP) suivants\u00a0:",
+        "personal-information-banks": {
+          "esdc-ppu-712": "<hcPib>FRP du RCSD d'EDSC</hcPib> (ESDC PPU 712)",
+          "hc-ppu-440": "<esdcPib>Le FRP du RCSD de SC</esdcPib> (HC PPU 440)"
+        },
+        "info-source-access": "Vous pouvez apprendre comment accéder à cette information dans la publication du gouvernement intitulée Info Source. Vous pouvez également accéder à Info Source en ligne dans n'importe quel Centre Service Canada.",
+        "privacy-contact": "Pour toute question relative à la protection des renseignements personnels concernant une demande, <contactServiceCanada>contactez Service Canada</contactServiceCanada> en composant le 1-833-537-4342.",
+        "personal-information-handling-complaint-process": "Si vous n'êtes pas en mesure de régler un problème relatif à la protection de la vie privée, ou si vous n'êtes pas satisfait de la façon dont vos renseignements personnels ont été traités par EDSC, vous pouvez communiquer avec le Commissariat à la protection de la vie privée du Canada (CPVP) pour <fileacomplaint>déposer une plainte</fileacomplaint>.",
+        "privacy-protection": "Pour plus de renseignements sur la protection de la vie privée dans le RCSD, consultez la <cdcpPrivacyPolicy>page sur la protection de la vie privée</cdcpPrivacyPolicy> du RCSD."
+      }
+    },
+    "sharing-your-information": {
+      "summary": "Communication de vos renseignements",
+      "government-of-canada-and-sun-life": {
+        "heading": "Gouvernement du Canada et Sun Life",
+        "share-info": "Emploi et Développement social Canada (EDSC) peut communiquer les renseignements personnels que vous fournissez à Santé Canada (SC) et à l'Agence du revenu du Canada (ARC) pour valider votre admissibilité et inscrire les participants au Régime canadien de soins dentaires (RCSD).",
+        "policy-analysis": "EDSC peut utiliser ou communiquer les renseignements que vous fournissez pour les activités d'analyse des politiques, de recherche, de surveillance et d'évaluation au sein d'EDSC, de SC et de Statistique Canada. Ces utilisations ou activités n'auront aucune incidence sur les décisions administratives prises à votre sujet ou au sujet d'autres personnes pour qui vous faites la demande.",
+        "send-letters": "ESDC ou SC peut partager vos renseignements personnels avec Services publics et Approvisionnement Canada dans le but de vous envoyer des lettres du RCSD.",
+        "disclose-info": "Vos renseignements personnels peuvent également être divulgués à la Sun Life, à l'administrateur des prestations du RCSD et aux agents et fournisseurs de services de la Sun Life aux fins de souscription, de vérification, d'administration, de décision et d'enquête concernant les prestations versées au titre du RCSD.",
+        "sun-life-authorization": "La Sun Life est autorisée à recueillir, à utiliser et à partager des renseignements personnels à toute personne ou organisation, y compris les fournisseurs de soins de santé buccodentaire, les établissements, les services d'enquête et le RCSD, aux fins de l'administration du programme, de la vérification, du traitement et de la validation des demandes de règlement et de la sécurité des patients/clients."
+      },
+      "sharing-of-information-and-oral-health-providers": {
+        "heading": "Fournisseurs de soins buccodentaires",
+        "enrol-consent": "En vous inscrivant au RCSD ou en y inscrivant d'autres personnes, vous consentez à ce que les fournisseurs de soins de santé buccodentaire divulguent tous les renseignements personnels dont Sun Life aurait besoin pour l'administration du programme, de la vérification et de la gestion des demandes de règlement, et de la sécurité des patients/clients. Ces renseignements peuvent comprendre, sans s'y limiter, des détails sur les services fournis, des données cliniques sur le patient et les paiements. SC peut également partager des renseignements personnels limités avec des prestataires de soins de santé buccodentaire lorsque cela présente un avantage évident pour vous ou pour les personnes que vous avez sollicitées en leur nom.",
+        "considered-minor": "Si vous êtes considéré comme mineur dans votre province ou territoire, vos renseignements peuvent également être communiqués à vos parents ou tuteurs légaux."
+      }
+    },
+    "apply": {
+      "application-consent": "En continuant à utiliser cette demande, vous confirmez que vous avez lu, compris et accepté les présentes conditions d'utilisation et l'énoncé de confidentialité. Vous consentez également à ce que les renseignements personnels que vous avez fournis aux fins énumérées ci-dessus soient partagés.",
+      "back-button": "Retour",
+      "link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
+      "continue-button": "Continuer"
+    },
+    "links": {
+      "canada-ca-terms-and-conditions": "https://www.canada.ca/fr/transparence/avis.html",
+      "cdcp-privacy-policy": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/vie-privee.html",
+      "eligibility-requirements": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/admissibilite.html",
+      "file-complaint": "https://www.priv.gc.ca/fr/signaler-un-probleme/",
+      "hcaptcha": "https://www.hcaptcha.com/terms",
+      "info-source": "https://www.canada.ca/fr/emploi-developpement-social/ministere/transparence/aai/rapports/infosource.html",
+      "microsoft-data-privacy-policy": "https://www.microsoft.com/fr-ca/trust-center/privacy",
+      "service-canada": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
+      "sun-life": "https://www.sunlife.ca/fr/",
+      "esdc-pib": "https://www.canada.ca/fr/emploi-developpement-social/ministere/transparence/aai/rapports/infosource-2023-2024/infosource-detaille.html#h3.5.25",
+      "hc-pib": "https://www.canada.ca/fr/sante-canada/organisation/a-propos-sante-canada/activites-responsabilites/acces-information-protection-renseignements-personnels/info-source-renseignements-gouvernement-federal-fonctionnaires-federaux.html"
+    },
+    "checkboxes": {
+      "acknowledge-terms": "J'ai lu, j'ai compris et j'accepte les conditions d'utilisation.",
+      "acknowledge-privacy": "J'ai lu, j'ai compris et j'accepte cet énoncé de confidentialité.",
+      "share-data": "Je consens à ce que les renseignements personnels fournis soient partagés.",
+      "do-not-consent": "Je <strong>n'accepte pas</strong> les termes et conditions et la déclaration de confidentialité et je <strong>ne consens pas</strong> à la divulgation de mes renseignements personnels aux fins énumérées.",
+      "error-message": {
+        "acknowledge-terms-required": "Vous devez lire les modalités d'utilisation avant de poursuivre",
+        "acknowledge-privacy-required": "Vous devez lire l'énoncé de confidentialité avant de poursuivre",
+        "share-data-required": "Vous devez consentir à la communication de vos renseignements avant de poursuivre",
+        "consent-required": "Vous devez accepter les Conditions générales et la Déclaration de confidentialité, ainsi que consentir à la divulgation de vos renseignements personnels. Pour adhérer au Régime canadien de soins dentaires, vous devez accepter les Conditions générales et la Déclaration de confidentialité. Vous devez également consentir à la divulgation de vos renseignements personnels aux fins indiquées."
+      }
+    }
+  },
+  "dental-insurance": {
+    "title": "Accès à une assurance dentaire privée",
+    "legend": "Avez-vous accès à une assurance ou à une couverture dentaire privée par l'un des moyens suivants\u00a0:",
+    "option-yes": "<strong>Oui</strong>, j'ai accès à une assurance ou à une couverture dentaire privée",
+    "option-no": "<strong>Non</strong>, je n'ai pas accès à une assurance ou à une couverture dentaire privée",
+    "back-btn": "Retour",
+    "save-btn": "Sauvegarder",
+    "detail": {
+      "additional-info": {
+        "list": {
+          "employer": "régime d'avantages sociaux de votre employeur",
+          "pension": "régime de retraite de votre employeur",
+          "pension-plans": "régime d'un membre de la famille",
+          "organization": "organisation professionnelle ou étudiante",
+          "company": "couverture achetée individuellement"
+        },
+        "eligible": "Cela s'applique également si vous choisissez de ne pas souscrire à une assurance dentaire privée, si vous ne l'utilisez pas ou si vous devez payer une prime pour cette assurance.",
+        "access": "L'accès à une couverture dentaire dans le cadre du Régime canadien de soins dentaires ou d'autres programmes sociaux fédéraux, provinciaux ou territoriaux n'est pas considéré comme un accès à une assurance dentaire privée."
+      }
+    },
+    "yes": {
+      "alert-title": "Confirmation de l'assurance dentaire privée",
+      "alert-body": "Si vous avez accès à une assurance dentaire privée, vous n'êtes pas admissible au Régime canadien de soins dentaires. Si vous êtes déjà membre et que vous poursuivez la demande, votre couverture prendra fin immédiatement.",
+      "confirmation": "Je comprends que je ne suis pas admissible au Régime canadien de soins dentaires si j'ai accès à une assurance ou à une couverture dentaire privée."
+    },
+    "no": {
+      "alert-title": "Confirmation de l'assurance dentaire",
+      "alert-body": "Nous confirmerons votre réponse en examinant vos feuillets <t4Href>T4 (case 45)</t4Href> ou <t4aHref>T4A (case 015)</t4aHref>. Si le document indique que vous avez accès à une assurance ou à une couverture dentaire fournie par votre employeur ou votre régime de retraite, vous pourriez devoir fournir une preuve que vous n'êtes pas couvert(e).",
+      "alert-t4-href": "https://www.canada.ca/fr/agence-revenu/services/impot/particuliers/sujets/tout-votre-declaration-revenus/declaration-revenus/remplir-declaration-revenus/feuillets-renseignements/comprendre-vos-feuillets-renseignements-fiscaux/feuillets-t4/t4-etat-remuneration-payee.html",
+      "alert-t4a-href": "https://www.canada.ca/fr/agence-revenu/services/impot/particuliers/sujets/tout-votre-declaration-revenus/declaration-revenus/remplir-declaration-revenus/feuillets-renseignements/comprendre-vos-feuillets-renseignements-fiscaux/feuillets-t4/feuillet-t4a.html",
+      "confirmation": "Je comprends qu'on pourrait me demander de fournir la preuve que je n'ai pas accès à une assurance ou à une couverture dentaire."
+    },
+    "error-message": {
+      "dental-insurance-required": "Sélectionnez si vous avez accès à une assurance dentaire privée",
+      "dental-insurance-eligibility-confirmation-required": "Sélectionnez si vous comprenez que si vous avez une assurance dentaire privée, vous n'êtes pas admissible au Régime canadien de soins dentaires"
+    }
+  },
+  "personal-information": {
+    "page-title": "Renseignements personnels",
+    "member-id": "Numéro d'identification du membre",
+    "form-instructions-sin": "Entrez votre nom exactement tel qu'il apparaît sur votre carte d'assurance sociale ou sur les lettres du Régime canadien de soins dentaires (RCSD).",
+    "form-instructions-info": "Nous utiliserons les renseignements que vous avez fournis pour vérifier votre identité. Tout écart entre les renseignements et votre numéro d'assurance sociale ou l'information figurant à votre dossier du RCSD pourrait retarder le traitement de votre demande.",
+    "sin": "Numéro d'assurance sociale (NAS)",
+    "last-name": "Nom de famille",
+    "first-name": "Prénom",
+    "dob": "Date de naissance",
+    "single-legal-name": "Si vous utilisez un seul nom légal",
+    "name-instructions": "Si vous n'avez qu'un seul nom légal, saisissez-le à la fois dans les champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
+    "back-btn": "Retour",
+    "save-btn": "Sauvegarder",
+    "help-message": {
+      "sin": "Entrez le NAS à 9 chiffres",
+      "member-id": "Vous trouverez votre numéro d'identification du member à 11 chiffres dans le coin supérieur droit de la lettre de Service Canada ou sur votre carte de membre du Régime canadien de soins dentaires."
+    },
+    "error-message": {
+      "member-id-required": "Entrez le numéro d'identification du membre à 11 chiffres",
+      "member-id-valid": "Le numéro d'identification du membre doit comporter 11 chiffres",
+      "first-name-required": "Entrez le prénom",
+      "last-name-required": "Entrez le nom de famille",
+      "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
+      "sin-valid": "Le NAS doit être valide",
+      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",
+      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
+      "first-name-no-digits": "Le prénom doit contenir uniquement des lettres",
+      "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres",
+      "date-of-birth-day-number": "Le jour doit être un nombre",
+      "date-of-birth-day-required": "La date de naissance doit inclure un jour",
+      "date-of-birth-is-past": "La date de naissance doit être dans le passé",
+      "date-of-birth-is-past-valid": "Date de naissance trop éloignée dans le passé",
+      "date-of-birth-month-required": "La date de naissance doit inclure un mois",
+      "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisis",
+      "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
+      "date-of-birth-year-required": "La date de naissance doit inclure une année",
+      "alert": {
+        "heading": "Nous n'avons pas trouvé votre compte du Régime canadien de soins dentaires (RCSD) avec les renseignements que vous avez saisis.",
+        "detail": "Vérifiez que les renseignements saisis sont corrects et réessayez. Si le problème persiste, appelez-nous au <noWrap>1-833-537-4342</noWrap> pour mettre à jour vos renseignements.",
+        "applyDate": "<strong>Remarque\u00a0:</strong> Seuls les participants actuels du RCSD peuvent renouveler leur adhésion dès maintenant. Si vous ne participez pas déjà au RCSD, vous pourrez présenter une demande d'adhésion pour la prochaine année de couverture à compter du {{startDate}}."
+      }
+    }
+  },
+  "dental-benefits": {
+    "title": "Autres prestations dentaires fédérales, provinciales ou territoriales",
+    "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
+    "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture sera coordonnée entre les régimes afin qu'il n'y ait pas de lacunes ou de dédoublement dans la couverture.",
+    "select-one": "Choisissez une option",
+    "federal-benefits": {
+      "title": "Prestations fédérales",
+      "legend": "Recevez-vous d'autres prestations dentaires dans le cadre d'un programme social fédéral autre que le Régime canadien de soins dentaires?",
+      "option-yes": "<strong>Oui</strong>, j'ai accès à des prestations fédérales pour soins dentaires",
+      "option-no": "<strong>Non</strong>, je n'ai pas accès à des prestations fédérales pour soins dentaires",
+      "social-programs": {
+        "legend": "Veuillez sélectionner le programme social avec lequel vous êtes assuré. Si vous en avez plusieurs, veuillez sélectionner celui que vous utilisez le plus."
+      }
+    },
+    "provincial-territorial-benefits": {
+      "title": "Prestations provinciales ou territoriales",
+      "legend": "Recevez-vous d'autres prestations dentaires dans le cadre d'un programme social provincial ou territorial autre que le Régime canadien de soins dentaires?",
+      "option-yes": "<strong>Oui</strong>, j'ai accès à des prestations provinciales ou territoriales pour soins dentaires",
+      "option-no": "<strong>Non</strong>, je n'ai pas accès à des prestations provinciales ou territoriales pour soins dentaires",
+      "social-programs": {
+        "input-legend": "Dans quelle province ou quel territoire?",
+        "radio-legend": "Veuillez sélectionner le programme social avec lequel vous êtes assuré. Si vous en avez plusieurs, veuillez sélectionner celui que vous utilisez le plus."
+      }
+    },
+    "back-btn": "Retour",
+    "save-btn": "Sauvegarder",
+    "error-message": {
+      "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel vous êtes couvert",
+      "federal-benefit-required": "Sélectionnez si vous avez la prestation dentaire fédérale",
+      "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial auquel vous êtes couvert",
+      "provincial-benefit-required": "Sélectionnez si vous avez la prestation dentaire provinciale ou territoriale",
+      "provincial-territorial-required": "Sélectionnez une province ou territoire"
+    }
+  },
+  "living-independently": {
+    "page-title": "Personne vivant de manière indépendante",
+    "description": "Vivre de manière indépendante de vos parents signifie que vous avez 16 ou 17 ans, que vous ne recevez pas d'aide financière de vos parents et que votre résidence principale est différente de la leur.",
+    "form-instructions": "Vivez-vous de manière indépendante de vos parents?",
+    "radio-options": {
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "error-message": {
+      "living-independently-required": "Sélectionnez si vous vivez de manière indépendante de vos parents"
+    },
+    "back-btn": "Retour",
+    "save-btn": "Sauvegarder"
+  },
+  "parent-or-guardian": {
+    "page-title": "Le parent ou le tuteur légal doit présenter la demande",
+    "unable-to-apply": "Vous avez moins de 18 ans. Un parent ou tuteur légal doit présenter la demande pour vous.",
+    "apply-for-yourself": "Si vous avez déjà présenté une demande pour un enfant et que vous souhaitez maintenant faire une demande pour vous-même, vous devez vous adresser à un représentant de Service Canada. Vous pouvez communiquer avec Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
+    "back-btn": "Retour",
+    "exit-btn": "Quitter la demande",
+    "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
+  "phone-number": {
+    "page-title": "Numéro de téléphone",
+    "phone-number": "Numéro de téléphone",
+    "phone-number-alt": "Autre numéro de téléphone (facultatif)",
+    "back-btn": "Retour",
+    "save-btn": "Sauvegarder",
+    "dont-have-number": "Je n'ai pas de numéro de téléphone",
+    "need-phone-number": "Vous devez avoir un numéro de téléphone pour présenter une demande en ligne. Si vous ne pouvez pas être joint(e) par téléphone, vous pouvez tout de même présenter une demande d'adhésion au Régime canadien de soins dentaires\u00a0:",
+    "service-canada": "Par téléphone\u00a0: contactez Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
+    "in-person": "En personne\u00a0: <findOffice>trouvez un bureau de Service Canada</findOffice>.",
+    "office-link": "https://bureaux.service.canada.ca/fr",
+    "error-message": {
+      "phone-number-valid": "Numéro de téléphone invalide",
+      "phone-number-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-number-alt-valid": "Autre numéro de téléphone invalide",
+      "phone-number-alt-valid-international": "L'autre numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-required": "Entrez un numéro de téléphone"
+    }
+  },
+  "address": {
+    "mailing-address": {
+      "page-title": "Adresse postale",
+      "header": "Adresse postale"
+    },
+    "home-address": {
+      "page-title": "Adresse à domicile",
+      "use-mailing-address": "Utiliser cette adresse comme adresse à domicile"
+    },
+    "address-field": {
+      "address": "Adresse municipale",
+      "address-help": "Indiquez le numéro civique et le nom de rue. Par exemple\u00a0: 123, rue Main.",
+      "apartment": "Appartement, chambre, unité, immeuble (facultatif)",
+      "apartment-help": "Entrez le numéro de votre appartement, de votre chambre ou de votre immeuble, s'il y a lieu. Par exemple\u00a0: chambre 4B.",
+      "country": "Pays",
+      "province": "Province, territoire, état ou région",
+      "city": "Ville ou municipalité",
+      "postal-code": "Code postal ou de zone",
+      "postal-code-optional": "Code postal ou de zone (facultatif)",
+      "select-one": "Sélectionnez une option"
+    },
+    "back": "Retour",
+    "continue": "Continuer",
+    "save-btn": "Sauvegarder"
+  },
+  "communication-preferences": {
+    "page-title": "Préférences de communication",
+    "preferred-method": "Comment aimeriez-vous que la Sun Life communique avec vous?",
+    "preferred-method-help-message": "La Sun Life est chargée de gérer l'inscription des membres et le traitement des demandes de remboursement dans le cadre du Régime canadien de soins dentaires.",
+    "preferred-language": "Quelle langue officielle de communication préférez-vous?",
+    "by-email": "<span>{{name}}</span><br>S'inscrire aux notifications par courriel est le moyen le plus rapide d'obtenir des mises à jour.",
+    "preferred-notification-method": "Comment souhaitez-vous recevoir les mises à jour du gouvernement du Canada concernant le Régime canadien de soins dentaires?",
+    "preferred-notification-method-msca": "<span>{{name}}</span><br><mscaLinkAccount>S'inscrire aux notifications</mscaLinkAccount> en ligne est le moyen le plus rapide d'obtenir des mises à jour.",
+    "preferred-notification-method-mail": "<span>{{name}}</span><br>Vous pouvez également consulter les renseignements figurant à votre dossier du Régime canadien de soins dentaires dans <mscaLinkAccount>MDSC</mscaLinkAccount>.",
+    "back": "Retour",
+    "continue": "Continuer",
+    "save": "Sauvegarder",
+    "msca-link-account": "https://www.canada.ca/fr/emploi-developpement-social/services/mon-dossier.html",
+    "error-message": {
+      "preferred-language-required": "Sélectionnez la langue de communication préférée",
+      "preferred-method-required": "Sélectionnez votre moyen de communication préféré avec la Sun Life",
+      "preferred-notification-method-required": "Sélectionnez votre moyen de communication préféré avec le gouvernement du Canada"
+    }
+  },
+  "email": {
+    "page-title": "Adresse courriel",
+    "provide-email": "Indiquez l'adresse électronique à laquelle vous souhaitez recevoir l'information au sujet de votre couverture au titre du Régime canadien de soins dentaires que vous communiqueront le gouvernement du Canada et la Sun Life.",
+    "verify-email": "Nous devrons confirmer votre adresse électronique.",
+    "email-legend": "Adresse courriel",
+    "back": "Retour",
+    "continue": "Continuer",
+    "error-message": {
+      "email-required": "Entrez l'adresse courriel, par exemple nom@exemple.com",
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com"
+    }
+  },
+  "verify-email": {
+    "page-title": "Code de vérification",
+    "verification-code": "Un courriel contenant un code a été envoyé à {{email}}. Veuillez saisir le code de vérification à 5 chiffres et sélectionner «\u00a0Continuer\u00a0».",
+    "request-new": "La réception du courriel peut prendre jusqu'à 60 secondes. Si vous ne le voyez pas, vérifiez votre dossier de courrier indésirable. Si le code ne se trouve pas dans ce dossier, vous pouvez en demander un nouveau.",
+    "unable-to-verify": "Si vous n'êtes pas en mesure de confirmer votre adresse électronique, cliquez sur «\u00a0Retour\u00a0» pour mettre à jour votre adresse électronique ou <communicationLink>modifier vos préférences de communication</communicationLink>.",
+    "verification-code-label": "Code de vérification",
+    "request-new-code": "Demander un nouveau code",
+    "back": "Retour",
+    "continue": "Continuer",
+    "error-message": {
+      "verification-code-required": "Entrez le code de vérification de 5 chiffres",
+      "verification-code-max-attempts": "Vous avez saisi un code de vérification incorrect plus de 5 fois. Vous devez demander un nouveau code à l'aide du lien «\u00a0Demander un nouveau code de vérification\u00a0» ci-dessous."
+    },
+    "verification-code-alert": {
+      "heading": "Le code de vérification saisi ne correspond pas au code envoyé à l'adresse électronique fournie, ou le code a expiré.",
+      "detail": "Veuillez vérifier le code et essayer de nouveau. Si le problème persiste, vous pouvez demander un nouveau code à l'aide du lien «\u00a0Demander un nouveau code de vérification\u00a0» ci-dessous."
+    },
+    "code-sent": {
+      "heading": "Nouveau code",
+      "detail": "Un nouveau code de vérification a été envoyé à {{email}}."
+    }
+  },
+  "children": {
+    "child-number": "Enfant {{childNumber}}",
+    "information": {
+      "page-title": "Renseignements sur l'enfant {{childName}}",
+      "form-instructions-sin": "Veuillez fournir le nom légal de l'enfant tel qu'il apparaît dans les dossiers du numéro d'assurance sociale (NAS) ou sur d'autres documents gouvernementaux.",
+      "single-legal-name": "Si l'enfant n'a qu'un seul nom légal",
+      "name-instructions": "Si l'enfant utilise un seul nom légal, veuillez indiquer ce nom dans les champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
+      "last-name": "Nom de famille",
+      "first-name": "Prénom",
+      "date-of-birth": "Date de naissance",
+      "sin-legend": "Cet enfant a-t-il un numéro d'assurance sociale (NAS)?",
+      "sin-yes": "Oui",
+      "sin-no": "Non",
+      "sin": "Entrez le NAS à 9 chiffres de l'enfant",
+      "member-id": "Identifiant de membre de l'enfant",
+      "parent-legend": "Êtes-vous le parent ou le tuteur légal de cet enfant?",
+      "radio-options": {
+        "yes": "Oui",
+        "no": "Non"
+      },
+      "back-btn": "Retour",
+      "save-btn": "Sauvegarder",
+      "help-message": {
+        "member-id": "Vous trouverez le numéro d'identification de l'enfant dans le coin supérieur droit de la lettre de Service Canada ou sur sa carte de membre du Régime canadien de soins dentaires."
+      },
+      "error-message": {
+        "member-id-required": "Entrez le numéro d'identification du membre à 11 chiffres",
+        "member-id-valid": "Le numéro d'identification du membre doit comporter 11 chiffres",
+        "first-name-required": "Entrez le prénom de l'enfant",
+        "last-name-required": "Entrez le nom de famille de l'enfant",
+        "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
+        "sin-valid": "Le NAS doit être valide",
+        "sin-unique": "NAS doit être unique",
+        "date-of-birth-day-number": "Le jour doit être un nombre",
+        "date-of-birth-day-required": "La date de naissance doit inclure un jour",
+        "date-of-birth-is-past": "La date de naissance doit être dans le passé",
+        "date-of-birth-is-past-valid": "Date de naissance trop éloignée dans le passé",
+        "date-of-birth-month-required": "La date de naissance doit inclure un mois",
+        "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisis",
+        "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
+        "date-of-birth-year-required": "La date de naissance doit inclure une année",
+        "has-social-insurance-number": "Sélectionnez cet enfant a un NAS",
+        "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
+        "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()",
+        "first-name-no-digits": "Le nom prénom doit contenir uniquement des lettres",
+        "last-name-no-digits": "Le nom de famille doit contenir uniquement des lettres",
+        "alert": {
+          "heading": "Nous n'avons pas trouvé le compte du Régime canadien de soins dentaires (RCSD) de votre enfant avec les renseignements que vous avez saisis.",
+          "detail": "Vérifiez que les renseignements concernant l'enfant sont corrects et réessayez. Si le problème persiste, appelez-nous au <noWrap>1-833-537-4342</noWrap> pour mettre à jour vos renseignements.",
+          "applyDate": "Remarque \u00a0: seuls les participants actuels de RCSD peuvent renouveler leur adhésion dès maintenant. Si votre enfant ne participe pas déjà au RCSD, vous pourrez présenter une demande d'adhésion pour la prochaine année de couverture à compter du 2 juin 2026."
+        }
+      }
+    },
+    "parent-or-guardian": {
+      "page-title": "Vous devez être le parent ou le tuteur légal",
+      "must-be": "Vous devez être le parent ou le tuteur légal",
+      "unable-to-apply": "Vous ne pouvez pas présenter de demande pour cet enfant. Vous devez être le parent ou le tuteur légal d'un enfant pour présenter une demande en son nom.",
+      "back-btn": "Retour",
+      "exit-btn": "Quitter la demande",
+      "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+    },
+    "cannot-apply-child": {
+      "page-title": "Votre enfant doit présenter une demande",
+      "ineligible-to-apply": "Votre enfant a 18 ans ou plus. Votre enfant doit présenter sa propre demande au titre du Régime canadien de soins dentaires.",
+      "eligibility-info": "Si votre enfant est un adulte à charge et que vous êtes son représentant légal ou son mandataire, vous devez vous adresser à un représentant de Service Canada pour présenter une demande en son nom. Vous pouvez contacter Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
+      "back-btn": "Retour",
+      "continue-btn": "Continuer"
+    },
+    "dental-benefits": {
+      "title": "Accès de {{childName}} à d'autres prestations dentaires fédérales, provinciales ou territoriales",
+      "access-to-dental": "L'accès à une couverture dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur l'admissibilité de l'enfant au Régime canadien de soins dentaires.",
+      "select-one": "Choisissez une option",
+      "eligibility-criteria": "Si l'enfant répond à tous les critères d'admissibilité, sa couverture doit être coordonnée entre les régimes afin qu'il n'y ait pas de dédoublement ou de lacunes dans la couverture.",
+      "federal-benefits": {
+        "title": "Prestations fédérales",
+        "legend": "{{childName}} reçoit-il ou reçoit-elle d'autres prestations dentaires dans le cadre d'un programme social fédéral autre que le Régime canadien de soins dentaires?",
+        "option-yes": "<strong>Oui</strong>, cet enfant reçoit des prestations dentaires fédérales",
+        "option-no": "<strong>Non</strong>, cet enfant ne reçoit pas de prestations dentaires fédérales",
+        "social-programs": {
+          "legend": "Veuillez sélectionner le programme social avec lequel cet enfant est assuré. Si cet enfant en a plusieurs, veuillez sélectionner celui qu'il ou elle utilise le plus."
+        }
+      },
+      "provincial-territorial-benefits": {
+        "title": "Prestations provinciales ou territoriales",
+        "legend": "{{childName}} reçoit-il ou reçoit-elle d'autres prestations dentaires dans le cadre d'un programme social provincial ou territorial autre que le Régime canadien de soins dentaires?",
+        "option-yes": "<strong>Oui</strong>, cet enfant reçoit des prestations dentaires provinciales ou territoriales",
+        "option-no": "<strong>Non</strong>, cet enfant ne reçoit pas de prestations dentaires provinciales ou territoriales",
+        "social-programs": {
+          "input-legend": "Dans quelle province ou quel territoire?",
+          "radio-legend": "Veuillez sélectionner le programme social avec lequel cet enfant est assuré. Si cet enfant en a plusieurs, veuillez sélectionner celui qu'il ou elle utilise le plus."
+        }
+      },
+      "back-btn": "Retour",
+      "save-btn": "Sauvegarder",
+      "error-message": {
+        "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel l'enfant est couvert",
+        "federal-benefit-required": "Sélectionnez si l'enfant bénéficie de prestations dentaires fédérales",
+        "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial auquel l'enfant est couvert",
+        "provincial-benefit-required": "Sélectionnez si l'enfant bénéficie de prestations dentaires provinciales ou territoriales",
+        "provincial-territorial-required": "Sélectionnez une province ou territoire"
+      }
+    },
+    "dental-insurance": {
+      "title": "Accès de {{childName}} à une assurance dentaire privée",
+      "legend": "{{childName}} a-t-il ou a-t-elle accès à une assurance ou à une couverture dentaire privée par l'un des moyens suivants\u00a0:",
+      "option-yes": "<strong>Oui</strong>, cet enfant a accès à une assurance ou à une couverture dentaire privée",
+      "option-no": "<strong>Non</strong>, cet enfant n'a pas accès à une assurance ou à une couverture dentaire privée",
+      "dental-insurance-eligibility-confirmation": "Je comprends que {{childName}} n'est pas admissible au Régime canadien de soins dentaires s'il ou elle a accès à une assurance ou à une couverture dentaire.",
+      "back-btn": "Retour",
+      "save-btn": "Sauvegarder",
+      "detail": {
+        "additional-info": {
+          "list": {
+            "employer": "régime d'un employeur d'un membre de sa famille",
+            "pension": "régime de retraite d'un membre de la famille",
+            "organization": "organisation professionnelle ou étudiante",
+            "private": "couverture achetée individuellement"
+          },
+          "eligible": "Cela s'applique également s'ils choisissent de ne pas souscrire d'assurance dentaire privée, si vous ne l'utilisez pas ou si vous devez payer une prime pour cette assurance.",
+          "access": "L'accès à une couverture dentaire dans le cadre du Régime canadien de soins dentaires ou d'autres programmes sociaux fédéraux, provinciaux ou territoriaux n'est pas considéré comme un accès à une assurance dentaire privée."
+        }
+      },
+      "alert": {
+        "title": "Confirmation de l'assurance dentaire privée",
+        "body": "Si {{childName}} a accès à une assurance ou à une couverture dentaire privée, il ou elle n'est pas admissible au Régime canadien de soins dentaires. Si vous poursuivez la demande et que {{childName}} est un membre actuel, sa couverture prendra fin immédiatement."
+      },
+      "error-message": {
+        "dental-insurance-required": "Sélectionnez si l'enfant a accès à une assurance dentaire privée",
+        "dental-insurance-eligibility-confirmation-required": "Sélectionnez si l'enfant comprend qu'il a une assurance dentaire privée, qu'il n'est pas admissible au Régime canadien de soins dentaires"
+      }
+    }
+  },
+  "dental-insurance-exit-application": {
+    "page-title": "Nous pourrions vous demander des renseignements supplémentaires",
+    "are-you-sure": "Vous pourriez devoir fournir une preuve démontrant que vous n'avez pas accès à une autre assurance dentaire. Cochez la case pour confirmer que vous comprenez ce qui est requis.",
+    "click-back": "Si vous souhaitez mettre fin à la session et interrompre votre demande, sélectionnez «\u00a0Fermer la demande\u00a0». Les renseignements entrés ne seront pas sauvegardés.",
+    "back-btn": "Retour",
+    "exit-btn": "Fermer la demande",
+    "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  }
+}

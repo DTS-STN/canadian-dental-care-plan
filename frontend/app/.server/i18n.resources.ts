@@ -11,6 +11,13 @@ import dataUnavailableEn from '~/../public/locales/en/data-unavailable.json';
 import documentsEn from '~/../public/locales/en/documents.json';
 import gcwebEn from '~/../public/locales/en/gcweb.json';
 import lettersEn from '~/../public/locales/en/letters.json';
+import protectedApplicationFullAdultEn from '~/../public/locales/en/protected-application-full-adult.json';
+import protectedApplicationFullChildEn from '~/../public/locales/en/protected-application-full-child.json';
+import protectedApplicationFullFamilyEn from '~/../public/locales/en/protected-application-full-family.json';
+import protectedApplicationSimplifiedAdultEn from '~/../public/locales/en/protected-application-simplified-adult.json';
+import protectedApplicationSimplifiedChildEn from '~/../public/locales/en/protected-application-simplified-child.json';
+import protectedApplicationSimplifiedFamilyEn from '~/../public/locales/en/protected-application-simplified-family.json';
+import protectedApplicationSpokesEn from '~/../public/locales/en/protected-application-spokes.json';
 import protectedApplicationEn from '~/../public/locales/en/protected-application.json';
 import protectedApplyAdultChildEn from '~/../public/locales/en/protected-apply-adult-child.json';
 import protectedApplyAdultEn from '~/../public/locales/en/protected-apply-adult.json';
@@ -34,6 +41,13 @@ import dataUnavailableFr from '~/../public/locales/fr/data-unavailable.json';
 import documentsFr from '~/../public/locales/fr/documents.json';
 import gcwebFr from '~/../public/locales/fr/gcweb.json';
 import lettersFr from '~/../public/locales/fr/letters.json';
+import protectedApplicationFullAdultFr from '~/../public/locales/fr/protected-application-full-adult.json';
+import protectedApplicationFullChildFr from '~/../public/locales/fr/protected-application-full-child.json';
+import protectedApplicationFullFamilyFr from '~/../public/locales/fr/protected-application-full-family.json';
+import protectedApplicationSimplifiedAdultFr from '~/../public/locales/fr/protected-application-simplified-adult.json';
+import protectedApplicationSimplifiedChildFr from '~/../public/locales/fr/protected-application-simplified-child.json';
+import protectedApplicationSimplifiedFamilyFr from '~/../public/locales/fr/protected-application-simplified-family.json';
+import protectedApplicationSpokesFr from '~/../public/locales/fr/protected-application-spokes.json';
 import protectedApplicationFr from '~/../public/locales/fr/protected-application.json';
 import protectedApplyAdultChildFr from '~/../public/locales/fr/protected-apply-adult-child.json';
 import protectedApplyAdultFr from '~/../public/locales/fr/protected-apply-adult.json';
@@ -56,12 +70,19 @@ const i18nResourcesEn = {
   'application-simplified-adult': applicationSimplifiedAdultEn,
   'application-simplified-child': applicationSimplifiedChildEn,
   'application-simplified-family': applicationSimplifiedFamilyEn,
-  'protected-application': protectedApplicationEn,
   common: commonEn,
   'data-unavailable': dataUnavailableEn,
   documents: documentsEn,
   gcweb: gcwebEn,
   letters: lettersEn,
+  'protected-application': protectedApplicationEn,
+  'protected-application-full-adult': protectedApplicationFullAdultEn,
+  'protected-application-full-child': protectedApplicationFullChildEn,
+  'protected-application-full-family': protectedApplicationFullFamilyEn,
+  'protected-application-simplified-adult': protectedApplicationSimplifiedAdultEn,
+  'protected-application-simplified-child': protectedApplicationSimplifiedChildEn,
+  'protected-application-simplified-family': protectedApplicationSimplifiedFamilyEn,
+  'protected-application-spokes': protectedApplicationSpokesEn,
   'protected-apply': protectedApplyEn,
   'protected-apply-adult': protectedApplyAdultEn,
   'protected-apply-adult-child': protectedApplyAdultChildEn,
@@ -82,12 +103,19 @@ const i18nResourcesFr = {
   'application-simplified-child': applicationSimplifiedChildFr,
   'application-simplified-family': applicationSimplifiedFamilyFr,
   'application-spokes': applicationSpokesFr,
-  'protected-application': protectedApplicationFr,
   common: commonFr,
   'data-unavailable': dataUnavailableFr,
   documents: documentsFr,
   gcweb: gcwebFr,
   letters: lettersFr,
+  'protected-application': protectedApplicationFr,
+  'protected-application-full-adult': protectedApplicationFullAdultFr,
+  'protected-application-full-child': protectedApplicationFullChildFr,
+  'protected-application-full-family': protectedApplicationFullFamilyFr,
+  'protected-application-simplified-adult': protectedApplicationSimplifiedAdultFr,
+  'protected-application-simplified-child': protectedApplicationSimplifiedChildFr,
+  'protected-application-simplified-family': protectedApplicationSimplifiedFamilyFr,
+  'protected-application-spokes': protectedApplicationSpokesFr,
   'protected-apply': protectedApplyFr,
   'protected-apply-adult': protectedApplyAdultFr,
   'protected-apply-adult-child': protectedApplyAdultChildFr,
