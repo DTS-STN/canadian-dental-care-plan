@@ -1,5 +1,3 @@
-import type { FormEvent } from 'react';
-
 import { redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -69,7 +67,7 @@ export default function ProtectedApplyFlowApplicationDelegate({ loaderData, para
   const preparingToApply = <InlineLink to={t('protected-apply:application-delegate.preparing-to-apply-href')} className="external-link" newTabIndicator target="_blank" />;
   const noWrap = <span className="whitespace-nowrap" />;
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     await fetcher.submit(event.currentTarget, { method: 'POST' });
     sessionStorage.removeItem('protected.apply.state');

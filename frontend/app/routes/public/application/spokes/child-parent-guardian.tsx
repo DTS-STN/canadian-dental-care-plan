@@ -1,5 +1,3 @@
-import type { FormEvent } from 'react';
-
 import { redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -58,7 +56,7 @@ export default function ParentOrGuardian({ loaderData, params }: Route.Component
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     await fetcher.submit(event.currentTarget, { method: 'POST' });
     sessionStorage.removeItem('flow.state');

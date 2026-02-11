@@ -1,5 +1,3 @@
-import type { FormEvent } from 'react';
-
 import { redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -53,7 +51,7 @@ export default function ApplicationFileYourTaxes({ loaderData, params }: Route.C
 
   const taxInfo = <InlineLink to={t('application:file-your-taxes.tax-info-href')} className="external-link" newTabIndicator target="_blank" />;
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     await fetcher.submit(event.currentTarget, { method: 'POST' });
     sessionStorage.removeItem('flow.state');

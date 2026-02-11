@@ -1,5 +1,3 @@
-import type { FormEvent } from 'react';
-
 import { redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
@@ -89,7 +87,7 @@ export default function ProtectedApplyFlowParentOrGuardian({ loaderData, params 
     return 'protected/apply/$id/adult/applicant-information';
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     await fetcher.submit(event.currentTarget, { method: 'POST' });
     sessionStorage.removeItem('flow.state');

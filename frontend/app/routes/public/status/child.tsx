@@ -1,4 +1,3 @@
-import type { FormEvent } from 'react';
 import { useState } from 'react';
 
 import { redirect } from 'react-router';
@@ -219,7 +218,7 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
   const fetcher = useEnhancedFetcher<typeof action>();
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
