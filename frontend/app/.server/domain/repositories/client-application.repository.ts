@@ -184,6 +184,14 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
         PreviousTaxesFiledIndicator: true,
       },
     ],
+    [
+      '800011819',
+      {
+        InvitationToApplyIndicator: false,
+        PreviousTaxesFiledIndicator: true,
+        ApplicantEarning: [],
+      },
+    ],
   ]);
 
   private readonly log: Logger;
@@ -255,12 +263,12 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
     }
 
     // Otherwise, return specific flags or the default
-    const clientApplicationFlags = this.mockApplicantFlags.get(personSINIdentification) ?? {
+    const { InvitationToApplyIndicator, PreviousTaxesFiledIndicator, ApplicantEarning } = this.mockApplicantFlags.get(personSINIdentification) ?? {
       InvitationToApplyIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.InvitationToApplyIndicator,
       PreviousTaxesFiledIndicator: clientApplicationJsonDataSource.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator,
     };
 
-    const jsonDataSource = clientApplicationFlags.InvitationToApplyIndicator ? clientApplicationItaJsonDataSource : clientApplicationJsonDataSource;
+    const jsonDataSource = InvitationToApplyIndicator ? clientApplicationItaJsonDataSource : clientApplicationJsonDataSource;
 
     const clientApplicationEntity: ClientApplicationEntity = {
       ...jsonDataSource,
@@ -273,8 +281,10 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
           },
           ApplicantDetail: {
             ...jsonDataSource.BenefitApplication.Applicant.ApplicantDetail,
-            ...clientApplicationFlags,
+            InvitationToApplyIndicator,
+            PreviousTaxesFiledIndicator,
           },
+          ApplicantEarning: ApplicantEarning ?? jsonDataSource.BenefitApplication.Applicant.ApplicantEarning,
         },
       },
     };
