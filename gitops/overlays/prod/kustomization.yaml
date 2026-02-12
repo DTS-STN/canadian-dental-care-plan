@@ -14,6 +14,7 @@ resources:
   - ../../base/fluentd-archiver/
   - ../../base/maintenance/
   - ../../base/redis/
+  - ../../base/reloader/
   - ./hpas.yaml
   - ./external-secrets.yaml
   #
