@@ -23,7 +23,7 @@
     "tax-filing-section": {
       "title": "Tax filing",
       "instructions": "Your tax information is used to confirm that you are eligible for the Canadian Dental Care Plan.",
-      "have-filed-taxes": "Myself and my spouse or common-law partner (if applicable) have received our Notice of Assessments from our income tax return.",
+      "have-filed-taxes": "Myself and my spouse or common-law partner (if applicable) have received our Notice of Assessment from our income tax return.",
       "add-button": "Confirm tax filing",
       "edit-button": "Edit answer"
     }
