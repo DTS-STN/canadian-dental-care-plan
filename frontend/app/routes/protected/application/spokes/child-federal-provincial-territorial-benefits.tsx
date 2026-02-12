@@ -48,6 +48,9 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
 });
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+
   const state = getProtectedApplicationState({ params, session });
   validateApplicationFlow(state, params, ['full-children', 'full-family', 'simplified-children', 'simplified-family']);
   const childState = getSingleChildState({ params, request, session });
@@ -82,12 +85,13 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+
   const state = getProtectedApplicationState({ params, session });
   validateApplicationFlow(state, params, ['full-children', 'full-family', 'simplified-children', 'simplified-family']);
 
   const formData = await request.formData();
-
-  const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
   const childState = getSingleChildState({ params, request, session });
