@@ -4,7 +4,6 @@ import type { Params } from 'react-router';
 import { UTCDate } from '@date-fns/utc';
 import { invariant } from '@dts-stn/invariant';
 import { differenceInMinutes } from 'date-fns';
-import { omit } from 'moderndash';
 import type { ReadonlyDeep } from 'type-fest';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
@@ -239,11 +238,10 @@ export function getProtectedApplicationState({ params, session }: LoadStateArgs)
   return state;
 }
 
-interface SaveStateArgs {
+interface SaveProtectedApplicationStateArgs {
   params: ApplicationStateParams;
   session: Session;
   state: Partial<OmitStrict<ProtectedApplicationState, 'id' | 'lastUpdatedOn' | 'applicationYear' | 'context' | 'inputModel'>>;
-  remove?: keyof OmitStrict<ProtectedApplicationState, 'children' | 'id' | 'lastUpdatedOn' | 'applicationYear' | 'context' | 'inputModel'>;
 }
 
 /**
@@ -251,19 +249,15 @@ interface SaveStateArgs {
  * @param args - The arguments.
  * @returns The new protected application state.
  */
-export function saveProtectedApplicationState({ params, session, state, remove }: SaveStateArgs): ProtectedApplicationState {
+export function saveProtectedApplicationState({ params, session, state }: SaveProtectedApplicationStateArgs): ProtectedApplicationState {
   const log = createLogger('application-route-helpers.server/saveApplicationState');
   const currentState = getProtectedApplicationState({ params, session });
 
-  let newState = {
+  const newState = {
     ...currentState,
     ...state,
     lastUpdatedOn: new UTCDate().toISOString(),
   } satisfies ProtectedApplicationState;
-
-  if (remove && remove in newState) {
-    newState = omit(newState, [remove]);
-  }
 
   const sessionkey = getSessionKey(currentState.id);
   session.set(sessionkey, newState);
