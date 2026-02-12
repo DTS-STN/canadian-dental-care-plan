@@ -33,6 +33,14 @@ export type ProtectedApplicationState = ReadonlyDeep<{
    */
   context: 'intake' | 'renewal';
 
+  /**
+   * The input model for the application, either 'full' or 'simplified'. For intake applications, this is
+   * determined by the applicant's eligibility and is set at the start of the application process. For renewal
+   * applications, this is determined based on the client application data and is also set at the start of the
+   * application process. This field is immutable after being set at the start of the application.
+   */
+  inputModel: 'full' | 'simplified';
+
   lastUpdatedOn: string;
   applicantInformation?: {
     memberId?: string;
@@ -139,7 +147,7 @@ export type ProtectedApplicationState = ReadonlyDeep<{
     acknowledgePrivacy: boolean;
     shareData: boolean;
   };
-  inputModel?: 'full' | 'simplified';
+
   typeOfApplication?: 'adult' | 'children' | 'family' | 'delegate';
   clientApplication?: ClientApplicationDto;
   applicantClientIdsToRenew?: string[];
@@ -234,8 +242,8 @@ export function getProtectedApplicationState({ params, session }: LoadStateArgs)
 interface SaveStateArgs {
   params: ApplicationStateParams;
   session: Session;
-  state: Partial<OmitStrict<ProtectedApplicationState, 'id' | 'lastUpdatedOn' | 'applicationYear' | 'context'>>;
-  remove?: keyof OmitStrict<ProtectedApplicationState, 'children' | 'id' | 'lastUpdatedOn' | 'applicationYear' | 'context'>;
+  state: Partial<OmitStrict<ProtectedApplicationState, 'id' | 'lastUpdatedOn' | 'applicationYear' | 'context' | 'inputModel'>>;
+  remove?: keyof OmitStrict<ProtectedApplicationState, 'children' | 'id' | 'lastUpdatedOn' | 'applicationYear' | 'context' | 'inputModel'>;
 }
 
 /**
@@ -282,23 +290,58 @@ export function clearProtectedApplicationState({ params, session }: ClearStateAr
 }
 
 interface StartArgs {
+  /**
+   * The application year data used to determine the application year. This is required to initialize the state
+   */
   applicationYear: ApplicationYearState;
-  clientApplication: ClientApplicationDto;
+
+  /**
+   * The client application data used to determine the input model for renewal applications. This should be
+   * provided when starting a renewal application, and can be omitted for intake applications.
+   */
+  clientApplication?: ClientApplicationDto;
+
+  /**
+   * The session object used to store the application state. This is required to initialize the state
+   * and should be provided when starting the application.
+   */
   session: Session;
 }
 
 /**
- * Starts application state.
+ * Starts the application state by creating a new state object with the provided application year
+ * and client application data, and storing it in the session. The function determines the application
+ * context (intake or renewal) based on the current date and the defined renewal period, and
+ * sets the input model accordingly.
+ *
  * @param args - The arguments.
- * @returns The initial application state.
+ * @returns The initialized protected application state.
  */
 export function startApplicationState({ applicationYear, clientApplication, session }: StartArgs): ProtectedApplicationState {
   const log = createLogger('application-route-helpers.server/startApplicationState');
 
   const id = generateId();
+  const context = isWithinRenewalPeriod() ? 'renewal' : 'intake';
+
+  // Default to 'full' for intake applications. For renewal applications,
+  // determine based on client application data.
+  let inputModel: InputModelState = 'full';
+
+  if (context === 'renewal') {
+    if (!clientApplication) {
+      log.warn('Attempting to start a renewal application without a client application; sessionId: [%s]', session.id);
+      throw new Error('Client application data is required to start a renewal application');
+    }
+
+    // For renewal applications, the input model is determined based on the presence
+    // of copay tier earning record in the client application data.
+    inputModel = clientApplication.copayTierEarningRecord ? 'simplified' : 'full';
+  }
+
   const initialState: ProtectedApplicationState = {
     id,
-    context: isWithinRenewalPeriod() ? 'renewal' : 'intake',
+    context,
+    inputModel,
     lastUpdatedOn: new UTCDate().toISOString(),
     applicationYear,
     clientApplication,
@@ -422,9 +465,9 @@ export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${I
   const inputModel = state.inputModel;
   const type = state.typeOfApplication;
 
-  if (!inputModel || !type) {
+  if (!type) {
     const redirectUrl = getInitialApplicationFlowUrl('entry', params);
-    log.warn('Input model or type is not defined in the state; redirecting to [%s], stateId: [%s]', redirectUrl, state.id);
+    log.warn('Type is not defined in the state; redirecting to [%s], stateId: [%s]', redirectUrl, state.id);
     throw redirectDocument(redirectUrl);
   }
 
