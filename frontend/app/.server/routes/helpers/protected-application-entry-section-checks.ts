@@ -10,8 +10,8 @@ export function isTypeOfApplicationSectionCompleted(state: Pick<ProtectedApplica
 /**
  * Checks if the personal information section is completed.
  */
-export function isPersonalInformationSectionCompleted(state: Pick<ProtectedApplicationState, 'inputModel' | 'applicantInformation'>): boolean {
-  return state.inputModel !== undefined && state.applicantInformation !== undefined;
+export function isPersonalInformationSectionCompleted(state: Pick<ProtectedApplicationState, 'applicantInformation'>): boolean {
+  return state.applicantInformation !== undefined;
 }
 
 /**
