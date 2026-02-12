@@ -2,6 +2,7 @@ import { redirect, redirectDocument } from 'react-router';
 import type { Params } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
+import { invariant } from '@dts-stn/invariant';
 import { differenceInMinutes } from 'date-fns';
 import { omit } from 'moderndash';
 import type { ReadonlyDeep } from 'type-fest';
@@ -542,4 +543,14 @@ export function getEligibilityStatus(hasPrivateDentalInsurance: boolean, t4Denta
   if (!hasPrivateDentalInsurance && !t4DentalIndicator) return 'eligible';
   if (!hasPrivateDentalInsurance && t4DentalIndicator) return 'eligible-proof';
   return 'ineligible';
+}
+
+export function getTypeOfApplicationFromRenewalSelectionClientIds(state: ProtectedApplicationState, applicantIds: string[]): TypeOfApplicationState {
+  invariant(state.clientApplication, 'Expected clientApplication to be defined');
+  const isPrimaryApplicantRenewing = applicantIds.includes(state.clientApplication.applicantInformation.clientId);
+  const isDependentRenewing = applicantIds.some((id) => state.clientApplication?.children.some((child) => child.information.clientId === id));
+  if (isPrimaryApplicantRenewing && isDependentRenewing) return 'family';
+  if (isPrimaryApplicantRenewing) return 'adult';
+  if (isDependentRenewing) return 'children';
+  return 'delegate';
 }

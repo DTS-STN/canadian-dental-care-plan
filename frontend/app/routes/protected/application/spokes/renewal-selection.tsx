@@ -8,7 +8,7 @@ import { z } from 'zod';
 import type { Route } from './+types/renewal-selection';
 
 import { TYPES } from '~/.server/constants';
-import { getProtectedApplicationState, saveProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getProtectedApplicationState, getTypeOfApplicationFromRenewalSelectionClientIds, saveProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -68,7 +68,10 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  saveProtectedApplicationState({ params, session, state: { applicantClientIdsToRenew: parsedDataResult.data.applicants } });
+  const state = getProtectedApplicationState({ params, session });
+  const typeOfApplication = getTypeOfApplicationFromRenewalSelectionClientIds(state, parsedDataResult.data.applicants);
+
+  saveProtectedApplicationState({ params, session, state: { typeOfApplication, applicantClientIdsToRenew: parsedDataResult.data.applicants } });
 
   return redirect(getPathById('protected/application/$id/type-of-application', params));
 }
