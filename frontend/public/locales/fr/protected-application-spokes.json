@@ -519,5 +519,14 @@
     "back-btn": "Retour",
     "exit-btn": "Fermer la demande",
     "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
+  "renewal-selection": {
+    "page-title": "(FR) Renewal selection",
+    "select": "(FR) Select everyone you wish to renew for.",
+    "back-btn": "(FR) Back",
+    "save-btn": "(FR) Save",
+    "error-message": {
+      "renewal-selection-required": "(FR) Select a member to renew"
+    }
   }
 }

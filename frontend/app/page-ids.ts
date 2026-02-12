@@ -31,6 +31,7 @@ export const pageIds = {
         childConfirmFederalProvincialTerritorialBenefits: 'CDCP-PROT-APPL-SPK-0024',
         childFederalProvincialTerritorialBenefits: 'CDCP-PROT-APPL-SPK-0025',
         dentalInsuranceExitApplication: 'CDCP-PROT-APPL-SPK-0026',
+        renewalSelection: 'CDCP-PROT-APPL-SPK-0027',
       },
     },
     documents: {

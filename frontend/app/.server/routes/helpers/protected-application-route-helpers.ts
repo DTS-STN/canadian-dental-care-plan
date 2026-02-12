@@ -141,6 +141,7 @@ export type ProtectedApplicationState = ReadonlyDeep<{
   inputModel?: 'full' | 'simplified';
   typeOfApplication?: 'adult' | 'children' | 'family' | 'delegate';
   clientApplication?: ClientApplicationDto;
+  applicantClientIdsToRenew?: string[];
 }>;
 
 export type ApplicantInformationState = NonNullable<ProtectedApplicationState['applicantInformation']>;

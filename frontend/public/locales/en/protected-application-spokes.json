@@ -519,5 +519,14 @@
     "back-btn": "Back",
     "exit-btn": "Close application",
     "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+  },
+  "renewal-selection": {
+    "page-title": "Renewal selection",
+    "select": "Select everyone you wish to renew for.",
+    "back-btn": "Back",
+    "save-btn": "Save",
+    "error-message": {
+      "renewal-selection-required": "Select a member to renew"
+    }
   }
 }
