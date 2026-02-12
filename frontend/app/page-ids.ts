@@ -4,13 +4,13 @@ export const pageIds = {
       index: 'CDCP-PROT-APPL-0001',
       eligibilityRequirements: 'CDCP-PROT-APPL-0002',
       typeOfApplication: 'CDCP-PROT-APPL-0003',
-      newAdult: {
-        maritalStatus: 'CDCP-PROT-APPL-NAD-0001',
-        dentalInsurance: 'CDCP-PROT-APPL-NAD-0002',
-        contactInformation: 'CDCP-PROT-APPL-NAD-0003',
-        submit: 'CDCP-PROT-APPL-NAD-0004',
-        confirmation: 'CDCP-PROT-APPL-NAD-0005',
-        exitApplication: 'CDCP-PROT-APPL-NAD-0006',
+      fullAdult: {
+        maritalStatus: 'CDCP-PROT-APPL-FAD-0001',
+        dentalInsurance: 'CDCP-PROT-APPL-FAD-0002',
+        contactInformation: 'CDCP-PROT-APPL-FAD-0003',
+        submit: 'CDCP-PROT-APPL-FAD-0004',
+        confirmation: 'CDCP-PROT-APPL-FAD-0005',
+        exitApplication: 'CDCP-PROT-APPL-FAD-0006',
       },
       spokes: {
         taxFiling: 'CDCP-PROT-APPL-SPK-0001',
