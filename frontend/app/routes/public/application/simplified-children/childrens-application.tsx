@@ -37,7 +37,7 @@ const FORM_ACTION = { add: 'add', remove: 'remove', DENTAL_BENEFITS_NOT_CHANGED:
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-simplified-child', 'application', 'gcweb', 'common'),
-  pageIdentifier: pageIds.public.application.renewChild.childApplication,
+  pageIdentifier: pageIds.public.application.simplifiedChild.childApplication,
   pageTitleI18nKey: 'application-simplified-child:childrens-application.page-title',
 } as const satisfies RouteHandleData;
 

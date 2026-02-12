@@ -36,7 +36,7 @@ const FORM_ACTION = { add: 'add', remove: 'remove' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-full-family', 'application', 'gcweb', 'common'),
-  pageIdentifier: pageIds.public.application.newFamily.childApplication,
+  pageIdentifier: pageIds.public.application.fullFamily.childApplication,
   pageTitleI18nKey: 'application-full-family:childrens-application.page-title',
 } as const satisfies RouteHandleData;
 

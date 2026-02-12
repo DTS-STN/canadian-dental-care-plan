@@ -29,7 +29,7 @@ import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-simplified-child', 'application', 'gcweb'),
-  pageIdentifier: pageIds.public.application.renewChild.confirmation,
+  pageIdentifier: pageIds.public.application.simplifiedChild.confirmation,
   pageTitleI18nKey: 'application-simplified-child:confirm.page-title',
 } as const satisfies RouteHandleData;
 

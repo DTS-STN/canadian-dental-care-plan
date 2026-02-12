@@ -32,7 +32,7 @@ const FORM_ACTION = {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'application-simplified-family', 'gcweb'),
-  pageIdentifier: pageIds.public.application.renewFamily.dentalInsurance,
+  pageIdentifier: pageIds.public.application.simplifiedFamily.dentalInsurance,
   pageTitleI18nKey: 'application-simplified-family:dental-insurance.page-heading',
 } as const satisfies RouteHandleData;
 
