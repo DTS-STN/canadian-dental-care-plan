@@ -148,13 +148,13 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (ageCategory === 'youth') {
-    return redirect(getPathById('public/application/$id/living-independently', params));
+    return redirect(getPathById('protected/application/$id/living-independently', params));
   }
   if (ageCategory === 'children') {
-    return redirect(getPathById('public/application/$id/parent-or-guardian', params));
+    return redirect(getPathById('protected/application/$id/parent-or-guardian', params));
   }
 
-  return redirect(getPathById('public/application/$id/type-of-application', params));
+  return redirect(getPathById('protected/application/$id/type-of-application', params));
 }
 
 export default function ApplicationPersonalInformation({ loaderData, params }: Route.ComponentProps) {
@@ -250,7 +250,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               <ButtonLink
                 id="back-button"
                 variant="secondary"
-                routeId={`public/application/$id/type-of-application`}
+                routeId={`protected/application/$id/type-of-application`}
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
