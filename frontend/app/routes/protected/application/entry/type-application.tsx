@@ -108,7 +108,7 @@ export default function ProtectedTypeOfApplication({ loaderData, params }: Route
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="type-of-application-edit-button" variant="link" className="p-0" routeId="protected/application/$id/type-application" params={params} startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus} size="lg">
+          <ButtonLink id="type-of-application-edit-button" variant="link" className="p-0" routeId="protected/application/$id/renewal-selection" params={params} startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus} size="lg">
             {defaultState.typeOfApplication === undefined ? t('protected-application:type-of-application.add-type-application') : t('protected-application:type-of-application.edit-type-application')}
           </ButtonLink>
         </CardFooter>
