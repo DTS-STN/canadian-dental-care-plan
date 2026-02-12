@@ -26,7 +26,7 @@ import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-full-adult', 'protected-application', 'gcweb'),
-  pageIdentifier: pageIds.protected.application.newAdult.confirmation,
+  pageIdentifier: pageIds.protected.application.fullAdult.confirmation,
   pageTitleI18nKey: 'protected-application-full-adult:confirm.page-title',
 } as const satisfies RouteHandleData;
 

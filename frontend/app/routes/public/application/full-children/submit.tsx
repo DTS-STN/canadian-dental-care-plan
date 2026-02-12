@@ -33,7 +33,7 @@ const CHECKBOX_VALUE = {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'application-full-child', 'gcweb'),
-  pageIdentifier: pageIds.public.application.newChild.submit,
+  pageIdentifier: pageIds.public.application.fullChild.submit,
   pageTitleI18nKey: 'application-full-child:submit.page-heading',
 } as const satisfies RouteHandleData;
 

@@ -23,7 +23,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application', 'protected-application-full-adult', 'gcweb'),
-  pageIdentifier: pageIds.protected.application.newAdult.dentalInsurance,
+  pageIdentifier: pageIds.protected.application.fullAdult.dentalInsurance,
   pageTitleI18nKey: 'protected-application-full-adult:dental-insurance.page-heading',
 } as const satisfies RouteHandleData;
 
