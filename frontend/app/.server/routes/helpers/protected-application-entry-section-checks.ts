@@ -31,3 +31,10 @@ export function isTermsAndConditionsSectionCompleted(state: Pick<ProtectedApplic
 export function isTaxFilingSectionCompleted(state: Pick<ProtectedApplicationState, 'hasFiledTaxes'>): boolean {
   return state.hasFiledTaxes === true;
 }
+
+/**
+ * Checks if the renewal selection section is completed.
+ */
+export function isRenewalSelectionCompleted(state: Pick<ProtectedApplicationState, 'applicantClientIdsToRenew'>): boolean {
+  return state.applicantClientIdsToRenew !== undefined;
+}
