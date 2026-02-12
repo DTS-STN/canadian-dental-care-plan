@@ -94,20 +94,21 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+
   const state = getProtectedApplicationState({ params, session });
   validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family', 'simplified-children']);
 
   const formData = await request.formData();
+  securityHandler.validateCsrfToken({ formData, session });
+
   const locale = getLocale(request);
 
   const clientConfig = appContainer.get(TYPES.ClientConfig);
   const addressValidationService = appContainer.get(TYPES.AddressValidationService);
   const countryService = appContainer.get(TYPES.CountryService);
   const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
-
-  const securityHandler = appContainer.get(TYPES.SecurityHandler);
-  await securityHandler.validateAuthSession({ request, session });
-  securityHandler.validateCsrfToken({ formData, session });
 
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   const isCopyMailingToHome = formData.get('syncAddresses') === 'true';
