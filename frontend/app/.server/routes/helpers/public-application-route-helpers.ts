@@ -3,7 +3,6 @@ import type { Params } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';
-import { omit } from 'moderndash';
 import type { ReadonlyDeep } from 'type-fest';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
@@ -229,11 +228,10 @@ export function getPublicApplicationState({ params, session }: LoadStateArgs): P
   return state;
 }
 
-interface SaveStateArgs {
+interface SavePublicApplicationStateArgs {
   params: ApplicationStateParams;
   session: Session;
   state: Partial<OmitStrict<PublicApplicationState, 'id' | 'lastUpdatedOn' | 'applicationYear' | 'context'>>;
-  remove?: keyof OmitStrict<PublicApplicationState, 'children' | 'id' | 'lastUpdatedOn' | 'applicationYear' | 'context'>;
 }
 
 /**
@@ -241,19 +239,15 @@ interface SaveStateArgs {
  * @param args - The arguments.
  * @returns The new public application state.
  */
-export function savePublicApplicationState({ params, session, state, remove }: SaveStateArgs): PublicApplicationState {
+export function savePublicApplicationState({ params, session, state }: SavePublicApplicationStateArgs): PublicApplicationState {
   const log = createLogger('application-route-helpers.server/saveApplicationState');
   const currentState = getPublicApplicationState({ params, session });
 
-  let newState = {
+  const newState = {
     ...currentState,
     ...state,
     lastUpdatedOn: new UTCDate().toISOString(),
   } satisfies PublicApplicationState;
-
-  if (remove && remove in newState) {
-    newState = omit(newState, [remove]);
-  }
 
   const sessionkey = getSessionKey(currentState.id);
   session.set(sessionkey, newState);
