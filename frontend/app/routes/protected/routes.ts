@@ -17,6 +17,38 @@ export const routes = [
             file: 'routes/protected/application/entry/eligibility-requirements.tsx',
             paths: { en: '/:lang/protected/application/:id/eligibility-requirements', fr: '/:lang/protected/demande/:id/criteres-admissibilite' },
           },
+
+          {
+            id: 'protected/application/$id/full-adult/marital-status',
+            file: 'routes/protected/application/full-adult/marital-status.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/adult/marital-status', fr: '/:lang/protege/demande/:id/complete/adulte/etat-civil' },
+          },
+          {
+            id: 'protected/application/$id/full-adult/dental-insurance',
+            file: 'routes/protected/application/full-adult/dental-insurance.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/adult/dental-insurance', fr: '/:lang/protege/demande/:id/complete/adulte/assurance-dentaire' },
+          },
+          {
+            id: 'protected/application/$id/full-adult/contact-information',
+            file: 'routes/protected/application/full-adult/contact-information.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/adult/contact-information', fr: '/:lang/protege/demande/:id/complete/adulte/coordonnees' },
+          },
+          {
+            id: 'protected/application/$id/full-adult/submit',
+            file: 'routes/protected/application/full-adult/submit.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/adult/submit', fr: '/:lang/protege/demande/:id/complete/adulte/soumettre' },
+          },
+          {
+            id: 'protected/application/$id/full-adult/exit-application',
+            file: 'routes/protected/application/full-adult/exit-application.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/adult/exit-application', fr: '/:lang/protege/demande/:id/complete/adulte/quitter-demande' },
+          },
+          {
+            id: 'protected/application/$id/full-adult/confirmation',
+            file: 'routes/protected/application/full-adult/confirmation.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/adult/confirmation', fr: '/:lang/protege/demande/:id/complete/adulte/confirmation' },
+          },
+
           {
             id: 'protected/application/$id/type-of-application',
             file: 'routes/protected/application/entry/type-application.tsx',

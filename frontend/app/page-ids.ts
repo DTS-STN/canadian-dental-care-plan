@@ -4,6 +4,14 @@ export const pageIds = {
       index: 'CDCP-PROT-APPL-0001',
       eligibilityRequirements: 'CDCP-PROT-APPL-0002',
       typeOfApplication: 'CDCP-PROT-APPL-0003',
+      newAdult: {
+        maritalStatus: 'CDCP-PROT-APPL-NAD-0001',
+        dentalInsurance: 'CDCP-PROT-APPL-NAD-0002',
+        contactInformation: 'CDCP-PROT-APPL-NAD-0003',
+        submit: 'CDCP-PROT-APPL-NAD-0004',
+        confirmation: 'CDCP-PROT-APPL-NAD-0005',
+        exitApplication: 'CDCP-PROT-APPL-NAD-0006',
+      },
       spokes: {
         taxFiling: 'CDCP-PROT-APPL-SPK-0001',
         fileYourTaxes: 'CDCP-PROT-APPL-SPK-0002',
