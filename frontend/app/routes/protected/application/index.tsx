@@ -43,6 +43,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
   const applicationYear = applicationYearService.getIntakeApplicationYear(currentDate);
 
+  // TODO: this needs to be evaluated for the intake application since clients might not have an existing clientApplication
   const clientApplication = await securityHandler.requireClientApplication({
     applicationYearId: applicationYear.applicationYearId,
     params,

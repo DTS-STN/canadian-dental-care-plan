@@ -302,6 +302,7 @@ export function startApplicationState({ applicationYear, clientApplication, sess
     lastUpdatedOn: new UTCDate().toISOString(),
     applicationYear,
     clientApplication,
+    inputModel: clientApplication.copayTierEarningRecord ? 'simplified' : 'full',
     children: [],
   };
 
