@@ -34,10 +34,10 @@ export type ProtectedApplicationState = ReadonlyDeep<{
   context: 'intake' | 'renewal';
 
   /**
-   * The input model for the application, either 'full' or 'simplified'. For intake applications, this is
-   * determined by the applicant's eligibility and is set at the start of the application process. For renewal
-   * applications, this is determined based on the client application data and is also set at the start of the
-   * application process. This field is immutable after being set at the start of the application.
+   * The input model for the application, either 'full' or 'simplified'. For intake applications, this is always set to
+   * 'full' at the start of the application process. For renewal applications, this is determined based on the client
+   * application data and is also set at the start of the application process. This field is immutable after being set
+   * at the start of the application.
    */
   inputModel: 'full' | 'simplified';
 
