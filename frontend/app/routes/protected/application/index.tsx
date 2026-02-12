@@ -7,8 +7,8 @@ import { invariant } from '@dts-stn/invariant';
 import type { Route } from './+types/index';
 
 import { TYPES } from '~/.server/constants';
-import { startApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { isWithinRenewalPeriod, startProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { pageIds } from '~/page-ids';
 import { getCurrentDateString } from '~/utils/date-utils';
@@ -36,26 +36,20 @@ export async function loader({ context: { appContainer, session }, request, para
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.application.index', { userId: idToken.sub });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
-
-  const currentDate = getCurrentDateString(locale);
   const applicationYearService = appContainer.get(TYPES.ApplicationYearService);
-  const applicationYear = applicationYearService.getIntakeApplicationYear(currentDate);
+  const applicationYear = applicationYearService.getIntakeApplicationYear(getCurrentDateString());
 
-  // TODO: this needs to be evaluated for the intake application since clients might not have an existing clientApplication
-  const clientApplication = await securityHandler.requireClientApplication({
-    applicationYearId: applicationYear.applicationYearId,
-    params,
-    request,
-    session,
-  });
+  // Only require client application if within renewal period, otherwise intake period does not require client application.
+  const clientApplication = isWithinRenewalPeriod() //
+    ? await securityHandler.requireClientApplication({ applicationYearId: applicationYear.applicationYearId, params, request, session })
+    : undefined;
 
-  const state = startApplicationState({ session, applicationYear, clientApplication });
+  const state = startProtectedApplicationState({ session, applicationYear, clientApplication });
 
+  const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:index.page-title') }) };
 
-  return { id: state.id, locale, meta };
+  return { id: state.id, meta };
 }
 
 export default function ProtectedApplicationIndex({ loaderData, params }: Route.ComponentProps) {

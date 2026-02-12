@@ -20,7 +20,6 @@ describe('isPersonalInformationSectionCompleted', () => {
   it('should return true when inputModel and applicantInformation are defined', () => {
     expect(
       isPersonalInformationSectionCompleted({
-        inputModel: 'full',
         applicantInformation: {
           dateOfBirth: '1990-01-01',
           firstName: 'John',
@@ -31,24 +30,9 @@ describe('isPersonalInformationSectionCompleted', () => {
     ).toBe(true);
   });
 
-  it('should return false when inputModel is undefined', () => {
-    expect(
-      isPersonalInformationSectionCompleted({
-        inputModel: undefined,
-        applicantInformation: {
-          dateOfBirth: '1990-01-01',
-          firstName: 'John',
-          lastName: 'Doe',
-          socialInsuranceNumber: '123456789',
-        },
-      }),
-    ).toBe(false);
-  });
-
   it('should return false when applicantInformation is undefined', () => {
     expect(
       isPersonalInformationSectionCompleted({
-        inputModel: 'full',
         applicantInformation: undefined,
       }),
     ).toBe(false);
