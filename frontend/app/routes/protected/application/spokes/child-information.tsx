@@ -3,7 +3,6 @@ import { useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
-import { invariant } from '@dts-stn/invariant';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -29,7 +28,6 @@ import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { AppPageTitle } from '~/components/layouts/protected-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
-import { isValidClientNumberRenewal, renewalCodeInputPatternFormat } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -37,7 +35,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
-import { extractDigits, hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
+import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
 const YES_NO_OPTION = {
   yes: 'yes',
@@ -77,7 +75,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     childName,
     isNew: childState.isNew,
     applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
-    isRenewalContext: state.context === 'renewal',
   };
 }
 
@@ -99,13 +96,6 @@ export async function action({ context: { appContainer, session }, params, reque
   // state validation schema
   const childInformationSchema = z
     .object({
-      memberId: z
-        .string()
-        .trim()
-        .min(1, t('protected-application-spokes:children.information.error-message.member-id-required'))
-        .refine(isValidClientNumberRenewal, t('protected-application-spokes:children.information.error-message.member-id-valid'))
-        .transform((code) => extractDigits(code))
-        .optional(),
       firstName: z
         .string()
         .trim()
@@ -190,7 +180,6 @@ export async function action({ context: { appContainer, session }, params, reque
     }) satisfies z.ZodType<ChildSinState>;
 
   const parsedDataResult = childInformationSchema.safeParse({
-    memberId: formData.get('memberId')?.toString(),
     firstName: String(formData.get('firstName') ?? ''),
     lastName: String(formData.get('lastName') ?? ''),
     dateOfBirthYear: formData.get('dateOfBirthYear') ? Number(formData.get('dateOfBirthYear')) : undefined,
@@ -215,15 +204,6 @@ export async function action({ context: { appContainer, session }, params, reque
       },
       { status: 400 },
     );
-  }
-
-  // validate that for a renewal the child's memberId is contained in the clientApplication
-  if (state.context === 'renewal') {
-    invariant(state.clientApplication, 'state.clientApplication must be defined for a renewal application');
-    const isChildValid = state.clientApplication.children.some((child) => child.information.clientNumber === parsedDataResult.data.memberId);
-    if (!isChildValid) {
-      return { status: 'not-eligible' } as const;
-    }
   }
 
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
@@ -256,7 +236,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ChildInformation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, childName, isNew, applicationFlow, isRenewalContext } = loaderData;
+  const { defaultState, childName, isNew, applicationFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -318,20 +298,6 @@ export default function ChildInformation({ loaderData, params }: Route.Component
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
-            {isRenewalContext && (
-              <InputPatternField
-                id="member-id"
-                name="memberId"
-                label={t('protected-application-spokes:children.information.member-id')}
-                inputMode="numeric"
-                format={renewalCodeInputPatternFormat}
-                helpMessagePrimary={t('protected-application-spokes:children.information.help-message.member-id')}
-                helpMessagePrimaryClassName="text-black"
-                defaultValue={defaultState?.memberId ?? ''}
-                errorMessage={errors?.memberId}
-                required
-              />
-            )}
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputSanitizeField
                 id="first-name"
