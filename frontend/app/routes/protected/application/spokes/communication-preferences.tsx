@@ -25,7 +25,8 @@ import { LoadingButton } from '~/components/loading-button';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
-import { type RouteHandleData, getPathById } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
