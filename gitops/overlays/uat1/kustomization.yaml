@@ -45,22 +45,3 @@ configMapGenerator:
   # TODO :: Remove when letters maintenance is no longer needed
     files:
       - ./configs/maintenance/503.html
-secretGenerator:
-  - name: frontend
-    behavior: replace
-    options:
-      # disable suffix hash so it can effectively
-      # be managed by external secrets operator
-      disableNameSuffixHash: true
-  - name: oauth-proxy
-    behavior: create
-    options:
-      # disable suffix hash so it can effectively
-      # be managed by external secrets operator
-      disableNameSuffixHash: true
-  - name: redis
-    behavior: replace
-    options:
-      # disable suffix hash so it can effectively
-      # be managed by external secrets operator
-      disableNameSuffixHash: true
