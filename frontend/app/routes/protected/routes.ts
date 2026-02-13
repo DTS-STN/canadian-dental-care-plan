@@ -164,6 +164,37 @@ export const routes = [
           },
 
           {
+            id: 'protected/application/$id/simplified-family/contact-information',
+            file: 'routes/protected/application/simplified-family/contact-information.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/family/contact-information', fr: '/:lang/protege/demande/:id/simplifie/famille/coordonnees' },
+          },
+          {
+            id: 'protected/application/$id/simplified-family/dental-insurance',
+            file: 'routes/protected/application/simplified-family/dental-insurance.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/family/dental-insurance', fr: '/:lang/protege/demande/:id/simplifie/famille/assurance-dentaire' },
+          },
+          {
+            id: 'protected/application/$id/simplified-family/childrens-application',
+            file: 'routes/protected/application/simplified-family/childrens-application.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/family/childrens-application', fr: '/:lang/protege/demande/:id/simplifie/famille/demande-enfants' },
+          },
+          {
+            id: 'protected/application/$id/simplified-family/submit',
+            file: 'routes/protected/application/simplified-family/submit.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/family/submit', fr: '/:lang/protege/demande/:id/simplifie/famille/soumettre' },
+          },
+          {
+            id: 'protected/application/$id/simplified-family/confirmation',
+            file: 'routes/protected/application/simplified-family/confirmation.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/family/confirmation', fr: '/:lang/protege/demande/:id/simplifie/famille/confirmation' },
+          },
+          {
+            id: 'protected/application/$id/simplified-family/exit-application',
+            file: 'routes/protected/application/simplified-family/exit-application.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/family/exit-application', fr: '/:lang/protege/demande/:id/simplifie/famille/quitter-demande' },
+          },
+
+          {
             id: 'protected/application/$id/type-of-application',
             file: 'routes/protected/application/entry/type-application.tsx',
             paths: { en: '/:lang/protected/application/:id/type-of-application', fr: '/:lang/protected/demande/:id/type-de-demande' },
