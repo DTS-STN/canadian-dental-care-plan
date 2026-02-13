@@ -112,6 +112,32 @@ export const routes = [
           },
 
           {
+            id: 'protected/application/$id/simplified-adult/contact-information',
+            file: 'routes/protected/application/simplified-adult/contact-information.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/adult/contact-information', fr: '/:lang/protege/demande/:id/simplifie/adulte/coordonnees' },
+          },
+          {
+            id: 'protected/application/$id/simplified-adult/dental-insurance',
+            file: 'routes/protected/application/simplified-adult/dental-insurance.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/adult/dental-insurance', fr: '/:lang/protege/demande/:id/simplifie/adulte/assurance-dentaire' },
+          },
+          {
+            id: 'protected/application/$id/simplified-adult/submit',
+            file: 'routes/protected/application/simplified-adult/submit.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/adult/submit', fr: '/:lang/protege/demande/:id/simplifie/adulte/soumettre' },
+          },
+          {
+            id: 'protected/application/$id/simplified-adult/confirmation',
+            file: 'routes/protected/application/simplified-adult/confirmation.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/adult/confirmation', fr: '/:lang/protege/demande/:id/simplifie/adulte/confirmation' },
+          },
+          {
+            id: 'protected/application/$id/simplified-adult/exit-application',
+            file: 'routes/protected/application/simplified-adult/exit-application.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/adult/exit-application', fr: '/:lang/protege/demande/:id/simplifie/adulte/quitter-demande' },
+          },
+
+          {
             id: 'protected/application/$id/type-of-application',
             file: 'routes/protected/application/entry/type-application.tsx',
             paths: { en: '/:lang/protected/application/:id/type-of-application', fr: '/:lang/protected/demande/:id/type-de-demande' },
