@@ -11,12 +11,6 @@ describe('DefaultClientApplicationDtoMapper', () => {
     APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY: '222222222',
     COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: 'Co-Pay Tier (TPC)',
     ENGLISH_LANGUAGE_CODE: 1,
-    MARITAL_STATUS_CODE_SINGLE: 'single',
-    MARITAL_STATUS_CODE_MARRIED: 'married',
-    MARITAL_STATUS_CODE_COMMON_LAW: 'commonlaw',
-    MARITAL_STATUS_CODE_DIVORCED: 'divorced',
-    MARITAL_STATUS_CODE_WIDOWED: 'widowed',
-    MARITAL_STATUS_CODE_SEPARATED: 'separated',
   };
   const mapper = new DefaultClientApplicationDtoMapper(mockServerConfig);
 
@@ -106,7 +100,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
             ],
             PersonMaritalStatus: {
               StatusCode: {
-                ReferenceDataID: 'married',
+                ReferenceDataID: '775170001',
               },
             },
             PersonName: [
@@ -221,7 +215,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
         applicantInformation: {
           firstName: 'John',
           lastName: 'Doe',
-          maritalStatus: 'married',
+          maritalStatus: '775170001',
           socialInsuranceNumber: '80000002',
           clientId: '00000000-0000-0000-0000-000000000000',
           clientNumber: '00000000000',
