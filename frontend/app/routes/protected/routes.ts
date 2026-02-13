@@ -50,6 +50,32 @@ export const routes = [
           },
 
           {
+            id: 'protected/application/$id/full-children/parent-or-guardian',
+            file: 'routes/protected/application/full-children/parent-or-guardian.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/children/parent-or-guardian', fr: '/:lang/protege/demande/:id/complete/enfants/parent-ou-tuteur' },
+          },
+          {
+            id: 'protected/application/$id/full-children/submit',
+            file: 'routes/protected/application/full-children/submit.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/children/submit', fr: '/:lang/protege/demande/:id/complete/enfants/soumettre' },
+          },
+          {
+            id: 'protected/application/$id/full-children/exit-application',
+            file: 'routes/protected/application/full-children/exit-application.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/children/exit-application', fr: '/:lang/protege/demande/:id/complete/enfants/quitter-demande' },
+          },
+          {
+            id: 'protected/application/$id/full-children/confirmation',
+            file: 'routes/protected/application/full-children/confirmation.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/children/confirmation', fr: '/:lang/protege/demande/:id/complete/enfants/confirmation' },
+          },
+          {
+            id: 'protected/application/$id/full-children/childrens-application',
+            file: 'routes/protected/application/full-children/childrens-application.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/children/childrens-application', fr: '/:lang/protege/demande/:id/complete/enfants/demande-enfants' },
+          },
+
+          {
             id: 'protected/application/$id/type-of-application',
             file: 'routes/protected/application/entry/type-application.tsx',
             paths: { en: '/:lang/protected/application/:id/type-of-application', fr: '/:lang/protected/demande/:id/type-de-demande' },
