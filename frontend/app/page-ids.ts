@@ -19,6 +19,15 @@ export const pageIds = {
         confirmation: 'CDCP-PROT-APPL-FCH-0005',
         childApplication: 'CDCP-PROT-APPL-FCH-0006',
       },
+      fullFamily: {
+        maritalStatus: 'CDCP-PROT-APPL-FFAM-0001',
+        contactInformation: 'CDCP-PROT-APPL-FFAM-0002',
+        dentalInsurance: 'CDCP-PROT-APPL-FFAM-0003',
+        submit: 'CDCP-PROT-APPL-FFAM-0004',
+        confirmation: 'CDCP-PROT-APPL-FFAM-0005',
+        childApplication: 'CDCP-PROT-APPL-FFAM-0006',
+        exitApplication: 'CDCP-PROT-APPL-FFAM-0007',
+      },
       spokes: {
         taxFiling: 'CDCP-PROT-APPL-SPK-0001',
         fileYourTaxes: 'CDCP-PROT-APPL-SPK-0002',
