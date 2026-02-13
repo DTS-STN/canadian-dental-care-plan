@@ -76,6 +76,42 @@ export const routes = [
           },
 
           {
+            id: 'protected/application/$id/full-family/marital-status',
+            file: 'routes/protected/application/full-family/marital-status.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/family/marital-status', fr: '/:lang/protege/demande/:id/complete/famille/etat-civil' },
+          },
+          {
+            id: 'protected/application/$id/full-family/contact-information',
+            file: 'routes/protected/application/full-family/contact-information.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/family/contact-information', fr: '/:lang/protege/demande/:id/complete/famille/coordonnees' },
+          },
+          {
+            id: 'protected/application/$id/full-family/dental-insurance',
+            file: 'routes/protected/application/full-family/dental-insurance.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/family/dental-insurance', fr: '/:lang/protege/demande/:id/complete/famille/assurance-dentaire' },
+          },
+          {
+            id: 'protected/application/$id/full-family/childrens-application',
+            file: 'routes/protected/application/full-family/childrens-application.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/family/childrens-application', fr: '/:lang/protege/demande/:id/complete/famille/demande-enfants' },
+          },
+          {
+            id: 'protected/application/$id/full-family/confirmation',
+            file: 'routes/protected/application/full-family/confirmation.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/family/confirmation', fr: '/:lang/protege/demande/:id/complete/famille/confirmation' },
+          },
+          {
+            id: 'protected/application/$id/full-family/submit',
+            file: 'routes/protected/application/full-family/submit.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/family/submit', fr: '/:lang/protege/demande/:id/complete/famille/soumettre' },
+          },
+          {
+            id: 'protected/application/$id/full-family/exit-application',
+            file: 'routes/protected/application/full-family/exit-application.tsx',
+            paths: { en: '/:lang/protected/application/:id/full/family/exit-application', fr: '/:lang/protege/demande/:id/complete/famille/quitter-demande' },
+          },
+
+          {
             id: 'protected/application/$id/type-of-application',
             file: 'routes/protected/application/entry/type-application.tsx',
             paths: { en: '/:lang/protected/application/:id/type-of-application', fr: '/:lang/protected/demande/:id/type-de-demande' },
