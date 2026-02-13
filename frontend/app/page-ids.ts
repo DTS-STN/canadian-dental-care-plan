@@ -12,6 +12,13 @@ export const pageIds = {
         confirmation: 'CDCP-PROT-APPL-FAD-0005',
         exitApplication: 'CDCP-PROT-APPL-FAD-0006',
       },
+      fullChild: {
+        parentOrGuardian: 'CDCP-PROT-APPL-FCH-0001',
+        submit: 'CDCP-PROT-APPL-FCH-0003',
+        exitApplication: 'CDCP-PROT-APPL-FCH-0004',
+        confirmation: 'CDCP-PROT-APPL-FCH-0005',
+        childApplication: 'CDCP-PROT-APPL-FCH-0006',
+      },
       spokes: {
         taxFiling: 'CDCP-PROT-APPL-SPK-0001',
         fileYourTaxes: 'CDCP-PROT-APPL-SPK-0002',
