@@ -138,6 +138,32 @@ export const routes = [
           },
 
           {
+            id: 'protected/application/$id/simplified-children/parent-or-guardian',
+            file: 'routes/protected/application/simplified-children/parent-or-guardian.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/children/parent-or-guardian', fr: '/:lang/protege/demande/:id/simplifie/enfants/parent-ou-tuteur' },
+          },
+          {
+            id: 'protected/application/$id/simplified-children/submit',
+            file: 'routes/protected/application/simplified-children/submit.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/children/submit', fr: '/:lang/protege/demande/:id/simplifie/enfants/soumettre' },
+          },
+          {
+            id: 'protected/application/$id/simplified-children/exit-application',
+            file: 'routes/protected/application/simplified-children/exit-application.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/children/exit-application', fr: '/:lang/protege/demande/:id/simplifie/enfants/quitter-demande' },
+          },
+          {
+            id: 'protected/application/$id/simplified-children/childrens-application',
+            file: 'routes/protected/application/simplified-children/childrens-application.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/children/childrens-application', fr: '/:lang/protege/demande/:id/simplifie/enfants/demande-enfants' },
+          },
+          {
+            id: 'protected/application/$id/simplified-children/confirmation',
+            file: 'routes/protected/application/simplified-children/confirmation.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/children/confirmation', fr: '/:lang/protege/demande/:id/simplifie/enfants/confirmation' },
+          },
+
+          {
             id: 'protected/application/$id/type-of-application',
             file: 'routes/protected/application/entry/type-application.tsx',
             paths: { en: '/:lang/protected/application/:id/type-of-application', fr: '/:lang/protected/demande/:id/type-de-demande' },
