@@ -40,7 +40,7 @@ export function isDentalInsuranceSectionCompleted(state: Pick<ProtectedApplicati
  * Checks if the dental benefits section is completed for full application.
  */
 export function isDentalBenefitsSectionCompleted(state: Pick<ProtectedApplicationState, 'dentalBenefits'>): boolean {
-  return state.dentalBenefits?.hasChanged === true;
+  return state.dentalBenefits !== undefined;
 }
 
 /**
