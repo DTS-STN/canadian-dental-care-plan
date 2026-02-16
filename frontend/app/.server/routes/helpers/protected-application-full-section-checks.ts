@@ -5,7 +5,7 @@ import { getEnv } from '~/.server/utils/env.utils';
  * Checks if the phone number section is completed for full application.
  */
 export function isPhoneNumberSectionCompleted(state: Pick<ProtectedApplicationState, 'phoneNumber'>): boolean {
-  return state.phoneNumber?.hasChanged === true;
+  return state.phoneNumber !== undefined;
 }
 
 /**
@@ -22,18 +22,15 @@ export function isAddressSectionCompleted(state: Pick<ProtectedApplicationState,
 /**
  * Checks if the communication preferences section is completed for full application.
  */
-export function isCommunicationPreferencesSectionCompleted(state: Pick<ProtectedApplicationState, 'communicationPreferences' | 'email' | 'emailVerified'>): boolean {
-  if (state.communicationPreferences?.hasChanged !== true) {
-    return false; // communication preferences not set
-  }
+export function isCommunicationPreferencesSectionCompleted(state: Pick<ProtectedApplicationState, 'communicationPreferences'>): boolean {
+  return state.communicationPreferences !== undefined;
+}
 
-  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
-  const emailMethods = new Set([COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID]); // methods that require email
-  const isEmailRequired =
-    emailMethods.has(state.communicationPreferences.value.preferredMethod) || //
-    emailMethods.has(state.communicationPreferences.value.preferredNotificationMethod);
-
-  return isEmailRequired ? state.email !== undefined && state.emailVerified === true : true;
+/**
+ * Checks if the email section is completed for full application.
+ */
+export function isEmailSectionCompleted(state: Pick<ProtectedApplicationState, 'email' | 'emailVerified'>): boolean {
+  return state.email !== undefined && state.emailVerified === true;
 }
 
 /**

@@ -35,8 +35,8 @@ describe('protected-application-full-section-checks', () => {
       ).toBe(true);
     });
 
-    it('should return false when phoneNumber.hasChanged is false', () => {
-      expect(isPhoneNumberSectionCompleted({ phoneNumber: { hasChanged: false } })).toBe(false);
+    it('should return true when phoneNumber.hasChanged is false', () => {
+      expect(isPhoneNumberSectionCompleted({ phoneNumber: { hasChanged: false } })).toBe(true);
     });
 
     it('should return false when phoneNumber is undefined', () => {
@@ -111,14 +111,12 @@ describe('protected-application-full-section-checks', () => {
   });
 
   describe('isCommunicationPreferencesSectionCompleted', () => {
-    it('should return false when communication preferences have not changed', () => {
+    it('should return true when communication preferences have not changed', () => {
       expect(
         isCommunicationPreferencesSectionCompleted({
           communicationPreferences: { hasChanged: false },
-          email: undefined,
-          emailVerified: undefined,
         }),
-      ).toBe(false);
+      ).toBe(true);
     });
 
     it('should return true when email not required and preferences set', () => {
@@ -137,54 +135,8 @@ describe('protected-application-full-section-checks', () => {
               preferredNotificationMethod: 'mail',
             },
           },
-          email: undefined,
-          emailVerified: false,
         }),
       ).toBe(true);
-    });
-
-    it('should return true when email required and provided with verification', () => {
-      vi.mocked(getEnv, { partial: true }).mockReturnValue({
-        COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID: 'sunlife',
-        COMMUNICATION_METHOD_GC_DIGITAL_ID: 'gc-digital',
-      });
-
-      expect(
-        isCommunicationPreferencesSectionCompleted({
-          communicationPreferences: {
-            hasChanged: true,
-            value: {
-              preferredMethod: 'sunlife',
-              preferredLanguage: 'en',
-              preferredNotificationMethod: 'mail',
-            },
-          },
-          email: 'test@example.com',
-          emailVerified: true,
-        }),
-      ).toBe(true);
-    });
-
-    it('should return false when email required but not verified', () => {
-      vi.mocked(getEnv, { partial: true }).mockReturnValue({
-        COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID: 'sunlife',
-        COMMUNICATION_METHOD_GC_DIGITAL_ID: 'gc-digital',
-      });
-
-      expect(
-        isCommunicationPreferencesSectionCompleted({
-          communicationPreferences: {
-            hasChanged: true,
-            value: {
-              preferredMethod: 'mail',
-              preferredLanguage: 'en',
-              preferredNotificationMethod: 'gc-digital',
-            },
-          },
-          email: 'test@example.com',
-          emailVerified: false,
-        }),
-      ).toBe(false);
     });
   });
 
