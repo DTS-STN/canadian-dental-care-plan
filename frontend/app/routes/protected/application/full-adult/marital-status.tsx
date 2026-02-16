@@ -97,10 +97,10 @@ export default function ProtectedNewAdultMaritalStatus({ loaderData, params }: R
         </Card>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="protected/application/$id/full-adult/contact-information" params={params}>
-            {t('protected-application-full-adult:marital-status.contact-information')}
+            {t('protected-application-full-adult:marital-status.next-btn')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/type-of-application" params={params}>
-            {t('protected-application-full-adult:marital-status.type-of-application')}
+            {t('protected-application-full-adult:marital-status.prev-btn')}
           </NavigationButtonLink>
         </div>
       </div>

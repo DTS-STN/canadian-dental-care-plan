@@ -594,3 +594,10 @@ export function getTypeOfApplicationFromRenewalSelectionClientIds(state: Protect
   if (isDependentRenewing) return 'children';
   return 'delegate';
 }
+
+// Helper function to get value from either state or client application
+export function getDeclaredChangeValueOrClientValue<T>(declaredChange: { hasChanged: boolean; value?: T } | undefined, clientValue: T | undefined): T | undefined {
+  if (declaredChange?.hasChanged === true) return declaredChange.value;
+  if (declaredChange?.hasChanged === false) return clientValue;
+  return undefined;
+}
