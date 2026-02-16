@@ -12,11 +12,7 @@ export function isPhoneNumberSectionCompleted(state: Pick<ProtectedApplicationSt
  * Checks if the address section is completed for full application.
  */
 export function isAddressSectionCompleted(state: Pick<ProtectedApplicationState, 'mailingAddress' | 'homeAddress' | 'isHomeAddressSameAsMailingAddress'>): boolean {
-  return (
-    state.mailingAddress?.hasChanged === true && //
-    state.homeAddress?.hasChanged === true &&
-    state.isHomeAddressSameAsMailingAddress !== undefined
-  );
+  return state.mailingAddress !== undefined && (state.homeAddress !== undefined || state.isHomeAddressSameAsMailingAddress !== undefined);
 }
 
 /**

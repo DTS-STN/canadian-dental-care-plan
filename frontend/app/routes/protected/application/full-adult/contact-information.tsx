@@ -54,28 +54,45 @@ export async function loader({ context: { appContainer, session }, request, para
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-full-adult:contact-information.page-title') }) };
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province) : undefined;
-  const countryMailing = state.mailingAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale) : undefined;
-  const countryHome = state.homeAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale) : undefined;
+  const mailingAddressInfo = state.mailingAddress?.value?.country
+    ? {
+        address: state.mailingAddress.value.address,
+        city: state.mailingAddress.value.city,
+        province: state.mailingAddress.value.province ? (await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province)).abbr : undefined, //eslint-disable-line unicorn/no-await-expression-member
+        postalCode: state.mailingAddress.value.postalCode,
+        country: state.mailingAddress.value.country ? (await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale)).name : undefined, //eslint-disable-line unicorn/no-await-expression-member
+        hasChanged: state.mailingAddress.hasChanged,
+      }
+    : state.clientApplication?.contactInformation.mailingCountry //eslint-disable-line unicorn/no-nested-ternary
+      ? {
+          address: state.clientApplication.contactInformation.mailingAddress,
+          city: state.clientApplication.contactInformation.mailingCity,
+          province: state.clientApplication.contactInformation.mailingProvince ? (await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingProvince)).abbr : undefined, //eslint-disable-line unicorn/no-await-expression-member
+          postalCode: state.clientApplication.contactInformation.mailingPostalCode,
+          country: state.clientApplication.contactInformation.mailingCountry ? (await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.mailingCountry, locale)).name : undefined, //eslint-disable-line unicorn/no-await-expression-member
+          hasChanged: false,
+        }
+      : undefined;
 
-  const mailingAddressInfo = {
-    address: state.mailingAddress?.value?.address,
-    city: state.mailingAddress?.value?.city,
-    province: mailingProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.mailingAddress?.value?.postalCode,
-    country: countryMailing?.name,
-    hasChanged: state.mailingAddress?.hasChanged,
-  };
-
-  const homeAddressInfo = {
-    address: state.homeAddress?.value?.address,
-    city: state.homeAddress?.value?.city,
-    province: homeProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.homeAddress?.value?.postalCode,
-    country: countryHome?.name,
-    hasChanged: state.homeAddress?.hasChanged,
-  };
+  const homeAddressInfo = state.homeAddress?.value?.country
+    ? {
+        address: state.homeAddress.value.address,
+        city: state.homeAddress.value.city,
+        province: state.homeAddress.value.province ? (await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province)).abbr : undefined, //eslint-disable-line unicorn/no-await-expression-member
+        postalCode: state.homeAddress.value.postalCode,
+        country: state.homeAddress.value.country ? (await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale)).name : undefined, //eslint-disable-line unicorn/no-await-expression-member
+        hasChanged: state.homeAddress.hasChanged,
+      }
+    : state.clientApplication?.contactInformation.homeCountry //eslint-disable-line unicorn/no-nested-ternary
+      ? {
+          address: state.clientApplication.contactInformation.homeAddress,
+          city: state.clientApplication.contactInformation.homeCity,
+          province: state.clientApplication.contactInformation.homeProvince ? (await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.clientApplication.contactInformation.homeProvince)).abbr : undefined, //eslint-disable-line unicorn/no-await-expression-member
+          postalCode: state.clientApplication.contactInformation.homePostalCode,
+          country: state.clientApplication.contactInformation.homeCountry ? (await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.homeCountry, locale)).name : undefined, //eslint-disable-line unicorn/no-await-expression-member
+          hasChanged: false,
+        }
+      : undefined;
 
   const preferredLanguageId = state.communicationPreferences?.value?.preferredLanguage ?? state.clientApplication?.communicationPreferences.preferredLanguage;
   const preferredMethodId = state.communicationPreferences?.value?.preferredMethod ?? state.clientApplication?.communicationPreferences.preferredMethodSunLife;
@@ -85,17 +102,19 @@ export async function loader({ context: { appContainer, session }, request, para
     preferredLanguage: preferredLanguageId ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(preferredLanguageId, locale).name : undefined,
     preferredMethod: preferredMethodId ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(preferredMethodId, locale).name : undefined,
     email: state.email ?? state.clientApplication?.contactInformation.email,
+    mailingAddressInfo,
+    homeAddressInfo,
   };
 
   return {
     state: {
       phoneNumber: state.phoneNumber,
       communicationPreferences: state.communicationPreferences,
+      mailingAddress: state.mailingAddress,
+      homeAddress: state.homeAddress,
       email: state.email,
     },
     defaultDisplayValues,
-    mailingAddressInfo,
-    homeAddressInfo,
     sections: {
       phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
       address: { completed: isAddressSectionCompleted(state) },
@@ -168,7 +187,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedRenewAdultContactInformation({ loaderData, params }: Route.ComponentProps) {
-  const { state, defaultDisplayValues, mailingAddressInfo, homeAddressInfo, sections } = loaderData;
+  const { state, defaultDisplayValues, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
@@ -249,44 +268,105 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
-            {mailingAddressInfo.hasChanged === undefined && homeAddressInfo.hasChanged === undefined && <p>{t('protected-application-full-adult:contact-information.address-help')}</p>}
-
-            {mailingAddressInfo.hasChanged === false && homeAddressInfo.hasChanged === false && <p>{t('protected-application-full-adult:contact-information.no-change')}</p>}
-
-            {mailingAddressInfo.hasChanged === true && homeAddressInfo.hasChanged === true && (
+            {state.mailingAddress?.hasChanged === true && state.homeAddress?.hasChanged === true && (
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t('protected-application-full-adult:contact-information.mailing-address')}>
                   <Address
                     address={{
-                      address: mailingAddressInfo.address ?? '',
-                      city: mailingAddressInfo.city ?? '',
-                      provinceState: mailingAddressInfo.province,
-                      postalZipCode: mailingAddressInfo.postalCode,
-                      country: mailingAddressInfo.country ?? '',
+                      address: defaultDisplayValues.mailingAddressInfo?.address ?? '',
+                      city: defaultDisplayValues.mailingAddressInfo?.city ?? '',
+                      provinceState: defaultDisplayValues.mailingAddressInfo?.province,
+                      postalZipCode: defaultDisplayValues.mailingAddressInfo?.postalCode,
+                      country: defaultDisplayValues.mailingAddressInfo?.country ?? '',
                     }}
                   />
                 </DefinitionListItem>
                 <DefinitionListItem term={t('protected-application-full-adult:contact-information.home-address')}>
                   <Address
                     address={{
-                      address: homeAddressInfo.address ?? '',
-                      city: homeAddressInfo.city ?? '',
-                      provinceState: homeAddressInfo.province,
-                      postalZipCode: homeAddressInfo.postalCode,
-                      country: homeAddressInfo.country ?? '',
+                      address: defaultDisplayValues.homeAddressInfo?.address ?? '',
+                      city: defaultDisplayValues.homeAddressInfo?.city ?? '',
+                      provinceState: defaultDisplayValues.homeAddressInfo?.province,
+                      postalZipCode: defaultDisplayValues.homeAddressInfo?.postalCode,
+                      country: defaultDisplayValues.homeAddressInfo?.country ?? '',
                     }}
                   />
                 </DefinitionListItem>
               </DefinitionList>
             )}
+
+            {state.mailingAddress?.hasChanged === false && state.homeAddress?.hasChanged === false && (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('protected-application-full-adult:contact-information.mailing-address')}>
+                  <div>
+                    <Address
+                      address={{
+                        address: defaultDisplayValues.mailingAddressInfo?.address ?? '',
+                        city: defaultDisplayValues.mailingAddressInfo?.city ?? '',
+                        provinceState: defaultDisplayValues.mailingAddressInfo?.province,
+                        postalZipCode: defaultDisplayValues.mailingAddressInfo?.postalCode,
+                        country: defaultDisplayValues.mailingAddressInfo?.country ?? '',
+                      }}
+                    />
+                  </div>
+                </DefinitionListItem>
+                <DefinitionListItem term={t('protected-application-full-adult:contact-information.home-address')}>
+                  <div>
+                    <Address
+                      address={{
+                        address: defaultDisplayValues.homeAddressInfo?.address ?? '',
+                        city: defaultDisplayValues.homeAddressInfo?.city ?? '',
+                        provinceState: defaultDisplayValues.homeAddressInfo?.province,
+                        postalZipCode: defaultDisplayValues.homeAddressInfo?.postalCode,
+                        country: defaultDisplayValues.homeAddressInfo?.country ?? '',
+                      }}
+                    />
+                  </div>
+                </DefinitionListItem>
+              </DefinitionList>
+            )}
+
+            {!state.mailingAddress && !state.homeAddress && defaultDisplayValues.mailingAddressInfo && defaultDisplayValues.homeAddressInfo && (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('protected-application-full-adult:contact-information.mailing-address')}>
+                  <div>
+                    <Address
+                      address={{
+                        address: defaultDisplayValues.mailingAddressInfo.address,
+                        city: defaultDisplayValues.mailingAddressInfo.city,
+                        provinceState: defaultDisplayValues.mailingAddressInfo.province,
+                        postalZipCode: defaultDisplayValues.mailingAddressInfo.postalCode,
+                        country: defaultDisplayValues.mailingAddressInfo.country ?? '',
+                      }}
+                    />
+                  </div>
+                </DefinitionListItem>
+                <DefinitionListItem term={t('protected-application-full-adult:contact-information.home-address')}>
+                  <div>
+                    <Address
+                      address={{
+                        address: defaultDisplayValues.homeAddressInfo.address ?? '',
+                        city: defaultDisplayValues.homeAddressInfo.city ?? '',
+                        provinceState: defaultDisplayValues.homeAddressInfo.province,
+                        postalZipCode: defaultDisplayValues.homeAddressInfo.postalCode,
+                        country: defaultDisplayValues.homeAddressInfo.country ?? '',
+                      }}
+                    />
+                  </div>
+                </DefinitionListItem>
+              </DefinitionList>
+            )}
+
+            {!state.mailingAddress && !state.homeAddress && !defaultDisplayValues.mailingAddressInfo && !defaultDisplayValues.homeAddressInfo && <p>{t('protected-application-full-adult:contact-information.address-help')}</p>}
           </CardContent>
-          {mailingAddressInfo.hasChanged !== undefined && homeAddressInfo.hasChanged !== undefined ? (
+
+          {state.mailingAddress || state.homeAddress ? (
             <CardFooter className="border-t bg-zinc-100">
               <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/mailing-address" params={params} startIcon={sections.address.completed ? faPenToSquare : faCirclePlus} size="lg">
                 {sections.address.completed ? t('protected-application-full-adult:contact-information.edit-address') : t('protected-application-full-adult:contact-information.add-address')}
               </ButtonLink>
             </CardFooter>
-          ) : (
+          ) : defaultDisplayValues.mailingAddressInfo && defaultDisplayValues.homeAddressInfo ? ( // eslint-disable-line unicorn/no-nested-ternary
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
                 <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/mailing-address" params={params} startIcon={faPenToSquare} size="lg">
@@ -298,6 +378,12 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
                   {t('protected-application-full-adult:contact-information.address-unchanged')}
                 </Button>
               </div>
+            </CardFooter>
+          ) : (
+            <CardFooter className="border-t bg-zinc-100">
+              <ButtonLink id="add-button" variant="link" className="p-0" routeId="protected/application/$id/mailing-address" params={params} startIcon={faCirclePlus} size="lg">
+                {t('protected-application-full-adult:contact-information.add-address')}
+              </ButtonLink>
             </CardFooter>
           )}
         </Card>

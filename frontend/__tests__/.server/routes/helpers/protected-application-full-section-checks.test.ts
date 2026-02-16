@@ -73,7 +73,7 @@ describe('protected-application-full-section-checks', () => {
       ).toBe(true);
     });
 
-    it('should return false when mailing address has not changed', () => {
+    it('should return true when mailing address has not changed', () => {
       expect(
         isAddressSectionCompleted({
           mailingAddress: { hasChanged: false },
@@ -88,10 +88,10 @@ describe('protected-application-full-section-checks', () => {
             },
           },
         }),
-      ).toBe(false);
+      ).toBe(true);
     });
 
-    it('should return false when home address has not changed', () => {
+    it('should return true when home address has not changed', () => {
       expect(
         isAddressSectionCompleted({
           mailingAddress: {
@@ -106,7 +106,7 @@ describe('protected-application-full-section-checks', () => {
           },
           homeAddress: { hasChanged: false },
         }),
-      ).toBe(false);
+      ).toBe(true);
     });
   });
 
