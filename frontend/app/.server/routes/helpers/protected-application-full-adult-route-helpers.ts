@@ -92,9 +92,14 @@ export function validateProtectedApplicationFullAdultStateForReview({ params, st
     inputModel,
     typeOfApplication,
     children,
+    clientApplication,
   } = state;
 
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
+
+  if (clientApplication === undefined) {
+    throw redirect(getPathById('protected/application/index', params));
+  }
 
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('protected/application/$id/eligibility-requirements', params));
@@ -116,11 +121,7 @@ export function validateProtectedApplicationFullAdultStateForReview({ params, st
     throw redirect(getPathById('protected/application/$id/eligibility-requirements', params));
   }
 
-  if (applicantInformation === undefined) {
-    throw redirect(getPathById('protected/application/$id/type-of-application', params));
-  }
-
-  const ageCategory = getAgeCategoryFromDateString(applicantInformation.dateOfBirth);
+  const ageCategory = getAgeCategoryFromDateString(clientApplication.dateOfBirth);
 
   if (ageCategory === 'children') {
     throw redirect(getPathById('protected/application/$id/type-of-application', params));
@@ -191,5 +192,6 @@ export function validateProtectedApplicationFullAdultStateForReview({ params, st
     inputModel,
     typeOfApplication,
     children,
+    clientApplication,
   };
 }

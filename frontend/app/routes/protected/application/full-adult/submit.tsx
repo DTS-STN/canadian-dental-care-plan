@@ -52,13 +52,13 @@ export async function loader({ context: { appContainer, session }, request, para
   const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
 
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
-  const benefitApplicationDtoMapper = appContainer.get(TYPES.BenefitApplicationDtoMapper);
-  const benefitApplicationStateMapper = appContainer.get(TYPES.HubSpokeBenefitApplicationStateMapper);
-  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplicationAdultStateToBenefitApplicationDto(state));
+  const benefitApplicationDtoMapper = appContainer.get(TYPES.BenefitRenewalDtoMapper);
+  const benefitApplicationStateMapper = appContainer.get(TYPES.HubSpokeBenefitRenewalStateMapper);
+  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitApplicationStateMapper.mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(state));
 
   return {
     state: {
-      applicantName: `${state.applicantInformation.firstName} ${state.applicantInformation.lastName}`,
+      applicantName: `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`,
     },
     meta,
     payload,
@@ -91,8 +91,8 @@ export async function action({ context: { appContainer, session }, request, para
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  const benefitApplicationDto = appContainer.get(TYPES.HubSpokeBenefitApplicationStateMapper).mapApplicationAdultStateToBenefitApplicationDto(state);
-  const confirmationCode = await appContainer.get(TYPES.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
+  const benefitApplicationDto = appContainer.get(TYPES.HubSpokeBenefitRenewalStateMapper).mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(state);
+  const confirmationCode = await appContainer.get(TYPES.BenefitRenewalService).createProtectedBenefitRenewal(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
   saveProtectedApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
 
