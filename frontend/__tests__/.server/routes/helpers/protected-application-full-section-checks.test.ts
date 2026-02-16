@@ -179,8 +179,8 @@ describe('protected-application-full-section-checks', () => {
       ).toBe(true);
     });
 
-    it('should return false when dental benefits have not changed', () => {
-      expect(isDentalBenefitsSectionCompleted({ dentalBenefits: { hasChanged: false } })).toBe(false);
+    it('should return true when dental benefits have not changed', () => {
+      expect(isDentalBenefitsSectionCompleted({ dentalBenefits: { hasChanged: false } })).toBe(true);
     });
   });
 

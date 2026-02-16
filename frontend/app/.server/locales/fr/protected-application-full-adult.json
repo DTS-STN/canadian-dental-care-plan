@@ -33,11 +33,15 @@
     "access-to-government-benefits": "Accès à des prestations dentaires gouvernementales",
     "access-to-government-benefits-yes": "Oui, j'ai accès à des prestations fédérales, provinciales ou territoriales pour soins dentaires",
     "access-to-government-benefits-no": "Non, je n'ai pas accès à des prestations fédérales, provinciales ou territoriales pour soins dentaires",
-    "dental-benefits-indicate-status": "Veuillez indiquer si vous avez accès à d'autres prestations dentaires gouvernementales.",
+    "dental-benefits-indicate-status": "Souhaitez-vous mettre à jour votre accès à d'autres prestations dentaires gouvernementales?",
+    "add-access-to-government-benefits": "(FR) Add access to government dental benefits",
     "edit-access-to-government-benefits": "Modifier la réponse sur l'accès aux prestations dentaires gouvernementales",
     "add-answer": "Ajouter une réponse",
     "contact-information": "Vos coordonnées",
-    "submit": "Soumettre"
+    "submit": "Soumettre",
+    "update-my-access": "Mettre à jour mon accès aux prestations dentaires gouvernementales",
+    "access-not-changed": "Mon accès aux prestations dentaires gouvernementales n'a pas changé",
+    "no-change": "Pas de mise à jour."
   },
   "contact-information": {
     "page-title": "Vos coordonnées",
