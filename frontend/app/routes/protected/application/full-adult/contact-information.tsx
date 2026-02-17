@@ -200,7 +200,7 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
       <ProgressStepper activeStep="contact-information" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('protected-application:required-label')}</p>
+          <p>{t('protected-application:complete-all-sections')}</p>
           <p>{completedSectionsLabel}</p>
           <p>{t('protected-application:confirm-information')}</p>
         </div>

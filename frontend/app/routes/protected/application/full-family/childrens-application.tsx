@@ -182,7 +182,7 @@ export default function ProtectedNewFamilyChildrensApplication({ loaderData, par
             <div key={child.id}>
               <h2 className="font-lato mb-4 text-2xl font-bold">{t('protected-application-full-family:childrens-application.child-title', { childNumber: index + 1 })}</h2>
               <div className="space-y-4">
-                <p>{t('protected-application:required-label')}</p>
+                <p>{t('protected-application:complete-all-sections')}</p>
                 <p>{t('common:sections-completed', { number: sectionCompletedCount, count: sectionsCount })}</p>
               </div>
               <Card className="my-2">

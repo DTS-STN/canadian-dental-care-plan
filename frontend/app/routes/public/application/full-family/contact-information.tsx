@@ -90,7 +90,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
       <ProgressStepper activeStep="contact-information" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('application:required-label')}</p>
+          <p>{t('application:complete-all-sections')}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>

@@ -205,7 +205,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
             <div key={child.id}>
               <h2 className="font-lato mb-4 text-2xl font-bold">{t('application-simplified-child:childrens-application.child-title', { childNumber: index + 1 })}</h2>
               <div className="space-y-4">
-                <p>{t('application:required-label')}</p>
+                <p>{t('application:complete-all-sections')}</p>
                 <p>{t('common:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
               </div>
               <Card className="my-2">

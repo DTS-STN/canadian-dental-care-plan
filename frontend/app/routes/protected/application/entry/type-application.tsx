@@ -78,7 +78,7 @@ export default function ProtectedTypeOfApplication({ loaderData, params }: Route
   return (
     <div className="max-w-prose space-y-8">
       <div className="space-y-4">
-        <p>{t('protected-application:required-label')}</p>
+        <p>{t('protected-application:complete-all-sections')}</p>
         <p>{completedSectionsLabel}</p>
       </div>
       <Card>
