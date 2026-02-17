@@ -38,7 +38,7 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.childSocialInsuranceNumber,
-  pageTitleI18nKey: 'protected-application-spokes:children.child-social-insurance-number.page-title',
+  pageTitleI18nKey: 'protected-application-spokes:children.social-insurance-number.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -57,8 +57,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const childName = childState.information?.firstName ?? childNumber;
 
   const meta = {
-    title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.child-social-insurance-number.page-title', { childName }) }),
-    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.child-social-insurance-number.page-title', { childName: childNumber }) }),
+    title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.social-insurance-number.page-title', { childName }) }),
+    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.social-insurance-number.page-title', { childName: childNumber }) }),
   };
 
   return {
@@ -116,7 +116,10 @@ export async function action({ context: { appContainer, session }, params, reque
         if (child.id !== childState.id) return child;
         return {
           ...child,
-          socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
+          childInformation: {
+            ...child.information,
+            socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
+          },
         };
       }),
     },
@@ -125,9 +128,9 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById(getRouteFromApplicationFlow(applicationFlow), params));
 }
 
-export default function ApplicationEmail({ loaderData, params }: Route.ComponentProps) {
+export default function ChildSocialInsuranceNumber({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { childSin } = loaderData;
+  const { childSin, applicationFlow, childName } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -146,28 +149,27 @@ export default function ApplicationEmail({ loaderData, params }: Route.Component
               id="social-insurance-number"
               name="socialInsuranceNumber"
               format={sinInputPatternFormat}
-              label={t('protected-application-spokes:personal-information.sin')}
+              label={t('protected-application-spokes:children.social-insurance-number.legend', { childName })}
               inputMode="numeric"
-              helpMessagePrimary={t('protected-application-spokes:personal-information.help-message.sin')}
+              helpMessagePrimary={t('protected-application-spokes:children.social-insurance-number.help-message')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={childSin ?? ''}
               errorMessage={errors?.socialInsuranceNumber}
-              required
             />
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Child social insurance number click">
-              {t('protected-application-spokes:children.child-social-insurance-number.save-btn')}
+              {t('protected-application-spokes:children.social-insurance-number.save-btn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId="protected/application/$id/childrens-application"
+              routeId={`protected/application/$id/${applicationFlow}/childrens-application`}
               params={params}
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child social insurance number click"
             >
-              {t('protected-application-spokes:children.child-social-insurance-number.back-btn')}
+              {t('protected-application-spokes:children.social-insurance-number.back-btn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

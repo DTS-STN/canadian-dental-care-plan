@@ -274,9 +274,9 @@ export const routes = [
             paths: { en: '/:lang/protected/application/:id/children/:childId/parent-guardian', fr: '/:lang/protected/demande/:id/enfant/:childId/parent-tuteur' },
           },
           {
-            id: 'protected/application/$id/children/$childId/child-social-insurance-number',
+            id: 'protected/application/$id/children/$childId/social-insurance-number',
             file: 'routes/protected/application/spokes/child-social-insurance-number.tsx',
-            paths: { en: '/:lang/protected/application/:id/children/:childId/child-social-insurance-number', fr: '/:lang/protected/demande/:id/enfant/:childId/numero-assurance-sociale' },
+            paths: { en: '/:lang/protected/application/:id/children/:childId/social-insurance-number', fr: '/:lang/protected/demande/:id/enfant/:childId/numero-assurance-sociale' },
           },
         ],
       },
