@@ -510,6 +510,17 @@
         "dental-insurance-required": "Sélectionnez si l'enfant a accès à une assurance dentaire privée",
         "dental-insurance-eligibility-confirmation-required": "Sélectionnez si l'enfant comprend qu'il a une assurance dentaire privée, qu'il n'est pas admissible au Régime canadien de soins dentaires"
       }
+    },
+    "parent-guardian": {
+      "page-title": "Le parent ou le tuteur légal doit présenter",
+      "parent-legend": "Êtes-vous le parent ou le tuteur légal de {{ childName }}?",
+      "radio-options": {
+        "yes": "Oui",
+        "no": "Non"
+      },
+      "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
+      "back-btn": "Retour",
+      "save-btn": "Sauvegarder"
     }
   },
   "dental-insurance-exit-application": {
