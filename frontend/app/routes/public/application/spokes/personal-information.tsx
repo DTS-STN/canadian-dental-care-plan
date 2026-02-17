@@ -87,7 +87,12 @@ export async function action({ context: { appContainer, session }, params, reque
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
             ctx.addIssue({ code: 'custom', message: t('application-spokes:personal-information.error-message.sin-valid') });
-          } else if (state.partnerInformation && formatSin(sin) === formatSin(state.partnerInformation.socialInsuranceNumber)) {
+          } else if (
+            [state.partnerInformation?.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
+              .filter((sin) => sin !== undefined)
+              .map((sin) => formatSin(sin))
+              .includes(formatSin(sin))
+          ) {
             ctx.addIssue({ code: 'custom', message: t('application-spokes:personal-information.error-message.sin-unique') });
           }
         }),
