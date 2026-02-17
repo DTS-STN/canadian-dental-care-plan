@@ -29,7 +29,7 @@ const YES_NO_OPTION = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.parentGuardian,
-  pageTitleI18nKey: 'protected-application-spokes:children.parent-or-guardian.page-title',
+  pageTitleI18nKey: 'protected-application-spokes:children.parent-guardian.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -42,13 +42,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['full-children', 'full-family', 'simplified-children', 'simplified-family']);
   const childState = getSingleChildState({ params, request, session });
 
-  getProtectedApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const childNumber = t('protected-application-spokes:children.child-number', { childNumber: childState.childNumber });
   const childName = childState.isNew ? childNumber : (childState.information?.firstName ?? childNumber);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.parent-or-guardian.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.parent-guardian.page-title') }) };
 
   return { meta, defaultState: childState.information, childName, isNew: childState.isNew, applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const };
 }
@@ -63,8 +62,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
-
-  getProtectedApplicationState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -88,20 +85,23 @@ export async function action({ context: { appContainer, session }, params, reque
         if (child.id !== childState.id) return child;
         return {
           ...child,
-          isParentOrGuardian: parsedDataResult.data.isParent,
+          childInformation: {
+            ...child.information,
+            isParent: parsedDataResult.data.isParent,
+          },
         };
       }),
     },
   });
 
   if (!parsedDataResult.data.isParent) {
-    return redirect(getPathById('protected/application/$id/children/$childId/cannot-apply-child', params));
+    return redirect(getPathById('protected/application/$id/children/$childId/parent-or-guardian', params));
   }
 
   return redirect(getPathById(`protected/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
 }
 
-export default function ChildParentGuardian({ loaderData, params }: Route.ComponentProps) {
+export default function ParentGuardian({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, childName, isNew, applicationFlow } = loaderData;
 
@@ -136,7 +136,7 @@ export default function ChildParentGuardian({ loaderData, params }: Route.Compon
           startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Application Form-Child:Back - Child parent or guardian needs to apply click"
         >
-          {t('protected-application-spokes:children.parent-or-guardian.back-btn')}
+          {t('protected-application-spokes:children.parent-guardian.back-btn')}
         </ButtonLink>
         <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Application Form-Child:Save - Child Information click">
           {t('protected-application-spokes:children.parent-guardian.save-btn')}
