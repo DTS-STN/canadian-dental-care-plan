@@ -60,7 +60,7 @@ jobs:
         working-directory: frontend/
       - run: npm run typecheck
         working-directory: frontend/
-      - run: npm run lint
+      - run: npm run lint:eslint
         working-directory: frontend/
       - run: npm run test:unit:coverage
         working-directory: frontend/
