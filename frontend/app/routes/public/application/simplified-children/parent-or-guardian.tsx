@@ -154,7 +154,7 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
           <p>{t('application:confirm-information')}</p>
-          <p>{t('application:required-label')}</p>
+          <p>{t('application:complete-all-sections')}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>

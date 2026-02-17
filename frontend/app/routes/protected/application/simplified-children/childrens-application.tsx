@@ -210,7 +210,7 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
             <div key={child.id}>
               <h2 className="font-lato mb-4 text-2xl font-bold">{t('protected-application-simplified-child:childrens-application.child-title', { childNumber: index + 1 })}</h2>
               <div className="space-y-4">
-                <p>{t('protected-application:required-label')}</p>
+                <p>{t('protected-application:complete-all-sections')}</p>
                 <p>{t('common:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
               </div>
               <Card className="my-2">

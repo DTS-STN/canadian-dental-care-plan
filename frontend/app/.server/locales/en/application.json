@@ -4,6 +4,7 @@
   },
   "required-label": "Complete all fields.",
   "optional-label": "Complete all fields unless marked as optional.",
+  "complete-all-sections": "Complete all sections.",
   "confirm-information": "Please confirm the information we have on file for you.",
   "next": "Next",
   "previous": "Previous",

@@ -63,7 +63,7 @@ export default function ProtectedNewAdultMaritalStatus({ loaderData, params }: R
       <ProgressStepper activeStep="marital-status" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('protected-application:required-label')}</p>
+          <p>{t('protected-application:complete-all-sections')}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>

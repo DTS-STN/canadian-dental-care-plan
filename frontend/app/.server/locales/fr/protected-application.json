@@ -4,6 +4,7 @@
   },
   "required-label": "Remplissez tous les champs.",
   "optional-label": "Remplissez tous les champs, sauf s'ils sont indiqués facultatifs.",
+  "complete-all-sections": "Veuillez remplir toutes les sections.",
   "confirm-information": "Veuillez confirmer l'exactitude des renseignements figurant à votre dossier.",
   "next": "Suivant",
   "previous": "Précédent",
