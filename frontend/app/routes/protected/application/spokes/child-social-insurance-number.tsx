@@ -79,9 +79,9 @@ export async function action({ context: { appContainer, session }, params, reque
       .optional()
       .superRefine((sin, ctx) => {
         if (sin && !isValidSin(sin)) {
-          ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:personal-information.error-message.sin-valid') });
+          ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:children.social-insurance-number.sin-valid') });
         } else if (sin && formatSin(sin) === formatSin(childState.information?.socialInsuranceNumber ?? '')) {
-          ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:personal-information.error-message.sin-unique') });
+          ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:children.social-insurance-number.sin-unique') });
         }
       }),
   });
