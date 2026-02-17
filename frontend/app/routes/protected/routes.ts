@@ -268,6 +268,11 @@ export const routes = [
             file: 'routes/protected/application/spokes/child-dental-insurance.tsx',
             paths: { en: '/:lang/protected/application/:id/children/:childId/dental-insurance', fr: '/:lang/protected/demande/:id/enfant/:childId/assurance-dentaire' },
           },
+          {
+            id: 'protected/application/$id/children/$childId/parent-guardian',
+            file: 'routes/protected/application/spokes/parent-guardian.tsx',
+            paths: { en: '/:lang/protected/application/:id/children/:childId/parent-guardian', fr: '/:lang/protected/demande/:id/enfant/:childId/parent-tuteur' },
+          },
         ],
       },
 

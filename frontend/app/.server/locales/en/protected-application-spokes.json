@@ -510,6 +510,17 @@
         "dental-insurance-required": "Select whether you have access to dental insurance",
         "dental-insurance-eligibility-confirmation-required": "Select whether you understand that if you have private dental insurance you are not eligible for the Canadian Dental Care Plan"
       }
+    },
+    "parent-guardian": {
+      "page-title": "Parent or legal guardian",
+      "parent-legend": "Are you the parent or legal guardian of {{ childName }}?",
+      "radio-options": {
+        "yes": "Yes",
+        "no": "No"
+      },
+      "is-parent": "Select whether you are the parent or legal guardian of the child",
+      "back-btn": "Back",
+      "save-btn": "Save"
     }
   },
   "dental-insurance-exit-application": {
