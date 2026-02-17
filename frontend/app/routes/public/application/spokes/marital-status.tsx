@@ -105,7 +105,12 @@ export async function action({ context: { appContainer, session }, params, reque
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
           ctx.addIssue({ code: 'custom', message: t('application-spokes:marital-status.error-message.sin-valid') });
-        } else if (state.applicantInformation?.socialInsuranceNumber && formatSin(sin) === formatSin(state.applicantInformation.socialInsuranceNumber)) {
+        } else if (
+          [state.applicantInformation?.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
+            .filter((sin) => sin !== undefined)
+            .map((sin) => formatSin(sin))
+            .includes(formatSin(sin))
+        ) {
           ctx.addIssue({ code: 'custom', message: t('application-spokes:marital-status.error-message.sin-unique') });
         }
       }),
