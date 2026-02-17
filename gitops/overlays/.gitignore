@@ -1,0 +1,2 @@
+# ignore secrets (ie: frontend-secrets.conf, redis-secrets.conf)
+**/*secrets.conf

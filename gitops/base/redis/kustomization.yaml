@@ -11,3 +11,7 @@ configMapGenerator:
       - ./configs/primary.conf
       - ./configs/replica.conf
       - ./configs/sentinel.conf
+secretGenerator:
+  - name: redis
+    envs:
+      - ./configs/secrets.conf

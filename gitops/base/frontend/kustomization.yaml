@@ -8,3 +8,7 @@ configMapGenerator:
   - name: frontend
     envs:
       - ./configs/config.conf
+secretGenerator:
+  - name: frontend
+    envs:
+      - ./configs/secrets.conf
