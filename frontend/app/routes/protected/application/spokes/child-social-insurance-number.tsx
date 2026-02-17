@@ -79,15 +79,24 @@ export async function action({ context: { appContainer, session }, params, reque
       .optional()
       .superRefine((sin, ctx) => {
         if (sin && !isValidSin(sin)) {
-          ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:children.social-insurance-number.sin-valid') });
-        } else if (sin && formatSin(sin) === formatSin(childState.information?.socialInsuranceNumber ?? '')) {
-          ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:children.social-insurance-number.sin-unique') });
+          ctx.addIssue({
+            code: 'custom',
+            path: ['socialInsuranceNumber'],
+            message: t('protected-application-spokes:children.social-insurance-number.sin-valid'),
+          });
+        } else if (sin && childState.information?.socialInsuranceNumber && formatSin(sin) === formatSin(childState.information.socialInsuranceNumber)) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['socialInsuranceNumber'],
+            message: t('protected-application-spokes:children.social-insurance-number.sin-unique'),
+          });
         }
       }),
   });
 
+  const sin = formData.get('socialInsuranceNumber');
   const parsedDataResult = sinSchema.safeParse({
-    socialInsuranceNumber: formData.get('socialInsuranceNumber')?.toString(),
+    socialInsuranceNumber: sin ? sin.toString() : undefined,
   });
 
   if (!parsedDataResult.success) {
