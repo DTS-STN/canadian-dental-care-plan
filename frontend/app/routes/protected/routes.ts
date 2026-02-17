@@ -273,6 +273,11 @@ export const routes = [
             file: 'routes/protected/application/spokes/parent-guardian.tsx',
             paths: { en: '/:lang/protected/application/:id/children/:childId/parent-guardian', fr: '/:lang/protected/demande/:id/enfant/:childId/parent-tuteur' },
           },
+          {
+            id: 'protected/application/$id/children/$childId/child-social-insurance-number',
+            file: 'routes/protected/application/spokes/child-social-insurance-number.tsx',
+            paths: { en: '/:lang/protected/application/:id/children/:childId/child-social-insurance-number', fr: '/:lang/protected/demande/:id/enfant/:childId/numero-assurance-sociale' },
+          },
         ],
       },
 

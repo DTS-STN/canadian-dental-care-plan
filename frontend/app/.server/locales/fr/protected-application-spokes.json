@@ -519,6 +519,14 @@
         "no": "Non"
       },
       "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
+        "back-btn": "Retour",
+      "save-btn": "Sauvegarder"
+    },
+    "child-social-insurance-number": {
+      "page-title": "(FR) Child's Social Insurance Number",
+      "legend": "(FR) {{childName}}'s Social Insurance Number (SIN)",
+      "sin-valid": "(FR) Must be a valid SIN",
+      "sin-unique": "(FR) The Social Insurance Number (SIN) must be unique",
       "back-btn": "Retour",
       "save-btn": "Sauvegarder"
     }

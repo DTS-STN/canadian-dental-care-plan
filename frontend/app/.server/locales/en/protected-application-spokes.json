@@ -521,6 +521,14 @@
       "is-parent": "Select whether you are the parent or legal guardian of the child",
       "back-btn": "Back",
       "save-btn": "Save"
+    },
+    "child-social-insurance-number": {
+      "page-title": "Child's Social Insurance Number",
+      "legend": "{{childName}}'s Social Insurance Number (SIN)",
+      "sin-valid": "Must be a valid SIN",
+      "sin-unique": "The Social Insurance Number (SIN) must be unique",
+      "back-btn": "Back",
+      "save-btn": "Save"
     }
   },
   "dental-insurance-exit-application": {
