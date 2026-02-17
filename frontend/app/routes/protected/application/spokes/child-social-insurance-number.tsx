@@ -7,7 +7,6 @@ import type { Route } from './+types/child-social-insurance-number';
 
 import { TYPES } from '~/.server/constants';
 import { getProtectedApplicationState, getSingleChildState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
-import type { ApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -24,17 +23,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 
-function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
-  switch (applicationFlow) {
-    case 'full-children': {
-      return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
-    }
-    default: {
-      return `protected/application/$id/${applicationFlow}/contact-information`;
-    }
-  }
-}
-
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.childSocialInsuranceNumber,
@@ -48,7 +36,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family', 'simplified-children']);
+  validateApplicationFlow(state, params, ['full-children', 'full-family', 'simplified-children', 'simplified-family']);
   const childState = getSingleChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -72,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family', 'simplified-children']);
+  validateApplicationFlow(state, params, ['full-children', 'full-family', 'simplified-children', 'simplified-family']);
 
   const formData = await request.formData();
 
@@ -83,8 +71,6 @@ export async function action({ context: { appContainer, session }, params, reque
   const childState = getSingleChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-
-  const applicationFlow: ApplicationFlow = `${state.inputModel}-${state.typeOfApplication}`;
 
   const sinSchema = z.object({
     socialInsuranceNumber: z
@@ -125,7 +111,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById(getRouteFromApplicationFlow(applicationFlow), params));
+  return redirect(getPathById(`protected/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
 }
 
 export default function ChildSocialInsuranceNumber({ loaderData, params }: Route.ComponentProps) {
