@@ -1,12 +1,11 @@
 import type { SyntheticEvent } from 'react';
 
-import { data, redirect, useFetcher } from 'react-router';
+import { data, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import { faCircleCheck, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
 
 import type { Route } from './+types/childrens-application';
 
@@ -25,12 +24,9 @@ import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/protected/application/full-children/progress-stepper';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
-import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
-
-const FORM_ACTION = { DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-full-child', 'protected-application', 'gcweb', 'common'),
@@ -119,29 +115,22 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
 
-  const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
+  const childId = formData.get('childId');
+  saveProtectedApplicationState({
+    params,
+    session,
+    state: {
+      children: state.children.map((child) => {
+        if (child.id !== childId) return child;
+        return {
+          ...child,
+          dentalBenefits: { hasChanged: false },
+        };
+      }),
+    },
+  });
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (formAction === FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED) {
-    const childId = formData.get('childId');
-    saveProtectedApplicationState({
-      params,
-      session,
-      state: {
-        children: state.children.map((child) => {
-          if (child.id !== childId) return child;
-          return {
-            ...child,
-            dentalBenefits: { hasChanged: false },
-          };
-        }),
-      },
-    });
-
-    return data({ success: true }, { status: 200 });
-  }
-
-  return redirect(getPathById(`protected/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
+  return data({ success: true }, { status: 200 });
 }
 
 export default function ProtectedNewChildChildrensApplication({ loaderData, params }: Route.ComponentProps) {
@@ -208,7 +197,7 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                     startIcon={sections.sin.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
                   >
-                    {child.information === undefined ? t('protected-application-full-child:childrens-application.add-child-sin') : t('protected-application-full-child:childrens-application.edit-child-sin', { childNumber: index + 1 })}
+                    {child.information === undefined ? t('protected-application-full-child:childrens-application.add-child-sin') : t('protected-application-full-child:childrens-application.edit-child-sin')}
                   </ButtonLink>
                 </CardFooter>
               </Card>
@@ -338,7 +327,7 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                       <CsrfTokenInput />
                       <input type="hidden" name="childId" value={child.id} />
                       <div className="w-full px-6">
-                        <Button id="edit-button-not-changed" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} disabled={isSubmitting} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                        <Button id="edit-button-not-changed" name="_action" disabled={isSubmitting} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
                           {t('protected-application-full-child:childrens-application.benefits-not-changed')}
                         </Button>
                       </div>

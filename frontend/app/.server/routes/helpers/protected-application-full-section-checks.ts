@@ -60,7 +60,7 @@ export function isMaritalStatusSectionCompleted(state: Pick<ProtectedApplication
 }
 
 /**
- * Checks if the child SIN section is completed for simplified application.
+ * Checks if the child SIN section is completed for full application.
  */
 export function isSinSectionCompleted(child: Pick<ChildState, 'information'>): boolean {
   // TODO: Check with age category and live independently status
@@ -68,7 +68,7 @@ export function isSinSectionCompleted(child: Pick<ChildState, 'information'>): b
 }
 
 /**
- * Checks if the child parent/guardian section is completed for simplified application.
+ * Checks if the child parent/guardian section is completed for full application.
  */
 export function isParentGuardianSectionCompleted(child: Pick<ChildState, 'information'>): boolean {
   // TODO: Check with age category and live independently status
