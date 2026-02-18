@@ -9,6 +9,7 @@ import type { Route } from './+types/dental-insurance';
 
 import { TYPES } from '~/.server/constants';
 import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { loadProtectedApplicationSimplifiedAdultState } from '~/.server/routes/helpers/protected-application-simplified-adult-route-helpers';
 import { isDentalBenefitsSectionCompleted, isDentalInsuranceSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -49,12 +50,53 @@ export async function loader({ context: { appContainer, session }, request, para
   const locale = getLocale(request);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-simplified-adult:dental-insurance.page-title') }) };
 
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
+
+  const clientDentalBenefits = (await state.clientApplication?.dentalBenefits.reduce(async (benefitsPromise, id) => {
+    const benefits = await benefitsPromise;
+
+    const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(id, locale);
+    if (federalProgram.isSome()) {
+      return {
+        ...benefits,
+        hasFederalBenefits: true,
+        federalSocialProgram: federalProgram.unwrap().name,
+      };
+    }
+
+    const provincialProgram = await provincialGovernmentInsurancePlanService.findLocalizedProvincialGovernmentInsurancePlanById(id, locale);
+    if (provincialProgram.isSome()) {
+      return {
+        ...benefits,
+        hasProvincialTerritorialBenefits: true,
+        provincialTerritorialSocialProgram: provincialProgram.unwrap().name,
+      };
+    }
+
+    return benefits;
+  }, Promise.resolve({}))) as DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+
   const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.value?.federalSocialProgram
     ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale)
     : undefined;
 
   const selectedProvincialBenefit = state.dentalBenefits?.value?.provincialTerritorialSocialProgram
     ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
+    : undefined;
+
+  const currentDentalBenefits = state.dentalBenefits
+    ? {
+        hasChanged: state.dentalBenefits.hasChanged,
+        federalBenefit: {
+          access: state.dentalBenefits.value?.hasFederalBenefits,
+          benefit: selectedFederalGovernmentInsurancePlan?.name,
+        },
+        provTerrBenefit: {
+          access: state.dentalBenefits.value?.hasProvincialTerritorialBenefits,
+          benefit: selectedProvincialBenefit?.name,
+        },
+      }
     : undefined;
 
   const sections = {
@@ -69,19 +111,10 @@ export async function loader({ context: { appContainer, session }, request, para
   return {
     state: {
       dentalInsurance: state.dentalInsurance?.hasDentalInsurance,
-      dentalBenefits: state.dentalBenefits
-        ? {
-            hasChanged: state.dentalBenefits.hasChanged,
-            federalBenefit: {
-              access: state.dentalBenefits.value?.hasFederalBenefits,
-              benefit: selectedFederalGovernmentInsurancePlan?.name,
-            },
-            provTerrBenefit: {
-              access: state.dentalBenefits.value?.hasProvincialTerritorialBenefits,
-              benefit: selectedProvincialBenefit?.name,
-            },
-          }
-        : undefined,
+      dentalBenefits: currentDentalBenefits,
+    },
+    defaultDisplayValues: {
+      dentalBenefits: clientDentalBenefits.hasFederalBenefits || clientDentalBenefits.hasProvincialTerritorialBenefits ? clientDentalBenefits : undefined,
     },
     sections,
     meta,
@@ -102,14 +135,23 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
   if (formAction === (FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED as string)) {
-    saveProtectedApplicationState({ params, session, state: { dentalBenefits: { hasChanged: false, value: undefined } } });
+    saveProtectedApplicationState({
+      params,
+      session,
+      state: {
+        dentalBenefits: {
+          hasChanged: false,
+          value: undefined,
+        },
+      },
+    });
   }
 
   return data({ success: true }, { status: 200 });
 }
 
 export default function ProtectedRenewAdultDentalInsurance({ loaderData, params }: Route.ComponentProps) {
-  const { state, sections } = loaderData;
+  const { state, defaultDisplayValues, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
 
@@ -153,32 +195,67 @@ export default function ProtectedRenewAdultDentalInsurance({ loaderData, params 
             <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
-            {state.dentalBenefits ? (
+            {state.dentalBenefits?.hasChanged === true && (
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t('protected-application-simplified-adult:dental-insurance.access-to-government-benefits')}>
-                  {state.dentalBenefits.hasChanged ? (
-                    <>
-                      {state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
-                        <div className="space-y-3">
-                          <p>{t('protected-application-simplified-adult:dental-insurance.access-to-government-benefits-yes')}</p>
-                          <ul className="list-disc space-y-1 pl-7">
-                            {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
-                            {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
-                          </ul>
-                        </div>
-                      ) : (
-                        <p>{t('protected-application-simplified-adult:dental-insurance.access-to-government-benefits-no')}</p>
-                      )}
-                    </>
+                  {state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
+                    <div className="space-y-3">
+                      <p>{t('protected-application-simplified-adult:dental-insurance.access-to-government-benefits-yes')}</p>
+                      <ul className="list-disc space-y-1 pl-7">
+                        {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
+                        {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
+                      </ul>
+                    </div>
                   ) : (
-                    <p>{t('protected-application-simplified-adult:dental-insurance.no-change')}</p>
+                    <p>{t('protected-application-simplified-adult:dental-insurance.access-to-government-benefits-no')}</p>
                   )}
                 </DefinitionListItem>
               </DefinitionList>
-            ) : (
-              <p>{t('protected-application-simplified-adult:dental-insurance.dental-benefits-indicate-status')}</p>
             )}
+
+            {state.dentalBenefits?.hasChanged === false && defaultDisplayValues.dentalBenefits && (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('protected-application-simplified-adult:dental-insurance.access-to-government-benefits')}>
+                  <div>
+                    {defaultDisplayValues.dentalBenefits.hasFederalBenefits || defaultDisplayValues.dentalBenefits.hasProvincialTerritorialBenefits ? (
+                      <div className="space-y-3">
+                        <p>{t('protected-application-simplified-adult:dental-insurance.access-to-government-benefits-yes')}</p>
+                        <ul className="list-disc space-y-1 pl-7">
+                          {defaultDisplayValues.dentalBenefits.hasFederalBenefits && <li>{defaultDisplayValues.dentalBenefits.federalSocialProgram}</li>}
+                          {defaultDisplayValues.dentalBenefits.hasProvincialTerritorialBenefits && <li>{defaultDisplayValues.dentalBenefits.provincialTerritorialSocialProgram}</li>}
+                        </ul>
+                      </div>
+                    ) : (
+                      <p>{t('protected-application-simplified-adult:dental-insurance.access-to-government-benefits-no')}</p>
+                    )}
+                  </div>
+                </DefinitionListItem>
+              </DefinitionList>
+            )}
+
+            {!state.dentalBenefits && defaultDisplayValues.dentalBenefits && (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('protected-application-simplified-adult:dental-insurance.access-to-government-benefits')}>
+                  <div>
+                    {defaultDisplayValues.dentalBenefits.hasFederalBenefits || defaultDisplayValues.dentalBenefits.hasProvincialTerritorialBenefits ? (
+                      <div className="space-y-3">
+                        <p>{t('protected-application-simplified-adult:dental-insurance.access-to-government-benefits-yes')}</p>
+                        <ul className="list-disc space-y-1 pl-7">
+                          {defaultDisplayValues.dentalBenefits.hasFederalBenefits && <li>{defaultDisplayValues.dentalBenefits.federalSocialProgram}</li>}
+                          {defaultDisplayValues.dentalBenefits.hasProvincialTerritorialBenefits && <li>{defaultDisplayValues.dentalBenefits.provincialTerritorialSocialProgram}</li>}
+                        </ul>
+                      </div>
+                    ) : (
+                      <p>{t('protected-application-simplified-adult:dental-insurance.access-to-government-benefits-no')}</p>
+                    )}
+                  </div>
+                </DefinitionListItem>
+              </DefinitionList>
+            )}
+
+            {!state.dentalBenefits && !defaultDisplayValues.dentalBenefits && <p>{t('protected-application-simplified-adult:dental-insurance.dental-benefits-indicate-status')}</p>}
           </CardContent>
+
           {state.dentalBenefits ? (
             <CardFooter className="border-t bg-zinc-100">
               <ButtonLink
@@ -193,7 +270,7 @@ export default function ProtectedRenewAdultDentalInsurance({ loaderData, params 
                 {t('protected-application-simplified-adult:dental-insurance.edit-access-to-government-benefits')}
               </ButtonLink>
             </CardFooter>
-          ) : (
+          ) : defaultDisplayValues.dentalBenefits ? ( // eslint-disable-line unicorn/no-nested-ternary
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
                 <ButtonLink id="edit-button-update-access" variant="link" className="p-0 pb-5" routeId="protected/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faPenToSquare} size="lg">
@@ -205,6 +282,12 @@ export default function ProtectedRenewAdultDentalInsurance({ loaderData, params 
                   {t('protected-application-simplified-adult:dental-insurance.access-not-changed')}
                 </Button>
               </div>
+            </CardFooter>
+          ) : (
+            <CardFooter className="border-t bg-zinc-100">
+              <ButtonLink id="add-button-government-benefits" variant="link" className="p-0" routeId="protected/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faCirclePlus} size="lg">
+                {t('protected-application-simplified-adult:dental-insurance.add-access-to-government-benefits')}
+              </ButtonLink>
             </CardFooter>
           )}
         </Card>

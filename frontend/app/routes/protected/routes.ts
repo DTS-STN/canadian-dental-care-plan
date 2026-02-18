@@ -17,7 +17,6 @@ export const routes = [
             file: 'routes/protected/application/entry/eligibility-requirements.tsx',
             paths: { en: '/:lang/protected/application/:id/eligibility-requirements', fr: '/:lang/protected/demande/:id/criteres-admissibilite' },
           },
-
           {
             id: 'protected/application/$id/full-adult/marital-status',
             file: 'routes/protected/application/full-adult/marital-status.tsx',
@@ -110,7 +109,11 @@ export const routes = [
             file: 'routes/protected/application/full-family/exit-application.tsx',
             paths: { en: '/:lang/protected/application/:id/full/family/exit-application', fr: '/:lang/protege/demande/:id/complete/famille/quitter-demande' },
           },
-
+          {
+            id: 'protected/application/$id/simplified-adult/marital-status',
+            file: 'routes/protected/application/simplified-adult/marital-status.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/adult/marital-status', fr: '/:lang/protege/demande/:id/simplifie/adulte/etat-civil' },
+          },
           {
             id: 'protected/application/$id/simplified-adult/contact-information',
             file: 'routes/protected/application/simplified-adult/contact-information.tsx',

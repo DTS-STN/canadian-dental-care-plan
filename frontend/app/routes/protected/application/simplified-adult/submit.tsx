@@ -54,11 +54,11 @@ export async function loader({ context: { appContainer, session }, request, para
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
   const benefitApplicationDtoMapper = appContainer.get(TYPES.BenefitRenewalDtoMapper);
   const benefitApplicationStateMapper = appContainer.get(TYPES.HubSpokeBenefitRenewalStateMapper);
-  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapAdultBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitApplicationStateMapper.mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(state));
+  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitApplicationStateMapper.mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(state));
 
   return {
     state: {
-      applicantName: `${state.applicantInformation.firstName} ${state.applicantInformation.lastName}`,
+      applicantName: `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`,
     },
     meta,
     payload,
@@ -92,20 +92,18 @@ export async function action({ context: { appContainer, session }, request, para
   }
 
   const benefitApplicationDto = appContainer.get(TYPES.HubSpokeBenefitRenewalStateMapper).mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(state);
-  const confirmationCode = await appContainer.get(TYPES.BenefitRenewalService).createAdultBenefitRenewal(benefitApplicationDto);
+  const confirmationCode = await appContainer.get(TYPES.BenefitRenewalService).createProtectedBenefitRenewal(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
   saveProtectedApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
 
   return redirect(getPathById('protected/application/$id/simplified-adult/confirmation', params));
 }
 
-export default function ProtectedRenewAdultSubmit({ loaderData, params }: Route.ComponentProps) {
+export default function ProtectedNewAdultSubmit({ loaderData, params }: Route.ComponentProps) {
   const { state, payload } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-
   const errors = fetcher.data?.errors;
 
   const eligibilityLink = <InlineLink to={t('protected-application-simplified-adult:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
@@ -128,7 +126,7 @@ export default function ProtectedRenewAdultSubmit({ loaderData, params }: Route.
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-simplified-adult:submit.review-your-application')}</h2>
             <p>{t('protected-application-simplified-adult:submit.please-review')}</p>
-            <ButtonLink variant="primary" routeId="protected/application/$id/simplified-adult/contact-information" params={params}>
+            <ButtonLink variant="primary" routeId="protected/application/$id/simplified-adult/marital-status" params={params}>
               {t('protected-application-simplified-adult:submit.review-application')}
             </ButtonLink>
           </section>

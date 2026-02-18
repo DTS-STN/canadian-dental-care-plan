@@ -11,29 +11,22 @@ export function isPhoneNumberSectionCompleted(state: Pick<ProtectedApplicationSt
 /**
  * Checks if the address section is completed for simplified application.
  */
-export function isAddressSectionCompleted(state: Pick<ProtectedApplicationState, 'mailingAddress' | 'homeAddress'>): boolean {
-  return state.mailingAddress !== undefined && state.homeAddress !== undefined;
+export function isAddressSectionCompleted(state: Pick<ProtectedApplicationState, 'mailingAddress' | 'homeAddress' | 'isHomeAddressSameAsMailingAddress'>): boolean {
+  return state.mailingAddress !== undefined && (state.homeAddress !== undefined || state.isHomeAddressSameAsMailingAddress !== undefined);
 }
 
 /**
  * Checks if the communication preferences section is completed for simplified application.
  */
-export function isCommunicationPreferencesSectionCompleted(state: Pick<ProtectedApplicationState, 'communicationPreferences' | 'email' | 'emailVerified'>): boolean {
-  if (state.communicationPreferences === undefined) {
-    return false; // communication preferences not set
-  }
+export function isCommunicationPreferencesSectionCompleted(state: Pick<ProtectedApplicationState, 'communicationPreferences'>): boolean {
+  return state.communicationPreferences !== undefined;
+}
 
-  if (state.communicationPreferences.hasChanged === false) {
-    return true; // communication preferences set but has not changed
-  }
-
-  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
-  const emailMethods = new Set([COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID]); // methods that require email
-  const isEmailRequired =
-    emailMethods.has(state.communicationPreferences.value.preferredMethod) || //
-    emailMethods.has(state.communicationPreferences.value.preferredNotificationMethod);
-
-  return isEmailRequired ? state.email !== undefined && state.emailVerified === true : true;
+/**
+ * Checks if the email section is completed for simplified application.
+ */
+export function isEmailSectionCompleted(state: Pick<ProtectedApplicationState, 'email' | 'emailVerified'>): boolean {
+  return state.email !== undefined && state.emailVerified === true;
 }
 
 /**
@@ -48,6 +41,22 @@ export function isDentalInsuranceSectionCompleted(state: Pick<ProtectedApplicati
  */
 export function isDentalBenefitsSectionCompleted(state: Pick<ProtectedApplicationState, 'dentalBenefits'>): boolean {
   return state.dentalBenefits !== undefined;
+}
+
+/**
+ * Checks if the marital status section is completed for simplified application.
+ */
+export function isMaritalStatusSectionCompleted(state: Pick<ProtectedApplicationState, 'maritalStatus' | 'partnerInformation'>): boolean {
+  if (state.maritalStatus === undefined) return false; // marital status not selected
+
+  const { MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED } = getEnv();
+  const partnerMaritalStatuses = [MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED]; // statuses that require partner information
+
+  if (partnerMaritalStatuses.includes(state.maritalStatus)) {
+    return state.partnerInformation?.confirm === true; // partner information required and consent given
+  }
+
+  return true; // no partner information required
 }
 
 /**

@@ -8,6 +8,7 @@ import {
   isCommunicationPreferencesSectionCompleted,
   isDentalBenefitsSectionCompleted,
   isDentalInsuranceSectionCompleted,
+  isMaritalStatusSectionCompleted,
   isPhoneNumberSectionCompleted,
 } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
 import { getEnv } from '~/.server/utils/env.utils';
@@ -131,132 +132,18 @@ describe('protected-application-simplified-section-checks', () => {
       expect(
         isCommunicationPreferencesSectionCompleted({
           communicationPreferences: undefined,
-          email: undefined,
-          emailVerified: undefined,
         }),
       ).toBe(false);
     });
 
-    it('should return true when communicationPreferences is set but hasChanged is false', () => {
+    it('should return true when communicationPreferences is defined', () => {
       expect(
         isCommunicationPreferencesSectionCompleted({
           communicationPreferences: {
             hasChanged: false,
           },
-          email: undefined,
-          emailVerified: false,
         }),
       ).toBe(true);
-    });
-
-    it('should return true when email not required and preferences have changed', () => {
-      vi.mocked(getEnv, { partial: true }).mockReturnValue({
-        COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID: 'sunlife',
-        COMMUNICATION_METHOD_GC_DIGITAL_ID: 'gc-digital',
-      });
-
-      expect(
-        isCommunicationPreferencesSectionCompleted({
-          communicationPreferences: {
-            hasChanged: true,
-            value: {
-              preferredMethod: 'mail',
-              preferredLanguage: 'en',
-              preferredNotificationMethod: 'mail',
-            },
-          },
-          email: undefined,
-          emailVerified: false,
-        }),
-      ).toBe(true);
-    });
-
-    it('should return true when email required for preferredMethod and email is verified', () => {
-      vi.mocked(getEnv, { partial: true }).mockReturnValue({
-        COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID: 'sunlife',
-        COMMUNICATION_METHOD_GC_DIGITAL_ID: 'gc-digital',
-      });
-
-      expect(
-        isCommunicationPreferencesSectionCompleted({
-          communicationPreferences: {
-            hasChanged: true,
-            value: {
-              preferredMethod: 'sunlife',
-              preferredLanguage: 'en',
-              preferredNotificationMethod: 'mail',
-            },
-          },
-          email: 'test@example.com',
-          emailVerified: true,
-        }),
-      ).toBe(true);
-    });
-
-    it('should return true when email required for preferredNotificationMethod and email is verified', () => {
-      vi.mocked(getEnv, { partial: true }).mockReturnValue({
-        COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID: 'sunlife',
-        COMMUNICATION_METHOD_GC_DIGITAL_ID: 'gc-digital',
-      });
-
-      expect(
-        isCommunicationPreferencesSectionCompleted({
-          communicationPreferences: {
-            hasChanged: true,
-            value: {
-              preferredMethod: 'mail',
-              preferredLanguage: 'en',
-              preferredNotificationMethod: 'gc-digital',
-            },
-          },
-          email: 'test@example.com',
-          emailVerified: true,
-        }),
-      ).toBe(true);
-    });
-
-    it('should return false when email required but not verified', () => {
-      vi.mocked(getEnv, { partial: true }).mockReturnValue({
-        COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID: 'sunlife',
-        COMMUNICATION_METHOD_GC_DIGITAL_ID: 'gc-digital',
-      });
-
-      expect(
-        isCommunicationPreferencesSectionCompleted({
-          communicationPreferences: {
-            hasChanged: true,
-            value: {
-              preferredMethod: 'sunlife',
-              preferredLanguage: 'en',
-              preferredNotificationMethod: 'mail',
-            },
-          },
-          email: 'test@example.com',
-          emailVerified: false,
-        }),
-      ).toBe(false);
-    });
-
-    it('should return false when email required but email is undefined', () => {
-      vi.mocked(getEnv, { partial: true }).mockReturnValue({
-        COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID: 'sunlife',
-        COMMUNICATION_METHOD_GC_DIGITAL_ID: 'gc-digital',
-      });
-
-      expect(
-        isCommunicationPreferencesSectionCompleted({
-          communicationPreferences: {
-            hasChanged: true,
-            value: {
-              preferredMethod: 'gc-digital',
-              preferredLanguage: 'fr',
-              preferredNotificationMethod: 'mail',
-            },
-          },
-          email: undefined,
-          emailVerified: false,
-        }),
-      ).toBe(false);
     });
   });
 
@@ -322,6 +209,54 @@ describe('protected-application-simplified-section-checks', () => {
 
     it('should return false when dentalBenefits is undefined', () => {
       expect(isDentalBenefitsSectionCompleted({ dentalBenefits: undefined })).toBe(false);
+    });
+  });
+
+  describe('isMaritalStatusSectionCompleted', () => {
+    it('should return false when marital status is undefined', () => {
+      const state = { maritalStatus: undefined, partnerInformation: undefined };
+      expect(isMaritalStatusSectionCompleted(state)).toBe(false);
+    });
+
+    it('should return true for single status without partner information', () => {
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
+        MARITAL_STATUS_CODE_COMMON_LAW: 'common-law',
+        MARITAL_STATUS_CODE_MARRIED: 'married',
+      });
+
+      expect(
+        isMaritalStatusSectionCompleted({
+          maritalStatus: 'single',
+          partnerInformation: undefined,
+        }),
+      ).toBe(true);
+    });
+
+    it('should return true for married status with partner confirmation', () => {
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
+        MARITAL_STATUS_CODE_COMMON_LAW: 'common-law',
+        MARITAL_STATUS_CODE_MARRIED: 'married',
+      });
+
+      expect(
+        isMaritalStatusSectionCompleted({
+          maritalStatus: 'married',
+          partnerInformation: {
+            confirm: true,
+            socialInsuranceNumber: '123-456-789',
+            yearOfBirth: '1980',
+          },
+        }),
+      ).toBe(true);
+    });
+
+    it('should return false for common-law status without partner confirmation', () => {
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
+        MARITAL_STATUS_CODE_COMMON_LAW: 'common-law',
+        MARITAL_STATUS_CODE_MARRIED: 'married',
+      });
+
+      expect(isMaritalStatusSectionCompleted({ maritalStatus: 'common-law' })).toBe(false);
     });
   });
 
