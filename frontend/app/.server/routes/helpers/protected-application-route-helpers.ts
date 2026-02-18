@@ -285,19 +285,18 @@ export function clearProtectedApplicationState({ params, session }: ClearStateAr
 
 /**
  * Determines the input model based on context and client application data. For intake applications,
- * the input model is always 'full'. For renewal applications, the input model is 'simplified' if the
- * client application has a copay tier earning record, and 'full' otherwise.
+ * the input model is always 'full'. For renewal applications, the input model is always 'simplified'.
  */
-function determineInputModel(context: ProtectedApplicationState['context'], clientApplication?: ClientApplicationDto): InputModelState {
+function determineInputModel(context: ProtectedApplicationState['context']): InputModelState {
   if (context === 'intake') {
     return 'full';
   }
 
-  if (!clientApplication) {
-    throw new Error('Client application data is required to start a renewal application');
-  }
-
-  return clientApplication.copayTierEarningRecord ? 'simplified' : 'full';
+  // Before input mode for "renewal" applications was determined based on the presence of any copay tier earning record.
+  // Now, the input mode is always "simplified" for renewal applications, regardless of the presence of copay tier
+  // earning records. The copay tier earning record will be used to conditionally add "marital status" question in the
+  // application flow.
+  return 'simplified';
 }
 
 interface StartProtectedApplicationStateArgs {
@@ -331,13 +330,17 @@ interface StartProtectedApplicationStateArgs {
 export function startProtectedApplicationState({ applicationYear, clientApplication, session }: StartProtectedApplicationStateArgs): ProtectedApplicationState {
   const id = generateId();
   const context = isWithinRenewalPeriod() ? 'renewal' : 'intake';
-  const inputModel = determineInputModel(context, clientApplication);
+
+  // For renewal applications, client application data is required to initialize the state
+  if (context === 'renewal' && !clientApplication) {
+    throw new Error('Client application data is required to start a renewal application');
+  }
 
   // Create the initial state object
   const initialState = {
     id,
     context,
-    inputModel,
+    inputModel: determineInputModel(context),
     lastUpdatedOn: new UTCDate().toISOString(),
     applicationYear,
     clientApplication,
