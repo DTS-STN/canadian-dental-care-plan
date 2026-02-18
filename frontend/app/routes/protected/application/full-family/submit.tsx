@@ -59,7 +59,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
   const benefitApplicationDtoMapper = appContainer.get(TYPES.BenefitApplicationDtoMapper);
   const benefitApplicationStateMapper = appContainer.get(TYPES.HubSpokeBenefitApplicationStateMapper);
-  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplicationFamilyStateToBenefitApplicationDto(state));
+  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToProtectedBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplicationFamilyStateToBenefitApplicationDto(state));
 
   return {
     state: {
@@ -98,7 +98,7 @@ export async function action({ context: { appContainer, session }, request, para
   }
 
   const benefitApplicationDto = appContainer.get(TYPES.HubSpokeBenefitApplicationStateMapper).mapApplicationFamilyStateToBenefitApplicationDto(state);
-  const confirmationCode = await appContainer.get(TYPES.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
+  const confirmationCode = await appContainer.get(TYPES.BenefitApplicationService).createProtectedBenefitApplication(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
   saveProtectedApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
 
