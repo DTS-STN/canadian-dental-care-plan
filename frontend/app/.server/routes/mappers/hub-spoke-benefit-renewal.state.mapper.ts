@@ -36,11 +36,12 @@ import type {
   DentalInsuranceState,
   DentalProvincialTerritorialBenefitsState,
   PartnerInformationState,
+  TermsAndConditionsState,
 } from '~/.server/routes/helpers/public-application-route-helpers';
 
 export interface BenefitRenewalAdultState {
   applicationYear: ApplicationYearState;
-  clientApplication: ClientApplicationDto;
+  clientApplication?: ClientApplicationDto;
   phoneNumber: DeclaredChangePhoneNumberState;
   dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
   dentalInsurance: DentalInsuranceState;
@@ -52,12 +53,13 @@ export interface BenefitRenewalAdultState {
   email?: string;
   emailVerified?: boolean;
   communicationPreferences?: DeclaredChangeCommunicationPreferencesState;
+  termsAndConditions: TermsAndConditionsState;
 }
 
 export interface BenefitRenewalAdultChildState {
   applicationYear: ApplicationYearState;
   children: ChildState[];
-  clientApplication: ClientApplicationDto;
+  clientApplication?: ClientApplicationDto;
   phoneNumber: DeclaredChangePhoneNumberState;
   dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
   dentalInsurance: DentalInsuranceState;
@@ -69,11 +71,12 @@ export interface BenefitRenewalAdultChildState {
   email?: string;
   emailVerified?: boolean;
   communicationPreferences?: DeclaredChangeCommunicationPreferencesState;
+  termsAndConditions: TermsAndConditionsState;
 }
 
 export interface BenefitRenewalChildState {
   applicationYear: ApplicationYearState;
-  clientApplication: ClientApplicationDto;
+  clientApplication?: ClientApplicationDto;
   children: ChildState[];
   phoneNumber: DeclaredChangePhoneNumberState;
   homeAddress?: DeclaredChangeHomeAddressState;
@@ -84,6 +87,7 @@ export interface BenefitRenewalChildState {
   email?: string;
   emailVerified?: boolean;
   communicationPreferences?: DeclaredChangeCommunicationPreferencesState;
+  termsAndConditions: TermsAndConditionsState;
 }
 
 export interface HubSpokeBenefitRenewalStateMapper {
@@ -178,9 +182,14 @@ export class DefaultHubSpokeBenefitRenewalStateMapper implements HubSpokeBenefit
     email,
     emailVerified,
     communicationPreferences,
+    termsAndConditions,
   }: BenefitRenewalAdultState): AdultBenefitRenewalDto {
     if (communicationPreferences === undefined) {
       throw new Error('Expected communicationPreferences to be defined');
+    }
+
+    if (clientApplication === undefined) {
+      throw new Error('Expected clientApplication to be defined');
     }
 
     return {
@@ -217,6 +226,7 @@ export class DefaultHubSpokeBenefitRenewalStateMapper implements HubSpokeBenefit
         renewedPartnerInformation: partnerInformation,
       }),
       typeOfApplication: 'adult',
+      termsAndConditions,
       userId: 'anonymous',
     };
   }
@@ -236,9 +246,14 @@ export class DefaultHubSpokeBenefitRenewalStateMapper implements HubSpokeBenefit
     email,
     emailVerified,
     communicationPreferences,
+    termsAndConditions,
   }: BenefitRenewalAdultChildState): AdultChildBenefitRenewalDto {
     if (communicationPreferences === undefined) {
       throw new Error('Expected communicationPreferences to be defined');
+    }
+
+    if (clientApplication === undefined) {
+      throw new Error('Expected clientApplication to be defined');
     }
 
     return {
@@ -278,6 +293,7 @@ export class DefaultHubSpokeBenefitRenewalStateMapper implements HubSpokeBenefit
         renewedPartnerInformation: partnerInformation,
       }),
       typeOfApplication: children.length === 0 ? 'adult' : 'adult-child',
+      termsAndConditions,
       userId: 'anonymous',
     };
   }
@@ -295,9 +311,14 @@ export class DefaultHubSpokeBenefitRenewalStateMapper implements HubSpokeBenefit
     email,
     emailVerified,
     communicationPreferences,
+    termsAndConditions,
   }: BenefitRenewalChildState): ChildBenefitRenewalDto {
     if (communicationPreferences === undefined) {
       throw new Error('Expected communicationPreferences to be defined');
+    }
+
+    if (clientApplication === undefined) {
+      throw new Error('Expected clientApplication to be defined');
     }
 
     return {
@@ -333,6 +354,7 @@ export class DefaultHubSpokeBenefitRenewalStateMapper implements HubSpokeBenefit
         renewedPartnerInformation: partnerInformation,
       }),
       typeOfApplication: 'child',
+      termsAndConditions,
       userId: 'anonymous',
     };
   }

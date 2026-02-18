@@ -54,9 +54,16 @@ export async function loader({ context: { appContainer, session }, request, para
   const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
 
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
-  const benefitApplicationDtoMapper = appContainer.get(TYPES.BenefitApplicationDtoMapper);
-  const benefitApplicationStateMapper = appContainer.get(TYPES.HubSpokeBenefitApplicationStateMapper);
-  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplicationFamilyStateToBenefitApplicationDto(state));
+  let payload;
+  if (state.context === 'intake') {
+    const benefitApplicationDtoMapper = appContainer.get(TYPES.BenefitApplicationDtoMapper);
+    const benefitApplicationStateMapper = appContainer.get(TYPES.HubSpokeBenefitApplicationStateMapper);
+    payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplicationFamilyStateToBenefitApplicationDto(state));
+  } else {
+    const benefitRenewalDtoMapper = appContainer.get(TYPES.BenefitRenewalDtoMapper);
+    const benefitRenewalStateMapper = appContainer.get(TYPES.HubSpokeBenefitRenewalStateMapper);
+    payload = viewPayloadEnabled && benefitRenewalDtoMapper.mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalStateMapper.mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto(state));
+  }
 
   return {
     state: {
@@ -92,10 +99,17 @@ export async function action({ context: { appContainer, session }, request, para
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  const benefitApplicationDto = appContainer.get(TYPES.HubSpokeBenefitApplicationStateMapper).mapApplicationFamilyStateToBenefitApplicationDto(state);
-  const confirmationCode = await appContainer.get(TYPES.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
-  const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
-  savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
+  if (state.context === 'intake') {
+    const benefitApplicationDto = appContainer.get(TYPES.HubSpokeBenefitApplicationStateMapper).mapApplicationFamilyStateToBenefitApplicationDto(state);
+    const confirmationCode = await appContainer.get(TYPES.BenefitApplicationService).createBenefitApplication(benefitApplicationDto);
+    const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
+    savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
+  } else {
+    const benefitRenewalDto = appContainer.get(TYPES.HubSpokeBenefitRenewalStateMapper).mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto(state);
+    const confirmationCode = await appContainer.get(TYPES.BenefitRenewalService).createAdultChildBenefitRenewal(benefitRenewalDto);
+    const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
+    savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
+  }
 
   return redirect(getPathById('public/application/$id/full-family/confirmation', params));
 }
