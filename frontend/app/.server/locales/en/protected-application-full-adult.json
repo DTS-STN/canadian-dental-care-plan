@@ -17,7 +17,7 @@
     "consent-no": "My spouse or common-law partner has not agreed to share their personal information.",
     "add-marital-status": "Add marital status",
     "edit-marital-status": "Edit marital status information",
-    "prev-btn": "Renew your Canadian Dental Care Plan benefits",
+    "prev-btn": "Type of application",
     "next-btn": "Your contact information"
   },
   "dental-insurance": {
@@ -74,7 +74,7 @@
     "communication-preferences-unchanged": "My communication preferences have not changed",
     "email": "Email address",
     "email-help": "Enter your email address.",
-    "update-email-help": "Would you like to update your email adress?",
+    "update-email-help": "Would you like to update your email address?",
     "update-email": "Update my email address",
     "add-email": "Add email address",
     "edit-email": "Edit email address",

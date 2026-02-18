@@ -97,10 +97,6 @@ export function validateProtectedApplicationFullAdultStateForReview({ params, st
 
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
 
-  if (clientApplication === undefined) {
-    throw redirect(getPathById('protected/application/index', params));
-  }
-
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('protected/application/$id/eligibility-requirements', params));
   }
@@ -121,7 +117,11 @@ export function validateProtectedApplicationFullAdultStateForReview({ params, st
     throw redirect(getPathById('protected/application/$id/eligibility-requirements', params));
   }
 
-  const ageCategory = getAgeCategoryFromDateString(clientApplication.dateOfBirth);
+  if (applicantInformation === undefined) {
+    throw redirect(getPathById('protected/application/$id/type-of-application', params));
+  }
+
+  const ageCategory = getAgeCategoryFromDateString(applicantInformation.dateOfBirth);
 
   if (ageCategory === 'children') {
     throw redirect(getPathById('protected/application/$id/type-of-application', params));
@@ -132,10 +132,6 @@ export function validateProtectedApplicationFullAdultStateForReview({ params, st
   }
 
   if (ageCategory === 'youth' && livingIndependently === false) {
-    throw redirect(getPathById('protected/application/$id/type-of-application', params));
-  }
-
-  if (applicantInformation === undefined) {
     throw redirect(getPathById('protected/application/$id/type-of-application', params));
   }
 
