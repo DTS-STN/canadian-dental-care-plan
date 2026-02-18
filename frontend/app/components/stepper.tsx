@@ -72,22 +72,22 @@ function StepItem({ label, status, isLast, customIcon }: StepItemProps) {
   return (
     <li className="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col" aria-current={status === 'current' ? 'true' : undefined}>
       {/* Connection Line */}
-      {!isLast && <div className={cn('absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 bg-gray-300 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full', status === 'completed' && 'bg-blue-700')} aria-hidden="true" />}
+      {!isLast && <div className={cn('absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 bg-gray-300 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full', status === 'completed' && 'bg-green-700')} aria-hidden="true" />}
 
       {/* Indicator Box */}
       <div
         className={cn(
-          'z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6',
+          'z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6',
           status === 'upcoming' && 'border-gray-300 bg-white text-gray-300',
-          status === 'current' && 'border-blue-700 bg-white text-blue-700 outline-4 outline-blue-700/10',
-          status === 'completed' && 'border-blue-700 bg-blue-700 text-white',
+          status === 'current' && 'border-blue-600 bg-white text-blue-600',
+          status === 'completed' && 'border-green-700 bg-green-700 text-white',
         )}
         aria-hidden="true"
       >
         {customIcon ?? (
           <>
-            {status === 'current' && <FontAwesomeIcon icon={faCircle} className="size-1.5 sm:size-2" />}
-            {status === 'completed' && <FontAwesomeIcon icon={faCheck} className="size-2 sm:size-2.5" />}
+            {status === 'current' && <FontAwesomeIcon icon={faCircle} className="size-2 sm:size-2.5" />}
+            {status === 'completed' && <FontAwesomeIcon icon={faCheck} className="size-2.5 sm:size-3" />}
           </>
         )}
       </div>
@@ -96,9 +96,8 @@ function StepItem({ label, status, isLast, customIcon }: StepItemProps) {
       <span
         className={cn(
           'grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap',
-          status === 'upcoming' && 'text-gray-500',
-          status === 'current' && 'text-blue-700',
-          status === 'completed' && 'text-gray-700',
+          status === 'upcoming' && 'text-black/60',
+          status === 'current' && 'font-semibold text-blue-600',
         )}
       >
         {label}
