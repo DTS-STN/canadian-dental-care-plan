@@ -91,9 +91,14 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     termsAndConditions,
     inputModel,
     typeOfApplication,
+    clientApplication,
   } = state;
 
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
+
+  if (context === 'renewal' && clientApplication === undefined) {
+    throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
+  }
 
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
@@ -184,6 +189,7 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     termsAndConditions,
     inputModel,
     typeOfApplication,
+    clientApplication,
   };
 }
 

@@ -206,6 +206,11 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         applicantStateCompleted,
         renewedChildren: children,
       }),
+      termsAndConditions: {
+        acknowledgeTerms: true,
+        acknowledgePrivacy: true,
+        shareData: true,
+      },
     };
   }
 

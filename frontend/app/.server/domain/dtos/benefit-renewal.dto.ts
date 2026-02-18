@@ -56,6 +56,7 @@ export type BenefitRenewalDto = ReadonlyDeep<{
   demographicSurvey?: DemographicSurveyDto;
   partnerInformation?: RenewalPartnerInformationDto;
   typeOfApplication: RenewalTypeOfApplicationDto;
+  termsAndConditions: TermsAndConditionsDto;
 
   /** A unique identifier for the user making the request - used for auditing */
   userId: string;
@@ -133,4 +134,10 @@ export type DemographicSurveyDto = ReadonlyDeep<{
 type DentalInsuranceDto = ReadonlyDeep<{
   hasDentalInsurance: boolean;
   dentalInsuranceEligibilityConfirmation?: boolean;
+}>;
+
+type TermsAndConditionsDto = ReadonlyDeep<{
+  acknowledgeTerms: boolean;
+  acknowledgePrivacy: boolean;
+  shareData: boolean;
 }>;
