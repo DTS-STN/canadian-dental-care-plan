@@ -10,15 +10,15 @@ exports[`ProgressStepper > renders correctly when all steps are completed (activ
     >
       <div
         aria-hidden="true"
-        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-blue-700"
+        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-green-700"
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-green-700 bg-green-700 text-white"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-check size-2 sm:size-2.5"
+          class="svg-inline--fa fa-check size-2.5 sm:size-3"
           data-icon="check"
           data-prefix="fas"
           role="img"
@@ -31,7 +31,7 @@ exports[`ProgressStepper > renders correctly when all steps are completed (activ
         </svg>
       </div>
       <span
-        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap"
       >
         First Step
         <span
@@ -46,15 +46,15 @@ exports[`ProgressStepper > renders correctly when all steps are completed (activ
     >
       <div
         aria-hidden="true"
-        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-blue-700"
+        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-green-700"
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-green-700 bg-green-700 text-white"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-check size-2 sm:size-2.5"
+          class="svg-inline--fa fa-check size-2.5 sm:size-3"
           data-icon="check"
           data-prefix="fas"
           role="img"
@@ -67,7 +67,7 @@ exports[`ProgressStepper > renders correctly when all steps are completed (activ
         </svg>
       </div>
       <span
-        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap"
       >
         Second Step
         <span
@@ -82,11 +82,11 @@ exports[`ProgressStepper > renders correctly when all steps are completed (activ
     >
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-green-700 bg-green-700 text-white"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-check size-2 sm:size-2.5"
+          class="svg-inline--fa fa-check size-2.5 sm:size-3"
           data-icon="check"
           data-prefix="fas"
           role="img"
@@ -99,7 +99,7 @@ exports[`ProgressStepper > renders correctly when all steps are completed (activ
         </svg>
       </div>
       <span
-        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap"
       >
         Third Step
         <span
@@ -128,11 +128,11 @@ exports[`ProgressStepper > renders correctly with the first step active > expect
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-white text-blue-700 outline-4 outline-blue-700/10"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-blue-600 bg-white text-blue-600"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-circle size-1.5 sm:size-2"
+          class="svg-inline--fa fa-circle size-2 sm:size-2.5"
           data-icon="circle"
           data-prefix="fas"
           role="img"
@@ -145,7 +145,7 @@ exports[`ProgressStepper > renders correctly with the first step active > expect
         </svg>
       </div>
       <span
-        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-blue-700"
+        class="grow overflow-hidden text-left text-sm text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap font-semibold text-blue-600"
       >
         First Step
       </span>
@@ -159,10 +159,10 @@ exports[`ProgressStepper > renders correctly with the first step active > expect
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
       />
       <span
-        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-500"
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-black/60"
       >
         Second Step
         <span
@@ -177,10 +177,10 @@ exports[`ProgressStepper > renders correctly with the first step active > expect
     >
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
       />
       <span
-        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-500"
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-black/60"
       >
         Third Step
         <span
@@ -204,15 +204,15 @@ exports[`ProgressStepper > renders correctly with the last step active > expecte
     >
       <div
         aria-hidden="true"
-        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-blue-700"
+        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-green-700"
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-green-700 bg-green-700 text-white"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-check size-2 sm:size-2.5"
+          class="svg-inline--fa fa-check size-2.5 sm:size-3"
           data-icon="check"
           data-prefix="fas"
           role="img"
@@ -225,7 +225,7 @@ exports[`ProgressStepper > renders correctly with the last step active > expecte
         </svg>
       </div>
       <span
-        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap"
       >
         First Step
         <span
@@ -240,15 +240,15 @@ exports[`ProgressStepper > renders correctly with the last step active > expecte
     >
       <div
         aria-hidden="true"
-        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-blue-700"
+        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-green-700"
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-green-700 bg-green-700 text-white"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-check size-2 sm:size-2.5"
+          class="svg-inline--fa fa-check size-2.5 sm:size-3"
           data-icon="check"
           data-prefix="fas"
           role="img"
@@ -261,7 +261,7 @@ exports[`ProgressStepper > renders correctly with the last step active > expecte
         </svg>
       </div>
       <span
-        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap"
       >
         Second Step
         <span
@@ -277,11 +277,11 @@ exports[`ProgressStepper > renders correctly with the last step active > expecte
     >
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-white text-blue-700 outline-4 outline-blue-700/10"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-blue-600 bg-white text-blue-600"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-circle size-1.5 sm:size-2"
+          class="svg-inline--fa fa-circle size-2 sm:size-2.5"
           data-icon="circle"
           data-prefix="fas"
           role="img"
@@ -294,7 +294,7 @@ exports[`ProgressStepper > renders correctly with the last step active > expecte
         </svg>
       </div>
       <span
-        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-blue-700"
+        class="grow overflow-hidden text-left text-sm text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap font-semibold text-blue-600"
       >
         Third Step
       </span>
@@ -313,15 +313,15 @@ exports[`ProgressStepper > renders correctly with the second step active > expec
     >
       <div
         aria-hidden="true"
-        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-blue-700"
+        class="absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full bg-green-700"
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-blue-700 text-white"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-green-700 bg-green-700 text-white"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-check size-2 sm:size-2.5"
+          class="svg-inline--fa fa-check size-2.5 sm:size-3"
           data-icon="check"
           data-prefix="fas"
           role="img"
@@ -334,7 +334,7 @@ exports[`ProgressStepper > renders correctly with the second step active > expec
         </svg>
       </div>
       <span
-        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-700"
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap"
       >
         First Step
         <span
@@ -354,11 +354,11 @@ exports[`ProgressStepper > renders correctly with the second step active > expec
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-blue-700 bg-white text-blue-700 outline-4 outline-blue-700/10"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-blue-600 bg-white text-blue-600"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-circle size-1.5 sm:size-2"
+          class="svg-inline--fa fa-circle size-2 sm:size-2.5"
           data-icon="circle"
           data-prefix="fas"
           role="img"
@@ -371,7 +371,7 @@ exports[`ProgressStepper > renders correctly with the second step active > expec
         </svg>
       </div>
       <span
-        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-blue-700"
+        class="grow overflow-hidden text-left text-sm text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap font-semibold text-blue-600"
       >
         Second Step
       </span>
@@ -381,10 +381,10 @@ exports[`ProgressStepper > renders correctly with the second step active > expec
     >
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
+        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
       />
       <span
-        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-gray-500"
+        class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-black/60"
       >
         Third Step
         <span
