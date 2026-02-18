@@ -4,12 +4,13 @@ import {
   isAddressSectionCompleted,
   isChildDentalBenefitsSectionCompleted,
   isChildDentalInsuranceSectionCompleted,
-  isChildInformationSectionCompleted,
   isCommunicationPreferencesSectionCompleted,
   isDentalBenefitsSectionCompleted,
   isDentalInsuranceSectionCompleted,
   isMaritalStatusSectionCompleted,
+  isParentGuardianSectionCompleted,
   isPhoneNumberSectionCompleted,
+  isSinSectionCompleted,
 } from '~/.server/routes/helpers/protected-application-full-section-checks';
 import { getEnv } from '~/.server/utils/env.utils';
 
@@ -232,14 +233,15 @@ describe('protected-application-full-section-checks', () => {
     });
   });
 
-  describe('isChildInformationSectionCompleted', () => {
-    it('should return true when child information has date of birth', () => {
+  describe('isSinSectionCompleted', () => {
+    it('should return true when child sin is defined', () => {
       expect(
-        isChildInformationSectionCompleted({
+        isSinSectionCompleted({
           information: {
-            firstName: 'Test',
+            socialInsuranceNumber: 'Test',
+            firstName: 'Child',
             lastName: 'Child',
-            hasSocialInsuranceNumber: false,
+            hasSocialInsuranceNumber: true,
             isParent: true,
             dateOfBirth: '2010-01-01',
           },
@@ -247,21 +249,43 @@ describe('protected-application-full-section-checks', () => {
       ).toBe(true);
     });
 
-    it('should return false when date of birth is empty string', () => {
-      const child = {
-        information: {
-          firstName: 'Test',
-          lastName: 'Child',
-          hasSocialInsuranceNumber: false,
-          isParent: true,
-          dateOfBirth: '',
-        },
-      };
-      expect(isChildInformationSectionCompleted(child)).toBe(false);
+    it('should return false when sin is empty string', () => {
+      expect(
+        isSinSectionCompleted({
+          information: {
+            firstName: 'Test',
+            lastName: 'Child',
+            hasSocialInsuranceNumber: false,
+            isParent: true,
+            dateOfBirth: '',
+          },
+        }),
+      ).toBe(false);
     });
 
     it('should return false when information is undefined', () => {
-      expect(isChildInformationSectionCompleted({ information: undefined })).toBe(false);
+      expect(isSinSectionCompleted({ information: undefined })).toBe(false);
+    });
+  });
+
+  describe('isParentGuardianSectionCompleted', () => {
+    it('should return true when child parent or guardian is defined', () => {
+      expect(
+        isParentGuardianSectionCompleted({
+          information: {
+            socialInsuranceNumber: 'Test',
+            firstName: 'Child',
+            lastName: 'Child',
+            hasSocialInsuranceNumber: true,
+            isParent: true,
+            dateOfBirth: '2010-01-01',
+          },
+        }),
+      ).toBe(true);
+    });
+
+    it('should return false when information is undefined', () => {
+      expect(isParentGuardianSectionCompleted({ information: undefined })).toBe(false);
     });
   });
 
