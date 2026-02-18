@@ -29,11 +29,12 @@ export const pageIds = {
         exitApplication: 'CDCP-PROT-APPL-FFAM-0007',
       },
       simplifiedAdult: {
-        contactInformation: 'CDCP-PROT-APPL-SAD-0001',
+        maritalStatus: 'CDCP-PROT-APPL-SAD-0001',
         dentalInsurance: 'CDCP-PROT-APPL-SAD-0002',
-        submit: 'CDCP-PROT-APPL-SAD-0003',
-        confirmation: 'CDCP-PROT-APPL-SAD-0004',
-        exitApplication: 'CDCP-PROT-APPL-SAD-0005',
+        contactInformation: 'CDCP-PROT-APPL-SAD-0003',
+        submit: 'CDCP-PROT-APPL-SAD-0004',
+        confirmation: 'CDCP-PROT-APPL-SAD-0005',
+        exitApplication: 'CDCP-PROT-APPL-SAD-0006',
       },
       simplifiedChild: {
         parentOrGuardian: 'CDCP-PROT-APPL-SCH-0001',

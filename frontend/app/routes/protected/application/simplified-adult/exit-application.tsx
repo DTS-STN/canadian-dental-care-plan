@@ -56,7 +56,7 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(t('protected-application-simplified-adult:exit-application.exit-link'));
 }
 
-export default function ProtectedRenewAdultExitApplication({ loaderData, params }: Route.ComponentProps) {
+export default function ProtectedNewAdultExitApplication({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const fetcher = useFetcher<typeof action>();
@@ -77,11 +77,11 @@ export default function ProtectedRenewAdultExitApplication({ loaderData, params 
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Back - Exiting the application click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Exiting the application click"
         >
           {t('protected-application-simplified-adult:exit-application.back-btn')}
         </ButtonLink>
-        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Exit - Exiting the application click">
+        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - Exiting the application click">
           {t('protected-application-simplified-adult:exit-application.exit-btn')}
         </LoadingButton>
       </fetcher.Form>

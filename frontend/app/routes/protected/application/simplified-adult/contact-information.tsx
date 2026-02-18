@@ -10,7 +10,7 @@ import type { Route } from './+types/contact-information';
 import { TYPES } from '~/.server/constants';
 import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { loadProtectedApplicationSimplifiedAdultState } from '~/.server/routes/helpers/protected-application-simplified-adult-route-helpers';
-import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
+import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isEmailSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -32,6 +32,7 @@ const FORM_ACTION = {
   PHONE_NUMBER_NOT_CHANGED: 'phone-number-not-changed',
   ADDRESS_NOT_CHANGED: 'address-not-changed',
   COMMUNICATION_PREFERENCES_NOT_CHANGED: 'communication-preferences-not-changed',
+  EMAIL_ADDRESS_NOT_CHANGED: 'email-address-not-changed',
 } as const;
 
 export const handle = {
@@ -53,44 +54,72 @@ export async function loader({ context: { appContainer, session }, request, para
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-simplified-adult:contact-information.page-title') }) };
   const locale = getLocale(request);
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province) : undefined;
-  const countryMailing = state.mailingAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale) : undefined;
-  const countryHome = state.homeAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale) : undefined;
+  const mailingAddressInfo = state.mailingAddress?.value?.country
+    ? {
+        address: state.mailingAddress.value.address,
+        city: state.mailingAddress.value.city,
+        province: state.mailingAddress.value.province ? (await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province)).abbr : undefined, //eslint-disable-line unicorn/no-await-expression-member
+        postalCode: state.mailingAddress.value.postalCode,
+        country: state.mailingAddress.value.country ? (await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale)).name : undefined, //eslint-disable-line unicorn/no-await-expression-member
+        hasChanged: state.mailingAddress.hasChanged,
+      }
+    : state.clientApplication?.contactInformation.mailingCountry //eslint-disable-line unicorn/no-nested-ternary
+      ? {
+          address: state.clientApplication.contactInformation.mailingAddress,
+          city: state.clientApplication.contactInformation.mailingCity,
+          province: state.clientApplication.contactInformation.mailingProvince ? (await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingProvince)).abbr : undefined, //eslint-disable-line unicorn/no-await-expression-member
+          postalCode: state.clientApplication.contactInformation.mailingPostalCode,
+          country: state.clientApplication.contactInformation.mailingCountry ? (await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.mailingCountry, locale)).name : undefined, //eslint-disable-line unicorn/no-await-expression-member
+          hasChanged: false,
+        }
+      : undefined;
 
-  const mailingAddressInfo = {
-    address: state.mailingAddress?.value?.address,
-    city: state.mailingAddress?.value?.city,
-    province: mailingProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.mailingAddress?.value?.postalCode,
-    country: countryMailing?.name,
-    hasChanged: state.mailingAddress?.hasChanged,
-  };
+  const homeAddressInfo = state.homeAddress?.value?.country
+    ? {
+        address: state.homeAddress.value.address,
+        city: state.homeAddress.value.city,
+        province: state.homeAddress.value.province ? (await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province)).abbr : undefined, //eslint-disable-line unicorn/no-await-expression-member
+        postalCode: state.homeAddress.value.postalCode,
+        country: state.homeAddress.value.country ? (await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale)).name : undefined, //eslint-disable-line unicorn/no-await-expression-member
+        hasChanged: state.homeAddress.hasChanged,
+      }
+    : state.clientApplication?.contactInformation.homeCountry //eslint-disable-line unicorn/no-nested-ternary
+      ? {
+          address: state.clientApplication.contactInformation.homeAddress,
+          city: state.clientApplication.contactInformation.homeCity,
+          province: state.clientApplication.contactInformation.homeProvince ? (await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.clientApplication.contactInformation.homeProvince)).abbr : undefined, //eslint-disable-line unicorn/no-await-expression-member
+          postalCode: state.clientApplication.contactInformation.homePostalCode,
+          country: state.clientApplication.contactInformation.homeCountry ? (await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.clientApplication.contactInformation.homeCountry, locale)).name : undefined, //eslint-disable-line unicorn/no-await-expression-member
+          hasChanged: false,
+        }
+      : undefined;
 
-  const homeAddressInfo = {
-    address: state.homeAddress?.value?.address,
-    city: state.homeAddress?.value?.city,
-    province: homeProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.homeAddress?.value?.postalCode,
-    country: countryHome?.name,
-    hasChanged: state.homeAddress?.hasChanged,
+  const preferredLanguageId = state.communicationPreferences?.value?.preferredLanguage ?? state.clientApplication?.communicationPreferences.preferredLanguage;
+  const preferredMethodId = state.communicationPreferences?.value?.preferredMethod ?? state.clientApplication?.communicationPreferences.preferredMethodSunLife;
+
+  const defaultDisplayValues = {
+    phoneNumber: state.phoneNumber?.value?.primary ?? state.clientApplication?.contactInformation.phoneNumber,
+    preferredLanguage: preferredLanguageId ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(preferredLanguageId, locale).name : undefined,
+    preferredMethod: preferredMethodId ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(preferredMethodId, locale).name : undefined,
+    email: state.email ?? state.clientApplication?.contactInformation.email,
+    mailingAddressInfo,
+    homeAddressInfo,
   };
 
   return {
     state: {
       phoneNumber: state.phoneNumber,
       communicationPreferences: state.communicationPreferences,
+      mailingAddress: state.mailingAddress,
+      homeAddress: state.homeAddress,
       email: state.email,
     },
-    preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
-    preferredMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale) : undefined,
-    preferredNotificationMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale) : undefined,
-    mailingAddressInfo,
-    homeAddressInfo,
+    defaultDisplayValues,
     sections: {
       phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
       address: { completed: isAddressSectionCompleted(state) },
       communicationPreferences: { completed: isCommunicationPreferencesSectionCompleted(state) },
+      email: { completed: isEmailSectionCompleted(state) },
     },
     meta,
   };
@@ -141,11 +170,24 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     });
   }
+
+  // TODO: make email of type DeclaredChange (likely)
+  if (formAction === FORM_ACTION.EMAIL_ADDRESS_NOT_CHANGED) {
+    saveProtectedApplicationState({
+      params,
+      session,
+      state: {
+        email: state.clientApplication?.contactInformation.email,
+        emailVerified: state.clientApplication?.contactInformation.emailVerified,
+      },
+    });
+  }
+
   return data({ success: true }, { status: 200 });
 }
 
 export default function ProtectedRenewAdultContactInformation({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, sections } = loaderData;
+  const { state, defaultDisplayValues, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
@@ -158,9 +200,9 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
       <ProgressStepper activeStep="contact-information" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('protected-application:confirm-information')}</p>
           <p>{t('protected-application:complete-all-sections')}</p>
           <p>{completedSectionsLabel}</p>
+          <p>{t('protected-application:confirm-information')}</p>
         </div>
         <Card>
           <CardHeader>
@@ -168,15 +210,35 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
             <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
-            {state.phoneNumber === undefined ? (
-              <p>{t('protected-application-simplified-adult:contact-information.phone-number-help')}</p>
-            ) : (
+            {state.phoneNumber?.hasChanged === true && (
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.phone-number')}>
-                  {state.phoneNumber.hasChanged === false ? <p>{t('protected-application-simplified-adult:contact-information.no-change')}</p> : <p>{state.phoneNumber.value.primary}</p>}
+                  <p>{state.phoneNumber.value.primary}</p>
                 </DefinitionListItem>
               </DefinitionList>
             )}
+
+            {state.phoneNumber?.hasChanged === false && (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.phone-number')}>
+                  <div>
+                    <p>{defaultDisplayValues.phoneNumber}</p>
+                  </div>
+                </DefinitionListItem>
+              </DefinitionList>
+            )}
+
+            {!state.phoneNumber && defaultDisplayValues.phoneNumber && (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.phone-number')}>
+                  <div>
+                    <p>{defaultDisplayValues.phoneNumber}</p>
+                  </div>
+                </DefinitionListItem>
+              </DefinitionList>
+            )}
+
+            {!state.phoneNumber && !defaultDisplayValues.phoneNumber && <p>{t('protected-application-simplified-adult:contact-information.phone-number-help')}</p>}
           </CardContent>
           {state.phoneNumber ? (
             <CardFooter className="border-t bg-zinc-100">
@@ -206,48 +268,105 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
-            {mailingAddressInfo.hasChanged === undefined && homeAddressInfo.hasChanged === undefined ? (
-              <p>{t('protected-application-simplified-adult:contact-information.address-help')}</p>
-            ) : (
-              <>
-                {mailingAddressInfo.hasChanged === false && homeAddressInfo.hasChanged === false ? (
-                  <p>{t('protected-application-simplified-adult:contact-information.no-change')}</p>
-                ) : (
-                  <DefinitionList layout="single-column">
-                    <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.mailing-address')}>
-                      <Address
-                        address={{
-                          address: mailingAddressInfo.address ?? '',
-                          city: mailingAddressInfo.city ?? '',
-                          provinceState: mailingAddressInfo.province,
-                          postalZipCode: mailingAddressInfo.postalCode,
-                          country: mailingAddressInfo.country ?? '',
-                        }}
-                      />
-                    </DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.home-address')}>
-                      <Address
-                        address={{
-                          address: homeAddressInfo.address ?? '',
-                          city: homeAddressInfo.city ?? '',
-                          provinceState: homeAddressInfo.province,
-                          postalZipCode: homeAddressInfo.postalCode,
-                          country: homeAddressInfo.country ?? '',
-                        }}
-                      />
-                    </DefinitionListItem>
-                  </DefinitionList>
-                )}
-              </>
+            {state.mailingAddress?.hasChanged === true && state.homeAddress?.hasChanged === true && (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.mailing-address')}>
+                  <Address
+                    address={{
+                      address: defaultDisplayValues.mailingAddressInfo?.address ?? '',
+                      city: defaultDisplayValues.mailingAddressInfo?.city ?? '',
+                      provinceState: defaultDisplayValues.mailingAddressInfo?.province,
+                      postalZipCode: defaultDisplayValues.mailingAddressInfo?.postalCode,
+                      country: defaultDisplayValues.mailingAddressInfo?.country ?? '',
+                    }}
+                  />
+                </DefinitionListItem>
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.home-address')}>
+                  <Address
+                    address={{
+                      address: defaultDisplayValues.homeAddressInfo?.address ?? '',
+                      city: defaultDisplayValues.homeAddressInfo?.city ?? '',
+                      provinceState: defaultDisplayValues.homeAddressInfo?.province,
+                      postalZipCode: defaultDisplayValues.homeAddressInfo?.postalCode,
+                      country: defaultDisplayValues.homeAddressInfo?.country ?? '',
+                    }}
+                  />
+                </DefinitionListItem>
+              </DefinitionList>
             )}
+
+            {state.mailingAddress?.hasChanged === false && state.homeAddress?.hasChanged === false && (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.mailing-address')}>
+                  <div>
+                    <Address
+                      address={{
+                        address: defaultDisplayValues.mailingAddressInfo?.address ?? '',
+                        city: defaultDisplayValues.mailingAddressInfo?.city ?? '',
+                        provinceState: defaultDisplayValues.mailingAddressInfo?.province,
+                        postalZipCode: defaultDisplayValues.mailingAddressInfo?.postalCode,
+                        country: defaultDisplayValues.mailingAddressInfo?.country ?? '',
+                      }}
+                    />
+                  </div>
+                </DefinitionListItem>
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.home-address')}>
+                  <div>
+                    <Address
+                      address={{
+                        address: defaultDisplayValues.homeAddressInfo?.address ?? '',
+                        city: defaultDisplayValues.homeAddressInfo?.city ?? '',
+                        provinceState: defaultDisplayValues.homeAddressInfo?.province,
+                        postalZipCode: defaultDisplayValues.homeAddressInfo?.postalCode,
+                        country: defaultDisplayValues.homeAddressInfo?.country ?? '',
+                      }}
+                    />
+                  </div>
+                </DefinitionListItem>
+              </DefinitionList>
+            )}
+
+            {!state.mailingAddress && !state.homeAddress && defaultDisplayValues.mailingAddressInfo && defaultDisplayValues.homeAddressInfo && (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.mailing-address')}>
+                  <div>
+                    <Address
+                      address={{
+                        address: defaultDisplayValues.mailingAddressInfo.address,
+                        city: defaultDisplayValues.mailingAddressInfo.city,
+                        provinceState: defaultDisplayValues.mailingAddressInfo.province,
+                        postalZipCode: defaultDisplayValues.mailingAddressInfo.postalCode,
+                        country: defaultDisplayValues.mailingAddressInfo.country ?? '',
+                      }}
+                    />
+                  </div>
+                </DefinitionListItem>
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.home-address')}>
+                  <div>
+                    <Address
+                      address={{
+                        address: defaultDisplayValues.homeAddressInfo.address ?? '',
+                        city: defaultDisplayValues.homeAddressInfo.city ?? '',
+                        provinceState: defaultDisplayValues.homeAddressInfo.province,
+                        postalZipCode: defaultDisplayValues.homeAddressInfo.postalCode,
+                        country: defaultDisplayValues.homeAddressInfo.country ?? '',
+                      }}
+                    />
+                  </div>
+                </DefinitionListItem>
+              </DefinitionList>
+            )}
+
+            {!state.mailingAddress && !state.homeAddress && !defaultDisplayValues.mailingAddressInfo && !defaultDisplayValues.homeAddressInfo && <p>{t('protected-application-simplified-adult:contact-information.address-help')}</p>}
           </CardContent>
-          {mailingAddressInfo.hasChanged !== undefined && homeAddressInfo.hasChanged !== undefined ? (
+
+          {state.mailingAddress || state.homeAddress ? (
             <CardFooter className="border-t bg-zinc-100">
               <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/mailing-address" params={params} startIcon={sections.address.completed ? faPenToSquare : faCirclePlus} size="lg">
                 {sections.address.completed ? t('protected-application-simplified-adult:contact-information.edit-address') : t('protected-application-simplified-adult:contact-information.add-address')}
               </ButtonLink>
             </CardFooter>
-          ) : (
+          ) : defaultDisplayValues.mailingAddressInfo && defaultDisplayValues.homeAddressInfo ? ( // eslint-disable-line unicorn/no-nested-ternary
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
                 <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/mailing-address" params={params} startIcon={faPenToSquare} size="lg">
@@ -260,6 +379,12 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
                 </Button>
               </div>
             </CardFooter>
+          ) : (
+            <CardFooter className="border-t bg-zinc-100">
+              <ButtonLink id="add-button" variant="link" className="p-0" routeId="protected/application/$id/mailing-address" params={params} startIcon={faCirclePlus} size="lg">
+                {t('protected-application-simplified-adult:contact-information.add-address')}
+              </ButtonLink>
+            </CardFooter>
           )}
         </Card>
 
@@ -269,22 +394,36 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
             <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
-            {state.communicationPreferences === undefined ? (
-              <p>{t('protected-application-simplified-adult:contact-information.communication-preferences-help')}</p>
-            ) : (
-              <>
-                {state.communicationPreferences.hasChanged === false ? (
-                  <p>{t('protected-application-simplified-adult:contact-information.no-change')}</p>
-                ) : (
-                  <DefinitionList layout="single-column">
-                    <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
-                    {state.email && <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.email')}>{state.email}</DefinitionListItem>}
-                  </DefinitionList>
-                )}
-              </>
+            {state.communicationPreferences?.hasChanged === true && (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-language')}>{defaultDisplayValues.preferredLanguage}</DefinitionListItem>
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-method')}>{defaultDisplayValues.preferredMethod}</DefinitionListItem>
+              </DefinitionList>
             )}
+
+            {state.communicationPreferences?.hasChanged === false && (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-language')}>
+                  <div>{defaultDisplayValues.preferredLanguage}</div>
+                </DefinitionListItem>
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-method')}>
+                  <div>{defaultDisplayValues.preferredMethod}</div>
+                </DefinitionListItem>
+              </DefinitionList>
+            )}
+
+            {!state.communicationPreferences && defaultDisplayValues.preferredLanguage && defaultDisplayValues.preferredMethod && (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-language')}>
+                  <div>{defaultDisplayValues.preferredLanguage}</div>
+                </DefinitionListItem>
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-method')}>
+                  <div>{defaultDisplayValues.preferredMethod}</div>
+                </DefinitionListItem>
+              </DefinitionList>
+            )}
+
+            {!state.communicationPreferences && !defaultDisplayValues.preferredLanguage && !defaultDisplayValues.preferredMethod && <p>{t('protected-application-simplified-adult:contact-information.communication-preferences-help')}</p>}
           </CardContent>
           {state.communicationPreferences ? (
             <CardFooter className="border-t bg-zinc-100">
@@ -303,6 +442,54 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
                 <LoadingButton id="complete-button" variant="link" name="_action" value={FORM_ACTION.COMMUNICATION_PREFERENCES_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
                   {t('protected-application-simplified-adult:contact-information.communication-preferences-unchanged')}
                 </LoadingButton>
+              </div>
+            </CardFooter>
+          )}
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('protected-application-simplified-adult:contact-information.email')}</CardTitle>
+            <CardAction>{sections.email.completed && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>
+            {state.email && (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.email')}>
+                  <p>{state.email}</p>
+                </DefinitionListItem>
+              </DefinitionList>
+            )}
+
+            {!state.email && defaultDisplayValues.email && (
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.email')}>
+                  <div>
+                    <p>{defaultDisplayValues.email}</p>
+                  </div>
+                </DefinitionListItem>
+              </DefinitionList>
+            )}
+
+            {!state.email && !defaultDisplayValues.email && <p>{t('protected-application-simplified-adult:contact-information.email-help')}</p>}
+          </CardContent>
+          {state.email ? (
+            <CardFooter className="border-t bg-zinc-100">
+              <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/email" params={params} startIcon={sections.email.completed ? faPenToSquare : faCirclePlus} size="lg">
+                {sections.email.completed ? t('protected-application-simplified-adult:contact-information.edit-email') : t('protected-application-simplified-adult:contact-information.add-email')}
+              </ButtonLink>
+            </CardFooter>
+          ) : (
+            <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+              <div className="w-full px-6">
+                <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/email" params={params} startIcon={faPenToSquare} size="lg">
+                  {t('protected-application-simplified-adult:contact-information.update-email')}
+                </ButtonLink>
+              </div>
+              <div className="w-full px-6">
+                <Button id="complete-button" variant="link" name="_action" value={FORM_ACTION.EMAIL_ADDRESS_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                  {t('protected-application-simplified-adult:contact-information.email-unchanged')}
+                </Button>
               </div>
             </CardFooter>
           )}
