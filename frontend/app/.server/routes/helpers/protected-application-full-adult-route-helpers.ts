@@ -135,6 +135,10 @@ export function validateProtectedApplicationFullAdultStateForReview({ params, st
     throw redirect(getPathById('protected/application/$id/type-of-application', params));
   }
 
+  if (applicantInformation === undefined) {
+    throw redirect(getPathById('protected/application/$id/type-of-application', params));
+  }
+
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
     throw redirect(getPathById('protected/application/$id/full-adult/marital-status', params));
   }

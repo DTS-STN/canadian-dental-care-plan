@@ -52,7 +52,7 @@ export async function loader({ context: { appContainer, session }, request, para
   };
 }
 
-export default function ProtectedNewAdultMaritalStatus({ loaderData, params }: Route.ComponentProps) {
+export default function NewAdultMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { state, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
