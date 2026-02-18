@@ -50,15 +50,14 @@ export async function loader({ context: { appContainer, session }, request, para
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-full-adult:submit.page-title') }) };
 
   const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
-
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
-  const benefitApplicationDtoMapper = appContainer.get(TYPES.BenefitRenewalDtoMapper);
-  const benefitApplicationStateMapper = appContainer.get(TYPES.HubSpokeBenefitRenewalStateMapper);
-  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitApplicationStateMapper.mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(state));
+  const benefitApplicationDtoMapper = appContainer.get(TYPES.BenefitApplicationDtoMapper);
+  const benefitApplicationStateMapper = appContainer.get(TYPES.HubSpokeBenefitApplicationStateMapper);
+  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapBenefitApplicationDtoToProtectedBenefitApplicationRequestEntity(benefitApplicationStateMapper.mapApplicationAdultStateToBenefitApplicationDto(state));
 
   return {
     state: {
-      applicantName: `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`,
+      applicantName: `${state.applicantInformation.firstName} ${state.applicantInformation.lastName}`,
     },
     meta,
     payload,
@@ -91,15 +90,15 @@ export async function action({ context: { appContainer, session }, request, para
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  const benefitApplicationDto = appContainer.get(TYPES.HubSpokeBenefitRenewalStateMapper).mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(state);
-  const confirmationCode = await appContainer.get(TYPES.BenefitRenewalService).createProtectedBenefitRenewal(benefitApplicationDto);
+  const benefitApplicationDto = appContainer.get(TYPES.HubSpokeBenefitApplicationStateMapper).mapApplicationAdultStateToBenefitApplicationDto(state);
+  const confirmationCode = await appContainer.get(TYPES.BenefitApplicationService).createProtectedBenefitApplication(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
   saveProtectedApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
 
   return redirect(getPathById('protected/application/$id/full-adult/confirmation', params));
 }
 
-export default function ProtectedNewAdultSubmit({ loaderData, params }: Route.ComponentProps) {
+export default function NewAdultSubmit({ loaderData, params }: Route.ComponentProps) {
   const { state, payload } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();

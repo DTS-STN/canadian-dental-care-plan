@@ -6,7 +6,7 @@ import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationFullAdultState } from '~/.server/routes/helpers/protected-application-full-adult-route-helpers';
-import { clearProtectedApplicationState, getDeclaredChangeValueOrClientValue, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { clearProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -43,14 +43,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   const locale = getLocale(request);
 
   // prettier-ignore
-  if (
-    state.clientApplication === undefined ||
-    state.communicationPreferences === undefined ||
-    state.dentalBenefits === undefined ||
+  if (state.applicantInformation === undefined ||
+    state.communicationPreferences?.hasChanged !== true ||
+    state.dentalBenefits?.hasChanged !== true ||
     state.dentalInsurance === undefined ||
-    state.phoneNumber === undefined ||
-    state.mailingAddress === undefined ||
-    state.homeAddress === undefined ||
+    state.phoneNumber?.hasChanged !== true ||
+    state.mailingAddress?.hasChanged !== true ||
+    state.homeAddress?.hasChanged !== true ||
     state.submitTerms === undefined ||
     state.hasFiledTaxes === undefined  ||
     state.submissionInfo === undefined
@@ -61,95 +60,32 @@ export async function loader({ context: { appContainer, session }, params, reque
   const env = appContainer.get(TYPES.ClientConfig);
   const surveyLink = locale === 'en' ? env.CDCP_SURVEY_LINK_EN : env.CDCP_SURVEY_LINK_FR;
 
-  const clientCommunicationPreferences = {
-    preferredLanguage: state.clientApplication.communicationPreferences.preferredLanguage,
-    preferredMethod: state.clientApplication.communicationPreferences.preferredMethodSunLife,
-    preferredNotificationMethod: state.clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada,
-  };
-
-  const communicationPreferences = getDeclaredChangeValueOrClientValue(state.communicationPreferences, clientCommunicationPreferences) ?? state.communicationPreferences.value;
-
-  const clientPhoneNumber = state.clientApplication.contactInformation.phoneNumber
-    ? {
-        primary: state.clientApplication.contactInformation.phoneNumber,
-        alternate: state.clientApplication.contactInformation.phoneNumberAlt,
-      }
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.value.federalSocialProgram
+    ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale)
     : undefined;
 
-  const phoneNumber = getDeclaredChangeValueOrClientValue(state.phoneNumber, clientPhoneNumber) ?? state.phoneNumber.value;
-
-  const clientMailingAddress = state.clientApplication.contactInformation.mailingCountry
-    ? {
-        address: state.clientApplication.contactInformation.mailingAddress,
-        city: state.clientApplication.contactInformation.mailingCity,
-        country: state.clientApplication.contactInformation.mailingCountry,
-        postalCode: state.clientApplication.contactInformation.mailingPostalCode,
-        province: state.clientApplication.contactInformation.mailingProvince,
-      }
+  const selectedProvincialBenefits = state.dentalBenefits.value.provincialTerritorialSocialProgram
+    ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
     : undefined;
 
-  const mailingAddress = getDeclaredChangeValueOrClientValue(state.mailingAddress, clientMailingAddress) ?? state.mailingAddress.value;
-
-  const clientHomeAddress = state.clientApplication.contactInformation.homeCountry
-    ? {
-        address: state.clientApplication.contactInformation.homeAddress ?? '',
-        city: state.clientApplication.contactInformation.homeCity ?? '',
-        country: state.clientApplication.contactInformation.homeCountry,
-        postalCode: state.clientApplication.contactInformation.homePostalCode,
-        province: state.clientApplication.contactInformation.homeProvince,
-      }
-    : undefined;
-
-  const homeAddress = getDeclaredChangeValueOrClientValue(state.homeAddress, clientHomeAddress) ?? state.homeAddress.value;
-
-  const email = state.email ?? state.clientApplication.contactInformation.email;
-
-  let federalBenefit;
-  let provincialBenefit;
-
-  if (state.dentalBenefits.hasChanged === true) {
-    if (state.dentalBenefits.value.federalSocialProgram) {
-      federalBenefit = await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale);
-    }
-    if (state.dentalBenefits.value.provincialTerritorialSocialProgram) {
-      provincialBenefit = await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale);
-    }
-  } else {
-    for (const benefitId of state.clientApplication.dentalBenefits) {
-      const federalProgram = await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).findLocalizedFederalGovernmentInsurancePlanById(benefitId, locale);
-      if (federalProgram.isSome()) {
-        federalBenefit = federalProgram.unwrap();
-        continue;
-      }
-
-      const provincialProgram = await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).findLocalizedProvincialGovernmentInsurancePlanById(benefitId, locale);
-      if (provincialProgram.isSome()) {
-        provincialBenefit = provincialProgram.unwrap();
-      }
-    }
-  }
-
-  const mailingProvinceTerritoryStateAbbr = mailingAddress?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(mailingAddress.province) : undefined;
-
-  const homeProvinceTerritoryStateAbbr = homeAddress?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(homeAddress.province) : undefined;
-
-  const countryMailing = mailingAddress?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(mailingAddress.country, locale) : undefined;
-
-  const countryHome = homeAddress?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(homeAddress.country, locale) : undefined;
+  const mailingProvinceTerritoryStateAbbr = state.mailingAddress.value.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
+  const homeProvinceTerritoryStateAbbr = state.homeAddress.value.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province) : undefined;
+  const countryMailing = await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale);
+  const countryHome = await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale);
 
   const userInfo = {
-    memberId: state.clientApplication.applicantInformation.clientNumber,
-    firstName: state.clientApplication.applicantInformation.firstName,
-    lastName: state.clientApplication.applicantInformation.lastName,
-    phoneNumber: phoneNumber?.primary,
-    altPhoneNumber: phoneNumber?.alternate,
-    preferredLanguage: communicationPreferences?.preferredLanguage ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(communicationPreferences.preferredLanguage, locale) : undefined,
-    birthday: toLocaleDateString(parseDateString(state.clientApplication.dateOfBirth), locale),
-    sin: state.clientApplication.applicantInformation.socialInsuranceNumber,
+    memberId: state.applicantInformation.memberId,
+    firstName: state.applicantInformation.firstName,
+    lastName: state.applicantInformation.lastName,
+    phoneNumber: state.phoneNumber.value.primary,
+    altPhoneNumber: state.phoneNumber.value.alternate,
+    preferredLanguage: appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale),
+    birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
+    sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
-    contactInformationEmail: email,
-    communicationSunLifePreference: communicationPreferences?.preferredMethod ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(communicationPreferences.preferredMethod, locale) : undefined,
-    communicationGOCPreference: communicationPreferences?.preferredNotificationMethod ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(communicationPreferences.preferredNotificationMethod, locale) : undefined,
+    contactInformationEmail: state.email,
+    communicationSunLifePreference: appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale),
+    communicationGOCPreference: appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale),
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -157,30 +93,26 @@ export async function loader({ context: { appContainer, session }, params, reque
     sin: state.partnerInformation.socialInsuranceNumber,
   };
 
-  const mailingAddressInfo = mailingAddress
-    ? {
-        address: mailingAddress.address,
-        city: mailingAddress.city,
-        province: mailingProvinceTerritoryStateAbbr?.abbr,
-        postalCode: mailingAddress.postalCode,
-        country: countryMailing?.name ?? '',
-      }
-    : undefined;
+  const mailingAddressInfo = {
+    address: state.mailingAddress.value.address,
+    city: state.mailingAddress.value.city,
+    province: mailingProvinceTerritoryStateAbbr?.abbr,
+    postalCode: state.mailingAddress.value.postalCode,
+    country: countryMailing.name,
+  };
 
-  const homeAddressInfo = homeAddress
-    ? {
-        address: homeAddress.address,
-        city: homeAddress.city,
-        province: homeProvinceTerritoryStateAbbr?.abbr,
-        postalCode: homeAddress.postalCode,
-        country: countryHome?.name ?? '',
-      }
-    : undefined;
+  const homeAddressInfo = {
+    address: state.homeAddress.value.address,
+    city: state.homeAddress.value.city,
+    province: homeProvinceTerritoryStateAbbr?.abbr,
+    postalCode: state.homeAddress.value.postalCode,
+    country: countryHome.name,
+  };
 
   const dentalInsurance = {
     accessToDentalInsurance: state.dentalInsurance.hasDentalInsurance,
-    selectedFederalBenefits: federalBenefit?.name,
-    selectedProvincialBenefits: provincialBenefit?.name,
+    selectedFederalBenefits: selectedFederalGovernmentInsurancePlan?.name,
+    selectedProvincialBenefits: selectedProvincialBenefits?.name,
   };
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-full-adult:confirm.page-title') }) };
@@ -215,7 +147,7 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(t('confirm.exit-link'));
 }
 
-export default function ProtectedApplicationFlowConfirm({ loaderData, params }: Route.ComponentProps) {
+export default function ApplyFlowConfirm({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink } = loaderData;
@@ -336,57 +268,49 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h3>
           <DefinitionList border>
-            {userInfo.phoneNumber && (
-              <DefinitionListItem term={t('confirm.phone-number')}>
-                <span className="text-nowrap">{userInfo.phoneNumber}</span>
-              </DefinitionListItem>
-            )}
-            {userInfo.altPhoneNumber && (
-              <DefinitionListItem term={t('confirm.alt-phone-number')}>
-                <span className="text-nowrap">{userInfo.altPhoneNumber}</span>
-              </DefinitionListItem>
-            )}
+            <DefinitionListItem term={t('confirm.phone-number')}>
+              <span className="text-nowrap">{userInfo.phoneNumber}</span>
+            </DefinitionListItem>
+            <DefinitionListItem term={t('confirm.alt-phone-number')}>
+              <span className="text-nowrap">{userInfo.altPhoneNumber}</span>
+            </DefinitionListItem>
             {userInfo.contactInformationEmail && (
               <DefinitionListItem term={t('confirm.email')}>
                 <span className="text-nowrap">{userInfo.contactInformationEmail}</span>
               </DefinitionListItem>
             )}
-            {mailingAddressInfo && (
-              <DefinitionListItem term={t('confirm.mailing')}>
-                <Address
-                  address={{
-                    address: mailingAddressInfo.address,
-                    city: mailingAddressInfo.city,
-                    provinceState: mailingAddressInfo.province,
-                    postalZipCode: mailingAddressInfo.postalCode,
-                    country: mailingAddressInfo.country,
-                  }}
-                />
-              </DefinitionListItem>
-            )}
-            {homeAddressInfo && (
-              <DefinitionListItem term={t('confirm.home')}>
-                <Address
-                  address={{
-                    address: homeAddressInfo.address,
-                    city: homeAddressInfo.city,
-                    provinceState: homeAddressInfo.province,
-                    postalZipCode: homeAddressInfo.postalCode,
-                    country: homeAddressInfo.country,
-                  }}
-                />
-              </DefinitionListItem>
-            )}
+            <DefinitionListItem term={t('confirm.mailing')}>
+              <Address
+                address={{
+                  address: mailingAddressInfo.address,
+                  city: mailingAddressInfo.city,
+                  provinceState: mailingAddressInfo.province,
+                  postalZipCode: mailingAddressInfo.postalCode,
+                  country: mailingAddressInfo.country,
+                }}
+              />
+            </DefinitionListItem>
+            <DefinitionListItem term={t('confirm.home')}>
+              <Address
+                address={{
+                  address: homeAddressInfo.address,
+                  city: homeAddressInfo.city,
+                  provinceState: homeAddressInfo.province,
+                  postalZipCode: homeAddressInfo.postalCode,
+                  country: homeAddressInfo.country,
+                }}
+              />
+            </DefinitionListItem>
           </DefinitionList>
         </section>
 
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-pref')}</h3>
           <DefinitionList border>
-            {userInfo.preferredLanguage && <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage.name}</DefinitionListItem>}
-            {userInfo.communicationSunLifePreference && <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.communicationSunLifePreference.name}</DefinitionListItem>}
-            {userInfo.communicationGOCPreference && <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.communicationGOCPreference.name}</DefinitionListItem>}
-            {userInfo.contactInformationEmail && <DefinitionListItem term={t('confirm.email')}>{userInfo.contactInformationEmail}</DefinitionListItem>}
+            <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage.name}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.communicationSunLifePreference.name}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.communicationGOCPreference.name}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.email')}>{userInfo.contactInformationEmail}</DefinitionListItem>
           </DefinitionList>
         </section>
 
