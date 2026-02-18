@@ -588,13 +588,37 @@ export function getEligibilityStatus(hasPrivateDentalInsurance: boolean, t4Denta
   return 'ineligible';
 }
 
-export function getTypeOfApplicationFromRenewalSelectionClientIds(state: ProtectedApplicationState, applicantIds: string[]): TypeOfApplicationState {
+/**
+ * Determines if the provided client ID corresponds to the primary applicant in the protected application state.
+ *
+ * @param state - The protected application state.
+ * @param clientId - The ID of the client to check.
+ * @returns `true` if the primary applicant is included in the renewal selection; otherwise, `false`.
+ */
+export function isPrimaryApplicant(state: ProtectedApplicationState, clientId: string): boolean {
   invariant(state.clientApplication, 'Expected clientApplication to be defined');
-  const isPrimaryApplicantRenewing = applicantIds.includes(state.clientApplication.applicantInformation.clientId);
-  const isDependentRenewing = applicantIds.some((id) => state.clientApplication?.children.some((child) => child.information.clientId === id));
-  if (isPrimaryApplicantRenewing && isDependentRenewing) return 'family';
-  if (isPrimaryApplicantRenewing) return 'adult';
-  if (isDependentRenewing) return 'children';
+  return state.clientApplication.applicantInformation.clientId === clientId;
+}
+
+/**
+ * Determines if the provided client ID corresponds to a child of the primary applicant in the protected application state.
+ *
+ * @param state - The protected application state.
+ * @param clientId - The ID of the client to check.
+ * @returns `true` if the client ID corresponds to a child of the primary applicant; otherwise, `false`.
+ */
+export function isPrimaryApplicantChild(state: ProtectedApplicationState, clientId: string): boolean {
+  invariant(state.clientApplication, 'Expected clientApplication to be defined');
+  return state.clientApplication.children.some((child) => child.information.clientId === clientId);
+}
+
+export function getTypeOfApplicationFromRenewalSelectionClientIds(state: ProtectedApplicationState, clientIds: string[]): TypeOfApplicationState {
+  invariant(state.clientApplication, 'Expected clientApplication to be defined');
+  const hasPrimaryApplicant = clientIds.some((id) => isPrimaryApplicant(state, id));
+  const hasDependent = clientIds.some((id) => isPrimaryApplicantChild(state, id));
+  if (hasPrimaryApplicant && hasDependent) return 'family';
+  if (hasPrimaryApplicant) return 'adult';
+  if (hasDependent) return 'children';
   return 'delegate';
 }
 
