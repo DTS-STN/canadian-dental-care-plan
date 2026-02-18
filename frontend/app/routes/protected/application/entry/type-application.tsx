@@ -7,7 +7,7 @@ import type { Route } from './+types/type-application';
 import { TYPES } from '~/.server/constants';
 import { isPersonalInformationSectionCompleted, isTypeOfApplicationSectionCompleted } from '~/.server/routes/helpers/protected-application-entry-section-checks';
 import type { ApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getInitialApplicationFlowUrl, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getInitialApplicationFlowUrl, getProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -38,6 +38,8 @@ export async function loader({ context: { appContainer, session }, request, para
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
+  validateProtectedApplicationContext(state, params, 'intake');
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:type-of-application.page-title') }) };
 

@@ -8,7 +8,7 @@ import type { Route } from './+types/personal-information';
 
 import { TYPES } from '~/.server/constants';
 import type { ApplicantInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getAgeCategoryFromDateString, getProtectedApplicationState, saveProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getAgeCategoryFromDateString, getProtectedApplicationState, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -44,9 +44,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  validateProtectedApplicationContext(state, params, 'intake');
 
+  const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:personal-information.page-title') }) };
+
   return {
     state: state.applicantInformation,
     meta,
@@ -61,6 +63,8 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const state = getProtectedApplicationState({ params, session });
+  validateProtectedApplicationContext(state, params, 'intake');
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const applicantInformationSchema = z

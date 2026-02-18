@@ -99,7 +99,7 @@ export default function ProtectedNewAdultMaritalStatus({ loaderData, params }: R
           <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="protected/application/$id/simplified-adult/contact-information" params={params}>
             {t('protected-application-simplified-adult:marital-status.next-btn')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/type-of-application" params={params}>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renew" params={params}>
             {t('protected-application-simplified-adult:marital-status.prev-btn')}
           </NavigationButtonLink>
         </div>
