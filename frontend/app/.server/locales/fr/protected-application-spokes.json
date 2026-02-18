@@ -517,6 +517,15 @@
       "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
       "back-btn": "Retour",
       "save-btn": "Sauvegarder"
+    },
+    "social-insurance-number": {
+      "page-title": "(FR) Numéro d'assurance sociale de l'enfant (optional)",
+      "legend": "(FR) {{childName}}'s Social Insurance Number (SIN)",
+      "help-message": "(FR) Enter their 9-digit SIN",
+      "sin-valid": "(FR) Must be a valid SIN",
+      "sin-unique": "(FR) The Social Insurance Number (SIN) must be unique",
+      "back-btn": "Retour",
+      "save-btn": "Sauvegarder"
     }
   },
   "dental-insurance-exit-application": {
