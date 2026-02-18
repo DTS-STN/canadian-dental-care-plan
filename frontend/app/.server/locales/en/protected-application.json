@@ -54,7 +54,7 @@
     "exit-btn": "Exit application",
     "exit-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   },
-  "type-of-application": {
+  "renewal-selection": {
     "page-title": "Renew your Canadian Dental Care Plan benefits",
     "type-application-heading": "Renewal selection",
     "type-application-legend": "You wish to renew the CDCP for the following member(s):",
@@ -66,5 +66,28 @@
     "before-you-start": "Before you apply",
     "add-type-application": "Select member(s)",
     "edit-type-application": "Edit selection"
+  },
+  "type-of-application": {
+    "page-title": "Type of application",
+    "type-application-heading": "Type of application",
+    "type-application-legend": "Who are you applying for?",
+    "type-application-description": "Tell us who you are applying for. Are you applying for yourself, your child(ren) or on behalf of someone else?",
+    "type-application-personal": "I am applying for myself",
+    "type-application-children": "I am applying for my child(ren)",
+    "type-application-family": "I am applying for myself and my child(ren)",
+    "personal-info-heading": "Personal information",
+    "personal-info-description": "Enter your Member ID, name, date of birth and Social Insurance Number (SIN).",
+    "member-id": "Member ID",
+    "full-name": "Full name",
+    "date-of-birth": "Date of birth",
+    "sin": "Social Insurance Number (SIN)",
+    "application": "Application",
+    "before-you-start": "Before you start your application",
+    "add-answer": "Add answer",
+    "edit-answer": "Edit answer",
+    "add-type-application": "Add type of application",
+    "edit-type-application": "Edit type of application",
+    "add-personal-information": "Add personal information",
+    "edit-personal-information": "Edit personal information"
   }
 }

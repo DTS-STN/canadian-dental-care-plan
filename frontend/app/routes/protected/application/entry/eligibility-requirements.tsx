@@ -50,12 +50,13 @@ export async function loader({ context: { appContainer, session }, request, para
       termsAndConditions: { completed: isTermsAndConditionsSectionCompleted(state) },
       taxFiling: { completed: isTaxFilingSectionCompleted(state) },
     },
+    isIntake: state.context === 'intake',
     meta,
   };
 }
 
 export default function ProtectedApplicationEligibilityRequirements({ loaderData, params }: Route.ComponentProps) {
-  const { state, sections } = loaderData;
+  const { state, sections, isIntake } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
@@ -104,7 +105,7 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
           </ButtonLink>
         </CardFooter>
       </Card>
-      <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="protected/application/$id/type-of-application" params={params}>
+      <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId={`protected/application/$id/${isIntake ? 'type-of-application' : 'renew'}`} params={params}>
         {t('protected-application:eligibility-requirements.next-button')}
       </NavigationButtonLink>
     </div>
