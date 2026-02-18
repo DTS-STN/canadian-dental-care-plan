@@ -71,3 +71,22 @@ configMapGenerator:
       - startTimeFr=30 avril 2025 à 22 h 00 HAE
       - endTimeEn=7:00am EDT May 1, 2025
       - endTimeFr=1 mai 2025 à 7 h 00 HAE
+secretGenerator:
+  - name: frontend
+    behavior: replace
+    options:
+      # disable suffix hash so it can effectively
+      # be managed by external secrets operator
+      disableNameSuffixHash: true
+  - name: oauth-proxy
+    behavior: create
+    options:
+      # disable suffix hash so it can effectively
+      # be managed by external secrets operator
+      disableNameSuffixHash: true
+  - name: redis
+    behavior: replace
+    options:
+      # disable suffix hash so it can effectively
+      # be managed by external secrets operator
+      disableNameSuffixHash: true
