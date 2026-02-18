@@ -18,6 +18,16 @@ export const routes = [
             paths: { en: '/:lang/protected/application/:id/eligibility-requirements', fr: '/:lang/protected/demande/:id/criteres-admissibilite' },
           },
           {
+            id: 'protected/application/$id/type-of-application',
+            file: 'routes/protected/application/entry/type-application.tsx',
+            paths: { en: '/:lang/protected/application/:id/type-of-application', fr: '/:lang/protected/demande/:id/type-de-demande' },
+          },
+          {
+            id: 'protected/application/$id/renew',
+            file: 'routes/protected/application/entry/renew.tsx',
+            paths: { en: '/:lang/protected/application/:id/renew', fr: '/:lang/protected/demande/:id/renouveler' },
+          },
+          {
             id: 'protected/application/$id/full-adult/marital-status',
             file: 'routes/protected/application/full-adult/marital-status.tsx',
             paths: { en: '/:lang/protected/application/:id/full/adult/marital-status', fr: '/:lang/protege/demande/:id/complete/adulte/etat-civil' },
@@ -197,11 +207,6 @@ export const routes = [
             paths: { en: '/:lang/protected/application/:id/simplified/family/exit-application', fr: '/:lang/protege/demande/:id/simplifie/famille/quitter-demande' },
           },
 
-          {
-            id: 'protected/application/$id/type-of-application',
-            file: 'routes/protected/application/entry/type-application.tsx',
-            paths: { en: '/:lang/protected/application/:id/type-of-application', fr: '/:lang/protected/demande/:id/type-de-demande' },
-          },
           // spokes
           {
             id: 'protected/application/$id/application-delegate',
