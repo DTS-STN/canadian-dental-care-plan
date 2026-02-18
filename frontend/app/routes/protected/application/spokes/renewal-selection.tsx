@@ -8,7 +8,7 @@ import { z } from 'zod';
 import type { Route } from './+types/renewal-selection';
 
 import { TYPES } from '~/.server/constants';
-import { getProtectedApplicationState, getTypeOfApplicationFromRenewalSelectionClientIds, saveProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getProtectedApplicationState, getTypeOfApplicationFromRenewalSelectionClientIds, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import type { ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -38,11 +38,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
+  validateProtectedApplicationContext(state, params, 'renewal');
+  invariant(state.clientApplication, 'Expected clientApplication to be defined');
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:renewal-selection.page-title') }) };
-
-  invariant(state.clientApplication, 'Expected clientApplication to be defined');
 
   const applicants = [
     { id: state.clientApplication.applicantInformation.clientId, name: `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}` },
@@ -57,6 +58,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
+  validateProtectedApplicationContext(state, params, 'renewal');
   invariant(state.clientApplication, 'Expected clientApplication to be defined');
 
   const formData = await request.formData();

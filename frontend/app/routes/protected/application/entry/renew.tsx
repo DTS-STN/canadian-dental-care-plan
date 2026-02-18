@@ -6,7 +6,7 @@ import type { Route } from './+types/renew';
 
 import { TYPES } from '~/.server/constants';
 import { isRenewalSelectionCompleted } from '~/.server/routes/helpers/protected-application-entry-section-checks';
-import { getInitialApplicationFlowUrl, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getInitialApplicationFlowUrl, getProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import type { ApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
@@ -41,6 +41,8 @@ export async function loader({ context: { appContainer, session }, request, para
   appContainer.get(TYPES.AuditService).createAudit('page-view.application.entry.type-of-application', { userId: idToken.sub });
 
   const state = getProtectedApplicationState({ params, session });
+  validateProtectedApplicationContext(state, params, 'renewal');
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:renewal-selection.page-title') }) };
 

@@ -7,7 +7,7 @@ import { z } from 'zod';
 import type { Route } from './+types/type-application';
 
 import { TYPES } from '~/.server/constants';
-import { getProtectedApplicationState, saveProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getProtectedApplicationState, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -38,6 +38,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
+  validateProtectedApplicationContext(state, params, 'intake');
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:type-of-application.page-title') }) };
@@ -52,7 +54,9 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  getProtectedApplicationState({ params, session });
+  const state = getProtectedApplicationState({ params, session });
+  validateProtectedApplicationContext(state, params, 'intake');
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   /**

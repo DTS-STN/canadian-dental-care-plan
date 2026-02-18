@@ -515,13 +515,13 @@ export function getInitialApplicationFlowUrl(applicationFlow: ApplicationFlow, p
       return getPathById('protected/application/$id/application-delegate', params);
     }
     case 'simplified-adult': {
-      return getPathById('protected/application/$id/simplified-adult/contact-information', params);
+      return getPathById('protected/application/$id/simplified-adult/marital-status', params);
     }
     case 'simplified-children': {
       return getPathById('protected/application/$id/simplified-children/parent-or-guardian', params);
     }
     case 'simplified-family': {
-      return getPathById('protected/application/$id/simplified-family/contact-information', params);
+      return getPathById('protected/application/$id/simplified-family/marital-status', params);
     }
     case 'simplified-delegate': {
       return getPathById('protected/application/$id/application-delegate', params);
@@ -627,4 +627,21 @@ export function getDeclaredChangeValueOrClientValue<T>(declaredChange: { hasChan
   if (declaredChange?.hasChanged === true) return declaredChange.value;
   if (declaredChange?.hasChanged === false) return clientValue;
   return undefined;
+}
+
+/**
+ * Validates if the protected application state context matches the expected context. If the context
+ * does not match, it redirects to the initial application flow URL.
+ */
+export function validateProtectedApplicationContext<TExpectedContext extends ProtectedApplicationState['context']>(
+  state: ProtectedApplicationState,
+  params: ApplicationStateParams,
+  expectedContext: TExpectedContext,
+): asserts state is Omit<ProtectedApplicationState, 'context'> & { context: TExpectedContext } {
+  if (state.context !== expectedContext) {
+    const redirectUrl = getInitialApplicationFlowUrl('entry', params);
+    const log = createLogger('protected-application-route-helpers.server/validateProtectedApplicationContext');
+    log.warn('Application context [%s] does not match expected context [%s]; redirecting to [%s], stateId: [%s]', state.context, expectedContext, redirectUrl, state.id);
+    throw redirectDocument(redirectUrl);
+  }
 }
