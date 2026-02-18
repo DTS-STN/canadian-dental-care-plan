@@ -118,22 +118,22 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
 
-    const childId = formData.get('childId');
-    saveProtectedApplicationState({
-      params,
-      session,
-      state: {
-        children: state.children.map((child) => {
-          if (child.id !== childId) return child;
-          return {
-            ...child,
-            dentalBenefits: { hasChanged: false },
-          };
-        }),
-      },
-    });
+  const childId = formData.get('childId');
+  saveProtectedApplicationState({
+    params,
+    session,
+    state: {
+      children: state.children.map((child) => {
+        if (child.id !== childId) return child;
+        return {
+          ...child,
+          dentalBenefits: { hasChanged: false },
+        };
+      }),
+    },
+  });
 
-    return data({ success: true }, { status: 200 });
+  return data({ success: true }, { status: 200 });
 }
 
 export default function ProtectedRenewChildChildrensApplication({ loaderData, params }: Route.ComponentProps) {
