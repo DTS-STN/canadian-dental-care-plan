@@ -60,11 +60,19 @@ export function isMaritalStatusSectionCompleted(state: Pick<ProtectedApplication
 }
 
 /**
- * Checks if the child information section is completed for full application.
+ * Checks if the child SIN section is completed for simplified application.
  */
-export function isChildInformationSectionCompleted(child: Pick<ChildState, 'information'>): boolean {
+export function isSinSectionCompleted(child: Pick<ChildState, 'information'>): boolean {
   // TODO: Check with age category and live independently status
-  return child.information !== undefined && child.information.dateOfBirth !== '';
+  return child.information?.socialInsuranceNumber !== undefined;
+}
+
+/**
+ * Checks if the child parent/guardian section is completed for simplified application.
+ */
+export function isParentGuardianSectionCompleted(child: Pick<ChildState, 'information'>): boolean {
+  // TODO: Check with age category and live independently status
+  return child.information?.isParent !== undefined;
 }
 
 /**

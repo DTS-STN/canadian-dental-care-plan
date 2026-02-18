@@ -377,57 +377,6 @@
   },
   "children": {
     "child-number": "Child {{childNumber}}",
-    "information": {
-      "page-title": "{{childName}}: information",
-      "form-instructions-sin": "Provide the child's legal name as indicated on their Social Insurance Number (SIN) record, or other government documentation.",
-      "single-legal-name": "If the child has one legal name",
-      "name-instructions": "If the child uses one legal name, please enter that name in BOTH the first name and last name fields.",
-      "last-name": "Last name",
-      "first-name": "First name",
-      "date-of-birth": "Date of birth",
-      "sin-legend": "Does this child have a Social Insurance Number (SIN)?",
-      "sin-yes": "Yes",
-      "sin-no": "No",
-      "sin": "Enter the 9-digit SIN",
-      "member-id": "Child's member ID",
-      "parent-legend": "Are you the parent or legal guardian of this child?",
-      "radio-options": {
-        "yes": "Yes",
-        "no": "No"
-      },
-      "back-btn": "Back",
-      "save-btn": "Save",
-      "help-message": {
-        "member-id": "You can find the child's member ID in the upper right corner of the letter from Service Canada or on the child's Canadian Dental Care Plan member card."
-      },
-      "error-message": {
-        "member-id-required": "Enter 11-digit member ID",
-        "member-id-valid": "Member ID must be 11-digit",
-        "first-name-required": "Enter child's first name",
-        "last-name-required": "Enter child's last name",
-        "sin-required": "Enter 9-digit SIN, for example 123 456 789",
-        "sin-valid": "Must be a valid SIN",
-        "sin-unique": "SIN must be unique",
-        "date-of-birth-day-number": "Day must be a number",
-        "date-of-birth-day-required": "Date of birth must include a day",
-        "date-of-birth-is-past": "Date of birth must be in the past",
-        "date-of-birth-is-past-valid": "Date of birth too far in the past",
-        "date-of-birth-month-required": "Date of birth must include a month",
-        "date-of-birth-valid": "Day must be valid for the given month and year",
-        "date-of-birth-year-number": "Year must be a number, for example 1950",
-        "date-of-birth-year-required": "Date of birth must include a year",
-        "has-social-insurance-number": "Select whether the child has a SIN",
-        "is-parent": "Select whether you are the parent or legal guardian of the child",
-        "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()",
-        "first-name-no-digits": "First name must contain letters only",
-        "last-name-no-digits": "Last name must contain letters only",
-        "alert": {
-          "heading": "We couldn't find your child's Canadian Dental Care Plan (CDCP) account with the information you entered",
-          "detail": "Check that the child's information is correct and try again. If the problem continues, call us at <noWrap>1-833-537-4342</noWrap> to update your information.",
-          "applyDate": "Note: only current CDCP members can renew benefits now. If your child is not enrolled, you can apply for the upcoming benefit year starting June 2, 2026."
-        }
-      }
-    },
     "parent-or-guardian": {
       "page-title": "You must be a parent or legal guardian",
       "must-be": "You must be a parent or legal guardian.",

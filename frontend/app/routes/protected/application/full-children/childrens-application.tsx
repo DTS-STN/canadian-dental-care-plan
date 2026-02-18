@@ -1,9 +1,10 @@
 import type { SyntheticEvent } from 'react';
 
-import { redirect, useFetcher } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import { faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -11,7 +12,7 @@ import type { Route } from './+types/childrens-application';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationFullChildState } from '~/.server/routes/helpers/protected-application-full-child-route-helpers';
-import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildInformationSectionCompleted } from '~/.server/routes/helpers/protected-application-full-section-checks';
+import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isParentGuardianSectionCompleted, isSinSectionCompleted } from '~/.server/routes/helpers/protected-application-full-section-checks';
 import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -20,11 +21,8 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
-import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/protected/application/full-children/progress-stepper';
-import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
-import { generateId } from '~/utils/id.utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -32,7 +30,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-const FORM_ACTION = { add: 'add', remove: 'remove' } as const;
+const FORM_ACTION = { DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-full-child', 'protected-application', 'gcweb', 'common'),
@@ -68,19 +66,19 @@ export async function loader({ context: { appContainer, session }, request, para
 
       return {
         ...child,
-        dentalBenefits:
-          child.dentalBenefits?.hasChanged === true
-            ? {
-                federalBenefit: {
-                  access: child.dentalBenefits.value.hasFederalBenefits,
-                  benefit: federalGovernmentInsurancePlanProgram?.name,
-                },
-                provTerrBenefit: {
-                  access: child.dentalBenefits.value.hasProvincialTerritorialBenefits,
-                  benefit: provincialTerritorialSocialProgram?.name,
-                },
-              }
-            : undefined,
+        dentalBenefits: child.dentalBenefits
+          ? {
+              hasChanged: child.dentalBenefits.hasChanged,
+              federalBenefit: {
+                access: child.dentalBenefits.value?.hasFederalBenefits,
+                benefit: federalGovernmentInsurancePlanProgram?.name,
+              },
+              provTerrBenefit: {
+                access: child.dentalBenefits.value?.hasProvincialTerritorialBenefits,
+                benefit: provincialTerritorialSocialProgram?.name,
+              },
+            }
+          : undefined,
       };
     }),
   );
@@ -93,9 +91,18 @@ export async function loader({ context: { appContainer, session }, request, para
     childrenSections: state.children.map((child) => ({
       id: child.id,
       sections: {
-        childInformation: { completed: isChildInformationSectionCompleted(child) },
-        childDentalInsurance: { completed: isChildDentalInsuranceSectionCompleted(child) },
-        childDentalBenefits: { completed: isChildDentalBenefitsSectionCompleted(child) },
+        sin: {
+          completed: isSinSectionCompleted(child),
+        },
+        parentGuardian: {
+          completed: isParentGuardianSectionCompleted(child),
+        },
+        childDentalInsurance: {
+          completed: isChildDentalInsuranceSectionCompleted(child),
+        },
+        childDentalBenefits: {
+          completed: isChildDentalBenefitsSectionCompleted(child),
+        },
       },
     })),
   };
@@ -114,37 +121,30 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
-  if (formAction === FORM_ACTION.add) {
-    const childId = generateId();
-    const children = [...state.children, { id: childId }];
-
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (formAction === FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED) {
+    const childId = formData.get('childId');
     saveProtectedApplicationState({
       params,
       session,
       state: {
-        children: children,
+        children: state.children.map((child) => {
+          if (child.id !== childId) return child;
+          return {
+            ...child,
+            dentalBenefits: { hasChanged: false },
+          };
+        }),
       },
     });
-  }
 
-  if (formAction === FORM_ACTION.remove) {
-    const removeChildId = formData.get('childId');
-    const children = [...state.children].filter((child) => child.id !== removeChildId);
-
-    saveProtectedApplicationState({
-      params,
-      session,
-      state: {
-        children: children,
-      },
-    });
+    return data({ success: true }, { status: 200 });
   }
 
   return redirect(getPathById(`protected/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
 }
 
 export default function ProtectedNewChildChildrensApplication({ loaderData, params }: Route.ComponentProps) {
-  const { currentLanguage } = useCurrentLanguage();
   const { state, childrenSections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
@@ -170,9 +170,6 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
       <ProgressStepper activeStep="childrens-application" className="mb-8" />
       <div className="max-w-prose space-y-8">
         {state.children.map((child, index) => {
-          const childName = `${child.information?.firstName} ${child.information?.lastName}`;
-          const dateOfBirth = child.information?.dateOfBirth ? toLocaleDateString(parseDateString(child.information.dateOfBirth), currentLanguage) : '';
-
           const sections = childrenSections.find((c) => c.id === child.id)?.sections;
           invariant(sections, 'Expected sections to be defined for child');
           const sectionCompletedCount = Object.values(sections).filter((section) => section.completed).length;
@@ -187,28 +184,44 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
               </div>
               <Card className="my-2">
                 <CardHeader>
-                  <CardTitle>{t('protected-application-full-child:childrens-application.child-information-card-title', { childNumber: index + 1 })}</CardTitle>
-                  <CardAction>{sections.childInformation.completed && <StatusTag status="complete" />}</CardAction>
+                  <CardTitle>{t('protected-application-full-child:childrens-application.child-sin-card-title')}</CardTitle>
+                  <CardAction>{sections.sin.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.information === undefined ? (
-                    <p>{t('protected-application-full-child:childrens-application.child-information-indicate-status')}</p>
+                    <p>{t('protected-application-full-child:childrens-application.child-sin-indicate-status')}</p>
                   ) : (
                     <DefinitionList layout="single-column">
-                      {child.information.memberId && (
-                        <DefinitionListItem term={t('protected-application-full-child:childrens-application.member-id-title')}>
-                          <p>{child.information.memberId}</p>
-                        </DefinitionListItem>
-                      )}
-                      <DefinitionListItem term={t('protected-application-full-child:childrens-application.full-name-title')}>
-                        <p>{childName}</p>
-                      </DefinitionListItem>
-                      <DefinitionListItem term={t('protected-application-full-child:childrens-application.dob-title')}>
-                        <p>{dateOfBirth}</p>
-                      </DefinitionListItem>
                       <DefinitionListItem term={t('protected-application-full-child:childrens-application.sin-title')}>
                         <p>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</p>
                       </DefinitionListItem>
+                    </DefinitionList>
+                  )}
+                </CardContent>
+                <CardFooter className="border-t bg-zinc-100">
+                  <ButtonLink
+                    id="edit-button"
+                    variant="link"
+                    className="p-0"
+                    routeId="protected/application/$id/children/$childId/social-insurance-number"
+                    params={{ ...params, childId: child.id }}
+                    startIcon={sections.sin.completed ? faPenToSquare : faCirclePlus}
+                    size="lg"
+                  >
+                    {child.information === undefined ? t('protected-application-full-child:childrens-application.add-child-sin') : t('protected-application-full-child:childrens-application.edit-child-sin', { childNumber: index + 1 })}
+                  </ButtonLink>
+                </CardFooter>
+              </Card>
+              <Card className="my-2">
+                <CardHeader>
+                  <CardTitle>{t('protected-application-full-child:childrens-application.child-parent-guardian-card-title')}</CardTitle>
+                  <CardAction>{sections.parentGuardian.completed && <StatusTag status="complete" />}</CardAction>
+                </CardHeader>
+                <CardContent>
+                  {child.information === undefined ? (
+                    <p>{t('protected-application-full-child:childrens-application.child-parent-guardian-indicate-status')}</p>
+                  ) : (
+                    <DefinitionList layout="single-column">
                       <DefinitionListItem term={t('protected-application-full-child:childrens-application.parent-guardian-title')}>
                         <p>{child.information.isParent ? t('protected-application-full-child:childrens-application.yes') : t('protected-application-full-child:childrens-application.no')}</p>
                       </DefinitionListItem>
@@ -220,16 +233,15 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                     id="edit-button"
                     variant="link"
                     className="p-0"
-                    routeId="protected/application/$id/children/$childId/information"
+                    routeId="protected/application/$id/children/$childId/parent-guardian"
                     params={{ ...params, childId: child.id }}
-                    startIcon={sections.childInformation.completed ? faPenToSquare : faCirclePlus}
+                    startIcon={sections.parentGuardian.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
                   >
-                    {child.information === undefined ? t('protected-application-full-child:childrens-application.add-child-information') : t('protected-application-full-child:childrens-application.edit-child-information', { childNumber: index + 1 })}
+                    {child.information === undefined ? t('protected-application-full-child:childrens-application.add-answer') : t('protected-application-full-child:childrens-application.edit-answer')}
                   </ButtonLink>
                 </CardFooter>
               </Card>
-
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle>{t('protected-application-full-child:childrens-application.child-dental-insurance-card-title')}</CardTitle>
@@ -272,60 +284,71 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                   ) : (
                     <DefinitionList layout="single-column">
                       <DefinitionListItem term={t('protected-application-full-child:childrens-application.dental-benefits-title')}>
-                        {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
-                          <div className="space-y-3">
-                            <p>{t('protected-application-full-child:childrens-application.dental-benefits-yes')}</p>
-                            <ul className="list-disc space-y-1 pl-7">
-                              {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
-                              {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
-                            </ul>
-                          </div>
+                        {child.dentalBenefits.hasChanged ? (
+                          <>
+                            {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
+                              <div className="space-y-3">
+                                <p>{t('protected-application-full-child:childrens-application.dental-benefits-yes')}</p>
+                                <ul className="list-disc space-y-1 pl-7">
+                                  {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
+                                  {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
+                                </ul>
+                              </div>
+                            ) : (
+                              <p>{t('protected-application-full-child:childrens-application.dental-benefits-no')}</p>
+                            )}
+                          </>
                         ) : (
-                          <p>{t('protected-application-full-child:childrens-application.dental-benefits-no')}</p>
+                          <p>{t('protected-application-full-child:childrens-application.no-change')}</p>
                         )}
                       </DefinitionListItem>
                     </DefinitionList>
                   )}
                 </CardContent>
-                <CardFooter className="border-t bg-zinc-100">
-                  <ButtonLink
-                    id="edit-button"
-                    variant="link"
-                    className="p-0"
-                    routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
-                    params={{ ...params, childId: child.id }}
-                    startIcon={sections.childDentalBenefits.completed ? faPenToSquare : faCirclePlus}
-                    size="lg"
-                  >
-                    {child.dentalBenefits === undefined ? t('protected-application-full-child:childrens-application.add-answer') : t('protected-application-full-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })}
-                  </ButtonLink>
-                </CardFooter>
+                {child.dentalBenefits ? (
+                  <CardFooter className="border-t bg-zinc-100">
+                    <ButtonLink
+                      id="edit-button-government-benefits"
+                      variant="link"
+                      className="p-0"
+                      routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
+                      params={{ ...params, childId: child.id }}
+                      startIcon={sections.childDentalBenefits.completed ? faPenToSquare : faCirclePlus}
+                      size="lg"
+                    >
+                      {t('protected-application-full-child:childrens-application.edit-child-dental-benefits')}
+                    </ButtonLink>
+                  </CardFooter>
+                ) : (
+                  <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+                    <div className="w-full px-6">
+                      <ButtonLink
+                        id="edit-button-update-access"
+                        variant="link"
+                        className="p-0 pb-5"
+                        routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
+                        params={{ ...params, childId: child.id }}
+                        startIcon={faPenToSquare}
+                        size="lg"
+                      >
+                        {t('protected-application-full-child:childrens-application.update-dental-benefits')}
+                      </ButtonLink>
+                    </div>
+                    <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+                      <CsrfTokenInput />
+                      <input type="hidden" name="childId" value={child.id} />
+                      <div className="w-full px-6">
+                        <Button id="edit-button-not-changed" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} disabled={isSubmitting} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                          {t('protected-application-full-child:childrens-application.benefits-not-changed')}
+                        </Button>
+                      </div>
+                    </fetcher.Form>
+                  </CardFooter>
+                )}
               </Card>
-              <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
-                <CsrfTokenInput />
-                <input type="hidden" name="childId" value={child.id} />
-                <Button
-                  id="remove-child"
-                  className="my-5"
-                  name="_action"
-                  value={FORM_ACTION.remove}
-                  disabled={isSubmitting}
-                  variant="secondary"
-                  size="sm"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Remove child - Child(ren) application click"
-                >
-                  {t('protected-application-full-child:childrens-application.remove-child')}
-                </Button>
-              </fetcher.Form>
             </div>
           );
         })}
-        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
-          <CsrfTokenInput />
-          <Button variant="primary" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Add child - Child(ren) application click">
-            {t('protected-application-full-child:childrens-application.add-child')}
-          </Button>
-        </fetcher.Form>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="protected/application/$id/full-children/submit" params={params}>

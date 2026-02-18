@@ -13,7 +13,7 @@ import type { Route } from './+types/childrens-application';
 import { TYPES } from '~/.server/constants';
 import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { loadProtectedApplicationSimplifiedChildState } from '~/.server/routes/helpers/protected-application-simplified-child-route-helpers';
-import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildInformationSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
+import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isParentGuardianSectionCompleted, isSinSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -21,10 +21,8 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
-import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/protected/application/simplified-children/progress-stepper';
-import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -95,8 +93,11 @@ export async function loader({ context: { appContainer, session }, request, para
       state.children.map((child) => [
         child.id,
         {
-          childInformation: {
-            completed: isChildInformationSectionCompleted(child),
+          sin: {
+            completed: isSinSectionCompleted(child),
+          },
+          parentGuardian: {
+            completed: isParentGuardianSectionCompleted(child),
           },
           dentalInsurance: {
             completed: isChildDentalInsuranceSectionCompleted(child),
@@ -147,7 +148,6 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedRenewChildChildrensApplication({ loaderData, params }: Route.ComponentProps) {
-  const { currentLanguage } = useCurrentLanguage();
   const { state, childrenSections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
@@ -173,9 +173,6 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
       <ProgressStepper activeStep="childrens-application" className="mb-8" />
       <div className="max-w-prose space-y-8">
         {state.children.map((child, index) => {
-          const childName = `${child.information?.firstName} ${child.information?.lastName}`;
-          const dateOfBirth = child.information?.dateOfBirth ? toLocaleDateString(parseDateString(child.information.dateOfBirth), currentLanguage) : '';
-
           const sections = childrenSections[child.id];
           invariant(sections, `Expected child sections to be defined for child ${child.id}`);
           const completedSectionsCount = Object.values(sections).filter((section) => section.completed).length;
@@ -189,26 +186,44 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
               </div>
               <Card className="my-2">
                 <CardHeader>
-                  <CardTitle>{t('protected-application-simplified-child:childrens-application.child-information-card-title', { childNumber: index + 1 })}</CardTitle>
-                  <CardAction>{sections.childInformation.completed && <StatusTag status="complete" />}</CardAction>
+                  <CardTitle>{t('protected-application-simplified-child:childrens-application.child-sin-card-title')}</CardTitle>
+                  <CardAction>{sections.sin.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.information === undefined ? (
-                    <p>{t('protected-application-simplified-child:childrens-application.child-information-indicate-status')}</p>
+                    <p>{t('protected-application-simplified-child:childrens-application.child-sin-indicate-status')}</p>
                   ) : (
                     <DefinitionList layout="single-column">
-                      <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.member-id-title')}>
-                        <p>{child.information.memberId}</p>
-                      </DefinitionListItem>
-                      <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.full-name-title')}>
-                        <p>{childName}</p>
-                      </DefinitionListItem>
-                      <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.dob-title')}>
-                        <p>{dateOfBirth}</p>
-                      </DefinitionListItem>
                       <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.sin-title')}>
                         <p>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</p>
                       </DefinitionListItem>
+                    </DefinitionList>
+                  )}
+                </CardContent>
+                <CardFooter className="border-t bg-zinc-100">
+                  <ButtonLink
+                    id="edit-button"
+                    variant="link"
+                    className="p-0"
+                    routeId="protected/application/$id/children/$childId/social-insurance-number"
+                    params={{ ...params, childId: child.id }}
+                    startIcon={sections.sin.completed ? faPenToSquare : faCirclePlus}
+                    size="lg"
+                  >
+                    {child.information === undefined ? t('protected-application-simplified-child:childrens-application.add-child-sin') : t('protected-application-simplified-child:childrens-application.edit-child-sin')}
+                  </ButtonLink>
+                </CardFooter>
+              </Card>
+              <Card className="my-2">
+                <CardHeader>
+                  <CardTitle>{t('protected-application-simplified-child:childrens-application.child-parent-guardian-card-title')}</CardTitle>
+                  <CardAction>{sections.parentGuardian.completed && <StatusTag status="complete" />}</CardAction>
+                </CardHeader>
+                <CardContent>
+                  {child.information === undefined ? (
+                    <p>{t('protected-application-simplified-child:childrens-application.child-parent-guardian-indicate-status')}</p>
+                  ) : (
+                    <DefinitionList layout="single-column">
                       <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.parent-guardian-title')}>
                         <p>{child.information.isParent ? t('protected-application-simplified-child:childrens-application.yes') : t('protected-application-simplified-child:childrens-application.no')}</p>
                       </DefinitionListItem>
@@ -220,18 +235,15 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
                     id="edit-button"
                     variant="link"
                     className="p-0"
-                    routeId="protected/application/$id/children/$childId/information"
+                    routeId="protected/application/$id/children/$childId/parent-guardian"
                     params={{ ...params, childId: child.id }}
-                    startIcon={sections.childInformation.completed ? faPenToSquare : faCirclePlus}
+                    startIcon={sections.parentGuardian.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
                   >
-                    {child.information === undefined
-                      ? t('protected-application-simplified-child:childrens-application.add-child-information')
-                      : t('protected-application-simplified-child:childrens-application.edit-child-information', { childNumber: index + 1 })}
+                    {child.information === undefined ? t('protected-application-simplified-child:childrens-application.add-answer') : t('protected-application-simplified-child:childrens-application.edit-answer')}
                   </ButtonLink>
                 </CardFooter>
               </Card>
-
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle>{t('protected-application-simplified-child:childrens-application.child-dental-insurance-card-title')}</CardTitle>

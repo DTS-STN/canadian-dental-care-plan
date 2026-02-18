@@ -252,11 +252,6 @@ export const routes = [
           { id: 'protected/application/$id/email', file: 'routes/protected/application/spokes/email.tsx', paths: { en: '/:lang/protected/application/:id/email', fr: '/:lang/protected/demande/:id/adresse-courriel' } },
           { id: 'protected/application/$id/verify-email', file: 'routes/protected/application/spokes/verify-email.tsx', paths: { en: '/:lang/protected/application/:id/verify-email', fr: '/:lang/protected/demande/:id/verifier-courriel' } },
           {
-            id: 'protected/application/$id/children/$childId/information',
-            file: 'routes/protected/application/spokes/child-information.tsx',
-            paths: { en: '/:lang/protected/application/:id/children/:childId/information', fr: '/:lang/protected/demande/:id/enfant/:childId/information' },
-          },
-          {
             id: 'protected/application/$id/children/$childId/parent-or-guardian',
             file: 'routes/protected/application/spokes/child-parent-guardian.tsx',
             paths: { en: '/:lang/protected/application/:id/children/:childId/parent-or-guardian', fr: '/:lang/protected/demande/:id/enfant/:childId/parent-ou-tuteur' },
