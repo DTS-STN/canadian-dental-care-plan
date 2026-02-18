@@ -74,7 +74,8 @@
   "childrens-application": {
     "page-title": "La demande de votre/vos enfant(s)",
     "child-title": "Enfant {{childNumber}}",
-    "child-information-card-title": "Renseignements sur l'enfant {{childNumber}}",
+    "child-sin-card-title": "Numéro d'assurance sociale (NAS)",
+    "child-parent-guardian-card-title": "Parent ou tuteur légal de l'enfant",
     "child-dental-insurance-card-title": "Accès à une assurance dentaire privée",
     "child-dental-benefits-card-title": "Autres prestations dentaires gouvernementales",
     "edit-child-sin": "Modifier le NAS de l'enfant",
