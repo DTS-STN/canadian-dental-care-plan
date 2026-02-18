@@ -176,7 +176,7 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle>{t('protected-application-simplified-child:childrens-application.child-sin-card-title')}</CardTitle>
-                  <CardAction>{sections.sin.completed && <StatusTag status="complete" />}</CardAction>
+                  <CardAction>{sections.sin.completed ? <StatusTag status="complete" /> : <StatusTag status="optional" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.information === undefined ? (

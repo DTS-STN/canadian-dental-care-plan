@@ -174,7 +174,7 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle>{t('protected-application-full-child:childrens-application.child-sin-card-title')}</CardTitle>
-                  <CardAction>{sections.sin.completed && <StatusTag status="complete" />}</CardAction>
+                  <CardAction>{sections.sin.completed ? <StatusTag status="complete" /> : <StatusTag status="optional" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.information === undefined ? (
