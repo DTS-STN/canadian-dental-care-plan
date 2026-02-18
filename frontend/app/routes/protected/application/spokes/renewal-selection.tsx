@@ -9,6 +9,7 @@ import type { Route } from './+types/renewal-selection';
 
 import { TYPES } from '~/.server/constants';
 import { getProtectedApplicationState, getTypeOfApplicationFromRenewalSelectionClientIds, saveProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import type { ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -52,10 +53,13 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const formData = await request.formData();
-
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
+
+  const state = getProtectedApplicationState({ params, session });
+  invariant(state.clientApplication, 'Expected clientApplication to be defined');
+
+  const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -68,12 +72,68 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  const state = getProtectedApplicationState({ params, session });
-  const typeOfApplication = getTypeOfApplicationFromRenewalSelectionClientIds(state, parsedDataResult.data.applicants);
+  const applicantClientIdsToRenew = parsedDataResult.data.applicants;
+  const typeOfApplication = getTypeOfApplicationFromRenewalSelectionClientIds(state, applicantClientIdsToRenew);
+  const children = getChildren(state, applicantClientIdsToRenew);
 
-  saveProtectedApplicationState({ params, session, state: { typeOfApplication, applicantClientIdsToRenew: parsedDataResult.data.applicants } });
+  saveProtectedApplicationState({
+    params,
+    session,
+    state: {
+      typeOfApplication,
+      applicantClientIdsToRenew,
+      applicantInformation: {
+        memberId: state.clientApplication.applicantInformation.clientNumber,
+        firstName: state.clientApplication.applicantInformation.firstName,
+        lastName: state.clientApplication.applicantInformation.lastName,
+        dateOfBirth: state.clientApplication.dateOfBirth,
+        socialInsuranceNumber: state.clientApplication.applicantInformation.socialInsuranceNumber,
+      },
+      children,
+    },
+  });
 
   return redirect(getPathById('protected/application/$id/type-of-application', params));
+}
+
+/**
+ * Generates a list of children for the protected application state based on the selected client IDs in the renewal selection.
+ * This function checks the existing children in the state and updates them if they are included in the selected client IDs.
+ * If a child is not included in the existing state but is part of the selected client IDs, it creates a new child entry with default values.
+ *
+ * @param state The current protected application state.
+ * @param selectedClientIds The list of selected client IDs from the renewal selection.
+ * @returns A list of children for the protected application state.
+ */
+function getChildren(state: ProtectedApplicationState, selectedClientIds: string[]): ProtectedApplicationState['children'] {
+  invariant(state.clientApplication, 'Expected clientApplication to be defined');
+  const clientApplicationChildren = state.clientApplication.children.filter((child) => selectedClientIds.includes(child.information.clientId));
+  return clientApplicationChildren.map((child) => {
+    const existingChild = state.children.find((c) => c.id === child.information.clientId);
+
+    // If the child is already in the existing state, return it as is
+    if (existingChild) {
+      return existingChild;
+    }
+
+    // If the child is not in the existing state but is selected, create a new entry with default values
+    return {
+      id: child.information.clientId,
+      information: {
+        memberId: child.information.clientNumber,
+        firstName: child.information.firstName,
+        lastName: child.information.lastName,
+        dateOfBirth: child.information.dateOfBirth,
+        hasSocialInsuranceNumber: !!child.information.socialInsuranceNumber,
+        socialInsuranceNumber: child.information.socialInsuranceNumber,
+        isParent: true,
+      },
+      dentalCoverage: {
+        hasDentalCoverage: undefined,
+        coverageDetails: undefined,
+      },
+    };
+  });
 }
 
 export default function ProtectedSpokesRenewalSelection({ loaderData, params }: Route.ComponentProps) {
