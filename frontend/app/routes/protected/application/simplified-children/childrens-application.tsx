@@ -25,7 +25,6 @@ import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/protected/application/simplified-children/progress-stepper';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
-import { generateId } from '~/utils/id.utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -33,7 +32,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-const FORM_ACTION = { add: 'add', remove: 'remove', DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed' } as const;
+const FORM_ACTION = { DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-simplified-child', 'protected-application', 'gcweb', 'common'),
@@ -124,32 +123,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
-  if (formAction === FORM_ACTION.add) {
-    const childId = generateId();
-    const children = [...state.children, { id: childId }];
-
-    saveProtectedApplicationState({
-      params,
-      session,
-      state: {
-        children: children,
-      },
-    });
-  }
-
-  if (formAction === FORM_ACTION.remove) {
-    const removeChildId = formData.get('childId');
-    const children = [...state.children].filter((child) => child.id !== removeChildId);
-
-    saveProtectedApplicationState({
-      params,
-      session,
-      state: {
-        children: children,
-      },
-    });
-  }
-
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (formAction === FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED) {
     const childId = formData.get('childId');
     saveProtectedApplicationState({
@@ -362,31 +336,9 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
                   </CardFooter>
                 )}
               </Card>
-              <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
-                <CsrfTokenInput />
-                <input type="hidden" name="childId" value={child.id} />
-                <Button
-                  id="remove-child"
-                  className="my-5"
-                  name="_action"
-                  value={FORM_ACTION.remove}
-                  disabled={isSubmitting}
-                  variant="secondary"
-                  size="sm"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Child:Remove child - Child(ren) application click"
-                >
-                  {t('protected-application-simplified-child:childrens-application.remove-child')}
-                </Button>
-              </fetcher.Form>
             </div>
           );
         })}
-        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
-          <CsrfTokenInput />
-          <Button variant="primary" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Child:Add child - Child(ren) application click">
-            {t('protected-application-simplified-child:childrens-application.add-child')}
-          </Button>
-        </fetcher.Form>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="protected/application/$id/simplified-children/submit" params={params}>
