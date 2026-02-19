@@ -57,19 +57,19 @@ export async function loader({ context: { appContainer, session }, request, para
 
       return {
         ...child,
-        dentalBenefits: child.dentalBenefits
-          ? {
-              hasChanged: child.dentalBenefits.hasChanged,
-              federalBenefit: {
-                access: child.dentalBenefits.value?.hasFederalBenefits,
-                benefit: federalGovernmentInsurancePlanProgram?.name,
-              },
-              provTerrBenefit: {
-                access: child.dentalBenefits.value?.hasProvincialTerritorialBenefits,
-                benefit: provincialTerritorialSocialProgram?.name,
-              },
-            }
-          : undefined,
+        dentalBenefits:
+          child.dentalBenefits?.hasChanged === true
+            ? {
+                federalBenefit: {
+                  access: child.dentalBenefits.value.hasFederalBenefits,
+                  benefit: federalGovernmentInsurancePlanProgram?.name,
+                },
+                provTerrBenefit: {
+                  access: child.dentalBenefits.value.hasProvincialTerritorialBenefits,
+                  benefit: provincialTerritorialSocialProgram?.name,
+                },
+              }
+            : undefined,
       };
     }),
   );
