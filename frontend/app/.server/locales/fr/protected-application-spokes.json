@@ -537,12 +537,12 @@
     "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
   "renewal-selection": {
-    "page-title": "(FR) Renewal selection",
-    "select": "(FR) Select everyone you wish to renew for.",
-    "back-btn": "(FR) Back",
-    "save-btn": "(FR) Save",
+    "page-title": "Sélection des renouvellements",
+    "select": "Sélectionner toutes les personnes pour lesquelles vous souhaitez effectuer un renouvellement.",
+    "back-btn": "Retour",
+    "save-btn": "Sauvegarder",
     "error-message": {
-      "renewal-selection-required": "(FR) Select a member to renew"
+      "renewal-selection-required": "Sélectionnez un membre pour renouveler"
     }
   }
 }
