@@ -333,9 +333,13 @@
     "preferred-method-help-message": "La Sun Life est chargée de gérer l'inscription des membres et le traitement des demandes de remboursement dans le cadre du Régime canadien de soins dentaires.",
     "preferred-language": "Quelle langue officielle de communication préférez-vous?",
     "by-email": "<span>{{name}}</span><br>S'inscrire aux notifications par courriel est le moyen le plus rapide d'obtenir des mises à jour.",
+    "preferred-notification-method": "Comment souhaitez-vous recevoir les mises à jour du gouvernement du Canada concernant le Régime canadien de soins dentaires?",
+    "preferred-notification-method-msca": "<span>{{name}}</span><br><mscaLinkAccount>S'inscrire aux notifications</mscaLinkAccount> en ligne est le moyen le plus rapide d'obtenir des mises à jour.",
+    "preferred-notification-method-mail": "<span>{{name}}</span><br>Vous pouvez également consulter les renseignements figurant à votre dossier du Régime canadien de soins dentaires dans <mscaLinkAccount>MDSC</mscaLinkAccount>.",
     "back": "Retour",
     "continue": "Continuer",
     "save": "Sauvegarder",
+    "msca-link-account": "https://www.canada.ca/fr/emploi-developpement-social/services/mon-dossier.html",
     "error-message": {
       "preferred-language-required": "Sélectionnez la langue de communication préférée",
       "preferred-method-required": "Sélectionnez votre moyen de communication préféré avec la Sun Life",

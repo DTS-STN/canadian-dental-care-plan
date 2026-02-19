@@ -23,13 +23,6 @@ export function isCommunicationPreferencesSectionCompleted(state: Pick<Protected
 }
 
 /**
- * Checks if the email section is completed for full application.
- */
-export function isEmailSectionCompleted(state: Pick<ProtectedApplicationState, 'email' | 'emailVerified'>): boolean {
-  return state.email !== undefined && state.emailVerified === true;
-}
-
-/**
  * Checks if the dental insurance section is completed for full application.
  */
 export function isDentalInsuranceSectionCompleted(state: Pick<ProtectedApplicationState, 'dentalInsurance'>): boolean {

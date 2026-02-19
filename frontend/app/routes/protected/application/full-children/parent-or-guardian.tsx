@@ -5,7 +5,7 @@ import type { Route } from './+types/parent-or-guardian';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationFullChildState } from '~/.server/routes/helpers/protected-application-full-child-route-helpers';
-import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isEmailSectionCompleted, isMaritalStatusSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-full-section-checks';
+import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isMaritalStatusSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-full-section-checks';
 import { validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
@@ -74,19 +74,19 @@ export async function loader({ context: { appContainer, session }, request, para
     homeAddressInfo,
     preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     preferredMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale) : undefined,
+    preferredNotificationMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale) : undefined,
     sections: {
       maritalStatus: { completed: isMaritalStatusSectionCompleted(state) },
       phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
       address: { completed: isAddressSectionCompleted(state) },
       communicationPreferences: { completed: isCommunicationPreferencesSectionCompleted(state) },
-      email: { completed: isEmailSectionCompleted(state) },
     },
     meta,
   };
 }
 
 export default function ProtectedNewChildParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, sections } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
@@ -215,6 +215,8 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t('protected-application-full-child:parent-or-guardian.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
                 <DefinitionListItem term={t('protected-application-full-child:parent-or-guardian.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
+                <DefinitionListItem term={t('protected-application-full-child:parent-or-guardian.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
+                <DefinitionListItem term={t('protected-application-full-child:parent-or-guardian.email')}>{state.email}</DefinitionListItem>
               </DefinitionList>
             ) : (
               <p>{t('protected-application-full-child:parent-or-guardian.communication-preferences-help')}</p>
@@ -223,27 +225,6 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
           <CardFooter className="border-t bg-zinc-100">
             <ButtonLink id="edit-comms-button" variant="link" className="p-0" routeId="protected/application/$id/communication-preferences" params={params} startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus} size="lg">
               {sections.communicationPreferences.completed ? t('protected-application-full-child:parent-or-guardian.edit-communication-preferences') : t('protected-application-full-child:parent-or-guardian.add-communication-preferences')}
-            </ButtonLink>
-          </CardFooter>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('protected-application-full-child:parent-or-guardian.email')}</CardTitle>
-            <CardAction>{sections.email.completed && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          <CardContent>
-            {state.email ? (
-              <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('protected-application-full-child:parent-or-guardian.email')}>{state.email}</DefinitionListItem>
-              </DefinitionList>
-            ) : (
-              <p>{t('protected-application-full-child:parent-or-guardian.email-help')}</p>
-            )}
-          </CardContent>
-          <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-email-button" variant="link" className="p-0" routeId="protected/application/$id/email" params={params} startIcon={sections.email.completed ? faPenToSquare : faCirclePlus} size="lg">
-              {sections.email.completed ? t('protected-application-full-child:parent-or-guardian.edit-email') : t('protected-application-full-child:parent-or-guardian.add-email')}
             </ButtonLink>
           </CardFooter>
         </Card>
