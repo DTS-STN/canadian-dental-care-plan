@@ -298,6 +298,9 @@ export default function ChildInformation({ loaderData, params }: Route.Component
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
+            <Collapsible id="name-instructions" summary={t('protected-application-spokes:children.information.single-legal-name')}>
+              <p>{t('protected-application-spokes:children.information.name-instructions')}</p>
+            </Collapsible>
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputSanitizeField
                 id="first-name"
@@ -324,9 +327,6 @@ export default function ChildInformation({ loaderData, params }: Route.Component
                 required
               />
             </div>
-            <Collapsible id="name-instructions" summary={t('protected-application-spokes:children.information.single-legal-name')}>
-              <p>{t('protected-application-spokes:children.information.name-instructions')}</p>
-            </Collapsible>
             <DatePickerField
               id="date-of-birth"
               names={{
