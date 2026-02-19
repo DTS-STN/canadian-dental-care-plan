@@ -212,7 +212,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                 </CardContent>
                 <CardFooter className="border-t bg-zinc-100">
                   <ButtonLink
-                    id="edit-button"
+                    id={`edit-info-button-${child.id}`}
                     variant="link"
                     className="p-0"
                     routeId="public/application/$id/children/$childId/information"
@@ -243,7 +243,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                 </CardContent>
                 <CardFooter className="border-t bg-zinc-100">
                   <ButtonLink
-                    id="edit-button"
+                    id={`edit-insurance-button-${child.id}`}
                     variant="link"
                     className="p-0"
                     routeId="public/application/$id/children/$childId/dental-insurance"
@@ -284,7 +284,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                 </CardContent>
                 <CardFooter className="border-t bg-zinc-100">
                   <ButtonLink
-                    id="edit-button"
+                    id={`edit-benefits-button-${child.id}`}
                     variant="link"
                     className="p-0"
                     routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits"

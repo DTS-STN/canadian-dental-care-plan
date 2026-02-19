@@ -242,19 +242,19 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
           </CardContent>
           {state.phoneNumber ? (
             <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/phone-number" params={params} startIcon={sections.phoneNumber.completed ? faPenToSquare : faCirclePlus} size="lg">
+              <ButtonLink id="edit-phone-button" variant="link" className="p-0" routeId="protected/application/$id/phone-number" params={params} startIcon={sections.phoneNumber.completed ? faPenToSquare : faCirclePlus} size="lg">
                 {sections.phoneNumber.completed ? t('protected-application-simplified-adult:contact-information.edit-phone-number') : t('protected-application-simplified-adult:contact-information.add-phone-number')}
               </ButtonLink>
             </CardFooter>
           ) : (
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
-                <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/phone-number" params={params} startIcon={faPenToSquare} size="lg">
+                <ButtonLink id="update-phone-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/phone-number" params={params} startIcon={faPenToSquare} size="lg">
                   {t('protected-application-simplified-adult:contact-information.update-phone-number')}
                 </ButtonLink>
               </div>
               <div className="w-full px-6">
-                <Button id="complete-button" variant="link" name="_action" value={FORM_ACTION.PHONE_NUMBER_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                <Button id="complete-phone-button" variant="link" name="_action" value={FORM_ACTION.PHONE_NUMBER_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
                   {t('protected-application-simplified-adult:contact-information.phone-number-unchanged')}
                 </Button>
               </div>
@@ -362,26 +362,26 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
 
           {state.mailingAddress || state.homeAddress ? (
             <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/mailing-address" params={params} startIcon={sections.address.completed ? faPenToSquare : faCirclePlus} size="lg">
+              <ButtonLink id="edit-address-button" variant="link" className="p-0" routeId="protected/application/$id/mailing-address" params={params} startIcon={sections.address.completed ? faPenToSquare : faCirclePlus} size="lg">
                 {sections.address.completed ? t('protected-application-simplified-adult:contact-information.edit-address') : t('protected-application-simplified-adult:contact-information.add-address')}
               </ButtonLink>
             </CardFooter>
           ) : defaultDisplayValues.mailingAddressInfo && defaultDisplayValues.homeAddressInfo ? ( // eslint-disable-line unicorn/no-nested-ternary
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
-                <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/mailing-address" params={params} startIcon={faPenToSquare} size="lg">
+                <ButtonLink id="update-address-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/mailing-address" params={params} startIcon={faPenToSquare} size="lg">
                   {t('protected-application-simplified-adult:contact-information.update-address')}
                 </ButtonLink>
               </div>
               <div className="w-full px-6">
-                <Button id="complete-button" variant="link" className="p-0 pt-5" name="_action" value={FORM_ACTION.ADDRESS_NOT_CHANGED} startIcon={faCircleCheck} size="lg">
+                <Button id="complete-address-button" variant="link" className="p-0 pt-5" name="_action" value={FORM_ACTION.ADDRESS_NOT_CHANGED} startIcon={faCircleCheck} size="lg">
                   {t('protected-application-simplified-adult:contact-information.address-unchanged')}
                 </Button>
               </div>
             </CardFooter>
           ) : (
             <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink id="add-button" variant="link" className="p-0" routeId="protected/application/$id/mailing-address" params={params} startIcon={faCirclePlus} size="lg">
+              <ButtonLink id="add-address-button" variant="link" className="p-0" routeId="protected/application/$id/mailing-address" params={params} startIcon={faCirclePlus} size="lg">
                 {t('protected-application-simplified-adult:contact-information.add-address')}
               </ButtonLink>
             </CardFooter>
@@ -427,19 +427,19 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
           </CardContent>
           {state.communicationPreferences ? (
             <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/communication-preferences" params={params} startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus} size="lg">
+              <ButtonLink id="edit-comms-button" variant="link" className="p-0" routeId="protected/application/$id/communication-preferences" params={params} startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus} size="lg">
                 {sections.communicationPreferences.completed ? t('protected-application-simplified-adult:contact-information.edit-communication-preferences') : t('protected-application-simplified-adult:contact-information.add-communication-preferences')}
               </ButtonLink>
             </CardFooter>
           ) : (
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
-                <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/communication-preferences" params={params} startIcon={faPenToSquare} size="lg">
+                <ButtonLink id="update-comms-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/communication-preferences" params={params} startIcon={faPenToSquare} size="lg">
                   {t('protected-application-simplified-adult:contact-information.update-communication-preferences')}
                 </ButtonLink>
               </div>
               <div className="w-full px-6">
-                <LoadingButton id="complete-button" variant="link" name="_action" value={FORM_ACTION.COMMUNICATION_PREFERENCES_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                <LoadingButton id="complete-comms-button" variant="link" name="_action" value={FORM_ACTION.COMMUNICATION_PREFERENCES_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
                   {t('protected-application-simplified-adult:contact-information.communication-preferences-unchanged')}
                 </LoadingButton>
               </div>
@@ -475,19 +475,19 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
           </CardContent>
           {state.email ? (
             <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/email" params={params} startIcon={sections.email.completed ? faPenToSquare : faCirclePlus} size="lg">
+              <ButtonLink id="edit-email-button" variant="link" className="p-0" routeId="protected/application/$id/email" params={params} startIcon={sections.email.completed ? faPenToSquare : faCirclePlus} size="lg">
                 {sections.email.completed ? t('protected-application-simplified-adult:contact-information.edit-email') : t('protected-application-simplified-adult:contact-information.add-email')}
               </ButtonLink>
             </CardFooter>
           ) : (
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
-                <ButtonLink id="update-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/email" params={params} startIcon={faPenToSquare} size="lg">
+                <ButtonLink id="update-email-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/email" params={params} startIcon={faPenToSquare} size="lg">
                   {t('protected-application-simplified-adult:contact-information.update-email')}
                 </ButtonLink>
               </div>
               <div className="w-full px-6">
-                <Button id="complete-button" variant="link" name="_action" value={FORM_ACTION.EMAIL_ADDRESS_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                <Button id="complete-email-button" variant="link" name="_action" value={FORM_ACTION.EMAIL_ADDRESS_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
                   {t('protected-application-simplified-adult:contact-information.email-unchanged')}
                 </Button>
               </div>

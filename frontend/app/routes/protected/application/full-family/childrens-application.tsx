@@ -217,7 +217,7 @@ export default function ProtectedNewFamilyChildrensApplication({ loaderData, par
                 </CardContent>
                 <CardFooter className="border-t bg-zinc-100">
                   <ButtonLink
-                    id="edit-button"
+                    id="edit-info-button"
                     variant="link"
                     className="p-0"
                     routeId="protected/application/$id/children/$childId/information"
@@ -248,7 +248,7 @@ export default function ProtectedNewFamilyChildrensApplication({ loaderData, par
                 </CardContent>
                 <CardFooter className="border-t bg-zinc-100">
                   <ButtonLink
-                    id="edit-button"
+                    id="edit-insurance-button"
                     variant="link"
                     className="p-0"
                     routeId="protected/application/$id/children/$childId/dental-insurance"
@@ -289,7 +289,7 @@ export default function ProtectedNewFamilyChildrensApplication({ loaderData, par
                 </CardContent>
                 <CardFooter className="border-t bg-zinc-100">
                   <ButtonLink
-                    id="edit-button"
+                    id="edit-benefits-button"
                     variant="link"
                     className="p-0"
                     routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
