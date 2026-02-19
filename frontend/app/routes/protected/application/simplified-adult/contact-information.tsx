@@ -8,7 +8,7 @@ import z from 'zod';
 import type { Route } from './+types/contact-information';
 
 import { TYPES } from '~/.server/constants';
-import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { saveProtectedApplicationState, shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { loadProtectedApplicationSimplifiedAdultState } from '~/.server/routes/helpers/protected-application-simplified-adult-route-helpers';
 import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isEmailSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -63,7 +63,7 @@ export async function loader({ context: { appContainer, session }, request, para
         country: state.mailingAddress.value.country ? (await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale)).name : undefined, //eslint-disable-line unicorn/no-await-expression-member
         hasChanged: state.mailingAddress.hasChanged,
       }
-    : state.clientApplication?.contactInformation.mailingCountry //eslint-disable-line unicorn/no-nested-ternary
+    : state.clientApplication.contactInformation.mailingCountry //eslint-disable-line unicorn/no-nested-ternary
       ? {
           address: state.clientApplication.contactInformation.mailingAddress,
           city: state.clientApplication.contactInformation.mailingCity,
@@ -83,7 +83,7 @@ export async function loader({ context: { appContainer, session }, request, para
         country: state.homeAddress.value.country ? (await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale)).name : undefined, //eslint-disable-line unicorn/no-await-expression-member
         hasChanged: state.homeAddress.hasChanged,
       }
-    : state.clientApplication?.contactInformation.homeCountry //eslint-disable-line unicorn/no-nested-ternary
+    : state.clientApplication.contactInformation.homeCountry //eslint-disable-line unicorn/no-nested-ternary
       ? {
           address: state.clientApplication.contactInformation.homeAddress,
           city: state.clientApplication.contactInformation.homeCity,
@@ -94,14 +94,14 @@ export async function loader({ context: { appContainer, session }, request, para
         }
       : undefined;
 
-  const preferredLanguageId = state.communicationPreferences?.value?.preferredLanguage ?? state.clientApplication?.communicationPreferences.preferredLanguage;
-  const preferredMethodId = state.communicationPreferences?.value?.preferredMethod ?? state.clientApplication?.communicationPreferences.preferredMethodSunLife;
+  const preferredLanguageId = state.communicationPreferences?.value?.preferredLanguage ?? state.clientApplication.communicationPreferences.preferredLanguage;
+  const preferredMethodId = state.communicationPreferences?.value?.preferredMethod ?? state.clientApplication.communicationPreferences.preferredMethodSunLife;
 
   const defaultDisplayValues = {
-    phoneNumber: state.phoneNumber?.value?.primary ?? state.clientApplication?.contactInformation.phoneNumber,
+    phoneNumber: state.phoneNumber?.value?.primary ?? state.clientApplication.contactInformation.phoneNumber,
     preferredLanguage: preferredLanguageId ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(preferredLanguageId, locale).name : undefined,
     preferredMethod: preferredMethodId ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(preferredMethodId, locale).name : undefined,
-    email: state.email ?? state.clientApplication?.contactInformation.email,
+    email: state.email ?? state.clientApplication.contactInformation.email,
     mailingAddressInfo,
     homeAddressInfo,
   };
@@ -114,6 +114,7 @@ export async function loader({ context: { appContainer, session }, request, para
       homeAddress: state.homeAddress,
       email: state.email,
     },
+    shouldSkipMaritalStatusStep: shouldSkipMaritalStatus(state),
     defaultDisplayValues,
     sections: {
       phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
@@ -177,8 +178,8 @@ export async function action({ context: { appContainer, session }, params, reque
       params,
       session,
       state: {
-        email: state.clientApplication?.contactInformation.email,
-        emailVerified: state.clientApplication?.contactInformation.emailVerified,
+        email: state.clientApplication.contactInformation.email,
+        emailVerified: state.clientApplication.contactInformation.emailVerified,
       },
     });
   }
@@ -187,7 +188,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedRenewAdultContactInformation({ loaderData, params }: Route.ComponentProps) {
-  const { state, defaultDisplayValues, sections } = loaderData;
+  const { state, defaultDisplayValues, sections, shouldSkipMaritalStatusStep } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
@@ -197,7 +198,7 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
   return (
     <fetcher.Form method="post" noValidate>
       <CsrfTokenInput />
-      <ProgressStepper activeStep="contact-information" className="mb-8" />
+      <ProgressStepper activeStep="contact-information" excludeMaritalStatus={shouldSkipMaritalStatusStep} className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
           <p>{t('protected-application:complete-all-sections')}</p>
@@ -499,9 +500,15 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
           <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="protected/application/$id/simplified-adult/dental-insurance" params={params}>
             {t('protected-application-simplified-adult:contact-information.next-btn')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/type-of-application" params={params}>
-            {t('protected-application-simplified-adult:contact-information.prev-btn')}
-          </NavigationButtonLink>
+          {shouldSkipMaritalStatusStep ? (
+            <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renew" params={params}>
+              {t('protected-application-simplified-adult:contact-information.prev-btn.renew')}
+            </NavigationButtonLink>
+          ) : (
+            <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/simplified-adult/marital-status" params={params}>
+              {t('protected-application-simplified-adult:contact-information.prev-btn.marital-status')}
+            </NavigationButtonLink>
+          )}
         </div>
       </div>
     </fetcher.Form>

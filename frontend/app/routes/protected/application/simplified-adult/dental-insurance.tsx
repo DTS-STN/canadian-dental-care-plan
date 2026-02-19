@@ -8,7 +8,7 @@ import { z } from 'zod';
 import type { Route } from './+types/dental-insurance';
 
 import { TYPES } from '~/.server/constants';
-import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { saveProtectedApplicationState, shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { loadProtectedApplicationSimplifiedAdultState } from '~/.server/routes/helpers/protected-application-simplified-adult-route-helpers';
 import { isDentalBenefitsSectionCompleted, isDentalInsuranceSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
@@ -53,7 +53,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
 
-  const clientDentalBenefits = (await state.clientApplication?.dentalBenefits.reduce(async (benefitsPromise, id) => {
+  const clientDentalBenefits = (await state.clientApplication.dentalBenefits.reduce(async (benefitsPromise, id) => {
     const benefits = await benefitsPromise;
 
     const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(id, locale);
@@ -113,6 +113,7 @@ export async function loader({ context: { appContainer, session }, request, para
       dentalInsurance: state.dentalInsurance?.hasDentalInsurance,
       dentalBenefits: currentDentalBenefits,
     },
+    shouldSkipMaritalStatusStep: shouldSkipMaritalStatus(state),
     defaultDisplayValues: {
       dentalBenefits: clientDentalBenefits.hasFederalBenefits || clientDentalBenefits.hasProvincialTerritorialBenefits ? clientDentalBenefits : undefined,
     },
@@ -151,7 +152,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedRenewAdultDentalInsurance({ loaderData, params }: Route.ComponentProps) {
-  const { state, defaultDisplayValues, sections } = loaderData;
+  const { state, defaultDisplayValues, sections, shouldSkipMaritalStatusStep } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
 
@@ -160,7 +161,7 @@ export default function ProtectedRenewAdultDentalInsurance({ loaderData, params 
   return (
     <fetcher.Form method="post" noValidate>
       <CsrfTokenInput />
-      <ProgressStepper activeStep="dental-insurance" className="mb-8" />
+      <ProgressStepper activeStep="dental-insurance" excludeMaritalStatus={shouldSkipMaritalStatusStep} className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
           <p>{t('protected-application:complete-all-sections')}</p>

@@ -45,16 +45,21 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  // prettier-ignore
-  if (state.applicantInformation === undefined ||
+  if (
+    state.applicantInformation === undefined || //
     state.communicationPreferences === undefined ||
     state.phoneNumber === undefined ||
     state.mailingAddress === undefined ||
     state.submitTerms === undefined ||
     state.hasFiledTaxes === undefined ||
     state.submissionInfo === undefined ||
-    state.children.some(child => child.information === undefined || child.dentalInsurance === undefined || child.dentalBenefits === undefined)
-    ) {
+    state.children.some(
+      (child) =>
+        child.information === undefined || //
+        child.dentalInsurance === undefined ||
+        child.dentalBenefits === undefined,
+    )
+  ) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
@@ -122,7 +127,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       : undefined;
 
       invariant(child.dentalInsurance, "Child's dental insurance must be defined");
-      const eligibility = getEligibilityStatus(child.dentalInsurance.hasDentalInsurance, state.clientApplication?.t4DentalIndicator);
+      const eligibility = getEligibilityStatus(child.dentalInsurance.hasDentalInsurance, state.clientApplication.t4DentalIndicator);
 
       return {
         id: child.id,

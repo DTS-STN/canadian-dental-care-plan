@@ -7,7 +7,7 @@ import { z } from 'zod';
 import type { Route } from './+types/submit';
 
 import { TYPES } from '~/.server/constants';
-import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { saveProtectedApplicationState, shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { loadProtectedApplicationSimplifiedAdultStateForReview } from '~/.server/routes/helpers/protected-application-simplified-adult-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -60,6 +60,7 @@ export async function loader({ context: { appContainer, session }, request, para
     state: {
       applicantName: `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}`,
     },
+    shouldSkipMaritalStatusStep: shouldSkipMaritalStatus(state),
     meta,
     payload,
   };
@@ -100,7 +101,7 @@ export async function action({ context: { appContainer, session }, request, para
 }
 
 export default function ProtectedNewAdultSubmit({ loaderData, params }: Route.ComponentProps) {
-  const { state, payload } = loaderData;
+  const { state, payload, shouldSkipMaritalStatusStep } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -110,7 +111,7 @@ export default function ProtectedNewAdultSubmit({ loaderData, params }: Route.Co
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
-      <ProgressStepper activeStep="submit" className="mb-8" />
+      <ProgressStepper activeStep="submit" excludeMaritalStatus={shouldSkipMaritalStatusStep} className="mb-8" />
       <div className="max-w-prose space-y-8">
         <ErrorSummary />
         <div className="space-y-8">
@@ -126,9 +127,15 @@ export default function ProtectedNewAdultSubmit({ loaderData, params }: Route.Co
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-simplified-adult:submit.review-your-application')}</h2>
             <p>{t('protected-application-simplified-adult:submit.please-review')}</p>
-            <ButtonLink variant="primary" routeId="protected/application/$id/simplified-adult/marital-status" params={params}>
-              {t('protected-application-simplified-adult:submit.review-application')}
-            </ButtonLink>
+            {shouldSkipMaritalStatusStep ? (
+              <ButtonLink variant="primary" routeId="protected/application/$id/simplified-adult/contact-information" params={params}>
+                {t('protected-application-simplified-adult:submit.review-application')}
+              </ButtonLink>
+            ) : (
+              <ButtonLink variant="primary" routeId="protected/application/$id/simplified-adult/marital-status" params={params}>
+                {t('protected-application-simplified-adult:submit.review-application')}
+              </ButtonLink>
+            )}
           </section>
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-simplified-adult:submit.submit-your-application')}</h2>

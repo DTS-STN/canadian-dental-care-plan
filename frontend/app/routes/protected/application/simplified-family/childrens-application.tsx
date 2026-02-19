@@ -11,7 +11,7 @@ import { z } from 'zod';
 import type { Route } from './+types/childrens-application';
 
 import { TYPES } from '~/.server/constants';
-import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { saveProtectedApplicationState, shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { loadProtectedApplicationSimplifiedFamilyState } from '~/.server/routes/helpers/protected-application-simplified-family-route-helpers';
 import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildInformationSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -89,6 +89,7 @@ export async function loader({ context: { appContainer, session }, request, para
     state: {
       children: children,
     },
+    shouldSkipMaritalStatusStep: shouldSkipMaritalStatus(state),
     childrenSections: Object.fromEntries(
       state.children.map((child) => [
         child.id,
@@ -141,7 +142,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewFamilyChildrensApplication({ loaderData, params }: Route.ComponentProps) {
   const { currentLanguage } = useCurrentLanguage();
-  const { state, childrenSections } = loaderData;
+  const { state, childrenSections, shouldSkipMaritalStatusStep } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const fetcher = useFetcher<typeof action>();
@@ -163,7 +164,7 @@ export default function ProtectedRenewFamilyChildrensApplication({ loaderData, p
 
   return (
     <>
-      <ProgressStepper activeStep="childrens-application" className="mb-8" />
+      <ProgressStepper activeStep="childrens-application" excludeMaritalStatus={shouldSkipMaritalStatusStep} className="mb-8" />
       <div className="max-w-prose space-y-8">
         {state.children.map((child, index) => {
           const childName = `${child.information?.firstName} ${child.information?.lastName}`;
