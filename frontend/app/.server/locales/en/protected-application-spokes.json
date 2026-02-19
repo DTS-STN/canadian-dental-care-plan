@@ -333,12 +333,17 @@
     "preferred-method-help-message": "Sun Life will be responsible for handling member enrolment and claims processing for the Canadian Dental Care Plan.",
     "preferred-language": "What is your preferred official language of communication?",
     "by-email": "<span>{{name}}</span><br>Signing up for email is the fastest way to get updates.",
+    "preferred-notification-method": "How would you like to receive updates from the Government of Canada about the Canadian Dental Care Plan?",
+    "preferred-notification-method-msca": "<span>{{name}}</span><br><mscaLinkAccount>Signing up</mscaLinkAccount> for online notifications is the fastest way to get updates.",
+    "preferred-notification-method-mail": "<span>{{name}}</span><br>You can also view your Canadian Dental Care Plan information in your <mscaLinkAccount>MSCA</mscaLinkAccount>.",
     "back": "Back",
     "continue": "Continue",
     "save": "Save",
+    "msca-link-account": "https://www.canada.ca/en/employment-social-development/services/my-account.html",
     "error-message": {
       "preferred-language-required": "Select preferred language of communication",
-      "preferred-method-required": "Select preferred method of communication for Sun Life"
+      "preferred-method-required": "Select preferred method of communication for Sun Life",
+      "preferred-notification-method-required": "Select preferred method of communication for the Government of Canada"
     }
   },
   "email": {
