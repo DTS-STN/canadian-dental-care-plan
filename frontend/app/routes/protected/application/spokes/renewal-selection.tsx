@@ -95,7 +95,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById('protected/application/$id/type-of-application', params));
+  return redirect(getPathById('protected/application/$id/renew', params));
 }
 
 /**
@@ -171,7 +171,7 @@ export default function ProtectedSpokesRenewalSelection({ loaderData, params }: 
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId="protected/application/$id/type-of-application"
+              routeId="protected/application/$id/renew"
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
