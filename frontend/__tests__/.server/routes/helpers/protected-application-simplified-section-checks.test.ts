@@ -277,15 +277,15 @@ describe('protected-application-simplified-section-checks', () => {
       ).toBe(true);
     });
 
-    it('should return false when sin is empty string', () => {
+    it('should return false when sin is undefined', () => {
       expect(
         isSinSectionCompleted({
           information: {
-            firstName: 'Test',
+            firstName: 'Child',
             lastName: 'Child',
-            hasSocialInsuranceNumber: false,
+            hasSocialInsuranceNumber: true,
             isParent: true,
-            dateOfBirth: '',
+            dateOfBirth: '2010-01-01',
           },
         }),
       ).toBe(false);
