@@ -158,8 +158,6 @@
     "edit-child-dental-insurance": "Modifier la réponse sur l'accès à une assurance dentaire privée",
     "edit-child-dental-benefits": "Modifier la réponse sur l'accès aux prestations dentaires gouvernementales",
     "edit-answer": "Modifier la réponse",
-    "update-dental-benefits": "Mettre à jour l'accès de mon enfant aux prestations dentaires gouvernementales",
-    "benefits-not-changed": "L'accès de mon enfant aux prestations dentaires gouvernementales n'a pas changé",
     "add-child-sin": "Ajouter le NAS",
     "add-answer": "Ajouter une réponse",
     "child-sin-indicate-status": "Saisir le NAS de votre enfant.",
@@ -180,7 +178,6 @@
     "dental-benefits-yes": "Oui, l'enfant bénéficie de prestations dentaires fédérales, provinciales ou territoriales",
     "dental-benefits-no": "Non, l'enfant ne bénéficie pas de prestations dentaires fédérales, provinciales ou territoriales",
     "back-btn": "Renseignements sur le parent ou le tuteur légal",
-    "submit-btn": "Soumettre la demande",
-    "no-change": "Pas de mise à jour."
+    "submit-btn": "Soumettre la demande"
   }
 }

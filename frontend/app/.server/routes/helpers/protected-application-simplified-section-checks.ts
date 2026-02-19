@@ -59,6 +59,11 @@ export function isMaritalStatusSectionCompleted(state: Pick<ProtectedApplication
   return true; // no partner information required
 }
 
+//TODO: remove when family childrens-application is updated
+export function isChildInformationSectionCompleted(child: Pick<ChildState, 'information'>): boolean {
+  return child.information !== undefined && child.information.dateOfBirth !== '';
+}
+
 /**
  * Checks if the child SIN section is completed for simplified application.
  */

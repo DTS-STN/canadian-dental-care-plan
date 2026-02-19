@@ -1,9 +1,5 @@
-import type { SyntheticEvent } from 'react';
-
-import { data, useFetcher } from 'react-router';
-
 import { invariant } from '@dts-stn/invariant';
-import { faCircleCheck, faPenToSquare } from '@fortawesome/free-regular-svg-icons';
+import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -12,11 +8,10 @@ import type { Route } from './+types/childrens-application';
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationFullChildState } from '~/.server/routes/helpers/protected-application-full-child-route-helpers';
 import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isParentGuardianSectionCompleted, isSinSectionCompleted } from '~/.server/routes/helpers/protected-application-full-section-checks';
-import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
-import { Button, ButtonLink } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
-import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
@@ -104,53 +99,9 @@ export async function loader({ context: { appContainer, session }, request, para
   };
 }
 
-export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  const securityHandler = appContainer.get(TYPES.SecurityHandler);
-  await securityHandler.validateAuthSession({ request, session });
-
-  const state = loadProtectedApplicationFullChildState({ params, request, session });
-  validateApplicationFlow(state, params, ['full-children']);
-
-  const formData = await request.formData();
-
-  securityHandler.validateCsrfToken({ formData, session });
-
-  const childId = formData.get('childId');
-  saveProtectedApplicationState({
-    params,
-    session,
-    state: {
-      children: state.children.map((child) => {
-        if (child.id !== childId) return child;
-        return {
-          ...child,
-          dentalBenefits: { hasChanged: false },
-        };
-      }),
-    },
-  });
-
-  return data({ success: true }, { status: 200 });
-}
-
 export default function ProtectedNewChildChildrensApplication({ loaderData, params }: Route.ComponentProps) {
   const { state, childrenSections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-
-  const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
-
-  async function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-
-    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
-    invariant(submitter, 'Expected submitter to be defined');
-    formData.append(submitter.name, submitter.value);
-
-    await fetcher.submit(formData, { method: 'POST' });
-  }
 
   const allChildrenCompleted = state.children.length > 0 && childrenSections.every((child) => Object.values(child.sections).every((section) => section.completed));
 
@@ -273,67 +224,34 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                   ) : (
                     <DefinitionList layout="single-column">
                       <DefinitionListItem term={t('protected-application-full-child:childrens-application.dental-benefits-title')}>
-                        {child.dentalBenefits.hasChanged ? (
-                          <>
-                            {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
-                              <div className="space-y-3">
-                                <p>{t('protected-application-full-child:childrens-application.dental-benefits-yes')}</p>
-                                <ul className="list-disc space-y-1 pl-7">
-                                  {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
-                                  {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
-                                </ul>
-                              </div>
-                            ) : (
-                              <p>{t('protected-application-full-child:childrens-application.dental-benefits-no')}</p>
-                            )}
-                          </>
+                        {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
+                          <div className="space-y-3">
+                            <p>{t('protected-application-full-child:childrens-application.dental-benefits-yes')}</p>
+                            <ul className="list-disc space-y-1 pl-7">
+                              {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
+                              {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
+                            </ul>
+                          </div>
                         ) : (
-                          <p>{t('protected-application-full-child:childrens-application.no-change')}</p>
+                          <p>{t('protected-application-full-child:childrens-application.dental-benefits-no')}</p>
                         )}
                       </DefinitionListItem>
                     </DefinitionList>
                   )}
                 </CardContent>
-                {child.dentalBenefits ? (
-                  <CardFooter className="border-t bg-zinc-100">
-                    <ButtonLink
-                      id="edit-button-government-benefits"
-                      variant="link"
-                      className="p-0"
-                      routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
-                      params={{ ...params, childId: child.id }}
-                      startIcon={sections.childDentalBenefits.completed ? faPenToSquare : faCirclePlus}
-                      size="lg"
-                    >
-                      {t('protected-application-full-child:childrens-application.edit-child-dental-benefits')}
-                    </ButtonLink>
-                  </CardFooter>
-                ) : (
-                  <CardFooter className="divide-y border-t bg-zinc-100 px-0">
-                    <div className="w-full px-6">
-                      <ButtonLink
-                        id="edit-button-update-access"
-                        variant="link"
-                        className="p-0 pb-5"
-                        routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
-                        params={{ ...params, childId: child.id }}
-                        startIcon={faPenToSquare}
-                        size="lg"
-                      >
-                        {t('protected-application-full-child:childrens-application.update-dental-benefits')}
-                      </ButtonLink>
-                    </div>
-                    <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
-                      <CsrfTokenInput />
-                      <input type="hidden" name="childId" value={child.id} />
-                      <div className="w-full px-6">
-                        <Button id="edit-button-not-changed" name="_action" disabled={isSubmitting} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
-                          {t('protected-application-full-child:childrens-application.benefits-not-changed')}
-                        </Button>
-                      </div>
-                    </fetcher.Form>
-                  </CardFooter>
-                )}
+                <CardFooter className="border-t bg-zinc-100">
+                  <ButtonLink
+                    id="edit-button"
+                    variant="link"
+                    className="p-0"
+                    routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
+                    params={{ ...params, childId: child.id }}
+                    startIcon={sections.childDentalBenefits.completed ? faPenToSquare : faCirclePlus}
+                    size="lg"
+                  >
+                    {child.dentalBenefits === undefined ? t('protected-application-full-child:childrens-application.add-answer') : t('protected-application-full-child:childrens-application.edit-child-dental-benefits')}
+                  </ButtonLink>
+                </CardFooter>
               </Card>
             </div>
           );

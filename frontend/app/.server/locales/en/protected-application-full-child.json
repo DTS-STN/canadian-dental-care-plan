@@ -157,8 +157,6 @@
     "edit-child-dental-insurance": "Edit access to private dental insurance",
     "edit-child-dental-benefits": "Edit access to government dental benefits",
     "edit-answer": "Edit answer",
-    "update-dental-benefits": "Update my child's access to government dental benefits",
-    "benefits-not-changed": "My child's access to government dental benefits has not changed",
     "add-child-sin": "Add SIN",
     "add-answer": "Add answer",
     "child-sin-indicate-status": "Enter your child's SIN.",
@@ -179,7 +177,6 @@
     "dental-benefits-yes": "Yes, this child has federal, provincial, or territorial benefits",
     "dental-benefits-no": "No, this child does not have federal, provincial, or territorial benefits",
     "back-btn": "Parent or legal guardian information",
-    "submit-btn": "Submit",
-    "no-change": "No update."
+    "submit-btn": "Submit"
   }
 }
