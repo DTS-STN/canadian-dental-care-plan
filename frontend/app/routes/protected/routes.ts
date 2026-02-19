@@ -175,7 +175,11 @@ export const routes = [
             file: 'routes/protected/application/simplified-children/confirmation.tsx',
             paths: { en: '/:lang/protected/application/:id/simplified/children/confirmation', fr: '/:lang/protege/demande/:id/simplifie/enfants/confirmation' },
           },
-
+          {
+            id: 'protected/application/$id/simplified-family/marital-status',
+            file: 'routes/protected/application/simplified-family/marital-status.tsx',
+            paths: { en: '/:lang/protected/application/:id/simplified/family/marital-status', fr: '/:lang/protege/demande/:id/simplifie/famille/etat-civil' },
+          },
           {
             id: 'protected/application/$id/simplified-family/contact-information',
             file: 'routes/protected/application/simplified-family/contact-information.tsx',

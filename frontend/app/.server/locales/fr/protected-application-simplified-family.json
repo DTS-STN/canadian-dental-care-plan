@@ -1,9 +1,25 @@
 {
   "progress-stepper": {
+    "marital-status": "Votre état civil",
     "contact-information": "Vos coordonnées",
     "dental-insurance": "Votre accès à une assurance dentaire",
     "childrens-application": "La demande de votre/vos enfant(s)",
     "submit": "Soumettre"
+  },
+  "marital-status": {
+    "page-title": "Votre état civil",
+    "page-heading": "Votre état civil",
+    "marital-status": "État civil",
+    "select-your-status": "Veuillez sélectionner votre état civil.",
+    "spouse-sin": "Numéro d'assurance sociale (NAS) de l'époux ou de l'épouse ou du conjoint ou de la conjointe de fait",
+    "spouse-yob": "Année de naissance de l'époux ou de l'épouse ou du conjoint ou de la conjointe de fait",
+    "consent": "Consentement",
+    "consent-yes": "Mon époux ou épouse ou conjoint ou conjointe de fait a consenti à la communication de ses renseignements personnels.",
+    "consent-no": "Mon époux ou épouse ou conjoint ou conjointe de fait n'a pas consenti à la communication de ses renseignements personnels.",
+    "add-marital-status": "Ajouter l'état civil",
+    "edit-marital-status": "Modifier l'état civil",
+    "prev-btn": "Type de demande",
+    "next-btn": "Coordonnées"
   },
   "contact-information": {
     "page-title": "Vos coordonnées",
