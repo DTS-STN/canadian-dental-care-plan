@@ -4,7 +4,7 @@ import type { Params } from 'react-router';
 import { UTCDate } from '@date-fns/utc';
 import { invariant } from '@dts-stn/invariant';
 import { differenceInMinutes } from 'date-fns';
-import type { ReadonlyDeep } from 'type-fest';
+import type { PickDeep, ReadonlyDeep } from 'type-fest';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
@@ -644,4 +644,19 @@ export function validateProtectedApplicationContext<TExpectedContext extends Pro
     log.warn('Application context [%s] does not match expected context [%s]; redirecting to [%s], stateId: [%s]', state.context, expectedContext, redirectUrl, state.id);
     throw redirectDocument(redirectUrl);
   }
+}
+
+/**
+ * Determines whether the marital status state should be skipped in the application flow based on the
+ * application input model and client application data.
+ *
+ * @param state - The protected application state containing the application input model and client application data.
+ * @returns A boolean value indicating whether to skip the marital status state (true) or not (false). The marital
+ * status state should be skipped if the application input model is 'simplified' and the client application has a copay tier
+ * earning record; otherwise, it should not be skipped.
+ */
+export function shouldSkipMaritalStatus(state: PickDeep<ProtectedApplicationState, 'inputModel' | 'clientApplication.copayTierEarningRecord'>): boolean {
+  if (state.inputModel !== 'simplified') return false;
+  if (state.clientApplication === undefined) return false;
+  return state.clientApplication.copayTierEarningRecord === true;
 }

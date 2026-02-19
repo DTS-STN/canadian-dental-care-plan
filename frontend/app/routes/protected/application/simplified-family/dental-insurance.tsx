@@ -8,7 +8,7 @@ import { z } from 'zod';
 import type { Route } from './+types/dental-insurance';
 
 import { TYPES } from '~/.server/constants';
-import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { saveProtectedApplicationState, shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { loadProtectedApplicationSimplifiedFamilyState } from '~/.server/routes/helpers/protected-application-simplified-family-route-helpers';
 import { isDentalBenefitsSectionCompleted, isDentalInsuranceSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -83,6 +83,7 @@ export async function loader({ context: { appContainer, session }, request, para
           }
         : undefined,
     },
+    shouldSkipMaritalStatusStep: shouldSkipMaritalStatus(state),
     sections,
     meta,
   };
@@ -109,7 +110,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedRenewFamilyDentalInsurance({ loaderData, params }: Route.ComponentProps) {
-  const { state, sections } = loaderData;
+  const { state, sections, shouldSkipMaritalStatusStep } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
 
@@ -118,7 +119,7 @@ export default function ProtectedRenewFamilyDentalInsurance({ loaderData, params
   return (
     <fetcher.Form method="post" noValidate>
       <CsrfTokenInput />
-      <ProgressStepper activeStep="dental-insurance" className="mb-8" />
+      <ProgressStepper activeStep="dental-insurance" excludeMaritalStatus={shouldSkipMaritalStatusStep} className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
           <p>{t('protected-application:complete-all-sections')}</p>

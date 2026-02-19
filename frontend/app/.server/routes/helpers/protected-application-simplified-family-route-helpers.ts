@@ -1,11 +1,17 @@
 import { redirect } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
+
 import { createLogger } from '~/.server/logging';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import type { ApplicationStateParams, ChildrenState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
+
+export type ProtectedApplicationSimplifiedFamilyState = OmitStrict<ProtectedApplicationState, 'clientApplication'> & {
+  clientApplication: NonNullable<ProtectedApplicationState['clientApplication']>;
+};
 
 interface LoadProtectedApplicationSimplifiedFamilyStateArgs {
   params: ApplicationStateParams;
@@ -18,7 +24,7 @@ interface LoadProtectedApplicationSimplifiedFamilyStateArgs {
  * @param args - The arguments.
  * @returns The loaded protected simplified family state.
  */
-export function loadProtectedApplicationSimplifiedFamilyState({ params, request, session }: LoadProtectedApplicationSimplifiedFamilyStateArgs) {
+export function loadProtectedApplicationSimplifiedFamilyState({ params, request, session }: LoadProtectedApplicationSimplifiedFamilyStateArgs): ProtectedApplicationSimplifiedFamilyState {
   const log = createLogger('protected-application-simplified-family-route-helpers/loadProtectedApplicationSimplifiedFamilyState');
   const { pathname } = new URL(request.url);
   const applicationState = getProtectedApplicationState({ params, session });
@@ -43,7 +49,9 @@ export function loadProtectedApplicationSimplifiedFamilyState({ params, request,
     throw redirect(typeOfApplicationRouteUrl);
   }
 
-  return applicationState;
+  const { clientApplication, ...rest } = applicationState;
+  invariant(clientApplication, 'clientApplication must be defined in the protected simplified family application state');
+  return { ...rest, clientApplication };
 }
 
 interface LoadProtectedApplicationSimplifiedFamilyStateForReviewArgs {
@@ -64,7 +72,7 @@ export function loadProtectedApplicationSimplifiedFamilyStateForReview({ params,
 
 interface ValidateProtectedApplicationFamilyStateForReviewArgs {
   params: ApplicationStateParams;
-  state: ProtectedApplicationState;
+  state: ProtectedApplicationSimplifiedFamilyState;
 }
 
 export function validateProtectedApplicationFamilyStateForReview({ params, state }: ValidateProtectedApplicationFamilyStateForReviewArgs) {
@@ -95,10 +103,6 @@ export function validateProtectedApplicationFamilyStateForReview({ params, state
   } = state;
 
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
-
-  if (clientApplication === undefined) {
-    throw redirect(getPathById('protected/application/$id/type-of-application', params));
-  }
 
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('protected/application/$id/eligibility-requirements', params));

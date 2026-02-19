@@ -80,7 +80,10 @@
     "edit-email": "Edit email address",
     "email-unchanged": "My email address has not changed",
     "next-btn": "Access to dental insurance",
-    "prev-btn": "Your marital status",
+    "prev-btn": {
+      "marital-status": "Your marital status",
+      "renew": "Renew your Canadian Dental Care Plan benefits"
+    },
     "alt-phone-number": "Alternate phone number",
     "no-change": "No update."
   },

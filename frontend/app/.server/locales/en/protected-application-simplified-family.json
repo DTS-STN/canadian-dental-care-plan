@@ -52,7 +52,10 @@
     "edit-communication-preferences": "Edit communication preferences",
     "communication-preferences-unchanged": "My communication preferences have not changed",
     "next-btn": "Access to dental insurance",
-    "prev-btn": "Type of application",
+    "prev-btn": {
+      "marital-status": "Your marital status",
+      "renew": "Renew your Canadian Dental Care Plan benefits"
+    },
     "alt-phone-number": "Alternate phone number",
     "no-change": "No update."
   },

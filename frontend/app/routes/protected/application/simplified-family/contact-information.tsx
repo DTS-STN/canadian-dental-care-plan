@@ -8,7 +8,7 @@ import z from 'zod';
 import type { Route } from './+types/contact-information';
 
 import { TYPES } from '~/.server/constants';
-import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { saveProtectedApplicationState, shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { loadProtectedApplicationSimplifiedFamilyState } from '~/.server/routes/helpers/protected-application-simplified-family-route-helpers';
 import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -82,6 +82,7 @@ export async function loader({ context: { appContainer, session }, request, para
       communicationPreferences: state.communicationPreferences,
       email: state.email,
     },
+    shouldSkipMaritalStatusStep: shouldSkipMaritalStatus(state),
     preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     preferredMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale) : undefined,
     preferredNotificationMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale) : undefined,
@@ -145,7 +146,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedRenewFamilyContactInformation({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, sections } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, sections, shouldSkipMaritalStatusStep } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
@@ -155,7 +156,7 @@ export default function ProtectedRenewFamilyContactInformation({ loaderData, par
   return (
     <fetcher.Form method="post" noValidate>
       <CsrfTokenInput />
-      <ProgressStepper activeStep="contact-information" className="mb-8" />
+      <ProgressStepper activeStep="contact-information" excludeMaritalStatus={shouldSkipMaritalStatusStep} className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
           <p>{t('protected-application:confirm-information')}</p>
@@ -312,9 +313,15 @@ export default function ProtectedRenewFamilyContactInformation({ loaderData, par
           <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="protected/application/$id/simplified-family/dental-insurance" params={params}>
             {t('protected-application-simplified-family:contact-information.next-btn')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/type-of-application" params={params}>
-            {t('protected-application-simplified-family:contact-information.prev-btn')}
-          </NavigationButtonLink>
+          {shouldSkipMaritalStatusStep ? (
+            <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renew" params={params}>
+              {t('protected-application-simplified-family:contact-information.prev-btn.renew')}
+            </NavigationButtonLink>
+          ) : (
+            <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/simplified-family/marital-status" params={params}>
+              {t('protected-application-simplified-family:contact-information.prev-btn.marital-status')}
+            </NavigationButtonLink>
+          )}
         </div>
       </div>
     </fetcher.Form>

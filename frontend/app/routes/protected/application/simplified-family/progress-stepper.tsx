@@ -13,19 +13,25 @@ type ProgressStepperProps = OmitStrict<ComponentProps<typeof ReusableProgressSte
    * The active step of the application.
    */
   activeStep: ApplicationSimplifiedFamilySteps;
+  /**
+   * Indicates whether the marital status step should be excluded.
+   */
+  excludeMaritalStatus?: boolean;
 };
 
-export function ProgressStepper({ activeStep, ...props }: ProgressStepperProps): JSX.Element {
+export function ProgressStepper({ activeStep, excludeMaritalStatus, ...props }: ProgressStepperProps): JSX.Element {
   const { t } = useTranslation(['protected-application-simplified-family']);
 
   const steps = useMemo(
     function () {
-      return applicationSimplifiedFamilySteps.map((step) => ({
-        id: step,
-        label: t(`protected-application-simplified-family:progress-stepper.${step}`),
-      }));
+      return applicationSimplifiedFamilySteps
+        .filter((step) => !excludeMaritalStatus || step !== 'marital-status')
+        .map((step) => ({
+          id: step,
+          label: t(`protected-application-simplified-family:progress-stepper.${step}`),
+        }));
     },
-    [t],
+    [excludeMaritalStatus, t],
   );
 
   return <ReusableProgressStepper steps={steps} activeStep={activeStep} {...props} />;

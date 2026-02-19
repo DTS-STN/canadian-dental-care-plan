@@ -65,7 +65,10 @@
     "add-communication-preferences": "Ajouter des préférences de communication",
     "edit-communication-preferences": "Modifier les préférences de communication",
     "next-btn": "Accès à une assurance dentaire",
-    "prev-btn": "Votre état civil",
+    "prev-btn": {
+      "marital-status": "Votre état civil",
+      "renew": "Renouveler vos prestations du Régime canadien de soins dentaires"
+    },
     "alt-phone-number": "Autre numéro de téléphone",
     "update-phone-number-help": "Souhaitez-vous mettre à jour votre numéro de téléphone\u00a0?",
     "update-phone-number": "Mettre à jour mon numéro de téléphone",

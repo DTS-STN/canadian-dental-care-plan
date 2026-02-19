@@ -1,11 +1,17 @@
 import { redirect } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
+
 import { createLogger } from '~/.server/logging';
 import type { ApplicationStateParams, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getAgeCategoryFromDateString, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
+
+export type ProtectedApplicationSimplifiedAdultState = OmitStrict<ProtectedApplicationState, 'clientApplication'> & {
+  clientApplication: NonNullable<ProtectedApplicationState['clientApplication']>;
+};
 
 interface LoadProtectedApplicationSimplifiedAdultStateArgs {
   params: ApplicationStateParams;
@@ -18,7 +24,7 @@ interface LoadProtectedApplicationSimplifiedAdultStateArgs {
  * @param args - The arguments.
  * @returns The loaded adult state.
  */
-export function loadProtectedApplicationSimplifiedAdultState({ params, request, session }: LoadProtectedApplicationSimplifiedAdultStateArgs) {
+export function loadProtectedApplicationSimplifiedAdultState({ params, request, session }: LoadProtectedApplicationSimplifiedAdultStateArgs): ProtectedApplicationSimplifiedAdultState {
   const log = createLogger('protected-application-simplified-adult-route-helpers/loadProtectedApplicationSimplifiedAdultState');
   const { pathname } = new URL(request.url);
   const applicationState = getProtectedApplicationState({ params, session });
@@ -43,7 +49,9 @@ export function loadProtectedApplicationSimplifiedAdultState({ params, request, 
     throw redirect(typeOfApplicationRouteUrl);
   }
 
-  return applicationState;
+  const { clientApplication, ...rest } = applicationState;
+  invariant(clientApplication, 'clientApplication must be defined in the protected simplified adult application state');
+  return { ...rest, clientApplication };
 }
 
 interface LoadProtectedApplicationSimplifiedAdultStateForReviewArgs {
@@ -64,7 +72,7 @@ export function loadProtectedApplicationSimplifiedAdultStateForReview({ params, 
 
 interface ValidateProtectedRenewAdultStateForReviewArgs {
   params: ApplicationStateParams;
-  state: ProtectedApplicationState;
+  state: ProtectedApplicationSimplifiedAdultState;
 }
 
 export function validateProtectedRenewAdultStateForReview({ params, state }: ValidateProtectedRenewAdultStateForReviewArgs) {
@@ -96,10 +104,6 @@ export function validateProtectedRenewAdultStateForReview({ params, state }: Val
   } = state;
 
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
-
-  if (clientApplication === undefined) {
-    throw redirect(getPathById('protected/application/$id/type-of-application', params));
-  }
 
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('protected/application/$id/eligibility-requirements', params));

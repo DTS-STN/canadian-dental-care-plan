@@ -1,10 +1,12 @@
+import { redirect } from 'react-router';
+
 import { faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
-import { validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { loadProtectedApplicationSimplifiedFamilyState } from '~/.server/routes/helpers/protected-application-simplified-family-route-helpers';
 import { isMaritalStatusSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -18,6 +20,7 @@ import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/protected/application/simplified-family/progress-stepper';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
+import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
@@ -36,6 +39,10 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const state = loadProtectedApplicationSimplifiedFamilyState({ params, request, session });
   validateApplicationFlow(state, params, ['simplified-family']);
+
+  if (shouldSkipMaritalStatus(state)) {
+    throw redirect(getPathById('protected/application/$id/simplified-family/contact-information', params));
+  }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-simplified-family:marital-status.page-title') }) };

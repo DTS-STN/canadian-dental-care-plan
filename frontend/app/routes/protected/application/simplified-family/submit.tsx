@@ -7,7 +7,7 @@ import { z } from 'zod';
 import type { Route } from './+types/submit';
 
 import { TYPES } from '~/.server/constants';
-import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { saveProtectedApplicationState, shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { loadProtectedApplicationSimplifiedFamilyStateForReview } from '~/.server/routes/helpers/protected-application-simplified-family-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -66,6 +66,7 @@ export async function loader({ context: { appContainer, session }, request, para
       applicantName: `${state.applicantInformation.firstName} ${state.applicantInformation.lastName}`,
       children,
     },
+    shouldSkipMaritalStatusStep: shouldSkipMaritalStatus(state),
     meta,
     payload,
   };
@@ -106,7 +107,7 @@ export async function action({ context: { appContainer, session }, request, para
 }
 
 export default function ProtectedSimplifiedFamilySubmit({ loaderData, params }: Route.ComponentProps) {
-  const { state, payload } = loaderData;
+  const { state, payload, shouldSkipMaritalStatusStep } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const fetcher = useFetcher<typeof action>();
@@ -118,7 +119,7 @@ export default function ProtectedSimplifiedFamilySubmit({ loaderData, params }: 
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
-      <ProgressStepper activeStep="submit" className="mb-8" />
+      <ProgressStepper activeStep="submit" excludeMaritalStatus={shouldSkipMaritalStatusStep} className="mb-8" />
       <div className="max-w-prose space-y-8">
         <ErrorSummary />
         <div className="space-y-8">
@@ -137,9 +138,15 @@ export default function ProtectedSimplifiedFamilySubmit({ loaderData, params }: 
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-simplified-family:submit.review-your-application')}</h2>
             <p>{t('protected-application-simplified-family:submit.please-review')}</p>
-            <ButtonLink variant="primary" routeId="protected/application/$id/simplified-family/contact-information" params={params}>
-              {t('protected-application-simplified-family:submit.review-application')}
-            </ButtonLink>
+            {shouldSkipMaritalStatusStep ? (
+              <ButtonLink variant="primary" routeId="protected/application/$id/simplified-family/contact-information" params={params}>
+                {t('protected-application-simplified-family:submit.review-application')}
+              </ButtonLink>
+            ) : (
+              <ButtonLink variant="primary" routeId="protected/application/$id/simplified-family/marital-status" params={params}>
+                {t('protected-application-simplified-family:submit.review-application')}
+              </ButtonLink>
+            )}
           </section>
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-simplified-family:submit.submit-your-application')}</h2>

@@ -42,19 +42,17 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  // prettier-ignore
   if (
-    state.clientApplication === undefined ||
-    state.communicationPreferences === undefined ||
+    state.communicationPreferences === undefined || //
     state.dentalBenefits === undefined ||
     state.dentalInsurance === undefined ||
     state.phoneNumber === undefined ||
     state.mailingAddress === undefined ||
     state.homeAddress === undefined ||
     state.submitTerms === undefined ||
-    state.hasFiledTaxes === undefined  ||
+    state.hasFiledTaxes === undefined ||
     state.submissionInfo === undefined
-    ) {
+  ) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
