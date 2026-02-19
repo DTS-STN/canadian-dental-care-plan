@@ -430,7 +430,6 @@
     },
     "parent-or-guardian": {
       "page-title": "You must be a parent or legal guardian",
-      "must-be": "You must be a parent or legal guardian.",
       "unable-to-apply": "You are not able to apply for this child. You must be a parent or legal guardian to apply on behalf of a child.",
       "back-btn": "Back",
       "exit-btn": "Exit application",
