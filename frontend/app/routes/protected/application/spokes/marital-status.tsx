@@ -37,6 +37,9 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
     case 'full-children': {
       return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
     }
+    case 'simplified-children': {
+      return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
+    }
     default: {
       return `protected/application/$id/${applicationFlow}/marital-status`;
     }
@@ -56,7 +59,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family']);
+  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-children', 'simplified-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -72,7 +75,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family']);
+  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-children', 'simplified-family']);
 
   const formData = await request.formData();
 
