@@ -126,7 +126,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={sections.maritalStatus.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink id="edit-marital-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={sections.maritalStatus.completed ? faPenToSquare : faCirclePlus} size="lg">
               {state.maritalStatus === undefined ? t('application-full-child:parent-or-guardian.add-marital-status') : t('application-full-child:parent-or-guardian.edit-marital-status')}
             </ButtonLink>
           </CardFooter>
@@ -154,7 +154,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={sections.phoneNumber.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink id="edit-phone-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={sections.phoneNumber.completed ? faPenToSquare : faCirclePlus} size="lg">
               {sections.phoneNumber.completed ? t('application-full-child:parent-or-guardian.edit-phone-number') : t('application-full-child:parent-or-guardian.add-phone-number')}
             </ButtonLink>
           </CardFooter>
@@ -196,7 +196,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={sections.address.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink id="edit-address-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={sections.address.completed ? faPenToSquare : faCirclePlus} size="lg">
               {sections.address.completed ? t('application-full-child:parent-or-guardian.edit-address') : t('application-full-child:parent-or-guardian.add-address')}
             </ButtonLink>
           </CardFooter>
@@ -220,7 +220,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/communication-preferences" params={params} startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink id="edit-comms-button" variant="link" className="p-0" routeId="public/application/$id/communication-preferences" params={params} startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus} size="lg">
               {sections.communicationPreferences.completed ? t('application-full-child:parent-or-guardian.edit-communication-preferences') : t('application-full-child:parent-or-guardian.add-communication-preferences')}
             </ButtonLink>
           </CardFooter>

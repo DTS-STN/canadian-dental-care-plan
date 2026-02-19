@@ -104,7 +104,7 @@ export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/dental-insurance" params={params} startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink id="edit-insurance-button" variant="link" className="p-0" routeId="protected/application/$id/dental-insurance" params={params} startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus} size="lg">
               {state.dentalInsurance === undefined ? t('protected-application-full-family:dental-insurance.add-answer') : t('protected-application-full-family:dental-insurance.edit-access-to-dental-insurance')}
             </ButtonLink>
           </CardFooter>
@@ -137,7 +137,15 @@ export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={sections.dentalBenefits.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink
+              id="edit-benefits-button"
+              variant="link"
+              className="p-0"
+              routeId="protected/application/$id/federal-provincial-territorial-benefits"
+              params={params}
+              startIcon={sections.dentalBenefits.completed ? faPenToSquare : faCirclePlus}
+              size="lg"
+            >
               {state.dentalBenefits === undefined ? t('protected-application-full-family:dental-insurance.add-answer') : t('protected-application-full-family:dental-insurance.edit-access-to-government-benefits')}
             </ButtonLink>
           </CardFooter>

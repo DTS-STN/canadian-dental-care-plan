@@ -90,7 +90,7 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/marital-status" params={params} startIcon={sections.maritalStatus.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink id="edit-marital-button" variant="link" className="p-0" routeId="protected/application/$id/marital-status" params={params} startIcon={sections.maritalStatus.completed ? faPenToSquare : faCirclePlus} size="lg">
               {state.maritalStatus === undefined ? t('protected-application-full-adult:marital-status.add-marital-status') : t('protected-application-full-adult:marital-status.edit-marital-status')}
             </ButtonLink>
           </CardFooter>
