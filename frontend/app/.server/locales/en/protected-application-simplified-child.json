@@ -34,10 +34,10 @@
     "add-communication-preferences": "Add communication preferences",
     "edit-communication-preferences": "Edit communication preferences",
     "communication-preferences-unchanged": "My communication preferences have not changed",
-    "type-of-application": "Type of application",
-    "childrens-application": "Your child(ren)'s application",
     "alt-phone-number": "Alternate phone number",
-    "no-change": "No update."
+    "no-change": "No update.",
+    "next-btn": "Your child(ren)'s application",
+    "prev-btn": "Renew your Canadian Dental Care Plan benefits"
   },
   "submit": {
     "page-title": "Submit your application",
