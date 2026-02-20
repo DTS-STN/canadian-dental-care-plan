@@ -91,9 +91,9 @@ export interface BenefitRenewalChildState {
 }
 
 export interface HubSpokeBenefitRenewalStateMapper {
-  mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(benefitrenewalAdultState: BenefitRenewalAdultState): AdultBenefitRenewalDto;
-  mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto(benefitrenewalAdultChildState: BenefitRenewalAdultChildState): AdultChildBenefitRenewalDto;
-  mapBenefitRenewalChildStateToChildBenefitRenewalDto(benefitrenewalChildSTate: BenefitRenewalChildState): ChildBenefitRenewalDto;
+  mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(benefitrenewalAdultState: BenefitRenewalAdultState, userId?: string): AdultBenefitRenewalDto;
+  mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto(benefitrenewalAdultChildState: BenefitRenewalAdultChildState, userId?: string): AdultChildBenefitRenewalDto;
+  mapBenefitRenewalChildStateToChildBenefitRenewalDto(benefitRenewalChildState: BenefitRenewalChildState, userId?: string): ChildBenefitRenewalDto;
 }
 
 interface ToApplicantInformationArgs {
@@ -168,22 +168,25 @@ export class DefaultHubSpokeBenefitRenewalStateMapper implements HubSpokeBenefit
     this.serverConfig = serverConfig;
   }
 
-  mapBenefitRenewalAdultStateToAdultBenefitRenewalDto({
-    applicationYear,
-    clientApplication,
-    phoneNumber,
-    dentalBenefits,
-    dentalInsurance,
-    homeAddress,
-    isHomeAddressSameAsMailingAddress,
-    mailingAddress,
-    maritalStatus,
-    partnerInformation,
-    email,
-    emailVerified,
-    communicationPreferences,
-    termsAndConditions,
-  }: BenefitRenewalAdultState): AdultBenefitRenewalDto {
+  mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(
+    {
+      applicationYear,
+      clientApplication,
+      phoneNumber,
+      dentalBenefits,
+      dentalInsurance,
+      homeAddress,
+      isHomeAddressSameAsMailingAddress,
+      mailingAddress,
+      maritalStatus,
+      partnerInformation,
+      email,
+      emailVerified,
+      communicationPreferences,
+      termsAndConditions,
+    }: BenefitRenewalAdultState,
+    userId: string = 'anonymous',
+  ): AdultBenefitRenewalDto {
     if (communicationPreferences === undefined) {
       throw new Error('Expected communicationPreferences to be defined');
     }
@@ -227,27 +230,30 @@ export class DefaultHubSpokeBenefitRenewalStateMapper implements HubSpokeBenefit
       }),
       typeOfApplication: 'adult',
       termsAndConditions,
-      userId: 'anonymous',
+      userId,
     };
   }
 
-  mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto({
-    applicationYear,
-    children,
-    clientApplication,
-    phoneNumber,
-    dentalBenefits,
-    dentalInsurance,
-    homeAddress,
-    isHomeAddressSameAsMailingAddress,
-    mailingAddress,
-    maritalStatus,
-    partnerInformation,
-    email,
-    emailVerified,
-    communicationPreferences,
-    termsAndConditions,
-  }: BenefitRenewalAdultChildState): AdultChildBenefitRenewalDto {
+  mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto(
+    {
+      applicationYear,
+      children,
+      clientApplication,
+      phoneNumber,
+      dentalBenefits,
+      dentalInsurance,
+      homeAddress,
+      isHomeAddressSameAsMailingAddress,
+      mailingAddress,
+      maritalStatus,
+      partnerInformation,
+      email,
+      emailVerified,
+      communicationPreferences,
+      termsAndConditions,
+    }: BenefitRenewalAdultChildState,
+    userId: string = 'anonymous',
+  ): AdultChildBenefitRenewalDto {
     if (communicationPreferences === undefined) {
       throw new Error('Expected communicationPreferences to be defined');
     }
@@ -294,25 +300,28 @@ export class DefaultHubSpokeBenefitRenewalStateMapper implements HubSpokeBenefit
       }),
       typeOfApplication: children.length === 0 ? 'adult' : 'adult-child',
       termsAndConditions,
-      userId: 'anonymous',
+      userId,
     };
   }
 
-  mapBenefitRenewalChildStateToChildBenefitRenewalDto({
-    applicationYear,
-    children,
-    clientApplication,
-    phoneNumber,
-    homeAddress,
-    isHomeAddressSameAsMailingAddress,
-    mailingAddress,
-    maritalStatus,
-    partnerInformation,
-    email,
-    emailVerified,
-    communicationPreferences,
-    termsAndConditions,
-  }: BenefitRenewalChildState): ChildBenefitRenewalDto {
+  mapBenefitRenewalChildStateToChildBenefitRenewalDto(
+    {
+      applicationYear,
+      children,
+      clientApplication,
+      phoneNumber,
+      homeAddress,
+      isHomeAddressSameAsMailingAddress,
+      mailingAddress,
+      maritalStatus,
+      partnerInformation,
+      email,
+      emailVerified,
+      communicationPreferences,
+      termsAndConditions,
+    }: BenefitRenewalChildState,
+    userId: string = 'anonymous',
+  ): ChildBenefitRenewalDto {
     if (communicationPreferences === undefined) {
       throw new Error('Expected communicationPreferences to be defined');
     }
@@ -355,7 +364,7 @@ export class DefaultHubSpokeBenefitRenewalStateMapper implements HubSpokeBenefit
       }),
       typeOfApplication: 'child',
       termsAndConditions,
-      userId: 'anonymous',
+      userId,
     };
   }
 
