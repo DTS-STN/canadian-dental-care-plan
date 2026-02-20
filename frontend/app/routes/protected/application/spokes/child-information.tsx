@@ -208,6 +208,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
 
+  const currentYear = new Date().getFullYear();
+  const isAdultOnDate = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth, `${currentYear}-07-01`) === 'adults';
+
   saveProtectedApplicationState({
     params,
     session,
@@ -229,6 +232,10 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (ageCategory === 'adults' || ageCategory === 'seniors') {
     return redirect(getPathById('protected/application/$id/children/$childId/cannot-apply-child', params));
+  }
+
+  if (isAdultOnDate && state.typeOfApplication === 'family') {
+    return redirect(getPathById('protected/application/$id/children/$childId/cannot-apply-child-year', params));
   }
 
   return redirect(getPathById(`protected/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
