@@ -18,15 +18,14 @@ export function isAddressSectionCompleted(state: Pick<ProtectedApplicationState,
 /**
  * Checks if the communication preferences section is completed for simplified application.
  */
-export function isCommunicationPreferencesSectionCompleted(state: Pick<ProtectedApplicationState, 'communicationPreferences'>): boolean {
-  return state.communicationPreferences !== undefined;
-}
-
-/**
- * Checks if the email section is completed for simplified application.
- */
-export function isEmailSectionCompleted(state: Pick<ProtectedApplicationState, 'email' | 'emailVerified'>): boolean {
-  return state.email !== undefined && state.emailVerified === true;
+export function isCommunicationPreferencesSectionCompleted(state: Pick<ProtectedApplicationState, 'communicationPreferences' | 'email' | 'emailVerified'>): boolean {
+  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
+  return (
+    state.communicationPreferences !== undefined &&
+    (state.communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || state.communicationPreferences.value?.preferredNotificationMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID
+      ? state.email !== undefined && state.emailVerified === true
+      : true)
+  );
 }
 
 /**

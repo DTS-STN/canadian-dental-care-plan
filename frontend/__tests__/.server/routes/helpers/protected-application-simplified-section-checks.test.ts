@@ -128,6 +128,11 @@ describe('protected-application-simplified-section-checks', () => {
   });
 
   describe('isCommunicationPreferencesSectionCompleted', () => {
+    vi.mocked(getEnv, { partial: true }).mockReturnValue({
+      COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID: 'email',
+      COMMUNICATION_METHOD_GC_DIGITAL_ID: 'email',
+    });
+
     it('should return false when communicationPreferences is undefined', () => {
       expect(
         isCommunicationPreferencesSectionCompleted({
