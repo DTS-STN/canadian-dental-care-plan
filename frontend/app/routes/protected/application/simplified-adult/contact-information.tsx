@@ -12,7 +12,7 @@ import type { Route } from './+types/contact-information';
 import { TYPES } from '~/.server/constants';
 import { saveProtectedApplicationState, shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { loadProtectedApplicationSimplifiedAdultState } from '~/.server/routes/helpers/protected-application-simplified-adult-route-helpers';
-import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isEmailSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
+import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -59,6 +59,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const languageService = appContainer.get(TYPES.LanguageService);
   const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
   const sunLifeCommunicationMethodService = appContainer.get(TYPES.SunLifeCommunicationMethodService);
+  const gcCommunicationMethodService = appContainer.get(TYPES.GCCommunicationMethodService);
 
   return {
     // Application state that is relevant to the contact information page.
@@ -74,6 +75,7 @@ export async function loader({ context: { appContainer, session }, request, para
         ? {
             preferredLanguage: languageService.getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale).name,
             preferredMethod: sunLifeCommunicationMethodService.getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale).name,
+            preferredNotificationMethod: gcCommunicationMethodService.getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale).name,
           }
         : undefined,
       mailingAddress: state.mailingAddress?.hasChanged
@@ -114,6 +116,7 @@ export async function loader({ context: { appContainer, session }, request, para
           ? {
               preferredLanguage: languageService.getLocalizedLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name,
               preferredMethod: sunLifeCommunicationMethodService.getLocalizedSunLifeCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethodSunLife, locale).name,
+              preferredNotificationMethod: gcCommunicationMethodService.getLocalizedGCCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada, locale).name,
             }
           : undefined,
       mailingAddress: state.clientApplication.contactInformation.mailingCountry
@@ -146,7 +149,6 @@ export async function loader({ context: { appContainer, session }, request, para
       phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
       address: { completed: isAddressSectionCompleted(state) },
       communicationPreferences: { completed: isCommunicationPreferencesSectionCompleted(state) },
-      email: { completed: isEmailSectionCompleted(state) },
     },
     meta,
   };
@@ -256,15 +258,6 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
           </CardHeader>
           <CommunicationPreferencesCardContent />
           <CommunicationPreferencesCardFooter />
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('protected-application-simplified-adult:contact-information.email')}</CardTitle>
-            <CardAction>{sections.email.completed && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          <EmailCardContent />
-          <EmailCardFooter />
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
@@ -576,6 +569,8 @@ function CommunicationPreferencesCardContent(): JSX.Element {
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-language')}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
           <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-method')}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
+          <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-notification-method')}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
+          {state.email && <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.email')}>{state.email}</DefinitionListItem>}
         </DefinitionList>
       </CardContent>
     );
@@ -587,6 +582,8 @@ function CommunicationPreferencesCardContent(): JSX.Element {
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-language')}>{clientApplication.communicationPreferences.preferredLanguage}</DefinitionListItem>
           <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-method')}>{clientApplication.communicationPreferences.preferredMethod}</DefinitionListItem>
+          <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.preferred-notification-method')}>{clientApplication.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
+          {clientApplication.email && <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.email')}>{clientApplication.email}</DefinitionListItem>}
         </DefinitionList>
       </CardContent>
     );
@@ -655,111 +652,6 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
     <CardFooter className="border-t bg-zinc-100">
       <ButtonLink id="add-comms-button" variant="link" className="p-0" routeId="protected/application/$id/communication-preferences" params={params} startIcon={faCirclePlus} size="lg">
         {t('protected-application-simplified-adult:contact-information.add-communication-preferences')}
-      </ButtonLink>
-    </CardFooter>
-  );
-}
-
-/**
- * This component determines what to show in the email card content based on whether the user has entered a new email,
- * whether there is an existing email on the client application, or if there is no email at all. The logic is as follows:
- *
- * - If the user has entered a new email (state.email is defined), show the new email.
- *
- * - If the user has not entered a new email but there is an existing email on the client application, show the
- *   existing email.
- *
- * - If there is no email on the client application and the user has not entered a new email, show the help text.
- *
- * This logic ensures that the user always sees an email if there is one available, whether it's the new one they
- * entered or the existing one on their application. If there is no email at all, it prompts them to add one.
- */
-function EmailCardContent(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const { state, clientApplication } = useLoaderData<typeof loader>();
-
-  if (state.email) {
-    return (
-      <CardContent>
-        <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.email')}>{state.email}</DefinitionListItem>
-        </DefinitionList>
-      </CardContent>
-    );
-  }
-
-  if (clientApplication.email && clientApplication.emailVerified === true) {
-    return (
-      <CardContent>
-        <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-simplified-adult:contact-information.email')}>{clientApplication.email}</DefinitionListItem>
-        </DefinitionList>
-      </CardContent>
-    );
-  }
-
-  return (
-    <CardContent>
-      <p>{t('protected-application-simplified-adult:contact-information.email-help')}</p>
-    </CardContent>
-  );
-}
-
-/**
- * This component determines what to show in the email card footer based on whether the user has entered a new email or
- * if there is an existing email on the client application. The logic is as follows:
- *
- * - If the user has entered a new email (state.email is defined), show the "Edit email" button.
- *
- * - If the user has not entered a new email but there is an existing email on the client application and it is verified,
- *   show both the "Update email" button and the "Email unchanged" button. This allows the user to either go update their
- *   email or confirm that their existing email is still correct. Note that if the existing email is not verified, we do
- *   not show the "Email unchanged" button, as we want to encourage the user to either update their email or add a new
- *   one to ensure they have a verified email on file.
- *
- * - If there is no email on the client application or the existing email is not verified, and the user has not entered
- *   a new email, show the "Add email" button.
- *
- * This logic ensures that the user always has a clear call to action based on their current state. If they have made
- * a change, they can edit it. If they haven't made a change but have an existing email, they can either update it or
- * confirm it's unchanged. If they don't have an email at all, they are prompted to add one.
- */
-function EmailCardFooter(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const { state, clientApplication, sections } = useLoaderData<typeof loader>();
-  const params = useParams();
-
-  if (state.email || sections.email.completed) {
-    return (
-      <CardFooter className="border-t bg-zinc-100">
-        <ButtonLink id="edit-email-button" variant="link" className="p-0" routeId="protected/application/$id/email" params={params} startIcon={faPenToSquare} size="lg">
-          {t('protected-application-simplified-adult:contact-information.edit-email')}
-        </ButtonLink>
-      </CardFooter>
-    );
-  }
-
-  if (clientApplication.email && clientApplication.emailVerified === true) {
-    return (
-      <CardFooter className="divide-y border-t bg-zinc-100 px-0">
-        <div className="w-full px-6">
-          <ButtonLink id="update-email-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/email" params={params} startIcon={faPenToSquare} size="lg">
-            {t('protected-application-simplified-adult:contact-information.update-email')}
-          </ButtonLink>
-        </div>
-        <div className="w-full px-6">
-          <Button id="complete-email-button" variant="link" name="_action" value={FORM_ACTION.EMAIL_ADDRESS_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
-            {t('protected-application-simplified-adult:contact-information.email-unchanged')}
-          </Button>
-        </div>
-      </CardFooter>
-    );
-  }
-
-  return (
-    <CardFooter className="border-t bg-zinc-100">
-      <ButtonLink id="add-email-button" variant="link" className="p-0" routeId="protected/application/$id/email" params={params} startIcon={faCirclePlus} size="lg">
-        {t('protected-application-simplified-adult:contact-information.add-email')}
       </ButtonLink>
     </CardFooter>
   );
