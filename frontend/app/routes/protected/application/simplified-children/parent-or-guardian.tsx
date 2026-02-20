@@ -12,7 +12,7 @@ import type { Route } from './+types/parent-or-guardian';
 import { TYPES } from '~/.server/constants';
 import { saveProtectedApplicationState, shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { loadProtectedApplicationSimplifiedChildState } from '~/.server/routes/helpers/protected-application-simplified-child-route-helpers';
-import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
+import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isMaritalStatusSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -28,6 +28,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatSin } from '~/utils/sin-utils';
 
 const FORM_ACTION = {
   PHONE_NUMBER_NOT_CHANGED: 'phone-number-not-changed',
@@ -59,10 +60,13 @@ export async function loader({ context: { appContainer, session }, request, para
   const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
   const sunLifeCommunicationMethodService = appContainer.get(TYPES.SunLifeCommunicationMethodService);
   const gcCommunicationMethodService = appContainer.get(TYPES.GCCommunicationMethodService);
+  const shouldSkipMaritalStatusStep = shouldSkipMaritalStatus(state);
 
   return {
     // Application state that is relevant to the contact information page.
     state: {
+      maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale) : undefined,
+      partnerInformation: state.partnerInformation,
       email: state.email,
       phoneNumber: state.phoneNumber?.hasChanged
         ? {
@@ -143,8 +147,9 @@ export async function loader({ context: { appContainer, session }, request, para
           }
         : undefined,
     },
-    shouldSkipMaritalStatusStep: shouldSkipMaritalStatus(state),
+    shouldSkipMaritalStatusStep,
     sections: {
+      ...(shouldSkipMaritalStatusStep ? {} : { maritalStatus: { completed: isMaritalStatusSectionCompleted(state) } }),
       phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
       address: { completed: isAddressSectionCompleted(state) },
       communicationPreferences: { completed: isCommunicationPreferencesSectionCompleted(state) },
@@ -203,7 +208,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedRenewChildParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
-  const { sections } = loaderData;
+  const { state, sections, shouldSkipMaritalStatusStep } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
@@ -220,6 +225,39 @@ export default function ProtectedRenewChildParentOrGuardian({ loaderData, params
           <p>{completedSectionsLabel}</p>
           <p>{t('protected-application:confirm-information')}</p>
         </div>
+
+        {!shouldSkipMaritalStatusStep && (
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('protected-application-simplified-child:parent-or-guardian.marital-status')}</CardTitle>
+              <CardAction>{sections.maritalStatus?.completed && <StatusTag status="complete" />}</CardAction>
+            </CardHeader>
+            <CardContent>
+              {state.maritalStatus === undefined ? (
+                <p>{t('protected-application-simplified-child:parent-or-guardian.select-your-status')}</p>
+              ) : (
+                <DefinitionList layout="single-column">
+                  <DefinitionListItem term={t('protected-application-simplified-child:parent-or-guardian.marital-status')}>{state.maritalStatus.name}</DefinitionListItem>
+                  {state.partnerInformation && (
+                    <>
+                      <DefinitionListItem term={t('protected-application-simplified-child:parent-or-guardian.spouse-sin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
+                      <DefinitionListItem term={t('protected-application-simplified-child:parent-or-guardian.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
+                      <DefinitionListItem term={t('protected-application-simplified-child:parent-or-guardian.consent')}>
+                        {state.partnerInformation.confirm ? t('protected-application-simplified-child:parent-or-guardian.consent-yes') : t('protected-application-simplified-child:parent-or-guardian.consent-no')}
+                      </DefinitionListItem>
+                    </>
+                  )}
+                </DefinitionList>
+              )}
+            </CardContent>
+            <CardFooter className="border-t bg-zinc-100">
+              <ButtonLink id="edit-marital-button" variant="link" className="p-0" routeId="protected/application/$id/marital-status" params={params} startIcon={sections.maritalStatus?.completed ? faPenToSquare : faCirclePlus} size="lg">
+                {state.maritalStatus === undefined ? t('protected-application-simplified-child:parent-or-guardian.add-marital-status') : t('protected-application-simplified-child:parent-or-guardian.edit-marital-status')}
+              </ButtonLink>
+            </CardFooter>
+          </Card>
+        )}
+
         <Card>
           <CardHeader>
             <CardTitle>{t('protected-application-simplified-child:parent-or-guardian.phone-number')}</CardTitle>
