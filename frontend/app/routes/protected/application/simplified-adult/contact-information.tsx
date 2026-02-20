@@ -33,7 +33,6 @@ const FORM_ACTION = {
   PHONE_NUMBER_NOT_CHANGED: 'phone-number-not-changed',
   ADDRESS_NOT_CHANGED: 'address-not-changed',
   COMMUNICATION_PREFERENCES_NOT_CHANGED: 'communication-preferences-not-changed',
-  EMAIL_ADDRESS_NOT_CHANGED: 'email-address-not-changed',
 } as const;
 
 export const handle = {
@@ -196,18 +195,6 @@ export async function action({ context: { appContainer, session }, params, reque
         communicationPreferences: {
           hasChanged: false,
         },
-      },
-    });
-  }
-
-  // TODO: make email of type DeclaredChange (likely)
-  if (formAction === FORM_ACTION.EMAIL_ADDRESS_NOT_CHANGED) {
-    saveProtectedApplicationState({
-      params,
-      session,
-      state: {
-        email: state.clientApplication.contactInformation.email,
-        emailVerified: state.clientApplication.contactInformation.emailVerified,
       },
     });
   }
