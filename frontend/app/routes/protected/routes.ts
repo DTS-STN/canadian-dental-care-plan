@@ -271,6 +271,11 @@ export const routes = [
             paths: { en: '/:lang/protected/application/:id/children/:childId/cannot-apply-child', fr: '/:lang/protected/demande/:id/enfant/:childId/pas-demande-enfant' },
           },
           {
+            id: 'protected/application/$id/children/$childId/cannot-apply-child-year',
+            file: 'routes/protected/application/spokes/cannot-apply-child-year.tsx',
+            paths: { en: '/:lang/protected/application/:id/children/:childId/cannot-apply-child-year', fr: '/:lang/protected/demande/:id/enfant/:childId/pas-demande-enfant-annee' },
+          },
+          {
             id: 'protected/application/$id/children/$childId/federal-provincial-territorial-benefits',
             file: 'routes/protected/application/spokes/child-federal-provincial-territorial-benefits.tsx',
             paths: { en: '/:lang/protected/application/:id/children/:childId/federal-provincial-territorial-benefits', fr: '/:lang/protected/demande/:id/enfant/:childId/prestations-dentaires-federales-provinciales-territoriales' },

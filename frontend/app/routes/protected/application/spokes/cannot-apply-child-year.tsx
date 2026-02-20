@@ -1,0 +1,89 @@
+import { redirect, useFetcher } from 'react-router';
+
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { Trans, useTranslation } from 'react-i18next';
+
+import type { Route } from './+types/cannot-apply-child-year';
+
+import { TYPES } from '~/.server/constants';
+import { getSingleChildState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getFixedT } from '~/.server/utils/locale.utils';
+import { ButtonLink } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
+import { LoadingButton } from '~/components/loading-button';
+import { pageIds } from '~/page-ids';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
+import { getTitleMetaTags } from '~/utils/seo-utils';
+
+export const handle = {
+  i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'gcweb'),
+  pageIdentifier: pageIds.protected.application.spokes.cannotApplyChildYear,
+  pageTitleI18nKey: 'protected-application-spokes:children.cannot-apply-child-year.page-title',
+} as const satisfies RouteHandleData;
+
+export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
+
+export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+
+  getSingleChildState({ params, request, session });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.cannot-apply-child-year.page-title') }) };
+
+  return { meta };
+}
+
+export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  const securityHandler = appContainer.get(TYPES.SecurityHandler);
+  await securityHandler.validateAuthSession({ request, session });
+
+  const formData = await request.formData();
+
+  securityHandler.validateCsrfToken({ formData, session });
+
+  return redirect(getPathById('protected/apply/$id/child/children/index', params));
+}
+
+export default function CannotApplyChildYear({ loaderData, params }: Route.ComponentProps) {
+  const { t } = useTranslation(handle.i18nNamespaces);
+
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
+
+  const noWrap = <span className="whitespace-nowrap" />;
+
+  const currentYear = new Date().getFullYear();
+
+  return (
+    <div className="max-w-prose">
+      <div className="mb-6 space-y-4">
+        <p>{t('protected-application-spokes:children.cannot-apply-child-year.ineligible-to-apply', { currentYear })}</p>
+        <p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:children.cannot-apply-child-year.eligibility-info" components={{ noWrap }} />
+        </p>
+      </div>
+      <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
+        <CsrfTokenInput />
+        <ButtonLink
+          id="back-button"
+          variant="secondary"
+          routeId="protected/application/$id/children/$childId/information"
+          params={params}
+          disabled={isSubmitting}
+          startIcon={faChevronLeft}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Application Form-Child:Back - Child cannot apply year click"
+        >
+          {t('protected-application-spokes:children.cannot-apply-child-year.back-btn')}
+        </ButtonLink>
+        <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Application Form-Child:Proceed - Child cannot apply year click">
+          {t('protected-application-spokes:children.cannot-apply-child-year.continue-btn')}
+        </LoadingButton>
+      </fetcher.Form>
+    </div>
+  );
+}

@@ -447,6 +447,13 @@
       "back-btn": "Back",
       "continue-btn": "Continue"
     },
+    "cannot-apply-child-year": {
+      "page-title": "Your child must apply",
+      "ineligible-to-apply": "Your child will turn 18 by July 1, {{currentYear}}. Once they turn 18, they must submit their own application.",
+      "eligibility-info": "If your child is a dependant adult and you are their legal delegate or Power of Attorney, you must speak to a Service Canada representative to apply on their behalf. You can contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
+      "back-btn": "Back",
+      "continue-btn": "Continue"
+    },
     "dental-benefits": {
       "title": "{{childName}}'s access to other federal, provincial or territorial dental benefits",
       "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact the child's eligibility for the Canadian Dental Care Plan.",
