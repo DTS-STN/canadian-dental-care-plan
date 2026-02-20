@@ -234,7 +234,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/application/$id/children/$childId/cannot-apply-child', params));
   }
 
-  if (isAdultOnDate) {
+  if (isAdultOnDate && state.typeOfApplication === 'family') {
     return redirect(getPathById('protected/application/$id/children/$childId/cannot-apply-child-year', params));
   }
 
