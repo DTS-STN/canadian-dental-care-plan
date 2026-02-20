@@ -25,8 +25,6 @@
     "email": "Adresse courriel",
     "add-communication-preferences": "Ajouter des préférences de communication",
     "edit-communication-preferences": "Modifier les préférences de communication",
-    "next-btn": "Accès à une assurance dentaire",
-    "prev-btn": "Votre état civil",
     "alt-phone-number": "Autre numéro de téléphone",
     "update-phone-number-help": "Souhaitez-vous mettre à jour votre numéro de téléphone\u00a0?",
     "update-phone-number": "Mettre à jour mon numéro de téléphone",
@@ -38,8 +36,8 @@
     "update-communication-preferences": "Mettre à jour mes préférences de communication",
     "communication-preferences-unchanged": "Mes préférences de communication n'ont pas changé",
     "no-change": "Pas de mise à jour.",
-    "type-of-application": "Type de demande",
-    "childrens-application": "La demande de votre/vos enfant(s)"
+    "prev-btn": "Renouveler vos prestations du Régime canadien de soins dentaires",
+    "next-btn": "La demande de votre/vos enfant(s)"
   },
   "submit": {
     "page-title": "Soumettre votre demande",
