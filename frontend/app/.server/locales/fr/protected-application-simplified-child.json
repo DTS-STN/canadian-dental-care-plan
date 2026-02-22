@@ -87,6 +87,7 @@
     "edit-child-information": "Modifier les renseignements sur l'enfant {{childNumber}}",
     "edit-child-dental-insurance": "Modifier la réponse sur l'accès à une assurance dentaire privée",
     "edit-child-dental-benefits": "Modifier la réponse sur l'accès aux prestations dentaires gouvernementales",
+    "add-child-dental-benefits": "Ajouter l'accès aux prestations dentaires gouvernementales",
     "update-dental-benefits": "Mettre à jour l'accès de mon enfant aux prestations dentaires gouvernementales",
     "benefits-not-changed": "L'accès de mon enfant aux prestations dentaires gouvernementales n'a pas changé",
     "add-child-information": "Ajouter les renseignements du demandeur",

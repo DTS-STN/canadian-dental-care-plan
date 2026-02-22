@@ -87,6 +87,7 @@
     "edit-child-information": "Edit child {{childNumber}} information",
     "edit-child-dental-insurance": "Edit access to private dental insurance",
     "edit-child-dental-benefits": "Edit access to government dental benefits",
+    "add-child-dental-benefits": "Add access to government dental benefits",
     "update-dental-benefits": "Update my child's access to government dental benefits",
     "benefits-not-changed": "My child's access to government dental benefits has not changed",
     "add-child-information": "Add applicant information",
