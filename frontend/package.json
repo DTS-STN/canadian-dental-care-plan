@@ -121,7 +121,7 @@
     "@vitest/eslint-plugin": "^1.6.9",
     "@vitest/ui": "^4.0.18",
     "commander": "^14.0.3",
-    "eslint": "^9.39.2",
+    "eslint": "^10.0.1",
     "eslint-formatter-summary": "^2.0.2",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
