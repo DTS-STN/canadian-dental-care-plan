@@ -55,7 +55,8 @@
   },
   "status": {
     "complete": "Complet",
-    "new": "Nouveau"
+    "new": "Nouveau",
+    "optional": "Facultatif"
   },
   "navigation": {
     "previous": "Précédent",
