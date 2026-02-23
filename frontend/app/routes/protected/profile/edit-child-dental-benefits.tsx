@@ -17,6 +17,7 @@ import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { transformAdobeAnalyticsUrl } from '~/route-helpers/adobe-analytics-route-helpers';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -203,7 +204,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
   const { federalSocialPrograms, provincialTerritorialSocialPrograms, regions, childName, federalProgram, provincialTerritorialProgram } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const [hasFederalBenefitValue, setHasFederalBenefitValue] = useState(federalProgram !== undefined);
   const [hasProvincialTerritorialBenefitValue, setHasProvincialTerritorialBenefitValue] = useState(provincialTerritorialProgram !== undefined);
   const [provincialTerritorialSocialProgramValue, setProvincialTerritorialSocialProgramValue] = useState(provincialTerritorialProgram?.id);

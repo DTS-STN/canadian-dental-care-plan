@@ -12,6 +12,7 @@ import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -47,7 +48,7 @@ export default function ApplicationFileYourTaxes({ loaderData, params }: Route.C
   const { t } = useTranslation(handle.i18nNamespaces);
   const { taxYear } = loaderData;
   const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   const taxInfo = <InlineLink to={t('application:file-your-taxes.tax-info-href')} className="external-link" newTabIndicator target="_blank" />;
 

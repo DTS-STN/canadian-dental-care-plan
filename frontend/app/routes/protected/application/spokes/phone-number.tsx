@@ -19,6 +19,7 @@ import { ErrorSummary } from '~/components/future-error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputPhoneField } from '~/components/input-phone-field';
 import { LoadingButton } from '~/components/loading-button';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -124,7 +125,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
   const { defaultState, applicationFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
 

@@ -19,6 +19,7 @@ import { ErrorSummary } from '~/components/future-error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { NavigationButton, NavigationButtonLink } from '~/components/navigation-buttons';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/public/application/full-adult/progress-stepper';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -112,7 +113,7 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
   const { state, payload } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const errors = fetcher.data?.errors;
 
   const eligibilityLink = <InlineLink to={t('application-full-adult:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;

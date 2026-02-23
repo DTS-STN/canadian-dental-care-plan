@@ -19,6 +19,7 @@ import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
 import type { ProfileEmailContext } from '~/routes/protected/profile/email';
@@ -140,7 +141,7 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
   const [selectedPreferredMethodGovernmentOfCanada, setSelectedPreferredMethodGovernmentOfCanada] = useState(defaultState.preferredMethodGovernmentOfCanada);
 
   const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {

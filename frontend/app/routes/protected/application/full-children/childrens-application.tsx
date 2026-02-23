@@ -18,7 +18,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
-import { useCurrentLanguage } from '~/hooks';
+import { useCurrentLanguage, useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/protected/application/full-children/progress-stepper';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
@@ -146,7 +146,7 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
   const { state, childrenSections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   const allChildrenCompleted = state.children.length > 0 && childrenSections.every((child) => Object.values(child.sections).every((section) => section.completed));
 
