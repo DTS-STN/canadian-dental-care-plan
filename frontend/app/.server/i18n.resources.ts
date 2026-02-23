@@ -14,9 +14,9 @@ import lettersEn from '~/.server/locales/en/letters.json';
 import protectedApplicationFullAdultEn from '~/.server/locales/en/protected-application-full-adult.json';
 import protectedApplicationFullChildEn from '~/.server/locales/en/protected-application-full-child.json';
 import protectedApplicationFullFamilyEn from '~/.server/locales/en/protected-application-full-family.json';
-import protectedApplicationSimplifiedAdultEn from '~/.server/locales/en/protected-application-simplified-adult.json';
-import protectedApplicationSimplifiedChildEn from '~/.server/locales/en/protected-application-simplified-child.json';
-import protectedApplicationSimplifiedFamilyEn from '~/.server/locales/en/protected-application-simplified-family.json';
+import protectedApplicationRenewalAdultEn from '~/.server/locales/en/protected-application-renewal-adult.json';
+import protectedApplicationRenewalChildEn from '~/.server/locales/en/protected-application-renewal-child.json';
+import protectedApplicationRenewalFamilyEn from '~/.server/locales/en/protected-application-renewal-family.json';
 import protectedApplicationSpokesEn from '~/.server/locales/en/protected-application-spokes.json';
 import protectedApplicationEn from '~/.server/locales/en/protected-application.json';
 import protectedApplyAdultChildEn from '~/.server/locales/en/protected-apply-adult-child.json';
@@ -44,9 +44,9 @@ import lettersFr from '~/.server/locales/fr/letters.json';
 import protectedApplicationFullAdultFr from '~/.server/locales/fr/protected-application-full-adult.json';
 import protectedApplicationFullChildFr from '~/.server/locales/fr/protected-application-full-child.json';
 import protectedApplicationFullFamilyFr from '~/.server/locales/fr/protected-application-full-family.json';
-import protectedApplicationSimplifiedAdultFr from '~/.server/locales/fr/protected-application-simplified-adult.json';
-import protectedApplicationSimplifiedChildFr from '~/.server/locales/fr/protected-application-simplified-child.json';
-import protectedApplicationSimplifiedFamilyFr from '~/.server/locales/fr/protected-application-simplified-family.json';
+import protectedApplicationRenewalAdultFr from '~/.server/locales/fr/protected-application-renewal-adult.json';
+import protectedApplicationRenewalChildFr from '~/.server/locales/fr/protected-application-renewal-child.json';
+import protectedApplicationRenewalFamilyFr from '~/.server/locales/fr/protected-application-renewal-family.json';
 import protectedApplicationSpokesFr from '~/.server/locales/fr/protected-application-spokes.json';
 import protectedApplicationFr from '~/.server/locales/fr/protected-application.json';
 import protectedApplyAdultChildFr from '~/.server/locales/fr/protected-apply-adult-child.json';
@@ -79,9 +79,9 @@ const i18nResourcesEn = {
   'protected-application-full-adult': protectedApplicationFullAdultEn,
   'protected-application-full-child': protectedApplicationFullChildEn,
   'protected-application-full-family': protectedApplicationFullFamilyEn,
-  'protected-application-simplified-adult': protectedApplicationSimplifiedAdultEn,
-  'protected-application-simplified-child': protectedApplicationSimplifiedChildEn,
-  'protected-application-simplified-family': protectedApplicationSimplifiedFamilyEn,
+  'protected-application-simplified-adult': protectedApplicationRenewalAdultEn,
+  'protected-application-simplified-child': protectedApplicationRenewalChildEn,
+  'protected-application-simplified-family': protectedApplicationRenewalFamilyEn,
   'protected-application-spokes': protectedApplicationSpokesEn,
   'protected-apply': protectedApplyEn,
   'protected-apply-adult': protectedApplyAdultEn,
@@ -112,9 +112,9 @@ const i18nResourcesFr = {
   'protected-application-full-adult': protectedApplicationFullAdultFr,
   'protected-application-full-child': protectedApplicationFullChildFr,
   'protected-application-full-family': protectedApplicationFullFamilyFr,
-  'protected-application-simplified-adult': protectedApplicationSimplifiedAdultFr,
-  'protected-application-simplified-child': protectedApplicationSimplifiedChildFr,
-  'protected-application-simplified-family': protectedApplicationSimplifiedFamilyFr,
+  'protected-application-simplified-adult': protectedApplicationRenewalAdultFr,
+  'protected-application-simplified-child': protectedApplicationRenewalChildFr,
+  'protected-application-simplified-family': protectedApplicationRenewalFamilyFr,
   'protected-application-spokes': protectedApplicationSpokesFr,
   'protected-apply': protectedApplyFr,
   'protected-apply-adult': protectedApplyAdultFr,
