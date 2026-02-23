@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { redirect } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
@@ -17,6 +17,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummaryProvider } from '~/components/error-summary-context';
 import { ErrorSummary } from '~/components/future-error-summary';
@@ -24,7 +25,7 @@ import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
-import { useEnhancedFetcher } from '~/hooks';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useClientEnv, useFeature } from '~/root';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
@@ -215,7 +216,8 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
 
   const [childHasSinState, setChildHasSinState] = useState<boolean>();
 
-  const fetcher = useEnhancedFetcher<typeof action>();
+  const fetcher = useFetcher<typeof action>();
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
 
   async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
@@ -246,6 +248,7 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
+          <CsrfTokenInput />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
           <div className="mb-8 space-y-6">
             <InputPatternField
@@ -313,10 +316,10 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
             )}
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={fetcher.isSubmitting}>
+            <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
               {t('status:child.form.back-btn')}
             </ButtonLink>
-            <LoadingButton variant="primary" id="submit" loading={fetcher.isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+            <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
               {t('status:child.form.submit')}
             </LoadingButton>
           </div>

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { data, redirect } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -24,7 +24,7 @@ import type { InputOptionProps } from '~/components/input-option';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
-import { useEnhancedFetcher } from '~/hooks';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -209,8 +209,8 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
   const { defaultState, countryList, regionList } = loaderData;
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useClientEnv();
 
-  const fetcher = useEnhancedFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
+  const fetcher = useFetcher<typeof action>();
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.country ?? CANADA_COUNTRY_ID);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
   const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
@@ -345,7 +345,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   {t('protected-application-spokes:address.save-btn')}
                 </LoadingButton>
               </DialogTrigger>
-              {!fetcher.isSubmitting && addressDialogContent && (
+              {!isSubmitting && addressDialogContent && (
                 <>
                   {addressDialogContent.status === 'address-suggestion' && (
                     <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
