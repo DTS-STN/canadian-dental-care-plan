@@ -145,7 +145,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 name="phoneNumber"
                 type="tel"
                 inputMode="tel"
-                className="w-intake"
+                className="w-full"
                 autoComplete="tel"
                 defaultValue={defaultState.phoneNumber ?? ''}
                 errorMessage={errors?.phoneNumber}
@@ -158,7 +158,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 name="phoneNumberAlt"
                 type="tel"
                 inputMode="tel"
-                className="w-intake"
+                className="w-full"
                 autoComplete="tel"
                 defaultValue={defaultState.phoneNumberAlt ?? ''}
                 errorMessage={errors?.phoneNumberAlt}

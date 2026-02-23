@@ -159,7 +159,7 @@ export default function ApplicationEmail({ loaderData, params }: Route.Component
               name="email"
               type="email"
               inputMode="email"
-              className="w-intake"
+              className="w-full"
               autoComplete="email"
               defaultValue={defaultState}
               errorMessage={errors?.email}

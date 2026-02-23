@@ -218,7 +218,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
               <InputField
                 id="verification-code"
                 name="verificationCode"
-                className="w-intake"
+                className="w-full"
                 errorMessage={errors?.verificationCode}
                 label={t('protected-application-spokes:verify-email.verification-code-label')}
                 aria-describedby="verification-code"
