@@ -1,4 +1,4 @@
-import { data, redirect } from 'react-router';
+import { data, redirect, useFetcher } from 'react-router';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
@@ -17,7 +17,7 @@ import { ErrorSummaryProvider } from '~/components/error-summary-context';
 import { ErrorSummary } from '~/components/future-error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { LoadingButton } from '~/components/loading-button';
-import { useEnhancedFetcher } from '~/hooks';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useClientEnv, useFeature } from '~/root';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
@@ -112,7 +112,8 @@ export default function StatusCheckerMyself({ loaderData, params }: Route.Compon
   const { HCAPTCHA_SITE_KEY } = useClientEnv();
   const { captchaRef } = useHCaptcha();
 
-  const fetcher = useEnhancedFetcher<typeof action>();
+  const fetcher = useFetcher<typeof action>();
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
 
   async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
@@ -155,10 +156,10 @@ export default function StatusCheckerMyself({ loaderData, params }: Route.Compon
             <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={fetcher.isSubmitting}>
+            <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
               {t('status:myself.form.back-btn')}
             </ButtonLink>
-            <LoadingButton variant="primary" id="submit" loading={fetcher.isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+            <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
               {t('status:myself.form.submit')}
             </LoadingButton>
           </div>

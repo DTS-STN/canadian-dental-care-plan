@@ -1,4 +1,4 @@
-import { redirect } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
@@ -16,7 +16,7 @@ import { ErrorSummary } from '~/components/future-error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
-import { useEnhancedFetcher } from '~/hooks';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useClientEnv, useFeature } from '~/root';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
@@ -84,7 +84,8 @@ export default function StatusChecker({ loaderData, params }: Route.ComponentPro
   const hCaptchaEnabled = useFeature('hcaptcha');
   const { HCAPTCHA_SITE_KEY } = useClientEnv();
   const { captchaRef } = useHCaptcha();
-  const fetcher = useEnhancedFetcher<typeof action>();
+  const fetcher = useFetcher<typeof action>();
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const errors = fetcher.data?.errors;
 
   async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
@@ -189,7 +190,7 @@ export default function StatusChecker({ loaderData, params }: Route.ComponentPro
             required
             errorMessage={errors?.checkFor}
           />
-          <LoadingButton variant="primary" id="submit" loading={fetcher.isSubmitting} className="my-8" data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+          <LoadingButton variant="primary" id="submit" loading={isSubmitting} className="my-8" data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
             {t('status:form.continue')}
           </LoadingButton>
         </fetcher.Form>
