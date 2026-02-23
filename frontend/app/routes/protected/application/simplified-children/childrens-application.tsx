@@ -332,7 +332,7 @@ function ChildSinCardFooter({ child, sectionCompleted, params }: { child: Route.
   if (hasSin || sectionCompleted) {
     return (
       <CardFooter className="border-t bg-zinc-100">
-        <ButtonLink id={`edit-child-sin-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/information" params={{ ...params, childId: child.id }} startIcon={faPenToSquare} size="lg">
+        <ButtonLink id={`edit-child-sin-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/social-insurance-number" params={{ ...params, childId: child.id }} startIcon={faPenToSquare} size="lg">
           {t('protected-application-simplified-child:childrens-application.edit-sin')}
         </ButtonLink>
       </CardFooter>
@@ -341,7 +341,7 @@ function ChildSinCardFooter({ child, sectionCompleted, params }: { child: Route.
 
   return (
     <CardFooter className="border-t bg-zinc-100">
-      <ButtonLink id={`add-child-sin-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/information" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+      <ButtonLink id={`add-child-sin-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/social-insurance-number" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
         {t('protected-application-simplified-child:childrens-application.add-sin')}
       </ButtonLink>
     </CardFooter>
@@ -410,7 +410,7 @@ function ChildParentGuardianCardFooter({ child, sectionCompleted, params }: { ch
   if (hasValue || sectionCompleted) {
     return (
       <CardFooter className="border-t bg-zinc-100">
-        <ButtonLink id={`edit-child-parent-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/information" params={{ ...params, childId: child.id }} startIcon={faPenToSquare} size="lg">
+        <ButtonLink id={`edit-child-parent-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/parent-guardian" params={{ ...params, childId: child.id }} startIcon={faPenToSquare} size="lg">
           {t('protected-application-simplified-child:childrens-application.edit-parent-guardian')}
         </ButtonLink>
       </CardFooter>
@@ -419,7 +419,7 @@ function ChildParentGuardianCardFooter({ child, sectionCompleted, params }: { ch
 
   return (
     <CardFooter className="border-t bg-zinc-100">
-      <ButtonLink id={`add-child-parent-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/information" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+      <ButtonLink id={`add-child-parent-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/parent-guardian" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
         {t('protected-application-simplified-child:childrens-application.add-parent-guardian')}
       </ButtonLink>
     </CardFooter>
