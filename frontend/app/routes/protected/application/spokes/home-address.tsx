@@ -256,7 +256,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
               <InputSanitizeField
                 id="home-address"
                 name="address"
-                className="w-intake"
+                className="w-full"
                 label={t('protected-application-spokes:address.address-field.address')}
                 helpMessagePrimary={t('protected-application-spokes:address.address-field.address-help')}
                 helpMessagePrimaryClassName="text-black"
@@ -269,7 +269,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
               <InputSanitizeField
                 id="home-apartment"
                 name="apartment"
-                className="w-intake"
+                className="w-full"
                 label={t('protected-application-spokes:address.address-field.apartment')}
                 maxLength={100}
                 helpMessagePrimary={t('protected-application-spokes:address.address-field.apartment-help')}
@@ -282,7 +282,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 <InputSanitizeField
                   id="home-city"
                   name="city"
-                  className="w-intake"
+                  className="w-full"
                   label={t('protected-application-spokes:address.address-field.city')}
                   maxLength={100}
                   autoComplete="address-level2"
@@ -293,7 +293,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 <InputSanitizeField
                   id="home-postal-code"
                   name="postalZipCode"
-                  className="w-intake"
+                  className="w-full"
                   label={isPostalCodeRequired ? t('protected-application-spokes:address.address-field.postal-code') : t('protected-application-spokes:address.address-field.postal-code-optional')}
                   maxLength={100}
                   autoComplete="postal-code"
@@ -306,7 +306,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 <InputSelect
                   id="home-province"
                   name="provinceStateId"
-                  className="w-intake sm:w-1/2"
+                  className="w-full sm:w-1/2"
                   label={t('protected-application-spokes:address.address-field.province')}
                   defaultValue={defaultState.province}
                   errorMessage={errors?.provinceStateId}
@@ -317,7 +317,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
               <InputSelect
                 id="home-country"
                 name="countryId"
-                className="w-intake sm:w-1/2"
+                className="w-full sm:w-1/2"
                 label={t('protected-application-spokes:address.address-field.country')}
                 autoComplete="country"
                 defaultValue={defaultState.country ?? ''}

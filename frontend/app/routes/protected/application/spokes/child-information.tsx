@@ -314,7 +314,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
                 id="first-name"
                 name="firstName"
                 label={t('protected-application-spokes:children.information.first-name')}
-                className="w-intake"
+                className="w-full"
                 maxLength={100}
                 aria-description={t('protected-application-spokes:children.information.name-instructions')}
                 autoComplete="given-name"
@@ -326,7 +326,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
                 id="last-name"
                 name="lastName"
                 label={t('protected-application-spokes:children.information.last-name')}
-                className="w-intake"
+                className="w-full"
                 maxLength={100}
                 autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}

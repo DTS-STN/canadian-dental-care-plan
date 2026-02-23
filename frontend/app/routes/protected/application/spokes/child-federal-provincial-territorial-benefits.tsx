@@ -287,7 +287,7 @@ export default function ChildFederalProvincialTerritorialBenefits({ loaderData, 
                       <InputSelect
                         id="province"
                         name="province"
-                        className="w-intake sm:w-1/2"
+                        className="w-full sm:w-1/2"
                         label={t('protected-application-spokes:children.dental-benefits.provincial-territorial-benefits.social-programs.input-legend')}
                         onChange={handleOnRegionChanged}
                         options={[
