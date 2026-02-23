@@ -50,7 +50,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['simplified-adult', 'full-adult', 'full-children', 'full-family', 'simplified-family']);
+  validateApplicationFlow(state, params, ['renewal-adult', 'intake-adult', 'intake-children', 'intake-family', 'renewal-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -64,14 +64,14 @@ export async function loader({ context: { appContainer, session }, params, reque
           dentalInsuranceEligibilityConfirmationNo: state.dentalInsurance.hasDentalInsurance === false ? state.dentalInsurance.dentalInsuranceEligibilityConfirmation : undefined,
         }
       : undefined,
-    applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
+    applicationFlow: `${state.context}-${state.typeOfApplication}` as const,
     meta,
   };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family']);
+  validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-family']);
 
   const formData = await request.formData();
 
@@ -122,7 +122,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/application/$id/dental-insurance-exit-application', params));
   }
 
-  return redirect(getPathById(`protected/application/$id/${state.inputModel}-${state.typeOfApplication}/dental-insurance`, params));
+  return redirect(getPathById(`protected/application/$id/${state.context}-${state.typeOfApplication}/dental-insurance`, params));
 }
 
 export default function ApplicationSpokeDentalInsurance({ loaderData, params }: Route.ComponentProps) {

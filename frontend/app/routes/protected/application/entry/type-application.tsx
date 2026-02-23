@@ -43,11 +43,11 @@ export async function loader({ context: { appContainer, session }, request, para
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:type-of-application.page-title') }) };
 
-  const applicationFlow: ApplicationFlow = state.typeOfApplication ? `${state.inputModel}-${state.typeOfApplication}` : 'entry';
+  const applicationFlow: ApplicationFlow = state.typeOfApplication ? `${state.context}-${state.typeOfApplication}` : 'entry';
   const nextRouteId = getInitialApplicationFlowUrl(applicationFlow, params);
   return {
     defaultState: {
-      inputModel: state.inputModel,
+      context: state.context,
       typeOfApplication: state.typeOfApplication,
       personalInformation: state.applicantInformation,
     },

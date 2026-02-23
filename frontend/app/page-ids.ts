@@ -4,7 +4,7 @@ export const pageIds = {
       index: 'CDCP-PROT-APPL-0001',
       eligibilityRequirements: 'CDCP-PROT-APPL-0002',
       typeOfApplication: 'CDCP-PROT-APPL-0003',
-      fullAdult: {
+      intakeAdult: {
         maritalStatus: 'CDCP-PROT-APPL-FAD-0001',
         dentalInsurance: 'CDCP-PROT-APPL-FAD-0002',
         contactInformation: 'CDCP-PROT-APPL-FAD-0003',
@@ -12,14 +12,14 @@ export const pageIds = {
         confirmation: 'CDCP-PROT-APPL-FAD-0005',
         exitApplication: 'CDCP-PROT-APPL-FAD-0006',
       },
-      fullChild: {
+      intakeChild: {
         parentOrGuardian: 'CDCP-PROT-APPL-FCH-0001',
         submit: 'CDCP-PROT-APPL-FCH-0003',
         exitApplication: 'CDCP-PROT-APPL-FCH-0004',
         confirmation: 'CDCP-PROT-APPL-FCH-0005',
         childApplication: 'CDCP-PROT-APPL-FCH-0006',
       },
-      fullFamily: {
+      intakeFamily: {
         maritalStatus: 'CDCP-PROT-APPL-FFAM-0001',
         contactInformation: 'CDCP-PROT-APPL-FFAM-0002',
         dentalInsurance: 'CDCP-PROT-APPL-FFAM-0003',
@@ -28,7 +28,7 @@ export const pageIds = {
         childApplication: 'CDCP-PROT-APPL-FFAM-0006',
         exitApplication: 'CDCP-PROT-APPL-FFAM-0007',
       },
-      simplifiedAdult: {
+      renewalAdult: {
         maritalStatus: 'CDCP-PROT-APPL-SAD-0001',
         dentalInsurance: 'CDCP-PROT-APPL-SAD-0002',
         contactInformation: 'CDCP-PROT-APPL-SAD-0003',
@@ -36,14 +36,14 @@ export const pageIds = {
         confirmation: 'CDCP-PROT-APPL-SAD-0005',
         exitApplication: 'CDCP-PROT-APPL-SAD-0006',
       },
-      simplifiedChild: {
+      renewalChild: {
         parentOrGuardian: 'CDCP-PROT-APPL-SCH-0001',
         submit: 'CDCP-PROT-APPL-SCH-0002',
         exitApplication: 'CDCP-PROT-APPL-SCH-0003',
         childApplication: 'CDCP-PROT-APPL-SCH-0004',
         confirmation: 'CDCP-PROT-APPL-SCH-0005',
       },
-      simplifiedFamily: {
+      renewalFamily: {
         maritalStatus: 'CDCP-PROT-APPL-SFAM-0001',
         contactInformation: 'CDCP-PROT-APPL-SFAM-0002',
         dentalInsurance: 'CDCP-PROT-APPL-SFAM-0003',

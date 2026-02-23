@@ -42,10 +42,10 @@ const FORM_ACTION = {
 
 function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
   switch (applicationFlow) {
-    case 'full-children': {
+    case 'intake-children': {
       return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
     }
-    case 'simplified-children': {
+    case 'renewal-children': {
       return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
     }
     default: {
@@ -67,7 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['simplified-adult', 'full-adult', 'full-children', 'full-family', 'simplified-family', 'simplified-children']);
+  validateApplicationFlow(state, params, ['renewal-adult', 'intake-adult', 'intake-children', 'intake-family', 'renewal-family', 'renewal-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -96,7 +96,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family', 'simplified-children']);
+  validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-family', 'renewal-children']);
 
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
@@ -111,7 +111,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const homeAddressValidator = appContainer.get(TYPES.HomeAddressValidatorFactory).createHomeAddressValidator(locale);
 
-  const applicationFlow: ApplicationFlow = `${state.inputModel}-${state.typeOfApplication}`;
+  const applicationFlow: ApplicationFlow = `${state.context}-${state.typeOfApplication}`;
 
   const parsedDataResult = await homeAddressValidator.validateHomeAddress({
     address: formData.get('address')?.toString(),
@@ -256,7 +256,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
               <InputSanitizeField
                 id="home-address"
                 name="address"
-                className="w-full"
+                className="w-intake"
                 label={t('protected-application-spokes:address.address-field.address')}
                 helpMessagePrimary={t('protected-application-spokes:address.address-field.address-help')}
                 helpMessagePrimaryClassName="text-black"
@@ -269,7 +269,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
               <InputSanitizeField
                 id="home-apartment"
                 name="apartment"
-                className="w-full"
+                className="w-intake"
                 label={t('protected-application-spokes:address.address-field.apartment')}
                 maxLength={100}
                 helpMessagePrimary={t('protected-application-spokes:address.address-field.apartment-help')}
@@ -282,7 +282,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 <InputSanitizeField
                   id="home-city"
                   name="city"
-                  className="w-full"
+                  className="w-intake"
                   label={t('protected-application-spokes:address.address-field.city')}
                   maxLength={100}
                   autoComplete="address-level2"
@@ -293,7 +293,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 <InputSanitizeField
                   id="home-postal-code"
                   name="postalZipCode"
-                  className="w-full"
+                  className="w-intake"
                   label={isPostalCodeRequired ? t('protected-application-spokes:address.address-field.postal-code') : t('protected-application-spokes:address.address-field.postal-code-optional')}
                   maxLength={100}
                   autoComplete="postal-code"
@@ -306,7 +306,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 <InputSelect
                   id="home-province"
                   name="provinceStateId"
-                  className="w-full sm:w-1/2"
+                  className="w-intake sm:w-1/2"
                   label={t('protected-application-spokes:address.address-field.province')}
                   defaultValue={defaultState.province}
                   errorMessage={errors?.provinceStateId}
@@ -317,7 +317,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
               <InputSelect
                 id="home-country"
                 name="countryId"
-                className="w-full sm:w-1/2"
+                className="w-intake sm:w-1/2"
                 label={t('protected-application-spokes:address.address-field.country')}
                 autoComplete="country"
                 defaultValue={defaultState.country ?? ''}

@@ -29,10 +29,10 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
   switch (applicationFlow) {
-    case 'full-children': {
+    case 'intake-children': {
       return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
     }
-    case 'simplified-children': {
+    case 'renewal-children': {
       return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
     }
     default: {
@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['simplified-adult', 'full-adult', 'full-children', 'full-family', 'simplified-family', 'simplified-children']);
+  validateApplicationFlow(state, params, ['renewal-adult', 'intake-adult', 'intake-children', 'intake-family', 'renewal-family', 'renewal-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -64,14 +64,14 @@ export async function loader({ context: { appContainer, session }, params, reque
       phoneNumber: state.phoneNumber?.value?.primary,
       phoneNumberAlt: state.phoneNumber?.value?.alternate,
     },
-    applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
+    applicationFlow: `${state.context}-${state.typeOfApplication}` as const,
     meta,
   };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family', 'simplified-children']);
+  validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-family', 'renewal-children']);
 
   const formData = await request.formData();
 
@@ -81,7 +81,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const applicationFlow: ApplicationFlow = `${state.inputModel}-${state.typeOfApplication}`;
+  const applicationFlow: ApplicationFlow = `${state.context}-${state.typeOfApplication}`;
 
   const phoneNumberSchema = z.object({
     phoneNumber: phoneSchema({
@@ -145,7 +145,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 name="phoneNumber"
                 type="tel"
                 inputMode="tel"
-                className="w-full"
+                className="w-intake"
                 autoComplete="tel"
                 defaultValue={defaultState.phoneNumber ?? ''}
                 errorMessage={errors?.phoneNumber}
@@ -158,7 +158,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 name="phoneNumberAlt"
                 type="tel"
                 inputMode="tel"
-                className="w-full"
+                className="w-intake"
                 autoComplete="tel"
                 defaultValue={defaultState.phoneNumberAlt ?? ''}
                 errorMessage={errors?.phoneNumberAlt}

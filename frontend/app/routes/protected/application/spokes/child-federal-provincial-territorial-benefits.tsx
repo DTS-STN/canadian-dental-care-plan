@@ -53,7 +53,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-children', 'full-family', 'simplified-children', 'simplified-family']);
+  validateApplicationFlow(state, params, ['intake-children', 'intake-family', 'renewal-children', 'renewal-family']);
   const childState = getSingleChildState({ params, request, session });
 
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
@@ -80,7 +80,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     provincialTerritorialSocialPrograms,
     regions,
     childName,
-    applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
+    applicationFlow: `${state.context}-${state.typeOfApplication}` as const,
     i18nOptions: { childName },
   };
 }
@@ -90,7 +90,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-children', 'full-family', 'simplified-children', 'simplified-family']);
+  validateApplicationFlow(state, params, ['intake-children', 'intake-family', 'renewal-children', 'renewal-family']);
 
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
@@ -185,7 +185,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById(`protected/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
+  return redirect(getPathById(`protected/application/$id/${state.context}-${state.typeOfApplication}/childrens-application`, params));
 }
 
 export default function ChildFederalProvincialTerritorialBenefits({ loaderData, params }: Route.ComponentProps) {
@@ -287,7 +287,7 @@ export default function ChildFederalProvincialTerritorialBenefits({ loaderData, 
                       <InputSelect
                         id="province"
                         name="province"
-                        className="w-full sm:w-1/2"
+                        className="w-intake sm:w-1/2"
                         label={t('protected-application-spokes:children.dental-benefits.provincial-territorial-benefits.social-programs.input-legend')}
                         onChange={handleOnRegionChanged}
                         options={[

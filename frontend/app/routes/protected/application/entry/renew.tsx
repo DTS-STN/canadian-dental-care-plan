@@ -46,7 +46,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:renewal-selection.page-title') }) };
 
-  const applicationFlow: ApplicationFlow = state.typeOfApplication ? `${state.inputModel}-${state.typeOfApplication}` : 'entry';
+  const applicationFlow: ApplicationFlow = state.typeOfApplication ? `${state.context}-${state.typeOfApplication}` : 'entry';
   const nextRouteId = getInitialApplicationFlowUrl(applicationFlow, params);
 
   const applicants = state.clientApplication
@@ -58,7 +58,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   return {
     defaultState: {
-      inputModel: state.inputModel,
+      context: state.context,
       typeOfApplication: state.typeOfApplication,
       applicantClientIdsToRenew: state.applicantClientIdsToRenew,
     },

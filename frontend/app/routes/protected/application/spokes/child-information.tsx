@@ -57,7 +57,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-children', 'full-family', 'simplified-children', 'simplified-family']);
+  validateApplicationFlow(state, params, ['intake-children', 'intake-family', 'renewal-children', 'renewal-family']);
   const childState = getSingleChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -75,7 +75,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     defaultState: childState.information,
     childName,
     isNew: childState.isNew,
-    applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
+    applicationFlow: `${state.context}-${state.typeOfApplication}` as const,
   };
 }
 
@@ -84,7 +84,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-children', 'full-family', 'simplified-children', 'simplified-family']);
+  validateApplicationFlow(state, params, ['intake-children', 'intake-family', 'renewal-children', 'renewal-family']);
 
   const formData = await request.formData();
 
@@ -239,7 +239,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/application/$id/children/$childId/cannot-apply-child-year', params));
   }
 
-  return redirect(getPathById(`protected/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
+  return redirect(getPathById(`protected/application/$id/${state.context}-${state.typeOfApplication}/childrens-application`, params));
 }
 
 export default function ChildInformation({ loaderData, params }: Route.ComponentProps) {
@@ -314,7 +314,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
                 id="first-name"
                 name="firstName"
                 label={t('protected-application-spokes:children.information.first-name')}
-                className="w-full"
+                className="w-intake"
                 maxLength={100}
                 aria-description={t('protected-application-spokes:children.information.name-instructions')}
                 autoComplete="given-name"
@@ -326,7 +326,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
                 id="last-name"
                 name="lastName"
                 label={t('protected-application-spokes:children.information.last-name')}
-                className="w-full"
+                className="w-intake"
                 maxLength={100}
                 autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}

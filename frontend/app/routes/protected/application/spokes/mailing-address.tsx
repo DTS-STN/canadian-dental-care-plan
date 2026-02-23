@@ -43,10 +43,10 @@ const FORM_ACTION = {
 
 function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
   switch (applicationFlow) {
-    case 'full-children': {
+    case 'intake-children': {
       return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
     }
-    case 'simplified-children': {
+    case 'renewal-children': {
       return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
     }
     default: {
@@ -68,7 +68,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family', 'simplified-children']);
+  validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-family', 'renewal-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -86,7 +86,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       country: state.mailingAddress?.value?.country,
       isHomeAddressSameAsMailingAddress: state.isHomeAddressSameAsMailingAddress,
     },
-    applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
+    applicationFlow: `${state.context}-${state.typeOfApplication}` as const,
     countryList,
     regionList,
     meta,
@@ -98,7 +98,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family', 'simplified-children']);
+  validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-family', 'renewal-children']);
 
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
@@ -113,7 +113,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
   const isCopyMailingToHome = formData.get('syncAddresses') === 'true';
 
-  const applicationFlow: ApplicationFlow = `${state.inputModel}-${state.typeOfApplication}`;
+  const applicationFlow: ApplicationFlow = `${state.context}-${state.typeOfApplication}`;
 
   const mailingAddressValidator = appContainer.get(TYPES.MailingAddressValidatorFactory).createMailingAddressValidator(locale);
   const parsedDataResult = await mailingAddressValidator.validateMailingAddress({
@@ -294,7 +294,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 <InputSanitizeField
                   id="mailing-address"
                   name="address"
-                  className="w-full"
+                  className="w-intake"
                   label={t('protected-application-spokes:address.address-field.address')}
                   maxLength={100}
                   helpMessagePrimary={t('protected-application-spokes:address.address-field.address-help')}
@@ -307,7 +307,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 <InputSanitizeField
                   id="mailing-apartment"
                   name="apartment"
-                  className="w-full"
+                  className="w-intake"
                   label={t('protected-application-spokes:address.address-field.apartment')}
                   maxLength={100}
                   helpMessagePrimary={t('protected-application-spokes:address.address-field.apartment-help')}
@@ -320,7 +320,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                   <InputSanitizeField
                     id="mailing-city"
                     name="city"
-                    className="w-full"
+                    className="w-intake"
                     label={t('protected-application-spokes:address.address-field.city')}
                     maxLength={100}
                     autoComplete="address-level2"
@@ -331,7 +331,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                   <InputSanitizeField
                     id="mailing-postal-code"
                     name="postalZipCode"
-                    className="w-full"
+                    className="w-intake"
                     label={isPostalCodeRequired ? t('protected-application-spokes:address.address-field.postal-code') : t('protected-application-spokes:address.address-field.postal-code-optional')}
                     maxLength={100}
                     autoComplete="postal-code"
@@ -345,7 +345,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                   <InputSelect
                     id="mailing-province"
                     name="provinceStateId"
-                    className="w-full sm:w-1/2"
+                    className="w-intake sm:w-1/2"
                     label={t('protected-application-spokes:address.address-field.province')}
                     defaultValue={defaultState.province}
                     errorMessage={errors?.provinceStateId}
@@ -356,7 +356,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 <InputSelect
                   id="mailing-country"
                   name="countryId"
-                  className="w-full sm:w-1/2"
+                  className="w-intake sm:w-1/2"
                   label={t('protected-application-spokes:address.address-field.country')}
                   autoComplete="country"
                   defaultValue={defaultState.country}
