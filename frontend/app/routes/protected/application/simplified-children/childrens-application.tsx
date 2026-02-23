@@ -21,6 +21,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/protected/application/simplified-children/progress-stepper';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -584,7 +585,7 @@ function ChildDentalBenefitsCardContent({ child }: { child: Route.ComponentProps
 function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { child: Route.ComponentProps['loaderData']['state']['children'][0]; sectionCompleted: boolean; params: Route.ComponentProps['params'] }): JSX.Element {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   // Case 1: User has made changes or section is completed - show Edit button
   if (child.dentalBenefits || sectionCompleted) {

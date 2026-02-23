@@ -12,6 +12,7 @@ import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -55,7 +56,7 @@ export default function ApplicationDelegate({ loaderData, params }: Route.Compon
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   const contactServiceCanada = <InlineLink to={t('protected-application-spokes:application-delegate.contact-service-canada-href')} className="external-link" newTabIndicator target="_blank" />;
   const preparingToApply = <InlineLink to={t('protected-application-spokes:application-delegate.preparing-to-apply-href')} className="external-link" newTabIndicator target="_blank" />;

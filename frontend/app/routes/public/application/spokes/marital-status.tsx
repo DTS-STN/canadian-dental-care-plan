@@ -23,6 +23,7 @@ import { InputPatternField } from '~/components/input-pattern-field';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -157,7 +158,7 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
   const { defaultState, maritalStatuses, applicationFlow } = loaderData;
   const { MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
   const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   const [selectedMaritalStatus, setSelectedMaritalStatus] = useState(defaultState.maritalStatus);
 

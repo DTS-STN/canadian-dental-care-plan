@@ -27,6 +27,7 @@ import { InputLegend } from '~/components/input-legend';
 import type { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
 import { getClientEnv } from '~/utils/env-utils';
@@ -455,7 +456,7 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
   const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_COUNT } = env;
 
   const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   const errors = fetcher.data?.errors;
   const applicantError = errors?.properties?.applicant?.errors.at(0);

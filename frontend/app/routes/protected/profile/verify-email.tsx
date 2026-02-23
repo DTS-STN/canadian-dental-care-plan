@@ -19,6 +19,7 @@ import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
 import { LoadingButton } from '~/components/loading-button';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import type { ProfileEmailContext } from '~/routes/protected/profile/email';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -195,7 +196,7 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
   const [showDialog, setShowDialog] = useState(false);
 
   const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const submittedAction = fetcher.formData?.get('_action')?.toString();
 
   const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
