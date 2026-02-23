@@ -30,94 +30,94 @@ export const routes = [
           {
             id: 'protected/application/$id/intake-adult/marital-status',
             file: 'routes/protected/application/intake-adult/marital-status.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/adult/marital-status', fr: '/:lang/protege/demande/:id/intake/adulte/etat-civil' },
+            paths: { en: '/:lang/protected/application/:id/intake/adult/marital-status', fr: '/:lang/protege/demande/:id/admission/adulte/etat-civil' },
           },
           {
             id: 'protected/application/$id/intake-adult/dental-insurance',
             file: 'routes/protected/application/intake-adult/dental-insurance.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/adult/dental-insurance', fr: '/:lang/protege/demande/:id/intake/adulte/assurance-dentaire' },
+            paths: { en: '/:lang/protected/application/:id/intake/adult/dental-insurance', fr: '/:lang/protege/demande/:id/admission/adulte/assurance-dentaire' },
           },
           {
             id: 'protected/application/$id/intake-adult/contact-information',
             file: 'routes/protected/application/intake-adult/contact-information.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/adult/contact-information', fr: '/:lang/protege/demande/:id/intake/adulte/coordonnees' },
+            paths: { en: '/:lang/protected/application/:id/intake/adult/contact-information', fr: '/:lang/protege/demande/:id/admission/adulte/coordonnees' },
           },
           {
             id: 'protected/application/$id/intake-adult/submit',
             file: 'routes/protected/application/intake-adult/submit.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/adult/submit', fr: '/:lang/protege/demande/:id/intake/adulte/soumettre' },
+            paths: { en: '/:lang/protected/application/:id/intake/adult/submit', fr: '/:lang/protege/demande/:id/admission/adulte/soumettre' },
           },
           {
             id: 'protected/application/$id/intake-adult/exit-application',
             file: 'routes/protected/application/intake-adult/exit-application.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/adult/exit-application', fr: '/:lang/protege/demande/:id/intake/adulte/quitter-demande' },
+            paths: { en: '/:lang/protected/application/:id/intake/adult/exit-application', fr: '/:lang/protege/demande/:id/admission/adulte/quitter-demande' },
           },
           {
             id: 'protected/application/$id/intake-adult/confirmation',
             file: 'routes/protected/application/intake-adult/confirmation.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/adult/confirmation', fr: '/:lang/protege/demande/:id/intake/adulte/confirmation' },
+            paths: { en: '/:lang/protected/application/:id/intake/adult/confirmation', fr: '/:lang/protege/demande/:id/admission/adulte/confirmation' },
           },
 
           {
             id: 'protected/application/$id/intake-children/parent-or-guardian',
             file: 'routes/protected/application/intake-children/parent-or-guardian.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/children/parent-or-guardian', fr: '/:lang/protege/demande/:id/intake/enfants/parent-ou-tuteur' },
+            paths: { en: '/:lang/protected/application/:id/intake/children/parent-or-guardian', fr: '/:lang/protege/demande/:id/admission/enfants/parent-ou-tuteur' },
           },
           {
             id: 'protected/application/$id/intake-children/submit',
             file: 'routes/protected/application/intake-children/submit.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/children/submit', fr: '/:lang/protege/demande/:id/intake/enfants/soumettre' },
+            paths: { en: '/:lang/protected/application/:id/intake/children/submit', fr: '/:lang/protege/demande/:id/admission/enfants/soumettre' },
           },
           {
             id: 'protected/application/$id/intake-children/exit-application',
             file: 'routes/protected/application/intake-children/exit-application.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/children/exit-application', fr: '/:lang/protege/demande/:id/intake/enfants/quitter-demande' },
+            paths: { en: '/:lang/protected/application/:id/intake/children/exit-application', fr: '/:lang/protege/demande/:id/admission/enfants/quitter-demande' },
           },
           {
             id: 'protected/application/$id/intake-children/confirmation',
             file: 'routes/protected/application/intake-children/confirmation.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/children/confirmation', fr: '/:lang/protege/demande/:id/intake/enfants/confirmation' },
+            paths: { en: '/:lang/protected/application/:id/intake/children/confirmation', fr: '/:lang/protege/demande/:id/admission/enfants/confirmation' },
           },
           {
             id: 'protected/application/$id/intake-children/childrens-application',
             file: 'routes/protected/application/intake-children/childrens-application.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/children/childrens-application', fr: '/:lang/protege/demande/:id/intake/enfants/demande-enfants' },
+            paths: { en: '/:lang/protected/application/:id/intake/children/childrens-application', fr: '/:lang/protege/demande/:id/admission/enfants/demande-enfants' },
           },
 
           {
             id: 'protected/application/$id/intake-family/marital-status',
             file: 'routes/protected/application/intake-family/marital-status.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/family/marital-status', fr: '/:lang/protege/demande/:id/intake/famille/etat-civil' },
+            paths: { en: '/:lang/protected/application/:id/intake/family/marital-status', fr: '/:lang/protege/demande/:id/admission/famille/etat-civil' },
           },
           {
             id: 'protected/application/$id/intake-family/contact-information',
             file: 'routes/protected/application/intake-family/contact-information.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/family/contact-information', fr: '/:lang/protege/demande/:id/intake/famille/coordonnees' },
+            paths: { en: '/:lang/protected/application/:id/intake/family/contact-information', fr: '/:lang/protege/demande/:id/admission/famille/coordonnees' },
           },
           {
             id: 'protected/application/$id/intake-family/dental-insurance',
             file: 'routes/protected/application/intake-family/dental-insurance.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/family/dental-insurance', fr: '/:lang/protege/demande/:id/intake/famille/assurance-dentaire' },
+            paths: { en: '/:lang/protected/application/:id/intake/family/dental-insurance', fr: '/:lang/protege/demande/:id/admission/famille/assurance-dentaire' },
           },
           {
             id: 'protected/application/$id/intake-family/childrens-application',
             file: 'routes/protected/application/intake-family/childrens-application.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/family/childrens-application', fr: '/:lang/protege/demande/:id/intake/famille/demande-enfants' },
+            paths: { en: '/:lang/protected/application/:id/intake/family/childrens-application', fr: '/:lang/protege/demande/:id/admission/famille/demande-enfants' },
           },
           {
             id: 'protected/application/$id/intake-family/confirmation',
             file: 'routes/protected/application/intake-family/confirmation.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/family/confirmation', fr: '/:lang/protege/demande/:id/intake/famille/confirmation' },
+            paths: { en: '/:lang/protected/application/:id/intake/family/confirmation', fr: '/:lang/protege/demande/:id/admission/famille/confirmation' },
           },
           {
             id: 'protected/application/$id/intake-family/submit',
             file: 'routes/protected/application/intake-family/submit.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/family/submit', fr: '/:lang/protege/demande/:id/intake/famille/soumettre' },
+            paths: { en: '/:lang/protected/application/:id/intake/family/submit', fr: '/:lang/protege/demande/:id/admission/famille/soumettre' },
           },
           {
             id: 'protected/application/$id/intake-family/exit-application',
             file: 'routes/protected/application/intake-family/exit-application.tsx',
-            paths: { en: '/:lang/protected/application/:id/intake/family/exit-application', fr: '/:lang/protege/demande/:id/intake/famille/quitter-demande' },
+            paths: { en: '/:lang/protected/application/:id/intake/family/exit-application', fr: '/:lang/protege/demande/:id/admission/famille/quitter-demande' },
           },
           {
             id: 'protected/application/$id/renewal-adult/marital-status',
