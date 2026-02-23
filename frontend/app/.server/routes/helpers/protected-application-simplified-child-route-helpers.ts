@@ -106,11 +106,11 @@ export function validateProtectedApplicationSimplifiedChildStateForReview({ para
   }
 
   if (inputModel !== 'simplified') {
-    throw redirect(getPathById('protected/application/$id/type-of-application', params));
+    throw redirect(getPathById('protected/application/$id/renew', params));
   }
 
   if (typeOfApplication !== 'children') {
-    throw redirect(getPathById('protected/application/$id/type-of-application', params));
+    throw redirect(getPathById('protected/application/$id/renew', params));
   }
 
   if (hasFiledTaxes === undefined) {
@@ -124,13 +124,13 @@ export function validateProtectedApplicationSimplifiedChildStateForReview({ para
   const children = validateChildrenStateForReview({ childrenState: state.children, params });
 
   if (applicantInformation === undefined) {
-    throw redirect(getPathById('protected/application/$id/type-of-application', params));
+    throw redirect(getPathById('protected/application/$id/renew', params));
   }
 
   const ageCategory = getAgeCategoryFromDateString(applicantInformation.dateOfBirth);
 
   if (ageCategory === 'children') {
-    throw redirect(getPathById('protected/application/$id/type-of-application', params));
+    throw redirect(getPathById('protected/application/$id/renew', params));
   }
 
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
@@ -154,7 +154,7 @@ export function validateProtectedApplicationSimplifiedChildStateForReview({ para
   }
 
   if ((communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) && !emailVerified) {
-    throw redirect(getPathById('protected/application/$id/simplified-children/contact-information', params));
+    throw redirect(getPathById('protected/application/$id/simplified-children/parent-or-guardian', params));
   }
 
   return {
@@ -211,7 +211,7 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
     const ageCategory = getAgeCategoryFromDateString(information.dateOfBirth);
 
     if (ageCategory === 'adults' || ageCategory === 'seniors') {
-      throw redirect(getPathById('protected/application/$id/type-of-application', params));
+      throw redirect(getPathById('protected/application/$id/renew', params));
     }
 
     if (dentalInsurance === undefined) {
