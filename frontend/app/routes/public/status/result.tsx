@@ -1,8 +1,5 @@
-import type { SyntheticEvent } from 'react';
-
 import { redirect, useFetcher } from 'react-router';
 
-import { invariant } from '@dts-stn/invariant';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -87,21 +84,8 @@ export default function StatusCheckerResult({ loaderData, params }: Route.Compon
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  async function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-
-    // Get the clicked button's value and append it to the FormData object
-    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
-    invariant(submitter, 'Expected submitter to be defined');
-    formData.append(submitter.name, submitter.value);
-
-    await fetcher.submit(formData, { method: 'POST' });
-  }
-
   return (
-    <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
+    <fetcher.Form method="post" noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
       <CsrfTokenInput />
       <div className="max-w-prose">
         {statusResult.clientFriendlyStatus ? (

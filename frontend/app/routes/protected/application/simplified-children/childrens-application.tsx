@@ -1,4 +1,4 @@
-import type { JSX, SyntheticEvent } from 'react';
+import type { JSX } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
@@ -586,18 +586,6 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  async function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-
-    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
-    invariant(submitter, 'Expected submitter to be defined');
-    formData.append(submitter.name, submitter.value);
-
-    await fetcher.submit(formData, { method: 'POST' });
-  }
-
   // Case 1: User has made changes or section is completed - show Edit button
   if (child.dentalBenefits || sectionCompleted) {
     return (
@@ -634,7 +622,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
             {t('protected-application-simplified-child:childrens-application.update-dental-benefits')}
           </ButtonLink>
         </div>
-        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+        <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <input type="hidden" name="childId" value={child.id} />
           <div className="w-full px-6">
