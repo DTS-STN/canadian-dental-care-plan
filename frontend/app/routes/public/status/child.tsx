@@ -17,6 +17,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummaryProvider } from '~/components/error-summary-context';
 import { ErrorSummary } from '~/components/future-error-summary';
@@ -247,6 +248,7 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
+          <CsrfTokenInput />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
           <div className="mb-8 space-y-6">
             <InputPatternField
