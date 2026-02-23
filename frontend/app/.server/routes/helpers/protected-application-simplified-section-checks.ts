@@ -67,6 +67,20 @@ export function isChildInformationSectionCompleted(child: Pick<ChildState, 'info
 }
 
 /**
+ * Checks if the child parent or legal guardian section is completed for simplified application.
+ */
+export function isChildParentGuardianSectionCompleted(child: Pick<ChildState, 'information'>): boolean {
+  return child.information?.isParent !== undefined;
+}
+
+/**
+ * Checks if the child Social Insurance Number section is completed for simplified application.
+ */
+export function isChildSinSectionCompleted(child: Pick<ChildState, 'information'>): boolean {
+  return child.information?.socialInsuranceNumber !== undefined;
+}
+
+/**
  * Checks if the child dental insurance section is completed for simplified application.
  */
 export function isChildDentalInsuranceSectionCompleted(child: Pick<ChildState, 'dentalInsurance'>): boolean {

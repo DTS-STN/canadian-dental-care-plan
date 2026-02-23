@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Badge } from '~/components/badge';
 
 interface StatusTagProps {
-  status: 'complete' | 'new';
+  status: 'complete' | 'new' | 'optional';
 }
 
 export function StatusTag({ status }: StatusTagProps) {
@@ -23,6 +23,10 @@ export function StatusTag({ status }: StatusTagProps) {
 
     case 'new': {
       return <Badge variant="info">{t('common:status.new')}</Badge>;
+    }
+
+    case 'optional': {
+      return <Badge variant="gray">{t('common:status.optional')}</Badge>;
     }
 
     default: {

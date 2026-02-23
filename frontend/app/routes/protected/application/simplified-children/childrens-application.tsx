@@ -13,7 +13,7 @@ import type { Route } from './+types/childrens-application';
 import { TYPES } from '~/.server/constants';
 import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { loadProtectedApplicationSimplifiedChildState } from '~/.server/routes/helpers/protected-application-simplified-child-route-helpers';
-import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildInformationSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
+import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildParentGuardianSectionCompleted, isChildSinSectionCompleted } from '~/.server/routes/helpers/protected-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -21,10 +21,8 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
-import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/protected/application/simplified-children/progress-stepper';
-import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -34,12 +32,12 @@ import { formatSin } from '~/utils/sin-utils';
 
 type ClientDentalBenefits = {
   federalBenefit?: {
-    access: boolean;
-    benefit: string;
+    access?: boolean;
+    benefit?: string;
   };
   provTerrBenefit?: {
-    access: boolean;
-    benefit: string;
+    access?: boolean;
+    benefit?: string;
   };
 };
 
@@ -108,7 +106,11 @@ export async function loader({ context: { appContainer, session }, request, para
 
       return {
         ...child,
-        clientDentalBenefits: clientDentalBenefits.federalBenefit?.access || clientDentalBenefits.provTerrBenefit?.access ? clientDentalBenefits : undefined,
+        clientApplication: {
+          socialInsuranceNumber: immutableChild?.information.socialInsuranceNumber,
+          isParent: immutableChild?.information.isParent,
+          clientDentalBenefits: clientDentalBenefits.federalBenefit?.access || clientDentalBenefits.provTerrBenefit?.access ? clientDentalBenefits : undefined,
+        },
         dentalBenefits: child.dentalBenefits
           ? {
               hasChanged: child.dentalBenefits.hasChanged,
@@ -135,8 +137,11 @@ export async function loader({ context: { appContainer, session }, request, para
       state.children.map((child) => [
         child.id,
         {
-          childInformation: {
-            completed: isChildInformationSectionCompleted(child),
+          sin: {
+            completed: isChildSinSectionCompleted(child),
+          },
+          parentGuardian: {
+            completed: isChildParentGuardianSectionCompleted(child),
           },
           dentalInsurance: {
             completed: isChildDentalInsuranceSectionCompleted(child),
@@ -212,11 +217,23 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
 
               <Card className="my-4">
                 <CardHeader>
-                  <CardTitle>{t('protected-application-simplified-child:childrens-application.child-information-card-title', { childNumber: index + 1 })}</CardTitle>
-                  <CardAction>{sections.childInformation.completed && <StatusTag status="complete" />}</CardAction>
+                  <CardTitle>{t('protected-application-simplified-child:childrens-application.sin-card-title')}</CardTitle>
+                  <CardAction>
+                    {sections.sin.completed && <StatusTag status="complete" />}
+                    {!sections.sin.completed && (child.information?.socialInsuranceNumber !== undefined || child.clientApplication.socialInsuranceNumber !== undefined) && <StatusTag status="optional" />}
+                  </CardAction>
                 </CardHeader>
-                <ChildInformationCardContent child={child} />
-                <ChildInformationCardFooter childId={child.id} childInformation={child.information} sectionCompleted={sections.childInformation.completed} params={params} index={index} />
+                <ChildSinCardContent child={child} />
+                <ChildSinCardFooter child={child} sectionCompleted={sections.sin.completed} params={params} />
+              </Card>
+
+              <Card className="my-4">
+                <CardHeader>
+                  <CardTitle>{t('protected-application-simplified-child:childrens-application.parent-guardian-card-title')}</CardTitle>
+                  <CardAction>{sections.parentGuardian.completed && <StatusTag status="complete" />}</CardAction>
+                </CardHeader>
+                <ChildParentGuardianCardContent child={child} />
+                <ChildParentGuardianCardFooter child={child} sectionCompleted={sections.parentGuardian.completed} params={params} />
               </Card>
 
               <Card className="my-4">
@@ -254,36 +271,101 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
 }
 
 /**
- * This component determines what to show in the child information card content based on whether the user has
- * entered child information. The logic is as follows:
+ * This component determines what to show in the SIN card content. The logic is as follows:
  *
- * - If the user has entered child information (child.information is defined), show the child's details.
+ * - If the user has entered a SIN (child.information.socialInsuranceNumber is defined), show the formatted SIN.
  *
- * - If the user has not entered child information, show the help text to indicate they need to provide it.
+ * - If the user has not entered a SIN but there is a SIN from the client application (child.clientApplication.socialInsuranceNumber is defined),
+ *   show the formatted client SIN.
+ *
+ * - If there is no SIN at all, show the help text.
  */
-function ChildInformationCardContent({ child }: { child: Route.ComponentProps['loaderData']['state']['children'][0] }): JSX.Element {
-  const { currentLanguage } = useCurrentLanguage();
+function ChildSinCardContent({ child }: { child: Route.ComponentProps['loaderData']['state']['children'][0] }): JSX.Element {
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  if (child.information) {
-    const childName = `${child.information.firstName} ${child.information.lastName}`;
-    const dateOfBirth = child.information.dateOfBirth ? toLocaleDateString(parseDateString(child.information.dateOfBirth), currentLanguage) : '';
-
+  // User-entered SIN takes precedence
+  if (child.information?.socialInsuranceNumber) {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.member-id-title')}>
-            <p>{child.information.memberId}</p>
-          </DefinitionListItem>
-          <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.full-name-title')}>
-            <p>{childName}</p>
-          </DefinitionListItem>
-          <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.dob-title')}>
-            <p>{dateOfBirth}</p>
-          </DefinitionListItem>
           <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.sin-title')}>
-            <p>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</p>
+            <p>{formatSin(child.information.socialInsuranceNumber)}</p>
           </DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  // Fall back to client application SIN
+  if (child.clientApplication.socialInsuranceNumber) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.sin-title')}>
+            <p>{formatSin(child.clientApplication.socialInsuranceNumber)}</p>
+          </DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  // No SIN at all
+  return (
+    <CardContent>
+      <p>{t('protected-application-simplified-child:childrens-application.sin-help')}</p>
+    </CardContent>
+  );
+}
+
+/**
+ * This component determines what to show in the SIN card footer. The logic is as follows:
+ *
+ * - If the user has entered a SIN OR there is a client SIN OR section is completed, show the "Edit" button.
+ *
+ * - If there is no SIN at all, show the "Add" button.
+ */
+function ChildSinCardFooter({ child, sectionCompleted, params }: { child: Route.ComponentProps['loaderData']['state']['children'][0]; sectionCompleted: boolean; params: Route.ComponentProps['params'] }): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+
+  const hasSin = child.information?.socialInsuranceNumber !== undefined || child.clientApplication.socialInsuranceNumber !== undefined;
+
+  if (hasSin || sectionCompleted) {
+    return (
+      <CardFooter className="border-t bg-zinc-100">
+        <ButtonLink id={`edit-child-sin-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/information" params={{ ...params, childId: child.id }} startIcon={faPenToSquare} size="lg">
+          {t('protected-application-simplified-child:childrens-application.edit-sin')}
+        </ButtonLink>
+      </CardFooter>
+    );
+  }
+
+  return (
+    <CardFooter className="border-t bg-zinc-100">
+      <ButtonLink id={`add-child-sin-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/information" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+        {t('protected-application-simplified-child:childrens-application.add-sin')}
+      </ButtonLink>
+    </CardFooter>
+  );
+}
+
+/**
+ * This component determines what to show in the Parent/Guardian card content. The logic is as follows:
+ *
+ * - If the user has entered parent/guardian status (child.information.isParent is defined), show Yes/No.
+ *
+ * - If the user has not entered parent/guardian status but there is client data (child.clientApplication.isParent is defined),
+ *   show the client value.
+ *
+ * - If there is no parent/guardian status at all, show the help text.
+ */
+function ChildParentGuardianCardContent({ child }: { child: Route.ComponentProps['loaderData']['state']['children'][0] }): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+
+  // User-entered value takes precedence
+  if (child.information?.isParent !== undefined) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
           <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.parent-guardian-title')}>
             <p>{child.information.isParent ? t('protected-application-simplified-child:childrens-application.yes') : t('protected-application-simplified-child:childrens-application.no')}</p>
           </DefinitionListItem>
@@ -292,42 +374,44 @@ function ChildInformationCardContent({ child }: { child: Route.ComponentProps['l
     );
   }
 
+  // Fall back to client application value
+  if (child.clientApplication.isParent !== undefined) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.parent-guardian-title')}>
+            <p>{child.clientApplication.isParent ? t('protected-application-simplified-child:childrens-application.yes') : t('protected-application-simplified-child:childrens-application.no')}</p>
+          </DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  // No value at all
   return (
     <CardContent>
-      <p>{t('protected-application-simplified-child:childrens-application.child-information-indicate-status')}</p>
+      <p>{t('protected-application-simplified-child:childrens-application.parent-guardian-help')}</p>
     </CardContent>
   );
 }
 
 /**
- * This component determines what to show in the child information card footer. The logic is as follows:
+ * This component determines what to show in the Parent/Guardian card footer. The logic is as follows:
  *
- * - If the user has entered child information OR the section is completed, show the "Edit" button.
+ * - If the user has entered a value OR there is a client value OR section is completed, show the "Edit" button.
  *
- * - If the user has not entered child information, show the "Add" button.
- *
- * Note: There is no existing client application data for children, so we only have two states.
+ * - If there is no value at all, show the "Add" button.
  */
-function ChildInformationCardFooter({
-  childId,
-  childInformation,
-  sectionCompleted,
-  params,
-  index,
-}: {
-  childId: string;
-  childInformation: Route.ComponentProps['loaderData']['state']['children'][0]['information'];
-  sectionCompleted: boolean;
-  params: Route.ComponentProps['params'];
-  index: number;
-}): JSX.Element {
+function ChildParentGuardianCardFooter({ child, sectionCompleted, params }: { child: Route.ComponentProps['loaderData']['state']['children'][0]; sectionCompleted: boolean; params: Route.ComponentProps['params'] }): JSX.Element {
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  if (childInformation || sectionCompleted) {
+  const hasValue = child.information?.isParent !== undefined || child.clientApplication.isParent !== undefined;
+
+  if (hasValue || sectionCompleted) {
     return (
       <CardFooter className="border-t bg-zinc-100">
-        <ButtonLink id={`edit-child-info-${childId}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/information" params={{ ...params, childId }} startIcon={faPenToSquare} size="lg">
-          {t('protected-application-simplified-child:childrens-application.edit-child-information', { childNumber: index + 1 })}
+        <ButtonLink id={`edit-child-parent-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/information" params={{ ...params, childId: child.id }} startIcon={faPenToSquare} size="lg">
+          {t('protected-application-simplified-child:childrens-application.edit-parent-guardian')}
         </ButtonLink>
       </CardFooter>
     );
@@ -335,8 +419,8 @@ function ChildInformationCardFooter({
 
   return (
     <CardFooter className="border-t bg-zinc-100">
-      <ButtonLink id={`add-child-info-${childId}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/information" params={{ ...params, childId }} startIcon={faCirclePlus} size="lg">
-        {t('protected-application-simplified-child:childrens-application.add-child-information')}
+      <ButtonLink id={`add-child-parent-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/information" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+        {t('protected-application-simplified-child:childrens-application.add-parent-guardian')}
       </ButtonLink>
     </CardFooter>
   );
@@ -416,9 +500,9 @@ function ChildDentalInsuranceCardFooter({
  * - If the user has entered new dental benefits (child.dentalBenefits is defined with hasChanged=true), show the new benefits.
  *
  * - If the user has confirmed existing benefits haven't changed (child.dentalBenefits is defined with hasChanged=false),
- *   show a "no change" message.
+ *   show the existing client benefits (since they haven't changed).
  *
- * - If there are existing benefits from the client application (child.clientDentalBenefits is defined) and the user hasn't
+ * - If there are existing benefits from the client application (child.clientApplication.clientDentalBenefits is defined) and the user hasn't
  *   made changes, show the existing benefits.
  *
  * - If there are no dental benefits at all, show the help text.
@@ -426,60 +510,53 @@ function ChildDentalInsuranceCardFooter({
 function ChildDentalBenefitsCardContent({ child }: { child: Route.ComponentProps['loaderData']['state']['children'][0] }): JSX.Element {
   const { t } = useTranslation(handle.i18nNamespaces);
 
+  // Helper function to render benefits
+  const renderBenefits = (benefits: ClientDentalBenefits) => {
+    const hasBenefits = benefits.federalBenefit?.access === true || benefits.provTerrBenefit?.access === true;
+
+    if (hasBenefits) {
+      return (
+        <div className="space-y-3">
+          <p>{t('protected-application-simplified-child:childrens-application.dental-benefits-yes')}</p>
+          <ul className="list-disc space-y-1 pl-7">
+            {benefits.federalBenefit?.access && <li>{benefits.federalBenefit.benefit}</li>}
+            {benefits.provTerrBenefit?.access && <li>{benefits.provTerrBenefit.benefit}</li>}
+          </ul>
+        </div>
+      );
+    }
+
+    return <p>{t('protected-application-simplified-child:childrens-application.dental-benefits-no')}</p>;
+  };
+
   // Case 1: User has made changes (hasChanged true) - show their selections
   if (child.dentalBenefits?.hasChanged) {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.dental-benefits-title')}>
-            {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
-              <div className="space-y-3">
-                <p>{t('protected-application-simplified-child:childrens-application.dental-benefits-yes')}</p>
-                <ul className="list-disc space-y-1 pl-7">
-                  {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
-                  {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
-                </ul>
-              </div>
-            ) : (
-              <p>{t('protected-application-simplified-child:childrens-application.dental-benefits-no')}</p>
-            )}
-          </DefinitionListItem>
+          <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.dental-benefits-title')}>{renderBenefits(child.dentalBenefits)}</DefinitionListItem>
         </DefinitionList>
       </CardContent>
     );
   }
 
-  // Case 2: User has confirmed no changes (hasChanged false) - show no change message
-  if (child.dentalBenefits && !child.dentalBenefits.hasChanged) {
+  // Case 2: User has confirmed no changes (hasChanged false) - show client benefits
+  if (child.dentalBenefits && !child.dentalBenefits.hasChanged && child.clientApplication.clientDentalBenefits) {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.dental-benefits-title')}>
-            <p>{t('protected-application-simplified-child:childrens-application.no-change')}</p>
-          </DefinitionListItem>
+          <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.dental-benefits-title')}>{renderBenefits(child.clientApplication.clientDentalBenefits)}</DefinitionListItem>
         </DefinitionList>
       </CardContent>
     );
   }
 
   // Case 3: No user changes, but client has existing benefits - show existing benefits
-  if (child.clientDentalBenefits) {
+  if (child.clientApplication.clientDentalBenefits) {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.dental-benefits-title')}>
-            {child.clientDentalBenefits.federalBenefit?.access || child.clientDentalBenefits.provTerrBenefit?.access ? (
-              <div className="space-y-3">
-                <p>{t('protected-application-simplified-child:childrens-application.dental-benefits-yes')}</p>
-                <ul className="list-disc space-y-1 pl-7">
-                  {child.clientDentalBenefits.federalBenefit?.access && <li>{child.clientDentalBenefits.federalBenefit.benefit}</li>}
-                  {child.clientDentalBenefits.provTerrBenefit?.access && <li>{child.clientDentalBenefits.provTerrBenefit.benefit}</li>}
-                </ul>
-              </div>
-            ) : (
-              <p>{t('protected-application-simplified-child:childrens-application.dental-benefits-no')}</p>
-            )}
-          </DefinitionListItem>
+          <DefinitionListItem term={t('protected-application-simplified-child:childrens-application.dental-benefits-title')}>{renderBenefits(child.clientApplication.clientDentalBenefits)}</DefinitionListItem>
         </DefinitionList>
       </CardContent>
     );
@@ -499,7 +576,7 @@ function ChildDentalBenefitsCardContent({ child }: { child: Route.ComponentProps
  * - If the user has entered new dental benefits (child.dentalBenefits is defined), show the "Edit" button.
  *
  * - If the user has not entered new dental benefits but there are existing dental benefits on the parent
- *   application (child.clientDentalBenefits is defined), show both the "Update" button and the "Not changed" button.
+ *   application (child.clientApplication.clientDentalBenefits is defined), show both the "Update" button and the "Not changed" button.
  *
  * - If there are no dental benefits on the parent application and the user has not entered new dental benefits,
  *   show the "Add" button.
@@ -541,7 +618,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
   }
 
   // Case 2: No user changes yet, but client has existing benefits - show Update and Not Changed buttons
-  if (child.clientDentalBenefits) {
+  if (child.clientApplication.clientDentalBenefits) {
     return (
       <CardFooter className="divide-y border-t bg-zinc-100 px-0">
         <div className="w-full px-6">
