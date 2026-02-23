@@ -1,5 +1,3 @@
-import type { SyntheticEvent } from 'react';
-
 import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
@@ -164,21 +162,8 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
   const { currentLanguage } = useCurrentLanguage();
   const { state, childrenSections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-
-  async function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-
-    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
-    invariant(submitter, 'Expected submitter to be defined');
-    formData.append(submitter.name, submitter.value);
-
-    await fetcher.submit(formData, { method: 'POST' });
-  }
 
   const allChildrenCompleted = Object.keys(childrenSections).length > 0 && Object.values(childrenSections).every((sections) => Object.values(sections).every((section) => section.completed));
 
@@ -336,7 +321,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                         {t('application-simplified-family:childrens-application.update-dental-benefits')}
                       </ButtonLink>
                     </div>
-                    <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+                    <fetcher.Form method="post" noValidate>
                       <CsrfTokenInput />
                       <input type="hidden" name="childId" value={child.id} />
                       <div className="w-full px-6">
@@ -348,7 +333,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                   </CardFooter>
                 )}
               </Card>
-              <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+              <fetcher.Form method="post" noValidate>
                 <CsrfTokenInput />
                 <input type="hidden" name="childId" value={child.id} />
                 <Button
@@ -367,7 +352,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
             </div>
           );
         })}
-        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+        <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <Button variant="primary" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Family:Add child - Child(ren) application click">
             {t('application-simplified-family:childrens-application.add-child')}
