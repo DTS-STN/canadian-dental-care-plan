@@ -40,7 +40,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-children', 'full-family', 'simplified-children', 'simplified-family']);
+  validateApplicationFlow(state, params, ['intake-children', 'intake-family', 'renewal-children', 'renewal-family']);
   const childState = getSingleChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -50,7 +50,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.parent-guardian.page-title') }) };
 
-  return { meta, defaultState: childState.information, childName, isNew: childState.isNew, applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const };
+  return { meta, defaultState: childState.information, childName, isNew: childState.isNew, applicationFlow: `${state.context}-${state.typeOfApplication}` as const };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -58,7 +58,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-children', 'full-family', 'simplified-children', 'simplified-family']);
+  validateApplicationFlow(state, params, ['intake-children', 'intake-family', 'renewal-children', 'renewal-family']);
   const childState = getSingleChildState({ params, request, session });
 
   const formData = await request.formData();
@@ -99,7 +99,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/application/$id/children/$childId/parent-or-guardian', params));
   }
 
-  return redirect(getPathById(`protected/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
+  return redirect(getPathById(`protected/application/$id/${state.context}-${state.typeOfApplication}/childrens-application`, params));
 }
 
 export default function ParentGuardian({ loaderData, params }: Route.ComponentProps) {

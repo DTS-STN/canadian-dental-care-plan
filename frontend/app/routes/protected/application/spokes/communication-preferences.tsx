@@ -31,10 +31,10 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
   switch (applicationFlow) {
-    case 'full-children': {
+    case 'intake-children': {
       return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
     }
-    case 'simplified-children': {
+    case 'renewal-children': {
       return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
     }
     default: {
@@ -56,7 +56,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family', 'simplified-children']);
+  validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-family', 'renewal-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -70,7 +70,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     defaultState: state.communicationPreferences?.value,
-    applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
+    applicationFlow: `${state.context}-${state.typeOfApplication}` as const,
     languages,
     gcCommunicationMethods,
     sunLifeCommunicationMethods,
@@ -86,7 +86,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family', 'simplified-children']);
+  validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-family', 'renewal-children']);
 
   const formData = await request.formData();
 
@@ -94,7 +94,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const applicationFlow: ApplicationFlow = `${state.inputModel}-${state.typeOfApplication}`;
+  const applicationFlow: ApplicationFlow = `${state.context}-${state.typeOfApplication}`;
 
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 

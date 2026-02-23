@@ -6,7 +6,7 @@ describe('protected-application-route-helpers', () => {
   describe('shouldSkipMaritalStatus', () => {
     it('returns false when input model is not simplified', () => {
       const state = {
-        inputModel: 'full',
+        context: 'intake',
         clientApplication: {
           copayTierEarningRecord: true,
         },
@@ -17,7 +17,7 @@ describe('protected-application-route-helpers', () => {
 
     it('returns false when client application is undefined', () => {
       const state = {
-        inputModel: 'simplified',
+        context: 'renewal',
         clientApplication: undefined,
       } as const;
 
@@ -26,7 +26,7 @@ describe('protected-application-route-helpers', () => {
 
     it('returns false when copay tier earning record is false', () => {
       const state = {
-        inputModel: 'simplified',
+        context: 'renewal',
         clientApplication: {
           copayTierEarningRecord: false,
         },
@@ -37,7 +37,7 @@ describe('protected-application-route-helpers', () => {
 
     it('returns true when input model is simplified and copay tier earning record is true', () => {
       const state = {
-        inputModel: 'simplified',
+        context: 'renewal',
         clientApplication: {
           copayTierEarningRecord: true,
         },

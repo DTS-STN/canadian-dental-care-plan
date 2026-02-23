@@ -10,7 +10,7 @@ import {
   isDentalInsuranceSectionCompleted,
   isMaritalStatusSectionCompleted,
   isPhoneNumberSectionCompleted,
-} from '~/.server/routes/helpers/protected-application-full-section-checks';
+} from '~/.server/routes/helpers/protected-application-intake-section-checks';
 import { getEnv } from '~/.server/utils/env.utils';
 
 vi.mock('~/.server/utils/env.utils');

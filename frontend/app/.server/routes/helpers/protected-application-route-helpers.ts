@@ -32,14 +32,6 @@ export type ProtectedApplicationState = ReadonlyDeep<{
    */
   context: 'intake' | 'renewal';
 
-  /**
-   * The input model for the application, either 'full' or 'simplified'. For intake applications, this is always set to
-   * 'full' at the start of the application process. For renewal applications, this is determined based on the client
-   * application data and is also set at the start of the application process. This field is immutable after being set
-   * at the start of the application.
-   */
-  inputModel: 'full' | 'simplified';
-
   lastUpdatedOn: string;
   applicantInformation?: {
     memberId?: string;
@@ -174,7 +166,7 @@ export type MailingAddressState = NonNullable<ProtectedApplicationState['mailing
 export type PartnerInformationState = NonNullable<ProtectedApplicationState['partnerInformation']>;
 export type SubmissionInfoState = NonNullable<ProtectedApplicationState['submissionInfo']>;
 export type TermsAndConditionsState = NonNullable<ProtectedApplicationState['termsAndConditions']>;
-export type InputModelState = NonNullable<ProtectedApplicationState['inputModel']>;
+export type ContextState = NonNullable<ProtectedApplicationState['context']>;
 export type TypeOfApplicationState = NonNullable<ProtectedApplicationState['typeOfApplication']>;
 export type DeclaredChangeHomeAddressState = NonNullable<ProtectedApplicationState['homeAddress']>;
 export type DeclaredChangeMailingAddressState = NonNullable<ProtectedApplicationState['mailingAddress']>;
@@ -241,7 +233,7 @@ export function getProtectedApplicationState({ params, session }: LoadStateArgs)
 interface SaveProtectedApplicationStateArgs {
   params: ApplicationStateParams;
   session: Session;
-  state: Partial<OmitStrict<ProtectedApplicationState, 'id' | 'lastUpdatedOn' | 'applicationYear' | 'context' | 'inputModel'>>;
+  state: Partial<OmitStrict<ProtectedApplicationState, 'id' | 'lastUpdatedOn' | 'applicationYear' | 'context'>>;
 }
 
 /**
@@ -281,22 +273,6 @@ export function clearProtectedApplicationState({ params, session }: ClearStateAr
   const sessionKey = getSessionKey(id);
   session.unset(sessionKey);
   log.info('Application session state cleared; sessionKey: [%s], sessionId: [%s]', sessionKey, session.id);
-}
-
-/**
- * Determines the input model based on context and client application data. For intake applications,
- * the input model is always 'full'. For renewal applications, the input model is always 'simplified'.
- */
-function determineInputModel(context: ProtectedApplicationState['context']): InputModelState {
-  if (context === 'intake') {
-    return 'full';
-  }
-
-  // Before input mode for "renewal" applications was determined based on the presence of any copay tier earning record.
-  // Now, the input mode is always "simplified" for renewal applications, regardless of the presence of copay tier
-  // earning records. The copay tier earning record will be used to conditionally add "marital status" question in the
-  // application flow.
-  return 'simplified';
 }
 
 interface StartProtectedApplicationStateArgs {
@@ -340,7 +316,6 @@ export function startProtectedApplicationState({ applicationYear, clientApplicat
   const initialState = {
     id,
     context,
-    inputModel: determineInputModel(context),
     lastUpdatedOn: new UTCDate().toISOString(),
     applicationYear,
     clientApplication,
@@ -421,20 +396,20 @@ export function getEligibilityByAge(dateOfBirth: string): EligibilityResult {
 /**
  * Extracts the input model and type of application from a combined string.
  *
- * @template S - A string in the format `${InputModelState}-${TypeOfApplicationState}`
+ * @template S - A string in the format `${ContextState}-${TypeOfApplicationState}`
  *
- * @returns An object containing `inputModel` and `typeOfApplication` if the input string is valid; otherwise, `never`.
+ * @returns An object containing `context` and `typeOfApplication` if the input string is valid; otherwise, `never`.
  *
  * @example
  * ```typescript
- * type Result = ExtractStateFromApplicationFlow<'full-adult'>;
- * // Result is { inputModel: 'full'; typeOfApplication: 'adult' }
+ * type Result = ExtractStateFromApplicationFlow<'intake-adult'>;
+ * // Result is { context: 'intake'; typeOfApplication: 'adult' }
  * ```
  */
 type ExtractStateFromApplicationFlow<S extends string> = S extends `${infer I}-${infer T}` //
-  ? I extends InputModelState
+  ? I extends ContextState
     ? T extends TypeOfApplicationState
-      ? { inputModel: I; typeOfApplication: T }
+      ? { context: I; typeOfApplication: T }
       : never
     : never
   : never;
@@ -452,17 +427,17 @@ type ExtractStateFromApplicationFlow<S extends string> = S extends `${infer I}-$
  *
  * @example
  * ```typescript
- * validateApplicationFlow(state, params, ['full-adult', 'simplified-children']);
+ * validateApplicationFlow(state, params, ['intake-adult', 'renewal-children']);
  * ```
  */
-export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${InputModelState}-${TypeOfApplicationState}`>>(
+export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${ContextState}-${TypeOfApplicationState}`>>(
   state: ProtectedApplicationState,
   params: Params,
   allowedFlows: TAllowedFlows,
-): asserts state is OmitStrict<ProtectedApplicationState, 'inputModel' | 'typeOfApplication'> & ExtractStateFromApplicationFlow<TAllowedFlows[number]> {
+): asserts state is OmitStrict<ProtectedApplicationState, 'context' | 'typeOfApplication'> & ExtractStateFromApplicationFlow<TAllowedFlows[number]> {
   const log = createLogger('application-route-helpers.server/validateApplicationFlow');
 
-  const inputModel = state.inputModel;
+  const context = state.context;
   const type = state.typeOfApplication;
 
   if (!type) {
@@ -471,30 +446,29 @@ export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${I
     throw redirectDocument(redirectUrl);
   }
 
-  const flowKey = `${inputModel}-${type}` as const;
-
+  const flowKey = `${context}-${type}` as const;
   if (!allowedFlows.includes(flowKey)) {
     const redirectUrl = getInitialApplicationFlowUrl(flowKey, params);
     log.warn('Flow [%s] is not allowed; allowedTypesAndFlows: [%s], redirecting to [%s], stateId: [%s]', flowKey, allowedFlows, redirectUrl, state.id);
     throw redirectDocument(redirectUrl);
   }
 
-  if (inputModel === 'simplified' && state.clientApplication === undefined) {
+  if (context === 'renewal' && state.clientApplication === undefined) {
     const redirectUrl = getInitialApplicationFlowUrl('entry', params);
-    log.warn("Input model is 'simplified' but clientApplication is not defined in state; redirecting to [%s], stateId: [%s]", redirectUrl, state.id);
+    log.warn("Context is 'renewal' but clientApplication is not defined in state; redirecting to [%s], stateId: [%s]", redirectUrl, state.id);
     throw redirectDocument(redirectUrl);
   }
 }
 
-export type ApplicationFlow = 'entry' | `${InputModelState}-${TypeOfApplicationState}`;
+export type ApplicationFlow = 'entry' | `${ContextState}-${TypeOfApplicationState}`;
 
 /**
- * Determines the initial URL path based on the input model and type of application.
+ * Determines the initial URL path based on the context and type of application.
  *
- * @param applicationFlow - Either 'entry' for initial entry point, or a combination of input model
- *                      and type of application in the format `${TypeOfApplicationState}-${TypeOfApplicationState}`
+ * @param applicationFlow - Either 'entry' for initial entry point, or a combination of context
+ *                      and type of application in the format `${ContextState}-${TypeOfApplicationState}`
  * @param params - Route parameters used to generate the path, typically containing an application ID
- * @returns The URL path string for the corresponding input model and application type
+ * @returns The URL path string for the corresponding context and application type
  * @throws {Error} When an unknown applicationFlow value is provided
  */
 export function getInitialApplicationFlowUrl(applicationFlow: ApplicationFlow, params: Params) {
@@ -502,28 +476,28 @@ export function getInitialApplicationFlowUrl(applicationFlow: ApplicationFlow, p
     case 'entry': {
       return getPathById('protected/application/$id/eligibility-requirements', params);
     }
-    case 'full-adult': {
-      return getPathById('protected/application/$id/full-adult/marital-status', params);
+    case 'intake-adult': {
+      return getPathById('protected/application/$id/intake-adult/marital-status', params);
     }
-    case 'full-children': {
-      return getPathById('protected/application/$id/full-children/parent-or-guardian', params);
+    case 'intake-children': {
+      return getPathById('protected/application/$id/intake-children/parent-or-guardian', params);
     }
-    case 'full-family': {
-      return getPathById('protected/application/$id/full-family/marital-status', params);
+    case 'intake-family': {
+      return getPathById('protected/application/$id/intake-family/marital-status', params);
     }
-    case 'full-delegate': {
+    case 'intake-delegate': {
       return getPathById('protected/application/$id/application-delegate', params);
     }
-    case 'simplified-adult': {
-      return getPathById('protected/application/$id/simplified-adult/marital-status', params);
+    case 'renewal-adult': {
+      return getPathById('protected/application/$id/renewal-adult/marital-status', params);
     }
-    case 'simplified-children': {
-      return getPathById('protected/application/$id/simplified-children/parent-or-guardian', params);
+    case 'renewal-children': {
+      return getPathById('protected/application/$id/renewal-children/parent-or-guardian', params);
     }
-    case 'simplified-family': {
-      return getPathById('protected/application/$id/simplified-family/marital-status', params);
+    case 'renewal-family': {
+      return getPathById('protected/application/$id/renewal-family/marital-status', params);
     }
-    case 'simplified-delegate': {
+    case 'renewal-delegate': {
       return getPathById('protected/application/$id/application-delegate', params);
     }
     default: {
@@ -550,14 +524,14 @@ export function getSingleChildState({ params, request, session }: getSingleChild
 
   if (!isValidId(childId)) {
     log.warn('Invalid "childId" param format; childId: [%s]', childId);
-    throw redirect(getPathById(`protected/application/$id/${applicationState.inputModel}-${applicationState.typeOfApplication}/children/index`, params));
+    throw redirect(getPathById(`protected/application/$id/${applicationState.context}-${applicationState.typeOfApplication}/children/index`, params));
   }
 
   const childStateIndex = applicationState.children.findIndex(({ id }) => id === childId);
 
   if (childStateIndex === -1) {
     log.warn('Apply single child has not been found; childId: [%s]', childId);
-    throw redirect(getPathById(`protected/application/$id/${applicationState.inputModel}-${applicationState.typeOfApplication}/children/index`, params));
+    throw redirect(getPathById(`protected/application/$id/${applicationState.context}-${applicationState.typeOfApplication}/children/index`, params));
   }
 
   const childState = applicationState.children[childStateIndex];
@@ -652,11 +626,11 @@ export function validateProtectedApplicationContext<TExpectedContext extends Pro
  *
  * @param state - The protected application state containing the application input model and client application data.
  * @returns A boolean value indicating whether to skip the marital status state (true) or not (false). The marital
- * status state should be skipped if the application input model is 'simplified' and the client application has a copay tier
+ * status state should be skipped if the application context is 'renewal' and the client application has a copay tier
  * earning record; otherwise, it should not be skipped.
  */
-export function shouldSkipMaritalStatus(state: PickDeep<ProtectedApplicationState, 'inputModel' | 'clientApplication.copayTierEarningRecord'>): boolean {
-  if (state.inputModel !== 'simplified') return false;
+export function shouldSkipMaritalStatus(state: PickDeep<ProtectedApplicationState, 'context' | 'clientApplication.copayTierEarningRecord'>): boolean {
+  if (state.context !== 'renewal') return false;
   if (state.clientApplication === undefined) return false;
   return state.clientApplication.copayTierEarningRecord === true;
 }

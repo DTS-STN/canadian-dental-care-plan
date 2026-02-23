@@ -35,10 +35,10 @@ import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils'
 
 function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
   switch (applicationFlow) {
-    case 'full-children': {
+    case 'intake-children': {
       return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
     }
-    case 'simplified-children': {
+    case 'renewal-children': {
       return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
     }
     default: {
@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-children', 'simplified-family']);
+  validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-children', 'renewal-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -68,7 +68,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const maritalStatuses = appContainer.get(TYPES.MaritalStatusService).listLocalizedMaritalStatuses(locale);
   return {
     defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation },
-    applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
+    applicationFlow: `${state.context}-${state.typeOfApplication}` as const,
     meta,
     maritalStatuses,
   };
@@ -76,7 +76,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-children', 'simplified-family']);
+  validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-children', 'renewal-family']);
 
   const formData = await request.formData();
 
@@ -86,7 +86,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const applicationFlow: ApplicationFlow = `${state.inputModel}-${state.typeOfApplication}`;
+  const applicationFlow: ApplicationFlow = `${state.context}-${state.typeOfApplication}`;
 
   // state validation schema
   const maritalStatusSchema = z.object({

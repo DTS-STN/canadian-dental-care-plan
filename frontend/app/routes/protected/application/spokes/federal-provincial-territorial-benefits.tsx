@@ -51,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family']);
+  validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-family']);
 
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
 
@@ -70,13 +70,13 @@ export async function loader({ context: { appContainer, session }, params, reque
     meta,
     provincialTerritorialSocialPrograms,
     provinceTerritoryStates,
-    applicationFlow: `${state.inputModel}-${state.typeOfApplication}` as const,
+    applicationFlow: `${state.context}-${state.typeOfApplication}` as const,
   };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
   const state = getProtectedApplicationState({ params, session });
-  validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family']);
+  validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-family']);
 
   const formData = await request.formData();
 
@@ -167,7 +167,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  return redirect(getPathById(`protected/application/$id/${state.inputModel}-${state.typeOfApplication}/dental-insurance`, params));
+  return redirect(getPathById(`protected/application/$id/${state.context}-${state.typeOfApplication}/dental-insurance`, params));
 }
 
 export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ loaderData, params }: Route.ComponentProps) {
@@ -269,7 +269,7 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
                       <InputSelect
                         id="province"
                         name="province"
-                        className="w-full sm:w-1/2"
+                        className="w-intake sm:w-1/2"
                         label={t('protected-application-spokes:dental-benefits.provincial-territorial-benefits.social-programs.input-legend')}
                         onChange={handleOnRegionChanged}
                         options={[
