@@ -137,6 +137,10 @@ const serverEnv = clientEnvSchema.extend({
   SESSION_COOKIE_HTTP_ONLY: z.string().transform(toBoolean).default(true),
   SESSION_COOKIE_SECURE: z.string().transform(toBoolean).default(true),
   SESSION_KEY_PREFIX: z.string().trim().min(1).default('SESSION:'),
+  SESSION_LOCK_ENABLED: z.string().transform(toBoolean).default(true),
+  SESSION_LOCK_TTL_MS: z.coerce.number().int().positive().default(10_000),
+  SESSION_LOCK_WAIT_MS: z.coerce.number().int().nonnegative().default(15_000),
+  SESSION_LOCK_RETRY_MS: z.coerce.number().int().positive().default(100),
 
 
   // redis server configuration

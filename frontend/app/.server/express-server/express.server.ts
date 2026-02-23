@@ -3,7 +3,7 @@ import express from 'express';
 import sourceMapSupport from 'source-map-support';
 
 import { routeRequestCounter } from '~/.server/express-server/instrumentation.server';
-import { logging, securityHeaders, session } from '~/.server/express-server/middleware.server';
+import { logging, securityHeaders, session, sessionLock } from '~/.server/express-server/middleware.server';
 import { globalErrorHandler, rrRequestHandler } from '~/.server/express-server/request-handlers.server';
 import { createViteDevServer } from '~/.server/express-server/vite.server';
 import { createLogger } from '~/.server/logging';
@@ -55,6 +55,9 @@ if (isProduction) {
 
 log.info('    ✓ security headers middleware');
 app.use(securityHeaders());
+
+log.info('    ✓ session lock middleware (%s)', environment.SESSION_STORAGE_TYPE);
+app.use(sessionLock(environment));
 
 log.info('    ✓ session middleware (%s)', environment.SESSION_STORAGE_TYPE);
 app.use(await session(isProduction, environment));

@@ -107,6 +107,8 @@
     "@testing-library/user-event": "^14.6.1",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/compression": "^1.8.1",
+    "@types/cookie": "^0.6.0",
+    "@types/cookie-signature": "^1.1.2",
     "@types/express-session": "^1.18.2",
     "@types/jmespath": "^0.15.2",
     "@types/jsdom": "^27.0.0",
