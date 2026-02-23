@@ -11,9 +11,9 @@ import dataUnavailableEn from '~/.server/locales/en/data-unavailable.json';
 import documentsEn from '~/.server/locales/en/documents.json';
 import gcwebEn from '~/.server/locales/en/gcweb.json';
 import lettersEn from '~/.server/locales/en/letters.json';
-import protectedApplicationFullAdultEn from '~/.server/locales/en/protected-application-full-adult.json';
-import protectedApplicationFullChildEn from '~/.server/locales/en/protected-application-full-child.json';
-import protectedApplicationFullFamilyEn from '~/.server/locales/en/protected-application-full-family.json';
+import protectedApplicationIntakeAdultEn from '~/.server/locales/en/protected-application-intake-adult.json';
+import protectedApplicationIntakeChildEn from '~/.server/locales/en/protected-application-intake-child.json';
+import protectedApplicationIntakeFamilyEn from '~/.server/locales/en/protected-application-intake-family.json';
 import protectedApplicationSimplifiedAdultEn from '~/.server/locales/en/protected-application-simplified-adult.json';
 import protectedApplicationSimplifiedChildEn from '~/.server/locales/en/protected-application-simplified-child.json';
 import protectedApplicationSimplifiedFamilyEn from '~/.server/locales/en/protected-application-simplified-family.json';
@@ -41,9 +41,9 @@ import dataUnavailableFr from '~/.server/locales/fr/data-unavailable.json';
 import documentsFr from '~/.server/locales/fr/documents.json';
 import gcwebFr from '~/.server/locales/fr/gcweb.json';
 import lettersFr from '~/.server/locales/fr/letters.json';
-import protectedApplicationFullAdultFr from '~/.server/locales/fr/protected-application-full-adult.json';
-import protectedApplicationFullChildFr from '~/.server/locales/fr/protected-application-full-child.json';
-import protectedApplicationFullFamilyFr from '~/.server/locales/fr/protected-application-full-family.json';
+import protectedApplicationIntakeAdultFr from '~/.server/locales/fr/protected-application-intake-adult.json';
+import protectedApplicationIntakeChildFr from '~/.server/locales/fr/protected-application-intake-child.json';
+import protectedApplicationIntakeFamilyFr from '~/.server/locales/fr/protected-application-intake-family.json';
 import protectedApplicationSimplifiedAdultFr from '~/.server/locales/fr/protected-application-simplified-adult.json';
 import protectedApplicationSimplifiedChildFr from '~/.server/locales/fr/protected-application-simplified-child.json';
 import protectedApplicationSimplifiedFamilyFr from '~/.server/locales/fr/protected-application-simplified-family.json';
@@ -76,9 +76,9 @@ const i18nResourcesEn = {
   gcweb: gcwebEn,
   letters: lettersEn,
   'protected-application': protectedApplicationEn,
-  'protected-application-full-adult': protectedApplicationFullAdultEn,
-  'protected-application-full-child': protectedApplicationFullChildEn,
-  'protected-application-full-family': protectedApplicationFullFamilyEn,
+  'protected-application-intake-adult': protectedApplicationIntakeAdultEn,
+  'protected-application-intake-child': protectedApplicationIntakeChildEn,
+  'protected-application-intake-family': protectedApplicationIntakeFamilyEn,
   'protected-application-simplified-adult': protectedApplicationSimplifiedAdultEn,
   'protected-application-simplified-child': protectedApplicationSimplifiedChildEn,
   'protected-application-simplified-family': protectedApplicationSimplifiedFamilyEn,
@@ -109,9 +109,9 @@ const i18nResourcesFr = {
   gcweb: gcwebFr,
   letters: lettersFr,
   'protected-application': protectedApplicationFr,
-  'protected-application-full-adult': protectedApplicationFullAdultFr,
-  'protected-application-full-child': protectedApplicationFullChildFr,
-  'protected-application-full-family': protectedApplicationFullFamilyFr,
+  'protected-application-intake-adult': protectedApplicationIntakeAdultFr,
+  'protected-application-intake-child': protectedApplicationIntakeChildFr,
+  'protected-application-intake-family': protectedApplicationIntakeFamilyFr,
   'protected-application-simplified-adult': protectedApplicationSimplifiedAdultFr,
   'protected-application-simplified-child': protectedApplicationSimplifiedChildFr,
   'protected-application-simplified-family': protectedApplicationSimplifiedFamilyFr,
