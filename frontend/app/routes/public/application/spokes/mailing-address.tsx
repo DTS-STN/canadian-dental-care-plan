@@ -376,7 +376,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
                     endIcon={faChevronRight}
-                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Mailing address click"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Mailing address click"
                   >
                     {copyAddressChecked ? t('application-spokes:address.save-btn') : t('application-spokes:address.continue')}
                   </LoadingButton>
@@ -399,7 +399,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Mailing address click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Mailing address click"
               >
                 {t('application-spokes:address.back')}
               </ButtonLink>

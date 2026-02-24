@@ -175,19 +175,46 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
           </CardContent>
           {state.phoneNumber ? (
             <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink id="edit-phone-button" variant="link" className="p-0" routeId="public/application/$id/phone-number" params={params} startIcon={sections.phoneNumber.completed ? faPenToSquare : faCirclePlus} size="lg">
+              <ButtonLink
+                id="edit-phone-button"
+                variant="link"
+                className="p-0"
+                routeId="public/application/$id/phone-number"
+                params={params}
+                startIcon={sections.phoneNumber.completed ? faPenToSquare : faCirclePlus}
+                size="lg"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Edit phone click"
+              >
                 {sections.phoneNumber.completed ? t('application-simplified-adult:contact-information.edit-phone-number') : t('application-simplified-adult:contact-information.add-phone-number')}
               </ButtonLink>
             </CardFooter>
           ) : (
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
-                <ButtonLink id="update-phone-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/phone-number" params={params} startIcon={faPenToSquare} size="lg">
+                <ButtonLink
+                  id="update-phone-button"
+                  variant="link"
+                  className="p-0 pb-5"
+                  routeId="public/application/$id/phone-number"
+                  params={params}
+                  startIcon={faPenToSquare}
+                  size="lg"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Update phone click"
+                >
                   {t('application-simplified-adult:contact-information.update-phone-number')}
                 </ButtonLink>
               </div>
               <div className="w-full px-6">
-                <Button id="complete-phone-button" variant="link" name="_action" value={FORM_ACTION.PHONE_NUMBER_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                <Button
+                  id="complete-phone-button"
+                  variant="link"
+                  name="_action"
+                  value={FORM_ACTION.PHONE_NUMBER_NOT_CHANGED}
+                  className="p-0 pt-5"
+                  startIcon={faCircleCheck}
+                  size="lg"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Complete phone click"
+                >
                   {t('application-simplified-adult:contact-information.phone-number-unchanged')}
                 </Button>
               </div>
@@ -238,19 +265,46 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
           </CardContent>
           {mailingAddressInfo.hasChanged !== undefined && homeAddressInfo.hasChanged !== undefined ? (
             <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink id="edit-address-button" variant="link" className="p-0" routeId="public/application/$id/mailing-address" params={params} startIcon={sections.address.completed ? faPenToSquare : faCirclePlus} size="lg">
+              <ButtonLink
+                id="edit-address-button"
+                variant="link"
+                className="p-0"
+                routeId="public/application/$id/mailing-address"
+                params={params}
+                startIcon={sections.address.completed ? faPenToSquare : faCirclePlus}
+                size="lg"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Edit address click"
+              >
                 {sections.address.completed ? t('application-simplified-adult:contact-information.edit-address') : t('application-simplified-adult:contact-information.add-address')}
               </ButtonLink>
             </CardFooter>
           ) : (
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
-                <ButtonLink id="update-address-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/mailing-address" params={params} startIcon={faPenToSquare} size="lg">
+                <ButtonLink
+                  id="update-address-button"
+                  variant="link"
+                  className="p-0 pb-5"
+                  routeId="public/application/$id/mailing-address"
+                  params={params}
+                  startIcon={faPenToSquare}
+                  size="lg"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Update address click"
+                >
                   {t('application-simplified-adult:contact-information.update-address')}
                 </ButtonLink>
               </div>
               <div className="w-full px-6">
-                <Button id="complete-address-button" variant="link" className="p-0 pt-5" name="_action" value={FORM_ACTION.ADDRESS_NOT_CHANGED} startIcon={faCircleCheck} size="lg">
+                <Button
+                  id="complete-address-button"
+                  variant="link"
+                  className="p-0 pt-5"
+                  name="_action"
+                  value={FORM_ACTION.ADDRESS_NOT_CHANGED}
+                  startIcon={faCircleCheck}
+                  size="lg"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Complete address click"
+                >
                   {t('application-simplified-adult:contact-information.address-unchanged')}
                 </Button>
               </div>
@@ -283,19 +337,46 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
           </CardContent>
           {state.communicationPreferences ? (
             <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink id="edit-comms-button" variant="link" className="p-0" routeId="public/application/$id/communication-preferences" params={params} startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus} size="lg">
+              <ButtonLink
+                id="edit-comms-button"
+                variant="link"
+                className="p-0"
+                routeId="public/application/$id/communication-preferences"
+                params={params}
+                startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus}
+                size="lg"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Edit comms click"
+              >
                 {sections.communicationPreferences.completed ? t('application-simplified-adult:contact-information.edit-communication-preferences') : t('application-simplified-adult:contact-information.add-communication-preferences')}
               </ButtonLink>
             </CardFooter>
           ) : (
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
-                <ButtonLink id="update-comms-button" variant="link" className="p-0 pb-5" routeId="public/application/$id/communication-preferences" params={params} startIcon={faPenToSquare} size="lg">
+                <ButtonLink
+                  id="update-comms-button"
+                  variant="link"
+                  className="p-0 pb-5"
+                  routeId="public/application/$id/communication-preferences"
+                  params={params}
+                  startIcon={faPenToSquare}
+                  size="lg"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Update comms click"
+                >
                   {t('application-simplified-adult:contact-information.update-communication-preferences')}
                 </ButtonLink>
               </div>
               <div className="w-full px-6">
-                <LoadingButton id="complete-comms-button" variant="link" name="_action" value={FORM_ACTION.COMMUNICATION_PREFERENCES_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                <LoadingButton
+                  id="complete-comms-button"
+                  variant="link"
+                  name="_action"
+                  value={FORM_ACTION.COMMUNICATION_PREFERENCES_NOT_CHANGED}
+                  className="p-0 pt-5"
+                  startIcon={faCircleCheck}
+                  size="lg"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Complete comms click"
+                >
                   {t('application-simplified-adult:contact-information.communication-preferences-unchanged')}
                 </LoadingButton>
               </div>
@@ -304,10 +385,17 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-adult/dental-insurance" params={params}>
+          <NavigationButtonLink
+            disabled={!allSectionsCompleted}
+            variant="primary"
+            direction="next"
+            routeId="public/application/$id/simplified-adult/dental-insurance"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Continue click"
+          >
             {t('application-simplified-adult:contact-information.next-btn')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Back click">
             {t('application-simplified-adult:contact-information.prev-btn')}
           </NavigationButtonLink>
         </div>

@@ -147,7 +147,7 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.review-your-application')}</h2>
             <p>{t('application-full-family:submit.please-review')}</p>
-            <ButtonLink variant="primary" routeId="public/application/$id/full-family/marital-status" params={params}>
+            <ButtonLink variant="primary" routeId="public/application/$id/full-family/marital-status" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Action click">
               {t('application-full-family:submit.review-application')}
             </ButtonLink>
           </section>
@@ -168,10 +168,17 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
                 </InputCheckbox>
               </div>
               <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-                <NavigationButton loading={isSubmitting} variant="primary" direction="next">
+                <NavigationButton loading={isSubmitting} variant="primary" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Submit click">
                   {t('application-full-family:submit.submit')}
                 </NavigationButton>
-                <NavigationButtonLink disabled={isSubmitting} variant="secondary" direction="previous" routeId="public/application/$id/full-family/childrens-application" params={params}>
+                <NavigationButtonLink
+                  disabled={isSubmitting}
+                  variant="secondary"
+                  direction="previous"
+                  routeId="public/application/$id/full-family/childrens-application"
+                  params={params}
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Back click"
+                >
                   {t('application-full-family:submit.children-application')}
                 </NavigationButtonLink>
               </div>

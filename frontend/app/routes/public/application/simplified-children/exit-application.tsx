@@ -73,11 +73,11 @@ export default function RenewChildrenExitApplication({ loaderData, params }: Rou
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Children:Back - Exiting the application click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Back - Exiting the application click"
         >
           {t('application-simplified-child:exit-application.back-btn')}
         </ButtonLink>
-        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Children:Exit - Exiting the application click">
+        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Exit - Exiting the application click">
           {t('application-simplified-child:exit-application.exit-btn')}
         </LoadingButton>
       </fetcher.Form>

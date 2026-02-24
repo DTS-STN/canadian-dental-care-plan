@@ -241,7 +241,7 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Family:Print top - Application successfully submitted click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Print top - Application successfully submitted click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -259,7 +259,7 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
             className="external-link"
             newTabIndicator
             target="_blank"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Family:Confirmation survey button - Take the survey click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Confirmation survey button - Take the survey click"
             variant="primary"
           >
             {t('confirm.survey.button')}
@@ -445,7 +445,7 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Family:Print bottom - Application successfully submitted click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Print bottom - Application successfully submitted click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -455,7 +455,7 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
           <button
             aria-expanded={undefined}
             className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Family:Exit - Application successfully submitted click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Exit - Application successfully submitted click"
           >
             {t('application-simplified-family:confirm.close-application')}
           </button>
@@ -468,7 +468,7 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
           <p>{t('application-simplified-family:confirm.modal.are-you-sure')}</p>
           <DialogFooter>
             <DialogClose asChild>
-              <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Family:Back exit modal - Application successfully submitted click">
+              <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Back exit modal - Application successfully submitted click">
                 {t('application-simplified-family:confirm.modal.back-btn')}
               </Button>
             </DialogClose>
@@ -479,7 +479,7 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
                 variant="primary"
                 size="sm"
                 onClick={() => sessionStorage.removeItem('flow.state')}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Family:Confirmation exit modal - Application successfully submitted click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Confirmation exit modal - Application successfully submitted click"
               >
                 {t('application-simplified-family:confirm.modal.close-btn')}
               </Button>

@@ -131,7 +131,7 @@ export default function RenewChildrenSubmit({ loaderData, params }: Route.Compon
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-child:submit.review-your-application')}</h2>
             <p>{t('application-simplified-child:submit.please-review')}</p>
-            <ButtonLink variant="primary" routeId="public/application/$id/simplified-children/parent-or-guardian" params={params}>
+            <ButtonLink variant="primary" routeId="public/application/$id/simplified-children/parent-or-guardian" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Action click">
               {t('application-simplified-child:submit.review-application')}
             </ButtonLink>
           </section>
@@ -152,10 +152,17 @@ export default function RenewChildrenSubmit({ loaderData, params }: Route.Compon
                 </InputCheckbox>
               </div>
               <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-                <NavigationButton loading={isSubmitting} variant="primary" direction="next">
+                <NavigationButton loading={isSubmitting} variant="primary" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Submit click">
                   {t('application-simplified-child:submit.submit')}
                 </NavigationButton>
-                <NavigationButtonLink disabled={isSubmitting} variant="secondary" direction="previous" routeId="public/application/$id/simplified-children/childrens-application" params={params}>
+                <NavigationButtonLink
+                  disabled={isSubmitting}
+                  variant="secondary"
+                  direction="previous"
+                  routeId="public/application/$id/simplified-children/childrens-application"
+                  params={params}
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Back click"
+                >
                   {t('application-simplified-child:submit.childrens-application')}
                 </NavigationButtonLink>
               </div>

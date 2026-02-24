@@ -124,7 +124,7 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-adult:submit.review-your-application')}</h2>
             <p>{t('application-simplified-adult:submit.please-review')}</p>
-            <ButtonLink variant="primary" routeId="public/application/$id/simplified-adult/contact-information" params={params}>
+            <ButtonLink variant="primary" routeId="public/application/$id/simplified-adult/contact-information" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Action click">
               {t('application-simplified-adult:submit.review-application')}
             </ButtonLink>
           </section>
@@ -145,10 +145,17 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
                 </InputCheckbox>
               </div>
               <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-                <NavigationButton loading={isSubmitting} variant="primary" direction="next">
+                <NavigationButton loading={isSubmitting} variant="primary" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Submit click">
                   {t('application-simplified-adult:submit.submit')}
                 </NavigationButton>
-                <NavigationButtonLink disabled={isSubmitting} variant="secondary" direction="previous" routeId="public/application/$id/simplified-adult/dental-insurance" params={params}>
+                <NavigationButtonLink
+                  disabled={isSubmitting}
+                  variant="secondary"
+                  direction="previous"
+                  routeId="public/application/$id/simplified-adult/dental-insurance"
+                  params={params}
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Back click"
+                >
                   {t('application-simplified-adult:submit.dental-insurance')}
                 </NavigationButtonLink>
               </div>

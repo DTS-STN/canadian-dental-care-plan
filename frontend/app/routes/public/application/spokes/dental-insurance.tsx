@@ -223,7 +223,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
           )}
 
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Access to other dental insurance click">
+            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Access to other dental insurance click">
               {t('dental-insurance.save-btn')}
             </LoadingButton>
             <ButtonLink
@@ -233,7 +233,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Access to other dental insurance click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Access to other dental insurance click"
             >
               {t('dental-insurance.back-btn')}
             </ButtonLink>

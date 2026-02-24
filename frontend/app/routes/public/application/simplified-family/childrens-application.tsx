@@ -223,6 +223,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                     params={{ ...params, childId: child.id }}
                     startIcon={sections.childInformation.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Action click"
                   >
                     {child.information === undefined ? t('application-simplified-family:childrens-application.add-child-information') : t('application-simplified-family:childrens-application.edit-child-information', { childNumber: index + 1 })}
                   </ButtonLink>
@@ -254,6 +255,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                     params={{ ...params, childId: child.id }}
                     startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Action click"
                   >
                     {child.dentalInsurance === undefined ? t('application-simplified-family:childrens-application.add-answer') : t('application-simplified-family:childrens-application.edit-child-dental-insurance')}
                   </ButtonLink>
@@ -302,6 +304,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                       params={{ ...params, childId: child.id }}
                       startIcon={sections.dentalBenefits.completed ? faPenToSquare : faCirclePlus}
                       size="lg"
+                      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Action click"
                     >
                       {t('application-simplified-family:childrens-application.edit-child-dental-benefits')}
                     </ButtonLink>
@@ -317,6 +320,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                         params={{ ...params, childId: child.id }}
                         startIcon={faPenToSquare}
                         size="lg"
+                        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit button update access click"
                       >
                         {t('application-simplified-family:childrens-application.update-dental-benefits')}
                       </ButtonLink>
@@ -325,7 +329,17 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                       <CsrfTokenInput />
                       <input type="hidden" name="childId" value={child.id} />
                       <div className="w-full px-6">
-                        <Button id="edit-button-not-changed" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} disabled={isSubmitting} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                        <Button
+                          id="edit-button-not-changed"
+                          name="_action"
+                          value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
+                          disabled={isSubmitting}
+                          variant="link"
+                          className="p-0 pt-5"
+                          startIcon={faCircleCheck}
+                          size="lg"
+                          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit button not changed click"
+                        >
                           {t('application-simplified-family:childrens-application.benefits-not-changed')}
                         </Button>
                       </div>
@@ -360,10 +374,23 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
         </fetcher.Form>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-family/submit" params={params}>
+          <NavigationButtonLink
+            disabled={!allChildrenCompleted}
+            variant="primary"
+            direction="next"
+            routeId="public/application/$id/simplified-family/submit"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Continue click"
+          >
             {t('application-simplified-family:childrens-application.submit-btn')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/simplified-family/dental-insurance" params={params}>
+          <NavigationButtonLink
+            variant="secondary"
+            direction="previous"
+            routeId="public/application/$id/simplified-family/dental-insurance"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Back click"
+          >
             {t('application-simplified-family:childrens-application.back-btn')}
           </NavigationButtonLink>
         </div>

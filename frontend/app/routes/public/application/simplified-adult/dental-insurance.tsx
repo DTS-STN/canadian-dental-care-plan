@@ -136,7 +136,16 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button-dental-insurance" variant="link" className="p-0" routeId="public/application/$id/dental-insurance" params={params} startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink
+              id="edit-button-dental-insurance"
+              variant="link"
+              className="p-0"
+              routeId="public/application/$id/dental-insurance"
+              params={params}
+              startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Edit button dental insurance click"
+            >
               {state.dentalInsurance === undefined ? t('application-simplified-adult:dental-insurance.add-answer') : t('application-simplified-adult:dental-insurance.edit-access-to-dental-insurance')}
             </ButtonLink>
           </CardFooter>
@@ -184,6 +193,7 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
                 params={params}
                 startIcon={sections.dentalBenefits.completed ? faPenToSquare : faCirclePlus}
                 size="lg"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Edit button government benefits click"
               >
                 {t('application-simplified-adult:dental-insurance.edit-access-to-government-benefits')}
               </ButtonLink>
@@ -191,12 +201,30 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
           ) : (
             <CardFooter className="divide-y border-t bg-zinc-100 px-0">
               <div className="w-full px-6">
-                <ButtonLink id="edit-button-update-access" variant="link" className="p-0 pb-5" routeId="public/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faPenToSquare} size="lg">
+                <ButtonLink
+                  id="edit-button-update-access"
+                  variant="link"
+                  className="p-0 pb-5"
+                  routeId="public/application/$id/federal-provincial-territorial-benefits"
+                  params={params}
+                  startIcon={faPenToSquare}
+                  size="lg"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Edit button update access click"
+                >
                   {t('application-simplified-adult:dental-insurance.update-my-access')}
                 </ButtonLink>
               </div>
               <div className="w-full px-6">
-                <Button id="edit-button-not-changed" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+                <Button
+                  id="edit-button-not-changed"
+                  name="_action"
+                  value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
+                  variant="link"
+                  className="p-0 pt-5"
+                  startIcon={faCircleCheck}
+                  size="lg"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Edit button not changed click"
+                >
                   {t('application-simplified-adult:dental-insurance.access-not-changed')}
                 </Button>
               </div>
@@ -205,10 +233,23 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/simplified-adult/submit" params={params}>
+          <NavigationButtonLink
+            disabled={!allSectionsCompleted}
+            variant="primary"
+            direction="next"
+            routeId="public/application/$id/simplified-adult/submit"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Continue click"
+          >
             {t('application-simplified-adult:dental-insurance.submit')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/simplified-adult/contact-information" params={params}>
+          <NavigationButtonLink
+            variant="secondary"
+            direction="previous"
+            routeId="public/application/$id/simplified-adult/contact-information"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Back click"
+          >
             {t('application-simplified-adult:dental-insurance.contact-information')}
           </NavigationButtonLink>
         </div>

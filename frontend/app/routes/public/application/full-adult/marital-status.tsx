@@ -87,16 +87,32 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-marital-button" variant="link" className="p-0" routeId="public/application/$id/marital-status" params={params} startIcon={sections.maritalStatus.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink
+              id="edit-marital-button"
+              variant="link"
+              className="p-0"
+              routeId="public/application/$id/marital-status"
+              params={params}
+              startIcon={sections.maritalStatus.completed ? faPenToSquare : faCirclePlus}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Edit marital click"
+            >
               {state.maritalStatus === undefined ? t('application-full-adult:marital-status.add-marital-status') : t('application-full-adult:marital-status.edit-marital-status')}
             </ButtonLink>
           </CardFooter>
         </Card>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/full-adult/contact-information" params={params}>
+          <NavigationButtonLink
+            disabled={!allSectionsCompleted}
+            variant="primary"
+            direction="next"
+            routeId="public/application/$id/full-adult/contact-information"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Continue click"
+          >
             {t('application-full-adult:marital-status.contact-information')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params}>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Back click">
             {t('application-full-adult:marital-status.type-of-application')}
           </NavigationButtonLink>
         </div>
