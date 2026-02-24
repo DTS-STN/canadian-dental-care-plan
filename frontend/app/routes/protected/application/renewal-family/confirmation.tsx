@@ -183,6 +183,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     userInfo,
     children,
     eligibility: getEligibilityStatus(state.dentalInsurance.hasDentalInsurance, state.clientApplication.t4DentalIndicator),
+    displayEligibility: state.clientApplication.copayTierEarningRecord,
   };
 }
 
@@ -207,7 +208,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ProtectedRenewalFamilyConfirmation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, children, eligibility } = loaderData;
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, children, eligibility, displayEligibility } = loaderData;
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('protected-application-renewal-family:confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
@@ -216,21 +217,23 @@ export default function ProtectedRenewalFamilyConfirmation({ loaderData, params 
 
   return (
     <div className="max-w-prose space-y-10">
-      <section className="space-y-6">
-        <h3 className="font-lato text-2xl font-bold">{t('confirm.your-eligibility')}</h3>
-        <DefinitionList border>
-          <DefinitionListItem term={`${userInfo.firstName} ${userInfo.lastName}`}>
-            <Eligibility type={eligibility} />
-          </DefinitionListItem>
-        </DefinitionList>
-        {children.map((child) => (
-          <DefinitionList key={child.id}>
-            <DefinitionListItem term={`${child.firstName} ${child.lastName}`}>
-              <Eligibility type={child.eligibility} />
+      {displayEligibility && (
+        <section className="space-y-6">
+          <h3 className="font-lato text-2xl font-bold">{t('confirm.your-eligibility')}</h3>
+          <DefinitionList border>
+            <DefinitionListItem term={`${userInfo.firstName} ${userInfo.lastName}`}>
+              <Eligibility type={eligibility} />
             </DefinitionListItem>
           </DefinitionList>
-        ))}
-      </section>
+          {children.map((child) => (
+            <DefinitionList key={child.id}>
+              <DefinitionListItem term={`${child.firstName} ${child.lastName}`}>
+                <Eligibility type={child.eligibility} />
+              </DefinitionListItem>
+            </DefinitionList>
+          ))}
+        </section>
+      )}
 
       <div className="space-y-4">
         <p className="text-2xl">
