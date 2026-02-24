@@ -113,6 +113,7 @@
   },
   "confirm": {
     "page-title": "Application successfully submitted",
+    "your-eligibility": "Your eligibility",
     "app-code-is": "Your application code is:",
     "make-note": "Save this code, you'll need it to check the status of your application.",
     "keep-copy": "Print or save a copy of your application",
