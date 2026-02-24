@@ -6,7 +6,7 @@ import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationRenewalAdultState } from '~/.server/routes/helpers/protected-application-renewal-adult-route-helpers';
-import { clearProtectedApplicationState, getDeclaredChangeValueOrClientValue, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { clearProtectedApplicationState, getDeclaredChangeValueOrClientValue, getEligibilityStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -14,6 +14,7 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
+import { Eligibility } from '~/components/eligibility';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
 import { formatClientNumber, formatSubmissionApplicationCode } from '~/utils/application-code-utils';
@@ -192,6 +193,8 @@ export async function loader({ context: { appContainer, session }, params, reque
     submissionInfo: state.submissionInfo,
     surveyLink,
     userInfo,
+    eligibility: getEligibilityStatus(state.dentalInsurance.hasDentalInsurance, state.clientApplication.t4DentalIndicator),
+    displayEligibility: state.clientApplication.copayTierEarningRecord,
   };
 }
 
@@ -216,13 +219,24 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ProtectedApplicationFlowConfirm({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink } = loaderData;
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, eligibility, displayEligibility } = loaderData;
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('protected-application-renewal-adult:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose space-y-10">
+      {displayEligibility && (
+        <section className="space-y-6">
+          <h3 className="font-lato text-2xl font-bold">{t('confirm.your-eligibility')}</h3>
+          <DefinitionList border>
+            <DefinitionListItem term={`${userInfo.firstName} ${userInfo.lastName}`}>
+              <Eligibility type={eligibility} />
+            </DefinitionListItem>
+          </DefinitionList>
+        </section>
+      )}
+
       <div className="space-y-4">
         <p className="text-2xl">
           <strong>{t('confirm.app-code-is')}</strong>

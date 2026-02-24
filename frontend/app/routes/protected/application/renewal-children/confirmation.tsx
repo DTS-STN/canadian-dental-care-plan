@@ -165,6 +165,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     surveyLink,
     userInfo,
     children,
+    displayEligibility: state.clientApplication.copayTierEarningRecord,
   };
 }
 
@@ -189,7 +190,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ProtectedRenewChildrenConfirmation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo, surveyLink, children } = loaderData;
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo, surveyLink, children, displayEligibility } = loaderData;
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('protected-application-renewal-child:confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
@@ -198,16 +199,18 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
 
   return (
     <div className="max-w-prose space-y-10">
-      <section className="space-y-6">
-        <h3 className="font-lato text-2xl font-bold">{t('confirm.your-eligibility')}</h3>
-        {children.map((child) => (
-          <DefinitionList border key={child.id}>
-            <DefinitionListItem term={`${child.firstName} ${child.lastName}`}>
-              <Eligibility type={child.eligibility} />
-            </DefinitionListItem>
-          </DefinitionList>
-        ))}
-      </section>
+      {displayEligibility && (
+        <section className="space-y-6">
+          <h3 className="font-lato text-2xl font-bold">{t('confirm.your-eligibility')}</h3>
+          {children.map((child) => (
+            <DefinitionList border key={child.id}>
+              <DefinitionListItem term={`${child.firstName} ${child.lastName}`}>
+                <Eligibility type={child.eligibility} />
+              </DefinitionListItem>
+            </DefinitionList>
+          ))}
+        </section>
+      )}
 
       <div className="space-y-4">
         <p className="text-2xl">
