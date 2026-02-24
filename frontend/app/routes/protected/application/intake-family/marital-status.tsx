@@ -104,7 +104,7 @@ export default function ProtectedNewFamilyMaritalStatus({ loaderData, params }: 
               params={params}
               startIcon={sections.maritalStatus.completed ? faPenToSquare : faCirclePlus}
               size="lg"
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family: Edit marital click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Edit marital click"
             >
               {state.maritalStatus === undefined ? t('protected-application-intake-family:marital-status.add-marital-status') : t('protected-application-intake-family:marital-status.edit-marital-status')}
             </ButtonLink>
@@ -117,11 +117,11 @@ export default function ProtectedNewFamilyMaritalStatus({ loaderData, params }: 
             direction="next"
             routeId="protected/application/$id/intake-family/contact-information"
             params={params}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family: Continue click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Continue click"
           >
             {t('protected-application-intake-family:marital-status.contact-information')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family: Back click">
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Back click">
             {t('protected-application-intake-family:marital-status.type-of-application')}
           </NavigationButtonLink>
         </div>

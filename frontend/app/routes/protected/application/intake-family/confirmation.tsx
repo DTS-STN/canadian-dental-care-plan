@@ -460,7 +460,7 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
             </DialogClose>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
-              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family: Close confirm modal click">
+              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Close confirm modal click">
                 {t('protected-application-intake-family:confirm.modal.close-btn')}
               </Button>
             </fetcher.Form>

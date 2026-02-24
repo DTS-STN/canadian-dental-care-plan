@@ -138,7 +138,7 @@ export default function ProtectedNewFamilySubmit({ loaderData, params }: Route.C
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-intake-family:submit.review-your-application')}</h2>
             <p>{t('protected-application-intake-family:submit.please-review')}</p>
-            <ButtonLink variant="primary" routeId="protected/application/$id/intake-family/marital-status" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family: Action click">
+            <ButtonLink variant="primary" routeId="protected/application/$id/intake-family/marital-status" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Action click">
               {t('protected-application-intake-family:submit.review-application')}
             </ButtonLink>
           </section>
@@ -159,7 +159,7 @@ export default function ProtectedNewFamilySubmit({ loaderData, params }: Route.C
                 </InputCheckbox>
               </div>
               <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-                <NavigationButton loading={isSubmitting} variant="primary" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family: Submit click">
+                <NavigationButton loading={isSubmitting} variant="primary" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Submit click">
                   {t('protected-application-intake-family:submit.submit')}
                 </NavigationButton>
                 <NavigationButtonLink
@@ -168,7 +168,7 @@ export default function ProtectedNewFamilySubmit({ loaderData, params }: Route.C
                   direction="previous"
                   routeId="protected/application/$id/intake-family/childrens-application"
                   params={params}
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family: Back click"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Back click"
                 >
                   {t('protected-application-intake-family:submit.children-application')}
                 </NavigationButtonLink>

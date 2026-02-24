@@ -116,7 +116,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             params={params}
             startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus}
             size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry: Edit type of application click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit type of application click"
           >
             {defaultState.typeOfApplication === undefined ? t('protected-application:type-of-application.add-type-application') : t('protected-application:type-of-application.edit-type-application')}
           </ButtonLink>
@@ -159,7 +159,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             params={params}
             startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus}
             size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry: Edit personal information click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit personal information click"
           >
             {defaultState.personalInformation === undefined ? t('protected-application:type-of-application.add-personal-information') : t('protected-application:type-of-application.edit-personal-information')}
           </ButtonLink>
@@ -167,10 +167,10 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry: Continue click">
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Continue click">
           {t('protected-application:type-of-application.application')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/eligibility-requirements" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry: Back click">
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/eligibility-requirements" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Back click">
           {t('protected-application:type-of-application.before-you-start')}
         </NavigationButtonLink>
       </div>

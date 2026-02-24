@@ -120,7 +120,7 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
               params={params}
               startIcon={sections.phoneNumber.completed ? faPenToSquare : faCirclePlus}
               size="lg"
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult: Edit phone click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Edit phone click"
             >
               {sections.phoneNumber.completed ? t('protected-application-intake-adult:contact-information.edit-phone-number') : t('protected-application-intake-adult:contact-information.add-phone-number')}
             </ButtonLink>
@@ -171,7 +171,7 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
               params={params}
               startIcon={sections.address.completed ? faPenToSquare : faCirclePlus}
               size="lg"
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult: Edit address click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Edit address click"
             >
               {sections.address.completed ? t('protected-application-intake-adult:contact-information.edit-address') : t('protected-application-intake-adult:contact-information.add-address')}
             </ButtonLink>
@@ -204,7 +204,7 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
               params={params}
               startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus}
               size="lg"
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult: Edit comms click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Edit comms click"
             >
               {sections.communicationPreferences.completed ? t('protected-application-intake-adult:contact-information.edit-communication-preferences') : t('protected-application-intake-adult:contact-information.add-communication-preferences')}
             </ButtonLink>
@@ -218,7 +218,7 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
             direction="next"
             routeId="protected/application/$id/intake-adult/dental-insurance"
             params={params}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult: Continue click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Continue click"
           >
             {t('protected-application-intake-adult:contact-information.next-btn')}
           </NavigationButtonLink>
@@ -227,7 +227,7 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
             direction="previous"
             routeId="protected/application/$id/intake-adult/marital-status"
             params={params}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult: Back click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Back click"
           >
             {t('protected-application-intake-adult:contact-information.prev-btn')}
           </NavigationButtonLink>

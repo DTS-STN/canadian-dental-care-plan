@@ -131,11 +131,11 @@ export default function ProtectedNewAdultSubmit({ loaderData, params }: Route.Co
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-renewal-adult:submit.review-your-application')}</h2>
             <p>{t('protected-application-renewal-adult:submit.please-review')}</p>
             {shouldSkipMaritalStatusStep ? (
-              <ButtonLink variant="primary" routeId="protected/application/$id/renewal-adult/contact-information" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Action click">
+              <ButtonLink variant="primary" routeId="protected/application/$id/renewal-adult/contact-information" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Action click">
                 {t('protected-application-renewal-adult:submit.review-application')}
               </ButtonLink>
             ) : (
-              <ButtonLink variant="primary" routeId="protected/application/$id/renewal-adult/marital-status" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Action click">
+              <ButtonLink variant="primary" routeId="protected/application/$id/renewal-adult/marital-status" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Action click">
                 {t('protected-application-renewal-adult:submit.review-application')}
               </ButtonLink>
             )}
@@ -157,7 +157,7 @@ export default function ProtectedNewAdultSubmit({ loaderData, params }: Route.Co
                 </InputCheckbox>
               </div>
               <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-                <NavigationButton loading={isSubmitting} variant="primary" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Submit click">
+                <NavigationButton loading={isSubmitting} variant="primary" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Submit click">
                   {t('protected-application-renewal-adult:submit.submit')}
                 </NavigationButton>
                 <NavigationButtonLink
@@ -166,7 +166,7 @@ export default function ProtectedNewAdultSubmit({ loaderData, params }: Route.Co
                   direction="previous"
                   routeId="protected/application/$id/renewal-adult/dental-insurance"
                   params={params}
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Back click"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Back click"
                 >
                   {t('protected-application-renewal-adult:submit.dental-insurance')}
                 </NavigationButtonLink>

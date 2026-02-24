@@ -137,7 +137,7 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
               params={params}
               startIcon={sections.maritalStatus.completed ? faPenToSquare : faCirclePlus}
               size="lg"
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child: Edit marital click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit marital click"
             >
               {state.maritalStatus === undefined ? t('protected-application-intake-child:parent-or-guardian.add-marital-status') : t('protected-application-intake-child:parent-or-guardian.edit-marital-status')}
             </ButtonLink>
@@ -174,7 +174,7 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
               params={params}
               startIcon={sections.phoneNumber.completed ? faPenToSquare : faCirclePlus}
               size="lg"
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child: Edit phone click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit phone click"
             >
               {sections.phoneNumber.completed ? t('protected-application-intake-child:parent-or-guardian.edit-phone-number') : t('protected-application-intake-child:parent-or-guardian.add-phone-number')}
             </ButtonLink>
@@ -225,7 +225,7 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
               params={params}
               startIcon={sections.address.completed ? faPenToSquare : faCirclePlus}
               size="lg"
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child: Edit address click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit address click"
             >
               {sections.address.completed ? t('protected-application-intake-child:parent-or-guardian.edit-address') : t('protected-application-intake-child:parent-or-guardian.add-address')}
             </ButtonLink>
@@ -258,7 +258,7 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
               params={params}
               startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus}
               size="lg"
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child: Edit comms click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit comms click"
             >
               {sections.communicationPreferences.completed ? t('protected-application-intake-child:parent-or-guardian.edit-communication-preferences') : t('protected-application-intake-child:parent-or-guardian.add-communication-preferences')}
             </ButtonLink>
@@ -272,11 +272,11 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
             direction="next"
             routeId="protected/application/$id/intake-children/childrens-application"
             params={params}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child: Continue click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Continue click"
           >
             {t('protected-application-intake-child:parent-or-guardian.childrens-application')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child: Back click">
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Back click">
             {t('protected-application-intake-child:parent-or-guardian.type-of-application')}
           </NavigationButtonLink>
         </div>

@@ -138,7 +138,7 @@ export default function ProtectedRenewChildrenSubmit({ loaderData, params }: Rou
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-renewal-child:submit.review-your-application')}</h2>
             <p>{t('protected-application-renewal-child:submit.please-review')}</p>
-            <ButtonLink variant="primary" routeId="protected/application/$id/renewal-children/parent-or-guardian" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Action click">
+            <ButtonLink variant="primary" routeId="protected/application/$id/renewal-children/parent-or-guardian" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click">
               {t('protected-application-renewal-child:submit.review-application')}
             </ButtonLink>
           </section>
@@ -159,7 +159,7 @@ export default function ProtectedRenewChildrenSubmit({ loaderData, params }: Rou
                 </InputCheckbox>
               </div>
               <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-                <NavigationButton loading={isSubmitting} variant="primary" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Submit click">
+                <NavigationButton loading={isSubmitting} variant="primary" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Submit click">
                   {t('protected-application-renewal-child:submit.submit')}
                 </NavigationButton>
                 <NavigationButtonLink
@@ -168,7 +168,7 @@ export default function ProtectedRenewChildrenSubmit({ loaderData, params }: Rou
                   direction="previous"
                   routeId="protected/application/$id/renewal-children/childrens-application"
                   params={params}
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Back click"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Back click"
                 >
                   {t('protected-application-renewal-child:submit.childrens-application')}
                 </NavigationButtonLink>

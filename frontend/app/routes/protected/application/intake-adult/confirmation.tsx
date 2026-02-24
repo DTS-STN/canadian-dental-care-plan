@@ -374,7 +374,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
             </DialogClose>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
-              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult: Close confirm modal click">
+              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Close confirm modal click">
                 {t('protected-application-intake-adult:confirm.modal.close-btn')}
               </Button>
             </fetcher.Form>

@@ -259,7 +259,7 @@ export default function ProtectedRenewChildParentOrGuardian({ loaderData, params
                 params={params}
                 startIcon={sections.maritalStatus?.completed ? faPenToSquare : faCirclePlus}
                 size="lg"
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Edit marital click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Edit marital click"
               >
                 {state.maritalStatus === undefined ? t('protected-application-renewal-child:parent-or-guardian.add-marital-status') : t('protected-application-renewal-child:parent-or-guardian.edit-marital-status')}
               </ButtonLink>
@@ -301,11 +301,11 @@ export default function ProtectedRenewChildParentOrGuardian({ loaderData, params
             direction="next"
             routeId="protected/application/$id/renewal-children/childrens-application"
             params={params}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Continue click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Continue click"
           >
             {t('protected-application-renewal-child:parent-or-guardian.next-btn')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Back click">
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Back click">
             {t('protected-application-renewal-child:parent-or-guardian.prev-btn')}
           </NavigationButtonLink>
         </div>
@@ -398,7 +398,7 @@ function PhoneNumberCardFooter(): JSX.Element {
           params={params}
           startIcon={faPenToSquare}
           size="lg"
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Edit phone click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Edit phone click"
         >
           {t('protected-application-renewal-child:parent-or-guardian.edit-phone-number')}
         </ButtonLink>
@@ -418,7 +418,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             params={params}
             startIcon={faPenToSquare}
             size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Update phone click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Update phone click"
           >
             {t('protected-application-renewal-child:parent-or-guardian.update-phone-number')}
           </ButtonLink>
@@ -432,7 +432,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             className="p-0 pt-5"
             startIcon={faCircleCheck}
             size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Complete phone click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Complete phone click"
           >
             {t('protected-application-renewal-child:parent-or-guardian.phone-number-unchanged')}
           </Button>
@@ -451,7 +451,7 @@ function PhoneNumberCardFooter(): JSX.Element {
         params={params}
         startIcon={faCirclePlus}
         size="lg"
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Add phone click"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Add phone click"
       >
         {t('protected-application-renewal-child:parent-or-guardian.add-phone-number')}
       </ButtonLink>
@@ -587,7 +587,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
           params={params}
           startIcon={faPenToSquare}
           size="lg"
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Edit address click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Edit address click"
         >
           {t('protected-application-renewal-child:parent-or-guardian.edit-address')}
         </ButtonLink>
@@ -607,7 +607,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             params={params}
             startIcon={faPenToSquare}
             size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Update address click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Update address click"
           >
             {t('protected-application-renewal-child:parent-or-guardian.update-address')}
           </ButtonLink>
@@ -621,7 +621,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             value={FORM_ACTION.ADDRESS_NOT_CHANGED}
             startIcon={faCircleCheck}
             size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Complete address click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Complete address click"
           >
             {t('protected-application-renewal-child:parent-or-guardian.address-unchanged')}
           </Button>
@@ -640,7 +640,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
         params={params}
         startIcon={faCirclePlus}
         size="lg"
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Add address click"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Add address click"
       >
         {t('protected-application-renewal-child:parent-or-guardian.add-address')}
       </ButtonLink>
@@ -739,7 +739,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
           params={params}
           startIcon={faPenToSquare}
           size="lg"
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Edit comms click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Edit comms click"
         >
           {t('protected-application-renewal-child:parent-or-guardian.edit-communication-preferences')}
         </ButtonLink>
@@ -759,7 +759,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             params={params}
             startIcon={faPenToSquare}
             size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Update comms click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Update comms click"
           >
             {t('protected-application-renewal-child:parent-or-guardian.update-communication-preferences')}
           </ButtonLink>
@@ -773,7 +773,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             className="p-0 pt-5"
             startIcon={faCircleCheck}
             size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Complete comms click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Complete comms click"
           >
             {t('protected-application-renewal-child:parent-or-guardian.communication-preferences-unchanged')}
           </Button>
@@ -792,7 +792,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
         params={params}
         startIcon={faCirclePlus}
         size="lg"
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Add comms click"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Add comms click"
       >
         {t('protected-application-renewal-child:parent-or-guardian.add-communication-preferences')}
       </ButtonLink>

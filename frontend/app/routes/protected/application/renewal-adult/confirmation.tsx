@@ -462,7 +462,7 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
             </DialogClose>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
-              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Close confirm modal click">
+              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Close confirm modal click">
                 {t('protected-application-renewal-adult:confirm.modal.close-btn')}
               </Button>
             </fetcher.Form>

@@ -423,7 +423,7 @@ export default function ProtectedNewChildrenConfirmation({ loaderData, params }:
             </DialogClose>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
-              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child: Close confirm modal click">
+              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Close confirm modal click">
                 {t('protected-application-intake-child:confirm.modal.close-btn')}
               </Button>
             </fetcher.Form>

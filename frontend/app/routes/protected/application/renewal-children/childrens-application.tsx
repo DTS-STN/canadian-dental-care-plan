@@ -259,7 +259,7 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
             direction="next"
             routeId="protected/application/$id/renewal-children/submit"
             params={params}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Continue click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Continue click"
           >
             {t('protected-application-renewal-child:childrens-application.submit-btn')}
           </NavigationButtonLink>
@@ -268,7 +268,7 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
             direction="previous"
             routeId="protected/application/$id/renewal-children/parent-or-guardian"
             params={params}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Back click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Back click"
           >
             {t('protected-application-renewal-child:childrens-application.back-btn')}
           </NavigationButtonLink>
@@ -330,7 +330,7 @@ function ChildSinCardFooter({ child, params }: { child: Route.ComponentProps['lo
           params={{ ...params, childId: child.id }}
           startIcon={faPenToSquare}
           size="lg"
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Action click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
         >
           {t('protected-application-renewal-child:childrens-application.edit-sin')}
         </ButtonLink>
@@ -348,7 +348,7 @@ function ChildSinCardFooter({ child, params }: { child: Route.ComponentProps['lo
         params={{ ...params, childId: child.id }}
         startIcon={faCirclePlus}
         size="lg"
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Action click"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
       >
         {t('protected-application-renewal-child:childrens-application.add-sin')}
       </ButtonLink>
@@ -408,7 +408,7 @@ function ChildParentGuardianCardFooter({ child, sectionCompleted, params }: { ch
           params={{ ...params, childId: child.id }}
           startIcon={faPenToSquare}
           size="lg"
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Action click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
         >
           {t('protected-application-renewal-child:childrens-application.edit-parent-guardian')}
         </ButtonLink>
@@ -426,7 +426,7 @@ function ChildParentGuardianCardFooter({ child, sectionCompleted, params }: { ch
         params={{ ...params, childId: child.id }}
         startIcon={faCirclePlus}
         size="lg"
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Action click"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
       >
         {t('protected-application-renewal-child:childrens-application.add-parent-guardian')}
       </ButtonLink>
@@ -494,7 +494,7 @@ function ChildDentalInsuranceCardFooter({
           params={{ ...params, childId }}
           startIcon={faPenToSquare}
           size="lg"
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Action click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
         >
           {t('protected-application-renewal-child:childrens-application.edit-child-dental-insurance')}
         </ButtonLink>
@@ -512,7 +512,7 @@ function ChildDentalInsuranceCardFooter({
         params={{ ...params, childId }}
         startIcon={faCirclePlus}
         size="lg"
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Action click"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
       >
         {t('protected-application-renewal-child:childrens-application.add-answer')}
       </ButtonLink>
@@ -624,7 +624,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
           params={{ ...params, childId: child.id }}
           startIcon={faPenToSquare}
           size="lg"
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Action click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
         >
           {t('protected-application-renewal-child:childrens-application.edit-child-dental-benefits')}
         </ButtonLink>
@@ -645,7 +645,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
             params={{ ...params, childId: child.id }}
             startIcon={faPenToSquare}
             size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Action click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
           >
             {t('protected-application-renewal-child:childrens-application.update-dental-benefits')}
           </ButtonLink>
@@ -663,7 +663,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
               className="p-0 pt-5"
               startIcon={faCircleCheck}
               size="lg"
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Action click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
             >
               {t('protected-application-renewal-child:childrens-application.benefits-not-changed')}
             </Button>
@@ -684,7 +684,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
         params={{ ...params, childId: child.id }}
         startIcon={faCirclePlus}
         size="lg"
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child: Action click"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
       >
         {t('protected-application-renewal-child:childrens-application.add-child-dental-benefits')}
       </ButtonLink>

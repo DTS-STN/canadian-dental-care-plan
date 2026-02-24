@@ -112,7 +112,7 @@ export default function ProtectedTypeOfApplication({ loaderData, params }: Route
             params={params}
             startIcon={defaultState.applicantClientIdsToRenew ? faPenToSquare : faCirclePlus}
             size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry: Edit type of application click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit type of application click"
           >
             {defaultState.applicantClientIdsToRenew === undefined ? t('protected-application:renewal-selection.add-type-application') : t('protected-application:renewal-selection.edit-type-application')}
           </ButtonLink>
@@ -120,10 +120,10 @@ export default function ProtectedTypeOfApplication({ loaderData, params }: Route
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry: Continue click">
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Continue click">
           {t('protected-application:renewal-selection.application')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/eligibility-requirements" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry: Back click">
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/eligibility-requirements" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Back click">
           {t('protected-application:renewal-selection.before-you-start')}
         </NavigationButtonLink>
       </div>
