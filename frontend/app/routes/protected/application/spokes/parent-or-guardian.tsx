@@ -85,8 +85,8 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
   }
 
   return (
-    <>
-      <div className="mb-8 max-w-prose space-y-4">
+    <div className="max-w-prose">
+      <div className="mb-8 space-y-4">
         <p className="mb-4">{t('protected-application-spokes:parent-or-guardian.unable-to-apply')}</p>
         <p>
           <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:parent-or-guardian.apply-for-yourself" components={{ noWrap }} />
@@ -109,6 +109,6 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
           {t('protected-application-spokes:parent-or-guardian.exit-btn')}
         </LoadingButton>
       </fetcher.Form>
-    </>
+    </div>
   );
 }

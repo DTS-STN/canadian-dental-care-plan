@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const childNumber = t('protected-application-spokes:children.child-number', { childNumber: childState.childNumber });
-  const childName = childState.isNew ? childNumber : (childState.information?.firstName ?? childNumber);
+  const childName = childState.information?.firstName ?? childNumber;
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.parent-guardian.page-title') }) };
 
@@ -113,37 +113,39 @@ export default function ParentGuardian({ loaderData, params }: Route.ComponentPr
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
 
   return (
-    <fetcher.Form method="post" noValidate>
-      <div className="mb-8 space-y-4">
-        <InputRadios
-          id="is-parent-radios"
-          name="isParent"
-          legend={t('protected-application-spokes:children.parent-guardian.parent-legend', { childName })}
-          options={[
-            { value: YES_NO_OPTION.yes, children: t('protected-application-spokes:children.parent-guardian.radio-options.yes'), defaultChecked: defaultState?.isParent === true },
-            { value: YES_NO_OPTION.no, children: t('protected-application-spokes:children.parent-guardian.radio-options.no'), defaultChecked: defaultState?.isParent === false },
-          ]}
-          errorMessage={errors?.isParent}
-          required
-        />
-      </div>
-      <div className="flex flex-wrap items-center gap-3">
-        <CsrfTokenInput />
-        <ButtonLink
-          id="back-button"
-          variant="secondary"
-          routeId={`protected/application/$id/${applicationFlow}/childrens-application`}
-          params={params}
-          disabled={isSubmitting}
-          startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child parent or guardian needs to apply click"
-        >
-          {t('protected-application-spokes:children.parent-guardian.back-btn')}
-        </ButtonLink>
-        <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Child Information click">
-          {t('protected-application-spokes:children.parent-guardian.save-btn')}
-        </LoadingButton>
-      </div>
-    </fetcher.Form>
+    <div className="max-w-prose">
+      <fetcher.Form method="post" noValidate>
+        <div className="mb-8 space-y-4">
+          <InputRadios
+            id="is-parent-radios"
+            name="isParent"
+            legend={t('protected-application-spokes:children.parent-guardian.parent-legend', { childName })}
+            options={[
+              { value: YES_NO_OPTION.yes, children: t('protected-application-spokes:children.parent-guardian.radio-options.yes'), defaultChecked: defaultState?.isParent === true },
+              { value: YES_NO_OPTION.no, children: t('protected-application-spokes:children.parent-guardian.radio-options.no'), defaultChecked: defaultState?.isParent === false },
+            ]}
+            errorMessage={errors?.isParent}
+            required
+          />
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <CsrfTokenInput />
+          <ButtonLink
+            id="back-button"
+            variant="secondary"
+            routeId={`protected/application/$id/${applicationFlow}/childrens-application`}
+            params={params}
+            disabled={isSubmitting}
+            startIcon={faChevronLeft}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child parent or guardian needs to apply click"
+          >
+            {t('protected-application-spokes:children.parent-guardian.back-btn')}
+          </ButtonLink>
+          <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Child Information click">
+            {t('protected-application-spokes:children.parent-guardian.save-btn')}
+          </LoadingButton>
+        </div>
+      </fetcher.Form>
+    </div>
   );
 }

@@ -182,96 +182,94 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
   const { ErrorAlert } = useErrorAlert(fetcherStatus === 'client-not-found');
 
   return (
-    <>
-      <div className="max-w-prose">
-        <ErrorAlert>
-          <h2 className="mb-2 font-bold">{t('protected-application-spokes:personal-information.error-message.alert.heading')}</h2>
-          <p className="mb-2">
-            <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:personal-information.error-message.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
-          </p>
-          <p className="mb-2">
-            <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:personal-information.error-message.alert.applyDate" values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
-          </p>
-        </ErrorAlert>
-        <ErrorSummaryProvider actionData={fetcher.data}>
-          <ErrorSummary />
-          <p className="mb-4">{t('protected-application-spokes:personal-information.form-instructions-sin')}</p>
-          <p className="mb-6">{t('protected-application-spokes:personal-information.form-instructions-info')}</p>
-          <p className="mb-4 italic">{t('protected-application:required-label')}</p>
-          <fetcher.Form method="post" noValidate>
-            <CsrfTokenInput />
-            <div className="mb-8 space-y-6">
-              <div className="grid items-end gap-6 md:grid-cols-2">
-                <InputSanitizeField
-                  id="first-name"
-                  name="firstName"
-                  label={t('protected-application-spokes:personal-information.first-name')}
-                  className="w-full"
-                  maxLength={100}
-                  aria-description={t('protected-application-spokes:personal-information.name-instructions')}
-                  autoComplete="given-name"
-                  defaultValue={state?.firstName ?? ''}
-                  errorMessage={errors?.firstName}
-                  required
-                />
-                <InputSanitizeField
-                  id="last-name"
-                  name="lastName"
-                  label={t('protected-application-spokes:personal-information.last-name')}
-                  className="w-full"
-                  maxLength={100}
-                  aria-description={t('protected-application-spokes:personal-information.name-instructions')}
-                  autoComplete="family-name"
-                  defaultValue={state?.lastName ?? ''}
-                  errorMessage={errors?.lastName}
-                  required
-                />
-              </div>
-              <Collapsible id="name-instructions" summary={t('protected-application-spokes:personal-information.single-legal-name')}>
-                <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:personal-information.name-instructions" />
-                </p>
-              </Collapsible>
-              <DatePickerField
-                id="date-of-birth"
-                names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
-                defaultValue={state?.dateOfBirth ?? ''}
-                legend={t('protected-application-spokes:personal-information.dob')}
-                errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
+    <div className="max-w-prose">
+      <ErrorAlert>
+        <h2 className="mb-2 font-bold">{t('protected-application-spokes:personal-information.error-message.alert.heading')}</h2>
+        <p className="mb-2">
+          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:personal-information.error-message.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+        </p>
+        <p className="mb-2">
+          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:personal-information.error-message.alert.applyDate" values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
+        </p>
+      </ErrorAlert>
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
+        <p className="mb-4">{t('protected-application-spokes:personal-information.form-instructions-sin')}</p>
+        <p className="mb-6">{t('protected-application-spokes:personal-information.form-instructions-info')}</p>
+        <p className="mb-4 italic">{t('protected-application:required-label')}</p>
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <div className="mb-8 space-y-6">
+            <div className="grid items-end gap-6 md:grid-cols-2">
+              <InputSanitizeField
+                id="first-name"
+                name="firstName"
+                label={t('protected-application-spokes:personal-information.first-name')}
+                className="w-full"
+                maxLength={100}
+                aria-description={t('protected-application-spokes:personal-information.name-instructions')}
+                autoComplete="given-name"
+                defaultValue={state?.firstName ?? ''}
+                errorMessage={errors?.firstName}
                 required
               />
-              <InputPatternField
-                id="social-insurance-number"
-                name="socialInsuranceNumber"
-                format={sinInputPatternFormat}
-                label={t('protected-application-spokes:personal-information.sin')}
-                inputMode="numeric"
-                helpMessagePrimary={t('protected-application-spokes:personal-information.help-message.sin')}
-                helpMessagePrimaryClassName="text-black"
-                defaultValue={state?.socialInsuranceNumber ?? ''}
-                errorMessage={errors?.socialInsuranceNumber}
+              <InputSanitizeField
+                id="last-name"
+                name="lastName"
+                label={t('protected-application-spokes:personal-information.last-name')}
+                className="w-full"
+                maxLength={100}
+                aria-description={t('protected-application-spokes:personal-information.name-instructions')}
+                autoComplete="family-name"
+                defaultValue={state?.lastName ?? ''}
+                errorMessage={errors?.lastName}
                 required
               />
             </div>
-            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Applicant information click">
-                {t('protected-application-spokes:personal-information.save-btn')}
-              </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                variant="secondary"
-                routeId={`protected/application/$id/type-of-application`}
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Applicant information click"
-              >
-                {t('protected-application-spokes:personal-information.back-btn')}
-              </ButtonLink>
-            </div>
-          </fetcher.Form>
-        </ErrorSummaryProvider>
-      </div>
-    </>
+            <Collapsible id="name-instructions" summary={t('protected-application-spokes:personal-information.single-legal-name')}>
+              <p>
+                <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:personal-information.name-instructions" />
+              </p>
+            </Collapsible>
+            <DatePickerField
+              id="date-of-birth"
+              names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
+              defaultValue={state?.dateOfBirth ?? ''}
+              legend={t('protected-application-spokes:personal-information.dob')}
+              errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
+              required
+            />
+            <InputPatternField
+              id="social-insurance-number"
+              name="socialInsuranceNumber"
+              format={sinInputPatternFormat}
+              label={t('protected-application-spokes:personal-information.sin')}
+              inputMode="numeric"
+              helpMessagePrimary={t('protected-application-spokes:personal-information.help-message.sin')}
+              helpMessagePrimaryClassName="text-black"
+              defaultValue={state?.socialInsuranceNumber ?? ''}
+              errorMessage={errors?.socialInsuranceNumber}
+              required
+            />
+          </div>
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Applicant information click">
+              {t('protected-application-spokes:personal-information.save-btn')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              variant="secondary"
+              routeId={`protected/application/$id/type-of-application`}
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Applicant information click"
+            >
+              {t('protected-application-spokes:personal-information.back-btn')}
+            </ButtonLink>
+          </div>
+        </fetcher.Form>
+      </ErrorSummaryProvider>
+    </div>
   );
 }
