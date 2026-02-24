@@ -313,7 +313,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                   <CardFooter className="divide-y border-t bg-zinc-100 px-0">
                     <div className="w-full px-6">
                       <ButtonLink
-                        id="edit-button-update-access"
+                        id={`edit-button-update-access-${child.id}`}
                         variant="link"
                         className="p-0 pb-5"
                         routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits"
@@ -330,7 +330,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                       <input type="hidden" name="childId" value={child.id} />
                       <div className="w-full px-6">
                         <Button
-                          id="edit-button-not-changed"
+                          id={`edit-button-not-changed-${child.id}`}
                           name="_action"
                           value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
                           disabled={isSubmitting}
@@ -351,7 +351,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                 <CsrfTokenInput />
                 <input type="hidden" name="childId" value={child.id} />
                 <Button
-                  id="remove-child"
+                  id={`remove-child-${child.id}`}
                   className="my-5"
                   name="_action"
                   value={FORM_ACTION.remove}
