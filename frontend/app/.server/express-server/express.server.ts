@@ -70,19 +70,19 @@ app.use(await routeRequestCounter(viteDevServer));
 log.info('  ✓ registering react router request handler');
 
 /**
- * Redirect Protected Renewals
+ * Redirect Protected Apply
  *
- * Temporarily redirects all HTTP requests for protected renewal pages (English and French)
- * to the corresponding "apply" pages, until the flows are merged.
+ * Redirects all HTTP requests for protected apply pages (English and French) to the corresponding "application" pages.
  *
- * TODO: Remove this redirect on the next major release when the renewal and apply functionalities are merged.
+ * TODO: Remove this redirect after the legacy "/:lang/protected/apply" and "/:lang/protege/demander" URLs have been deprecated
+ * and unused in production for at least 6 months.
  */
-app.all(['/:lang/protected/renew{/*splat}', '/:lang/protege/renouveler{/*splat}'], (req, res) => {
+app.all(['/:lang/protected/apply{/*splat}', '/:lang/protege/demander{/*splat}'], (req, res) => {
   const { lang } = req.params;
   const isFrench = lang === 'fr';
-  const basePath = isFrench ? 'protege/demander' : 'protected/apply';
+  const basePath = isFrench ? 'protege/demande' : 'protected/application';
   const redirectUrl = `/${lang}/${basePath}`;
-  log.info('Redirecting protected renewal. request: [%s], redirectUrl: [%s]', req.originalUrl, redirectUrl);
+  log.info('Redirecting protected apply. request: [%s], redirectUrl: [%s]', req.originalUrl, redirectUrl);
   res.redirect(302, redirectUrl);
 });
 
