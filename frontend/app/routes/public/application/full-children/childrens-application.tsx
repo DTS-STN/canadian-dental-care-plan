@@ -288,7 +288,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                 <CsrfTokenInput />
                 <input type="hidden" name="childId" value={child.id} />
                 <Button
-                  id="remove-child"
+                  id={`remove-child-${child.id}`}
                   className="my-5"
                   name="_action"
                   value={FORM_ACTION.remove}
