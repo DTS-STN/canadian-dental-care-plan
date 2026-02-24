@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
@@ -10,8 +12,8 @@ import type { Route } from './+types/childrens-application';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationRenewalFamilyState } from '~/.server/routes/helpers/protected-application-renewal-family-route-helpers';
-import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildInformationSectionCompleted } from '~/.server/routes/helpers/protected-application-renewal-section-checks';
-import { saveProtectedApplicationState, shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildParentGuardianSectionCompleted } from '~/.server/routes/helpers/protected-application-renewal-section-checks';
+import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -19,16 +21,26 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
-import { useCurrentLanguage, useFetcherSubmissionState } from '~/hooks';
+import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/protected/application/renewal-family/progress-stepper';
-import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
+
+type ClientDentalBenefits = {
+  federalBenefit?: {
+    access?: boolean;
+    benefit?: string;
+  };
+  provTerrBenefit?: {
+    access?: boolean;
+    benefit?: string;
+  };
+};
 
 const FORM_ACTION = { DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed' } as const;
 
@@ -64,8 +76,40 @@ export async function loader({ context: { appContainer, session }, request, para
         ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
         : undefined;
 
+      const immutableChild = state.clientApplication.children.find((c) => c.information.clientNumber === child.information?.memberId);
+      const clientDentalBenefits = (await immutableChild?.dentalBenefits.reduce(async (benefitsPromise, id) => {
+        const benefits = await benefitsPromise;
+
+        const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(id, locale);
+        if (federalProgram.isSome()) {
+          return {
+            ...benefits,
+            federalBenefit: {
+              access: true,
+              benefit: federalProgram.unwrap().name,
+            },
+          };
+        }
+
+        const provincialProgram = await provincialGovernmentInsurancePlanService.findLocalizedProvincialGovernmentInsurancePlanById(id, locale);
+        if (provincialProgram.isSome()) {
+          return {
+            ...benefits,
+            provTerrBenefit: {
+              access: true,
+              benefit: provincialProgram.unwrap().name,
+            },
+          };
+        }
+
+        return benefits;
+      }, Promise.resolve({}))) as ClientDentalBenefits;
+
       return {
         ...child,
+        clientApplication: {
+          clientDentalBenefits: clientDentalBenefits.federalBenefit?.access || clientDentalBenefits.provTerrBenefit?.access ? clientDentalBenefits : undefined,
+        },
         dentalBenefits: child.dentalBenefits
           ? {
               hasChanged: child.dentalBenefits.hasChanged,
@@ -85,20 +129,25 @@ export async function loader({ context: { appContainer, session }, request, para
 
   return {
     state: {
-      children: children,
+      children,
     },
-    shouldSkipMaritalStatusStep: shouldSkipMaritalStatus(state),
+    meta,
     childrenSections: Object.fromEntries(
       state.children.map((child) => [
         child.id,
         {
-          childInformation: { completed: isChildInformationSectionCompleted(child) },
-          dentalInsurance: { completed: isChildDentalInsuranceSectionCompleted(child) },
-          dentalBenefits: { completed: isChildDentalBenefitsSectionCompleted(child) },
+          parentGuardian: {
+            completed: isChildParentGuardianSectionCompleted(child),
+          },
+          dentalInsurance: {
+            completed: isChildDentalInsuranceSectionCompleted(child),
+          },
+          dentalBenefits: {
+            completed: isChildDentalBenefitsSectionCompleted(child),
+          },
         },
       ]),
     ),
-    meta,
   };
 }
 
@@ -115,8 +164,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (formAction === FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED) {
+  if (formAction === (FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED as string)) {
     const childId = formData.get('childId');
     saveProtectedApplicationState({
       params,
@@ -139,181 +187,66 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedRenewFamilyChildrensApplication({ loaderData, params }: Route.ComponentProps) {
-  const { currentLanguage } = useCurrentLanguage();
-  const { state, childrenSections, shouldSkipMaritalStatusStep } = loaderData;
+  const { state, childrenSections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
-  const fetcher = useFetcher<typeof action>();
-  const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   const allChildrenCompleted = Object.keys(childrenSections).length > 0 && Object.values(childrenSections).every((sections) => Object.values(sections).every((section) => section.completed));
 
   return (
     <>
-      <ProgressStepper activeStep="childrens-application" excludeMaritalStatus={shouldSkipMaritalStatusStep} className="mb-8" />
+      <ProgressStepper activeStep="childrens-application" className="mb-8" />
       <div className="max-w-prose space-y-8">
-        {state.children.map((child, index) => {
-          const childName = `${child.information?.firstName} ${child.information?.lastName}`;
-          const dateOfBirth = child.information?.dateOfBirth ? toLocaleDateString(parseDateString(child.information.dateOfBirth), currentLanguage) : '';
+        <div className="space-y-4">
+          <p>{t('protected-application:complete-all-sections')}</p>
+          <p>{t('protected-application:confirm-information')}</p>
+        </div>
 
+        {state.children.map((child) => {
           const sections = childrenSections[child.id];
           invariant(sections, `Expected child sections to be defined for child ${child.id}`);
           const completedSectionsCount = Object.values(sections).filter((section) => section.completed).length;
 
           return (
             <div key={child.id}>
-              <h2 className="font-lato mb-4 text-2xl font-bold">{t('protected-application-renewal-family:childrens-application.child-title', { childNumber: index + 1 })}</h2>
-              <div className="space-y-4">
-                <p>{t('protected-application:complete-all-sections')}</p>
-                <p>{t('common:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
-              </div>
-              <Card className="my-2">
+              <h2 className="font-lato mb-4 text-2xl font-bold">{`${child.information?.firstName} ${child.information?.lastName}`}</h2>
+              <p>{t('common:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
+
+              <Card className="my-4">
                 <CardHeader>
-                  <CardTitle>{t('protected-application-renewal-family:childrens-application.child-information-card-title', { childNumber: index + 1 })}</CardTitle>
-                  <CardAction>{sections.childInformation.completed && <StatusTag status="complete" />}</CardAction>
+                  <CardTitle>{t('protected-application-renewal-family:childrens-application.sin-card-title')}</CardTitle>
+                  <CardAction>
+                    <StatusTag status="optional" />
+                  </CardAction>
                 </CardHeader>
-                <CardContent>
-                  {child.information === undefined ? (
-                    <p>{t('protected-application-renewal-family:childrens-application.child-information-indicate-status')}</p>
-                  ) : (
-                    <DefinitionList layout="single-column">
-                      <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.member-id-title')}>
-                        <p>{child.information.memberId}</p>
-                      </DefinitionListItem>
-                      <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.full-name-title')}>
-                        <p>{childName}</p>
-                      </DefinitionListItem>
-                      <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.dob-title')}>
-                        <p>{dateOfBirth}</p>
-                      </DefinitionListItem>
-                      <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.sin-title')}>
-                        <p>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</p>
-                      </DefinitionListItem>
-                      <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.parent-guardian-title')}>
-                        <p>{child.information.isParent ? t('protected-application-renewal-family:childrens-application.yes') : t('protected-application-renewal-family:childrens-application.no')}</p>
-                      </DefinitionListItem>
-                    </DefinitionList>
-                  )}
-                </CardContent>
-                <CardFooter className="border-t bg-zinc-100">
-                  <ButtonLink
-                    id="edit-info-button"
-                    variant="link"
-                    className="p-0"
-                    routeId="protected/application/$id/children/$childId/information"
-                    params={{ ...params, childId: child.id }}
-                    startIcon={sections.childInformation.completed ? faPenToSquare : faCirclePlus}
-                    size="lg"
-                  >
-                    {child.information === undefined
-                      ? t('protected-application-renewal-family:childrens-application.add-child-information')
-                      : t('protected-application-renewal-family:childrens-application.edit-child-information', { childNumber: index + 1 })}
-                  </ButtonLink>
-                </CardFooter>
+                <ChildSinCardContent child={child} />
+                <ChildSinCardFooter child={child} params={params} sectionCompleted={true} />
               </Card>
 
-              <Card className="my-2">
+              <Card className="my-4">
+                <CardHeader>
+                  <CardTitle>{t('protected-application-renewal-family:childrens-application.parent-guardian-card-title')}</CardTitle>
+                  <CardAction>{sections.parentGuardian.completed && <StatusTag status="complete" />}</CardAction>
+                </CardHeader>
+                <ChildParentGuardianCardContent child={child} />
+                <ChildParentGuardianCardFooter child={child} sectionCompleted={sections.parentGuardian.completed} params={params} />
+              </Card>
+
+              <Card className="my-4">
                 <CardHeader>
                   <CardTitle>{t('protected-application-renewal-family:childrens-application.child-dental-insurance-card-title')}</CardTitle>
                   <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
-                <CardContent>
-                  {child.dentalInsurance === undefined ? (
-                    <p>{t('protected-application-renewal-family:childrens-application.child-dental-insurance-indicate-status')}</p>
-                  ) : (
-                    <DefinitionList layout="single-column">
-                      <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.dental-insurance-title')}>
-                        <p>{child.dentalInsurance.hasDentalInsurance ? t('protected-application-renewal-family:childrens-application.dental-insurance-yes') : t('protected-application-renewal-family:childrens-application.dental-insurance-no')}</p>
-                      </DefinitionListItem>
-                    </DefinitionList>
-                  )}
-                </CardContent>
-                <CardFooter className="border-t bg-zinc-100">
-                  <ButtonLink
-                    id="edit-insurance-button"
-                    variant="link"
-                    className="p-0"
-                    routeId="protected/application/$id/children/$childId/dental-insurance"
-                    params={{ ...params, childId: child.id }}
-                    startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus}
-                    size="lg"
-                  >
-                    {child.dentalInsurance === undefined ? t('protected-application-renewal-family:childrens-application.add-answer') : t('protected-application-renewal-family:childrens-application.edit-child-dental-insurance')}
-                  </ButtonLink>
-                </CardFooter>
+                <ChildDentalInsuranceCardContent child={child} />
+                <ChildDentalInsuranceCardFooter childId={child.id} dentalInsurance={child.dentalInsurance} sectionCompleted={sections.dentalInsurance.completed} params={params} />
               </Card>
 
-              <Card className="my-2">
+              <Card className="my-4">
                 <CardHeader>
                   <CardTitle>{t('protected-application-renewal-family:childrens-application.child-dental-benefits-card-title')}</CardTitle>
                   <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
-                <CardContent>
-                  {child.dentalBenefits === undefined ? (
-                    <p>{t('protected-application-renewal-family:childrens-application.child-dental-benefits-indicate-status')}</p>
-                  ) : (
-                    <DefinitionList layout="single-column">
-                      <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.dental-benefits-title')}>
-                        {child.dentalBenefits.hasChanged ? (
-                          <>
-                            {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
-                              <div className="space-y-3">
-                                <p>{t('protected-application-renewal-family:childrens-application.dental-benefits-yes')}</p>
-                                <ul className="list-disc space-y-1 pl-7">
-                                  {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
-                                  {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
-                                </ul>
-                              </div>
-                            ) : (
-                              <p>{t('protected-application-renewal-family:childrens-application.dental-benefits-no')}</p>
-                            )}
-                          </>
-                        ) : (
-                          <p>{t('protected-application-renewal-family:childrens-application.no-change')}</p>
-                        )}
-                      </DefinitionListItem>
-                    </DefinitionList>
-                  )}
-                </CardContent>
-                {child.dentalBenefits ? (
-                  <CardFooter className="border-t bg-zinc-100">
-                    <ButtonLink
-                      id="edit-button-government-benefits"
-                      variant="link"
-                      className="p-0"
-                      routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
-                      params={{ ...params, childId: child.id }}
-                      startIcon={sections.dentalBenefits.completed ? faPenToSquare : faCirclePlus}
-                      size="lg"
-                    >
-                      {t('protected-application-renewal-family:childrens-application.edit-child-dental-benefits')}
-                    </ButtonLink>
-                  </CardFooter>
-                ) : (
-                  <CardFooter className="divide-y border-t bg-zinc-100 px-0">
-                    <div className="w-full px-6">
-                      <ButtonLink
-                        id="edit-button-update-access"
-                        variant="link"
-                        className="p-0 pb-5"
-                        routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
-                        params={{ ...params, childId: child.id }}
-                        startIcon={faPenToSquare}
-                        size="lg"
-                      >
-                        {t('protected-application-renewal-family:childrens-application.update-dental-benefits')}
-                      </ButtonLink>
-                    </div>
-                    <fetcher.Form method="post" noValidate>
-                      <CsrfTokenInput />
-                      <input type="hidden" name="childId" value={child.id} />
-                      <div className="w-full px-6">
-                        <Button id="edit-button-not-changed" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} disabled={isSubmitting} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
-                          {t('protected-application-renewal-family:childrens-application.benefits-not-changed')}
-                        </Button>
-                      </div>
-                    </fetcher.Form>
-                  </CardFooter>
-                )}
+                <ChildDentalBenefitsCardContent child={child} />
+                <ChildDentalBenefitsCardFooter child={child} sectionCompleted={sections.dentalBenefits.completed} params={params} />
               </Card>
             </div>
           );
@@ -329,5 +262,352 @@ export default function ProtectedRenewFamilyChildrensApplication({ loaderData, p
         </div>
       </div>
     </>
+  );
+}
+
+/**
+ * This component determines what to show in the SIN card content. The logic is as follows:
+ *
+ * - If the user has entered a SIN (child.information.socialInsuranceNumber is defined), show the formatted SIN.
+ *
+ * - If there is no SIN at all, show the help text.
+ */
+function ChildSinCardContent({ child }: { child: Route.ComponentProps['loaderData']['state']['children'][0] }): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+
+  // User-entered SIN takes precedence
+  if (child.information?.socialInsuranceNumber) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.sin-title')}>
+            <p>{formatSin(child.information.socialInsuranceNumber)}</p>
+          </DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  // No SIN at all
+  return (
+    <CardContent>
+      <p>{t('protected-application-renewal-family:childrens-application.sin-help')}</p>
+    </CardContent>
+  );
+}
+
+/**
+ * This component determines what to show in the SIN card footer. The logic is as follows:
+ *
+ * - If the user has entered a SIN OR there is a client SIN OR section is completed, show the "Edit" button.
+ *
+ * - If there is no SIN at all, show the "Add" button.
+ */
+function ChildSinCardFooter({ child, params }: { child: Route.ComponentProps['loaderData']['state']['children'][0]; sectionCompleted: boolean; params: Route.ComponentProps['params'] }): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+
+  if (child.information?.socialInsuranceNumber !== undefined) {
+    return (
+      <CardFooter className="border-t bg-zinc-100">
+        <ButtonLink id={`edit-child-sin-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/social-insurance-number" params={{ ...params, childId: child.id }} startIcon={faPenToSquare} size="lg">
+          {t('protected-application-renewal-family:childrens-application.edit-sin')}
+        </ButtonLink>
+      </CardFooter>
+    );
+  }
+
+  return (
+    <CardFooter className="border-t bg-zinc-100">
+      <ButtonLink id={`add-child-sin-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/social-insurance-number" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+        {t('protected-application-renewal-family:childrens-application.add-sin')}
+      </ButtonLink>
+    </CardFooter>
+  );
+}
+
+/**
+ * This component determines what to show in the Parent/Guardian card content. The logic is as follows:
+ *
+ * - If the user has entered parent/guardian status (child.information.isParent is defined), show Yes/No.
+ *
+ * - If there is no parent/guardian status at all, show the help text.
+ */
+function ChildParentGuardianCardContent({ child }: { child: Route.ComponentProps['loaderData']['state']['children'][0] }): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+
+  // User-entered value takes precedence
+  if (child.information?.isParent !== undefined) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.parent-guardian-title')}>
+            <p>{child.information.isParent ? t('protected-application-renewal-family:childrens-application.yes') : t('protected-application-renewal-family:childrens-application.no')}</p>
+          </DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  // No value at all
+  return (
+    <CardContent>
+      <p>{t('protected-application-renewal-family:childrens-application.parent-guardian-help')}</p>
+    </CardContent>
+  );
+}
+
+/**
+ * This component determines what to show in the Parent/Guardian card footer. The logic is as follows:
+ *
+ * - If the user has entered a value OR there is a client value OR section is completed, show the "Edit" button.
+ *
+ * - If there is no value at all, show the "Add" button.
+ */
+function ChildParentGuardianCardFooter({ child, sectionCompleted, params }: { child: Route.ComponentProps['loaderData']['state']['children'][0]; sectionCompleted: boolean; params: Route.ComponentProps['params'] }): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+
+  if (child.information?.isParent !== undefined || sectionCompleted) {
+    return (
+      <CardFooter className="border-t bg-zinc-100">
+        <ButtonLink id={`edit-child-parent-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/parent-guardian" params={{ ...params, childId: child.id }} startIcon={faPenToSquare} size="lg">
+          {t('protected-application-renewal-family:childrens-application.edit-parent-guardian')}
+        </ButtonLink>
+      </CardFooter>
+    );
+  }
+
+  return (
+    <CardFooter className="border-t bg-zinc-100">
+      <ButtonLink id={`add-child-parent-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/parent-guardian" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+        {t('protected-application-renewal-family:childrens-application.add-parent-guardian')}
+      </ButtonLink>
+    </CardFooter>
+  );
+}
+
+/**
+ * This component determines what to show in the child dental insurance card content. The logic is as follows:
+ *
+ * - If the user has entered dental insurance information (child.dentalInsurance is defined), show the value.
+ *
+ * - If the user has not entered dental insurance information, show the help text.
+ */
+function ChildDentalInsuranceCardContent({ child }: { child: Route.ComponentProps['loaderData']['state']['children'][0] }): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+
+  if (child.dentalInsurance !== undefined) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.dental-insurance-title')}>
+            <p>{child.dentalInsurance.hasDentalInsurance ? t('protected-application-renewal-family:childrens-application.dental-insurance-yes') : t('protected-application-renewal-family:childrens-application.dental-insurance-no')}</p>
+          </DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  return (
+    <CardContent>
+      <p>{t('protected-application-renewal-family:childrens-application.child-dental-insurance-indicate-status')}</p>
+    </CardContent>
+  );
+}
+
+/**
+ * This component determines what to show in the child dental insurance card footer. The logic is as follows:
+ *
+ * - If the user has entered dental insurance information OR the section is completed, show the "Edit" button.
+ *
+ * - If the user has not entered dental insurance information, show the "Add" button.
+ */
+function ChildDentalInsuranceCardFooter({
+  childId,
+  dentalInsurance,
+  sectionCompleted,
+  params,
+}: {
+  childId: string;
+  dentalInsurance: Route.ComponentProps['loaderData']['state']['children'][0]['dentalInsurance'];
+  sectionCompleted: boolean;
+  params: Route.ComponentProps['params'];
+}): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+
+  if (dentalInsurance !== undefined || sectionCompleted) {
+    return (
+      <CardFooter className="border-t bg-zinc-100">
+        <ButtonLink id={`edit-child-dental-insurance-${childId}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/dental-insurance" params={{ ...params, childId }} startIcon={faPenToSquare} size="lg">
+          {t('protected-application-renewal-family:childrens-application.edit-child-dental-insurance')}
+        </ButtonLink>
+      </CardFooter>
+    );
+  }
+
+  return (
+    <CardFooter className="border-t bg-zinc-100">
+      <ButtonLink id={`add-child-dental-insurance-${childId}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/dental-insurance" params={{ ...params, childId }} startIcon={faCirclePlus} size="lg">
+        {t('protected-application-renewal-family:childrens-application.add-answer')}
+      </ButtonLink>
+    </CardFooter>
+  );
+}
+
+/**
+ * This component determines what to show in the child dental benefits card content. The logic is as follows:
+ *
+ * - If the user has entered new dental benefits (child.dentalBenefits is defined with hasChanged=true), show the new benefits.
+ *
+ * - If the user has confirmed existing benefits haven't changed (child.dentalBenefits is defined with hasChanged=false),
+ *   show the existing client benefits (since they haven't changed).
+ *
+ * - If there are existing benefits from the client application (child.clientApplication.clientDentalBenefits is defined) and the user hasn't
+ *   made changes, show the existing benefits.
+ *
+ * - If there are no dental benefits at all, show the help text.
+ */
+function ChildDentalBenefitsCardContent({ child }: { child: Route.ComponentProps['loaderData']['state']['children'][0] }): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+
+  // Helper function to render benefits
+  const renderBenefits = (benefits: ClientDentalBenefits) => {
+    const hasBenefits = benefits.federalBenefit?.access === true || benefits.provTerrBenefit?.access === true;
+
+    if (hasBenefits) {
+      return (
+        <div className="space-y-3">
+          <p>{t('protected-application-renewal-family:childrens-application.dental-benefits-yes')}</p>
+          <ul className="list-disc space-y-1 pl-7">
+            {benefits.federalBenefit?.access && <li>{benefits.federalBenefit.benefit}</li>}
+            {benefits.provTerrBenefit?.access && <li>{benefits.provTerrBenefit.benefit}</li>}
+          </ul>
+        </div>
+      );
+    }
+
+    return <p>{t('protected-application-renewal-family:childrens-application.dental-benefits-no')}</p>;
+  };
+
+  // Case 1: User has made changes (hasChanged true) - show their selections
+  if (child.dentalBenefits?.hasChanged) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.dental-benefits-title')}>{renderBenefits(child.dentalBenefits)}</DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  // Case 2: User has confirmed no changes (hasChanged false) - show client benefits
+  if (child.dentalBenefits && !child.dentalBenefits.hasChanged && child.clientApplication.clientDentalBenefits) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.dental-benefits-title')}>{renderBenefits(child.clientApplication.clientDentalBenefits)}</DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  // Case 3: No user changes, but client has existing benefits - show existing benefits
+  if (child.clientApplication.clientDentalBenefits) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.dental-benefits-title')}>{renderBenefits(child.clientApplication.clientDentalBenefits)}</DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  // Case 4: No benefits at all - show help text
+  return (
+    <CardContent>
+      <p>{t('protected-application-renewal-family:childrens-application.child-dental-benefits-indicate-status')}</p>
+    </CardContent>
+  );
+}
+
+/**
+ * This component determines what to show in the child dental benefits card footer. The logic is as follows:
+ *
+ * - If the user has entered new dental benefits (child.dentalBenefits is defined), show the "Edit" button.
+ *
+ * - If the user has not entered new dental benefits but there are existing dental benefits on the parent
+ *   application (child.clientApplication.clientDentalBenefits is defined), show both the "Update" button and the "Not changed" button.
+ *
+ * - If there are no dental benefits on the parent application and the user has not entered new dental benefits,
+ *   show the "Add" button.
+ */
+function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { child: Route.ComponentProps['loaderData']['state']['children'][0]; sectionCompleted: boolean; params: Route.ComponentProps['params'] }): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const fetcher = useFetcher<typeof action>();
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
+
+  // Case 1: User has made changes or section is completed - show Edit button
+  if (child.dentalBenefits || sectionCompleted) {
+    return (
+      <CardFooter className="border-t bg-zinc-100">
+        <ButtonLink
+          id={`edit-child-benefits-${child.id}`}
+          variant="link"
+          className="p-0"
+          routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
+          params={{ ...params, childId: child.id }}
+          startIcon={faPenToSquare}
+          size="lg"
+        >
+          {t('protected-application-renewal-family:childrens-application.edit-child-dental-benefits')}
+        </ButtonLink>
+      </CardFooter>
+    );
+  }
+
+  // Case 2: No user changes yet, but client has existing benefits - show Update and Not Changed buttons
+  if (child.clientApplication.clientDentalBenefits) {
+    return (
+      <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+        <div className="w-full px-6">
+          <ButtonLink
+            id={`update-child-benefits-${child.id}`}
+            variant="link"
+            className="p-0 pb-5"
+            routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
+            params={{ ...params, childId: child.id }}
+            startIcon={faPenToSquare}
+            size="lg"
+          >
+            {t('protected-application-renewal-family:childrens-application.update-dental-benefits')}
+          </ButtonLink>
+        </div>
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <input type="hidden" name="childId" value={child.id} />
+          <div className="w-full px-6">
+            <Button id={`complete-benefits-${child.id}`} name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} disabled={isSubmitting} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+              {t('protected-application-renewal-family:childrens-application.benefits-not-changed')}
+            </Button>
+          </div>
+        </fetcher.Form>
+      </CardFooter>
+    );
+  }
+
+  // Case 3: No benefits at all - show Add button
+  return (
+    <CardFooter className="border-t bg-zinc-100">
+      <ButtonLink
+        id={`add-child-benefits-${child.id}`}
+        variant="link"
+        className="p-0"
+        routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
+        params={{ ...params, childId: child.id }}
+        startIcon={faCirclePlus}
+        size="lg"
+      >
+        {t('protected-application-renewal-family:childrens-application.add-child-dental-benefits')}
+      </ButtonLink>
+    </CardFooter>
   );
 }
