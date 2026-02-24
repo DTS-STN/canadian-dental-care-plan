@@ -201,14 +201,14 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
           <p>{t('protected-application:confirm-information')}</p>
         </div>
 
-        {state.children.map((child, index) => {
+        {state.children.map((child) => {
           const sections = childrenSections[child.id];
           invariant(sections, `Expected child sections to be defined for child ${child.id}`);
           const completedSectionsCount = Object.values(sections).filter((section) => section.completed).length;
 
           return (
             <div key={child.id}>
-              <h2 className="font-lato mb-4 text-2xl font-bold">{t('protected-application-renewal-child:childrens-application.child-title', { childNumber: index + 1 })}</h2>
+              <h2 className="font-lato mb-4 text-2xl font-bold">{`${child.information?.firstName} ${child.information?.lastName}`}</h2>
               <p>{t('common:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
 
               <Card className="my-4">

@@ -80,7 +80,6 @@
   },
   "childrens-application": {
     "page-title": "Your child(ren)'s application",
-    "child-title": "Child {{childNumber}}",
     "sin-card-title": "Social Insurance Number (SIN)",
     "sin-help": "Enter your child's SIN.",
     "edit-sin": "Edit child's SIN",
@@ -110,8 +109,7 @@
     "dental-benefits-yes": "Yes, this child has federal, provincial, or territorial benefits",
     "dental-benefits-no": "No, this child does not have federal, provincial, or territorial benefits",
     "back-btn": "Parent or legal guardian information",
-    "submit-btn": "Submit",
-    "no-change": "No update."
+    "submit-btn": "Submit"
   },
   "confirm": {
     "page-title": "Application successfully submitted",
