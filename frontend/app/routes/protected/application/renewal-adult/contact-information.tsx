@@ -248,15 +248,28 @@ export default function ProtectedRenewAdultContactInformation({ loaderData, para
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="protected/application/$id/renewal-adult/dental-insurance" params={params}>
+          <NavigationButtonLink
+            disabled={!allSectionsCompleted}
+            variant="primary"
+            direction="next"
+            routeId="protected/application/$id/renewal-adult/dental-insurance"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Continue click"
+          >
             {t('protected-application-renewal-adult:contact-information.next-btn')}
           </NavigationButtonLink>
           {shouldSkipMaritalStatusStep ? (
-            <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renew" params={params}>
+            <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Back click">
               {t('protected-application-renewal-adult:contact-information.prev-btn.renew')}
             </NavigationButtonLink>
           ) : (
-            <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renewal-adult/marital-status" params={params}>
+            <NavigationButtonLink
+              variant="secondary"
+              direction="previous"
+              routeId="protected/application/$id/renewal-adult/marital-status"
+              params={params}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Back click"
+            >
               {t('protected-application-renewal-adult:contact-information.prev-btn.marital-status')}
             </NavigationButtonLink>
           )}
@@ -342,7 +355,16 @@ function PhoneNumberCardFooter(): JSX.Element {
   if (state.phoneNumber || sections.phoneNumber.completed) {
     return (
       <CardFooter className="border-t bg-zinc-100">
-        <ButtonLink id="edit-phone-button" variant="link" className="p-0" routeId="protected/application/$id/phone-number" params={params} startIcon={faPenToSquare} size="lg">
+        <ButtonLink
+          id="edit-phone-button"
+          variant="link"
+          className="p-0"
+          routeId="protected/application/$id/phone-number"
+          params={params}
+          startIcon={faPenToSquare}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Edit phone click"
+        >
           {t('protected-application-renewal-adult:contact-information.edit-phone-number')}
         </ButtonLink>
       </CardFooter>
@@ -353,12 +375,30 @@ function PhoneNumberCardFooter(): JSX.Element {
     return (
       <CardFooter className="divide-y border-t bg-zinc-100 px-0">
         <div className="w-full px-6">
-          <ButtonLink id="update-phone-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/phone-number" params={params} startIcon={faPenToSquare} size="lg">
+          <ButtonLink
+            id="update-phone-button"
+            variant="link"
+            className="p-0 pb-5"
+            routeId="protected/application/$id/phone-number"
+            params={params}
+            startIcon={faPenToSquare}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Update phone click"
+          >
             {t('protected-application-renewal-adult:contact-information.update-phone-number')}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
-          <Button id="complete-phone-button" variant="link" name="_action" value={FORM_ACTION.PHONE_NUMBER_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+          <Button
+            id="complete-phone-button"
+            variant="link"
+            name="_action"
+            value={FORM_ACTION.PHONE_NUMBER_NOT_CHANGED}
+            className="p-0 pt-5"
+            startIcon={faCircleCheck}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Complete phone click"
+          >
             {t('protected-application-renewal-adult:contact-information.phone-number-unchanged')}
           </Button>
         </div>
@@ -368,7 +408,16 @@ function PhoneNumberCardFooter(): JSX.Element {
 
   return (
     <CardFooter className="border-t bg-zinc-100">
-      <ButtonLink id="add-phone-button" variant="link" className="p-0" routeId="protected/application/$id/phone-number" params={params} startIcon={faCirclePlus} size="lg">
+      <ButtonLink
+        id="add-phone-button"
+        variant="link"
+        className="p-0"
+        routeId="protected/application/$id/phone-number"
+        params={params}
+        startIcon={faCirclePlus}
+        size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Add phone click"
+      >
         {t('protected-application-renewal-adult:contact-information.add-phone-number')}
       </ButtonLink>
     </CardFooter>
@@ -495,7 +544,16 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
   if ((state.mailingAddress && state.homeAddress) || sections.address.completed) {
     return (
       <CardFooter className="border-t bg-zinc-100">
-        <ButtonLink id="edit-address-button" variant="link" className="p-0" routeId="protected/application/$id/mailing-address" params={params} startIcon={faPenToSquare} size="lg">
+        <ButtonLink
+          id="edit-address-button"
+          variant="link"
+          className="p-0"
+          routeId="protected/application/$id/mailing-address"
+          params={params}
+          startIcon={faPenToSquare}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Edit address click"
+        >
           {t('protected-application-renewal-adult:contact-information.edit-address')}
         </ButtonLink>
       </CardFooter>
@@ -506,12 +564,30 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
     return (
       <CardFooter className="divide-y border-t bg-zinc-100 px-0">
         <div className="w-full px-6">
-          <ButtonLink id="update-address-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/mailing-address" params={params} startIcon={faPenToSquare} size="lg">
+          <ButtonLink
+            id="update-address-button"
+            variant="link"
+            className="p-0 pb-5"
+            routeId="protected/application/$id/mailing-address"
+            params={params}
+            startIcon={faPenToSquare}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Update address click"
+          >
             {t('protected-application-renewal-adult:contact-information.update-address')}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
-          <Button id="complete-address-button" variant="link" className="p-0 pt-5" name="_action" value={FORM_ACTION.ADDRESS_NOT_CHANGED} startIcon={faCircleCheck} size="lg">
+          <Button
+            id="complete-address-button"
+            variant="link"
+            className="p-0 pt-5"
+            name="_action"
+            value={FORM_ACTION.ADDRESS_NOT_CHANGED}
+            startIcon={faCircleCheck}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Complete address click"
+          >
             {t('protected-application-renewal-adult:contact-information.address-unchanged')}
           </Button>
         </div>
@@ -521,7 +597,16 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
 
   return (
     <CardFooter className="border-t bg-zinc-100">
-      <ButtonLink id="add-address-button" variant="link" className="p-0" routeId="protected/application/$id/mailing-address" params={params} startIcon={faCirclePlus} size="lg">
+      <ButtonLink
+        id="add-address-button"
+        variant="link"
+        className="p-0"
+        routeId="protected/application/$id/mailing-address"
+        params={params}
+        startIcon={faCirclePlus}
+        size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Add address click"
+      >
         {t('protected-application-renewal-adult:contact-information.add-address')}
       </ButtonLink>
     </CardFooter>
@@ -611,7 +696,16 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
   if (state.communicationPreferences || sections.communicationPreferences.completed) {
     return (
       <CardFooter className="border-t bg-zinc-100">
-        <ButtonLink id="edit-comms-button" variant="link" className="p-0" routeId="protected/application/$id/communication-preferences" params={params} startIcon={faPenToSquare} size="lg">
+        <ButtonLink
+          id="edit-comms-button"
+          variant="link"
+          className="p-0"
+          routeId="protected/application/$id/communication-preferences"
+          params={params}
+          startIcon={faPenToSquare}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Edit comms click"
+        >
           {t('protected-application-renewal-adult:contact-information.edit-communication-preferences')}
         </ButtonLink>
       </CardFooter>
@@ -622,12 +716,30 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
     return (
       <CardFooter className="divide-y border-t bg-zinc-100 px-0">
         <div className="w-full px-6">
-          <ButtonLink id="update-comms-button" variant="link" className="p-0 pb-5" routeId="protected/application/$id/communication-preferences" params={params} startIcon={faPenToSquare} size="lg">
+          <ButtonLink
+            id="update-comms-button"
+            variant="link"
+            className="p-0 pb-5"
+            routeId="protected/application/$id/communication-preferences"
+            params={params}
+            startIcon={faPenToSquare}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Update comms click"
+          >
             {t('protected-application-renewal-adult:contact-information.update-communication-preferences')}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
-          <Button id="complete-comms-button" variant="link" name="_action" value={FORM_ACTION.COMMUNICATION_PREFERENCES_NOT_CHANGED} className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+          <Button
+            id="complete-comms-button"
+            variant="link"
+            name="_action"
+            value={FORM_ACTION.COMMUNICATION_PREFERENCES_NOT_CHANGED}
+            className="p-0 pt-5"
+            startIcon={faCircleCheck}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Complete comms click"
+          >
             {t('protected-application-renewal-adult:contact-information.communication-preferences-unchanged')}
           </Button>
         </div>
@@ -637,7 +749,16 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
 
   return (
     <CardFooter className="border-t bg-zinc-100">
-      <ButtonLink id="add-comms-button" variant="link" className="p-0" routeId="protected/application/$id/communication-preferences" params={params} startIcon={faCirclePlus} size="lg">
+      <ButtonLink
+        id="add-comms-button"
+        variant="link"
+        className="p-0"
+        routeId="protected/application/$id/communication-preferences"
+        params={params}
+        startIcon={faCirclePlus}
+        size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Add comms click"
+      >
         {t('protected-application-renewal-adult:contact-information.add-communication-preferences')}
       </ButtonLink>
     </CardFooter>

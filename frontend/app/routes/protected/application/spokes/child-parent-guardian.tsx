@@ -78,11 +78,11 @@ export default function ChildParentGuardian({ loaderData, params }: Route.Compon
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Application Form-Child:Back - Child parent or guardian needs to apply click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child parent or guardian needs to apply click"
         >
           {t('protected-application-spokes:children.parent-or-guardian.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Application Form-Child:Exit - Child parent or guardian needs to apply click">
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - Child parent or guardian needs to apply click">
           {t('protected-application-spokes:children.parent-or-guardian.exit-btn')}
         </LoadingButton>
       </fetcher.Form>

@@ -104,7 +104,16 @@ export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-insurance-button" variant="link" className="p-0" routeId="protected/application/$id/dental-insurance" params={params} startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink
+              id="edit-insurance-button"
+              variant="link"
+              className="p-0"
+              routeId="protected/application/$id/dental-insurance"
+              params={params}
+              startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family: Edit insurance click"
+            >
               {state.dentalInsurance === undefined ? t('protected-application-intake-family:dental-insurance.add-answer') : t('protected-application-intake-family:dental-insurance.edit-access-to-dental-insurance')}
             </ButtonLink>
           </CardFooter>
@@ -145,6 +154,7 @@ export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }
               params={params}
               startIcon={sections.dentalBenefits.completed ? faPenToSquare : faCirclePlus}
               size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family: Edit benefits click"
             >
               {state.dentalBenefits === undefined ? t('protected-application-intake-family:dental-insurance.add-answer') : t('protected-application-intake-family:dental-insurance.edit-access-to-government-benefits')}
             </ButtonLink>
@@ -152,10 +162,23 @@ export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="protected/application/$id/intake-family/childrens-application" params={params}>
+          <NavigationButtonLink
+            disabled={!allSectionsCompleted}
+            variant="primary"
+            direction="next"
+            routeId="protected/application/$id/intake-family/childrens-application"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family: Continue click"
+          >
             {t('protected-application-intake-family:dental-insurance.childrens-application')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/intake-family/contact-information" params={params}>
+          <NavigationButtonLink
+            variant="secondary"
+            direction="previous"
+            routeId="protected/application/$id/intake-family/contact-information"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family: Back click"
+          >
             {t('protected-application-intake-family:dental-insurance.contact-information')}
           </NavigationButtonLink>
         </div>

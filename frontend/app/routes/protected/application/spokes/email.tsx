@@ -169,7 +169,7 @@ export default function ApplicationEmail({ loaderData, params }: Route.Component
             />
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Email click">
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Email click">
               {t('protected-application-spokes:email.continue')}
             </LoadingButton>
             <ButtonLink
@@ -178,7 +178,7 @@ export default function ApplicationEmail({ loaderData, params }: Route.Component
               routeId="protected/application/$id/communication-preferences"
               params={params}
               disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Email click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Email click"
             >
               {t('protected-application-spokes:email.back')}
             </ButtonLink>

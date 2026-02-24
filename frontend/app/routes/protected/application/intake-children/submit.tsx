@@ -136,7 +136,7 @@ export default function ProtectedNewChildrenSubmit({ loaderData, params }: Route
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-intake-child:submit.review-your-application')}</h2>
             <p>{t('protected-application-intake-child:submit.please-review')}</p>
-            <ButtonLink variant="primary" routeId="protected/application/$id/intake-children/parent-or-guardian" params={params}>
+            <ButtonLink variant="primary" routeId="protected/application/$id/intake-children/parent-or-guardian" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child: Action click">
               {t('protected-application-intake-child:submit.review-application')}
             </ButtonLink>
           </section>
@@ -157,10 +157,17 @@ export default function ProtectedNewChildrenSubmit({ loaderData, params }: Route
                 </InputCheckbox>
               </div>
               <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-                <NavigationButton loading={isSubmitting} variant="primary" direction="next">
+                <NavigationButton loading={isSubmitting} variant="primary" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child: Submit click">
                   {t('protected-application-intake-child:submit.submit')}
                 </NavigationButton>
-                <NavigationButtonLink disabled={isSubmitting} variant="secondary" direction="previous" routeId="protected/application/$id/intake-children/childrens-application" params={params}>
+                <NavigationButtonLink
+                  disabled={isSubmitting}
+                  variant="secondary"
+                  direction="previous"
+                  routeId="protected/application/$id/intake-children/childrens-application"
+                  params={params}
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child: Back click"
+                >
                   {t('protected-application-intake-child:submit.childrens-application')}
                 </NavigationButtonLink>
               </div>

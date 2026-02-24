@@ -188,10 +188,23 @@ export default function ProtectedRenewFamilyDentalInsurance({ loaderData, params
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="protected/application/$id/renewal-family/childrens-application" params={params}>
+          <NavigationButtonLink
+            disabled={!allSectionsCompleted}
+            variant="primary"
+            direction="next"
+            routeId="protected/application/$id/renewal-family/childrens-application"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Continue click"
+          >
             {t('protected-application-renewal-family:dental-insurance.childrens-application')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renewal-family/contact-information" params={params}>
+          <NavigationButtonLink
+            variant="secondary"
+            direction="previous"
+            routeId="protected/application/$id/renewal-family/contact-information"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Back click"
+          >
             {t('protected-application-renewal-family:dental-insurance.contact-information')}
           </NavigationButtonLink>
         </div>
@@ -253,7 +266,16 @@ function DentalInsuranceCardFooter(): JSX.Element {
   if (state.dentalInsurance !== undefined || sections.dentalInsurance.completed) {
     return (
       <CardFooter className="border-t bg-zinc-100">
-        <ButtonLink id="edit-button-dental-insurance" variant="link" className="p-0" routeId="protected/application/$id/dental-insurance" params={params} startIcon={faPenToSquare} size="lg">
+        <ButtonLink
+          id="edit-button-dental-insurance"
+          variant="link"
+          className="p-0"
+          routeId="protected/application/$id/dental-insurance"
+          params={params}
+          startIcon={faPenToSquare}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Edit button dental insurance click"
+        >
           {t('protected-application-renewal-family:dental-insurance.edit-access-to-dental-insurance')}
         </ButtonLink>
       </CardFooter>
@@ -262,7 +284,16 @@ function DentalInsuranceCardFooter(): JSX.Element {
 
   return (
     <CardFooter className="border-t bg-zinc-100">
-      <ButtonLink id="add-button-dental-insurance" variant="link" className="p-0" routeId="protected/application/$id/dental-insurance" params={params} startIcon={faCirclePlus} size="lg">
+      <ButtonLink
+        id="add-button-dental-insurance"
+        variant="link"
+        className="p-0"
+        routeId="protected/application/$id/dental-insurance"
+        params={params}
+        startIcon={faCirclePlus}
+        size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Add button dental insurance click"
+      >
         {t('protected-application-renewal-family:dental-insurance.add-answer')}
       </ButtonLink>
     </CardFooter>
@@ -359,7 +390,16 @@ function DentalBenefitsCardFooter(): JSX.Element {
   if (state.dentalBenefits || sections.dentalBenefits.completed) {
     return (
       <CardFooter className="border-t bg-zinc-100">
-        <ButtonLink id="edit-button-government-benefits" variant="link" className="p-0" routeId="protected/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faPenToSquare} size="lg">
+        <ButtonLink
+          id="edit-button-government-benefits"
+          variant="link"
+          className="p-0"
+          routeId="protected/application/$id/federal-provincial-territorial-benefits"
+          params={params}
+          startIcon={faPenToSquare}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Edit button government benefits click"
+        >
           {t('protected-application-renewal-family:dental-insurance.edit-access-to-government-benefits')}
         </ButtonLink>
       </CardFooter>
@@ -370,12 +410,30 @@ function DentalBenefitsCardFooter(): JSX.Element {
     return (
       <CardFooter className="divide-y border-t bg-zinc-100 px-0">
         <div className="w-full px-6">
-          <ButtonLink id="update-button-government-benefits" variant="link" className="p-0 pb-5" routeId="protected/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faPenToSquare} size="lg">
+          <ButtonLink
+            id="update-button-government-benefits"
+            variant="link"
+            className="p-0 pb-5"
+            routeId="protected/application/$id/federal-provincial-territorial-benefits"
+            params={params}
+            startIcon={faPenToSquare}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Update button government benefits click"
+          >
             {t('protected-application-renewal-family:dental-insurance.update-my-access')}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
-          <Button id="complete-benefits-button" name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+          <Button
+            id="complete-benefits-button"
+            name="_action"
+            value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
+            variant="link"
+            className="p-0 pt-5"
+            startIcon={faCircleCheck}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Complete benefits click"
+          >
             {t('protected-application-renewal-family:dental-insurance.access-not-changed')}
           </Button>
         </div>
@@ -385,7 +443,16 @@ function DentalBenefitsCardFooter(): JSX.Element {
 
   return (
     <CardFooter className="border-t bg-zinc-100">
-      <ButtonLink id="add-button-government-benefits" variant="link" className="p-0" routeId="protected/application/$id/federal-provincial-territorial-benefits" params={params} startIcon={faCirclePlus} size="lg">
+      <ButtonLink
+        id="add-button-government-benefits"
+        variant="link"
+        className="p-0"
+        routeId="protected/application/$id/federal-provincial-territorial-benefits"
+        params={params}
+        startIcon={faCirclePlus}
+        size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Add button government benefits click"
+      >
         {t('protected-application-renewal-family:dental-insurance.add-access-to-government-benefits')}
       </ButtonLink>
     </CardFooter>

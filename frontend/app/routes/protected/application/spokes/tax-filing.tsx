@@ -98,7 +98,7 @@ export default function ApplicationTaxFiling({ loaderData, params }: Route.Compo
             required
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Tax filing click">
+            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Tax filing click">
               {t('protected-application:tax-filing.save-btn')}
             </LoadingButton>
             <ButtonLink
@@ -108,7 +108,7 @@ export default function ApplicationTaxFiling({ loaderData, params }: Route.Compo
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Tax filing click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Tax filing click"
             >
               {t('protected-application:tax-filing.back-btn')}
             </ButtonLink>

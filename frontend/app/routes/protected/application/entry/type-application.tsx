@@ -108,7 +108,16 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="type-of-application-edit-button" variant="link" className="p-0" routeId="protected/application/$id/type-application" params={params} startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus} size="lg">
+          <ButtonLink
+            id="type-of-application-edit-button"
+            variant="link"
+            className="p-0"
+            routeId="protected/application/$id/type-application"
+            params={params}
+            startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry: Edit type of application click"
+          >
             {defaultState.typeOfApplication === undefined ? t('protected-application:type-of-application.add-type-application') : t('protected-application:type-of-application.edit-type-application')}
           </ButtonLink>
         </CardFooter>
@@ -142,17 +151,26 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="personal-information-edit-button" variant="link" className="p-0" routeId="protected/application/$id/personal-information" params={params} startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus} size="lg">
+          <ButtonLink
+            id="personal-information-edit-button"
+            variant="link"
+            className="p-0"
+            routeId="protected/application/$id/personal-information"
+            params={params}
+            startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry: Edit personal information click"
+          >
             {defaultState.personalInformation === undefined ? t('protected-application:type-of-application.add-personal-information') : t('protected-application:type-of-application.edit-personal-information')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry: Continue click">
           {t('protected-application:type-of-application.application')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/eligibility-requirements" params={params}>
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/eligibility-requirements" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry: Back click">
           {t('protected-application:type-of-application.before-you-start')}
         </NavigationButtonLink>
       </div>

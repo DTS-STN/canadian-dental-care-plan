@@ -104,17 +104,26 @@ export default function ProtectedTypeOfApplication({ loaderData, params }: Route
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="type-of-application-edit-button" variant="link" className="p-0" routeId="protected/application/$id/renewal-selection" params={params} startIcon={defaultState.applicantClientIdsToRenew ? faPenToSquare : faCirclePlus} size="lg">
+          <ButtonLink
+            id="type-of-application-edit-button"
+            variant="link"
+            className="p-0"
+            routeId="protected/application/$id/renewal-selection"
+            params={params}
+            startIcon={defaultState.applicantClientIdsToRenew ? faPenToSquare : faCirclePlus}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry: Edit type of application click"
+          >
             {defaultState.applicantClientIdsToRenew === undefined ? t('protected-application:renewal-selection.add-type-application') : t('protected-application:renewal-selection.edit-type-application')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry: Continue click">
           {t('protected-application:renewal-selection.application')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/eligibility-requirements" params={params}>
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/eligibility-requirements" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry: Back click">
           {t('protected-application:renewal-selection.before-you-start')}
         </NavigationButtonLink>
       </div>

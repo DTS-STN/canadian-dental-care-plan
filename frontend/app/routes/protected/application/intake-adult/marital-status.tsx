@@ -90,16 +90,32 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-marital-button" variant="link" className="p-0" routeId="protected/application/$id/marital-status" params={params} startIcon={sections.maritalStatus.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink
+              id="edit-marital-button"
+              variant="link"
+              className="p-0"
+              routeId="protected/application/$id/marital-status"
+              params={params}
+              startIcon={sections.maritalStatus.completed ? faPenToSquare : faCirclePlus}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult: Edit marital click"
+            >
               {state.maritalStatus === undefined ? t('protected-application-intake-adult:marital-status.add-marital-status') : t('protected-application-intake-adult:marital-status.edit-marital-status')}
             </ButtonLink>
           </CardFooter>
         </Card>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="protected/application/$id/intake-adult/contact-information" params={params}>
+          <NavigationButtonLink
+            disabled={!allSectionsCompleted}
+            variant="primary"
+            direction="next"
+            routeId="protected/application/$id/intake-adult/contact-information"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult: Continue click"
+          >
             {t('protected-application-intake-adult:marital-status.next-btn')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/type-of-application" params={params}>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult: Back click">
             {t('protected-application-intake-adult:marital-status.prev-btn')}
           </NavigationButtonLink>
         </div>

@@ -121,7 +121,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
               errorMessage={errors?.livingIndependently}
             />
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Living independently click">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Living independently click">
                 {t('protected-application-spokes:living-independently.save-btn')}
               </LoadingButton>
               <ButtonLink
@@ -131,7 +131,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Living independently click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Living independently click"
               >
                 {t('protected-application-spokes:living-independently.back-btn')}
               </ButtonLink>

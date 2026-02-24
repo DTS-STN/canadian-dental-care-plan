@@ -97,16 +97,32 @@ export default function ProtectedNewFamilyMaritalStatus({ loaderData, params }: 
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-marital-status-button" variant="link" className="p-0" routeId="protected/application/$id/marital-status" params={params} startIcon={sections.maritalStatus.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink
+              id="edit-marital-status-button"
+              variant="link"
+              className="p-0"
+              routeId="protected/application/$id/marital-status"
+              params={params}
+              startIcon={sections.maritalStatus.completed ? faPenToSquare : faCirclePlus}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Edit marital status click"
+            >
               {state.maritalStatus === undefined ? t('protected-application-renewal-family:marital-status.add-marital-status') : t('protected-application-renewal-family:marital-status.edit-marital-status')}
             </ButtonLink>
           </CardFooter>
         </Card>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="protected/application/$id/renewal-family/contact-information" params={params}>
+          <NavigationButtonLink
+            disabled={!allSectionsCompleted}
+            variant="primary"
+            direction="next"
+            routeId="protected/application/$id/renewal-family/contact-information"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Continue click"
+          >
             {t('protected-application-renewal-family:marital-status.next-btn')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renew" params={params}>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Back click">
             {t('protected-application-renewal-family:marital-status.prev-btn')}
           </NavigationButtonLink>
         </div>

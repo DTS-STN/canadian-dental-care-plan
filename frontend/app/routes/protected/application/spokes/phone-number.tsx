@@ -184,7 +184,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
             </div>
           </Collapsible>
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Phone number click">
+            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Phone number click">
               {t('protected-application-spokes:phone-number.save-btn')}
             </LoadingButton>
             <ButtonLink
@@ -193,7 +193,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
               routeId={getRouteFromApplicationFlow(applicationFlow)}
               params={params}
               disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Phone number click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Phone number click"
             >
               {t('protected-application-spokes:phone-number.back-btn')}
             </ButtonLink>

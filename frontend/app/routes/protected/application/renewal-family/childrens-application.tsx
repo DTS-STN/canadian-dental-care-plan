@@ -253,10 +253,23 @@ export default function ProtectedRenewFamilyChildrensApplication({ loaderData, p
         })}
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="protected/application/$id/renewal-family/submit" params={params}>
+          <NavigationButtonLink
+            disabled={!allChildrenCompleted}
+            variant="primary"
+            direction="next"
+            routeId="protected/application/$id/renewal-family/submit"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Continue click"
+          >
             {t('protected-application-renewal-family:childrens-application.submit-btn')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renewal-family/dental-insurance" params={params}>
+          <NavigationButtonLink
+            variant="secondary"
+            direction="previous"
+            routeId="protected/application/$id/renewal-family/dental-insurance"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Back click"
+          >
             {t('protected-application-renewal-family:childrens-application.back-btn')}
           </NavigationButtonLink>
         </div>
@@ -309,7 +322,16 @@ function ChildSinCardFooter({ child, params }: { child: Route.ComponentProps['lo
   if (child.information?.socialInsuranceNumber !== undefined) {
     return (
       <CardFooter className="border-t bg-zinc-100">
-        <ButtonLink id={`edit-child-sin-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/social-insurance-number" params={{ ...params, childId: child.id }} startIcon={faPenToSquare} size="lg">
+        <ButtonLink
+          id={`edit-child-sin-${child.id}`}
+          variant="link"
+          className="p-0"
+          routeId="protected/application/$id/children/$childId/social-insurance-number"
+          params={{ ...params, childId: child.id }}
+          startIcon={faPenToSquare}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Action click"
+        >
           {t('protected-application-renewal-family:childrens-application.edit-sin')}
         </ButtonLink>
       </CardFooter>
@@ -318,7 +340,16 @@ function ChildSinCardFooter({ child, params }: { child: Route.ComponentProps['lo
 
   return (
     <CardFooter className="border-t bg-zinc-100">
-      <ButtonLink id={`add-child-sin-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/social-insurance-number" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+      <ButtonLink
+        id={`add-child-sin-${child.id}`}
+        variant="link"
+        className="p-0"
+        routeId="protected/application/$id/children/$childId/social-insurance-number"
+        params={{ ...params, childId: child.id }}
+        startIcon={faCirclePlus}
+        size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Action click"
+      >
         {t('protected-application-renewal-family:childrens-application.add-sin')}
       </ButtonLink>
     </CardFooter>
@@ -369,7 +400,16 @@ function ChildParentGuardianCardFooter({ child, sectionCompleted, params }: { ch
   if (child.information?.isParent !== undefined || sectionCompleted) {
     return (
       <CardFooter className="border-t bg-zinc-100">
-        <ButtonLink id={`edit-child-parent-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/parent-guardian" params={{ ...params, childId: child.id }} startIcon={faPenToSquare} size="lg">
+        <ButtonLink
+          id={`edit-child-parent-${child.id}`}
+          variant="link"
+          className="p-0"
+          routeId="protected/application/$id/children/$childId/parent-guardian"
+          params={{ ...params, childId: child.id }}
+          startIcon={faPenToSquare}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Action click"
+        >
           {t('protected-application-renewal-family:childrens-application.edit-parent-guardian')}
         </ButtonLink>
       </CardFooter>
@@ -378,7 +418,16 @@ function ChildParentGuardianCardFooter({ child, sectionCompleted, params }: { ch
 
   return (
     <CardFooter className="border-t bg-zinc-100">
-      <ButtonLink id={`add-child-parent-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/parent-guardian" params={{ ...params, childId: child.id }} startIcon={faCirclePlus} size="lg">
+      <ButtonLink
+        id={`add-child-parent-${child.id}`}
+        variant="link"
+        className="p-0"
+        routeId="protected/application/$id/children/$childId/parent-guardian"
+        params={{ ...params, childId: child.id }}
+        startIcon={faCirclePlus}
+        size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Action click"
+      >
         {t('protected-application-renewal-family:childrens-application.add-parent-guardian')}
       </ButtonLink>
     </CardFooter>
@@ -437,7 +486,16 @@ function ChildDentalInsuranceCardFooter({
   if (dentalInsurance !== undefined || sectionCompleted) {
     return (
       <CardFooter className="border-t bg-zinc-100">
-        <ButtonLink id={`edit-child-dental-insurance-${childId}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/dental-insurance" params={{ ...params, childId }} startIcon={faPenToSquare} size="lg">
+        <ButtonLink
+          id={`edit-child-dental-insurance-${childId}`}
+          variant="link"
+          className="p-0"
+          routeId="protected/application/$id/children/$childId/dental-insurance"
+          params={{ ...params, childId }}
+          startIcon={faPenToSquare}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Action click"
+        >
           {t('protected-application-renewal-family:childrens-application.edit-child-dental-insurance')}
         </ButtonLink>
       </CardFooter>
@@ -446,7 +504,16 @@ function ChildDentalInsuranceCardFooter({
 
   return (
     <CardFooter className="border-t bg-zinc-100">
-      <ButtonLink id={`add-child-dental-insurance-${childId}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/dental-insurance" params={{ ...params, childId }} startIcon={faCirclePlus} size="lg">
+      <ButtonLink
+        id={`add-child-dental-insurance-${childId}`}
+        variant="link"
+        className="p-0"
+        routeId="protected/application/$id/children/$childId/dental-insurance"
+        params={{ ...params, childId }}
+        startIcon={faCirclePlus}
+        size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Action click"
+      >
         {t('protected-application-renewal-family:childrens-application.add-answer')}
       </ButtonLink>
     </CardFooter>
@@ -557,6 +624,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
           params={{ ...params, childId: child.id }}
           startIcon={faPenToSquare}
           size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Action click"
         >
           {t('protected-application-renewal-family:childrens-application.edit-child-dental-benefits')}
         </ButtonLink>
@@ -577,6 +645,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
             params={{ ...params, childId: child.id }}
             startIcon={faPenToSquare}
             size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Action click"
           >
             {t('protected-application-renewal-family:childrens-application.update-dental-benefits')}
           </ButtonLink>
@@ -585,7 +654,17 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
           <CsrfTokenInput />
           <input type="hidden" name="childId" value={child.id} />
           <div className="w-full px-6">
-            <Button id={`complete-benefits-${child.id}`} name="_action" value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED} disabled={isSubmitting} variant="link" className="p-0 pt-5" startIcon={faCircleCheck} size="lg">
+            <Button
+              id={`complete-benefits-${child.id}`}
+              name="_action"
+              value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
+              disabled={isSubmitting}
+              variant="link"
+              className="p-0 pt-5"
+              startIcon={faCircleCheck}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Action click"
+            >
               {t('protected-application-renewal-family:childrens-application.benefits-not-changed')}
             </Button>
           </div>
@@ -605,6 +684,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
         params={{ ...params, childId: child.id }}
         startIcon={faCirclePlus}
         size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Action click"
       >
         {t('protected-application-renewal-family:childrens-application.add-child-dental-benefits')}
       </ButtonLink>
