@@ -297,19 +297,6 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
             </p>
             <p className="mt-4">{t('confirm.use-code')}</p>
           </section>
-
-          <section>
-            <h2 className="font-lato text-3xl font-bold">{t('confirm.get-updates-title')}</h2>
-            <p className="mt-4">
-              <Trans ns={handle.i18nNamespaces} i18nKey={'confirm.get-updates-text'} components={{ mscaLinkAccount }} />
-            </p>
-            <p className="mt-4">{t('confirm.get-updates-info')}</p>
-            <ul className="list-disc space-y-1 pl-7">
-              <li>{t('confirm.view')}</li>
-              <li>{t('confirm.update')}</li>
-              <li>{t('confirm.access')}</li>
-            </ul>
-          </section>
         </>
       )}
 
