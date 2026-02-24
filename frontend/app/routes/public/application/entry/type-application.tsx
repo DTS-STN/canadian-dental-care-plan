@@ -103,7 +103,16 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink id="type-of-application-edit-button" variant="link" className="p-0" routeId="public/application/$id/type-application" params={params} startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus} size="lg">
+          <ButtonLink
+            id="type-of-application-edit-button"
+            variant="link"
+            className="p-0"
+            routeId="public/application/$id/type-application"
+            params={params}
+            startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Edit type of application click"
+          >
             {defaultState.typeOfApplication === undefined ? t('application:type-of-application.add-type-application') : t('application:type-of-application.edit-type-application')}
           </ButtonLink>
         </CardFooter>
@@ -138,14 +147,32 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
         </CardContent>
         {isRenewalContext && !sections.personalInformation.completed && (
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="personal-information-edit-button" variant="link" className="p-0" routeId="public/application/$id/personal-information" params={params} startIcon={faCirclePlus} size="lg">
+            <ButtonLink
+              id="personal-information-edit-button"
+              variant="link"
+              className="p-0"
+              routeId="public/application/$id/personal-information"
+              params={params}
+              startIcon={faCirclePlus}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Edit personal information click"
+            >
               {t('application:type-of-application.add-personal-information')}
             </ButtonLink>
           </CardFooter>
         )}
         {!isRenewalContext && (
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="personal-information-edit-button" variant="link" className="p-0" routeId="public/application/$id/personal-information" params={params} startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink
+              id="personal-information-edit-button"
+              variant="link"
+              className="p-0"
+              routeId="public/application/$id/personal-information"
+              params={params}
+              startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Edit personal information click"
+            >
               {defaultState.personalInformation === undefined ? t('application:type-of-application.add-personal-information') : t('application:type-of-application.edit-personal-information')}
             </ButtonLink>
           </CardFooter>
@@ -153,10 +180,10 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId}>
+        <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Continue click">
           {t('application:type-of-application.application')}
         </NavigationButtonLink>
-        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/eligibility-requirements" params={params}>
+        <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/eligibility-requirements" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Back click">
           {t('application:type-of-application.before-you-start')}
         </NavigationButtonLink>
       </div>

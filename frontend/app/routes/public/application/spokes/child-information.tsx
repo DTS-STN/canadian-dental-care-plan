@@ -390,7 +390,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
             />
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Child Information click">
+            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Child Information click">
               {t('application-spokes:children.information.save-btn')}
             </LoadingButton>
             <ButtonLink
@@ -400,7 +400,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child Information click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Child Information click"
             >
               {t('application-spokes:children.information.back-btn')}
             </ButtonLink>

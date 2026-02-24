@@ -337,7 +337,7 @@ export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, par
               id="save-button"
               loading={isSubmitting}
               endIcon={faChevronRight}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Child access to other federal, provincial or territorial dental benefits click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Child access to other federal, provincial or territorial dental benefits click"
             >
               {t('application-spokes:children.dental-benefits.save-btn')}
             </LoadingButton>
@@ -348,7 +348,7 @@ export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, par
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child access to other federal, provincial or territorial dental benefits click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Child access to other federal, provincial or territorial dental benefits click"
             >
               {t('application-spokes:children.dental-benefits.back-btn')}
             </ButtonLink>

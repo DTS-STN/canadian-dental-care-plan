@@ -204,6 +204,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                     params={{ ...params, childId: child.id }}
                     startIcon={sections.childInformation.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Action click"
                   >
                     {child.information === undefined ? t('application-full-child:childrens-application.add-child-information') : t('application-full-child:childrens-application.edit-child-information', { childNumber: index + 1 })}
                   </ButtonLink>
@@ -235,6 +236,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                     params={{ ...params, childId: child.id }}
                     startIcon={sections.childDentalInsurance.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Action click"
                   >
                     {child.dentalInsurance === undefined ? t('application-full-child:childrens-application.add-answer') : t('application-full-child:childrens-application.edit-child-dental-insurance', { childNumber: index + 1 })}
                   </ButtonLink>
@@ -276,6 +278,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                     params={{ ...params, childId: child.id }}
                     startIcon={sections.childDentalBenefits.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Action click"
                   >
                     {child.dentalBenefits === undefined ? t('application-full-child:childrens-application.add-answer') : t('application-full-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })}
                   </ButtonLink>
@@ -292,7 +295,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                   disabled={isSubmitting}
                   variant="secondary"
                   size="sm"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Remove child - Child(ren) application click"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Remove child - Child(ren) application click"
                 >
                   {t('application-full-child:childrens-application.remove-child')}
                 </Button>
@@ -302,16 +305,23 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
         })}
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <Button variant="primary" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Add child - Child(ren) application click">
+          <Button variant="primary" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Add child - Child(ren) application click">
             {t('application-full-child:childrens-application.add-child')}
           </Button>
         </fetcher.Form>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allChildrenCompleted} variant="primary" direction="next" routeId="public/application/$id/full-children/submit" params={params}>
+          <NavigationButtonLink
+            disabled={!allChildrenCompleted}
+            variant="primary"
+            direction="next"
+            routeId="public/application/$id/full-children/submit"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Continue click"
+          >
             {t('application-full-child:childrens-application.submit-btn')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-children/parent-or-guardian" params={params}>
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-children/parent-or-guardian" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Back click">
             {t('application-full-child:childrens-application.back-btn')}
           </NavigationButtonLink>
         </div>

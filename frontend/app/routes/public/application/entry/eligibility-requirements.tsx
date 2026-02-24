@@ -79,6 +79,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
             params={params}
             startIcon={sections.termsAndConditions.completed ? faPenToSquare : faCircleCheck}
             size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Edit terms conditions click"
           >
             {sections.termsAndConditions.completed //
               ? t('application:eligibility-requirements.terms-conditions-section.edit-button')
@@ -107,6 +108,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
             params={params}
             startIcon={sections.taxFiling.completed ? faPenToSquare : faCircleCheck}
             size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Edit tax filing click"
           >
             {sections.taxFiling.completed //
               ? t('application:eligibility-requirements.tax-filing-section.edit-button')
@@ -114,7 +116,14 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
           </ButtonLink>
         </CardFooter>
       </Card>
-      <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/type-of-application" params={params}>
+      <NavigationButtonLink
+        disabled={!allSectionsCompleted}
+        variant="primary"
+        direction="next"
+        routeId="public/application/$id/type-of-application"
+        params={params}
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Continue click"
+      >
         {t('application:eligibility-requirements.next-button')}
       </NavigationButtonLink>
     </div>

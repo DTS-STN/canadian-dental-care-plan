@@ -199,7 +199,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Print top - Application successfully submitted click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Print top - Application successfully submitted click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -217,7 +217,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
             className="external-link"
             newTabIndicator
             target="_blank"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Confirmation survey button - Take the survey click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Confirmation survey button - Take the survey click"
             variant="primary"
           >
             {t('confirm.survey.button')}
@@ -387,7 +387,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Print bottom - Application successfully submitted click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Print bottom - Application successfully submitted click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -397,7 +397,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
           <button
             aria-expanded={undefined}
             className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Application successfully submitted click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Exit - Application successfully submitted click"
           >
             {t('application-full-child:confirm.close-application')}
           </button>
@@ -410,7 +410,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
           <p>{t('application-full-child:confirm.modal.are-you-sure')}</p>
           <DialogFooter>
             <DialogClose asChild>
-              <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back exit modal - Application successfully submitted click">
+              <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Back exit modal - Application successfully submitted click">
                 {t('application-full-child:confirm.modal.back-btn')}
               </Button>
             </DialogClose>
@@ -421,7 +421,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
                 variant="primary"
                 size="sm"
                 onClick={() => sessionStorage.removeItem('flow.state')}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Confirmation exit modal - Application successfully submitted click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Confirmation exit modal - Application successfully submitted click"
               >
                 {t('application-full-child:confirm.modal.close-btn')}
               </Button>
