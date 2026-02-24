@@ -27,11 +27,6 @@ export const routes = [
     path: '/api/health',
   },
   {
-    id: 'api/protected-apply-state',
-    file: 'routes/api/protected-apply-state.ts',
-    path: '/api/protected-apply-state',
-  },
-  {
     id: 'api/protected-renew-state',
     file: 'routes/api/protected-renew-state.ts',
     path: '/api/protected-renew-state',
