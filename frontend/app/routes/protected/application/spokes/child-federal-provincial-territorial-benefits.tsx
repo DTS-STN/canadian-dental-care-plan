@@ -341,7 +341,7 @@ export default function ChildFederalProvincialTerritorialBenefits({ loaderData, 
               id="save-button"
               loading={isSubmitting}
               endIcon={faChevronRight}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Application Form-Child:Save - Child access to other federal, provincial or territorial dental benefits click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Child access to other federal, provincial or territorial dental benefits click"
             >
               {t('protected-application-spokes:children.dental-benefits.save-btn')}
             </LoadingButton>
@@ -352,7 +352,7 @@ export default function ChildFederalProvincialTerritorialBenefits({ loaderData, 
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Application Form-Child:Back - Child access to other federal, provincial or territorial dental benefits click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child access to other federal, provincial or territorial dental benefits click"
             >
               {t('protected-application-spokes:children.dental-benefits.back-btn')}
             </ButtonLink>

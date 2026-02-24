@@ -254,7 +254,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               />
             </div>
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Applicant information click">
+              <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Applicant information click">
                 {t('protected-application-spokes:personal-information.save-btn')}
               </LoadingButton>
               <ButtonLink
@@ -264,7 +264,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
                 params={params}
                 disabled={isSubmitting}
                 startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Applicant information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Applicant information click"
               >
                 {t('protected-application-spokes:personal-information.back-btn')}
               </ButtonLink>

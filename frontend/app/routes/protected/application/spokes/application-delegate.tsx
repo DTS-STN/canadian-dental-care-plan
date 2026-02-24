@@ -87,11 +87,11 @@ export default function ApplicationDelegate({ loaderData, params }: Route.Compon
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Application Form:Back - Applying on behalf of someone click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Applying on behalf of someone click"
         >
           {t('protected-application-spokes:application-delegate.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Application Form:Exit - Applying on behalf of someone click">
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - Applying on behalf of someone click">
           {t('protected-application-spokes:application-delegate.exit-btn')}
         </LoadingButton>
       </fetcher.Form>

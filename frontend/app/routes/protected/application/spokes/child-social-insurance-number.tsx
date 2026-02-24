@@ -155,7 +155,7 @@ export default function ChildSocialInsuranceNumber({ loaderData, params }: Route
             />
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Child social insurance number click">
+            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Child social insurance number click">
               {t('protected-application-spokes:children.social-insurance-number.save-btn')}
             </LoadingButton>
             <ButtonLink
@@ -164,7 +164,7 @@ export default function ChildSocialInsuranceNumber({ loaderData, params }: Route
               routeId={`protected/application/$id/${applicationFlow}/childrens-application`}
               params={params}
               disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child social insurance number click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child social insurance number click"
             >
               {t('protected-application-spokes:children.social-insurance-number.back-btn')}
             </ButtonLink>

@@ -112,7 +112,16 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-phone-button" variant="link" className="p-0" routeId="protected/application/$id/phone-number" params={params} startIcon={sections.phoneNumber.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink
+              id="edit-phone-button"
+              variant="link"
+              className="p-0"
+              routeId="protected/application/$id/phone-number"
+              params={params}
+              startIcon={sections.phoneNumber.completed ? faPenToSquare : faCirclePlus}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult: Edit phone click"
+            >
               {sections.phoneNumber.completed ? t('protected-application-intake-adult:contact-information.edit-phone-number') : t('protected-application-intake-adult:contact-information.add-phone-number')}
             </ButtonLink>
           </CardFooter>
@@ -154,7 +163,16 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-address-button" variant="link" className="p-0" routeId="protected/application/$id/mailing-address" params={params} startIcon={sections.address.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink
+              id="edit-address-button"
+              variant="link"
+              className="p-0"
+              routeId="protected/application/$id/mailing-address"
+              params={params}
+              startIcon={sections.address.completed ? faPenToSquare : faCirclePlus}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult: Edit address click"
+            >
               {sections.address.completed ? t('protected-application-intake-adult:contact-information.edit-address') : t('protected-application-intake-adult:contact-information.add-address')}
             </ButtonLink>
           </CardFooter>
@@ -178,17 +196,39 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-comms-button" variant="link" className="p-0" routeId="protected/application/$id/communication-preferences" params={params} startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus} size="lg">
+            <ButtonLink
+              id="edit-comms-button"
+              variant="link"
+              className="p-0"
+              routeId="protected/application/$id/communication-preferences"
+              params={params}
+              startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult: Edit comms click"
+            >
               {sections.communicationPreferences.completed ? t('protected-application-intake-adult:contact-information.edit-communication-preferences') : t('protected-application-intake-adult:contact-information.add-communication-preferences')}
             </ButtonLink>
           </CardFooter>
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="protected/application/$id/intake-adult/dental-insurance" params={params}>
+          <NavigationButtonLink
+            disabled={!allSectionsCompleted}
+            variant="primary"
+            direction="next"
+            routeId="protected/application/$id/intake-adult/dental-insurance"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult: Continue click"
+          >
             {t('protected-application-intake-adult:contact-information.next-btn')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/intake-adult/marital-status" params={params}>
+          <NavigationButtonLink
+            variant="secondary"
+            direction="previous"
+            routeId="protected/application/$id/intake-adult/marital-status"
+            params={params}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult: Back click"
+          >
             {t('protected-application-intake-adult:contact-information.prev-btn')}
           </NavigationButtonLink>
         </div>

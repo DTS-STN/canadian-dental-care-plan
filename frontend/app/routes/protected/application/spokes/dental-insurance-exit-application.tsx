@@ -76,11 +76,11 @@ export default function ApplicationSpokeDentalInsuranceExitApplication({ loaderD
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Exiting the application click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Exiting the application click"
         >
           {t('protected-application-spokes:dental-insurance-exit-application.back-btn')}
         </ButtonLink>
-        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - Exiting the application click">
+        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - Exiting the application click">
           {t('protected-application-spokes:dental-insurance-exit-application.exit-btn')}
         </LoadingButton>
       </fetcher.Form>

@@ -78,11 +78,11 @@ export default function ProtectedRenewalFamilyExitApplication({ loaderData, para
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Family:Back - Exiting the application click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Back - Exiting the application click"
         >
           {t('protected-application-renewal-family:exit-application.back-btn')}
         </ButtonLink>
-        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Family:Exit - Exiting the application click">
+        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Exit - Exiting the application click">
           {t('protected-application-renewal-family:exit-application.exit-btn')}
         </LoadingButton>
       </fetcher.Form>

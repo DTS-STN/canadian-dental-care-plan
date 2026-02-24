@@ -340,7 +340,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   value={FORM_ACTION.submit}
                   loading={isSubmitting}
                   endIcon={faChevronRight}
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Home address click"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Home address click"
                 >
                   {t('protected-application-spokes:address.save-btn')}
                 </LoadingButton>
@@ -361,7 +361,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Home address click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Home address click"
             >
               {t('protected-application-spokes:address.back')}
             </ButtonLink>

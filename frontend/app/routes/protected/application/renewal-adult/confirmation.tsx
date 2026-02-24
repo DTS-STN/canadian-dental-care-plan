@@ -257,7 +257,7 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Print top - Application successfully submitted click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Print top - Application successfully submitted click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -275,7 +275,7 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
             className="external-link"
             newTabIndicator
             target="_blank"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Confirmation survey button - Take the survey click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Confirmation survey button - Take the survey click"
             variant="primary"
           >
             {t('confirm.survey.button')}
@@ -433,7 +433,7 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Print bottom - Application successfully submitted click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Print bottom - Application successfully submitted click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -443,7 +443,7 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
           <button
             aria-expanded={undefined}
             className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - Application successfully submitted click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Exit - Application successfully submitted click"
           >
             {t('protected-application-renewal-adult:confirm.close-application')}
           </button>
@@ -456,19 +456,13 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
           <p>{t('protected-application-renewal-adult:confirm.modal.are-you-sure')}</p>
           <DialogFooter>
             <DialogClose asChild>
-              <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back exit modal - Application successfully submitted click">
+              <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Back exit modal - Application successfully submitted click">
                 {t('protected-application-renewal-adult:confirm.modal.back-btn')}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
-              <Button
-                id="confirm-modal-close"
-                variant="primary"
-                size="sm"
-                onClick={() => sessionStorage.removeItem('flow.state')}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Confirmation exit modal - Application successfully submitted click"
-              >
+              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult: Close confirm modal click">
                 {t('protected-application-renewal-adult:confirm.modal.close-btn')}
               </Button>
             </fetcher.Form>

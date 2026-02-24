@@ -88,11 +88,11 @@ export default function ApplicationFileYourTaxes({ loaderData, params }: Route.C
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - File your taxes click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - File your taxes click"
         >
           {t('protected-application:file-your-taxes.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - File your taxes click">
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - File your taxes click">
           {t('protected-application:file-your-taxes.exit-btn')}
         </LoadingButton>
       </fetcher.Form>

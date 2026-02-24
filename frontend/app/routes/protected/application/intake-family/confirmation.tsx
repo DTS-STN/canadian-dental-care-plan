@@ -220,7 +220,7 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Family:Print top - Application successintakey submitted click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Print top - Application successfully submitted click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -238,7 +238,7 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
             className="external-link"
             newTabIndicator
             target="_blank"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Family:Confirmation survey button - Take the survey click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Confirmation survey button - Take the survey click"
             variant="primary"
           >
             {t('confirm.survey.button')}
@@ -431,7 +431,7 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Family:Print bottom - Application successintakey submitted click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Print bottom - Application successfully submitted click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -441,7 +441,7 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
           <button
             aria-expanded={undefined}
             className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Family:Exit - Application successintakey submitted click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Exit - Application successfully submitted click"
           >
             {t('protected-application-intake-family:confirm.close-application')}
           </button>
@@ -454,19 +454,13 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
           <p>{t('protected-application-intake-family:confirm.modal.are-you-sure')}</p>
           <DialogFooter>
             <DialogClose asChild>
-              <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Family:Back exit modal - Application successintakey submitted click">
+              <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Back exit modal - Application successfully submitted click">
                 {t('protected-application-intake-family:confirm.modal.back-btn')}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
-              <Button
-                id="confirm-modal-close"
-                variant="primary"
-                size="sm"
-                onClick={() => sessionStorage.removeItem('flow.state')}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Family:Confirmation exit modal - Application successintakey submitted click"
-              >
+              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family: Close confirm modal click">
                 {t('protected-application-intake-family:confirm.modal.close-btn')}
               </Button>
             </fetcher.Form>

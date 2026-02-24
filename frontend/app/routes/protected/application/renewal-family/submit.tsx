@@ -142,11 +142,11 @@ export default function ProtectedRenewalFamilySubmit({ loaderData, params }: Rou
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-renewal-family:submit.review-your-application')}</h2>
             <p>{t('protected-application-renewal-family:submit.please-review')}</p>
             {shouldSkipMaritalStatusStep ? (
-              <ButtonLink variant="primary" routeId="protected/application/$id/renewal-family/contact-information" params={params}>
+              <ButtonLink variant="primary" routeId="protected/application/$id/renewal-family/contact-information" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Action click">
                 {t('protected-application-renewal-family:submit.review-application')}
               </ButtonLink>
             ) : (
-              <ButtonLink variant="primary" routeId="protected/application/$id/renewal-family/marital-status" params={params}>
+              <ButtonLink variant="primary" routeId="protected/application/$id/renewal-family/marital-status" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Action click">
                 {t('protected-application-renewal-family:submit.review-application')}
               </ButtonLink>
             )}
@@ -168,10 +168,17 @@ export default function ProtectedRenewalFamilySubmit({ loaderData, params }: Rou
                 </InputCheckbox>
               </div>
               <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-                <NavigationButton loading={isSubmitting} variant="primary" direction="next">
+                <NavigationButton loading={isSubmitting} variant="primary" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Submit click">
                   {t('protected-application-renewal-family:submit.submit')}
                 </NavigationButton>
-                <NavigationButtonLink disabled={isSubmitting} variant="secondary" direction="previous" routeId="protected/application/$id/renewal-family/childrens-application" params={params}>
+                <NavigationButtonLink
+                  disabled={isSubmitting}
+                  variant="secondary"
+                  direction="previous"
+                  routeId="protected/application/$id/renewal-family/childrens-application"
+                  params={params}
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family: Back click"
+                >
                   {t('protected-application-renewal-family:submit.childrens-application')}
                 </NavigationButtonLink>
               </div>

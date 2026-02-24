@@ -235,7 +235,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
               disabled={isSubmitting}
               loading={isSubmitting && submittedAction === FORM_ACTION.request}
               value={FORM_ACTION.request}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Request new verification code - Verify email click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Request new verification code - Verify email click"
               onClick={async () => {
                 const formData = new FormData();
                 formData.append('_action', FORM_ACTION.request);
@@ -258,11 +258,11 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
               value={FORM_ACTION.submit}
               disabled={isSubmitting}
               loading={isSubmitting && submittedAction === FORM_ACTION.submit}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Verify email"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Verify email click"
             >
               {t('protected-application-spokes:verify-email.continue')}
             </LoadingButton>
-            <ButtonLink id="back-button" variant="secondary" routeId="protected/application/$id/email" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Verify email click">
+            <ButtonLink id="back-button" variant="secondary" routeId="protected/application/$id/email" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Verify email click">
               {t('protected-application-spokes:verify-email.back')}
             </ButtonLink>
           </div>
@@ -276,7 +276,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
           <DialogDescription>{t('protected-application-spokes:verify-email.code-sent.detail', { email: defaultState })}</DialogDescription>
           <DialogFooter>
             <DialogClose asChild>
-              <Button id="modal-continue" disabled={isSubmitting} variant="primary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Modal Continue - Verify email click">
+              <Button id="modal-continue" disabled={isSubmitting} variant="primary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Modal Continue - Verify email click">
                 {t('protected-application-spokes:verify-email.continue')}
               </Button>
             </DialogClose>

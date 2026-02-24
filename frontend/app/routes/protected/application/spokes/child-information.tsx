@@ -368,7 +368,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
             />
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Application Form-Child:Save - Child Information click">
+            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Child Information click">
               {t('protected-application-spokes:children.information.save-btn')}
             </LoadingButton>
             <ButtonLink
@@ -378,7 +378,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
               params={params}
               disabled={isSubmitting}
               startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Protected Application Form-Child:Back - Child Information click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child Information click"
             >
               {t('protected-application-spokes:children.information.back-btn')}
             </ButtonLink>

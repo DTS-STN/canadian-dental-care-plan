@@ -248,7 +248,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
             <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:terms-conditions.checkboxes.do-not-consent" />
           </InputCheckbox>
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton aria-describedby="application-consent" variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Terms and Conditions click">
+            <LoadingButton aria-describedby="application-consent" variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Terms and Conditions click">
               {t('protected-application-spokes:terms-conditions.apply.continue-button')}
             </LoadingButton>
             <ButtonLink
@@ -257,7 +257,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               routeId="protected/application/$id/eligibility-requirements"
               params={params}
               disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Terms and Conditions click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Terms and Conditions click"
             >
               {t('protected-application-spokes:terms-conditions.apply.back-button')}
             </ButtonLink>

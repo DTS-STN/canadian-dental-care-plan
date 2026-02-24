@@ -78,11 +78,11 @@ export default function ProtectedNewChildrenExitApplication({ loaderData, params
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Children:Back - Exiting the application click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Back - Exiting the application click"
         >
           {t('protected-application-intake-child:exit-application.back-btn')}
         </ButtonLink>
-        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Children:Exit - Exiting the application click">
+        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Exit - Exiting the application click">
           {t('protected-application-intake-child:exit-application.exit-btn')}
         </LoadingButton>
       </fetcher.Form>
