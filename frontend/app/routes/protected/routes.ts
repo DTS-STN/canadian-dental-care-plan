@@ -226,7 +226,11 @@ export const routes = [
             paths: { en: '/:lang/protected/application/:id/dental-insurance-exit-application', fr: '/:lang/protege/demande/:id/quitter-demande-assurance-dentaire' },
           },
           { id: 'protected/application/$id/tax-filing', file: 'routes/protected/application/spokes/tax-filing.tsx', paths: { en: '/:lang/protected/application/:id/tax-filing', fr: '/:lang/protege/demande/:id/declaration-impot' } },
-          { id: 'protected/application/$id/renewal-selection', file: 'routes/protected/application/spokes/renewal-selection.tsx', paths: { en: '/:lang/protected/application/:id/renewal-selection', fr: '/:lang/protege/demande/:id/renewal-selection' } },
+          {
+            id: 'protected/application/$id/renewal-selection',
+            file: 'routes/protected/application/spokes/renewal-selection.tsx',
+            paths: { en: '/:lang/protected/application/:id/renewal-selection', fr: '/:lang/protege/demande/:id/selection-renouvellement' },
+          },
           { id: 'protected/application/$id/terms-conditions', file: 'routes/protected/application/spokes/terms-conditions.tsx', paths: { en: '/:lang/protected/application/:id/terms-conditions', fr: '/:lang/protege/demande/:id/conditions-utilisation' } },
           { id: 'protected/application/$id/type-application', file: 'routes/protected/application/spokes/type-application.tsx', paths: { en: '/:lang/protected/application/:id/type-application', fr: '/:lang/protege/demande/:id/type-demande' } },
           {
