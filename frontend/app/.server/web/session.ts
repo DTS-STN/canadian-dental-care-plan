@@ -8,7 +8,6 @@ import type { ApplicantDto, LetterDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import type { ProtectedApplicationState, ProtectedApplicationStateSessionKey } from '~/.server/routes/helpers/protected-application-route-helpers';
-import type { ProtectedApplyState, ProtectedApplyStateSessionKey } from '~/.server/routes/helpers/protected-apply-route-helpers';
 import type { ProtectedRenewState, ProtectedRenewStateSessionKey } from '~/.server/routes/helpers/protected-renew-route-helpers';
 import type { PublicApplicationState, PublicApplicationStateSessionKey } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { StatusState, StatusStateSessionKey } from '~/.server/routes/helpers/status-route-helpers';
@@ -24,8 +23,6 @@ type SessionTypeMap = {
   [K in PublicApplicationStateSessionKey]: PublicApplicationState;
 } & {
   [K in ProtectedApplicationStateSessionKey]: ProtectedApplicationState;
-} & {
-  [K in ProtectedApplyStateSessionKey]: ProtectedApplyState;
 } & {
   [K in ProtectedRenewStateSessionKey]: ProtectedRenewState;
 } & {
