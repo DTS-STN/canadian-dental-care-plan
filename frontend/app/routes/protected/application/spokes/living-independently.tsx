@@ -93,52 +93,50 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
   const errors = fetcher.data?.errors;
 
   return (
-    <>
-      <div className="max-w-prose">
-        <p className="mb-6">{t('protected-application-spokes:living-independently.description')}</p>
-        <p className="mb-4 italic">{t('protected-application:required-label')}</p>
-        <ErrorSummaryProvider actionData={fetcher.data}>
-          <ErrorSummary />
-          <fetcher.Form method="post" noValidate>
-            <CsrfTokenInput />
-            <InputRadios
-              id="living-independently"
-              name="livingIndependently"
-              legend={t('protected-application-spokes:living-independently.form-instructions')}
-              options={[
-                {
-                  value: LIVING_INDEPENDENTLY_OPTION.yes,
-                  children: t('protected-application-spokes:living-independently.radio-options.yes'),
-                  defaultChecked: defaultState === true,
-                },
-                {
-                  value: LIVING_INDEPENDENTLY_OPTION.no,
-                  children: t('protected-application-spokes:living-independently.radio-options.no'),
-                  defaultChecked: defaultState === false,
-                },
-              ]}
-              required
-              errorMessage={errors?.livingIndependently}
-            />
-            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Living independently click">
-                {t('protected-application-spokes:living-independently.save-btn')}
-              </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                variant="secondary"
-                routeId="protected/application/$id/personal-information"
-                params={params}
-                disabled={isSubmitting}
-                startIcon={faChevronLeft}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Living independently click"
-              >
-                {t('protected-application-spokes:living-independently.back-btn')}
-              </ButtonLink>
-            </div>
-          </fetcher.Form>
-        </ErrorSummaryProvider>
-      </div>
-    </>
+    <div className="max-w-prose">
+      <p className="mb-6">{t('protected-application-spokes:living-independently.description')}</p>
+      <p className="mb-4 italic">{t('protected-application:required-label')}</p>
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <InputRadios
+            id="living-independently"
+            name="livingIndependently"
+            legend={t('protected-application-spokes:living-independently.form-instructions')}
+            options={[
+              {
+                value: LIVING_INDEPENDENTLY_OPTION.yes,
+                children: t('protected-application-spokes:living-independently.radio-options.yes'),
+                defaultChecked: defaultState === true,
+              },
+              {
+                value: LIVING_INDEPENDENTLY_OPTION.no,
+                children: t('protected-application-spokes:living-independently.radio-options.no'),
+                defaultChecked: defaultState === false,
+              },
+            ]}
+            required
+            errorMessage={errors?.livingIndependently}
+          />
+          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Living independently click">
+              {t('protected-application-spokes:living-independently.save-btn')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              variant="secondary"
+              routeId="protected/application/$id/personal-information"
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Living independently click"
+            >
+              {t('protected-application-spokes:living-independently.back-btn')}
+            </ButtonLink>
+          </div>
+        </fetcher.Form>
+      </ErrorSummaryProvider>
+    </div>
   );
 }

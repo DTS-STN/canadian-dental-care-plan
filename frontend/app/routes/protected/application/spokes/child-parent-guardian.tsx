@@ -30,12 +30,15 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  getProtectedApplicationState({ params, session });
+  const state = getProtectedApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.parent-or-guardian.page-title') }) };
 
-  return { meta };
+  return {
+    meta,
+    isRenewal: state.context === 'renewal',
+  };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -53,6 +56,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ChildParentGuardian({ loaderData, params }: Route.ComponentProps) {
+  const { isRenewal } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const fetcher = useFetcher<typeof action>();
@@ -65,7 +69,7 @@ export default function ChildParentGuardian({ loaderData, params }: Route.Compon
   }
 
   return (
-    <>
+    <div className="max-w-prose">
       <div className="mb-8 space-y-4">
         <p>{t('protected-application-spokes:children.parent-or-guardian.unable-to-apply')}</p>
       </div>
@@ -74,7 +78,7 @@ export default function ChildParentGuardian({ loaderData, params }: Route.Compon
         <ButtonLink
           id="back-button"
           variant="secondary"
-          routeId="protected/application/$id/children/$childId/information"
+          routeId={`protected/application/$id/children/$childId/${isRenewal ? 'parent-guardian' : 'information'}`}
           params={params}
           disabled={isSubmitting}
           startIcon={faChevronLeft}
@@ -86,6 +90,6 @@ export default function ChildParentGuardian({ loaderData, params }: Route.Compon
           {t('protected-application-spokes:children.parent-or-guardian.exit-btn')}
         </LoadingButton>
       </fetcher.Form>
-    </>
+    </div>
   );
 }
