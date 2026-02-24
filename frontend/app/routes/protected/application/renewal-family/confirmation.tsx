@@ -183,7 +183,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     userInfo,
     children,
     eligibility: getEligibilityStatus(state.dentalInsurance.hasDentalInsurance, state.clientApplication.t4DentalIndicator),
-    displayEligibility: state.clientApplication.copayTierEarningRecord,
+    isSimplifiedRenewal: state.clientApplication.copayTierEarningRecord,
   };
 }
 
@@ -208,7 +208,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ProtectedRenewalFamilyConfirmation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, children, eligibility, displayEligibility } = loaderData;
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, children, eligibility, isSimplifiedRenewal } = loaderData;
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('protected-application-renewal-family:confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
@@ -217,7 +217,7 @@ export default function ProtectedRenewalFamilyConfirmation({ loaderData, params 
 
   return (
     <div className="max-w-prose space-y-10">
-      {displayEligibility && (
+      {isSimplifiedRenewal && (
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.your-eligibility')}</h3>
           <DefinitionList border>
@@ -280,24 +280,31 @@ export default function ProtectedRenewalFamilyConfirmation({ loaderData, params 
         </div>
       </ContextualAlert>
 
-      <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>
-        <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.begin-process" components={{ cdcpLink, mscaLinkAccount }} />
-        </p>
-      </section>
+      {!isSimplifiedRenewal && (
+        <>
+          <section>
+            <h2 className="font-lato text-3xl font-bold">{t('confirm.full-whats-next')}</h2>
+            <p className="mt-4">{t('confirm.full-begin-process')}</p>
+          </section>
 
-      <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.get-updates-title')}</h2>
-        <p className="my-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey={'confirm.get-updates-text'} components={{ mscaLinkAccount }} />
-        </p>
-        <ul className="list-disc space-y-1 pl-7">
-          <li>{t('confirm.view')}</li>
-          <li>{t('confirm.update')}</li>
-          <li>{t('confirm.access')}</li>
-        </ul>
-      </section>
+          <section>
+            <h2 className="font-lato text-3xl font-bold">{t('confirm.check-status')}</h2>
+            <p className="mt-4">
+              <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
+            </p>
+            <p className="mt-4">{t('confirm.use-code')}</p>
+          </section>
+        </>
+      )}
+
+      {isSimplifiedRenewal && (
+        <section>
+          <h2 className="font-lato text-3xl font-bold">{t('confirm.simplified-whats-next')}</h2>
+          <p className="mt-4">
+            <Trans ns={handle.i18nNamespaces} i18nKey="confirm.simplified-begin-process" components={{ cdcpLink, mscaLinkAccount }} />
+          </p>
+        </section>
+      )}
 
       <section className="space-y-8">
         <div className="space-y-6">
