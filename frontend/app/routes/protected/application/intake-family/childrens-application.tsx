@@ -276,7 +276,7 @@ export default function ProtectedNewFamilyChildrensApplication({ loaderData, par
                 </CardContent>
                 <CardFooter className="border-t bg-zinc-100">
                   <ButtonLink
-                    id="edit-benefits-button"
+                    id={`edit-benefits-button-${child.id}`}
                     variant="link"
                     className="p-0"
                     routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
@@ -293,7 +293,7 @@ export default function ProtectedNewFamilyChildrensApplication({ loaderData, par
                 <CsrfTokenInput />
                 <input type="hidden" name="childId" value={child.id} />
                 <Button
-                  id="remove-child"
+                  id={`remove-child-${child.id}`}
                   className="my-5"
                   name="_action"
                   value={FORM_ACTION.remove}
