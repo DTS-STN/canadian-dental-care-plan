@@ -80,7 +80,6 @@
   },
   "childrens-application": {
     "page-title": "La demande de votre/vos enfant(s)",
-    "child-title": "Enfant {{childNumber}}",
     "sin-card-title": "Numéro d'assurance sociale (NAS)",
     "sin-help": "Saisir le NAS de votre enfant.",
     "edit-sin": "Modifier le NAS",
@@ -110,8 +109,7 @@
     "dental-benefits-yes": "Oui, l'enfant bénéficie de prestations dentaires fédérales, provinciales ou territoriales",
     "dental-benefits-no": "Non, l'enfant ne bénéficie pas de prestations dentaires fédérales, provinciales ou territoriales",
     "back-btn": "Renseignements sur le parent ou le tuteur légal",
-    "submit-btn": "Soumettre la demande",
-    "no-change": "Pas de mise à jour."
+    "submit-btn": "Soumettre la demande"
   },
   "confirm": {
     "page-title": "Demande soumise avec succès",
