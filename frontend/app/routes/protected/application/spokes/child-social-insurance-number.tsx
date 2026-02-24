@@ -86,7 +86,13 @@ export async function action({ context: { appContainer, session }, params, reque
             path: ['socialInsuranceNumber'],
             message: t('protected-application-spokes:children.social-insurance-number.sin-valid'),
           });
-        } else if (sin && childState.information?.socialInsuranceNumber && formatSin(sin) === formatSin(childState.information.socialInsuranceNumber)) {
+        } else if (
+          sin &&
+          [state.applicantInformation?.socialInsuranceNumber, state.partnerInformation?.socialInsuranceNumber, ...state.children.filter((child) => child.id !== childState.id).map((child) => child.information?.socialInsuranceNumber)]
+            .filter((sin) => sin !== undefined)
+            .map((sin) => formatSin(sin))
+            .includes(formatSin(sin))
+        ) {
           ctx.addIssue({
             code: 'custom',
             path: ['socialInsuranceNumber'],
