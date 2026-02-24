@@ -9,7 +9,7 @@ import type { Route } from './+types/renewal-selection';
 
 import { TYPES } from '~/.server/constants';
 import { getProtectedApplicationState, getTypeOfApplicationFromRenewalSelectionClientIds, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
-import type { ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import type { ChildInformationState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -127,14 +127,7 @@ function getChildren(state: ProtectedApplicationState, selectedClientIds: string
         firstName: child.information.firstName,
         lastName: child.information.lastName,
         dateOfBirth: child.information.dateOfBirth,
-        hasSocialInsuranceNumber: !!child.information.socialInsuranceNumber,
-        socialInsuranceNumber: child.information.socialInsuranceNumber,
-        isParent: true,
-      },
-      dentalCoverage: {
-        hasDentalCoverage: undefined,
-        coverageDetails: undefined,
-      },
+      } as ChildInformationState,
     };
   });
 }
