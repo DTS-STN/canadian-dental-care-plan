@@ -6,6 +6,7 @@ import { z } from 'zod';
 import type { Route } from './+types/child-social-insurance-number';
 
 import { TYPES } from '~/.server/constants';
+import type { ChildInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getProtectedApplicationState, getSingleChildState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -112,10 +113,10 @@ export async function action({ context: { appContainer, session }, params, reque
         if (child.id !== childState.id) return child;
         return {
           ...child,
-          childInformation: {
+          information: {
             ...child.information,
             socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
-          },
+          } as ChildInformationState,
         };
       }),
     },

@@ -8,6 +8,7 @@ import type { Route } from './+types/parent-guardian';
 
 import { TYPES } from '~/.server/constants';
 import { getProtectedApplicationState, getSingleChildState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import type { ChildInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -50,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.parent-guardian.page-title') }) };
 
-  return { meta, defaultState: childState.information, childName, isNew: childState.isNew, applicationFlow: `${state.context}-${state.typeOfApplication}` as const };
+  return { meta, defaultState: childState.information, childName, applicationFlow: `${state.context}-${state.typeOfApplication}` as const };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -86,10 +87,10 @@ export async function action({ context: { appContainer, session }, params, reque
         if (child.id !== childState.id) return child;
         return {
           ...child,
-          childInformation: {
+          information: {
             ...child.information,
             isParent: parsedDataResult.data.isParent,
-          },
+          } as ChildInformationState,
         };
       }),
     },
@@ -104,7 +105,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ParentGuardian({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, childName, isNew, applicationFlow } = loaderData;
+  const { defaultState, childName, applicationFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
@@ -119,8 +120,8 @@ export default function ParentGuardian({ loaderData, params }: Route.ComponentPr
           name="isParent"
           legend={t('protected-application-spokes:children.parent-guardian.parent-legend', { childName })}
           options={[
-            { value: YES_NO_OPTION.yes, children: t('protected-application-spokes:children.parent-guardian.radio-options.yes'), defaultChecked: defaultState?.isParent === true, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
-            { value: YES_NO_OPTION.no, children: t('protected-application-spokes:children.parent-guardian.radio-options.no'), defaultChecked: defaultState?.isParent === false, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
+            { value: YES_NO_OPTION.yes, children: t('protected-application-spokes:children.parent-guardian.radio-options.yes'), defaultChecked: defaultState?.isParent === true },
+            { value: YES_NO_OPTION.no, children: t('protected-application-spokes:children.parent-guardian.radio-options.no'), defaultChecked: defaultState?.isParent === false },
           ]}
           errorMessage={errors?.isParent}
           required

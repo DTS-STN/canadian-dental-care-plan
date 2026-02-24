@@ -12,7 +12,7 @@ import type { Route } from './+types/childrens-application';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationRenewalChildState } from '~/.server/routes/helpers/protected-application-renewal-child-route-helpers';
-import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildParentGuardianSectionCompleted, isChildSinSectionCompleted } from '~/.server/routes/helpers/protected-application-renewal-section-checks';
+import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildParentGuardianSectionCompleted } from '~/.server/routes/helpers/protected-application-renewal-section-checks';
 import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -76,7 +76,7 @@ export async function loader({ context: { appContainer, session }, request, para
         ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
         : undefined;
 
-      const immutableChild = state.clientApplication.children.find((c) => c.information.socialInsuranceNumber === child.information?.socialInsuranceNumber);
+      const immutableChild = state.clientApplication.children.find((c) => c.information.clientNumber === child.information?.memberId);
       const clientDentalBenefits = (await immutableChild?.dentalBenefits.reduce(async (benefitsPromise, id) => {
         const benefits = await benefitsPromise;
 
@@ -108,8 +108,6 @@ export async function loader({ context: { appContainer, session }, request, para
       return {
         ...child,
         clientApplication: {
-          socialInsuranceNumber: immutableChild?.information.socialInsuranceNumber,
-          isParent: immutableChild?.information.isParent,
           clientDentalBenefits: clientDentalBenefits.federalBenefit?.access || clientDentalBenefits.provTerrBenefit?.access ? clientDentalBenefits : undefined,
         },
         dentalBenefits: child.dentalBenefits
@@ -138,9 +136,6 @@ export async function loader({ context: { appContainer, session }, request, para
       state.children.map((child) => [
         child.id,
         {
-          sin: {
-            completed: isChildSinSectionCompleted(child),
-          },
           parentGuardian: {
             completed: isChildParentGuardianSectionCompleted(child),
           },
@@ -220,12 +215,11 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
                 <CardHeader>
                   <CardTitle>{t('protected-application-renewal-child:childrens-application.sin-card-title')}</CardTitle>
                   <CardAction>
-                    {sections.sin.completed && <StatusTag status="complete" />}
-                    {!sections.sin.completed && (child.information?.socialInsuranceNumber !== undefined || child.clientApplication.socialInsuranceNumber !== undefined) && <StatusTag status="optional" />}
+                    <StatusTag status="optional" />
                   </CardAction>
                 </CardHeader>
                 <ChildSinCardContent child={child} />
-                <ChildSinCardFooter child={child} sectionCompleted={sections.sin.completed} params={params} />
+                <ChildSinCardFooter child={child} params={params} sectionCompleted={true} />
               </Card>
 
               <Card className="my-4">
@@ -276,9 +270,6 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
  *
  * - If the user has entered a SIN (child.information.socialInsuranceNumber is defined), show the formatted SIN.
  *
- * - If the user has not entered a SIN but there is a SIN from the client application (child.clientApplication.socialInsuranceNumber is defined),
- *   show the formatted client SIN.
- *
  * - If there is no SIN at all, show the help text.
  */
 function ChildSinCardContent({ child }: { child: Route.ComponentProps['loaderData']['state']['children'][0] }): JSX.Element {
@@ -291,19 +282,6 @@ function ChildSinCardContent({ child }: { child: Route.ComponentProps['loaderDat
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t('protected-application-renewal-child:childrens-application.sin-title')}>
             <p>{formatSin(child.information.socialInsuranceNumber)}</p>
-          </DefinitionListItem>
-        </DefinitionList>
-      </CardContent>
-    );
-  }
-
-  // Fall back to client application SIN
-  if (child.clientApplication.socialInsuranceNumber) {
-    return (
-      <CardContent>
-        <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-child:childrens-application.sin-title')}>
-            <p>{formatSin(child.clientApplication.socialInsuranceNumber)}</p>
           </DefinitionListItem>
         </DefinitionList>
       </CardContent>
@@ -325,12 +303,10 @@ function ChildSinCardContent({ child }: { child: Route.ComponentProps['loaderDat
  *
  * - If there is no SIN at all, show the "Add" button.
  */
-function ChildSinCardFooter({ child, sectionCompleted, params }: { child: Route.ComponentProps['loaderData']['state']['children'][0]; sectionCompleted: boolean; params: Route.ComponentProps['params'] }): JSX.Element {
+function ChildSinCardFooter({ child, params }: { child: Route.ComponentProps['loaderData']['state']['children'][0]; sectionCompleted: boolean; params: Route.ComponentProps['params'] }): JSX.Element {
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  const hasSin = child.information?.socialInsuranceNumber !== undefined || child.clientApplication.socialInsuranceNumber !== undefined;
-
-  if (hasSin || sectionCompleted) {
+  if (child.information?.socialInsuranceNumber !== undefined) {
     return (
       <CardFooter className="border-t bg-zinc-100">
         <ButtonLink id={`edit-child-sin-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/social-insurance-number" params={{ ...params, childId: child.id }} startIcon={faPenToSquare} size="lg">
@@ -354,9 +330,6 @@ function ChildSinCardFooter({ child, sectionCompleted, params }: { child: Route.
  *
  * - If the user has entered parent/guardian status (child.information.isParent is defined), show Yes/No.
  *
- * - If the user has not entered parent/guardian status but there is client data (child.clientApplication.isParent is defined),
- *   show the client value.
- *
  * - If there is no parent/guardian status at all, show the help text.
  */
 function ChildParentGuardianCardContent({ child }: { child: Route.ComponentProps['loaderData']['state']['children'][0] }): JSX.Element {
@@ -369,19 +342,6 @@ function ChildParentGuardianCardContent({ child }: { child: Route.ComponentProps
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t('protected-application-renewal-child:childrens-application.parent-guardian-title')}>
             <p>{child.information.isParent ? t('protected-application-renewal-child:childrens-application.yes') : t('protected-application-renewal-child:childrens-application.no')}</p>
-          </DefinitionListItem>
-        </DefinitionList>
-      </CardContent>
-    );
-  }
-
-  // Fall back to client application value
-  if (child.clientApplication.isParent !== undefined) {
-    return (
-      <CardContent>
-        <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-child:childrens-application.parent-guardian-title')}>
-            <p>{child.clientApplication.isParent ? t('protected-application-renewal-child:childrens-application.yes') : t('protected-application-renewal-child:childrens-application.no')}</p>
           </DefinitionListItem>
         </DefinitionList>
       </CardContent>
@@ -406,9 +366,7 @@ function ChildParentGuardianCardContent({ child }: { child: Route.ComponentProps
 function ChildParentGuardianCardFooter({ child, sectionCompleted, params }: { child: Route.ComponentProps['loaderData']['state']['children'][0]; sectionCompleted: boolean; params: Route.ComponentProps['params'] }): JSX.Element {
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  const hasValue = child.information?.isParent !== undefined || child.clientApplication.isParent !== undefined;
-
-  if (hasValue || sectionCompleted) {
+  if (child.information?.isParent !== undefined || sectionCompleted) {
     return (
       <CardFooter className="border-t bg-zinc-100">
         <ButtonLink id={`edit-child-parent-${child.id}`} variant="link" className="p-0" routeId="protected/application/$id/children/$childId/parent-guardian" params={{ ...params, childId: child.id }} startIcon={faPenToSquare} size="lg">
