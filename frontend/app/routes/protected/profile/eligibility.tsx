@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import type { Route } from './+types/eligibility';
 
 import { TYPES } from '~/.server/constants';
+import { isWithinRenewalPeriod } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
@@ -75,18 +76,20 @@ export async function loader({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.eligibility', { userId: idToken.sub });
 
   const currentCoverage = appContainer.get(TYPES.CoverageService).getCurrentCoverage();
+  const showApplyLink = isWithinRenewalPeriod();
 
   return {
     meta,
     SCCH_BASE_URI,
     applicants,
     currentCoverage,
+    showApplyLink,
   };
 }
 
 export default function ProtectedProfileEligibility({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { applicants, SCCH_BASE_URI, currentCoverage } = loaderData;
+  const { applicants, SCCH_BASE_URI, currentCoverage, showApplyLink } = loaderData;
   const { ELIGIBILITY_STATUS_CODE_ELIGIBLE: ELIGIBILITY_STATUS_CODE_ELIGIBLE } = useClientEnv();
 
   return (
@@ -118,7 +121,7 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
             const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear, isNextYear: true, ELIGIBILITY_STATUS_CODE_ELIGIBLE });
             return (
               <DefinitionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
-                <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={coverageStartYear} coverageEndYear={coverageEndYear} showApplyLink={true} />
+                <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={coverageStartYear} coverageEndYear={coverageEndYear} showApplyLink={showApplyLink} />
               </DefinitionListItem>
             );
           })}
