@@ -12,7 +12,7 @@ export interface ClientApplicationDtoMapper {
   mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity: ClientApplicationEntity): ClientApplicationDto;
 }
 
-export type DefaultClientApplicationDtoMapper_ServerConfig = Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC' | 'ENGLISH_LANGUAGE_CODE'>;
+export type DefaultClientApplicationDtoMapper_ServerConfig = Pick<ServerConfig, 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'COVERAGE_CATEGORY_CODE_COPAY_TIER' | 'ENGLISH_LANGUAGE_CODE'>;
 
 @injectable()
 export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMapper {
@@ -188,7 +188,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       children,
       communicationPreferences,
       contactInformation,
-      copayTierEarningRecord: applicant.ApplicantEarning.some((earning) => earning.Coverage.some((coverage) => coverage.CoverageCategoryCode.ReferenceDataName === this.serverConfig.COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC)),
+      copayTierEarningRecord: applicant.ApplicantEarning.some((earning) => earning.Coverage.some((coverage) => coverage.CoverageCategoryCode.ReferenceDataName === this.serverConfig.COVERAGE_CATEGORY_CODE_COPAY_TIER)),
       dateOfBirth: applicant.PersonBirthDate.date,
       dentalBenefits: applicant.ApplicantDetail.InsurancePlan?.at(0)?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
       dentalInsurance: applicant.ApplicantDetail.PrivateDentalInsuranceIndicator,

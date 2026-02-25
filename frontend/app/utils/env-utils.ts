@@ -87,7 +87,8 @@ export const clientEnvSchema = z.object({
   // Enrollment Status Codes
   ENROLLMENT_STATUS_CODE_ENROLLED: z.string().trim().min(1).default('775170000'),
 
-  // Coverage Category Code
+  // Coverage Category Codes
+  COVERAGE_CATEGORY_CODE_COPAY_TIER: z.string().trim().min(1).default('Co-Pay Tier'),
   COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: z.string().trim().min(1).default('Co-Pay Tier (TPC)'),
 });
 
