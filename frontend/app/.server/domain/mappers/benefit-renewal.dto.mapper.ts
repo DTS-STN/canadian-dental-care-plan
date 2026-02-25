@@ -75,28 +75,14 @@ interface ToEmailAddressArgs {
 export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
   private readonly serverConfig: Pick<
     ServerConfig,
-    | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
-    | 'APPLICANT_CATEGORY_CODE_FAMILY'
-    | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
-    | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED'
-    | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'
-    | 'ENGLISH_LANGUAGE_CODE'
-    | 'FRENCH_LANGUAGE_CODE'
-    | 'MARITAL_STATUS_CODE_SINGLE'
+    'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED' | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC' | 'MARITAL_STATUS_CODE_SINGLE'
   >;
 
   constructor(
     @inject(TYPES.ServerConfig)
     serverConfig: Pick<
       ServerConfig,
-      | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
-      | 'APPLICANT_CATEGORY_CODE_FAMILY'
-      | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
-      | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED'
-      | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'
-      | 'ENGLISH_LANGUAGE_CODE'
-      | 'FRENCH_LANGUAGE_CODE'
-      | 'MARITAL_STATUS_CODE_SINGLE'
+      'APPLICANT_CATEGORY_CODE_INDIVIDUAL' | 'APPLICANT_CATEGORY_CODE_FAMILY' | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED' | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC' | 'MARITAL_STATUS_CODE_SINGLE'
     >,
   ) {
     this.serverConfig = serverConfig;
@@ -139,7 +125,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     }: ToBenefitRenewalRequestEntityArgs,
     isProtectedRoute: boolean,
   ): BenefitRenewalRequestEntity {
-    const { BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED, BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC, ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE, MARITAL_STATUS_CODE_SINGLE } = this.serverConfig;
+    const { BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED, BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC, MARITAL_STATUS_CODE_SINGLE } = this.serverConfig;
 
     return {
       BenefitApplication: {
@@ -178,7 +164,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
           PersonLanguage: [
             {
               CommunicationCategoryCode: {
-                ReferenceDataID: (communicationPreferences.preferredLanguage === 'english' ? ENGLISH_LANGUAGE_CODE : FRENCH_LANGUAGE_CODE).toString(),
+                ReferenceDataID: communicationPreferences.preferredLanguage,
               },
               PreferredIndicator: true,
             },
