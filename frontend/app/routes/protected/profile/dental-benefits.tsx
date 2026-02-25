@@ -5,7 +5,7 @@ import type { Route } from './+types/dental-benefits';
 import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
-import { DescriptionListItem } from '~/components/description-list-item';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -77,8 +77,8 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
       <p className="mb-4">{t('protected-profile:dental-benefits.eligibility-criteria')}</p>
       <section className="space-y-6">
         <h2 className="font-lato text-2xl font-bold">{`${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`}</h2>
-        <dl className="divide-y border-y">
-          <DescriptionListItem term={t('protected-profile:dental-benefits.have-access')}>
+        <DefinitionList border>
+          <DefinitionListItem term={t('protected-profile:dental-benefits.have-access')}>
             <div className="space-y-4">
               <p>{clientApplication.dentalBenefits.length > 0 ? t('protected-profile:dental-benefits.yes') : t('protected-profile:dental-benefits.no')}</p>
               {clientApplication.dentalBenefits.length > 0 && (
@@ -94,8 +94,8 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
                 {t('protected-profile:dental-benefits.update-link-text')}
               </InlineLink>
             </div>
-          </DescriptionListItem>
-        </dl>
+          </DefinitionListItem>
+        </DefinitionList>
       </section>
 
       {children.map((child) => {
@@ -104,8 +104,8 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
         return (
           <section className="space-y-6" key={child.information.clientId}>
             <h2 className="font-lato text-2xl font-bold">{childName}</h2>
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('protected-profile:dental-benefits.have-access')}>
+            <DefinitionList border>
+              <DefinitionListItem term={t('protected-profile:dental-benefits.have-access')}>
                 <div className="space-y-4">
                   <p>{child.dentalBenefits.length > 0 ? t('protected-profile:dental-benefits.yes') : t('protected-profile:dental-benefits.no')}</p>
                   {child.dentalBenefits.length > 0 && (
@@ -121,8 +121,8 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
                     {t('protected-profile:dental-benefits.update-link-text')}
                   </InlineLink>
                 </div>
-              </DescriptionListItem>
-            </dl>
+              </DefinitionListItem>
+            </DefinitionList>
           </section>
         );
       })}

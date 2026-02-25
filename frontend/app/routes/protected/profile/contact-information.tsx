@@ -10,7 +10,7 @@ import { Address } from '~/components/address';
 import type { AddressDetails } from '~/components/address';
 import { Badge } from '~/components/badge';
 import { ButtonLink } from '~/components/buttons';
-import { DescriptionListItem } from '~/components/description-list-item';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -84,23 +84,23 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
 
   return (
     <div className="max-w-prose space-y-10">
-      <dl className="divide-y border-y">
-        <DescriptionListItem term={t('protected-profile:contact-information.phone-number')} className="border-none pb-0 sm:pb-0">
+      <DefinitionList border>
+        <DefinitionListItem term={t('protected-profile:contact-information.phone-number')} className="border-none pb-0 sm:pb-0">
           <p>{phoneNumber ?? t('protected-profile:none')}</p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('protected-profile:contact-information.alt-phone-number')}>
+        </DefinitionListItem>
+        <DefinitionListItem term={t('protected-profile:contact-information.alt-phone-number')}>
           <p>{altPhoneNumber ?? t('protected-profile:none')}</p>
           <div className="mt-4 sm:mt-6">
             <InlineLink id="update-contact-information-phone" routeId="protected/profile/contact/phone" params={params}>
               {t('protected-profile:contact-information.update-phone-link-text')}
             </InlineLink>
           </div>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('protected-profile:contact-information.email')}>
+        </DefinitionListItem>
+        <DefinitionListItem term={t('protected-profile:contact-information.email')}>
           <p>{emailAddress ?? t('protected-profile:none')}</p>
           {emailVerificationStatus && (
             <Badge asChild size="lg" variant={emailVerificationStatus === 'unverified' ? 'warning' : 'success'}>
-              <p>
+              <p className="mt-3">
                 <FontAwesomeIcon icon={emailVerificationStatus === 'unverified' ? faExclamationTriangle : faCheckCircle} />
                 {t(`protected-profile:contact-information.email-verification-status.${emailVerificationStatus}`)}
               </p>
@@ -111,24 +111,24 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
               {t('protected-profile:contact-information.update-email-link-text')}
             </InlineLink>
           </div>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('protected-profile:contact-information.mailing-address')}>
+        </DefinitionListItem>
+        <DefinitionListItem term={t('protected-profile:contact-information.mailing-address')}>
           <Address address={mailingAddressDetails} />
           <div className="mt-4 sm:mt-6">
             <InlineLink id="update-contact-information-mailing-address" routeId="protected/profile/contact/mailing-address" params={params}>
               {t('protected-profile:contact-information.update-mailing-address-link-text')}
             </InlineLink>
           </div>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('protected-profile:contact-information.home-address')}>
+        </DefinitionListItem>
+        <DefinitionListItem term={t('protected-profile:contact-information.home-address')}>
           <Address address={homeAddressDetails} />
           <div className="mt-4 sm:mt-6">
             <InlineLink id="update-contact-information-home-address" routeId="protected/profile/contact/home-address" params={params}>
               {t('protected-profile:contact-information.update-home-address-link-text')}
             </InlineLink>
           </div>
-        </DescriptionListItem>
-      </dl>
+        </DefinitionListItem>
+      </DefinitionList>
       <ButtonLink
         variant="primary"
         id="back-button"
