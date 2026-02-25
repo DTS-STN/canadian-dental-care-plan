@@ -151,6 +151,7 @@ export type ClientApplicationBasicInfoRequestEntity = ReadonlyDeep<{
     };
     ClientIdentification: Array<{
       IdentificationID: string;
+      IdentificationCategoryText: 'Client Number';
     }>;
   };
   BenefitApplicationYear?: {

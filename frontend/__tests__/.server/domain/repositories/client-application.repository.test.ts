@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 import type { ServerConfig } from '~/.server/configs';
+import type { ClientApplicationBasicInfoRequestEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
 import { DefaultClientApplicationRepository, MockClientApplicationRepository } from '~/.server/domain/repositories';
 import type { HttpClient } from '~/.server/http';
 
@@ -65,9 +66,9 @@ describe('DefaultClientApplicationRepository', () => {
       httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock, { status: 200 }));
 
       const repository = new DefaultClientApplicationRepository(serverConfigMock, httpClientMock);
-      const requestEntity = {
+      const requestEntity: ClientApplicationBasicInfoRequestEntity = {
         Applicant: {
-          ClientIdentification: [{ IdentificationID: '123' }],
+          ClientIdentification: [{ IdentificationID: '123', IdentificationCategoryText: 'Client Number' }],
           PersonName: { PersonGivenName: ['John'], PersonSurName: 'Doe' },
           PersonBirthDate: { date: '2000-01-01' },
         },
@@ -99,9 +100,9 @@ describe('DefaultClientApplicationRepository', () => {
       httpClientMock.instrumentedFetch.mockResolvedValue(new Response(null, { status: 204 }));
 
       const repository = new DefaultClientApplicationRepository(serverConfigMock, httpClientMock);
-      const requestEntity = {
+      const requestEntity: ClientApplicationBasicInfoRequestEntity = {
         Applicant: {
-          ClientIdentification: [{ IdentificationID: '123' }],
+          ClientIdentification: [{ IdentificationID: '123', IdentificationCategoryText: 'Client Number' }],
           PersonName: { PersonGivenName: ['John'], PersonSurName: 'Doe' },
           PersonBirthDate: { date: '2000-01-01' },
         },
@@ -120,9 +121,9 @@ describe('DefaultClientApplicationRepository', () => {
       httpClientMock.instrumentedFetch.mockResolvedValue(new Response(null, { status: 500, statusText: 'Internal Server Error' }));
 
       const repository = new DefaultClientApplicationRepository(serverConfigMock, httpClientMock);
-      const requestEntity = {
+      const requestEntity: ClientApplicationBasicInfoRequestEntity = {
         Applicant: {
-          ClientIdentification: [{ IdentificationID: '123' }],
+          ClientIdentification: [{ IdentificationID: '123', IdentificationCategoryText: 'Client Number' }],
           PersonName: { PersonGivenName: ['John'], PersonSurName: 'Doe' },
           PersonBirthDate: { date: '2000-01-01' },
         },
@@ -148,7 +149,7 @@ describe('DefaultClientApplicationRepository', () => {
       httpClientMock.instrumentedFetch.mockResolvedValue(Response.json(responseDataMock, { status: 200 }));
 
       const repository = new DefaultClientApplicationRepository(serverConfigMock, httpClientMock);
-      const requestEntity = {
+      const requestEntity: ClientApplicationSinRequestEntity = {
         Applicant: {
           PersonSINIdentification: { IdentificationID: '800000002' },
         },
@@ -176,7 +177,7 @@ describe('DefaultClientApplicationRepository', () => {
       httpClientMock.instrumentedFetch.mockResolvedValue(new Response(null, { status: 204 }));
 
       const repository = new DefaultClientApplicationRepository(serverConfigMock, httpClientMock);
-      const requestEntity = {
+      const requestEntity: ClientApplicationSinRequestEntity = {
         Applicant: {
           PersonSINIdentification: { IdentificationID: '900000001' },
         },
@@ -195,7 +196,7 @@ describe('DefaultClientApplicationRepository', () => {
       httpClientMock.instrumentedFetch.mockResolvedValue(new Response(null, { status: 400, statusText: 'Bad Request' }));
 
       const repository = new DefaultClientApplicationRepository(serverConfigMock, httpClientMock);
-      const requestEntity = {
+      const requestEntity: ClientApplicationSinRequestEntity = {
         Applicant: {
           PersonSINIdentification: { IdentificationID: '800000002' },
         },
@@ -218,9 +219,9 @@ describe('MockClientApplicationRepository', () => {
   describe('findClientApplicationByBasicInfo', () => {
     it('should return client application with ITA flag for specific ID', async () => {
       const repository = new MockClientApplicationRepository();
-      const requestEntity = {
+      const requestEntity: ClientApplicationBasicInfoRequestEntity = {
         Applicant: {
-          ClientIdentification: [{ IdentificationID: '10000000001' }],
+          ClientIdentification: [{ IdentificationID: '10000000001', IdentificationCategoryText: 'Client Number' }],
           PersonName: { PersonGivenName: ['John'], PersonSurName: 'Doe' },
           PersonBirthDate: { date: '2000-01-01' },
         },
@@ -241,9 +242,9 @@ describe('MockClientApplicationRepository', () => {
 
     it('should return client application with default flags for unknown ID', async () => {
       const repository = new MockClientApplicationRepository();
-      const requestEntity = {
+      const requestEntity: ClientApplicationBasicInfoRequestEntity = {
         Applicant: {
-          ClientIdentification: [{ IdentificationID: '9999999999' }],
+          ClientIdentification: [{ IdentificationID: '9999999999', IdentificationCategoryText: 'Client Number' }],
           PersonName: { PersonGivenName: ['Jane'], PersonSurName: 'Smith' },
           PersonBirthDate: { date: '1990-01-01' },
         },
@@ -264,9 +265,9 @@ describe('MockClientApplicationRepository', () => {
 
     it('should return null for specific ID (10000000000)', async () => {
       const repository = new MockClientApplicationRepository();
-      const requestEntity = {
+      const requestEntity: ClientApplicationBasicInfoRequestEntity = {
         Applicant: {
-          ClientIdentification: [{ IdentificationID: '10000000000' }],
+          ClientIdentification: [{ IdentificationID: '10000000000', IdentificationCategoryText: 'Client Number' }],
           PersonName: { PersonGivenName: ['John'], PersonSurName: 'Doe' },
           PersonBirthDate: { date: '2000-01-01' },
         },

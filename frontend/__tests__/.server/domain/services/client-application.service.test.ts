@@ -285,7 +285,7 @@ describe('DefaultClientApplicationService', () => {
         Applicant: {
           PersonName: { PersonGivenName: [mockClientApplicationBasicInfoRequestDto.firstName], PersonSurName: mockClientApplicationBasicInfoRequestDto.lastName },
           PersonBirthDate: { date: mockClientApplicationBasicInfoRequestDto.dateOfBirth },
-          ClientIdentification: [{ IdentificationID: mockClientApplicationBasicInfoRequestDto.clientNumber }],
+          ClientIdentification: [{ IdentificationID: mockClientApplicationBasicInfoRequestDto.clientNumber, IdentificationCategoryText: 'Client Number' }],
         },
         BenefitApplicationYear: { IdentificationID: '00000000-0000-0000-0000-000000000000' },
       };
@@ -323,7 +323,7 @@ describe('DefaultClientApplicationService', () => {
         Applicant: {
           PersonName: { PersonGivenName: [mockClientApplicationBasicInfoRequestDto.firstName], PersonSurName: mockClientApplicationBasicInfoRequestDto.lastName },
           PersonBirthDate: { date: mockClientApplicationBasicInfoRequestDto.dateOfBirth },
-          ClientIdentification: [{ IdentificationID: mockClientApplicationBasicInfoRequestDto.clientNumber }],
+          ClientIdentification: [{ IdentificationID: mockClientApplicationBasicInfoRequestDto.clientNumber, IdentificationCategoryText: 'Client Number' }],
         },
         BenefitApplicationYear: { IdentificationID: '00000000-0000-0000-0000-000000000000' },
       };
