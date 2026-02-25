@@ -29,7 +29,7 @@ import {
   DefaultSunLifeCommunicationMethodDtoMapper,
   DefaultVerificationCodeDtoMapper,
 } from '~/.server/domain/mappers';
-import { DefaultBenefitRenewalStateMapper, DefaultHubSpokeBenefitApplicationStateMapper, DefaultHubSpokeBenefitRenewalStateMapper } from '~/.server/routes/mappers';
+import { DefaultBenefitApplicationStateMapper, DefaultBenefitRenewalStateMapper } from '~/.server/routes/mappers';
 import { DefaultDynatraceDtoMapper, DefaultHCaptchaDtoMapper } from '~/.server/web/mappers';
 
 /**
@@ -42,10 +42,9 @@ export function createMappersContainerModule(): ContainerModule {
     options.bind(TYPES.ApplicationStatusDtoMapper).to(DefaultApplicationStatusDtoMapper);
     options.bind(TYPES.ApplicationYearDtoMapper).to(DefaultApplicationYearDtoMapper);
     options.bind(TYPES.BenefitApplicationDtoMapper).to(DefaultBenefitApplicationDtoMapper);
-    options.bind(TYPES.HubSpokeBenefitApplicationStateMapper).to(DefaultHubSpokeBenefitApplicationStateMapper);
-    options.bind(TYPES.HubSpokeBenefitRenewalStateMapper).to(DefaultHubSpokeBenefitRenewalStateMapper);
-    options.bind(TYPES.BenefitRenewalDtoMapper).to(DefaultBenefitRenewalDtoMapper);
+    options.bind(TYPES.BenefitApplicationStateMapper).to(DefaultBenefitApplicationStateMapper);
     options.bind(TYPES.BenefitRenewalStateMapper).to(DefaultBenefitRenewalStateMapper);
+    options.bind(TYPES.BenefitRenewalDtoMapper).to(DefaultBenefitRenewalDtoMapper);
     options.bind(TYPES.ClientApplicationDtoMapper).to(DefaultClientApplicationDtoMapper);
     options.bind(TYPES.ClientEligibilityDtoMapper).to(DefaultClientEligibilityDtoMapper);
     options.bind(TYPES.ClientFriendlyStatusDtoMapper).to(DefaultClientFriendlyStatusDtoMapper);

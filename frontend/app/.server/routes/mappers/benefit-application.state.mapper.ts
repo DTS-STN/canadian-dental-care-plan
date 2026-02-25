@@ -113,7 +113,7 @@ interface ToContactInformationArgs {
   mailingAddress?: DeclaredChangeMailingAddressState;
 }
 
-export interface HubSpokeBenefitApplicationStateMapper {
+export interface BenefitApplicationStateMapper {
   mapApplicationAdultStateToBenefitApplicationDto(applicationAdultState: ApplicationAdultState): BenefitApplicationDto;
 
   mapApplicationFamilyStateToBenefitApplicationDto(applicationFamilyState: ApplicationFamilyState): BenefitApplicationDto;
@@ -122,7 +122,7 @@ export interface HubSpokeBenefitApplicationStateMapper {
 }
 
 @injectable()
-export class DefaultHubSpokeBenefitApplicationStateMapper implements HubSpokeBenefitApplicationStateMapper {
+export class DefaultBenefitApplicationStateMapper implements BenefitApplicationStateMapper {
   mapApplicationAdultStateToBenefitApplicationDto(applicationAdultState: ApplicationAdultState): BenefitApplicationDto {
     const ageCategory = getAgeCategoryFromDateString(applicationAdultState.applicantInformation.dateOfBirth);
     if (ageCategory === 'youth' && applicationAdultState.livingIndependently === undefined) {
