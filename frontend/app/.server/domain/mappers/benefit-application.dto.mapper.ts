@@ -113,7 +113,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
       BenefitApplication: {
         Applicant: {
           ApplicantDetail: {
-            PrivateDentalInsuranceIndicator: !!dentalInsurance,
+            PrivateDentalInsuranceIndicator: !!dentalInsurance?.hasDentalInsurance,
             LivingIndependentlyIndicator: livingIndependently,
             PrivacyStatementIndicator: termsAndConditions.acknowledgePrivacy,
             TermsAndConditionsIndicator: termsAndConditions.acknowledgeTerms,
@@ -336,7 +336,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
       },
       ApplicantDetail: {
         AttestParentOrGuardianIndicator: child.information.isParent,
-        PrivateDentalInsuranceIndicator: !!child.dentalInsurance,
+        PrivateDentalInsuranceIndicator: !!child.dentalInsurance.hasDentalInsurance,
         InsurancePlan: this.toInsurancePlan(child.dentalBenefits),
       },
     }));

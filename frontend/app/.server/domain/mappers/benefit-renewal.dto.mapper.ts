@@ -43,7 +43,7 @@ interface ToBenefitRenewalRequestEntityArgs {
   contactInformation: RenewalContactInformationDto;
   dateOfBirth: string;
   dentalBenefits: readonly string[];
-  dentalInsurance?: boolean | DentalInsuranceDto;
+  dentalInsurance?: DentalInsuranceDto;
   livingIndependently?: boolean;
   partnerInformation?: RenewalPartnerInformationDto;
   typeOfApplication: RenewalTypeOfApplicationDto;
@@ -151,7 +151,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       BenefitApplication: {
         Applicant: {
           ApplicantDetail: {
-            PrivateDentalInsuranceIndicator: typeof dentalInsurance === 'boolean' ? dentalInsurance : (dentalInsurance?.hasDentalInsurance ?? false),
+            PrivateDentalInsuranceIndicator: !!dentalInsurance?.hasDentalInsurance,
             LivingIndependentlyIndicator: livingIndependently,
             PrivacyStatementIndicator: true,
             TermsAndConditionsIndicator: true,
@@ -395,7 +395,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       },
       ApplicantDetail: {
         AttestParentOrGuardianIndicator: true,
-        PrivateDentalInsuranceIndicator: typeof child.dentalInsurance === 'boolean' ? child.dentalInsurance : child.dentalInsurance.hasDentalInsurance,
+        PrivateDentalInsuranceIndicator: !!child.dentalInsurance.hasDentalInsurance,
         InsurancePlan: this.toInsurancePlan(child.dentalBenefits),
       },
       BenefitApplicationDetail: [],
