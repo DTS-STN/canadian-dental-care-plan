@@ -9,7 +9,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
   const mockServerConfig: DefaultClientApplicationDtoMapper_ServerConfig = {
     APPLICANT_CATEGORY_CODE_INDIVIDUAL: '111111111',
     APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY: '222222222',
-    COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: 'Co-Pay Tier (TPC)',
+    COVERAGE_CATEGORY_CODE_COPAY_TIER: 'Co-Pay Tier',
     ENGLISH_LANGUAGE_CODE: 1,
   };
   const mapper = new DefaultClientApplicationDtoMapper(mockServerConfig);
@@ -146,7 +146,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
                 Coverage: [
                   {
                     CoverageCategoryCode: {
-                      ReferenceDataName: 'Co-Pay Tier (TPC)',
+                      ReferenceDataName: 'Co-Pay Tier',
                       CoverageTierCode: {
                         ReferenceDataID: 'c12531e1-ef6d-49f9-9737-c32271fbba79',
                       },

@@ -115,7 +115,7 @@ describe('DefaultClientApplicationService', () => {
             Coverage: [
               {
                 CoverageCategoryCode: {
-                  ReferenceDataName: 'Co-Pay Tier (TPC)',
+                  ReferenceDataName: 'Co-Pay Tier',
                   CoverageTierCode: {
                     ReferenceDataID: 'c12531e1-ef6d-49f9-9737-c32271fbba79',
                   },
