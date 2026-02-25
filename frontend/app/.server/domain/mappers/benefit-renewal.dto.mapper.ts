@@ -11,7 +11,6 @@ import type {
   AdultChildChangeIndicators,
   ChildBenefitRenewalDto,
   ChildChangeIndicators,
-  DemographicSurveyDto,
   DentalInsuranceDto,
   ItaBenefitRenewalDto,
   ItaChangeIndicators,
@@ -43,7 +42,6 @@ interface ToBenefitRenewalRequestEntityArgs {
   communicationPreferences: RenewalCommunicationPreferencesDto;
   contactInformation: RenewalContactInformationDto;
   dateOfBirth: string;
-  demographicSurvey?: DemographicSurveyDto;
   dentalBenefits: readonly string[];
   dentalInsurance?: boolean | DentalInsuranceDto;
   livingIndependently?: boolean;
@@ -139,7 +137,6 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       communicationPreferences,
       contactInformation,
       dateOfBirth,
-      demographicSurvey,
       dentalBenefits,
       dentalInsurance,
       livingIndependently,
@@ -165,7 +162,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
             InsurancePlan: this.toInsurancePlan(dentalBenefits),
             ...this.toChangeIndicators(changeIndicators),
           },
-          BenefitApplicationDetail: this.toBenefitApplicationDetail(demographicSurvey),
+          BenefitApplicationDetail: [],
           ClientIdentification: [
             {
               IdentificationID: applicantInformation.clientId,
@@ -255,60 +252,6 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       MaritalStatusChangedIndicator: hasMaritalStatusChanged,
       PhoneChangedIndicator: hasPhoneChanged,
     };
-  }
-
-  private toBenefitApplicationDetail(demographicSurvey?: DemographicSurveyDto) {
-    if (!demographicSurvey) {
-      return [];
-    }
-
-    const benefitApplicationDetail = [];
-    const { anotherEthnicGroup, disabilityStatus, ethnicGroups, firstNations, genderStatus, indigenousStatus, locationBornStatus } = demographicSurvey;
-
-    if (firstNations) {
-      benefitApplicationDetail.push({
-        BenefitApplicationDetailID: 'AreYouFirstNations',
-        BenefitApplicationDetailValues: [firstNations],
-        BenefitApplicationDetailValue: indigenousStatus, // TODO verify with Interop if we should pass this as well as BenefitApplicationDetailValues
-      });
-    }
-
-    if (genderStatus) {
-      benefitApplicationDetail.push({
-        BenefitApplicationDetailID: 'Gender',
-        BenefitApplicationDetailValue: genderStatus,
-      });
-    }
-
-    if (ethnicGroups) {
-      benefitApplicationDetail.push({
-        BenefitApplicationDetailID: 'Ethnicity',
-        BenefitApplicationDetailValues: ethnicGroups,
-      });
-    }
-
-    if (disabilityStatus) {
-      benefitApplicationDetail.push({
-        BenefitApplicationDetailID: 'IdentifiesAsPersonWithDisability',
-        BenefitApplicationDetailValue: disabilityStatus, // TODO verify with Interop if we should use BenefitApplicationDetailIndicator as per their specs
-      });
-    }
-
-    if (anotherEthnicGroup) {
-      benefitApplicationDetail.push({
-        BenefitApplicationDetailID: 'OtherEthnicity',
-        BenefitApplicationDetailValue: anotherEthnicGroup,
-      });
-    }
-
-    if (locationBornStatus) {
-      benefitApplicationDetail.push({
-        BenefitApplicationDetailID: 'WhereWereYouBorn',
-        BenefitApplicationDetailValue: locationBornStatus,
-      });
-    }
-
-    return benefitApplicationDetail;
   }
 
   private toDate(date: string) {
@@ -455,7 +398,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         PrivateDentalInsuranceIndicator: typeof child.dentalInsurance === 'boolean' ? child.dentalInsurance : child.dentalInsurance.hasDentalInsurance,
         InsurancePlan: this.toInsurancePlan(child.dentalBenefits),
       },
-      BenefitApplicationDetail: this.toBenefitApplicationDetail(child.demographicSurvey),
+      BenefitApplicationDetail: [],
       ClientIdentification: [
         {
           IdentificationID: child.clientId,

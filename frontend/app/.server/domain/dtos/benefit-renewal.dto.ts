@@ -53,7 +53,6 @@ export type BenefitRenewalDto = ReadonlyDeep<{
   dateOfBirth: string;
   dentalBenefits: string[];
   dentalInsurance?: boolean | DentalInsuranceDto; //TODO: remove boolean once online application has been removed in favour of hub/spoke;
-  demographicSurvey?: DemographicSurveyDto;
   partnerInformation?: RenewalPartnerInformationDto;
   typeOfApplication: RenewalTypeOfApplicationDto;
   termsAndConditions: TermsAndConditionsDto;
@@ -76,7 +75,6 @@ export type RenewalChildDto = ReadonlyDeep<{
   clientNumber: string;
   dentalBenefits: string[];
   dentalInsurance: boolean | DentalInsuranceDto; //TODO: remove boolean once online application has been removed in favour of hub/spoke;
-  demographicSurvey?: DemographicSurveyDto;
   information: {
     firstName: string;
     lastName: string;
@@ -120,16 +118,6 @@ export type RenewalPartnerInformationDto = ReadonlyDeep<{
 }>;
 
 export type RenewalTypeOfApplicationDto = 'adult' | 'adult-child' | 'child';
-
-export type DemographicSurveyDto = ReadonlyDeep<{
-  indigenousStatus?: string;
-  firstNations?: string;
-  disabilityStatus?: string;
-  ethnicGroups?: string[];
-  anotherEthnicGroup?: string;
-  locationBornStatus?: string;
-  genderStatus?: string;
-}>;
 
 type DentalInsuranceDto = ReadonlyDeep<{
   hasDentalInsurance: boolean;

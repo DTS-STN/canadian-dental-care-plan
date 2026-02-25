@@ -12,7 +12,6 @@ import {
   DefaultClientEligibilityDtoMapper,
   DefaultClientFriendlyStatusDtoMapper,
   DefaultCountryDtoMapper,
-  DefaultDemographicSurveyDtoMapper,
   DefaultDocumentUploadDtoMapper,
   DefaultDocumentUploadReasonDtoMapper,
   DefaultEvidentiaryDocumentDtoMapper,
@@ -49,7 +48,6 @@ export function createMappersContainerModule(): ContainerModule {
     options.bind(TYPES.ClientEligibilityDtoMapper).to(DefaultClientEligibilityDtoMapper);
     options.bind(TYPES.ClientFriendlyStatusDtoMapper).to(DefaultClientFriendlyStatusDtoMapper);
     options.bind(TYPES.CountryDtoMapper).to(DefaultCountryDtoMapper);
-    options.bind(TYPES.DemographicSurveyDtoMapper).to(DefaultDemographicSurveyDtoMapper);
     options.bind(TYPES.DocumentUploadDtoMapper).to(DefaultDocumentUploadDtoMapper);
     options.bind(TYPES.DocumentUploadReasonDtoMapper).to(DefaultDocumentUploadReasonDtoMapper);
     options.bind(TYPES.DynatraceDtoMapper).to(DefaultDynatraceDtoMapper);
