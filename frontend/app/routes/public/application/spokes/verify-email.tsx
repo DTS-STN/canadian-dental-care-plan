@@ -200,17 +200,16 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
         <p className="mb-2">{t('application-spokes:verify-email.verification-code-alert.detail')}</p>
       </ErrorAlert>
       <ErrorSummaryProvider actionData={fetcher.data}>
+        <p className="mb-4">{t('application-spokes:verify-email.verification-code', { email: defaultState })}</p>
+        <p className="mb-4">{t('application-spokes:verify-email.request-new')}</p>
+        <p className="mb-8">
+          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:verify-email.unable-to-verify" components={{ communicationLink }} />
+        </p>
+        <p className="mb-4 italic">{t('application:required-label')}</p>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <fieldset className="mb-6">
-            <legend className="sr-only">{t('application-spokes:verify-email.verification-code-label')}</legend>
-            <p className="mb-4">{t('application-spokes:verify-email.verification-code', { email: defaultState })}</p>
-            <p className="mb-4">{t('application-spokes:verify-email.request-new')}</p>
-            <p className="mb-8">
-              <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:verify-email.unable-to-verify" components={{ communicationLink }} />
-            </p>
-            <p className="mb-4 italic">{t('application:required-label')}</p>
+          <div className="mb-6">
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t('application-spokes:verify-email.verification-code-label')} inputMode="numeric" required />
             </div>
@@ -236,7 +235,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
             >
               {t('application-spokes:verify-email.request-new-code')}
             </LoadingButton>
-          </fieldset>
+          </div>
 
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton
