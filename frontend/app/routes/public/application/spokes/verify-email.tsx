@@ -211,16 +211,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
             </p>
             <p className="mb-4 italic">{t('application:required-label')}</p>
             <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputField
-                id="verification-code"
-                name="verificationCode"
-                className="w-full"
-                errorMessage={errors?.verificationCode}
-                label={t('application-spokes:verify-email.verification-code-label')}
-                aria-describedby="verification-code"
-                inputMode="numeric"
-                required
-              />
+              <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t('application-spokes:verify-email.verification-code-label')} inputMode="numeric" required />
             </div>
             <LoadingButton
               id="request-button"
