@@ -9,7 +9,7 @@ import type { Route } from './+types/eligibility';
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
-import { DescriptionListItem } from '~/components/description-list-item';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
@@ -95,34 +95,34 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
       <section className="space-y-6">
         <h2 className="font-lato text-2xl font-bold">{t('protected-profile:eligibility.current-year')}</h2>
         <p>{t('protected-profile:eligibility.current-year-details', { end: currentCoverage.endYear })}</p>
-        <dl className="divide-y border-y">
+        <DefinitionList border>
           {applicants.map((applicant) => {
             const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear: currentCoverage.taxationYear, isNextYear: false, ELIGIBILITY_STATUS_CODE_ELIGIBLE });
             return (
-              <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
+              <DefinitionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
                 <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={currentCoverage.startYear} coverageEndYear={currentCoverage.endYear} />
-              </DescriptionListItem>
+              </DefinitionListItem>
             );
           })}
-        </dl>
+        </DefinitionList>
       </section>
 
       <section className="space-y-6">
         <h2 className="font-lato text-2xl font-bold">{t('protected-profile:eligibility.next-year')}</h2>
         <p>{t('protected-profile:eligibility.benefit-year-range', { start: currentCoverage.startYear + 1, end: currentCoverage.endYear + 1 })}</p>
-        <dl className="divide-y border-y">
+        <DefinitionList border>
           {applicants.map((applicant) => {
             const taxationYear = currentCoverage.taxationYear + 1;
             const coverageStartYear = currentCoverage.startYear + 1;
             const coverageEndYear = currentCoverage.endYear + 1;
             const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear, isNextYear: true, ELIGIBILITY_STATUS_CODE_ELIGIBLE });
             return (
-              <DescriptionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
+              <DefinitionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
                 <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={coverageStartYear} coverageEndYear={coverageEndYear} showApplyLink={true} />
-              </DescriptionListItem>
+              </DefinitionListItem>
             );
           })}
-        </dl>
+        </DefinitionList>
       </section>
 
       <ButtonLink
@@ -195,7 +195,7 @@ export function EligibilityStatusIndicator({ status, coverageStartYear, coverage
         <span className="text-nowrap">{t('protected-profile:eligibility.not-enrolled')}</span>
       </div>
       {showApplyLink && (
-        <InlineLink routeId="protected/apply/index" params={params}>
+        <InlineLink routeId="protected/application/index" params={params}>
           {t('protected-profile:eligibility.apply', { start: coverageStartYear, end: coverageEndYear })}
         </InlineLink>
       )}

@@ -5,7 +5,7 @@ import type { Route } from './+types/communication-preferences';
 import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
-import { DescriptionListItem } from '~/components/description-list-item';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -51,17 +51,17 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
 
   return (
     <div className="max-w-prose space-y-10">
-      <dl className="divide-y border-y">
-        <DescriptionListItem term={t('protected-profile:communication-preferences.language-preference')}>
+      <DefinitionList border>
+        <DefinitionListItem term={t('protected-profile:communication-preferences.language-preference')}>
           <p>{preferredLanguage.name}</p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('protected-profile:communication-preferences.sunlife-communication-preference')}>
+        </DefinitionListItem>
+        <DefinitionListItem term={t('protected-profile:communication-preferences.sunlife-communication-preference')}>
           <p>{preferredMethodSunLife.name}</p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('protected-profile:communication-preferences.goc-communication-preference')}>
+        </DefinitionListItem>
+        <DefinitionListItem term={t('protected-profile:communication-preferences.goc-communication-preference')}>
           <p>{preferredMethodGovernmentOfCanada.name}</p>
-        </DescriptionListItem>
-      </dl>
+        </DefinitionListItem>
+      </DefinitionList>
       <div>
         <InlineLink id="update-communication-preferences" routeId="protected/profile/communication-preferences/edit" params={params}>
           {t('protected-profile:communication-preferences.update-link-text')}

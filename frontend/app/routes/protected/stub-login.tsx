@@ -157,10 +157,6 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
               value: 'protected/application/index',
             },
             {
-              children: 'Apply',
-              value: 'protected/apply/index',
-            },
-            {
               children: 'Documents',
               value: 'protected/documents/index',
             },

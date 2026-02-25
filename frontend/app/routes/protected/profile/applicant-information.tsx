@@ -5,7 +5,7 @@ import type { Route } from './+types/applicant-information';
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
-import { DescriptionListItem } from '~/components/description-list-item';
+import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -68,34 +68,34 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
       </p>
       <section className="space-y-6">
         <h2 className="font-lato text-2xl font-bold">{`${primaryApplicant.firstName} ${primaryApplicant.lastName}`}</h2>
-        <dl className="divide-y border-y">
-          <DescriptionListItem term={t('protected-profile:applicant-information.member-id')}>
+        <DefinitionList border>
+          <DefinitionListItem term={t('protected-profile:applicant-information.member-id')}>
             <p>{primaryApplicant.id}</p>
-          </DescriptionListItem>
-          <DescriptionListItem term={t('protected-profile:applicant-information.dob')}>
+          </DefinitionListItem>
+          <DefinitionListItem term={t('protected-profile:applicant-information.dob')}>
             <p>{primaryApplicant.dob}</p>
-          </DescriptionListItem>
-          <DescriptionListItem term={t('protected-profile:applicant-information.sin')}>
+          </DefinitionListItem>
+          <DefinitionListItem term={t('protected-profile:applicant-information.sin')}>
             <p>{isValidSin(primaryApplicant.sin) ? formatSin(primaryApplicant.sin) : primaryApplicant.sin}</p>
-          </DescriptionListItem>
-        </dl>
+          </DefinitionListItem>
+        </DefinitionList>
       </section>
 
       {children.map((child) => {
         return (
           <section className="space-y-6" key={child.id}>
             <h2 className="font-lato text-2xl font-bold">{`${child.firstName} ${child.lastName}`}</h2>
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('protected-profile:applicant-information.member-id')}>
+            <DefinitionList border>
+              <DefinitionListItem term={t('protected-profile:applicant-information.member-id')}>
                 <p>{child.id}</p>
-              </DescriptionListItem>
-              <DescriptionListItem term={t('protected-profile:applicant-information.dob')}>
+              </DefinitionListItem>
+              <DefinitionListItem term={t('protected-profile:applicant-information.dob')}>
                 <p>{child.dob}</p>
-              </DescriptionListItem>
-              <DescriptionListItem term={t('protected-profile:applicant-information.sin')}>
+              </DefinitionListItem>
+              <DefinitionListItem term={t('protected-profile:applicant-information.sin')}>
                 <p>{isValidSin(child.sin) ? formatSin(child.sin) : child.sin}</p>
-              </DescriptionListItem>
-            </dl>
+              </DefinitionListItem>
+            </DefinitionList>
           </section>
         );
       })}
