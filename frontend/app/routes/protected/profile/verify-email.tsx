@@ -255,16 +255,7 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
           </p>
           <p className="mb-4 italic">{t('protected-profile:required-label')}</p>
           <div className="grid items-end gap-6 md:grid-cols-2">
-            <InputField
-              id="verification-code"
-              name="verificationCode"
-              className="w-full"
-              errorMessage={errors?.verificationCode}
-              label={t('protected-profile:verify-email.verification-code-label')}
-              aria-describedby="verification-code"
-              inputMode="numeric"
-              required
-            />
+            <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t('protected-profile:verify-email.verification-code-label')} inputMode="numeric" required />
           </div>
           <LoadingButton
             id="request-button"
