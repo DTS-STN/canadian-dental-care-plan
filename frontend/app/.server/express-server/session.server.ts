@@ -57,8 +57,6 @@ function purgeExpiredSessions(memoryStore: MemoryStore): void {
       for (const [sessionId, sessionData] of sessionEntries) {
         // express-session adds the cookie data to the session
         // so we can use this to check when the session is due to expire
-
-        // eslint-disable-next-line @typescript-eslint/no-deprecated
         const expiresAt = sessionData.cookie.expires;
 
         log.trace('Checking session %s (expires at %s)', sessionId, expiresAt);
