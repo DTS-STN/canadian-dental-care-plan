@@ -89,6 +89,18 @@ export type ClientApplicationBasicInfoRequestDto = Readonly<{
   userId: string;
 }>;
 
+export type ClientApplicationBasicInfoAndSinRequestDto = Readonly<{
+  clientNumber: string;
+  dateOfBirth: string;
+  firstName: string;
+  lastName: string;
+  applicationYearId?: string;
+  sin: string;
+
+  /** A unique identifier for the user making the request - used for auditing */
+  userId: string;
+}>;
+
 export type ClientApplicationSinRequestDto = Readonly<{
   sin: string;
   applicationYearId?: string;
