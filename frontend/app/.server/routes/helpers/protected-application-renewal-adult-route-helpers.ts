@@ -9,7 +9,7 @@ import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
-export type ProtectedApplicationRenewalAdultState = OmitStrict<ProtectedApplicationState, 'clientApplication'> & {
+type ProtectedApplicationRenewalAdultState = OmitStrict<ProtectedApplicationState, 'clientApplication'> & {
   clientApplication: NonNullable<ProtectedApplicationState['clientApplication']>;
 };
 

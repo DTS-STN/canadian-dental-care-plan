@@ -4,7 +4,7 @@ import type { ComponentProps } from 'react';
 import { useErrorSummaryContext } from '~/components/error-summary-context';
 import { cn } from '~/utils/tw-utils';
 
-export interface InputErrorProps extends OmitStrict<ComponentProps<'div'>, 'children'> {
+interface InputErrorProps extends OmitStrict<ComponentProps<'div'>, 'children'> {
   /** The ID of the input field associated with the error message. */
   fieldId: string;
 

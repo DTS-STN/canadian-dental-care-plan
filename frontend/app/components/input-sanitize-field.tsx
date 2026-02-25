@@ -7,7 +7,7 @@ import { InputLabel } from '~/components/input-label';
 import { isAllValidInputCharacters, normalizeHyphens, removeInvalidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
-export interface InputSanitizeFieldProps extends OmitStrict<
+interface InputSanitizeFieldProps extends OmitStrict<
   React.ComponentProps<typeof NumberFormatBase>,
   'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'format' | 'type' | 'removeFormatting' | 'isValidInputCharacter' | 'getCaretBoundary'
 > {

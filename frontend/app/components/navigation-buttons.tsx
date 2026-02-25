@@ -7,11 +7,11 @@ import { ButtonLink } from '~/components/buttons';
 import { LoadingButton } from '~/components/loading-button';
 import { cn } from '~/utils/tw-utils';
 
-export interface NavigationButtonBase {
+interface NavigationButtonBase {
   direction: 'previous' | 'next';
 }
 
-export interface NavigationButtonProps extends OmitStrict<ComponentProps<typeof LoadingButton>, 'endIcon' | 'endIconProps' | 'startIcon' | 'startIconProps' | 'loadingIconProps'>, NavigationButtonBase {}
+interface NavigationButtonProps extends OmitStrict<ComponentProps<typeof LoadingButton>, 'endIcon' | 'endIconProps' | 'startIcon' | 'startIconProps' | 'loadingIconProps'>, NavigationButtonBase {}
 
 /**
  * A navigation button component that displays directional navigation with icons and labels.
@@ -40,7 +40,7 @@ export function NavigationButton({ children, className, direction, ...props }: N
   );
 }
 
-export interface NavigationButtonLinkProps extends OmitStrict<ComponentProps<typeof ButtonLink>, 'endIcon' | 'endIconProps' | 'startIcon' | 'startIconProps'>, NavigationButtonBase {}
+interface NavigationButtonLinkProps extends OmitStrict<ComponentProps<typeof ButtonLink>, 'endIcon' | 'endIconProps' | 'startIcon' | 'startIconProps'>, NavigationButtonBase {}
 
 /**
  * A navigation link component that displays directional navigation with icons and labels.

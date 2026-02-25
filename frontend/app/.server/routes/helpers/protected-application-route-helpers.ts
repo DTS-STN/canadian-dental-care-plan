@@ -145,32 +145,17 @@ export type ProtectedApplicationState = ReadonlyDeep<{
 }>;
 
 export type ApplicantInformationState = NonNullable<ProtectedApplicationState['applicantInformation']>;
-export type ApplicationYearState = ProtectedApplicationState['applicationYear'];
+type ApplicationYearState = ProtectedApplicationState['applicationYear'];
 export type ChildrenState = ProtectedApplicationState['children'];
 export type ChildState = ChildrenState[number];
-export type ChildDentalBenefitsState = NonNullable<ChildState['dentalBenefits']>;
-export type ChildDentalInsuranceState = NonNullable<ChildState['dentalInsurance']>;
 export type ChildInformationState = NonNullable<ChildState['information']>;
 export type ChildSinState = Pick<NonNullable<ChildState['information']>, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>;
-export type DeclaredChangeCommunicationPreferencesState = NonNullable<NonNullable<ProtectedApplicationState['communicationPreferences']>>;
 export type CommunicationPreferencesState = NonNullable<NonNullable<ProtectedApplicationState['communicationPreferences']>['value']>;
-export type DeclaredChangePhoneNumberState = NonNullable<NonNullable<ProtectedApplicationState['phoneNumber']>>;
-export type PhoneNumberState = NonNullable<NonNullable<ProtectedApplicationState['phoneNumber']>['value']>;
-export type DeclaredChangeDentalFederalBenefitsState = NonNullable<ProtectedApplicationState['dentalBenefits']>;
 export type DentalFederalBenefitsState = Pick<NonNullable<NonNullable<ProtectedApplicationState['dentalBenefits']>['value']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
-export type DentalInsuranceState = NonNullable<ProtectedApplicationState['dentalInsurance']>;
-export type DeclaredChangeDentalProvincialTerritorialBenefitsState = NonNullable<ProtectedApplicationState['dentalBenefits']>;
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<NonNullable<ProtectedApplicationState['dentalBenefits']>['value']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
-export type HomeAddressState = NonNullable<ProtectedApplicationState['homeAddress']>;
-export type MailingAddressState = NonNullable<ProtectedApplicationState['mailingAddress']>;
 export type PartnerInformationState = NonNullable<ProtectedApplicationState['partnerInformation']>;
-export type SubmissionInfoState = NonNullable<ProtectedApplicationState['submissionInfo']>;
-export type TermsAndConditionsState = NonNullable<ProtectedApplicationState['termsAndConditions']>;
 export type ContextState = NonNullable<ProtectedApplicationState['context']>;
 export type TypeOfApplicationState = NonNullable<ProtectedApplicationState['typeOfApplication']>;
-export type DeclaredChangeHomeAddressState = NonNullable<ProtectedApplicationState['homeAddress']>;
-export type DeclaredChangeMailingAddressState = NonNullable<ProtectedApplicationState['mailingAddress']>;
-
 /**
  * Gets the protected application flow session key.
  * @param id - The protected application flow ID.
@@ -329,7 +314,7 @@ export function startProtectedApplicationState({ applicationYear, clientApplicat
   return initialState;
 }
 
-export type AgeCategory = 'children' | 'youth' | 'adults' | 'seniors';
+type AgeCategory = 'children' | 'youth' | 'adults' | 'seniors';
 
 export function getAgeCategoryFromDateString(date: string, coverageStartDate?: string) {
   const age = getAgeFromDateString(date, coverageStartDate);

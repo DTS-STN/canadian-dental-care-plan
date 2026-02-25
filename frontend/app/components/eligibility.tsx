@@ -10,7 +10,7 @@ import { cn } from '~/utils/tw-utils';
 
 export type EligibilityType = 'eligible' | 'ineligible' | 'eligible-proof';
 
-export interface EligibilityProps {
+interface EligibilityProps {
   type: EligibilityType;
   title?: string;
   children?: ReactNode;

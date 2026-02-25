@@ -40,7 +40,7 @@ export interface EvidentiaryDocumentTypeRepository {
   checkHealth(): Promise<void>;
 }
 
-export type DefaultEvidentiaryDocumentTypeRepositoryServerConfig = Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>;
+type DefaultEvidentiaryDocumentTypeRepositoryServerConfig = Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>;
 
 @injectable()
 export class DefaultEvidentiaryDocumentTypeRepository implements EvidentiaryDocumentTypeRepository {

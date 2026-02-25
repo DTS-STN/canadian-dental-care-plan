@@ -6,7 +6,7 @@ import { expandTemplate, extractDigits } from '~/utils/string-utils';
 /**
  * Error messages for phone number validation
  */
-export type PhoneSchemaErrorMessage = {
+type PhoneSchemaErrorMessage = {
   /**
    * Error message for invalid Canadian phone number
    * @default 'Invalid Canadian phone number, received {received}'

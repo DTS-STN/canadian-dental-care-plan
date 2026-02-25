@@ -1,6 +1,6 @@
 import type { ServerBuild, matchRoutes } from 'react-router';
 
-export type ServerRouteManifest = ServerBuild['routes'];
+type ServerRouteManifest = ServerBuild['routes'];
 export type ServerRouteManifestEntry = NonNullable<ServerRouteManifest[string]>;
 export type ServerRoute = ServerRouteManifestEntry & {
   children: ServerRoute[];
@@ -66,7 +66,7 @@ function groupServerRoutesByParentId(serverRouteManifest: ServerRouteManifest): 
  * from the type expected by `matchRoutes`. This type distinguishes between
  * index routes (which cannot have children) and non-index routes (which can).
  */
-export type AgnosticRoute = Parameters<typeof matchRoutes>[0][number];
+type AgnosticRoute = Parameters<typeof matchRoutes>[0][number];
 
 /**
  * Converts an array of server-defined routes (`ServerRoute[]`), typically representing

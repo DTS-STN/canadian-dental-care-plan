@@ -146,23 +146,17 @@ export type ApplicantInformationState = NonNullable<PublicApplicationState['appl
 export type ApplicationYearState = PublicApplicationState['applicationYear'];
 export type ChildrenState = PublicApplicationState['children'];
 export type ChildState = ChildrenState[number];
-export type ChildDentalBenefitsState = NonNullable<ChildState['dentalBenefits']>;
-export type ChildDentalInsuranceState = NonNullable<ChildState['dentalInsurance']>;
 export type ChildInformationState = NonNullable<ChildState['information']>;
 export type ChildSinState = Pick<NonNullable<ChildState['information']>, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>;
 export type DeclaredChangeCommunicationPreferencesState = NonNullable<NonNullable<PublicApplicationState['communicationPreferences']>>;
 export type CommunicationPreferencesState = NonNullable<NonNullable<PublicApplicationState['communicationPreferences']>['value']>;
 export type DeclaredChangePhoneNumberState = NonNullable<NonNullable<PublicApplicationState['phoneNumber']>>;
-export type PhoneNumberState = NonNullable<NonNullable<PublicApplicationState['phoneNumber']>['value']>;
 export type DeclaredChangeDentalFederalBenefitsState = NonNullable<PublicApplicationState['dentalBenefits']>;
 export type DentalFederalBenefitsState = Pick<NonNullable<NonNullable<PublicApplicationState['dentalBenefits']>['value']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type DentalInsuranceState = NonNullable<PublicApplicationState['dentalInsurance']>;
 export type DeclaredChangeDentalProvincialTerritorialBenefitsState = NonNullable<PublicApplicationState['dentalBenefits']>;
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<NonNullable<PublicApplicationState['dentalBenefits']>['value']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
-export type HomeAddressState = NonNullable<PublicApplicationState['homeAddress']>;
-export type MailingAddressState = NonNullable<PublicApplicationState['mailingAddress']>;
 export type PartnerInformationState = NonNullable<PublicApplicationState['partnerInformation']>;
-export type SubmissionInfoState = NonNullable<PublicApplicationState['submissionInfo']>;
 export type TermsAndConditionsState = NonNullable<PublicApplicationState['termsAndConditions']>;
 export type InputModelState = NonNullable<PublicApplicationState['inputModel']>;
 export type TypeOfApplicationState = NonNullable<PublicApplicationState['typeOfApplication']>;
@@ -301,7 +295,7 @@ export function startApplicationState({ applicationYear, session }: StartArgs): 
   return initialState;
 }
 
-export type AgeCategory = 'children' | 'youth' | 'adults' | 'seniors';
+type AgeCategory = 'children' | 'youth' | 'adults' | 'seniors';
 
 export function getAgeCategoryFromDateString(date: string, coverageStartDate?: string) {
   const age = getAgeFromDateString(date, coverageStartDate);

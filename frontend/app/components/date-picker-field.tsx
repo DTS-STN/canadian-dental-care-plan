@@ -18,7 +18,7 @@ const inputBaseStyles = 'block rounded-lg border-gray-500 focus:border-blue-500 
 const inputDisabledStyles = 'disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-70';
 const inputErrorStyles = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
-export interface DatePickerFieldProps {
+interface DatePickerFieldProps {
   defaultValue: string;
   disabled?: boolean;
   errorMessages?: {

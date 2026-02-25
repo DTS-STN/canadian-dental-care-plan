@@ -130,7 +130,7 @@ function PageFooter() {
   );
 }
 
-export interface BilingualNotFoundErrorProps {
+interface BilingualNotFoundErrorProps {
   error?: unknown;
 }
 
@@ -211,7 +211,7 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
   );
 }
 
-export interface NotFoundErrorProps {
+interface NotFoundErrorProps {
   error?: unknown;
 }
 
@@ -246,7 +246,7 @@ export function NotFoundError({ error }: NotFoundErrorProps) {
   );
 }
 
-export interface ServerErrorProps {
+interface ServerErrorProps {
   error: unknown;
 }
 

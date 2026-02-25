@@ -8,7 +8,7 @@ import { cn } from '~/utils/tw-utils';
 
 export type AlertType = 'warning' | 'success' | 'danger' | 'info' | 'comment';
 
-export interface ContextualAlertProps {
+interface ContextualAlertProps {
   children: ReactNode;
   type: AlertType;
 }

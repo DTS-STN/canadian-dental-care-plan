@@ -36,7 +36,7 @@ export const useErrorSummaryContext = () => {
   return useContext(ErrorSummaryContext);
 };
 
-export interface ErrorSummaryProviderProps {
+interface ErrorSummaryProviderProps {
   children: React.ReactNode;
   actionData: unknown;
 }

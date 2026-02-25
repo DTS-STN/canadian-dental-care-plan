@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { cn } from '~/utils/tw-utils';
 
-export interface InputRadioProps extends OmitStrict<React.ComponentProps<'input'>, 'aria-labelledby' | 'children' | 'type'> {
+interface InputRadioProps extends OmitStrict<React.ComponentProps<'input'>, 'aria-labelledby' | 'children' | 'type'> {
   append?: ReactNode;
   appendClassName?: string;
   children: ReactNode;

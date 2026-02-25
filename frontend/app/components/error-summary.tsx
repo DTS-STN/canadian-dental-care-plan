@@ -12,7 +12,7 @@ import { scrollAndFocusFromAnchorLink } from '~/utils/link-utils';
  * Represents an item in an error summary, containing information about
  * an error message and the associated field ID where the error occurred.
  */
-export interface ErrorSummaryItem {
+interface ErrorSummaryItem {
   errorMessage: string;
   fieldId: string;
 }
@@ -81,7 +81,7 @@ export function scrollAndFocusToErrorSummary(errorSummaryId: string) {
 /**
  * Props for the ErrorSummary component.
  */
-export interface ErrorSummaryProps {
+interface ErrorSummaryProps {
   errors: ErrorSummaryItem[];
   id: string;
 }
@@ -131,7 +131,7 @@ function isString(value: unknown): value is string {
  * - A `(index: number) => string` (for a simple array of errors)
  * - A `Record<string, string | ((index: number) => string)>` (for a nested array of error objects)
  */
-export type ErrorFieldMapping =
+type ErrorFieldMapping =
   | string
   | ((index: number) => string)
   | {
@@ -141,7 +141,7 @@ export type ErrorFieldMapping =
 /**
  * Field mapping configuration that supports nested array fields
  */
-export interface ErrorFieldMap {
+interface ErrorFieldMap {
   [key: string]: ErrorFieldMapping;
 }
 

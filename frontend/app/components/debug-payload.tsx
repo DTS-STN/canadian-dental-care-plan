@@ -4,7 +4,7 @@ import { faCheck, faClipboard } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from './buttons';
 
-export interface DebugPayloadProps {
+interface DebugPayloadProps {
   data?: unknown;
   enableCopy?: boolean;
 }

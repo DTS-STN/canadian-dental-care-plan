@@ -62,7 +62,7 @@ export function Button({ children, className, endIcon, endIconProps, pill, size 
   );
 }
 
-export interface ButtonLinkProps extends ComponentProps<typeof AppLink> {
+interface ButtonLinkProps extends ComponentProps<typeof AppLink> {
   disabled?: boolean;
   endIcon?: ButtonEndIconProps['icon'];
   endIconProps?: OmitStrict<ButtonEndIconProps, 'icon'>;

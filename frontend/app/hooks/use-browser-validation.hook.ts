@@ -11,12 +11,12 @@ export const DEFAULT_BROWSER_REQUIREMENTS = {
   edge: '>=126',
 } as const satisfies Bowser.Parser.checkTree;
 
-export type BrowserValidationData = {
+type BrowserValidationData = {
   isValidBrowser: boolean;
   browserInfo: Bowser.Parser.ParsedResult;
 };
 
-export type BrowserValidationResult =
+type BrowserValidationResult =
   | { status: 'idle'; data?: undefined; error?: undefined }
   | { status: 'loading'; data?: undefined; error?: undefined }
   | { status: 'success'; data: BrowserValidationData; error?: undefined }

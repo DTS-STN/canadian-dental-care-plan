@@ -25,7 +25,7 @@ export function ClientFriendlyStatusMarkdown({ content }: { content: string }) {
 /**
  * Props for ClientFriendlyStatusMarkdownLink component.
  */
-export interface ClientFriendlyStatusMarkdownLinkProps extends PropsWithChildren {
+interface ClientFriendlyStatusMarkdownLinkProps extends PropsWithChildren {
   href: string;
 }
 

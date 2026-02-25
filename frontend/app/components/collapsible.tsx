@@ -3,7 +3,7 @@ import type { ComponentProps, ReactNode } from 'react';
 
 import { cn } from '~/utils/tw-utils';
 
-export type CollapsibleSummaryProps = ComponentProps<'summary'>;
+type CollapsibleSummaryProps = ComponentProps<'summary'>;
 
 export function CollapsibleSummary({ children, className, ...props }: CollapsibleSummaryProps) {
   return (
@@ -13,7 +13,7 @@ export function CollapsibleSummary({ children, className, ...props }: Collapsibl
   );
 }
 
-export interface CollapsibleProps extends ComponentProps<'details'> {
+interface CollapsibleProps extends ComponentProps<'details'> {
   contentClassName?: string;
   summary: ReactNode;
 }

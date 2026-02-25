@@ -4,7 +4,7 @@ import { InputError } from './input-error';
 
 import { cn } from '~/utils/tw-utils';
 
-export interface InputCheckboxProps extends OmitStrict<React.ComponentProps<'input'>, 'aria-labelledby' | 'children' | 'type'> {
+interface InputCheckboxProps extends OmitStrict<React.ComponentProps<'input'>, 'aria-labelledby' | 'children' | 'type'> {
   append?: ReactNode;
   appendClassName?: string;
   children: ReactNode;

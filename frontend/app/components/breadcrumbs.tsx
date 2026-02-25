@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { InlineLink } from './inline-link';
 
-export interface BreadcrumbsProps {
+interface BreadcrumbsProps {
   className?: string;
   items: Array<{ content: string; routeId?: string; to?: To }>;
 }

@@ -7,7 +7,7 @@ import { InputOption } from './input-option';
 
 import { cn } from '~/utils/tw-utils';
 
-export interface InputSelectProps extends OmitStrict<ComponentProps<'select'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required'> {
+interface InputSelectProps extends OmitStrict<ComponentProps<'select'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required'> {
   errorMessage?: string;
   helpMessage?: ReactNode;
   id: string;

@@ -45,7 +45,7 @@ export interface EvidentiaryDocumentRepository {
   checkHealth(): Promise<void>;
 }
 
-export type DefaultEvidentiaryDocumentRepositoryServerConfig = Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>;
+type DefaultEvidentiaryDocumentRepositoryServerConfig = Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>;
 
 @injectable()
 export class DefaultEvidentiaryDocumentRepository implements EvidentiaryDocumentRepository {

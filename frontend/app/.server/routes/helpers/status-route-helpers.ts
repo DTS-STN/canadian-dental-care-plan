@@ -29,7 +29,7 @@ function getSessionKey(id: string): StatusStateSessionKey {
   return `status-flow-${idSchema.parse(id)}`;
 }
 
-export type StatusStateParams = {
+type StatusStateParams = {
   lang: string;
 };
 

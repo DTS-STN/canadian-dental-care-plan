@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from 'react';
 
 import { cn } from '~/utils/tw-utils';
 
-export type DefinitionListProps = ComponentProps<'dl'> & {
+type DefinitionListProps = ComponentProps<'dl'> & {
   border?: boolean;
   layout?: 'single-column' | 'two-column';
 };

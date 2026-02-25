@@ -8,7 +8,7 @@ import { useCurrentLanguage } from '~/hooks';
 import { isI18nPageRoute } from '~/routes/routes';
 import { findRouteById, getPathById } from '~/utils/route-utils';
 
-export type LanguageSwitcherProps = OmitStrict<InlineLinkProps, 'to' | 'reloadDocument'>;
+type LanguageSwitcherProps = OmitStrict<InlineLinkProps, 'to' | 'reloadDocument'>;
 
 /**
  * Component that can be used to switch from one language to another.
