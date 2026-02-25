@@ -8,7 +8,7 @@ export type BenefitApplicationDto = ReadonlyDeep<{
   contactInformation: ContactInformationDto;
   dateOfBirth: string;
   dentalBenefits: string[];
-  dentalInsurance?: boolean | DentalInsuranceDto; //TODO: remove boolean once online application has been removed in favour of hub/spoke
+  dentalInsurance?: DentalInsuranceDto;
   livingIndependently?: boolean;
   partnerInformation?: PartnerInformationDto;
   termsAndConditions: TermsAndConditionsDto;
@@ -28,7 +28,7 @@ export type ApplicantInformationDto = ReadonlyDeep<{
 
 export type ChildDto = ReadonlyDeep<{
   dentalBenefits: string[];
-  dentalInsurance: boolean | DentalInsuranceDto; //TODO: remove boolean once online application has been removed in favour of hub/spoke
+  dentalInsurance: DentalInsuranceDto;
   information: {
     firstName: string;
     lastName: string;
