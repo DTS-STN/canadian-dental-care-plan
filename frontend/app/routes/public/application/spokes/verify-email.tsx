@@ -204,6 +204,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <fieldset className="mb-6">
+            <legend className="font-lato mb-4 text-2xl font-bold">{t('application-spokes:verify-email.verification-code-label')}</legend>
             <p className="mb-4">{t('application-spokes:verify-email.verification-code', { email: defaultState })}</p>
             <p className="mb-4">{t('application-spokes:verify-email.request-new')}</p>
             <p className="mb-8">
