@@ -1,6 +1,8 @@
 import { useId, useState } from 'react';
 import type { SyntheticEvent } from 'react';
 
+import { useFetcher } from 'react-router';
+
 import { invariant } from '@dts-stn/invariant';
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,10 +10,11 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
+import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
-import { useEnhancedFetcher } from '~/hooks';
+import { useFetcherSubmissionState } from '~/hooks';
 
 export interface CanadianAddress {
   address: string;
@@ -45,7 +48,9 @@ interface AddressSuggestionDialogContentProps {
 
 export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddress, formAction, syncAddresses = false }: AddressSuggestionDialogContentProps) {
   const { t } = useTranslation(['common']);
-  const fetcher = useEnhancedFetcher();
+  const fetcher = useFetcher();
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
+
   const enteredAddressOptionValue = 'entered-address';
   const suggestedAddressOptionValue = 'suggested-address';
   type AddressSelectionOption = typeof enteredAddressOptionValue | typeof suggestedAddressOptionValue;
@@ -127,17 +132,18 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
       </div>
       <DialogFooter>
         <DialogClose asChild>
-          <Button id="dialog.corrected-address-close-button" disabled={fetcher.isSubmitting} variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Suggestion click">
+          <Button id="dialog.corrected-address-close-button" disabled={isSubmitting} variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Suggestion click">
             {t('common:dialog.address-suggestion.cancel-button')}
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
+          <CsrfTokenInput />
           <LoadingButton
             name="_action"
             value={formAction}
             type="submit"
             id="dialog.corrected-address-use-selected-address-button"
-            loading={fetcher.isSubmitting}
+            loading={isSubmitting}
             variant="primary"
             size="sm"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Use Selected Address - Address Suggestion click"
@@ -159,7 +165,8 @@ interface AddressInvalidDialogContentProps {
 
 export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAddresses = false, addressContext }: AddressInvalidDialogContentProps) {
   const { t } = useTranslation(['common']);
-  const fetcher = useEnhancedFetcher();
+  const fetcher = useFetcher();
+  const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   async function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
@@ -210,12 +217,13 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
+          <CsrfTokenInput />
           <LoadingButton
             name="_action"
             value={formAction}
             type="submit"
             id="dialog.address-invalid-use-entered-address-button"
-            loading={fetcher.isSubmitting}
+            loading={isSubmitting}
             variant="primary"
             size="sm"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Use entered address - Address Invalid click"

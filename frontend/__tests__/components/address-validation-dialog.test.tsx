@@ -5,11 +5,14 @@ import { describe, expect, it, vi } from 'vitest';
 import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
 import { Dialog } from '~/components/dialog';
 
-vi.mock('~/hooks', () => ({
-  useEnhancedFetcher: vi.fn(() => ({
+vi.mock('react-router', () => ({
+  useFetcher: vi.fn(() => ({
     Form: vi.fn(({ children, method, noValidate }) => <form method={method}>{children}</form>),
+    state: 'idle',
   })),
 }));
+
+vi.mock('~/components/csrf-token-input');
 
 describe('AddressInvalidDialogContent', () => {
   it('should render the AddressInvalidDialogContent', async () => {
