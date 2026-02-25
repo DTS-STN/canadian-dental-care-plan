@@ -36,20 +36,10 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
     | 'APPLICANT_CATEGORY_CODE_FAMILY'
     | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
-    | 'COMMUNICATION_METHOD_GC_DIGITAL_ID'
-    | 'COMMUNICATION_METHOD_GC_MAIL_ID'
-    | 'COMMUNICATION_METHOD_SUNLIFE_MAIL_ID'
-    | 'COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID'
     | 'ENGLISH_LANGUAGE_CODE'
     | 'FRENCH_LANGUAGE_CODE'
     | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'
     | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED'
-    | 'MARITAL_STATUS_CODE_SINGLE'
-    | 'MARITAL_STATUS_CODE_MARRIED'
-    | 'MARITAL_STATUS_CODE_COMMON_LAW'
-    | 'MARITAL_STATUS_CODE_DIVORCED'
-    | 'MARITAL_STATUS_CODE_WIDOWED'
-    | 'MARITAL_STATUS_CODE_SEPARATED'
   >;
 
   constructor(
@@ -59,20 +49,10 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
       | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
       | 'APPLICANT_CATEGORY_CODE_FAMILY'
       | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
-      | 'COMMUNICATION_METHOD_GC_DIGITAL_ID'
-      | 'COMMUNICATION_METHOD_GC_MAIL_ID'
-      | 'COMMUNICATION_METHOD_SUNLIFE_MAIL_ID'
-      | 'COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID'
       | 'ENGLISH_LANGUAGE_CODE'
       | 'FRENCH_LANGUAGE_CODE'
       | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'
       | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED'
-      | 'MARITAL_STATUS_CODE_SINGLE'
-      | 'MARITAL_STATUS_CODE_MARRIED'
-      | 'MARITAL_STATUS_CODE_COMMON_LAW'
-      | 'MARITAL_STATUS_CODE_DIVORCED'
-      | 'MARITAL_STATUS_CODE_WIDOWED'
-      | 'MARITAL_STATUS_CODE_SEPARATED'
     >,
   ) {
     this.serverConfig = serverConfig;
@@ -90,25 +70,8 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     const { applicantInformation, applicationYearId, children, communicationPreferences, contactInformation, dateOfBirth, dentalBenefits, dentalInsurance, livingIndependently, partnerInformation, termsAndConditions, typeOfApplication } =
       benefitApplication;
 
-    const {
-      BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED,
-      BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC,
-      MARITAL_STATUS_CODE_SINGLE,
-      MARITAL_STATUS_CODE_MARRIED,
-      MARITAL_STATUS_CODE_COMMON_LAW,
-      MARITAL_STATUS_CODE_SEPARATED,
-      MARITAL_STATUS_CODE_DIVORCED,
-      MARITAL_STATUS_CODE_WIDOWED,
-    } = this.serverConfig;
+    const { BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED, BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC } = this.serverConfig;
 
-    const MARITAL_STATUS_CODE_MAP: Record<string, string> = {
-      single: MARITAL_STATUS_CODE_SINGLE,
-      married: MARITAL_STATUS_CODE_MARRIED,
-      commonlaw: MARITAL_STATUS_CODE_COMMON_LAW,
-      separated: MARITAL_STATUS_CODE_SEPARATED,
-      divorced: MARITAL_STATUS_CODE_DIVORCED,
-      widowed: MARITAL_STATUS_CODE_WIDOWED,
-    };
     return {
       BenefitApplication: {
         Applicant: {
@@ -142,7 +105,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
           ],
           PersonMaritalStatus: {
             StatusCode: {
-              ReferenceDataID: MARITAL_STATUS_CODE_MAP[applicantInformation.maritalStatus] ?? applicantInformation.maritalStatus,
+              ReferenceDataID: applicantInformation.maritalStatus,
             },
           },
           PersonName: [
@@ -157,10 +120,10 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
           RelatedPerson: this.toRelatedPersons(partnerInformation, children),
           MailingSameAsHomeIndicator: contactInformation.copyMailingAddress,
           PreferredMethodCommunicationCode: {
-            ReferenceDataID: this.toPreferredMethodCommunicationCode(communicationPreferences.preferredMethod),
+            ReferenceDataID: communicationPreferences.preferredMethod,
           },
           PreferredMethodCommunicationGCCode: {
-            ReferenceDataID: this.toPreferredMethodCommunicationGCCode(communicationPreferences.preferredMethodGovernmentOfCanada),
+            ReferenceDataID: communicationPreferences.preferredMethodGovernmentOfCanada,
           },
         },
         BenefitApplicationCategoryCode: {
@@ -340,22 +303,6 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
         InsurancePlan: this.toInsurancePlan(child.dentalBenefits),
       },
     }));
-  }
-
-  private toPreferredMethodCommunicationCode(preferredMethod: string) {
-    const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_SUNLIFE_MAIL_ID } = this.serverConfig;
-    // TODO remove the 'email' and 'mail' conditionals once hub/spoke has been released
-    if (preferredMethod === 'email') return COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID;
-    if (preferredMethod === 'mail') return COMMUNICATION_METHOD_SUNLIFE_MAIL_ID;
-    return preferredMethod;
-  }
-
-  private toPreferredMethodCommunicationGCCode(preferredMethodGovernmentOfCanada: string) {
-    const { COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID } = this.serverConfig;
-    // TODO remove the 'email' and 'mail' conditionals once hub/spoke has been released
-    if (preferredMethodGovernmentOfCanada === 'msca') return COMMUNICATION_METHOD_GC_DIGITAL_ID;
-    if (preferredMethodGovernmentOfCanada === 'mail') return COMMUNICATION_METHOD_GC_MAIL_ID;
-    return preferredMethodGovernmentOfCanada;
   }
 
   private toBenefitApplicationCategoryCode(typeOfApplication: TypeOfApplicationDto) {

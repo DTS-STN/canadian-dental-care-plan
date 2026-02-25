@@ -80,9 +80,6 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
     | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED'
     | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'
-    | 'COMMUNICATION_METHOD_SUNLIFE_MAIL_ID'
-    | 'COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID'
-    | 'COMMUNICATION_METHOD_GC_DIGITAL_ID'
     | 'ENGLISH_LANGUAGE_CODE'
     | 'FRENCH_LANGUAGE_CODE'
     | 'MARITAL_STATUS_CODE_SINGLE'
@@ -97,9 +94,6 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY'
       | 'BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED'
       | 'BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC'
-      | 'COMMUNICATION_METHOD_SUNLIFE_MAIL_ID'
-      | 'COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID'
-      | 'COMMUNICATION_METHOD_GC_DIGITAL_ID'
       | 'ENGLISH_LANGUAGE_CODE'
       | 'FRENCH_LANGUAGE_CODE'
       | 'MARITAL_STATUS_CODE_SINGLE'
@@ -206,10 +200,10 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
           RelatedPerson: this.toRelatedPersons(partnerInformation, children),
           MailingSameAsHomeIndicator: contactInformation.copyMailingAddress,
           PreferredMethodCommunicationCode: {
-            ReferenceDataID: this.toPreferredMethodCommunicationCode(communicationPreferences.preferredMethod),
+            ReferenceDataID: communicationPreferences.preferredMethod,
           },
           PreferredMethodCommunicationGCCode: {
-            ReferenceDataID: this.toPreferredMethodCommunicationGCCode(communicationPreferences.preferredMethodGovernmentOfCanada),
+            ReferenceDataID: communicationPreferences.preferredMethodGovernmentOfCanada,
           },
         },
         BenefitApplicationCategoryCode: {
@@ -410,20 +404,6 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         },
       ],
     }));
-  }
-
-  private toPreferredMethodCommunicationCode(preferredMethod: string) {
-    const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_SUNLIFE_MAIL_ID } = this.serverConfig;
-    if (preferredMethod === 'email') return COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID;
-    if (preferredMethod === 'mail') return COMMUNICATION_METHOD_SUNLIFE_MAIL_ID;
-    return preferredMethod;
-  }
-
-  private toPreferredMethodCommunicationGCCode(preferredMethodGovernmentOfCanada: string) {
-    const { COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_SUNLIFE_MAIL_ID } = this.serverConfig;
-    if (preferredMethodGovernmentOfCanada === 'msca') return COMMUNICATION_METHOD_GC_DIGITAL_ID;
-    if (preferredMethodGovernmentOfCanada === 'mail') return COMMUNICATION_METHOD_SUNLIFE_MAIL_ID;
-    return preferredMethodGovernmentOfCanada;
   }
 
   private toBenefitApplicationCategoryCode(typeOfApplication: RenewalTypeOfApplicationDto) {
