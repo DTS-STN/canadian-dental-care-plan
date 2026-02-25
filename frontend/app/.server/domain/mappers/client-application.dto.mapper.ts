@@ -25,7 +25,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
     this.serverConfig = serverConfig;
   }
 
-  mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto) {
+  mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto): ClientApplicationBasicInfoRequestEntity {
     return {
       Applicant: {
         PersonName: {
