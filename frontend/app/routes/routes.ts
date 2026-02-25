@@ -19,13 +19,14 @@ export type Language = 'en' | 'fr';
 export type I18nRoute = I18nLayoutRoute | I18nPageRoute;
 export type I18nLayoutRoute = { file: string; children: I18nRoute[] };
 export type I18nPageRoute = { file: string; id: string; paths: I18nPaths };
-export type I18nRouteId = ExtractI18nRouteIds<(typeof i18nRoutes)[number]>;
 export type I18nPaths = Record<Language, string>;
 
-type ExtractI18nRouteId<T> = T extends I18nPageRoute ? T['id'] : never;
-type ExtractI18nRouteIds<T, Filter = void> = T extends I18nLayoutRoute //
-  ? ExtractI18nRouteIds<T['children'][number], Filter>
-  : ExtractI18nRouteId<T>;
+// Extract the route IDs from the i18nRoutes config to create a union type of valid route IDs for localized routes.
+// type I18nRouteId = ExtractI18nRouteIds<(typeof i18nRoutes)[number]>;
+// type ExtractI18nRouteId<T> = T extends I18nPageRoute ? T['id'] : never;
+// type ExtractI18nRouteIds<T, Filter = void> = T extends I18nLayoutRoute //
+//   ? ExtractI18nRouteIds<T['children'][number], Filter>
+//   : ExtractI18nRouteId<T>;
 
 /**
  * Type guard to determine if a route is an I18nLayoutRoute.

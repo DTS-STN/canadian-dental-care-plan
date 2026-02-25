@@ -52,7 +52,7 @@ export interface InstrumentationService {
   startActiveSpan<T extends (span: Span) => unknown>(name: string, fn: T): ReturnType<T>;
 }
 
-export type DefaultInstrumentationServiceServerConfig = Pick<ServerConfig, 'OTEL_SERVICE_NAME'>;
+type DefaultInstrumentationServiceServerConfig = Pick<ServerConfig, 'OTEL_SERVICE_NAME'>;
 
 @injectable()
 export class DefaultInstrumentationService implements InstrumentationService {

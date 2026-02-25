@@ -5,7 +5,7 @@ import { ButtonEndIcon, ButtonStartIcon } from './button-icons';
 import type { ButtonProps } from './buttons';
 import { Button } from './buttons';
 
-export interface LoadingButtonProps extends ButtonProps {
+interface LoadingButtonProps extends ButtonProps {
   loading?: boolean;
   loadingIcon?: FontAwesomeIconProps['icon'];
   loadingIconProps?: OmitStrict<FontAwesomeIconProps, 'icon'>;

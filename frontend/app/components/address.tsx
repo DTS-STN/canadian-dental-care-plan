@@ -12,7 +12,7 @@ export interface AddressDetails {
   provinceState?: string;
 }
 
-export interface AddressProps extends ComponentProps<'address'> {
+interface AddressProps extends ComponentProps<'address'> {
   address: AddressDetails;
   /**
    * The format of the address

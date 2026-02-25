@@ -7,7 +7,7 @@ import { createHash, subtle } from 'node:crypto';
 
 import { createLogger } from '~/.server/logging';
 
-export type CryptoKeyAlgorithm = 'encrypt' | 'decrypt' | 'sign' | 'verify';
+type CryptoKeyAlgorithm = 'encrypt' | 'decrypt' | 'sign' | 'verify';
 
 /**
  * Generate a JWK ID from the modulus of the JWK.

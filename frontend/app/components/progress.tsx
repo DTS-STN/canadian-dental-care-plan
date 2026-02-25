@@ -23,7 +23,7 @@ const variantStyles = {
   yellow: 'bg-yellow-400',
 };
 
-export interface ProgressProps extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
+interface ProgressProps extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
   size?: keyof typeof sizeStyles;
   variant?: keyof typeof variantStyles;
   label: string;

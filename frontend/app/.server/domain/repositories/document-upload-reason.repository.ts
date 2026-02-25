@@ -40,7 +40,7 @@ export interface DocumentUploadReasonRepository {
   checkHealth(): Promise<void>;
 }
 
-export type DefaultDocumentUploadReasonRepositoryServerConfig = Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>;
+type DefaultDocumentUploadReasonRepositoryServerConfig = Pick<ServerConfig, 'HTTP_PROXY_URL' | 'INTEROP_API_BASE_URI' | 'INTEROP_API_SUBSCRIPTION_KEY' | 'INTEROP_API_MAX_RETRIES' | 'INTEROP_API_BACKOFF_MS'>;
 
 @injectable()
 export class DefaultDocumentUploadReasonRepository implements DocumentUploadReasonRepository {

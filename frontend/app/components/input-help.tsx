@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from 'react';
 
 import { cn } from '~/utils/tw-utils';
 
-export interface InputHelpProps extends ComponentProps<'div'> {
+interface InputHelpProps extends ComponentProps<'div'> {
   children: ReactNode;
   id: string;
 }

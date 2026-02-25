@@ -6,7 +6,7 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { cn } from '~/utils/tw-utils';
 
-export interface ErrorAlertProps extends ComponentProps<'section'> {
+interface ErrorAlertProps extends ComponentProps<'section'> {
   /* Type of alert (eg. 'info', 'warning'; defaults to 'danger') */
   type?: AlertType;
 }

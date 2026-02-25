@@ -2,7 +2,7 @@ import type { ComponentPropsWithoutRef } from 'react';
 
 import type { ClientEnv } from '~/utils/env-utils';
 
-export interface ClientEnvProps extends ComponentPropsWithoutRef<'script'> {
+interface ClientEnvProps extends ComponentPropsWithoutRef<'script'> {
   env: ClientEnv;
 }
 

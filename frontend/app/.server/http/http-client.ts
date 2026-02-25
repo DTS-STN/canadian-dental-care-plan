@@ -37,7 +37,7 @@ export interface FetchOptions {
 /**
  * Options for configuring a retry mechanism for fetch function.
  */
-export interface RetryOptions {
+interface RetryOptions {
   /**
    * Maximum number of retry attempts (excluding the first try).
    * Set to 0 or undefined to disable retries.

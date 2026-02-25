@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from 'react';
 
 import { cn } from '~/utils/tw-utils';
 
-export interface InputLegendProps extends ComponentProps<'legend'> {
+interface InputLegendProps extends ComponentProps<'legend'> {
   children: ReactNode;
 }
 

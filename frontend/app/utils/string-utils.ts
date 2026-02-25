@@ -139,7 +139,7 @@ export function formatAddressLine({ address, apartment }: FormatAddressLineArgum
 /**
  * Arguments for formatting a complete address
  */
-export interface FormatAddressArguments {
+interface FormatAddressArguments {
   /** Street address */
   address: string;
 

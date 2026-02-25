@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { useCurrentLanguage } from '~/hooks';
 
-export interface PageHeaderBrandProps {
+interface PageHeaderBrandProps {
   /**
    * The URL to wrap the logo with. If this prop is defined and non-empty,
    * the logo will be wrapped in a link pointing to this URL.

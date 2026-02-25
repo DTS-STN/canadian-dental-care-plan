@@ -12,7 +12,7 @@ export interface ClientEligibilityDtoMapper {
   mapClientEligibilityRequestDtoToClientEligibilityRequestEntity(clientEligibilityRequestDto: ClientEligibilityRequestDto): ClientEligibilityRequestEntity;
 }
 
-export type DefaultClientEligibilityDtoMapperServerConfig = Pick<ServerConfig, 'COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC' | 'ELIGIBILITY_STATUS_CODE_ELIGIBLE' | 'ELIGIBILITY_STATUS_CODE_INELIGIBLE'>;
+type DefaultClientEligibilityDtoMapperServerConfig = Pick<ServerConfig, 'COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC' | 'ELIGIBILITY_STATUS_CODE_ELIGIBLE' | 'ELIGIBILITY_STATUS_CODE_INELIGIBLE'>;
 
 @injectable()
 export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMapper {

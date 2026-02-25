@@ -9,7 +9,7 @@ import { InputHelp } from './input-help';
 import { InputLabel } from '~/components/input-label';
 import { cn } from '~/utils/tw-utils';
 
-export interface InputPhoneFieldProps extends OmitStrict<React.ComponentProps<typeof PhoneInput>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children' | 'value'> {
+interface InputPhoneFieldProps extends OmitStrict<React.ComponentProps<typeof PhoneInput>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children' | 'value'> {
   defaultValue?: string;
   errorMessage?: string;
   helpMessagePrimary?: React.ReactNode;

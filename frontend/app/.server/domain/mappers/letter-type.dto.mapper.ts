@@ -12,7 +12,7 @@ export interface LetterTypeDtoMapper {
   mapLetterTypeEntitiesToLetterTypeDtos(LetterTypeEntities: ReadonlyArray<LetterTypeEntity>): ReadonlyArray<LetterTypeDto>;
 }
 
-export type LetterTypeDtoMapperImpl_ServerConfig = Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE'>;
+type LetterTypeDtoMapperImpl_ServerConfig = Pick<ServerConfig, 'ENGLISH_LANGUAGE_CODE' | 'FRENCH_LANGUAGE_CODE'>;
 
 @injectable()
 export class DefaultLetterTypeDtoMapper implements LetterTypeDtoMapper {

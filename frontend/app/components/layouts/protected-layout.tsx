@@ -206,7 +206,7 @@ function PageFooter() {
   );
 }
 
-export interface NotFoundErrorProps {
+interface NotFoundErrorProps {
   error?: unknown;
 }
 
@@ -242,7 +242,7 @@ export function NotFoundError({ error }: NotFoundErrorProps) {
   );
 }
 
-export interface ServerErrorProps {
+interface ServerErrorProps {
   error: unknown;
 }
 

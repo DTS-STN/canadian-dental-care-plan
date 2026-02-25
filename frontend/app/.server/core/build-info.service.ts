@@ -18,7 +18,7 @@ export interface BuildInfoService {
   getBuildInfo(): BuildInfo;
 }
 
-export type DefaultBuildInfoService_ClientConfig = Pick<ClientConfig, 'BUILD_DATE' | 'BUILD_ID' | 'BUILD_REVISION' | 'BUILD_VERSION'>;
+type DefaultBuildInfoService_ClientConfig = Pick<ClientConfig, 'BUILD_DATE' | 'BUILD_ID' | 'BUILD_REVISION' | 'BUILD_VERSION'>;
 
 @injectable()
 export class DefaultBuildInfoService implements BuildInfoService {
