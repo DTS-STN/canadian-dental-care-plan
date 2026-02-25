@@ -163,12 +163,13 @@ export async function action({ context: { appContainer, session }, params, reque
   if (state.context === 'renewal') {
     invariant(parsedDataResult.data.memberId, 'Member ID must be defined for renewal applications');
 
-    const clientApplicationOption = await appContainer.get(TYPES.ClientApplicationService).findClientApplicationByBasicInfo({
+    const clientApplicationOption = await appContainer.get(TYPES.ClientApplicationService).findClientApplicationByBasicInfoAndSin({
       clientNumber: parsedDataResult.data.memberId,
       firstName: parsedDataResult.data.firstName,
       lastName: parsedDataResult.data.lastName,
       dateOfBirth: parsedDataResult.data.dateOfBirth,
       applicationYearId: state.applicationYear.applicationYearId,
+      sin: parsedDataResult.data.socialInsuranceNumber,
       userId: 'anonymous',
     });
 

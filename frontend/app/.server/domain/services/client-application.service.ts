@@ -3,7 +3,7 @@ import { None, Some } from 'oxide.ts';
 import type { Option } from 'oxide.ts';
 
 import { TYPES } from '~/.server/constants';
-import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
+import type { ClientApplicationBasicInfoAndSinRequestDto, ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
 import type { ClientApplicationDtoMapper } from '~/.server/domain/mappers';
 import type { ClientApplicationRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
@@ -21,6 +21,14 @@ export interface ClientApplicationService {
    * @returns A Promise that resolves to the client application dto if found, or `null` otherwise.
    */
   findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto): Promise<Option<ClientApplicationDto>>;
+
+  /**
+   * Finds a client application by basic info and SIN.
+   *
+   * @param clientApplicationBasicInfoAndSinRequestDto The basic info and SIN request dto.
+   * @returns A Promise that resolves to the client application dto if found, or `null` otherwise.
+   */
+  findClientApplicationByBasicInfoAndSin(clientApplicationBasicInfoAndSinRequestDto: ClientApplicationBasicInfoAndSinRequestDto): Promise<Option<ClientApplicationDto>>;
 
   /**
    * Finds a client application by SIN.
@@ -65,6 +73,25 @@ export class DefaultClientApplicationService implements ClientApplicationService
 
     this.log.trace('Returning client application: [%j]', clientApplicationDto);
     return clientApplicationDto;
+  }
+
+  async findClientApplicationByBasicInfoAndSin(clientApplicationBasicInfoAndSinRequestDto: ClientApplicationBasicInfoAndSinRequestDto): Promise<Option<ClientApplicationDto>> {
+    const { sin, ...basicInfoRequestDto } = clientApplicationBasicInfoAndSinRequestDto;
+    const clientApplication = await this.findClientApplicationByBasicInfo(basicInfoRequestDto);
+
+    if (clientApplication.isNone()) {
+      this.log.trace('No client application found with basic info: [%j]', basicInfoRequestDto);
+      return None;
+    }
+
+    // Note: We compare the SINs by removing all non-digit characters to ensure that formatting differences do not affect the comparison.
+    if (clientApplication.unwrap().applicantInformation.socialInsuranceNumber.replaceAll(/\D/g, '') !== sin.replaceAll(/\D/g, '')) {
+      this.log.trace('Client application found with basic info, but SIN does not match. Basic info: [%j], SIN: [%s]', basicInfoRequestDto, sin);
+      return None;
+    }
+
+    this.log.trace('Client application found with basic info and SIN: [%j]', clientApplication.unwrap());
+    return clientApplication;
   }
 
   async findClientApplicationBySin(clientApplicationSinRequestDto: ClientApplicationSinRequestDto): Promise<Option<ClientApplicationDto>> {
