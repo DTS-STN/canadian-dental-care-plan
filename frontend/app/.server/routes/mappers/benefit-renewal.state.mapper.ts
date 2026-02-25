@@ -380,7 +380,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     return {
       firstName: existingApplicantInformation.firstName,
       lastName: existingApplicantInformation.lastName,
-      maritalStatus: existingApplicantInformation.maritalStatus ?? renewedMaritalStatus,
+      maritalStatus: renewedMaritalStatus ?? existingApplicantInformation.maritalStatus,
       socialInsuranceNumber: existingApplicantInformation.socialInsuranceNumber,
       clientId: existingApplicantInformation.clientId,
       clientNumber: existingApplicantInformation.clientNumber,
