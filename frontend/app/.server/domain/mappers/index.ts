@@ -8,7 +8,6 @@ export * from './client-application.dto.mapper';
 export * from './client-eligibility.dto.mapper';
 export * from './client-friendly-status.dto.mapper';
 export * from './country.dto.mapper';
-export * from './demographic-survey.dto.mapper';
 export * from './document-upload-reason.dto.mapper';
 export * from './document-upload.dto.mapper';
 export * from './evidentiary-document-type.dto.mapper';

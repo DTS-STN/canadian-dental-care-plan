@@ -10,7 +10,6 @@ export * from './client-eligibility.service';
 export * from './client-friendly-status.service';
 export * from './country.service';
 export * from './coverage.service';
-export * from './demographic-survey.service';
 export * from './document-upload-reason.service';
 export * from './document-upload.service';
 export * from './evidentiary-document-type.service';

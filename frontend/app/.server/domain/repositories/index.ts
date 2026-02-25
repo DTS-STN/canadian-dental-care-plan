@@ -7,7 +7,6 @@ export * from './benefit-renewal.repository';
 export * from './client-application.repository';
 export * from './client-friendly-status.repository';
 export * from './country.repository';
-export * from './demographic-survey.repository';
 export * from './document-upload.repository';
 export * from './document-upload-reason.repository';
 export * from './evidentiary-document-type.repository';

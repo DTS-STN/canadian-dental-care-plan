@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { isValidTimeZone } from '~/utils/date-utils';
 import { isValidExtension } from '~/utils/file.utils';
 
-const validFeatureNames = ['hcaptcha', 'killswitch-api', 'show-prototype-banner', 'stub-login', 'status', 'view-letters', 'view-payload', 'demographic-survey', 'doc-upload'] as const;
+const validFeatureNames = ['hcaptcha', 'killswitch-api', 'show-prototype-banner', 'stub-login', 'status', 'view-letters', 'view-payload', 'doc-upload'] as const;
 
 export type FeatureName = (typeof validFeatureNames)[number];
 
@@ -50,15 +50,6 @@ export const clientEnvSchema = z.object({
 
   SESSION_TIMEOUT_SECONDS: z.coerce.number().min(0).default(19 * 60),
   SESSION_TIMEOUT_PROMPT_SECONDS: z.coerce.number().min(0).default(5 * 60),
-
-  // demographic survey codes
-  IS_APPLICANT_FIRST_NATIONS_YES_OPTION: z.coerce.number().default(775_170_000),
-  ANOTHER_ETHNIC_GROUP_OPTION: z.coerce.number().default(775_170_009),
-  INDIGENOUS_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775_170_003),
-  DISABILITY_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775_170_004),
-  ETHNIC_GROUP_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775_170_011),
-  LOCATION_BORN_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775_170_003),
-  GENDER_STATUS_PREFER_NOT_TO_ANSWER: z.coerce.number().default(775_170_004),
 
   // lookup identifiers
   CANADA_COUNTRY_ID: z.string().trim().min(1).default('0cf5389e-97ae-eb11-8236-000d3af4bfc3'),

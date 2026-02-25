@@ -1,7 +1,6 @@
 export * from './base-domain.exception';
 export * from './client-friendly-status-not-found.exception';
 export * from './country-not-found.exception';
-export * from './demographic-survey-not-found.exception';
 export * from './document-upload-reason.exception';
 export * from './evidentiary-document-type-not-found.exception';
 export * from './federal-government-insurance-plan-not-found.exception';

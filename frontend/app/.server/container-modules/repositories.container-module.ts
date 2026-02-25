@@ -15,7 +15,6 @@ import {
   DefaultClientEligibilityRepository,
   DefaultClientFriendlyStatusRepository,
   DefaultCountryRepository,
-  DefaultDemographicSurveyRepository,
   DefaultDocumentUploadReasonRepository,
   DefaultDocumentUploadRepository,
   DefaultEvidentiaryDocumentRepository,
@@ -110,7 +109,6 @@ export function createRepositoriesContainerModule(serverConfig: Pick<ServerConfi
     options.bind(TYPES.CountryRepository).to(DefaultCountryRepository).when(isMockEnabled(serverConfig, 'code-tables', false));
     options.bind(TYPES.CountryRepository).to(MockCountryRepository).when(isMockEnabled(serverConfig, 'code-tables', true));
 
-    options.bind(TYPES.DemographicSurveyRepository).to(DefaultDemographicSurveyRepository);
 
     options.bind(TYPES.DocumentUploadRepository).to(DefaultDocumentUploadRepository).when(isMockEnabled(serverConfig, 'document-upload', false));
     options.bind(TYPES.DocumentUploadRepository).to(MockDocumentUploadRepository).when(isMockEnabled(serverConfig, 'document-upload', true));
