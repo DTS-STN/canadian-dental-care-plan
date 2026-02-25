@@ -24,7 +24,6 @@ import protectedApplyAdultEn from '~/.server/locales/en/protected-apply-adult.js
 import protectedApplyChildEn from '~/.server/locales/en/protected-apply-child.json';
 import protectedApplyEn from '~/.server/locales/en/protected-apply.json';
 import protectedProfileEn from '~/.server/locales/en/protected-profile.json';
-import protectedRenewEn from '~/.server/locales/en/protected-renew.json';
 import statusEn from '~/.server/locales/en/status.json';
 import stubLoginEn from '~/.server/locales/en/stub-login.json';
 import unableToProcessRequestEn from '~/.server/locales/en/unable-to-process-request.json';
@@ -54,7 +53,6 @@ import protectedApplyAdultFr from '~/.server/locales/fr/protected-apply-adult.js
 import protectedApplyChildFr from '~/.server/locales/fr/protected-apply-child.json';
 import protectedApplyFr from '~/.server/locales/fr/protected-apply.json';
 import protectedProfileFr from '~/.server/locales/fr/protected-profile.json';
-import protectedRenewFr from '~/.server/locales/fr/protected-renew.json';
 import statusFr from '~/.server/locales/fr/status.json';
 import stubLoginFr from '~/.server/locales/fr/stub-login.json';
 import unableToProcessRequestFr from '~/.server/locales/fr/unable-to-process-request.json';
@@ -87,7 +85,6 @@ const i18nResourcesEn = {
   'protected-apply-adult': protectedApplyAdultEn,
   'protected-apply-adult-child': protectedApplyAdultChildEn,
   'protected-apply-child': protectedApplyChildEn,
-  'protected-renew': protectedRenewEn,
   'protected-profile': protectedProfileEn,
   status: statusEn,
   'stub-login': stubLoginEn,
@@ -120,7 +117,6 @@ const i18nResourcesFr = {
   'protected-apply-adult': protectedApplyAdultFr,
   'protected-apply-adult-child': protectedApplyAdultChildFr,
   'protected-apply-child': protectedApplyChildFr,
-  'protected-renew': protectedRenewFr,
   'protected-profile': protectedProfileFr,
   status: statusFr,
   'stub-login': stubLoginFr,

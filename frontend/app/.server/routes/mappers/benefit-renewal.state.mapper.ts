@@ -6,12 +6,15 @@ import validator from 'validator';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type {
+  AdultBenefitRenewalDto,
+  AdultChildBenefitRenewalDto,
+  ChildBenefitRenewalDto,
   ClientApplicantInformationDto,
   ClientApplicationDto,
   ClientChildDto,
+  ClientCommunicationPreferencesDto,
   ClientContactInformationDto,
   ClientPartnerInformationDto,
-  ProtectedBenefitRenewalDto,
   RenewalApplicantInformationDto,
   RenewalChildDto,
   RenewalCommunicationPreferencesDto,
@@ -21,99 +24,132 @@ import type {
 } from '~/.server/domain/dtos';
 import type { FederalGovernmentInsurancePlanService, ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services';
 import type {
-  ProtectedApplicationYearState,
-  ProtectedChildState,
-  ProtectedConmmunicationPreferenceState,
-  ProtectedContactInformationState,
-  ProtectedDemographicSurveyState,
-  ProtectedDentalFederalBenefitsState,
-  ProtectedDentalProvincialTerritorialBenefitsState,
-  ProtectedHomeAddressState,
-  ProtectedMailingAddressState,
-  ProtectedPartnerInformationState,
-} from '~/.server/routes/helpers/protected-renew-route-helpers';
+  ApplicationYearState,
+  ChildState,
+  DeclaredChangeCommunicationPreferencesState,
+  DeclaredChangeDentalFederalBenefitsState,
+  DeclaredChangeDentalProvincialTerritorialBenefitsState,
+  DeclaredChangeHomeAddressState,
+  DeclaredChangeMailingAddressState,
+  DeclaredChangePhoneNumberState,
+  DentalFederalBenefitsState,
+  DentalInsuranceState,
+  DentalProvincialTerritorialBenefitsState,
+  PartnerInformationState,
+  TermsAndConditionsState,
+} from '~/.server/routes/helpers/public-application-route-helpers';
 
-export interface ProtectedRenewState {
-  applicationYear: ProtectedApplicationYearState;
-  clientApplication: ClientApplicationDto;
-  children: ProtectedChildState[];
-  contactInformation?: ProtectedContactInformationState;
-  demographicSurvey?: ProtectedDemographicSurveyState;
-  dentalBenefits?: ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
-  dentalInsurance?: boolean;
-  homeAddress?: ProtectedHomeAddressState;
+export interface BenefitRenewalAdultState {
+  applicationYear: ApplicationYearState;
+  clientApplication?: ClientApplicationDto;
+  phoneNumber: DeclaredChangePhoneNumberState;
+  dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
+  dentalInsurance: DentalInsuranceState;
+  homeAddress?: DeclaredChangeHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress?: ProtectedMailingAddressState;
+  mailingAddress?: DeclaredChangeMailingAddressState;
   maritalStatus?: string;
-  partnerInformation?: ProtectedPartnerInformationState;
-  communicationPreferences?: ProtectedConmmunicationPreferenceState;
-  emailVerified?: boolean;
+  partnerInformation?: PartnerInformationState;
   email?: string;
-  preferredLanguage?: string;
+  emailVerified?: boolean;
+  communicationPreferences?: DeclaredChangeCommunicationPreferencesState;
+  termsAndConditions: TermsAndConditionsState;
+}
+
+export interface BenefitRenewalAdultChildState {
+  applicationYear: ApplicationYearState;
+  children: ChildState[];
+  clientApplication?: ClientApplicationDto;
+  phoneNumber: DeclaredChangePhoneNumberState;
+  dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
+  dentalInsurance: DentalInsuranceState;
+  homeAddress?: DeclaredChangeHomeAddressState;
+  isHomeAddressSameAsMailingAddress?: boolean;
+  mailingAddress?: DeclaredChangeMailingAddressState;
+  maritalStatus?: string;
+  partnerInformation?: PartnerInformationState;
+  email?: string;
+  emailVerified?: boolean;
+  communicationPreferences?: DeclaredChangeCommunicationPreferencesState;
+  termsAndConditions: TermsAndConditionsState;
+}
+
+export interface BenefitRenewalChildState {
+  applicationYear: ApplicationYearState;
+  clientApplication?: ClientApplicationDto;
+  children: ChildState[];
+  phoneNumber: DeclaredChangePhoneNumberState;
+  homeAddress?: DeclaredChangeHomeAddressState;
+  isHomeAddressSameAsMailingAddress?: boolean;
+  mailingAddress?: DeclaredChangeMailingAddressState;
+  maritalStatus?: string;
+  partnerInformation?: PartnerInformationState;
+  email?: string;
+  emailVerified?: boolean;
+  communicationPreferences?: DeclaredChangeCommunicationPreferencesState;
+  termsAndConditions: TermsAndConditionsState;
 }
 
 export interface BenefitRenewalStateMapper {
-  mapProtectedRenewStateToProtectedBenefitRenewalDto(protectedRenewState: ProtectedRenewState, userId: string, primaryApplicantStateCompleted: boolean): ProtectedBenefitRenewalDto;
+  mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(benefitrenewalAdultState: BenefitRenewalAdultState, userId?: string): AdultBenefitRenewalDto;
+  mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto(benefitrenewalAdultChildState: BenefitRenewalAdultChildState, userId?: string): AdultChildBenefitRenewalDto;
+  mapBenefitRenewalChildStateToChildBenefitRenewalDto(benefitRenewalChildState: BenefitRenewalChildState, userId?: string): ChildBenefitRenewalDto;
 }
 
 interface ToApplicantInformationArgs {
   existingApplicantInformation: ReadonlyDeep<ClientApplicantInformationDto>;
-  hasMaritalStatusChanged: boolean;
   renewedMaritalStatus?: string;
 }
 
 interface ToChildrenArgs {
   existingChildren: readonly ReadonlyDeep<ClientChildDto>[];
-  renewedChildren: ProtectedChildState[];
+  renewedChildren: ChildState[];
   isProtectedRenewal?: boolean;
 }
 
 interface ToCommunicationPreferencesArgs {
-  communicationPreferences: ProtectedConmmunicationPreferenceState;
+  existingCommunicationPreferences: ReadonlyDeep<ClientCommunicationPreferencesDto>;
+  communicationPreferences: DeclaredChangeCommunicationPreferencesState;
   email?: string;
   emailVerified?: boolean;
-  preferredLanguage: string;
 }
 
 interface ToContactInformationArgs {
   existingContactInformation: ReadonlyDeep<ClientContactInformationDto>;
-  hasAddressChanged: boolean;
   hasEmailChanged: boolean;
-  hasPhoneChanged: boolean;
   isHomeAddressSameAsMailingAddress?: boolean;
-  renewedContactInformation?: ProtectedContactInformationState;
-  renewedHomeAddress?: ProtectedHomeAddressState;
-  renewedMailingAddress?: ProtectedMailingAddressState;
+  renewedContactInformation?: DeclaredChangePhoneNumberState;
+  renewedHomeAddress?: DeclaredChangeHomeAddressState;
+  renewedMailingAddress?: DeclaredChangeMailingAddressState;
   renewedEmail?: string;
 }
 
 interface ToDentalBenefitsArgs {
   existingDentalBenefits: readonly string[];
   hasFederalProvincialTerritorialBenefitsChanged: boolean;
-  renewedDentalBenefits?: ProtectedDentalFederalBenefitsState & ProtectedDentalProvincialTerritorialBenefitsState;
+  renewedDentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
 }
 
 interface ToHomeAddressArgs {
   existingContactInformation: ReadonlyDeep<ClientContactInformationDto>;
-  homeAddress?: ProtectedHomeAddressState;
+  homeAddress?: DeclaredChangeHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress?: ProtectedMailingAddressState;
+  mailingAddress?: DeclaredChangeMailingAddressState;
 }
 
 interface ToMailingAddressArgs {
   existingContactInformation: ReadonlyDeep<ClientContactInformationDto>;
-  mailingAddress?: ProtectedMailingAddressState;
+  mailingAddress?: DeclaredChangeMailingAddressState;
 }
 
 interface ToPartnerInformationArgs {
   existingPartnerInformation?: ReadonlyDeep<ClientPartnerInformationDto>;
-  hasMaritalStatusChanged: boolean;
-  renewedPartnerInformation?: ProtectedPartnerInformationState;
+  renewedPartnerInformation?: PartnerInformationState;
 }
 
 interface ToTypeOfApplicationArgs {
   applicantStateCompleted: boolean;
-  renewedChildren: ProtectedChildState[];
+  renewedChildren: ChildState[];
 }
 
 @injectable()
@@ -132,12 +168,11 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     this.serverConfig = serverConfig;
   }
 
-  mapProtectedRenewStateToProtectedBenefitRenewalDto(
+  mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(
     {
       applicationYear,
-      children,
-      contactInformation,
-      demographicSurvey,
+      clientApplication,
+      phoneNumber,
       dentalBenefits,
       dentalInsurance,
       homeAddress,
@@ -145,72 +180,191 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       mailingAddress,
       maritalStatus,
       partnerInformation,
-      clientApplication,
-      communicationPreferences,
-      emailVerified,
-      preferredLanguage,
       email,
-    }: ProtectedRenewState,
-    userId: string,
-    applicantStateCompleted: boolean,
-  ): ProtectedBenefitRenewalDto {
+      emailVerified,
+      communicationPreferences,
+      termsAndConditions,
+    }: BenefitRenewalAdultState,
+    userId: string = 'anonymous',
+  ): AdultBenefitRenewalDto {
     if (communicationPreferences === undefined) {
       throw new Error('Expected communicationPreferences to be defined');
     }
+
+    if (clientApplication === undefined) {
+      throw new Error('Expected clientApplication to be defined');
+    }
+
     return {
       ...clientApplication,
       applicantInformation: this.toApplicantInformation({
         existingApplicantInformation: clientApplication.applicantInformation,
-        hasMaritalStatusChanged: !!maritalStatus,
         renewedMaritalStatus: maritalStatus,
       }),
-      applicationYearId: applicationYear.renewalYearId,
-      demographicSurvey,
-      children: this.toChildren({
-        existingChildren: clientApplication.children,
-        renewedChildren: children,
-        isProtectedRenewal: true,
-      }),
+      applicationYearId: applicationYear.applicationYearId,
+      children: [],
       communicationPreferences: this.toCommunicationPreferences({
+        existingCommunicationPreferences: clientApplication.communicationPreferences,
         communicationPreferences,
         email,
         emailVerified,
-        preferredLanguage: preferredLanguage ?? clientApplication.communicationPreferences.preferredLanguage,
       }),
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
-        hasAddressChanged: !!homeAddress || !!mailingAddress || !!isHomeAddressSameAsMailingAddress,
-        hasEmailChanged: !!contactInformation?.email,
-        hasPhoneChanged: !!contactInformation?.phoneNumber,
+        hasEmailChanged: !!email,
         isHomeAddressSameAsMailingAddress,
-        renewedContactInformation: contactInformation,
+        renewedContactInformation: phoneNumber,
         renewedHomeAddress: homeAddress,
         renewedMailingAddress: mailingAddress,
         renewedEmail: email,
       }),
-      dentalBenefits: applicantStateCompleted
-        ? this.toDentalBenefits({
-            existingDentalBenefits: clientApplication.dentalBenefits,
-            hasFederalProvincialTerritorialBenefitsChanged: !!dentalBenefits,
-            renewedDentalBenefits: dentalBenefits,
-          })
-        : [],
-      dentalInsurance: applicantStateCompleted ? dentalInsurance : undefined,
+      dentalBenefits: this.toDentalBenefits({
+        existingDentalBenefits: clientApplication.dentalBenefits,
+        hasFederalProvincialTerritorialBenefitsChanged: true,
+        renewedDentalBenefits: dentalBenefits?.value,
+      }),
+      dentalInsurance,
       partnerInformation: this.toPartnerInformation({
         existingPartnerInformation: clientApplication.partnerInformation,
-        hasMaritalStatusChanged: !!maritalStatus,
         renewedPartnerInformation: partnerInformation,
       }),
+      typeOfApplication: 'adult',
+      termsAndConditions,
       userId,
-      typeOfApplication: this.toTypeOfApplication({
-        applicantStateCompleted,
+    };
+  }
+
+  mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto(
+    {
+      applicationYear,
+      children,
+      clientApplication,
+      phoneNumber,
+      dentalBenefits,
+      dentalInsurance,
+      homeAddress,
+      isHomeAddressSameAsMailingAddress,
+      mailingAddress,
+      maritalStatus,
+      partnerInformation,
+      email,
+      emailVerified,
+      communicationPreferences,
+      termsAndConditions,
+    }: BenefitRenewalAdultChildState,
+    userId: string = 'anonymous',
+  ): AdultChildBenefitRenewalDto {
+    if (communicationPreferences === undefined) {
+      throw new Error('Expected communicationPreferences to be defined');
+    }
+
+    if (clientApplication === undefined) {
+      throw new Error('Expected clientApplication to be defined');
+    }
+
+    return {
+      ...clientApplication,
+      applicantInformation: this.toApplicantInformation({
+        existingApplicantInformation: clientApplication.applicantInformation,
+        renewedMaritalStatus: maritalStatus,
+      }),
+      applicationYearId: applicationYear.applicationYearId,
+      children: this.toChildren({
+        existingChildren: clientApplication.children,
         renewedChildren: children,
       }),
-      termsAndConditions: {
-        acknowledgeTerms: true,
-        acknowledgePrivacy: true,
-        shareData: true,
-      },
+      communicationPreferences: this.toCommunicationPreferences({
+        existingCommunicationPreferences: clientApplication.communicationPreferences,
+        communicationPreferences,
+        email,
+        emailVerified,
+      }),
+      contactInformation: this.toContactInformation({
+        existingContactInformation: clientApplication.contactInformation,
+        hasEmailChanged: !!email,
+        isHomeAddressSameAsMailingAddress,
+        renewedContactInformation: phoneNumber,
+        renewedHomeAddress: homeAddress,
+        renewedMailingAddress: mailingAddress,
+        renewedEmail: email,
+      }),
+      dentalBenefits: this.toDentalBenefits({
+        existingDentalBenefits: clientApplication.dentalBenefits,
+        hasFederalProvincialTerritorialBenefitsChanged: true,
+        renewedDentalBenefits: dentalBenefits?.value,
+      }),
+      dentalInsurance,
+      partnerInformation: this.toPartnerInformation({
+        existingPartnerInformation: clientApplication.partnerInformation,
+        renewedPartnerInformation: partnerInformation,
+      }),
+      typeOfApplication: children.length === 0 ? 'adult' : 'adult-child',
+      termsAndConditions,
+      userId,
+    };
+  }
+
+  mapBenefitRenewalChildStateToChildBenefitRenewalDto(
+    {
+      applicationYear,
+      children,
+      clientApplication,
+      phoneNumber,
+      homeAddress,
+      isHomeAddressSameAsMailingAddress,
+      mailingAddress,
+      maritalStatus,
+      partnerInformation,
+      email,
+      emailVerified,
+      communicationPreferences,
+      termsAndConditions,
+    }: BenefitRenewalChildState,
+    userId: string = 'anonymous',
+  ): ChildBenefitRenewalDto {
+    if (communicationPreferences === undefined) {
+      throw new Error('Expected communicationPreferences to be defined');
+    }
+
+    if (clientApplication === undefined) {
+      throw new Error('Expected clientApplication to be defined');
+    }
+
+    return {
+      ...clientApplication,
+      applicantInformation: this.toApplicantInformation({
+        existingApplicantInformation: clientApplication.applicantInformation,
+        renewedMaritalStatus: maritalStatus,
+      }),
+      applicationYearId: applicationYear.applicationYearId,
+      children: this.toChildren({
+        existingChildren: clientApplication.children,
+        renewedChildren: children,
+      }),
+      communicationPreferences: this.toCommunicationPreferences({
+        existingCommunicationPreferences: clientApplication.communicationPreferences,
+        communicationPreferences,
+        email,
+        emailVerified,
+      }),
+      contactInformation: this.toContactInformation({
+        existingContactInformation: clientApplication.contactInformation,
+        hasEmailChanged: !!email,
+        isHomeAddressSameAsMailingAddress,
+        renewedContactInformation: phoneNumber,
+        renewedHomeAddress: homeAddress,
+        renewedMailingAddress: mailingAddress,
+        renewedEmail: email,
+      }),
+      dentalBenefits: [],
+      dentalInsurance: undefined,
+      partnerInformation: this.toPartnerInformation({
+        existingPartnerInformation: clientApplication.partnerInformation,
+        renewedPartnerInformation: partnerInformation,
+      }),
+      typeOfApplication: 'child',
+      termsAndConditions,
+      userId,
     };
   }
 
@@ -222,14 +376,11 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     return renewedChildren.length === 0 ? 'adult' : 'adult-child';
   }
 
-  private toApplicantInformation({ existingApplicantInformation, hasMaritalStatusChanged, renewedMaritalStatus }: ToApplicantInformationArgs): RenewalApplicantInformationDto {
-    if (!hasMaritalStatusChanged) return existingApplicantInformation as RenewalApplicantInformationDto;
-    invariant(renewedMaritalStatus, 'Expected renewedMaritalStatus to be defined when hasMaritalStatusChanged is true');
-
+  private toApplicantInformation({ existingApplicantInformation, renewedMaritalStatus }: ToApplicantInformationArgs): RenewalApplicantInformationDto {
     return {
       firstName: existingApplicantInformation.firstName,
       lastName: existingApplicantInformation.lastName,
-      maritalStatus: renewedMaritalStatus,
+      maritalStatus: existingApplicantInformation.maritalStatus ?? renewedMaritalStatus,
       socialInsuranceNumber: existingApplicantInformation.socialInsuranceNumber,
       clientId: existingApplicantInformation.clientId,
       clientNumber: existingApplicantInformation.clientNumber,
@@ -238,7 +389,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
 
   private toChildren({ existingChildren, renewedChildren, isProtectedRenewal }: ToChildrenArgs): RenewalChildDto[] {
     return renewedChildren.map((renewedChild) => {
-      const existingChild = existingChildren.find((existingChild) => existingChild.information.clientNumber === renewedChild.information?.clientNumber);
+      const existingChild = existingChildren.find((existingChild) => existingChild.information.clientNumber === renewedChild.information?.memberId);
       invariant(existingChild, 'Expected existingChild to be defined');
       invariant(renewedChild.information, 'Expected renewedChild.information to be defined');
 
@@ -252,9 +403,8 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         dentalBenefits: this.toDentalBenefits({
           existingDentalBenefits: existingChild.dentalBenefits,
           hasFederalProvincialTerritorialBenefitsChanged: isProtectedRenewal ? !!renewedChild.dentalBenefits : true,
-          renewedDentalBenefits: renewedChild.dentalBenefits,
+          renewedDentalBenefits: renewedChild.dentalBenefits?.value,
         }),
-        demographicSurvey: renewedChild.demographicSurvey,
         dentalInsurance: renewedChild.dentalInsurance,
         information: {
           firstName: renewedChild.information.firstName,
@@ -267,17 +417,8 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     });
   }
 
-  private toContactInformation({
-    existingContactInformation,
-    hasAddressChanged,
-    hasEmailChanged,
-    hasPhoneChanged,
-    isHomeAddressSameAsMailingAddress,
-    renewedContactInformation,
-    renewedHomeAddress,
-    renewedMailingAddress,
-    renewedEmail,
-  }: ToContactInformationArgs): RenewalContactInformationDto {
+  private toContactInformation({ existingContactInformation, hasEmailChanged, isHomeAddressSameAsMailingAddress, renewedContactInformation, renewedHomeAddress, renewedMailingAddress, renewedEmail }: ToContactInformationArgs): RenewalContactInformationDto {
+    const hasAddressChanged = renewedHomeAddress !== undefined || renewedMailingAddress !== undefined;
     return {
       ...(hasAddressChanged
         ? {
@@ -296,12 +437,12 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
             homeCity:
               existingContactInformation.homeCity ??
               (() => {
-                throw new Error('Expected existingApplicantInformation.homeCity to be defined');
+                throw new Error('Expected existingContactInformation.homeCity to be defined');
               })(),
             homeCountry:
               existingContactInformation.homeCountry ??
               (() => {
-                throw new Error('Expected existingApplicantInformation.homeCountry to be defined');
+                throw new Error('Expected existingContactInformation.homeCountry to be defined');
               })(),
             homePostalCode: existingContactInformation.homePostalCode,
             homeProvince: existingContactInformation.homeProvince,
@@ -312,15 +453,8 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
             mailingPostalCode: existingContactInformation.mailingPostalCode,
             mailingProvince: existingContactInformation.mailingProvince,
           }),
-      ...(hasPhoneChanged
-        ? {
-            phoneNumber: renewedContactInformation?.phoneNumber,
-            phoneNumberAlt: renewedContactInformation?.phoneNumberAlt,
-          }
-        : {
-            phoneNumber: existingContactInformation.phoneNumber,
-            phoneNumberAlt: existingContactInformation.phoneNumberAlt,
-          }),
+      phoneNumber: renewedContactInformation?.value?.primary,
+      phoneNumberAlt: renewedContactInformation?.value?.alternate,
       ...(hasEmailChanged
         ? {
             email: renewedEmail,
@@ -335,12 +469,12 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     if (isHomeAddressSameAsMailingAddress) {
       return mailingAddress
         ? {
-            homeAddress: mailingAddress.address,
+            homeAddress: mailingAddress.value?.address ?? '',
             homeApartment: undefined,
-            homeCity: mailingAddress.city,
-            homeCountry: mailingAddress.country,
-            homePostalCode: mailingAddress.postalCode,
-            homeProvince: mailingAddress.province,
+            homeCity: mailingAddress.value?.city ?? '',
+            homeCountry: mailingAddress.value?.country ?? '',
+            homePostalCode: mailingAddress.value?.postalCode ?? '',
+            homeProvince: mailingAddress.value?.province ?? '',
           }
         : {
             homeAddress: existingContactInformation.mailingAddress,
@@ -354,12 +488,12 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
 
     return homeAddress
       ? {
-          homeAddress: homeAddress.address,
+          homeAddress: homeAddress.value?.address ?? '',
           homeApartment: undefined,
-          homeCity: homeAddress.city,
-          homeCountry: homeAddress.country,
-          homePostalCode: homeAddress.postalCode,
-          homeProvince: homeAddress.province,
+          homeCity: homeAddress.value?.city ?? '',
+          homeCountry: homeAddress.value?.country ?? '',
+          homePostalCode: homeAddress.value?.postalCode ?? '',
+          homeProvince: homeAddress.value?.province ?? '',
         }
       : {
           homeAddress:
@@ -371,12 +505,12 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
           homeCity:
             existingContactInformation.homeCity ??
             (() => {
-              throw new Error('Expected existingApplicantInformation.homeCity to be defined');
+              throw new Error('Expected existingContactInformation.homeCity to be defined');
             })(),
           homeCountry:
             existingContactInformation.homeCountry ??
             (() => {
-              throw new Error('Expected existingApplicantInformation.homeCountry to be defined');
+              throw new Error('Expected existingContactInformation.homeCountry to be defined');
             })(),
           homePostalCode: existingContactInformation.homePostalCode,
           homeProvince: existingContactInformation.homeProvince,
@@ -386,12 +520,12 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   private toMailingAddress({ existingContactInformation, mailingAddress }: ToMailingAddressArgs) {
     return mailingAddress
       ? {
-          mailingAddress: mailingAddress.address,
+          mailingAddress: mailingAddress.value?.address ?? '',
           mailingApartment: undefined,
-          mailingCity: mailingAddress.city,
-          mailingCountry: mailingAddress.country,
-          mailingPostalCode: mailingAddress.postalCode,
-          mailingProvince: mailingAddress.province,
+          mailingCity: mailingAddress.value?.city ?? '',
+          mailingCountry: mailingAddress.value?.country ?? '',
+          mailingPostalCode: mailingAddress.value?.postalCode ?? '',
+          mailingProvince: mailingAddress.value?.province ?? '',
         }
       : {
           mailingAddress: existingContactInformation.mailingAddress,
@@ -403,13 +537,14 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         };
   }
 
-  private toCommunicationPreferences({ communicationPreferences, preferredLanguage, email, emailVerified }: ToCommunicationPreferencesArgs): RenewalCommunicationPreferencesDto {
+  private toCommunicationPreferences({ existingCommunicationPreferences, communicationPreferences, email, emailVerified }: ToCommunicationPreferencesArgs): RenewalCommunicationPreferencesDto {
+    invariant(communicationPreferences, 'Expected communicationPreferences to be defined');
     return {
       email,
       emailVerified,
-      preferredLanguage,
-      preferredMethod: communicationPreferences.preferredMethod,
-      preferredMethodGovernmentOfCanada: communicationPreferences.preferredNotificationMethod,
+      preferredLanguage: communicationPreferences.hasChanged ? communicationPreferences.value.preferredLanguage : existingCommunicationPreferences.preferredLanguage,
+      preferredMethod: communicationPreferences.hasChanged ? communicationPreferences.value.preferredMethod : existingCommunicationPreferences.preferredMethodSunLife,
+      preferredMethodGovernmentOfCanada: communicationPreferences.hasChanged ? communicationPreferences.value.preferredNotificationMethod : existingCommunicationPreferences.preferredMethodGovernmentOfCanada,
     };
   }
 
@@ -430,7 +565,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     return dentalBenefits;
   }
 
-  private toPartnerInformation({ existingPartnerInformation, hasMaritalStatusChanged, renewedPartnerInformation }: ToPartnerInformationArgs): RenewalPartnerInformationDto | undefined {
-    return hasMaritalStatusChanged ? renewedPartnerInformation : existingPartnerInformation;
+  private toPartnerInformation({ existingPartnerInformation, renewedPartnerInformation }: ToPartnerInformationArgs): RenewalPartnerInformationDto | undefined {
+    return renewedPartnerInformation;
   }
 }
