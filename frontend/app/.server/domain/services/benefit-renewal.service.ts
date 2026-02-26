@@ -3,7 +3,7 @@ import { inject, injectable, optional } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { RedisService } from '~/.server/data';
-import type { AdultBenefitRenewalDto, AdultChildBenefitRenewalDto, ChildBenefitRenewalDto, ItaBenefitRenewalDto, ProtectedBenefitRenewalDto } from '~/.server/domain/dtos';
+import type { BenefitRenewalDto, ProtectedBenefitRenewalDto } from '~/.server/domain/dtos';
 import type { BenefitRenewalDtoMapper } from '~/.server/domain/mappers';
 import type { BenefitRenewalRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
@@ -15,32 +15,11 @@ import { ErrorCodes } from '~/errors/error-codes';
 
 export interface BenefitRenewalService {
   /**
-   * Submits an adult benefit renewal request.
+   * Submits a benefit renewal request.
    *
-   * @param adultBenefitRenewalDto The adult benefit renewal request dto
+   * @param benefitRenewalDto The benefit renewal request dto
    */
-  createAdultBenefitRenewal(adultBenefitRenewalDto: AdultBenefitRenewalDto): Promise<string>;
-
-  /**
-   * Submits an adult child benefit renewal request.
-   *
-   * @param adultChildBenefitRenewalDto The adult child benefit renewal request dto
-   */
-  createAdultChildBenefitRenewal(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): Promise<string>;
-
-  /**
-   * Submits an ITA benefit renewal request.
-   *
-   * @param adultChildBenefitRenewalDto The adult child benefit renewal request dto
-   */
-  createItaBenefitRenewal(itaBenefitRenewalDto: ItaBenefitRenewalDto): Promise<string>;
-
-  /**
-   * Submits a child benefit renewal request.
-   *
-   * @param childBenefitRenewalDto The child benefit renewal request dto
-   */
-  createChildBenefitRenewal(childBenefitRenewalDto: ChildBenefitRenewalDto): Promise<string>;
+  createBenefitRenewal(benefitRenewalDto: BenefitRenewalDto): Promise<string>;
 
   /**
    * Submits benefit renewal request for protected route.
@@ -84,107 +63,20 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     this.log.debug('DefaultBenefitRenewalService initiated.');
   }
 
-  async createAdultBenefitRenewal(adultBenefitRenewalDto: AdultBenefitRenewalDto): Promise<string> {
-    this.log.trace('Creating adult benefit renewal for request [%j]', adultBenefitRenewalDto);
+  async createBenefitRenewal(benefitRenewalDto: BenefitRenewalDto): Promise<string> {
+    this.log.trace('Creating benefit renewal for request [%j]', benefitRenewalDto);
 
     const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
 
     if (killswitchEngaged) {
-      this.log.error('Request to renew adult benefit application is unavailable (killswitch engaged).');
-      new AppError('Request to renew adult benefit application is unavailable (killswitch engaged)', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
+      this.log.error('Request to renew benefit application is unavailable (killswitch engaged).');
+      new AppError('Request to renew benefit application is unavailable (killswitch engaged)', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
     }
 
-    this.auditService.createAudit('adult-renewal-submit.post', { userId: adultBenefitRenewalDto.userId });
+    this.auditService.createAudit('benefit-renewal-submit.post', { userId: benefitRenewalDto.userId });
 
     try {
-      const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapAdultBenefitRenewalDtoToBenefitRenewalRequestEntity(adultBenefitRenewalDto);
-      const benefitRenewalResponseEntity = await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
-      const applicationCode = this.benefitRenewalDtoMapper.mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity);
-
-      this.log.trace('Returning application code: [%s]', applicationCode);
-      return applicationCode;
-    } catch (error) {
-      if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
-        this.log.error('Received XAPI_TOO_MANY_REQUESTS; killswitch engage!');
-        await this.redisService?.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
-      }
-
-      throw error;
-    }
-  }
-
-  async createAdultChildBenefitRenewal(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): Promise<string> {
-    this.log.trace('Creating adult child benefit renewal for request [%j]', adultChildBenefitRenewalDto);
-
-    const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
-
-    if (killswitchEngaged) {
-      this.log.error('Request to renew adult child benefit application is unavailable (killswitch engaged).');
-      new AppError('Request to renew adult child benefit application is unavailable (killswitch engaged)', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
-    }
-
-    this.auditService.createAudit('adult-child-renewal-submit.post', { userId: adultChildBenefitRenewalDto.userId });
-
-    try {
-      const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(adultChildBenefitRenewalDto);
-      const benefitRenewalResponseEntity = await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
-      const applicationCode = this.benefitRenewalDtoMapper.mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity);
-
-      this.log.trace('Returning application code: [%s]', applicationCode);
-      return applicationCode;
-    } catch (error) {
-      if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
-        this.log.warn('Received XAPI_TOO_MANY_REQUESTS; killswitch engage!');
-        await this.redisService?.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
-      }
-
-      throw error;
-    }
-  }
-
-  async createItaBenefitRenewal(itaBenefitRenewalDto: ItaBenefitRenewalDto): Promise<string> {
-    this.log.trace('Creating ITA benefit renewal for request [%j]', itaBenefitRenewalDto);
-
-    const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
-
-    if (killswitchEngaged) {
-      this.log.error('Request to renew ITA benefit application is unavailable (killswitch engaged).');
-      new AppError('Request to renew ITA benefit application is unavailable (killswitch engaged)', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
-    }
-
-    this.auditService.createAudit('ita-renewal-submit.post', { userId: itaBenefitRenewalDto.userId });
-
-    try {
-      const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(itaBenefitRenewalDto);
-      const benefitRenewalResponseEntity = await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
-      const applicationCode = this.benefitRenewalDtoMapper.mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity);
-
-      this.log.trace('Returning application code: [%s]', applicationCode);
-      return applicationCode;
-    } catch (error) {
-      if (isAppError(error) && error.errorCode === ErrorCodes.XAPI_TOO_MANY_REQUESTS) {
-        this.log.warn('Received XAPI_TOO_MANY_REQUESTS; killswitch engage!');
-        await this.redisService?.set(KILLSWITCH_KEY, true, this.serverConfig.APPLICATION_KILLSWITCH_TTL_SECONDS);
-      }
-
-      throw error;
-    }
-  }
-
-  async createChildBenefitRenewal(childBenefitRenewalDto: ChildBenefitRenewalDto): Promise<string> {
-    this.log.trace('Creating child benefit renewal for request [%j]', childBenefitRenewalDto);
-
-    const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
-
-    if (killswitchEngaged) {
-      this.log.error('Request to renew child benefit application is unavailable (killswitch engaged).');
-      new AppError('Request to renew child benefit application is unavailable (killswitch engaged)', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
-    }
-
-    this.auditService.createAudit('child-renewal-submit.post', { userId: childBenefitRenewalDto.userId });
-
-    try {
-      const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapChildBenefitRenewalDtoToBenefitRenewalRequestEntity(childBenefitRenewalDto);
+      const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalDto);
       const benefitRenewalResponseEntity = await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
       const applicationCode = this.benefitRenewalDtoMapper.mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity);
 

@@ -63,7 +63,7 @@ export async function loader({ context: { appContainer, session }, request, para
   } else {
     const benefitRenewalDtoMapper = appContainer.get(TYPES.BenefitRenewalDtoMapper);
     const benefitRenewalStateMapper = appContainer.get(TYPES.BenefitRenewalStateMapper);
-    payload = viewPayloadEnabled && benefitRenewalDtoMapper.mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalStateMapper.mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto(state));
+    payload = viewPayloadEnabled && benefitRenewalDtoMapper.mapBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalStateMapper.mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto(state));
   }
 
   return {
@@ -107,7 +107,7 @@ export async function action({ context: { appContainer, session }, request, para
     savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
   } else {
     const benefitRenewalDto = appContainer.get(TYPES.BenefitRenewalStateMapper).mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto(state);
-    const confirmationCode = await appContainer.get(TYPES.BenefitRenewalService).createAdultChildBenefitRenewal(benefitRenewalDto);
+    const confirmationCode = await appContainer.get(TYPES.BenefitRenewalService).createBenefitRenewal(benefitRenewalDto);
     const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
     savePublicApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });
   }

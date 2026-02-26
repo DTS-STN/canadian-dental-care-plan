@@ -1,13 +1,5 @@
 import type { ReadonlyDeep } from 'type-fest';
 
-export type AdultBenefitRenewalDto = BenefitRenewalDto;
-
-export type AdultChildBenefitRenewalDto = BenefitRenewalDto;
-
-export type ItaBenefitRenewalDto = BenefitRenewalDto;
-
-export type ChildBenefitRenewalDto = BenefitRenewalDto;
-
 export type ProtectedBenefitRenewalDto = BenefitRenewalDto;
 
 export type BenefitRenewalDto = ReadonlyDeep<{

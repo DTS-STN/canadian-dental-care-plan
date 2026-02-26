@@ -4,9 +4,7 @@ import type { ReadonlyDeep } from 'type-fest';
 import validator from 'validator';
 
 import type {
-  AdultBenefitRenewalDto,
-  AdultChildBenefitRenewalDto,
-  ChildBenefitRenewalDto,
+  BenefitRenewalDto,
   ClientApplicantInformationDto,
   ClientApplicationDto,
   ClientChildDto,
@@ -87,9 +85,9 @@ export interface BenefitRenewalChildState {
 }
 
 export interface BenefitRenewalStateMapper {
-  mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(benefitrenewalAdultState: BenefitRenewalAdultState, userId?: string): AdultBenefitRenewalDto;
-  mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto(benefitrenewalAdultChildState: BenefitRenewalAdultChildState, userId?: string): AdultChildBenefitRenewalDto;
-  mapBenefitRenewalChildStateToChildBenefitRenewalDto(benefitRenewalChildState: BenefitRenewalChildState, userId?: string): ChildBenefitRenewalDto;
+  mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(benefitrenewalAdultState: BenefitRenewalAdultState, userId?: string): BenefitRenewalDto;
+  mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto(benefitrenewalAdultChildState: BenefitRenewalAdultChildState, userId?: string): BenefitRenewalDto;
+  mapBenefitRenewalChildStateToChildBenefitRenewalDto(benefitRenewalChildState: BenefitRenewalChildState, userId?: string): BenefitRenewalDto;
 }
 
 interface ToApplicantInformationArgs {
@@ -163,7 +161,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       termsAndConditions,
     }: BenefitRenewalAdultState,
     userId: string = 'anonymous',
-  ): AdultBenefitRenewalDto {
+  ): BenefitRenewalDto {
     if (communicationPreferences === undefined) {
       throw new Error('Expected communicationPreferences to be defined');
     }
@@ -236,7 +234,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       termsAndConditions,
     }: BenefitRenewalAdultChildState,
     userId: string = 'anonymous',
-  ): AdultChildBenefitRenewalDto {
+  ): BenefitRenewalDto {
     if (communicationPreferences === undefined) {
       throw new Error('Expected communicationPreferences to be defined');
     }
@@ -310,7 +308,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       termsAndConditions,
     }: BenefitRenewalChildState,
     userId: string = 'anonymous',
-  ): ChildBenefitRenewalDto {
+  ): BenefitRenewalDto {
     if (communicationPreferences === undefined) {
       throw new Error('Expected communicationPreferences to be defined');
     }
