@@ -438,8 +438,15 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
             mailingPostalCode: existingContactInformation.mailingPostalCode,
             mailingProvince: existingContactInformation.mailingProvince,
           }),
-      phoneNumber: renewedContactInformation?.value?.primary ?? existingContactInformation.phoneNumber,
-      phoneNumberAlt: renewedContactInformation?.value?.alternate ?? existingContactInformation.phoneNumberAlt,
+      ...(renewedContactInformation?.hasChanged
+        ? {
+            phoneNumber: renewedContactInformation.value.primary,
+            phoneNumberAlt: renewedContactInformation.value.alternate,
+          }
+        : {
+            phoneNumber: existingContactInformation.phoneNumber,
+            phoneNumberAlt: existingContactInformation.phoneNumberAlt,
+          }),
       ...(hasEmailChanged
         ? {
             email: renewedEmail,
