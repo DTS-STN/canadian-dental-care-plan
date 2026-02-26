@@ -14,6 +14,7 @@ import { ClientEnv } from '~/components/client-env';
 import { InlineLink } from '~/components/inline-link';
 import { NonceContext } from '~/components/nonce-context';
 import { PageTitle } from '~/components/page-title';
+import { RouteChangeAnnouncer } from '~/components/route-change-announcer';
 import indexStyleSheet from '~/index.css?url';
 import tailwindStyleSheet from '~/tailwind.css?url';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
@@ -127,6 +128,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
         )}
       </head>
       <body vocab="http://schema.org/" typeof="WebPage">
+        <RouteChangeAnnouncer />
         <Outlet />
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />

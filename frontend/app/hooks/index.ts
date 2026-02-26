@@ -1,3 +1,4 @@
+export * from './use-accessible-focus-management';
 export * from './use-browser-compatibility-banner.hook';
 export * from './use-browser-validation.hook';
 export * from './use-current-language.hook';
