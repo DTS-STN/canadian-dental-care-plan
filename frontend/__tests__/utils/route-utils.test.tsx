@@ -291,11 +291,11 @@ describe('usePageTitle()', () => {
     const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
-        handle: { pageTitleI18nKey: 'protected-apply:index.page-title' } satisfies RouteHandleData,
+        handle: { pageTitleI18nKey: 'protected-application:index.page-title' } satisfies RouteHandleData,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(usePageTitleI18nKey())}</div>,
-            handle: { pageTitleI18nKey: 'protected-apply:index.page-title' } satisfies RouteHandleData,
+            handle: { pageTitleI18nKey: 'protected-application:index.page-title' } satisfies RouteHandleData,
             path: '/',
           },
         ],
@@ -305,6 +305,6 @@ describe('usePageTitle()', () => {
     render(<RoutesStub />);
 
     const element = await waitFor(async () => await screen.findByTestId('data'));
-    expect(element.textContent).toEqual('"protected-apply:index.page-title"');
+    expect(element.textContent).toEqual('"protected-application:index.page-title"');
   });
 });

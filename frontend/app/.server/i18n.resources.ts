@@ -19,10 +19,6 @@ import protectedApplicationRenewalChildEn from '~/.server/locales/en/protected-a
 import protectedApplicationRenewalFamilyEn from '~/.server/locales/en/protected-application-renewal-family.json';
 import protectedApplicationSpokesEn from '~/.server/locales/en/protected-application-spokes.json';
 import protectedApplicationEn from '~/.server/locales/en/protected-application.json';
-import protectedApplyAdultChildEn from '~/.server/locales/en/protected-apply-adult-child.json';
-import protectedApplyAdultEn from '~/.server/locales/en/protected-apply-adult.json';
-import protectedApplyChildEn from '~/.server/locales/en/protected-apply-child.json';
-import protectedApplyEn from '~/.server/locales/en/protected-apply.json';
 import protectedProfileEn from '~/.server/locales/en/protected-profile.json';
 import statusEn from '~/.server/locales/en/status.json';
 import stubLoginEn from '~/.server/locales/en/stub-login.json';
@@ -48,10 +44,6 @@ import protectedApplicationRenewalChildFr from '~/.server/locales/fr/protected-a
 import protectedApplicationRenewalFamilyFr from '~/.server/locales/fr/protected-application-renewal-family.json';
 import protectedApplicationSpokesFr from '~/.server/locales/fr/protected-application-spokes.json';
 import protectedApplicationFr from '~/.server/locales/fr/protected-application.json';
-import protectedApplyAdultChildFr from '~/.server/locales/fr/protected-apply-adult-child.json';
-import protectedApplyAdultFr from '~/.server/locales/fr/protected-apply-adult.json';
-import protectedApplyChildFr from '~/.server/locales/fr/protected-apply-child.json';
-import protectedApplyFr from '~/.server/locales/fr/protected-apply.json';
 import protectedProfileFr from '~/.server/locales/fr/protected-profile.json';
 import statusFr from '~/.server/locales/fr/status.json';
 import stubLoginFr from '~/.server/locales/fr/stub-login.json';
@@ -81,10 +73,6 @@ const i18nResourcesEn = {
   'protected-application-renewal-child': protectedApplicationRenewalChildEn,
   'protected-application-renewal-family': protectedApplicationRenewalFamilyEn,
   'protected-application-spokes': protectedApplicationSpokesEn,
-  'protected-apply': protectedApplyEn,
-  'protected-apply-adult': protectedApplyAdultEn,
-  'protected-apply-adult-child': protectedApplyAdultChildEn,
-  'protected-apply-child': protectedApplyChildEn,
   'protected-profile': protectedProfileEn,
   status: statusEn,
   'stub-login': stubLoginEn,
@@ -113,10 +101,6 @@ const i18nResourcesFr = {
   'protected-application-renewal-child': protectedApplicationRenewalChildFr,
   'protected-application-renewal-family': protectedApplicationRenewalFamilyFr,
   'protected-application-spokes': protectedApplicationSpokesFr,
-  'protected-apply': protectedApplyFr,
-  'protected-apply-adult': protectedApplyAdultFr,
-  'protected-apply-adult-child': protectedApplyAdultChildFr,
-  'protected-apply-child': protectedApplyChildFr,
   'protected-profile': protectedProfileFr,
   status: statusFr,
   'stub-login': stubLoginFr,
