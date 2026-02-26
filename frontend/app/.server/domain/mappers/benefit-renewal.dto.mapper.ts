@@ -6,14 +6,11 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type {
   AdultBenefitRenewalDto,
-  AdultChangeIndicators,
   AdultChildBenefitRenewalDto,
-  AdultChildChangeIndicators,
+  ChangeIndicatorsDto,
   ChildBenefitRenewalDto,
-  ChildChangeIndicators,
   DentalInsuranceDto,
   ItaBenefitRenewalDto,
-  ItaChangeIndicators,
   ProtectedBenefitRenewalDto,
   RenewalApplicantInformationDto,
   RenewalChildDto,
@@ -37,7 +34,7 @@ export interface BenefitRenewalDtoMapper {
 interface ToBenefitRenewalRequestEntityArgs {
   applicantInformation: RenewalApplicantInformationDto;
   applicationYearId: string;
-  changeIndicators?: AdultChangeIndicators | AdultChildChangeIndicators | ItaChangeIndicators | ChildChangeIndicators;
+  changeIndicators?: ChangeIndicatorsDto;
   children: readonly RenewalChildDto[];
   communicationPreferences: RenewalCommunicationPreferencesDto;
   contactInformation: RenewalContactInformationDto;
@@ -57,13 +54,6 @@ interface ToAddressArgs {
   country: string;
   postalCode?: string;
   province?: string;
-}
-
-interface ToChangeIndicatorsArgs {
-  hasAddressChanged?: boolean;
-  hasEmailChanged?: boolean;
-  hasMaritalStatusChanged?: boolean;
-  hasPhoneChanged?: boolean;
 }
 
 interface ToEmailAddressArgs {
@@ -220,7 +210,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     ];
   }
 
-  private toChangeIndicators(changeIndicators?: ToChangeIndicatorsArgs) {
+  private toChangeIndicators(changeIndicators?: ChangeIndicatorsDto) {
     if (!changeIndicators) {
       return {};
     }
