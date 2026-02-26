@@ -79,6 +79,10 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
+  if (!parsedDataResult.data.isParent) {
+    return redirect(getPathById('protected/application/$id/children/$childId/parent-or-guardian', params));
+  }
+
   saveProtectedApplicationState({
     params,
     session,
@@ -95,10 +99,6 @@ export async function action({ context: { appContainer, session }, params, reque
       }),
     },
   });
-
-  if (!parsedDataResult.data.isParent) {
-    return redirect(getPathById('protected/application/$id/children/$childId/parent-or-guardian', params));
-  }
 
   return redirect(getPathById(`protected/application/$id/${state.context}-${state.typeOfApplication}/childrens-application`, params));
 }
