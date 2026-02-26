@@ -5,12 +5,9 @@ import validator from 'validator';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type {
-  AdultBenefitRenewalDto,
-  AdultChildBenefitRenewalDto,
+  BenefitRenewalDto,
   ChangeIndicatorsDto,
-  ChildBenefitRenewalDto,
   DentalInsuranceDto,
-  ItaBenefitRenewalDto,
   ProtectedBenefitRenewalDto,
   RenewalApplicantInformationDto,
   RenewalChildDto,
@@ -23,10 +20,7 @@ import type { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '
 import { parseDateString } from '~/utils/date-utils';
 
 export interface BenefitRenewalDtoMapper {
-  mapAdultBenefitRenewalDtoToBenefitRenewalRequestEntity(adultBenefitRenewalDto: AdultBenefitRenewalDto): BenefitRenewalRequestEntity;
-  mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): BenefitRenewalRequestEntity;
-  mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(itaBenefitRenewalDto: ItaBenefitRenewalDto): BenefitRenewalRequestEntity;
-  mapChildBenefitRenewalDtoToBenefitRenewalRequestEntity(childBenefitRenewalDto: ChildBenefitRenewalDto): BenefitRenewalRequestEntity;
+  mapBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalDto: BenefitRenewalDto): BenefitRenewalRequestEntity;
   mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedRenewDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity;
   mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity: BenefitRenewalResponseEntity): string;
 }
@@ -78,20 +72,8 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     this.serverConfig = serverConfig;
   }
 
-  mapAdultBenefitRenewalDtoToBenefitRenewalRequestEntity(adultBenefitRenewalDto: AdultBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity(adultBenefitRenewalDto, false);
-  }
-
-  mapAdultChildBenefitRenewalDtoToBenefitRenewalRequestEntity(adultChildBenefitRenewalDto: AdultChildBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity(adultChildBenefitRenewalDto, false);
-  }
-
-  mapItaBenefitRenewalDtoToBenefitRenewalRequestEntity(itaBenefitRenewalDto: ItaBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity(itaBenefitRenewalDto, false);
-  }
-
-  mapChildBenefitRenewalDtoToBenefitRenewalRequestEntity(childBenefitRenewalDto: ChildBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity(childBenefitRenewalDto, false);
+  mapBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalDto: BenefitRenewalDto): BenefitRenewalRequestEntity {
+    return this.toBenefitRenewalRequestEntity(benefitRenewalDto, false);
   }
 
   mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity {
