@@ -378,7 +378,7 @@ function PhoneNumberCardFooter(): JSX.Element {
           <ButtonLink
             id="update-phone-button"
             variant="link"
-            className="p-0 pb-5"
+            className="mb-5 p-0"
             routeId="protected/application/$id/phone-number"
             params={params}
             startIcon={faPenToSquare}
@@ -394,7 +394,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             variant="link"
             name="_action"
             value={FORM_ACTION.PHONE_NUMBER_NOT_CHANGED}
-            className="p-0 pt-5"
+            className="mt-5 p-0"
             startIcon={faCircleCheck}
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Complete phone click"
@@ -567,7 +567,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
           <ButtonLink
             id="update-address-button"
             variant="link"
-            className="p-0 pb-5"
+            className="mb-5 p-0"
             routeId="protected/application/$id/mailing-address"
             params={params}
             startIcon={faPenToSquare}
@@ -581,7 +581,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
           <Button
             id="complete-address-button"
             variant="link"
-            className="p-0 pt-5"
+            className="mt-5 p-0"
             name="_action"
             value={FORM_ACTION.ADDRESS_NOT_CHANGED}
             startIcon={faCircleCheck}
@@ -719,7 +719,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
           <ButtonLink
             id="update-comms-button"
             variant="link"
-            className="p-0 pb-5"
+            className="mb-5 p-0"
             routeId="protected/application/$id/communication-preferences"
             params={params}
             startIcon={faPenToSquare}
@@ -735,7 +735,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             variant="link"
             name="_action"
             value={FORM_ACTION.COMMUNICATION_PREFERENCES_NOT_CHANGED}
-            className="p-0 pt-5"
+            className="mt-5 p-0"
             startIcon={faCircleCheck}
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Complete comms click"
