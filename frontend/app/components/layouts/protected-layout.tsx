@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import type { PropsWithChildren } from 'react';
 
 import { Link } from 'react-router';
@@ -17,7 +17,7 @@ import { PageDetails } from '~/components/page-details';
 import { PageHeaderBrand } from '~/components/page-header-brand';
 import { PageTitle } from '~/components/page-title';
 import { SkipNavigationLinks } from '~/components/skip-navigation-links';
-import { useBrowserCompatiblityBanner } from '~/hooks';
+import { useAccessibleFocusManagement, useBrowserCompatiblityBanner } from '~/hooks';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
@@ -52,10 +52,13 @@ export function ProtectedLayout({ children }: PropsWithChildren) {
 
 export function AppPageTitle({ children }: PropsWithChildren) {
   const { t } = useTranslation(i18nNamespaces);
+  const focusableElementRef = useRef<HTMLHeadingElement | null>(null);
+  useAccessibleFocusManagement(focusableElementRef);
+
   return (
     <div className="my-8 max-w-prose after:mt-2 after:block after:h-1.5 after:w-18 after:bg-[#a62a1e] after:content-['']">
       <h2 className="font-lato mb-2 font-semibold">{t('gcweb:header.application-title')}</h2>
-      <PageTitle>{children}</PageTitle>
+      <PageTitle ref={focusableElementRef}>{children}</PageTitle>
     </div>
   );
 }
