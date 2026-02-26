@@ -212,6 +212,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged: !!maritalStatus,
         hasAddressChanged: mailingAddress?.hasChanged,
         hasPhoneChanged: phoneNumber.hasChanged,
+        hasEmailChanged: emailVerified && email !== clientApplication.contactInformation.email,
       },
     };
   }
@@ -287,6 +288,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged: !!maritalStatus,
         hasAddressChanged: mailingAddress?.hasChanged,
         hasPhoneChanged: phoneNumber.hasChanged,
+        hasEmailChanged: emailVerified && email !== clientApplication.contactInformation.email,
       },
     };
   }
@@ -356,6 +358,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged: !!maritalStatus,
         hasAddressChanged: mailingAddress?.hasChanged,
         hasPhoneChanged: phoneNumber.hasChanged,
+        hasEmailChanged: emailVerified && email !== clientApplication.contactInformation.email,
       },
     };
   }

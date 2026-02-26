@@ -1,46 +1,12 @@
 import type { ReadonlyDeep } from 'type-fest';
 
-export type AdultBenefitRenewalDto = BenefitRenewalDto &
-  ReadonlyDeep<{
-    changeIndicators?: AdultChangeIndicators;
-  }>;
+export type AdultBenefitRenewalDto = BenefitRenewalDto;
 
-export type AdultChangeIndicators = ReadonlyDeep<{
-  hasAddressChanged?: boolean;
-  hasMaritalStatusChanged?: boolean;
-  hasPhoneChanged: boolean;
-}>;
+export type AdultChildBenefitRenewalDto = BenefitRenewalDto;
 
-export type AdultChildBenefitRenewalDto = BenefitRenewalDto &
-  ReadonlyDeep<{
-    changeIndicators?: AdultChildChangeIndicators;
-  }>;
+export type ItaBenefitRenewalDto = BenefitRenewalDto;
 
-export type AdultChildChangeIndicators = ReadonlyDeep<{
-  hasAddressChanged?: boolean;
-  hasMaritalStatusChanged?: boolean;
-  hasPhoneChanged: boolean;
-}>;
-
-export type ItaBenefitRenewalDto = BenefitRenewalDto &
-  ReadonlyDeep<{
-    changeIndicators?: ItaChangeIndicators;
-  }>;
-
-export type ItaChangeIndicators = ReadonlyDeep<{
-  hasAddressChanged: boolean;
-}>;
-
-export type ChildBenefitRenewalDto = BenefitRenewalDto &
-  ReadonlyDeep<{
-    changeIndicators?: ChildChangeIndicators;
-  }>;
-
-export type ChildChangeIndicators = ReadonlyDeep<{
-  hasAddressChanged?: boolean;
-  hasMaritalStatusChanged?: boolean;
-  hasPhoneChanged: boolean;
-}>;
+export type ChildBenefitRenewalDto = BenefitRenewalDto;
 
 export type ProtectedBenefitRenewalDto = BenefitRenewalDto;
 
@@ -56,6 +22,7 @@ export type BenefitRenewalDto = ReadonlyDeep<{
   partnerInformation?: RenewalPartnerInformationDto;
   typeOfApplication: RenewalTypeOfApplicationDto;
   termsAndConditions: TermsAndConditionsDto;
+  changeIndicators?: ChangeIndicatorsDto;
 
   /** A unique identifier for the user making the request - used for auditing */
   userId: string;
@@ -128,4 +95,11 @@ type TermsAndConditionsDto = ReadonlyDeep<{
   acknowledgeTerms: boolean;
   acknowledgePrivacy: boolean;
   shareData: boolean;
+}>;
+
+export type ChangeIndicatorsDto = ReadonlyDeep<{
+  hasAddressChanged?: boolean;
+  hasMaritalStatusChanged?: boolean;
+  hasPhoneChanged?: boolean;
+  hasEmailChanged?: boolean;
 }>;
