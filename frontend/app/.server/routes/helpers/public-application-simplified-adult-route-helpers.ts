@@ -155,6 +155,14 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
   }
 
+  if (
+    communicationPreferences.hasChanged === false &&
+    (clientApplication.communicationPreferences.preferredMethodSunLife === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID) &&
+    !(clientApplication.contactInformation.email && clientApplication.contactInformation.emailVerified)
+  ) {
+    throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
+  }
+
   if (dentalInsurance === undefined) {
     throw redirect(getPathById('public/application/$id/simplified-adult/dental-insurance', params));
   }
