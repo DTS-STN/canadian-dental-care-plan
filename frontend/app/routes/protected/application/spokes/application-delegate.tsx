@@ -1,6 +1,5 @@
 import { redirect, useFetcher } from 'react-router';
 
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/application-delegate';
@@ -86,7 +85,6 @@ export default function ApplicationDelegate({ loaderData, params }: Route.Compon
           routeId="protected/application/$id/type-application"
           params={params}
           disabled={isSubmitting}
-          startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Applying on behalf of someone click"
         >
           {t('protected-application-spokes:application-delegate.back-btn')}

@@ -1,6 +1,5 @@
 import { redirect, useFetcher } from 'react-router';
 
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/child-parent-guardian';
@@ -81,7 +80,6 @@ export default function ChildParentGuardian({ loaderData, params }: Route.Compon
           routeId={`protected/application/$id/children/$childId/${isRenewal ? 'parent-guardian' : 'information'}`}
           params={params}
           disabled={isSubmitting}
-          startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child parent or guardian needs to apply click"
         >
           {t('protected-application-spokes:children.parent-or-guardian.back-btn')}

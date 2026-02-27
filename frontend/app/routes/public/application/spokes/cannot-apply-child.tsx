@@ -1,6 +1,5 @@
 import { redirect, useFetcher } from 'react-router';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/cannot-apply-child';
@@ -69,12 +68,11 @@ export default function ApplyForYourself({ loaderData, params }: Route.Component
           routeId="public/application/$id/children/$childId/information"
           params={params}
           disabled={isSubmitting}
-          startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Child apply for yourself click"
         >
           {t('application-spokes:children.cannot-apply-child.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Proceed - Child apply for yourself click">
+        <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Proceed - Child apply for yourself click">
           {t('application-spokes:children.cannot-apply-child.continue-btn')}
         </LoadingButton>
       </fetcher.Form>

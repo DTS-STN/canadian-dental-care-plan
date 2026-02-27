@@ -1,6 +1,5 @@
 import { redirect, useFetcher } from 'react-router';
 
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/file-taxes';
@@ -73,15 +72,7 @@ export default function ApplicationFileYourTaxes({ loaderData, params }: Route.C
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
-        <ButtonLink
-          id="back-button"
-          variant="secondary"
-          routeId="public/application/$id/tax-filing"
-          params={params}
-          disabled={isSubmitting}
-          startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - File your taxes click"
-        >
+        <ButtonLink id="back-button" variant="secondary" routeId="public/application/$id/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - File your taxes click">
           {t('application:file-your-taxes.back-btn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - File your taxes click">

@@ -1,6 +1,5 @@
 import { data, redirect, useFetcher } from 'react-router';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -110,7 +109,7 @@ export default function ApplicationTypeOfApplication({ loaderData, params }: Rou
             errorMessage={errors?.typeOfApplication}
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Type of application click">
+            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Type of application click">
               {t('protected-application-spokes:type-of-application.save-btn')}
             </LoadingButton>
             <ButtonLink
@@ -119,7 +118,6 @@ export default function ApplicationTypeOfApplication({ loaderData, params }: Rou
               routeId="protected/application/$id/type-of-application"
               params={params}
               disabled={isSubmitting}
-              startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Type of application click"
             >
               {t('protected-application-spokes:type-of-application.back-btn')}

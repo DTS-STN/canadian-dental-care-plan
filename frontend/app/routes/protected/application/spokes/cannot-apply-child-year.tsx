@@ -1,6 +1,5 @@
 import { redirect, useFetcher } from 'react-router';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/cannot-apply-child-year';
@@ -76,12 +75,11 @@ export default function CannotApplyChildYear({ loaderData, params }: Route.Compo
           routeId="protected/application/$id/children/$childId/information"
           params={params}
           disabled={isSubmitting}
-          startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child cannot apply year click"
         >
           {t('protected-application-spokes:children.cannot-apply-child-year.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Proceed - Child cannot apply year click">
+        <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Proceed - Child cannot apply year click">
           {t('protected-application-spokes:children.cannot-apply-child-year.continue-btn')}
         </LoadingButton>
       </fetcher.Form>

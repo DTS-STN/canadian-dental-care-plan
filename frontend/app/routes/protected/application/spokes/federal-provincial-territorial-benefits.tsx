@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
@@ -317,7 +316,7 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
             />
           </fieldset>
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Access to other dental benefits click">
+            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Access to other dental benefits click">
               {t('protected-application-spokes:dental-benefits.save-btn')}
             </LoadingButton>
             <ButtonLink
@@ -326,7 +325,6 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
               routeId={`protected/application/$id/${applicationFlow}/dental-insurance`}
               params={params}
               disabled={isSubmitting}
-              startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Access to other dental benefits click"
             >
               {t('protected-application-spokes:dental-benefits.back-btn')}

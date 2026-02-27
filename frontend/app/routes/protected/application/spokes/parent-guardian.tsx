@@ -1,6 +1,5 @@
 import { data, redirect, useFetcher } from 'react-router';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import z from 'zod';
 
@@ -136,12 +135,11 @@ export default function ParentGuardian({ loaderData, params }: Route.ComponentPr
             routeId={`protected/application/$id/${applicationFlow}/childrens-application`}
             params={params}
             disabled={isSubmitting}
-            startIcon={faChevronLeft}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child parent or guardian needs to apply click"
           >
             {t('protected-application-spokes:children.parent-guardian.back-btn')}
           </ButtonLink>
-          <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Child Information click">
+          <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Child Information click">
             {t('protected-application-spokes:children.parent-guardian.save-btn')}
           </LoadingButton>
         </div>

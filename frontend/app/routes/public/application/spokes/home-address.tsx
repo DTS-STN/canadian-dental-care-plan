@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -334,7 +333,6 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   name="_action"
                   value={FORM_ACTION.submit}
                   loading={isSubmitting}
-                  endIcon={faChevronRight}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Home address click"
                 >
                   {t('application-spokes:address.save-btn')}
@@ -349,15 +347,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 </>
               )}
             </Dialog>
-            <ButtonLink
-              id="back-button"
-              variant="secondary"
-              routeId={`public/application/$id/mailing-address`}
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Home address click"
-            >
+            <ButtonLink id="back-button" variant="secondary" routeId={`public/application/$id/mailing-address`} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Home address click">
               {t('application-spokes:address.back')}
             </ButtonLink>
           </div>

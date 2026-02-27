@@ -3,7 +3,6 @@ import { useMemo, useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -231,7 +230,7 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
             )}
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Marital status click">
+            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Marital status click">
               {t('application-spokes:marital-status.save-btn')}
             </LoadingButton>
             <ButtonLink
@@ -240,7 +239,6 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
               routeId={getRouteFromApplicationFlow(applicationFlow)}
               params={params}
               disabled={isSubmitting}
-              startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Marital status click"
             >
               {t('application-spokes:marital-status.back-btn')}

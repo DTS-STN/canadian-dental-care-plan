@@ -1,7 +1,6 @@
 import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -159,7 +158,7 @@ export default function ProtectedSpokesRenewalSelection({ loaderData, params }: 
             required
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Renewal selection click">
+            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Renewal selection click">
               {t('protected-application-spokes:renewal-selection.save-btn')}
             </LoadingButton>
             <ButtonLink
@@ -168,7 +167,6 @@ export default function ProtectedSpokesRenewalSelection({ loaderData, params }: 
               routeId="protected/application/$id/renew"
               params={params}
               disabled={isSubmitting}
-              startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Renewal selection click"
             >
               {t('protected-application-spokes:renewal-selection.back-btn')}

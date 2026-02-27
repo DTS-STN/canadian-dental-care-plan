@@ -1,6 +1,5 @@
 import { redirect, useFetcher } from 'react-router';
 
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/dental-insurance-exit-application';
@@ -75,7 +74,6 @@ export default function ApplicationSpokeDentalInsuranceExitApplication({ loaderD
           routeId="protected/application/$id/dental-insurance"
           params={params}
           disabled={isSubmitting}
-          startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Exiting the application click"
         >
           {t('protected-application-spokes:dental-insurance-exit-application.back-btn')}
