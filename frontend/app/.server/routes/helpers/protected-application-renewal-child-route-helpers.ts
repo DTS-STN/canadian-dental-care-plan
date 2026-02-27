@@ -156,6 +156,14 @@ export function validateProtectedApplicationRenewalChildStateForReview({ params,
     throw redirect(getPathById('protected/application/$id/renewal-children/parent-or-guardian', params));
   }
 
+  if (
+    communicationPreferences.hasChanged === false &&
+    (clientApplication.communicationPreferences.preferredMethodSunLife === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID) &&
+    !(clientApplication.contactInformation.email && clientApplication.contactInformation.emailVerified)
+  ) {
+    throw redirect(getPathById('protected/application/$id/renewal-children/parent-or-guardian', params));
+  }
+
   return {
     ageCategory,
     applicantInformation,
