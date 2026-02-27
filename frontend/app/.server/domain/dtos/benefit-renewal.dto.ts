@@ -15,6 +15,7 @@ export type BenefitRenewalDto = ReadonlyDeep<{
   typeOfApplication: RenewalTypeOfApplicationDto;
   termsAndConditions: TermsAndConditionsDto;
   changeIndicators?: ChangeIndicatorsDto;
+  inputModel?: 'full' | 'simplified';
 
   /** A unique identifier for the user making the request - used for auditing */
   userId: string;
