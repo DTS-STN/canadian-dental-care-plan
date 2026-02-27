@@ -185,7 +185,7 @@ export default function ProtectedNewChildrenConfirmation({ loaderData, params }:
   return (
     <div className="max-w-prose space-y-10">
       <div className="space-y-4">
-        <p className="text-2xl">
+        <p className="text-3xl">
           <strong>{t('confirm.app-code-is')}</strong>
           <br />
           <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>

@@ -236,7 +236,7 @@ export default function ProtectedRenewalFamilyConfirmation({ loaderData, params 
       )}
 
       <div className="space-y-4">
-        <p className="text-2xl">
+        <p className="text-3xl">
           <strong>{t('confirm.app-code-is')}</strong>
           <br />
           <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
