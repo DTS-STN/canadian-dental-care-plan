@@ -1,4 +1,6 @@
-import { data, useFetcher } from 'react-router';
+import type { JSX } from 'react';
+
+import { data, useFetcher, useLoaderData, useParams } from 'react-router';
 
 import { faCircleCheck, faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
@@ -55,35 +57,48 @@ export async function loader({ context: { appContainer, session }, request, para
   const countryMailing = state.mailingAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale) : undefined;
   const countryHome = state.homeAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale) : undefined;
 
-  const mailingAddressInfo = {
-    address: state.mailingAddress?.value?.address,
-    city: state.mailingAddress?.value?.city,
-    province: mailingProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.mailingAddress?.value?.postalCode,
-    country: countryMailing?.name,
-    hasChanged: state.mailingAddress?.hasChanged,
-  };
-
-  const homeAddressInfo = {
-    address: state.homeAddress?.value?.address,
-    city: state.homeAddress?.value?.city,
-    province: homeProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.homeAddress?.value?.postalCode,
-    country: countryHome?.name,
-    hasChanged: state.homeAddress?.hasChanged,
-  };
-
   return {
     state: {
-      phoneNumber: state.phoneNumber,
-      communicationPreferences: state.communicationPreferences,
       email: state.email,
+      phoneNumber: state.phoneNumber?.hasChanged
+        ? {
+            primary: state.phoneNumber.value.primary,
+          }
+        : undefined,
+      communicationPreferences: state.communicationPreferences?.hasChanged
+        ? {
+            preferredLanguage: appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale).name,
+            preferredMethod: appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale).name,
+            preferredNotificationMethod: appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale).name,
+          }
+        : undefined,
+      mailingAddress: state.mailingAddress?.hasChanged
+        ? {
+            address: state.mailingAddress.value.address,
+            city: state.mailingAddress.value.city,
+            province: mailingProvinceTerritoryStateAbbr?.abbr,
+            postalCode: state.mailingAddress.value.postalCode,
+            country: countryMailing?.name,
+          }
+        : undefined,
+      homeAddress: state.homeAddress?.hasChanged
+        ? {
+            address: state.homeAddress.value.address,
+            city: state.homeAddress.value.city,
+            province: homeProvinceTerritoryStateAbbr?.abbr,
+            postalCode: state.homeAddress.value.postalCode,
+            country: countryHome?.name,
+          }
+        : undefined,
     },
-    preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
-    preferredMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale) : undefined,
-    preferredNotificationMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale) : undefined,
-    mailingAddressInfo,
-    homeAddressInfo,
+    clientApplication: {
+      email: state.clientApplication?.contactInformation.email,
+      emailVerified: state.clientApplication?.contactInformation.emailVerified,
+      hasPhoneNumber: !!state.clientApplication?.contactInformation.phoneNumber,
+      hasCommunicationPreferences: !!state.clientApplication?.communicationPreferences,
+      hasMailingAddress: !!state.clientApplication?.contactInformation.mailingCountry,
+      hasHomeAddress: !!state.clientApplication?.contactInformation.homeCountry,
+    },
     sections: {
       phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
       address: { completed: isAddressSectionCompleted(state) },
@@ -140,7 +155,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function RenewFamilyContactInformation({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, sections } = loaderData;
+  const { sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
@@ -162,64 +177,8 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
             <CardTitle>{t('application-simplified-family:contact-information.phone-number')}</CardTitle>
             <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
-          <CardContent>
-            {state.phoneNumber === undefined ? (
-              <p>{t('application-simplified-family:contact-information.phone-number-help')}</p>
-            ) : (
-              <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-simplified-family:contact-information.phone-number')}>
-                  {state.phoneNumber.hasChanged === false ? <p>{t('application-simplified-family:contact-information.no-change')}</p> : <p>{state.phoneNumber.value.primary}</p>}
-                </DefinitionListItem>
-              </DefinitionList>
-            )}
-          </CardContent>
-          {state.phoneNumber ? (
-            <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink
-                id="edit-phone-button"
-                variant="link"
-                className="p-0"
-                routeId="public/application/$id/phone-number"
-                params={params}
-                startIcon={sections.phoneNumber.completed ? faPenToSquare : faCirclePlus}
-                size="lg"
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit phone click"
-              >
-                {sections.phoneNumber.completed ? t('application-simplified-family:contact-information.edit-phone-number') : t('application-simplified-family:contact-information.add-phone-number')}
-              </ButtonLink>
-            </CardFooter>
-          ) : (
-            <CardFooter className="divide-y border-t bg-zinc-100 px-0">
-              <div className="w-full px-6">
-                <ButtonLink
-                  id="update-phone-button"
-                  variant="link"
-                  className="mb-5 p-0"
-                  routeId="public/application/$id/phone-number"
-                  params={params}
-                  startIcon={faPenToSquare}
-                  size="lg"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Update phone click"
-                >
-                  {t('application-simplified-family:contact-information.update-phone-number')}
-                </ButtonLink>
-              </div>
-              <div className="w-full px-6">
-                <Button
-                  id="complete-phone-button"
-                  variant="link"
-                  name="_action"
-                  value={FORM_ACTION.PHONE_NUMBER_NOT_CHANGED}
-                  className="mt-5 p-0"
-                  startIcon={faCircleCheck}
-                  size="lg"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Complete phone click"
-                >
-                  {t('application-simplified-family:contact-information.phone-number-unchanged')}
-                </Button>
-              </div>
-            </CardFooter>
-          )}
+          <PhoneNumberCardContent />
+          <PhoneNumberCardFooter />
         </Card>
 
         <Card>
@@ -227,89 +186,8 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
             <CardTitle>{t('application-simplified-family:contact-information.mailing-and-home-address')}</CardTitle>
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
-          <CardContent>
-            {mailingAddressInfo.hasChanged === undefined && homeAddressInfo.hasChanged === undefined ? (
-              <p>{t('application-simplified-family:contact-information.address-help')}</p>
-            ) : (
-              <>
-                {mailingAddressInfo.hasChanged === false && homeAddressInfo.hasChanged === false ? (
-                  <p>{t('application-simplified-family:contact-information.no-change')}</p>
-                ) : (
-                  <DefinitionList layout="single-column">
-                    <DefinitionListItem term={t('application-simplified-family:contact-information.mailing-address')}>
-                      <Address
-                        address={{
-                          address: mailingAddressInfo.address ?? '',
-                          city: mailingAddressInfo.city ?? '',
-                          provinceState: mailingAddressInfo.province,
-                          postalZipCode: mailingAddressInfo.postalCode,
-                          country: mailingAddressInfo.country ?? '',
-                        }}
-                      />
-                    </DefinitionListItem>
-                    <DefinitionListItem term={t('application-simplified-family:contact-information.home-address')}>
-                      <Address
-                        address={{
-                          address: homeAddressInfo.address ?? '',
-                          city: homeAddressInfo.city ?? '',
-                          provinceState: homeAddressInfo.province,
-                          postalZipCode: homeAddressInfo.postalCode,
-                          country: homeAddressInfo.country ?? '',
-                        }}
-                      />
-                    </DefinitionListItem>
-                  </DefinitionList>
-                )}
-              </>
-            )}
-          </CardContent>
-          {mailingAddressInfo.hasChanged !== undefined && homeAddressInfo.hasChanged !== undefined ? (
-            <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink
-                id="edit-address-button"
-                variant="link"
-                className="p-0"
-                routeId="public/application/$id/mailing-address"
-                params={params}
-                startIcon={sections.address.completed ? faPenToSquare : faCirclePlus}
-                size="lg"
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit address click"
-              >
-                {sections.address.completed ? t('application-simplified-family:contact-information.edit-address') : t('application-simplified-family:contact-information.add-address')}
-              </ButtonLink>
-            </CardFooter>
-          ) : (
-            <CardFooter className="divide-y border-t bg-zinc-100 px-0">
-              <div className="w-full px-6">
-                <ButtonLink
-                  id="update-address-button"
-                  variant="link"
-                  className="mb-5 p-0"
-                  routeId="public/application/$id/mailing-address"
-                  params={params}
-                  startIcon={faPenToSquare}
-                  size="lg"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Update address click"
-                >
-                  {t('application-simplified-family:contact-information.update-address')}
-                </ButtonLink>
-              </div>
-              <div className="w-full px-6">
-                <Button
-                  id="complete-address-button"
-                  variant="link"
-                  className="mt-5 p-0"
-                  name="_action"
-                  value={FORM_ACTION.ADDRESS_NOT_CHANGED}
-                  startIcon={faCircleCheck}
-                  size="lg"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Complete address click"
-                >
-                  {t('application-simplified-family:contact-information.address-unchanged')}
-                </Button>
-              </div>
-            </CardFooter>
-          )}
+          <MailingAndHomeAddressCardContent />
+          <MailingAndHomeAddressCardFooter />
         </Card>
 
         <Card>
@@ -317,71 +195,8 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
             <CardTitle>{t('application-simplified-family:contact-information.communication-preferences')}</CardTitle>
             <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
-          <CardContent>
-            {state.communicationPreferences === undefined ? (
-              <p>{t('application-simplified-family:contact-information.communication-preferences-help')}</p>
-            ) : (
-              <>
-                {state.communicationPreferences.hasChanged === false ? (
-                  <p>{t('application-simplified-family:contact-information.no-change')}</p>
-                ) : (
-                  <DefinitionList layout="single-column">
-                    <DefinitionListItem term={t('application-simplified-family:contact-information.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-simplified-family:contact-information.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-simplified-family:contact-information.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
-                    {state.email && <DefinitionListItem term={t('application-simplified-family:contact-information.email')}>{state.email}</DefinitionListItem>}
-                  </DefinitionList>
-                )}
-              </>
-            )}
-          </CardContent>
-          {state.communicationPreferences ? (
-            <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink
-                id="edit-comms-button"
-                variant="link"
-                className="p-0"
-                routeId="public/application/$id/communication-preferences"
-                params={params}
-                startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus}
-                size="lg"
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit comms click"
-              >
-                {sections.communicationPreferences.completed ? t('application-simplified-family:contact-information.edit-communication-preferences') : t('application-simplified-family:contact-information.add-communication-preferences')}
-              </ButtonLink>
-            </CardFooter>
-          ) : (
-            <CardFooter className="divide-y border-t bg-zinc-100 px-0">
-              <div className="w-full px-6">
-                <ButtonLink
-                  id="update-comms-button"
-                  variant="link"
-                  className="mb-5 p-0"
-                  routeId="public/application/$id/communication-preferences"
-                  params={params}
-                  startIcon={faPenToSquare}
-                  size="lg"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Update comms click"
-                >
-                  {t('application-simplified-family:contact-information.update-communication-preferences')}
-                </ButtonLink>
-              </div>
-              <div className="w-full px-6">
-                <LoadingButton
-                  id="complete-comms-button"
-                  variant="link"
-                  name="_action"
-                  value={FORM_ACTION.COMMUNICATION_PREFERENCES_NOT_CHANGED}
-                  className="mt-5 p-0"
-                  startIcon={faCircleCheck}
-                  size="lg"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Complete comms click"
-                >
-                  {t('application-simplified-family:contact-information.communication-preferences-unchanged')}
-                </LoadingButton>
-              </div>
-            </CardFooter>
-          )}
+          <CommunicationPreferencesCardContent />
+          <CommunicationPreferencesCardFooter />
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
@@ -401,5 +216,448 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
         </div>
       </div>
     </fetcher.Form>
+  );
+}
+
+/**
+ * This component determines what to show in the phone number card content based on whether the user has entered a new
+ * phone number or if there is no phone number at all. The logic is as follows:
+ *
+ * - If the user has entered a new phone number (state.phoneNumber is defined), show the new phone number.
+ *
+ * - If the user has not entered a new phone number but there is an existing phone number on the client application,
+ *   show the update help text ("Would you like to update your phone number?").
+ *
+ * - If there is no phone number on the client application and the user has not entered a new phone number, show the
+ *   help text ("Enter your phone number.").
+ *
+ * This logic ensures that the user never sees the existing client application values directly. Instead, they are
+ * prompted to either add a phone number (if none exists) or update their existing phone number (if one exists).
+ */
+function PhoneNumberCardContent(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { state, clientApplication } = useLoaderData<typeof loader>();
+
+  if (state.phoneNumber) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('application-simplified-family:contact-information.phone-number')}>{state.phoneNumber.primary}</DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  if (clientApplication.hasPhoneNumber) {
+    return (
+      <CardContent>
+        <p>{t('application-simplified-family:contact-information.update-phone-number-help')}</p>
+      </CardContent>
+    );
+  }
+
+  return (
+    <CardContent>
+      <p>{t('application-simplified-family:contact-information.phone-number-help')}</p>
+    </CardContent>
+  );
+}
+
+/**
+ * This component determines what to show in the phone number card footer based on whether the user has entered a new
+ * phone number or if there is an existing phone number on the client application. The logic is as follows:
+ *
+ * - If the user has entered a new phone number (state.phoneNumber is defined), show the "Edit phone number" button.
+ *
+ * - If the user has not entered a new phone number but there is an existing phone number on the client application,
+ *   show both the "Update phone number" button and the "Phone number unchanged" button. This allows the user to either
+ *   go update their phone number or confirm that their existing phone number is still correct.
+ *
+ * - If there is no phone number on the client application and the user has not entered a new phone number, show the
+ *   "Add phone number" button.
+ *
+ * This logic ensures that the user always has a clear call to action based on their current state. If they have made
+ * a change, they can edit it. If they haven't made a change but have an existing phone number, they can either update
+ * it or confirm it's unchanged. If they don't have a phone number at all, they are prompted to add one.
+ */
+function PhoneNumberCardFooter(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { state, clientApplication, sections } = useLoaderData<typeof loader>();
+  const params = useParams();
+
+  if (state.phoneNumber || sections.phoneNumber.completed) {
+    return (
+      <CardFooter className="border-t bg-zinc-100">
+        <ButtonLink
+          id="edit-phone-button"
+          variant="link"
+          className="p-0"
+          routeId="public/application/$id/phone-number"
+          params={params}
+          startIcon={sections.phoneNumber.completed ? faPenToSquare : faCirclePlus}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit phone click"
+        >
+          {sections.phoneNumber.completed ? t('application-simplified-family:contact-information.edit-phone-number') : t('application-simplified-family:contact-information.add-phone-number')}
+        </ButtonLink>
+      </CardFooter>
+    );
+  }
+
+  if (clientApplication.hasPhoneNumber) {
+    return (
+      <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+        <div className="w-full px-6">
+          <ButtonLink
+            id="update-phone-button"
+            variant="link"
+            className="mb-5 p-0"
+            routeId="public/application/$id/phone-number"
+            params={params}
+            startIcon={faPenToSquare}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Update phone click"
+          >
+            {t('application-simplified-family:contact-information.update-phone-number')}
+          </ButtonLink>
+        </div>
+        <div className="w-full px-6">
+          <Button
+            id="complete-phone-button"
+            variant="link"
+            name="_action"
+            value={FORM_ACTION.PHONE_NUMBER_NOT_CHANGED}
+            className="mt-5 p-0"
+            startIcon={faCircleCheck}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Complete phone click"
+          >
+            {t('application-simplified-family:contact-information.phone-number-unchanged')}
+          </Button>
+        </div>
+      </CardFooter>
+    );
+  }
+
+  return (
+    <CardFooter className="border-t bg-zinc-100">
+      <ButtonLink
+        id="add-phone-button"
+        variant="link"
+        className="p-0"
+        routeId="public/application/$id/phone-number"
+        params={params}
+        startIcon={faCirclePlus}
+        size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Add phone click"
+      >
+        {t('application-simplified-family:contact-information.add-phone-number')}
+      </ButtonLink>
+    </CardFooter>
+  );
+}
+
+/**
+ * This component determines what to show in the mailing and home address card content based on whether the user has
+ * entered new addresses or if there are no addresses at all. The logic is as follows:
+ *
+ * - If the user has entered new addresses (state.mailingAddress and state.homeAddress are defined), show the new
+ *   addresses.
+ *
+ * - If the user has not entered new addresses but there are existing addresses on the client application, show the
+ *   update help text ("Would you like to update your mailing and home address?").
+ *
+ * - If there are no addresses on the client application and the user has not entered new addresses, show the help
+ *   text ("Enter your mailing and home address.").
+ *
+ * This logic ensures that the user never sees the existing client application values directly. Instead, they are
+ * prompted to either add addresses (if none exist) or update their existing addresses (if they exist).
+ */
+function MailingAndHomeAddressCardContent(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { state, clientApplication } = useLoaderData<typeof loader>();
+
+  if (state.mailingAddress && state.homeAddress) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('application-simplified-family:contact-information.mailing-address')}>
+            <Address
+              address={{
+                address: state.mailingAddress.address,
+                city: state.mailingAddress.city,
+                provinceState: state.mailingAddress.province,
+                postalZipCode: state.mailingAddress.postalCode,
+                country: state.mailingAddress.country ?? '',
+              }}
+            />
+          </DefinitionListItem>
+          <DefinitionListItem term={t('application-simplified-family:contact-information.home-address')}>
+            <Address
+              address={{
+                address: state.homeAddress.address,
+                city: state.homeAddress.city,
+                provinceState: state.homeAddress.province,
+                postalZipCode: state.homeAddress.postalCode,
+                country: state.homeAddress.country ?? '',
+              }}
+            />
+          </DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  if (clientApplication.hasMailingAddress && clientApplication.hasHomeAddress) {
+    return (
+      <CardContent>
+        <p>{t('application-simplified-family:contact-information.update-address-help')}</p>
+      </CardContent>
+    );
+  }
+
+  return (
+    <CardContent>
+      <p>{t('application-simplified-family:contact-information.address-help')}</p>
+    </CardContent>
+  );
+}
+
+/**
+ * This component determines what to show in the mailing and home address card footer based on whether the user has
+ * entered new addresses or if there are existing addresses on the client application. The logic is as follows:
+ *
+ * - If the user has entered new addresses (state.mailingAddress and state.homeAddress are defined), show the "Edit
+ *   address" button.
+ *
+ * - If the user has not entered new addresses but there are existing addresses on the client application, show both
+ *   the "Update address" button and the "Address unchanged" button. This allows the user to either go update their
+ *   addresses or confirm that their existing addresses are still correct.
+ *
+ * - If there are no addresses on the client application and the user has not entered new addresses, show the "Add
+ *   address" button.
+ *
+ * This logic ensures that the user always has a clear call to action based on their current state. If they have made
+ * a change, they can edit it. If they haven't made a change but have existing addresses, they can either update them
+ * or confirm they're unchanged. If they don't have addresses at all, they are prompted to add them.
+ */
+function MailingAndHomeAddressCardFooter(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { state, clientApplication, sections } = useLoaderData<typeof loader>();
+  const params = useParams();
+
+  if ((state.mailingAddress && state.homeAddress) || sections.address.completed) {
+    return (
+      <CardFooter className="border-t bg-zinc-100">
+        <ButtonLink
+          id="edit-address-button"
+          variant="link"
+          className="p-0"
+          routeId="public/application/$id/mailing-address"
+          params={params}
+          startIcon={sections.address.completed ? faPenToSquare : faCirclePlus}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit address click"
+        >
+          {sections.address.completed ? t('application-simplified-family:contact-information.edit-address') : t('application-simplified-family:contact-information.add-address')}
+        </ButtonLink>
+      </CardFooter>
+    );
+  }
+
+  if (clientApplication.hasMailingAddress && clientApplication.hasHomeAddress) {
+    return (
+      <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+        <div className="w-full px-6">
+          <ButtonLink
+            id="update-address-button"
+            variant="link"
+            className="mb-5 p-0"
+            routeId="public/application/$id/mailing-address"
+            params={params}
+            startIcon={faPenToSquare}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Update address click"
+          >
+            {t('application-simplified-family:contact-information.update-address')}
+          </ButtonLink>
+        </div>
+        <div className="w-full px-6">
+          <Button
+            id="complete-address-button"
+            variant="link"
+            className="mt-5 p-0"
+            name="_action"
+            value={FORM_ACTION.ADDRESS_NOT_CHANGED}
+            startIcon={faCircleCheck}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Complete address click"
+          >
+            {t('application-simplified-family:contact-information.address-unchanged')}
+          </Button>
+        </div>
+      </CardFooter>
+    );
+  }
+
+  return (
+    <CardFooter className="border-t bg-zinc-100">
+      <ButtonLink
+        id="add-address-button"
+        variant="link"
+        className="p-0"
+        routeId="public/application/$id/mailing-address"
+        params={params}
+        startIcon={faCirclePlus}
+        size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Add address click"
+      >
+        {t('application-simplified-family:contact-information.add-address')}
+      </ButtonLink>
+    </CardFooter>
+  );
+}
+
+/**
+ * This component determines what to show in the communication preferences card content based on whether the user has
+ * entered new preferences or if there are no preferences at all. The logic is as follows:
+ *
+ * - If the user has entered new communication preferences (state.communicationPreferences is defined), show the new
+ *   preferences.
+ *
+ * - If the user has not entered new communication preferences but there are existing preferences on the client
+ *   application, show the update help text ("Would you like to update your communication preferences?").
+ *
+ * - If there are no communication preferences on the client application and the user has not entered new preferences,
+ *   show the help text ("Select your communication preferences.").
+ *
+ * This logic ensures that the user never sees the existing client application values directly. Instead, they are
+ * prompted to either add preferences (if none exist) or update their existing preferences (if they exist).
+ */
+function CommunicationPreferencesCardContent(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { state, clientApplication } = useLoaderData<typeof loader>();
+
+  if (state.communicationPreferences) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('application-simplified-family:contact-information.preferred-language')}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
+          <DefinitionListItem term={t('application-simplified-family:contact-information.preferred-method')}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
+          <DefinitionListItem term={t('application-simplified-family:contact-information.preferred-notification-method')}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
+          {state.email && <DefinitionListItem term={t('application-simplified-family:contact-information.email')}>{state.email}</DefinitionListItem>}
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  if (clientApplication.hasCommunicationPreferences) {
+    return (
+      <CardContent>
+        <p>{t('application-simplified-family:contact-information.update-communication-preferences-help')}</p>
+      </CardContent>
+    );
+  }
+
+  return (
+    <CardContent>
+      <p>{t('application-simplified-family:contact-information.communication-preferences-help')}</p>
+    </CardContent>
+  );
+}
+
+/**
+ * This component determines what to show in the communication preferences card footer based on whether the user has
+ * entered new preferences or if there are existing preferences on the client application. The logic is as follows:
+ *
+ * - If the user has entered new communication preferences (state.communicationPreferences is defined), show the "Edit
+ *   communication preferences" button.
+ *
+ * - If the user has not entered new communication preferences but there are existing preferences on the client
+ *   application, show both the "Update communication preferences" button and the "Communication preferences unchanged"
+ *   button. This allows the user to either go update their preferences or confirm that their existing preferences are
+ *   still correct.
+ *
+ * - If there are no communication preferences on the client application and the user has not entered new preferences,
+ *   show the "Add communication preferences" button.
+ *
+ * This logic ensures that the user always has a clear call to action based on their current state. If they have made
+ * a change, they can edit it. If they haven't made a change but have existing preferences, they can either update them
+ * or confirm they're unchanged. If they don't have preferences at all, they are prompted to add them.
+ */
+function CommunicationPreferencesCardFooter(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { state, clientApplication, sections } = useLoaderData<typeof loader>();
+  const params = useParams();
+
+  if (state.communicationPreferences || sections.communicationPreferences.completed) {
+    return (
+      <CardFooter className="border-t bg-zinc-100">
+        <ButtonLink
+          id="edit-comms-button"
+          variant="link"
+          className="p-0"
+          routeId="public/application/$id/communication-preferences"
+          params={params}
+          startIcon={sections.communicationPreferences.completed ? faPenToSquare : faCirclePlus}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit comms click"
+        >
+          {sections.communicationPreferences.completed ? t('application-simplified-family:contact-information.edit-communication-preferences') : t('application-simplified-family:contact-information.add-communication-preferences')}
+        </ButtonLink>
+      </CardFooter>
+    );
+  }
+
+  if (clientApplication.hasCommunicationPreferences) {
+    return (
+      <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+        <div className="w-full px-6">
+          <ButtonLink
+            id="update-comms-button"
+            variant="link"
+            className="mb-5 p-0"
+            routeId="public/application/$id/communication-preferences"
+            params={params}
+            startIcon={faPenToSquare}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Update comms click"
+          >
+            {t('application-simplified-family:contact-information.update-communication-preferences')}
+          </ButtonLink>
+        </div>
+        <div className="w-full px-6">
+          <LoadingButton
+            id="complete-comms-button"
+            variant="link"
+            name="_action"
+            value={FORM_ACTION.COMMUNICATION_PREFERENCES_NOT_CHANGED}
+            className="mt-5 p-0"
+            startIcon={faCircleCheck}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Complete comms click"
+          >
+            {t('application-simplified-family:contact-information.communication-preferences-unchanged')}
+          </LoadingButton>
+        </div>
+      </CardFooter>
+    );
+  }
+
+  return (
+    <CardFooter className="border-t bg-zinc-100">
+      <ButtonLink
+        id="add-comms-button"
+        variant="link"
+        className="p-0"
+        routeId="public/application/$id/communication-preferences"
+        params={params}
+        startIcon={faCirclePlus}
+        size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Add comms click"
+      >
+        {t('application-simplified-family:contact-information.add-communication-preferences')}
+      </ButtonLink>
+    </CardFooter>
   );
 }
