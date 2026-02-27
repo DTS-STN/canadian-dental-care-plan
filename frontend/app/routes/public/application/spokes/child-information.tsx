@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -390,7 +389,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
             />
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Child Information click">
+            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Child Information click">
               {t('application-spokes:children.information.save-btn')}
             </LoadingButton>
             <ButtonLink
@@ -399,7 +398,6 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
               routeId={`public/application/$id/${applicationFlow}/childrens-application`}
               params={params}
               disabled={isSubmitting}
-              startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Child Information click"
             >
               {t('application-spokes:children.information.back-btn')}

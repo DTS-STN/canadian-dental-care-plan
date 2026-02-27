@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -199,7 +198,7 @@ export default function ChildDentalInsurance({ loaderData, params }: Route.Compo
             </div>
           )}
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Child access to other dental insurance click">
+            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Child access to other dental insurance click">
               {t('children.dental-insurance.save-btn')}
             </LoadingButton>
             <ButtonLink
@@ -208,7 +207,6 @@ export default function ChildDentalInsurance({ loaderData, params }: Route.Compo
               routeId={`protected/application/$id/${applicationFlow}/childrens-application`}
               params={params}
               disabled={isSubmitting}
-              startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child access to other dental insurance click"
             >
               {t('children.dental-insurance.back-btn')}

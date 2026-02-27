@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
@@ -332,13 +331,7 @@ export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, par
           </fieldset>
 
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton
-              variant="primary"
-              id="save-button"
-              loading={isSubmitting}
-              endIcon={faChevronRight}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Child access to other federal, provincial or territorial dental benefits click"
-            >
+            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Child access to other federal, provincial or territorial dental benefits click">
               {t('application-spokes:children.dental-benefits.save-btn')}
             </LoadingButton>
             <ButtonLink
@@ -347,7 +340,6 @@ export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, par
               routeId={`public/application/$id/${applicationFlow}/childrens-application`}
               params={params}
               disabled={isSubmitting}
-              startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Child access to other federal, provincial or territorial dental benefits click"
             >
               {t('application-spokes:children.dental-benefits.back-btn')}

@@ -1,7 +1,6 @@
 import { redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/parent-or-guardian';
@@ -100,7 +99,6 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
           routeId={getBackButtonRouteId()}
           params={params}
           disabled={isSubmitting}
-          startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Parent or guardian needs to apply click"
         >
           {t('protected-application-spokes:parent-or-guardian.back-btn')}

@@ -1,7 +1,6 @@
 import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { addDays } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -313,7 +312,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               />
             </div>
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Applicant information click">
+              <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Applicant information click">
                 {t('application-spokes:personal-information.save-btn')}
               </LoadingButton>
               <ButtonLink
@@ -322,7 +321,6 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
                 routeId={`public/application/$id/type-of-application`}
                 params={params}
                 disabled={isSubmitting}
-                startIcon={faChevronLeft}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Applicant information click"
               >
                 {t('application-spokes:personal-information.back-btn')}

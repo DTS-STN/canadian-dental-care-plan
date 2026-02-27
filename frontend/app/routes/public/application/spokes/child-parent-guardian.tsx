@@ -1,6 +1,5 @@
 import { redirect, useFetcher } from 'react-router';
 
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/child-parent-guardian';
@@ -75,7 +74,6 @@ export default function ParentOrGuardian({ loaderData, params }: Route.Component
           routeId="public/application/$id/children/$childId/information"
           params={params}
           disabled={isSubmitting}
-          startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Child parent or guardian needs to apply click"
         >
           {t('application-spokes:children.parent-or-guardian.back-btn')}

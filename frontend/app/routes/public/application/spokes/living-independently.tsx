@@ -1,6 +1,5 @@
 import { data, redirect, useFetcher } from 'react-router';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -117,7 +116,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
               errorMessage={errors?.livingIndependently}
             />
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Living independently click">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Living independently click">
                 {t('application-spokes:living-independently.save-btn')}
               </LoadingButton>
               <ButtonLink
@@ -126,7 +125,6 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
                 routeId="public/application/$id/personal-information"
                 params={params}
                 disabled={isSubmitting}
-                startIcon={faChevronLeft}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Living independently click"
               >
                 {t('application-spokes:living-independently.back-btn')}

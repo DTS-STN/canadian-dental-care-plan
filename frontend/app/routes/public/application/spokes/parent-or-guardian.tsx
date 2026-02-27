@@ -1,7 +1,6 @@
 import { redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/parent-or-guardian';
@@ -90,15 +89,7 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
-        <ButtonLink
-          id="back-button"
-          variant="secondary"
-          routeId={getBackButtonRouteId()}
-          params={params}
-          disabled={isSubmitting}
-          startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Parent or guardian needs to apply click"
-        >
+        <ButtonLink id="back-button" variant="secondary" routeId={getBackButtonRouteId()} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Parent or guardian needs to apply click">
           {t('application-spokes:parent-or-guardian.back-btn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - Parent or guardian needs to apply click">

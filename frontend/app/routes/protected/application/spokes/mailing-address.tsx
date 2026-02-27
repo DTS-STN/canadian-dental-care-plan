@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -381,7 +380,6 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                     name="_action"
                     value={FORM_ACTION.submit}
                     loading={isSubmitting}
-                    endIcon={faChevronRight}
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Mailing address click"
                   >
                     {copyAddressChecked ? t('protected-application-spokes:address.save-btn') : t('protected-application-spokes:address.continue')}
@@ -404,7 +402,6 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 routeId={getRouteFromApplicationFlow(applicationFlow)}
                 params={params}
                 disabled={isSubmitting}
-                startIcon={faChevronLeft}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Mailing address click"
               >
                 {t('protected-application-spokes:address.back')}
