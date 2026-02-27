@@ -14,9 +14,7 @@ export function isTypeOfApplicationSectionCompleted(state: Pick<PublicApplicatio
  */
 export function isPersonalInformationSectionCompleted(state: Pick<PublicApplicationState, 'inputModel' | 'applicantInformation' | 'livingIndependently'>): boolean {
   if (state.inputModel === undefined || state.applicantInformation === undefined) return false;
-  const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
-  if (ageCategory === 'youth' && state.livingIndependently === undefined) return false;
-
+  if (getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth) === 'youth' && state.livingIndependently === undefined) return false;
   return true;
 }
 
