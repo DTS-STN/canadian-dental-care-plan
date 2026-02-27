@@ -29,7 +29,6 @@ import type {
   DentalFederalBenefitsState,
   DentalInsuranceState,
   DentalProvincialTerritorialBenefitsState,
-  InputModelState,
   PartnerInformationState,
   TermsAndConditionsState,
 } from '~/.server/routes/helpers/public-application-route-helpers';
@@ -49,7 +48,6 @@ export interface BenefitRenewalAdultState {
   emailVerified?: boolean;
   communicationPreferences?: DeclaredChangeCommunicationPreferencesState;
   termsAndConditions: TermsAndConditionsState;
-  inputModel?: InputModelState;
 }
 
 export interface BenefitRenewalAdultChildState {
@@ -68,7 +66,6 @@ export interface BenefitRenewalAdultChildState {
   emailVerified?: boolean;
   communicationPreferences?: DeclaredChangeCommunicationPreferencesState;
   termsAndConditions: TermsAndConditionsState;
-  inputModel?: InputModelState;
 }
 
 export interface BenefitRenewalChildState {
@@ -85,7 +82,6 @@ export interface BenefitRenewalChildState {
   emailVerified?: boolean;
   communicationPreferences?: DeclaredChangeCommunicationPreferencesState;
   termsAndConditions: TermsAndConditionsState;
-  inputModel?: InputModelState;
 }
 
 export interface BenefitRenewalStateMapper {
@@ -163,7 +159,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       emailVerified,
       communicationPreferences,
       termsAndConditions,
-      inputModel,
     }: BenefitRenewalAdultState,
     userId: string = 'anonymous',
   ): BenefitRenewalDto {
@@ -217,7 +212,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasPhoneChanged: phoneNumber.hasChanged,
         hasEmailChanged: emailVerified && email !== clientApplication.contactInformation.email,
       },
-      inputModel,
     };
   }
 
@@ -238,7 +232,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       emailVerified,
       communicationPreferences,
       termsAndConditions,
-      inputModel,
     }: BenefitRenewalAdultChildState,
     userId: string = 'anonymous',
   ): BenefitRenewalDto {
@@ -295,7 +288,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasPhoneChanged: phoneNumber.hasChanged,
         hasEmailChanged: emailVerified && email !== clientApplication.contactInformation.email,
       },
-      inputModel,
     };
   }
 
@@ -314,7 +306,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       emailVerified,
       communicationPreferences,
       termsAndConditions,
-      inputModel,
     }: BenefitRenewalChildState,
     userId: string = 'anonymous',
   ): BenefitRenewalDto {
@@ -367,7 +358,6 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasPhoneChanged: phoneNumber.hasChanged,
         hasEmailChanged: emailVerified && email !== clientApplication.contactInformation.email,
       },
-      inputModel,
     };
   }
 
