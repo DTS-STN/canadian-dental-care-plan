@@ -204,7 +204,7 @@ export default function RenewFamilyDentalInsurance({ loaderData, params }: Route
                 <ButtonLink
                   id="edit-button-update-access"
                   variant="link"
-                  className="p-0 pb-5"
+                  className="mb-5 p-0"
                   routeId="public/application/$id/federal-provincial-territorial-benefits"
                   params={params}
                   startIcon={faPenToSquare}
@@ -220,7 +220,7 @@ export default function RenewFamilyDentalInsurance({ loaderData, params }: Route
                   name="_action"
                   value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
                   variant="link"
-                  className="p-0 pt-5"
+                  className="mt-5 p-0"
                   startIcon={faCircleCheck}
                   size="lg"
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit button not changed click"

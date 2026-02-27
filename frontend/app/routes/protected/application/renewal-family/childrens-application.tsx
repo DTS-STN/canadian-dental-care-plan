@@ -640,7 +640,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
           <ButtonLink
             id={`update-child-benefits-${child.id}`}
             variant="link"
-            className="p-0 pb-5"
+            className="mb-5 p-0"
             routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
             params={{ ...params, childId: child.id }}
             startIcon={faPenToSquare}
@@ -660,7 +660,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
               value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
               disabled={isSubmitting}
               variant="link"
-              className="p-0 pt-5"
+              className="mt-5 p-0"
               startIcon={faCircleCheck}
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Action click"

@@ -413,7 +413,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
           <ButtonLink
             id="update-button-government-benefits"
             variant="link"
-            className="p-0 pb-5"
+            className="mb-5 p-0"
             routeId="protected/application/$id/federal-provincial-territorial-benefits"
             params={params}
             startIcon={faPenToSquare}
@@ -429,7 +429,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
             name="_action"
             value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
             variant="link"
-            className="p-0 pt-5"
+            className="mt-5 p-0"
             startIcon={faCircleCheck}
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Complete benefits click"

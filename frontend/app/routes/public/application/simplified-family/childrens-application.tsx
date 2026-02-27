@@ -315,7 +315,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                       <ButtonLink
                         id={`edit-button-update-access-${child.id}`}
                         variant="link"
-                        className="p-0 pb-5"
+                        className="mb-5 p-0"
                         routeId="public/application/$id/children/$childId/federal-provincial-territorial-benefits"
                         params={{ ...params, childId: child.id }}
                         startIcon={faPenToSquare}
@@ -335,7 +335,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                           value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
                           disabled={isSubmitting}
                           variant="link"
-                          className="p-0 pt-5"
+                          className="mt-5 p-0"
                           startIcon={faCircleCheck}
                           size="lg"
                           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit button not changed click"
