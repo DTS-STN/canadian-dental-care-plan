@@ -38,7 +38,6 @@ interface ToBenefitRenewalRequestEntityArgs {
   livingIndependently?: boolean;
   partnerInformation?: RenewalPartnerInformationDto;
   typeOfApplication: RenewalTypeOfApplicationDto;
-  inputModel?: 'full' | 'simplified';
 }
 
 interface ToAddressArgs {
@@ -95,7 +94,6 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       livingIndependently,
       partnerInformation,
       typeOfApplication,
-      inputModel,
     }: ToBenefitRenewalRequestEntityArgs,
     isProtectedRoute: boolean,
   ): BenefitRenewalRequestEntity {
@@ -168,7 +166,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         },
         BenefitApplicationCategoryCode: {
           ReferenceDataID: this.toBenefitApplicationCategoryCode(typeOfApplication),
-          ReferenceDataName: inputModel === 'full' ? 'New' : 'Renewal',
+          ReferenceDataName: 'Renewal',
         },
         BenefitApplicationChannelCode: {
           ReferenceDataID: isProtectedRoute ? BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED : BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC,
