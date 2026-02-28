@@ -56,6 +56,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const homeProvinceTerritoryStateAbbr = state.homeAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province) : undefined;
   const countryMailing = state.mailingAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale) : undefined;
   const countryHome = state.homeAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale) : undefined;
+  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 
   return {
     state: {
@@ -95,7 +96,8 @@ export async function loader({ context: { appContainer, session }, request, para
       email: state.clientApplication?.contactInformation.email,
       emailVerified: state.clientApplication?.contactInformation.emailVerified,
       hasPhoneNumber: !!state.clientApplication?.contactInformation.phoneNumber,
-      hasCommunicationPreferences: !!state.clientApplication?.communicationPreferences,
+      hasCommunicationPreferences:
+        state.clientApplication?.communicationPreferences.preferredMethodSunLife === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID && state.clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID,
       hasMailingAddress: !!state.clientApplication?.contactInformation.mailingCountry,
       hasHomeAddress: !!state.clientApplication?.contactInformation.homeCountry,
     },
