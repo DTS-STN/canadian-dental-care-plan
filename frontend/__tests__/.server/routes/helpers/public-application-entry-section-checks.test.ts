@@ -57,6 +57,57 @@ describe('isPersonalInformationSectionCompleted', () => {
   it('should return false when both are undefined', () => {
     expect(isPersonalInformationSectionCompleted({})).toBe(false);
   });
+
+  it('should return false when livingIndependently is undefined and applicant is youth', () => {
+    const youthDateOfBirth = new Date();
+    youthDateOfBirth.setFullYear(youthDateOfBirth.getFullYear() - 17);
+    expect(
+      isPersonalInformationSectionCompleted({
+        inputModel: 'full',
+        applicantInformation: {
+          dateOfBirth: youthDateOfBirth.toISOString().split('T')[0],
+          firstName: 'John',
+          lastName: 'Doe',
+          socialInsuranceNumber: '123456789',
+        },
+        livingIndependently: undefined,
+      }),
+    ).toBe(false);
+  });
+
+  it('should return true when livingIndependently is true and applicant is youth', () => {
+    const youthDateOfBirth = new Date();
+    youthDateOfBirth.setFullYear(youthDateOfBirth.getFullYear() - 17);
+    expect(
+      isPersonalInformationSectionCompleted({
+        inputModel: 'full',
+        applicantInformation: {
+          dateOfBirth: youthDateOfBirth.toISOString().split('T')[0],
+          firstName: 'John',
+          lastName: 'Doe',
+          socialInsuranceNumber: '123456789',
+        },
+        livingIndependently: true,
+      }),
+    ).toBe(true);
+  });
+
+  it('should return true when livingIndependently is false and applicant is youth', () => {
+    const youthDateOfBirth = new Date();
+    youthDateOfBirth.setFullYear(youthDateOfBirth.getFullYear() - 16);
+    expect(
+      isPersonalInformationSectionCompleted({
+        inputModel: 'full',
+        applicantInformation: {
+          dateOfBirth: youthDateOfBirth.toISOString().split('T')[0],
+          firstName: 'John',
+          lastName: 'Doe',
+          socialInsuranceNumber: '123456789',
+        },
+        livingIndependently: false,
+      }),
+    ).toBe(true);
+  });
 });
 
 describe('isTermsAndConditionsSectionCompleted', () => {
