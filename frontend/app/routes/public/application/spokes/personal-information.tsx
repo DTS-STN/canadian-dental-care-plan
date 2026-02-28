@@ -48,7 +48,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
 
   if (state.context === 'renewal' && state.applicantInformation !== undefined) {
-    return redirect(getPathById(`public/application/$id/type-of-application`, params));
+    // If youth applicant allow access to personal-information if livingIndependently is undefined
+    const isYouthWithIncompleteLivingIndependently = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth) === 'youth' && state.livingIndependently === undefined;
+
+    if (!isYouthWithIncompleteLivingIndependently) {
+      return redirect(getPathById(`public/application/$id/type-of-application`, params));
+    }
   }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
