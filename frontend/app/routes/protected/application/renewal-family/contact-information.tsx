@@ -59,6 +59,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
   const sunLifeCommunicationMethodService = appContainer.get(TYPES.SunLifeCommunicationMethodService);
   const gcCommunicationMethodService = appContainer.get(TYPES.GCCommunicationMethodService);
+  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 
   return {
     // Application state that is relevant to the contact information page.
@@ -111,7 +112,7 @@ export async function loader({ context: { appContainer, session }, request, para
           }
         : undefined,
       communicationPreferences:
-        state.clientApplication.communicationPreferences.preferredLanguage && state.clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada
+        state.clientApplication.communicationPreferences.preferredMethodSunLife === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID && state.clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID
           ? {
               preferredLanguage: languageService.getLocalizedLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name,
               preferredMethod: sunLifeCommunicationMethodService.getLocalizedSunLifeCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethodSunLife, locale).name,
