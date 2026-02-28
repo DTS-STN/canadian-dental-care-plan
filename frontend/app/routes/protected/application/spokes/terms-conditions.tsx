@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { data, redirect, useFetcher } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
@@ -28,6 +30,17 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 const CHECKBOX_VALUE = {
   yes: 'yes',
 } as const;
+
+const CHECKBOX_IDS = {
+  ACKNOWLEDGE_TERMS: 'acknowledgeTerms',
+  ACKNOWLEDGE_PRIVACY: 'acknowledgePrivacy',
+  SHARE_DATA: 'shareData',
+  DO_NOT_CONSENT: 'doNotConsent',
+} as const;
+
+type CheckboxId = (typeof CHECKBOX_IDS)[keyof typeof CHECKBOX_IDS];
+
+const CONSENT_CHECKBOXES = [CHECKBOX_IDS.ACKNOWLEDGE_TERMS, CHECKBOX_IDS.ACKNOWLEDGE_PRIVACY, CHECKBOX_IDS.SHARE_DATA] as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'gcweb'),
@@ -109,6 +122,44 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   const errors = fetcher.data?.errors;
+
+  const [checkboxState, setCheckboxState] = useState({
+    [CHECKBOX_IDS.ACKNOWLEDGE_TERMS]: defaultState?.acknowledgeTerms ?? false,
+    [CHECKBOX_IDS.ACKNOWLEDGE_PRIVACY]: defaultState?.acknowledgePrivacy ?? false,
+    [CHECKBOX_IDS.SHARE_DATA]: defaultState?.shareData ?? false,
+    [CHECKBOX_IDS.DO_NOT_CONSENT]: false,
+  });
+
+  const handleCheckboxChange = (checkboxId: CheckboxId, checked: boolean) => {
+    if (checkboxId === CHECKBOX_IDS.DO_NOT_CONSENT) {
+      if (checked) {
+        setCheckboxState({
+          [CHECKBOX_IDS.ACKNOWLEDGE_TERMS]: false,
+          [CHECKBOX_IDS.ACKNOWLEDGE_PRIVACY]: false,
+          [CHECKBOX_IDS.SHARE_DATA]: false,
+          [CHECKBOX_IDS.DO_NOT_CONSENT]: true,
+        });
+      } else {
+        setCheckboxState((prev) => ({
+          ...prev,
+          [CHECKBOX_IDS.DO_NOT_CONSENT]: false,
+        }));
+      }
+    } else if (CONSENT_CHECKBOXES.includes(checkboxId as (typeof CONSENT_CHECKBOXES)[number])) {
+      if (checked) {
+        setCheckboxState((prev) => ({
+          ...prev,
+          [checkboxId]: checked,
+          [CHECKBOX_IDS.DO_NOT_CONSENT]: false,
+        }));
+      } else {
+        setCheckboxState((prev) => ({
+          ...prev,
+          [checkboxId]: checked,
+        }));
+      }
+    }
+  };
 
   const esdcPib = <InlineLink to={t('protected-application-spokes:terms-conditions.links.esdc-pib')} className="external-link" newTabIndicator target="_blank" />;
   const hcPib = <InlineLink to={t('protected-application-spokes:terms-conditions.links.hc-pib')} className="external-link" newTabIndicator target="_blank" />;
@@ -234,19 +285,55 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
           <CsrfTokenInput />
           <ErrorSummary />
           <div className="space-y-2">
-            <InputCheckbox id="acknowledge-terms" name="acknowledgeTerms" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.acknowledgeTerms} errorMessage={errors?.acknowledgeTerms} required>
+            <InputCheckbox
+              id="acknowledge-terms"
+              name={CHECKBOX_IDS.ACKNOWLEDGE_TERMS}
+              value={CHECKBOX_VALUE.yes}
+              checked={checkboxState[CHECKBOX_IDS.ACKNOWLEDGE_TERMS]}
+              onChange={(e) => handleCheckboxChange(CHECKBOX_IDS.ACKNOWLEDGE_TERMS, e.target.checked)}
+              errorMessage={errors?.acknowledgeTerms}
+              required
+            >
               {t('protected-application-spokes:terms-conditions.checkboxes.acknowledge-terms')}
             </InputCheckbox>
-            <InputCheckbox id="acknowledge-privacy" name="acknowledgePrivacy" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.acknowledgePrivacy} errorMessage={errors?.acknowledgePrivacy} required>
+
+            <InputCheckbox
+              id="acknowledge-privacy"
+              name={CHECKBOX_IDS.ACKNOWLEDGE_PRIVACY}
+              value={CHECKBOX_VALUE.yes}
+              checked={checkboxState[CHECKBOX_IDS.ACKNOWLEDGE_PRIVACY]}
+              onChange={(e) => handleCheckboxChange(CHECKBOX_IDS.ACKNOWLEDGE_PRIVACY, e.target.checked)}
+              errorMessage={errors?.acknowledgePrivacy}
+              required
+            >
               {t('protected-application-spokes:terms-conditions.checkboxes.acknowledge-privacy')}
             </InputCheckbox>
-            <InputCheckbox id="share-data" name="shareData" value={CHECKBOX_VALUE.yes} defaultChecked={defaultState?.shareData} errorMessage={errors?.shareData} required>
+
+            <InputCheckbox
+              id="share-data"
+              name={CHECKBOX_IDS.SHARE_DATA}
+              value={CHECKBOX_VALUE.yes}
+              checked={checkboxState[CHECKBOX_IDS.SHARE_DATA]}
+              onChange={(e) => handleCheckboxChange(CHECKBOX_IDS.SHARE_DATA, e.target.checked)}
+              errorMessage={errors?.shareData}
+              required
+            >
               {t('protected-application-spokes:terms-conditions.checkboxes.share-data')}
             </InputCheckbox>
           </div>
-          <InputCheckbox id="do-not-consent" name="doNotConsent" value={CHECKBOX_VALUE.yes} className="my-8" errorMessage={errors?.doNotConsent}>
+
+          <InputCheckbox
+            id="do-not-consent"
+            name={CHECKBOX_IDS.DO_NOT_CONSENT}
+            value={CHECKBOX_VALUE.yes}
+            className="my-8"
+            checked={checkboxState[CHECKBOX_IDS.DO_NOT_CONSENT]}
+            onChange={(e) => handleCheckboxChange(CHECKBOX_IDS.DO_NOT_CONSENT, e.target.checked)}
+            errorMessage={errors?.doNotConsent}
+          >
             <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:terms-conditions.checkboxes.do-not-consent" />
           </InputCheckbox>
+
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton aria-describedby="application-consent" variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Terms and Conditions click">
               {t('protected-application-spokes:terms-conditions.apply.continue-button')}
