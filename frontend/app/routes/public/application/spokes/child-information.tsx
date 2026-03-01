@@ -212,15 +212,6 @@ export async function action({ context: { appContainer, session }, params, reque
     );
   }
 
-  // validate that for a renewal the child's memberId is contained in the clientApplication
-  if (state.context === 'renewal') {
-    invariant(state.clientApplication, 'state.clientApplication must be defined for a renewal application');
-    const isChildValid = state.clientApplication.children.some((child) => child.information.clientNumber === parsedDataResult.data.memberId);
-    if (!isChildValid) {
-      return { status: 'not-eligible' } as const;
-    }
-  }
-
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
 
   savePublicApplicationState({
@@ -244,6 +235,15 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (ageCategory === 'adults' || ageCategory === 'seniors') {
     return redirect(getPathById('public/application/$id/children/$childId/cannot-apply-child', params));
+  }
+
+  // validate that for a renewal the child's memberId is contained in the clientApplication
+  if (state.context === 'renewal') {
+    invariant(state.clientApplication, 'state.clientApplication must be defined for a renewal application');
+    const isChildValid = state.clientApplication.children.some((child) => child.information.clientNumber === parsedDataResult.data.memberId);
+    if (!isChildValid) {
+      return { status: 'not-eligible' } as const;
+    }
   }
 
   return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));

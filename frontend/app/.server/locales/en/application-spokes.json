@@ -443,7 +443,10 @@
     },
     "cannot-apply-child": {
       "page-title": "Your child must apply",
-      "ineligible-to-apply": "Your child is 18 years or older. Your child must submit their own application to the Canadian Dental Care Plan.",
+      "ineligible-to-apply": {
+        "child-application": "Your child is 18 years or older. Your child must submit their own application to the Canadian Dental Care Plan.",
+        "family-application": "Your child will turn 18 by July 1, 2026. Once they turn 18, they must submit their own application."
+      },
       "eligibility-info": "If your child is a dependant adult and you are their legal delegate or Power of Attorney, you must speak to a Service Canada representative to apply on their behalf. You can contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
       "back-btn": "Back",
       "continue-btn": "Continue"
