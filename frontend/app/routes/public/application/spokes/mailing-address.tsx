@@ -376,7 +376,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                     loading={isSubmitting}
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Mailing address click"
                   >
-                    {t('application-spokes:address.continue')}
+                    {copyAddressChecked ? t('application-spokes:address.save-btn') : t('application-spokes:address.continue')}
                   </LoadingButton>
                 </DialogTrigger>
                 {!isSubmitting && addressDialogContent && (
