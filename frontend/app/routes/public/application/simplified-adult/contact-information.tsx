@@ -61,33 +61,40 @@ export async function loader({ context: { appContainer, session }, request, para
   return {
     state: {
       email: state.email,
-      phoneNumber: state.phoneNumber?.hasChanged
+      phoneNumber: state.phoneNumber
         ? {
-            primary: state.phoneNumber.value.primary,
+            hasChanged: state.phoneNumber.hasChanged,
+            primary: state.phoneNumber.value?.primary,
+            alternate: state.phoneNumber.value?.alternate,
           }
         : undefined,
-      communicationPreferences: state.communicationPreferences?.hasChanged
+      communicationPreferences: state.communicationPreferences
         ? {
-            preferredLanguage: appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale).name,
-            preferredMethod: appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale).name,
-            preferredNotificationMethod: appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale).name,
+            hasChanged: state.communicationPreferences.hasChanged,
+            preferredLanguage: state.communicationPreferences.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale).name : undefined,
+            preferredMethod: state.communicationPreferences.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale).name : undefined,
+            preferredNotificationMethod: state.communicationPreferences.hasChanged
+              ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale).name
+              : undefined,
           }
         : undefined,
-      mailingAddress: state.mailingAddress?.hasChanged
+      mailingAddress: state.mailingAddress
         ? {
-            address: state.mailingAddress.value.address,
-            city: state.mailingAddress.value.city,
+            hasChanged: state.mailingAddress.hasChanged,
+            address: state.mailingAddress.value?.address,
+            city: state.mailingAddress.value?.city,
             province: mailingProvinceTerritoryStateAbbr?.abbr,
-            postalCode: state.mailingAddress.value.postalCode,
+            postalCode: state.mailingAddress.value?.postalCode,
             country: countryMailing?.name,
           }
         : undefined,
-      homeAddress: state.homeAddress?.hasChanged
+      homeAddress: state.homeAddress
         ? {
-            address: state.homeAddress.value.address,
-            city: state.homeAddress.value.city,
+            hasChanged: state.homeAddress.hasChanged,
+            address: state.homeAddress.value?.address,
+            city: state.homeAddress.value?.city,
             province: homeProvinceTerritoryStateAbbr?.abbr,
-            postalCode: state.homeAddress.value.postalCode,
+            postalCode: state.homeAddress.value?.postalCode,
             country: countryHome?.name,
           }
         : undefined,
@@ -223,9 +230,11 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
 
 /**
  * This component determines what to show in the phone number card content based on whether the user has entered a new
- * phone number or if there is no phone number at all. The logic is as follows:
+ * phone number, confirmed no changes, or if there is no phone number at all. The logic is as follows:
  *
- * - If the user has entered a new phone number (state.phoneNumber is defined), show the new phone number.
+ * - If the user has entered a new phone number (state.phoneNumber is defined with hasChanged true), show the new phone number.
+ *
+ * - If the user has confirmed no changes (state.phoneNumber is defined with hasChanged false), show "No update" text.
  *
  * - If the user has not entered a new phone number but there is an existing phone number on the client application,
  *   show the update help text ("Would you like to update your phone number?").
@@ -244,7 +253,13 @@ function PhoneNumberCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('application-simplified-adult:contact-information.phone-number')}>{state.phoneNumber.primary}</DefinitionListItem>
+          {!state.phoneNumber.hasChanged && <p>{t('application-simplified-adult:contact-information.no-change')}</p>}
+          {state.phoneNumber.hasChanged && (
+            <>
+              <DefinitionListItem term={t('application-simplified-adult:contact-information.phone-number')}>{state.phoneNumber.primary}</DefinitionListItem>
+              {state.phoneNumber.alternate && <DefinitionListItem term={t('application-simplified-adult:contact-information.alt-phone-number')}>{state.phoneNumber.alternate}</DefinitionListItem>}
+            </>
+          )}
         </DefinitionList>
       </CardContent>
     );
@@ -361,10 +376,13 @@ function PhoneNumberCardFooter(): JSX.Element {
 
 /**
  * This component determines what to show in the mailing and home address card content based on whether the user has
- * entered new addresses or if there are no addresses at all. The logic is as follows:
+ * entered new addresses, confirmed no changes, or if there are no addresses at all. The logic is as follows:
  *
- * - If the user has entered new addresses (state.mailingAddress and state.homeAddress are defined), show the new
- *   addresses.
+ * - If the user has entered new addresses (state.mailingAddress and state.homeAddress are defined with hasChanged true),
+ *   show the new addresses.
+ *
+ * - If the user has confirmed no changes (state.mailingAddress and state.homeAddress are defined with hasChanged false),
+ *   show "No update" text.
  *
  * - If the user has not entered new addresses but there are existing addresses on the client application, show the
  *   update help text ("Would you like to update your mailing and home address?").
@@ -379,37 +397,49 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { state, clientApplication } = useLoaderData<typeof loader>();
 
+  // Case 1: User has state for addresses
   if (state.mailingAddress && state.homeAddress) {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('application-simplified-adult:contact-information.mailing-address')}>
-            <Address
-              address={{
-                address: state.mailingAddress.address,
-                city: state.mailingAddress.city,
-                provinceState: state.mailingAddress.province,
-                postalZipCode: state.mailingAddress.postalCode,
-                country: state.mailingAddress.country ?? '',
-              }}
-            />
-          </DefinitionListItem>
-          <DefinitionListItem term={t('application-simplified-adult:contact-information.home-address')}>
-            <Address
-              address={{
-                address: state.homeAddress.address,
-                city: state.homeAddress.city,
-                provinceState: state.homeAddress.province,
-                postalZipCode: state.homeAddress.postalCode,
-                country: state.homeAddress.country ?? '',
-              }}
-            />
-          </DefinitionListItem>
+          {/* Check if both addresses have no changes */}
+          {!state.mailingAddress.hasChanged && !state.homeAddress.hasChanged && <p>{t('application-simplified-adult:contact-information.no-change')}</p>}
+
+          {/* Show mailing address if it has changes */}
+          {state.mailingAddress.hasChanged && (
+            <DefinitionListItem term={t('application-simplified-adult:contact-information.mailing-address')}>
+              <Address
+                address={{
+                  address: state.mailingAddress.address ?? '',
+                  city: state.mailingAddress.city ?? '',
+                  provinceState: state.mailingAddress.province,
+                  postalZipCode: state.mailingAddress.postalCode,
+                  country: state.mailingAddress.country ?? '',
+                }}
+              />
+            </DefinitionListItem>
+          )}
+
+          {/* Show home address if it has changes */}
+          {state.homeAddress.hasChanged && (
+            <DefinitionListItem term={t('application-simplified-adult:contact-information.home-address')}>
+              <Address
+                address={{
+                  address: state.homeAddress.address ?? '',
+                  city: state.homeAddress.city ?? '',
+                  provinceState: state.homeAddress.province,
+                  postalZipCode: state.homeAddress.postalCode,
+                  country: state.homeAddress.country ?? '',
+                }}
+              />
+            </DefinitionListItem>
+          )}
         </DefinitionList>
       </CardContent>
     );
   }
 
+  // Case 2: No state changes but client has data
   if (clientApplication.hasMailingAddress && clientApplication.hasHomeAddress) {
     return (
       <CardContent>
@@ -418,6 +448,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
     );
   }
 
+  // Case 3: No data at all
   return (
     <CardContent>
       <p>{t('application-simplified-adult:contact-information.address-help')}</p>
@@ -522,10 +553,12 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
 
 /**
  * This component determines what to show in the communication preferences card content based on whether the user has
- * entered new preferences or if there are no preferences at all. The logic is as follows:
+ * entered new preferences, confirmed no changes, or if there are no preferences at all. The logic is as follows:
  *
- * - If the user has entered new communication preferences (state.communicationPreferences is defined), show the new
- *   preferences.
+ * - If the user has entered new communication preferences (state.communicationPreferences is defined with hasChanged true),
+ *   show the new preferences.
+ *
+ * - If the user has confirmed no changes (state.communicationPreferences is defined with hasChanged false), show "No update" text.
  *
  * - If the user has not entered new communication preferences but there are existing preferences on the client
  *   application, show the update help text ("Would you like to update your communication preferences?").
@@ -540,19 +573,29 @@ function CommunicationPreferencesCardContent(): JSX.Element {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { state, clientApplication } = useLoaderData<typeof loader>();
 
+  // Case 1: User has state for communication preferences
   if (state.communicationPreferences) {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('application-simplified-adult:contact-information.preferred-language')}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
-          <DefinitionListItem term={t('application-simplified-adult:contact-information.preferred-method')}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
-          <DefinitionListItem term={t('application-simplified-adult:contact-information.preferred-notification-method')}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
-          {state.email && <DefinitionListItem term={t('application-simplified-adult:contact-information.email')}>{state.email}</DefinitionListItem>}
+          {/* Check if communication preferences have no changes */}
+          {!state.communicationPreferences.hasChanged && <p>{t('application-simplified-adult:contact-information.no-change')}</p>}
+
+          {/* Show preferences if they have changes */}
+          {state.communicationPreferences.hasChanged && (
+            <>
+              <DefinitionListItem term={t('application-simplified-adult:contact-information.preferred-language')}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
+              <DefinitionListItem term={t('application-simplified-adult:contact-information.preferred-method')}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
+              <DefinitionListItem term={t('application-simplified-adult:contact-information.preferred-notification-method')}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
+              {state.email && <DefinitionListItem term={t('application-simplified-adult:contact-information.email')}>{state.email}</DefinitionListItem>}
+            </>
+          )}
         </DefinitionList>
       </CardContent>
     );
   }
 
+  // Case 2: No state changes but client has data
   if (clientApplication.hasCommunicationPreferences) {
     return (
       <CardContent>
@@ -561,6 +604,7 @@ function CommunicationPreferencesCardContent(): JSX.Element {
     );
   }
 
+  // Case 3: No data at all
   return (
     <CardContent>
       <p>{t('application-simplified-adult:contact-information.communication-preferences-help')}</p>
