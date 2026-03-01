@@ -403,7 +403,7 @@
       "back-btn": "Retour",
       "save-btn": "Sauvegarder",
       "help-message": {
-        "member-id": "Vous trouverez le numéro d'identification de l'enfant dans le coin supérieur droit de la lettre de Service Canada ou sur sa carte de membre du Régime canadien de soins dentaires."
+        "member-id": "Vous trouverez le numéro d'identification du member de l'enfant dans le coin supérieur droit de la lettre de renouvellement de Service Canada ou sur la carte de membre du Régime canadien de soins dentaires de l'enfant."
       },
       "error-message": {
         "member-id-required": "Entrez le numéro d'identification du membre à 11 chiffres",
