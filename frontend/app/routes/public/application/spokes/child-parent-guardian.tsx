@@ -63,7 +63,6 @@ export default function ParentOrGuardian({ loaderData, params }: Route.Component
   return (
     <>
       <div className="mb-8 space-y-4">
-        <p>{t('application-spokes:children.parent-or-guardian.must-be')}</p>
         <p>{t('application-spokes:children.parent-or-guardian.unable-to-apply')}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
