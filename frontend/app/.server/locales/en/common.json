@@ -3,18 +3,20 @@
     "address-suggestion": {
       "address-selection-legend": "Please select an address option below:",
       "cancel-button": "Back",
-      "description": "There's a problem with the address you provided. Please select the address you want to use. If you live in an apartment or suite, make sure to include that information.",
+      "description": "There's a problem with the address you provided. Select the address you want to use. If you live in an apartment or suite, make sure to include that information.",
       "entered-address-option": "Entered address",
-      "header": "Verify your address",
+      "header": "Confirm your address",
       "suggested-address-option": "Suggested address",
       "use-selected-address-button": "Use selected address"
     },
     "address-invalid": {
       "close-button": "Back",
       "description": "We couldn't validate your address. Please check it again and make sure to <strong>include your apartment or suite number</strong> if you have one.",
+      "important": "It is important that your address is correct. If we are not able to contact you by mail you may experience a delay in receiving benefits.",
       "entered-address": "Entered address",
       "header": "Address not found",
-      "use-entered-address-button": "My address is correct",
+      "continue-button": "Continue",
+      "checkbox": "I confirm that the address I entered is correct.",
       "context": {
         "home-address": "Home address",
         "mailing-address": "Mailing address"

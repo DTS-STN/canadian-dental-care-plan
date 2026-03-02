@@ -41,6 +41,9 @@ exports[`AddressInvalidDialogContent > should render the AddressInvalidDialogCon
     <p>
       common:dialog.address-invalid.description
     </p>
+    <p>
+      common:dialog.address-invalid.important
+    </p>
     <h3
       class="font-lato text-xl font-bold"
     >
@@ -62,6 +65,26 @@ Ottawa ON  E5E 4A2
 CA
       </address>
     </div>
+    <div>
+      <div
+        class="flex items-start"
+      >
+        <input
+          aria-labelledby="input-checkbox-confirm-checkbox-label"
+          class="mt-0.5 size-5 rounded-sm border-gray-500 bg-gray-50 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+          id="input-checkbox-confirm-checkbox"
+          name="confirm-checkbox"
+          type="checkbox"
+        />
+        <label
+          class="block pl-3 leading-6"
+          for="input-checkbox-confirm-checkbox"
+          id="input-checkbox-confirm-checkbox-label"
+        >
+          common:dialog.address-invalid.checkbox
+        </label>
+      </div>
+    </div>
   </div>
   <div
     class="flex flex-wrap-reverse justify-end gap-2"
@@ -80,13 +103,14 @@ CA
       <button
         class="inline-flex items-center justify-center rounded-sm border-2 align-middle font-lato outline-offset-4 px-3 py-2 text-sm border-[#26374A] bg-[#26374A] font-medium text-white hover:border-[#2B4380] hover:bg-[#2B4380] focus:border-[#2B4380] focus:bg-[#2B4380] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Use entered address - Address Invalid click"
+        disabled=""
         id="dialog.address-invalid-use-entered-address-button"
         name="_action"
         type="submit"
         value="use-invalid-address"
       >
         <span>
-          common:dialog.address-invalid.use-entered-address-button
+          common:dialog.address-invalid.continue-button
         </span>
       </button>
     </form>

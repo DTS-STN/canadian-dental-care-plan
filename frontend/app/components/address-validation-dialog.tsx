@@ -8,6 +8,8 @@ import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { InputCheckbox } from './input-checkbox';
+
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -167,6 +169,7 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
   const { t } = useTranslation(['common']);
   const fetcher = useFetcher();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
 
   async function onSubmitHandler(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
@@ -202,6 +205,9 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
         <p>
           <Trans ns={['common']} i18nKey="common:dialog.address-invalid.description" />
         </p>
+        <p>
+          <Trans ns={['common']} i18nKey="common:dialog.address-invalid.important" />
+        </p>
         <h3 className="font-lato text-xl font-bold">{t(`common:dialog.address-invalid.context.${addressContext}`)}</h3>
         <div className="space-y-2">
           <p>
@@ -209,6 +215,9 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
           </p>
           <Address address={invalidAddress} />
         </div>
+        <InputCheckbox id="confirm-checkbox" name="confirm-checkbox" onChange={() => setIsCheckboxChecked((prev) => !prev)}>
+          {t('common:dialog.address-invalid.checkbox')}
+        </InputCheckbox>
       </div>
       <DialogFooter>
         <DialogClose asChild>
@@ -224,11 +233,12 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
             type="submit"
             id="dialog.address-invalid-use-entered-address-button"
             loading={isSubmitting}
+            disabled={!isCheckboxChecked}
             variant="primary"
             size="sm"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Use entered address - Address Invalid click"
           >
-            {t('common:dialog.address-invalid.use-entered-address-button')}
+            {t('common:dialog.address-invalid.continue-button')}
           </LoadingButton>
         </fetcher.Form>
       </DialogFooter>
