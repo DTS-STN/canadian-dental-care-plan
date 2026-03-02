@@ -393,7 +393,7 @@
       "sin-legend": "Does this child have a Social Insurance Number (SIN)?",
       "sin-yes": "Yes",
       "sin-no": "No",
-      "sin": "Enter the 9-digit SIN",
+      "sin": "Enter the child's 9-digit SIN",
       "member-id": "Child's member ID",
       "parent-legend": "Are you the parent or legal guardian of this child?",
       "radio-options": {
