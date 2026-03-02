@@ -72,7 +72,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     hasPhoneNumberChanged: state.phoneNumber.hasChanged,
     phoneNumber: state.phoneNumber.value?.primary,
     altPhoneNumber: state.phoneNumber.value?.alternate,
-    haveCommunicationPreferencesChanged: state.communicationPreferences.hasChanged,
+    hasCommunicationPreferencesChanged: state.communicationPreferences.hasChanged,
     preferredLanguage: state.communicationPreferences.value?.preferredLanguage ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
@@ -135,7 +135,7 @@ export async function loader({ context: { appContainer, session }, params, reque
         isParent: child.information?.isParent,
         dentalInsurance: {
           accessToDentalInsurance: child.dentalInsurance.hasDentalInsurance,
-          haveDentalBenefitsChanged: child.dentalBenefits?.hasChanged,
+          hasDentalBenefitsChanged: child.dentalBenefits?.hasChanged,
           federalBenefit: {
             access: child.dentalBenefits?.value?.hasFederalBenefits,
             benefit: selectFederalGovernmentInsurancePlan?.name,
@@ -315,7 +315,7 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
             </DefinitionListItem>
             {userInfo.contactInformationEmail && (
               <DefinitionListItem term={t('confirm.email')}>
-                <span className="text-nowrap">{userInfo.haveCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')}</span>
+                <span className="text-nowrap">{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')}</span>
               </DefinitionListItem>
             )}
             <DefinitionListItem term={t('confirm.mailing')}>
@@ -354,10 +354,10 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-pref')}</h3>
           <DefinitionList border>
-            <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.haveCommunicationPreferencesChanged ? userInfo.preferredLanguage?.name : t('confirm.no-update')}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.haveCommunicationPreferencesChanged ? userInfo.communicationSunLifePreference?.name : t('confirm.no-update')}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.haveCommunicationPreferencesChanged ? userInfo.communicationGOCPreference?.name : t('confirm.no-update')}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.email')}>{userInfo.haveCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.preferredLanguage?.name : t('confirm.no-update')}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationSunLifePreference?.name : t('confirm.no-update')}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationGOCPreference?.name : t('confirm.no-update')}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.email')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')}</DefinitionListItem>
           </DefinitionList>
         </section>
 
@@ -384,7 +384,7 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
                       {child.dentalInsurance.accessToDentalInsurance ? t('application-simplified-child:confirm.yes') : t('application-simplified-child:confirm.no')}
                     </DefinitionListItem>
                     <DefinitionListItem term={t('application-simplified-child:confirm.dental-public')}>
-                      {child.dentalInsurance.haveDentalBenefitsChanged && (child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access) ? (
+                      {child.dentalInsurance.hasDentalBenefitsChanged && (child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access) ? (
                         <div className="space-y-3">
                           <p>{t('application-simplified-child:confirm.yes')}</p>
                           <p>{t('application-simplified-child:confirm.dental-benefit-has-access')}</p>
@@ -394,7 +394,7 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
                           </ul>
                         </div>
                       ) : (
-                        <p>{child.dentalInsurance.haveDentalBenefitsChanged ? t('application-simplified-child:confirm.no') : t('application-simplified-child:confirm.no-update')}</p>
+                        <p>{child.dentalInsurance.hasDentalBenefitsChanged ? t('application-simplified-child:confirm.no') : t('application-simplified-child:confirm.no-update')}</p>
                       )}
                     </DefinitionListItem>
                   </DefinitionList>
