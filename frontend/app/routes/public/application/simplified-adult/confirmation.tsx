@@ -72,9 +72,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
+    hasPhoneNumberChanged: state.phoneNumber.hasChanged,
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.phoneNumber.value?.primary,
     altPhoneNumber: state.phoneNumber.value?.alternate,
+    haveCommunicationPreferencesChanged: state.communicationPreferences.hasChanged,
     preferredLanguage: state.communicationPreferences.value?.preferredLanguage ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
@@ -94,6 +96,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const mailingAddressInfo = {
+    hasMailingAddressChanged: state.mailingAddress.hasChanged,
     address: state.mailingAddress.value?.address,
     city: state.mailingAddress.value?.city,
     province: mailingProvinceTerritoryStateAbbr?.abbr,
@@ -102,6 +105,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const homeAddressInfo = {
+    hasHomeAddressChanged: state.homeAddress?.hasChanged,
     address: state.homeAddress?.value?.address,
     city: state.homeAddress?.value?.city,
     province: homeProvinceTerritoryStateAbbr?.abbr,
@@ -111,6 +115,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const dentalInsurance = {
     accessToDentalInsurance: state.dentalInsurance.hasDentalInsurance,
+    haveDentalBenefitsChanged: state.dentalBenefits.hasChanged,
     selectedFederalBenefits: selectedFederalGovernmentInsurancePlan?.name,
     selectedProvincialBenefits: selectedProvincialBenefits?.name,
   };
@@ -268,37 +273,45 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
           <h3 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h3>
           <DefinitionList border>
             <DefinitionListItem term={t('confirm.phone-number')}>
-              <span className="text-nowrap">{userInfo.phoneNumber}</span>
+              <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.phoneNumber : t('confirm.no-update')}</span>
             </DefinitionListItem>
             <DefinitionListItem term={t('confirm.alt-phone-number')}>
-              <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
+              <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.altPhoneNumber : t('confirm.no-update')}</span>
             </DefinitionListItem>
             {userInfo.contactInformationEmail && (
               <DefinitionListItem term={t('confirm.email')}>
-                <span className="text-nowrap">{userInfo.contactInformationEmail} </span>
+                <span className="text-nowrap">{userInfo.haveCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')} </span>
               </DefinitionListItem>
             )}
             <DefinitionListItem term={t('confirm.mailing')}>
-              <Address
-                address={{
-                  address: mailingAddressInfo.address ?? '',
-                  city: mailingAddressInfo.city ?? '',
-                  provinceState: mailingAddressInfo.province,
-                  postalZipCode: mailingAddressInfo.postalCode,
-                  country: mailingAddressInfo.country ?? '',
-                }}
-              />
+              {mailingAddressInfo.hasMailingAddressChanged ? (
+                <Address
+                  address={{
+                    address: mailingAddressInfo.address ?? '',
+                    city: mailingAddressInfo.city ?? '',
+                    provinceState: mailingAddressInfo.province,
+                    postalZipCode: mailingAddressInfo.postalCode,
+                    country: mailingAddressInfo.country ?? '',
+                  }}
+                />
+              ) : (
+                <span className="text-nowrap">{t('confirm.no-update')}</span>
+              )}
             </DefinitionListItem>
             <DefinitionListItem term={t('confirm.home')}>
-              <Address
-                address={{
-                  address: homeAddressInfo.address ?? '',
-                  city: homeAddressInfo.city ?? '',
-                  provinceState: homeAddressInfo.province,
-                  postalZipCode: homeAddressInfo.postalCode,
-                  country: homeAddressInfo.country ?? '',
-                }}
-              />
+              {homeAddressInfo.hasHomeAddressChanged ? (
+                <Address
+                  address={{
+                    address: homeAddressInfo.address ?? '',
+                    city: homeAddressInfo.city ?? '',
+                    provinceState: homeAddressInfo.province,
+                    postalZipCode: homeAddressInfo.postalCode,
+                    country: homeAddressInfo.country ?? '',
+                  }}
+                />
+              ) : (
+                <span className="text-nowrap">{t('confirm.no-update')}</span>
+              )}
             </DefinitionListItem>
           </DefinitionList>
         </section>
@@ -306,10 +319,10 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-pref')}</h3>
           <DefinitionList border>
-            <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage?.name}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.communicationSunLifePreference?.name}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.communicationGOCPreference?.name}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.email')}>{userInfo.contactInformationEmail}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.haveCommunicationPreferencesChanged ? userInfo.preferredLanguage?.name : t('confirm.no-update')}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.haveCommunicationPreferencesChanged ? userInfo.communicationSunLifePreference?.name : t('confirm.no-update')}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.haveCommunicationPreferencesChanged ? userInfo.communicationGOCPreference?.name : t('confirm.no-update')}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.email')}>{userInfo.haveCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')}</DefinitionListItem>
           </DefinitionList>
         </section>
 
@@ -318,7 +331,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
           <DefinitionList border>
             <DefinitionListItem term={t('confirm.dental-private')}> {dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.dental-public')}>
-              {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
+              {dentalInsurance.haveDentalBenefitsChanged && (dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits) ? (
                 <div className="space-y-3">
                   <p>{t('application-simplified-adult:confirm.yes')}</p>
                   <p>{t('application-simplified-adult:confirm.dental-benefit-has-access')}</p>
@@ -328,7 +341,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
                   </ul>
                 </div>
               ) : (
-                <p>{t('confirm.no')}</p>
+                <p>{dentalInsurance.haveDentalBenefitsChanged ? t('confirm.no') : t('confirm.no-update')}</p>
               )}
             </DefinitionListItem>
           </DefinitionList>
