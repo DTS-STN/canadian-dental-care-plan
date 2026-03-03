@@ -5,7 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/cannot-apply-child';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, getSingleChildState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getSingleChildState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -27,14 +27,13 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  getSingleChildState({ params, request, session });
+  const childState = getSingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const state = getPublicApplicationState({ params, session });
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:children.cannot-apply-child.page-title') }) };
 
   return {
-    isFamilyApplication: state.typeOfApplication === 'family',
+    isAdultAtCutoff: childState.isAdultAtCutoff,
     meta,
   };
 }
@@ -49,7 +48,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyForYourself({ loaderData, params }: Route.ComponentProps) {
-  const { isFamilyApplication } = loaderData;
+  const { isAdultAtCutoff } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const fetcher = useFetcher<typeof action>();
@@ -60,7 +59,7 @@ export default function ApplyForYourself({ loaderData, params }: Route.Component
   return (
     <div className="max-w-prose">
       <div className="mb-6 space-y-4">
-        <p>{t(`application-spokes:children.cannot-apply-child.ineligible-to-apply.${isFamilyApplication ? 'family-application' : 'child-application'}`)}</p>
+        <p>{t(`application-spokes:children.cannot-apply-child.ineligible-to-apply.${isAdultAtCutoff ? 'cutoff-application' : 'adult-application'}`)}</p>
         <p>
           <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:children.cannot-apply-child.eligibility-info" components={{ noWrap }} />
         </p>

@@ -13,7 +13,7 @@ import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
 import type { EligibilityType } from '~/components/eligibility';
-import { getAgeFromDateString } from '~/utils/date-utils';
+import { getAgeFromDate, getAgeFromDateString } from '~/utils/date-utils';
 import { generateId, isValidId } from '~/utils/id.utils';
 import { getPathById } from '~/utils/route-utils';
 
@@ -66,6 +66,7 @@ export type PublicApplicationState = ReadonlyDeep<{
       hasSocialInsuranceNumber: boolean;
       socialInsuranceNumber?: string;
     };
+    isAdultAtCutoff?: boolean;
   }[];
   communicationPreferences?: DeclaredChange<{
     preferredLanguage: string;
@@ -527,4 +528,15 @@ export function getEligibilityStatus(hasPrivateDentalInsurance: boolean, t4Denta
   if (!hasPrivateDentalInsurance && !t4DentalIndicator) return 'eligible';
   if (!hasPrivateDentalInsurance && t4DentalIndicator) return 'eligible-proof';
   return 'ineligible';
+}
+
+/**
+ *
+ * @param dateString - the date of birth of the child
+ * @returns `true` if the child is an adult (18 years old) by the time of the cutoff date
+ */
+export function isChildAnAdultAtCutoffDate(dateString: string, cutoffDate?: string) {
+  if (!dateString) return false;
+  const ageAtCutoff = getAgeFromDate(new UTCDate(dateString), new UTCDate(cutoffDate ?? '2026-07-01')); // TODO: figure out if we have a service or piece of state that already defines the cutoff date
+  return ageAtCutoff === 18;
 }
