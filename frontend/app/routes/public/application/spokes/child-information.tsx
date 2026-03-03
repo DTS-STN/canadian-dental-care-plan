@@ -221,9 +221,10 @@ export async function action({ context: { appContainer, session }, params, reque
     state: {
       children: state.children.map((child) => {
         if (child.id !== childState.id) return child;
+        const information = { ...parsedDataResult.data, ...parsedSinDataResult.data };
         return {
           ...child,
-          isAdultAtCutoff,
+          information,
         };
       }),
     },
@@ -245,18 +246,6 @@ export async function action({ context: { appContainer, session }, params, reque
       return { status: 'not-eligible' } as const;
     }
   }
-
-  savePublicApplicationState({
-    params,
-    session,
-    state: {
-      children: state.children.map((child) => {
-        if (child.id !== childState.id) return child;
-        const information = { ...parsedDataResult.data, ...parsedSinDataResult.data };
-        return { ...child, information };
-      }),
-    },
-  });
 
   return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
 }
