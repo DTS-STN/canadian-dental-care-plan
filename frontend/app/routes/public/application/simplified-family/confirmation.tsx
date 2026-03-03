@@ -79,9 +79,11 @@ export async function loader({ context: { appContainer, session }, params, reque
   const userInfo = {
     memberId: state.applicantInformation.memberId,
     firstName: state.applicantInformation.firstName,
+    hasPhoneNumberChanged: state.phoneNumber.hasChanged,
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.phoneNumber.value?.primary,
     altPhoneNumber: state.phoneNumber.value?.alternate,
+    hasCommunicationPreferencesChanged: state.communicationPreferences.hasChanged,
     preferredLanguage: state.communicationPreferences.value?.preferredLanguage ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
@@ -101,6 +103,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const mailingAddressInfo = {
+    hasMailingAddressChanged: state.mailingAddress.hasChanged,
     address: state.mailingAddress.value?.address,
     city: state.mailingAddress.value?.city,
     province: mailingProvinceTerritoryStateAbbr?.abbr,
@@ -109,6 +112,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const homeAddressInfo = {
+    hasHomeAddressChanged: state.homeAddress?.hasChanged,
     address: state.homeAddress?.value?.address,
     city: state.homeAddress?.value?.city,
     province: homeProvinceTerritoryStateAbbr?.abbr,
@@ -118,6 +122,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const dentalInsurance = {
     accessToDentalInsurance: state.dentalInsurance.hasDentalInsurance,
+    hasDentalBenefitsChanged: state.dentalBenefits.hasChanged,
     selectedFederalBenefits: selectedFederalGovernmentInsurancePlan?.name,
     selectedProvincialBenefits: selectedProvincialBenefits?.name,
   };
@@ -147,6 +152,7 @@ export async function loader({ context: { appContainer, session }, params, reque
         isParent: child.information?.isParent,
         dentalInsurance: {
           accessToDentalInsurance: child.dentalInsurance,
+          hasDentalBenefitsChanged: child.dentalBenefits?.hasChanged,
           federalBenefit: {
             access: child.dentalBenefits?.value?.hasFederalBenefits,
             benefit: selectFederalGovernmentInsurancePlan?.name,
@@ -326,37 +332,45 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
           <h3 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h3>
           <DefinitionList border>
             <DefinitionListItem term={t('confirm.phone-number')}>
-              <span className="text-nowrap">{userInfo.phoneNumber}</span>
+              <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.phoneNumber : t('confirm.no-update')}</span>
             </DefinitionListItem>
             <DefinitionListItem term={t('confirm.alt-phone-number')}>
-              <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
+              <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.altPhoneNumber : t('confirm.no-update')}</span>
             </DefinitionListItem>
             {userInfo.contactInformationEmail && (
               <DefinitionListItem term={t('confirm.email')}>
-                <span className="text-nowrap">{userInfo.contactInformationEmail} </span>
+                <span className="text-nowrap">{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')} </span>
               </DefinitionListItem>
             )}
             <DefinitionListItem term={t('confirm.mailing')}>
-              <Address
-                address={{
-                  address: mailingAddressInfo.address ?? '',
-                  city: mailingAddressInfo.city ?? '',
-                  provinceState: mailingAddressInfo.province,
-                  postalZipCode: mailingAddressInfo.postalCode,
-                  country: mailingAddressInfo.country ?? '',
-                }}
-              />
+              {mailingAddressInfo.hasMailingAddressChanged ? (
+                <Address
+                  address={{
+                    address: mailingAddressInfo.address ?? '',
+                    city: mailingAddressInfo.city ?? '',
+                    provinceState: mailingAddressInfo.province,
+                    postalZipCode: mailingAddressInfo.postalCode,
+                    country: mailingAddressInfo.country ?? '',
+                  }}
+                />
+              ) : (
+                <span className="text-nowrap">{t('confirm.no-update')}</span>
+              )}
             </DefinitionListItem>
             <DefinitionListItem term={t('confirm.home')}>
-              <Address
-                address={{
-                  address: homeAddressInfo.address ?? '',
-                  city: homeAddressInfo.city ?? '',
-                  provinceState: homeAddressInfo.province,
-                  postalZipCode: homeAddressInfo.postalCode,
-                  country: homeAddressInfo.country ?? '',
-                }}
-              />
+              {homeAddressInfo.hasHomeAddressChanged ? (
+                <Address
+                  address={{
+                    address: homeAddressInfo.address ?? '',
+                    city: homeAddressInfo.city ?? '',
+                    provinceState: homeAddressInfo.province,
+                    postalZipCode: homeAddressInfo.postalCode,
+                    country: homeAddressInfo.country ?? '',
+                  }}
+                />
+              ) : (
+                <span className="text-nowrap">{t('confirm.no-update')}</span>
+              )}
             </DefinitionListItem>
           </DefinitionList>
         </section>
@@ -364,10 +378,10 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
         <section className="space-y-6">
           <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-pref')}</h3>
           <DefinitionList border>
-            <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage?.name}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.communicationSunLifePreference?.name}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.communicationGOCPreference?.name}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.email')}>{userInfo.contactInformationEmail}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.preferredLanguage?.name : t('confirm.no-update')}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationSunLifePreference?.name : t('confirm.no-update')}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationGOCPreference?.name : t('confirm.no-update')}</DefinitionListItem>
+            <DefinitionListItem term={t('confirm.email')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')}</DefinitionListItem>
           </DefinitionList>
         </section>
 
@@ -376,7 +390,7 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
           <DefinitionList border>
             <DefinitionListItem term={t('confirm.dental-private')}> {dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DefinitionListItem>
             <DefinitionListItem term={t('confirm.dental-public')}>
-              {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
+              {dentalInsurance.hasDentalBenefitsChanged && (dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits) ? (
                 <div className="space-y-3">
                   <p>{t('application-simplified-family:confirm.yes')}</p>
                   <p>{t('application-simplified-family:confirm.dental-benefit-has-access')}</p>
@@ -386,7 +400,7 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
                   </ul>
                 </div>
               ) : (
-                <p>{t('confirm.no')}</p>
+                <p>{dentalInsurance.hasDentalBenefitsChanged ? t('confirm.no') : t('confirm.no-update')}</p>
               )}
             </DefinitionListItem>
           </DefinitionList>
@@ -415,7 +429,7 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
                       {child.dentalInsurance.accessToDentalInsurance.hasDentalInsurance ? t('application-simplified-family:confirm.yes') : t('application-simplified-family:confirm.no')}
                     </DefinitionListItem>
                     <DefinitionListItem term={t('application-simplified-family:confirm.dental-public')}>
-                      {child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access ? (
+                      {child.dentalInsurance.hasDentalBenefitsChanged && (child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access) ? (
                         <div className="space-y-3">
                           <p>{t('application-simplified-family:confirm.yes')}</p>
                           <p>{t('application-simplified-family:confirm.dental-benefit-has-access')}</p>
@@ -425,7 +439,7 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
                           </ul>
                         </div>
                       ) : (
-                        <>{t('application-simplified-family:confirm.no')}</>
+                        <p>{child.dentalInsurance.hasDentalBenefitsChanged ? t('application-simplified-family:confirm.no') : t('application-simplified-family:confirm.no-update')}</p>
                       )}
                     </DefinitionListItem>
                   </DefinitionList>

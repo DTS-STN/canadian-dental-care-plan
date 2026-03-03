@@ -178,6 +178,7 @@
     "application-code": "Code de demande",
     "yes": "Oui",
     "no": "Non",
+    "no-update": "Aucune mise à jour fournie",
     "close-application": "Fermer la demande",
     "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html",
     "modal": {

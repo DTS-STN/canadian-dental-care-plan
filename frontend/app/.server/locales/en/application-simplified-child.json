@@ -163,6 +163,7 @@
     "application-code": "Application code",
     "yes": "Yes",
     "no": "No",
+    "no-update": "No update provided",
     "close-application": "Close application",
     "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html",
     "modal": {
