@@ -225,6 +225,7 @@ export async function action({ context: { appContainer, session }, params, reque
         return {
           ...child,
           information,
+          isAdultAtCutoff,
         };
       }),
     },
