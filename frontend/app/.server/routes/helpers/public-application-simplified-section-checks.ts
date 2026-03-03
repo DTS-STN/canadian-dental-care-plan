@@ -1,4 +1,5 @@
 import type { ChildState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getAgeCategoryFromDateString, isChildAnAdultAtCutoffDate } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 
 /**
@@ -54,8 +55,12 @@ export function isDentalBenefitsSectionCompleted(state: Pick<PublicApplicationSt
  * Checks if the child information section is completed for simplified application.
  */
 export function isChildInformationSectionCompleted(child: Pick<ChildState, 'information'>): boolean {
-  // TODO: Check with age category and live independently status
-  return child.information !== undefined && child.information.dateOfBirth !== '';
+  if (child.information === undefined || child.information.dateOfBirth === '') return false;
+  const ageCategory = getAgeCategoryFromDateString(child.information.dateOfBirth);
+  const isAdultAtCutoff = isChildAnAdultAtCutoffDate(child.information.dateOfBirth);
+  if (ageCategory !== 'children' && ageCategory !== 'youth') return false;
+  if (isAdultAtCutoff) return false;
+  return true;
 }
 
 /**
