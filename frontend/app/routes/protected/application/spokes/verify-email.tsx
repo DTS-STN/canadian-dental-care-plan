@@ -39,9 +39,7 @@ const MAX_ATTEMPTS = 5;
 
 function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
   switch (applicationFlow) {
-    case 'intake-children': {
-      return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
-    }
+    case 'intake-children':
     case 'renewal-children': {
       return `protected/application/$id/${applicationFlow}/parent-or-guardian`;
     }
