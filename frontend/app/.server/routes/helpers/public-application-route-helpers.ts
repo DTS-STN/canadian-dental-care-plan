@@ -1,4 +1,4 @@
-import { redirect, redirectDocument } from 'react-router';
+import { data, redirectDocument } from 'react-router';
 import type { Params } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
@@ -476,7 +476,6 @@ export function getInitialApplicationFlowUrl(applicationFlow: ApplicationFlow, p
 
 interface getSingleChildStateArgs {
   params: ApplicationStateParams & { childId: string };
-  request: Request;
   session: Session;
 }
 
@@ -485,21 +484,15 @@ interface getSingleChildStateArgs {
  * @param args - The arguments.
  * @returns The loaded child state.
  */
-export function getSingleChildState({ params, request, session }: getSingleChildStateArgs) {
+export function getSingleChildState({ params, session }: getSingleChildStateArgs) {
   const log = createLogger('public-application-route-helpers.server/publicApplicationSingleChildState');
   const applicationState = getPublicApplicationState({ params, session });
   const childId = params.childId;
-
-  if (!isValidId(childId)) {
-    log.warn('Invalid "childId" param format; childId: [%s]', childId);
-    throw redirect(getPathById(`public/application/$id/${applicationState.inputModel}-${applicationState.typeOfApplication}/childrens-application`, params));
-  }
-
   const childStateIndex = applicationState.children.findIndex(({ id }) => id === childId);
 
   if (childStateIndex === -1) {
-    log.warn('Apply single child has not been found; childId: [%s]', childId);
-    throw redirect(getPathById(`public/application/$id/${applicationState.inputModel}-${applicationState.typeOfApplication}/childrens-application`, params));
+    log.warn('Public application single child has not been found; stateId: [%s] childId: [%s]', applicationState.id, childId);
+    throw data(null, { status: 404 });
   }
 
   const childState = applicationState.children[childStateIndex];

@@ -53,7 +53,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const state = getProtectedApplicationState({ params, session });
   validateApplicationFlow(state, params, ['intake-children', 'intake-family', 'renewal-children', 'renewal-family']);
-  const childState = getSingleChildState({ params, request, session });
+  const childState = getSingleChildState({ params, session });
 
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -94,7 +94,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
 
-  const childState = getSingleChildState({ params, request, session });
+  const childState = getSingleChildState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // NOTE: state validation schemas are independent otherwise user have to anwser

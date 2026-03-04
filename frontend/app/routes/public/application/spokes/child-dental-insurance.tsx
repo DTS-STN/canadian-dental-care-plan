@@ -48,7 +48,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
   validateApplicationFlow(state, params, ['full-children', 'full-family', 'simplified-children', 'simplified-family']);
-  const childState = getSingleChildState({ params, request, session });
+  const childState = getSingleChildState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -72,7 +72,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const childState = getSingleChildState({ params, request, session });
+  const childState = getSingleChildState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
