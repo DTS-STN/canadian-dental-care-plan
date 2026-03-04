@@ -5,7 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/cannot-apply-child';
 
 import { TYPES } from '~/.server/constants';
-import { getPublicApplicationState, getSingleChildState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { clearPublicApplicationState, getSingleChildState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -15,7 +15,6 @@ import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
-import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -39,15 +38,16 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
-  getSingleChildState({ params, session });
-  const state = getPublicApplicationState({ params, session });
-
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
+  const t = await getFixedT(request, handle.i18nNamespaces);
+
+  clearPublicApplicationState({ params, session });
+
+  return redirect(t('application-spokes:children.cannot-apply-child.exit-btn-link'));
 }
 
 export default function ApplyForYourself({ loaderData, params }: Route.ComponentProps) {
@@ -79,8 +79,8 @@ export default function ApplyForYourself({ loaderData, params }: Route.Component
         >
           {t('application-spokes:children.cannot-apply-child.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Proceed - Child apply for yourself click">
-          {t('application-spokes:children.cannot-apply-child.continue-btn')}
+        <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - Child apply for yourself click">
+          {t('application-spokes:children.cannot-apply-child.exit-btn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

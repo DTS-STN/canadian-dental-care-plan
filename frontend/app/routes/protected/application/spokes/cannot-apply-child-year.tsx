@@ -5,7 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/cannot-apply-child-year';
 
 import { TYPES } from '~/.server/constants';
-import { getProtectedApplicationState, getSingleChildState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { clearProtectedApplicationState, getSingleChildState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -15,7 +15,6 @@ import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
-import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -42,13 +41,15 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  getSingleChildState({ params, session });
-  const state = getProtectedApplicationState({ params, session });
-
   const formData = await request.formData();
+
   securityHandler.validateCsrfToken({ formData, session });
 
-  return redirect(getPathById(`protected/application/$id/${state.context}-${state.typeOfApplication}/childrens-application`, params));
+  const t = await getFixedT(request, handle.i18nNamespaces);
+
+  clearProtectedApplicationState({ params, session });
+
+  return redirect(t('protected-application-spokes:children.cannot-apply-child-year.exit-btn-link'));
 }
 
 export default function CannotApplyChildYear({ loaderData, params }: Route.ComponentProps) {
@@ -81,8 +82,8 @@ export default function CannotApplyChildYear({ loaderData, params }: Route.Compo
         >
           {t('protected-application-spokes:children.cannot-apply-child-year.back-btn')}
         </ButtonLink>
-        <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Proceed - Child cannot apply year click">
-          {t('protected-application-spokes:children.cannot-apply-child-year.continue-btn')}
+        <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - Child cannot apply year click">
+          {t('protected-application-spokes:children.cannot-apply-child-year.exit-btn')}
         </LoadingButton>
       </fetcher.Form>
     </div>
