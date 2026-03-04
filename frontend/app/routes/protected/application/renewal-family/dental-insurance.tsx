@@ -166,7 +166,6 @@ export default function ProtectedRenewFamilyDentalInsurance({ loaderData, params
         <div className="space-y-4">
           <p>{t('protected-application:complete-all-sections')}</p>
           <p>{completedSectionsLabel}</p>
-          <p>{t('protected-application:confirm-information')}</p>
         </div>
 
         <Card>
