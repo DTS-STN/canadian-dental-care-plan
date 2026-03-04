@@ -146,7 +146,7 @@ export default function ChildSocialInsuranceNumber({ loaderData, params }: Route
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <p className="mb-4 italic">{t('protected-application:optional-label')}</p>
+          <p className="mb-4 italic">{t('protected-application:all-optional')}</p>
           <div className="mb-6">
             <InputPatternField
               id="social-insurance-number"

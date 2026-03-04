@@ -529,11 +529,11 @@
       "save-btn": "Sauvegarder"
     },
     "social-insurance-number": {
-      "page-title": "(FR) Numéro d'assurance sociale de l'enfant (optional)",
-      "legend": "(FR) {{childName}}'s Social Insurance Number (SIN)",
-      "help-message": "(FR) Enter their 9-digit SIN",
-      "sin-valid": "(FR) Must be a valid SIN",
-      "sin-unique": "(FR) The Social Insurance Number (SIN) must be unique",
+      "page-title": "Numéro d'assurance sociale de l'enfant",
+      "legend": "Numéro d'assurance sociale (NAS) de {{childName}} (Facultatif)",
+      "help-message": "Saisir leur NAS à 9 chiffres.",
+      "sin-valid": "Le NAS doit être valide",
+      "sin-unique": "NAS doit être unique",
       "back-btn": "Retour",
       "save-btn": "Sauvegarder"
     }
