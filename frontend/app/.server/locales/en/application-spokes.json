@@ -449,7 +449,8 @@
       },
       "eligibility-info": "If your child is a dependant adult and you are their legal delegate or Power of Attorney, you must speak to a Service Canada representative to apply on their behalf. You can contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
       "back-btn": "Back",
-      "continue-btn": "Continue"
+      "exit-btn": "Exit application",
+      "exit-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     },
     "dental-benefits": {
       "title": "{{childName}}'s access to other federal, provincial or territorial dental benefits",
