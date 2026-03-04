@@ -150,7 +150,7 @@ export function validatePublicApplicationSimplifiedChildStateForReview({ params,
   }
 
   if ((communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) && !emailVerified) {
-    throw redirect(getPathById('public/application/$id/simplified-children/contact-information', params));
+    throw redirect(getPathById('public/application/$id/simplified-children/parent-or-guardian', params));
   }
 
   if (
@@ -158,7 +158,7 @@ export function validatePublicApplicationSimplifiedChildStateForReview({ params,
     (clientApplication.communicationPreferences.preferredMethodSunLife === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID) &&
     !(clientApplication.contactInformation.email && clientApplication.contactInformation.emailVerified)
   ) {
-    throw redirect(getPathById('public/application/$id/simplified-children/contact-information', params));
+    throw redirect(getPathById('public/application/$id/simplified-children/parent-or-guardian', params));
   }
 
   return {
