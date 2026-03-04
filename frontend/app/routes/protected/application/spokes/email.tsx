@@ -80,11 +80,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const emailSchema = z
     .object({
-      email: z
-        .string({ error: t('protected-application-spokes:email.error-message.email-required') })
-        .trim()
-        .min(1)
-        .max(64),
+      email: z.string().trim().min(1, t('protected-application-spokes:email.error-message.email-required')).max(64),
     })
 
     .superRefine((val, ctx) => {
