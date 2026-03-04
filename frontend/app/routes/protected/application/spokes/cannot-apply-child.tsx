@@ -5,7 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/cannot-apply-child';
 
 import { TYPES } from '~/.server/constants';
-import { getSingleChildState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getProtectedApplicationState, getSingleChildState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -42,11 +42,13 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const formData = await request.formData();
+  getSingleChildState({ params, request, session });
+  const state = getProtectedApplicationState({ params, session });
 
+  const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
 
-  return redirect(getPathById('protected/apply/$id/child/children/index', params));
+  return redirect(getPathById(`protected/application/$id/${state.context}-${state.typeOfApplication}/childrens-application`, params));
 }
 
 export default function CannotApplyChild({ loaderData, params }: Route.ComponentProps) {

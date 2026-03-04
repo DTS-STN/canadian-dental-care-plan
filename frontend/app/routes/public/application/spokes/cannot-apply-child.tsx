@@ -5,7 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/cannot-apply-child';
 
 import { TYPES } from '~/.server/constants';
-import { getSingleChildState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, getSingleChildState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -39,12 +39,15 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
+  getSingleChildState({ params, request, session });
+  const state = getPublicApplicationState({ params, session });
+
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  return redirect(getPathById('public/apply/$id/child/children/index', params));
+  return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
 }
 
 export default function ApplyForYourself({ loaderData, params }: Route.ComponentProps) {

@@ -509,14 +509,14 @@ export function getSingleChildState({ params, request, session }: getSingleChild
 
   if (!isValidId(childId)) {
     log.warn('Invalid "childId" param format; childId: [%s]', childId);
-    throw redirect(getPathById(`protected/application/$id/${applicationState.context}-${applicationState.typeOfApplication}/children/index`, params));
+    throw redirect(getPathById(`protected/application/$id/${applicationState.context}-${applicationState.typeOfApplication}/childrens-application`, params));
   }
 
   const childStateIndex = applicationState.children.findIndex(({ id }) => id === childId);
 
   if (childStateIndex === -1) {
     log.warn('Apply single child has not been found; childId: [%s]', childId);
-    throw redirect(getPathById(`protected/application/$id/${applicationState.context}-${applicationState.typeOfApplication}/children/index`, params));
+    throw redirect(getPathById(`protected/application/$id/${applicationState.context}-${applicationState.typeOfApplication}/childrens-application`, params));
   }
 
   const childState = applicationState.children[childStateIndex];
