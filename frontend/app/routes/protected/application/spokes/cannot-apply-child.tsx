@@ -30,7 +30,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  getSingleChildState({ params, request, session });
+  getSingleChildState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.cannot-apply-child.page-title') }) };
@@ -42,7 +42,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  getSingleChildState({ params, request, session });
+  getSingleChildState({ params, session });
   const state = getProtectedApplicationState({ params, session });
 
   const formData = await request.formData();

@@ -51,7 +51,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const state = getProtectedApplicationState({ params, session });
   validateApplicationFlow(state, params, ['intake-children', 'intake-family', 'renewal-children', 'renewal-family']);
-  const childState = getSingleChildState({ params, request, session });
+  const childState = getSingleChildState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -77,7 +77,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
 
-  const childState = getSingleChildState({ params, request, session });
+  const childState = getSingleChildState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
