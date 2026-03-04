@@ -11,7 +11,7 @@ import type { Route } from './+types/child-information';
 
 import { TYPES } from '~/.server/constants';
 import type { ChildInformationState, ChildSinState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getAgeCategoryFromDateString, getPublicApplicationState, getSingleChildState, isChildAnAdultAtCutoffDate, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getContextualAgeCategoryFromDate, getPublicApplicationState, getSingleChildState, isChildAnAdultAtCutoffDate, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -212,7 +212,7 @@ export async function action({ context: { appContainer, session }, params, reque
     );
   }
 
-  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+  const ageCategory = getContextualAgeCategoryFromDate(parsedDataResult.data.dateOfBirth, state.context);
   const isAdultAtCutoff = isChildAnAdultAtCutoffDate(parsedDataResult.data.dateOfBirth);
 
   savePublicApplicationState({

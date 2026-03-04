@@ -282,8 +282,9 @@ describe('public-application-full-section-checks', () => {
 
   describe('isChildInformationSectionCompleted', () => {
     it('should return true when child information has date of birth', () => {
+      const context = 'intake';
       expect(
-        isChildInformationSectionCompleted({
+        isChildInformationSectionCompleted(context, {
           information: {
             firstName: 'Test',
             lastName: 'Child',
@@ -296,6 +297,7 @@ describe('public-application-full-section-checks', () => {
     });
 
     it('should return false when date of birth is empty string', () => {
+      const context = 'intake';
       const child = {
         information: {
           firstName: 'Test',
@@ -305,11 +307,12 @@ describe('public-application-full-section-checks', () => {
           dateOfBirth: '',
         },
       };
-      expect(isChildInformationSectionCompleted(child)).toBe(false);
+      expect(isChildInformationSectionCompleted(context, child)).toBe(false);
     });
 
     it('should return false when information is undefined', () => {
-      expect(isChildInformationSectionCompleted({ information: undefined })).toBe(false);
+      const context = 'intake';
+      expect(isChildInformationSectionCompleted(context, { information: undefined })).toBe(false);
     });
   });
 

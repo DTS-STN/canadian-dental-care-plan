@@ -4,7 +4,7 @@ import { invariant } from '@dts-stn/invariant';
 
 import { createLogger } from '~/.server/logging';
 import type { ApplicationStateParams, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getAgeCategoryFromDateString, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getContextualAgeCategoryFromDate, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
@@ -128,7 +128,7 @@ export function validateProtectedRenewAdultStateForReview({ params, state }: Val
     throw redirect(getPathById('protected/application/$id/type-of-application', params));
   }
 
-  const ageCategory = getAgeCategoryFromDateString(applicantInformation.dateOfBirth);
+  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
 
   if (ageCategory === 'children') {
     throw redirect(getPathById('protected/application/$id/type-of-application', params));

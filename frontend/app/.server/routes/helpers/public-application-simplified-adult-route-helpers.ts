@@ -2,7 +2,7 @@ import { redirect } from 'react-router';
 
 import { createLogger } from '~/.server/logging';
 import type { ApplicationStateParams, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getAgeCategoryFromDateString, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getContextualAgeCategoryFromDate, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
@@ -125,7 +125,7 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
-  const ageCategory = getAgeCategoryFromDateString(applicantInformation.dateOfBirth);
+  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
 
   if (ageCategory === 'children') {
     throw redirect(getPathById('public/application/$id/type-of-application', params));

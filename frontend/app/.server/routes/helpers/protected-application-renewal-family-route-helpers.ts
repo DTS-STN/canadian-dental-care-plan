@@ -3,7 +3,7 @@ import { redirect } from 'react-router';
 import { invariant } from '@dts-stn/invariant';
 
 import { createLogger } from '~/.server/logging';
-import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { applicantInformationStateHasPartner, getChildrenState, getContextualAgeCategoryFromDate, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import type { ApplicationStateParams, ChildrenState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
@@ -127,7 +127,7 @@ export function validateProtectedApplicationFamilyStateForReview({ params, state
     throw redirect(getPathById('protected/application/$id/type-of-application', params));
   }
 
-  const ageCategory = getAgeCategoryFromDateString(applicantInformation.dateOfBirth);
+  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
 
   if (ageCategory === 'children') {
     throw redirect(getPathById('protected/application/$id/type-of-application', params));
@@ -173,7 +173,7 @@ export function validateProtectedApplicationFamilyStateForReview({ params, state
     throw redirect(getPathById('protected/application/$id/renewal-family/dental-insurance', params));
   }
 
-  const children = validateChildrenStateForReview({ childrenState: state.children, params });
+  const children = validateChildrenStateForReview({ context, childrenState: state.children, params });
 
   return {
     ageCategory,
@@ -204,11 +204,12 @@ export function validateProtectedApplicationFamilyStateForReview({ params, state
 }
 
 interface ValidateChildrenStateForReviewArgs {
+  context: 'intake' | 'renewal';
   childrenState: ChildrenState;
   params: ApplicationStateParams;
 }
 
-function validateChildrenStateForReview({ childrenState, params }: ValidateChildrenStateForReviewArgs) {
+function validateChildrenStateForReview({ context, childrenState, params }: ValidateChildrenStateForReviewArgs) {
   const children = getChildrenState({ children: childrenState });
 
   if (children.length === 0) {
@@ -228,7 +229,7 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       throw redirect(getPathById('protected/application/$id/renewal-family/childrens-application', params));
     }
 
-    const ageCategory = getAgeCategoryFromDateString(information.dateOfBirth);
+    const ageCategory = getContextualAgeCategoryFromDate(information.dateOfBirth, context);
 
     if (ageCategory === 'adults' || ageCategory === 'seniors') {
       throw redirect(getPathById('protected/application/$id/type-of-application', params));

@@ -8,6 +8,7 @@ import type { PickDeep, ReadonlyDeep } from 'type-fest';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
+import { getAgeCategoryFromAge, getAgeCategoryReferenceDate } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { DeclaredChange } from '~/.server/routes/helpers/declared-change-type';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
@@ -314,19 +315,19 @@ export function startProtectedApplicationState({ applicationYear, clientApplicat
   return initialState;
 }
 
-type AgeCategory = 'children' | 'youth' | 'adults' | 'seniors';
-
-export function getAgeCategoryFromDateString(date: string, coverageStartDate?: string) {
-  const age = getAgeFromDateString(date, coverageStartDate);
+/**
+ * Gets the age category based on the given date string and application context. The reference date for age calculation
+ * is determined by the application context: 'intake' uses the current date, while 'renewal' uses the end date of the
+ * current coverage period.
+ *
+ * @param date - The date of birth as a string.
+ * @param context - The application context, either 'intake' or 'renewal'.
+ * @returns The age category as a string.
+ */
+export function getContextualAgeCategoryFromDate(date: string, context: 'intake' | 'renewal') {
+  const referenceDate = getAgeCategoryReferenceDate(context);
+  const age = getAgeFromDateString(date, referenceDate);
   return getAgeCategoryFromAge(age);
-}
-
-export function getAgeCategoryFromAge(age: number): AgeCategory {
-  if (age >= 65) return 'seniors';
-  if (age >= 18 && age < 65) return 'adults';
-  if (age >= 16 && age < 18) return 'youth';
-  if (age >= 0 && age < 16) return 'children';
-  throw new Error(`Invalid age [${age}]`);
 }
 
 export function isNewChildState(child: ChildState) {

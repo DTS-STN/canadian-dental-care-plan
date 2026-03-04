@@ -327,8 +327,9 @@ describe('public-application-simplified-section-checks', () => {
 
   describe('isChildInformationSectionCompleted', () => {
     it('should return true when child information is defined with valid date of birth', () => {
+      const context = 'intake';
       expect(
-        isChildInformationSectionCompleted({
+        isChildInformationSectionCompleted(context, {
           information: {
             firstName: 'Test',
             lastName: 'Child',
@@ -341,8 +342,9 @@ describe('public-application-simplified-section-checks', () => {
     });
 
     it('should return false when date of birth is empty string', () => {
+      const context = 'intake';
       expect(
-        isChildInformationSectionCompleted({
+        isChildInformationSectionCompleted(context, {
           information: {
             firstName: 'Test',
             lastName: 'Child',
@@ -355,7 +357,8 @@ describe('public-application-simplified-section-checks', () => {
     });
 
     it('should return false when information is undefined', () => {
-      expect(isChildInformationSectionCompleted({ information: undefined })).toBe(false);
+      const context = 'intake';
+      expect(isChildInformationSectionCompleted(context, { information: undefined })).toBe(false);
     });
   });
 

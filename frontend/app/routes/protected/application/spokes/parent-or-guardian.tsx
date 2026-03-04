@@ -6,7 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/parent-or-guardian';
 
 import { TYPES } from '~/.server/constants';
-import { clearProtectedApplicationState, getAgeCategoryFromDateString, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { clearProtectedApplicationState, getContextualAgeCategoryFromDate, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -37,7 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:parent-or-guardian.page-title') }) };
 
   invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
-  const ageCategory = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth);
+  const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context);
 
   if (ageCategory !== 'children' && ageCategory !== 'youth') {
     return redirect(getPathById('protected/application/$id/personal-information', params));

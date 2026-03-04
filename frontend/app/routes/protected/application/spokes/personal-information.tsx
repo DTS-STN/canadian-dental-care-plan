@@ -7,7 +7,7 @@ import type { Route } from './+types/personal-information';
 
 import { TYPES } from '~/.server/constants';
 import type { ApplicantInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getAgeCategoryFromDateString, getProtectedApplicationState, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getContextualAgeCategoryFromDate, getProtectedApplicationState, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -141,7 +141,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+  const ageCategory = getContextualAgeCategoryFromDate(parsedDataResult.data.dateOfBirth, state.context);
 
   saveProtectedApplicationState({
     params,

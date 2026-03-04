@@ -17,9 +17,10 @@ import type {
   PartnerInformationState,
   TermsAndConditionsState,
 } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getContextualAgeCategoryFromDate } from '~/.server/routes/helpers/public-application-route-helpers';
 
 export interface ApplicationAdultState {
+  context: 'intake' | 'renewal';
   applicantInformation: ApplicantInformationState;
   applicationYear: ApplicationYearState;
   communicationPreferences: DeclaredChangeCommunicationPreferencesState;
@@ -37,6 +38,7 @@ export interface ApplicationAdultState {
 }
 
 export interface ApplicationFamilyState {
+  context: 'intake' | 'renewal';
   applicantInformation: ApplicantInformationState;
   applicationYear: ApplicationYearState;
   children: ChildState[];
@@ -55,6 +57,7 @@ export interface ApplicationFamilyState {
 }
 
 export interface ApplicationChildrenState {
+  context: 'intake' | 'renewal';
   applicantInformation: ApplicantInformationState;
   applicationYear: ApplicationYearState;
   children: ChildState[];
@@ -71,6 +74,7 @@ export interface ApplicationChildrenState {
 }
 
 interface ToBenefitApplicationDtoArgs {
+  context: 'intake' | 'renewal';
   applicantInformation: ApplicantInformationState;
   applicationYear: ApplicationYearState;
   children?: ChildState[];
@@ -124,7 +128,7 @@ export interface BenefitApplicationStateMapper {
 @injectable()
 export class DefaultBenefitApplicationStateMapper implements BenefitApplicationStateMapper {
   mapApplicationAdultStateToBenefitApplicationDto(applicationAdultState: ApplicationAdultState): BenefitApplicationDto {
-    const ageCategory = getAgeCategoryFromDateString(applicationAdultState.applicantInformation.dateOfBirth);
+    const ageCategory = getContextualAgeCategoryFromDate(applicationAdultState.applicantInformation.dateOfBirth, applicationAdultState.context);
     if (ageCategory === 'youth' && applicationAdultState.livingIndependently === undefined) {
       throw new Error('Expected livingIndependently to be defined');
     }
@@ -137,7 +141,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
   }
 
   mapApplicationFamilyStateToBenefitApplicationDto(applicationFamilyState: ApplicationFamilyState): BenefitApplicationDto {
-    const ageCategory = getAgeCategoryFromDateString(applicationFamilyState.applicantInformation.dateOfBirth);
+    const ageCategory = getContextualAgeCategoryFromDate(applicationFamilyState.applicantInformation.dateOfBirth, applicationFamilyState.context);
     if (ageCategory === 'youth' && applicationFamilyState.livingIndependently === undefined) {
       throw new Error('Expected livingIndependently to be defined');
     }
