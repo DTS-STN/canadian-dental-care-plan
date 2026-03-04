@@ -9,8 +9,9 @@ import { z } from 'zod';
 import type { Route } from './+types/child-information';
 
 import { TYPES } from '~/.server/constants';
+import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ChildInformationState, ChildSinState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getAgeCategoryFromDateString, getProtectedApplicationState, getSingleChildState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getContextualAgeCategoryFromDate, getProtectedApplicationState, getSingleChildState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -206,7 +207,7 @@ export async function action({ context: { appContainer, session }, params, reque
     );
   }
 
-  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+  const ageCategory = getContextualAgeCategoryFromDate(parsedDataResult.data.dateOfBirth, state.context);
 
   const currentYear = new Date().getFullYear();
   const isAdultOnDate = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth, `${currentYear}-07-01`) === 'adults';

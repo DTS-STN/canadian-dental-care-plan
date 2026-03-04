@@ -20,6 +20,7 @@ describe('isPersonalInformationSectionCompleted', () => {
   it('should return true when inputModel and applicantInformation are defined', () => {
     expect(
       isPersonalInformationSectionCompleted({
+        context: 'intake',
         inputModel: 'full',
         applicantInformation: {
           dateOfBirth: '1990-01-01',
@@ -34,6 +35,7 @@ describe('isPersonalInformationSectionCompleted', () => {
   it('should return false when inputModel is undefined', () => {
     expect(
       isPersonalInformationSectionCompleted({
+        context: 'intake',
         inputModel: undefined,
         applicantInformation: {
           dateOfBirth: '1990-01-01',
@@ -48,6 +50,7 @@ describe('isPersonalInformationSectionCompleted', () => {
   it('should return false when applicantInformation is undefined', () => {
     expect(
       isPersonalInformationSectionCompleted({
+        context: 'intake',
         inputModel: 'full',
         applicantInformation: undefined,
       }),
@@ -55,7 +58,7 @@ describe('isPersonalInformationSectionCompleted', () => {
   });
 
   it('should return false when both are undefined', () => {
-    expect(isPersonalInformationSectionCompleted({})).toBe(false);
+    expect(isPersonalInformationSectionCompleted({ context: 'intake' })).toBe(false);
   });
 
   it('should return false when livingIndependently is undefined and applicant is youth', () => {
@@ -63,6 +66,7 @@ describe('isPersonalInformationSectionCompleted', () => {
     youthDateOfBirth.setFullYear(youthDateOfBirth.getFullYear() - 17);
     expect(
       isPersonalInformationSectionCompleted({
+        context: 'intake',
         inputModel: 'full',
         applicantInformation: {
           dateOfBirth: youthDateOfBirth.toISOString().split('T')[0],
@@ -80,6 +84,7 @@ describe('isPersonalInformationSectionCompleted', () => {
     youthDateOfBirth.setFullYear(youthDateOfBirth.getFullYear() - 17);
     expect(
       isPersonalInformationSectionCompleted({
+        context: 'intake',
         inputModel: 'full',
         applicantInformation: {
           dateOfBirth: youthDateOfBirth.toISOString().split('T')[0],
@@ -97,6 +102,7 @@ describe('isPersonalInformationSectionCompleted', () => {
     youthDateOfBirth.setFullYear(youthDateOfBirth.getFullYear() - 16);
     expect(
       isPersonalInformationSectionCompleted({
+        context: 'intake',
         inputModel: 'full',
         applicantInformation: {
           dateOfBirth: youthDateOfBirth.toISOString().split('T')[0],

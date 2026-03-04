@@ -1,5 +1,5 @@
 import type { PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getContextualAgeCategoryFromDate } from '~/.server/routes/helpers/public-application-route-helpers';
 
 /**
  * Checks if the type of application section is completed.
@@ -12,9 +12,9 @@ export function isTypeOfApplicationSectionCompleted(state: Pick<PublicApplicatio
  * Checks if the personal information section is completed.
  * For youth applicants, livingIndependently must also be completed.
  */
-export function isPersonalInformationSectionCompleted(state: Pick<PublicApplicationState, 'inputModel' | 'applicantInformation' | 'livingIndependently'>): boolean {
+export function isPersonalInformationSectionCompleted(state: Pick<PublicApplicationState, 'context' | 'inputModel' | 'applicantInformation' | 'livingIndependently'>): boolean {
   if (state.inputModel === undefined || state.applicantInformation === undefined) return false;
-  if (getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth) === 'youth' && state.livingIndependently === undefined) return false;
+  if (getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context) === 'youth' && state.livingIndependently === undefined) return false;
   return true;
 }
 

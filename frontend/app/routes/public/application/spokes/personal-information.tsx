@@ -10,7 +10,7 @@ import type { Route } from './+types/personal-information';
 import { TYPES } from '~/.server/constants';
 import type { ClientApplicationDto } from '~/.server/domain/dtos/client-application.dto';
 import type { ApplicantInformationState, InputModelState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getAgeCategoryFromDateString, getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getContextualAgeCategoryFromDate, getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -48,7 +48,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   if (state.context === 'renewal' && state.applicantInformation !== undefined) {
     // If youth applicant allow access to personal-information if livingIndependently is undefined
-    const isYouthWithIncompleteLivingIndependently = getAgeCategoryFromDateString(state.applicantInformation.dateOfBirth) === 'youth' && state.livingIndependently === undefined;
+    const isYouthWithIncompleteLivingIndependently = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context) === 'youth' && state.livingIndependently === undefined;
 
     if (!isYouthWithIncompleteLivingIndependently) {
       return redirect(getPathById(`public/application/$id/type-of-application`, params));
@@ -156,7 +156,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+  const ageCategory = getContextualAgeCategoryFromDate(parsedDataResult.data.dateOfBirth, state.context);
 
   // Determine input model based on context and data. 'intake' applications always use 'full' model
   let inputModel: InputModelState = 'full';
