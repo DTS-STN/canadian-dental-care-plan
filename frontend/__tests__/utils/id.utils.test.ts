@@ -34,9 +34,14 @@ describe('id.utils', () => {
       expect(isValidId(id, 'nanoid')).toBe(true);
     });
 
-    it('should validate a valid UUID', () => {
-      const uuid = generateId('uuid');
-      expect(isValidId(uuid, 'uuid')).toBe(true);
+    it.each([
+      // Valid UUIDs for testing
+      ['550e8400-e29b-41d4-a716-446655440000'],
+      ['123e4567-e89b-12d3-a456-426614174000'],
+      ['fab8df50-1df6-f011-8406-6045bdf97563'], // custom UUID with 'f' in the version position
+      ['0cb9df50-1df6-f011-8406-6045bdf97563'], // custom UUID with '0' in the version position
+    ])('should validate a valid UUID: %s', (uuid) => {
+      expect(isValidId(uuid, 'uuid'), `UUID: ${uuid}`).toBe(true);
     });
 
     it('should reject invalid nanoid when format is specified', () => {

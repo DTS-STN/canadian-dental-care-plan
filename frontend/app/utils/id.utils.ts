@@ -23,10 +23,13 @@ const nanoidSchema = z
   .regex(/^[a-zA-Z0-9_-]+$/);
 
 /**
- * Zod schema for validating the structure of a UUID v4.
- * Ensures the string follows the standard UUID format.
+ * Zod schema for validating the structure of a UUID.
+ * Enforces the standard UUID format (8-4-4-4-12 hexadecimal characters).
+ * Note: This regex allows for any version and variant of UUID, including custom ones.
  */
-const uuidSchema = z.uuid();
+const uuidSchema = z //
+  .string()
+  .regex(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i, 'Invalid UUID format');
 
 /**
  * Generates a unique identifier string.
