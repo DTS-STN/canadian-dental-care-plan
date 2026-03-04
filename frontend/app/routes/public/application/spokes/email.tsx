@@ -74,20 +74,12 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const verificationCodeService = appContainer.get(TYPES.VerificationCodeService);
 
-  const emailSchema = z
-    .object({
-      email: z
-        .string({ error: t('application-spokes:email.error-message.email-required') })
-        .trim()
-        .min(1)
-        .max(64),
-    })
-
-    .superRefine((val, ctx) => {
-      if (!validator.isEmail(val.email)) {
-        ctx.addIssue({ code: 'custom', message: t('application-spokes:email.error-message.email-valid'), path: ['email'] });
-      }
-    });
+  const emailSchema = z.object({
+    email: z
+      .string({ error: t('application-spokes:email.error-message.email-required') })
+      .nonempty(t('application-spokes:email.error-message.email-required'))
+      .refine((val) => validator.isEmail(val), t('application-spokes:email.error-message.email-valid')),
+  });
 
   const parsedDataResult = emailSchema.safeParse({
     email: formData.get('email')?.toString(),
