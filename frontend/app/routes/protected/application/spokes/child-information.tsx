@@ -9,8 +9,9 @@ import { z } from 'zod';
 import type { Route } from './+types/child-information';
 
 import { TYPES } from '~/.server/constants';
+import { isChildEligible } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ChildInformationState, ChildSinState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getContextualAgeCategoryFromDate, getProtectedApplicationState, getSingleChildState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getProtectedApplicationState, getSingleChildState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -206,8 +207,6 @@ export async function action({ context: { appContainer, session }, params, reque
     );
   }
 
-  const ageCategory = getContextualAgeCategoryFromDate(parsedDataResult.data.dateOfBirth, state.context);
-
   saveProtectedApplicationState({
     params,
     session,
@@ -215,9 +214,6 @@ export async function action({ context: { appContainer, session }, params, reque
       children: state.children.map((child) => {
         if (child.id !== childState.id) return child;
         const information = { ...parsedDataResult.data, ...parsedSinDataResult.data };
-        if (ageCategory !== 'youth' && ageCategory !== 'children') {
-          information['dateOfBirth'] = child.information?.dateOfBirth ?? '';
-        }
         return { ...child, information };
       }),
     },
@@ -227,7 +223,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/application/$id/children/$childId/parent-or-guardian', params));
   }
 
-  if (ageCategory === 'adults' || ageCategory === 'seniors') {
+  if (!isChildEligible(parsedDataResult.data.dateOfBirth, state.context)) {
     return redirect(getPathById('protected/application/$id/children/$childId/cannot-apply-child', params));
   }
 

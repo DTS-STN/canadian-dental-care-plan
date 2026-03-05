@@ -1,5 +1,7 @@
+import { isChildEligible } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ChildState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
+import { isValidDateString } from '~/utils/date-utils';
 
 /**
  * Checks if the phone number section is completed for renewal application.
@@ -63,7 +65,11 @@ export function isMaritalStatusSectionCompleted(state: Pick<ProtectedApplication
  */
 export function isChildInformationSectionCompleted(child: Pick<ChildState, 'information'>): boolean {
   // TODO: Check with age category and live independently status
-  return child.information !== undefined && child.information.dateOfBirth !== '';
+  return (
+    child.information?.dateOfBirth !== undefined && //
+    isValidDateString(child.information.dateOfBirth) &&
+    isChildEligible(child.information.dateOfBirth, 'renewal')
+  );
 }
 
 /**
