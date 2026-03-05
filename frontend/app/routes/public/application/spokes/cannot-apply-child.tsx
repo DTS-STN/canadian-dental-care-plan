@@ -32,7 +32,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:children.cannot-apply-child.page-title') }) };
 
   return {
-    isAdultAtCutoff: childState.isAdultAtCutoff,
+    childTurnsAdultAtEndOfRenewalPeriod: childState.childTurnsAdultAtEndOfRenewalPeriod,
     meta,
   };
 }
@@ -51,7 +51,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyForYourself({ loaderData, params }: Route.ComponentProps) {
-  const { isAdultAtCutoff } = loaderData;
+  const { childTurnsAdultAtEndOfRenewalPeriod } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const fetcher = useFetcher<typeof action>();
@@ -62,7 +62,7 @@ export default function ApplyForYourself({ loaderData, params }: Route.Component
   return (
     <div className="max-w-prose">
       <div className="mb-6 space-y-4">
-        <p>{t(`application-spokes:children.cannot-apply-child.ineligible-to-apply.${isAdultAtCutoff ? 'cutoff-application' : 'adult-application'}`)}</p>
+        <p>{t(`application-spokes:children.cannot-apply-child.ineligible-to-apply.${childTurnsAdultAtEndOfRenewalPeriod ? 'cutoff-application' : 'adult-application'}`)}</p>
         <p>
           <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:children.cannot-apply-child.eligibility-info" components={{ noWrap }} />
         </p>

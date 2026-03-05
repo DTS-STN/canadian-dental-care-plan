@@ -67,7 +67,7 @@ export type PublicApplicationState = ReadonlyDeep<{
       hasSocialInsuranceNumber: boolean;
       socialInsuranceNumber?: string;
     };
-    isAdultAtCutoff?: boolean;
+    childTurnsAdultAtEndOfRenewalPeriod?: boolean;
   }[];
   communicationPreferences?: DeclaredChange<{
     preferredLanguage: string;
