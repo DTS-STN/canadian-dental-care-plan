@@ -10,9 +10,8 @@ import { z } from 'zod';
 import type { Route } from './+types/child-information';
 
 import { TYPES } from '~/.server/constants';
-import { getAgeCategoryFromDateString, getAgeCategoryReferenceDate } from '~/.server/routes/helpers/base-application-route-helpers';
+import { getContextualAgeCategoryFromDate, getPublicApplicationState, getSingleChildState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { ChildInformationState, ChildSinState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getPublicApplicationState, getSingleChildState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -213,10 +212,6 @@ export async function action({ context: { appContainer, session }, params, reque
     );
   }
 
-  const currentAgeCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
-  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth, getAgeCategoryReferenceDate(state.context));
-  const childTurnsAdultAtEndOfRenewalPeriod = state.context === 'renewal' && (currentAgeCategory === 'children' || currentAgeCategory === 'youth') && ageCategory !== 'children' && ageCategory !== 'youth';
-
   savePublicApplicationState({
     params,
     session,
@@ -227,7 +222,6 @@ export async function action({ context: { appContainer, session }, params, reque
         return {
           ...child,
           information,
-          childTurnsAdultAtEndOfRenewalPeriod,
         };
       }),
     },
@@ -237,7 +231,9 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/application/$id/children/$childId/parent-or-guardian', params));
   }
 
-  if (ageCategory === 'adults' || ageCategory === 'seniors' || childTurnsAdultAtEndOfRenewalPeriod) {
+  const ageCategory = getContextualAgeCategoryFromDate(parsedDataResult.data.dateOfBirth, state.context);
+
+  if (ageCategory === 'adults' || ageCategory === 'seniors') {
     return redirect(getPathById('public/application/$id/children/$childId/cannot-apply-child', params));
   }
 

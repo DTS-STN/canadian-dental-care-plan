@@ -1,10 +1,12 @@
 import { redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/cannot-apply-child';
 
 import { TYPES } from '~/.server/constants';
+import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/base-application-route-helpers';
 import { clearPublicApplicationState, getSingleChildState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -31,10 +33,15 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:children.cannot-apply-child.page-title') }) };
 
-  return {
-    childTurnsAdultAtEndOfRenewalPeriod: childState.childTurnsAdultAtEndOfRenewalPeriod,
-    meta,
-  };
+  invariant(childState.information?.dateOfBirth, 'Child date of birth must be defined');
+  const ageCategory = getAgeCategoryFromDateString(childState.information.dateOfBirth);
+
+  // Determines which message to display:
+  // - If the applicant is currently a child or youth, show content indicating they will turn 18 by the end of the current coverage.
+  // - Otherwise, show content indicating they are not eligible to apply because they are an adult.
+  const isChildrenOrYouth = ageCategory === 'children' || ageCategory === 'youth';
+
+  return { isChildrenOrYouth, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -51,7 +58,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyForYourself({ loaderData, params }: Route.ComponentProps) {
-  const { childTurnsAdultAtEndOfRenewalPeriod } = loaderData;
+  const { isChildrenOrYouth } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const fetcher = useFetcher<typeof action>();
@@ -62,7 +69,11 @@ export default function ApplyForYourself({ loaderData, params }: Route.Component
   return (
     <div className="max-w-prose">
       <div className="mb-6 space-y-4">
-        <p>{t(`application-spokes:children.cannot-apply-child.ineligible-to-apply.${childTurnsAdultAtEndOfRenewalPeriod ? 'cutoff-application' : 'adult-application'}`)}</p>
+        <p>
+          {isChildrenOrYouth //
+            ? t(`application-spokes:children.cannot-apply-child.ineligible-to-apply.cutoff-application`)
+            : t(`application-spokes:children.cannot-apply-child.ineligible-to-apply.adult-application`)}
+        </p>
         <p>
           <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:children.cannot-apply-child.eligibility-info" components={{ noWrap }} />
         </p>

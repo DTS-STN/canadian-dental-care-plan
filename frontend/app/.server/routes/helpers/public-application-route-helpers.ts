@@ -67,7 +67,6 @@ export type PublicApplicationState = ReadonlyDeep<{
       hasSocialInsuranceNumber: boolean;
       socialInsuranceNumber?: string;
     };
-    childTurnsAdultAtEndOfRenewalPeriod?: boolean;
   }[];
   communicationPreferences?: DeclaredChange<{
     preferredLanguage: string;
@@ -499,7 +498,7 @@ export function getSingleChildState({ params, session }: getSingleChildStateArgs
   const childState = applicationState.children[childStateIndex];
   const isNew = isNewChildState(childState);
 
-  return { ...childState, childNumber: childStateIndex + 1, isNew };
+  return { ...childState, childNumber: childStateIndex + 1, isNew, context: applicationState.context };
 }
 
 /**
