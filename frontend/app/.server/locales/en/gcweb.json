@@ -51,7 +51,10 @@
     },
     "gc-symbol": "Symbol of the Government of Canada",
     "main-band": {
-      "header": "Service Canada",
+      "header": {
+        "public": "Service Canada",
+        "protected": "My Service Canada Account"
+      },
       "links": {
         "contact-us": {
           "content": "Contact us",
