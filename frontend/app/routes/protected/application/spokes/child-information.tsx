@@ -9,7 +9,6 @@ import { z } from 'zod';
 import type { Route } from './+types/child-information';
 
 import { TYPES } from '~/.server/constants';
-import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ChildInformationState, ChildSinState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getContextualAgeCategoryFromDate, getProtectedApplicationState, getSingleChildState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
@@ -209,9 +208,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const ageCategory = getContextualAgeCategoryFromDate(parsedDataResult.data.dateOfBirth, state.context);
 
-  const currentYear = new Date().getFullYear();
-  const isAdultOnDate = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth, `${currentYear}-07-01`) === 'adults';
-
   saveProtectedApplicationState({
     params,
     session,
@@ -233,10 +229,6 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (ageCategory === 'adults' || ageCategory === 'seniors') {
     return redirect(getPathById('protected/application/$id/children/$childId/cannot-apply-child', params));
-  }
-
-  if (isAdultOnDate && state.typeOfApplication === 'family') {
-    return redirect(getPathById('protected/application/$id/children/$childId/cannot-apply-child-year', params));
   }
 
   return redirect(getPathById(`protected/application/$id/${state.context}-${state.typeOfApplication}/childrens-application`, params));
