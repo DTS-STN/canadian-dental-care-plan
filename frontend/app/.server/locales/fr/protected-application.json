@@ -12,7 +12,10 @@
   "eligibility-requirements": {
     "page-title": "Avant de commencer votre demande",
     "page-heading": "Avant de commencer votre demande",
-    "next-button": "Type de demande",
+    "next-button": {
+      "intake": "Type de demande",
+      "renewal": "Renouveler votre demande de prestations du Régime canadien de soins dentaires"
+    },
     "terms-conditions-section": {
       "title": "Conditions générales d'utilisation et énoncé de confidentialité",
       "instructions": "Veuillez lire les conditions générales d'utilisation et l'énoncé de confidentialité.",

@@ -12,7 +12,10 @@
   "eligibility-requirements": {
     "page-title": "Before you start your application",
     "page-heading": "Before you start your application",
-    "next-button": "Type of application",
+    "next-button": {
+      "intake": "Type of application",
+      "renewal": "Renew your Canadian Dental Care Plan benefits"
+    },
     "terms-conditions-section": {
       "title": "Terms and conditions of use and privacy statement",
       "instructions": "Read the terms and conditions of use and privacy statement.",
