@@ -55,3 +55,19 @@ export function getAgeCategoryReferenceDate(context: 'intake' | 'renewal'): stri
   const coverageEndYear = now.getUTCFullYear() + (now.getUTCMonth() >= 6 ? 1 : 0);
   return `${coverageEndYear}-06-30`;
 }
+
+/**
+ * Determines if a child is eligible to apply (intake) or renew (renewal) based on their date of birth and the context
+ * of the application (intake or renewal). The eligibility is determined by calculating the age category of the child
+ * using their date of birth and the appropriate reference date for the given context. A child is considered eligible
+ * if they fall into the 'children' or 'youth' age categories.
+ *
+ * @param dateOfBirth - The date of birth of the child.
+ * @param context - The context of the application ('intake' or 'renewal').
+ * @returns A boolean indicating whether the child is eligible.
+ */
+export function isChildEligible(dateOfBirth: string, context: 'intake' | 'renewal'): boolean {
+  const referenceDate = getAgeCategoryReferenceDate(context);
+  const ageCategory = getAgeCategoryFromDateString(dateOfBirth, referenceDate);
+  return ageCategory === 'children' || ageCategory === 'youth';
+}

@@ -2,11 +2,13 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
 import { useTranslation } from 'react-i18next';
+import type { PickDeep } from 'type-fest';
 import { z } from 'zod';
 
 import type { Route } from './+types/renewal-selection';
 
 import { TYPES } from '~/.server/constants';
+import { isChildEligible } from '~/.server/routes/helpers/base-application-route-helpers';
 import { getProtectedApplicationState, getTypeOfApplicationFromRenewalSelectionClientIds, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import type { ChildInformationState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
@@ -45,12 +47,23 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:renewal-selection.page-title') }) };
 
-  const applicants = [
+  const applicants: ReadonlyArray<{ id: string; name: string }> = [
     { id: state.clientApplication.applicantInformation.clientId, name: `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}` },
-    ...state.clientApplication.children.map((child) => ({ id: child.information.clientId, name: `${child.information.firstName} ${child.information.lastName}` })),
+    ...getEligibleChildrenForRenewalSelection(state),
   ];
 
   return { meta, state: state.applicantClientIdsToRenew ?? [], applicants };
+}
+
+/**
+ * Filters the children of the client application to find those who are eligible for renewal selection based on their
+ * date of birth and the current context.
+ */
+function getEligibleChildrenForRenewalSelection(state: PickDeep<ProtectedApplicationState, 'context' | 'clientApplication.children'>): ReadonlyArray<{ id: string; name: string }> {
+  invariant(state.clientApplication, 'Expected clientApplication to be defined');
+  return state.clientApplication.children //
+    .filter((child) => isChildEligible(child.information.dateOfBirth, state.context))
+    .map((child) => ({ id: child.information.clientId, name: `${child.information.firstName} ${child.information.lastName}` }) as const);
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {

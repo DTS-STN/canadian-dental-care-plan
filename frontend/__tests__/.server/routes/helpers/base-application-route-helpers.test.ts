@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { getAgeCategoryFromAge, getAgeCategoryFromDateString, getAgeCategoryReferenceDate } from '~/.server/routes/helpers/base-application-route-helpers';
+import { getAgeCategoryFromAge, getAgeCategoryFromDateString, getAgeCategoryReferenceDate, isChildEligible } from '~/.server/routes/helpers/base-application-route-helpers';
 
 describe('base-application-route-helpers', () => {
   describe('getAgeCategoryFromAge', () => {
@@ -77,6 +77,48 @@ describe('base-application-route-helpers', () => {
       vi.setSystemTime('2026-08-01T10:00:00.000Z');
 
       expect(getAgeCategoryReferenceDate('renewal')).toBe('2027-06-30');
+    });
+  });
+  describe('isChildEligible', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime('2026-03-04T12:00:00.000Z');
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('returns true for children in intake context', () => {
+      expect(isChildEligible('2012-03-04', 'intake')).toBe(true);
+    });
+
+    it('returns true for youth in intake context', () => {
+      expect(isChildEligible('2009-03-04', 'intake')).toBe(true);
+    });
+
+    it('returns false for adults in intake context', () => {
+      expect(isChildEligible('2008-03-04', 'intake')).toBe(false);
+    });
+
+    it('returns false for seniors in intake context', () => {
+      expect(isChildEligible('1960-03-04', 'intake')).toBe(false);
+    });
+
+    it('returns true for children in renewal context', () => {
+      expect(isChildEligible('2012-03-04', 'renewal')).toBe(true);
+    });
+
+    it('returns true for youth in renewal context', () => {
+      expect(isChildEligible('2009-03-04', 'renewal')).toBe(true);
+    });
+
+    it('returns false for adults in renewal context', () => {
+      expect(isChildEligible('2008-03-04', 'renewal')).toBe(false);
+    });
+
+    it('returns false for seniors in renewal context', () => {
+      expect(isChildEligible('1960-03-04', 'renewal')).toBe(false);
     });
   });
 });
