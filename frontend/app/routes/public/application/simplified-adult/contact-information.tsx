@@ -284,7 +284,7 @@ function PhoneNumberCardContent(): JSX.Element {
  * This component determines what to show in the phone number card footer based on whether the user has entered a new
  * phone number or if there is an existing phone number on the client application. The logic is as follows:
  *
- * - If the user has entered a new phone number (state.phoneNumber is defined), show the "Edit phone number" button.
+ * - If the user has entered a new phone number (state.phoneNumber is defined), show the "Edit my phone number" button.
  *
  * - If the user has not entered a new phone number but there is an existing phone number on the client application,
  *   show both the "Update phone number" button and the "Phone number unchanged" button. This allows the user to either
