@@ -131,7 +131,7 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
         params={params}
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Continue click"
       >
-        {t('protected-application:eligibility-requirements.next-button')}
+        {t(`protected-application:eligibility-requirements.next-button.${isIntake ? 'intake' : 'renewal'}`)}
       </NavigationButtonLink>
     </div>
   );
