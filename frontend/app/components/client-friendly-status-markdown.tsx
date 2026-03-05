@@ -12,6 +12,8 @@ const markdownOptions: MarkdownToJSX.Options = {
     a: {
       component: ClientFriendlyStatusMarkdownLink,
     },
+    ul: <ul className="list-disc space-y-1 pl-7" />,
+    ol: <ol className="list-decimal space-y-1 pl-7" />,
   },
 };
 

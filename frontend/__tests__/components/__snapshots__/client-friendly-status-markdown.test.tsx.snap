@@ -44,7 +44,9 @@ exports[`ClientFriendlyStatusMarkdown Component > renders markdown component wit
     >
       H2
     </h2>
-    <ul>
+    <ul
+      class="list-disc space-y-1 pl-7"
+    >
       <li>
         unordered list item 1
       </li>
