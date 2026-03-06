@@ -12,6 +12,10 @@ export type ClientApplicationDto = ReadonlyDeep<{
   dateOfBirth: string;
   dentalBenefits: string[];
   dentalInsurance?: boolean;
+  /**
+   * Applicant profile eligibility status code
+   */
+  eligibilityStatusCode?: string;
   hasFiledTaxes: boolean;
   isInvitationToApplyClient: boolean;
   livingIndependently?: boolean;
