@@ -6,7 +6,8 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
-import { clearPublicApplicationState, getEligibilityStatus, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getEligibilityStatus } from '~/.server/routes/helpers/base-application-route-helpers';
+import { clearPublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicApplicationSimplifiedFamilyState } from '~/.server/routes/helpers/public-application-simplified-family-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
@@ -140,7 +141,10 @@ export async function loader({ context: { appContainer, session }, params, reque
       : undefined;
 
       invariant(child.dentalInsurance, "Child's dental insurance must be defined");
-      const eligibility = getEligibilityStatus(child.dentalInsurance.hasDentalInsurance, state.clientApplication?.t4DentalIndicator);
+      const eligibility = getEligibilityStatus({
+        hasPrivateDentalInsurance: child.dentalInsurance.hasDentalInsurance,
+        t4DentalIndicator: state.clientApplication?.t4DentalIndicator,
+      });
 
       return {
         id: child.id,
@@ -170,6 +174,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-family:confirm.page-title') }) };
 
+  const eligibility = getEligibilityStatus({
+    hasPrivateDentalInsurance: state.dentalInsurance.hasDentalInsurance,
+    t4DentalIndicator: state.clientApplication?.t4DentalIndicator,
+  });
+
   return {
     dentalInsurance,
     homeAddressInfo,
@@ -180,7 +189,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     surveyLink,
     userInfo,
     children,
-    eligibility: getEligibilityStatus(state.dentalInsurance.hasDentalInsurance, state.clientApplication?.t4DentalIndicator),
+    eligibility,
   };
 }
 

@@ -5,8 +5,9 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
+import { getEligibilityStatus } from '~/.server/routes/helpers/base-application-route-helpers';
 import { loadProtectedApplicationRenewalAdultState } from '~/.server/routes/helpers/protected-application-renewal-adult-route-helpers';
-import { clearProtectedApplicationState, getDeclaredChangeValueOrClientValue, getEligibilityStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { clearProtectedApplicationState, getDeclaredChangeValueOrClientValue, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -184,6 +185,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-renewal-adult:confirm.page-title') }) };
 
+  const eligibility = getEligibilityStatus({
+    hasPrivateDentalInsurance: state.dentalInsurance.hasDentalInsurance,
+    t4DentalIndicator: state.clientApplication.t4DentalIndicator,
+  });
+
   return {
     dentalInsurance,
     homeAddressInfo,
@@ -193,7 +199,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     submissionInfo: state.submissionInfo,
     surveyLink,
     userInfo,
-    eligibility: getEligibilityStatus(state.dentalInsurance.hasDentalInsurance, state.clientApplication.t4DentalIndicator),
+    eligibility,
     isSimplifiedRenewal: state.clientApplication.copayTierEarningRecord,
   };
 }

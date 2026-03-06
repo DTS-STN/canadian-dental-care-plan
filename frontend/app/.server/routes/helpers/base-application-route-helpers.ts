@@ -1,5 +1,6 @@
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { getEnv } from '~/.server/utils/env.utils';
+import type { EligibilityType } from '~/components/eligibility';
 import { getAgeFromDateString } from '~/utils/date-utils';
 
 /**
@@ -90,4 +91,33 @@ export function isEligibleToRenew(clientApplicationDto: Pick<ClientApplicationDt
   // If the eligibility status code is defined, we check if it is equal to the eligible status code.
   const { ELIGIBILITY_STATUS_CODE_ELIGIBLE } = getEnv();
   return clientApplicationDto.eligibilityStatusCode === ELIGIBILITY_STATUS_CODE_ELIGIBLE;
+}
+
+interface GetEligibilityStatusArgs {
+  /**
+   * Indicates whether the applicant has private dental insurance.
+   */
+  hasPrivateDentalInsurance: boolean;
+
+  /**
+   * Indicates the T4 dental indicator status.
+   */
+  t4DentalIndicator?: boolean;
+}
+
+/**
+ * Determines the eligibility status based on private dental insurance and T4 dental indicator.
+ *
+ * The eligibility status is determined as follows:
+ * - 'eligible' if the applicant does not have private dental insurance and the T4 dental indicator is false or undefined.
+ * - 'eligible-proof' if the applicant does not have private dental insurance but the T4 dental indicator is true,
+ *   indicating that proof of eligibility may be required.
+ * - 'ineligible' if the applicant has private dental insurance, regardless of the T4 dental indicator.
+ *
+ * @returns The eligibility status as 'eligible', 'eligible-proof', or 'ineligible'.
+ */
+export function getEligibilityStatus({ hasPrivateDentalInsurance, t4DentalIndicator }: GetEligibilityStatusArgs): EligibilityType {
+  if (!hasPrivateDentalInsurance && !t4DentalIndicator) return 'eligible';
+  if (!hasPrivateDentalInsurance && t4DentalIndicator) return 'eligible-proof';
+  return 'ineligible';
 }
