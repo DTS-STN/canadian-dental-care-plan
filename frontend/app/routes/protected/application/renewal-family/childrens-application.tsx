@@ -108,7 +108,7 @@ export async function loader({ context: { appContainer, session }, request, para
       return {
         ...child,
         clientApplication: {
-          clientDentalBenefits: clientDentalBenefits.federalBenefit?.access || clientDentalBenefits.provTerrBenefit?.access ? clientDentalBenefits : undefined,
+          clientDentalBenefits: clientDentalBenefits,
         },
         dentalBenefits: child.dentalBenefits
           ? {
@@ -566,32 +566,11 @@ function ChildDentalBenefitsCardContent({ child }: { child: Route.ComponentProps
     );
   }
 
-  // Case 2: User has confirmed no changes (hasChanged false) - show client benefits
-  if (child.dentalBenefits && !child.dentalBenefits.hasChanged && child.clientApplication.clientDentalBenefits) {
-    return (
-      <CardContent>
-        <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.dental-benefits-title')}>{renderBenefits(child.clientApplication.clientDentalBenefits)}</DefinitionListItem>
-        </DefinitionList>
-      </CardContent>
-    );
-  }
-
-  // Case 3: No user changes, but client has existing benefits - show existing benefits
-  if (child.clientApplication.clientDentalBenefits) {
-    return (
-      <CardContent>
-        <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.dental-benefits-title')}>{renderBenefits(child.clientApplication.clientDentalBenefits)}</DefinitionListItem>
-        </DefinitionList>
-      </CardContent>
-    );
-  }
-
-  // Case 4: No benefits at all - show help text
   return (
     <CardContent>
-      <p>{t('protected-application-renewal-family:childrens-application.child-dental-benefits-indicate-status')}</p>
+      <DefinitionList layout="single-column">
+        <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.dental-benefits-title')}>{renderBenefits(child.clientApplication.clientDentalBenefits)}</DefinitionListItem>
+      </DefinitionList>
     </CardContent>
   );
 }
@@ -632,62 +611,41 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
     );
   }
 
-  // Case 2: No user changes yet, but client has existing benefits - show Update and Not Changed buttons
-  if (child.clientApplication.clientDentalBenefits) {
-    return (
-      <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+  return (
+    <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+      <div className="w-full px-6">
+        <ButtonLink
+          id={`update-child-benefits-${child.id}`}
+          variant="link"
+          className="mb-5 p-0"
+          routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
+          params={{ ...params, childId: child.id }}
+          startIcon={faPenToSquare}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Action click"
+        >
+          {t('protected-application-renewal-family:childrens-application.update-dental-benefits')}
+        </ButtonLink>
+      </div>
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <input type="hidden" name="childId" value={child.id} />
         <div className="w-full px-6">
-          <ButtonLink
-            id={`update-child-benefits-${child.id}`}
+          <Button
+            id={`complete-benefits-${child.id}`}
+            name="_action"
+            value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
+            disabled={isSubmitting}
             variant="link"
-            className="mb-5 p-0"
-            routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
-            params={{ ...params, childId: child.id }}
-            startIcon={faPenToSquare}
+            className="mt-5 p-0"
+            startIcon={faCircleCheck}
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Action click"
           >
-            {t('protected-application-renewal-family:childrens-application.update-dental-benefits')}
-          </ButtonLink>
+            {t('protected-application-renewal-family:childrens-application.benefits-not-changed')}
+          </Button>
         </div>
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <input type="hidden" name="childId" value={child.id} />
-          <div className="w-full px-6">
-            <Button
-              id={`complete-benefits-${child.id}`}
-              name="_action"
-              value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
-              disabled={isSubmitting}
-              variant="link"
-              className="mt-5 p-0"
-              startIcon={faCircleCheck}
-              size="lg"
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Action click"
-            >
-              {t('protected-application-renewal-family:childrens-application.benefits-not-changed')}
-            </Button>
-          </div>
-        </fetcher.Form>
-      </CardFooter>
-    );
-  }
-
-  // Case 3: No benefits at all - show Add button
-  return (
-    <CardFooter className="border-t bg-zinc-100">
-      <ButtonLink
-        id={`add-child-benefits-${child.id}`}
-        variant="link"
-        className="p-0"
-        routeId="protected/application/$id/children/$childId/federal-provincial-territorial-benefits"
-        params={{ ...params, childId: child.id }}
-        startIcon={faCirclePlus}
-        size="lg"
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Action click"
-      >
-        {t('protected-application-renewal-family:childrens-application.add-child-dental-benefits')}
-      </ButtonLink>
+      </fetcher.Form>
     </CardFooter>
   );
 }
