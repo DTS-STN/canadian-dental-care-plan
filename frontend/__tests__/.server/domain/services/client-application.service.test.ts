@@ -116,9 +116,9 @@ describe('DefaultClientApplicationService', () => {
               {
                 CoverageCategoryCode: {
                   ReferenceDataName: 'Co-Pay Tier',
-                  CoverageTierCode: {
-                    ReferenceDataID: 'c12531e1-ef6d-49f9-9737-c32271fbba79',
-                  },
+                },
+                CoverageTierCode: {
+                  ReferenceDataID: 'c12531e1-ef6d-49f9-9737-c32271fbba79',
                 },
               },
             ],
@@ -207,7 +207,7 @@ describe('DefaultClientApplicationService', () => {
       mailingCity: 'Mailing City',
       mailingCountry: 'USA',
     },
-    copayTierEarningRecord: true,
+    hasCopayTierCoverage: true,
     dateOfBirth: '2000-01-01',
     dentalBenefits: ['ID-123456'],
     hasFiledTaxes: true,

@@ -6,9 +6,9 @@ export type ClientApplicationDto = ReadonlyDeep<{
   communicationPreferences: ClientCommunicationPreferencesDto;
   contactInformation: ClientContactInformationDto;
   /**
-   * Indicates whether the applicant has a co-pay tier earning record
+   * Indicates whether the applicant has a co-pay tier coverage that would make them eligible for the program.
    */
-  copayTierEarningRecord: boolean;
+  hasCopayTierCoverage: boolean;
   dateOfBirth: string;
   dentalBenefits: string[];
   dentalInsurance?: boolean;

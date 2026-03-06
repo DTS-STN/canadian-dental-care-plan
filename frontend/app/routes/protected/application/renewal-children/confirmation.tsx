@@ -169,7 +169,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     surveyLink,
     userInfo,
     children,
-    isSimplifiedRenewal: state.clientApplication.copayTierEarningRecord,
+    isSimplifiedRenewal: state.clientApplication.hasCopayTierCoverage,
   };
 }
 

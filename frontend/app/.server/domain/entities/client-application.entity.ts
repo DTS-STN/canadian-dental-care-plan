@@ -26,9 +26,9 @@ export type ClientApplicationEntity = ReadonlyDeep<{
         Coverage: Array<{
           CoverageCategoryCode: {
             ReferenceDataName: string;
-            CoverageTierCode: {
-              ReferenceDataID: string;
-            };
+          };
+          CoverageTierCode: {
+            ReferenceDataID: string;
           };
         }>;
         PrivateDentalInsuranceIndicator: boolean;

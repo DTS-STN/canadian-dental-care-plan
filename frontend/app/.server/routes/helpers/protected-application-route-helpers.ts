@@ -569,8 +569,8 @@ export function validateProtectedApplicationContext<TExpectedContext extends Pro
  * status state should be skipped if the application context is 'renewal' and the client application has a copay tier
  * earning record; otherwise, it should not be skipped.
  */
-export function shouldSkipMaritalStatus(state: PickDeep<ProtectedApplicationState, 'context' | 'clientApplication.copayTierEarningRecord'>): boolean {
+export function shouldSkipMaritalStatus(state: PickDeep<ProtectedApplicationState, 'context' | 'clientApplication.hasCopayTierCoverage'>): boolean {
   if (state.context !== 'renewal') return false;
   if (state.clientApplication === undefined) return false;
-  return state.clientApplication.copayTierEarningRecord === true;
+  return state.clientApplication.hasCopayTierCoverage === true;
 }

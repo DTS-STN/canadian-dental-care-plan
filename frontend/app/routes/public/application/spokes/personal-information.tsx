@@ -164,7 +164,7 @@ export async function action({ context: { appContainer, session }, params, reque
   let clientApplication: ClientApplicationDto | undefined;
 
   // For renewal applications, we need to determine the input model based on the client's application data. If the
-  // client has a copayTierEarningRecord, we can use the 'simplified' model which requires less information from the
+  // client has a hasCopayTierCoverage, we can use the 'simplified' model which requires less information from the
   // applicant. Otherwise, we use the 'full' model.
   if (state.context === 'renewal') {
     invariant(parsedDataResult.data.memberId, 'Member ID must be defined for renewal applications');
@@ -189,9 +189,9 @@ export async function action({ context: { appContainer, session }, params, reque
     }
 
     // Determine input model based on client application data
-    // If copayTierEarningRecord exists, use 'simplified' model
+    // If hasCopayTierCoverage exists, use 'simplified' model
     // Otherwise, use 'full' model
-    inputModel = clientApplication.copayTierEarningRecord ? 'simplified' : 'full';
+    inputModel = clientApplication.hasCopayTierCoverage ? 'simplified' : 'full';
   }
 
   savePublicApplicationState({

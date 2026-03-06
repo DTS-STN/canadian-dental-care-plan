@@ -8,7 +8,7 @@ describe('protected-application-route-helpers', () => {
       const state = {
         context: 'intake',
         clientApplication: {
-          copayTierEarningRecord: true,
+          hasCopayTierCoverage: true,
         },
       } as const;
 
@@ -28,7 +28,7 @@ describe('protected-application-route-helpers', () => {
       const state = {
         context: 'renewal',
         clientApplication: {
-          copayTierEarningRecord: false,
+          hasCopayTierCoverage: false,
         },
       } as const;
 
@@ -39,7 +39,7 @@ describe('protected-application-route-helpers', () => {
       const state = {
         context: 'renewal',
         clientApplication: {
-          copayTierEarningRecord: true,
+          hasCopayTierCoverage: true,
         },
       } as const;
 
