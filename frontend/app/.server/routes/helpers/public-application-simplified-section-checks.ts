@@ -1,6 +1,7 @@
+import { isChildEligible } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ChildState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getContextualAgeCategoryFromDate, isChildAnAdultAtCutoffDate } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
+import { isValidDateString } from '~/utils/date-utils';
 
 /**
  * Checks if the phone number section is completed for simplified application.
@@ -55,12 +56,12 @@ export function isDentalBenefitsSectionCompleted(state: Pick<PublicApplicationSt
  * Checks if the child information section is completed for simplified application.
  */
 export function isChildInformationSectionCompleted(context: 'intake' | 'renewal', child: Pick<ChildState, 'information'>): boolean {
-  if (child.information === undefined || child.information.dateOfBirth === '') return false;
-  const ageCategory = getContextualAgeCategoryFromDate(child.information.dateOfBirth, context);
-  const isAdultAtCutoff = isChildAnAdultAtCutoffDate(child.information.dateOfBirth);
-  if (ageCategory !== 'children' && ageCategory !== 'youth') return false;
-  if (isAdultAtCutoff) return false;
-  return true;
+  // TODO: Check with age category and live independently status
+  return (
+    child.information?.dateOfBirth !== undefined && //
+    isValidDateString(child.information.dateOfBirth) &&
+    isChildEligible(child.information.dateOfBirth, context)
+  );
 }
 
 /**

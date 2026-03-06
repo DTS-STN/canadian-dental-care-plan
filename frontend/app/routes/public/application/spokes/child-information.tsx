@@ -10,7 +10,8 @@ import { z } from 'zod';
 import type { Route } from './+types/child-information';
 
 import { TYPES } from '~/.server/constants';
-import { getContextualAgeCategoryFromDate, getPublicApplicationState, getSingleChildState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { isChildEligible } from '~/.server/routes/helpers/base-application-route-helpers';
+import { getPublicApplicationState, getSingleChildState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { ChildInformationState, ChildSinState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -212,6 +213,13 @@ export async function action({ context: { appContainer, session }, params, reque
     );
   }
 
+  // validate that for a renewal the child's memberId is contained in the clientApplication
+  if (state.context === 'renewal') {
+    invariant(state.clientApplication, 'state.clientApplication must be defined for a renewal application');
+    const child = state.clientApplication.children.find((child) => child.information.clientNumber === parsedDataResult.data.memberId);
+    if (!child) return { status: 'not-eligible' } as const;
+  }
+
   savePublicApplicationState({
     params,
     session,
@@ -219,10 +227,7 @@ export async function action({ context: { appContainer, session }, params, reque
       children: state.children.map((child) => {
         if (child.id !== childState.id) return child;
         const information = { ...parsedDataResult.data, ...parsedSinDataResult.data };
-        return {
-          ...child,
-          information,
-        };
+        return { ...child, information };
       }),
     },
   });
@@ -231,19 +236,8 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/application/$id/children/$childId/parent-or-guardian', params));
   }
 
-  const ageCategory = getContextualAgeCategoryFromDate(parsedDataResult.data.dateOfBirth, state.context);
-
-  if (ageCategory === 'adults' || ageCategory === 'seniors') {
+  if (!isChildEligible(parsedDataResult.data.dateOfBirth, state.context)) {
     return redirect(getPathById('public/application/$id/children/$childId/cannot-apply-child', params));
-  }
-
-  // validate that for a renewal the child's memberId is contained in the clientApplication
-  if (state.context === 'renewal') {
-    invariant(state.clientApplication, 'state.clientApplication must be defined for a renewal application');
-    const isChildValid = state.clientApplication.children.some((child) => child.information.clientNumber === parsedDataResult.data.memberId);
-    if (!isChildValid) {
-      return { status: 'not-eligible' } as const;
-    }
   }
 
   return redirect(getPathById(`public/application/$id/${state.inputModel}-${state.typeOfApplication}/childrens-application`, params));
