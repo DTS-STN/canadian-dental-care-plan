@@ -5,7 +5,8 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
-import { clearPublicApplicationState, getEligibilityStatus, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getEligibilityStatus } from '~/.server/routes/helpers/base-application-route-helpers';
+import { clearPublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicApplicationSimplifiedAdultState } from '~/.server/routes/helpers/public-application-simplified-adult-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
@@ -122,6 +123,11 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-adult:confirm.page-title') }) };
 
+  const eligibility = getEligibilityStatus({
+    hasPrivateDentalInsurance: state.dentalInsurance.hasDentalInsurance,
+    t4DentalIndicator: state.clientApplication?.t4DentalIndicator,
+  });
+
   return {
     dentalInsurance,
     homeAddressInfo,
@@ -131,7 +137,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     submissionInfo: state.submissionInfo,
     surveyLink,
     userInfo,
-    eligibility: getEligibilityStatus(state.dentalInsurance.hasDentalInsurance, state.clientApplication?.t4DentalIndicator),
+    eligibility,
   };
 }
 

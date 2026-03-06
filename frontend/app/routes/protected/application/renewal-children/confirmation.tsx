@@ -6,8 +6,9 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
+import { getEligibilityStatus } from '~/.server/routes/helpers/base-application-route-helpers';
 import { loadProtectedApplicationRenewalChildState } from '~/.server/routes/helpers/protected-application-renewal-child-route-helpers';
-import { clearProtectedApplicationState, getEligibilityStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { clearProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -127,7 +128,10 @@ export async function loader({ context: { appContainer, session }, params, reque
       : undefined;
 
       invariant(child.dentalInsurance, "Child's dental insurance must be defined");
-      const eligibility = getEligibilityStatus(child.dentalInsurance.hasDentalInsurance, state.clientApplication.t4DentalIndicator);
+      const eligibility = getEligibilityStatus({
+        hasPrivateDentalInsurance: child.dentalInsurance.hasDentalInsurance,
+        t4DentalIndicator: state.clientApplication.t4DentalIndicator,
+      });
 
       return {
         id: child.id,

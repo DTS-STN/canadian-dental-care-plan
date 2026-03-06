@@ -14,7 +14,6 @@ import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
-import type { EligibilityType } from '~/components/eligibility';
 import { getAgeFromDateString } from '~/utils/date-utils';
 import { generateId, isValidId } from '~/utils/id.utils';
 import { getPathById } from '~/utils/route-utils';
@@ -501,12 +500,6 @@ export function isWithinRenewalPeriod(date: Date = new Date()): boolean {
   const startDate = new Date(RENEWAL_PERIOD_START_DATE);
   const endDate = new Date(RENEWAL_PERIOD_END_DATE);
   return date >= startDate && date <= endDate;
-}
-
-export function getEligibilityStatus(hasPrivateDentalInsurance: boolean, t4DentalIndicator?: boolean): EligibilityType {
-  if (!hasPrivateDentalInsurance && !t4DentalIndicator) return 'eligible';
-  if (!hasPrivateDentalInsurance && t4DentalIndicator) return 'eligible-proof';
-  return 'ineligible';
 }
 
 /**
