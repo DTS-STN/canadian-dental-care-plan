@@ -21,6 +21,8 @@
     "govt-of-canada.text": "Government of Canada",
     "govt-of-canada.href": "https://www.canada.ca/en.html",
     "menu-title": "Account",
+    "menu-inbox.text": "Inbox",
+    "menu-inbox.href": "{{baseUri}}/en/inbox",
     "menu-dashboard.text": "My dashboard",
     "menu-dashboard.href": "{{baseUri}}/en/my-dashboard",
     "menu-msca-home.href": "{{baseUri}}/sc/msca-mdsc/portal-portail/pro/home-accueil?Lang=eng",
