@@ -14,18 +14,18 @@ exports[`ProgressStepper > renders correctly when all steps are completed (activ
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-green-700 bg-green-700 text-white"
+        class="z-10 flex shrink-0 items-center justify-center rounded-full bg-white ring-4 ring-white transition-all duration-200 [&>svg]:size-5 sm:[&>svg]:size-6 text-green-700"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-check size-2.5 sm:size-3"
-          data-icon="check"
+          class="svg-inline--fa fa-circle-check"
+          data-icon="circle-check"
           data-prefix="fas"
           role="img"
-          viewBox="0 0 448 512"
+          viewBox="0 0 512 512"
         >
           <path
-            d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+            d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zM374 145.7c-10.7-7.8-25.7-5.4-33.5 5.3L221.1 315.2 169 263.1c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l72 72c5 5 11.8 7.5 18.8 7s13.4-4.1 17.5-9.8L379.3 179.2c7.8-10.7 5.4-25.7-5.3-33.5z"
             fill="currentColor"
           />
         </svg>
@@ -50,18 +50,18 @@ exports[`ProgressStepper > renders correctly when all steps are completed (activ
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-green-700 bg-green-700 text-white"
+        class="z-10 flex shrink-0 items-center justify-center rounded-full bg-white ring-4 ring-white transition-all duration-200 [&>svg]:size-5 sm:[&>svg]:size-6 text-green-700"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-check size-2.5 sm:size-3"
-          data-icon="check"
+          class="svg-inline--fa fa-circle-check"
+          data-icon="circle-check"
           data-prefix="fas"
           role="img"
-          viewBox="0 0 448 512"
+          viewBox="0 0 512 512"
         >
           <path
-            d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+            d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zM374 145.7c-10.7-7.8-25.7-5.4-33.5 5.3L221.1 315.2 169 263.1c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l72 72c5 5 11.8 7.5 18.8 7s13.4-4.1 17.5-9.8L379.3 179.2c7.8-10.7 5.4-25.7-5.3-33.5z"
             fill="currentColor"
           />
         </svg>
@@ -82,18 +82,18 @@ exports[`ProgressStepper > renders correctly when all steps are completed (activ
     >
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-green-700 bg-green-700 text-white"
+        class="z-10 flex shrink-0 items-center justify-center rounded-full bg-white ring-4 ring-white transition-all duration-200 [&>svg]:size-5 sm:[&>svg]:size-6 text-green-700"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-check size-2.5 sm:size-3"
-          data-icon="check"
+          class="svg-inline--fa fa-circle-check"
+          data-icon="circle-check"
           data-prefix="fas"
           role="img"
-          viewBox="0 0 448 512"
+          viewBox="0 0 512 512"
         >
           <path
-            d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+            d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zM374 145.7c-10.7-7.8-25.7-5.4-33.5 5.3L221.1 315.2 169 263.1c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l72 72c5 5 11.8 7.5 18.8 7s13.4-4.1 17.5-9.8L379.3 179.2c7.8-10.7 5.4-25.7-5.3-33.5z"
             fill="currentColor"
           />
         </svg>
@@ -128,18 +128,18 @@ exports[`ProgressStepper > renders correctly with the first step active > expect
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-blue-600 bg-white text-blue-600"
+        class="z-10 flex shrink-0 items-center justify-center rounded-full bg-white ring-4 ring-white transition-all duration-200 [&>svg]:size-5 sm:[&>svg]:size-6 text-blue-600"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-circle size-2 sm:size-2.5"
-          data-icon="circle"
-          data-prefix="fas"
+          class="svg-inline--fa fa-circle-dot"
+          data-icon="circle-dot"
+          data-prefix="far"
           role="img"
           viewBox="0 0 512 512"
         >
           <path
-            d="M0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+            d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
             fill="currentColor"
           />
         </svg>
@@ -159,8 +159,22 @@ exports[`ProgressStepper > renders correctly with the first step active > expect
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
-      />
+        class="z-10 flex shrink-0 items-center justify-center rounded-full bg-white ring-4 ring-white transition-all duration-200 [&>svg]:size-5 sm:[&>svg]:size-6 text-gray-300"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-circle"
+          data-icon="circle"
+          data-prefix="far"
+          role="img"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M464 256a208 208 0 1 0 -416 0 208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
       <span
         class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-black/60"
       >
@@ -177,8 +191,22 @@ exports[`ProgressStepper > renders correctly with the first step active > expect
     >
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
-      />
+        class="z-10 flex shrink-0 items-center justify-center rounded-full bg-white ring-4 ring-white transition-all duration-200 [&>svg]:size-5 sm:[&>svg]:size-6 text-gray-300"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-circle"
+          data-icon="circle"
+          data-prefix="far"
+          role="img"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M464 256a208 208 0 1 0 -416 0 208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
       <span
         class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-black/60"
       >
@@ -208,18 +236,18 @@ exports[`ProgressStepper > renders correctly with the last step active > expecte
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-green-700 bg-green-700 text-white"
+        class="z-10 flex shrink-0 items-center justify-center rounded-full bg-white ring-4 ring-white transition-all duration-200 [&>svg]:size-5 sm:[&>svg]:size-6 text-green-700"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-check size-2.5 sm:size-3"
-          data-icon="check"
+          class="svg-inline--fa fa-circle-check"
+          data-icon="circle-check"
           data-prefix="fas"
           role="img"
-          viewBox="0 0 448 512"
+          viewBox="0 0 512 512"
         >
           <path
-            d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+            d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zM374 145.7c-10.7-7.8-25.7-5.4-33.5 5.3L221.1 315.2 169 263.1c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l72 72c5 5 11.8 7.5 18.8 7s13.4-4.1 17.5-9.8L379.3 179.2c7.8-10.7 5.4-25.7-5.3-33.5z"
             fill="currentColor"
           />
         </svg>
@@ -244,18 +272,18 @@ exports[`ProgressStepper > renders correctly with the last step active > expecte
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-green-700 bg-green-700 text-white"
+        class="z-10 flex shrink-0 items-center justify-center rounded-full bg-white ring-4 ring-white transition-all duration-200 [&>svg]:size-5 sm:[&>svg]:size-6 text-green-700"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-check size-2.5 sm:size-3"
-          data-icon="check"
+          class="svg-inline--fa fa-circle-check"
+          data-icon="circle-check"
           data-prefix="fas"
           role="img"
-          viewBox="0 0 448 512"
+          viewBox="0 0 512 512"
         >
           <path
-            d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+            d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zM374 145.7c-10.7-7.8-25.7-5.4-33.5 5.3L221.1 315.2 169 263.1c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l72 72c5 5 11.8 7.5 18.8 7s13.4-4.1 17.5-9.8L379.3 179.2c7.8-10.7 5.4-25.7-5.3-33.5z"
             fill="currentColor"
           />
         </svg>
@@ -277,18 +305,18 @@ exports[`ProgressStepper > renders correctly with the last step active > expecte
     >
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-blue-600 bg-white text-blue-600"
+        class="z-10 flex shrink-0 items-center justify-center rounded-full bg-white ring-4 ring-white transition-all duration-200 [&>svg]:size-5 sm:[&>svg]:size-6 text-blue-600"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-circle size-2 sm:size-2.5"
-          data-icon="circle"
-          data-prefix="fas"
+          class="svg-inline--fa fa-circle-dot"
+          data-icon="circle-dot"
+          data-prefix="far"
           role="img"
           viewBox="0 0 512 512"
         >
           <path
-            d="M0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+            d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
             fill="currentColor"
           />
         </svg>
@@ -317,18 +345,18 @@ exports[`ProgressStepper > renders correctly with the second step active > expec
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-green-700 bg-green-700 text-white"
+        class="z-10 flex shrink-0 items-center justify-center rounded-full bg-white ring-4 ring-white transition-all duration-200 [&>svg]:size-5 sm:[&>svg]:size-6 text-green-700"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-check size-2.5 sm:size-3"
-          data-icon="check"
+          class="svg-inline--fa fa-circle-check"
+          data-icon="circle-check"
           data-prefix="fas"
           role="img"
-          viewBox="0 0 448 512"
+          viewBox="0 0 512 512"
         >
           <path
-            d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+            d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zM374 145.7c-10.7-7.8-25.7-5.4-33.5 5.3L221.1 315.2 169 263.1c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l72 72c5 5 11.8 7.5 18.8 7s13.4-4.1 17.5-9.8L379.3 179.2c7.8-10.7 5.4-25.7-5.3-33.5z"
             fill="currentColor"
           />
         </svg>
@@ -354,18 +382,18 @@ exports[`ProgressStepper > renders correctly with the second step active > expec
       />
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-blue-600 bg-white text-blue-600"
+        class="z-10 flex shrink-0 items-center justify-center rounded-full bg-white ring-4 ring-white transition-all duration-200 [&>svg]:size-5 sm:[&>svg]:size-6 text-blue-600"
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-circle size-2 sm:size-2.5"
-          data-icon="circle"
-          data-prefix="fas"
+          class="svg-inline--fa fa-circle-dot"
+          data-icon="circle-dot"
+          data-prefix="far"
           role="img"
           viewBox="0 0 512 512"
         >
           <path
-            d="M0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+            d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm0 304a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"
             fill="currentColor"
           />
         </svg>
@@ -381,8 +409,22 @@ exports[`ProgressStepper > renders correctly with the second step active > expec
     >
       <div
         aria-hidden="true"
-        class="z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6 border-gray-300 bg-white text-gray-300"
-      />
+        class="z-10 flex shrink-0 items-center justify-center rounded-full bg-white ring-4 ring-white transition-all duration-200 [&>svg]:size-5 sm:[&>svg]:size-6 text-gray-300"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-circle"
+          data-icon="circle"
+          data-prefix="far"
+          role="img"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M464 256a208 208 0 1 0 -416 0 208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
       <span
         class="grow overflow-hidden text-left text-sm font-medium text-nowrap text-ellipsis transition-colors duration-200 sm:overflow-auto sm:text-wrap text-black/60"
       >

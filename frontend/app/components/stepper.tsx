@@ -1,6 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
 
-import { faCheck, faCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCircle, faCircleDot } from '@fortawesome/free-regular-svg-icons';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import type { ReadonlyDeep } from 'type-fest';
@@ -77,17 +78,18 @@ function StepItem({ label, status, isLast, customIcon }: StepItemProps) {
       {/* Indicator Box */}
       <div
         className={cn(
-          'z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white transition-all duration-200 sm:size-6',
-          status === 'upcoming' && 'border-gray-300 bg-white text-gray-300',
-          status === 'current' && 'border-blue-600 bg-white text-blue-600',
-          status === 'completed' && 'border-green-700 bg-green-700 text-white',
+          'z-10 flex shrink-0 items-center justify-center rounded-full bg-white ring-4 ring-white transition-all duration-200 [&>svg]:size-5 sm:[&>svg]:size-6',
+          status === 'upcoming' && 'text-gray-300',
+          status === 'current' && 'text-blue-600',
+          status === 'completed' && 'text-green-700',
         )}
         aria-hidden="true"
       >
         {customIcon ?? (
           <>
-            {status === 'current' && <FontAwesomeIcon icon={faCircle} className="size-2 sm:size-2.5" />}
-            {status === 'completed' && <FontAwesomeIcon icon={faCheck} className="size-2.5 sm:size-3" />}
+            {status === 'current' && <FontAwesomeIcon icon={faCircleDot} />}
+            {status === 'completed' && <FontAwesomeIcon icon={faCircleCheck} />}
+            {status === 'upcoming' && <FontAwesomeIcon icon={faCircle} />}
           </>
         )}
       </div>
