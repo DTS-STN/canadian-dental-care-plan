@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 
-import { useNavigate } from 'react-router';
+import { redirect, useNavigate } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
 
 import type { Route } from './+types/index';
 
 import { TYPES } from '~/.server/constants';
+import type { ClientApplicationDto } from '~/.server/domain/dtos';
+import { isEligibleToRenew } from '~/.server/routes/helpers/base-application-route-helpers';
 import { isWithinRenewalPeriod, startProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
@@ -40,9 +42,15 @@ export async function loader({ context: { appContainer, session }, request, para
   const applicationYear = applicationYearService.getIntakeApplicationYear(getCurrentDateString());
 
   // Only require client application if within renewal period, otherwise intake period does not require client application.
-  const clientApplication = isWithinRenewalPeriod() //
-    ? await securityHandler.requireClientApplication({ applicationYearId: applicationYear.applicationYearId, params, request, session })
-    : undefined;
+  let clientApplication: ClientApplicationDto | undefined;
+
+  if (isWithinRenewalPeriod()) {
+    clientApplication = await securityHandler.requireClientApplication({ applicationYearId: applicationYear.applicationYearId, params, request, session });
+
+    if (!isEligibleToRenew(clientApplication)) {
+      throw redirect(getPathById('protected/data-unavailable', params));
+    }
+  }
 
   const state = startProtectedApplicationState({ session, applicationYear, clientApplication });
 
