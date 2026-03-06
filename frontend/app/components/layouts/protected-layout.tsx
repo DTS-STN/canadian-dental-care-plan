@@ -3,12 +3,13 @@ import type { PropsWithChildren } from 'react';
 
 import { Link } from 'react-router';
 
-import { faArrowRightFromBracket, faChevronDown, faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightFromBracket, faChevronDown, faCircleUser, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { AppLink } from '../app-link';
 import { Banner } from '../banner';
+import { ButtonLink } from '../buttons';
 
 import { Breadcrumbs } from '~/components/breadcrumbs';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '~/components/dropdown-menu';
@@ -139,10 +140,34 @@ function PageHeader() {
                 {t('gcweb:header.application-title-msca')}
               </AppLink>
             </h2>
-            <NavigationMenu />
+            <div className="items-center gap-8 md:flex">
+              <ButtonLink
+                variant="alternative"
+                startIcon={faEnvelope}
+                startIconProps={{ size: 'xl' }}
+                className="hidden px-3 py-1.5 font-sans text-xl text-gray-700 md:flex"
+                to={t('gcweb:header.menu-inbox.href', { baseUri: SCCH_BASE_URI })}
+                data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:my-dashboard"
+              >
+                {t('gcweb:header.menu-inbox.text')}
+              </ButtonLink>
+              <NavigationMenu />
+            </div>
           </div>
         </div>
       </section>
+      <div className="container mt-6 md:hidden">
+        <ButtonLink
+          variant="secondary"
+          startIcon={faEnvelope}
+          startIconProps={{ size: 'xl' }}
+          className="px-3 py-1.5 font-sans text-xl text-gray-700"
+          to={t('gcweb:header.menu-inbox.href', { baseUri: SCCH_BASE_URI })}
+          data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:my-dashboard"
+        >
+          {t('gcweb:header.menu-inbox.text')}
+        </ButtonLink>
+      </div>
     </header>
   );
 }
