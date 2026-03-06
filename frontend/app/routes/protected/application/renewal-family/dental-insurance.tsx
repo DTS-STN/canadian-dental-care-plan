@@ -117,7 +117,7 @@ export async function loader({ context: { appContainer, session }, request, para
     },
     shouldSkipMaritalStatusStep: shouldSkipMaritalStatus(state),
     clientApplication: {
-      dentalBenefits: clientDentalBenefits.hasFederalBenefits || clientDentalBenefits.hasProvincialTerritorialBenefits ? clientDentalBenefits : undefined,
+      dentalBenefits: clientDentalBenefits,
     },
     sections,
     meta,
@@ -338,33 +338,25 @@ function DentalBenefitsCardContent(): JSX.Element {
     );
   }
 
-  if (clientApplication.dentalBenefits) {
-    return (
-      <CardContent>
-        <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-family:dental-insurance.access-to-government-benefits')}>
-            <div>
-              {clientApplication.dentalBenefits.hasFederalBenefits || clientApplication.dentalBenefits.hasProvincialTerritorialBenefits ? (
-                <div className="space-y-3">
-                  <p>{t('protected-application-renewal-family:dental-insurance.access-to-government-benefits-yes')}</p>
-                  <ul className="list-disc space-y-1 pl-7">
-                    {clientApplication.dentalBenefits.hasFederalBenefits && <li>{clientApplication.dentalBenefits.federalSocialProgram}</li>}
-                    {clientApplication.dentalBenefits.hasProvincialTerritorialBenefits && <li>{clientApplication.dentalBenefits.provincialTerritorialSocialProgram}</li>}
-                  </ul>
-                </div>
-              ) : (
-                <p>{t('protected-application-renewal-family:dental-insurance.access-to-government-benefits-no')}</p>
-              )}
-            </div>
-          </DefinitionListItem>
-        </DefinitionList>
-      </CardContent>
-    );
-  }
-
   return (
     <CardContent>
-      <p>{t('protected-application-renewal-family:dental-insurance.dental-benefits-indicate-status')}</p>
+      <DefinitionList layout="single-column">
+        <DefinitionListItem term={t('protected-application-renewal-family:dental-insurance.access-to-government-benefits')}>
+          <div>
+            {clientApplication.dentalBenefits.hasFederalBenefits || clientApplication.dentalBenefits.hasProvincialTerritorialBenefits ? (
+              <div className="space-y-3">
+                <p>{t('protected-application-renewal-family:dental-insurance.access-to-government-benefits-yes')}</p>
+                <ul className="list-disc space-y-1 pl-7">
+                  {clientApplication.dentalBenefits.hasFederalBenefits && <li>{clientApplication.dentalBenefits.federalSocialProgram}</li>}
+                  {clientApplication.dentalBenefits.hasProvincialTerritorialBenefits && <li>{clientApplication.dentalBenefits.provincialTerritorialSocialProgram}</li>}
+                </ul>
+              </div>
+            ) : (
+              <p>{t('protected-application-renewal-family:dental-insurance.access-to-government-benefits-no')}</p>
+            )}
+          </div>
+        </DefinitionListItem>
+      </DefinitionList>
     </CardContent>
   );
 }
@@ -383,7 +375,7 @@ function DentalBenefitsCardContent(): JSX.Element {
  */
 function DentalBenefitsCardFooter(): JSX.Element {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { state, clientApplication, sections } = useLoaderData<typeof loader>();
+  const { state, sections } = useLoaderData<typeof loader>();
   const params = useParams();
 
   if (state.dentalBenefits || sections.dentalBenefits.completed) {
@@ -405,55 +397,36 @@ function DentalBenefitsCardFooter(): JSX.Element {
     );
   }
 
-  if (clientApplication.dentalBenefits) {
-    return (
-      <CardFooter className="divide-y border-t bg-zinc-100 px-0">
-        <div className="w-full px-6">
-          <ButtonLink
-            id="update-button-government-benefits"
-            variant="link"
-            className="mb-5 p-0"
-            routeId="protected/application/$id/federal-provincial-territorial-benefits"
-            params={params}
-            startIcon={faPenToSquare}
-            size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Update button government benefits click"
-          >
-            {t('protected-application-renewal-family:dental-insurance.update-my-access')}
-          </ButtonLink>
-        </div>
-        <div className="w-full px-6">
-          <Button
-            id="complete-benefits-button"
-            name="_action"
-            value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
-            variant="link"
-            className="mt-5 p-0"
-            startIcon={faCircleCheck}
-            size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Complete benefits click"
-          >
-            {t('protected-application-renewal-family:dental-insurance.access-not-changed')}
-          </Button>
-        </div>
-      </CardFooter>
-    );
-  }
-
   return (
-    <CardFooter className="border-t bg-zinc-100">
-      <ButtonLink
-        id="add-button-government-benefits"
-        variant="link"
-        className="p-0"
-        routeId="protected/application/$id/federal-provincial-territorial-benefits"
-        params={params}
-        startIcon={faCirclePlus}
-        size="lg"
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Add button government benefits click"
-      >
-        {t('protected-application-renewal-family:dental-insurance.add-access-to-government-benefits')}
-      </ButtonLink>
+    <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+      <div className="w-full px-6">
+        <ButtonLink
+          id="update-button-government-benefits"
+          variant="link"
+          className="mb-5 p-0"
+          routeId="protected/application/$id/federal-provincial-territorial-benefits"
+          params={params}
+          startIcon={faPenToSquare}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Update button government benefits click"
+        >
+          {t('protected-application-renewal-family:dental-insurance.update-my-access')}
+        </ButtonLink>
+      </div>
+      <div className="w-full px-6">
+        <Button
+          id="complete-benefits-button"
+          name="_action"
+          value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
+          variant="link"
+          className="mt-5 p-0"
+          startIcon={faCircleCheck}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Complete benefits click"
+        >
+          {t('protected-application-renewal-family:dental-insurance.access-not-changed')}
+        </Button>
+      </div>
     </CardFooter>
   );
 }
