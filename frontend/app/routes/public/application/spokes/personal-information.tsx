@@ -9,6 +9,7 @@ import type { Route } from './+types/personal-information';
 
 import { TYPES } from '~/.server/constants';
 import type { ClientApplicationDto } from '~/.server/domain/dtos/client-application.dto';
+import { isEligibleToRenew } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicantInformationState, InputModelState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getContextualAgeCategoryFromDate, getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -156,14 +157,15 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  const ageCategory = getContextualAgeCategoryFromDate(parsedDataResult.data.dateOfBirth, state.context);
-
   // Determine input model based on context and data. 'intake' applications always use 'full' model
   let inputModel: InputModelState = 'full';
 
   // Fetch client application data using ClientApplicationService
   let clientApplication: ClientApplicationDto | undefined;
 
+  // For renewal applications, we need to determine the input model based on the client's application data. If the
+  // client has a copayTierEarningRecord, we can use the 'simplified' model which requires less information from the
+  // applicant. Otherwise, we use the 'full' model.
   if (state.context === 'renewal') {
     invariant(parsedDataResult.data.memberId, 'Member ID must be defined for renewal applications');
 
@@ -177,12 +179,14 @@ export async function action({ context: { appContainer, session }, params, reque
       userId: 'anonymous',
     });
 
-    if (clientApplicationOption.isNone()) {
+    clientApplication = clientApplicationOption.unwrapUnchecked();
+
+    // If no client application is found or if the client application is not eligible for renewal, return an error
+    // status with the date when they can apply again
+    if (!clientApplication || !isEligibleToRenew(clientApplication)) {
       const startDate = toLocaleDateString(addDays(RENEWAL_PERIOD_END_DATE, 1), locale);
       return { status: 'client-not-found', startDate } as const;
     }
-
-    clientApplication = clientApplicationOption.unwrap();
 
     // Determine input model based on client application data
     // If copayTierEarningRecord exists, use 'simplified' model
@@ -205,6 +209,8 @@ export async function action({ context: { appContainer, session }, params, reque
       },
     },
   });
+
+  const ageCategory = getContextualAgeCategoryFromDate(parsedDataResult.data.dateOfBirth, state.context);
 
   if (ageCategory === 'youth') {
     return redirect(getPathById('public/application/$id/living-independently', params));
