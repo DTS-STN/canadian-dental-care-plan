@@ -129,7 +129,7 @@
         {
           "BenefitEligibilityStatus": {
             "StatusCode": {
-              "ReferenceDataID": "775170001"
+              "ReferenceDataID": "775170000"
             }
           },
           "Coverage": [
