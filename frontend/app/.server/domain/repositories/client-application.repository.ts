@@ -162,6 +162,33 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
         ApplicantEarning: [],
       },
     ],
+    [
+      '10000000004',
+      {
+        InvitationToApplyIndicator: false,
+        PreviousTaxesFiledIndicator: true,
+        ApplicantEarning: [
+          {
+            BenefitEligibilityStatus: {
+              StatusCode: {
+                ReferenceDataID: '775170001',
+              },
+            },
+            Coverage: [
+              {
+                CoverageCategoryCode: {
+                  ReferenceDataName: 'Co-Pay Tier',
+                },
+                CoverageTierCode: {
+                  ReferenceDataID: 'c12531e1-ef6d-49f9-9737-c32271fbba79',
+                },
+              },
+            ],
+            PrivateDentalInsuranceIndicator: true,
+          },
+        ],
+      },
+    ],
     // by sin
     [
       '800000002',
@@ -190,6 +217,33 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
         InvitationToApplyIndicator: false,
         PreviousTaxesFiledIndicator: true,
         ApplicantEarning: [],
+      },
+    ],
+    [
+      '811222333',
+      {
+        InvitationToApplyIndicator: false,
+        PreviousTaxesFiledIndicator: true,
+        ApplicantEarning: [
+          {
+            BenefitEligibilityStatus: {
+              StatusCode: {
+                ReferenceDataID: '775170001',
+              },
+            },
+            Coverage: [
+              {
+                CoverageCategoryCode: {
+                  ReferenceDataName: 'Co-Pay Tier',
+                },
+                CoverageTierCode: {
+                  ReferenceDataID: 'c12531e1-ef6d-49f9-9737-c32271fbba79',
+                },
+              },
+            ],
+            PrivateDentalInsuranceIndicator: true,
+          },
+        ],
       },
     ],
   ]);
