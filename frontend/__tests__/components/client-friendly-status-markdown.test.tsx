@@ -18,7 +18,17 @@ describe('ClientFriendlyStatusMarkdown Component', () => {
   });
 
   it('renders markdown component with correct markdown parsing', () => {
-    const content = `# H1\n## H2\n- unordered list item 1`;
+    const content = `# H1
+
+## H2
+
+- unordered list item 1
+- unordered list item 2
+
+1. ordered list item 1
+2. ordered list item 2
+    `;
+
     const { container } = render(<ClientFriendlyStatusMarkdown content={content} />);
     expect(container).toMatchSnapshot('expected html');
   });
