@@ -4,7 +4,7 @@ import type { MockProxy } from 'vitest-mock-extended';
 import { anyArray, anyObject, mock } from 'vitest-mock-extended';
 
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
-import type { ApplicantService, ClientApplicationService, ClientEligibilityService, CoverageService } from '~/.server/domain/services';
+import type { ApplicantService, ClientApplicationService, ClientEligibilityService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { DefaultSecurityHandler } from '~/.server/routes/security';
@@ -24,7 +24,6 @@ describe('DefaultSecurityHandler', () => {
   let mockRaoidcSessionValidator: MockProxy<RaoidcSessionValidator>;
   let mockClientApplicationService: MockProxy<ClientApplicationService>;
   let mockApplicantService: MockProxy<ApplicantService>;
-  let mockCoverageService: MockProxy<CoverageService>;
   let mockClientEligibilityService: MockProxy<ClientEligibilityService>;
   let securityHandler: DefaultSecurityHandler;
 
@@ -37,7 +36,6 @@ describe('DefaultSecurityHandler', () => {
     mockRaoidcSessionValidator = mock<RaoidcSessionValidator>();
     mockClientApplicationService = mock<ClientApplicationService>();
     mockApplicantService = mock<ApplicantService>();
-    mockCoverageService = mock<CoverageService>();
     mockClientEligibilityService = mock<ClientEligibilityService>();
 
     // Creating an instance of DefaultSecurityHandler with the mocked dependencies
@@ -48,7 +46,6 @@ describe('DefaultSecurityHandler', () => {
       mockRaoidcSessionValidator,
       mockClientApplicationService,
       mockApplicantService,
-      mockCoverageService,
       mockClientEligibilityService,
     );
   });
@@ -138,7 +135,6 @@ describe('DefaultSecurityHandler', () => {
         mockRaoidcSessionValidator,
         mockClientApplicationService,
         mockApplicantService,
-        mockCoverageService,
         mockClientEligibilityService,
       );
 
@@ -161,7 +157,7 @@ describe('DefaultSecurityHandler', () => {
         mockRaoidcSessionValidator,
         mockClientApplicationService,
         mockApplicantService,
-        mockCoverageService,
+
         mockClientEligibilityService,
       );
 
@@ -202,7 +198,7 @@ describe('DefaultSecurityHandler', () => {
         mockRaoidcSessionValidator,
         mockClientApplicationService,
         mockApplicantService,
-        mockCoverageService,
+
         mockClientEligibilityService,
       );
 
@@ -365,17 +361,8 @@ describe('DefaultSecurityHandler', () => {
       const clientNumber = 'client-number-123';
       const params = { lang: 'en' };
 
-      mockCoverageService.getCurrentCoverage //
-        .mockReturnValueOnce({
-          startDate: '2024-01-01',
-          endDate: '2024-12-31',
-          startYear: 2024,
-          endYear: 2024,
-          taxationYear: 2024,
-        });
-
-      mockClientEligibilityService.listClientEligibilityByClientNumbersAndTaxationYear //
-        .calledWith(anyArray([clientNumber]), 2024)
+      mockClientEligibilityService.listClientEligibilitiesByClientNumbers //
+        .calledWith(anyArray([clientNumber]))
         .mockResolvedValueOnce(
           new Map([
             [
@@ -404,17 +391,8 @@ describe('DefaultSecurityHandler', () => {
       const clientNumber = 'client-number-123';
       const params = { lang: 'en' };
 
-      mockCoverageService.getCurrentCoverage //
-        .mockReturnValueOnce({
-          startDate: '2024-01-01',
-          endDate: '2024-12-31',
-          startYear: 2024,
-          endYear: 2024,
-          taxationYear: 2024,
-        });
-
-      mockClientEligibilityService.listClientEligibilityByClientNumbersAndTaxationYear //
-        .calledWith(anyArray([clientNumber]), 2024)
+      mockClientEligibilityService.listClientEligibilitiesByClientNumbers //
+        .calledWith(anyArray([clientNumber]))
         .mockResolvedValueOnce(
           new Map([
             [

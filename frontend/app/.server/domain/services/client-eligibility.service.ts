@@ -4,7 +4,7 @@ import type { Memoized, Options } from 'micro-memoize';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { ClientEligibilityDto, ClientEligibilityRequestDto } from '~/.server/domain/dtos';
+import type { ClientEligibilityDto } from '~/.server/domain/dtos';
 import type { ClientEligibilityDtoMapper } from '~/.server/domain/mappers';
 import type { ClientEligibilityRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
@@ -19,19 +19,10 @@ export interface ClientEligibilityService {
   /**
    * Lists client eligibilities by client numbers.
    *
-   * @param clientEligibilityRequestDto The client eligibility request dto containing client numbers.
-   * @returns A Promise that resolves to a readonly array of client eligibility dtos.
+   * @param clientNumbers - An array of client numbers to retrieve eligibility information for.
+   * @returns A Promise that resolves to a readonly map of client eligibility dtos keyed by client number.
    */
-  listClientEligibilitiesByClientNumbers(clientEligibilityRequestDto: ClientEligibilityRequestDto): Promise<ReadonlyArray<ClientEligibilityDto>>;
-
-  /**
-   * Lists client eligibilities by client numbers and taxation year.
-   *
-   * @param clientNumbers The array of client numbers.
-   * @param taxationYear The taxation year.
-   * @returns A Promise that resolves to a readonly map of client numbers to their client eligibility dto.
-   */
-  listClientEligibilityByClientNumbersAndTaxationYear(clientNumbers: ReadonlyArray<string>, taxationYear: number): Promise<ReadonlyMap<string, ClientEligibilityDto>>;
+  listClientEligibilitiesByClientNumbers(clientNumbers: ReadonlyArray<string>): Promise<ReadonlyMap<string, ClientEligibilityDto>>;
 }
 
 @injectable()
@@ -75,26 +66,17 @@ export class DefaultClientEligibilityService implements ClientEligibilityService
     this.log.debug('DefaultClientEligibilityService initiated.');
   }
 
-  async listClientEligibilitiesByClientNumbers(clientEligibilityRequestDto: ClientEligibilityRequestDto): Promise<ReadonlyArray<ClientEligibilityDto>> {
-    this.log.trace('Get client eligibility with number: [%j]', clientEligibilityRequestDto);
+  async listClientEligibilitiesByClientNumbers(clientNumbers: ReadonlyArray<string>): Promise<ReadonlyMap<string, ClientEligibilityDto>> {
+    this.log.trace('Get client eligibility with numbers: [%j]', clientNumbers);
 
     this.auditService.createAudit('client-eligibility.number.get');
 
+    const clientEligibilityRequestDto = clientNumbers.map((clientNumber) => ({ clientNumber }));
     const clientEligibilityRequestEntity = this.clientEligibilityDtoMapper.mapClientEligibilityRequestDtoToClientEligibilityRequestEntity(clientEligibilityRequestDto);
     const clientEligibilityEntities = await this.clientEligibilityRepository.listClientEligibilitiesByClientNumbers(clientEligibilityRequestEntity);
     const clientEligibilityDtos = clientEligibilityEntities.map((entity) => this.clientEligibilityDtoMapper.mapClientEligibilityEntityToClientEligibilityDto(entity));
 
     this.log.trace('Returning client eligibility: [%j]', clientEligibilityDtos);
-    return clientEligibilityDtos;
-  }
-
-  async listClientEligibilityByClientNumbersAndTaxationYear(clientNumbers: ReadonlyArray<string>, taxationYear: number): Promise<ReadonlyMap<string, ClientEligibilityDto>> {
-    this.log.trace('Get client eligibility status for client numbers: [%j] and taxation year: [%d]', clientNumbers, taxationYear);
-
-    this.auditService.createAudit('client-eligibility_by-client-number-and-taxation-year.get');
-
-    const clientEligibilityRequestDtos = clientNumbers.map((clientNumber) => ({ clientNumber }));
-    const clientEligibilities = await this.listClientEligibilitiesByClientNumbers(clientEligibilityRequestDtos);
-    return new Map(clientEligibilities.map((eligibility) => [eligibility.clientNumber, eligibility]));
+    return new Map(clientEligibilityDtos.map((dto) => [dto.clientNumber, dto]));
   }
 }

@@ -6,7 +6,7 @@ import { inject, injectable } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicantDto, ClientApplicationDto } from '~/.server/domain/dtos';
-import type { ApplicantService, ClientApplicationService, ClientEligibilityService, CoverageService } from '~/.server/domain/services';
+import type { ApplicantService, ClientApplicationService, ClientEligibilityService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { getClientIpAddress } from '~/.server/utils/ip-address.utils';
@@ -191,7 +191,6 @@ export class DefaultSecurityHandler implements SecurityHandler {
   private readonly raoidcSessionValidator: RaoidcSessionValidator;
   private readonly clientApplicationService: ClientApplicationService;
   private readonly applicantService: ApplicantService;
-  private readonly coverageService: CoverageService;
   private readonly clientEligibilityService: ClientEligibilityService;
 
   constructor(
@@ -201,7 +200,6 @@ export class DefaultSecurityHandler implements SecurityHandler {
     @inject(TYPES.RaoidcSessionValidator) raoidcSessionValidator: RaoidcSessionValidator,
     @inject(TYPES.ClientApplicationService) clientApplicationService: ClientApplicationService,
     @inject(TYPES.ApplicantService) applicantService: ApplicantService,
-    @inject(TYPES.CoverageService) coverageService: CoverageService,
     @inject(TYPES.ClientEligibilityService) clientEligibilityService: ClientEligibilityService,
   ) {
     this.log = createLogger('DefaultSecurityHandler');
@@ -211,7 +209,6 @@ export class DefaultSecurityHandler implements SecurityHandler {
     this.raoidcSessionValidator = raoidcSessionValidator;
     this.clientApplicationService = clientApplicationService;
     this.applicantService = applicantService;
-    this.coverageService = coverageService;
     this.clientEligibilityService = clientEligibilityService;
   }
 
@@ -386,8 +383,8 @@ export class DefaultSecurityHandler implements SecurityHandler {
 
   async requireEnrolledApplicant({ clientNumber, params, options = {} }: RequireEnrolledApplicantArgs): Promise<void> {
     this.log.debug('Requiring enrolled applicant with client number [%s]', clientNumber);
-    const currentCoverage = this.coverageService.getCurrentCoverage();
-    const clientEligibilities = await this.clientEligibilityService.listClientEligibilityByClientNumbersAndTaxationYear([clientNumber], currentCoverage.taxationYear);
+
+    const clientEligibilities = await this.clientEligibilityService.listClientEligibilitiesByClientNumbers([clientNumber]);
     const enrollmentStatusCode = clientEligibilities.get(clientNumber)?.enrollmentStatusCode;
 
     if (enrollmentStatusCode !== this.serverConfig.ENROLLMENT_STATUS_CODE_ENROLLED) {

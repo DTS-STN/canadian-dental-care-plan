@@ -36,13 +36,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const dependentClientNumbers = clientApplication.children.map((child) => child.information.clientNumber);
   const clientNumbers = [clientNumber, ...dependentClientNumbers];
 
-  const clientEligibilityRequestDto = clientNumbers.map((clientNumber) => ({ clientNumber }));
+  const clientEligibilityResponse = await appContainer.get(TYPES.ClientEligibilityService).listClientEligibilitiesByClientNumbers(clientNumbers);
 
-  const clientEligibilityResponse = await appContainer.get(TYPES.ClientEligibilityService).listClientEligibilitiesByClientNumbers(clientEligibilityRequestDto);
-
-  const eligibilityMap = new Map(clientEligibilityResponse.map((eligibility) => [eligibility.clientNumber, eligibility]));
-
-  const primaryApplicantEligibility = eligibilityMap.get(clientApplication.applicantInformation.clientNumber);
+  const primaryApplicantEligibility = clientEligibilityResponse.get(clientApplication.applicantInformation.clientNumber);
   const primaryApplicant = {
     clientId: clientApplication.applicantInformation.clientId,
     clientNumber: clientApplication.applicantInformation.clientNumber,
@@ -54,7 +50,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const children = clientApplication.children.map((child) => {
-    const childEligibility = eligibilityMap.get(child.information.clientNumber);
+    const childEligibility = clientEligibilityResponse.get(child.information.clientNumber);
     return {
       clientId: child.information.clientId,
       clientNumber: child.information.clientNumber,
