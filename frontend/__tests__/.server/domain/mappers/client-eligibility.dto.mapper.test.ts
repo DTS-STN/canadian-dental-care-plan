@@ -10,6 +10,7 @@ describe('DefaultClientEligibilityDtoMapper', () => {
   beforeEach(() => {
     const serverConfig = {
       COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: 'Co-Pay Tier (TPC)',
+      COVERAGE_TIER_CODE_TIER_98: 'coverage-tier-98',
       ELIGIBILITY_STATUS_CODE_ELIGIBLE: 'status-001',
       ELIGIBILITY_STATUS_CODE_INELIGIBLE: 'status-002',
     };
@@ -33,7 +34,7 @@ describe('DefaultClientEligibilityDtoMapper', () => {
                 {
                   CoverageCategoryCode: {
                     ReferenceDataName: 'Co-Pay Tier (TPC)',
-                    CoverageTierCode: { ReferenceDataID: 'coverage-001' },
+                    CoverageTierCode: { ReferenceDataID: 'coverage-tier-01' },
                   },
                 },
               ],
@@ -56,7 +57,7 @@ describe('DefaultClientEligibilityDtoMapper', () => {
                 {
                   CoverageCategoryCode: {
                     ReferenceDataName: 'Other Tier',
-                    CoverageTierCode: { ReferenceDataID: 'coverage-002' },
+                    CoverageTierCode: { ReferenceDataID: 'coverage-tier-98' },
                   },
                 },
               ],
@@ -106,13 +107,13 @@ describe('DefaultClientEligibilityDtoMapper', () => {
         clientNumber: '67890',
         earnings: [
           {
-            hasCopayTierCoverage: true,
+            coverageCopayTierCode: 'coverage-tier-01',
             isEligible: true,
             statusCode: 'status-001',
             taxationYear: 2022,
           },
           {
-            hasCopayTierCoverage: false,
+            coverageCopayTierCode: undefined,
             isEligible: false,
             statusCode: 'status-002',
             taxationYear: 2023,

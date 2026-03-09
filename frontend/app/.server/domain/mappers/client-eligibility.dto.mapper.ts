@@ -12,7 +12,7 @@ export interface ClientEligibilityDtoMapper {
   mapClientEligibilityRequestDtoToClientEligibilityRequestEntity(clientEligibilityRequestDto: ClientEligibilityRequestDto): ClientEligibilityRequestEntity;
 }
 
-type DefaultClientEligibilityDtoMapperServerConfig = Pick<ServerConfig, 'COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC' | 'ELIGIBILITY_STATUS_CODE_ELIGIBLE' | 'ELIGIBILITY_STATUS_CODE_INELIGIBLE'>;
+type DefaultClientEligibilityDtoMapperServerConfig = Pick<ServerConfig, 'COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC' | 'ELIGIBILITY_STATUS_CODE_ELIGIBLE' | 'ELIGIBILITY_STATUS_CODE_INELIGIBLE' | 'COVERAGE_TIER_CODE_TIER_98'>;
 
 @injectable()
 export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMapper {
@@ -30,20 +30,28 @@ export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMa
       clientNumber: Result.from(applicant.ClientIdentification.find(({ IdentificationCategoryText }) => IdentificationCategoryText === 'Client Number')?.IdentificationID).expect('Client Number not found'),
       firstName: Result.from(applicant.PersonName.at(0)?.PersonGivenName.at(0)).expect('First name not found'),
       lastName: Result.from(applicant.PersonName.at(0)?.PersonSurName).expect('Last name not found'),
-      earnings: applicant.ApplicantEarning.map((earning) => {
-        const earningStatusCode = earning.BenefitEligibilityStatus.StatusCode.ReferenceDataID;
-        const earningHasEligibilityStatusCode = earningStatusCode === this.serverConfig.ELIGIBILITY_STATUS_CODE_ELIGIBLE;
-        const earningHasCopayTierCoverage = earning.Coverage.some((coverage) => coverage.CoverageCategoryCode.ReferenceDataName === this.serverConfig.COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC);
-        return {
-          hasCopayTierCoverage: earningHasCopayTierCoverage,
-          isEligible: earningHasEligibilityStatusCode && earningHasCopayTierCoverage,
-          statusCode: earningStatusCode,
-          taxationYear: Number.parseInt(earning.EarningTaxationYear.YearDate),
-        };
-      }),
+      earnings: applicant.ApplicantEarning.map((earning) => this.mapApplicantEarningToClientEligibilityEarning(earning)),
       eligibilityStatusCode: applicant.BenefitEligibilityStatus?.StatusCode?.ReferenceDataID,
       eligibilityStatusCodeNextYear: applicant.BenefitEligibilityNextYearStatus?.StatusCode?.ReferenceDataID,
       enrollmentStatusCode: applicant.ApplicantEnrollmentStatus?.StatusCode?.ReferenceDataID,
+    };
+  }
+
+  private mapApplicantEarningToClientEligibilityEarning(earning: ClientEligibilityEntity['Applicant']['ApplicantEarning'][number]): ClientEligibilityDto['earnings'][number] {
+    const earningStatusCode = earning.BenefitEligibilityStatus.StatusCode.ReferenceDataID;
+    const earningHasEligibilityStatusCode = earningStatusCode === this.serverConfig.ELIGIBILITY_STATUS_CODE_ELIGIBLE;
+    const earningCopayTierCoverage = earning.Coverage.find((coverage) => {
+      return (
+        coverage.CoverageCategoryCode.ReferenceDataName === this.serverConfig.COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC && //
+        coverage.CoverageCategoryCode.CoverageTierCode.ReferenceDataID !== this.serverConfig.COVERAGE_TIER_CODE_TIER_98
+      );
+    });
+
+    return {
+      coverageCopayTierCode: earningCopayTierCoverage?.CoverageCategoryCode.CoverageTierCode.ReferenceDataID,
+      isEligible: earningHasEligibilityStatusCode && !!earningCopayTierCoverage,
+      statusCode: earningStatusCode,
+      taxationYear: Number.parseInt(earning.EarningTaxationYear.YearDate),
     };
   }
 
