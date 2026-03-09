@@ -1,19 +1,15 @@
 import type { PropsWithChildren } from 'react';
 
-import type { MarkdownToJSX } from 'markdown-to-jsx/react';
-import Markdown from 'markdown-to-jsx/react';
+import type { Options } from 'react-markdown';
+import Markdown from 'react-markdown';
 
 import { InlineLink } from './inline-link';
 
-const markdownOptions: MarkdownToJSX.Options = {
-  forceWrapper: true,
-  wrapper: ClientFriendlyStatusMarkdownWrapper,
-  overrides: {
-    a: {
-      component: ClientFriendlyStatusMarkdownLink,
-    },
-    ul: <ul className="list-disc space-y-1 pl-7" />,
-    ol: <ol className="list-decimal space-y-1 pl-7" />,
+const markdownOptions: Options = {
+  components: {
+    a: ({ children, href }) => href && <ClientFriendlyStatusMarkdownLink href={href}>{children}</ClientFriendlyStatusMarkdownLink>,
+    ul: ({ children }) => <ul className="list-disc space-y-1 pl-7">{children}</ul>,
+    ol: ({ children }) => <ol className="list-decimal space-y-1 pl-7">{children}</ol>,
   },
 };
 
@@ -21,7 +17,11 @@ const markdownOptions: MarkdownToJSX.Options = {
  * Renders markdown content with custom options.
  */
 export function ClientFriendlyStatusMarkdown({ content }: { content: string }) {
-  return <Markdown options={markdownOptions}>{content}</Markdown>;
+  return (
+    <div className="space-y-4">
+      <Markdown {...markdownOptions}>{content}</Markdown>
+    </div>
+  );
 }
 
 /**
@@ -40,11 +40,4 @@ export function ClientFriendlyStatusMarkdownLink({ children, href }: ClientFrien
       {children}
     </InlineLink>
   );
-}
-
-/**
- * Wraps the content in a div with custom styles.
- */
-export function ClientFriendlyStatusMarkdownWrapper({ children }: PropsWithChildren) {
-  return <div className="space-y-4">{children}</div>;
 }

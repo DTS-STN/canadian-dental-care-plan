@@ -5,18 +5,20 @@ exports[`ClientFriendlyStatusMarkdown Component > renders inline-links from pars
   <div
     class="space-y-4"
   >
-    <a
-      class="text-slate-700 underline hover:text-blue-700 focus:text-blue-700 external-link"
-      href="https://www.example.com"
-      target="_blank"
-    >
-      link text
-      <span
-        class="sr-only"
+    <p>
+      <a
+        class="text-slate-700 underline hover:text-blue-700 focus:text-blue-700 external-link"
+        href="https://www.example.com"
+        target="_blank"
       >
-         (screen-reader.new-tab)
-      </span>
-    </a>
+        link text
+        <span
+          class="sr-only"
+        >
+           (screen-reader.new-tab)
+        </span>
+      </a>
+    </p>
   </div>
 </div>
 `;
@@ -34,36 +36,49 @@ exports[`ClientFriendlyStatusMarkdown Component > renders markdown component wit
   <div
     class="space-y-4"
   >
-    <h1
-      id="h1"
-    >
+    <h1>
       H1
     </h1>
-    <h2
-      id="h2"
-    >
+    
+
+    <h2>
       H2
     </h2>
+    
+
     <ul
       class="list-disc space-y-1 pl-7"
     >
+      
+
       <li>
         unordered list item 1
       </li>
+      
+
       <li>
         unordered list item 2
       </li>
+      
+
     </ul>
+    
+
     <ol
       class="list-decimal space-y-1 pl-7"
-      start="1"
     >
+      
+
       <li>
         ordered list item 1
       </li>
+      
+
       <li>
         ordered list item 2
       </li>
+      
+
     </ol>
   </div>
 </div>
