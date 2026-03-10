@@ -92,10 +92,10 @@ export const clientEnvSchema = z.object({
   COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: z.string().trim().min(1).default('Co-Pay Tier (TPC)'),
 
   // Coverage Tier Codes
-  COVERAGE_TIER_CODE_TIER_1: z.uuid().default('4f763da3-311c-ee11-8f6d-000d3a09d1b8'),
-  COVERAGE_TIER_CODE_TIER_2: z.uuid().default('f2f62bcb-311c-ee11-8f6d-000d3a09d1b8'),
-  COVERAGE_TIER_CODE_TIER_3: z.uuid().default('5984caeb-311c-ee11-8f6d-000d3a09d1b8'),
-  COVERAGE_TIER_CODE_TIER_98: z.uuid().default('a0425bc5-e8fc-ee11-9f8a-000d3a09d132'),
+  COVERAGE_TIER_CODE_TIER_1: z.string().trim().min(1).default('4f763da3-311c-ee11-8f6d-000d3a09d1b8'),
+  COVERAGE_TIER_CODE_TIER_2: z.string().trim().min(1).default('f2f62bcb-311c-ee11-8f6d-000d3a09d1b8'),
+  COVERAGE_TIER_CODE_TIER_3: z.string().trim().min(1).default('5984caeb-311c-ee11-8f6d-000d3a09d1b8'),
+  COVERAGE_TIER_CODE_TIER_98: z.string().trim().min(1).default('a0425bc5-e8fc-ee11-9f8a-000d3a09d132'),
 });
 
 export type ClientEnv = ReadonlyDeep<z.infer<typeof clientEnvSchema>>;
