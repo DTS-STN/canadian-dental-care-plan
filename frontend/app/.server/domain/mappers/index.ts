@@ -4,6 +4,7 @@ export * from './application-status.dto.mapper';
 export * from './application-year.dto.mapper';
 export * from './benefit-application.dto.mapper';
 export * from './benefit-renewal.dto.mapper';
+export * from './client-application-renewal-eligibility.dto.mapper';
 export * from './client-application.dto.mapper';
 export * from './client-eligibility.dto.mapper';
 export * from './client-friendly-status.dto.mapper';
