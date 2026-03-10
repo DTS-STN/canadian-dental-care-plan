@@ -5,6 +5,7 @@ export type * from './application-year.dto';
 export type * from './audit.dto';
 export type * from './benefit-application.dto';
 export type * from './benefit-renewal.dto';
+export type * from './client-application-renewal-eligibility.dto';
 export type * from './client-application.dto';
 export type * from './client-eligibility.dto';
 export type * from './client-friendly-status.dto';

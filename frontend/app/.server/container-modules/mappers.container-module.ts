@@ -9,6 +9,7 @@ import {
   DefaultBenefitApplicationDtoMapper,
   DefaultBenefitRenewalDtoMapper,
   DefaultClientApplicationDtoMapper,
+  DefaultClientApplicationRenewalEligibilityDtoMapper,
   DefaultClientEligibilityDtoMapper,
   DefaultClientFriendlyStatusDtoMapper,
   DefaultCountryDtoMapper,
@@ -45,6 +46,7 @@ export function createMappersContainerModule(): ContainerModule {
     options.bind(TYPES.BenefitRenewalStateMapper).to(DefaultBenefitRenewalStateMapper);
     options.bind(TYPES.BenefitRenewalDtoMapper).to(DefaultBenefitRenewalDtoMapper);
     options.bind(TYPES.ClientApplicationDtoMapper).to(DefaultClientApplicationDtoMapper);
+    options.bind(TYPES.ClientApplicationRenewalEligibilityDtoMapper).to(DefaultClientApplicationRenewalEligibilityDtoMapper);
     options.bind(TYPES.ClientEligibilityDtoMapper).to(DefaultClientEligibilityDtoMapper);
     options.bind(TYPES.ClientFriendlyStatusDtoMapper).to(DefaultClientFriendlyStatusDtoMapper);
     options.bind(TYPES.CountryDtoMapper).to(DefaultCountryDtoMapper);

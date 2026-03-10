@@ -6,6 +6,7 @@ export * from './audit.service';
 export * from './benefit-application.service';
 export * from './benefit-renewal.service';
 export * from './client-application.service';
+export * from './client-application-renewal-eligibility.service';
 export * from './client-eligibility.service';
 export * from './client-friendly-status.service';
 export * from './country.service';
