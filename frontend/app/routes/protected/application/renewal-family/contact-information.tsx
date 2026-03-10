@@ -223,7 +223,9 @@ export default function ProtectedRenewFamilyContactInformation({ loaderData, par
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>{t('protected-application-renewal-family:contact-information.phone-number')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('protected-application-renewal-family:contact-information.phone-number')}</h2>
+            </CardTitle>
             <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <PhoneNumberCardContent />
@@ -232,7 +234,9 @@ export default function ProtectedRenewFamilyContactInformation({ loaderData, par
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('protected-application-renewal-family:contact-information.mailing-and-home-address')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('protected-application-renewal-family:contact-information.mailing-and-home-address')}</h2>
+            </CardTitle>
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <MailingAndHomeAddressCardContent />
@@ -241,7 +245,9 @@ export default function ProtectedRenewFamilyContactInformation({ loaderData, par
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('protected-application-renewal-family:contact-information.communication-preferences')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('protected-application-renewal-family:contact-information.communication-preferences')}</h2>
+            </CardTitle>
             <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CommunicationPreferencesCardContent />

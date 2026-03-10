@@ -167,7 +167,9 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
               </div>
               <Card className="my-2">
                 <CardHeader>
-                  <CardTitle>{t('application-full-family:childrens-application.child-information-card-title', { childNumber: index + 1 })}</CardTitle>
+                  <CardTitle asChild>
+                    <h2>{t('application-full-family:childrens-application.child-information-card-title', { childNumber: index + 1 })}</h2>
+                  </CardTitle>
                   <CardAction>{sections.childInformation.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
@@ -213,7 +215,9 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
 
               <Card className="my-2">
                 <CardHeader>
-                  <CardTitle>{t('application-full-family:childrens-application.child-dental-insurance-card-title')}</CardTitle>
+                  <CardTitle asChild>
+                    <h2>{t('application-full-family:childrens-application.child-dental-insurance-card-title')}</h2>
+                  </CardTitle>
                   <CardAction>{sections.childDentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
@@ -245,7 +249,9 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
 
               <Card className="my-2">
                 <CardHeader>
-                  <CardTitle>{t('application-full-family:childrens-application.child-dental-benefits-card-title')}</CardTitle>
+                  <CardTitle asChild>
+                    <h2>{t('application-full-family:childrens-application.child-dental-benefits-card-title')}</h2>
+                  </CardTitle>
                   <CardAction>{sections.childDentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>

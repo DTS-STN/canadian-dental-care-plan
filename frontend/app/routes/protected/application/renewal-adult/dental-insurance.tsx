@@ -170,7 +170,9 @@ export default function ProtectedRenewAdultDentalInsurance({ loaderData, params 
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('protected-application-renewal-adult:dental-insurance.access-to-dental-insurance')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('protected-application-renewal-adult:dental-insurance.access-to-dental-insurance')}</h2>
+            </CardTitle>
             <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <DentalInsuranceCardContent />
@@ -179,7 +181,9 @@ export default function ProtectedRenewAdultDentalInsurance({ loaderData, params 
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('protected-application-renewal-adult:dental-insurance.other-benefits')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('protected-application-renewal-adult:dental-insurance.other-benefits')}</h2>
+            </CardTitle>
             <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <DentalBenefitsCardContent />

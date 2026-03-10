@@ -189,7 +189,9 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
               </div>
               <Card className="my-2">
                 <CardHeader>
-                  <CardTitle>{t('application-simplified-child:childrens-application.child-information-card-title', { childNumber: index + 1 })}</CardTitle>
+                  <CardTitle asChild>
+                    <h2>{t('application-simplified-child:childrens-application.child-information-card-title', { childNumber: index + 1 })}</h2>
+                  </CardTitle>
                   <CardAction>{sections.childInformation.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
@@ -233,7 +235,9 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
 
               <Card className="my-2">
                 <CardHeader>
-                  <CardTitle>{t('application-simplified-child:childrens-application.child-dental-insurance-card-title')}</CardTitle>
+                  <CardTitle asChild>
+                    <h2>{t('application-simplified-child:childrens-application.child-dental-insurance-card-title')}</h2>
+                  </CardTitle>
                   <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
@@ -265,7 +269,9 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
 
               <Card className="my-2">
                 <CardHeader>
-                  <CardTitle>{t('application-simplified-child:childrens-application.child-dental-benefits-card-title')}</CardTitle>
+                  <CardTitle asChild>
+                    <h2>{t('application-simplified-child:childrens-application.child-dental-benefits-card-title')}</h2>
+                  </CardTitle>
                   <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>

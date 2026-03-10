@@ -101,7 +101,9 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>{t('protected-application-intake-child:parent-or-guardian.marital-status')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('protected-application-intake-child:parent-or-guardian.marital-status')}</h2>
+            </CardTitle>
             <CardAction>{sections.maritalStatus.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
@@ -146,7 +148,9 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('protected-application-intake-child:parent-or-guardian.phone-number')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('protected-application-intake-child:parent-or-guardian.phone-number')}</h2>
+            </CardTitle>
             <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
@@ -183,7 +187,9 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('protected-application-intake-child:parent-or-guardian.mailing-and-home-address')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('protected-application-intake-child:parent-or-guardian.mailing-and-home-address')}</h2>
+            </CardTitle>
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
@@ -234,7 +240,9 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('protected-application-intake-child:parent-or-guardian.communication-preferences')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('protected-application-intake-child:parent-or-guardian.communication-preferences')}</h2>
+            </CardTitle>
             <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>

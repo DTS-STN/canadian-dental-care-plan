@@ -75,7 +75,9 @@ export default function ProtectedNewAdultMaritalStatus({ loaderData, params }: R
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>{t('protected-application-renewal-adult:marital-status.marital-status')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('protected-application-renewal-adult:marital-status.marital-status')}</h2>
+            </CardTitle>
             <CardAction>{sections.maritalStatus.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>

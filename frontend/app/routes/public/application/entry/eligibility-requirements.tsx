@@ -56,7 +56,9 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>{t('application:eligibility-requirements.terms-conditions-section.title')}</CardTitle>
+          <CardTitle asChild>
+            <h2>{t('application:eligibility-requirements.terms-conditions-section.title')}</h2>
+          </CardTitle>
           <CardAction>{sections.termsAndConditions.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
@@ -89,7 +91,9 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle>{t('application:eligibility-requirements.tax-filing-section.title')}</CardTitle>
+          <CardTitle asChild>
+            <h2>{t('application:eligibility-requirements.tax-filing-section.title')}</h2>
+          </CardTitle>
           <CardAction>{sections.taxFiling.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
