@@ -1,6 +1,11 @@
 import type { ReadonlyDeep } from 'type-fest';
 
 export type ClientApplicationDto = ReadonlyDeep<{
+  /**
+   * The year ID of the application, which corresponds to the benefit application year in the database. This is used to
+   * determine which year's rules and eligibility criteria to apply when processing the application.
+   */
+  applicationYearId: string;
   applicantInformation: ClientApplicantInformationDto;
   children: ClientChildDto[];
   communicationPreferences: ClientCommunicationPreferencesDto;

@@ -213,6 +213,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
       };
 
       const expectedClientApplicationDto: ClientApplicationDto = {
+        applicationYearId: '2024',
         applicantInformation: {
           firstName: 'John',
           lastName: 'Doe',

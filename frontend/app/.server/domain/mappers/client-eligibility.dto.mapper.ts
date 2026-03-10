@@ -48,6 +48,7 @@ export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMa
     });
 
     return {
+      applicationYearId: earning.BenefitApplicationYearIdentification.IdentificationID,
       coverageCopayTierCode: earningCopayTierCoverage?.CoverageCategoryCode.CoverageTierCode.ReferenceDataID,
       isEligible: earningHasEligibilityStatusCode && !!earningCopayTierCoverage,
       statusCode: earningStatusCode,

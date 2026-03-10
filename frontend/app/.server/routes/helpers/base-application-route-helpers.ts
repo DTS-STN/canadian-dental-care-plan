@@ -76,18 +76,12 @@ export function isChildEligible(dateOfBirth: string, context: 'intake' | 'renewa
 }
 
 /**
- * Determines if a client application is eligible to renew based on its eligibility status code. If the eligibility
- * status code is missing or empty (i.e., falsy), the application is assumed to be eligible to renew.
+ * Determines if a client application is eligible to renew based on its eligibility status code.
  *
  * @param clientApplicationDto - The client application DTO.
  * @returns A boolean indicating whether the client application is eligible to renew.
  */
 export function isEligibleToRenew(clientApplicationDto: Pick<ClientApplicationDto, 'eligibilityStatusCode'>): boolean {
-  if (!clientApplicationDto.eligibilityStatusCode) {
-    // If the eligibility status code is missing or empty (i.e., falsy), we assume the application is eligible to renew.
-    return true;
-  }
-
   // If the eligibility status code is defined, we check if it is equal to the eligible status code.
   const { ELIGIBILITY_STATUS_CODE_ELIGIBLE } = getEnv();
   return clientApplicationDto.eligibilityStatusCode === ELIGIBILITY_STATUS_CODE_ELIGIBLE;

@@ -4,6 +4,7 @@ export type ClientEligibilityDto = ReadonlyDeep<{
   clientId: string;
   clientNumber: string;
   earnings: ReadonlyArray<{
+    applicationYearId: string;
     /** Co-pay tier code for the earning taxation year */
     coverageCopayTierCode?: string;
     /** Indicates if client is eligible for the earning taxation year */
