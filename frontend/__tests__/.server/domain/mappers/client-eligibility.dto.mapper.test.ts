@@ -107,12 +107,14 @@ describe('DefaultClientEligibilityDtoMapper', () => {
         clientNumber: '67890',
         earnings: [
           {
+            applicationYearId: '2022',
             coverageCopayTierCode: 'coverage-tier-01',
             isEligible: true,
             statusCode: 'status-001',
             taxationYear: 2022,
           },
           {
+            applicationYearId: '2023',
             coverageCopayTierCode: undefined,
             isEligible: false,
             statusCode: 'status-002',

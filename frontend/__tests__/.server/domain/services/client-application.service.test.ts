@@ -182,6 +182,7 @@ describe('DefaultClientApplicationService', () => {
 
   // Mock for ClientApplicationDto
   const mockClientApplicationDto: ClientApplicationDto = {
+    applicationYearId: '2024',
     applicantInformation: {
       firstName: 'John',
       lastName: 'Doe',

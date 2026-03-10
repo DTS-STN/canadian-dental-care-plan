@@ -1,6 +1,24 @@
 import type { ClientApplicationDto } from '~/.server/domain/dtos/client-application.dto';
 
-export type ClientApplicationRenewalEligibilityDto = ClientApplicationDto;
+export type ClientApplicationRenewalEligibilityDto =
+  | {
+      result: 'CLIENT-APPLICATION-NOT-FOUND';
+      clientApplication?: undefined;
+      eligibleClientNumbers?: undefined;
+      inputModel?: undefined;
+    }
+  | {
+      result: 'INELIGIBLE';
+      clientApplication: ClientApplicationDto;
+      eligibleClientNumbers?: undefined;
+      inputModel?: undefined;
+    }
+  | {
+      result: 'ELIGIBLE';
+      clientApplication: ClientApplicationDto;
+      eligibleClientNumbers: ReadonlyArray<string>;
+      inputModel: 'full' | 'simplified';
+    };
 
 export type ClientApplicationRenewalEligibilityBasicInfoRequestDto = Readonly<{
   clientNumber: string;

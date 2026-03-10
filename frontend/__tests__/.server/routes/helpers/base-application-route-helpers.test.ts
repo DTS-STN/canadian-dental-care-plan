@@ -129,8 +129,8 @@ describe('base-application-route-helpers', () => {
   });
 
   describe('isEligibleToRenew', () => {
-    it('returns true when eligibilityStatusCode is undefined', () => {
-      expect(isEligibleToRenew({ eligibilityStatusCode: undefined })).toBe(true);
+    it('returns false when eligibilityStatusCode is undefined', () => {
+      expect(isEligibleToRenew({ eligibilityStatusCode: undefined })).toBe(false);
     });
 
     it('returns true when eligibilityStatusCode matches ELIGIBILITY_STATUS_CODE_ELIGIBLE', () => {
@@ -141,8 +141,8 @@ describe('base-application-route-helpers', () => {
       expect(isEligibleToRenew({ eligibilityStatusCode: 'INELIGIBLE' })).toBe(false);
     });
 
-    it('returns true when eligibilityStatusCode is an empty string', () => {
-      expect(isEligibleToRenew({ eligibilityStatusCode: '' })).toBe(true);
+    it('returns false when eligibilityStatusCode is an empty string', () => {
+      expect(isEligibleToRenew({ eligibilityStatusCode: '' })).toBe(false);
     });
   });
 

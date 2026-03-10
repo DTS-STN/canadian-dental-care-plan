@@ -190,7 +190,11 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
         }
       : undefined;
 
+    const applicationYearId = clientApplicationEntity.BenefitApplication.BenefitApplicationYear.BenefitApplicationYearIdentification.at(0)?.IdentificationID;
+    invariant(applicationYearId, 'Expected applicationYearId to be defined');
+
     return {
+      applicationYearId,
       applicantInformation,
       children,
       communicationPreferences,

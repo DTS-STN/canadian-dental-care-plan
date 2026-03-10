@@ -1,5 +1,4 @@
 import { inject, injectable } from 'inversify';
-import type { Option } from 'oxide.ts';
 
 import { TYPES } from '~/.server/constants';
 import type { ClientApplicationRenewalEligibilityBasicInfoAndSinRequestDto, ClientApplicationRenewalEligibilityBasicInfoRequestDto, ClientApplicationRenewalEligibilityDto, ClientApplicationRenewalEligibilitySinRequestDto } from '~/.server/domain/dtos';
@@ -13,28 +12,28 @@ import type { Logger } from '~/.server/logging';
  */
 export interface ClientApplicationRenewalEligibilityService {
   /**
-   * Finds a client application renewal eligibility by basic info.
+   * Gets a client application renewal eligibility by basic info.
    *
-   * @param clientApplicationBasicInfoRequestDto The basic info request dto.
-   * @returns A Promise that resolves to client application renewal eligibility dto if found, otherwise None.
+   * @param clientApplicationRenewalEligibilityBasicInfoRequestDto The basic info request dto.
+   * @returns A Promise that resolves to client application renewal eligibility dto.
    */
-  findClientApplicationRenewalEligibilityByBasicInfo(clientApplicationRenewalEligibilityBasicInfoRequestDto: ClientApplicationRenewalEligibilityBasicInfoRequestDto): Promise<Option<ClientApplicationRenewalEligibilityDto>>;
+  getClientApplicationRenewalEligibilityByBasicInfo(clientApplicationRenewalEligibilityBasicInfoRequestDto: ClientApplicationRenewalEligibilityBasicInfoRequestDto): Promise<ClientApplicationRenewalEligibilityDto>;
 
   /**
-   * Finds a client application renewal eligibility by basic info and SIN.
+   * Gets a client application renewal eligibility by basic info and SIN.
    *
-   * @param clientApplicationBasicInfoAndSinRequestDto The basic info and SIN request dto.
-   * @returns A Promise that resolves to client application renewal eligibility dto if found, otherwise None.
+   * @param clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto The basic info and SIN request dto.
+   * @returns A Promise that resolves to client application renewal eligibility dto.
    */
-  findClientApplicationRenewalEligibilityByBasicInfoAndSin(clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto: ClientApplicationRenewalEligibilityBasicInfoAndSinRequestDto): Promise<Option<ClientApplicationRenewalEligibilityDto>>;
+  getClientApplicationRenewalEligibilityByBasicInfoAndSin(clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto: ClientApplicationRenewalEligibilityBasicInfoAndSinRequestDto): Promise<ClientApplicationRenewalEligibilityDto>;
 
   /**
-   * Finds a client application renewal eligibility by SIN.
+   * Gets a client application renewal eligibility by SIN.
    *
-   * @param clientApplicationSinRequestDto The SIN request dto.
-   * @returns A Promise that resolves to client application renewal eligibility dto if found, otherwise None.
+   * @param clientApplicationRenewalEligibilitySinRequestDto The SIN request dto.
+   * @returns A Promise that resolves to client application renewal eligibility dto.
    */
-  findClientApplicationRenewalEligibilityBySin(clientApplicationRenewalEligibilitySinRequestDto: ClientApplicationRenewalEligibilitySinRequestDto): Promise<Option<ClientApplicationRenewalEligibilityDto>>;
+  getClientApplicationRenewalEligibilityBySin(clientApplicationRenewalEligibilitySinRequestDto: ClientApplicationRenewalEligibilitySinRequestDto): Promise<ClientApplicationRenewalEligibilityDto>;
 }
 
 @injectable()
@@ -60,29 +59,29 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
     this.log.debug('DefaultClientApplicationRenewalEligibilityService initiated.');
   }
 
-  async findClientApplicationRenewalEligibilityByBasicInfo(clientApplicationRenewalEligibilityBasicInfoRequestDto: ClientApplicationRenewalEligibilityBasicInfoRequestDto): Promise<Option<ClientApplicationRenewalEligibilityDto>> {
+  async getClientApplicationRenewalEligibilityByBasicInfo(clientApplicationRenewalEligibilityBasicInfoRequestDto: ClientApplicationRenewalEligibilityBasicInfoRequestDto): Promise<ClientApplicationRenewalEligibilityDto> {
     this.log.trace('Get client application renewal eligibility by basic info: [%j]', clientApplicationRenewalEligibilityBasicInfoRequestDto);
     this.auditService.createAudit('client-application-renewal-eligibility.basic-info.get', { userId: clientApplicationRenewalEligibilityBasicInfoRequestDto.userId });
     const clientApplicationDto = await this.clientApplicationService.findClientApplicationByBasicInfo(clientApplicationRenewalEligibilityBasicInfoRequestDto);
-    const clientApplicationRenewalEligibilityDto = this.clientApplicationRenewalEligibilityDtoMapper.mapToClientApplicationRenewalEligibilityDto(clientApplicationDto);
+    const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapToClientApplicationRenewalEligibilityDto(clientApplicationDto);
     this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
     return clientApplicationRenewalEligibilityDto;
   }
 
-  async findClientApplicationRenewalEligibilityByBasicInfoAndSin(clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto: ClientApplicationRenewalEligibilityBasicInfoAndSinRequestDto): Promise<Option<ClientApplicationRenewalEligibilityDto>> {
+  async getClientApplicationRenewalEligibilityByBasicInfoAndSin(clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto: ClientApplicationRenewalEligibilityBasicInfoAndSinRequestDto): Promise<ClientApplicationRenewalEligibilityDto> {
     this.log.trace('Get client application renewal eligibility with basic info and sin: [%j]', clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto);
     this.auditService.createAudit('client-application-renewal-eligibility.basic-info-and-sin.get', { userId: clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto.userId });
     const clientApplicationDto = await this.clientApplicationService.findClientApplicationByBasicInfoAndSin(clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto);
-    const clientApplicationRenewalEligibilityDto = this.clientApplicationRenewalEligibilityDtoMapper.mapToClientApplicationRenewalEligibilityDto(clientApplicationDto);
+    const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapToClientApplicationRenewalEligibilityDto(clientApplicationDto);
     this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
     return clientApplicationRenewalEligibilityDto;
   }
 
-  async findClientApplicationRenewalEligibilityBySin(clientApplicationRenewalEligibilitySinRequestDto: ClientApplicationRenewalEligibilitySinRequestDto): Promise<Option<ClientApplicationRenewalEligibilityDto>> {
+  async getClientApplicationRenewalEligibilityBySin(clientApplicationRenewalEligibilitySinRequestDto: ClientApplicationRenewalEligibilitySinRequestDto): Promise<ClientApplicationRenewalEligibilityDto> {
     this.log.trace('Get client application renewal eligibility with sin: [%j]', clientApplicationRenewalEligibilitySinRequestDto);
     this.auditService.createAudit('client-application-renewal-eligibility.sin.get', { userId: clientApplicationRenewalEligibilitySinRequestDto.userId });
     const clientApplicationDto = await this.clientApplicationService.findClientApplicationBySin(clientApplicationRenewalEligibilitySinRequestDto);
-    const clientApplicationRenewalEligibilityDto = this.clientApplicationRenewalEligibilityDtoMapper.mapToClientApplicationRenewalEligibilityDto(clientApplicationDto);
+    const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapToClientApplicationRenewalEligibilityDto(clientApplicationDto);
     this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
     return clientApplicationRenewalEligibilityDto;
   }
