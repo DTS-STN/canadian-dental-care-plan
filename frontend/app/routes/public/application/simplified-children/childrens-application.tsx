@@ -275,19 +275,17 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                     <DefinitionList layout="single-column">
                       <DefinitionListItem term={t('application-simplified-child:childrens-application.dental-benefits-title')}>
                         {child.dentalBenefits.hasChanged ? (
-                          <>
-                            {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
-                              <div className="space-y-3">
-                                <p>{t('application-simplified-child:childrens-application.dental-benefits-yes')}</p>
-                                <ul className="list-disc space-y-1 pl-7">
-                                  {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
-                                  {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
-                                </ul>
-                              </div>
-                            ) : (
-                              <p>{t('application-simplified-child:childrens-application.dental-benefits-no')}</p>
-                            )}
-                          </>
+                          child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
+                            <div className="space-y-3">
+                              <p>{t('application-simplified-child:childrens-application.dental-benefits-yes')}</p>
+                              <ul className="list-disc space-y-1 pl-7">
+                                {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
+                                {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
+                              </ul>
+                            </div>
+                          ) : (
+                            <p>{t('application-simplified-child:childrens-application.dental-benefits-no')}</p>
+                          )
                         ) : (
                           <p>{t('application-simplified-child:childrens-application.no-change')}</p>
                         )}

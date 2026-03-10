@@ -255,10 +255,8 @@ function PhoneNumberCardContent(): JSX.Element {
         {!state.phoneNumber.hasChanged && <p>{t('application-simplified-child:parent-or-guardian.no-change')}</p>}
         {state.phoneNumber.hasChanged && (
           <DefinitionList layout="single-column">
-            <>
-              <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.phone-number')}>{state.phoneNumber.primary}</DefinitionListItem>
-              {state.phoneNumber.alternate && <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.alt-phone-number')}>{state.phoneNumber.alternate}</DefinitionListItem>}
-            </>
+            <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.phone-number')}>{state.phoneNumber.primary}</DefinitionListItem>
+            {state.phoneNumber.alternate && <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.alt-phone-number')}>{state.phoneNumber.alternate}</DefinitionListItem>}
           </DefinitionList>
         )}
       </CardContent>
@@ -576,12 +574,10 @@ function CommunicationPreferencesCardContent(): JSX.Element {
         {!state.communicationPreferences.hasChanged && <p>{t('application-simplified-child:parent-or-guardian.no-change')}</p>}
         {state.communicationPreferences.hasChanged && (
           <DefinitionList layout="single-column">
-            <>
-              <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.preferred-language')}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
-              <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.preferred-method')}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
-              <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.preferred-notification-method')}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
-              {state.email && <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.email')}>{state.email}</DefinitionListItem>}
-            </>
+            <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.preferred-language')}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
+            <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.preferred-method')}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
+            <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.preferred-notification-method')}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
+            {state.email && <DefinitionListItem term={t('application-simplified-child:parent-or-guardian.email')}>{state.email}</DefinitionListItem>}
           </DefinitionList>
         )}
       </CardContent>

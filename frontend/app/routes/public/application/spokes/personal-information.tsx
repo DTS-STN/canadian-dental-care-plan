@@ -237,109 +237,107 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
   const { ErrorAlert } = useErrorAlert(fetcherStatus === 'client-not-found');
 
   return (
-    <>
-      <div className="max-w-prose">
-        <ErrorAlert>
-          <h2 className="mb-2 font-bold">{t('application-spokes:personal-information.error-message.alert.heading')}</h2>
-          <p className="mb-2">
-            <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.error-message.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
-          </p>
-          <p className="mb-2">
-            <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.error-message.alert.applyDate" values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
-          </p>
-        </ErrorAlert>
-        <ErrorSummaryProvider actionData={fetcher.data}>
-          <ErrorSummary />
-          <p className="mb-4">{t('application-spokes:personal-information.form-instructions-sin')}</p>
-          <p className="mb-6">{t('application-spokes:personal-information.form-instructions-info')}</p>
-          <p className="mb-4 italic">{t('application:required-label')}</p>
-          <fetcher.Form method="post" noValidate>
-            <CsrfTokenInput />
-            <div className="mb-8 space-y-6">
-              {isRenewalContext && (
-                <InputPatternField
-                  id="member-id"
-                  name="memberId"
-                  label={t('application-spokes:personal-information.member-id')}
-                  inputMode="numeric"
-                  format={renewalCodeInputPatternFormat}
-                  helpMessagePrimary={t('application-spokes:personal-information.help-message.member-id')}
-                  helpMessagePrimaryClassName="text-black"
-                  defaultValue={state?.memberId ?? ''}
-                  errorMessage={errors?.memberId}
-                  required
-                />
-              )}
-              <div className="grid items-end gap-6 md:grid-cols-2">
-                <InputSanitizeField
-                  id="first-name"
-                  name="firstName"
-                  label={t('application-spokes:personal-information.first-name')}
-                  className="w-full"
-                  maxLength={100}
-                  aria-description={t('application-spokes:personal-information.name-instructions')}
-                  autoComplete="given-name"
-                  defaultValue={state?.firstName ?? ''}
-                  errorMessage={errors?.firstName}
-                  required
-                />
-                <InputSanitizeField
-                  id="last-name"
-                  name="lastName"
-                  label={t('application-spokes:personal-information.last-name')}
-                  className="w-full"
-                  maxLength={100}
-                  aria-description={t('application-spokes:personal-information.name-instructions')}
-                  autoComplete="family-name"
-                  defaultValue={state?.lastName ?? ''}
-                  errorMessage={errors?.lastName}
-                  required
-                />
-              </div>
-              <Collapsible id="name-instructions" summary={t('application-spokes:personal-information.single-legal-name')}>
-                <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.name-instructions" />
-                </p>
-              </Collapsible>
-              <DatePickerField
-                id="date-of-birth"
-                names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
-                defaultValue={state?.dateOfBirth ?? ''}
-                legend={t('application-spokes:personal-information.dob')}
-                errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
-                required
-              />
+    <div className="max-w-prose">
+      <ErrorAlert>
+        <h2 className="mb-2 font-bold">{t('application-spokes:personal-information.error-message.alert.heading')}</h2>
+        <p className="mb-2">
+          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.error-message.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+        </p>
+        <p className="mb-2">
+          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.error-message.alert.applyDate" values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
+        </p>
+      </ErrorAlert>
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
+        <p className="mb-4">{t('application-spokes:personal-information.form-instructions-sin')}</p>
+        <p className="mb-6">{t('application-spokes:personal-information.form-instructions-info')}</p>
+        <p className="mb-4 italic">{t('application:required-label')}</p>
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <div className="mb-8 space-y-6">
+            {isRenewalContext && (
               <InputPatternField
-                id="social-insurance-number"
-                name="socialInsuranceNumber"
-                format={sinInputPatternFormat}
-                label={t('application-spokes:personal-information.sin')}
+                id="member-id"
+                name="memberId"
+                label={t('application-spokes:personal-information.member-id')}
                 inputMode="numeric"
-                helpMessagePrimary={t('application-spokes:personal-information.help-message.sin')}
+                format={renewalCodeInputPatternFormat}
+                helpMessagePrimary={t('application-spokes:personal-information.help-message.member-id')}
                 helpMessagePrimaryClassName="text-black"
-                defaultValue={state?.socialInsuranceNumber ?? ''}
-                errorMessage={errors?.socialInsuranceNumber}
+                defaultValue={state?.memberId ?? ''}
+                errorMessage={errors?.memberId}
+                required
+              />
+            )}
+            <div className="grid items-end gap-6 md:grid-cols-2">
+              <InputSanitizeField
+                id="first-name"
+                name="firstName"
+                label={t('application-spokes:personal-information.first-name')}
+                className="w-full"
+                maxLength={100}
+                aria-description={t('application-spokes:personal-information.name-instructions')}
+                autoComplete="given-name"
+                defaultValue={state?.firstName ?? ''}
+                errorMessage={errors?.firstName}
+                required
+              />
+              <InputSanitizeField
+                id="last-name"
+                name="lastName"
+                label={t('application-spokes:personal-information.last-name')}
+                className="w-full"
+                maxLength={100}
+                aria-description={t('application-spokes:personal-information.name-instructions')}
+                autoComplete="family-name"
+                defaultValue={state?.lastName ?? ''}
+                errorMessage={errors?.lastName}
                 required
               />
             </div>
-            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Applicant information click">
-                {t('application-spokes:personal-information.save-btn')}
-              </LoadingButton>
-              <ButtonLink
-                id="back-button"
-                variant="secondary"
-                routeId={`public/application/$id/type-of-application`}
-                params={params}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Applicant information click"
-              >
-                {t('application-spokes:personal-information.back-btn')}
-              </ButtonLink>
-            </div>
-          </fetcher.Form>
-        </ErrorSummaryProvider>
-      </div>
-    </>
+            <Collapsible id="name-instructions" summary={t('application-spokes:personal-information.single-legal-name')}>
+              <p>
+                <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.name-instructions" />
+              </p>
+            </Collapsible>
+            <DatePickerField
+              id="date-of-birth"
+              names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
+              defaultValue={state?.dateOfBirth ?? ''}
+              legend={t('application-spokes:personal-information.dob')}
+              errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
+              required
+            />
+            <InputPatternField
+              id="social-insurance-number"
+              name="socialInsuranceNumber"
+              format={sinInputPatternFormat}
+              label={t('application-spokes:personal-information.sin')}
+              inputMode="numeric"
+              helpMessagePrimary={t('application-spokes:personal-information.help-message.sin')}
+              helpMessagePrimaryClassName="text-black"
+              defaultValue={state?.socialInsuranceNumber ?? ''}
+              errorMessage={errors?.socialInsuranceNumber}
+              required
+            />
+          </div>
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Applicant information click">
+              {t('application-spokes:personal-information.save-btn')}
+            </LoadingButton>
+            <ButtonLink
+              id="back-button"
+              variant="secondary"
+              routeId={`public/application/$id/type-of-application`}
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Applicant information click"
+            >
+              {t('application-spokes:personal-information.back-btn')}
+            </ButtonLink>
+          </div>
+        </fetcher.Form>
+      </ErrorSummaryProvider>
+    </div>
   );
 }

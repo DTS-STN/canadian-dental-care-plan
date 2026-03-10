@@ -105,6 +105,7 @@ export default defineConfig(
     ],
     rules: {
       'react/no-unknown-property': ['error', { ignore: ['property', 'resource', 'typeof', 'vocab'] }],
+      'react/jsx-no-useless-fragment': ['error', { allowExpressions: true }],
       'react/prop-types': 'off',
       'react-hooks/set-state-in-effect': 'off',
     },

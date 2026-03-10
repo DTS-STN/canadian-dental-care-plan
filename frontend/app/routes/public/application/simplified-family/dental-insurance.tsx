@@ -161,19 +161,17 @@ export default function RenewFamilyDentalInsurance({ loaderData, params }: Route
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t('application-simplified-family:dental-insurance.access-to-government-benefits')}>
                   {state.dentalBenefits.hasChanged ? (
-                    <>
-                      {state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
-                        <div className="space-y-3">
-                          <p>{t('application-simplified-family:dental-insurance.access-to-government-benefits-yes')}</p>
-                          <ul className="list-disc space-y-1 pl-7">
-                            {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
-                            {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
-                          </ul>
-                        </div>
-                      ) : (
-                        <p>{t('application-simplified-family:dental-insurance.access-to-government-benefits-no')}</p>
-                      )}
-                    </>
+                    state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
+                      <div className="space-y-3">
+                        <p>{t('application-simplified-family:dental-insurance.access-to-government-benefits-yes')}</p>
+                        <ul className="list-disc space-y-1 pl-7">
+                          {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
+                          {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
+                        </ul>
+                      </div>
+                    ) : (
+                      <p>{t('application-simplified-family:dental-insurance.access-to-government-benefits-no')}</p>
+                    )
                   ) : (
                     <p>{t('application-simplified-family:dental-insurance.no-change')}</p>
                   )}
