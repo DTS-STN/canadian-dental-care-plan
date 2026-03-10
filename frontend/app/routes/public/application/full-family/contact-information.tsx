@@ -95,7 +95,9 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-full-family:contact-information.phone-number')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('application-full-family:contact-information.phone-number')}</h2>
+            </CardTitle>
             <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
@@ -132,7 +134,9 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-full-family:contact-information.mailing-and-home-address')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('application-full-family:contact-information.mailing-and-home-address')}</h2>
+            </CardTitle>
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
@@ -183,7 +187,9 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-full-family:contact-information.communication-preferences')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('application-full-family:contact-information.communication-preferences')}</h2>
+            </CardTitle>
             <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>

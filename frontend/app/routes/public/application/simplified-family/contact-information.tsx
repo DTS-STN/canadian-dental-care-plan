@@ -183,7 +183,9 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-simplified-family:contact-information.phone-number')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('application-simplified-family:contact-information.phone-number')}</h2>
+            </CardTitle>
             <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <PhoneNumberCardContent />
@@ -192,7 +194,9 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-simplified-family:contact-information.mailing-and-home-address')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('application-simplified-family:contact-information.mailing-and-home-address')}</h2>
+            </CardTitle>
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <MailingAndHomeAddressCardContent />
@@ -201,7 +205,9 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-simplified-family:contact-information.communication-preferences')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('application-simplified-family:contact-information.communication-preferences')}</h2>
+            </CardTitle>
             <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CommunicationPreferencesCardContent />

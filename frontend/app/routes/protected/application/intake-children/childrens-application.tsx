@@ -172,7 +172,9 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
               </div>
               <Card className="my-2">
                 <CardHeader>
-                  <CardTitle>{t('protected-application-intake-child:childrens-application.child-information-card-title', { childNumber: index + 1 })}</CardTitle>
+                  <CardTitle asChild>
+                    <h2>{t('protected-application-intake-child:childrens-application.child-information-card-title', { childNumber: index + 1 })}</h2>
+                  </CardTitle>
                   <CardAction>{sections.childInformation.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
@@ -218,7 +220,9 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
 
               <Card className="my-2">
                 <CardHeader>
-                  <CardTitle>{t('protected-application-intake-child:childrens-application.child-dental-insurance-card-title')}</CardTitle>
+                  <CardTitle asChild>
+                    <h2>{t('protected-application-intake-child:childrens-application.child-dental-insurance-card-title')}</h2>
+                  </CardTitle>
                   <CardAction>{sections.childDentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
@@ -250,7 +254,9 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
 
               <Card className="my-2">
                 <CardHeader>
-                  <CardTitle>{t('protected-application-intake-child:childrens-application.child-dental-benefits-card-title')}</CardTitle>
+                  <CardTitle asChild>
+                    <h2>{t('protected-application-intake-child:childrens-application.child-dental-benefits-card-title')}</h2>
+                  </CardTitle>
                   <CardAction>{sections.childDentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>

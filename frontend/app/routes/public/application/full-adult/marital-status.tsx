@@ -65,7 +65,9 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-full-adult:marital-status.marital-status')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('application-full-adult:marital-status.marital-status')}</h2>
+            </CardTitle>
             <CardAction>{sections.maritalStatus.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>

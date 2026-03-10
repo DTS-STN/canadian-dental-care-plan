@@ -65,7 +65,9 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-full-family:marital-status.marital-status')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('application-full-family:marital-status.marital-status')}</h2>
+            </CardTitle>
             <CardAction>{sections.maritalStatus.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>

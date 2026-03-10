@@ -213,7 +213,9 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
 
               <Card className="my-4">
                 <CardHeader>
-                  <CardTitle>{t('protected-application-renewal-child:childrens-application.sin-card-title')}</CardTitle>
+                  <CardTitle asChild>
+                    <h2>{t('protected-application-renewal-child:childrens-application.sin-card-title')}</h2>
+                  </CardTitle>
                   <CardAction>
                     <StatusTag status="optional" />
                   </CardAction>
@@ -224,7 +226,9 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
 
               <Card className="my-4">
                 <CardHeader>
-                  <CardTitle>{t('protected-application-renewal-child:childrens-application.parent-guardian-card-title')}</CardTitle>
+                  <CardTitle asChild>
+                    <h2>{t('protected-application-renewal-child:childrens-application.parent-guardian-card-title')}</h2>
+                  </CardTitle>
                   <CardAction>{sections.parentGuardian.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <ChildParentGuardianCardContent child={child} />
@@ -233,7 +237,9 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
 
               <Card className="my-4">
                 <CardHeader>
-                  <CardTitle>{t('protected-application-renewal-child:childrens-application.child-dental-insurance-card-title')}</CardTitle>
+                  <CardTitle asChild>
+                    <h2>{t('protected-application-renewal-child:childrens-application.child-dental-insurance-card-title')}</h2>
+                  </CardTitle>
                   <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <ChildDentalInsuranceCardContent child={child} />
@@ -242,7 +248,9 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
 
               <Card className="my-4">
                 <CardHeader>
-                  <CardTitle>{t('protected-application-renewal-child:childrens-application.child-dental-benefits-card-title')}</CardTitle>
+                  <CardTitle asChild>
+                    <h2>{t('protected-application-renewal-child:childrens-application.child-dental-benefits-card-title')}</h2>
+                  </CardTitle>
                   <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <ChildDentalBenefitsCardContent child={child} />

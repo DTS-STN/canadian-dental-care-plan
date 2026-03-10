@@ -88,7 +88,9 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>{t('application:type-of-application.type-application-heading')}</CardTitle>
+          <CardTitle asChild>
+            <h2>{t('application:type-of-application.type-application-heading')}</h2>
+          </CardTitle>
           <CardAction>{sections.typeOfApplication.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
@@ -120,7 +122,9 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
 
       <Card>
         <CardHeader>
-          <CardTitle>{t('application:type-of-application.personal-info-heading')}</CardTitle>
+          <CardTitle asChild>
+            <h2>{t('application:type-of-application.personal-info-heading')}</h2>
+          </CardTitle>
           <CardAction>{sections.personalInformation.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>

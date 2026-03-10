@@ -86,7 +86,9 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-full-adult:dental-insurance.access-to-dental-insurance')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('application-full-adult:dental-insurance.access-to-dental-insurance')}</h2>
+            </CardTitle>
             <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
@@ -118,7 +120,9 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-full-adult:dental-insurance.other-benefits')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('application-full-adult:dental-insurance.other-benefits')}</h2>
+            </CardTitle>
             <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>

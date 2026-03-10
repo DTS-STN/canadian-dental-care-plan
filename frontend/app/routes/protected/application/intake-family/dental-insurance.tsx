@@ -89,7 +89,9 @@ export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>{t('protected-application-intake-family:dental-insurance.access-to-dental-insurance')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('protected-application-intake-family:dental-insurance.access-to-dental-insurance')}</h2>
+            </CardTitle>
             <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
@@ -121,7 +123,9 @@ export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('protected-application-intake-family:dental-insurance.other-benefits')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('protected-application-intake-family:dental-insurance.other-benefits')}</h2>
+            </CardTitle>
             <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>

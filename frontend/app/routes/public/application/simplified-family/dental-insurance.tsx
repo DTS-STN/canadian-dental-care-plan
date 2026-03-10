@@ -121,7 +121,9 @@ export default function RenewFamilyDentalInsurance({ loaderData, params }: Route
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-simplified-family:dental-insurance.access-to-dental-insurance')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('application-simplified-family:dental-insurance.access-to-dental-insurance')}</h2>
+            </CardTitle>
             <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
@@ -153,7 +155,9 @@ export default function RenewFamilyDentalInsurance({ loaderData, params }: Route
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('application-simplified-family:dental-insurance.other-benefits')}</CardTitle>
+            <CardTitle asChild>
+              <h2>{t('application-simplified-family:dental-insurance.other-benefits')}</h2>
+            </CardTitle>
             <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
