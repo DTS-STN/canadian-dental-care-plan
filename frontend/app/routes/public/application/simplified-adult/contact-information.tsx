@@ -255,10 +255,8 @@ function PhoneNumberCardContent(): JSX.Element {
         {!state.phoneNumber.hasChanged && <p>{t('application-simplified-adult:contact-information.no-change')}</p>}
         {state.phoneNumber.hasChanged && (
           <DefinitionList layout="single-column">
-            <>
-              <DefinitionListItem term={t('application-simplified-adult:contact-information.phone-number')}>{state.phoneNumber.primary}</DefinitionListItem>
-              {state.phoneNumber.alternate && <DefinitionListItem term={t('application-simplified-adult:contact-information.alt-phone-number')}>{state.phoneNumber.alternate}</DefinitionListItem>}
-            </>
+            <DefinitionListItem term={t('application-simplified-adult:contact-information.phone-number')}>{state.phoneNumber.primary}</DefinitionListItem>
+            {state.phoneNumber.alternate && <DefinitionListItem term={t('application-simplified-adult:contact-information.alt-phone-number')}>{state.phoneNumber.alternate}</DefinitionListItem>}
           </DefinitionList>
         )}
       </CardContent>
