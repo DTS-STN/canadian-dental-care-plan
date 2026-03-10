@@ -69,15 +69,9 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
       <section className="space-y-6">
         <h2 className="font-lato text-2xl font-bold">{`${primaryApplicant.firstName} ${primaryApplicant.lastName}`}</h2>
         <DefinitionList border>
-          <DefinitionListItem term={t('protected-profile:applicant-information.member-id')}>
-            <p>{primaryApplicant.id}</p>
-          </DefinitionListItem>
-          <DefinitionListItem term={t('protected-profile:applicant-information.dob')}>
-            <p>{primaryApplicant.dob}</p>
-          </DefinitionListItem>
-          <DefinitionListItem term={t('protected-profile:applicant-information.sin')}>
-            <p>{isValidSin(primaryApplicant.sin) ? formatSin(primaryApplicant.sin) : primaryApplicant.sin}</p>
-          </DefinitionListItem>
+          <DefinitionListItem term={t('protected-profile:applicant-information.member-id')}>{primaryApplicant.id}</DefinitionListItem>
+          <DefinitionListItem term={t('protected-profile:applicant-information.dob')}>{primaryApplicant.dob}</DefinitionListItem>
+          <DefinitionListItem term={t('protected-profile:applicant-information.sin')}>{isValidSin(primaryApplicant.sin) ? formatSin(primaryApplicant.sin) : primaryApplicant.sin}</DefinitionListItem>
         </DefinitionList>
       </section>
 
@@ -86,15 +80,9 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
           <section className="space-y-6" key={child.id}>
             <h2 className="font-lato text-2xl font-bold">{`${child.firstName} ${child.lastName}`}</h2>
             <DefinitionList border>
-              <DefinitionListItem term={t('protected-profile:applicant-information.member-id')}>
-                <p>{child.id}</p>
-              </DefinitionListItem>
-              <DefinitionListItem term={t('protected-profile:applicant-information.dob')}>
-                <p>{child.dob}</p>
-              </DefinitionListItem>
-              <DefinitionListItem term={t('protected-profile:applicant-information.sin')}>
-                <p>{isValidSin(child.sin) ? formatSin(child.sin) : child.sin}</p>
-              </DefinitionListItem>
+              <DefinitionListItem term={t('protected-profile:applicant-information.member-id')}>{child.id}</DefinitionListItem>
+              <DefinitionListItem term={t('protected-profile:applicant-information.dob')}>{child.dob}</DefinitionListItem>
+              <DefinitionListItem term={t('protected-profile:applicant-information.sin')}>{isValidSin(child.sin) ? formatSin(child.sin) : child.sin}</DefinitionListItem>
             </DefinitionList>
           </section>
         );

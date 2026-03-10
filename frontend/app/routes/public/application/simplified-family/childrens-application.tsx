@@ -198,20 +198,12 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                     <p>{t('application-simplified-family:childrens-application.child-information-indicate-status')}</p>
                   ) : (
                     <DefinitionList layout="single-column">
-                      <DefinitionListItem term={t('application-simplified-family:childrens-application.member-id-title')}>
-                        <p>{child.information.memberId}</p>
-                      </DefinitionListItem>
-                      <DefinitionListItem term={t('application-simplified-family:childrens-application.full-name-title')}>
-                        <p>{childName}</p>
-                      </DefinitionListItem>
-                      <DefinitionListItem term={t('application-simplified-family:childrens-application.dob-title')}>
-                        <p>{dateOfBirth}</p>
-                      </DefinitionListItem>
-                      <DefinitionListItem term={t('application-simplified-family:childrens-application.sin-title')}>
-                        <p>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</p>
-                      </DefinitionListItem>
+                      <DefinitionListItem term={t('application-simplified-family:childrens-application.member-id-title')}>{child.information.memberId}</DefinitionListItem>
+                      <DefinitionListItem term={t('application-simplified-family:childrens-application.full-name-title')}>{childName}</DefinitionListItem>
+                      <DefinitionListItem term={t('application-simplified-family:childrens-application.dob-title')}>{dateOfBirth}</DefinitionListItem>
+                      <DefinitionListItem term={t('application-simplified-family:childrens-application.sin-title')}>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</DefinitionListItem>
                       <DefinitionListItem term={t('application-simplified-family:childrens-application.parent-guardian-title')}>
-                        <p>{child.information.isParent ? t('application-simplified-family:childrens-application.yes') : t('application-simplified-family:childrens-application.no')}</p>
+                        {child.information.isParent ? t('application-simplified-family:childrens-application.yes') : t('application-simplified-family:childrens-application.no')}
                       </DefinitionListItem>
                     </DefinitionList>
                   )}
@@ -245,7 +237,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                   ) : (
                     <DefinitionList layout="single-column">
                       <DefinitionListItem term={t('application-simplified-family:childrens-application.dental-insurance-title')}>
-                        <p>{child.dentalInsurance.hasDentalInsurance ? t('application-simplified-family:childrens-application.dental-insurance-yes') : t('application-simplified-family:childrens-application.dental-insurance-no')}</p>
+                        {child.dentalInsurance.hasDentalInsurance ? t('application-simplified-family:childrens-application.dental-insurance-yes') : t('application-simplified-family:childrens-application.dental-insurance-no')}
                       </DefinitionListItem>
                     </DefinitionList>
                   )}

@@ -182,22 +182,12 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                     <p>{t('protected-application-intake-child:childrens-application.child-information-indicate-status')}</p>
                   ) : (
                     <DefinitionList layout="single-column">
-                      {child.information.memberId && (
-                        <DefinitionListItem term={t('protected-application-intake-child:childrens-application.member-id-title')}>
-                          <p>{child.information.memberId}</p>
-                        </DefinitionListItem>
-                      )}
-                      <DefinitionListItem term={t('protected-application-intake-child:childrens-application.full-name-title')}>
-                        <p>{childName}</p>
-                      </DefinitionListItem>
-                      <DefinitionListItem term={t('protected-application-intake-child:childrens-application.dob-title')}>
-                        <p>{dateOfBirth}</p>
-                      </DefinitionListItem>
-                      <DefinitionListItem term={t('protected-application-intake-child:childrens-application.sin-title')}>
-                        <p>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</p>
-                      </DefinitionListItem>
+                      {child.information.memberId && <DefinitionListItem term={t('protected-application-intake-child:childrens-application.member-id-title')}>{child.information.memberId}</DefinitionListItem>}
+                      <DefinitionListItem term={t('protected-application-intake-child:childrens-application.full-name-title')}>{childName}</DefinitionListItem>
+                      <DefinitionListItem term={t('protected-application-intake-child:childrens-application.dob-title')}>{dateOfBirth}</DefinitionListItem>
+                      <DefinitionListItem term={t('protected-application-intake-child:childrens-application.sin-title')}>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</DefinitionListItem>
                       <DefinitionListItem term={t('protected-application-intake-child:childrens-application.parent-guardian-title')}>
-                        <p>{child.information.isParent ? t('protected-application-intake-child:childrens-application.yes') : t('protected-application-intake-child:childrens-application.no')}</p>
+                        {child.information.isParent ? t('protected-application-intake-child:childrens-application.yes') : t('protected-application-intake-child:childrens-application.no')}
                       </DefinitionListItem>
                     </DefinitionList>
                   )}
@@ -231,7 +221,7 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                   ) : (
                     <DefinitionList layout="single-column">
                       <DefinitionListItem term={t('protected-application-intake-child:childrens-application.dental-insurance-title')}>
-                        <p>{child.dentalInsurance.hasDentalInsurance ? t('protected-application-intake-child:childrens-application.dental-insurance-yes') : t('protected-application-intake-child:childrens-application.dental-insurance-no')}</p>
+                        {child.dentalInsurance.hasDentalInsurance ? t('protected-application-intake-child:childrens-application.dental-insurance-yes') : t('protected-application-intake-child:childrens-application.dental-insurance-no')}
                       </DefinitionListItem>
                     </DefinitionList>
                   )}

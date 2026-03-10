@@ -97,7 +97,7 @@ export default function NewFamilyDentalInsurance({ loaderData, params }: Route.C
             ) : (
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t('application-full-family:dental-insurance.access-to-dental-insurance-or-coverage')}>
-                  <p>{state.dentalInsurance ? t('application-full-family:dental-insurance.dental-insurance-yes') : t('application-full-family:dental-insurance.dental-insurance-no')}</p>
+                  {state.dentalInsurance ? t('application-full-family:dental-insurance.dental-insurance-yes') : t('application-full-family:dental-insurance.dental-insurance-no')}
                 </DefinitionListItem>
               </DefinitionList>
             )}

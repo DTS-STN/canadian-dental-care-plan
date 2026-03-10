@@ -301,9 +301,7 @@ function ChildSinCardContent({ child }: { child: Route.ComponentProps['loaderDat
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.sin-title')}>
-            <p>{formatSin(child.information.socialInsuranceNumber)}</p>
-          </DefinitionListItem>
+          <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.sin-title')}>{formatSin(child.information.socialInsuranceNumber)}</DefinitionListItem>
         </DefinitionList>
       </CardContent>
     );
@@ -380,7 +378,7 @@ function ChildParentGuardianCardContent({ child }: { child: Route.ComponentProps
       <CardContent>
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.parent-guardian-title')}>
-            <p>{child.information.isParent ? t('protected-application-renewal-family:childrens-application.yes') : t('protected-application-renewal-family:childrens-application.no')}</p>
+            {child.information.isParent ? t('protected-application-renewal-family:childrens-application.yes') : t('protected-application-renewal-family:childrens-application.no')}
           </DefinitionListItem>
         </DefinitionList>
       </CardContent>
@@ -457,7 +455,7 @@ function ChildDentalInsuranceCardContent({ child }: { child: Route.ComponentProp
       <CardContent>
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t('protected-application-renewal-family:childrens-application.dental-insurance-title')}>
-            <p>{child.dentalInsurance.hasDentalInsurance ? t('protected-application-renewal-family:childrens-application.dental-insurance-yes') : t('protected-application-renewal-family:childrens-application.dental-insurance-no')}</p>
+            {child.dentalInsurance.hasDentalInsurance ? t('protected-application-renewal-family:childrens-application.dental-insurance-yes') : t('protected-application-renewal-family:childrens-application.dental-insurance-no')}
           </DefinitionListItem>
         </DefinitionList>
       </CardContent>

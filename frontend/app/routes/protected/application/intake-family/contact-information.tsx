@@ -106,14 +106,8 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
           <CardContent>
             {state.phoneNumber?.hasChanged ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('protected-application-intake-family:contact-information.phone-number')}>
-                  <p>{state.phoneNumber.value.primary}</p>
-                </DefinitionListItem>
-                {state.phoneNumber.value.alternate && (
-                  <DefinitionListItem term={t('protected-application-intake-family:contact-information.alt-phone-number')}>
-                    <p>{state.phoneNumber.value.alternate}</p>
-                  </DefinitionListItem>
-                )}
+                <DefinitionListItem term={t('protected-application-intake-family:contact-information.phone-number')}>{state.phoneNumber.value.primary}</DefinitionListItem>
+                {state.phoneNumber.value.alternate && <DefinitionListItem term={t('protected-application-intake-family:contact-information.alt-phone-number')}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
               </DefinitionList>
             ) : (
               <p>{t('protected-application-intake-family:contact-information.phone-number-help')}</p>
