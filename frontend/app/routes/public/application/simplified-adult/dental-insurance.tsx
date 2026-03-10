@@ -132,7 +132,7 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
             ) : (
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t('application-simplified-adult:dental-insurance.access-to-dental-insurance-or-coverage')}>
-                  <p>{state.dentalInsurance ? t('application-simplified-adult:dental-insurance.dental-insurance-yes') : t('application-simplified-adult:dental-insurance.dental-insurance-no')}</p>
+                  {state.dentalInsurance ? t('application-simplified-adult:dental-insurance.dental-insurance-yes') : t('application-simplified-adult:dental-insurance.dental-insurance-no')}
                 </DefinitionListItem>
               </DefinitionList>
             )}

@@ -75,17 +75,11 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
               <p>{t('application-full-family:marital-status.select-your-status')}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-full-family:marital-status.marital-status')}>
-                  <p>{state.maritalStatus.name}</p>
-                </DefinitionListItem>
+                <DefinitionListItem term={t('application-full-family:marital-status.marital-status')}>{state.maritalStatus.name}</DefinitionListItem>
                 {state.partnerInformation && (
                   <>
-                    <DefinitionListItem term={t('application-full-family:marital-status.spouse-sin')}>
-                      <p>{formatSin(state.partnerInformation.socialInsuranceNumber)}</p>
-                    </DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-family:marital-status.spouse-yob')}>
-                      <p>{state.partnerInformation.yearOfBirth}</p>
-                    </DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-family:marital-status.spouse-sin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-family:marital-status.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
                     <DefinitionListItem term={t('application-full-family:marital-status.consent')}>
                       {state.partnerInformation.confirm ? t('application-full-family:marital-status.consent-yes') : t('application-full-family:marital-status.consent-no')}
                     </DefinitionListItem>

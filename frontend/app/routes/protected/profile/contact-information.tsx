@@ -86,7 +86,7 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
     <div className="max-w-prose space-y-10">
       <DefinitionList border>
         <DefinitionListItem term={t('protected-profile:contact-information.phone-number')} className="border-none pb-0 sm:pb-0">
-          <p>{phoneNumber ?? t('protected-profile:none')}</p>
+          {phoneNumber ?? t('protected-profile:none')}
         </DefinitionListItem>
         <DefinitionListItem term={t('protected-profile:contact-information.alt-phone-number')}>
           <p>{altPhoneNumber ?? t('protected-profile:none')}</p>

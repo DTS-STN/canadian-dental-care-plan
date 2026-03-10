@@ -100,7 +100,7 @@ export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }
             ) : (
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t('protected-application-intake-family:dental-insurance.access-to-dental-insurance-or-coverage')}>
-                  <p>{state.dentalInsurance ? t('protected-application-intake-family:dental-insurance.dental-insurance-yes') : t('protected-application-intake-family:dental-insurance.dental-insurance-no')}</p>
+                  {state.dentalInsurance ? t('protected-application-intake-family:dental-insurance.dental-insurance-yes') : t('protected-application-intake-family:dental-insurance.dental-insurance-no')}
                 </DefinitionListItem>
               </DefinitionList>
             )}

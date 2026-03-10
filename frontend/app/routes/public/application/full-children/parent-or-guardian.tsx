@@ -108,17 +108,11 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
               <p>{t('application-full-child:parent-or-guardian.select-your-status')}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-full-child:parent-or-guardian.marital-status')}>
-                  <p>{state.maritalStatus.name}</p>
-                </DefinitionListItem>
+                <DefinitionListItem term={t('application-full-child:parent-or-guardian.marital-status')}>{state.maritalStatus.name}</DefinitionListItem>
                 {state.partnerInformation && (
                   <>
-                    <DefinitionListItem term={t('application-full-child:parent-or-guardian.spouse-sin')}>
-                      <p>{formatSin(state.partnerInformation.socialInsuranceNumber)}</p>
-                    </DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:parent-or-guardian.spouse-yob')}>
-                      <p>{state.partnerInformation.yearOfBirth}</p>
-                    </DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-child:parent-or-guardian.spouse-sin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-child:parent-or-guardian.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
                     <DefinitionListItem term={t('application-full-child:parent-or-guardian.consent')}>
                       {state.partnerInformation.confirm ? t('application-full-child:parent-or-guardian.consent-yes') : t('application-full-child:parent-or-guardian.consent-no')}
                     </DefinitionListItem>
@@ -153,14 +147,8 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
           <CardContent>
             {state.phoneNumber?.hasChanged ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-full-child:parent-or-guardian.phone-number')}>
-                  <p>{state.phoneNumber.value.primary}</p>
-                </DefinitionListItem>
-                {state.phoneNumber.value.alternate && (
-                  <DefinitionListItem term={t('application-full-child:parent-or-guardian.alt-phone-number')}>
-                    <p>{state.phoneNumber.value.alternate}</p>
-                  </DefinitionListItem>
-                )}
+                <DefinitionListItem term={t('application-full-child:parent-or-guardian.phone-number')}>{state.phoneNumber.value.primary}</DefinitionListItem>
+                {state.phoneNumber.value.alternate && <DefinitionListItem term={t('application-full-child:parent-or-guardian.alt-phone-number')}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
               </DefinitionList>
             ) : (
               <p>{t('application-full-child:parent-or-guardian.phone-number-help')}</p>

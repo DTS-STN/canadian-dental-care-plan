@@ -237,7 +237,7 @@ function DentalInsuranceCardContent(): JSX.Element {
       <CardContent>
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t('protected-application-renewal-family:dental-insurance.access-to-dental-insurance-or-coverage')}>
-            <p>{state.dentalInsurance ? t('protected-application-renewal-family:dental-insurance.dental-insurance-yes') : t('protected-application-renewal-family:dental-insurance.dental-insurance-no')}</p>
+            {state.dentalInsurance ? t('protected-application-renewal-family:dental-insurance.dental-insurance-yes') : t('protected-application-renewal-family:dental-insurance.dental-insurance-no')}
           </DefinitionListItem>
         </DefinitionList>
       </CardContent>

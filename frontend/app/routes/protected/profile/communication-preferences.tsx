@@ -52,15 +52,9 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
   return (
     <div className="max-w-prose space-y-10">
       <DefinitionList border>
-        <DefinitionListItem term={t('protected-profile:communication-preferences.language-preference')}>
-          <p>{preferredLanguage.name}</p>
-        </DefinitionListItem>
-        <DefinitionListItem term={t('protected-profile:communication-preferences.sunlife-communication-preference')}>
-          <p>{preferredMethodSunLife.name}</p>
-        </DefinitionListItem>
-        <DefinitionListItem term={t('protected-profile:communication-preferences.goc-communication-preference')}>
-          <p>{preferredMethodGovernmentOfCanada.name}</p>
-        </DefinitionListItem>
+        <DefinitionListItem term={t('protected-profile:communication-preferences.language-preference')}>{preferredLanguage.name}</DefinitionListItem>
+        <DefinitionListItem term={t('protected-profile:communication-preferences.sunlife-communication-preference')}>{preferredMethodSunLife.name}</DefinitionListItem>
+        <DefinitionListItem term={t('protected-profile:communication-preferences.goc-communication-preference')}>{preferredMethodGovernmentOfCanada.name}</DefinitionListItem>
       </DefinitionList>
       <div>
         <InlineLink id="update-communication-preferences" routeId="protected/profile/communication-preferences/edit" params={params}>
