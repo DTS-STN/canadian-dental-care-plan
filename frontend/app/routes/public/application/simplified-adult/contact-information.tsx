@@ -252,15 +252,15 @@ function PhoneNumberCardContent(): JSX.Element {
   if (state.phoneNumber) {
     return (
       <CardContent>
-        <DefinitionList layout="single-column">
-          {!state.phoneNumber.hasChanged && <p>{t('application-simplified-adult:contact-information.no-change')}</p>}
-          {state.phoneNumber.hasChanged && (
+        {!state.phoneNumber.hasChanged && <p>{t('application-simplified-adult:contact-information.no-change')}</p>}
+        {state.phoneNumber.hasChanged && (
+          <DefinitionList layout="single-column">
             <>
               <DefinitionListItem term={t('application-simplified-adult:contact-information.phone-number')}>{state.phoneNumber.primary}</DefinitionListItem>
               {state.phoneNumber.alternate && <DefinitionListItem term={t('application-simplified-adult:contact-information.alt-phone-number')}>{state.phoneNumber.alternate}</DefinitionListItem>}
             </>
-          )}
-        </DefinitionList>
+          </DefinitionList>
+        )}
       </CardContent>
     );
   }
@@ -401,12 +401,9 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
   if (state.mailingAddress && state.homeAddress) {
     return (
       <CardContent>
-        <DefinitionList layout="single-column">
-          {/* Check if both addresses have no changes */}
-          {!state.mailingAddress.hasChanged && !state.homeAddress.hasChanged && <p>{t('application-simplified-adult:contact-information.no-change')}</p>}
-
-          {/* Show mailing address if it has changes */}
-          {state.mailingAddress.hasChanged && (
+        {!state.mailingAddress.hasChanged && !state.homeAddress.hasChanged && <p>{t('application-simplified-adult:contact-information.no-change')}</p>}
+        {state.mailingAddress.hasChanged && (
+          <DefinitionList layout="single-column">
             <DefinitionListItem term={t('application-simplified-adult:contact-information.mailing-address')}>
               <Address
                 address={{
@@ -418,23 +415,22 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
                 }}
               />
             </DefinitionListItem>
-          )}
 
-          {/* Show home address if it has changes */}
-          {state.homeAddress.hasChanged && (
-            <DefinitionListItem term={t('application-simplified-adult:contact-information.home-address')}>
-              <Address
-                address={{
-                  address: state.homeAddress.address ?? '',
-                  city: state.homeAddress.city ?? '',
-                  provinceState: state.homeAddress.province,
-                  postalZipCode: state.homeAddress.postalCode,
-                  country: state.homeAddress.country ?? '',
-                }}
-              />
-            </DefinitionListItem>
-          )}
-        </DefinitionList>
+            {state.homeAddress.hasChanged && (
+              <DefinitionListItem term={t('application-simplified-adult:contact-information.home-address')}>
+                <Address
+                  address={{
+                    address: state.homeAddress.address ?? '',
+                    city: state.homeAddress.city ?? '',
+                    provinceState: state.homeAddress.province,
+                    postalZipCode: state.homeAddress.postalCode,
+                    country: state.homeAddress.country ?? '',
+                  }}
+                />
+              </DefinitionListItem>
+            )}
+          </DefinitionList>
+        )}
       </CardContent>
     );
   }
@@ -577,20 +573,17 @@ function CommunicationPreferencesCardContent(): JSX.Element {
   if (state.communicationPreferences) {
     return (
       <CardContent>
-        <DefinitionList layout="single-column">
-          {/* Check if communication preferences have no changes */}
-          {!state.communicationPreferences.hasChanged && <p>{t('application-simplified-adult:contact-information.no-change')}</p>}
-
-          {/* Show preferences if they have changes */}
-          {state.communicationPreferences.hasChanged && (
+        {!state.communicationPreferences.hasChanged && <p>{t('application-simplified-adult:contact-information.no-change')}</p>}
+        {state.communicationPreferences.hasChanged && (
+          <DefinitionList layout="single-column">
             <>
               <DefinitionListItem term={t('application-simplified-adult:contact-information.preferred-language')}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
               <DefinitionListItem term={t('application-simplified-adult:contact-information.preferred-method')}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
               <DefinitionListItem term={t('application-simplified-adult:contact-information.preferred-notification-method')}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
               {state.email && <DefinitionListItem term={t('application-simplified-adult:contact-information.email')}>{state.email}</DefinitionListItem>}
             </>
-          )}
-        </DefinitionList>
+          </DefinitionList>
+        )}
       </CardContent>
     );
   }
