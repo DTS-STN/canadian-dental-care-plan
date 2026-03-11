@@ -106,7 +106,7 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
       result: 'ELIGIBLE',
       clientApplication: {
         ...clientApplicationDto,
-        eligibleClientNumbers: new Set(enrolledAndEligibleClients.keys()),
+        eligibleClientNumbers: [...enrolledAndEligibleClients.keys()],
         inputModel: this.getInputModelForEnrolledAndEligibleClients(enrolledAndEligibleClients),
       },
     };
