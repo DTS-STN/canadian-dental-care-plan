@@ -26,7 +26,7 @@ export type ClientApplicationDto = ReadonlyDeep<{
   livingIndependently?: boolean;
   partnerInformation?: ClientPartnerInformationDto;
   t4DentalIndicator?: boolean;
-  typeOfApplication: string;
+  typeOfApplication: 'adult' | 'children' | 'family';
 }>;
 
 export type ClientApplicantInformationDto = Readonly<{
