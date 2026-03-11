@@ -158,7 +158,7 @@
     "preferred-notification-method-msca": "Numériquement, dans Mon dossier Service Canada (MDSC)",
     "preferred-notification-method-mail": "Par la poste",
     "dental-private": "Accès à une assurance ou une couverture dentaire privée",
-    "dental-public": "Accès à des prestations dentaires gouvernementales",
+    "dental-public": "Accès à d'autres prestations dentaires gouvernementales",
     "page-sub-title": "Renseignements sur l'enfant {{child}}",
     "is-parent": "Parent ou tuteur légal de l'enfant",
     "dental-title": "Accès aux soins dentaires de {{child}}",
