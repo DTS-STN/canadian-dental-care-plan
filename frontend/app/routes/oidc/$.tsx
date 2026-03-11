@@ -269,7 +269,7 @@ async function generateUserInfoToken(clientPublicKey: string, serverPrivateKey: 
     iss: 'GC-ECAS-MOCK',
     locale: 'en-CA',
     sid: '00000000-0000-0000-0000-000000000000',
-    sin: '800011819',
+    sin: '800000408',
     //TODO We would need a future PR that would allow a caller to specify this user sub.
     sub: '76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6',
   };
