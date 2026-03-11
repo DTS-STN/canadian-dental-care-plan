@@ -2,13 +2,11 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
 import { useTranslation } from 'react-i18next';
-import type { PickDeep } from 'type-fest';
 import { z } from 'zod';
 
 import type { Route } from './+types/renewal-selection';
 
 import { TYPES } from '~/.server/constants';
-import { isChildEligible } from '~/.server/routes/helpers/base-application-route-helpers';
 import { getProtectedApplicationState, getTypeOfApplicationFromRenewalSelectionClientIds, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import type { ChildInformationState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
@@ -41,29 +39,45 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const state = getProtectedApplicationState({ params, session });
   validateProtectedApplicationContext(state, params, 'renewal');
-  invariant(state.clientApplication, 'Expected clientApplication to be defined');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:renewal-selection.page-title') }) };
 
-  const applicants: ReadonlyArray<{ id: string; name: string }> = [
-    { id: state.clientApplication.applicantInformation.clientId, name: `${state.clientApplication.applicantInformation.firstName} ${state.clientApplication.applicantInformation.lastName}` },
-    ...getEligibleChildrenForRenewalSelection(state),
-  ];
-
-  return { meta, state: state.applicantClientIdsToRenew ?? [], applicants };
+  return {
+    meta,
+    state: state.applicantClientIdsToRenew ?? [],
+    applicants: getEligibleApplicantsForRenewalSelection(state),
+  };
 }
 
 /**
- * Filters the children of the client application to find those who are eligible for renewal selection based on their
- * date of birth and the current context.
+ * Generates a list of eligible applicants for the renewal selection step based on the client application data in the
+ * protected application state. This function checks the primary applicant and any children applicants against the list
+ * of eligible client numbers for the application. Only those applicants whose client numbers are included in the
+ * eligible client numbers will be returned as options for selection in the renewal process.
  */
-function getEligibleChildrenForRenewalSelection(state: PickDeep<ProtectedApplicationState, 'context' | 'clientApplication.children'>): ReadonlyArray<{ id: string; name: string }> {
-  invariant(state.clientApplication, 'Expected clientApplication to be defined');
-  return state.clientApplication.children //
-    .filter((child) => isChildEligible(child.information.dateOfBirth, state.context))
-    .map((child) => ({ id: child.information.clientId, name: `${child.information.firstName} ${child.information.lastName}` }) as const);
+function getEligibleApplicantsForRenewalSelection({ clientApplication }: Pick<ProtectedApplicationState, 'clientApplication'>): ReadonlyArray<{ id: string; name: string }> {
+  invariant(clientApplication, 'Expected clientApplication to be defined');
+  const eligibleApplicants: Array<{ id: string; name: string }> = [];
+  const { applicantInformation, children, eligibleClientNumbers } = clientApplication;
+
+  // The primary applicant is only eligible for selection if their client number is included in the list of eligible
+  // client numbers for the application. This ensures that only applicants who are eligible for renewal are presented in
+  // the renewal selection step.
+  if (eligibleClientNumbers.includes(applicantInformation.clientNumber)) {
+    eligibleApplicants.push({ id: applicantInformation.clientId, name: `${applicantInformation.firstName} ${applicantInformation.lastName}` });
+  }
+
+  // Children applicants are eligible for selection if their client number is included in the list of eligible client
+  // numbers for the application. This ensures that only children who are eligible for renewal are presented in the
+  // renewal selection step.
+  eligibleApplicants.push(
+    ...children //
+      .filter(({ information }) => eligibleClientNumbers.includes(information.clientNumber))
+      .map(({ information }) => ({ id: information.clientId, name: `${information.firstName} ${information.lastName}` })),
+  );
+
+  return eligibleApplicants;
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
