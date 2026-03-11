@@ -5,7 +5,7 @@ import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';
 import type { ReadonlyDeep } from 'type-fest';
 
-import type { ClientApplicationDto } from '~/.server/domain/dtos';
+import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
 import { getAgeCategoryFromAge, getAgeCategoryReferenceDate } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { DeclaredChange } from '~/.server/routes/helpers/declared-change-type';
@@ -139,7 +139,7 @@ export type PublicApplicationState = ReadonlyDeep<{
   };
   inputModel?: 'full' | 'simplified';
   typeOfApplication?: 'adult' | 'children' | 'family' | 'delegate';
-  clientApplication?: ClientApplicationDto;
+  clientApplication?: ClientApplicationRenewalEligibleDto;
 }>;
 
 export type ApplicantInformationState = NonNullable<PublicApplicationState['applicantInformation']>;

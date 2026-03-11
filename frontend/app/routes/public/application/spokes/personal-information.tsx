@@ -8,8 +8,7 @@ import { z } from 'zod';
 import type { Route } from './+types/personal-information';
 
 import { TYPES } from '~/.server/constants';
-import type { ClientApplicationDto } from '~/.server/domain/dtos/client-application.dto';
-import { isEligibleToRenew } from '~/.server/routes/helpers/base-application-route-helpers';
+import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import type { ApplicantInformationState, InputModelState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getContextualAgeCategoryFromDate, getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -159,9 +158,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   // Determine input model based on context and data. 'intake' applications always use 'full' model
   let inputModel: InputModelState = 'full';
-
-  // Fetch client application data using ClientApplicationService
-  let clientApplication: ClientApplicationDto | undefined;
+  let clientApplication: ClientApplicationRenewalEligibleDto | undefined;
 
   // For renewal applications, we need to determine the input model based on the client's application data. If the
   // client has a hasCopayTierCoverage, we can use the 'simplified' model which requires less information from the
@@ -169,7 +166,7 @@ export async function action({ context: { appContainer, session }, params, reque
   if (state.context === 'renewal') {
     invariant(parsedDataResult.data.memberId, 'Member ID must be defined for renewal applications');
 
-    const clientApplicationOption = await appContainer.get(TYPES.ClientApplicationService).findClientApplicationByBasicInfoAndSin({
+    const clientApplicationRenewalEligibilityResult = await appContainer.get(TYPES.ClientApplicationRenewalEligibilityService).getClientApplicationRenewalEligibilityByBasicInfoAndSin({
       clientNumber: parsedDataResult.data.memberId,
       firstName: parsedDataResult.data.firstName,
       lastName: parsedDataResult.data.lastName,
@@ -179,19 +176,15 @@ export async function action({ context: { appContainer, session }, params, reque
       userId: 'anonymous',
     });
 
-    clientApplication = clientApplicationOption.unwrapUnchecked();
-
-    // If no client application is found or if the client application is not eligible for renewal, return an error
-    // status with the date when they can apply again
-    if (!clientApplication || !isEligibleToRenew(clientApplication)) {
+    // If the client is not eligible for renewal, return an error status with the date when they can apply again (the
+    // day after the renewal period end date)
+    if (clientApplicationRenewalEligibilityResult.result !== 'ELIGIBLE') {
       const startDate = toLocaleDateString(addDays(RENEWAL_PERIOD_END_DATE, 1), locale);
       return { status: 'client-not-found', startDate } as const;
     }
 
-    // Determine input model based on client application data
-    // If hasCopayTierCoverage exists, use 'simplified' model
-    // Otherwise, use 'full' model
-    inputModel = clientApplication.hasCopayTierCoverage ? 'simplified' : 'full';
+    clientApplication = clientApplicationRenewalEligibilityResult.clientApplication;
+    inputModel = clientApplication.inputModel;
   }
 
   savePublicApplicationState({
