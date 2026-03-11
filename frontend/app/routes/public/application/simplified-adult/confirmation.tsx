@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { redirect, useFetcher } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
@@ -164,6 +166,8 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('application-simplified-adult:confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
+
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="max-w-prose space-y-10">
@@ -368,10 +372,10 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
           {t('confirm.print-btn')}
         </Button>
       </div>
-      <Dialog>
-        <DialogTrigger asChild>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger>
           <button
-            aria-expanded={undefined}
+            aria-expanded={isOpen}
             className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Exit - Application successfully submitted click"
           >
