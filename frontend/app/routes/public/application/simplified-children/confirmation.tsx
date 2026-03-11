@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
@@ -196,8 +194,6 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
   const cdcpLink = <InlineLink to={t('application-simplified-child:confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
 
   const { currentLanguage } = useCurrentLanguage();
-
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="max-w-prose space-y-10">

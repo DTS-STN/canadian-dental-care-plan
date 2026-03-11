@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { redirect, useFetcher } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
@@ -156,8 +154,6 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('protected-application-intake-adult:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
-
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="max-w-prose space-y-10">
