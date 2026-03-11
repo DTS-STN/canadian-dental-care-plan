@@ -69,29 +69,37 @@ export class DefaultClientApplicationService implements ClientApplicationService
 
     const clientApplicationBasicInfoRequestEntity = this.clientApplicationDtoMapper.mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity(clientApplicationBasicInfoRequestDto);
     const clientApplicationEntity = await this.clientApplicationRepository.findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity);
-    const clientApplicationDto = clientApplicationEntity.isSome() ? Some(this.clientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity.unwrap())) : None;
 
+    if (clientApplicationEntity.isNone()) {
+      this.log.trace('No client application found with basic info: [%j]', clientApplicationBasicInfoRequestDto);
+      return None;
+    }
+
+    const clientApplicationDto = this.clientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity.unwrap());
     this.log.trace('Returning client application: [%j]', clientApplicationDto);
-    return clientApplicationDto;
+    return Some(clientApplicationDto);
   }
 
   async findClientApplicationByBasicInfoAndSin(clientApplicationBasicInfoAndSinRequestDto: ClientApplicationBasicInfoAndSinRequestDto): Promise<Option<ClientApplicationDto>> {
     const { sin, ...basicInfoRequestDto } = clientApplicationBasicInfoAndSinRequestDto;
-    const clientApplication = await this.findClientApplicationByBasicInfo(basicInfoRequestDto);
+    const clientApplicationOption = await this.findClientApplicationByBasicInfo(basicInfoRequestDto);
 
-    if (clientApplication.isNone()) {
+    if (clientApplicationOption.isNone()) {
       this.log.trace('No client application found with basic info: [%j]', basicInfoRequestDto);
       return None;
     }
 
-    // Note: We compare the SINs by removing all non-digit characters to ensure that formatting differences do not affect the comparison.
-    if (clientApplication.unwrap().applicantInformation.socialInsuranceNumber.replaceAll(/\D/g, '') !== sin.replaceAll(/\D/g, '')) {
+    // Note: We compare the SINs by removing all non-digit characters to ensure that formatting differences do not
+    // affect the comparison.
+    const clientApplication = clientApplicationOption.unwrap();
+
+    if (clientApplication.applicantInformation.socialInsuranceNumber.replaceAll(/\D/g, '') !== sin.replaceAll(/\D/g, '')) {
       this.log.trace('Client application found with basic info, but SIN does not match. Basic info: [%j], SIN: [%s]', basicInfoRequestDto, sin);
       return None;
     }
 
-    this.log.trace('Client application found with basic info and SIN: [%j]', clientApplication.unwrap());
-    return clientApplication;
+    this.log.trace('Client application found with basic info and SIN: [%j]', clientApplication);
+    return Some(clientApplication);
   }
 
   async findClientApplicationBySin(clientApplicationSinRequestDto: ClientApplicationSinRequestDto): Promise<Option<ClientApplicationDto>> {
@@ -101,9 +109,14 @@ export class DefaultClientApplicationService implements ClientApplicationService
 
     const clientApplicationSinRequestEntity = this.clientApplicationDtoMapper.mapClientApplicationSinRequestDtoToClientApplicationSinRequestEntity(clientApplicationSinRequestDto);
     const clientApplicationEntity = await this.clientApplicationRepository.findClientApplicationBySin(clientApplicationSinRequestEntity);
-    const clientApplicationDto = clientApplicationEntity.isSome() ? Some(this.clientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity.unwrap())) : None;
 
+    if (clientApplicationEntity.isNone()) {
+      this.log.trace('No client application found with SIN: [%j]', clientApplicationSinRequestDto);
+      return None;
+    }
+
+    const clientApplicationDto = this.clientApplicationDtoMapper.mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity.unwrap());
     this.log.trace('Returning client application: [%j]', clientApplicationDto);
-    return clientApplicationDto;
+    return Some(clientApplicationDto);
   }
 }
