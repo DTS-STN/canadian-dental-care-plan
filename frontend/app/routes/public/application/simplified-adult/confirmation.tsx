@@ -373,7 +373,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
         </Button>
       </div>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger>
+        <DialogTrigger asChild>
           <button
             aria-expanded={isOpen}
             className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
