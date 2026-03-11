@@ -52,17 +52,13 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
     this.clientApplicationService = clientApplicationService;
     this.clientApplicationRenewalEligibilityDtoMapper = clientApplicationRenewalEligibilityDtoMapper;
     this.auditService = auditService;
-    this.init();
-  }
-
-  private init(): void {
     this.log.debug('DefaultClientApplicationRenewalEligibilityService initiated.');
   }
 
   async getClientApplicationRenewalEligibilityByBasicInfo(clientApplicationRenewalEligibilityBasicInfoRequestDto: ClientApplicationRenewalEligibilityBasicInfoRequestDto): Promise<ClientApplicationRenewalEligibilityDto> {
     this.log.trace('Get client application renewal eligibility by basic info: [%j]', clientApplicationRenewalEligibilityBasicInfoRequestDto);
-    this.auditService.createAudit('client-application-renewal-eligibility.basic-info.get', { userId: clientApplicationRenewalEligibilityBasicInfoRequestDto.userId });
     const clientApplicationDto = await this.clientApplicationService.findClientApplicationByBasicInfo(clientApplicationRenewalEligibilityBasicInfoRequestDto);
+    this.auditService.createAudit('client-application-renewal-eligibility.basic-info.get', { userId: clientApplicationRenewalEligibilityBasicInfoRequestDto.userId });
     const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapToClientApplicationRenewalEligibilityDto(clientApplicationDto);
     this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
     return clientApplicationRenewalEligibilityDto;
@@ -70,8 +66,8 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
 
   async getClientApplicationRenewalEligibilityByBasicInfoAndSin(clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto: ClientApplicationRenewalEligibilityBasicInfoAndSinRequestDto): Promise<ClientApplicationRenewalEligibilityDto> {
     this.log.trace('Get client application renewal eligibility with basic info and sin: [%j]', clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto);
-    this.auditService.createAudit('client-application-renewal-eligibility.basic-info-and-sin.get', { userId: clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto.userId });
     const clientApplicationDto = await this.clientApplicationService.findClientApplicationByBasicInfoAndSin(clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto);
+    this.auditService.createAudit('client-application-renewal-eligibility.basic-info-and-sin.get', { userId: clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto.userId });
     const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapToClientApplicationRenewalEligibilityDto(clientApplicationDto);
     this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
     return clientApplicationRenewalEligibilityDto;
@@ -79,8 +75,8 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
 
   async getClientApplicationRenewalEligibilityBySin(clientApplicationRenewalEligibilitySinRequestDto: ClientApplicationRenewalEligibilitySinRequestDto): Promise<ClientApplicationRenewalEligibilityDto> {
     this.log.trace('Get client application renewal eligibility with sin: [%j]', clientApplicationRenewalEligibilitySinRequestDto);
-    this.auditService.createAudit('client-application-renewal-eligibility.sin.get', { userId: clientApplicationRenewalEligibilitySinRequestDto.userId });
     const clientApplicationDto = await this.clientApplicationService.findClientApplicationBySin(clientApplicationRenewalEligibilitySinRequestDto);
+    this.auditService.createAudit('client-application-renewal-eligibility.sin.get', { userId: clientApplicationRenewalEligibilitySinRequestDto.userId });
     const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapToClientApplicationRenewalEligibilityDto(clientApplicationDto);
     this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
     return clientApplicationRenewalEligibilityDto;
