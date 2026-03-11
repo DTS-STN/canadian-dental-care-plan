@@ -8,7 +8,19 @@ export type ClientApplicationRenewalEligibilityDto =
       inputModel?: undefined;
     }
   | {
-      result: 'INELIGIBLE';
+      result: 'INELIGIBLE-NO-CLIENT-NUMBERS';
+      clientApplication: ClientApplicationDto;
+      eligibleClientNumbers?: undefined;
+      inputModel?: undefined;
+    }
+  | {
+      result: 'INELIGIBLE-NO-ELIGIBILITIES';
+      clientApplication: ClientApplicationDto;
+      eligibleClientNumbers?: undefined;
+      inputModel?: undefined;
+    }
+  | {
+      result: 'INELIGIBLE-NOT-ENROLLED';
       clientApplication: ClientApplicationDto;
       eligibleClientNumbers?: undefined;
       inputModel?: undefined;
@@ -16,7 +28,7 @@ export type ClientApplicationRenewalEligibilityDto =
   | {
       result: 'ELIGIBLE';
       clientApplication: ClientApplicationDto;
-      eligibleClientNumbers: ReadonlyArray<string>;
+      eligibleClientNumbers: ReadonlySet<string>;
       inputModel: 'full' | 'simplified';
     };
 
