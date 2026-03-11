@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { getAgeCategoryFromAge, getAgeCategoryFromDateString, getAgeCategoryReferenceDate, getEligibilityStatus, isChildEligible, isEligibleToRenew } from '~/.server/routes/helpers/base-application-route-helpers';
+import { getAgeCategoryFromAge, getAgeCategoryFromDateString, getAgeCategoryReferenceDate, getEligibilityStatus, isChildEligible } from '~/.server/routes/helpers/base-application-route-helpers';
 
 vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn(() => ({
@@ -125,24 +125,6 @@ describe('base-application-route-helpers', () => {
 
     it('returns false for seniors in renewal context', () => {
       expect(isChildEligible('1960-03-04', 'renewal')).toBe(false);
-    });
-  });
-
-  describe('isEligibleToRenew', () => {
-    it('returns false when eligibilityStatusCode is undefined', () => {
-      expect(isEligibleToRenew({ eligibilityStatusCode: undefined })).toBe(false);
-    });
-
-    it('returns true when eligibilityStatusCode matches ELIGIBILITY_STATUS_CODE_ELIGIBLE', () => {
-      expect(isEligibleToRenew({ eligibilityStatusCode: 'ELIGIBLE' })).toBe(true);
-    });
-
-    it('returns false when eligibilityStatusCode does not match ELIGIBILITY_STATUS_CODE_ELIGIBLE', () => {
-      expect(isEligibleToRenew({ eligibilityStatusCode: 'INELIGIBLE' })).toBe(false);
-    });
-
-    it('returns false when eligibilityStatusCode is an empty string', () => {
-      expect(isEligibleToRenew({ eligibilityStatusCode: '' })).toBe(false);
     });
   });
 

@@ -1,5 +1,3 @@
-import type { ClientApplicationDto } from '~/.server/domain/dtos';
-import { getEnv } from '~/.server/utils/env.utils';
 import type { EligibilityType } from '~/components/eligibility';
 import { getAgeFromDateString } from '~/utils/date-utils';
 
@@ -73,18 +71,6 @@ export function isChildEligible(dateOfBirth: string, context: 'intake' | 'renewa
   const referenceDate = getAgeCategoryReferenceDate(context);
   const ageCategory = getAgeCategoryFromDateString(dateOfBirth, referenceDate);
   return ageCategory === 'children' || ageCategory === 'youth';
-}
-
-/**
- * Determines if a client application is eligible to renew based on its eligibility status code.
- *
- * @param clientApplicationDto - The client application DTO.
- * @returns A boolean indicating whether the client application is eligible to renew.
- */
-export function isEligibleToRenew(clientApplicationDto: Pick<ClientApplicationDto, 'eligibilityStatusCode'>): boolean {
-  // If the eligibility status code is defined, we check if it is equal to the eligible status code.
-  const { ELIGIBILITY_STATUS_CODE_ELIGIBLE } = getEnv();
-  return clientApplicationDto.eligibilityStatusCode === ELIGIBILITY_STATUS_CODE_ELIGIBLE;
 }
 
 interface GetEligibilityStatusArgs {
