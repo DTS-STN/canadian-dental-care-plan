@@ -130,7 +130,7 @@ export class DefaultProvincialGovernmentInsurancePlanService implements Provinci
     }
 
     const provincialGovernmentInsurancePlanLocalizedDto = this.provincialGovernmentInsurancePlanDtoMapper.mapProvincialGovernmentInsurancePlanDtoToProvincialGovernmentInsurancePlanLocalizedDto(provincialGovernmentInsurancePlanDto.unwrap(), locale);
-    this.log.trace('Returning provincial government insurance plan: [%j]', provincialGovernmentInsurancePlanDto);
+    this.log.trace('Returning provincial government insurance plan: [%j]', provincialGovernmentInsurancePlanLocalizedDto);
     return Some(provincialGovernmentInsurancePlanLocalizedDto);
   }
 
