@@ -20,7 +20,7 @@ type ClientEligibilityWithEarning = OmitStrict<ClientEligibilityDto, 'earnings'>
  * safe because the filter predicate already asserts `coverageCopayTierCode !== undefined`.
  */
 type EnrolledEligibleClient = OmitStrict<ClientEligibilityWithEarning, 'earning'> & {
-  earning: ClientEligibilityWithEarning['earning'] & { coverageCopayTierCode: string };
+  earning: ClientEligibilityWithEarning['earning'] & { coverageCopayTierCode?: string };
 };
 
 export interface ClientApplicationRenewalEligibilityDtoMapper {
@@ -37,11 +37,11 @@ export interface ClientApplicationRenewalEligibilityDtoMapper {
 export class DefaultClientApplicationRenewalEligibilityDtoMapper implements ClientApplicationRenewalEligibilityDtoMapper {
   private readonly log: Logger;
   private readonly clientEligibilityService: ClientEligibilityService;
-  private readonly serverConfig: Pick<ServerConfig, 'ENROLLMENT_STATUS_CODE_ENROLLED'>;
+  private readonly serverConfig: Pick<ServerConfig, 'ELIGIBILITY_STATUS_CODE_ELIGIBLE' | 'ENROLLMENT_STATUS_CODE_ENROLLED'>;
 
   constructor(
     @inject(TYPES.ClientEligibilityService) clientEligibilityService: ClientEligibilityService, //
-    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'ENROLLMENT_STATUS_CODE_ENROLLED'>,
+    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'ELIGIBILITY_STATUS_CODE_ELIGIBLE' | 'ENROLLMENT_STATUS_CODE_ENROLLED'>,
   ) {
     this.log = createLogger('DefaultClientApplicationRenewalEligibilityDtoMapper');
     this.clientEligibilityService = clientEligibilityService;
@@ -64,7 +64,7 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
    *    `'simplified'` (all share one copay tier) or `'full'` (mixed tiers).
    */
   async mapToClientApplicationRenewalEligibilityDto(clientApplicationDtoOption: Option<ClientApplicationDto>): Promise<ClientApplicationRenewalEligibilityDto> {
-    this.log.trace('Mapping client application dto to client application renewal eligibility dto: [%j]', clientApplicationDtoOption);
+    this.log.trace('Mapping client application dto to client application renewal eligibility dto: [%j]', clientApplicationDtoOption.unwrapUnchecked());
 
     if (clientApplicationDtoOption.isNone()) {
       this.log.debug('Client application dto is None, returning not found result');
@@ -193,19 +193,19 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
 
   /**
    * Filters to clients that are enrolled (`enrollmentStatusCode === ENROLLMENT_STATUS_CODE_ENROLLED`),
-   * have `isEligible: true`, and have a defined `coverageCopayTierCode`.
+   * have `isEligible: true`, or have `isEarningEligible: true`.
    */
   private getEnrolledAndEligibleClients(clientEligibilities: ReadonlyMap<string, ClientEligibilityWithEarning>): ReadonlyMap<string, EnrolledEligibleClient> {
     const entries: Array<[string, EnrolledEligibleClient]> = [];
 
     for (const [clientNumber, eligibility] of clientEligibilities) {
+      const isEligible = eligibility.eligibilityStatusCode === this.serverConfig.ELIGIBILITY_STATUS_CODE_ELIGIBLE;
       const isEnrolled = eligibility.enrollmentStatusCode === this.serverConfig.ENROLLMENT_STATUS_CODE_ENROLLED;
-      const isEligible = eligibility.earning.isEligible;
-      const coverageCopayTierCode = eligibility.earning.coverageCopayTierCode;
+      const isEarningEligible = eligibility.earning.eligibilityStatusCode === this.serverConfig.ELIGIBILITY_STATUS_CODE_ELIGIBLE;
 
-      this.log.trace('Checking client number [%s] for enrollment and eligibility: isEnrolled=[%s], isEligible=[%s], coverageCopayTierCode=[%s]', clientNumber, isEnrolled, isEligible, coverageCopayTierCode);
+      this.log.trace('Checking client number [%s] for enrollment and eligibility: isEnrolled=[%s], isEligible=[%s], isEarningEligible=[%s]', clientNumber, isEnrolled, isEligible, isEarningEligible);
 
-      if (isEnrolled && isEligible && coverageCopayTierCode) {
+      if (isEnrolled && (isEligible || isEarningEligible)) {
         entries.push([clientNumber, eligibility as EnrolledEligibleClient]);
       }
     }
@@ -217,7 +217,7 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
    * Returns `'simplified'` if all clients share the same `coverageCopayTierCode`, otherwise `'full'`.
    */
   private getInputModelForEnrolledAndEligibleClients(enrolledAndEligibleClients: ReadonlyMap<string, EnrolledEligibleClient>): 'simplified' | 'full' {
-    const seen = new Set<string>();
+    const seen = new Set<string | undefined>();
     for (const { earning } of enrolledAndEligibleClients.values()) {
       seen.add(earning.coverageCopayTierCode);
       if (seen.size > 1) return 'full';
