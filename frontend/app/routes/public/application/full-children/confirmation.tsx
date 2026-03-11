@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { redirect, useFetcher } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
@@ -176,6 +178,8 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
   const cdcpLink = <InlineLink to={t('application-full-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
   const { currentLanguage } = useCurrentLanguage();
+
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="max-w-prose space-y-10">
