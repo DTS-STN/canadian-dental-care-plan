@@ -351,14 +351,11 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
         </Button>
       </div>
       <Dialog>
-        <DialogTrigger asChild>
-          <button
-            aria-expanded={undefined}
-            className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Exit - Application successfully submitted click"
-          >
-            {t('protected-application-intake-adult:confirm.close-application')}
-          </button>
+        <DialogTrigger
+          className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Exit - Application successfully submitted click"
+        >
+          {t('protected-application-intake-adult:confirm.close-application')}
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>

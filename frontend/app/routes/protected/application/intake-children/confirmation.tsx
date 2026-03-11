@@ -400,14 +400,11 @@ export default function ProtectedNewChildrenConfirmation({ loaderData, params }:
         </Button>
       </div>
       <Dialog>
-        <DialogTrigger asChild>
-          <button
-            aria-expanded={undefined}
-            className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Exit - Application successfully submitted click"
-          >
-            {t('protected-application-intake-child:confirm.close-application')}
-          </button>
+        <DialogTrigger
+          className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Exit - Application successfully submitted click"
+        >
+          {t('protected-application-intake-child:confirm.close-application')}
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>

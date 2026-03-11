@@ -445,14 +445,11 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
         </Button>
       </div>
       <Dialog>
-        <DialogTrigger asChild>
-          <button
-            aria-expanded={undefined}
-            className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Exit - Application successfully submitted click"
-          >
-            {t('protected-application-renewal-adult:confirm.close-application')}
-          </button>
+        <DialogTrigger
+          className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Exit - Application successfully submitted click"
+        >
+          {t('protected-application-renewal-adult:confirm.close-application')}
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
