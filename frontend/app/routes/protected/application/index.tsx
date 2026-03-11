@@ -7,8 +7,7 @@ import { invariant } from '@dts-stn/invariant';
 import type { Route } from './+types/index';
 
 import { TYPES } from '~/.server/constants';
-import type { ClientApplicationDto } from '~/.server/domain/dtos';
-import { isEligibleToRenew } from '~/.server/routes/helpers/base-application-route-helpers';
+import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import { isWithinRenewalPeriod, startProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
@@ -42,14 +41,21 @@ export async function loader({ context: { appContainer, session }, request, para
   const applicationYear = applicationYearService.getIntakeApplicationYear(getCurrentDateString());
 
   // Only require client application if within renewal period, otherwise intake period does not require client application.
-  let clientApplication: ClientApplicationDto | undefined;
+  let clientApplication: ClientApplicationRenewalEligibleDto | undefined;
 
   if (isWithinRenewalPeriod()) {
-    clientApplication = await securityHandler.requireClientApplication({ applicationYearId: applicationYear.applicationYearId, params, request, session });
+    const clientApplicationRenewalEligibilityService = appContainer.get(TYPES.ClientApplicationRenewalEligibilityService);
+    const clientApplicationRenewalEligibilityResult = await clientApplicationRenewalEligibilityService.getClientApplicationRenewalEligibilityBySin({
+      sin: userInfoToken.sin,
+      applicationYearId: applicationYear.applicationYearId,
+      userId: userInfoToken.sub,
+    });
 
-    if (!isEligibleToRenew(clientApplication)) {
+    if (clientApplicationRenewalEligibilityResult.result !== 'ELIGIBLE') {
       throw redirect(getPathById('protected/data-unavailable', params));
     }
+
+    clientApplication = clientApplicationRenewalEligibilityResult.clientApplication;
   }
 
   const state = startProtectedApplicationState({ session, applicationYear, clientApplication });

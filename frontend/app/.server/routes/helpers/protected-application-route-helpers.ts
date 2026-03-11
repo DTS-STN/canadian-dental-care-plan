@@ -6,7 +6,7 @@ import { invariant } from '@dts-stn/invariant';
 import { differenceInMinutes } from 'date-fns';
 import type { PickDeep, ReadonlyDeep } from 'type-fest';
 
-import type { ClientApplicationDto } from '~/.server/domain/dtos';
+import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
 import { getAgeCategoryFromAge, getAgeCategoryReferenceDate } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { DeclaredChange } from '~/.server/routes/helpers/declared-change-type';
@@ -140,7 +140,7 @@ export type ProtectedApplicationState = ReadonlyDeep<{
   };
 
   typeOfApplication?: 'adult' | 'children' | 'family' | 'delegate';
-  clientApplication?: ClientApplicationDto;
+  clientApplication?: ClientApplicationRenewalEligibleDto;
   applicantClientIdsToRenew?: string[];
 }>;
 
@@ -270,7 +270,7 @@ interface StartProtectedApplicationStateArgs {
    * The client application data used to determine the input model for renewal applications. This should be
    * provided when starting a renewal application, and can be omitted for intake applications.
    */
-  clientApplication?: ClientApplicationDto;
+  clientApplication?: ClientApplicationRenewalEligibleDto;
 
   /**
    * The session object used to store the application state. This is required to initialize the state
