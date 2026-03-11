@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { redirect, useFetcher } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
@@ -178,8 +176,6 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
   const cdcpLink = <InlineLink to={t('application-full-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
   const { currentLanguage } = useCurrentLanguage();
-
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="max-w-prose space-y-10">
@@ -396,15 +392,12 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
           {t('confirm.print-btn')}
         </Button>
       </div>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
-          <button
-            aria-expanded={isOpen}
-            className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Exit - Application successfully submitted click"
-          >
-            {t('application-full-child:confirm.close-application')}
-          </button>
+      <Dialog>
+        <DialogTrigger
+          className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Exit - Application successfully submitted click"
+        >
+          {t('application-full-child:confirm.close-application')}
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>

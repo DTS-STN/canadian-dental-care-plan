@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
@@ -196,8 +194,6 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
   const cdcpLink = <InlineLink to={t('application-simplified-child:confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
 
   const { currentLanguage } = useCurrentLanguage();
-
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="max-w-prose space-y-10">
@@ -427,15 +423,12 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
           {t('confirm.print-btn')}
         </Button>
       </div>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
-          <button
-            aria-expanded={isOpen}
-            className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Exit - Application successfully submitted click"
-          >
-            {t('application-simplified-child:confirm.close-application')}
-          </button>
+      <Dialog>
+        <DialogTrigger
+          className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Exit - Application successfully submitted click"
+        >
+          {t('application-simplified-child:confirm.close-application')}
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>

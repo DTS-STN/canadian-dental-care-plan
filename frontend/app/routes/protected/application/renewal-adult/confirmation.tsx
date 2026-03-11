@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { redirect, useFetcher } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
@@ -232,8 +230,6 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('protected-application-renewal-adult:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <div className="max-w-prose space-y-10">
       {isSimplifiedRenewal && (
@@ -448,15 +444,12 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
           {t('confirm.print-btn')}
         </Button>
       </div>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
-          <button
-            aria-expanded={isOpen}
-            className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Exit - Application successfully submitted click"
-          >
-            {t('protected-application-renewal-adult:confirm.close-application')}
-          </button>
+      <Dialog>
+        <DialogTrigger
+          className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Exit - Application successfully submitted click"
+        >
+          {t('protected-application-renewal-adult:confirm.close-application')}
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
