@@ -1,4 +1,4 @@
-import { isChildEligible } from '~/.server/routes/helpers/base-application-route-helpers';
+import { isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ChildState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import { isValidDateString } from '~/utils/date-utils';
@@ -68,7 +68,7 @@ export function isChildInformationSectionCompleted(child: Pick<ChildState, 'info
   return (
     child.information?.dateOfBirth !== undefined && //
     isValidDateString(child.information.dateOfBirth) &&
-    isChildEligible(child.information.dateOfBirth, 'renewal')
+    isChildOrYouth(child.information.dateOfBirth, 'renewal')
   );
 }
 

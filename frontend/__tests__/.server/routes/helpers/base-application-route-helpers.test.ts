@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { getAgeCategoryFromAge, getAgeCategoryFromDateString, getAgeCategoryReferenceDate, getEligibilityStatus, isChildEligible, isEligibleToRenew } from '~/.server/routes/helpers/base-application-route-helpers';
+import { getAgeCategoryFromAge, getAgeCategoryFromDateString, getAgeCategoryReferenceDate, getEligibilityStatus, isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
 
 vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn(() => ({
@@ -85,7 +85,7 @@ describe('base-application-route-helpers', () => {
       expect(getAgeCategoryReferenceDate('renewal')).toBe('2027-06-30');
     });
   });
-  describe('isChildEligible', () => {
+  describe('isChildOrYouth', () => {
     beforeEach(() => {
       vi.useFakeTimers();
       vi.setSystemTime('2026-03-04T12:00:00.000Z');
@@ -96,53 +96,35 @@ describe('base-application-route-helpers', () => {
     });
 
     it('returns true for children in intake context', () => {
-      expect(isChildEligible('2012-03-04', 'intake')).toBe(true);
+      expect(isChildOrYouth('2012-03-04', 'intake')).toBe(true);
     });
 
     it('returns true for youth in intake context', () => {
-      expect(isChildEligible('2009-03-04', 'intake')).toBe(true);
+      expect(isChildOrYouth('2009-03-04', 'intake')).toBe(true);
     });
 
     it('returns false for adults in intake context', () => {
-      expect(isChildEligible('2008-03-04', 'intake')).toBe(false);
+      expect(isChildOrYouth('2008-03-04', 'intake')).toBe(false);
     });
 
     it('returns false for seniors in intake context', () => {
-      expect(isChildEligible('1960-03-04', 'intake')).toBe(false);
+      expect(isChildOrYouth('1960-03-04', 'intake')).toBe(false);
     });
 
     it('returns true for children in renewal context', () => {
-      expect(isChildEligible('2012-03-04', 'renewal')).toBe(true);
+      expect(isChildOrYouth('2012-03-04', 'renewal')).toBe(true);
     });
 
     it('returns true for youth in renewal context', () => {
-      expect(isChildEligible('2009-03-04', 'renewal')).toBe(true);
+      expect(isChildOrYouth('2009-03-04', 'renewal')).toBe(true);
     });
 
     it('returns false for adults in renewal context', () => {
-      expect(isChildEligible('2008-03-04', 'renewal')).toBe(false);
+      expect(isChildOrYouth('2008-03-04', 'renewal')).toBe(false);
     });
 
     it('returns false for seniors in renewal context', () => {
-      expect(isChildEligible('1960-03-04', 'renewal')).toBe(false);
-    });
-  });
-
-  describe('isEligibleToRenew', () => {
-    it('returns false when eligibilityStatusCode is undefined', () => {
-      expect(isEligibleToRenew({ eligibilityStatusCode: undefined })).toBe(false);
-    });
-
-    it('returns true when eligibilityStatusCode matches ELIGIBILITY_STATUS_CODE_ELIGIBLE', () => {
-      expect(isEligibleToRenew({ eligibilityStatusCode: 'ELIGIBLE' })).toBe(true);
-    });
-
-    it('returns false when eligibilityStatusCode does not match ELIGIBILITY_STATUS_CODE_ELIGIBLE', () => {
-      expect(isEligibleToRenew({ eligibilityStatusCode: 'INELIGIBLE' })).toBe(false);
-    });
-
-    it('returns false when eligibilityStatusCode is an empty string', () => {
-      expect(isEligibleToRenew({ eligibilityStatusCode: '' })).toBe(false);
+      expect(isChildOrYouth('1960-03-04', 'renewal')).toBe(false);
     });
   });
 

@@ -7,7 +7,7 @@ import type { ClientApplicationDto, ClientApplicationRenewalEligibilityDto, Clie
 import type { ClientEligibilityService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
-import { isChildEligible } from '~/.server/routes/helpers/base-application-route-helpers';
+import { isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
 
 /** A client eligibility record flattened to a single earning for a specific application year. */
 type ClientEligibilityWithEarning = OmitStrict<ClientEligibilityDto, 'earnings'> & {
@@ -53,7 +53,7 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
    *
    * 1. None → `INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND`.
    * 2. Filter children to those in the `'children'` or `'youth'` age category as of the renewal
-   *    reference date (see `isChildEligible`).
+   *    reference date (see `isChildOrYouth`).
    * 3. Derive client numbers by application type (`'adult'` / `'children'` / `'family'`).
    *    No client numbers → `INELIGIBLE-NO-CLIENT-NUMBERS`.
    * 4. Fetch eligibilities for the derived client numbers, keeping only those
@@ -114,10 +114,10 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
 
   /**
    * Returns a copy of the DTO keeping only children in the `'children'` or `'youth'` age category
-   * as of the renewal reference date (determined by `isChildEligible`).
+   * as of the renewal reference date (determined by `isChildOrYouth`).
    */
   private filterEligibleChildrenByAge(clientApplicationDto: ClientApplicationDto): ClientApplicationDto {
-    const eligibleChildren = clientApplicationDto.children.filter((child) => isChildEligible(child.information.dateOfBirth, 'renewal'));
+    const eligibleChildren = clientApplicationDto.children.filter((child) => isChildOrYouth(child.information.dateOfBirth, 'renewal'));
     this.log.trace('Filtered children by age: [%d] of [%d] children eligible for renewal', eligibleChildren.length, clientApplicationDto.children.length);
     return {
       ...clientApplicationDto,

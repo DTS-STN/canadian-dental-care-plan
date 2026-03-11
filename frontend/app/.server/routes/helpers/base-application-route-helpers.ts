@@ -1,5 +1,3 @@
-import type { ClientApplicationDto } from '~/.server/domain/dtos';
-import { getEnv } from '~/.server/utils/env.utils';
 import type { EligibilityType } from '~/components/eligibility';
 import { getAgeFromDateString } from '~/utils/date-utils';
 
@@ -60,31 +58,17 @@ export function getAgeCategoryReferenceDate(context: 'intake' | 'renewal'): stri
 }
 
 /**
- * Determines if a child is eligible to apply (intake) or renew (renewal) based on their date of birth and the context
- * of the application (intake or renewal). The eligibility is determined by calculating the age category of the child
- * using their date of birth and the appropriate reference date for the given context. A child is considered eligible
- * if they fall into the 'children' or 'youth' age categories.
+ * Determines if the individual is categorized as a child or youth based on their date of birth and the context (intake
+ * or renewal).
  *
- * @param dateOfBirth - The date of birth of the child.
+ * @param dateOfBirth - The date of birth of the individual.
  * @param context - The context of the application ('intake' or 'renewal').
- * @returns A boolean indicating whether the child is eligible.
+ * @returns A boolean indicating whether the individual is a child or youth.
  */
-export function isChildEligible(dateOfBirth: string, context: 'intake' | 'renewal'): boolean {
+export function isChildOrYouth(dateOfBirth: string, context: 'intake' | 'renewal'): boolean {
   const referenceDate = getAgeCategoryReferenceDate(context);
   const ageCategory = getAgeCategoryFromDateString(dateOfBirth, referenceDate);
   return ageCategory === 'children' || ageCategory === 'youth';
-}
-
-/**
- * Determines if a client application is eligible to renew based on its eligibility status code.
- *
- * @param clientApplicationDto - The client application DTO.
- * @returns A boolean indicating whether the client application is eligible to renew.
- */
-export function isEligibleToRenew(clientApplicationDto: Pick<ClientApplicationDto, 'eligibilityStatusCode'>): boolean {
-  // If the eligibility status code is defined, we check if it is equal to the eligible status code.
-  const { ELIGIBILITY_STATUS_CODE_ELIGIBLE } = getEnv();
-  return clientApplicationDto.eligibilityStatusCode === ELIGIBILITY_STATUS_CODE_ELIGIBLE;
 }
 
 interface GetEligibilityStatusArgs {

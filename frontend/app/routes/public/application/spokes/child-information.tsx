@@ -10,7 +10,7 @@ import { z } from 'zod';
 import type { Route } from './+types/child-information';
 
 import { TYPES } from '~/.server/constants';
-import { isChildEligible } from '~/.server/routes/helpers/base-application-route-helpers';
+import { isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
 import { getPublicApplicationState, getSingleChildState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { ChildInformationState, ChildSinState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
@@ -236,7 +236,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/application/$id/children/$childId/parent-or-guardian', params));
   }
 
-  if (!isChildEligible(parsedDataResult.data.dateOfBirth, state.context)) {
+  if (!isChildOrYouth(parsedDataResult.data.dateOfBirth, state.context)) {
     return redirect(getPathById('public/application/$id/children/$childId/cannot-apply-child', params));
   }
 
