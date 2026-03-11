@@ -33,15 +33,25 @@ export interface ClientApplicationRenewalEligibilityDtoMapper {
   mapToClientApplicationRenewalEligibilityDto(clientApplicationDtoOption: Option<ClientApplicationDto>): Promise<ClientApplicationRenewalEligibilityDto>;
 }
 
+type DefaultClientApplicationRenewalEligibilityDtoMapper_ServerConfig = //
+  Pick<
+    ServerConfig,
+    | 'COVERAGE_TIER_CODE_TIER_1' //
+    | 'COVERAGE_TIER_CODE_TIER_2'
+    | 'COVERAGE_TIER_CODE_TIER_3'
+    | 'ELIGIBILITY_STATUS_CODE_ELIGIBLE'
+    | 'ENROLLMENT_STATUS_CODE_ENROLLED'
+  >;
+
 @injectable()
 export class DefaultClientApplicationRenewalEligibilityDtoMapper implements ClientApplicationRenewalEligibilityDtoMapper {
   private readonly log: Logger;
   private readonly clientEligibilityService: ClientEligibilityService;
-  private readonly serverConfig: Pick<ServerConfig, 'ELIGIBILITY_STATUS_CODE_ELIGIBLE' | 'ENROLLMENT_STATUS_CODE_ENROLLED'>;
+  private readonly serverConfig: DefaultClientApplicationRenewalEligibilityDtoMapper_ServerConfig;
 
   constructor(
     @inject(TYPES.ClientEligibilityService) clientEligibilityService: ClientEligibilityService, //
-    @inject(TYPES.ServerConfig) serverConfig: Pick<ServerConfig, 'ELIGIBILITY_STATUS_CODE_ELIGIBLE' | 'ENROLLMENT_STATUS_CODE_ENROLLED'>,
+    @inject(TYPES.ServerConfig) serverConfig: DefaultClientApplicationRenewalEligibilityDtoMapper_ServerConfig,
   ) {
     this.log = createLogger('DefaultClientApplicationRenewalEligibilityDtoMapper');
     this.clientEligibilityService = clientEligibilityService;
@@ -61,7 +71,7 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
    * 5. Filter to clients that are enrolled, have `isEligible: true`, and have a
    *    defined `coverageCopayTierCode`. None passing → `INELIGIBLE-NOT-ENROLLED`.
    * 6. Return `ELIGIBLE` with the passing client numbers and an input model of
-   *    `'simplified'` (all share one copay tier) or `'full'` (mixed tiers).
+   *    `'simplified'` (all share one valid copay tier) or `'full'` (mixed tiers).
    */
   async mapToClientApplicationRenewalEligibilityDto(clientApplicationDtoOption: Option<ClientApplicationDto>): Promise<ClientApplicationRenewalEligibilityDto> {
     this.log.trace('Mapping client application dto to client application renewal eligibility dto: [%j]', clientApplicationDtoOption.unwrapUnchecked());
@@ -214,14 +224,29 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
   }
 
   /**
-   * Returns `'simplified'` if all clients share the same `coverageCopayTierCode`, otherwise `'full'`.
+   * Determines the input model to use for the renewal form.
+   *
+   * Returns `'simplified'` only when both conditions hold:
+   * 1. Every client's `coverageCopayTierCode` is one of the configured valid tier codes (TIER_1, TIER_2, or TIER_3).
+   * 2. All clients share the exact same tier code.
+   *
+   * Returns `'full'` if any tier code is missing, unrecognized, or clients have different tier codes.
    */
   private getInputModelForEnrolledAndEligibleClients(enrolledAndEligibleClients: ReadonlyMap<string, EnrolledEligibleClient>): 'simplified' | 'full' {
-    const seen = new Set<string | undefined>();
-    for (const { earning } of enrolledAndEligibleClients.values()) {
-      seen.add(earning.coverageCopayTierCode);
-      if (seen.size > 1) return 'full';
-    }
+    const validTierCodes = new Set([
+      this.serverConfig.COVERAGE_TIER_CODE_TIER_1, //
+      this.serverConfig.COVERAGE_TIER_CODE_TIER_2,
+      this.serverConfig.COVERAGE_TIER_CODE_TIER_3,
+    ]);
+
+    const tierCodes = [...enrolledAndEligibleClients.values()].map(({ earning }) => earning.coverageCopayTierCode);
+
+    const allValidTierCodes = tierCodes.every((code) => code !== undefined && validTierCodes.has(code));
+    if (!allValidTierCodes) return 'full';
+
+    const allClientsShareSameTierCode = new Set(tierCodes).size === 1;
+    if (!allClientsShareSameTierCode) return 'full';
+
     return 'simplified';
   }
 }
