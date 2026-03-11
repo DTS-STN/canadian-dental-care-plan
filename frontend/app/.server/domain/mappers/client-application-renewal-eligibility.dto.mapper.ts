@@ -27,7 +27,7 @@ export interface ClientApplicationRenewalEligibilityDtoMapper {
   /**
    * Maps a client application DTO option to a renewal eligibility DTO.
    * @param clientApplicationDtoOption - The client application, or None if not found.
-   * @returns A promise resolving to `CLIENT-APPLICATION-NOT-FOUND`, `INELIGIBLE-NO-CLIENT-NUMBERS`,
+   * @returns A promise resolving to `INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND`, `INELIGIBLE-NO-CLIENT-NUMBERS`,
    *   `INELIGIBLE-NO-ELIGIBILITIES`, `INELIGIBLE-NOT-ENROLLED`, or `ELIGIBLE`.
    */
   mapToClientApplicationRenewalEligibilityDto(clientApplicationDtoOption: Option<ClientApplicationDto>): Promise<ClientApplicationRenewalEligibilityDto>;
@@ -51,7 +51,7 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
   /**
    * Maps a client application DTO to a renewal eligibility DTO:
    *
-   * 1. None → `CLIENT-APPLICATION-NOT-FOUND`.
+   * 1. None → `INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND`.
    * 2. Filter children to those in the `'children'` or `'youth'` age category as of the renewal
    *    reference date (see `isChildEligible`).
    * 3. Derive client numbers by application type (`'adult'` / `'children'` / `'family'`).
@@ -68,7 +68,7 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
 
     if (clientApplicationDtoOption.isNone()) {
       this.log.debug('Client application dto is None, returning not found result');
-      return { result: 'CLIENT-APPLICATION-NOT-FOUND' };
+      return { result: 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND' };
     }
 
     const clientApplicationDto = this.filterEligibleChildrenByAge(clientApplicationDtoOption.unwrap());
@@ -76,28 +76,39 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
     const clientNumbers = this.listClientNumbers(clientApplicationDto);
     if (clientNumbers.length === 0) {
       this.log.debug('No client numbers found for client application, returning ineligible result');
-      return { result: 'INELIGIBLE-NO-CLIENT-NUMBERS', clientApplication: clientApplicationDto };
+      return {
+        result: 'INELIGIBLE-NO-CLIENT-NUMBERS',
+        clientApplication: clientApplicationDto,
+      };
     }
 
     const clientEligibilities = await this.listClientEligibilities(clientNumbers, clientApplicationDto.applicationYearId);
     if (clientEligibilities.size === 0) {
       this.log.debug('No client eligibilities found for client application, returning ineligible result');
-      return { result: 'INELIGIBLE-NO-ELIGIBILITIES', clientApplication: clientApplicationDto };
+      return {
+        result: 'INELIGIBLE-NO-ELIGIBILITIES',
+        clientApplication: clientApplicationDto,
+      };
     }
 
     const enrolledAndEligibleClients = this.getEnrolledAndEligibleClients(clientEligibilities);
     if (enrolledAndEligibleClients.size === 0) {
       this.log.debug('No enrolled and eligible clients found for client application, returning ineligible result');
-      return { result: 'INELIGIBLE-NOT-ENROLLED', clientApplication: clientApplicationDto };
+      return {
+        result: 'INELIGIBLE-NOT-ENROLLED',
+        clientApplication: clientApplicationDto,
+      };
     }
 
     this.log.debug('Client application is eligible for renewal, returning eligible result');
 
     return {
       result: 'ELIGIBLE',
-      clientApplication: clientApplicationDto,
-      eligibleClientNumbers: new Set(enrolledAndEligibleClients.keys()),
-      inputModel: this.getInputModelForEnrolledAndEligibleClients(enrolledAndEligibleClients),
+      clientApplication: {
+        ...clientApplicationDto,
+        eligibleClientNumbers: new Set(enrolledAndEligibleClients.keys()),
+        inputModel: this.getInputModelForEnrolledAndEligibleClients(enrolledAndEligibleClients),
+      },
     };
   }
 
