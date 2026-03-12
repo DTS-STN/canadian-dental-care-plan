@@ -158,12 +158,6 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
         const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication()));
         expect(result.result).toBe('INELIGIBLE-NO-ELIGIBILITIES');
       });
-
-      it('returns INELIGIBLE-NO-ELIGIBILITIES when no earning matches the application year', async () => {
-        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001', { applicationYearId: 'year-2023' })]]));
-        const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication({ applicationYearId: 'year-2024' })));
-        expect(result.result).toBe('INELIGIBLE-NO-ELIGIBILITIES');
-      });
     });
 
     describe('INELIGIBLE-NOT-ENROLLED', () => {
@@ -228,6 +222,14 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
         const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication()));
         expect(result.result).toBe('INELIGIBLE-NOT-ENROLLED');
       });
+
+      it('returns INELIGIBLE-NOT-ENROLLED when enrolled, no profile status, and no earning matches the application year', async () => {
+        // The client has an eligibility record (so it is not INELIGIBLE-NO-ELIGIBILITIES) but
+        // its only earning is for a different year and there is no profile status to fall back on.
+        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001', { applicationYearId: 'year-2023' })]]));
+        const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication({ applicationYearId: 'year-2024' })));
+        expect(result.result).toBe('INELIGIBLE-NOT-ENROLLED');
+      });
     });
 
     describe('ELIGIBLE', () => {
@@ -262,6 +264,24 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
           ]),
         );
         const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication()));
+        expect(result.result).toBe('ELIGIBLE');
+      });
+
+      it('qualifies via profile eligibility when no earning matches the application year', async () => {
+        // The client has no earning for the renewal year but a present profile eligibilityStatusCode
+        // — profile eligibility is authoritative and does not require a matching earning.
+        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(
+          new Map([
+            [
+              'client-001',
+              makeEligibility('client-001', {
+                eligibilityStatusCode: SERVER_CONFIG.ELIGIBILITY_STATUS_CODE_ELIGIBLE,
+                applicationYearId: 'year-2023', // earning is for a different year
+              }),
+            ],
+          ]),
+        );
+        const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication({ applicationYearId: 'year-2024' })));
         expect(result.result).toBe('ELIGIBLE');
       });
 
@@ -369,6 +389,25 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
         it('returns full when a client has no tier code (coverageCopayTierCode is undefined)', async () => {
           mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001', { missingTierCode: true })]]));
           const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication()));
+          assert(result.result === 'ELIGIBLE');
+          expect(result.clientApplication.inputModel).toBe('full');
+        });
+
+        it('returns full when the eligible client has no matching earning (no tier code available)', async () => {
+          // Profile-eligible client whose only earning is for a different year → earning is undefined
+          // → no coverageCopayTierCode can be read → allValidTierCodes is false → 'full'.
+          mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(
+            new Map([
+              [
+                'client-001',
+                makeEligibility('client-001', {
+                  eligibilityStatusCode: SERVER_CONFIG.ELIGIBILITY_STATUS_CODE_ELIGIBLE,
+                  applicationYearId: 'year-2023', // earning is for a different year
+                }),
+              ],
+            ]),
+          );
+          const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication({ applicationYearId: 'year-2024' })));
           assert(result.result === 'ELIGIBLE');
           expect(result.clientApplication.inputModel).toBe('full');
         });
