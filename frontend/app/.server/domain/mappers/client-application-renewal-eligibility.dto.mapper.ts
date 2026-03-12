@@ -195,20 +195,48 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
   }
 
   /**
-   * Filters to clients that are enrolled (`enrollmentStatusCode === ENROLLMENT_STATUS_CODE_ENROLLED`),
-   * have `isEligible: true`, or have `isEarningEligible: true`.
+   * Filters `clientEligibilities` down to clients that are enrolled **and** eligible,
+   * applying the following three-step decision for each client:
+   *
+   * 1. **Enrollment check** — the client's `enrollmentStatusCode` must equal
+   *    `ENROLLMENT_STATUS_CODE_ENROLLED`. Clients that fail this check are skipped entirely.
+   *
+   * 2. **Profile eligibility check** — when `eligibilityStatusCode` is present on the client
+   *    profile, it is the authoritative signal. If eligible, the client qualifies; if not,
+   *    the client is excluded. Earning eligibility is **not** consulted in either case.
+   *
+   * 3. **Earning eligibility fallback** — only reached when `eligibilityStatusCode` is absent
+   *    (`undefined`) on the client profile. The earning's own `eligibilityStatusCode` is used
+   *    as the eligibility signal instead.
    */
   private getEnrolledAndEligibleClients(clientEligibilities: ReadonlyMap<string, ClientEligibilityWithEarning>): ReadonlyMap<string, EnrolledEligibleClient> {
     const entries: Array<[string, EnrolledEligibleClient]> = [];
 
     for (const [clientNumber, eligibility] of clientEligibilities) {
-      const isEligible = eligibility.eligibilityStatusCode === this.serverConfig.ELIGIBILITY_STATUS_CODE_ELIGIBLE;
+      // Step 1: enrollment gate — skip clients that are not enrolled.
       const isEnrolled = eligibility.enrollmentStatusCode === this.serverConfig.ENROLLMENT_STATUS_CODE_ENROLLED;
+      this.log.trace('Checking client number [%s] enrollment status: isEnrolled=[%s]', clientNumber, isEnrolled);
+      if (!isEnrolled) {
+        continue;
+      }
+
+      // Step 2: profile eligibility — when present, it is authoritative and earning eligibility
+      // is never consulted (the `continue` below enforces this regardless of the outcome).
+      if (eligibility.eligibilityStatusCode !== undefined) {
+        const isEligible = eligibility.eligibilityStatusCode === this.serverConfig.ELIGIBILITY_STATUS_CODE_ELIGIBLE;
+        this.log.trace('Checking client number [%s] profile eligibility: isEnrolled=[%s], isEligible=[%s]', clientNumber, isEnrolled, isEligible);
+        if (isEligible) {
+          entries.push([clientNumber, eligibility as EnrolledEligibleClient]);
+        }
+        continue;
+      }
+
+      // Step 3: earning eligibility fallback — only reached when the profile has no eligibility
+      // status code, meaning we must rely on the earning-level status instead.
       const isEarningEligible = eligibility.earning.eligibilityStatusCode === this.serverConfig.ELIGIBILITY_STATUS_CODE_ELIGIBLE;
+      this.log.trace('Checking client number [%s] earning eligibility (no profile status): isEnrolled=[%s], isEarningEligible=[%s]', clientNumber, isEnrolled, isEarningEligible);
 
-      this.log.trace('Checking client number [%s] for enrollment and eligibility: isEnrolled=[%s], isEligible=[%s], isEarningEligible=[%s]', clientNumber, isEnrolled, isEligible, isEarningEligible);
-
-      if (isEnrolled && (isEligible || isEarningEligible)) {
+      if (isEarningEligible) {
         entries.push([clientNumber, eligibility as EnrolledEligibleClient]);
       }
     }

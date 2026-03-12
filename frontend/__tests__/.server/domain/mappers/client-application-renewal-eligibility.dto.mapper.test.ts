@@ -83,7 +83,7 @@ function makeEligibility(
 ): ClientEligibilityDto {
   const {
     enrollmentStatusCode = SERVER_CONFIG.ENROLLMENT_STATUS_CODE_ENROLLED,
-    eligibilityStatusCode = SERVER_CONFIG.ELIGIBILITY_STATUS_CODE_ELIGIBLE,
+    eligibilityStatusCode,
     earningEligibilityStatusCode = SERVER_CONFIG.ELIGIBILITY_STATUS_CODE_ELIGIBLE,
     coverageCopayTierCode = 'tier-1',
     missingTierCode = false,
@@ -173,14 +173,54 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
         expect(result.result).toBe('INELIGIBLE-NOT-ENROLLED');
       });
 
-      it('returns INELIGIBLE-NOT-ENROLLED when enrolled but neither profile-eligible nor earning-eligible', async () => {
+      it('returns INELIGIBLE-NOT-ENROLLED when enrolled but profile eligibility status is not eligible', async () => {
+        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001', { eligibilityStatusCode: 'not-eligible' })]]));
+        const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication()));
+        expect(result.result).toBe('INELIGIBLE-NOT-ENROLLED');
+      });
+
+      it('returns INELIGIBLE-NOT-ENROLLED when enrolled, profile eligibility status is not eligible, and earning eligibility status is eligible (profile takes precedence)', async () => {
         mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(
           new Map([
             [
               'client-001',
               makeEligibility('client-001', {
                 eligibilityStatusCode: 'not-eligible',
+                earningEligibilityStatusCode: SERVER_CONFIG.ELIGIBILITY_STATUS_CODE_ELIGIBLE,
+              }),
+            ],
+          ]),
+        );
+        const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication()));
+        expect(result.result).toBe('INELIGIBLE-NOT-ENROLLED');
+      });
+
+      it('returns INELIGIBLE-NOT-ENROLLED when enrolled, no profile eligibility status, and earning eligibility status is not eligible', async () => {
+        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(
+          new Map([
+            [
+              'client-001',
+              makeEligibility('client-001', {
+                eligibilityStatusCode: undefined,
                 earningEligibilityStatusCode: 'not-eligible',
+              }),
+            ],
+          ]),
+        );
+        const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication()));
+        expect(result.result).toBe('INELIGIBLE-NOT-ENROLLED');
+      });
+
+      it('returns INELIGIBLE-NOT-ENROLLED when enrolled and profile eligibility status is an empty string (earning eligibility is not consulted)', async () => {
+        // An empty string is !== undefined so it is treated as a present-but-non-eligible profile
+        // signal; earning eligibility is never consulted regardless of its value.
+        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(
+          new Map([
+            [
+              'client-001',
+              makeEligibility('client-001', {
+                eligibilityStatusCode: '',
+                earningEligibilityStatusCode: SERVER_CONFIG.ELIGIBILITY_STATUS_CODE_ELIGIBLE,
               }),
             ],
           ]),
@@ -191,19 +231,31 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
     });
 
     describe('ELIGIBLE', () => {
-      it('returns ELIGIBLE for an enrolled and profile-eligible adult client', async () => {
-        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001')]]));
-        const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication()));
-        expect(result.result).toBe('ELIGIBLE');
-      });
-
-      it('qualifies a client via earning eligibility when profile eligibility is absent', async () => {
+      it('returns ELIGIBLE when enrolled and profile eligibility status is eligible (profile branch)', async () => {
+        // eligibilityStatusCode is explicitly set so the profile branch (Step 2) is exercised
+        // and earning eligibility is never consulted.
         mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(
           new Map([
             [
               'client-001',
               makeEligibility('client-001', {
-                eligibilityStatusCode: 'not-eligible',
+                eligibilityStatusCode: SERVER_CONFIG.ELIGIBILITY_STATUS_CODE_ELIGIBLE,
+                earningEligibilityStatusCode: 'not-eligible', // must be ignored
+              }),
+            ],
+          ]),
+        );
+        const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication()));
+        expect(result.result).toBe('ELIGIBLE');
+      });
+
+      it('qualifies a client via earning eligibility when profile eligibility status is absent', async () => {
+        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(
+          new Map([
+            [
+              'client-001',
+              makeEligibility('client-001', {
+                eligibilityStatusCode: undefined,
                 earningEligibilityStatusCode: SERVER_CONFIG.ELIGIBILITY_STATUS_CODE_ELIGIBLE,
               }),
             ],
