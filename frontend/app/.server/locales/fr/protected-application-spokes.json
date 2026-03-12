@@ -138,7 +138,7 @@
       "acknowledge-terms": "J'ai lu, j'ai compris et j'accepte les conditions d'utilisation.",
       "acknowledge-privacy": "J'ai lu, j'ai compris et j'accepte cet énoncé de confidentialité.",
       "share-data": "Je consens à ce que les renseignements personnels fournis soient partagés.",
-      "do-not-consent": "Je <strong>n'accepte pas</strong> les termes et conditions et la déclaration de confidentialité et je <strong>ne consens pas</strong> à la divulgation de mes renseignements personnels aux fins énumérées.",
+      "do-not-consent": "Je <strong>n'accepte pas</strong> les conditions d'utilisation et l'énoncé de confidentialité et je <strong>ne consens pas</strong> à ce que mes renseignements soient communiqués aux fins indiquées ci-dessus.",
       "error-message": {
         "acknowledge-terms-required": "Vous devez lire les modalités d'utilisation avant de poursuivre",
         "acknowledge-privacy-required": "Vous devez lire l'énoncé de confidentialité avant de poursuivre",
