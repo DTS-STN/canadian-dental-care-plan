@@ -2,7 +2,7 @@
   "index": {
     "page-title": "Présenter une demande"
   },
-  "required-label": "Remplissez tous les champs.",
+  "required-label": "Veuillez remplir tous les champs.",
   "optional-label": "Remplissez tous les champs, sauf s'ils sont indiqués facultatifs.",
   "complete-all-sections": "Veuillez remplir toutes les sections.",
   "all-optional": "Tous les champs sont facultatifs.",
