@@ -255,7 +255,7 @@
               "IdentificationCategoryText": "Client ID"
             },
             {
-              "IdentificationID": "10000000004",
+              "IdentificationID": "10000000005",
               "IdentificationCategoryText": "Client Number"
             }
           ]
@@ -266,7 +266,7 @@
       "ReferenceDataID": "775170001"
     },
     "BenefitApplicationCategoryCode": {
-      "ReferenceDataID": "775170000"
+      "ReferenceDataID": "775170001"
     },
     "BenefitApplicationYear": {
       "BenefitApplicationYearIdentification": [
