@@ -10,7 +10,6 @@ describe('DefaultClientApplicationDtoMapper', () => {
     APPLICANT_CATEGORY_CODE_INDIVIDUAL: '111111111',
     APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY: '222222222',
     COVERAGE_CATEGORY_CODE_COPAY_TIER: 'Co-Pay Tier',
-    COVERAGE_TIER_CODE_TIER_98: 'Tier 98',
     ENGLISH_LANGUAGE_CODE: 1,
   };
   const mapper = new DefaultClientApplicationDtoMapper(mockServerConfig);
@@ -247,7 +246,6 @@ describe('DefaultClientApplicationDtoMapper', () => {
           phoneNumber: '555-555-5555',
           phoneNumberAlt: '555-555-5556',
         },
-        hasCopayTierCoverage: true,
         dateOfBirth: '2000-01-01',
         dentalBenefits: ['ID-123456'],
         dentalInsurance: true,

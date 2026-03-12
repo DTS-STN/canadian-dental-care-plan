@@ -208,7 +208,6 @@ describe('DefaultClientApplicationService', () => {
       mailingCity: 'Mailing City',
       mailingCountry: 'USA',
     },
-    hasCopayTierCoverage: true,
     dateOfBirth: '2000-01-01',
     dentalBenefits: ['ID-123456'],
     hasFiledTaxes: true,

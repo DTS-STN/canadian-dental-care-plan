@@ -160,9 +160,11 @@ export async function action({ context: { appContainer, session }, params, reque
   let inputModel: InputModelState = 'full';
   let clientApplication: ClientApplicationRenewalEligibleDto | undefined;
 
-  // For renewal applications, we need to determine the input model based on the client's application data. If the
-  // client has a hasCopayTierCoverage, we can use the 'simplified' model which requires less information from the
-  // applicant. Otherwise, we use the 'full' model.
+  // For renewal applications, use the provided member ID, first name, last name, date of birth and SIN to check if the
+  // client is eligible for renewal and to retrieve the client's existing application information. This information will
+  // be used to pre-populate the application and determine the next steps in the application flow. If the client is not
+  // eligible for renewal, return an error status with the date when they can apply again (the day after the renewal
+  // period end date)
   if (state.context === 'renewal') {
     invariant(parsedDataResult.data.memberId, 'Member ID must be defined for renewal applications');
 
@@ -176,8 +178,6 @@ export async function action({ context: { appContainer, session }, params, reque
       userId: 'anonymous',
     });
 
-    // If the client is not eligible for renewal, return an error status with the date when they can apply again (the
-    // day after the renewal period end date)
     if (clientApplicationRenewalEligibilityResult.result !== 'ELIGIBLE') {
       const startDate = toLocaleDateString(addDays(RENEWAL_PERIOD_END_DATE, 1), locale);
       return { status: 'client-not-found', startDate } as const;

@@ -17,7 +17,6 @@ export type DefaultClientApplicationDtoMapper_ServerConfig = Pick<
   | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' //
   | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
   | 'COVERAGE_CATEGORY_CODE_COPAY_TIER'
-  | 'COVERAGE_TIER_CODE_TIER_98'
   | 'ENGLISH_LANGUAGE_CODE'
 >;
 
@@ -199,7 +198,6 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       children,
       communicationPreferences,
       contactInformation,
-      hasCopayTierCoverage: this.hasCopayTierCoverage(applicant),
       dateOfBirth: applicant.PersonBirthDate.date,
       dentalBenefits: applicant.ApplicantDetail.InsurancePlan?.at(0)?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
       dentalInsurance: applicant.ApplicantDetail.PrivateDentalInsuranceIndicator,
@@ -218,23 +216,5 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
     if (typeOfApplication === APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY) return 'children';
     if (typeOfApplication === APPLICANT_CATEGORY_CODE_INDIVIDUAL) return 'adult';
     return 'family';
-  }
-
-  /**
-   * Determines whether the applicant has a co-pay tier coverage, based on the presence of a co-pay tier coverage record
-   * with a coverage tier code other than TIER_98 in the applicant's earning records.
-   *
-   * @returns true if the applicant has a co-pay tier coverage; false otherwise.
-   */
-  private hasCopayTierCoverage(applicant: ClientApplicationEntity['BenefitApplication']['Applicant']): boolean {
-    const copayTierCoverage = applicant.ApplicantEarning.at(0)?.Coverage.find((coverage) => {
-      return coverage.CoverageCategoryCode.ReferenceDataName === this.serverConfig.COVERAGE_CATEGORY_CODE_COPAY_TIER;
-    });
-
-    // If there is no co-pay tier coverage record, or if the coverage tier code of the co-pay tier coverage record is
-    // TIER_98, then the applicant does not have a co-pay tier coverage. Otherwise, the applicant has a co-pay tier coverage.
-    return copayTierCoverage //
-      ? copayTierCoverage.CoverageTierCode.ReferenceDataID !== this.serverConfig.COVERAGE_TIER_CODE_TIER_98
-      : false;
   }
 }

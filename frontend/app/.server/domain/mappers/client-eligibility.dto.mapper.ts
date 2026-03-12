@@ -6,13 +6,14 @@ import type { ClientEligibilityEntity, ClientEligibilityRequestEntity } from '..
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
+import { isValidCoverageCopayTierCode } from '~/.server/utils/coverage.utils';
 
 export interface ClientEligibilityDtoMapper {
   mapClientEligibilityEntityToClientEligibilityDto(clientEligibilityEntity: ClientEligibilityEntity): ClientEligibilityDto;
   mapClientEligibilityRequestDtoToClientEligibilityRequestEntity(clientEligibilityRequestDto: ClientEligibilityRequestDto): ClientEligibilityRequestEntity;
 }
 
-type DefaultClientEligibilityDtoMapperServerConfig = Pick<ServerConfig, 'COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC' | 'ELIGIBILITY_STATUS_CODE_ELIGIBLE' | 'ELIGIBILITY_STATUS_CODE_INELIGIBLE' | 'COVERAGE_TIER_CODE_TIER_98'>;
+type DefaultClientEligibilityDtoMapperServerConfig = Pick<ServerConfig, 'COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC'>;
 
 @injectable()
 export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMapper {
@@ -42,7 +43,8 @@ export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMa
     const earningCopayTierCoverage = earning.Coverage.find((coverage) => {
       return (
         coverage.CoverageCategoryCode.ReferenceDataName === this.serverConfig.COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC && //
-        coverage.CoverageCategoryCode.CoverageTierCode.ReferenceDataID !== this.serverConfig.COVERAGE_TIER_CODE_TIER_98
+        typeof coverage.CoverageCategoryCode.CoverageTierCode.ReferenceDataID === 'string' &&
+        isValidCoverageCopayTierCode(coverage.CoverageCategoryCode.CoverageTierCode.ReferenceDataID)
       );
     });
 

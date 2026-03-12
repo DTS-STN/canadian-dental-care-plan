@@ -1,24 +1,24 @@
 // generate unit tests for app/.server/domain/mappers/client-eligibility.dto.mapper.ts with vitest
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { ClientEligibilityEntity } from '~/.server/domain/entities/client-eligibility.entity';
 import { DefaultClientEligibilityDtoMapper } from '~/.server/domain/mappers/client-eligibility.dto.mapper';
+import { isValidCoverageCopayTierCode } from '~/.server/utils/coverage.utils';
+
+vi.mock('~/.server/utils/coverage.utils');
 
 describe('DefaultClientEligibilityDtoMapper', () => {
   let mapper: DefaultClientEligibilityDtoMapper;
 
   beforeEach(() => {
-    const serverConfig = {
-      COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: 'Co-Pay Tier (TPC)',
-      COVERAGE_TIER_CODE_TIER_98: 'coverage-tier-98',
-      ELIGIBILITY_STATUS_CODE_ELIGIBLE: 'status-001',
-      ELIGIBILITY_STATUS_CODE_INELIGIBLE: 'status-002',
-    };
+    const serverConfig = { COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC: 'Co-Pay Tier (TPC)' };
     mapper = new DefaultClientEligibilityDtoMapper(serverConfig);
   });
 
   describe('mapClientEligibilityEntityToClientEligibilityDto', () => {
     it('should map ClientEligibilityEntity to ClientEligibilityDto correctly', () => {
+      vi.mocked(isValidCoverageCopayTierCode).mockReturnValueOnce(true).mockReturnValueOnce(false);
+
       const clientEligibilityEntity: ClientEligibilityEntity = {
         Applicant: {
           ClientIdentification: [
