@@ -8,6 +8,7 @@ import type { ClientEligibilityService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
+import { isValidCoverageCopayTierCode } from '~/.server/utils/coverage.utils';
 
 /** A client eligibility record flattened to a single earning for a specific application year. */
 type ClientEligibilityWithEarning = OmitStrict<ClientEligibilityDto, 'earnings'> & {
@@ -33,15 +34,7 @@ export interface ClientApplicationRenewalEligibilityDtoMapper {
   mapToClientApplicationRenewalEligibilityDto(clientApplicationDtoOption: Option<ClientApplicationDto>): Promise<ClientApplicationRenewalEligibilityDto>;
 }
 
-type DefaultClientApplicationRenewalEligibilityDtoMapper_ServerConfig = //
-  Pick<
-    ServerConfig,
-    | 'COVERAGE_TIER_CODE_TIER_1' //
-    | 'COVERAGE_TIER_CODE_TIER_2'
-    | 'COVERAGE_TIER_CODE_TIER_3'
-    | 'ELIGIBILITY_STATUS_CODE_ELIGIBLE'
-    | 'ENROLLMENT_STATUS_CODE_ENROLLED'
-  >;
+type DefaultClientApplicationRenewalEligibilityDtoMapper_ServerConfig = Pick<ServerConfig, 'ELIGIBILITY_STATUS_CODE_ELIGIBLE' | 'ENROLLMENT_STATUS_CODE_ENROLLED'>;
 
 @injectable()
 export class DefaultClientApplicationRenewalEligibilityDtoMapper implements ClientApplicationRenewalEligibilityDtoMapper {
@@ -227,21 +220,15 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
    * Determines the input model to use for the renewal form.
    *
    * Returns `'simplified'` only when both conditions hold:
-   * 1. Every client's `coverageCopayTierCode` is one of the configured valid tier codes (TIER_1, TIER_2, or TIER_3).
+   * 1. Every client's `coverageCopayTierCode` is a recognised valid tier code (see `isValidCoverageCopayTierCode`).
    * 2. All clients share the exact same tier code.
    *
-   * Returns `'full'` if any tier code is missing, unrecognized, or clients have different tier codes.
+   * Returns `'full'` if any tier code is missing, unrecognised, or clients have different tier codes.
    */
   private getInputModelForEnrolledAndEligibleClients(enrolledAndEligibleClients: ReadonlyMap<string, EnrolledEligibleClient>): 'simplified' | 'full' {
-    const validTierCodes = new Set([
-      this.serverConfig.COVERAGE_TIER_CODE_TIER_1, //
-      this.serverConfig.COVERAGE_TIER_CODE_TIER_2,
-      this.serverConfig.COVERAGE_TIER_CODE_TIER_3,
-    ]);
-
     const tierCodes = [...enrolledAndEligibleClients.values()].map(({ earning }) => earning.coverageCopayTierCode);
 
-    const allValidTierCodes = tierCodes.every((code) => code !== undefined && validTierCodes.has(code));
+    const allValidTierCodes = tierCodes.every((code) => typeof code === 'string' && isValidCoverageCopayTierCode(code));
     if (!allValidTierCodes) return 'full';
 
     const allClientsShareSameTierCode = new Set(tierCodes).size === 1;

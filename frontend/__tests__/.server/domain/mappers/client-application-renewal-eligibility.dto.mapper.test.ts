@@ -7,13 +7,12 @@ import type { ClientApplicationDto, ClientChildDto, ClientEligibilityDto } from 
 import { DefaultClientApplicationRenewalEligibilityDtoMapper } from '~/.server/domain/mappers/client-application-renewal-eligibility.dto.mapper';
 import type { ClientEligibilityService } from '~/.server/domain/services';
 import { isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
+import { isValidCoverageCopayTierCode } from '~/.server/utils/coverage.utils';
 
 vi.mock('~/.server/routes/helpers/base-application-route-helpers');
+vi.mock('~/.server/utils/coverage.utils');
 
 const SERVER_CONFIG = {
-  COVERAGE_TIER_CODE_TIER_1: 'tier-1',
-  COVERAGE_TIER_CODE_TIER_2: 'tier-2',
-  COVERAGE_TIER_CODE_TIER_3: 'tier-3',
   ELIGIBILITY_STATUS_CODE_ELIGIBLE: 'eligible',
   ENROLLMENT_STATUS_CODE_ENROLLED: 'enrolled',
 };
@@ -86,7 +85,7 @@ function makeEligibility(
     enrollmentStatusCode = SERVER_CONFIG.ENROLLMENT_STATUS_CODE_ENROLLED,
     eligibilityStatusCode = SERVER_CONFIG.ELIGIBILITY_STATUS_CODE_ELIGIBLE,
     earningEligibilityStatusCode = SERVER_CONFIG.ELIGIBILITY_STATUS_CODE_ELIGIBLE,
-    coverageCopayTierCode = SERVER_CONFIG.COVERAGE_TIER_CODE_TIER_1,
+    coverageCopayTierCode = 'tier-1',
     missingTierCode = false,
     applicationYearId = 'year-2024',
   } = options;
@@ -126,6 +125,7 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
     mapper = new DefaultClientApplicationRenewalEligibilityDtoMapper(mockClientEligibilityService, SERVER_CONFIG);
 
     vi.mocked(isChildOrYouth).mockReturnValue(true);
+    vi.mocked(isValidCoverageCopayTierCode).mockReturnValue(true);
   });
 
   afterEach(() => {
@@ -307,6 +307,7 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
         });
 
         it('returns full when a client has an unrecognised tier code', async () => {
+          vi.mocked(isValidCoverageCopayTierCode).mockReturnValue(false);
           mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001', { coverageCopayTierCode: 'tier-unknown' })]]));
           const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication()));
           assert(result.result === 'ELIGIBLE');
