@@ -16,7 +16,10 @@ export type ClientEligibilityEntity = ReadonlyDeep<{
         CoverageCategoryCode: {
           ReferenceDataName: string;
           CoverageTierCode: {
-            ReferenceDataID: string;
+            // ReferenceDataID is optional because some coverages do not have a tier assigned.
+            // Consumers MUST handle undefined and treat it as "no specific coverage tier" rather
+            // than assuming a ReferenceDataID is always present.
+            ReferenceDataID?: string;
           };
         };
       }>;

@@ -200,7 +200,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     surveyLink,
     userInfo,
     eligibility,
-    isSimplifiedRenewal: state.clientApplication.hasCopayTierCoverage,
+    isSimplifiedRenewal: state.clientApplication.inputModel === 'simplified',
   };
 }
 

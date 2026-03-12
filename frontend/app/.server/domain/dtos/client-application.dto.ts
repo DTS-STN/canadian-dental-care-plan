@@ -10,10 +10,6 @@ export type ClientApplicationDto = ReadonlyDeep<{
   children: ClientChildDto[];
   communicationPreferences: ClientCommunicationPreferencesDto;
   contactInformation: ClientContactInformationDto;
-  /**
-   * Indicates whether the applicant has a co-pay tier coverage that would make them eligible for the program.
-   */
-  hasCopayTierCoverage: boolean;
   dateOfBirth: string;
   dentalBenefits: string[];
   dentalInsurance?: boolean;
