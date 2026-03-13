@@ -110,7 +110,7 @@ export type ClientApplicationEntity = ReadonlyDeep<{
           ReferenceDataName: string;
         };
         PersonSINIdentification: {
-          IdentificationID: string;
+          IdentificationID?: string;
         };
         ApplicantDetail: {
           PrivateDentalInsuranceIndicator?: boolean;

@@ -46,7 +46,7 @@ export type ClientChildDto = ReadonlyDeep<{
     isParent: boolean;
     clientId: string;
     clientNumber: string;
-    socialInsuranceNumber: string;
+    socialInsuranceNumber?: string;
   };
 }>;
 
@@ -82,7 +82,7 @@ export type ClientPartnerInformationDto = ReadonlyDeep<{
   yearOfBirth: string;
   firstName: string;
   lastName: string;
-  socialInsuranceNumber: string;
+  socialInsuranceNumber?: string;
 }>;
 
 export type ClientApplicationBasicInfoRequestDto = Readonly<{

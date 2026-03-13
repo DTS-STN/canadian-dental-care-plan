@@ -82,7 +82,7 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
             <DefinitionList border>
               <DefinitionListItem term={t('protected-profile:applicant-information.member-id')}>{child.id}</DefinitionListItem>
               <DefinitionListItem term={t('protected-profile:applicant-information.dob')}>{child.dob}</DefinitionListItem>
-              <DefinitionListItem term={t('protected-profile:applicant-information.sin')}>{isValidSin(child.sin) ? formatSin(child.sin) : child.sin}</DefinitionListItem>
+              <DefinitionListItem term={t('protected-profile:applicant-information.sin')}>{typeof child.sin === 'string' && isValidSin(child.sin) ? formatSin(child.sin) : child.sin}</DefinitionListItem>
             </DefinitionList>
           </section>
         );
