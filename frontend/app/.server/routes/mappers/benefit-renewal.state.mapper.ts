@@ -396,7 +396,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
           lastName: renewedChild.information.lastName,
           dateOfBirth: renewedChild.information.dateOfBirth,
           isParent: renewedChild.information.isParent,
-          socialInsuranceNumber: existingChild.information.socialInsuranceNumber,
+          socialInsuranceNumber: renewedChild.information.socialInsuranceNumber ?? existingChild.information.socialInsuranceNumber,
         },
       };
     });
