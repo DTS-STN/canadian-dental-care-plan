@@ -89,7 +89,7 @@ export async function loader({ context: { appContainer, session }, request, para
       state.children.map((child) => [
         child.id,
         {
-          childInformation: { completed: isChildInformationSectionCompleted(state.context, child) },
+          childInformation: { completed: isChildInformationSectionCompleted(state.context, child, state.clientApplication) },
           dentalInsurance: { completed: isChildDentalInsuranceSectionCompleted(child) },
           dentalBenefits: { completed: isChildDentalBenefitsSectionCompleted(child) },
         },

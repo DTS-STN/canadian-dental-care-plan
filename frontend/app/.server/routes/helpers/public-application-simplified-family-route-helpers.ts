@@ -1,6 +1,7 @@
 import { redirect } from 'react-router';
 
 import { createLogger } from '~/.server/logging';
+import { isChildClientNumberValid } from '~/.server/routes/helpers/base-application-route-helpers';
 import { applicantInformationStateHasPartner, getChildrenState, getContextualAgeCategoryFromDate, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { ApplicationStateParams, ChildrenState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
@@ -170,7 +171,7 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     throw redirect(getPathById('public/application/$id/simplified-family/dental-insurance', params));
   }
 
-  const children = validateChildrenStateForReview({ context, childrenState: state.children, params });
+  const children = validateChildrenStateForReview({ context, childrenState: state.children, state, params });
 
   return {
     ageCategory,
@@ -204,10 +205,11 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
 interface ValidateChildrenStateForReviewArgs {
   context: 'intake' | 'renewal';
   childrenState: ChildrenState;
+  state: PublicApplicationState;
   params: ApplicationStateParams;
 }
 
-function validateChildrenStateForReview({ context, childrenState, params }: ValidateChildrenStateForReviewArgs) {
+function validateChildrenStateForReview({ context, childrenState, state, params }: ValidateChildrenStateForReviewArgs) {
   const children = getChildrenState({ children: childrenState });
 
   if (children.length === 0) {
@@ -224,6 +226,10 @@ function validateChildrenStateForReview({ context, childrenState, params }: Vali
     }
 
     if (!information.isParent) {
+      throw redirect(getPathById('public/application/$id/simplified-family/childrens-application', params));
+    }
+
+    if (!isChildClientNumberValid(context, state.clientApplication, information.memberId)) {
       throw redirect(getPathById('public/application/$id/simplified-family/childrens-application', params));
     }
 

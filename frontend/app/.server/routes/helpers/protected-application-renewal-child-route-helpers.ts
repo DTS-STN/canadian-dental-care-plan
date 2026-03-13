@@ -3,6 +3,7 @@ import { redirect } from 'react-router';
 import { invariant } from '@dts-stn/invariant';
 
 import { createLogger } from '~/.server/logging';
+import { isChildClientNumberValid } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationStateParams, ChildrenState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { applicantInformationStateHasPartner, getChildrenState, getContextualAgeCategoryFromDate, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
@@ -120,7 +121,7 @@ export function validateProtectedApplicationRenewalChildStateForReview({ params,
     throw redirect(getPathById('protected/application/$id/eligibility-requirements', params));
   }
 
-  const children = validateChildrenStateForReview({ context, childrenState: state.children, params });
+  const children = validateChildrenStateForReview({ context, childrenState: state.children, state, params });
 
   if (applicantInformation === undefined) {
     throw redirect(getPathById('protected/application/$id/renew', params));
@@ -192,10 +193,11 @@ export function validateProtectedApplicationRenewalChildStateForReview({ params,
 interface ValidateChildrenStateForReviewArgs {
   context: 'intake' | 'renewal';
   childrenState: ChildrenState;
+  state: ProtectedApplicationState;
   params: ApplicationStateParams;
 }
 
-function validateChildrenStateForReview({ context, childrenState, params }: ValidateChildrenStateForReviewArgs) {
+function validateChildrenStateForReview({ context, childrenState, state, params }: ValidateChildrenStateForReviewArgs) {
   const children = getChildrenState({ children: childrenState });
 
   if (children.length === 0) {
@@ -212,6 +214,10 @@ function validateChildrenStateForReview({ context, childrenState, params }: Vali
     }
 
     if (!information.isParent) {
+      throw redirect(getPathById('protected/application/$id/renewal-children/childrens-application', params));
+    }
+
+    if (!isChildClientNumberValid(context, state.clientApplication, information.memberId)) {
       throw redirect(getPathById('protected/application/$id/renewal-children/childrens-application', params));
     }
 
