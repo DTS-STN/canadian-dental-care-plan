@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import {
   isAddressSectionCompleted,
   isChildDentalBenefitsSectionCompleted,
@@ -266,23 +267,56 @@ describe('protected-application-simplified-section-checks', () => {
   });
 
   describe('isChildInformationSectionCompleted', () => {
+    const mockClientApplication = {
+      applicantInformation: {
+        clientNumber: 'APP-123',
+        firstName: 'John',
+        lastName: 'Doe',
+      },
+      eligibleClientNumbers: ['APP-123', 'CHILD-001', 'CHILD-002'],
+      children: [
+        {
+          information: {
+            clientNumber: 'CHILD-001',
+            firstName: 'Jane',
+            lastName: 'Doe',
+            dateOfBirth: '2010-01-01',
+            isParent: true,
+          },
+        },
+        {
+          information: {
+            clientNumber: 'CHILD-002',
+            firstName: 'Jim',
+            lastName: 'Doe',
+            dateOfBirth: '2012-01-01',
+            isParent: true,
+          },
+        },
+      ],
+    } as unknown as ClientApplicationRenewalEligibleDto;
+
     it('should return true when child information is defined with valid date of birth', () => {
       expect(
-        isChildInformationSectionCompleted({
-          information: {
-            firstName: 'Test',
-            lastName: 'Child',
-            hasSocialInsuranceNumber: false,
-            isParent: true,
-            dateOfBirth: '2010-01-01',
+        isChildInformationSectionCompleted(
+          'renewal',
+          {
+            information: {
+              firstName: 'Test',
+              lastName: 'Child',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              dateOfBirth: '2010-01-01',
+            },
           },
-        }),
+          mockClientApplication,
+        ),
       ).toBe(true);
     });
 
     it('should return false when date of birth is empty string', () => {
       expect(
-        isChildInformationSectionCompleted({
+        isChildInformationSectionCompleted('renewal', {
           information: {
             firstName: 'Test',
             lastName: 'Child',
@@ -295,7 +329,7 @@ describe('protected-application-simplified-section-checks', () => {
     });
 
     it('should return false when information is undefined', () => {
-      expect(isChildInformationSectionCompleted({ information: undefined })).toBe(false);
+      expect(isChildInformationSectionCompleted('renewal', { information: undefined })).toBe(false);
     });
   });
 

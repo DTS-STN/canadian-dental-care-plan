@@ -1,4 +1,5 @@
-import { isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
+import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
+import { isChildClientNumberValid, isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ChildState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import { isValidDateString } from '~/utils/date-utils';
@@ -71,12 +72,13 @@ export function isMaritalStatusSectionCompleted(state: Pick<PublicApplicationSta
 /**
  * Checks if the child information section is completed for full application.
  */
-export function isChildInformationSectionCompleted(context: 'intake' | 'renewal', child: Pick<ChildState, 'information'>): boolean {
+export function isChildInformationSectionCompleted(context: 'intake' | 'renewal', child: Pick<ChildState, 'information'>, clientApplication?: ClientApplicationRenewalEligibleDto): boolean {
   // TODO: Check with age category and live independently status
   return (
     child.information?.dateOfBirth !== undefined && //
     isValidDateString(child.information.dateOfBirth) &&
-    isChildOrYouth(child.information.dateOfBirth, context)
+    isChildOrYouth(child.information.dateOfBirth, context) &&
+    isChildClientNumberValid(context, clientApplication, child.information.memberId)
   );
 }
 

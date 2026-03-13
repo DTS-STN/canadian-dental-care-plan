@@ -1,3 +1,4 @@
+import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import type { EligibilityType } from '~/components/eligibility';
 import { getAgeFromDateString } from '~/utils/date-utils';
 
@@ -98,4 +99,36 @@ export function getEligibilityStatus({ hasPrivateDentalInsurance, t4DentalIndica
   if (!hasPrivateDentalInsurance && !t4DentalIndicator) return 'eligible';
   if (!hasPrivateDentalInsurance && t4DentalIndicator) return 'eligible-proof';
   return 'ineligible';
+}
+
+/**
+ * Validates whether a client number is valid for a child in the context of an application.
+ *
+ * In the "intake" context, this function always returns true as client number validation
+ * is not required during initial application submission.
+ *
+ * In the "renewal" context, a client number is considered valid if it exists in either:
+ * - The list of eligible client numbers (excluding the applicant's own client number)
+ * - The list of client numbers associated with the applicant's children
+ *
+ * If either clientApplication or clientNumber is undefined in the renewal context,
+ * the function returns true to allow for partial form completion.
+ *
+ * @param context - The application context ('intake' for new applications, 'renewal' for renewals)
+ * @param clientApplication - Optional client application data containing applicant information,
+ *                           eligible client numbers, and children's information
+ * @param clientNumber - Optional client number to validate
+ * @returns A boolean indicating whether the client number is valid:
+ *          - Always true for intake context
+ *          - True for renewal context if:
+ *            - clientApplication or clientNumber is undefined
+ *            - clientNumber exists in the set of eligible non-applicant client numbers or children's client numbers
+ *          - False for renewal context if clientNumber is not found in the valid set
+ */
+export function isChildClientNumberValid(context: 'intake' | 'renewal', clientApplication?: ClientApplicationRenewalEligibleDto, clientNumber?: string) {
+  if (context === 'intake' || clientApplication === undefined || clientNumber === undefined) return true;
+  return new Set([
+    ...clientApplication.eligibleClientNumbers.filter((val) => val !== clientApplication.applicantInformation.clientNumber), //
+    ...clientApplication.children.map((child) => child.information.clientNumber),
+  ]).has(clientNumber);
 }
