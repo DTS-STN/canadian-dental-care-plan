@@ -1,6 +1,7 @@
 // generate unit tests for app/.server/domain/mappers/client-eligibility.dto.mapper.ts with vitest
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { ClientEligibilityDto } from '~/.server/domain/dtos';
 import type { ClientEligibilityEntity } from '~/.server/domain/entities/client-eligibility.entity';
 import { DefaultClientEligibilityDtoMapper } from '~/.server/domain/mappers/client-eligibility.dto.mapper';
 import { isValidCoverageCopayTierCode } from '~/.server/utils/coverage.utils';
@@ -102,19 +103,19 @@ describe('DefaultClientEligibilityDtoMapper', () => {
 
       const result = mapper.mapClientEligibilityEntityToClientEligibilityDto(clientEligibilityEntity);
 
-      expect(result).toEqual({
+      expect(result).toEqual<ClientEligibilityDto>({
         clientId: '12345',
         clientNumber: '67890',
         earnings: [
           {
             applicationYearId: '2022',
-            coverageCopayTierCode: 'coverage-tier-01',
+            coverageCopayTierTpcCode: 'coverage-tier-01',
             eligibilityStatusCode: 'status-001',
             taxationYear: 2022,
           },
           {
             applicationYearId: '2023',
-            coverageCopayTierCode: undefined,
+            coverageCopayTierTpcCode: undefined,
             eligibilityStatusCode: 'status-002',
             taxationYear: 2023,
           },
