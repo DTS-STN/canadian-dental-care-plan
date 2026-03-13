@@ -127,8 +127,10 @@ export function getEligibilityStatus({ hasPrivateDentalInsurance, t4DentalIndica
  */
 export function isChildClientNumberValid(context: 'intake' | 'renewal', clientApplication?: ClientApplicationRenewalEligibleDto, clientNumber?: string) {
   if (context === 'intake' || clientApplication === undefined || clientNumber === undefined) return true;
-  return new Set([
-    ...clientApplication.eligibleClientNumbers.filter((val) => val !== clientApplication.applicantInformation.clientNumber), //
-    ...clientApplication.children.map((child) => child.information.clientNumber),
-  ]).has(clientNumber);
+  return new Set(
+    [
+      ...clientApplication.eligibleClientNumbers, //
+      ...clientApplication.children.map((child) => child.information.clientNumber),
+    ].filter((val) => val !== clientApplication.applicantInformation.clientNumber),
+  ).has(clientNumber);
 }
