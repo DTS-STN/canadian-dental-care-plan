@@ -10,6 +10,8 @@ export type ClientApplicationDto = ReadonlyDeep<{
   children: ClientChildDto[];
   communicationPreferences: ClientCommunicationPreferencesDto;
   contactInformation: ClientContactInformationDto;
+  /** Valid co-pay tier (1, 2 or 3) code for the earning taxation year */
+  coverageCopayTierCode?: string;
   dateOfBirth: string;
   dentalBenefits: string[];
   dentalInsurance?: boolean;

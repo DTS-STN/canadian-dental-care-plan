@@ -5,6 +5,7 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
 import type { ClientApplicationBasicInfoRequestEntity, ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
+import { isValidCoverageCopayTierCode } from '~/.server/utils/coverage.utils';
 
 export interface ClientApplicationDtoMapper {
   mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto): ClientApplicationBasicInfoRequestEntity;
@@ -17,7 +18,6 @@ export type DefaultClientApplicationDtoMapper_ServerConfig = Pick<
   | 'APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY' //
   | 'APPLICANT_CATEGORY_CODE_INDIVIDUAL'
   | 'COVERAGE_CATEGORY_CODE_COPAY_TIER'
-  | 'ENGLISH_LANGUAGE_CODE'
 >;
 
 @injectable()
@@ -192,21 +192,30 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
     const applicationYearId = clientApplicationEntity.BenefitApplication.BenefitApplicationYear.BenefitApplicationYearIdentification.at(0)?.IdentificationID;
     invariant(applicationYearId, 'Expected applicationYearId to be defined');
 
+    const applicantEarning = applicant.ApplicantEarning.at(0);
+    const coverageCategoryCode = applicantEarning?.Coverage.find((coverage) => coverage.CoverageCategoryCode.ReferenceDataName === this.serverConfig.COVERAGE_CATEGORY_CODE_COPAY_TIER);
+    const coverageTierCode = coverageCategoryCode?.CoverageTierCode.ReferenceDataID;
+    const coverageCopayTierCode =
+      typeof coverageTierCode === 'string' && isValidCoverageCopayTierCode(coverageTierCode) //
+        ? coverageTierCode
+        : undefined;
+
     return {
       applicationYearId,
       applicantInformation,
       children,
       communicationPreferences,
       contactInformation,
+      coverageCopayTierCode,
       dateOfBirth: applicant.PersonBirthDate.date,
       dentalBenefits: applicant.ApplicantDetail.InsurancePlan?.at(0)?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
       dentalInsurance: applicant.ApplicantDetail.PrivateDentalInsuranceIndicator,
-      eligibilityStatusCode: applicant.ApplicantEarning.at(0)?.BenefitEligibilityStatus.StatusCode.ReferenceDataID,
+      eligibilityStatusCode: applicantEarning?.BenefitEligibilityStatus.StatusCode.ReferenceDataID,
       hasFiledTaxes: applicant.ApplicantDetail.PreviousTaxesFiledIndicator,
       isInvitationToApplyClient: applicant.ApplicantDetail.InvitationToApplyIndicator,
       livingIndependently: applicant.ApplicantDetail.LivingIndependentlyIndicator,
       partnerInformation,
-      t4DentalIndicator: applicant.ApplicantEarning.at(0)?.PrivateDentalInsuranceIndicator,
+      t4DentalIndicator: applicantEarning?.PrivateDentalInsuranceIndicator,
       typeOfApplication: this.toBenefitApplicationCategoryCode(clientApplicationEntity.BenefitApplication.BenefitApplicationCategoryCode.ReferenceDataID),
     };
   }
