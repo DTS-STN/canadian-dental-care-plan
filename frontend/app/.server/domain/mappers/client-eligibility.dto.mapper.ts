@@ -40,7 +40,7 @@ export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMa
 
   private mapApplicantEarningToClientEligibilityEarning(earning: ClientEligibilityEntity['Applicant']['ApplicantEarning'][number]): ClientEligibilityDto['earnings'][number] {
     const eligibilityStatusCode = earning.BenefitEligibilityStatus.StatusCode.ReferenceDataID;
-    const earningCopayTierCoverage = earning.Coverage.find((coverage) => {
+    const earningCopayTierTpcCoverage = earning.Coverage.find((coverage) => {
       return (
         coverage.CoverageCategoryCode.ReferenceDataName === this.serverConfig.COVERAGE_CATEGORY_CODE_COPAY_TIER_TPC && //
         typeof coverage.CoverageCategoryCode.CoverageTierCode.ReferenceDataID === 'string' &&
@@ -50,7 +50,7 @@ export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMa
 
     return {
       applicationYearId: earning.BenefitApplicationYearIdentification.IdentificationID,
-      coverageCopayTierCode: earningCopayTierCoverage?.CoverageCategoryCode.CoverageTierCode.ReferenceDataID,
+      coverageCopayTierTpcCode: earningCopayTierTpcCoverage?.CoverageCategoryCode.CoverageTierCode.ReferenceDataID,
       eligibilityStatusCode: eligibilityStatusCode,
       taxationYear: Number.parseInt(earning.EarningTaxationYear.YearDate),
     };

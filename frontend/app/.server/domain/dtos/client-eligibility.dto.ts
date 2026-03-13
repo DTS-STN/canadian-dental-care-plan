@@ -5,8 +5,11 @@ export type ClientEligibilityDto = ReadonlyDeep<{
   clientNumber: string;
   earnings: ReadonlyArray<{
     applicationYearId: string;
-    /** Valid co-pay tier (1, 2 or 3) code for the earning taxation year */
-    coverageCopayTierCode?: string;
+    /**
+     * Valid coverage "Co-Pay Tier (TPC)" code for the earning taxation year.
+     * Note: TPC stands for "Third Party Contractor"
+     */
+    coverageCopayTierTpcCode?: string;
     /** Earnings eligibility status code */
     eligibilityStatusCode: string;
     /** Earning taxation year */

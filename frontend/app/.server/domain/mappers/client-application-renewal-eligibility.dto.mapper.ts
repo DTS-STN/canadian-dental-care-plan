@@ -251,14 +251,14 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
    * Determines the input model to use for the renewal form.
    *
    * Returns `'simplified'` only when both conditions hold:
-   * 1. Every client's `coverageCopayTierCode` is a recognised valid tier code (see `isValidCoverageCopayTierCode`).
+   * 1. Every client's `coverageCopayTierTpcCode` is a recognised valid tier code (see `isValidCoverageCopayTierCode`).
    * 2. All clients share the exact same tier code.
    *
    * Returns `'full'` if any tier code is missing, unrecognised, clients have different tier codes,
    * or a client has no matching earning (and therefore no tier code).
    */
   private getInputModelForEnrolledAndEligibleClients(enrolledAndEligibleClients: ReadonlyMap<string, ClientEligibilityWithEarning>): 'simplified' | 'full' {
-    const tierCodes = [...enrolledAndEligibleClients.values()].map(({ earning }) => earning?.coverageCopayTierCode);
+    const tierCodes = [...enrolledAndEligibleClients.values()].map(({ earning }) => earning?.coverageCopayTierTpcCode);
 
     const allValidTierCodes = tierCodes.every((code) => typeof code === 'string' && isValidCoverageCopayTierCode(code));
     if (!allValidTierCodes) return 'full';

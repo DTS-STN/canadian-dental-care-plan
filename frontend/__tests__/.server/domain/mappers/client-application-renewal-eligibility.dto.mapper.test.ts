@@ -68,7 +68,7 @@ function makeChild(clientNumber: string, dateOfBirth = '2015-01-01'): ClientChil
 
 /**
  * Builds a ClientEligibilityDto with sensible defaults for an enrolled, eligible client.
- * Pass `missingTierCode: true` to omit `coverageCopayTierCode` (i.e. set it to `undefined`).
+ * Pass `missingTierCode: true` to omit `coverageCopayTierTpcCode` (i.e. set it to `undefined`).
  */
 function makeEligibility(
   clientNumber: string,
@@ -76,7 +76,7 @@ function makeEligibility(
     enrollmentStatusCode?: string;
     eligibilityStatusCode?: string;
     earningEligibilityStatusCode?: string;
-    coverageCopayTierCode?: string;
+    coverageCopayTierTpcCode?: string;
     missingTierCode?: boolean;
     applicationYearId?: string;
   } = {},
@@ -85,7 +85,7 @@ function makeEligibility(
     enrollmentStatusCode = SERVER_CONFIG.ENROLLMENT_STATUS_CODE_ENROLLED,
     eligibilityStatusCode,
     earningEligibilityStatusCode = SERVER_CONFIG.ELIGIBILITY_STATUS_CODE_ELIGIBLE,
-    coverageCopayTierCode = 'tier-1',
+    coverageCopayTierTpcCode = 'tier-1',
     missingTierCode = false,
     applicationYearId = 'year-2024',
   } = options;
@@ -100,7 +100,7 @@ function makeEligibility(
     earnings: [
       {
         applicationYearId,
-        coverageCopayTierCode: missingTierCode ? undefined : coverageCopayTierCode,
+        coverageCopayTierTpcCode: missingTierCode ? undefined : coverageCopayTierTpcCode,
         eligibilityStatusCode: earningEligibilityStatusCode,
         taxationYear: 2024,
       },
@@ -348,7 +348,7 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
 
       describe('inputModel', () => {
         it('returns simplified when a single client has a valid tier code', async () => {
-          mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001', { coverageCopayTierCode: 'tier-2' })]]));
+          mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001', { coverageCopayTierTpcCode: 'tier-2' })]]));
           const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication()));
           assert(result.result === 'ELIGIBLE');
           expect(result.clientApplication.inputModel).toBe('simplified');
@@ -357,8 +357,8 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
         it('returns simplified when multiple clients all share the same valid tier code', async () => {
           mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(
             new Map([
-              ['client-001', makeEligibility('client-001', { coverageCopayTierCode: 'tier-3' })],
-              ['child-001', makeEligibility('child-001', { coverageCopayTierCode: 'tier-3' })],
+              ['client-001', makeEligibility('client-001', { coverageCopayTierTpcCode: 'tier-3' })],
+              ['child-001', makeEligibility('child-001', { coverageCopayTierTpcCode: 'tier-3' })],
             ]),
           );
           const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication({ typeOfApplication: 'family', children: [makeChild('child-001')] })));
@@ -369,8 +369,8 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
         it('returns full when clients have different valid tier codes', async () => {
           mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(
             new Map([
-              ['client-001', makeEligibility('client-001', { coverageCopayTierCode: 'tier-1' })],
-              ['child-001', makeEligibility('child-001', { coverageCopayTierCode: 'tier-2' })],
+              ['client-001', makeEligibility('client-001', { coverageCopayTierTpcCode: 'tier-1' })],
+              ['child-001', makeEligibility('child-001', { coverageCopayTierTpcCode: 'tier-2' })],
             ]),
           );
           const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication({ typeOfApplication: 'family', children: [makeChild('child-001')] })));
@@ -380,13 +380,13 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
 
         it('returns full when a client has an unrecognised tier code', async () => {
           vi.mocked(isValidCoverageCopayTierCode).mockReturnValue(false);
-          mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001', { coverageCopayTierCode: 'tier-unknown' })]]));
+          mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001', { coverageCopayTierTpcCode: 'tier-unknown' })]]));
           const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication()));
           assert(result.result === 'ELIGIBLE');
           expect(result.clientApplication.inputModel).toBe('full');
         });
 
-        it('returns full when a client has no tier code (coverageCopayTierCode is undefined)', async () => {
+        it('returns full when a client has no tier code (coverageCopayTierTpcCode is undefined)', async () => {
           mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001', { missingTierCode: true })]]));
           const result = await mapper.mapToClientApplicationRenewalEligibilityDto(Some(makeClientApplication()));
           assert(result.result === 'ELIGIBLE');
@@ -395,7 +395,7 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
 
         it('returns full when the eligible client has no matching earning (no tier code available)', async () => {
           // Profile-eligible client whose only earning is for a different year → earning is undefined
-          // → no coverageCopayTierCode can be read → allValidTierCodes is false → 'full'.
+          // → no coverageCopayTierTpcCode can be read → allValidTierCodes is false → 'full'.
           mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(
             new Map([
               [
