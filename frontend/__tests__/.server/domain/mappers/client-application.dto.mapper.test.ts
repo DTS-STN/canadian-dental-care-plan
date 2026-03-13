@@ -1,17 +1,21 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
 import type { ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
 import { DefaultClientApplicationDtoMapper } from '~/.server/domain/mappers';
 import type { DefaultClientApplicationDtoMapper_ServerConfig } from '~/.server/domain/mappers';
 
+vi.mock('~/.server/utils/coverage.utils', () => ({
+  isValidCoverageCopayTierCode: (code: string) => ['Tier 1', 'Tier 2', 'Tier 3'].includes(code),
+}));
+
 describe('DefaultClientApplicationDtoMapper', () => {
   const mockServerConfig: DefaultClientApplicationDtoMapper_ServerConfig = {
     APPLICANT_CATEGORY_CODE_INDIVIDUAL: '111111111',
     APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY: '222222222',
     COVERAGE_CATEGORY_CODE_COPAY_TIER: 'Co-Pay Tier',
-    ENGLISH_LANGUAGE_CODE: 1,
   };
+
   const mapper = new DefaultClientApplicationDtoMapper(mockServerConfig);
 
   describe('mapClientApplicationEntityToClientApplicationDto', () => {
@@ -246,6 +250,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
           phoneNumber: '555-555-5555',
           phoneNumberAlt: '555-555-5556',
         },
+        coverageCopayTierCode: 'Tier 1',
         dateOfBirth: '2000-01-01',
         dentalBenefits: ['ID-123456'],
         dentalInsurance: true,
