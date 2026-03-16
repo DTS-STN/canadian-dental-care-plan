@@ -199,7 +199,15 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
             <InputRadios id="preferred-language" name="preferredLanguage" legend={t('application-spokes:communication-preferences.preferred-language')} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
-            <InputRadios id="preferred-method-sunlife" legend={t('application-spokes:communication-preferences.preferred-method')} name="preferredMethod" options={sunLifeCommunicationMethodOptions} errorMessage={errors?.preferredMethod} required />
+            <InputRadios
+              id="preferred-method-sunlife"
+              legend={t('application-spokes:communication-preferences.preferred-method')}
+              name="preferredMethod"
+              helpMessagePrimary={t('application-spokes:communication-preferences.preferred-method-help-message')}
+              options={sunLifeCommunicationMethodOptions}
+              errorMessage={errors?.preferredMethod}
+              required
+            />
             <InputRadios
               id="preferred-method-gc"
               name="preferredNotificationMethod"

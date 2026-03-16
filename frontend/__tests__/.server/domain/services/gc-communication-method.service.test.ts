@@ -16,7 +16,7 @@ describe('DefaultGCCommunicationMethodService', () => {
   describe('listGCCommunicationMethods', () => {
     it('fetches all GC communication methods', () => {
       const mockDtos: GCCommunicationMethodDto[] = [
-        { id: mockServerConfig.COMMUNICATION_METHOD_GC_DIGITAL_ID.toString(), code: 'digital', nameEn: 'Online through My Service Canada Account (MSCA)', nameFr: 'En ligne, sur Mon dossier Service Canada (MDSC)' },
+        { id: mockServerConfig.COMMUNICATION_METHOD_GC_DIGITAL_ID.toString(), code: 'digital', nameEn: 'Online through My Service Canada Account (MSCA)', nameFr: "En ligne, par l'entremise de Mon dossier Service Canada (MDSC)" },
         { id: mockServerConfig.COMMUNICATION_METHOD_GC_MAIL_ID.toString(), code: 'mail', nameEn: 'By mail', nameFr: 'Par la poste' },
       ];
 
