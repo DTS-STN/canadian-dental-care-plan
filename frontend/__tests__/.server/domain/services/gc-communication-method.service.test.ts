@@ -36,7 +36,7 @@ describe('DefaultGCCommunicationMethodService', () => {
         id: mockServerConfig.COMMUNICATION_METHOD_GC_DIGITAL_ID.toString(),
         code: 'digital',
         nameEn: 'Online through My Service Canada Account (MSCA)',
-        nameFr: 'En ligne, sur Mon dossier Service Canada (MDSC)',
+        nameFr: "En ligne, par l'entremise de Mon dossier Service Canada (MDSC)",
       };
       const mockGCCommunicationMethodDtoMapper = mock<GCCommunicationMethodDtoMapper>();
       const service = new DefaultGCCommunicationMethodService(mockGCCommunicationMethodDtoMapper, mockServerConfig);
