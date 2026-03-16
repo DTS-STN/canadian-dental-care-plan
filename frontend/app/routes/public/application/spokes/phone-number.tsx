@@ -81,6 +81,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const phoneNumberSchema = z.object({
     phoneNumber: phoneSchema({
+      required_error: t('application-spokes:phone-number.error-message.phone-required'),
       invalid_phone_canadian_error: t('application-spokes:phone-number.error-message.phone-number-valid'),
       invalid_phone_international_error: t('application-spokes:phone-number.error-message.phone-number-valid-international'),
     }),
