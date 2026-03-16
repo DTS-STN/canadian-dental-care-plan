@@ -364,7 +364,7 @@
     "request-new": "It may take up to 60 seconds for the email to arrive. If you do not see it, check your junk or spam folder. If you still do not have the code, you can request a new one.",
     "unable-to-verify": "If you are not able to confirm your email, select “Back” to change the email address or <communicationLink>modify your communication preference</communicationLink>.",
     "verification-code-label": "Verification code",
-    "request-new-code": "Request new verification code",
+    "request-new-code": "Request new code",
     "back": "Back",
     "continue": "Continue",
     "error-message": {
