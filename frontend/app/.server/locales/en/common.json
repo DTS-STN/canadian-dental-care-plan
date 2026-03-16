@@ -11,7 +11,7 @@
     },
     "address-invalid": {
       "close-button": "Back",
-      "description": "We couldn't validate your address. Please check it again and make sure to <strong>include your apartment or suite number</strong> if you have one.",
+      "description": "We couldn't confirm your address. Please check it again and make sure to <strong>include your apartment or suite number</strong>, if you have one.",
       "important": "It is important that your address is correct. If we are not able to contact you by mail you may experience a delay in receiving benefits.",
       "entered-address": "Entered address",
       "header": "Address not found",
