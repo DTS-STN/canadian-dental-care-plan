@@ -72,15 +72,16 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
 
     this.auditService.createAudit('client-application-renewal-eligibility.basic-info.get', { userId: clientApplicationRenewalEligibilityBasicInfoRequestDto.userId });
 
-    if (clientApplicationDto.isNone()) {
-      this.log.debug('Client application dto is None, returning not found result');
-      return { result: 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND' };
+    if (clientApplicationDto.isSome()) {
+      const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto.unwrap());
+
+      this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
+      return clientApplicationRenewalEligibilityDto;
     }
 
-    const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto.unwrap());
-
-    this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
-    return clientApplicationRenewalEligibilityDto;
+    // TODO: Check if an applicant exists with the provided basic info and SIN to return a more specific result (e.g., 'INELIGIBLE-APPLICANT-NOT-FOUND') instead of 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND'.
+    this.log.debug('Client application dto is None, returning not found result');
+    return { result: 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND' };
   }
 
   async getClientApplicationRenewalEligibilityByBasicInfoAndSin(clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto: ClientApplicationRenewalEligibilityBasicInfoAndSinRequestDto): Promise<ClientApplicationRenewalEligibilityDto> {
@@ -98,15 +99,16 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
 
     this.auditService.createAudit('client-application-renewal-eligibility.basic-info-and-sin.get', { userId: clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto.userId });
 
-    if (clientApplicationDto.isNone()) {
-      this.log.debug('Client application dto is None, returning not found result');
-      return { result: 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND' };
+    if (clientApplicationDto.isSome()) {
+      const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto.unwrap());
+
+      this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
+      return clientApplicationRenewalEligibilityDto;
     }
 
-    const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto.unwrap());
-
-    this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
-    return clientApplicationRenewalEligibilityDto;
+    // TODO: Check if an applicant exists with the provided basic info and SIN to return a more specific result (e.g., 'INELIGIBLE-APPLICANT-NOT-FOUND') instead of 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND'.
+    this.log.debug('Client application dto is None, returning not found result');
+    return { result: 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND' };
   }
 
   async getClientApplicationRenewalEligibilityBySin(clientApplicationRenewalEligibilitySinRequestDto: ClientApplicationRenewalEligibilitySinRequestDto): Promise<ClientApplicationRenewalEligibilityDto> {
@@ -120,15 +122,15 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
 
     this.auditService.createAudit('client-application-renewal-eligibility.sin.get', { userId: clientApplicationRenewalEligibilitySinRequestDto.userId });
 
-    if (clientApplicationDto.isNone()) {
-      // TODO: Check if an applicant exists with the provided SIN to return a more specific result (e.g., 'INELIGIBLE-APPLICANT-NOT-FOUND') instead of 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND'.
-      this.log.debug('Client application dto is None, returning not found result');
-      return { result: 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND' };
+    if (clientApplicationDto.isSome()) {
+      const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto.unwrap());
+
+      this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
+      return clientApplicationRenewalEligibilityDto;
     }
 
-    const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto.unwrap());
-
-    this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
-    return clientApplicationRenewalEligibilityDto;
+    // TODO: Check if an applicant exists with the provided SIN to return a more specific result (e.g., 'INELIGIBLE-APPLICANT-NOT-FOUND') instead of 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND'.
+    this.log.debug('Client application dto is None, returning not found result');
+    return { result: 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND' };
   }
 }
