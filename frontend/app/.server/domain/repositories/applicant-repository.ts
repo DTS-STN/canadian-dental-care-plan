@@ -157,13 +157,15 @@ export class MockApplicantRepository implements ApplicantRepository {
       emailAddressId: 'rhapsody@domain.ca',
       primaryTelephoneNumber: '807-555-5555',
       alternateTelephoneNumber: '416-555-6666',
-      preferredMethodCommunicationCode: '1033',
+      preferredMethodCommunicationCode: '775170001',
+      preferredMethodCommunicationGCCode: '775170000',
       federalDentalPlanId: 'e174250d-26c5-ee11-9079-000d3a09d640',
       provincialTerritorialDentalPlanId: 'b5f25fea-a7a9-ee11-a569-000d3af4f898',
       privateDentalPlanId: '333333',
       sinIdentification: '800011819',
+      maritalStatusCode: '775170001',
+      preferredLanguage: '1033',
     },
-
     {
       mailingAddressStreet: '1915 Verwandlung Street',
       mailingAddressSecondaryUnitText: 'Apt. No. 21',
@@ -188,11 +190,14 @@ export class MockApplicantRepository implements ApplicantRepository {
       emailAddressId: 'metamorphosis0@domain.ca',
       primaryTelephoneNumber: '555-555-5555',
       alternateTelephoneNumber: '789-555-6666',
-      preferredMethodCommunicationCode: '775170002',
+      preferredMethodCommunicationCode: '775170001',
+      preferredMethodCommunicationGCCode: '775170000',
       federalDentalPlanId: '5a5c5294-26c5-ee11-9079-000d3a09d640',
       provincialTerritorialDentalPlanId: '39449f70-37b3-eb11-8236-0022486d8d5f',
       privateDentalPlanId: '1111111',
       sinIdentification: '800000002',
+      maritalStatusCode: '775170001',
+      preferredLanguage: '1033',
     },
   ];
 
@@ -204,38 +209,96 @@ export class MockApplicantRepository implements ApplicantRepository {
     this.log.debug('Fetching applicant for sin [%j]', applicantRequestEntity);
 
     const personSinIdentification = applicantRequestEntity.Applicant.PersonSINIdentification.IdentificationID;
-    const peronalInformationEntity = this.mockPersonalInformationDb.find(({ sinIdentification }) => sinIdentification === personSinIdentification);
+    const personalInformationEntity = this.mockPersonalInformationDb.find(({ sinIdentification }) => sinIdentification === personSinIdentification);
 
-    if (!peronalInformationEntity) {
+    if (!personalInformationEntity) {
       this.log.debug('No applicant found; Returning null');
       return await Promise.resolve(None);
     }
 
     const clientIdentification: { IdentificationID: string; IdentificationCategoryText: 'Client ID' | 'Client Number' }[] = [];
 
-    if (peronalInformationEntity.clientNumber) {
-      clientIdentification.push({ IdentificationID: peronalInformationEntity.clientNumber, IdentificationCategoryText: 'Client Number' });
+    if (personalInformationEntity.clientNumber) {
+      clientIdentification.push({ IdentificationID: personalInformationEntity.clientNumber, IdentificationCategoryText: 'Client Number' });
     }
 
-    if (peronalInformationEntity.clientId) {
-      clientIdentification.push({ IdentificationID: peronalInformationEntity.clientId, IdentificationCategoryText: 'Client ID' });
+    if (personalInformationEntity.clientId) {
+      clientIdentification.push({ IdentificationID: personalInformationEntity.clientId, IdentificationCategoryText: 'Client ID' });
     }
 
     const applicantResponseEntity: ApplicantResponseEntity = {
       BenefitApplication: {
         Applicant: {
+          ApplicantCategoryCode: {
+            ReferenceDataID: personalInformationEntity.applicantCategoryCode,
+          },
           ClientIdentification: clientIdentification,
           PersonBirthDate: {
-            date: peronalInformationEntity.birthdate,
+            date: personalInformationEntity.birthdate,
+          },
+          PersonContactInformation: [
+            {
+              Address: [
+                {
+                  AddressCategoryCode: { ReferenceDataName: 'Mailing' },
+                  AddressStreet: { StreetName: personalInformationEntity.mailingAddressStreet },
+                  AddressSecondaryUnitText: personalInformationEntity.mailingAddressSecondaryUnitText,
+                  AddressCityName: personalInformationEntity.mailingAddressCityName,
+                  AddressProvince: { ProvinceCode: { ReferenceDataID: personalInformationEntity.mailingAddressProvince } },
+                  AddressCountry: { CountryCode: { ReferenceDataID: personalInformationEntity.mailingAddressCountryReferenceId } },
+                  AddressPostalCode: personalInformationEntity.mailingAddressPostalCode,
+                },
+                {
+                  AddressCategoryCode: { ReferenceDataName: 'Home' },
+                  AddressStreet: { StreetName: personalInformationEntity.homeAddressStreet },
+                  AddressSecondaryUnitText: personalInformationEntity.homeAddressSecondaryUnitText,
+                  AddressCityName: personalInformationEntity.homeAddressCityName,
+                  AddressProvince: { ProvinceCode: { ReferenceDataID: personalInformationEntity.homeAddressProvince } },
+                  AddressCountry: { CountryCode: { ReferenceDataID: personalInformationEntity.homeAddressCountryReferenceId } },
+                  AddressPostalCode: personalInformationEntity.homeAddressPostalCode,
+                },
+              ],
+              EmailAddress: [{ EmailAddressID: personalInformationEntity.emailAddressId }],
+              TelephoneNumber: [
+                {
+                  FullTelephoneNumber: { TelephoneNumberFullID: personalInformationEntity.primaryTelephoneNumber },
+                  TelephoneNumberCategoryCode: { ReferenceDataName: 'Primary' },
+                },
+                {
+                  FullTelephoneNumber: { TelephoneNumberFullID: personalInformationEntity.alternateTelephoneNumber },
+                  TelephoneNumberCategoryCode: { ReferenceDataName: 'Alternate' },
+                },
+              ],
+            },
+          ],
+
+          PersonMaritalStatus: {
+            StatusCode: {
+              ReferenceDataID: personalInformationEntity.maritalStatusCode,
+            },
           },
           PersonName: [
             {
-              PersonGivenName: [peronalInformationEntity.firstName],
-              PersonSurName: peronalInformationEntity.lastName,
+              PersonGivenName: [personalInformationEntity.firstName],
+              PersonSurName: personalInformationEntity.lastName,
             },
           ],
           PersonSINIdentification: {
-            IdentificationID: peronalInformationEntity.sinIdentification,
+            IdentificationID: personalInformationEntity.sinIdentification,
+          },
+          PersonLanguage: [
+            {
+              CommunicationCategoryCode: {
+                ReferenceDataID: personalInformationEntity.preferredLanguage,
+              },
+              PreferredIndicator: true,
+            },
+          ],
+          PreferredMethodCommunicationCode: {
+            ReferenceDataID: personalInformationEntity.preferredMethodCommunicationCode,
+          },
+          PreferredMethodCommunicationGCCode: {
+            ReferenceDataID: personalInformationEntity.preferredMethodCommunicationGCCode,
           },
         },
       },

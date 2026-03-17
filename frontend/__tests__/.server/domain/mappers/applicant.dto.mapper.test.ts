@@ -7,34 +7,111 @@ describe('DefaultApplicantDtoMapper', () => {
   describe('mapApplicantResponseEntityToApplicantDto', () => {
     const mapper = new DefaultApplicantDtoMapper();
 
-    it('should successfully map valid ApplicantResponseEntity to ApplicantDto', () => {
-      const mockEntity: ApplicantResponseEntity = {
-        BenefitApplication: {
-          Applicant: {
-            ClientIdentification: [
-              { IdentificationCategoryText: 'Client ID', IdentificationID: '12345' },
-              { IdentificationCategoryText: 'Client Number', IdentificationID: '67890' },
-            ],
-            PersonBirthDate: { date: '1990-01-01' },
-            PersonName: [
-              {
-                PersonGivenName: ['John'],
-                PersonSurName: 'Doe',
+    const mockBaseEntity: ApplicantResponseEntity = {
+      BenefitApplication: {
+        Applicant: {
+          ApplicantCategoryCode: { ReferenceDataID: 'SomeCategory' },
+          ClientIdentification: [
+            { IdentificationCategoryText: 'Client ID', IdentificationID: '12345' },
+            { IdentificationCategoryText: 'Client Number', IdentificationID: '67890' },
+          ],
+          PersonBirthDate: { date: '1990-01-01' },
+          PersonContactInformation: [
+            {
+              Address: [
+                {
+                  AddressCategoryCode: { ReferenceDataName: 'Mailing' },
+                  AddressCityName: 'City',
+                  AddressCountry: { CountryCode: { ReferenceDataID: 'CA' } },
+                  AddressPostalCode: 'A1A1A1',
+                  AddressStreet: { StreetName: '123 Main St' },
+                  AddressProvince: { ProvinceCode: { ReferenceDataID: 'ON' } },
+                  AddressSecondaryUnitText: 'Unit 1',
+                },
+                {
+                  AddressCategoryCode: { ReferenceDataName: 'Home' },
+                  AddressCityName: 'City',
+                  AddressCountry: { CountryCode: { ReferenceDataID: 'CA' } },
+                  AddressPostalCode: 'A1A1A1',
+                  AddressStreet: { StreetName: '123 Main St' },
+                  AddressProvince: { ProvinceCode: { ReferenceDataID: 'ON' } },
+                  AddressSecondaryUnitText: 'Unit 1',
+                },
+              ],
+              EmailAddress: [{ EmailAddressID: 'john.doe@example.com' }],
+              TelephoneNumber: [
+                {
+                  FullTelephoneNumber: { TelephoneNumberFullID: '123-456-7890' },
+                  TelephoneNumberCategoryCode: { ReferenceDataName: 'Primary' },
+                },
+                {
+                  FullTelephoneNumber: { TelephoneNumberFullID: '123-456-7891' },
+                  TelephoneNumberCategoryCode: { ReferenceDataName: 'Alternate' },
+                },
+              ],
+            },
+          ],
+          PersonMaritalStatus: {
+            StatusCode: {
+              ReferenceDataID: 'Single',
+            },
+          },
+          PersonName: [
+            {
+              PersonGivenName: ['John'],
+              PersonSurName: 'Doe',
+            },
+          ],
+          PersonSINIdentification: { IdentificationID: '123456789' },
+          PersonLanguage: [
+            {
+              CommunicationCategoryCode: {
+                ReferenceDataID: 'EN',
               },
-            ],
-            PersonSINIdentification: { IdentificationID: '123456789' },
+              PreferredIndicator: true,
+            },
+          ],
+          PreferredMethodCommunicationCode: {
+            ReferenceDataID: 'Email',
+          },
+          PreferredMethodCommunicationGCCode: {
+            ReferenceDataID: 'Digital',
           },
         },
-      };
+      },
+    };
 
-      const result = mapper.mapApplicantResponseEntityToApplicantDto(mockEntity);
-
+    it('should successfully map valid ApplicantResponseEntity to ApplicantDto', () => {
+      const result = mapper.mapApplicantResponseEntityToApplicantDto(mockBaseEntity);
       expect(result).toEqual({
         clientId: '12345',
         clientNumber: '67890',
+        communicationPreferences: {
+          preferredLanguage: 'EN',
+          preferredMethodGovernmentOfCanada: 'Digital',
+          preferredMethodSunLife: 'Email',
+        },
+        contactInformation: {
+          email: 'john.doe@example.com',
+          homeAddress: '123 Main St',
+          homeApartment: 'Unit 1',
+          homeCity: 'City',
+          homeCountry: 'CA',
+          homePostalCode: 'A1A1A1',
+          homeProvince: 'ON',
+          mailingAddress: '123 Main St',
+          mailingApartment: 'Unit 1',
+          mailingCity: 'City',
+          mailingCountry: 'CA',
+          mailingPostalCode: 'A1A1A1',
+          mailingProvince: 'ON',
+          phoneNumber: '123-456-7890',
+          phoneNumberAlt: '123-456-7891',
+        },
         dateOfBirth: '1990-01-01',
         firstName: 'John',
         lastName: 'Doe',
+        maritalStatus: 'Single',
         socialInsuranceNumber: '123456789',
       });
     });
@@ -43,10 +120,8 @@ describe('DefaultApplicantDtoMapper', () => {
       const mockEntity: ApplicantResponseEntity = {
         BenefitApplication: {
           Applicant: {
+            ...mockBaseEntity.BenefitApplication.Applicant,
             ClientIdentification: [{ IdentificationCategoryText: 'Client Number', IdentificationID: '67890' }],
-            PersonBirthDate: { date: '1990-01-01' },
-            PersonName: [{ PersonGivenName: ['John'], PersonSurName: 'Doe' }],
-            PersonSINIdentification: { IdentificationID: '123456789' },
           },
         },
       };
@@ -58,10 +133,8 @@ describe('DefaultApplicantDtoMapper', () => {
       const mockEntity: ApplicantResponseEntity = {
         BenefitApplication: {
           Applicant: {
+            ...mockBaseEntity.BenefitApplication.Applicant,
             ClientIdentification: [{ IdentificationCategoryText: 'Client ID', IdentificationID: '12345' }],
-            PersonBirthDate: { date: '1990-01-01' },
-            PersonName: [{ PersonGivenName: ['John'], PersonSurName: 'Doe' }],
-            PersonSINIdentification: { IdentificationID: '123456789' },
           },
         },
       };
@@ -73,13 +146,8 @@ describe('DefaultApplicantDtoMapper', () => {
       const mockEntity: ApplicantResponseEntity = {
         BenefitApplication: {
           Applicant: {
-            ClientIdentification: [
-              { IdentificationCategoryText: 'Client ID', IdentificationID: '12345' },
-              { IdentificationCategoryText: 'Client Number', IdentificationID: '67890' },
-            ],
-            PersonBirthDate: { date: '1990-01-01' },
+            ...mockBaseEntity.BenefitApplication.Applicant,
             PersonName: [{ PersonGivenName: [], PersonSurName: 'Doe' }],
-            PersonSINIdentification: { IdentificationID: '123456789' },
           },
         },
       };
@@ -91,14 +159,9 @@ describe('DefaultApplicantDtoMapper', () => {
       const mockEntity: ApplicantResponseEntity = {
         BenefitApplication: {
           Applicant: {
-            ClientIdentification: [
-              { IdentificationCategoryText: 'Client ID', IdentificationID: '12345' },
-              { IdentificationCategoryText: 'Client Number', IdentificationID: '67890' },
-            ],
-            PersonBirthDate: { date: '1990-01-01' },
+            ...mockBaseEntity.BenefitApplication.Applicant,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             PersonName: [{ PersonGivenName: ['John'], PersonSurName: undefined as any }],
-            PersonSINIdentification: { IdentificationID: '123456789' },
           },
         },
       };
@@ -110,13 +173,8 @@ describe('DefaultApplicantDtoMapper', () => {
       const mockEntity: ApplicantResponseEntity = {
         BenefitApplication: {
           Applicant: {
-            ClientIdentification: [
-              { IdentificationCategoryText: 'Client ID', IdentificationID: '12345' },
-              { IdentificationCategoryText: 'Client Number', IdentificationID: '67890' },
-            ],
-            PersonBirthDate: { date: '1990-01-01' },
+            ...mockBaseEntity.BenefitApplication.Applicant,
             PersonName: [],
-            PersonSINIdentification: { IdentificationID: '123456789' },
           },
         },
       };
