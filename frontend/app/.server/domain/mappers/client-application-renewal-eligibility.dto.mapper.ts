@@ -1,5 +1,4 @@
 import { inject, injectable } from 'inversify';
-import type { Option } from 'oxide.ts';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
@@ -13,11 +12,10 @@ import { isValidCoverageCopayTierCode } from '~/.server/utils/coverage.utils';
 export interface ClientApplicationRenewalEligibilityDtoMapper {
   /**
    * Maps a client application DTO option to a renewal eligibility DTO.
-   * @param clientApplicationDtoOption - The client application, or None if not found.
-   * @returns A promise resolving to `INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND`, `INELIGIBLE-NO-CLIENT-NUMBERS`,
-   *   `INELIGIBLE-NO-ELIGIBILITIES`, `INELIGIBLE-NOT-ENROLLED`, or `ELIGIBLE`.
+   * @param clientApplicationDto - The client application, or None if not found.
+   * @returns A promise resolving to `INELIGIBLE-NO-CLIENT-NUMBERS`, `INELIGIBLE-NO-ELIGIBILITIES`, `INELIGIBLE-NOT-ENROLLED`, or `ELIGIBLE`.
    */
-  mapToClientApplicationRenewalEligibilityDto(clientApplicationDtoOption: Option<ClientApplicationDto>): Promise<ClientApplicationRenewalEligibilityDto>;
+  mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto: ClientApplicationDto): Promise<ClientApplicationRenewalEligibilityDto>;
 }
 
 type DefaultClientApplicationRenewalEligibilityDtoMapper_ServerConfig = Pick<ServerConfig, 'ELIGIBILITY_STATUS_CODE_ELIGIBLE' | 'ENROLLMENT_STATUS_CODE_ENROLLED'>;
@@ -40,29 +38,23 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
   /**
    * Maps a client application DTO to a renewal eligibility DTO:
    *
-   * 1. None → `INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND`.
-   * 2. Filter children to those in the `'children'` or `'youth'` age category as of the renewal
+   * 1. Filter children to those in the `'children'` or `'youth'` age category as of the renewal
    *    reference date (see `isChildOrYouth`).
-   * 3. Derive client numbers by application type (`'adult'` / `'children'` / `'family'`).
+   * 2. Derive client numbers by application type (`'adult'` / `'children'` / `'family'`).
    *    No client numbers → `INELIGIBLE-NO-CLIENT-NUMBERS`.
-   * 4. Fetch eligibilities for the derived client numbers. Clients with no eligibility record
+   * 3. Fetch eligibilities for the derived client numbers. Clients with no eligibility record
    *    are silently omitted; None found at all → `INELIGIBLE-NO-ELIGIBILITIES`.
-   * 5. Filter to clients that are enrolled and eligible. None passing
+   * 4. Filter to clients that are enrolled and eligible. None passing
    *    → `INELIGIBLE-NOT-ENROLLED`.
-   * 6. Return `ELIGIBLE` with the passing client numbers and an input model of
+   * 5. Return `ELIGIBLE` with the passing client numbers and an input model of
    *    `'simplified'` (the application has a valid copay tier code) or `'full'` (missing or unrecognised tier code).
    */
-  async mapToClientApplicationRenewalEligibilityDto(clientApplicationDtoOption: Option<ClientApplicationDto>): Promise<ClientApplicationRenewalEligibilityDto> {
-    this.log.trace('Mapping client application dto to client application renewal eligibility dto: [%j]', clientApplicationDtoOption.unwrapUnchecked());
+  async mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto: ClientApplicationDto): Promise<ClientApplicationRenewalEligibilityDto> {
+    this.log.trace('Mapping client application dto to client application renewal eligibility dto: [%j]', clientApplicationDto);
 
-    if (clientApplicationDtoOption.isNone()) {
-      this.log.debug('Client application dto is None, returning not found result');
-      return { result: 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND' };
-    }
+    const filteredClientApplicationDto = this.filterEligibleChildrenByAge(clientApplicationDto);
 
-    const clientApplicationDto = this.filterEligibleChildrenByAge(clientApplicationDtoOption.unwrap());
-
-    const clientNumbers = this.listClientNumbers(clientApplicationDto);
+    const clientNumbers = this.listClientNumbers(filteredClientApplicationDto);
     if (clientNumbers.length === 0) {
       this.log.debug('No client numbers found for client application, returning ineligible result');
       return {

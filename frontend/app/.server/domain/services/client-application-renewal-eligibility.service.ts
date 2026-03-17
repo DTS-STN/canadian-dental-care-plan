@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '~/.server/constants';
 import type { ClientApplicationRenewalEligibilityBasicInfoAndSinRequestDto, ClientApplicationRenewalEligibilityBasicInfoRequestDto, ClientApplicationRenewalEligibilityDto, ClientApplicationRenewalEligibilitySinRequestDto } from '~/.server/domain/dtos';
 import type { ClientApplicationRenewalEligibilityDtoMapper } from '~/.server/domain/mappers';
-import type { AuditService, ClientApplicationService } from '~/.server/domain/services';
+import type { ApplicantService, AuditService, ClientApplicationService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 
@@ -39,16 +39,19 @@ export interface ClientApplicationRenewalEligibilityService {
 @injectable()
 export class DefaultClientApplicationRenewalEligibilityService implements ClientApplicationRenewalEligibilityService {
   private readonly log: Logger;
+  private readonly applicantService: ApplicantService;
   private readonly clientApplicationService: ClientApplicationService;
   private readonly clientApplicationRenewalEligibilityDtoMapper: ClientApplicationRenewalEligibilityDtoMapper;
   private readonly auditService: AuditService;
 
   constructor(
+    @inject(TYPES.ApplicantService) applicantService: ApplicantService,
     @inject(TYPES.ClientApplicationService) clientApplicationService: ClientApplicationService,
     @inject(TYPES.ClientApplicationRenewalEligibilityDtoMapper) clientApplicationRenewalEligibilityDtoMapper: ClientApplicationRenewalEligibilityDtoMapper,
     @inject(TYPES.AuditService) auditService: AuditService,
   ) {
     this.log = createLogger('DefaultClientApplicationRenewalEligibilityService');
+    this.applicantService = applicantService;
     this.clientApplicationService = clientApplicationService;
     this.clientApplicationRenewalEligibilityDtoMapper = clientApplicationRenewalEligibilityDtoMapper;
     this.auditService = auditService;
@@ -69,7 +72,12 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
 
     this.auditService.createAudit('client-application-renewal-eligibility.basic-info.get', { userId: clientApplicationRenewalEligibilityBasicInfoRequestDto.userId });
 
-    const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapToClientApplicationRenewalEligibilityDto(clientApplicationDto);
+    if (clientApplicationDto.isNone()) {
+      this.log.debug('Client application dto is None, returning not found result');
+      return { result: 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND' };
+    }
+
+    const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto.unwrap());
 
     this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
     return clientApplicationRenewalEligibilityDto;
@@ -90,7 +98,12 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
 
     this.auditService.createAudit('client-application-renewal-eligibility.basic-info-and-sin.get', { userId: clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto.userId });
 
-    const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapToClientApplicationRenewalEligibilityDto(clientApplicationDto);
+    if (clientApplicationDto.isNone()) {
+      this.log.debug('Client application dto is None, returning not found result');
+      return { result: 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND' };
+    }
+
+    const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto.unwrap());
 
     this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
     return clientApplicationRenewalEligibilityDto;
@@ -107,7 +120,13 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
 
     this.auditService.createAudit('client-application-renewal-eligibility.sin.get', { userId: clientApplicationRenewalEligibilitySinRequestDto.userId });
 
-    const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapToClientApplicationRenewalEligibilityDto(clientApplicationDto);
+    if (clientApplicationDto.isNone()) {
+      // TODO: Check if an applicant exists with the provided SIN to return a more specific result (e.g., 'INELIGIBLE-APPLICANT-NOT-FOUND') instead of 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND'.
+      this.log.debug('Client application dto is None, returning not found result');
+      return { result: 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND' };
+    }
+
+    const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto.unwrap());
 
     this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
     return clientApplicationRenewalEligibilityDto;
