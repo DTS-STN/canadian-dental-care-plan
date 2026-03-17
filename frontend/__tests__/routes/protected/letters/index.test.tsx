@@ -36,6 +36,12 @@ describe('Letters Page', () => {
               firstName: 'John',
               lastName: 'Doe',
               socialInsuranceNumber: '999999999',
+              communicationPreferences: {},
+              contactInformation: {
+                mailingAddress: '123 Main St',
+                mailingCity: 'Anytown',
+                mailingCountry: 'Canada',
+              },
             }),
         }),
       );
@@ -93,6 +99,12 @@ describe('Letters Page', () => {
             firstName: 'John',
             lastName: 'Doe',
             socialInsuranceNumber: '999999999',
+            communicationPreferences: {},
+            contactInformation: {
+              mailingAddress: '123 Main St',
+              mailingCity: 'Anytown',
+              mailingCountry: 'Canada',
+            },
           }),
       }),
     );

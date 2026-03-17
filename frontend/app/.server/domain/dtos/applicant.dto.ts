@@ -1,3 +1,5 @@
+import type { ReadonlyDeep } from 'type-fest';
+
 /**
  * Represents a Data Transfer Object (DTO) for finding an applicant by SIN.
  */
@@ -12,17 +14,55 @@ export type FindApplicantBySinRequestDto = Readonly<{
 /**
  * Represents a Data Transfer Object (DTO) for an applicant.
  */
-export type ApplicantDto = Readonly<{
+export type ApplicantDto = ReadonlyDeep<{
   /** The client ID of the applicant. */
   clientId: string;
+
   /** The client number of the applicant. */
   clientNumber: string;
+
   /** The date of birth of the applicant. */
   dateOfBirth: string;
+
   /** The first name of the applicant. */
   firstName: string;
+
   /** The last name of the applicant. */
   lastName: string;
+
   /** The social insurance number of the applicant. */
-  socialInsuranceNumber: string;
+  socialInsuranceNumber?: string;
+
+  /** The marital status of the applicant. */
+  maritalStatus?: string;
+
+  /** The communication preferences of the applicant */
+  communicationPreferences: ApplicantCommunicationPreferencesDto;
+
+  /** The contact information of the applicant */
+  contactInformation: ApplicantContactInformationDto;
+}>;
+
+export type ApplicantCommunicationPreferencesDto = ReadonlyDeep<{
+  preferredLanguage?: string;
+  preferredMethodSunLife?: string;
+  preferredMethodGovernmentOfCanada?: string;
+}>;
+
+export type ApplicantContactInformationDto = ReadonlyDeep<{
+  homeAddress?: string;
+  homeApartment?: string;
+  homeCity?: string;
+  homeCountry?: string;
+  homePostalCode?: string;
+  homeProvince?: string;
+  mailingAddress: string;
+  mailingApartment?: string;
+  mailingCity: string;
+  mailingCountry: string;
+  mailingPostalCode?: string;
+  mailingProvince?: string;
+  phoneNumber?: string;
+  phoneNumberAlt?: string;
+  email?: string;
 }>;
