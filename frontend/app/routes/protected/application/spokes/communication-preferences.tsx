@@ -212,6 +212,8 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
               id="preferred-method-sunlife"
               legend={t('protected-application-spokes:communication-preferences.preferred-method')}
               name="preferredMethod"
+              helpMessagePrimary={t('protected-application-spokes:communication-preferences.preferred-method-help-message')}
+              helpMessagePrimaryClassName="text-black"
               options={sunLifeCommunicationMethodOptions}
               errorMessage={errors?.preferredMethod}
               required
