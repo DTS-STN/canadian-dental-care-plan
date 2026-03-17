@@ -59,11 +59,11 @@ function createContainer() {
 
   // Load configurations first to ensure `ServerConfig` is available
   // for conditional service bindings in other modules.
-  container.loadSync(createConfigsContainerModule());
+  container.load(createConfigsContainerModule());
   const serverConfig = container.get(TYPES.ServerConfig);
 
   // Load other container modules
-  container.loadSync(
+  container.load(
     createAuthContainerModule(),
     createHealthContainerModule(serverConfig),
     createMappersContainerModule(),
