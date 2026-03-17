@@ -154,6 +154,7 @@
     "add-child-information": "Add applicant information",
     "add-answer": "Add answer",
     "child-information-indicate-status": "Enter your child's name, date of birth, and Social Insurance Number (SIN).",
+    "child-information-indicate-status-renewal": "Enter your child's name, date of birth and Member ID.",
     "child-dental-insurance-indicate-status": "Indicate if your child has access to private dental insurance.",
     "child-dental-benefits-indicate-status": "Indicate if your child has access to government dental benefits.",
     "member-id-title": "Member ID",

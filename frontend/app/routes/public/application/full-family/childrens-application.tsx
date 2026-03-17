@@ -83,6 +83,7 @@ export async function loader({ context: { appContainer, session }, request, para
   return {
     state: {
       children: children,
+      context: state.context,
     },
     childrenSections: state.children.map((child) => ({
       id: child.id,
@@ -174,7 +175,11 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
                 </CardHeader>
                 <CardContent>
                   {child.information === undefined ? (
-                    <p>{t('application-full-family:childrens-application.child-information-indicate-status')}</p>
+                    state.context === 'intake' ? (
+                      <p>{t('application-full-family:childrens-application.child-information-indicate-status')}</p>
+                    ) : (
+                      <p>{t('application-full-family:childrens-application.child-information-indicate-status-renewal')}</p>
+                    )
                   ) : (
                     <DefinitionList layout="single-column">
                       {child.information.memberId && <DefinitionListItem term={t('application-full-family:childrens-application.member-id-title')}>{child.information.memberId}</DefinitionListItem>}
@@ -280,22 +285,24 @@ export default function NewFamilyChildrensApplication({ loaderData, params }: Ro
                   </ButtonLink>
                 </CardFooter>
               </Card>
-              <fetcher.Form method="post" noValidate>
-                <CsrfTokenInput />
-                <input type="hidden" name="childId" value={child.id} />
-                <Button
-                  id={`remove-child-${child.id}`}
-                  className="my-5"
-                  name="_action"
-                  value={FORM_ACTION.remove}
-                  disabled={isSubmitting}
-                  variant="secondary"
-                  size="sm"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Remove child - Child(ren) application click"
-                >
-                  {t('application-full-family:childrens-application.remove-child')}
-                </Button>
-              </fetcher.Form>
+              {state.children.length > 1 && (
+                <fetcher.Form method="post" noValidate>
+                  <CsrfTokenInput />
+                  <input type="hidden" name="childId" value={child.id} />
+                  <Button
+                    id={`remove-child-${child.id}`}
+                    className="my-5"
+                    name="_action"
+                    value={FORM_ACTION.remove}
+                    disabled={isSubmitting}
+                    variant="secondary"
+                    size="sm"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Remove child - Child(ren) application click"
+                  >
+                    {t('application-full-family:childrens-application.remove-child')}
+                  </Button>
+                </fetcher.Form>
+              )}
             </div>
           );
         })}
