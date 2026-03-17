@@ -2,7 +2,8 @@ import { afterEach, assert, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mock } from 'vitest-mock-extended';
 import type { MockProxy } from 'vitest-mock-extended';
 
-import type { ClientApplicationDto, ClientChildDto, ClientEligibilityDto } from '~/.server/domain/dtos';
+import type { ApplicantDto, ClientApplicationDto, ClientChildDto, ClientEligibilityDto } from '~/.server/domain/dtos';
+import type { ClientApplicationDtoMapper } from '~/.server/domain/mappers';
 import { DefaultClientApplicationRenewalEligibilityDtoMapper } from '~/.server/domain/mappers/client-application-renewal-eligibility.dto.mapper';
 import type { ClientEligibilityService } from '~/.server/domain/services';
 import { isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
@@ -91,7 +92,26 @@ function makeEligibility(
   };
 }
 
+/** Builds a minimal ApplicantDto with optional overrides. */
+function makeApplicant(overrides: Partial<ApplicantDto> = {}): ApplicantDto {
+  return {
+    clientId: 'id-001',
+    clientNumber: 'client-001',
+    dateOfBirth: '2008-04-15', // turns 18 on 2026-04-15 (the faked clock date)
+    firstName: 'John',
+    lastName: 'Doe',
+    communicationPreferences: {},
+    contactInformation: {
+      mailingAddress: '123 Main St',
+      mailingCity: 'Ottawa',
+      mailingCountry: 'CA',
+    },
+    ...overrides,
+  };
+}
+
 describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
+  let mockClientApplicationDtoMapper: MockProxy<ClientApplicationDtoMapper>;
   let mockClientEligibilityService: MockProxy<ClientEligibilityService>;
   let mapper: DefaultClientApplicationRenewalEligibilityDtoMapper;
 
@@ -101,11 +121,15 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
     // when the test suite is actually run.
     vi.useFakeTimers({ now: new Date('2026-04-15') });
 
+    mockClientApplicationDtoMapper = mock<ClientApplicationDtoMapper>({
+      mapApplicantDtoToClientApplicationDto: vi.fn(),
+    });
+
     mockClientEligibilityService = mock<ClientEligibilityService>({
       listClientEligibilitiesByClientNumbers: vi.fn(),
     });
 
-    mapper = new DefaultClientApplicationRenewalEligibilityDtoMapper(mockClientEligibilityService, SERVER_CONFIG);
+    mapper = new DefaultClientApplicationRenewalEligibilityDtoMapper(mockClientApplicationDtoMapper, mockClientEligibilityService, SERVER_CONFIG);
 
     vi.mocked(isChildOrYouth).mockReturnValue(true);
     vi.mocked(isValidCoverageCopayTierCode).mockReturnValue(true);
@@ -114,6 +138,56 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.useRealTimers();
+  });
+
+  describe('mapApplicantDtoToClientApplicationRenewalEligibilityDto', () => {
+    describe('INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD', () => {
+      it('returns INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD when applicant is 17 (turns 18 tomorrow)', async () => {
+        // Born 2008-04-16: on 2026-04-15 the applicant is 17 years, 364 days old
+        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(makeApplicant({ dateOfBirth: '2008-04-16' }), 'year-2024');
+        expect(result.result).toBe('INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD');
+      });
+
+      it('returns INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD when applicant turns 19 today', async () => {
+        // Born 2007-04-15: on 2026-04-15 the applicant is exactly 19 years old
+        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(makeApplicant({ dateOfBirth: '2007-04-15' }), 'year-2024');
+        expect(result.result).toBe('INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD');
+      });
+
+      it('returns INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD when applicant is 26 years old', async () => {
+        // Born 2000-01-01: on 2026-04-15 the applicant is 26 years old
+        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(makeApplicant({ dateOfBirth: '2000-01-01' }), 'year-2024');
+        expect(result.result).toBe('INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD');
+      });
+    });
+
+    describe('delegation to mapClientApplicationDtoToClientApplicationRenewalEligibilityDto', () => {
+      it('delegates when applicant turns 18 today and passes the downstream result through', async () => {
+        // Born 2008-04-15: on 2026-04-15 the applicant is exactly 18 years old
+        const applicantDto = makeApplicant({ dateOfBirth: '2008-04-15' });
+        const clientApplicationDto = makeClientApplication();
+        mockClientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto.mockReturnValue(clientApplicationDto);
+        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001')]]));
+
+        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicantDto, 'year-2024');
+
+        expect(mockClientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto).toHaveBeenCalledWith({ applicantDto, applicationYearId: 'year-2024', typeOfApplication: 'adult' });
+        expect(result.result).toBe('ELIGIBLE');
+      });
+
+      it('delegates when applicant is 18 years and 364 days old and passes the downstream result through', async () => {
+        // Born 2007-04-16: on 2026-04-15 the applicant is 18 years, 364 days old (just before turning 19)
+        const applicantDto = makeApplicant({ dateOfBirth: '2007-04-16' });
+        const clientApplicationDto = makeClientApplication();
+        mockClientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto.mockReturnValue(clientApplicationDto);
+        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001')]]));
+
+        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicantDto, 'year-2024');
+
+        expect(mockClientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto).toHaveBeenCalledWith({ applicantDto, applicationYearId: 'year-2024', typeOfApplication: 'adult' });
+        expect(result.result).toBe('ELIGIBLE');
+      });
+    });
   });
 
   describe('mapClientApplicationDtoToClientApplicationRenewalEligibilityDto', () => {

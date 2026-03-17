@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
-import type { ClientApplicationRenewalEligibilityBasicInfoAndSinRequestDto, ClientApplicationRenewalEligibilityBasicInfoRequestDto, ClientApplicationRenewalEligibilityDto, ClientApplicationRenewalEligibilitySinRequestDto } from '~/.server/domain/dtos';
+import type { ClientApplicationRenewalEligibilityBasicInfoAndSinRequestDto, ClientApplicationRenewalEligibilityDto, ClientApplicationRenewalEligibilitySinRequestDto } from '~/.server/domain/dtos';
 import type { ClientApplicationRenewalEligibilityDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicantService, AuditService, ClientApplicationService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
@@ -11,14 +11,6 @@ import type { Logger } from '~/.server/logging';
  * A service that provides access to client application data for renewal eligibility.
  */
 export interface ClientApplicationRenewalEligibilityService {
-  /**
-   * Gets a client application renewal eligibility by basic info.
-   *
-   * @param clientApplicationRenewalEligibilityBasicInfoRequestDto The basic info request dto.
-   * @returns A Promise that resolves to client application renewal eligibility dto.
-   */
-  getClientApplicationRenewalEligibilityByBasicInfo(clientApplicationRenewalEligibilityBasicInfoRequestDto: ClientApplicationRenewalEligibilityBasicInfoRequestDto): Promise<ClientApplicationRenewalEligibilityDto>;
-
   /**
    * Gets a client application renewal eligibility by basic info and SIN.
    *
@@ -40,14 +32,14 @@ export interface ClientApplicationRenewalEligibilityService {
 export class DefaultClientApplicationRenewalEligibilityService implements ClientApplicationRenewalEligibilityService {
   private readonly log: Logger;
   private readonly applicantService: ApplicantService;
-  private readonly clientApplicationService: ClientApplicationService;
   private readonly clientApplicationRenewalEligibilityDtoMapper: ClientApplicationRenewalEligibilityDtoMapper;
+  private readonly clientApplicationService: ClientApplicationService;
   private readonly auditService: AuditService;
 
   constructor(
     @inject(TYPES.ApplicantService) applicantService: ApplicantService,
-    @inject(TYPES.ClientApplicationService) clientApplicationService: ClientApplicationService,
     @inject(TYPES.ClientApplicationRenewalEligibilityDtoMapper) clientApplicationRenewalEligibilityDtoMapper: ClientApplicationRenewalEligibilityDtoMapper,
+    @inject(TYPES.ClientApplicationService) clientApplicationService: ClientApplicationService,
     @inject(TYPES.AuditService) auditService: AuditService,
   ) {
     this.log = createLogger('DefaultClientApplicationRenewalEligibilityService');
@@ -56,32 +48,6 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
     this.clientApplicationRenewalEligibilityDtoMapper = clientApplicationRenewalEligibilityDtoMapper;
     this.auditService = auditService;
     this.log.debug('DefaultClientApplicationRenewalEligibilityService initiated.');
-  }
-
-  async getClientApplicationRenewalEligibilityByBasicInfo(clientApplicationRenewalEligibilityBasicInfoRequestDto: ClientApplicationRenewalEligibilityBasicInfoRequestDto): Promise<ClientApplicationRenewalEligibilityDto> {
-    this.log.trace('Get client application renewal eligibility by basic info: [%j]', clientApplicationRenewalEligibilityBasicInfoRequestDto);
-
-    const clientApplicationDto = await this.clientApplicationService.findClientApplicationByBasicInfo({
-      clientNumber: clientApplicationRenewalEligibilityBasicInfoRequestDto.clientNumber,
-      dateOfBirth: clientApplicationRenewalEligibilityBasicInfoRequestDto.dateOfBirth,
-      firstName: clientApplicationRenewalEligibilityBasicInfoRequestDto.firstName,
-      lastName: clientApplicationRenewalEligibilityBasicInfoRequestDto.lastName,
-      applicationYearId: clientApplicationRenewalEligibilityBasicInfoRequestDto.applicationYearId,
-      userId: clientApplicationRenewalEligibilityBasicInfoRequestDto.userId,
-    });
-
-    this.auditService.createAudit('client-application-renewal-eligibility.basic-info.get', { userId: clientApplicationRenewalEligibilityBasicInfoRequestDto.userId });
-
-    if (clientApplicationDto.isSome()) {
-      const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto.unwrap());
-
-      this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
-      return clientApplicationRenewalEligibilityDto;
-    }
-
-    // TODO: Check if an applicant exists with the provided basic info and SIN to return a more specific result (e.g., 'INELIGIBLE-APPLICANT-NOT-FOUND') instead of 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND'.
-    this.log.debug('Client application dto is None, returning not found result');
-    return { result: 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND' };
   }
 
   async getClientApplicationRenewalEligibilityByBasicInfoAndSin(clientApplicationRenewalEligibilityBasicInfoAndSinRequestDto: ClientApplicationRenewalEligibilityBasicInfoAndSinRequestDto): Promise<ClientApplicationRenewalEligibilityDto> {
@@ -129,8 +95,21 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
       return clientApplicationRenewalEligibilityDto;
     }
 
-    // TODO: Check if an applicant exists with the provided SIN to return a more specific result (e.g., 'INELIGIBLE-APPLICANT-NOT-FOUND') instead of 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND'.
-    this.log.debug('Client application dto is None, returning not found result');
-    return { result: 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND' };
+    // If no client application is found with the provided SIN, we check if an applicant exists with that SIN
+    const applicantOption = await this.applicantService.findApplicantBySin({
+      sin: clientApplicationRenewalEligibilitySinRequestDto.sin,
+      userId: clientApplicationRenewalEligibilitySinRequestDto.userId,
+    });
+
+    if (applicantOption.isNone()) {
+      this.log.debug('Applicant is None for provided SIN, returning not found result');
+      return { result: 'INELIGIBLE-APPLICANT-NOT-FOUND' };
+    }
+
+    const applicationYearId = clientApplicationRenewalEligibilitySinRequestDto.applicationYearId;
+    const applicant = applicantOption.unwrap();
+    this.log.debug('Applicant found for provided SIN, returning eligibility result based on applicant');
+    this.log.trace('Applicant found for provided SIN: [%j], applicationYearId: [%s]', applicant, applicationYearId);
+    return await this.clientApplicationRenewalEligibilityDtoMapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicant, applicationYearId);
   }
 }

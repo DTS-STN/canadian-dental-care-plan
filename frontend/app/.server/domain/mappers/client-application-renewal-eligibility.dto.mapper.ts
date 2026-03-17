@@ -2,14 +2,24 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { ClientApplicationDto, ClientApplicationRenewalEligibilityDto, ClientEligibilityDto } from '~/.server/domain/dtos';
+import type { ApplicantDto, ClientApplicationDto, ClientApplicationRenewalEligibilityDto, ClientEligibilityDto } from '~/.server/domain/dtos';
+import type { ClientApplicationDtoMapper } from '~/.server/domain/mappers/client-application.dto.mapper';
 import type { ClientEligibilityService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
 import { isValidCoverageCopayTierCode } from '~/.server/utils/coverage.utils';
+import { getAgeFromDateString } from '~/utils/date-utils';
 
 export interface ClientApplicationRenewalEligibilityDtoMapper {
+  /**
+   * Maps an applicant DTO to a client application renewal eligibility DTO.
+   * @param applicantDto - The applicant DTO.
+   * @param applicationYearId - The application year ID.
+   * @returns A promise resolving to a `ClientApplicationRenewalEligibilityDto`.
+   */
+  mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicantDto: ApplicantDto, applicationYearId: string): Promise<ClientApplicationRenewalEligibilityDto>;
+
   /**
    * Maps a client application DTO option to a renewal eligibility DTO.
    * @param clientApplicationDto - The client application, or None if not found.
@@ -23,16 +33,48 @@ type DefaultClientApplicationRenewalEligibilityDtoMapper_ServerConfig = Pick<Ser
 @injectable()
 export class DefaultClientApplicationRenewalEligibilityDtoMapper implements ClientApplicationRenewalEligibilityDtoMapper {
   private readonly log: Logger;
+  private readonly clientApplicationDtoMapper: ClientApplicationDtoMapper;
   private readonly clientEligibilityService: ClientEligibilityService;
   private readonly serverConfig: DefaultClientApplicationRenewalEligibilityDtoMapper_ServerConfig;
 
   constructor(
+    @inject(TYPES.ClientApplicationDtoMapper) clientApplicationDtoMapper: ClientApplicationDtoMapper,
     @inject(TYPES.ClientEligibilityService) clientEligibilityService: ClientEligibilityService, //
     @inject(TYPES.ServerConfig) serverConfig: DefaultClientApplicationRenewalEligibilityDtoMapper_ServerConfig,
   ) {
     this.log = createLogger('DefaultClientApplicationRenewalEligibilityDtoMapper');
+    this.clientApplicationDtoMapper = clientApplicationDtoMapper;
     this.clientEligibilityService = clientEligibilityService;
     this.serverConfig = serverConfig;
+  }
+
+  /**
+   * Maps an applicant DTO to a client application renewal eligibility DTO:
+   *
+   * 1. Calculate the applicant's age at intake using `dateOfBirth` and today's date.
+   * 2. If the applicant is not 18 years old at intake, return `INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD`.
+   * 3. Otherwise, map the applicant DTO to a client application DTO and delegate to
+   * `mapClientApplicationDtoToClientApplicationRenewalEligibilityDto`.
+   *
+   * @param applicantDto - The applicant DTO.
+   * @param applicationYearId - The application year ID.
+   * @returns A promise resolving to a `ClientApplicationRenewalEligibilityDto`.
+   */
+  async mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicantDto: ApplicantDto, applicationYearId: string): Promise<ClientApplicationRenewalEligibilityDto> {
+    this.log.trace('Mapping applicant dto to client application renewal eligibility dto: [%j]', applicantDto);
+
+    const ageReferenceDate = new Date().toISOString().slice(0, 10); // today - yyyy-mm-dd
+    const applicantAge = getAgeFromDateString(applicantDto.dateOfBirth, ageReferenceDate);
+    this.log.trace('Applicant age: [%s], date of birth: [%s], intake age reference date: [%s]', applicantAge, applicantDto.dateOfBirth, ageReferenceDate);
+
+    const applicantAgeIs18YearsOld = applicantAge >= 18 && applicantAge < 19;
+    if (!applicantAgeIs18YearsOld) {
+      this.log.debug('Applicant age is not 18 years old at intake, returning ineligible result');
+      return { result: 'INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD' };
+    }
+
+    const cliientApplicationDto = this.clientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto({ applicantDto, applicationYearId, typeOfApplication: 'adult' });
+    return await this.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(cliientApplicationDto);
   }
 
   /**
