@@ -42,8 +42,6 @@ function makeClientApplication(overrides: Partial<ClientApplicationDto> = {}): C
     },
     dateOfBirth: '1980-01-01',
     dentalBenefits: [],
-    hasFiledTaxes: true,
-    isInvitationToApplyClient: false,
     ...overrides,
   };
 }

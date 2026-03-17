@@ -255,8 +255,6 @@ describe('DefaultClientApplicationDtoMapper', () => {
         dentalBenefits: ['ID-123456'],
         dentalInsurance: true,
         eligibilityStatusCode: '775170001',
-        hasFiledTaxes: true,
-        isInvitationToApplyClient: false,
         livingIndependently: true,
         partnerInformation: {
           confirm: false,
