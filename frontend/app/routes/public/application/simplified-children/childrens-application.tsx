@@ -344,22 +344,24 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                   </CardFooter>
                 )}
               </Card>
-              <fetcher.Form method="post" noValidate>
-                <CsrfTokenInput />
-                <input type="hidden" name="childId" value={child.id} />
-                <Button
-                  id={`remove-child-${child.id}`}
-                  className="my-5"
-                  name="_action"
-                  value={FORM_ACTION.remove}
-                  disabled={isSubmitting}
-                  variant="secondary"
-                  size="sm"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Child:Remove child - Child(ren) application click"
-                >
-                  {t('application-simplified-child:childrens-application.remove-child')}
-                </Button>
-              </fetcher.Form>
+              {state.children.length > 1 && (
+                <fetcher.Form method="post" noValidate>
+                  <CsrfTokenInput />
+                  <input type="hidden" name="childId" value={child.id} />
+                  <Button
+                    id={`remove-child-${child.id}`}
+                    className="my-5"
+                    name="_action"
+                    value={FORM_ACTION.remove}
+                    disabled={isSubmitting}
+                    variant="secondary"
+                    size="sm"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Child:Remove child - Child(ren) application click"
+                  >
+                    {t('application-simplified-child:childrens-application.remove-child')}
+                  </Button>
+                </fetcher.Form>
+              )}
             </div>
           );
         })}

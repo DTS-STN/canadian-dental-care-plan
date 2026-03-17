@@ -285,22 +285,24 @@ export default function ProtectedNewFamilyChildrensApplication({ loaderData, par
                   </ButtonLink>
                 </CardFooter>
               </Card>
-              <fetcher.Form method="post" noValidate>
-                <CsrfTokenInput />
-                <input type="hidden" name="childId" value={child.id} />
-                <Button
-                  id={`remove-child-${child.id}`}
-                  className="my-5"
-                  name="_action"
-                  value={FORM_ACTION.remove}
-                  disabled={isSubmitting}
-                  variant="secondary"
-                  size="sm"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Remove child - Child(ren) application click"
-                >
-                  {t('protected-application-intake-family:childrens-application.remove-child')}
-                </Button>
-              </fetcher.Form>
+              {state.children.length > 1 && (
+                <fetcher.Form method="post" noValidate>
+                  <CsrfTokenInput />
+                  <input type="hidden" name="childId" value={child.id} />
+                  <Button
+                    id={`remove-child-${child.id}`}
+                    className="my-5"
+                    name="_action"
+                    value={FORM_ACTION.remove}
+                    disabled={isSubmitting}
+                    variant="secondary"
+                    size="sm"
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Remove child - Child(ren) application click"
+                  >
+                    {t('protected-application-intake-family:childrens-application.remove-child')}
+                  </Button>
+                </fetcher.Form>
+              )}
             </div>
           );
         })}
