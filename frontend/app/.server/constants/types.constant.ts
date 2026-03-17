@@ -116,10 +116,9 @@ export type ServiceIdentifier<TInstance = unknown> = Newable<TInstance>;
 /**
  * Describes a map of service identifiers that can be used in a dependency injection container.
  *
- * This type is recursive, allowing for nested namespaces or categories (e.g., `Routes`, `Web`, `Core`).
- * Each property is either:
- * - A `ServiceIdentifier<T>`, or
- * - Another `ServiceTypesMap`, supporting deep hierarchies.
+ * Each property is a `ServiceIdentifier<T>`, where `T` is the type of the service associated with that identifier. This
+ * structure allows for type-safe registration and retrieval of services from the container, ensuring that the correct
+ * types are used throughout the application.
  *
  * @template T - The base type for services in the map (defaults to `unknown`).
  *
@@ -127,21 +126,14 @@ export type ServiceIdentifier<TInstance = unknown> = Newable<TInstance>;
  * ```ts
  * const TYPES: ServiceTypesMap = {
  *   MyService: serviceIdentifier<MyService>(),
- *   web: {
- *     HttpClient: serviceIdentifier<HttpClient>(),
- *   },
+ *   HttpClient: serviceIdentifier<HttpClient>(),
  * };
  * ```
  */
-export type ServiceTypesMap<T = unknown> = Readonly<{
-  [key: string]: ServiceIdentifier<T> | ServiceTypesMap<T>;
-}>;
+export type ServiceTypesMap<T = unknown> = Readonly<ServiceIdentifier<T>>;
 
 /**
  * Collection of service identifiers used by the dependency injection container.
- *
- * This registry organizes all services, repositories, mappers, validators, and other
- * dependencies into a single structured object for easy lookup and type safety.
  *
  * Use this to register or retrieve dependencies from the container:
  *
@@ -153,7 +145,7 @@ export type ServiceTypesMap<T = unknown> = Readonly<{
  *
  * Each identifier is created using `serviceIdentifier<T>()`, ensuring type safety.
  *
- * @see assignServiceIdentifiers - Helper function that recursively applies identifiers.
+ * @see assignServiceIdentifiers - Helper function that applies identifiers.
  */
 export const TYPES = assignServiceIdentifiers({
   AddressValidationDtoMapper: serviceId<AddressValidationDtoMapper>(),
