@@ -412,7 +412,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
             ...this.toMailingAddress({ existingContactInformation, mailingAddress: renewedMailingAddress }),
           }
         : {
-            copyMailingAddress: existingContactInformation.copyMailingAddress,
+            copyMailingAddress: existingContactInformation.copyMailingAddress ?? false,
             homeAddress:
               existingContactInformation.homeAddress ??
               (() => {
@@ -531,12 +531,27 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
 
   private toCommunicationPreferences({ existingCommunicationPreferences, communicationPreferences, email, emailVerified }: ToCommunicationPreferencesArgs): RenewalCommunicationPreferencesDto {
     invariant(communicationPreferences, 'Expected communicationPreferences to be defined');
+
+    if (communicationPreferences.hasChanged) {
+      return {
+        email,
+        emailVerified,
+        preferredLanguage: communicationPreferences.value.preferredLanguage,
+        preferredMethod: communicationPreferences.value.preferredMethod,
+        preferredMethodGovernmentOfCanada: communicationPreferences.value.preferredNotificationMethod,
+      };
+    }
+
+    invariant(existingCommunicationPreferences.preferredLanguage, 'Expected existingCommunicationPreferences.preferredLanguage to be defined');
+    invariant(existingCommunicationPreferences.preferredMethodSunLife, 'Expected existingCommunicationPreferences.preferredMethodSunLife to be defined');
+    invariant(existingCommunicationPreferences.preferredMethodGovernmentOfCanada, 'Expected existingCommunicationPreferences.preferredMethodGovernmentOfCanada to be defined');
+
     return {
       email,
       emailVerified,
-      preferredLanguage: communicationPreferences.hasChanged ? communicationPreferences.value.preferredLanguage : existingCommunicationPreferences.preferredLanguage,
-      preferredMethod: communicationPreferences.hasChanged ? communicationPreferences.value.preferredMethod : existingCommunicationPreferences.preferredMethodSunLife,
-      preferredMethodGovernmentOfCanada: communicationPreferences.hasChanged ? communicationPreferences.value.preferredNotificationMethod : existingCommunicationPreferences.preferredMethodGovernmentOfCanada,
+      preferredLanguage: existingCommunicationPreferences.preferredLanguage,
+      preferredMethod: existingCommunicationPreferences.preferredMethodSunLife,
+      preferredMethodGovernmentOfCanada: existingCommunicationPreferences.preferredMethodGovernmentOfCanada,
     };
   }
 

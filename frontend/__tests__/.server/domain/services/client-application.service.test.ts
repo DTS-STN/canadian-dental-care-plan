@@ -210,8 +210,6 @@ describe('DefaultClientApplicationService', () => {
     },
     dateOfBirth: '2000-01-01',
     dentalBenefits: ['ID-123456'],
-    hasFiledTaxes: true,
-    isInvitationToApplyClient: false,
     typeOfApplication: 'adult',
     t4DentalIndicator: true,
   };

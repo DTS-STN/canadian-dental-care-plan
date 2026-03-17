@@ -19,8 +19,6 @@ export type ClientApplicationDto = ReadonlyDeep<{
    * Applicant profile eligibility status code
    */
   eligibilityStatusCode?: string;
-  hasFiledTaxes: boolean;
-  isInvitationToApplyClient: boolean;
   livingIndependently?: boolean;
   partnerInformation?: ClientPartnerInformationDto;
   t4DentalIndicator?: boolean;
@@ -51,13 +49,13 @@ export type ClientChildDto = ReadonlyDeep<{
 }>;
 
 export type ClientCommunicationPreferencesDto = ReadonlyDeep<{
-  preferredLanguage: string;
-  preferredMethodSunLife: string;
-  preferredMethodGovernmentOfCanada: string;
+  preferredLanguage?: string;
+  preferredMethodSunLife?: string;
+  preferredMethodGovernmentOfCanada?: string;
 }>;
 
 export type ClientContactInformationDto = ReadonlyDeep<{
-  copyMailingAddress: boolean;
+  copyMailingAddress?: boolean;
   // home address fields are optional because ITA clients initially have no home address
   homeAddress?: string;
   homeApartment?: string;

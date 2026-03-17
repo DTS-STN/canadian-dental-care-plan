@@ -36,9 +36,15 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   return {
     meta,
-    preferredLanguage: appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(clientApplication.communicationPreferences.preferredLanguage, locale),
-    preferredMethodSunLife: appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(clientApplication.communicationPreferences.preferredMethodSunLife, locale),
-    preferredMethodGovernmentOfCanada: appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada, locale),
+    preferredLanguage: clientApplication.communicationPreferences.preferredLanguage //
+      ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(clientApplication.communicationPreferences.preferredLanguage, locale)
+      : undefined,
+    preferredMethodSunLife: clientApplication.communicationPreferences.preferredMethodSunLife
+      ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(clientApplication.communicationPreferences.preferredMethodSunLife, locale)
+      : undefined,
+    preferredMethodGovernmentOfCanada: clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada
+      ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada, locale)
+      : undefined,
     SCCH_BASE_URI,
     COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
     COMMUNICATION_METHOD_GC_DIGITAL_ID,
@@ -52,9 +58,9 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
   return (
     <div className="max-w-prose space-y-10">
       <DefinitionList border>
-        <DefinitionListItem term={t('protected-profile:communication-preferences.language-preference')}>{preferredLanguage.name}</DefinitionListItem>
-        <DefinitionListItem term={t('protected-profile:communication-preferences.sunlife-communication-preference')}>{preferredMethodSunLife.name}</DefinitionListItem>
-        <DefinitionListItem term={t('protected-profile:communication-preferences.goc-communication-preference')}>{preferredMethodGovernmentOfCanada.name}</DefinitionListItem>
+        <DefinitionListItem term={t('protected-profile:communication-preferences.language-preference')}>{preferredLanguage?.name}</DefinitionListItem>
+        <DefinitionListItem term={t('protected-profile:communication-preferences.sunlife-communication-preference')}>{preferredMethodSunLife?.name}</DefinitionListItem>
+        <DefinitionListItem term={t('protected-profile:communication-preferences.goc-communication-preference')}>{preferredMethodGovernmentOfCanada?.name}</DefinitionListItem>
       </DefinitionList>
       <div>
         <InlineLink id="update-communication-preferences" routeId="protected/profile/communication-preferences/edit" params={params}>

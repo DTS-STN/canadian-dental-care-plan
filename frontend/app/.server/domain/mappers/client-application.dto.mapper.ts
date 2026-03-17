@@ -3,11 +3,17 @@ import { inject, injectable } from 'inversify';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
+import type { ApplicantDto, ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
 import type { ClientApplicationBasicInfoRequestEntity, ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
 import { isValidCoverageCopayTierCode } from '~/.server/utils/coverage.utils';
 
+interface MapApplicantDtoToClientApplicationDtoArgs {
+  applicantDto: ApplicantDto;
+  applicationYearId: string;
+  typeOfApplication: 'adult' | 'children' | 'family';
+}
 export interface ClientApplicationDtoMapper {
+  mapApplicantDtoToClientApplicationDto(args: MapApplicantDtoToClientApplicationDtoArgs): ClientApplicationDto;
   mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto): ClientApplicationBasicInfoRequestEntity;
   mapClientApplicationSinRequestDtoToClientApplicationSinRequestEntity(clientApplicationSinRequestDto: ClientApplicationSinRequestDto): ClientApplicationSinRequestEntity;
   mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity: ClientApplicationEntity): ClientApplicationDto;
@@ -29,6 +35,63 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
     serverConfig: DefaultClientApplicationDtoMapper_ServerConfig,
   ) {
     this.serverConfig = serverConfig;
+  }
+
+  mapApplicantDtoToClientApplicationDto(args: MapApplicantDtoToClientApplicationDtoArgs): ClientApplicationDto {
+    const { applicantDto, applicationYearId, typeOfApplication } = args;
+    return {
+      applicationYearId,
+      applicantInformation: {
+        firstName: applicantDto.firstName,
+        lastName: applicantDto.lastName,
+        maritalStatus: applicantDto.maritalStatus,
+        clientId: applicantDto.clientId,
+        clientNumber: applicantDto.clientNumber,
+        // children may not have SIN provided, but the field is required in ClientApplicantInformationDto for mapping
+        // to ClientApplicationEntity
+        socialInsuranceNumber: applicantDto.socialInsuranceNumber ?? '',
+      },
+      communicationPreferences: {
+        preferredLanguage: applicantDto.communicationPreferences.preferredLanguage,
+        preferredMethodSunLife: applicantDto.communicationPreferences.preferredMethodSunLife,
+        preferredMethodGovernmentOfCanada: applicantDto.communicationPreferences.preferredMethodGovernmentOfCanada,
+      },
+      contactInformation: {
+        // copyMailingAddress is not available in ApplicantDto, so we set it to undefined to indicate that it's
+        // intentionally not set
+        copyMailingAddress: undefined,
+        homeAddress: applicantDto.contactInformation.homeAddress,
+        homeApartment: applicantDto.contactInformation.homeApartment,
+        homeCity: applicantDto.contactInformation.homeCity,
+        homeCountry: applicantDto.contactInformation.homeCountry,
+        homePostalCode: applicantDto.contactInformation.homePostalCode,
+        homeProvince: applicantDto.contactInformation.homeProvince,
+        mailingAddress: applicantDto.contactInformation.mailingAddress,
+        mailingApartment: applicantDto.contactInformation.mailingApartment,
+        mailingCity: applicantDto.contactInformation.mailingCity,
+        mailingCountry: applicantDto.contactInformation.mailingCountry,
+        mailingPostalCode: applicantDto.contactInformation.mailingPostalCode,
+        mailingProvince: applicantDto.contactInformation.mailingProvince,
+        phoneNumber: applicantDto.contactInformation.phoneNumber,
+        phoneNumberAlt: applicantDto.contactInformation.phoneNumberAlt,
+        email: applicantDto.contactInformation.email,
+        // emailVerified is not available in ApplicantDto, so we set it to undefined to indicate that it's
+        // intentionally not set
+        emailVerified: undefined,
+      },
+      dateOfBirth: applicantDto.dateOfBirth,
+      typeOfApplication: typeOfApplication,
+      // The following fields are not available in ApplicantDto and are required in ClientApplicationDto, so we set them
+      // to default values
+      dentalBenefits: [],
+      children: [],
+      eligibilityStatusCode: undefined,
+      livingIndependently: undefined,
+      partnerInformation: undefined,
+      t4DentalIndicator: undefined,
+      coverageCopayTierCode: undefined,
+      dentalInsurance: undefined,
+    };
   }
 
   mapClientApplicationBasicInfoRequestDtoToClientApplicationBasicInfoRequestEntity(clientApplicationBasicInfoRequestDto: ClientApplicationBasicInfoRequestDto): ClientApplicationBasicInfoRequestEntity {
@@ -211,8 +274,6 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       dentalBenefits: applicant.ApplicantDetail.InsurancePlan?.at(0)?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
       dentalInsurance: applicant.ApplicantDetail.PrivateDentalInsuranceIndicator,
       eligibilityStatusCode: applicantEarning?.BenefitEligibilityStatus.StatusCode.ReferenceDataID,
-      hasFiledTaxes: applicant.ApplicantDetail.PreviousTaxesFiledIndicator,
-      isInvitationToApplyClient: applicant.ApplicantDetail.InvitationToApplyIndicator,
       livingIndependently: applicant.ApplicantDetail.LivingIndependentlyIndicator,
       partnerInformation,
       t4DentalIndicator: applicantEarning?.PrivateDentalInsuranceIndicator,
