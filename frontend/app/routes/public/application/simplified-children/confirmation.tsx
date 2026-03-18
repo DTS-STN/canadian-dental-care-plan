@@ -283,86 +283,90 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
           </DefinitionList>
         </div>
 
-        <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.applicant-title')}</h3>
-          <DefinitionList border>
-            {userInfo.memberId && <DefinitionListItem term={t('confirm.member-id')}>{formatClientNumber(userInfo.memberId)}</DefinitionListItem>}
-            <DefinitionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.dob')}>{userInfo.birthday}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.sin')}>
-              <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
-            </DefinitionListItem>
-          </DefinitionList>
-        </section>
+        <section className="space-y-8">
+          <h2 className="font-lato text-3xl font-bold">{t('confirm.parent-or-guardian')}</h2>
 
-        {spouseInfo && (
           <section className="space-y-6">
-            <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.parent-or-guardian-info')}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.dob')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
+              {userInfo.memberId && <DefinitionListItem term={t('confirm.member-id')}>{formatClientNumber(userInfo.memberId)}</DefinitionListItem>}
+              <DefinitionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.dob')}>{userInfo.birthday}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.sin')}>
-                <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
+                <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
               </DefinitionListItem>
-              <DefinitionListItem term={t('confirm.consent')}>{t('confirm.consent-answer')}</DefinitionListItem>
             </DefinitionList>
           </section>
-        )}
 
-        <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h3>
-          <DefinitionList border>
-            <DefinitionListItem term={t('confirm.phone-number')}>
-              <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.phoneNumber : t('confirm.no-update')}</span>
-            </DefinitionListItem>
-            <DefinitionListItem term={t('confirm.alt-phone-number')}>
-              <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.altPhoneNumber : t('confirm.no-update')}</span>
-            </DefinitionListItem>
-            {userInfo.contactInformationEmail && (
-              <DefinitionListItem term={t('confirm.email')}>
-                <span className="text-nowrap">{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')}</span>
+          {spouseInfo && (
+            <section className="space-y-6">
+              <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
+              <DefinitionList border>
+                <DefinitionListItem term={t('confirm.year-birth')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
+                <DefinitionListItem term={t('confirm.sin')}>
+                  <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
+                </DefinitionListItem>
+                <DefinitionListItem term={t('confirm.consent')}>{t('confirm.consent-answer')}</DefinitionListItem>
+              </DefinitionList>
+            </section>
+          )}
+
+          <section className="space-y-6">
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h3>
+            <DefinitionList border>
+              <DefinitionListItem term={t('confirm.phone-number')}>
+                <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.phoneNumber : t('confirm.no-update')}</span>
               </DefinitionListItem>
-            )}
-            <DefinitionListItem term={t('confirm.mailing')}>
-              {mailingAddressInfo.hasMailingAddressChanged ? (
-                <Address
-                  address={{
-                    address: mailingAddressInfo.address ?? '',
-                    city: mailingAddressInfo.city ?? '',
-                    provinceState: mailingAddressInfo.province,
-                    postalZipCode: mailingAddressInfo.postalCode,
-                    country: mailingAddressInfo.country ?? '',
-                  }}
-                />
-              ) : (
-                <span className="text-nowrap">{t('confirm.no-update')}</span>
+              <DefinitionListItem term={t('confirm.alt-phone-number')}>
+                <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.altPhoneNumber : t('confirm.no-update')}</span>
+              </DefinitionListItem>
+              {userInfo.contactInformationEmail && (
+                <DefinitionListItem term={t('confirm.email')}>
+                  <span className="text-nowrap">{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')}</span>
+                </DefinitionListItem>
               )}
-            </DefinitionListItem>
-            <DefinitionListItem term={t('confirm.home')}>
-              {homeAddressInfo.hasHomeAddressChanged ? (
-                <Address
-                  address={{
-                    address: homeAddressInfo.address ?? '',
-                    city: homeAddressInfo.city ?? '',
-                    provinceState: homeAddressInfo.province,
-                    postalZipCode: homeAddressInfo.postalCode,
-                    country: homeAddressInfo.country ?? '',
-                  }}
-                />
-              ) : (
-                <span className="text-nowrap">{t('confirm.no-update')}</span>
-              )}
-            </DefinitionListItem>
-          </DefinitionList>
-        </section>
+              <DefinitionListItem term={t('confirm.mailing')}>
+                {mailingAddressInfo.hasMailingAddressChanged ? (
+                  <Address
+                    address={{
+                      address: mailingAddressInfo.address ?? '',
+                      city: mailingAddressInfo.city ?? '',
+                      provinceState: mailingAddressInfo.province,
+                      postalZipCode: mailingAddressInfo.postalCode,
+                      country: mailingAddressInfo.country ?? '',
+                    }}
+                  />
+                ) : (
+                  <span className="text-nowrap">{t('confirm.no-update')}</span>
+                )}
+              </DefinitionListItem>
+              <DefinitionListItem term={t('confirm.home')}>
+                {homeAddressInfo.hasHomeAddressChanged ? (
+                  <Address
+                    address={{
+                      address: homeAddressInfo.address ?? '',
+                      city: homeAddressInfo.city ?? '',
+                      provinceState: homeAddressInfo.province,
+                      postalZipCode: homeAddressInfo.postalCode,
+                      country: homeAddressInfo.country ?? '',
+                    }}
+                  />
+                ) : (
+                  <span className="text-nowrap">{t('confirm.no-update')}</span>
+                )}
+              </DefinitionListItem>
+            </DefinitionList>
+          </section>
 
-        <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-pref')}</h3>
-          <DefinitionList border>
-            <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.preferredLanguage?.name : t('confirm.no-update')}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationSunLifePreference?.name : t('confirm.no-update')}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationGOCPreference?.name : t('confirm.no-update')}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.email')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')}</DefinitionListItem>
-          </DefinitionList>
+          <section className="space-y-6">
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-pref')}</h3>
+            <DefinitionList border>
+              <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.preferredLanguage?.name : t('confirm.no-update')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationSunLifePreference?.name : t('confirm.no-update')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationGOCPreference?.name : t('confirm.no-update')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.email')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')}</DefinitionListItem>
+            </DefinitionList>
+          </section>
         </section>
 
         <div className="mb-8 space-y-10">
