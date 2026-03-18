@@ -114,6 +114,7 @@ export default function ParentGuardian({ loaderData, params }: Route.ComponentPr
   return (
     <div className="max-w-prose">
       <fetcher.Form method="post" noValidate>
+        <p className="mb-4 italic">{t('protected-application:required-label')}</p>
         <div className="mb-8 space-y-4">
           <InputRadios
             id="is-parent-radios"
