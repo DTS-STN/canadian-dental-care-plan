@@ -11,7 +11,8 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { Button } from '~/components/buttons';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InputField } from '~/components/input-field';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputSelect } from '~/components/input-select';
@@ -129,74 +130,69 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultValues } = loaderData;
   const fetcher = useFetcher<typeof action>();
-
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, {
-    sin: 'sin',
-    destinationRouteId: 'destination-page',
-    sid: 'sid',
-    sub: 'sub',
-  });
 
   return (
     <div className="max-w-prose">
-      <errorSummary.ErrorSummary />
-      <fetcher.Form method="post" noValidate className="space-y-6">
-        <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('stub-login:index.sin')} required inputMode="numeric" defaultValue={defaultValues.sin} errorMessage={errors?.sin} />
-        <InputSelect
-          id="destination-page"
-          name="destinationRouteId"
-          label={t('stub-login:index.destination')}
-          errorMessage={errors?.destinationRouteId}
-          defaultValue=""
-          required
-          options={[
-            { children: 'Select a destination', value: '', disabled: true, hidden: true },
-            {
-              children: 'Application',
-              value: 'protected/application/index',
-            },
-            {
-              children: 'Documents',
-              value: 'protected/documents/index',
-            },
-            {
-              children: 'Letters',
-              value: 'protected/letters/index',
-            },
-            {
-              children: 'Member Eligibility',
-              value: 'protected/profile/eligibility',
-            },
-            {
-              children: 'Profile - Applicant Information',
-              value: 'protected/profile/applicant-information',
-            },
-            {
-              children: 'Profile - Communication Preferences',
-              value: 'protected/profile/communication-preferences',
-            },
-            {
-              children: 'Profile - Contact Information',
-              value: 'protected/profile/contact-information',
-            },
-            {
-              children: 'Profile - Dental Benefits',
-              value: 'protected/profile/dental-benefits',
-            },
-          ]}
-        />
-        <fieldset>
-          <legend className="mb-2 text-xl font-semibold">{t('stub-login:index.raoidc')}</legend>
-          <div className="space-y-6">
-            <InputField id="sid" name="sid" className="w-full" inputMode="text" label={t('stub-login:index.sid')} defaultValue={defaultValues.sid} errorMessage={errors?.sid} />
-            <InputField id="sub" name="sub" className="w-full" inputMode="text" label={t('stub-login:index.sub')} defaultValue={defaultValues.sub} errorMessage={errors?.sub} />
-          </div>
-        </fieldset>
-        <Button variant="primary" id="login-button">
-          {t('stub-login:index.login')}
-        </Button>
-      </fetcher.Form>
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
+        <fetcher.Form method="post" noValidate className="space-y-6">
+          <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('stub-login:index.sin')} required inputMode="numeric" defaultValue={defaultValues.sin} errorMessage={errors?.sin} />
+          <InputSelect
+            id="destination-page"
+            name="destinationRouteId"
+            label={t('stub-login:index.destination')}
+            errorMessage={errors?.destinationRouteId}
+            defaultValue=""
+            required
+            options={[
+              { children: 'Select a destination', value: '', disabled: true, hidden: true },
+              {
+                children: 'Application',
+                value: 'protected/application/index',
+              },
+              {
+                children: 'Documents',
+                value: 'protected/documents/index',
+              },
+              {
+                children: 'Letters',
+                value: 'protected/letters/index',
+              },
+              {
+                children: 'Member Eligibility',
+                value: 'protected/profile/eligibility',
+              },
+              {
+                children: 'Profile - Applicant Information',
+                value: 'protected/profile/applicant-information',
+              },
+              {
+                children: 'Profile - Communication Preferences',
+                value: 'protected/profile/communication-preferences',
+              },
+              {
+                children: 'Profile - Contact Information',
+                value: 'protected/profile/contact-information',
+              },
+              {
+                children: 'Profile - Dental Benefits',
+                value: 'protected/profile/dental-benefits',
+              },
+            ]}
+          />
+          <fieldset>
+            <legend className="mb-2 text-xl font-semibold">{t('stub-login:index.raoidc')}</legend>
+            <div className="space-y-6">
+              <InputField id="sid" name="sid" className="w-full" inputMode="text" label={t('stub-login:index.sid')} defaultValue={defaultValues.sid} errorMessage={errors?.sid} />
+              <InputField id="sub" name="sub" className="w-full" inputMode="text" label={t('stub-login:index.sub')} defaultValue={defaultValues.sub} errorMessage={errors?.sub} />
+            </div>
+          </fieldset>
+          <Button variant="primary" id="login-button">
+            {t('stub-login:index.login')}
+          </Button>
+        </fetcher.Form>
+      </ErrorSummaryProvider>
     </div>
   );
 }

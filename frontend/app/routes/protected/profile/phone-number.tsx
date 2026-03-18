@@ -11,7 +11,8 @@ import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { phoneSchema } from '~/.server/validation/phone-schema';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InputPhoneField } from '~/components/input-phone-field';
 import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
@@ -101,59 +102,56 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
   const { defaultState } = loaderData;
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
-
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, {
-    phoneNumber: 'phone-number',
-    phoneNumberAlt: 'phone-number-alt',
-  });
 
   return (
     <div className="max-w-prose">
-      <errorSummary.ErrorSummary />
-      <fetcher.Form method="post" noValidate>
-        <CsrfTokenInput />
-        <div className="mb-6">
-          <p className="mb-4">{t('protected-profile:phone-number.help-message')}</p>
-          <p className="mb-4 italic">{t('protected-profile:all-optional-label')}</p>
-          <div className="grid items-end gap-6">
-            <InputPhoneField
-              id="phone-number"
-              name="phoneNumber"
-              type="tel"
-              inputMode="tel"
-              className="w-full"
-              autoComplete="tel"
-              defaultValue={defaultState.phoneNumber ?? ''}
-              errorMessage={errors?.phoneNumber}
-              label={t('protected-profile:phone-number.phone-number')}
-              maxLength={100}
-              aria-describedby="adding-phone"
-            />
-            <InputPhoneField
-              id="phone-number-alt"
-              name="phoneNumberAlt"
-              type="tel"
-              inputMode="tel"
-              className="w-full"
-              autoComplete="tel"
-              defaultValue={defaultState.phoneNumberAlt ?? ''}
-              errorMessage={errors?.phoneNumberAlt}
-              label={t('protected-profile:phone-number.phone-number-alt')}
-              maxLength={100}
-              aria-describedby="adding-phone"
-            />
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <div className="mb-6">
+            <p className="mb-4">{t('protected-profile:phone-number.help-message')}</p>
+            <p className="mb-4 italic">{t('protected-profile:all-optional-label')}</p>
+            <div className="grid items-end gap-6">
+              <InputPhoneField
+                id="phone-number"
+                name="phoneNumber"
+                type="tel"
+                inputMode="tel"
+                className="w-full"
+                autoComplete="tel"
+                defaultValue={defaultState.phoneNumber ?? ''}
+                errorMessage={errors?.phoneNumber}
+                label={t('protected-profile:phone-number.phone-number')}
+                maxLength={100}
+                aria-describedby="adding-phone"
+              />
+              <InputPhoneField
+                id="phone-number-alt"
+                name="phoneNumberAlt"
+                type="tel"
+                inputMode="tel"
+                className="w-full"
+                autoComplete="tel"
+                defaultValue={defaultState.phoneNumberAlt ?? ''}
+                errorMessage={errors?.phoneNumberAlt}
+                label={t('protected-profile:phone-number.phone-number-alt')}
+                maxLength={100}
+                aria-describedby="adding-phone"
+              />
+            </div>
           </div>
-        </div>
-        <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Phone number click">
-            {t('protected-profile:phone-number.save-btn')}
-          </LoadingButton>
-          <ButtonLink variant="secondary" id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Phone number click">
-            {t('protected-profile:phone-number.back-btn')}
-          </ButtonLink>
-        </div>
-      </fetcher.Form>
+          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Phone number click">
+              {t('protected-profile:phone-number.save-btn')}
+            </LoadingButton>
+            <ButtonLink variant="secondary" id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Phone number click">
+              {t('protected-profile:phone-number.back-btn')}
+            </ButtonLink>
+          </div>
+        </fetcher.Form>
+      </ErrorSummaryProvider>
     </div>
   );
 }

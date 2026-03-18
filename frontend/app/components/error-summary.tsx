@@ -153,6 +153,7 @@ interface ErrorFieldMap {
  * @param errors - Object containing error messages keyed by field names. Can include nested array errors.
  * @param errorFieldMap - Object mapping field names (from errors) to corresponding field IDs or field ID generators for arrays.
  * @param errorSummaryId - ID attribute for the error summary container.
+ * @deprecated This hook is deprecated in favor of ErrorSummaryContext, which provides more flexibility and better separation of concerns. Please migrate to using ErrorSummaryContext for new implementations.
  */
 export function useErrorSummary(errors: Record<string, unknown> | undefined, errorFieldMap: ErrorFieldMap, errorSummaryId: string = 'error-summary') {
   // Memoize `errorFieldMap` based on its content to trigger useMemo only if the content changes
