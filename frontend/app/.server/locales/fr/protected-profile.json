@@ -1,6 +1,6 @@
 {
-  "required-label": "Remplissez tous les champs.",
-  "optional-label": "Remplissez tous les champs, sauf s'ils sont indiqués facultatifs.",
+  "required-label": "Veuillez remplir tous les champs.",
+  "optional-label": "Veuillez remplir tous les champs, sauf s'ils sont indiqués facultatifs.",
   "all-optional-label": "Tous les champs sont facultatifs.",
   "none": "Aucun",
   "eligibility": {
