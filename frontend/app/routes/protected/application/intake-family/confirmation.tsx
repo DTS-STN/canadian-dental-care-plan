@@ -283,99 +283,103 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
         </div>
 
         <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.applicant-title')}</h3>
-          <DefinitionList border>
-            {userInfo.memberId && <DefinitionListItem term={t('confirm.member-id')}>{formatClientNumber(userInfo.memberId)}</DefinitionListItem>}
-            <DefinitionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.dob')}>{userInfo.birthday}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.sin')}>
-              <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
-            </DefinitionListItem>
-            <DefinitionListItem term={t('confirm.marital-status')}>{userInfo.maritalStatus}</DefinitionListItem>
-          </DefinitionList>
-        </section>
+          <h2 className="font-lato text-3xl font-bold">{t('confirm.applicant')}</h2>
 
-        {spouseInfo && (
           <section className="space-y-6">
-            <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.applicant-info')}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.year-birth')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
+              {userInfo.memberId && <DefinitionListItem term={t('confirm.member-id')}>{formatClientNumber(userInfo.memberId)}</DefinitionListItem>}
+              <DefinitionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.dob')}>{userInfo.birthday}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.sin')}>
-                <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
+                <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
               </DefinitionListItem>
-              <DefinitionListItem term={t('confirm.consent')}>{t('confirm.consent-answer')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.marital-status')}>{userInfo.maritalStatus}</DefinitionListItem>
             </DefinitionList>
           </section>
-        )}
 
-        <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h3>
-          <DefinitionList border>
-            <DefinitionListItem term={t('confirm.phone-number')}>
-              <span className="text-nowrap">{userInfo.phoneNumber}</span>
-            </DefinitionListItem>
-            <DefinitionListItem term={t('confirm.alt-phone-number')}>
-              <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
-            </DefinitionListItem>
-            {userInfo.contactInformationEmail && (
-              <DefinitionListItem term={t('confirm.email')}>
-                <span className="text-nowrap">{userInfo.contactInformationEmail} </span>
+          {spouseInfo && (
+            <section className="space-y-6">
+              <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
+              <DefinitionList border>
+                <DefinitionListItem term={t('confirm.year-birth')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
+                <DefinitionListItem term={t('confirm.sin')}>
+                  <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
+                </DefinitionListItem>
+                <DefinitionListItem term={t('confirm.consent')}>{t('confirm.consent-answer')}</DefinitionListItem>
+              </DefinitionList>
+            </section>
+          )}
+
+          <section className="space-y-6">
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h3>
+            <DefinitionList border>
+              <DefinitionListItem term={t('confirm.phone-number')}>
+                <span className="text-nowrap">{userInfo.phoneNumber}</span>
               </DefinitionListItem>
-            )}
-            <DefinitionListItem term={t('confirm.mailing')}>
-              <Address
-                address={{
-                  address: mailingAddressInfo.address,
-                  city: mailingAddressInfo.city,
-                  provinceState: mailingAddressInfo.province,
-                  postalZipCode: mailingAddressInfo.postalCode,
-                  country: mailingAddressInfo.country,
-                }}
-              />
-            </DefinitionListItem>
-            <DefinitionListItem term={t('confirm.home')}>
-              <Address
-                address={{
-                  address: homeAddressInfo.address,
-                  city: homeAddressInfo.city,
-                  provinceState: homeAddressInfo.province,
-                  postalZipCode: homeAddressInfo.postalCode,
-                  country: homeAddressInfo.country,
-                }}
-              />
-            </DefinitionListItem>
-          </DefinitionList>
-        </section>
-
-        <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-pref')}</h3>
-          <DefinitionList border>
-            <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage.name}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.communicationSunLifePreference.name}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.communicationGOCPreference.name}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.email')}>{userInfo.contactInformationEmail}</DefinitionListItem>
-          </DefinitionList>
-        </section>
-
-        <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h3>
-          <DefinitionList border>
-            <DefinitionListItem term={t('confirm.dental-private')}> {dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DefinitionListItem>
-            <DefinitionListItem term={t('confirm.dental-public')}>
-              {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
-                <div className="space-y-3">
-                  <p>{t('protected-application-intake-family:confirm.yes')}</p>
-                  <p>{t('protected-application-intake-family:confirm.dental-benefit-has-access')}</p>
-                  <ul className="list-disc space-y-1 pl-7">
-                    {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
-                    {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
-                  </ul>
-                </div>
-              ) : (
-                <p>{t('confirm.no')}</p>
+              <DefinitionListItem term={t('confirm.alt-phone-number')}>
+                <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
+              </DefinitionListItem>
+              {userInfo.contactInformationEmail && (
+                <DefinitionListItem term={t('confirm.email')}>
+                  <span className="text-nowrap">{userInfo.contactInformationEmail} </span>
+                </DefinitionListItem>
               )}
-            </DefinitionListItem>
-          </DefinitionList>
+              <DefinitionListItem term={t('confirm.mailing')}>
+                <Address
+                  address={{
+                    address: mailingAddressInfo.address,
+                    city: mailingAddressInfo.city,
+                    provinceState: mailingAddressInfo.province,
+                    postalZipCode: mailingAddressInfo.postalCode,
+                    country: mailingAddressInfo.country,
+                  }}
+                />
+              </DefinitionListItem>
+              <DefinitionListItem term={t('confirm.home')}>
+                <Address
+                  address={{
+                    address: homeAddressInfo.address,
+                    city: homeAddressInfo.city,
+                    provinceState: homeAddressInfo.province,
+                    postalZipCode: homeAddressInfo.postalCode,
+                    country: homeAddressInfo.country,
+                  }}
+                />
+              </DefinitionListItem>
+            </DefinitionList>
+          </section>
+
+          <section className="space-y-6">
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-pref')}</h3>
+            <DefinitionList border>
+              <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage.name}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.communicationSunLifePreference.name}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.communicationGOCPreference.name}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.email')}>{userInfo.contactInformationEmail}</DefinitionListItem>
+            </DefinitionList>
+          </section>
+
+          <section className="space-y-6">
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h3>
+            <DefinitionList border>
+              <DefinitionListItem term={t('confirm.dental-private')}> {dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.dental-public')}>
+                {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
+                  <div className="space-y-3">
+                    <p>{t('protected-application-intake-family:confirm.yes')}</p>
+                    <p>{t('protected-application-intake-family:confirm.dental-benefit-has-access')}</p>
+                    <ul className="list-disc space-y-1 pl-7">
+                      {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
+                      {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
+                    </ul>
+                  </div>
+                ) : (
+                  <p>{t('confirm.no')}</p>
+                )}
+              </DefinitionListItem>
+            </DefinitionList>
+          </section>
         </section>
 
         <div className="mb-8 space-y-10">
