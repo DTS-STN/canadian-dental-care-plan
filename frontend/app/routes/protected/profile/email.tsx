@@ -11,7 +11,8 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
-import { useErrorSummary } from '~/components/error-summary';
+import { ErrorSummaryProvider } from '~/components/error-summary-context';
+import { ErrorSummary } from '~/components/future-error-summary';
 import { InputField } from '~/components/input-field';
 import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
@@ -169,33 +170,33 @@ export default function ProtectedProfileEmailAddress({ loaderData, params }: Rou
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
-
   const errors = fetcher.data?.errors;
-  const errorSummary = useErrorSummary(errors, { email: 'email' });
 
   const backButtonRouteId = context === 'communication-preferences' ? 'protected/profile/communication-preferences/edit' : 'protected/profile/contact-information';
 
   return (
     <div className="max-w-prose">
-      <errorSummary.ErrorSummary />
-      <fetcher.Form method="post" noValidate>
-        <CsrfTokenInput />
-        <p className="mb-4">{t('protected-profile:email.provide-email')}</p>
-        <p className="mb-8">{t('protected-profile:email.verify-email')}</p>
-        <p className="mb-4 italic">{t('protected-profile:required-label')}</p>
-        <div className="mb-6">
-          <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t('protected-profile:email.email-legend')} maxLength={64} required />
-        </div>
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ErrorSummary />
+        <fetcher.Form method="post" noValidate>
+          <CsrfTokenInput />
+          <p className="mb-4">{t('protected-profile:email.provide-email')}</p>
+          <p className="mb-8">{t('protected-profile:email.verify-email')}</p>
+          <p className="mb-4 italic">{t('protected-profile:required-label')}</p>
+          <div className="mb-6">
+            <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t('protected-profile:email.email-legend')} maxLength={64} required />
+          </div>
 
-        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Email address click">
-            {t('protected-profile:email.continue-btn')}
-          </LoadingButton>
-          <ButtonLink variant="secondary" id="back-button" routeId={backButtonRouteId} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Email address click">
-            {t('protected-profile:email.back')}
-          </ButtonLink>
-        </div>
-      </fetcher.Form>
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Email address click">
+              {t('protected-profile:email.continue-btn')}
+            </LoadingButton>
+            <ButtonLink variant="secondary" id="back-button" routeId={backButtonRouteId} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Email address click">
+              {t('protected-profile:email.back')}
+            </ButtonLink>
+          </div>
+        </fetcher.Form>
+      </ErrorSummaryProvider>
     </div>
   );
 }
