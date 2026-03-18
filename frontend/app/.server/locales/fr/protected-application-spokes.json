@@ -512,7 +512,7 @@
       }
     },
     "parent-guardian": {
-      "page-title": "Le parent ou le tuteur légal doit présenter",
+      "page-title": "Parent ou tuteur légal",
       "parent-legend": "Êtes-vous le parent ou le tuteur légal de {{ childName }}?",
       "radio-options": {
         "yes": "Oui",
