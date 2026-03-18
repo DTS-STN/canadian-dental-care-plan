@@ -210,7 +210,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
         <h2 className="mb-2 font-bold">{t('application-spokes:verify-email.verification-code-alert.heading')}</h2>
         <p className="-mb-3">{t('application-spokes:verify-email.verification-code-alert.detail')}</p>
         <LoadingButton
-          id="request-button"
+          id="alert-request-button"
           type="button"
           name="_action"
           variant="link"
