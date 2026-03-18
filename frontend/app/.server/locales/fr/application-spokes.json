@@ -373,7 +373,7 @@
     },
     "verification-code-alert": {
       "heading": "Le code saisi ne correspond pas au code envoyé à l'adresse courriel fournie, ou le code a expiré.",
-      "detail": " Veuillez vérifier le code et réessayer. Si le problème persiste, vous pouvez"
+      "detail": "Veuillez vérifier le code et réessayer. Si le problème persiste, vous pouvez"
     },
     "code-sent": {
       "heading": "Nouveau code",
