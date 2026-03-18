@@ -317,7 +317,7 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
             <section className="space-y-6">
               <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
               <DefinitionList border>
-                <DefinitionListItem term={t('confirm.dob')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
+                <DefinitionListItem term={t('confirm.year-birth')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
                 <DefinitionListItem term={t('confirm.sin')}>
                   <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
                 </DefinitionListItem>
