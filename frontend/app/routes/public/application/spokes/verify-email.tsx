@@ -23,6 +23,7 @@ import { InputField } from '~/components/input-field';
 import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
+import { useCsrfToken } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -177,6 +178,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState } = loaderData;
   const [showDialog, setShowDialog] = useState(false);
+  const csrfToken = useCsrfToken();
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
@@ -197,9 +199,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
   function handleRequestNewCode() {
     const formData = new FormData();
     formData.append('_action', FORM_ACTION.request);
-
-    const csrfTokenInput = document.querySelector('input[name="_csrf"]') as HTMLInputElement;
-    formData.append('_csrf', csrfTokenInput.value);
+    formData.append('_csrf', csrfToken);
 
     void fetcher.submit(formData, { method: 'post' });
   }
@@ -250,9 +250,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
               onClick={async () => {
                 const formData = new FormData();
                 formData.append('_action', FORM_ACTION.request);
-
-                const csrfTokenInput = document.querySelector('input[name="_csrf"]') as HTMLInputElement;
-                formData.append('_csrf', csrfTokenInput.value);
+                formData.append('_csrf', csrfToken);
 
                 await fetcher.submit(formData, { method: 'post' });
               }}
