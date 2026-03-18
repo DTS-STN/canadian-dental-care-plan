@@ -1,6 +1,6 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { isConfigured, pushErrorEvent, pushPageviewEvent, pushValidationErrorEvent } from '~/utils/adobe-analytics.client';
+import { isConfigured, pushErrorEvent, pushFormSubmitEvent, pushPageviewEvent, pushValidationErrorEvent } from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
 
 /*
@@ -53,6 +53,13 @@ describe('isConfigured', () => {
 describe('pushErrorEvent', () => {
   const originalAdobeDataLayer = window.adobeDataLayer;
 
+  beforeEach(() => {
+    vi.mocked(getClientEnv, { partial: true }).mockReturnValue({
+      ADOBE_ANALYTICS_JQUERY_SRC: 'http://example.com/jquery.min.js',
+      ADOBE_ANALYTICS_SRC: 'http://example.com/adobe-analytics.min.js',
+    });
+  });
+
   afterEach(() => {
     window.adobeDataLayer = originalAdobeDataLayer;
     vi.resetAllMocks();
@@ -81,6 +88,13 @@ describe('pushErrorEvent', () => {
 describe('pushPageviewEvent', () => {
   const originalAdobeDataLayer = window.adobeDataLayer;
 
+  beforeEach(() => {
+    vi.mocked(getClientEnv, { partial: true }).mockReturnValue({
+      ADOBE_ANALYTICS_JQUERY_SRC: 'http://example.com/jquery.min.js',
+      ADOBE_ANALYTICS_SRC: 'http://example.com/adobe-analytics.min.js',
+    });
+  });
+
   afterEach(() => {
     window.adobeDataLayer = originalAdobeDataLayer;
     vi.resetAllMocks();
@@ -108,6 +122,13 @@ describe('pushPageviewEvent', () => {
 
 describe('pushValidationErrorEvent', () => {
   const originalAdobeDataLayer = window.adobeDataLayer;
+
+  beforeEach(() => {
+    vi.mocked(getClientEnv, { partial: true }).mockReturnValue({
+      ADOBE_ANALYTICS_JQUERY_SRC: 'http://example.com/jquery.min.js',
+      ADOBE_ANALYTICS_SRC: 'http://example.com/adobe-analytics.min.js',
+    });
+  });
 
   afterEach(() => {
     window.adobeDataLayer = originalAdobeDataLayer;
@@ -154,6 +175,41 @@ describe('pushValidationErrorEvent', () => {
       error: {
         name: 'ESDC-EDSC:CDCP Online Application:input-radio-type-of-application-option-0|input-radio-tax-filing-2023-option-0|date-picker-date-of-birth-month|date-picker-date-of-birth-day|date-picker-date-of-birth-year|first-name|last-name|input-radio-marital-status-op',
       },
+    });
+  });
+});
+
+describe('pushFormSubmitEvent', () => {
+  const originalAdobeDataLayer = window.adobeDataLayer;
+
+  beforeEach(() => {
+    vi.mocked(getClientEnv, { partial: true }).mockReturnValue({
+      ADOBE_ANALYTICS_JQUERY_SRC: 'http://example.com/jquery.min.js',
+      ADOBE_ANALYTICS_SRC: 'http://example.com/adobe-analytics.min.js',
+    });
+  });
+
+  afterEach(() => {
+    window.adobeDataLayer = originalAdobeDataLayer;
+    vi.resetAllMocks();
+  });
+
+  it('does not send an event if window.adobeDataLayer is not defined', () => {
+    const spyConsoleWarnSpy = vi.spyOn(console, 'warn').mockImplementationOnce(() => {});
+
+    pushFormSubmitEvent({ field: 'value' });
+
+    expect(spyConsoleWarnSpy).toHaveBeenCalledWith('window.adobeDataLayer is not defined. This could mean your adobe analytics script has not loaded on the page yet.');
+  });
+
+  it('sends a formSubmit event with the correct form values', () => {
+    window.adobeDataLayer = { push: vi.fn() };
+
+    pushFormSubmitEvent({ 'first-name': 'John', 'last-name': 'Doe' });
+
+    expect(window.adobeDataLayer.push).toHaveBeenCalledWith({
+      event: 'formSubmit',
+      form: { 'first-name': 'John', 'last-name': 'Doe' },
     });
   });
 });
