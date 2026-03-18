@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import type { JSX } from 'react';
 
 import { BrowserCompatibilityBanner } from '~/components/browser-compatibility-banner';
-import { useBrowserValidation } from '~/hooks/use-browser-validation.hook';
+import { useBrowserValidation } from '~/hooks/use-browser-validation';
 
 const BROWSER_COMPATIBILITY_BANNER_STORAGE_KEY = 'browser-compatibility-banner';
 const BROWSER_COMPATIBILITY_BANNER_DISMISSED_VALUE = 'dismissed';

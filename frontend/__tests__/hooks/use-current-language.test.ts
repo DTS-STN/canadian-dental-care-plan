@@ -3,7 +3,7 @@ import { useLocation } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import { useCurrentLanguage } from '~/hooks/use-current-language.hook';
+import { useCurrentLanguage } from '~/hooks/use-current-language';
 import { getAltLanguage, getLanguage } from '~/utils/locale-utils';
 
 vi.mock('react-router', () => ({
