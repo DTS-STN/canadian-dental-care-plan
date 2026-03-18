@@ -197,19 +197,42 @@ describe('pushFormSubmitEvent', () => {
   it('does not send an event if window.adobeDataLayer is not defined', () => {
     const spyConsoleWarnSpy = vi.spyOn(console, 'warn').mockImplementationOnce(() => {});
 
-    pushFormSubmitEvent({ field: 'value' });
+    pushFormSubmitEvent('my-form', new Map());
 
     expect(spyConsoleWarnSpy).toHaveBeenCalledWith('window.adobeDataLayer is not defined. This could mean your adobe analytics script has not loaded on the page yet.');
   });
 
-  it('sends a formSubmit event with the correct form values', () => {
+  it('sends a formSubmit event with the correct form name and formatted field values', () => {
     window.adobeDataLayer = { push: vi.fn() };
 
-    pushFormSubmitEvent({ 'first-name': 'John', 'last-name': 'Doe' });
+    pushFormSubmitEvent(
+      'my-form',
+      new Map([
+        ['first-name', { elementType: 'radio', value: 'John' }],
+        ['newsletter', { elementType: 'checkbox', value: 'yes' }],
+      ]),
+    );
 
     expect(window.adobeDataLayer.push).toHaveBeenCalledWith({
       event: 'formSubmit',
-      form: { 'first-name': 'John', 'last-name': 'Doe' },
+      form: {
+        name: 'my-form',
+        list: 'radio:first-name:John|checkbox:newsletter:yes',
+      },
+    });
+  });
+
+  it('sends a formSubmit event with an empty list when no form values are provided', () => {
+    window.adobeDataLayer = { push: vi.fn() };
+
+    pushFormSubmitEvent('my-form', new Map());
+
+    expect(window.adobeDataLayer.push).toHaveBeenCalledWith({
+      event: 'formSubmit',
+      form: {
+        name: 'my-form',
+        list: '',
+      },
     });
   });
 });

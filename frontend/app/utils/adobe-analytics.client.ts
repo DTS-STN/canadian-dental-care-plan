@@ -85,13 +85,24 @@ export function pushValidationErrorEvent(fieldIds: ReadonlyArray<string>) {
 }
 
 /**
- * Pushes a `formSubmit` event containing the submitted form field values.
+ * Pushes a `formSubmit` event containing the submitted form field values. Field values are formatted as
+ * `elementType:fieldId:value` and joined with `|` to create a single string for Adobe Analytics.
+ *
+ * @param formName - The name of the submitted form, used for analytics categorization.
+ * @param formValues - A map of form field IDs to their values and element types (checkbox or radio).
  */
-export function pushFormSubmitEvent(formValues: Record<string, string>) {
+export function pushFormSubmitEvent(formName: string, formValues: ReadonlyMap<string, { elementType: 'checkbox' | 'radio'; value: string }>) {
   withAdobeAnalytics((adobeDataLayer) => {
+    // Format form values as `elementType:fieldId:value` and join with `|` to create a single string for Adobe Analytics.
+    const formattedFormValues = [...formValues.entries()].map(([fieldId, { elementType, value }]) => `${elementType}:${fieldId}:${value}`);
+    const listedValues = formattedFormValues.join('|');
+
     adobeDataLayer.push?.({
       event: 'formSubmit',
-      form: formValues,
+      form: {
+        name: formName,
+        list: listedValues,
+      },
     });
   });
 }
