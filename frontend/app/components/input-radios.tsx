@@ -42,7 +42,7 @@ export function InputRadios({ errorMessage, helpMessagePrimary, helpMessagePrima
       <InputLegend id={inputLegendId} className={legendClassName}>
         {legend}
       </InputLegend>
-      {errorMessage && <InputError id={inputErrorId} fieldId={`${id}-option-0`} message={errorMessage} />}
+      {errorMessage && <InputError id={inputErrorId} fieldId={`input-radio-${id}-option-0`} message={errorMessage} />}
       {helpMessagePrimary && (
         <InputHelp id={inputHelpMessagePrimaryId} className={helpMessagePrimaryClassName}>
           {helpMessagePrimary}
