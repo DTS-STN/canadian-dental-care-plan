@@ -23,6 +23,7 @@ import { InputField } from '~/components/input-field';
 import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
+import { useCsrfToken } from '~/root';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -181,6 +182,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState } = loaderData;
   const [showDialog, setShowDialog] = useState(false);
+  const csrfToken = useCsrfToken();
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
@@ -198,11 +200,32 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
     }
   }, [fetcherStatus, fetcher.data]);
 
+  function handleRequestNewCode() {
+    const formData = new FormData();
+    formData.append('_action', FORM_ACTION.request);
+    formData.append('_csrf', csrfToken);
+
+    void fetcher.submit(formData, { method: 'post' });
+  }
+
   return (
     <div className="max-w-prose">
       <ErrorAlert>
         <h2 className="mb-2 font-bold">{t('protected-application-spokes:verify-email.verification-code-alert.heading')}</h2>
-        <p className="mb-2">{t('protected-application-spokes:verify-email.verification-code-alert.detail')}</p>
+        <p className="-mb-3">{t('protected-application-spokes:verify-email.verification-code-alert.detail')}</p>
+        <LoadingButton
+          id="alert-request-button"
+          type="button"
+          name="_action"
+          variant="link"
+          className="text-[17px]"
+          disabled={isSubmitting}
+          loading={isSubmitting && submittedAction === FORM_ACTION.request}
+          value={FORM_ACTION.request}
+          onClick={handleRequestNewCode}
+        >
+          {t('protected-application-spokes:verify-email.request-new-code')}
+        </LoadingButton>
       </ErrorAlert>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <p className="mb-4">{t('protected-application-spokes:verify-email.verification-code', { email: defaultState })}</p>
@@ -231,9 +254,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
               onClick={async () => {
                 const formData = new FormData();
                 formData.append('_action', FORM_ACTION.request);
-
-                const csrfTokenInput = document.querySelector('input[name="_csrf"]') as HTMLInputElement;
-                formData.append('_csrf', csrfTokenInput.value);
+                formData.append('_csrf', csrfToken);
 
                 await fetcher.submit(formData, { method: 'post' });
               }}
