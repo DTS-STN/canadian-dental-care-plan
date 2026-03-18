@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 
-import { data, redirect, useFetcher } from 'react-router';
+import { data, useFetcher, useNavigate } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
 import type { PickDeep } from 'type-fest';
@@ -24,6 +24,7 @@ import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
 import type { ProfileEmailContext } from '~/routes/protected/profile/email';
+import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -113,7 +114,9 @@ export async function action({ context: { appContainer, session }, params, reque
       pref_method_sl: parsedDataResult.data.preferredMethodSunLife,
       pref_method_goc: parsedDataResult.data.preferredMethodGovernmentOfCanada,
     };
-    return redirect(getPathById('protected/profile/contact/email-address', params) + `?${new URLSearchParams(profileEmailContext)}`);
+
+    const redirectUrl = getPathById('protected/profile/contact/email-address', params) + `?${new URLSearchParams(profileEmailContext)}`;
+    return data({ success: true, redirectUrl }, { status: 200 });
   }
 
   // Update communication preferences
@@ -131,7 +134,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   appContainer.get(TYPES.AuditService).createAudit('update-data.profile.edit-communication-preferences', { userId: idToken.sub });
 
-  return redirect(getPathById('protected/profile/communication-preferences', params));
+  const redirectUrl = getPathById('protected/profile/communication-preferences', params);
+  return data({ success: true, redirectUrl }, { status: 200 });
 }
 
 export default function EditCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
@@ -143,12 +147,57 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
-  const errors = fetcher.data?.errors;
+  const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const success = fetcher.data && 'success' in fetcher.data && fetcher.data.success === true;
+    const redirectUrl = fetcher.data && 'redirectUrl' in fetcher.data ? fetcher.data.redirectUrl : undefined;
+
+    // Only navigate when the action indicates success and provides a redirectUrl
+    if (success && redirectUrl) {
+      // Push form submit event to Adobe Analytics with form values when the form is successfully submitted
+      if (adobeAnalytics.isConfigured()) {
+        const formName = 'ESDC-EDSC:CDCP Communication preferences in MSCA';
+        const formValues = new Map<string, { elementType: 'radio'; value: string }>();
+
+        const preferredLanguageSelectedEl = document.querySelector<HTMLInputElement>('input[name="preferredLanguage"]:checked');
+        if (preferredLanguageSelectedEl) {
+          formValues.set(preferredLanguageSelectedEl.id, {
+            elementType: 'radio',
+            value: preferredLanguageSelectedEl.attributes.getNamedItem('data-gc-analytics-value')?.value ?? preferredLanguageSelectedEl.value,
+          });
+        }
+
+        const preferredMethodSunLifeSelectedEl = document.querySelector<HTMLInputElement>('input[name="preferredMethodSunLife"]:checked');
+        if (preferredMethodSunLifeSelectedEl) {
+          formValues.set(preferredMethodSunLifeSelectedEl.id, {
+            elementType: 'radio',
+            value: preferredMethodSunLifeSelectedEl.attributes.getNamedItem('data-gc-analytics-value')?.value ?? preferredMethodSunLifeSelectedEl.value,
+          });
+        }
+
+        const preferredMethodGovernmentOfCanadaSelectedEl = document.querySelector<HTMLInputElement>('input[name="preferredMethodGovernmentOfCanada"]:checked');
+        if (preferredMethodGovernmentOfCanadaSelectedEl) {
+          formValues.set(preferredMethodGovernmentOfCanadaSelectedEl.id, {
+            elementType: 'radio',
+            value: preferredMethodGovernmentOfCanadaSelectedEl.attributes.getNamedItem('data-gc-analytics-value')?.value ?? preferredMethodGovernmentOfCanadaSelectedEl.value,
+          });
+        }
+
+        adobeAnalytics.pushFormSubmitEvent(formName, formValues);
+      }
+
+      void navigate(redirectUrl);
+    }
+  }, [fetcher.data, navigate]);
 
   const preferredLanguageOptions: InputRadiosProps['options'] = languages.map((language) => ({
     value: language.id,
     children: language.name,
     defaultChecked: defaultState.preferredLanguage === language.id,
+    'data-gc-analytics-value': language.code,
   }));
 
   const sunLifeCommunicationMethodOptions: InputRadiosProps['options'] = sunLifeCommunicationMethods.map((method) => ({
@@ -156,6 +205,7 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
     children: method.name,
     defaultChecked: selectedPreferredMethodSunLife === method.id,
     onChange: () => setSelectedPreferredMethodSunLife(method.id),
+    'data-gc-analytics-value': method.code,
   }));
 
   const gcCommunicationMethodOptions: InputRadiosProps['options'] = gcCommunicationMethods.map((method) => {
@@ -172,6 +222,7 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
       children,
       defaultChecked: selectedPreferredMethodGovernmentOfCanada === method.id,
       onChange: () => setSelectedPreferredMethodGovernmentOfCanada(method.id),
+      'data-gc-analytics-value': method.code,
     };
   });
 
