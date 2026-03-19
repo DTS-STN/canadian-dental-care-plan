@@ -141,7 +141,7 @@ export async function loader({ context: { appContainer, session }, params, reque
         sin: child.information?.socialInsuranceNumber,
         isParent: child.information?.isParent,
         dentalInsurance: {
-          accessToDentalInsurance: child.dentalInsurance,
+          accessToDentalInsurance: child.dentalInsurance?.hasDentalInsurance === true,
           federalBenefit: {
             access: child.dentalBenefits?.value?.hasFederalBenefits,
             benefit: selectFederalGovernmentInsurancePlan?.name,
@@ -363,7 +363,7 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
           <section className="space-y-6">
             <h3 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.dental-private')}> {dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.dental-private')}>{dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.dental-public')}>
                 {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
                   <div className="space-y-3">

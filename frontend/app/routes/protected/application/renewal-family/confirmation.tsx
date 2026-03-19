@@ -194,7 +194,7 @@ export async function loader({ context: { appContainer, session }, params, reque
         sin: child.information?.socialInsuranceNumber,
         isParent: child.information?.isParent,
         dentalInsurance: {
-          accessToDentalInsurance: child.dentalInsurance,
+          accessToDentalInsurance: child.dentalInsurance.hasDentalInsurance,
           federalBenefit: {
             access: child.dentalBenefits?.value?.hasFederalBenefits,
             benefit: selectedFederalBenefit?.name,
@@ -442,7 +442,7 @@ export default function ProtectedRenewalFamilyConfirmation({ loaderData, params 
           <section className="space-y-6">
             <h3 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.dental-private')}> {dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.dental-private')}>{dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.dental-public')}>
                 {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
                   <div className="space-y-3">
@@ -481,7 +481,7 @@ export default function ProtectedRenewalFamilyConfirmation({ loaderData, params 
                   <h3 className="font-lato mb-6 text-2xl font-bold">{t('protected-application-renewal-family:confirm.dental-title', { child: child.firstName })}</h3>
                   <DefinitionList border>
                     <DefinitionListItem term={t('protected-application-renewal-family:confirm.dental-private')}>
-                      {child.dentalInsurance.accessToDentalInsurance.hasDentalInsurance ? t('protected-application-renewal-family:confirm.yes') : t('protected-application-renewal-family:confirm.no')}
+                      {child.dentalInsurance.accessToDentalInsurance ? t('protected-application-renewal-family:confirm.yes') : t('protected-application-renewal-family:confirm.no')}
                     </DefinitionListItem>
                     <DefinitionListItem term={t('protected-application-renewal-family:confirm.dental-public')}>
                       {child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access ? (

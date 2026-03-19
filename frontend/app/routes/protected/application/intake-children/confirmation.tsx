@@ -125,7 +125,7 @@ export async function loader({ context: { appContainer, session }, params, reque
         sin: child.information?.socialInsuranceNumber,
         isParent: child.information?.isParent,
         dentalInsurance: {
-          accessToDentalInsurance: child.dentalInsurance,
+          accessToDentalInsurance: child.dentalInsurance?.hasDentalInsurance === true,
           federalBenefit: {
             access: child.dentalBenefits?.value?.hasFederalBenefits,
             benefit: selectFederalGovernmentInsurancePlan?.name,

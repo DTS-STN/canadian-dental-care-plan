@@ -315,7 +315,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
           <section className="space-y-6">
             <h3 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.dental-private')}> {dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.dental-private')}>{dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.dental-public')}>
                 {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
                   <div className="space-y-3">
