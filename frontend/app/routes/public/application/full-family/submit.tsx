@@ -168,7 +168,7 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
                 </InputCheckbox>
               </div>
               <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-                <NavigationButton loading={isSubmitting} variant="primary" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Submit click">
+                <NavigationButton loading={isSubmitting} variant="green" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Submit click">
                   {t('application-full-family:submit.submit')}
                 </NavigationButton>
                 <NavigationButtonLink

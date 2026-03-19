@@ -159,7 +159,7 @@ export default function ProtectedNewFamilySubmit({ loaderData, params }: Route.C
                 </InputCheckbox>
               </div>
               <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-                <NavigationButton loading={isSubmitting} variant="primary" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Submit click">
+                <NavigationButton loading={isSubmitting} variant="green" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Submit click">
                   {t('protected-application-intake-family:submit.submit')}
                 </NavigationButton>
                 <NavigationButtonLink
