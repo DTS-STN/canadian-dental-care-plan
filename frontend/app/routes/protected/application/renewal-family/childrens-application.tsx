@@ -203,9 +203,11 @@ export default function ProtectedRenewFamilyChildrensApplication({ loaderData, p
 
           return (
             <div key={child.id}>
-              <p className="mb-4">{t('protected-application:complete-all-sections')}</p>
-              <p className="mb-4">{t('common:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
               <h2 className="font-lato mb-4 text-2xl font-bold">{`${child.information?.firstName} ${child.information?.lastName}`}</h2>
+              <div className="space-y-4">
+                <p>{t('protected-application:complete-all-sections')}</p>
+                <p>{t('common:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
+              </div>
               <Card className="my-4">
                 <CardHeader>
                   <CardTitle asChild>
