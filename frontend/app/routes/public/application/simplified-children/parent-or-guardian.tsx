@@ -100,13 +100,13 @@ export async function loader({ context: { appContainer, session }, request, para
         : undefined,
     },
     clientApplication: {
-      email: state.clientApplication?.contactInformation.email,
-      emailVerified: state.clientApplication?.contactInformation.emailVerified,
-      hasPhoneNumber: !!state.clientApplication?.contactInformation.phoneNumber,
+      email: state.clientApplication.contactInformation.email,
+      emailVerified: state.clientApplication.contactInformation.emailVerified,
+      hasPhoneNumber: !!state.clientApplication.contactInformation.phoneNumber,
       hasCommunicationPreferences:
-        state.clientApplication?.communicationPreferences.preferredMethodSunLife === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID && state.clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID,
-      hasMailingAddress: !!state.clientApplication?.contactInformation.mailingCountry,
-      hasHomeAddress: !!state.clientApplication?.contactInformation.homeCountry,
+        state.clientApplication.communicationPreferences.preferredMethodSunLife === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID && state.clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID,
+      hasMailingAddress: !!state.clientApplication.contactInformation.mailingCountry,
+      hasHomeAddress: !!state.clientApplication.contactInformation.homeCountry,
     },
     sections: {
       phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
