@@ -11,14 +11,14 @@ import { loadProtectedApplicationIntakeChildStateForReview } from '~/.server/rou
 import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
-import { ButtonLink } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DebugPayload } from '~/components/debug-payload';
 import { ErrorSummary } from '~/components/error-summary';
 import { ErrorSummaryProvider } from '~/components/error-summary-context';
 import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
-import { NavigationButton, NavigationButtonLink } from '~/components/navigation-buttons';
+import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/protected/application/intake-children/progress-stepper';
@@ -157,9 +157,9 @@ export default function ProtectedNewChildrenSubmit({ loaderData, params }: Route
                 </InputCheckbox>
               </div>
               <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-                <NavigationButton loading={isSubmitting} variant="primary" direction="next" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Submit click">
+                <Button variant="green" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Submit click">
                   {t('protected-application-intake-child:submit.submit')}
-                </NavigationButton>
+                </Button>
                 <NavigationButtonLink
                   disabled={isSubmitting}
                   variant="secondary"
