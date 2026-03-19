@@ -117,23 +117,38 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const children = await Promise.all(
     state.children.map(async (child) => {
-      const childApplication = state.clientApplication.children.find((childApp) => childApp.information.clientId === child.id);
-      invariant(childApplication, `Expected childApplication to be defined for child with id ${child.id}`);
+      const childApplication = state.clientApplication.children.find((childApp) => childApp.information.clientNumber === child.information?.memberId);
 
-      // prettier-ignore
-      const selectFederalGovernmentInsurancePlan = child.dentalBenefits?.value?.federalSocialProgram
-      ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.value.federalSocialProgram, locale)
-      : undefined;
+      let selectedFederalBenefit;
+      let selectedProvincialBenefit;
 
-      // prettier-ignore
-      const selectedProvincialBenefit = child.dentalBenefits?.value?.provincialTerritorialSocialProgram
-      ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
-      : undefined;
+      if (child.dentalBenefits?.hasChanged === true) {
+        if (child.dentalBenefits.value.federalSocialProgram) {
+          selectedFederalBenefit = await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.value.federalSocialProgram, locale);
+        }
+        if (child.dentalBenefits.value.provincialTerritorialSocialProgram) {
+          selectedProvincialBenefit = await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.value.provincialTerritorialSocialProgram, locale);
+        }
+      } else {
+        invariant(childApplication?.dentalBenefits, 'Expected childApplication.dentalBenefits to be defined when hasChanged is false');
+        for (const benefitId of childApplication.dentalBenefits) {
+          const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(benefitId, locale);
+          if (federalProgram.isSome()) {
+            selectedFederalBenefit = federalProgram.unwrap();
+            continue;
+          }
+
+          const provincialProgram = await provincialGovernmentInsurancePlanService.findLocalizedProvincialGovernmentInsurancePlanById(benefitId, locale);
+          if (provincialProgram.isSome()) {
+            selectedProvincialBenefit = provincialProgram.unwrap();
+          }
+        }
+      }
 
       invariant(child.dentalInsurance, "Child's dental insurance must be defined");
       const eligibility = getEligibilityStatus({
         hasPrivateDentalInsurance: child.dentalInsurance.hasDentalInsurance,
-        t4DentalIndicator: childApplication.t4DentalIndicator,
+        t4DentalIndicator: childApplication?.t4DentalIndicator,
       });
 
       return {
@@ -148,7 +163,7 @@ export async function loader({ context: { appContainer, session }, params, reque
           accessToDentalInsurance: child.dentalInsurance.hasDentalInsurance,
           federalBenefit: {
             access: child.dentalBenefits?.value?.hasFederalBenefits,
-            benefit: selectFederalGovernmentInsurancePlan?.name,
+            benefit: selectedFederalBenefit?.name,
           },
           provTerrBenefit: {
             access: child.dentalBenefits?.value?.hasProvincialTerritorialBenefits,

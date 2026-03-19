@@ -151,8 +151,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const children = await Promise.all(
     state.children.map(async (child) => {
-      const childApplication = state.clientApplication.children.find((childApp) => childApp.information.clientId === child.id);
-      invariant(childApplication, `Expected childApplication to be defined for child with id ${child.id}`);
+      const childApplication = state.clientApplication.children.find((childApp) => childApp.information.clientNumber === child.information?.memberId);
 
       let selectedFederalBenefit;
       let selectedProvincialBenefit;
@@ -165,7 +164,7 @@ export async function loader({ context: { appContainer, session }, params, reque
           selectedProvincialBenefit = await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.value.provincialTerritorialSocialProgram, locale);
         }
       } else {
-        invariant(childApplication.dentalBenefits, 'Expected childApplication.dentalBenefits to be defined when hasChanged is false');
+        invariant(childApplication?.dentalBenefits, 'Expected childApplication.dentalBenefits to be defined when hasChanged is false');
         for (const benefitId of childApplication.dentalBenefits) {
           const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(benefitId, locale);
           if (federalProgram.isSome()) {
@@ -183,7 +182,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       invariant(child.dentalInsurance, "Child's dental insurance must be defined");
       const eligibility = getEligibilityStatus({
         hasPrivateDentalInsurance: child.dentalInsurance.hasDentalInsurance,
-        t4DentalIndicator: childApplication.t4DentalIndicator,
+        t4DentalIndicator: childApplication?.t4DentalIndicator,
       });
 
       return {
