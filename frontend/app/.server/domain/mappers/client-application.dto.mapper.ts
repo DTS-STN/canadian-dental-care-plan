@@ -172,6 +172,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
             })(),
           socialInsuranceNumber: child.PersonSINIdentification.IdentificationID,
         },
+        t4DentalIndicator: child.ApplicantDetail.PrivateDentalInsuranceIndicator,
       })) ?? [];
 
     const communicationPreferences = {

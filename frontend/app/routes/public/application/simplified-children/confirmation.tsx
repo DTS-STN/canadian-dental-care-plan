@@ -113,6 +113,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const children = await Promise.all(
     state.children.map(async (child) => {
+      const childApplication = state.clientApplication.children.find((childApp) => childApp.information.clientId === child.id);
+      invariant(childApplication, `Expected childApplication to be defined for child with id ${child.id}`);
+
       // prettier-ignore
       const selectFederalGovernmentInsurancePlan = child.dentalBenefits?.value?.federalSocialProgram
       ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.value.federalSocialProgram, locale)
@@ -126,7 +129,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       invariant(child.dentalInsurance, "Child's dental insurance must be defined");
       const eligibility = getEligibilityStatus({
         hasPrivateDentalInsurance: child.dentalInsurance.hasDentalInsurance,
-        t4DentalIndicator: state.clientApplication.t4DentalIndicator,
+        t4DentalIndicator: childApplication.t4DentalIndicator,
       });
 
       return {

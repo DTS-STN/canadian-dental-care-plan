@@ -46,6 +46,7 @@ export type ClientChildDto = ReadonlyDeep<{
     clientNumber: string;
     socialInsuranceNumber?: string;
   };
+  t4DentalIndicator?: boolean;
 }>;
 
 export type ClientCommunicationPreferencesDto = ReadonlyDeep<{
