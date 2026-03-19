@@ -196,11 +196,6 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
     <>
       <ProgressStepper activeStep="childrens-application" className="mb-8" />
       <div className="max-w-prose space-y-8">
-        <div className="space-y-4">
-          <p>{t('protected-application:complete-all-sections')}</p>
-          <p>{t('protected-application:confirm-information')}</p>
-        </div>
-
         {state.children.map((child) => {
           const sections = childrenSections[child.id];
           invariant(sections, `Expected child sections to be defined for child ${child.id}`);
@@ -209,8 +204,10 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
           return (
             <div key={child.id}>
               <h2 className="font-lato mb-4 text-2xl font-bold">{`${child.information?.firstName} ${child.information?.lastName}`}</h2>
-              <p>{t('common:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
-
+              <div className="space-y-4">
+                <p>{t('protected-application:complete-all-sections')}</p>
+                <p>{t('common:sections-completed', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
+              </div>
               <Card className="my-4">
                 <CardHeader>
                   <CardTitle asChild>
