@@ -167,7 +167,7 @@ export function validatePublicApplicationFullAdultStateForReview({ params, state
     throw redirect(getPathById('public/application/$id/full-adult/dental-insurance', params));
   }
 
-  if (dentalBenefits === undefined) {
+  if (dentalBenefits?.hasChanged !== true) {
     throw redirect(getPathById('public/application/$id/full-adult/federal-provincial-territorial-benefits', params));
   }
 

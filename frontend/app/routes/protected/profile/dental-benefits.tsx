@@ -33,7 +33,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const listAllLocalizedDentalBenefits = await federalGovernmentInsurancePlanService.listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
   const listAllLocalizedProvincialDentalBenefits = await provincialGovernmentInsurancePlanService.listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
-  const clientDentalBenefits = clientApplication.dentalBenefits.flatMap((id) => {
+  const clientDentalBenefits = clientApplication.dentalBenefits?.flatMap((id) => {
     const federalBenefit = listAllLocalizedDentalBenefits.find((benefit) => benefit.id === id);
     if (federalBenefit) return [federalBenefit.name];
 
@@ -80,8 +80,8 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
         <DefinitionList border>
           <DefinitionListItem term={t('protected-profile:dental-benefits.have-access')}>
             <div className="space-y-4">
-              <p>{clientApplication.dentalBenefits.length > 0 ? t('protected-profile:dental-benefits.yes') : t('protected-profile:dental-benefits.no')}</p>
-              {clientApplication.dentalBenefits.length > 0 && (
+              <p>{clientDentalBenefits && clientDentalBenefits.length > 0 ? t('protected-profile:dental-benefits.yes') : t('protected-profile:dental-benefits.no')}</p>
+              {clientDentalBenefits && clientDentalBenefits.length > 0 && (
                 <ul className="list-disc space-y-2 pl-10">
                   {clientDentalBenefits.map((benefit, index) => (
                     <li key={index}>{benefit}</li>

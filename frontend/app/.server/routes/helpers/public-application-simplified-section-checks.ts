@@ -1,3 +1,5 @@
+import type { PickDeep } from 'node_modules/type-fest/source/pick-deep';
+
 import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import { isChildClientNumberValid, isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ChildState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
@@ -48,9 +50,16 @@ export function isDentalInsuranceSectionCompleted(state: Pick<PublicApplicationS
 
 /**
  * Checks if the dental benefits section is completed for simplified application.
+ *
+ * The dental benefits section is considered complete if the user has indicated whether their access to government
+ * dental benefits has changed. If they have indicated that their access has changed, the section is complete regardless
+ * of whether they have access or not. If they have indicated that their access has not changed, then they must indicate
+ * their existing access to government dental benefits for the section to be considered complete.
  */
-export function isDentalBenefitsSectionCompleted(state: Pick<PublicApplicationState, 'dentalBenefits'>): boolean {
-  return state.dentalBenefits !== undefined;
+export function isDentalBenefitsSectionCompleted(state: PickDeep<PublicApplicationState, 'dentalBenefits' | 'clientApplication.dentalBenefits'>): boolean {
+  if (!state.dentalBenefits) return false; // user must indicate if their access to government dental benefits has changed
+  if (state.dentalBenefits.hasChanged) return true; // if access has changed, section is complete regardless of whether they have access or not
+  return state.clientApplication?.dentalBenefits !== undefined; // if access has not changed, existing access must be indicated
 }
 
 /**

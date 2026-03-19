@@ -159,7 +159,7 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     throw redirect(getPathById('public/application/$id/full-family/dental-insurance', params));
   }
 
-  if (dentalBenefits === undefined) {
+  if (dentalBenefits?.hasChanged !== true) {
     throw redirect(getPathById('public/application/$id/full-family/dental-insurance', params));
   }
 
@@ -235,7 +235,7 @@ function validateChildrenStateForReview({ context, childrenState, state, params 
       throw redirect(getPathById('public/application/$id/full-family/childrens-application', params));
     }
 
-    if (dentalBenefits === undefined) {
+    if (dentalBenefits?.hasChanged !== true) {
       throw redirect(getPathById('public/application/$id/full-family/childrens-application', params));
     }
 

@@ -207,7 +207,7 @@ function validateChildrenStateForReview({ context, childrenState, params }: Vali
       throw redirect(getPathById('protected/application/$id/intake-children/childrens-application', params));
     }
 
-    if (dentalBenefits === undefined) {
+    if (dentalBenefits?.hasChanged !== true) {
       throw redirect(getPathById('protected/application/$id/intake-children/childrens-application', params));
     }
 

@@ -55,37 +55,36 @@ export async function loader({ context: { appContainer, session }, request, para
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
 
-  const clientDentalBenefits = (await state.clientApplication.dentalBenefits.reduce(async (benefitsPromise, id) => {
-    const benefits = await benefitsPromise;
+  const federalGovernmentInsurancePlans = await federalGovernmentInsurancePlanService.listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
+  const provincialGovernmentInsurancePlans = await provincialGovernmentInsurancePlanService.listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
-    const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(id, locale);
-    if (federalProgram.isSome()) {
-      return {
-        ...benefits,
-        hasFederalBenefits: true,
-        federalSocialProgram: federalProgram.unwrap().name,
-      };
-    }
+  const clientDentalBenefits = state.clientApplication.dentalBenefits?.reduce<DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState>(
+    (benefits, planId) => {
+      const federalProgram = federalGovernmentInsurancePlans.find(({ id }) => id === planId);
+      if (federalProgram) {
+        return {
+          ...benefits,
+          hasFederalBenefits: true,
+          federalSocialProgram: federalProgram.name,
+        };
+      }
 
-    const provincialProgram = await provincialGovernmentInsurancePlanService.findLocalizedProvincialGovernmentInsurancePlanById(id, locale);
-    if (provincialProgram.isSome()) {
-      return {
-        ...benefits,
-        hasProvincialTerritorialBenefits: true,
-        provincialTerritorialSocialProgram: provincialProgram.unwrap().name,
-      };
-    }
+      const provincialProgram = provincialGovernmentInsurancePlans.find(({ id }) => id === planId);
+      if (provincialProgram) {
+        return {
+          ...benefits,
+          hasProvincialTerritorialBenefits: true,
+          provincialTerritorialSocialProgram: provincialProgram.name,
+        };
+      }
 
-    return benefits;
-  }, Promise.resolve({}))) as DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+      return benefits;
+    },
+    {} as DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState,
+  );
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.value?.federalSocialProgram
-    ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale)
-    : undefined;
-
-  const selectedProvincialBenefit = state.dentalBenefits?.value?.provincialTerritorialSocialProgram
-    ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
-    : undefined;
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.value?.federalSocialProgram ? federalGovernmentInsurancePlans.find(({ id }) => id === state.dentalBenefits?.value?.federalSocialProgram) : undefined;
+  const selectedProvincialBenefit = state.dentalBenefits?.value?.provincialTerritorialSocialProgram ? provincialGovernmentInsurancePlans.find(({ id }) => id === state.dentalBenefits?.value?.provincialTerritorialSocialProgram) : undefined;
 
   const currentDentalBenefits = state.dentalBenefits
     ? {
@@ -116,9 +115,7 @@ export async function loader({ context: { appContainer, session }, request, para
       dentalBenefits: currentDentalBenefits,
     },
     shouldSkipMaritalStatusStep: shouldSkipMaritalStatus(state),
-    clientApplication: {
-      dentalBenefits: clientDentalBenefits,
-    },
+    clientApplication: { dentalBenefits: clientDentalBenefits },
     sections,
     meta,
   };
@@ -342,11 +339,11 @@ function DentalBenefitsCardContent(): JSX.Element {
     );
   }
 
-  return (
-    <CardContent>
-      <DefinitionList layout="single-column">
-        <DefinitionListItem term={t('protected-application-renewal-family:dental-insurance.access-to-government-benefits')}>
-          <div>
+  if (clientApplication.dentalBenefits) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('protected-application-renewal-family:dental-insurance.access-to-government-benefits')}>
             {clientApplication.dentalBenefits.hasFederalBenefits || clientApplication.dentalBenefits.hasProvincialTerritorialBenefits ? (
               <div className="space-y-3">
                 <p>{t('protected-application-renewal-family:dental-insurance.access-to-government-benefits-yes')}</p>
@@ -358,9 +355,15 @@ function DentalBenefitsCardContent(): JSX.Element {
             ) : (
               <p>{t('protected-application-renewal-family:dental-insurance.access-to-government-benefits-no')}</p>
             )}
-          </div>
-        </DefinitionListItem>
-      </DefinitionList>
+          </DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  return (
+    <CardContent>
+      <p>{t('protected-application-renewal-family:dental-insurance.dental-benefits-indicate-status')}</p>
     </CardContent>
   );
 }
@@ -379,7 +382,7 @@ function DentalBenefitsCardContent(): JSX.Element {
  */
 function DentalBenefitsCardFooter(): JSX.Element {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { state, sections } = useLoaderData<typeof loader>();
+  const { state, sections, clientApplication } = useLoaderData<typeof loader>();
   const params = useParams();
 
   if (state.dentalBenefits || sections.dentalBenefits.completed) {
@@ -401,36 +404,55 @@ function DentalBenefitsCardFooter(): JSX.Element {
     );
   }
 
+  if (clientApplication.dentalBenefits) {
+    return (
+      <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+        <div className="w-full px-6">
+          <ButtonLink
+            id="update-button-government-benefits"
+            variant="link"
+            className="mb-5 p-0"
+            routeId="protected/application/$id/federal-provincial-territorial-benefits"
+            params={params}
+            startIcon={faPenToSquare}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Update button government benefits click"
+          >
+            {t('protected-application-renewal-family:dental-insurance.update-my-access')}
+          </ButtonLink>
+        </div>
+        <div className="w-full px-6">
+          <Button
+            id="complete-benefits-button"
+            name="_action"
+            value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
+            variant="link"
+            className="mt-5 p-0"
+            startIcon={faCircleCheck}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Complete benefits click"
+          >
+            {t('protected-application-renewal-family:dental-insurance.access-not-changed')}
+          </Button>
+        </div>
+      </CardFooter>
+    );
+  }
+
   return (
-    <CardFooter className="divide-y border-t bg-zinc-100 px-0">
-      <div className="w-full px-6">
-        <ButtonLink
-          id="update-button-government-benefits"
-          variant="link"
-          className="mb-5 p-0"
-          routeId="protected/application/$id/federal-provincial-territorial-benefits"
-          params={params}
-          startIcon={faPenToSquare}
-          size="lg"
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Update button government benefits click"
-        >
-          {t('protected-application-renewal-family:dental-insurance.update-my-access')}
-        </ButtonLink>
-      </div>
-      <div className="w-full px-6">
-        <Button
-          id="complete-benefits-button"
-          name="_action"
-          value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
-          variant="link"
-          className="mt-5 p-0"
-          startIcon={faCircleCheck}
-          size="lg"
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Complete benefits click"
-        >
-          {t('protected-application-renewal-family:dental-insurance.access-not-changed')}
-        </Button>
-      </div>
+    <CardFooter className="border-t bg-zinc-100">
+      <ButtonLink
+        id="add-button-dental-benefits"
+        variant="link"
+        className="p-0"
+        routeId="protected/application/$id/federal-provincial-territorial-benefits"
+        params={params}
+        startIcon={faPenToSquare}
+        size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Add button dental benefits click"
+      >
+        {t('protected-application-renewal-family:dental-insurance.add-answer')}
+      </ButtonLink>
     </CardFooter>
   );
 }

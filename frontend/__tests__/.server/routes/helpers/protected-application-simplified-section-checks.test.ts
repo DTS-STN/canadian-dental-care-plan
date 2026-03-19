@@ -182,7 +182,11 @@ describe('protected-application-simplified-section-checks', () => {
   });
 
   describe('isDentalBenefitsSectionCompleted', () => {
-    it('should return true when dentalBenefits is defined', () => {
+    it('should return false when dentalBenefits is undefined', () => {
+      expect(isDentalBenefitsSectionCompleted({ dentalBenefits: undefined })).toBe(false);
+    });
+
+    it('should return true when dentalBenefits.hasChanged is true', () => {
       expect(
         isDentalBenefitsSectionCompleted({
           dentalBenefits: {
@@ -196,25 +200,22 @@ describe('protected-application-simplified-section-checks', () => {
       ).toBe(true);
     });
 
-    it('should return true when dentalBenefits is defined with benefits', () => {
+    it('should return true when dentalBenefits.hasChanged is false and clientApplication.dentalBenefits is defined', () => {
       expect(
         isDentalBenefitsSectionCompleted({
-          dentalBenefits: {
-            hasChanged: true,
-            value: {
-              hasFederalBenefits: true,
-              federalSocialProgram: 'federal-program-id',
-              hasProvincialTerritorialBenefits: true,
-              province: 'ON',
-              provincialTerritorialSocialProgram: 'provincial-program-id',
-            },
-          },
+          dentalBenefits: { hasChanged: false },
+          clientApplication: { dentalBenefits: ['provincial-program-id'] } as unknown as ClientApplicationRenewalEligibleDto,
         }),
       ).toBe(true);
     });
 
-    it('should return false when dentalBenefits is undefined', () => {
-      expect(isDentalBenefitsSectionCompleted({ dentalBenefits: undefined })).toBe(false);
+    it('should return false when dentalBenefits.hasChanged is false and clientApplication.dentalBenefits is undefined', () => {
+      expect(
+        isDentalBenefitsSectionCompleted({
+          dentalBenefits: { hasChanged: false },
+          clientApplication: { dentalBenefits: undefined } as unknown as ClientApplicationRenewalEligibleDto,
+        }),
+      ).toBe(false);
     });
   });
 

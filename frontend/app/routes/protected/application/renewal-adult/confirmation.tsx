@@ -1,5 +1,6 @@
 import { redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/confirmation';
@@ -104,25 +105,29 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const email = state.email ?? state.clientApplication.contactInformation.email;
 
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
+
   let federalBenefit;
   let provincialBenefit;
 
   if (state.dentalBenefits.hasChanged === true) {
     if (state.dentalBenefits.value.federalSocialProgram) {
-      federalBenefit = await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale);
+      federalBenefit = await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale);
     }
     if (state.dentalBenefits.value.provincialTerritorialSocialProgram) {
-      provincialBenefit = await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale);
+      provincialBenefit = await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale);
     }
   } else {
+    invariant(state.clientApplication.dentalBenefits, 'Expected clientApplication.dentalBenefits to be defined when hasChanged is false');
     for (const benefitId of state.clientApplication.dentalBenefits) {
-      const federalProgram = await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).findLocalizedFederalGovernmentInsurancePlanById(benefitId, locale);
+      const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(benefitId, locale);
       if (federalProgram.isSome()) {
         federalBenefit = federalProgram.unwrap();
         continue;
       }
 
-      const provincialProgram = await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).findLocalizedProvincialGovernmentInsurancePlanById(benefitId, locale);
+      const provincialProgram = await provincialGovernmentInsurancePlanService.findLocalizedProvincialGovernmentInsurancePlanById(benefitId, locale);
       if (provincialProgram.isSome()) {
         provincialBenefit = provincialProgram.unwrap();
       }

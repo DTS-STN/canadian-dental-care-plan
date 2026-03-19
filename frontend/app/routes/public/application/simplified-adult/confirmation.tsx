@@ -1,5 +1,6 @@
 import { redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/confirmation';
@@ -58,13 +59,34 @@ export async function loader({ context: { appContainer, session }, params, reque
   const env = appContainer.get(TYPES.ClientConfig);
   const surveyLink = locale === 'en' ? env.CDCP_SURVEY_LINK_EN : env.CDCP_SURVEY_LINK_FR;
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.value?.federalSocialProgram
-    ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale)
-    : undefined;
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
 
-  const selectedProvincialBenefits = state.dentalBenefits.value?.provincialTerritorialSocialProgram
-    ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
-    : undefined;
+  let federalBenefit;
+  let provincialBenefit;
+
+  if (state.dentalBenefits.hasChanged === true) {
+    if (state.dentalBenefits.value.federalSocialProgram) {
+      federalBenefit = await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale);
+    }
+    if (state.dentalBenefits.value.provincialTerritorialSocialProgram) {
+      provincialBenefit = await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale);
+    }
+  } else {
+    invariant(state.clientApplication.dentalBenefits, 'Expected clientApplication.dentalBenefits to be defined when hasChanged is false');
+    for (const benefitId of state.clientApplication.dentalBenefits) {
+      const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(benefitId, locale);
+      if (federalProgram.isSome()) {
+        federalBenefit = federalProgram.unwrap();
+        continue;
+      }
+
+      const provincialProgram = await provincialGovernmentInsurancePlanService.findLocalizedProvincialGovernmentInsurancePlanById(benefitId, locale);
+      if (provincialProgram.isSome()) {
+        provincialBenefit = provincialProgram.unwrap();
+      }
+    }
+  }
 
   const mailingProvinceTerritoryStateAbbr = state.mailingAddress.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
   const homeProvinceTerritoryStateAbbr = state.homeAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province) : undefined;
@@ -117,15 +139,15 @@ export async function loader({ context: { appContainer, session }, params, reque
   const dentalInsurance = {
     accessToDentalInsurance: state.dentalInsurance.hasDentalInsurance,
     hasDentalBenefitsChanged: state.dentalBenefits.hasChanged,
-    selectedFederalBenefits: selectedFederalGovernmentInsurancePlan?.name,
-    selectedProvincialBenefits: selectedProvincialBenefits?.name,
+    selectedFederalBenefits: federalBenefit?.name,
+    selectedProvincialBenefits: provincialBenefit?.name,
   };
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-adult:confirm.page-title') }) };
 
   const eligibility = getEligibilityStatus({
     hasPrivateDentalInsurance: state.dentalInsurance.hasDentalInsurance,
-    t4DentalIndicator: state.clientApplication?.t4DentalIndicator,
+    t4DentalIndicator: state.clientApplication.t4DentalIndicator,
   });
 
   return {

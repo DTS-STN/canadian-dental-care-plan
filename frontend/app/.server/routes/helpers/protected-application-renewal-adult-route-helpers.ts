@@ -170,7 +170,12 @@ export function validateProtectedRenewAdultStateForReview({ params, state }: Val
     throw redirect(getPathById('protected/application/$id/renewal-adult/dental-insurance', params));
   }
 
-  if (dentalBenefits === undefined) {
+  if (
+    dentalBenefits === undefined ||
+    // if dental benefits has not changed and there is no existing value for dental benefits in the application,
+    // redirect to dental benefits page
+    (!dentalBenefits.hasChanged && clientApplication.dentalBenefits === undefined)
+  ) {
     throw redirect(getPathById('protected/application/$id/renewal-adult/federal-provincial-territorial-benefits', params));
   }
 

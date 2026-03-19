@@ -1,5 +1,7 @@
 import { redirect } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
+
 import { createLogger } from '~/.server/logging';
 import { isChildClientNumberValid } from '~/.server/routes/helpers/base-application-route-helpers';
 import { applicantInformationStateHasPartner, getChildrenState, getContextualAgeCategoryFromDate, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
@@ -7,6 +9,10 @@ import type { ApplicationStateParams, ChildrenState, PublicApplicationState } fr
 import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
+
+type PublicApplicationRenewalFamilyState = OmitStrict<PublicApplicationState, 'clientApplication'> & {
+  clientApplication: NonNullable<PublicApplicationState['clientApplication']>;
+};
 
 interface LoadPublicApplicationSimplifiedFamilyStateArgs {
   params: ApplicationStateParams;
@@ -44,7 +50,9 @@ export function loadPublicApplicationSimplifiedFamilyState({ params, request, se
     throw redirect(typeOfApplicationRouteUrl);
   }
 
-  return applicationState;
+  const { clientApplication, ...rest } = applicationState;
+  invariant(clientApplication, 'clientApplication must be defined in the public simplified family application state');
+  return { ...rest, clientApplication };
 }
 
 interface LoadPublicApplicationSimplifiedFamilyStateForReviewArgs {
@@ -65,7 +73,7 @@ export function loadPublicApplicationSimplifiedFamilyStateForReview({ params, re
 
 interface ValidatePublicApplicationFamilyStateForReviewArgs {
   params: ApplicationStateParams;
-  state: PublicApplicationState;
+  state: PublicApplicationRenewalFamilyState;
 }
 
 export function validatePublicApplicationFamilyStateForReview({ params, state }: ValidatePublicApplicationFamilyStateForReviewArgs) {
@@ -96,10 +104,6 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
   } = state;
 
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
-
-  if (clientApplication === undefined) {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
-  }
 
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
@@ -167,7 +171,12 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     throw redirect(getPathById('public/application/$id/simplified-family/dental-insurance', params));
   }
 
-  if (dentalBenefits === undefined) {
+  if (
+    dentalBenefits === undefined ||
+    // if dental benefits has not changed and there is no existing value for dental benefits in the application,
+    // redirect to dental benefits page
+    (!dentalBenefits.hasChanged && clientApplication.dentalBenefits === undefined)
+  ) {
     throw redirect(getPathById('public/application/$id/simplified-family/dental-insurance', params));
   }
 

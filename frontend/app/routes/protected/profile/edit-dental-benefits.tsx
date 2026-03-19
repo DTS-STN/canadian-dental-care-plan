@@ -66,8 +66,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const provinceTerritoryStates = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
   const provincialTerritorialSocialPrograms = await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
-  const federalProgram = federalSocialPrograms.find(({ id }) => clientApplication.dentalBenefits.includes(id));
-  const provincialTerritorialProgram = provincialTerritorialSocialPrograms.find(({ id }) => clientApplication.dentalBenefits.includes(id));
+  const federalProgram = federalSocialPrograms.find(({ id }) => clientApplication.dentalBenefits?.includes(id) === true);
+  const provincialTerritorialProgram = provincialTerritorialSocialPrograms.find(({ id }) => clientApplication.dentalBenefits?.includes(id) === true);
 
   const applicantName = clientApplication.applicantInformation.firstName;
 

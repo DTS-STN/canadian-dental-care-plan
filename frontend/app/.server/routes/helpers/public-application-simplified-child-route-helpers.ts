@@ -1,5 +1,7 @@
 import { redirect } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
+
 import { createLogger } from '~/.server/logging';
 import { isChildClientNumberValid } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationStateParams, ChildrenState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
@@ -7,6 +9,10 @@ import { applicantInformationStateHasPartner, getChildrenState, getContextualAge
 import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
+
+type PublicApplicationRenewalChildState = OmitStrict<PublicApplicationState, 'clientApplication'> & {
+  clientApplication: NonNullable<PublicApplicationState['clientApplication']>;
+};
 
 interface LoadPublicApplicationSimplifiedChildStateArgs {
   params: ApplicationStateParams;
@@ -19,7 +25,7 @@ interface LoadPublicApplicationSimplifiedChildStateArgs {
  * @param args - The arguments.
  * @returns The loaded child state.
  */
-export function loadPublicApplicationSimplifiedChildState({ params, request, session }: LoadPublicApplicationSimplifiedChildStateArgs) {
+export function loadPublicApplicationSimplifiedChildState({ params, request, session }: LoadPublicApplicationSimplifiedChildStateArgs): PublicApplicationRenewalChildState {
   const log = createLogger('public-application-simplified-child-route-helpers/loadPublicApplicationSimplifiedChildState');
   const { pathname } = new URL(request.url);
   const applicationState = getPublicApplicationState({ params, session });
@@ -44,7 +50,9 @@ export function loadPublicApplicationSimplifiedChildState({ params, request, ses
     throw redirect(typeOfApplicationRouteUrl);
   }
 
-  return applicationState;
+  const { clientApplication, ...rest } = applicationState;
+  invariant(clientApplication, 'clientApplication must be defined in the public simplified child application state');
+  return { ...rest, clientApplication };
 }
 
 interface LoadPublicApplicationSimplifiedChildStateForReviewArgs {
@@ -65,7 +73,7 @@ export function loadPublicApplicationSimplifiedChildStateForReview({ params, req
 
 interface ValidatePublicApplicationSimplifiedChildStateForReviewArgs {
   params: ApplicationStateParams;
-  state: PublicApplicationState;
+  state: PublicApplicationRenewalChildState;
 }
 
 export function validatePublicApplicationSimplifiedChildStateForReview({ params, state }: ValidatePublicApplicationSimplifiedChildStateForReviewArgs) {
@@ -93,10 +101,6 @@ export function validatePublicApplicationSimplifiedChildStateForReview({ params,
   } = state;
 
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
-
-  if (clientApplication === undefined) {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
-  }
 
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('public/application/$id/eligibility-requirements', params));

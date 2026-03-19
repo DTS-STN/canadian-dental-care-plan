@@ -170,7 +170,12 @@ export function validateProtectedApplicationFamilyStateForReview({ params, state
     throw redirect(getPathById('protected/application/$id/renewal-family/dental-insurance', params));
   }
 
-  if (dentalBenefits === undefined) {
+  if (
+    dentalBenefits === undefined ||
+    // if dental benefits has not changed and there is no existing value for dental benefits in the application,
+    // redirect to dental benefits page
+    (!dentalBenefits.hasChanged && clientApplication.dentalBenefits === undefined)
+  ) {
     throw redirect(getPathById('protected/application/$id/renewal-family/dental-insurance', params));
   }
 

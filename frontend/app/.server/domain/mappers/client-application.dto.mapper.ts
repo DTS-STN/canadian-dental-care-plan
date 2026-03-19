@@ -57,9 +57,6 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
         preferredMethodGovernmentOfCanada: applicantDto.communicationPreferences.preferredMethodGovernmentOfCanada,
       },
       contactInformation: {
-        // copyMailingAddress is not available in ApplicantDto, so we set it to undefined to indicate that it's
-        // intentionally not set
-        copyMailingAddress: undefined,
         homeAddress: applicantDto.contactInformation.homeAddress,
         homeApartment: applicantDto.contactInformation.homeApartment,
         homeCity: applicantDto.contactInformation.homeCity,
@@ -75,22 +72,10 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
         phoneNumber: applicantDto.contactInformation.phoneNumber,
         phoneNumberAlt: applicantDto.contactInformation.phoneNumberAlt,
         email: applicantDto.contactInformation.email,
-        // emailVerified is not available in ApplicantDto, so we set it to undefined to indicate that it's
-        // intentionally not set
-        emailVerified: undefined,
       },
       dateOfBirth: applicantDto.dateOfBirth,
       typeOfApplication: typeOfApplication,
-      // The following fields are not available in ApplicantDto and are required in ClientApplicationDto, so we set them
-      // to default values
-      dentalBenefits: [],
       children: [],
-      eligibilityStatusCode: undefined,
-      livingIndependently: undefined,
-      partnerInformation: undefined,
-      t4DentalIndicator: undefined,
-      coverageCopayTierCode: undefined,
-      dentalInsurance: undefined,
     };
   }
 

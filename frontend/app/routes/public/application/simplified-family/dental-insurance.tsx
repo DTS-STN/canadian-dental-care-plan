@@ -1,4 +1,6 @@
-import { data, useFetcher } from 'react-router';
+import type { JSX } from 'react';
+
+import { data, useFetcher, useLoaderData, useParams } from 'react-router';
 
 import { faCircleCheck, faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
@@ -9,6 +11,7 @@ import type { Route } from './+types/dental-insurance';
 
 import { TYPES } from '~/.server/constants';
 import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicApplicationSimplifiedFamilyState } from '~/.server/routes/helpers/public-application-simplified-family-route-helpers';
 import { isDentalBenefitsSectionCompleted, isDentalInsuranceSectionCompleted } from '~/.server/routes/helpers/public-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -46,13 +49,39 @@ export async function loader({ context: { appContainer, session }, request, para
   const locale = getLocale(request);
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-family:dental-insurance.page-title') }) };
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.value?.federalSocialProgram
-    ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale)
-    : undefined;
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
 
-  const selectedProvincialBenefit = state.dentalBenefits?.value?.provincialTerritorialSocialProgram
-    ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
-    : undefined;
+  const federalGovernmentInsurancePlans = await federalGovernmentInsurancePlanService.listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
+  const provincialGovernmentInsurancePlans = await provincialGovernmentInsurancePlanService.listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
+
+  const clientDentalBenefits = state.clientApplication.dentalBenefits?.reduce<DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState>(
+    (benefits, planId) => {
+      const federalProgram = federalGovernmentInsurancePlans.find(({ id }) => id === planId);
+      if (federalProgram) {
+        return {
+          ...benefits,
+          hasFederalBenefits: true,
+          federalSocialProgram: federalProgram.name,
+        };
+      }
+
+      const provincialProgram = provincialGovernmentInsurancePlans.find(({ id }) => id === planId);
+      if (provincialProgram) {
+        return {
+          ...benefits,
+          hasProvincialTerritorialBenefits: true,
+          provincialTerritorialSocialProgram: provincialProgram.name,
+        };
+      }
+
+      return benefits;
+    },
+    {} as DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState,
+  );
+
+  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.value?.federalSocialProgram ? federalGovernmentInsurancePlans.find(({ id }) => id === state.dentalBenefits?.value?.federalSocialProgram) : undefined;
+  const selectedProvincialBenefit = state.dentalBenefits?.value?.provincialTerritorialSocialProgram ? provincialGovernmentInsurancePlans.find(({ id }) => id === state.dentalBenefits?.value?.provincialTerritorialSocialProgram) : undefined;
 
   const sections = {
     dentalInsurance: {
@@ -80,6 +109,7 @@ export async function loader({ context: { appContainer, session }, request, para
           }
         : undefined,
     },
+    clientApplication: { dentalBenefits: clientDentalBenefits },
     sections,
     meta,
   };
@@ -104,7 +134,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function RenewFamilyDentalInsurance({ loaderData, params }: Route.ComponentProps) {
-  const { state, sections } = loaderData;
+  const { sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
 
@@ -126,31 +156,8 @@ export default function RenewFamilyDentalInsurance({ loaderData, params }: Route
             </CardTitle>
             <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
-          <CardContent>
-            {state.dentalInsurance === undefined ? (
-              <p>{t('application-simplified-family:dental-insurance.dental-insurance-indicate-status')}</p>
-            ) : (
-              <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-simplified-family:dental-insurance.access-to-dental-insurance-or-coverage')}>
-                  {state.dentalInsurance ? t('application-simplified-family:dental-insurance.dental-insurance-yes') : t('application-simplified-family:dental-insurance.dental-insurance-no')}
-                </DefinitionListItem>
-              </DefinitionList>
-            )}
-          </CardContent>
-          <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink
-              id="edit-button-dental-insurance"
-              variant="link"
-              className="p-0"
-              routeId="public/application/$id/dental-insurance"
-              params={params}
-              startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus}
-              size="lg"
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit button dental insurance click"
-            >
-              {state.dentalInsurance === undefined ? t('application-simplified-family:dental-insurance.add-answer') : t('application-simplified-family:dental-insurance.edit-access-to-dental-insurance')}
-            </ButtonLink>
-          </CardFooter>
+          <DentalInsuranceCardContent />
+          <DentalInsuranceCardFooter />
         </Card>
 
         <Card>
@@ -160,78 +167,8 @@ export default function RenewFamilyDentalInsurance({ loaderData, params }: Route
             </CardTitle>
             <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
-          <CardContent>
-            {state.dentalBenefits ? (
-              <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-simplified-family:dental-insurance.access-to-government-benefits')}>
-                  {state.dentalBenefits.hasChanged ? (
-                    state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
-                      <div className="space-y-3">
-                        <p>{t('application-simplified-family:dental-insurance.access-to-government-benefits-yes')}</p>
-                        <ul className="list-disc space-y-1 pl-7">
-                          {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
-                          {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
-                        </ul>
-                      </div>
-                    ) : (
-                      <p>{t('application-simplified-family:dental-insurance.access-to-government-benefits-no')}</p>
-                    )
-                  ) : (
-                    <p>{t('application-simplified-family:dental-insurance.no-change')}</p>
-                  )}
-                </DefinitionListItem>
-              </DefinitionList>
-            ) : (
-              <p>{t('application-simplified-family:dental-insurance.dental-benefits-indicate-status')}</p>
-            )}
-          </CardContent>
-          {state.dentalBenefits ? (
-            <CardFooter className="border-t bg-zinc-100">
-              <ButtonLink
-                id="edit-button-government-benefits"
-                variant="link"
-                className="p-0"
-                routeId="public/application/$id/federal-provincial-territorial-benefits"
-                params={params}
-                startIcon={sections.dentalBenefits.completed ? faPenToSquare : faCirclePlus}
-                size="lg"
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit button government benefits click"
-              >
-                {t('application-simplified-family:dental-insurance.edit-access-to-government-benefits')}
-              </ButtonLink>
-            </CardFooter>
-          ) : (
-            <CardFooter className="divide-y border-t bg-zinc-100 px-0">
-              <div className="w-full px-6">
-                <ButtonLink
-                  id="edit-button-update-access"
-                  variant="link"
-                  className="mb-5 p-0"
-                  routeId="public/application/$id/federal-provincial-territorial-benefits"
-                  params={params}
-                  startIcon={faPenToSquare}
-                  size="lg"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit button update access click"
-                >
-                  {t('application-simplified-family:dental-insurance.update-my-access')}
-                </ButtonLink>
-              </div>
-              <div className="w-full px-6">
-                <Button
-                  id="edit-button-not-changed"
-                  name="_action"
-                  value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
-                  variant="link"
-                  className="mt-5 p-0"
-                  startIcon={faCircleCheck}
-                  size="lg"
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit button not changed click"
-                >
-                  {t('application-simplified-family:dental-insurance.access-not-changed')}
-                </Button>
-              </div>
-            </CardFooter>
-          )}
+          <DentalBenefitsCardContent />
+          <DentalBenefitsCardFooter />
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
@@ -257,5 +194,249 @@ export default function RenewFamilyDentalInsurance({ loaderData, params }: Route
         </div>
       </div>
     </fetcher.Form>
+  );
+}
+
+/**
+ * This component determines what to show in the dental insurance card content based on whether the user has
+ * entered new dental insurance information, whether there is existing dental insurance information on the client
+ * application, or if there is no dental insurance information at all. The logic is as follows:
+ *
+ * - If the user has entered new dental insurance information (state.dentalInsurance is defined), show the new value.
+ *
+ * - If the user has not entered new dental insurance information, show the help text to indicate they need to provide it.
+ *
+ * Note: Unlike other sections, there is no existing client application data for dental insurance access,
+ * so we only show the help text when no selection has been made.
+ */
+function DentalInsuranceCardContent(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { state } = useLoaderData<typeof loader>();
+
+  if (state.dentalInsurance !== undefined) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('application-simplified-family:dental-insurance.access-to-dental-insurance-or-coverage')}>
+            {state.dentalInsurance ? t('application-simplified-family:dental-insurance.dental-insurance-yes') : t('application-simplified-family:dental-insurance.dental-insurance-no')}
+          </DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  return (
+    <CardContent>
+      <p>{t('application-simplified-family:dental-insurance.dental-insurance-indicate-status')}</p>
+    </CardContent>
+  );
+}
+
+/**
+ * This component determines what to show in the dental insurance card footer based on whether the user has
+ * entered dental insurance information. The logic is as follows:
+ *
+ * - If the user has entered dental insurance information OR the section is completed, show the "Edit" button.
+ *
+ * - If the user has not entered dental insurance information, show the "Add" button.
+ *
+ * Note: There is no existing client application data for this section, so we only have two states.
+ */
+function DentalInsuranceCardFooter(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { state, sections } = useLoaderData<typeof loader>();
+  const params = useParams();
+
+  if (state.dentalInsurance !== undefined || sections.dentalInsurance.completed) {
+    return (
+      <CardFooter className="border-t bg-zinc-100">
+        <ButtonLink
+          id="edit-button-dental-insurance"
+          variant="link"
+          className="p-0"
+          routeId="public/application/$id/dental-insurance"
+          params={params}
+          startIcon={faPenToSquare}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Family:Edit button dental insurance click"
+        >
+          {t('application-simplified-family:dental-insurance.edit-access-to-dental-insurance')}
+        </ButtonLink>
+      </CardFooter>
+    );
+  }
+
+  return (
+    <CardFooter className="border-t bg-zinc-100">
+      <ButtonLink
+        id="add-button-dental-insurance"
+        variant="link"
+        className="p-0"
+        routeId="public/application/$id/dental-insurance"
+        params={params}
+        startIcon={faCirclePlus}
+        size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Family:Add button dental insurance click"
+      >
+        {t('application-simplified-family:dental-insurance.add-answer')}
+      </ButtonLink>
+    </CardFooter>
+  );
+}
+
+/**
+ * This component determines what to show in the dental benefits card content based on whether the user has
+ * entered new dental benefits, whether there are existing dental benefits on the client application, or if there
+ * are no dental benefits at all. The logic is as follows:
+ *
+ * - If the user has entered new dental benefits (state.dentalBenefits is defined), show the new benefits.
+ *
+ * - If the user has not entered new dental benefits but there are existing dental benefits on the client
+ *   application, show the existing benefits.
+ *
+ * - If there are no dental benefits on the client application and the user has not entered new dental benefits,
+ *   show the help text.
+ */
+function DentalBenefitsCardContent(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { state, clientApplication } = useLoaderData<typeof loader>();
+
+  if (state.dentalBenefits?.hasChanged) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('application-simplified-family:dental-insurance.access-to-government-benefits')}>
+            {state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
+              <div className="space-y-3">
+                <p>{t('application-simplified-family:dental-insurance.access-to-government-benefits-yes')}</p>
+                <ul className="list-disc space-y-1 pl-7">
+                  {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
+                  {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
+                </ul>
+              </div>
+            ) : (
+              <p>{t('application-simplified-family:dental-insurance.access-to-government-benefits-no')}</p>
+            )}
+          </DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  if (clientApplication.dentalBenefits) {
+    return (
+      <CardContent>
+        <DefinitionList layout="single-column">
+          <DefinitionListItem term={t('application-simplified-family:dental-insurance.access-to-government-benefits')}>
+            {clientApplication.dentalBenefits.hasFederalBenefits || clientApplication.dentalBenefits.hasProvincialTerritorialBenefits ? (
+              <div className="space-y-3">
+                <p>{t('application-simplified-family:dental-insurance.access-to-government-benefits-yes')}</p>
+                <ul className="list-disc space-y-1 pl-7">
+                  {clientApplication.dentalBenefits.hasFederalBenefits && <li>{clientApplication.dentalBenefits.federalSocialProgram}</li>}
+                  {clientApplication.dentalBenefits.hasProvincialTerritorialBenefits && <li>{clientApplication.dentalBenefits.provincialTerritorialSocialProgram}</li>}
+                </ul>
+              </div>
+            ) : (
+              <p>{t('application-simplified-family:dental-insurance.access-to-government-benefits-no')}</p>
+            )}
+          </DefinitionListItem>
+        </DefinitionList>
+      </CardContent>
+    );
+  }
+
+  return (
+    <CardContent>
+      <p>{t('application-simplified-family:dental-insurance.dental-benefits-indicate-status')}</p>
+    </CardContent>
+  );
+}
+
+/**
+ * This component determines what to show in the dental benefits card footer based on whether the user has
+ * entered new dental benefits or if there are existing dental benefits on the client application. The logic is as follows:
+ *
+ * - If the user has entered new dental benefits (state.dentalBenefits is defined), show the "Edit" button.
+ *
+ * - If the user has not entered new dental benefits but there are existing dental benefits on the client
+ *   application, show both the "Update" button and the "Not changed" button.
+ *
+ * - If there are no dental benefits on the client application and the user has not entered new dental benefits,
+ *   show the "Add" button.
+ */
+function DentalBenefitsCardFooter(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { state, sections, clientApplication } = useLoaderData<typeof loader>();
+  const params = useParams();
+
+  if (state.dentalBenefits || sections.dentalBenefits.completed) {
+    return (
+      <CardFooter className="border-t bg-zinc-100">
+        <ButtonLink
+          id="edit-button-government-benefits"
+          variant="link"
+          className="p-0"
+          routeId="public/application/$id/federal-provincial-territorial-benefits"
+          params={params}
+          startIcon={faPenToSquare}
+          size="lg"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Family:Edit button government benefits click"
+        >
+          {t('application-simplified-family:dental-insurance.edit-access-to-government-benefits')}
+        </ButtonLink>
+      </CardFooter>
+    );
+  }
+
+  if (clientApplication.dentalBenefits) {
+    return (
+      <CardFooter className="divide-y border-t bg-zinc-100 px-0">
+        <div className="w-full px-6">
+          <ButtonLink
+            id="update-button-government-benefits"
+            variant="link"
+            className="mb-5 p-0"
+            routeId="public/application/$id/federal-provincial-territorial-benefits"
+            params={params}
+            startIcon={faPenToSquare}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Update button government benefits click"
+          >
+            {t('application-simplified-family:dental-insurance.update-my-access')}
+          </ButtonLink>
+        </div>
+        <div className="w-full px-6">
+          <Button
+            id="complete-benefits-button"
+            name="_action"
+            value={FORM_ACTION.DENTAL_BENEFITS_NOT_CHANGED}
+            variant="link"
+            className="mt-5 p-0"
+            startIcon={faCircleCheck}
+            size="lg"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Complete benefits click"
+          >
+            {t('application-simplified-family:dental-insurance.access-not-changed')}
+          </Button>
+        </div>
+      </CardFooter>
+    );
+  }
+
+  return (
+    <CardFooter className="border-t bg-zinc-100">
+      <ButtonLink
+        id="add-button-dental-benefits"
+        variant="link"
+        className="p-0"
+        routeId="public/application/$id/federal-provincial-territorial-benefits"
+        params={params}
+        startIcon={faPenToSquare}
+        size="lg"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Add button dental benefits click"
+      >
+        {t('application-simplified-family:dental-insurance.add-answer')}
+      </ButtonLink>
+    </CardFooter>
   );
 }

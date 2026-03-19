@@ -119,7 +119,7 @@ interface ToContactInformationArgs {
 }
 
 interface ToDentalBenefitsArgs {
-  existingDentalBenefits: readonly string[];
+  existingDentalBenefits?: readonly string[];
   hasFederalProvincialTerritorialBenefitsChanged: boolean;
   renewedDentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
 }
@@ -556,7 +556,11 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   }
 
   private toDentalBenefits({ existingDentalBenefits, hasFederalProvincialTerritorialBenefitsChanged, renewedDentalBenefits }: ToDentalBenefitsArgs): readonly string[] {
-    if (!hasFederalProvincialTerritorialBenefitsChanged) return existingDentalBenefits;
+    if (!hasFederalProvincialTerritorialBenefitsChanged) {
+      invariant(existingDentalBenefits, 'Expected existingDentalBenefits to be defined when hasFederalProvincialTerritorialBenefitsChanged is false');
+      return existingDentalBenefits;
+    }
+
     if (!renewedDentalBenefits) return [];
 
     const dentalBenefits = [];

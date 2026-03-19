@@ -1,11 +1,17 @@
 import { redirect } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
+
 import { createLogger } from '~/.server/logging';
 import type { ApplicationStateParams, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getContextualAgeCategoryFromDate, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
+
+type PublicApplicationRenewalAdultState = OmitStrict<PublicApplicationState, 'clientApplication'> & {
+  clientApplication: NonNullable<PublicApplicationState['clientApplication']>;
+};
 
 interface LoadPublicApplicationSimplifiedAdultStateArgs {
   params: ApplicationStateParams;
@@ -18,7 +24,7 @@ interface LoadPublicApplicationSimplifiedAdultStateArgs {
  * @param args - The arguments.
  * @returns The loaded adult state.
  */
-export function loadPublicApplicationSimplifiedAdultState({ params, request, session }: LoadPublicApplicationSimplifiedAdultStateArgs) {
+export function loadPublicApplicationSimplifiedAdultState({ params, request, session }: LoadPublicApplicationSimplifiedAdultStateArgs): PublicApplicationRenewalAdultState {
   const log = createLogger('public-application-simplified-adult-route-helpers/loadPublicApplicationSimplifiedAdultState');
   const { pathname } = new URL(request.url);
   const applicationState = getPublicApplicationState({ params, session });
@@ -43,7 +49,9 @@ export function loadPublicApplicationSimplifiedAdultState({ params, request, ses
     throw redirect(typeOfApplicationRouteUrl);
   }
 
-  return applicationState;
+  const { clientApplication, ...rest } = applicationState;
+  invariant(clientApplication, 'clientApplication must be defined in the public simplified adult application state');
+  return { ...rest, clientApplication };
 }
 
 interface LoadPublicApplicationSimplifiedAdultStateForReviewArgs {
@@ -64,7 +72,7 @@ export function loadPublicApplicationSimplifiedAdultStateForReview({ params, req
 
 interface ValidatePublicRenewAdultStateForReviewArgs {
   params: ApplicationStateParams;
-  state: PublicApplicationState;
+  state: PublicApplicationRenewalAdultState;
 }
 
 export function validatePublicRenewAdultStateForReview({ params, state }: ValidatePublicRenewAdultStateForReviewArgs) {
@@ -96,10 +104,6 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
   } = state;
 
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
-
-  if (clientApplication === undefined) {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
-  }
 
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
@@ -167,7 +171,12 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     throw redirect(getPathById('public/application/$id/simplified-adult/dental-insurance', params));
   }
 
-  if (dentalBenefits === undefined) {
+  if (
+    dentalBenefits === undefined ||
+    // if dental benefits has not changed and there is no existing value for dental benefits in the application,
+    // redirect to dental benefits page
+    (!dentalBenefits.hasChanged && clientApplication.dentalBenefits === undefined)
+  ) {
     throw redirect(getPathById('public/application/$id/simplified-adult/federal-provincial-territorial-benefits', params));
   }
 

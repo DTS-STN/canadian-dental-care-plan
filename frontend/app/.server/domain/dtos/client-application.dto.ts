@@ -7,13 +7,13 @@ export type ClientApplicationDto = ReadonlyDeep<{
    */
   applicationYearId: string;
   applicantInformation: ClientApplicantInformationDto;
-  children: ClientChildDto[];
+  children: Array<ClientChildDto>;
   communicationPreferences: ClientCommunicationPreferencesDto;
   contactInformation: ClientContactInformationDto;
   /** Valid co-pay tier (1, 2 or 3) code for the earning taxation year */
   coverageCopayTierCode?: string;
   dateOfBirth: string;
-  dentalBenefits: string[];
+  dentalBenefits?: Array<string>;
   dentalInsurance?: boolean;
   /**
    * Applicant profile eligibility status code
@@ -35,7 +35,7 @@ export type ClientApplicantInformationDto = Readonly<{
 }>;
 
 export type ClientChildDto = ReadonlyDeep<{
-  dentalBenefits: string[];
+  dentalBenefits: Array<string>;
   dentalInsurance: boolean;
   information: {
     firstName: string;
