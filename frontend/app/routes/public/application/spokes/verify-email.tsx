@@ -204,25 +204,26 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
     void fetcher.submit(formData, { method: 'post' });
   }
 
+  const requestLink = (
+    <LoadingButton
+      id="alert-request-button"
+      type="button"
+      name="_action"
+      variant="link"
+      className="mb-1 text-[17px]"
+      disabled={isSubmitting}
+      loading={isSubmitting && submittedAction === FORM_ACTION.request}
+      value={FORM_ACTION.request}
+      onClick={handleRequestNewCode}
+    />
+  );
+
   return (
     <div className="max-w-prose">
       <ErrorAlert>
         <h2 className="mb-2 font-bold">{t('application-spokes:verify-email.verification-code-alert.heading')}</h2>
         <p className="-mb-3">
-          {t('application-spokes:verify-email.verification-code-alert.detail')}
-          <LoadingButton
-            id="alert-request-button"
-            type="button"
-            name="_action"
-            variant="link"
-            className="mb-1 text-[17px]"
-            disabled={isSubmitting}
-            loading={isSubmitting && submittedAction === FORM_ACTION.request}
-            value={FORM_ACTION.request}
-            onClick={handleRequestNewCode}
-          >
-            {t('application-spokes:verify-email.request-new-code')}
-          </LoadingButton>
+          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:verify-email.verification-code-alert.detail" components={{ requestLink }} />
         </p>
       </ErrorAlert>
       <ErrorSummaryProvider actionData={fetcher.data}>
