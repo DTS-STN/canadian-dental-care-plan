@@ -179,7 +179,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       invariant(child.dentalInsurance, "Child's dental insurance must be defined");
       const eligibility = getEligibilityStatus({
         hasPrivateDentalInsurance: child.dentalInsurance.hasDentalInsurance,
-        t4DentalIndicator: childApplication?.t4DentalIndicator,
+        t4DentalIndicator: childApplication?.dentalInsurance,
       });
 
       return {
