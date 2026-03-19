@@ -63,7 +63,7 @@
     "type-application-heading": "Sélection des renouvellements",
     "type-application-legend": "Vous souhaitez renouveler le RCSD pour le(s) membre(s) suivant(s)\u00a0:",
     "type-application-description": "Sélectionner la personne pour laquelle vous souhaitez renouveler la couverture dentaire.",
-    "application": "Application",
+    "application": "Demande",
     "before-you-start": "Avant de commencer votre demande",
     "add-type-application": "Sélectionner le ou les membre(s)",
     "edit-type-application": "Modifier la sélection"
@@ -82,7 +82,7 @@
     "full-name": "Nom complet",
     "date-of-birth": "Date de naissance",
     "sin": "Numéro d'assurance sociale (NAS)",
-    "application": "Application",
+    "application": "Demande",
     "before-you-start": "Avant de commencer votre demande",
     "add-answer": "Ajouter une réponse",
     "edit-answer": "Modifier la réponse",
