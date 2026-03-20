@@ -145,7 +145,7 @@
     "print-copy-important": "Il est important de conserver une copie de votre demande.",
     "print-btn": "Imprimer ou sauvegarder",
     "full-whats-next": "Vous recevrez une lettre confirmant votre admissibilité",
-    "full-begin-process": "Nous avons reçu votre demande. Une lettre vous sera envoyée dans les 30 jours ouvrables pour vous informer de votre admissibilité au régime.",
+    "full-begin-process": "Nous avons reçu votre demande. Une lettre vous sera envoyée dans les 30 jours civils pour vous informer de votre admissibilité au régime.",
     "simplified-whats-next": "Confirmez votre admissibilité et votre niveau de couverture",
     "simplified-begin-process": "Vérifiez toujours votre admissibilité et votre niveau de couverture avant de recevoir des soins. Vous pouvez confirmer ces renseignements en utilisant le <cdcpLink>Vérificateur de l'état</cdcpLink> ou en vous connectant à <mscaLinkAccount>Mon dossier Service Canada (MDSC)</mscaLinkAccount>.",
     "check-status": "Consulter l'état de votre demande",
