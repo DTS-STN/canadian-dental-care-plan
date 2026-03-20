@@ -21,6 +21,7 @@ import type {
   SunLifeCommunicationMethodService,
 } from '~/.server/domain/services';
 import {
+  resolveRenewalStateChildDentalBenefitsValue,
   resolveRenewalStateCommunicationPreferencesValue,
   resolveRenewalStateDentalBenefitsValue,
   resolveRenewalStateEmailValue,
@@ -441,6 +442,105 @@ describe('protected-application-route-helpers', () => {
       provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(Some(mockProvincialPlan));
 
       const result = await resolveRenewalStateDentalBenefitsValue(state, 'en', federalService, provincialService);
+
+      expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: mockProvincialPlan });
+    });
+  });
+
+  describe('resolveRenewalStateChildDentalBenefitsValue', () => {
+    const mockFederalPlan: FederalGovernmentInsurancePlanLocalizedDto = { id: 'fed-1', name: 'Federal Plan A' };
+    const mockProvincialPlan: ProvincialGovernmentInsurancePlanLocalizedDto = { id: 'prov-1', name: 'Provincial Plan B', provinceTerritoryStateId: 'ON' };
+
+    it('returns federal and provincial plans from child state when hasChanged is true', async () => {
+      const childState = {
+        dentalBenefits: {
+          hasChanged: true,
+          value: { hasFederalBenefits: true, federalSocialProgram: 'fed-1', hasProvincialTerritorialBenefits: true, provincialTerritorialSocialProgram: 'prov-1', province: 'ON' },
+        },
+      } as const;
+      const childClientApplication = { dentalBenefits: [] } as const;
+
+      const federalService = mock<FederalGovernmentInsurancePlanService>();
+      const provincialService = mock<ProvincialGovernmentInsurancePlanService>();
+      federalService.getLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(mockFederalPlan);
+      provincialService.getLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(mockProvincialPlan);
+
+      const result = await resolveRenewalStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
+
+      expect(result).toEqual({ hasChanged: true, federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: mockProvincialPlan });
+    });
+
+    it('returns undefined plans from child state when both programs are undefined and hasChanged is true', async () => {
+      const childState = {
+        dentalBenefits: {
+          hasChanged: true,
+          value: { hasFederalBenefits: false, federalSocialProgram: undefined, hasProvincialTerritorialBenefits: false, provincialTerritorialSocialProgram: undefined, province: undefined },
+        },
+      } as const;
+      const childClientApplication = { dentalBenefits: [] } as const;
+
+      const federalService = mock<FederalGovernmentInsurancePlanService>();
+      const provincialService = mock<ProvincialGovernmentInsurancePlanService>();
+
+      const result = await resolveRenewalStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
+
+      expect(result).toEqual({ hasChanged: true, federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: undefined });
+      expect(federalService.getLocalizedFederalGovernmentInsurancePlanById).not.toHaveBeenCalled();
+      expect(provincialService.getLocalizedProvincialGovernmentInsurancePlanById).not.toHaveBeenCalled();
+    });
+
+    it('looks up plans by benefit ID from child client application when hasChanged is false and finds federal plan', async () => {
+      const childState = { dentalBenefits: { hasChanged: false } } as const;
+      const childClientApplication = { dentalBenefits: ['fed-1'] } as const;
+
+      const federalService = mock<FederalGovernmentInsurancePlanService>();
+      const provincialService = mock<ProvincialGovernmentInsurancePlanService>();
+      federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(Some(mockFederalPlan));
+      provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(None);
+
+      const result = await resolveRenewalStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
+
+      expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: undefined });
+    });
+
+    it('looks up plans by benefit ID from child client application when hasChanged is false and finds provincial plan', async () => {
+      const childState = { dentalBenefits: { hasChanged: false } } as const;
+      const childClientApplication = { dentalBenefits: ['prov-1'] } as const;
+
+      const federalService = mock<FederalGovernmentInsurancePlanService>();
+      const provincialService = mock<ProvincialGovernmentInsurancePlanService>();
+      federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(None);
+      provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(Some(mockProvincialPlan));
+
+      const result = await resolveRenewalStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
+
+      expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: mockProvincialPlan });
+    });
+
+    it('returns no plans when child client application benefit ID matches neither federal nor provincial', async () => {
+      const childState = { dentalBenefits: { hasChanged: false } } as const;
+      const childClientApplication = { dentalBenefits: ['unknown-1'] } as const;
+
+      const federalService = mock<FederalGovernmentInsurancePlanService>();
+      const provincialService = mock<ProvincialGovernmentInsurancePlanService>();
+      federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(None);
+      provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(None);
+
+      const result = await resolveRenewalStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
+
+      expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: undefined });
+    });
+
+    it('returns both plans when child client application has both federal and provincial benefit IDs', async () => {
+      const childState = { dentalBenefits: { hasChanged: false } } as const;
+      const childClientApplication = { dentalBenefits: ['fed-1', 'prov-1'] } as const;
+
+      const federalService = mock<FederalGovernmentInsurancePlanService>();
+      const provincialService = mock<ProvincialGovernmentInsurancePlanService>();
+      federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValueOnce(Some(mockFederalPlan)).mockResolvedValueOnce(None);
+      provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(Some(mockProvincialPlan));
+
+      const result = await resolveRenewalStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
 
       expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: mockProvincialPlan });
     });

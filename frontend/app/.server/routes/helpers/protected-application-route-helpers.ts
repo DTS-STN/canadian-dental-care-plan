@@ -861,3 +861,61 @@ export async function resolveRenewalStateDentalBenefitsValue(
     provincialGovernmentInsurancePlan,
   };
 }
+
+/**
+ * Resolves the effective child dental benefits value for a renewal application state.
+ * If the user has declared a change, the updated federal and provincial program selections from the state
+ * are used; otherwise, the benefit IDs from the client application are matched against both federal
+ * and provincial insurance plan services to determine the applicable plans.
+ *
+ * @param childState - The renewal application state containing child dental benefits and client application child dental benefits.
+ * @param locale - The locale used to retrieve localized insurance plan details.
+ * @param federalGovernmentInsurancePlanService - Service for resolving localized federal government insurance plans.
+ * @param provincialGovernmentInsurancePlanService - Service for resolving localized provincial government insurance plans.
+ * @returns The resolved federal and provincial government insurance plans, each of which may be `undefined` if not applicable.
+ */
+export async function resolveRenewalStateChildDentalBenefitsValue(
+  childState: Required<Pick<ProtectedApplicationState['children'][number], 'dentalBenefits'>>,
+  childClientApplication: Pick<NonNullable<ProtectedApplicationState['clientApplication']>['children'][number], 'dentalBenefits'>,
+  locale: AppLocale,
+  federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService,
+  provincialGovernmentInsurancePlanService: ProvincialGovernmentInsurancePlanService,
+): Promise<{
+  hasChanged: boolean;
+  federalGovernmentInsurancePlan?: FederalGovernmentInsurancePlanLocalizedDto;
+  provincialGovernmentInsurancePlan?: ProvincialGovernmentInsurancePlanLocalizedDto;
+}> {
+  if (childState.dentalBenefits.hasChanged) {
+    return {
+      hasChanged: true,
+      federalGovernmentInsurancePlan: childState.dentalBenefits.value.federalSocialProgram //
+        ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(childState.dentalBenefits.value.federalSocialProgram, locale)
+        : undefined,
+      provincialGovernmentInsurancePlan: childState.dentalBenefits.value.provincialTerritorialSocialProgram //
+        ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(childState.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
+        : undefined,
+    };
+  }
+
+  let federalGovernmentInsurancePlan: FederalGovernmentInsurancePlanLocalizedDto | undefined;
+  let provincialGovernmentInsurancePlan: ProvincialGovernmentInsurancePlanLocalizedDto | undefined;
+
+  for (const benefitId of childClientApplication.dentalBenefits) {
+    const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(benefitId, locale);
+    if (federalProgram.isSome()) {
+      federalGovernmentInsurancePlan = federalProgram.unwrap();
+      continue;
+    }
+
+    const provincialProgram = await provincialGovernmentInsurancePlanService.findLocalizedProvincialGovernmentInsurancePlanById(benefitId, locale);
+    if (provincialProgram.isSome()) {
+      provincialGovernmentInsurancePlan = provincialProgram.unwrap();
+    }
+  }
+
+  return {
+    hasChanged: false,
+    federalGovernmentInsurancePlan,
+    provincialGovernmentInsurancePlan,
+  };
+}
