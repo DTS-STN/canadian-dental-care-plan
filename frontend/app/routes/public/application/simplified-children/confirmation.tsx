@@ -7,6 +7,7 @@ import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { getEligibilityStatus } from '~/.server/routes/helpers/base-application-route-helpers';
+import { resolveRenewalStateChildDentalBenefitsValue } from '~/.server/routes/helpers/protected-application-route-helpers';
 import {
   clearPublicApplicationState,
   resolveSimplifiedStateCommunicationPreferencesValue,
@@ -129,60 +130,37 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const children = await Promise.all(
-    state.children.map(async (child) => {
-      const childApplication = state.clientApplication.children.find((childApp) => childApp.information.clientNumber === child.information?.memberId);
+    state.children.map(async (childState) => {
+      invariant(childState.dentalBenefits, `Expected dental benefits for child with id ${childState.id}`);
 
-      let selectedFederalBenefit;
-      let selectedProvincialBenefit;
+      const childApplication = state.clientApplication.children.find((childApp) => childApp.information.clientNumber === childState.information?.memberId);
+      invariant(childApplication?.dentalBenefits, `Expected dental benefits for child with memberId ${childState.information?.memberId}`);
+      invariant(childState.dentalInsurance, "Child's dental insurance must be defined");
 
-      if (child.dentalBenefits?.hasChanged === true) {
-        if (child.dentalBenefits.value.federalSocialProgram) {
-          selectedFederalBenefit = await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.value.federalSocialProgram, locale);
-        }
-        if (child.dentalBenefits.value.provincialTerritorialSocialProgram) {
-          selectedProvincialBenefit = await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.value.provincialTerritorialSocialProgram, locale);
-        }
-      } else {
-        invariant(childApplication?.dentalBenefits, 'Expected childApplication.dentalBenefits to be defined when hasChanged is false');
-        for (const benefitId of childApplication.dentalBenefits) {
-          const federalProgram = await federalGovernmentInsurancePlanService.findLocalizedFederalGovernmentInsurancePlanById(benefitId, locale);
-          if (federalProgram.isSome()) {
-            selectedFederalBenefit = federalProgram.unwrap();
-            continue;
-          }
-
-          const provincialProgram = await provincialGovernmentInsurancePlanService.findLocalizedProvincialGovernmentInsurancePlanById(benefitId, locale);
-          if (provincialProgram.isSome()) {
-            selectedProvincialBenefit = provincialProgram.unwrap();
-          }
-        }
-      }
-
-      invariant(child.dentalInsurance, "Child's dental insurance must be defined");
+      const childDentalBenefits = await resolveRenewalStateChildDentalBenefitsValue({ dentalBenefits: childState.dentalBenefits }, childApplication, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
       const eligibility = getEligibilityStatus({
-        hasPrivateDentalInsurance: child.dentalInsurance.hasDentalInsurance,
-        privateDentalInsuranceOnRecord: childApplication?.privateDentalInsurance,
+        hasPrivateDentalInsurance: childState.dentalInsurance.hasDentalInsurance,
+        privateDentalInsuranceOnRecord: childApplication.privateDentalInsurance,
       });
 
       return {
-        id: child.id,
-        memberId: child.information?.memberId,
-        firstName: child.information?.firstName,
-        lastName: child.information?.lastName,
-        birthday: child.information?.dateOfBirth,
-        sin: child.information?.socialInsuranceNumber,
-        isParent: child.information?.isParent,
+        id: childState.id,
+        memberId: childState.information?.memberId,
+        firstName: childState.information?.firstName,
+        lastName: childState.information?.lastName,
+        birthday: childState.information?.dateOfBirth,
+        sin: childState.information?.socialInsuranceNumber,
+        isParent: childState.information?.isParent,
         dentalInsurance: {
-          accessToDentalInsurance: child.dentalInsurance.hasDentalInsurance,
-          hasDentalBenefitsChanged: child.dentalBenefits?.hasChanged,
+          accessToDentalInsurance: childState.dentalInsurance.hasDentalInsurance,
+          hasDentalBenefitsChanged: childDentalBenefits.hasChanged,
           federalBenefit: {
-            access: child.dentalBenefits?.value?.hasFederalBenefits,
-            benefit: selectedFederalBenefit?.name,
+            access: childDentalBenefits.federalGovernmentInsurancePlan !== undefined,
+            benefit: childDentalBenefits.federalGovernmentInsurancePlan?.name,
           },
           provTerrBenefit: {
-            access: child.dentalBenefits?.value?.hasProvincialTerritorialBenefits,
-            province: child.dentalBenefits?.value?.province,
-            benefit: selectedProvincialBenefit?.name,
+            access: childDentalBenefits.provincialGovernmentInsurancePlan !== undefined,
+            benefit: childDentalBenefits.provincialGovernmentInsurancePlan?.name,
           },
         },
         eligibility,
