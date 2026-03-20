@@ -80,28 +80,10 @@
       "esdc_descriptionenglish": "This individual’s Canadian Dental Care Plan (CDCP) coverage ended because we did not receive a renewal application. \n\nTo check eligibility and reapply, <a href=\"https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html?utm_campaign=esdc-edsc-cdcp-rcsd-23-24&utm_medium=vanity-url&utm_source=canada-ca_dental\">visit the CDCP website</a>.\n\n<a href=\"https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html\">Contact Service Canada</a> if you have any questions or for more information."
     },
     {
-      "@odata.etag": "W/\"271775475\"",
-      "esdc_clientfriendlystatusid": "8c31a88d-b51c-f111-8342-6045bdf97563",
-      "esdc_descriptionfrench": null,
-      "esdc_descriptionenglish": null
-    },
-    {
-      "@odata.etag": "W/\"271775470\"",
-      "esdc_clientfriendlystatusid": "f42532a7-79c1-f011-8544-7c1e520630db",
-      "esdc_descriptionfrench": null,
-      "esdc_descriptionenglish": null
-    },
-    {
       "@odata.etag": "W/\"271775474\"",
       "esdc_clientfriendlystatusid": "d49b2b38-192c-f011-8c4e-7ced8d04e472",
       "esdc_descriptionfrench": "La couverture de cette personne a pris fin à la suite d’un examen de son admissibilité au Régime canadien de soins dentaires (RCSD).  \n\nPour en savoir plus sur les critères d’admissibilité, <a href=\"https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html?utm_campaign=esdc-edsc-cdcp-rcsd-23-24&utm_medium=vanity-url&utm_source=canada-ca_dentaire\">visitez le site Web du RCSD</a>.\n\nPour toute question ou tout renseignement complémentaire, <a href=\"https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html\">contactez Service Canada</a>.",
       "esdc_descriptionenglish": "Coverage for this individual has ended following a review of their eligibility under the Canadian Dental Care Plan (CDCP).  \n\nFor information on eligibility requirements, <a href=\"https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html?utm_campaign=esdc-edsc-cdcp-rcsd-23-24&utm_medium=vanity-url&utm_source=canada-ca_dental\">visit the CDCP website</a>.\n\n<a href=\"https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html\">Contact Service Canada</a> if you have any questions or for more information."
-    },
-    {
-      "@odata.etag": "W/\"271775480\"",
-      "esdc_clientfriendlystatusid": "3b82b0c9-a1d6-f011-8544-7ced8d05d4ca",
-      "esdc_descriptionfrench": null,
-      "esdc_descriptionenglish": null
     }
   ]
 }
