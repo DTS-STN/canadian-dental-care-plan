@@ -1,6 +1,22 @@
 import type { ReadonlyDeep } from 'type-fest';
 
-export type ApplicantRequestEntity = ReadonlyDeep<{
+export type FindApplicantByBasicInfoRequestEntity = ReadonlyDeep<{
+  Applicant: {
+    PersonName: {
+      PersonGivenName: Array<string>;
+      PersonSurName: string;
+    };
+    PersonBirthDate: {
+      date: string;
+    };
+    ClientIdentification: Array<{
+      IdentificationID: string;
+      IdentificationCategoryText: 'Client Number';
+    }>;
+  };
+}>;
+
+export type FindApplicantBySinRequestEntity = ReadonlyDeep<{
   Applicant: {
     PersonSINIdentification: {
       IdentificationID: string;

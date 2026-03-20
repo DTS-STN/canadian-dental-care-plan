@@ -1,5 +1,15 @@
 import type { ReadonlyDeep } from 'type-fest';
 
+export type FindApplicantByBasicInfoDto = Readonly<{
+  clientNumber: string;
+  dateOfBirth: string;
+  firstName: string;
+  lastName: string;
+
+  /** A unique identifier for the user making the request - used for auditing */
+  userId: string;
+}>;
+
 /**
  * Represents a Data Transfer Object (DTO) for finding an applicant by SIN.
  */
