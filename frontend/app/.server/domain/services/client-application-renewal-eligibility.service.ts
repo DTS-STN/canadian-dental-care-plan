@@ -72,25 +72,33 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
       return clientApplicationRenewalEligibilityDto;
     }
 
-    // If no client application is found with the provided SIN, we check if an applicant exists with that SIN
-    const applicantOption = await this.applicantService.findApplicantByBasicInfoAndSin({
+    // If no client application is found with the provided basic info and SIN, we check if an
+    // applicant exists with that basic info
+    const applicantOption = await this.applicantService.findApplicantByBasicInfo({
       clientNumber: request.clientNumber,
       dateOfBirth: request.dateOfBirth,
       firstName: request.firstName,
       lastName: request.lastName,
-      sin: request.sin,
       userId: request.userId,
     });
 
     if (applicantOption.isNone()) {
-      this.log.debug('Applicant is None for provided SIN, returning not found result');
+      this.log.debug('Applicant is None for provided basic info, returning not found result');
+      return { result: 'INELIGIBLE-APPLICANT-NOT-FOUND' };
+    }
+
+    const applicant = applicantOption.unwrap();
+
+    if (!applicant.socialInsuranceNumber) {
+      this.log.trace('Applicant found with basic info, but no SIN on file to compare against, skipping SIN check. Basic info: [%j]', request);
+    } else if (applicant.socialInsuranceNumber.replaceAll(/\D/g, '') !== request.sin.replaceAll(/\D/g, '')) {
+      this.log.trace('Applicant found with basic info, but SIN does not match. Basic info: [%j], SIN: [%s]', request, request.sin);
       return { result: 'INELIGIBLE-APPLICANT-NOT-FOUND' };
     }
 
     const applicationYearId = request.applicationYearId;
-    const applicant = applicantOption.unwrap();
-    this.log.debug('Applicant found for provided SIN, returning eligibility result based on applicant');
-    this.log.trace('Applicant found for provided SIN: [%j], applicationYearId: [%s]', applicant, applicationYearId);
+    this.log.debug('Applicant found for provided basic info and SIN, returning eligibility result based on applicant');
+    this.log.trace('Applicant found for provided basic info and SIN: [%j], applicationYearId: [%s]', applicant, applicationYearId);
     return await this.clientApplicationRenewalEligibilityDtoMapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicant, applicationYearId);
   }
 

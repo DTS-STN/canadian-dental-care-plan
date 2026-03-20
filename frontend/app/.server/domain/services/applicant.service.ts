@@ -3,7 +3,7 @@ import type { Option } from 'oxide.ts';
 import { None, Some } from 'oxide.ts';
 
 import { TYPES } from '~/.server/constants';
-import type { ApplicantDto, FindApplicantByBasicInfoAndSinRequestDto, FindApplicantByBasicInfoDto, FindApplicantBySinRequestDto } from '~/.server/domain/dtos';
+import type { ApplicantDto, FindApplicantByBasicInfoDto, FindApplicantBySinRequestDto } from '~/.server/domain/dtos';
 import type { ApplicantDtoMapper } from '~/.server/domain/mappers';
 import type { ApplicantRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
@@ -21,14 +21,6 @@ export interface ApplicantService {
    * @returns A Promise that resolves to the applicant dto if found, or `None` otherwise.
    */
   findApplicantByBasicInfo(request: FindApplicantByBasicInfoDto): Promise<Option<ApplicantDto>>;
-
-  /**
-   * Finds an applicant by basic info and SIN.
-   *
-   * @param request The basic info and SIN request dto.
-   * @returns A Promise that resolves to the applicant dto if found, or `None` otherwise.
-   */
-  findApplicantByBasicInfoAndSin(request: FindApplicantByBasicInfoAndSinRequestDto): Promise<Option<ApplicantDto>>;
 
   /**
    * Finds the applicant DTO by SIN.
@@ -70,32 +62,6 @@ export class DefaultApplicantService implements ApplicantService {
     const applicantDto = this.applicantDtoMapper.mapApplicantResponseEntityToApplicantDto(applicantEntity.unwrap());
     this.log.trace('Returning applicant: [%j]', applicantDto);
     return Some(applicantDto);
-  }
-
-  async findApplicantByBasicInfoAndSin(request: FindApplicantByBasicInfoAndSinRequestDto): Promise<Option<ApplicantDto>> {
-    const { sin, ...basicInfoRequestDto } = request;
-    const applicantOption = await this.findApplicantByBasicInfo(basicInfoRequestDto);
-
-    if (applicantOption.isNone()) {
-      this.log.trace('No applicant found with basic info: [%j]', basicInfoRequestDto);
-      return None;
-    }
-
-    // Note: We compare the SINs if exists on file by removing all non-digit characters to ensure that formatting
-    // differences do not affect the comparison.
-    const applicant = applicantOption.unwrap();
-    const normalizedApplicantSin = applicant.socialInsuranceNumber?.replaceAll(/\D/g, '');
-    const normalizedRequestSin = sin.replaceAll(/\D/g, '');
-
-    if (!normalizedApplicantSin) {
-      this.log.trace('Applicant found with basic info, but no SIN on file to compare against, skipping SIN check. Basic info: [%j]', basicInfoRequestDto);
-    } else if (normalizedApplicantSin !== normalizedRequestSin) {
-      this.log.trace('Applicant found with basic info, but SIN does not match. Basic info: [%j], SIN: [%s]', basicInfoRequestDto, sin);
-      return None;
-    }
-
-    this.log.trace('Applicant found with basic info and SIN: [%j]', applicant);
-    return Some(applicant);
   }
 
   async findApplicantBySin(request: FindApplicantBySinRequestDto): Promise<Option<ApplicantDto>> {
