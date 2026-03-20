@@ -191,6 +191,33 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
   });
 
   describe('mapClientApplicationDtoToClientApplicationRenewalEligibilityDto', () => {
+    describe('INELIGIBLE-ALREADY-RENEWED', () => {
+      it('returns INELIGIBLE-ALREADY-RENEWED when previousApplication is true', async () => {
+        const clientApplicationDto = makeClientApplication({ previousApplication: true });
+        const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto);
+        expect(result.result).toBe('INELIGIBLE-ALREADY-RENEWED');
+      });
+
+      it('includes the clientApplication in the result when previousApplication is true', async () => {
+        const clientApplicationDto = makeClientApplication({ previousApplication: true });
+        const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto);
+        assert(result.result === 'INELIGIBLE-ALREADY-RENEWED');
+        expect(result.clientApplication).toBe(clientApplicationDto);
+      });
+
+      it('does not return INELIGIBLE-ALREADY-RENEWED when previousApplication is false', async () => {
+        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001')]]));
+        const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(makeClientApplication({ previousApplication: false }));
+        expect(result.result).not.toBe('INELIGIBLE-ALREADY-RENEWED');
+      });
+
+      it('does not return INELIGIBLE-ALREADY-RENEWED when previousApplication is absent', async () => {
+        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001')]]));
+        const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(makeClientApplication());
+        expect(result.result).not.toBe('INELIGIBLE-ALREADY-RENEWED');
+      });
+    });
+
     describe('INELIGIBLE-NO-CLIENT-NUMBERS', () => {
       it('returns INELIGIBLE-NO-CLIENT-NUMBERS for a children application with no children', async () => {
         const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(makeClientApplication({ typeOfApplication: 'children', children: [] }));

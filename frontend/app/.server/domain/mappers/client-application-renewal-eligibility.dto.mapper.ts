@@ -80,19 +80,27 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
   /**
    * Maps a client application DTO to a renewal eligibility DTO:
    *
-   * 1. Filter children to those in the `'children'` or `'youth'` age category as of the renewal
+   * The mapping applies the following rules to determine the renewal eligibility result:
+   *
+   * 1. If the application has a `previousApplication`, return `INELIGIBLE-ALREADY-RENEWED`.
+   * 2. Filter children to those in the `'children'` or `'youth'` age category as of the renewal
    *    reference date (see `isChildOrYouth`).
-   * 2. Derive client numbers by application type (`'adult'` / `'children'` / `'family'`).
+   * 3. Derive client numbers by application type (`'adult'` / `'children'` / `'family'`).
    *    No client numbers → `INELIGIBLE-NO-CLIENT-NUMBERS`.
-   * 3. Fetch eligibilities for the derived client numbers. Clients with no eligibility record
+   * 4. Fetch eligibilities for the derived client numbers. Clients with no eligibility record
    *    are silently omitted; None found at all → `INELIGIBLE-NO-ELIGIBILITIES`.
-   * 4. Filter to clients that are enrolled and eligible. None passing
+   * 5. Filter to clients that are enrolled and eligible. None passing
    *    → `INELIGIBLE-NOT-ENROLLED`.
-   * 5. Return `ELIGIBLE` with the passing client numbers and an input model of
+   * 6. Return `ELIGIBLE` with the passing client numbers and an input model of
    *    `'simplified'` (the application has a valid copay tier code) or `'full'` (missing or unrecognised tier code).
    */
   async mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto: ClientApplicationDto): Promise<ClientApplicationRenewalEligibilityDto> {
     this.log.trace('Mapping client application dto to client application renewal eligibility dto: [%j]', clientApplicationDto);
+
+    if (clientApplicationDto.previousApplication) {
+      this.log.debug('Client application has a previous application, returning ineligible result');
+      return { result: 'INELIGIBLE-ALREADY-RENEWED', clientApplication: clientApplicationDto };
+    }
 
     const filteredClientApplicationDto = this.filterEligibleChildrenByAge(clientApplicationDto);
 
