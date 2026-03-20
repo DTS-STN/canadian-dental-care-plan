@@ -119,7 +119,7 @@ export default function RenewChildrenSubmit({ loaderData, params }: Route.Compon
         <div className="space-y-8">
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-child:submit.overview')}</h2>
-            <div>
+            <div className="space-y-4">
               <p>{t('application-simplified-child:submit.you-are-submitting')}</p>
               <ul className="list-disc space-y-1 pl-7">
                 {state.children.map((child, index) => (

@@ -125,7 +125,7 @@ export default function ProtectedNewFamilySubmit({ loaderData, params }: Route.C
         <div className="space-y-8">
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-intake-family:submit.overview')}</h2>
-            <div>
+            <div className="space-y-4">
               <p>{t('protected-application-intake-family:submit.you-are-submitting')}</p>
               <ul className="list-disc space-y-1 pl-7">
                 <li>{state.applicantName}</li>

@@ -124,7 +124,7 @@ export default function ProtectedNewChildrenSubmit({ loaderData, params }: Route
         <div className="space-y-8">
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-intake-child:submit.overview')}</h2>
-            <div>
+            <div className="space-y-4">
               <p>{t('protected-application-intake-child:submit.you-are-submitting')}</p>
               <ul className="list-disc space-y-1 pl-7">
                 {state.children.map((child, index) => (
