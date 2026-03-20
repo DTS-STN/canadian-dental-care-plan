@@ -1,3 +1,4 @@
+import { invariant } from '@dts-stn/invariant';
 import { inject, injectable } from 'inversify';
 import { None, Option, Some } from 'oxide.ts';
 
@@ -72,14 +73,10 @@ export class DefaultApplicantRepository implements ApplicantRepository {
   }
 
   async findApplicantByBasicInfo(request: FindApplicantByBasicInfoRequestEntity): Promise<Option<ApplicantResponseEntity>> {
-    return await Promise.reject(new Error('findApplicantByBasicInfo is not yet implemented.'));
-  }
-
-  async findApplicantBySin(request: FindApplicantBySinRequestEntity): Promise<Option<ApplicantResponseEntity>> {
     this.log.trace('Fetching applicant for sin [%j]', request);
 
     const url = `${this.baseUrl}/applicant`;
-    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.client-application_by-sin.posts', url, {
+    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.applicant_by-basic-info.posts', url, {
       proxyUrl: this.serverConfig.HTTP_PROXY_URL,
       method: 'POST',
       headers: {
@@ -103,7 +100,55 @@ export class DefaultApplicantRepository implements ApplicantRepository {
     }
 
     if (response.status === 204) {
-      this.log.trace('No applicant found; Returning null');
+      this.log.trace('No applicant found; Returning None');
+      return None;
+    }
+
+    this.log.error('%j', {
+      message: "'Failed to 'POST' for applicant.",
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    if (response.status === HttpStatusCodes.TOO_MANY_REQUESTS) {
+      // TODO ::: GjB ::: this throw is to facilitate enabling the application kill switch -- it should be removed once the killswitch functionality is removed
+      throw new AppError('Failed to POST to /applicant. Status: 429, Status Text: Too Many Requests', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
+    }
+
+    throw new Error(`Failed to 'POST' for applicant. Status:  ${response.status}, Status Text: ${response.statusText}`);
+  }
+
+  async findApplicantBySin(request: FindApplicantBySinRequestEntity): Promise<Option<ApplicantResponseEntity>> {
+    this.log.trace('Fetching applicant for sin [%j]', request);
+
+    const url = `${this.baseUrl}/applicant`;
+    const response = await this.httpClient.instrumentedFetch('http.client.interop-api.applicant_by-sin.posts', url, {
+      proxyUrl: this.serverConfig.HTTP_PROXY_URL,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_APPLICANT_API_SUBSCRIPTION_KEY ?? this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
+      },
+      body: JSON.stringify(request),
+      retryOptions: {
+        retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
+        backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,
+        retryConditions: {
+          [HttpStatusCodes.BAD_GATEWAY]: [],
+        },
+      },
+    });
+
+    if (response.status === 200) {
+      const applicantResponseEntity = (await response.json()) as ApplicantResponseEntity;
+      this.log.trace('Returning applicant [%j]', applicantResponseEntity);
+      return Some(applicantResponseEntity);
+    }
+
+    if (response.status === 204) {
+      this.log.trace('No applicant found; Returning None');
       return None;
     }
 
@@ -144,7 +189,7 @@ export class DefaultApplicantRepository implements ApplicantRepository {
 export class MockApplicantRepository implements ApplicantRepository {
   private readonly log: Logger;
 
-  private readonly mockPersonalInformationDb = [
+  private readonly mockApplicantDb = [
     {
       mailingAddressStreet: '2219 Waste Lane',
       mailingAddressSecondaryUnitText: 'Apt. No. 21',
@@ -218,70 +263,100 @@ export class MockApplicantRepository implements ApplicantRepository {
   }
 
   async findApplicantByBasicInfo(request: FindApplicantByBasicInfoRequestEntity): Promise<Option<ApplicantResponseEntity>> {
-    return await Promise.reject(new Error('MockApplicantRepository.findApplicantByBasicInfo is not yet implemented.'));
+    this.log.debug('Fetching applicant for sin [%j]', request);
+
+    const reqClientNumber = request.Applicant.ClientIdentification.at(0)?.IdentificationID;
+    invariant(reqClientNumber, 'Client number must be defined');
+    const reqFirstName = request.Applicant.PersonName.PersonGivenName.at(0);
+    invariant(reqFirstName, 'First name must be defined');
+    const reqLastName = request.Applicant.PersonName.PersonSurName;
+    const reqBirthDate = request.Applicant.PersonBirthDate.date;
+
+    const applicantEntity = this.mockApplicantDb.find(
+      ({ clientNumber, birthdate, lastName, firstName }) =>
+        clientNumber === reqClientNumber && //
+        lastName.localeCompare(reqLastName, undefined, { sensitivity: 'base' }) === 0 &&
+        firstName.localeCompare(reqFirstName, undefined, { sensitivity: 'base' }) === 0 &&
+        birthdate === reqBirthDate,
+    );
+
+    if (!applicantEntity) {
+      this.log.debug('No applicant found; Returning None');
+      return await Promise.resolve(None);
+    }
+
+    const applicantResponseEntity = this.mapToApplicantResponseEntity(applicantEntity);
+    this.log.debug('Returning applicant [%j]', applicantResponseEntity);
+    return await Promise.resolve(Some(applicantResponseEntity));
   }
 
   async findApplicantBySin(applicantRequestEntity: FindApplicantBySinRequestEntity): Promise<Option<ApplicantResponseEntity>> {
     this.log.debug('Fetching applicant for sin [%j]', applicantRequestEntity);
 
-    const personSinIdentification = applicantRequestEntity.Applicant.PersonSINIdentification.IdentificationID;
-    const personalInformationEntity = this.mockPersonalInformationDb.find(({ sinIdentification }) => sinIdentification === personSinIdentification);
+    const sin = applicantRequestEntity.Applicant.PersonSINIdentification.IdentificationID;
+    const applicantEntity = this.mockApplicantDb.find(({ sinIdentification }) => sinIdentification === sin);
 
-    if (!personalInformationEntity) {
-      this.log.debug('No applicant found; Returning null');
+    if (!applicantEntity) {
+      this.log.debug('No applicant found; Returning None');
       return await Promise.resolve(None);
     }
 
+    const applicantResponseEntity = this.mapToApplicantResponseEntity(applicantEntity);
+    this.log.debug('Returning applicant [%j]', applicantResponseEntity);
+    return await Promise.resolve(Some(applicantResponseEntity));
+  }
+
+  mapToApplicantResponseEntity(applicantEntity: (typeof this.mockApplicantDb)[number]): ApplicantResponseEntity {
     const clientIdentification: { IdentificationID: string; IdentificationCategoryText: 'Client ID' | 'Client Number' }[] = [];
 
-    if (personalInformationEntity.clientNumber) {
-      clientIdentification.push({ IdentificationID: personalInformationEntity.clientNumber, IdentificationCategoryText: 'Client Number' });
+    if (applicantEntity.clientNumber) {
+      clientIdentification.push({ IdentificationID: applicantEntity.clientNumber, IdentificationCategoryText: 'Client Number' });
     }
 
-    if (personalInformationEntity.clientId) {
-      clientIdentification.push({ IdentificationID: personalInformationEntity.clientId, IdentificationCategoryText: 'Client ID' });
+    if (applicantEntity.clientId) {
+      clientIdentification.push({ IdentificationID: applicantEntity.clientId, IdentificationCategoryText: 'Client ID' });
     }
 
-    const applicantResponseEntity: ApplicantResponseEntity = {
+    return {
       BenefitApplication: {
         Applicant: {
           ApplicantCategoryCode: {
-            ReferenceDataID: personalInformationEntity.applicantCategoryCode,
+            ReferenceDataID: applicantEntity.applicantCategoryCode,
           },
           ClientIdentification: clientIdentification,
           PersonBirthDate: {
-            date: personalInformationEntity.birthdate,
+            date: applicantEntity.birthdate,
           },
           PersonContactInformation: [
             {
               Address: [
                 {
                   AddressCategoryCode: { ReferenceDataName: 'Mailing' },
-                  AddressStreet: { StreetName: personalInformationEntity.mailingAddressStreet },
-                  AddressSecondaryUnitText: personalInformationEntity.mailingAddressSecondaryUnitText,
-                  AddressCityName: personalInformationEntity.mailingAddressCityName,
-                  AddressProvince: { ProvinceCode: { ReferenceDataID: personalInformationEntity.mailingAddressProvince } },
-                  AddressCountry: { CountryCode: { ReferenceDataID: personalInformationEntity.mailingAddressCountryReferenceId } },
-                  AddressPostalCode: personalInformationEntity.mailingAddressPostalCode,
+                  AddressStreet: { StreetName: applicantEntity.mailingAddressStreet },
+                  AddressSecondaryUnitText: applicantEntity.mailingAddressSecondaryUnitText,
+                  AddressCityName: applicantEntity.mailingAddressCityName,
+                  AddressProvince: { ProvinceCode: { ReferenceDataID: applicantEntity.mailingAddressProvince } },
+                  AddressCountry: { CountryCode: { ReferenceDataID: applicantEntity.mailingAddressCountryReferenceId } },
+                  AddressPostalCode: applicantEntity.mailingAddressPostalCode,
                 },
                 {
                   AddressCategoryCode: { ReferenceDataName: 'Home' },
-                  AddressStreet: { StreetName: personalInformationEntity.homeAddressStreet },
-                  AddressSecondaryUnitText: personalInformationEntity.homeAddressSecondaryUnitText,
-                  AddressCityName: personalInformationEntity.homeAddressCityName,
-                  AddressProvince: { ProvinceCode: { ReferenceDataID: personalInformationEntity.homeAddressProvince } },
-                  AddressCountry: { CountryCode: { ReferenceDataID: personalInformationEntity.homeAddressCountryReferenceId } },
-                  AddressPostalCode: personalInformationEntity.homeAddressPostalCode,
+                  AddressStreet: { StreetName: applicantEntity.homeAddressStreet },
+                  AddressSecondaryUnitText: applicantEntity.homeAddressSecondaryUnitText,
+                  AddressCityName: applicantEntity.homeAddressCityName,
+                  AddressProvince: { ProvinceCode: { ReferenceDataID: applicantEntity.homeAddressProvince } },
+                  AddressCountry: { CountryCode: { ReferenceDataID: applicantEntity.homeAddressCountryReferenceId } },
+                  AddressPostalCode: applicantEntity.homeAddressPostalCode,
                 },
               ],
-              EmailAddress: [{ EmailAddressID: personalInformationEntity.emailAddressId }],
+              EmailAddress: [{ EmailAddressID: applicantEntity.emailAddressId }],
               TelephoneNumber: [
                 {
-                  FullTelephoneNumber: { TelephoneNumberFullID: personalInformationEntity.primaryTelephoneNumber },
+                  FullTelephoneNumber: { TelephoneNumberFullID: applicantEntity.primaryTelephoneNumber },
                   TelephoneNumberCategoryCode: { ReferenceDataName: 'Primary' },
                 },
                 {
-                  FullTelephoneNumber: { TelephoneNumberFullID: personalInformationEntity.alternateTelephoneNumber },
+                  FullTelephoneNumber: { TelephoneNumberFullID: applicantEntity.alternateTelephoneNumber },
                   TelephoneNumberCategoryCode: { ReferenceDataName: 'Alternate' },
                 },
               ],
@@ -290,38 +365,35 @@ export class MockApplicantRepository implements ApplicantRepository {
 
           PersonMaritalStatus: {
             StatusCode: {
-              ReferenceDataID: personalInformationEntity.maritalStatusCode,
+              ReferenceDataID: applicantEntity.maritalStatusCode,
             },
           },
           PersonName: [
             {
-              PersonGivenName: [personalInformationEntity.firstName],
-              PersonSurName: personalInformationEntity.lastName,
+              PersonGivenName: [applicantEntity.firstName],
+              PersonSurName: applicantEntity.lastName,
             },
           ],
           PersonSINIdentification: {
-            IdentificationID: personalInformationEntity.sinIdentification,
+            IdentificationID: applicantEntity.sinIdentification,
           },
           PersonLanguage: [
             {
               CommunicationCategoryCode: {
-                ReferenceDataID: personalInformationEntity.preferredLanguage,
+                ReferenceDataID: applicantEntity.preferredLanguage,
               },
               PreferredIndicator: true,
             },
           ],
           PreferredMethodCommunicationCode: {
-            ReferenceDataID: personalInformationEntity.preferredMethodCommunicationCode,
+            ReferenceDataID: applicantEntity.preferredMethodCommunicationCode,
           },
           PreferredMethodCommunicationGCCode: {
-            ReferenceDataID: personalInformationEntity.preferredMethodCommunicationGCCode,
+            ReferenceDataID: applicantEntity.preferredMethodCommunicationGCCode,
           },
         },
       },
     };
-
-    this.log.debug('Returning applicant [%j]', applicantResponseEntity);
-    return await Promise.resolve(Some(applicantResponseEntity));
   }
 
   getMetadata(): Record<string, string> {
