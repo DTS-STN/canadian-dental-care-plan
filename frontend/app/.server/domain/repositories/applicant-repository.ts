@@ -3,7 +3,7 @@ import { None, Option, Some } from 'oxide.ts';
 
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
-import type { ApplicantRequestEntity, ApplicantResponseEntity } from '~/.server/domain/entities';
+import type { ApplicantResponseEntity, FindApplicantByBasicInfoRequestEntity, FindApplicantBySinRequestEntity } from '~/.server/domain/entities';
 import type { HttpClient } from '~/.server/http';
 import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
@@ -16,12 +16,20 @@ import { ErrorCodes } from '~/errors/error-codes';
  */
 export interface ApplicantRepository {
   /**
+   * Finds an applicant by basic info.
+   *
+   * @param request The basic info request entity.
+   * @returns A Promise that resolves to the applicant entity if found, or `None` otherwise.
+   */
+  findApplicantByBasicInfo(request: FindApplicantByBasicInfoRequestEntity): Promise<Option<ApplicantResponseEntity>>;
+
+  /**
    * Finds an applicant by SIN.
    *
-   * @param applicantRequestEntity The SIN request entity.
-   * @returns A Promise that resolves to the applicant entity if found, or `null` otherwise.
+   * @param request The SIN request entity.
+   * @returns A Promise that resolves to the applicant entity if found, or `None` otherwise.
    */
-  findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<Option<ApplicantResponseEntity>>;
+  findApplicantBySin(request: FindApplicantBySinRequestEntity): Promise<Option<ApplicantResponseEntity>>;
 
   /**
    * Retrieves metadata associated with the applicant repository.
@@ -63,8 +71,12 @@ export class DefaultApplicantRepository implements ApplicantRepository {
     this.baseUrl = `${this.serverConfig.INTEROP_APPLICANT_API_BASE_URI ?? this.serverConfig.INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1`;
   }
 
-  async findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<Option<ApplicantResponseEntity>> {
-    this.log.trace('Fetching applicant for sin [%j]', applicantRequestEntity);
+  async findApplicantByBasicInfo(request: FindApplicantByBasicInfoRequestEntity): Promise<Option<ApplicantResponseEntity>> {
+    return await Promise.reject(new Error('findApplicantByBasicInfo is not yet implemented.'));
+  }
+
+  async findApplicantBySin(request: FindApplicantBySinRequestEntity): Promise<Option<ApplicantResponseEntity>> {
+    this.log.trace('Fetching applicant for sin [%j]', request);
 
     const url = `${this.baseUrl}/applicant`;
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.client-application_by-sin.posts', url, {
@@ -74,7 +86,7 @@ export class DefaultApplicantRepository implements ApplicantRepository {
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': this.serverConfig.INTEROP_APPLICANT_API_SUBSCRIPTION_KEY ?? this.serverConfig.INTEROP_API_SUBSCRIPTION_KEY,
       },
-      body: JSON.stringify(applicantRequestEntity),
+      body: JSON.stringify(request),
       retryOptions: {
         retries: this.serverConfig.INTEROP_API_MAX_RETRIES,
         backoffMs: this.serverConfig.INTEROP_API_BACKOFF_MS,
@@ -205,7 +217,11 @@ export class MockApplicantRepository implements ApplicantRepository {
     this.log = createLogger('MockApplicantRepository');
   }
 
-  async findApplicantBySin(applicantRequestEntity: ApplicantRequestEntity): Promise<Option<ApplicantResponseEntity>> {
+  async findApplicantByBasicInfo(request: FindApplicantByBasicInfoRequestEntity): Promise<Option<ApplicantResponseEntity>> {
+    return await Promise.reject(new Error('MockApplicantRepository.findApplicantByBasicInfo is not yet implemented.'));
+  }
+
+  async findApplicantBySin(applicantRequestEntity: FindApplicantBySinRequestEntity): Promise<Option<ApplicantResponseEntity>> {
     this.log.debug('Fetching applicant for sin [%j]', applicantRequestEntity);
 
     const personSinIdentification = applicantRequestEntity.Applicant.PersonSINIdentification.IdentificationID;

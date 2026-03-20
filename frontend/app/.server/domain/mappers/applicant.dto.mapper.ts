@@ -2,21 +2,42 @@ import { invariant } from '@dts-stn/invariant';
 import { injectable } from 'inversify';
 import { Result } from 'oxide.ts';
 
-import type { ApplicantDto } from '~/.server/domain/dtos';
-import type { ApplicantRequestEntity, ApplicantResponseEntity } from '~/.server/domain/entities';
+import type { ApplicantDto, FindApplicantByBasicInfoDto, FindApplicantBySinRequestDto } from '~/.server/domain/dtos';
+import type { ApplicantResponseEntity, FindApplicantByBasicInfoRequestEntity, FindApplicantBySinRequestEntity } from '~/.server/domain/entities';
 
 export interface ApplicantDtoMapper {
-  mapSinToApplicantRequestEntity(sin: string): ApplicantRequestEntity;
+  mapFindApplicantByBasicInfoRequestDtoToFindApplicantByBasicInfoRequestEntity(request: OmitStrict<FindApplicantByBasicInfoDto, 'userId'>): FindApplicantByBasicInfoRequestEntity;
+  mapFindApplicantBySinRequestDtoToFindApplicantBySinRequestEntity(request: OmitStrict<FindApplicantBySinRequestDto, 'userId'>): FindApplicantBySinRequestEntity;
   mapApplicantResponseEntityToApplicantDto(applicantResponseEntity: ApplicantResponseEntity): ApplicantDto;
 }
 
 @injectable()
 export class DefaultApplicantDtoMapper implements ApplicantDtoMapper {
-  mapSinToApplicantRequestEntity(sin: string): ApplicantRequestEntity {
+  mapFindApplicantByBasicInfoRequestDtoToFindApplicantByBasicInfoRequestEntity(request: OmitStrict<FindApplicantByBasicInfoDto, 'userId'>): FindApplicantByBasicInfoRequestEntity {
+    return {
+      Applicant: {
+        PersonName: {
+          PersonGivenName: [request.firstName],
+          PersonSurName: request.lastName,
+        },
+        PersonBirthDate: {
+          date: request.dateOfBirth,
+        },
+        ClientIdentification: [
+          {
+            IdentificationID: request.clientNumber,
+            IdentificationCategoryText: 'Client Number',
+          },
+        ],
+      },
+    };
+  }
+
+  mapFindApplicantBySinRequestDtoToFindApplicantBySinRequestEntity(request: OmitStrict<FindApplicantBySinRequestDto, 'userId'>): FindApplicantBySinRequestEntity {
     return {
       Applicant: {
         PersonSINIdentification: {
-          IdentificationID: sin,
+          IdentificationID: request.sin,
         },
       },
     };
