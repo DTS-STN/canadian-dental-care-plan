@@ -445,7 +445,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Complete phone click"
           >
-            {t('protected-application-renewal-child:parent-or-guardian.phone-number-unchanged')}
+            <span className="text-left">{t('protected-application-renewal-child:parent-or-guardian.phone-number-unchanged')}</span>
           </Button>
         </div>
       </CardFooter>
@@ -634,7 +634,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Complete address click"
           >
-            {t('protected-application-renewal-child:parent-or-guardian.address-unchanged')}
+            <span className="text-left">{t('protected-application-renewal-child:parent-or-guardian.address-unchanged')}</span>
           </Button>
         </div>
       </CardFooter>
@@ -786,7 +786,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Complete comms click"
           >
-            {t('protected-application-renewal-child:parent-or-guardian.communication-preferences-unchanged')}
+            <span className="text-left">{t('protected-application-renewal-child:parent-or-guardian.communication-preferences-unchanged')}</span>
           </Button>
         </div>
       </CardFooter>

@@ -337,7 +337,7 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                           size="lg"
                           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Edit button not changed click"
                         >
-                          {t('application-simplified-child:childrens-application.benefits-not-changed')}
+                          <span className="text-left">{t('application-simplified-child:childrens-application.benefits-not-changed')}</span>
                         </Button>
                       </div>
                     </fetcher.Form>

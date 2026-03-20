@@ -408,8 +408,23 @@ function PhoneNumberCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Complete phone click"
           >
-            {t('protected-application-renewal-adult:contact-information.phone-number-unchanged')}
+            <span className="text-left">{t('protected-application-renewal-adult:contact-information.phone-number-unchanged')}</span>
           </Button>
+          <button
+            className="font-lato mt-5 inline-flex items-center justify-center rounded-sm border-2 border-none p-0 align-middle text-base text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70"
+            id="complete-address-button"
+            name="_action"
+            value="address-not-changed"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Complete address click"
+          >
+            <svg data-prefix="far" data-icon="circle-check" className="svg-inline--fa fa-circle-check me-2" role="img" viewBox="0 0 512 512" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-464a208 208 0 1 0 0 416 208 208 0 1 0 0-416zm70.7 121.9c7.8-10.7 22.8-13.1 33.5-5.3 10.7 7.8 13.1 22.8 5.3 33.5L243.4 366.1c-4.1 5.7-10.5 9.3-17.5 9.8-7 .5-13.9-2-18.8-6.9l-55.9-55.9c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l36 36 105.6-145.2z"
+              ></path>
+            </svg>
+            {t('protected-application-renewal-adult:contact-information.phone-number-unchanged')}
+          </button>
         </div>
       </CardFooter>
     );
@@ -597,7 +612,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Complete address click"
           >
-            {t('protected-application-renewal-adult:contact-information.address-unchanged')}
+            <span className="text-left">{t('protected-application-renewal-adult:contact-information.address-unchanged')}</span>
           </Button>
         </div>
       </CardFooter>
@@ -749,7 +764,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Complete comms click"
           >
-            {t('protected-application-renewal-adult:contact-information.communication-preferences-unchanged')}
+            <span className="text-left">{t('protected-application-renewal-adult:contact-information.communication-preferences-unchanged')}</span>
           </Button>
         </div>
       </CardFooter>

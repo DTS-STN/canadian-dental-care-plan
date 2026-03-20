@@ -416,7 +416,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Complete benefits click"
           >
-            {t('application-simplified-adult:dental-insurance.access-not-changed')}
+            <span className="text-left">{t('application-simplified-adult:dental-insurance.access-not-changed')}</span>
           </Button>
         </div>
       </CardFooter>

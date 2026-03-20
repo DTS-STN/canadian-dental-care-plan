@@ -645,7 +645,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
           >
-            {t('protected-application-renewal-child:childrens-application.benefits-not-changed')}
+            <span className="text-left">{t('protected-application-renewal-child:childrens-application.benefits-not-changed')}</span>
           </Button>
         </div>
       </fetcher.Form>

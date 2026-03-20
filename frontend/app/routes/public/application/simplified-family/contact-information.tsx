@@ -353,7 +353,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Complete phone click"
           >
-            {t('application-simplified-family:contact-information.phone-number-unchanged')}
+            <span className="text-left">{t('application-simplified-family:contact-information.phone-number-unchanged')}</span>
           </Button>
         </div>
       </CardFooter>
@@ -526,7 +526,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Complete address click"
           >
-            {t('application-simplified-family:contact-information.address-unchanged')}
+            <span className="text-left">{t('application-simplified-family:contact-information.address-unchanged')}</span>
           </Button>
         </div>
       </CardFooter>
@@ -678,7 +678,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Complete comms click"
           >
-            {t('application-simplified-family:contact-information.communication-preferences-unchanged')}
+            <span className="text-left">{t('application-simplified-family:contact-information.communication-preferences-unchanged')}</span>
           </LoadingButton>
         </div>
       </CardFooter>
