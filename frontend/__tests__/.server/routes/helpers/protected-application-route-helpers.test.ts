@@ -88,7 +88,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = resolveRenewalStateCommunicationPreferencesValue(state, 'en', languageService, sunLifeService, gcService);
 
-      expect(result).toEqual({ preferredLanguage: mockLanguage, preferredMethodSunLife: mockSunLifeMethod, preferredMethodGovernmentOfCanada: mockGCMethod });
+      expect(result).toEqual({ hasChanged: true, preferredLanguage: mockLanguage, preferredMethodSunLife: mockSunLifeMethod, preferredMethodGovernmentOfCanada: mockGCMethod });
       expect(languageService.getLocalizedLanguageById).toHaveBeenCalledWith('lang-1', 'en');
       expect(sunLifeService.getLocalizedSunLifeCommunicationMethodById).toHaveBeenCalledWith('sl-1', 'en');
       expect(gcService.getLocalizedGCCommunicationMethodById).toHaveBeenCalledWith('gc-1', 'en');
@@ -116,7 +116,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = resolveRenewalStateCommunicationPreferencesValue(state, 'en', languageService, sunLifeService, gcService);
 
-      expect(result).toEqual({ preferredLanguage: mockLanguage, preferredMethodSunLife: mockSunLifeMethod, preferredMethodGovernmentOfCanada: mockGCMethod });
+      expect(result).toEqual({ hasChanged: false, preferredLanguage: mockLanguage, preferredMethodSunLife: mockSunLifeMethod, preferredMethodGovernmentOfCanada: mockGCMethod });
       expect(languageService.getLocalizedLanguageById).toHaveBeenCalledWith('lang-2', 'en');
       expect(sunLifeService.getLocalizedSunLifeCommunicationMethodById).toHaveBeenCalledWith('sl-2', 'en');
       expect(gcService.getLocalizedGCCommunicationMethodById).toHaveBeenCalledWith('gc-2', 'en');
@@ -130,7 +130,7 @@ describe('protected-application-route-helpers', () => {
         clientApplication: { contactInformation: { phoneNumber: '555-0000', phoneNumberAlt: '555-0001' } },
       } as const;
 
-      expect(resolveRenewalStatePhoneNumberValue(state)).toEqual({ primary: '555-1234', alternate: '555-5678' });
+      expect(resolveRenewalStatePhoneNumberValue(state)).toEqual({ hasChanged: true, primary: '555-1234', alternate: '555-5678' });
     });
 
     it('returns client application phone numbers when hasChanged is false', () => {
@@ -139,7 +139,7 @@ describe('protected-application-route-helpers', () => {
         clientApplication: { contactInformation: { phoneNumber: '555-0000', phoneNumberAlt: '555-0001' } },
       } as const;
 
-      expect(resolveRenewalStatePhoneNumberValue(state)).toEqual({ primary: '555-0000', alternate: '555-0001' });
+      expect(resolveRenewalStatePhoneNumberValue(state)).toEqual({ hasChanged: false, primary: '555-0000', alternate: '555-0001' });
     });
 
     it('returns client application phone number without alternate when alt is undefined', () => {
@@ -148,7 +148,7 @@ describe('protected-application-route-helpers', () => {
         clientApplication: { contactInformation: { phoneNumber: '555-0000', phoneNumberAlt: undefined } },
       } as const;
 
-      expect(resolveRenewalStatePhoneNumberValue(state)).toEqual({ primary: '555-0000', alternate: undefined });
+      expect(resolveRenewalStatePhoneNumberValue(state)).toEqual({ hasChanged: false, primary: '555-0000', alternate: undefined });
     });
   });
 
@@ -172,7 +172,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = await resolveRenewalStateMailingAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
-      expect(result).toEqual({ address: '123 Main St', city: 'Ottawa', country: mockCountry, postalCode: 'K1A 0A9', province: mockProvince });
+      expect(result).toEqual({ hasChanged: true, address: '123 Main St', city: 'Ottawa', country: mockCountry, postalCode: 'K1A 0A9', province: mockProvince });
     });
 
     it('returns state mailing address without province when province is undefined', async () => {
@@ -190,7 +190,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = await resolveRenewalStateMailingAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
-      expect(result).toEqual({ address: '123 Main St', city: 'Ottawa', country: mockCountry, postalCode: undefined, province: undefined });
+      expect(result).toEqual({ hasChanged: true, address: '123 Main St', city: 'Ottawa', country: mockCountry, postalCode: undefined, province: undefined });
       expect(provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById).not.toHaveBeenCalled();
     });
 
@@ -209,7 +209,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = await resolveRenewalStateMailingAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
-      expect(result).toEqual({ address: '456 Elm St', city: 'Toronto', country: mockCountry, postalCode: 'M5G 2C8', province: mockProvince });
+      expect(result).toEqual({ hasChanged: false, address: '456 Elm St', city: 'Toronto', country: mockCountry, postalCode: 'M5G 2C8', province: mockProvince });
     });
 
     it('returns client application mailing address without province when province is undefined', async () => {
@@ -226,7 +226,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = await resolveRenewalStateMailingAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
-      expect(result).toEqual({ address: '456 Elm St', city: 'Toronto', country: mockCountry, postalCode: undefined, province: undefined });
+      expect(result).toEqual({ hasChanged: false, address: '456 Elm St', city: 'Toronto', country: mockCountry, postalCode: undefined, province: undefined });
       expect(provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById).not.toHaveBeenCalled();
     });
   });
@@ -251,7 +251,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = await resolveRenewalStateHomeAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
-      expect(result).toEqual({ address: '789 Oak Ave', city: 'Vancouver', country: mockCountry, postalCode: 'V6B 1A1', province: mockProvince });
+      expect(result).toEqual({ hasChanged: true, address: '789 Oak Ave', city: 'Vancouver', country: mockCountry, postalCode: 'V6B 1A1', province: mockProvince });
     });
 
     it('returns state home address without province when province is undefined', async () => {
@@ -269,7 +269,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = await resolveRenewalStateHomeAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
-      expect(result).toEqual({ address: '789 Oak Ave', city: 'Vancouver', country: mockCountry, postalCode: undefined, province: undefined });
+      expect(result).toEqual({ hasChanged: true, address: '789 Oak Ave', city: 'Vancouver', country: mockCountry, postalCode: undefined, province: undefined });
       expect(provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById).not.toHaveBeenCalled();
     });
 
@@ -288,7 +288,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = await resolveRenewalStateHomeAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
-      expect(result).toEqual({ address: '321 Pine Rd', city: 'Calgary', country: mockCountry, postalCode: 'T2P 1J9', province: mockProvince });
+      expect(result).toEqual({ hasChanged: false, address: '321 Pine Rd', city: 'Calgary', country: mockCountry, postalCode: 'T2P 1J9', province: mockProvince });
     });
 
     it('returns client application home address without province when province is undefined', async () => {
@@ -305,7 +305,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = await resolveRenewalStateHomeAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
-      expect(result).toEqual({ address: '321 Pine Rd', city: 'Calgary', country: mockCountry, postalCode: undefined, province: undefined });
+      expect(result).toEqual({ hasChanged: false, address: '321 Pine Rd', city: 'Calgary', country: mockCountry, postalCode: undefined, province: undefined });
       expect(provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById).not.toHaveBeenCalled();
     });
   });
@@ -359,7 +359,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = await resolveRenewalStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
-      expect(result).toEqual({ federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: mockProvincialPlan });
+      expect(result).toEqual({ hasChanged: true, federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: mockProvincialPlan });
     });
 
     it('returns undefined plans from state when both programs are undefined and hasChanged is true', async () => {
@@ -376,7 +376,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = await resolveRenewalStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
-      expect(result).toEqual({ federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: undefined });
+      expect(result).toEqual({ hasChanged: true, federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: undefined });
       expect(federalService.getLocalizedFederalGovernmentInsurancePlanById).not.toHaveBeenCalled();
       expect(provincialService.getLocalizedProvincialGovernmentInsurancePlanById).not.toHaveBeenCalled();
     });
@@ -394,7 +394,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = await resolveRenewalStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
-      expect(result).toEqual({ federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: undefined });
+      expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: undefined });
     });
 
     it('looks up plans by benefit ID from client application when hasChanged is false and finds provincial plan', async () => {
@@ -410,7 +410,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = await resolveRenewalStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
-      expect(result).toEqual({ federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: mockProvincialPlan });
+      expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: mockProvincialPlan });
     });
 
     it('returns no plans when client application benefit ID matches neither federal nor provincial', async () => {
@@ -426,7 +426,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = await resolveRenewalStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
-      expect(result).toEqual({ federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: undefined });
+      expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: undefined });
     });
 
     it('returns both plans when client application has both federal and provincial benefit IDs', async () => {
@@ -442,7 +442,7 @@ describe('protected-application-route-helpers', () => {
 
       const result = await resolveRenewalStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
-      expect(result).toEqual({ federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: mockProvincialPlan });
+      expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: mockProvincialPlan });
     });
   });
 });

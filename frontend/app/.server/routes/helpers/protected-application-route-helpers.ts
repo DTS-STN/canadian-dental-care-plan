@@ -612,12 +612,14 @@ export function resolveRenewalStateCommunicationPreferencesValue(
   sunLifeCommunicationMethodService: SunLifeCommunicationMethodService,
   gcCommunicationMethodService: GCCommunicationMethodService,
 ): {
+  hasChanged: boolean;
   preferredLanguage: LanguageLocalizedDto;
   preferredMethodSunLife: SunLifeCommunicationMethodLocalizedDto;
   preferredMethodGovernmentOfCanada: GCCommunicationMethodLocalizedDto;
 } {
   if (state.communicationPreferences.hasChanged) {
     return {
+      hasChanged: true,
       preferredLanguage: languageService.getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale),
       preferredMethodSunLife: sunLifeCommunicationMethodService.getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale),
       preferredMethodGovernmentOfCanada: gcCommunicationMethodService.getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale),
@@ -632,6 +634,7 @@ export function resolveRenewalStateCommunicationPreferencesValue(
   invariant(state.clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada, 'Expected clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada to be defined when communicationPreferences.hasChanged is false');
 
   return {
+    hasChanged: false,
     preferredLanguage: languageService.getLocalizedLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale),
     preferredMethodSunLife: sunLifeCommunicationMethodService.getLocalizedSunLifeCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethodSunLife, locale),
     preferredMethodGovernmentOfCanada: gcCommunicationMethodService.getLocalizedGCCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada, locale),
@@ -647,11 +650,13 @@ export function resolveRenewalStateCommunicationPreferencesValue(
  * @returns The resolved primary phone number and optional alternate phone number.
  */
 export function resolveRenewalStatePhoneNumberValue(state: Required<PickDeep<ProtectedApplicationState, 'phoneNumber' | 'clientApplication.contactInformation.phoneNumber' | 'clientApplication.contactInformation.phoneNumberAlt'>>): {
+  hasChanged: boolean;
   primary: string;
   alternate?: string;
 } {
   if (state.phoneNumber.hasChanged) {
     return {
+      hasChanged: true,
       primary: state.phoneNumber.value.primary,
       alternate: state.phoneNumber.value.alternate,
     };
@@ -663,6 +668,7 @@ export function resolveRenewalStatePhoneNumberValue(state: Required<PickDeep<Pro
   invariant(state.clientApplication.contactInformation.phoneNumber, 'Expected clientApplication.contactInformation.phoneNumber to be defined when phoneNumber.hasChanged is false');
 
   return {
+    hasChanged: false,
     primary: state.clientApplication.contactInformation.phoneNumber,
     alternate: state.clientApplication.contactInformation.phoneNumberAlt,
   };
@@ -695,6 +701,7 @@ export async function resolveRenewalStateMailingAddressValue(
   countryService: CountryService,
   provinceTerritoryStateService: ProvinceTerritoryStateService,
 ): Promise<{
+  hasChanged: boolean;
   address: string;
   city: string;
   country: CountryLocalizedDto;
@@ -703,6 +710,7 @@ export async function resolveRenewalStateMailingAddressValue(
 }> {
   if (state.mailingAddress.hasChanged) {
     return {
+      hasChanged: true,
       address: state.mailingAddress.value.address,
       city: state.mailingAddress.value.city,
       country: await countryService.getLocalizedCountryById(state.mailingAddress.value.country, locale),
@@ -712,6 +720,7 @@ export async function resolveRenewalStateMailingAddressValue(
   }
 
   return {
+    hasChanged: false,
     address: state.clientApplication.contactInformation.mailingAddress,
     city: state.clientApplication.contactInformation.mailingCity,
     country: await countryService.getLocalizedCountryById(state.clientApplication.contactInformation.mailingCountry, locale),
@@ -747,6 +756,7 @@ export async function resolveRenewalStateHomeAddressValue(
   countryService: CountryService,
   provinceTerritoryStateService: ProvinceTerritoryStateService,
 ): Promise<{
+  hasChanged: boolean;
   address: string;
   city: string;
   country: CountryLocalizedDto;
@@ -755,6 +765,7 @@ export async function resolveRenewalStateHomeAddressValue(
 }> {
   if (state.homeAddress.hasChanged) {
     return {
+      hasChanged: true,
       address: state.homeAddress.value.address,
       city: state.homeAddress.value.city,
       country: await countryService.getLocalizedCountryById(state.homeAddress.value.country, locale),
@@ -771,6 +782,7 @@ export async function resolveRenewalStateHomeAddressValue(
   invariant(state.clientApplication.contactInformation.homeCountry, 'Expected clientApplication.contactInformation.homeCountry to be defined when homeAddress.hasChanged is false');
 
   return {
+    hasChanged: false,
     address: state.clientApplication.contactInformation.homeAddress,
     city: state.clientApplication.contactInformation.homeCity,
     country: await countryService.getLocalizedCountryById(state.clientApplication.contactInformation.homeCountry, locale),
@@ -809,11 +821,13 @@ export async function resolveRenewalStateDentalBenefitsValue(
   federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService,
   provincialGovernmentInsurancePlanService: ProvincialGovernmentInsurancePlanService,
 ): Promise<{
+  hasChanged: boolean;
   federalGovernmentInsurancePlan?: FederalGovernmentInsurancePlanLocalizedDto;
   provincialGovernmentInsurancePlan?: ProvincialGovernmentInsurancePlanLocalizedDto;
 }> {
   if (state.dentalBenefits.hasChanged) {
     return {
+      hasChanged: true,
       federalGovernmentInsurancePlan: state.dentalBenefits.value.federalSocialProgram //
         ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale)
         : undefined,
@@ -842,6 +856,7 @@ export async function resolveRenewalStateDentalBenefitsValue(
   }
 
   return {
+    hasChanged: false,
     federalGovernmentInsurancePlan,
     provincialGovernmentInsurancePlan,
   };
