@@ -7,7 +7,15 @@ import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { getEligibilityStatus } from '~/.server/routes/helpers/base-application-route-helpers';
-import { clearPublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import {
+  clearPublicApplicationState,
+  resolveSimplifiedStateCommunicationPreferencesValue,
+  resolveSimplifiedStateEmailValue,
+  resolveSimplifiedStateHomeAddressValue,
+  resolveSimplifiedStateMailingAddressValue,
+  resolveSimplifiedStatePhoneNumberValue,
+  validateApplicationFlow,
+} from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicApplicationSimplifiedChildState } from '~/.server/routes/helpers/public-application-simplified-child-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
@@ -48,6 +56,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     state.communicationPreferences === undefined ||
     state.phoneNumber === undefined ||
     state.mailingAddress === undefined ||
+    state.homeAddress === undefined ||
     state.submitTerms === undefined ||
     state.hasFiledTaxes === undefined ||
     state.submissionInfo === undefined ||
@@ -59,33 +68,41 @@ export async function loader({ context: { appContainer, session }, params, reque
   const env = appContainer.get(TYPES.ClientConfig);
   const surveyLink = locale === 'en' ? env.CDCP_SURVEY_LINK_EN : env.CDCP_SURVEY_LINK_FR;
 
+  const countryService = appContainer.get(TYPES.CountryService);
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
+  const gcCommunicationMethodService = appContainer.get(TYPES.GCCommunicationMethodService);
+  const languageService = appContainer.get(TYPES.LanguageService);
+  const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
+  const sunLifeCommunicationMethodService = appContainer.get(TYPES.SunLifeCommunicationMethodService);
 
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province) : undefined;
-  const countryMailing = state.mailingAddress.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale) : undefined;
-  const countryHome = state.homeAddress?.value?.country ? await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale) : undefined;
+  const phoneNumber = resolveSimplifiedStatePhoneNumberValue({ clientApplication: state.clientApplication, phoneNumber: state.phoneNumber });
+  const mailingAddress = await resolveSimplifiedStateMailingAddressValue({ clientApplication: state.clientApplication, mailingAddress: state.mailingAddress }, locale, countryService, provinceTerritoryStateService);
+  const homeAddress = await resolveSimplifiedStateHomeAddressValue({ clientApplication: state.clientApplication, homeAddress: state.homeAddress }, locale, countryService, provinceTerritoryStateService);
+  const communicationPreferences = resolveSimplifiedStateCommunicationPreferencesValue(
+    { clientApplication: state.clientApplication, communicationPreferences: state.communicationPreferences },
+    locale,
+    languageService,
+    sunLifeCommunicationMethodService,
+    gcCommunicationMethodService,
+  );
+  const email = resolveSimplifiedStateEmailValue({ clientApplication: state.clientApplication, email: state.email });
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
-    hasPhoneNumberChanged: state.phoneNumber.hasChanged,
-    phoneNumber: state.phoneNumber.value?.primary,
-    altPhoneNumber: state.phoneNumber.value?.alternate,
-    hasCommunicationPreferencesChanged: state.communicationPreferences.hasChanged,
-    preferredLanguage: state.communicationPreferences.value?.preferredLanguage ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
-    contactInformationEmail: state.email,
-    communicationSunLifePreference: state.communicationPreferences.value?.preferredMethod
-      ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale)
-      : undefined,
-    communicationGOCPreference: state.communicationPreferences.value?.preferredNotificationMethod
-      ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale)
-      : undefined,
     memberId: state.applicantInformation.memberId,
+    hasPhoneNumberChanged: phoneNumber.hasChanged,
+    phoneNumber: phoneNumber.primary,
+    altPhoneNumber: phoneNumber.alternate,
+    hasCommunicationPreferencesChanged: communicationPreferences.hasChanged,
+    preferredLanguage: communicationPreferences.preferredLanguage,
+    communicationSunLifePreference: communicationPreferences.preferredMethodSunLife,
+    communicationGOCPreference: communicationPreferences.preferredMethodGovernmentOfCanada,
+    contactInformationEmail: email,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -94,21 +111,21 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const mailingAddressInfo = {
-    hasMailingAddressChanged: state.mailingAddress.hasChanged,
-    address: state.mailingAddress.value?.address,
-    city: state.mailingAddress.value?.city,
-    province: mailingProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.mailingAddress.value?.postalCode,
-    country: countryMailing?.name,
+    hasMailingAddressChanged: mailingAddress.hasChanged,
+    address: mailingAddress.address,
+    city: mailingAddress.city,
+    province: mailingAddress.province?.abbr,
+    postalCode: mailingAddress.postalCode,
+    country: mailingAddress.country.name,
   };
 
   const homeAddressInfo = {
-    hasHomeAddressChanged: state.homeAddress?.hasChanged,
-    address: state.homeAddress?.value?.address,
-    city: state.homeAddress?.value?.city,
-    province: homeProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.homeAddress?.value?.postalCode,
-    country: countryHome?.name,
+    hasHomeAddressChanged: homeAddress.hasChanged,
+    address: homeAddress.address,
+    city: homeAddress.city,
+    province: homeAddress.province?.abbr,
+    postalCode: homeAddress.postalCode,
+    country: homeAddress.country.name,
   };
 
   const children = await Promise.all(
@@ -347,11 +364,11 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
                 {mailingAddressInfo.hasMailingAddressChanged ? (
                   <Address
                     address={{
-                      address: mailingAddressInfo.address ?? '',
-                      city: mailingAddressInfo.city ?? '',
+                      address: mailingAddressInfo.address,
+                      city: mailingAddressInfo.city,
                       provinceState: mailingAddressInfo.province,
                       postalZipCode: mailingAddressInfo.postalCode,
-                      country: mailingAddressInfo.country ?? '',
+                      country: mailingAddressInfo.country,
                     }}
                   />
                 ) : (
@@ -362,11 +379,11 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
                 {homeAddressInfo.hasHomeAddressChanged ? (
                   <Address
                     address={{
-                      address: homeAddressInfo.address ?? '',
-                      city: homeAddressInfo.city ?? '',
+                      address: homeAddressInfo.address,
+                      city: homeAddressInfo.city,
                       provinceState: homeAddressInfo.province,
                       postalZipCode: homeAddressInfo.postalCode,
-                      country: homeAddressInfo.country ?? '',
+                      country: homeAddressInfo.country,
                     }}
                   />
                 ) : (
@@ -379,9 +396,9 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
           <section className="space-y-6">
             <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-pref')}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.preferredLanguage?.name : t('confirm.no-update')}</DefinitionListItem>
-              <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationSunLifePreference?.name : t('confirm.no-update')}</DefinitionListItem>
-              <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationGOCPreference?.name : t('confirm.no-update')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.preferredLanguage.name : t('confirm.no-update')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationSunLifePreference.name : t('confirm.no-update')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationGOCPreference.name : t('confirm.no-update')}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.email')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')}</DefinitionListItem>
             </DefinitionList>
           </section>
