@@ -9,8 +9,8 @@ import { getEligibilityStatus } from '~/.server/routes/helpers/base-application-
 import { loadProtectedApplicationRenewalAdultState } from '~/.server/routes/helpers/protected-application-renewal-adult-route-helpers';
 import {
   clearProtectedApplicationState,
-  resolveDentalBenefitsValue,
   resolveRenewalStateCommunicationPreferencesValue,
+  resolveRenewalStateDentalBenefitsValue,
   resolveRenewalStateEmailValue,
   resolveRenewalStateHomeAddressValue,
   resolveRenewalStateMailingAddressValue,
@@ -89,7 +89,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     gcCommunicationMethodService,
   );
   const email = resolveRenewalStateEmailValue({ clientApplication: state.clientApplication, email: state.email });
-  const dentalBenefits = await resolveDentalBenefitsValue({ dentalBenefits: state.dentalBenefits, clientApplication: state.clientApplication }, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
+  const dentalBenefits = await resolveRenewalStateDentalBenefitsValue({ dentalBenefits: state.dentalBenefits, clientApplication: state.clientApplication }, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
 
   const userInfo = {
     memberId: state.clientApplication.applicantInformation.clientNumber,

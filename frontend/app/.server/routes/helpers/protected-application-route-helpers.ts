@@ -803,7 +803,7 @@ export function resolveRenewalStateEmailValue(state: Pick<ProtectedApplicationSt
  * @param provincialGovernmentInsurancePlanService - Service for resolving localized provincial government insurance plans.
  * @returns The resolved federal and provincial government insurance plans, each of which may be `undefined` if not applicable.
  */
-export async function resolveDentalBenefitsValue(
+export async function resolveRenewalStateDentalBenefitsValue(
   state: Required<Pick<ProtectedApplicationState, 'dentalBenefits'>> & Required<PickDeep<ProtectedApplicationState, 'clientApplication.dentalBenefits'>>,
   locale: AppLocale,
   federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService,

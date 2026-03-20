@@ -21,8 +21,8 @@ import type {
   SunLifeCommunicationMethodService,
 } from '~/.server/domain/services';
 import {
-  resolveDentalBenefitsValue,
   resolveRenewalStateCommunicationPreferencesValue,
+  resolveRenewalStateDentalBenefitsValue,
   resolveRenewalStateEmailValue,
   resolveRenewalStateHomeAddressValue,
   resolveRenewalStateMailingAddressValue,
@@ -339,7 +339,7 @@ describe('protected-application-route-helpers', () => {
     });
   });
 
-  describe('resolveDentalBenefitsValue', () => {
+  describe('resolveRenewalStateDentalBenefitsValue', () => {
     const mockFederalPlan: FederalGovernmentInsurancePlanLocalizedDto = { id: 'fed-1', name: 'Federal Plan A' };
     const mockProvincialPlan: ProvincialGovernmentInsurancePlanLocalizedDto = { id: 'prov-1', name: 'Provincial Plan B', provinceTerritoryStateId: 'ON' };
 
@@ -357,7 +357,7 @@ describe('protected-application-route-helpers', () => {
       federalService.getLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(mockFederalPlan);
       provincialService.getLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(mockProvincialPlan);
 
-      const result = await resolveDentalBenefitsValue(state, 'en', federalService, provincialService);
+      const result = await resolveRenewalStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
       expect(result).toEqual({ federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: mockProvincialPlan });
     });
@@ -374,7 +374,7 @@ describe('protected-application-route-helpers', () => {
       const federalService = mock<FederalGovernmentInsurancePlanService>();
       const provincialService = mock<ProvincialGovernmentInsurancePlanService>();
 
-      const result = await resolveDentalBenefitsValue(state, 'en', federalService, provincialService);
+      const result = await resolveRenewalStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
       expect(result).toEqual({ federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: undefined });
       expect(federalService.getLocalizedFederalGovernmentInsurancePlanById).not.toHaveBeenCalled();
@@ -392,7 +392,7 @@ describe('protected-application-route-helpers', () => {
       federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(Some(mockFederalPlan));
       provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(None);
 
-      const result = await resolveDentalBenefitsValue(state, 'en', federalService, provincialService);
+      const result = await resolveRenewalStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
       expect(result).toEqual({ federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: undefined });
     });
@@ -408,7 +408,7 @@ describe('protected-application-route-helpers', () => {
       federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(None);
       provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(Some(mockProvincialPlan));
 
-      const result = await resolveDentalBenefitsValue(state, 'en', federalService, provincialService);
+      const result = await resolveRenewalStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
       expect(result).toEqual({ federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: mockProvincialPlan });
     });
@@ -424,7 +424,7 @@ describe('protected-application-route-helpers', () => {
       federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(None);
       provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(None);
 
-      const result = await resolveDentalBenefitsValue(state, 'en', federalService, provincialService);
+      const result = await resolveRenewalStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
       expect(result).toEqual({ federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: undefined });
     });
@@ -440,7 +440,7 @@ describe('protected-application-route-helpers', () => {
       federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValueOnce(Some(mockFederalPlan)).mockResolvedValueOnce(None);
       provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(Some(mockProvincialPlan));
 
-      const result = await resolveDentalBenefitsValue(state, 'en', federalService, provincialService);
+      const result = await resolveRenewalStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
       expect(result).toEqual({ federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: mockProvincialPlan });
     });
