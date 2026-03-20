@@ -261,6 +261,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       eligibilityStatusCode: applicantEarning?.BenefitEligibilityStatus.StatusCode.ReferenceDataID,
       livingIndependently: applicant.ApplicantDetail.LivingIndependentlyIndicator,
       partnerInformation,
+      previousApplication: applicant.ApplicantDetail.PreviousApplicationIndicator,
       t4DentalIndicator: applicantEarning?.PrivateDentalInsuranceIndicator,
       typeOfApplication: this.toBenefitApplicationCategoryCode(clientApplicationEntity.BenefitApplication.BenefitApplicationCategoryCode.ReferenceDataID),
     };

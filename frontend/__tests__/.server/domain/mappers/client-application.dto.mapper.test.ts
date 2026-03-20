@@ -263,8 +263,9 @@ describe('DefaultClientApplicationDtoMapper', () => {
           lastName: 'Doe',
           socialInsuranceNumber: '80000002',
         },
-        typeOfApplication: 'family',
+        previousApplication: false,
         t4DentalIndicator: true,
+        typeOfApplication: 'family',
       };
 
       // Act
