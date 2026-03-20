@@ -48,7 +48,7 @@ export type ClientApplicantInformationDto = Readonly<{
 
 export type ClientChildDto = ReadonlyDeep<{
   dentalBenefits: Array<string>;
-  dentalInsurance: boolean;
+  privateDentalInsurance: boolean;
   information: {
     firstName: string;
     lastName: string;

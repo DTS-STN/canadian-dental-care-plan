@@ -142,7 +142,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
     const children =
       applicant.RelatedPerson?.filter((person) => person.PersonRelationshipCode.ReferenceDataName === 'Dependant').map((child) => ({
         dentalBenefits: child.ApplicantDetail.InsurancePlan?.at(0)?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
-        dentalInsurance:
+        privateDentalInsurance:
           child.ApplicantDetail.PrivateDentalInsuranceIndicator ??
           (() => {
             throw new Error('Expected child.ApplicantDetail.PrivateDentalInsuranceIndicator to be defined');

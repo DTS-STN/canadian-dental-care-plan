@@ -51,7 +51,7 @@ function makeClientApplication(overrides: Partial<ClientApplicationDto> = {}): C
 function makeChild(clientNumber: string, dateOfBirth = '2015-01-01'): ClientChildDto {
   return {
     dentalBenefits: [],
-    dentalInsurance: false,
+    privateDentalInsurance: false,
     information: {
       clientNumber,
       clientId: `id-${clientNumber}`,
