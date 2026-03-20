@@ -1,11 +1,20 @@
 import type { ClientApplicationDto } from '~/.server/domain/dtos/client-application.dto';
 
 /**
- * Represents the result of a client application renewal eligibility check when the client application is not found and
+ * Represents the result of a client application renewal eligibility check when the client application is found and
  * no applicant is found with the provided basic info and SIN, which makes it ineligible for renewal.
  */
 type ClientApplicationRenewalApplicantNotFoundResult = {
   result: 'INELIGIBLE-APPLICANT-NOT-FOUND';
+  clientApplication?: undefined;
+};
+
+/**
+ * Represents the result of a client application renewal eligibility check when the client application and applicant are
+ * found but the provided SIN does not match applicant SIN on file, which makes it ineligible for renewal.
+ */
+type ClientApplicationRenewalApplicantSinMismatchResult = {
+  result: 'INELIGIBLE-APPLICANT-SIN-MISMATCH';
   clientApplication?: undefined;
 };
 
@@ -16,6 +25,15 @@ type ClientApplicationRenewalApplicantNotFoundResult = {
 export type ClientApplicationRenewalIneligibleApplicantNot18YearsOldResult = {
   result: 'INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD';
   clientApplication?: undefined;
+};
+
+/**
+ * Represents the result of a client application renewal eligibility check when the application is found but has already
+ * been renewed, which makes it ineligible for renewal.
+ */
+type ClientApplicationRenewalIneligibleAlreadyRenewedResult = {
+  result: 'INELIGIBLE-ALREADY-RENEWED';
+  clientApplication: ClientApplicationDto;
 };
 
 /**
@@ -70,6 +88,8 @@ export type ClientApplicationRenewalEligibleDto = ClientApplicationDto & {
 
 export type ClientApplicationRenewalEligibilityDto =
   | ClientApplicationRenewalApplicantNotFoundResult //
+  | ClientApplicationRenewalApplicantSinMismatchResult
+  | ClientApplicationRenewalIneligibleAlreadyRenewedResult
   | ClientApplicationRenewalIneligibleApplicantNot18YearsOldResult
   | ClientApplicationRenewalIneligibleNoClientNumbersResult
   | ClientApplicationRenewalIneligibleNoEligibilitiesResult
