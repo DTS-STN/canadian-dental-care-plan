@@ -73,7 +73,7 @@ export class DefaultApplicantRepository implements ApplicantRepository {
   }
 
   async findApplicantByBasicInfo(request: FindApplicantByBasicInfoRequestEntity): Promise<Option<ApplicantResponseEntity>> {
-    this.log.trace('Fetching applicant for sin [%j]', request);
+    this.log.trace('Fetching applicant by basic info [%j]', request);
 
     const url = `${this.baseUrl}/applicant`;
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.applicant_by-basic-info.posts', url, {
@@ -121,7 +121,7 @@ export class DefaultApplicantRepository implements ApplicantRepository {
   }
 
   async findApplicantBySin(request: FindApplicantBySinRequestEntity): Promise<Option<ApplicantResponseEntity>> {
-    this.log.trace('Fetching applicant for sin [%j]', request);
+    this.log.trace('Fetching applicant by SIN [%j]', request);
 
     const url = `${this.baseUrl}/applicant`;
     const response = await this.httpClient.instrumentedFetch('http.client.interop-api.applicant_by-sin.posts', url, {
@@ -263,7 +263,7 @@ export class MockApplicantRepository implements ApplicantRepository {
   }
 
   async findApplicantByBasicInfo(request: FindApplicantByBasicInfoRequestEntity): Promise<Option<ApplicantResponseEntity>> {
-    this.log.debug('Fetching applicant for sin [%j]', request);
+    this.log.debug('Fetching applicant by basic info [%j]', request);
 
     const reqClientNumber = request.Applicant.ClientIdentification.at(0)?.IdentificationID;
     invariant(reqClientNumber, 'Client number must be defined');
@@ -291,7 +291,7 @@ export class MockApplicantRepository implements ApplicantRepository {
   }
 
   async findApplicantBySin(applicantRequestEntity: FindApplicantBySinRequestEntity): Promise<Option<ApplicantResponseEntity>> {
-    this.log.debug('Fetching applicant for sin [%j]', applicantRequestEntity);
+    this.log.debug('Fetching applicant by SIN [%j]', applicantRequestEntity);
 
     const sin = applicantRequestEntity.Applicant.PersonSINIdentification.IdentificationID;
     const applicantEntity = this.mockApplicantDb.find(({ sinIdentification }) => sinIdentification === sin);
