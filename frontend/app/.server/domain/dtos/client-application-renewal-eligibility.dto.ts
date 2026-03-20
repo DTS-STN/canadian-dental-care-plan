@@ -1,15 +1,6 @@
 import type { ClientApplicationDto } from '~/.server/domain/dtos/client-application.dto';
 
 /**
- * Represents the result of a client application renewal eligibility check when the application is not found in the
- * system. This indicates that there is no existing application for the client.
- */
-type ClientApplicationRenewalNotFoundResult = {
-  result: 'INELIGIBLE-CLIENT-APPLICATION-NOT-FOUND';
-  clientApplication?: undefined;
-};
-
-/**
  * Represents the result of a client application renewal eligibility check when the client application is not found and
  * no applicant is found with the provided basic info and SIN, which makes it ineligible for renewal.
  */
@@ -78,8 +69,7 @@ export type ClientApplicationRenewalEligibleDto = ClientApplicationDto & {
 };
 
 export type ClientApplicationRenewalEligibilityDto =
-  | ClientApplicationRenewalNotFoundResult //
-  | ClientApplicationRenewalApplicantNotFoundResult
+  | ClientApplicationRenewalApplicantNotFoundResult //
   | ClientApplicationRenewalIneligibleApplicantNot18YearsOldResult
   | ClientApplicationRenewalIneligibleNoClientNumbersResult
   | ClientApplicationRenewalIneligibleNoEligibilitiesResult
