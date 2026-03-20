@@ -93,7 +93,7 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
       this.log.trace('Applicant found with basic info, but no SIN on file to compare against, skipping SIN check. Basic info: [%j]', request);
     } else if (applicant.socialInsuranceNumber.replaceAll(/\D/g, '') !== request.sin.replaceAll(/\D/g, '')) {
       this.log.trace('Applicant found with basic info, but SIN does not match. Basic info: [%j], SIN: [%s]', request, request.sin);
-      return { result: 'INELIGIBLE-APPLICANT-NOT-FOUND' };
+      return { result: 'INELIGIBLE-APPLICANT-SIN-MISMATCH' };
     }
 
     const applicationYearId = request.applicationYearId;
