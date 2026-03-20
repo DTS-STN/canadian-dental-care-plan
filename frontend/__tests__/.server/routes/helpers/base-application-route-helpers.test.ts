@@ -130,50 +130,50 @@ describe('base-application-route-helpers', () => {
   });
 
   describe('getEligibilityStatus', () => {
-    it('returns "eligible" when applicant has no private dental insurance and t4DentalIndicator is false', () => {
+    it('returns "eligible" when applicant has no private dental insurance and privateDentalInsurance is false', () => {
       const result = getEligibilityStatus({
         hasPrivateDentalInsurance: false,
-        t4DentalIndicator: false,
+        privateDentalInsurance: false,
       });
       expect(result).toBe('eligible');
     });
 
-    it('returns "eligible" when applicant has no private dental insurance and t4DentalIndicator is undefined', () => {
+    it('returns "eligible" when applicant has no private dental insurance and privateDentalInsurance is undefined', () => {
       const result = getEligibilityStatus({
         hasPrivateDentalInsurance: false,
-        t4DentalIndicator: undefined,
+        privateDentalInsurance: undefined,
       });
       expect(result).toBe('eligible');
     });
 
-    it('returns "eligible-proof" when applicant has no private dental insurance but t4DentalIndicator is true', () => {
+    it('returns "eligible-proof" when applicant has no private dental insurance but privateDentalInsurance is true', () => {
       const result = getEligibilityStatus({
         hasPrivateDentalInsurance: false,
-        t4DentalIndicator: true,
+        privateDentalInsurance: true,
       });
       expect(result).toBe('eligible-proof');
     });
 
-    it('returns "ineligible" when applicant has private dental insurance and t4DentalIndicator is false', () => {
+    it('returns "ineligible" when applicant has private dental insurance and privateDentalInsurance is false', () => {
       const result = getEligibilityStatus({
         hasPrivateDentalInsurance: true,
-        t4DentalIndicator: false,
+        privateDentalInsurance: false,
       });
       expect(result).toBe('ineligible');
     });
 
-    it('returns "ineligible" when applicant has private dental insurance and t4DentalIndicator is true', () => {
+    it('returns "ineligible" when applicant has private dental insurance and privateDentalInsurance is true', () => {
       const result = getEligibilityStatus({
         hasPrivateDentalInsurance: true,
-        t4DentalIndicator: true,
+        privateDentalInsurance: true,
       });
       expect(result).toBe('ineligible');
     });
 
-    it('returns "ineligible" when applicant has private dental insurance and t4DentalIndicator is undefined', () => {
+    it('returns "ineligible" when applicant has private dental insurance and privateDentalInsurance is undefined', () => {
       const result = getEligibilityStatus({
         hasPrivateDentalInsurance: true,
-        t4DentalIndicator: undefined,
+        privateDentalInsurance: undefined,
       });
       expect(result).toBe('ineligible');
     });

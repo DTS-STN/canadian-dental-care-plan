@@ -33,7 +33,7 @@ export type ClientApplicationDto = ReadonlyDeep<{
    */
   previousApplication?: boolean;
 
-  t4DentalIndicator?: boolean;
+  privateDentalInsurance?: boolean;
   typeOfApplication: 'adult' | 'children' | 'family';
 }>;
 

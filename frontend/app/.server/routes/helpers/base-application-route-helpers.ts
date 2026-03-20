@@ -81,7 +81,7 @@ interface GetEligibilityStatusArgs {
   /**
    * Indicates the T4 dental indicator status.
    */
-  t4DentalIndicator?: boolean;
+  privateDentalInsurance?: boolean;
 }
 
 /**
@@ -95,9 +95,9 @@ interface GetEligibilityStatusArgs {
  *
  * @returns The eligibility status as 'eligible', 'eligible-proof', or 'ineligible'.
  */
-export function getEligibilityStatus({ hasPrivateDentalInsurance, t4DentalIndicator }: GetEligibilityStatusArgs): EligibilityType {
-  if (!hasPrivateDentalInsurance && !t4DentalIndicator) return 'eligible';
-  if (!hasPrivateDentalInsurance && t4DentalIndicator) return 'eligible-proof';
+export function getEligibilityStatus({ hasPrivateDentalInsurance, privateDentalInsurance }: GetEligibilityStatusArgs): EligibilityType {
+  if (!hasPrivateDentalInsurance && !privateDentalInsurance) return 'eligible';
+  if (!hasPrivateDentalInsurance && privateDentalInsurance) return 'eligible-proof';
   return 'ineligible';
 }
 

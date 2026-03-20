@@ -211,7 +211,7 @@ describe('DefaultClientApplicationService', () => {
     dateOfBirth: '2000-01-01',
     dentalBenefits: ['ID-123456'],
     typeOfApplication: 'adult',
-    t4DentalIndicator: true,
+    privateDentalInsurance: true,
   };
 
   describe('findClientApplicationBySin', () => {

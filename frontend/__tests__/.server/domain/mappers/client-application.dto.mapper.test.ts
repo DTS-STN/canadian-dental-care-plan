@@ -264,7 +264,7 @@ describe('DefaultClientApplicationDtoMapper', () => {
           socialInsuranceNumber: '80000002',
         },
         previousApplication: false,
-        t4DentalIndicator: true,
+        privateDentalInsurance: true,
         typeOfApplication: 'family',
       };
 

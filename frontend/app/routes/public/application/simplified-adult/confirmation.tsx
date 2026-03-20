@@ -147,7 +147,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const eligibility = getEligibilityStatus({
     hasPrivateDentalInsurance: state.dentalInsurance.hasDentalInsurance,
-    t4DentalIndicator: state.clientApplication.t4DentalIndicator,
+    privateDentalInsurance: state.clientApplication.privateDentalInsurance,
   });
 
   return {
