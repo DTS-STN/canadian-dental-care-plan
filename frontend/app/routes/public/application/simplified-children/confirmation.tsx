@@ -7,9 +7,9 @@ import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { getEligibilityStatus } from '~/.server/routes/helpers/base-application-route-helpers';
-import { resolveRenewalStateChildDentalBenefitsValue } from '~/.server/routes/helpers/protected-application-route-helpers';
 import {
   clearPublicApplicationState,
+  resolveSimplifiedStateChildDentalBenefitsValue,
   resolveSimplifiedStateCommunicationPreferencesValue,
   resolveSimplifiedStateEmailValue,
   resolveSimplifiedStateHomeAddressValue,
@@ -137,7 +137,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       invariant(childApplication?.dentalBenefits, `Expected dental benefits for child with memberId ${childState.information?.memberId}`);
       invariant(childState.dentalInsurance, "Child's dental insurance must be defined");
 
-      const childDentalBenefits = await resolveRenewalStateChildDentalBenefitsValue({ dentalBenefits: childState.dentalBenefits }, childApplication, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
+      const childDentalBenefits = await resolveSimplifiedStateChildDentalBenefitsValue({ dentalBenefits: childState.dentalBenefits }, childApplication, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
       const eligibility = getEligibilityStatus({
         hasPrivateDentalInsurance: childState.dentalInsurance.hasDentalInsurance,
         privateDentalInsuranceOnRecord: childApplication.privateDentalInsurance,
