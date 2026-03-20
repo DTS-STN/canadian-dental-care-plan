@@ -196,6 +196,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
           <br />
           <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
         </p>
+        <p>{t('confirm.make-note')}</p>
       </div>
 
       <section>

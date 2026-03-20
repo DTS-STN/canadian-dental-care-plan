@@ -257,6 +257,7 @@ export default function ProtectedRenewalFamilyConfirmation({ loaderData, params 
           <br />
           <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
         </p>
+        <p>{t('confirm.make-note')}</p>
       </div>
 
       <section>

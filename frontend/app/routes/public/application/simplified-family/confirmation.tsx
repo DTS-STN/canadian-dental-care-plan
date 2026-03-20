@@ -250,6 +250,7 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
           <br />
           <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
         </p>
+        <p>{t('confirm.make-note')}</p>
       </div>
 
       <section>
