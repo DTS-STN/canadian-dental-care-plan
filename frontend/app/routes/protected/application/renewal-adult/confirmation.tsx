@@ -192,7 +192,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const eligibility = getEligibilityStatus({
     hasPrivateDentalInsurance: state.dentalInsurance.hasDentalInsurance,
-    privateDentalInsurance: state.clientApplication.privateDentalInsurance,
+    privateDentalInsuranceOnRecord: state.clientApplication.privateDentalInsurance,
   });
 
   return {

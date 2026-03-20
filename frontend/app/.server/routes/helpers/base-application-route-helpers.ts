@@ -79,25 +79,25 @@ interface GetEligibilityStatusArgs {
   hasPrivateDentalInsurance: boolean;
 
   /**
-   * Indicates the T4 dental indicator status.
+   * Indicates whether the applicant has private dental insurance on record.
    */
-  privateDentalInsurance?: boolean;
+  privateDentalInsuranceOnRecord?: boolean;
 }
 
 /**
- * Determines the eligibility status based on private dental insurance and T4 dental indicator.
+ * Determines the eligibility status based on private dental insurance and whether the applicant has private dental insurance on record.
  *
  * The eligibility status is determined as follows:
- * - 'eligible' if the applicant does not have private dental insurance and the T4 dental indicator is false or undefined.
- * - 'eligible-proof' if the applicant does not have private dental insurance but the T4 dental indicator is true,
+ * - 'eligible' if the applicant does not have private dental insurance and the private dental insurance on record is false or undefined.
+ * - 'eligible-proof' if the applicant does not have private dental insurance but the private dental insurance on record is true,
  *   indicating that proof of eligibility may be required.
- * - 'ineligible' if the applicant has private dental insurance, regardless of the T4 dental indicator.
+ * - 'ineligible' if the applicant has private dental insurance, regardless of the private dental insurance on record.
  *
  * @returns The eligibility status as 'eligible', 'eligible-proof', or 'ineligible'.
  */
-export function getEligibilityStatus({ hasPrivateDentalInsurance, privateDentalInsurance }: GetEligibilityStatusArgs): EligibilityType {
-  if (!hasPrivateDentalInsurance && !privateDentalInsurance) return 'eligible';
-  if (!hasPrivateDentalInsurance && privateDentalInsurance) return 'eligible-proof';
+export function getEligibilityStatus({ hasPrivateDentalInsurance, privateDentalInsuranceOnRecord }: GetEligibilityStatusArgs): EligibilityType {
+  if (!hasPrivateDentalInsurance && !privateDentalInsuranceOnRecord) return 'eligible';
+  if (!hasPrivateDentalInsurance && privateDentalInsuranceOnRecord) return 'eligible-proof';
   return 'ineligible';
 }
 
