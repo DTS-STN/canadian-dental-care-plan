@@ -257,7 +257,6 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       coverageCopayTierCode,
       dateOfBirth: applicant.PersonBirthDate.date,
       dentalBenefits: applicant.ApplicantDetail.InsurancePlan?.at(0)?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
-      dentalInsurance: applicant.ApplicantDetail.PrivateDentalInsuranceIndicator,
       eligibilityStatusCode: applicantEarning?.BenefitEligibilityStatus.StatusCode.ReferenceDataID,
       livingIndependently: applicant.ApplicantDetail.LivingIndependentlyIndicator,
       partnerInformation,

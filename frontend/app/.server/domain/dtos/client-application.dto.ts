@@ -17,7 +17,6 @@ export type ClientApplicationDto = ReadonlyDeep<{
 
   dateOfBirth: string;
   dentalBenefits?: Array<string>;
-  dentalInsurance?: boolean;
 
   /**
    * Applicant profile eligibility status code
