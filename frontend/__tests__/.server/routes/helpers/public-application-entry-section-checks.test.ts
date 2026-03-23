@@ -1,18 +1,78 @@
 import { describe, expect, it } from 'vitest';
 
-import { isPersonalInformationSectionCompleted, isTaxFilingSectionCompleted, isTermsAndConditionsSectionCompleted, isTypeOfApplicationSectionCompleted } from '~/.server/routes/helpers/public-application-entry-section-checks';
+import { getTypeOfApplicationSectionCompletionResult, isPersonalInformationSectionCompleted, isTaxFilingSectionCompleted, isTermsAndConditionsSectionCompleted } from '~/.server/routes/helpers/public-application-entry-section-checks';
 
-describe('isTypeOfApplicationSectionCompleted', () => {
-  it('should return true when typeOfApplication is defined and not delegate', () => {
-    expect(isTypeOfApplicationSectionCompleted({ typeOfApplication: 'adult' })).toBe(true);
+describe('getTypeOfApplicationSectionCompletionResult', () => {
+  describe('intake context', () => {
+    it('should return COMPLETED when typeOfApplication is adult', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'intake', typeOfApplication: 'adult' })).toBe('COMPLETED');
+    });
+
+    it('should return COMPLETED when typeOfApplication is children', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'intake', typeOfApplication: 'children' })).toBe('COMPLETED');
+    });
+
+    it('should return COMPLETED when typeOfApplication is family', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'intake', typeOfApplication: 'family' })).toBe('COMPLETED');
+    });
+
+    it('should return INCOMPLETED when typeOfApplication is delegate', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'intake', typeOfApplication: 'delegate' })).toBe('INCOMPLETED');
+    });
+
+    it('should return INCOMPLETED when typeOfApplication is undefined', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'intake', typeOfApplication: undefined })).toBe('INCOMPLETED');
+    });
   });
 
-  it('should return false when typeOfApplication is delegate', () => {
-    expect(isTypeOfApplicationSectionCompleted({ typeOfApplication: 'delegate' })).toBe(false);
-  });
+  describe('renewal context', () => {
+    it('should return INCOMPLETED when typeOfApplication is undefined', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: undefined })).toBe('INCOMPLETED');
+    });
 
-  it('should return false when typeOfApplication is undefined', () => {
-    expect(isTypeOfApplicationSectionCompleted({ typeOfApplication: undefined })).toBe(false);
+    it('should return INCOMPLETED when typeOfApplication is delegate', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'delegate' })).toBe('INCOMPLETED');
+    });
+
+    it('should return COMPLETED when typeOfApplication is set and clientApplication is absent', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'adult' })).toBe('COMPLETED');
+    });
+
+    it('should return COMPLETED when clientApplication typeOfApplication is adult and user selects adult', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'adult', clientApplication: { typeOfApplication: 'adult' } })).toBe('COMPLETED');
+    });
+
+    it('should return INCOMPLETED when clientApplication typeOfApplication is adult and user selects children', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'children', clientApplication: { typeOfApplication: 'adult' } })).toBe('INCOMPLETED');
+    });
+
+    it('should return INCOMPLETED when clientApplication typeOfApplication is adult and user selects family', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'family', clientApplication: { typeOfApplication: 'adult' } })).toBe('INCOMPLETED');
+    });
+
+    it('should return COMPLETED when clientApplication typeOfApplication is children and user selects children', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'children', clientApplication: { typeOfApplication: 'children' } })).toBe('COMPLETED');
+    });
+
+    it('should return INCOMPLETED when clientApplication typeOfApplication is children and user selects adult', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'adult', clientApplication: { typeOfApplication: 'children' } })).toBe('INCOMPLETED');
+    });
+
+    it('should return INCOMPLETED when clientApplication typeOfApplication is children and user selects family', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'family', clientApplication: { typeOfApplication: 'children' } })).toBe('INCOMPLETED');
+    });
+
+    it('should return COMPLETED when clientApplication typeOfApplication is family and user selects adult', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'adult', clientApplication: { typeOfApplication: 'family' } })).toBe('COMPLETED');
+    });
+
+    it('should return COMPLETED when clientApplication typeOfApplication is family and user selects children', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'children', clientApplication: { typeOfApplication: 'family' } })).toBe('COMPLETED');
+    });
+
+    it('should return COMPLETED when clientApplication typeOfApplication is family and user selects family', () => {
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'family', clientApplication: { typeOfApplication: 'family' } })).toBe('COMPLETED');
+    });
   });
 });
 

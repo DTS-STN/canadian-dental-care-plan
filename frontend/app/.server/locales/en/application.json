@@ -75,6 +75,7 @@
     "add-type-application": "Add type of application",
     "edit-type-application": "Edit type of application",
     "add-personal-information": "Add personal information",
-    "edit-personal-information": "Edit personal information"
+    "edit-personal-information": "Edit personal information",
+    "type-application-mismatch": "The type of application you selected doesn't match the information we have on file for you. Please choose another option."
   }
 }

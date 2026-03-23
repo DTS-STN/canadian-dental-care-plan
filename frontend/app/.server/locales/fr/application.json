@@ -75,6 +75,7 @@
     "add-type-application": "Ajouter le type de demande",
     "edit-type-application": "Modifier le type de demande",
     "add-personal-information": "Ajouter des renseignements personnels",
-    "edit-personal-information": "Modifier des renseignements personnels"
+    "edit-personal-information": "Modifier des renseignements personnels",
+    "type-application-mismatch": "Le type de demande que vous avez sélectionné ne correspond pas aux informations que nous avons dans nos dossiers. Veuillez choisir une autre option."
   }
 }

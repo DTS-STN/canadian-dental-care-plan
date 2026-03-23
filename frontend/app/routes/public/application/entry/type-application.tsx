@@ -4,12 +4,13 @@ import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/type-application';
 
-import { isPersonalInformationSectionCompleted, isTypeOfApplicationSectionCompleted } from '~/.server/routes/helpers/public-application-entry-section-checks';
+import { getTypeOfApplicationSectionCompletionResult, isPersonalInformationSectionCompleted } from '~/.server/routes/helpers/public-application-entry-section-checks';
 import type { ApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getInitialApplicationFlowUrl, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
+import { ContextualAlert } from '~/components/contextual-alert';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
@@ -21,6 +22,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
+import { cn } from '~/utils/tw-utils';
 
 const APPLICANT_TYPE = { adult: 'adult', family: 'family', children: 'children' } as const;
 
@@ -39,6 +41,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const applicationFlow: ApplicationFlow = state.inputModel && state.typeOfApplication ? `${state.inputModel}-${state.typeOfApplication}` : 'entry';
   const nextRouteId = getInitialApplicationFlowUrl(applicationFlow, params);
+  const typeOfApplicationSectionCompletionResult = getTypeOfApplicationSectionCompletionResult(state);
   return {
     defaultState: {
       inputModel: state.inputModel,
@@ -47,8 +50,9 @@ export async function loader({ context: { appContainer, session }, request, para
     },
     isRenewalContext: state.context === 'renewal',
     nextRouteId,
+    typeOfApplicationSectionCompletionResult,
     sections: {
-      typeOfApplication: { completed: isTypeOfApplicationSectionCompleted(state) },
+      typeOfApplication: { completed: typeOfApplicationSectionCompletionResult === 'COMPLETED' },
       personalInformation: { completed: isPersonalInformationSectionCompleted(state) },
     },
     meta,
@@ -56,7 +60,7 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export default function TypeOfApplication({ loaderData, params }: Route.ComponentProps) {
-  const { defaultState, isRenewalContext, nextRouteId, sections } = loaderData;
+  const { defaultState, isRenewalContext, nextRouteId, sections, typeOfApplicationSectionCompletionResult } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   function getTypeOfApplication(typeOfApplication: string) {
@@ -79,6 +83,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
   const formattedDate = defaultState.personalInformation ? format(parseISO(defaultState.personalInformation.dateOfBirth), 'MMMM d, yyyy') : undefined;
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
+  const isTypeOfApplicationTypeMismatched = typeOfApplicationSectionCompletionResult === 'TYPE-MISMATCHED';
 
   return (
     <div className="max-w-prose space-y-8">
@@ -86,14 +91,17 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
         <p>{t('application:complete-all-sections')}</p>
         <p>{completedSectionsLabel}</p>
       </div>
-      <Card>
+      <Card className={cn(isTypeOfApplicationTypeMismatched && 'border-red-600')}>
         <CardHeader>
           <CardTitle asChild>
             <h2>{t('application:type-of-application.type-application-heading')}</h2>
           </CardTitle>
-          <CardAction>{sections.typeOfApplication.completed && <StatusTag status="complete" />}</CardAction>
+          <CardAction>
+            {isTypeOfApplicationTypeMismatched && <StatusTag status="error" />}
+            {sections.typeOfApplication.completed && <StatusTag status="complete" />}
+          </CardAction>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-6">
           {defaultState.typeOfApplication === undefined ? (
             <p>{t('application:type-of-application.type-application-description')}</p>
           ) : (
@@ -103,12 +111,17 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
               </DefinitionListItem>
             </DefinitionList>
           )}
+          {isTypeOfApplicationTypeMismatched && (
+            <ContextualAlert type="danger">
+              <p>{t('application:type-of-application.type-application-mismatch')}</p>
+            </ContextualAlert>
+          )}
         </CardContent>
-        <CardFooter className="border-t bg-zinc-100">
+        <CardFooter className={cn('border-t bg-zinc-100', isTypeOfApplicationTypeMismatched && 'bg-red-100')}>
           <ButtonLink
             id="type-of-application-edit-button"
             variant="link"
-            className="p-0"
+            className={cn('p-0', isTypeOfApplicationTypeMismatched && 'text-red-700 hover:text-red-800 focus:text-red-800')}
             routeId="public/application/$id/type-application"
             params={params}
             startIcon={defaultState.typeOfApplication ? faPenToSquare : faCirclePlus}
@@ -119,7 +132,6 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           </ButtonLink>
         </CardFooter>
       </Card>
-
       <Card>
         <CardHeader>
           <CardTitle asChild>
