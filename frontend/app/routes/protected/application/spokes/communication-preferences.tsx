@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { data, redirect, useFetcher } from 'react-router';
+import { data, useFetcher, useNavigate } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -23,6 +23,7 @@ import type { InputRadiosProps } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
+import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -130,9 +131,12 @@ export async function action({ context: { appContainer, session }, params, reque
   });
 
   if (parsedDataResult.data.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || parsedDataResult.data.preferredNotificationMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
-    return redirect(getPathById('protected/application/$id/email', params));
+    const redirectUrl = getPathById('protected/application/$id/email', params);
+    return data({ success: true, redirectUrl }, { status: 200 });
   }
-  return redirect(getPathById(getRouteFromApplicationFlow(applicationFlow), params));
+
+  const redirectUrl = getPathById(getRouteFromApplicationFlow(applicationFlow), params);
+  return data({ success: true, redirectUrl }, { status: 200 });
 }
 
 export default function ApplicationSpokeCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
@@ -155,12 +159,57 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
     setPreferredNotification(e.target.value);
   }
 
-  const errors = fetcher.data?.errors;
+  const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const success = fetcher.data && 'success' in fetcher.data && fetcher.data.success === true;
+    const redirectUrl = fetcher.data && 'redirectUrl' in fetcher.data ? fetcher.data.redirectUrl : undefined;
+
+    // Only navigate when the action indicates success and provides a redirectUrl
+    if (success && redirectUrl) {
+      // Push form submit event to Adobe Analytics with form values when the form is successfully submitted
+      if (adobeAnalytics.isConfigured()) {
+        const formName = 'ESDC-EDSC:CDCP Communication preferences in MSCA application';
+        const formValues = new Map<string, { elementType: 'radio'; value: string }>();
+
+        const preferredLanguageSelectedEl = document.querySelector<HTMLInputElement>('input[name="preferredLanguage"]:checked');
+        if (preferredLanguageSelectedEl) {
+          formValues.set('preferred-language', {
+            elementType: 'radio',
+            value: preferredLanguageSelectedEl.attributes.getNamedItem('data-gc-analytics-value')?.value ?? preferredLanguageSelectedEl.value,
+          });
+        }
+
+        const preferredMethodSunLifeSelectedEl = document.querySelector<HTMLInputElement>('input[name="preferredMethodSunLife"]:checked');
+        if (preferredMethodSunLifeSelectedEl) {
+          formValues.set('preferred-method-sunlife', {
+            elementType: 'radio',
+            value: preferredMethodSunLifeSelectedEl.attributes.getNamedItem('data-gc-analytics-value')?.value ?? preferredMethodSunLifeSelectedEl.value,
+          });
+        }
+
+        const preferredMethodGovernmentOfCanadaSelectedEl = document.querySelector<HTMLInputElement>('input[name="preferredMethodGovernmentOfCanada"]:checked');
+        if (preferredMethodGovernmentOfCanadaSelectedEl) {
+          formValues.set('preferred-method-government-of-canada', {
+            elementType: 'radio',
+            value: preferredMethodGovernmentOfCanadaSelectedEl.attributes.getNamedItem('data-gc-analytics-value')?.value ?? preferredMethodGovernmentOfCanadaSelectedEl.value,
+          });
+        }
+
+        adobeAnalytics.pushFormSubmitEvent(formName, formValues);
+      }
+
+      void navigate(redirectUrl);
+    }
+  }, [fetcher.data, navigate]);
 
   const preferredLanguageOptions: InputRadiosProps['options'] = loaderData.languages.map((language) => ({
     value: language.id,
     children: language.name,
     defaultChecked: defaultState?.preferredLanguage === language.id,
+    'data-gc-analytics-value': language.code,
   }));
 
   const sunLifeCommunicationMethodOptions: InputRadiosProps['options'] = sunLifeCommunicationMethods.map((method) => {
@@ -175,6 +224,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
       children,
       defaultChecked: defaultState ? defaultState.preferredMethod === method.id : method.id === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
       onChange: handleOnPreferredMethodChanged,
+      'data-gc-analytics-value': method.code,
     };
   });
 
@@ -196,6 +246,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
       children,
       defaultChecked: defaultState ? defaultState.preferredNotificationMethod === method.id : method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID,
       onChange: handleOnPreferredNotificationChanged,
+      'data-gc-analytics-value': method.code,
     };
   });
 

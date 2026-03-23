@@ -93,16 +93,20 @@ export function pushValidationErrorEvent(fieldIds: ReadonlyArray<string>) {
  */
 export function pushFormSubmitEvent(formName: string, formValues: ReadonlyMap<string, { elementType: 'checkbox' | 'radio'; value: string }>) {
   withAdobeAnalytics((adobeDataLayer) => {
-    // Format form values as `elementType:fieldId:value` and join with `|` to create a single string for Adobe Analytics.
-    const formattedFormValues = [...formValues.entries()].map(([fieldId, { elementType, value }]) => `${elementType}:${fieldId}:${value}`);
-    const listedValues = formattedFormValues.join('|');
+    try {
+      // Format form values as `elementType:fieldId:value` and join with `|` to create a single string for Adobe Analytics.
+      const formattedFormValues = [...formValues.entries()].map(([fieldId, { elementType, value }]) => `${elementType}:${fieldId}:${value}`);
+      const listedValues = formattedFormValues.join('|');
 
-    adobeDataLayer.push?.({
-      event: 'formSubmit',
-      form: {
-        name: formName,
-        list: listedValues,
-      },
-    });
+      adobeDataLayer.push?.({
+        event: 'formSubmit',
+        form: {
+          name: formName,
+          list: listedValues,
+        },
+      });
+    } catch (error) {
+      console.warn('Failed to push form submit event to Adobe Analytics:', error);
+    }
   });
 }
