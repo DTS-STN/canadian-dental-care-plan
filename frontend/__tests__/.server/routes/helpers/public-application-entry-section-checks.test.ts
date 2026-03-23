@@ -1,19 +1,31 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
+import { getAllowedTypeOfApplication } from '~/.server/routes/helpers/base-application-route-helpers';
 import { getTypeOfApplicationSectionCompletionResult, isPersonalInformationSectionCompleted, isTaxFilingSectionCompleted, isTermsAndConditionsSectionCompleted } from '~/.server/routes/helpers/public-application-entry-section-checks';
+
+vi.mock('~/.server/routes/helpers/base-application-route-helpers', async (importOriginal) => ({
+  ...(await importOriginal()),
+  getAllowedTypeOfApplication: vi.fn(),
+}));
+
+const mockClientApplication = {
+  applicantInformation: { clientNumber: 'APP-001' },
+  eligibleClientNumbers: [],
+  children: [],
+};
 
 describe('getTypeOfApplicationSectionCompletionResult', () => {
   describe('intake context', () => {
-    it('should return COMPLETED when typeOfApplication is adult', () => {
+    it('should return COMPLETED when typeOfApplication is included in allowed types', () => {
+      vi.mocked(getAllowedTypeOfApplication).mockReturnValue(['adult', 'children', 'family']);
       expect(getTypeOfApplicationSectionCompletionResult({ context: 'intake', typeOfApplication: 'adult' })).toBe('COMPLETED');
-    });
-
-    it('should return COMPLETED when typeOfApplication is children', () => {
       expect(getTypeOfApplicationSectionCompletionResult({ context: 'intake', typeOfApplication: 'children' })).toBe('COMPLETED');
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'intake', typeOfApplication: 'family' })).toBe('COMPLETED');
     });
 
-    it('should return COMPLETED when typeOfApplication is family', () => {
-      expect(getTypeOfApplicationSectionCompletionResult({ context: 'intake', typeOfApplication: 'family' })).toBe('COMPLETED');
+    it('should return INCOMPLETED when typeOfApplication is not included in allowed types', () => {
+      vi.mocked(getAllowedTypeOfApplication).mockReturnValue(['adult']);
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'intake', typeOfApplication: 'family' })).toBe('INCOMPLETED');
     });
 
     it('should return INCOMPLETED when typeOfApplication is delegate', () => {
@@ -34,44 +46,19 @@ describe('getTypeOfApplicationSectionCompletionResult', () => {
       expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'delegate' })).toBe('INCOMPLETED');
     });
 
-    it('should return COMPLETED when typeOfApplication is set and clientApplication is absent', () => {
+    it('should return COMPLETED when clientApplication is absent', () => {
       expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'adult' })).toBe('COMPLETED');
     });
 
-    it('should return COMPLETED when clientApplication typeOfApplication is adult and user selects adult', () => {
-      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'adult', clientApplication: { typeOfApplication: 'adult' } })).toBe('COMPLETED');
+    it('should return COMPLETED when typeOfApplication is included in allowed types', () => {
+      vi.mocked(getAllowedTypeOfApplication).mockReturnValue(['adult']);
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'adult', clientApplication: mockClientApplication })).toBe('COMPLETED');
     });
 
-    it('should return INCOMPLETED when clientApplication typeOfApplication is adult and user selects children', () => {
-      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'children', clientApplication: { typeOfApplication: 'adult' } })).toBe('INCOMPLETED');
-    });
-
-    it('should return INCOMPLETED when clientApplication typeOfApplication is adult and user selects family', () => {
-      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'family', clientApplication: { typeOfApplication: 'adult' } })).toBe('INCOMPLETED');
-    });
-
-    it('should return COMPLETED when clientApplication typeOfApplication is children and user selects children', () => {
-      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'children', clientApplication: { typeOfApplication: 'children' } })).toBe('COMPLETED');
-    });
-
-    it('should return INCOMPLETED when clientApplication typeOfApplication is children and user selects adult', () => {
-      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'adult', clientApplication: { typeOfApplication: 'children' } })).toBe('INCOMPLETED');
-    });
-
-    it('should return INCOMPLETED when clientApplication typeOfApplication is children and user selects family', () => {
-      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'family', clientApplication: { typeOfApplication: 'children' } })).toBe('INCOMPLETED');
-    });
-
-    it('should return COMPLETED when clientApplication typeOfApplication is family and user selects adult', () => {
-      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'adult', clientApplication: { typeOfApplication: 'family' } })).toBe('COMPLETED');
-    });
-
-    it('should return COMPLETED when clientApplication typeOfApplication is family and user selects children', () => {
-      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'children', clientApplication: { typeOfApplication: 'family' } })).toBe('COMPLETED');
-    });
-
-    it('should return COMPLETED when clientApplication typeOfApplication is family and user selects family', () => {
-      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'family', clientApplication: { typeOfApplication: 'family' } })).toBe('COMPLETED');
+    it('should return INCOMPLETED when typeOfApplication is not included in allowed types', () => {
+      vi.mocked(getAllowedTypeOfApplication).mockReturnValue(['adult']);
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'children', clientApplication: mockClientApplication })).toBe('INCOMPLETED');
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'family', clientApplication: mockClientApplication })).toBe('INCOMPLETED');
     });
   });
 });

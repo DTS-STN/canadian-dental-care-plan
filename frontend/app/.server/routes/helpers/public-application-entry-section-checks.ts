@@ -21,7 +21,16 @@ type TypeOfApplicationSectionCompletionResult = 'INCOMPLETED' | 'COMPLETED' | 'T
  * If the type of application is not included in the allowed types of application for the context, the section is
  * considered incompleted.
  */
-export function getTypeOfApplicationSectionCompletionResult(state: PickDeep<PublicApplicationState, 'context' | 'clientApplication.typeOfApplication' | 'typeOfApplication'>): TypeOfApplicationSectionCompletionResult {
+export function getTypeOfApplicationSectionCompletionResult(
+  state: PickDeep<
+    PublicApplicationState,
+    | 'context' //
+    | 'clientApplication.applicantInformation.clientNumber'
+    | `clientApplication.children.${number}.information.clientNumber`
+    | 'clientApplication.eligibleClientNumbers'
+    | 'typeOfApplication'
+  >,
+): TypeOfApplicationSectionCompletionResult {
   if (!state.typeOfApplication || state.typeOfApplication === 'delegate') {
     return 'INCOMPLETED';
   }
