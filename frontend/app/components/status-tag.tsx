@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Badge } from '~/components/badge';
 
 interface StatusTagProps {
-  status: 'complete' | 'new' | 'optional';
+  status: 'complete' | 'error' | 'new' | 'optional';
   ariaLabel?: string;
 }
 
@@ -18,6 +18,14 @@ export function StatusTag({ status, ariaLabel }: StatusTagProps) {
         <Badge variant="success" role="status" aria-label={ariaLabel}>
           <FontAwesomeIcon icon={faCheck} />
           <span>{t('common:status.complete')}</span>
+        </Badge>
+      );
+    }
+
+    case 'error': {
+      return (
+        <Badge variant="danger" role="status" aria-label={ariaLabel}>
+          {t('common:status.error')}
         </Badge>
       );
     }

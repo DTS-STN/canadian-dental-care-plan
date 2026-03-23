@@ -57,6 +57,7 @@
   },
   "status": {
     "complete": "Terminé",
+    "error": "Erreur",
     "new": "Nouveau",
     "optional": "Facultatif"
   },

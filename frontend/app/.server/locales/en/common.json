@@ -57,6 +57,7 @@
   },
   "status": {
     "complete": "Complete",
+    "error": "Error",
     "new": "New",
     "optional": "Optional"
   },
