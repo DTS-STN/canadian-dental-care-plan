@@ -51,6 +51,10 @@ export async function loader({ context: { appContainer, session }, request, para
       userId: userInfoToken.sub,
     });
 
+    if (clientApplicationRenewalEligibilityResult.result === 'INELIGIBLE-ALREADY-RENEWED') {
+      throw redirect(getPathById('protected/application/renewal-submitted', params));
+    }
+
     if (clientApplicationRenewalEligibilityResult.result !== 'ELIGIBLE') {
       throw redirect(getPathById('protected/data-unavailable', params));
     }

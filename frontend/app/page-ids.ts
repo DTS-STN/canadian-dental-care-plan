@@ -83,6 +83,7 @@ export const pageIds = {
         parentGuardian: 'CDCP-PROT-APPL-SPK-0028',
         childSocialInsuranceNumber: 'CDCP-PROT-APPL-SPK-0029',
         cannotApplyChildYear: 'CDCP-PROT-APPL-SPK-0030',
+        renewalSubmitted: 'CDCP-PROT-APPL-SPK-0031',
       },
     },
     documents: {

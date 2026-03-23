@@ -297,6 +297,13 @@ export const routes = [
         ],
       },
 
+      // NOTE: protected application that has no application state, therefore not nested under the application layout
+      {
+        id: 'protected/application/renewal-submitted',
+        file: 'routes/protected/application/spokes/renewal-submitted.tsx',
+        paths: { en: '/:lang/protected/application/renewal-submitted', fr: '/:lang/protege/demande/renouvellement-soumise' },
+      },
+
       {
         id: 'protected/data-unavailable',
         file: 'routes/protected/data-unavailable.tsx',
