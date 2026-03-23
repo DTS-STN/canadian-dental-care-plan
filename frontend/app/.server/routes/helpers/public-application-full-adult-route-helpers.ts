@@ -1,6 +1,7 @@
 import { redirect } from 'react-router';
 
 import { createLogger } from '~/.server/logging';
+import { getAllowedTypeOfApplication } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationStateParams, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { applicantInformationStateHasPartner, getContextualAgeCategoryFromDate, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
@@ -97,10 +98,6 @@ export function validatePublicApplicationFullAdultStateForReview({ params, state
 
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
 
-  if (context === 'renewal' && clientApplication === undefined) {
-    throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
-  }
-
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('public/application/$id/eligibility-requirements', params));
   }
@@ -110,6 +107,14 @@ export function validatePublicApplicationFullAdultStateForReview({ params, state
   }
 
   if (typeOfApplication !== 'adult') {
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
+  }
+
+  if (context === 'intake' && getAllowedTypeOfApplication({ context }).includes(typeOfApplication) === false) {
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
+  }
+
+  if (context === 'renewal' && (!clientApplication || getAllowedTypeOfApplication({ context, clientApplication }).includes(typeOfApplication) === false)) {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 

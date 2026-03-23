@@ -1,6 +1,7 @@
 import { redirect } from 'react-router';
 
 import { createLogger } from '~/.server/logging';
+import { getAllowedTypeOfApplication } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationStateParams, ChildrenState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { applicantInformationStateHasPartner, getChildrenState, getContextualAgeCategoryFromDate, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
@@ -100,6 +101,10 @@ export function validateProtectedApplicationIntakeChildStateForReview({ params, 
   }
 
   if (typeOfApplication !== 'children') {
+    throw redirect(getPathById('protected/application/$id/type-of-application', params));
+  }
+
+  if (getAllowedTypeOfApplication({ context }).includes(typeOfApplication) === false) {
     throw redirect(getPathById('protected/application/$id/type-of-application', params));
   }
 

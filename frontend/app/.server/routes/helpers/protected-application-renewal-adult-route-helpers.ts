@@ -3,6 +3,7 @@ import { redirect } from 'react-router';
 import { invariant } from '@dts-stn/invariant';
 
 import { createLogger } from '~/.server/logging';
+import { getAllowedTypeOfApplication } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationStateParams, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getContextualAgeCategoryFromDate, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
@@ -113,6 +114,10 @@ export function validateProtectedRenewAdultStateForReview({ params, state }: Val
   }
 
   if (typeOfApplication !== 'adult') {
+    throw redirect(getPathById('protected/application/$id/type-of-application', params));
+  }
+
+  if (getAllowedTypeOfApplication({ context, clientApplication }).includes(typeOfApplication) === false) {
     throw redirect(getPathById('protected/application/$id/type-of-application', params));
   }
 

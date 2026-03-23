@@ -3,7 +3,7 @@ import { redirect } from 'react-router';
 import { invariant } from '@dts-stn/invariant';
 
 import { createLogger } from '~/.server/logging';
-import { isChildClientNumberValid } from '~/.server/routes/helpers/base-application-route-helpers';
+import { getAllowedTypeOfApplication, isChildClientNumberValid } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationStateParams, ChildrenState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { applicantInformationStateHasPartner, getChildrenState, getContextualAgeCategoryFromDate, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
@@ -111,6 +111,10 @@ export function validatePublicApplicationSimplifiedChildStateForReview({ params,
   }
 
   if (typeOfApplication !== 'children') {
+    throw redirect(getPathById('public/application/$id/type-of-application', params));
+  }
+
+  if (context === 'renewal' && getAllowedTypeOfApplication({ context, clientApplication }).includes(typeOfApplication) === false) {
     throw redirect(getPathById('public/application/$id/type-of-application', params));
   }
 
