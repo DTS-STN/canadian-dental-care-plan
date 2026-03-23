@@ -250,6 +250,11 @@ export const routes = [
             file: 'routes/public/application/spokes/child-dental-insurance.tsx',
             paths: { en: '/:lang/application/:id/children/:childId/dental-insurance', fr: '/:lang/demande/:id/enfant/:childId/assurance-dentaire' },
           },
+          {
+            id: 'public/application/$id/renewal-submitted',
+            file: 'routes/public/application/spokes/renewal-submitted.tsx',
+            paths: { en: '/:lang/application/:id/renewal-submitted', fr: '/:lang/demande/:id/renouvellement-soumise' },
+          },
         ],
       },
       {

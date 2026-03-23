@@ -523,5 +523,15 @@
     "back-btn": "Back",
     "exit-btn": "Close application",
     "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+  },
+  "renewal-submitted": {
+    "page-title": "Renewal application submitted",
+    "records-show-application-submitted": "Our records show that an application has already been submitted. We'll let you know if anything else is needed.",
+    "status-checker-info": "You can use the <statusCheckerLink>Status Checker</statusCheckerLink> to view the status of your application.",
+    "update-profile-info": "To update your contact information or communication preferences, log into your <mscaLinkAccount>My Service Canada Account (MSCA)</mscaLinkAccount>. For other updates, please call <noWrap>1-833-537-4342</noWrap>.",
+    "msca-link-account": "https://www.canada.ca/en/employment-social-development/services/my-account.html",
+    "back-btn": "Back",
+    "exit-btn": "Exit application",
+    "exit-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   }
 }

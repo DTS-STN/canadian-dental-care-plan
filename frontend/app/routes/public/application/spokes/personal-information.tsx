@@ -178,6 +178,10 @@ export async function action({ context: { appContainer, session }, params, reque
       userId: 'anonymous',
     });
 
+    if (clientApplicationRenewalEligibilityResult.result === 'INELIGIBLE-ALREADY-RENEWED') {
+      throw redirect(getPathById('public/application/$id/renewal-submitted', params));
+    }
+
     if (clientApplicationRenewalEligibilityResult.result !== 'ELIGIBLE') {
       const startDate = toLocaleDateString(addDays(RENEWAL_PERIOD_END_DATE, 1), locale);
       return { status: 'client-not-found', startDate } as const;
