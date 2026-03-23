@@ -4,6 +4,7 @@ export const pageIds = {
       index: 'CDCP-PROT-APPL-0001',
       eligibilityRequirements: 'CDCP-PROT-APPL-0002',
       typeOfApplication: 'CDCP-PROT-APPL-0003',
+      renewalSubmitted: 'CDCP-PROT-APPL-0004',
       intakeAdult: {
         maritalStatus: 'CDCP-PROT-APPL-FAD-0001',
         dentalInsurance: 'CDCP-PROT-APPL-FAD-0002',
