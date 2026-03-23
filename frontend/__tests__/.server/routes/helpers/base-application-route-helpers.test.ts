@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
-import { getAgeCategoryFromAge, getAgeCategoryFromDateString, getAgeCategoryReferenceDate, getEligibilityStatus, isChildClientNumberValid, isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
+import { getAgeCategoryFromAge, getAgeCategoryFromDateString, getAgeCategoryReferenceDate, getAllowedTypeOfApplication, getEligibilityStatus, isChildClientNumberValid, isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
 
 vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn(() => ({
@@ -317,6 +317,28 @@ describe('isChildClientNumberValid', () => {
       expect(isChildClientNumberValid('renewal', mockAppCaseSensitive, 'Child-003')).toBe(true);
       expect(isChildClientNumberValid('renewal', mockAppCaseSensitive, 'child-001')).toBe(false);
       expect(isChildClientNumberValid('renewal', mockAppCaseSensitive, 'CHILD-002')).toBe(false);
+    });
+  });
+});
+
+describe('getAllowedTypeOfApplication', () => {
+  describe('intake context', () => {
+    it('returns all three types', () => {
+      expect(getAllowedTypeOfApplication({ context: 'intake' })).toEqual(['family', 'adult', 'children']);
+    });
+  });
+
+  describe('renewal context', () => {
+    it('returns only adult when clientApplication typeOfApplication is adult', () => {
+      expect(getAllowedTypeOfApplication({ context: 'renewal', clientApplication: { typeOfApplication: 'adult' } })).toEqual(['adult']);
+    });
+
+    it('returns only children when clientApplication typeOfApplication is children', () => {
+      expect(getAllowedTypeOfApplication({ context: 'renewal', clientApplication: { typeOfApplication: 'children' } })).toEqual(['children']);
+    });
+
+    it('returns all three types when clientApplication typeOfApplication is family', () => {
+      expect(getAllowedTypeOfApplication({ context: 'renewal', clientApplication: { typeOfApplication: 'family' } })).toEqual(['family', 'adult', 'children']);
     });
   });
 });

@@ -134,3 +134,27 @@ export function isChildClientNumberValid(context: 'intake' | 'renewal', clientAp
     ].filter((val) => val !== clientApplication.applicantInformation.clientNumber),
   ).has(clientNumber);
 }
+
+/**
+ * Determines the allowed types of applications based on the current state.
+ *
+ * @param state - The current state, which can be either 'intake' or 'renewal' with optional client application data.
+ * @returns An array of allowed application types: 'family', 'adult', or 'children'.
+ */
+export function getAllowedTypeOfApplication(
+  state: { context: 'intake'; clientApplication?: undefined } | { context: 'renewal'; clientApplication: Pick<ClientApplicationRenewalEligibleDto, 'typeOfApplication'> },
+): ReadonlyArray<'family' | 'adult' | 'children'> {
+  if (state.context === 'intake') {
+    return ['family', 'adult', 'children'];
+  }
+
+  if (state.clientApplication.typeOfApplication === 'adult') {
+    return ['adult'];
+  }
+
+  if (state.clientApplication.typeOfApplication === 'children') {
+    return ['children'];
+  }
+
+  return ['family', 'adult', 'children'];
+}
