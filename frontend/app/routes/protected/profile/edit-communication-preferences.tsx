@@ -162,29 +162,19 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
         const formName = 'ESDC-EDSC:CDCP Communication preferences in MSCA profile';
         const formValues = new Map<string, { elementType: 'radio'; value: string }>();
 
-        const preferredLanguageSelectedEl = document.querySelector<HTMLInputElement>('input[name="preferredLanguage"]:checked');
-        if (preferredLanguageSelectedEl) {
-          formValues.set('preferred-language', {
-            elementType: 'radio',
-            value: preferredLanguageSelectedEl.attributes.getNamedItem('data-gc-analytics-value')?.value ?? preferredLanguageSelectedEl.value,
-          });
+        function getCheckedValue(name: string, fieldId: string) {
+          const selectedEl = document.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`);
+          if (selectedEl) {
+            formValues.set(fieldId, {
+              elementType: 'radio',
+              value: selectedEl.attributes.getNamedItem('data-gc-analytics-value')?.value ?? selectedEl.value,
+            });
+          }
         }
 
-        const preferredMethodSunLifeSelectedEl = document.querySelector<HTMLInputElement>('input[name="preferredMethodSunLife"]:checked');
-        if (preferredMethodSunLifeSelectedEl) {
-          formValues.set('preferred-method-sunlife', {
-            elementType: 'radio',
-            value: preferredMethodSunLifeSelectedEl.attributes.getNamedItem('data-gc-analytics-value')?.value ?? preferredMethodSunLifeSelectedEl.value,
-          });
-        }
-
-        const preferredMethodGovernmentOfCanadaSelectedEl = document.querySelector<HTMLInputElement>('input[name="preferredMethodGovernmentOfCanada"]:checked');
-        if (preferredMethodGovernmentOfCanadaSelectedEl) {
-          formValues.set('preferred-method-government-of-canada', {
-            elementType: 'radio',
-            value: preferredMethodGovernmentOfCanadaSelectedEl.attributes.getNamedItem('data-gc-analytics-value')?.value ?? preferredMethodGovernmentOfCanadaSelectedEl.value,
-          });
-        }
+        getCheckedValue('preferredLanguage', 'preferred-language');
+        getCheckedValue('preferredMethodSunLife', 'preferred-method-sunlife');
+        getCheckedValue('preferredMethodGovernmentOfCanada', 'preferred-method-government-of-canada');
 
         adobeAnalytics.pushFormSubmitEvent(formName, formValues);
       }
