@@ -177,7 +177,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
           });
         }
 
-        const preferredMethodSunLifeSelectedEl = document.querySelector<HTMLInputElement>('input[name="preferredMethodSunLife"]:checked');
+        const preferredMethodSunLifeSelectedEl = document.querySelector<HTMLInputElement>('input[name="preferredMethod"]:checked');
         if (preferredMethodSunLifeSelectedEl) {
           formValues.set('preferred-method-sunlife', {
             elementType: 'radio',
@@ -185,7 +185,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
           });
         }
 
-        const preferredMethodGovernmentOfCanadaSelectedEl = document.querySelector<HTMLInputElement>('input[name="preferredMethodGovernmentOfCanada"]:checked');
+        const preferredMethodGovernmentOfCanadaSelectedEl = document.querySelector<HTMLInputElement>('input[name="preferredNotificationMethod"]:checked');
         if (preferredMethodGovernmentOfCanadaSelectedEl) {
           formValues.set('preferred-method-government-of-canada', {
             elementType: 'radio',
