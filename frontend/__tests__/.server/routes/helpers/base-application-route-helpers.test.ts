@@ -324,21 +324,61 @@ describe('isChildClientNumberValid', () => {
 describe('getAllowedTypeOfApplication', () => {
   describe('intake context', () => {
     it('returns all three types', () => {
-      expect(getAllowedTypeOfApplication({ context: 'intake' })).toEqual(['family', 'adult', 'children']);
+      expect(getAllowedTypeOfApplication({ context: 'intake' })).toEqual(['adult', 'children', 'family']);
     });
   });
 
   describe('renewal context', () => {
-    it('returns only adult when clientApplication typeOfApplication is adult', () => {
-      expect(getAllowedTypeOfApplication({ context: 'renewal', clientApplication: { typeOfApplication: 'adult' } })).toEqual(['adult']);
+    it('returns adult, children, and family when both the primary applicant and at least one child are eligible', () => {
+      expect(
+        getAllowedTypeOfApplication({
+          context: 'renewal',
+          clientApplication: {
+            applicantInformation: { clientNumber: 'APP-001' },
+            eligibleClientNumbers: ['APP-001', 'CHILD-001'],
+            children: [{ information: { clientNumber: 'CHILD-001' } }],
+          },
+        }),
+      ).toEqual(['adult', 'children', 'family']);
     });
 
-    it('returns only children when clientApplication typeOfApplication is children', () => {
-      expect(getAllowedTypeOfApplication({ context: 'renewal', clientApplication: { typeOfApplication: 'children' } })).toEqual(['children']);
+    it('returns only adult when the primary applicant is eligible but no children are eligible', () => {
+      expect(
+        getAllowedTypeOfApplication({
+          context: 'renewal',
+          clientApplication: {
+            applicantInformation: { clientNumber: 'APP-001' },
+            eligibleClientNumbers: ['APP-001'],
+            children: [{ information: { clientNumber: 'CHILD-001' } }],
+          },
+        }),
+      ).toEqual(['adult']);
     });
 
-    it('returns all three types when clientApplication typeOfApplication is family', () => {
-      expect(getAllowedTypeOfApplication({ context: 'renewal', clientApplication: { typeOfApplication: 'family' } })).toEqual(['family', 'adult', 'children']);
+    it('returns only adult when the primary applicant is eligible and there are no children', () => {
+      expect(
+        getAllowedTypeOfApplication({
+          context: 'renewal',
+          clientApplication: {
+            applicantInformation: { clientNumber: 'APP-001' },
+            eligibleClientNumbers: ['APP-001'],
+            children: [],
+          },
+        }),
+      ).toEqual(['adult']);
+    });
+
+    it('returns only children when the primary applicant is not eligible but at least one child is eligible', () => {
+      expect(
+        getAllowedTypeOfApplication({
+          context: 'renewal',
+          clientApplication: {
+            applicantInformation: { clientNumber: 'APP-001' },
+            eligibleClientNumbers: ['CHILD-001'],
+            children: [{ information: { clientNumber: 'CHILD-001' } }],
+          },
+        }),
+      ).toEqual(['children']);
     });
   });
 });

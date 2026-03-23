@@ -1,3 +1,5 @@
+import type { PickDeep } from 'type-fest';
+
 import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import type { EligibilityType } from '~/components/eligibility';
 import { getAgeFromDateString } from '~/utils/date-utils';
@@ -136,25 +138,45 @@ export function isChildClientNumberValid(context: 'intake' | 'renewal', clientAp
 }
 
 /**
- * Determines the allowed types of applications based on the current state.
+ * Determines the allowed types of applications based on the current state. The allowed types of applications can be
+ * 'adult', 'children', or 'family', and they depend on the context (intake or renewal) and the eligibility of the
+ * primary applicant and their children for renewal.
  *
  * @param state - The current state, which can be either 'intake' or 'renewal' with optional client application data.
- * @returns An array of allowed application types: 'family', 'adult', or 'children'.
+ * @returns An array of allowed application types: 'adult', 'children', or 'family'.
  */
-export function getAllowedTypeOfApplication(
-  state: { context: 'intake'; clientApplication?: undefined } | { context: 'renewal'; clientApplication: Pick<ClientApplicationRenewalEligibleDto, 'typeOfApplication'> },
-): ReadonlyArray<'family' | 'adult' | 'children'> {
-  if (state.context === 'intake') {
-    return ['family', 'adult', 'children'];
+export function getAllowedTypeOfApplication({
+  context,
+  clientApplication,
+}:
+  | { context: 'intake'; clientApplication?: undefined } //
+  | {
+      context: 'renewal';
+      clientApplication: PickDeep<
+        ClientApplicationRenewalEligibleDto,
+        | 'applicantInformation.clientNumber' //
+        | `children.${number}.information.clientNumber`
+        | 'eligibleClientNumbers'
+      >;
+    }): ReadonlyArray<'adult' | 'children' | 'family'> {
+  if (context === 'intake') {
+    return ['adult', 'children', 'family'];
   }
 
-  if (state.clientApplication.typeOfApplication === 'adult') {
+  // In the renewal context, the allowed types of applications depend on the eligibility of the primary applicant and
+  // their children for renewal.
+  const primaryApplicantEligibleForRenewal = clientApplication.eligibleClientNumbers.includes(clientApplication.applicantInformation.clientNumber);
+  const anyChildEligibleForRenewal = clientApplication.children.some((child) => clientApplication.eligibleClientNumbers.includes(child.information.clientNumber));
+
+  if (primaryApplicantEligibleForRenewal && anyChildEligibleForRenewal) {
+    return ['adult', 'children', 'family'];
+  }
+
+  if (primaryApplicantEligibleForRenewal) {
     return ['adult'];
   }
 
-  if (state.clientApplication.typeOfApplication === 'children') {
-    return ['children'];
-  }
-
-  return ['family', 'adult', 'children'];
+  // If the primary applicant is not eligible for renewal but at least one child is eligible for renewal, we allow
+  // 'children' applications to enable the user to submit an application on behalf of their eligible child(ren).
+  return ['children'];
 }
