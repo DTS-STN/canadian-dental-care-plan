@@ -159,7 +159,7 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
     if (success && redirectUrl) {
       // Push form submit event to Adobe Analytics with form values when the form is successfully submitted
       if (adobeAnalytics.isConfigured()) {
-        const formName = 'ESDC-EDSC:CDCP Communication preferences in MSCA';
+        const formName = 'ESDC-EDSC:CDCP Communication preferences in MSCA profile';
         const formValues = new Map<string, { elementType: 'radio'; value: string }>();
 
         const preferredLanguageSelectedEl = document.querySelector<HTMLInputElement>('input[name="preferredLanguage"]:checked');
