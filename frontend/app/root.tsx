@@ -21,6 +21,7 @@ import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import type { FeatureName } from '~/utils/env-utils';
 import { useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
 import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
+import { useNProgress } from '~/hooks/use-nprogress';
 
 // see: https://docs.fontawesome.com/web/dig-deeper/security#content-security-policy
 fontAwesomeConfig.autoAddCss = false;
@@ -107,6 +108,8 @@ export default function App({ loaderData }: Route.ComponentProps) {
       adobeAnalytics.pushPageviewEvent(adobeLocationUrl);
     }
   }, [location.pathname, origin, transformAdobeAnalyticsUrl]);
+
+  useNProgress();
 
   return (
     <html lang={i18n.language}>
