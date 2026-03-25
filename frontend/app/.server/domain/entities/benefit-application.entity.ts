@@ -111,7 +111,7 @@ export type BenefitApplicationRequestEntity = ReadonlyDeep<{
     };
     BenefitApplicationCategoryCode: {
       ReferenceDataID: string;
-      ReferenceDataName: string;
+      ReferenceDataName: 'New';
     };
     BenefitApplicationChannelCode: {
       ReferenceDataID: string;
