@@ -23,9 +23,9 @@ describe('getTypeOfApplicationSectionCompletionResult', () => {
       expect(getTypeOfApplicationSectionCompletionResult({ context: 'intake', typeOfApplication: 'family' })).toBe('COMPLETED');
     });
 
-    it('should return INCOMPLETED when typeOfApplication is not included in allowed types', () => {
+    it('should return TYPE-MISMATCHED when typeOfApplication is not included in allowed types', () => {
       vi.mocked(getAllowedTypeOfApplication).mockReturnValue(['adult']);
-      expect(getTypeOfApplicationSectionCompletionResult({ context: 'intake', typeOfApplication: 'family' })).toBe('INCOMPLETED');
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'intake', typeOfApplication: 'family' })).toBe('TYPE-MISMATCHED');
     });
 
     it('should return INCOMPLETED when typeOfApplication is delegate', () => {
@@ -55,10 +55,10 @@ describe('getTypeOfApplicationSectionCompletionResult', () => {
       expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'adult', clientApplication: mockClientApplication })).toBe('COMPLETED');
     });
 
-    it('should return INCOMPLETED when typeOfApplication is not included in allowed types', () => {
+    it('should return TYPE-MISMATCHED when typeOfApplication is not included in allowed types', () => {
       vi.mocked(getAllowedTypeOfApplication).mockReturnValue(['adult']);
-      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'children', clientApplication: mockClientApplication })).toBe('INCOMPLETED');
-      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'family', clientApplication: mockClientApplication })).toBe('INCOMPLETED');
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'children', clientApplication: mockClientApplication })).toBe('TYPE-MISMATCHED');
+      expect(getTypeOfApplicationSectionCompletionResult({ context: 'renewal', typeOfApplication: 'family', clientApplication: mockClientApplication })).toBe('TYPE-MISMATCHED');
     });
   });
 });

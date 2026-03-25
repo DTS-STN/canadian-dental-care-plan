@@ -37,7 +37,7 @@ export function getTypeOfApplicationSectionCompletionResult(
 
   if (state.context === 'intake') {
     const intakeAllowedTypeOfApplication = getAllowedTypeOfApplication({ context: state.context });
-    return intakeAllowedTypeOfApplication.includes(state.typeOfApplication) ? 'COMPLETED' : 'INCOMPLETED';
+    return intakeAllowedTypeOfApplication.includes(state.typeOfApplication) ? 'COMPLETED' : 'TYPE-MISMATCHED';
   }
 
   if (!state.clientApplication) {
@@ -46,8 +46,8 @@ export function getTypeOfApplicationSectionCompletionResult(
     return 'COMPLETED';
   }
 
-  const intakeAllowedTypeOfApplication = getAllowedTypeOfApplication({ context: state.context, clientApplication: state.clientApplication });
-  return intakeAllowedTypeOfApplication.includes(state.typeOfApplication) ? 'COMPLETED' : 'INCOMPLETED';
+  const renewalAllowedTypeOfApplication = getAllowedTypeOfApplication({ context: state.context, clientApplication: state.clientApplication });
+  return renewalAllowedTypeOfApplication.includes(state.typeOfApplication) ? 'COMPLETED' : 'TYPE-MISMATCHED';
 }
 
 /**
