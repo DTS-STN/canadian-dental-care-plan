@@ -352,7 +352,7 @@
   */
 @layer base {
   select:invalid {
-    color: var(--color-gray-400);
+    color: var(--color-gray-600);
   }
   option[value=''][disabled] {
     display: none;

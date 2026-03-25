@@ -100,7 +100,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
       name={names.month}
       label={t('gcweb:date-picker.month.label')}
       placeholder={t('gcweb:date-picker.month.placeholder')}
-      className="w-full placeholder-gray-700 sm:w-auto"
+      className="w-full sm:w-auto"
       ariaErrorMessage={ariaErrorMessageMonth}
       required={required}
       disabled={disabled}
@@ -204,8 +204,6 @@ interface DatePickerMonthProps {
 function DatePickerMonth({ ariaErrorMessage, className, defaultValue, disabled, id, label, name, placeholder, required }: DatePickerMonthProps) {
   const { currentLanguage } = useCurrentLanguage();
   const months = useMonths(currentLanguage);
-  const [selectedValue, setSelectedValue] = useState(defaultValue);
-  const isPlaceholderSelected = selectedValue === '';
 
   const selectId = `date-picker-${id}-month`;
   const wrapperId = `date-picker-${id}-month-wrapper`;
@@ -222,13 +220,12 @@ function DatePickerMonth({ ariaErrorMessage, className, defaultValue, disabled, 
         aria-invalid={!!ariaErrorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={cn(inputBaseStyles, inputDisabledStyles, ariaErrorMessage && inputErrorStyles, isPlaceholderSelected ? 'text-gray-700' : undefined, className)}
+        className={cn(inputBaseStyles, inputDisabledStyles, ariaErrorMessage && inputErrorStyles, className)}
+        defaultValue={defaultValue}
         disabled={disabled}
         id={selectId}
         name={name}
-        onChange={(event) => setSelectedValue(event.target.value)}
         required={required}
-        value={selectedValue}
       >
         <InputOption id={inputOptionUnselectedId} value="" disabled hidden>
           {placeholder}
