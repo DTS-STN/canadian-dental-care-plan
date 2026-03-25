@@ -175,6 +175,19 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
         expect(result.result).toBe('ELIGIBLE');
       });
 
+      it('sets applicationCategoryCodeName to New when coming through mapApplicantDtoToClientApplicationRenewalEligibilityDto', async () => {
+        // Born 2008-04-15: on 2026-04-15 the applicant is exactly 18 years old
+        const applicantDto = makeApplicant({ dateOfBirth: '2008-04-15' });
+        const clientApplicationDto = makeClientApplication();
+        mockClientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto.mockReturnValue(clientApplicationDto);
+        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001')]]));
+
+        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicantDto, 'year-2024');
+
+        assert(result.result === 'ELIGIBLE');
+        expect(result.clientApplication.applicationCategoryCodeName).toBe('New');
+      });
+
       it('delegates when applicant is 18 years and 364 days old and passes the downstream result through', async () => {
         // Born 2007-04-16: on 2026-04-15 the applicant is 18 years, 364 days old (just before turning 19)
         const applicantDto = makeApplicant({ dateOfBirth: '2007-04-16' });
@@ -224,6 +237,13 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
         expect(result.result).toBe('INELIGIBLE-NO-CLIENT-NUMBERS');
       });
 
+      it('includes the clientApplication in the result', async () => {
+        const clientApplicationDto = makeClientApplication({ typeOfApplication: 'children', children: [] });
+        const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto);
+        assert(result.result === 'INELIGIBLE-NO-CLIENT-NUMBERS');
+        expect(result.clientApplication).toBe(clientApplicationDto);
+      });
+
       it('returns INELIGIBLE-NO-CLIENT-NUMBERS when all children are filtered out by isChildOrYouth', async () => {
         vi.mocked(isChildOrYouth).mockReturnValue(false);
         const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(makeClientApplication({ typeOfApplication: 'children', children: [makeChild('child-001'), makeChild('child-002')] }));
@@ -236,6 +256,14 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
         mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map());
         const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(makeClientApplication());
         expect(result.result).toBe('INELIGIBLE-NO-ELIGIBILITIES');
+      });
+
+      it('includes the clientApplication in the result', async () => {
+        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map());
+        const clientApplicationDto = makeClientApplication();
+        const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto);
+        assert(result.result === 'INELIGIBLE-NO-ELIGIBILITIES');
+        expect(result.clientApplication).toBe(clientApplicationDto);
       });
     });
 
@@ -264,6 +292,14 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
         mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001', { eligibilityStatusCode: '' })]]));
         const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(makeClientApplication());
         expect(result.result).toBe('INELIGIBLE-NOT-ENROLLED');
+      });
+
+      it('includes the clientApplication in the result', async () => {
+        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001', { enrollmentStatusCode: 'not-enrolled' })]]));
+        const clientApplicationDto = makeClientApplication();
+        const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto);
+        assert(result.result === 'INELIGIBLE-NOT-ENROLLED');
+        expect(result.clientApplication).toBe(clientApplicationDto);
       });
     });
 
@@ -330,6 +366,40 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
           const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(makeClientApplication({ typeOfApplication: 'family', children: [makeChild('child-001')] }));
           assert(result.result === 'ELIGIBLE');
           expect(result.clientApplication.eligibleClientNumbers).toEqual(['client-001', 'child-001']);
+        });
+
+        it('only includes children that pass the isChildOrYouth age check', async () => {
+          vi.mocked(isChildOrYouth).mockImplementation((dob) => dob === '2015-01-01');
+          mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(
+            new Map([
+              ['client-001', makeEligibility('client-001')],
+              ['child-001', makeEligibility('child-001')],
+            ]),
+          );
+          const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(
+            makeClientApplication({
+              typeOfApplication: 'family',
+              children: [makeChild('child-001', '2015-01-01'), makeChild('child-002', '2006-06-01')],
+            }),
+          );
+          assert(result.result === 'ELIGIBLE');
+          expect(result.clientApplication.eligibleClientNumbers).toEqual(['client-001', 'child-001']);
+        });
+      });
+
+      describe('applicationCategoryCodeName', () => {
+        it('defaults to Renewal when applicationCategoryCodeName is not passed', async () => {
+          mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001')]]));
+          const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(makeClientApplication());
+          assert(result.result === 'ELIGIBLE');
+          expect(result.clientApplication.applicationCategoryCodeName).toBe('Renewal');
+        });
+
+        it('sets applicationCategoryCodeName to New when explicitly passed', async () => {
+          mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001')]]));
+          const result = await mapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(makeClientApplication(), 'New');
+          assert(result.result === 'ELIGIBLE');
+          expect(result.clientApplication.applicationCategoryCodeName).toBe('New');
         });
       });
 
