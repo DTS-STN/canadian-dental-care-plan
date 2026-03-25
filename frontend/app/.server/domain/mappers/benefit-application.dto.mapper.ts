@@ -9,9 +9,8 @@ import type { BenefitApplicationRequestEntity, BenefitApplicationResponseEntity 
 import { parseDateString } from '~/utils/date-utils';
 
 export interface BenefitApplicationDtoMapper {
-  mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationDto: BenefitApplicationDto): BenefitApplicationRequestEntity;
+  mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationDto: BenefitApplicationDto, applicationChannelCode: 'protected' | 'public'): BenefitApplicationRequestEntity;
   mapBenefitApplicationResponseEntityToApplicationCode(benefitApplicationResponseEntity: BenefitApplicationResponseEntity): string;
-  mapBenefitApplicationDtoToProtectedBenefitApplicationRequestEntity(protectedBenefitApplicationRequestDto: BenefitApplicationDto): BenefitApplicationRequestEntity;
 }
 
 interface ToAddressArgs {
@@ -43,20 +42,14 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     this.serverConfig = serverConfig;
   }
 
-  mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationDto: BenefitApplicationDto): BenefitApplicationRequestEntity {
-    return this.toBenefitApplicationRequestEntity(benefitApplicationDto, false);
+  mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationDto: BenefitApplicationDto, applicationChannelCode: 'protected' | 'public'): BenefitApplicationRequestEntity {
+    const { BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED, BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC } = this.serverConfig;
+    return this.toBenefitApplicationRequestEntity(benefitApplicationDto, applicationChannelCode === 'protected' ? BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED : BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC);
   }
 
-  mapBenefitApplicationDtoToProtectedBenefitApplicationRequestEntity(protectedBenefitApplicationDto: BenefitApplicationDto): BenefitApplicationRequestEntity {
-    return this.toBenefitApplicationRequestEntity(protectedBenefitApplicationDto, true);
-  }
-
-  private toBenefitApplicationRequestEntity(benefitApplication: BenefitApplicationDto, isProtectedRoute: boolean): BenefitApplicationRequestEntity {
+  private toBenefitApplicationRequestEntity(benefitApplication: BenefitApplicationDto, applicationChannelCode: string): BenefitApplicationRequestEntity {
     const { applicantInformation, applicationYearId, children, communicationPreferences, contactInformation, dateOfBirth, dentalBenefits, dentalInsurance, livingIndependently, partnerInformation, termsAndConditions, typeOfApplication } =
       benefitApplication;
-
-    const { BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED, BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC } = this.serverConfig;
-
     return {
       BenefitApplication: {
         Applicant: {
@@ -116,7 +109,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
           ReferenceDataName: 'New',
         },
         BenefitApplicationChannelCode: {
-          ReferenceDataID: isProtectedRoute ? BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED : BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC,
+          ReferenceDataID: applicationChannelCode,
         },
         BenefitApplicationYear: {
           BenefitApplicationYearIdentification: [

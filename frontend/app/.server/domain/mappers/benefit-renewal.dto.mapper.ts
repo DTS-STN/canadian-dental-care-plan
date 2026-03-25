@@ -8,7 +8,6 @@ import type {
   BenefitRenewalDto,
   ChangeIndicatorsDto,
   DentalInsuranceDto,
-  ProtectedBenefitRenewalDto,
   RenewalApplicantInformationDto,
   RenewalChildDto,
   RenewalCommunicationPreferencesDto,
@@ -20,12 +19,23 @@ import type { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '
 import { parseDateString } from '~/utils/date-utils';
 
 export interface BenefitRenewalDtoMapper {
-  mapBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalDto: BenefitRenewalDto): BenefitRenewalRequestEntity;
-  mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedRenewDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity;
+  mapBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalDto: BenefitRenewalDto, applicationChannelCode: 'protected' | 'public'): BenefitRenewalRequestEntity;
   mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity: BenefitRenewalResponseEntity): string;
 }
 
 interface ToBenefitRenewalRequestEntityArgs {
+  /**
+   * Indicates whether the renewal request is to create a new benefit application or renew an existing benefit
+   * application.
+   *
+   * The current use case for "New" is when a primary dependent turning 18 years old renews their benefit as an
+   * individual after being previously covered as a dependent under their parent's benefit. In this case, a new benefit
+   * application needs to be created for the new adult. For all other renewal scenarios, the application category code
+   * name will be "Renewal" since the benefit application will be renewed instead of a new application being created.
+   */
+  applicationCategoryCodeName: 'New' | 'Renewal';
+
+  applicationChannelCode: string;
   applicantInformation: RenewalApplicantInformationDto;
   applicationYearId: string;
   changeIndicators?: ChangeIndicatorsDto;
@@ -72,32 +82,31 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     this.serverConfig = serverConfig;
   }
 
-  mapBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalDto: BenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity(benefitRenewalDto, false);
+  mapBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalDto: BenefitRenewalDto, applicationChannelCode: 'protected' | 'public'): BenefitRenewalRequestEntity {
+    const { BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED, BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC } = this.serverConfig;
+    return this.toBenefitRenewalRequestEntity({
+      ...benefitRenewalDto,
+      applicationChannelCode: applicationChannelCode === 'protected' ? BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED : BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC,
+    });
   }
 
-  mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): BenefitRenewalRequestEntity {
-    return this.toBenefitRenewalRequestEntity(protectedBenefitRenewalDto, true);
-  }
-
-  private toBenefitRenewalRequestEntity(
-    {
-      applicantInformation,
-      applicationYearId,
-      changeIndicators,
-      children,
-      communicationPreferences,
-      contactInformation,
-      dateOfBirth,
-      dentalBenefits,
-      dentalInsurance,
-      livingIndependently,
-      partnerInformation,
-      typeOfApplication,
-    }: ToBenefitRenewalRequestEntityArgs,
-    isProtectedRoute: boolean,
-  ): BenefitRenewalRequestEntity {
-    const { BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED, BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC, MARITAL_STATUS_CODE_SINGLE } = this.serverConfig;
+  private toBenefitRenewalRequestEntity({
+    applicationCategoryCodeName,
+    applicationChannelCode,
+    applicantInformation,
+    applicationYearId,
+    changeIndicators,
+    children,
+    communicationPreferences,
+    contactInformation,
+    dateOfBirth,
+    dentalBenefits,
+    dentalInsurance,
+    livingIndependently,
+    partnerInformation,
+    typeOfApplication,
+  }: ToBenefitRenewalRequestEntityArgs): BenefitRenewalRequestEntity {
+    const { MARITAL_STATUS_CODE_SINGLE } = this.serverConfig;
 
     return {
       BenefitApplication: {
@@ -166,10 +175,10 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         },
         BenefitApplicationCategoryCode: {
           ReferenceDataID: this.toBenefitApplicationCategoryCode(typeOfApplication),
-          ReferenceDataName: 'Renewal',
+          ReferenceDataName: applicationCategoryCodeName,
         },
         BenefitApplicationChannelCode: {
-          ReferenceDataID: isProtectedRoute ? BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED : BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC,
+          ReferenceDataID: applicationChannelCode,
         },
         BenefitApplicationYear: {
           BenefitApplicationYearIdentification: [

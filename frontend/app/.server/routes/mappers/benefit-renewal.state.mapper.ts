@@ -35,7 +35,7 @@ import type {
 
 export interface BenefitRenewalAdultState {
   applicationYear: ApplicationYearState;
-  clientApplication?: ClientApplicationDto;
+  clientApplication?: ClientApplicationDto & { applicationCategoryCodeName: 'New' | 'Renewal' };
   phoneNumber: DeclaredChangePhoneNumberState;
   dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
   dentalInsurance: DentalInsuranceState;
@@ -50,10 +50,10 @@ export interface BenefitRenewalAdultState {
   termsAndConditions: TermsAndConditionsState;
 }
 
-export interface BenefitRenewalAdultChildState {
+export interface BenefitRenewalFamilyState {
   applicationYear: ApplicationYearState;
   children: ChildState[];
-  clientApplication?: ClientApplicationDto;
+  clientApplication?: ClientApplicationDto & { applicationCategoryCodeName: 'New' | 'Renewal' };
   phoneNumber: DeclaredChangePhoneNumberState;
   dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
   dentalInsurance: DentalInsuranceState;
@@ -70,7 +70,7 @@ export interface BenefitRenewalAdultChildState {
 
 export interface BenefitRenewalChildState {
   applicationYear: ApplicationYearState;
-  clientApplication?: ClientApplicationDto;
+  clientApplication?: ClientApplicationDto & { applicationCategoryCodeName: 'New' | 'Renewal' };
   children: ChildState[];
   phoneNumber: DeclaredChangePhoneNumberState;
   homeAddress?: DeclaredChangeHomeAddressState;
@@ -85,9 +85,9 @@ export interface BenefitRenewalChildState {
 }
 
 export interface BenefitRenewalStateMapper {
-  mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(benefitrenewalAdultState: BenefitRenewalAdultState, userId?: string): BenefitRenewalDto;
-  mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto(benefitrenewalAdultChildState: BenefitRenewalAdultChildState, userId?: string): BenefitRenewalDto;
-  mapBenefitRenewalChildStateToChildBenefitRenewalDto(benefitRenewalChildState: BenefitRenewalChildState, userId?: string): BenefitRenewalDto;
+  mapBenefitRenewalAdultStateToBenefitRenewalDto(benefitrenewalAdultState: BenefitRenewalAdultState, userId?: string): BenefitRenewalDto;
+  mapBenefitRenewalFamilyStateToBenefitRenewalDto(benefitrenewalFamilyState: BenefitRenewalFamilyState, userId?: string): BenefitRenewalDto;
+  mapBenefitRenewalChildStateToBenefitRenewalDto(benefitRenewalChildState: BenefitRenewalChildState, userId?: string): BenefitRenewalDto;
 }
 
 interface ToApplicantInformationArgs {
@@ -143,7 +143,7 @@ interface ToPartnerInformationArgs {
 
 @injectable()
 export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapper {
-  mapBenefitRenewalAdultStateToAdultBenefitRenewalDto(
+  mapBenefitRenewalAdultStateToBenefitRenewalDto(
     {
       applicationYear,
       clientApplication,
@@ -215,7 +215,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     };
   }
 
-  mapBenefitRenewalAdultChildStateToAdultChildBenefitRenewalDto(
+  mapBenefitRenewalFamilyStateToBenefitRenewalDto(
     {
       applicationYear,
       children,
@@ -232,7 +232,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       emailVerified,
       communicationPreferences,
       termsAndConditions,
-    }: BenefitRenewalAdultChildState,
+    }: BenefitRenewalFamilyState,
     userId: string = 'anonymous',
   ): BenefitRenewalDto {
     if (communicationPreferences === undefined) {
@@ -291,7 +291,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     };
   }
 
-  mapBenefitRenewalChildStateToChildBenefitRenewalDto(
+  mapBenefitRenewalChildStateToBenefitRenewalDto(
     {
       applicationYear,
       children,

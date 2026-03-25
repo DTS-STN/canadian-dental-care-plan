@@ -78,7 +78,7 @@ export class DefaultBenefitApplicationService implements BenefitApplicationServi
     this.auditService.createAudit('application-submit.post', { userId: benefitApplicationRequestDto.userId });
 
     try {
-      const benefitApplicationRequestEntity = this.benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationRequestDto);
+      const benefitApplicationRequestEntity = this.benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationRequestDto, 'public');
       const benefitApplicationResponseEntity = await this.benefitApplicationRepository.createBenefitApplication(benefitApplicationRequestEntity);
       const applicationCode = this.benefitApplicationDtoMapper.mapBenefitApplicationResponseEntityToApplicationCode(benefitApplicationResponseEntity);
 
@@ -99,7 +99,7 @@ export class DefaultBenefitApplicationService implements BenefitApplicationServi
 
     this.auditService.createAudit('protected-application-submit.post', { userId: protectedBenefitApplicationRequestDto.userId });
 
-    const protectedBenefitApplicationRequestEntity = this.benefitApplicationDtoMapper.mapBenefitApplicationDtoToProtectedBenefitApplicationRequestEntity(protectedBenefitApplicationRequestDto);
+    const protectedBenefitApplicationRequestEntity = this.benefitApplicationDtoMapper.mapBenefitApplicationDtoToBenefitApplicationRequestEntity(protectedBenefitApplicationRequestDto, 'protected');
     const benefitApplicationResponseEntity = await this.benefitApplicationRepository.createBenefitApplication(protectedBenefitApplicationRequestEntity);
     const applicationCode = this.benefitApplicationDtoMapper.mapBenefitApplicationResponseEntityToApplicationCode(benefitApplicationResponseEntity);
 

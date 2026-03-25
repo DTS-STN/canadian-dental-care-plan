@@ -61,7 +61,8 @@ export async function loader({ context: { appContainer, session }, request, para
   const userInfoToken = session.get('userInfoToken');
   const benefitApplicationDtoMapper = appContainer.get(TYPES.BenefitRenewalDtoMapper);
   const benefitApplicationStateMapper = appContainer.get(TYPES.BenefitRenewalStateMapper);
-  const payload = viewPayloadEnabled && benefitApplicationDtoMapper.mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitApplicationStateMapper.mapBenefitRenewalChildStateToChildBenefitRenewalDto(state, userInfoToken.sub));
+  const benefitRenewalDto = viewPayloadEnabled && benefitApplicationStateMapper.mapBenefitRenewalChildStateToBenefitRenewalDto(state, userInfoToken.sub);
+  const payload = benefitRenewalDto && benefitApplicationDtoMapper.mapBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalDto, 'protected');
 
   return {
     state: {
@@ -99,7 +100,7 @@ export async function action({ context: { appContainer, session }, request, para
   }
 
   const userInfoToken = session.get('userInfoToken');
-  const benefitApplicationDto = appContainer.get(TYPES.BenefitRenewalStateMapper).mapBenefitRenewalChildStateToChildBenefitRenewalDto(state, userInfoToken.sub);
+  const benefitApplicationDto = appContainer.get(TYPES.BenefitRenewalStateMapper).mapBenefitRenewalChildStateToBenefitRenewalDto(state, userInfoToken.sub);
   const confirmationCode = await appContainer.get(TYPES.BenefitRenewalService).createProtectedBenefitRenewal(benefitApplicationDto);
   const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
   saveProtectedApplicationState({ params, session, state: { submitTerms: parsedDataResult.data, submissionInfo } });

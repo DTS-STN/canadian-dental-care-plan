@@ -3,7 +3,7 @@ import { inject, injectable, optional } from 'inversify';
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { RedisService } from '~/.server/data';
-import type { BenefitRenewalDto, ProtectedBenefitRenewalDto } from '~/.server/domain/dtos';
+import type { BenefitRenewalDto } from '~/.server/domain/dtos';
 import type { BenefitRenewalDtoMapper } from '~/.server/domain/mappers';
 import type { BenefitRenewalRepository } from '~/.server/domain/repositories';
 import type { AuditService } from '~/.server/domain/services';
@@ -24,9 +24,9 @@ export interface BenefitRenewalService {
   /**
    * Submits benefit renewal request for protected route.
    *
-   * @param protectedBenefitRenewalDto The protected route benefit renewal request dto
+   * @param benefitRenewalDto The route benefit renewal request dto
    */
-  createProtectedBenefitRenewal(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): Promise<string>;
+  createProtectedBenefitRenewal(benefitRenewalDto: BenefitRenewalDto): Promise<string>;
 }
 
 @injectable()
@@ -76,7 +76,7 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     this.auditService.createAudit('benefit-renewal-submit.post', { userId: benefitRenewalDto.userId });
 
     try {
-      const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalDto);
+      const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalDto, 'public');
       const benefitRenewalResponseEntity = await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
       const applicationCode = this.benefitRenewalDtoMapper.mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity);
 
@@ -92,8 +92,8 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
     }
   }
 
-  async createProtectedBenefitRenewal(protectedBenefitRenewalDto: ProtectedBenefitRenewalDto): Promise<string> {
-    this.log.trace('Creating protected benefit renewal for request [%j]', protectedBenefitRenewalDto);
+  async createProtectedBenefitRenewal(benefitRenewalDto: BenefitRenewalDto): Promise<string> {
+    this.log.trace('Creating protected benefit renewal for request [%j]', benefitRenewalDto);
 
     const killswitchEngaged = await this.redisService?.get(KILLSWITCH_KEY);
 
@@ -102,10 +102,10 @@ export class DefaultBenefitRenewalService implements BenefitRenewalService {
       new AppError('Request to renew protected benefit application is unavailable (killswitch engaged)', ErrorCodes.XAPI_TOO_MANY_REQUESTS);
     }
 
-    this.auditService.createAudit('protected-renewal-submit.post', { userId: protectedBenefitRenewalDto.userId });
+    this.auditService.createAudit('protected-renewal-submit.post', { userId: benefitRenewalDto.userId });
 
     try {
-      const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapProtectedBenefitRenewalDtoToBenefitRenewalRequestEntity(protectedBenefitRenewalDto);
+      const benefitRenewalRequestEntity = this.benefitRenewalDtoMapper.mapBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalDto, 'protected');
       const benefitRenewalResponseEntity = await this.benefitRenewalRepository.createBenefitRenewal(benefitRenewalRequestEntity);
       const applicationCode = this.benefitRenewalDtoMapper.mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity);
 
