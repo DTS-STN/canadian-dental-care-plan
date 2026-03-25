@@ -23,9 +23,10 @@ export interface ClientApplicationRenewalEligibilityDtoMapper {
   /**
    * Maps a client application DTO option to a renewal eligibility DTO.
    * @param clientApplicationDto - The client application, or None if not found.
+   * @param applicationCategoryCodeName - The application category, either "New" or "Renewal".
    * @returns A promise resolving to `INELIGIBLE-NO-CLIENT-NUMBERS`, `INELIGIBLE-NO-ELIGIBILITIES`, `INELIGIBLE-NOT-ENROLLED`, or `ELIGIBLE`.
    */
-  mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto: ClientApplicationDto): Promise<ClientApplicationRenewalEligibilityDto>;
+  mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto: ClientApplicationDto, applicationCategoryCodeName?: 'New' | 'Renewal'): Promise<ClientApplicationRenewalEligibilityDto>;
 }
 
 type DefaultClientApplicationRenewalEligibilityDtoMapper_ServerConfig = Pick<ServerConfig, 'ELIGIBILITY_STATUS_CODE_ELIGIBLE' | 'ENROLLMENT_STATUS_CODE_ENROLLED'>;
@@ -73,8 +74,8 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
       return { result: 'INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD' };
     }
 
-    const cliientApplicationDto = this.clientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto({ applicantDto, applicationYearId, typeOfApplication: 'adult' });
-    return await this.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(cliientApplicationDto);
+    const clientApplicationDto = this.clientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto({ applicantDto, applicationYearId, typeOfApplication: 'adult' });
+    return await this.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto, 'New');
   }
 
   /**
@@ -94,7 +95,7 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
    * 6. Return `ELIGIBLE` with the passing client numbers and an input model of
    *    `'simplified'` (the application has a valid copay tier code) or `'full'` (missing or unrecognised tier code).
    */
-  async mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto: ClientApplicationDto): Promise<ClientApplicationRenewalEligibilityDto> {
+  async mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto: ClientApplicationDto, applicationCategoryCodeName: 'New' | 'Renewal' = 'Renewal'): Promise<ClientApplicationRenewalEligibilityDto> {
     this.log.trace('Mapping client application dto to client application renewal eligibility dto: [%j]', clientApplicationDto);
 
     if (clientApplicationDto.previousApplication) {
@@ -139,6 +140,7 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
         ...clientApplicationDto,
         eligibleClientNumbers: [...enrolledAndEligibleClients.keys()],
         inputModel: this.getInputModel(clientApplicationDto),
+        applicationCategoryCodeName: applicationCategoryCodeName,
       },
     };
   }

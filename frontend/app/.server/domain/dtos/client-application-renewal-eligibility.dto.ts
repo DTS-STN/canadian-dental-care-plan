@@ -84,6 +84,7 @@ export type ClientApplicationRenewalEligibleDto = ClientApplicationDto & {
    */
   eligibleClientNumbers: ReadonlyArray<string>;
   inputModel: 'full' | 'simplified';
+  applicationCategoryCodeName: 'New' | 'Renewal';
 };
 
 export type ClientApplicationRenewalEligibilityDto =
