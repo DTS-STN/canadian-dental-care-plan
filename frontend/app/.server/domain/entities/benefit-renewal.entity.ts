@@ -132,7 +132,7 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
     };
     BenefitApplicationCategoryCode: {
       ReferenceDataID: string;
-      ReferenceDataName: string;
+      ReferenceDataName: 'New' | 'Renewal';
     };
     BenefitApplicationChannelCode: {
       ReferenceDataID: string;
