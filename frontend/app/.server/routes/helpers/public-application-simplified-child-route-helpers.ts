@@ -107,15 +107,15 @@ export function validatePublicApplicationSimplifiedChildStateForReview({ params,
   }
 
   if (inputModel !== 'simplified') {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   if (typeOfApplication !== 'children') {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   if (context === 'renewal' && getAllowedTypeOfApplication({ context, clientApplication }).includes(typeOfApplication) === false) {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   if (hasFiledTaxes === undefined) {
@@ -129,13 +129,13 @@ export function validatePublicApplicationSimplifiedChildStateForReview({ params,
   const children = validateChildrenStateForReview({ context, childrenState: state.children, state, params });
 
   if (applicantInformation === undefined) {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
 
   if (ageCategory === 'children') {
-    throw redirect(getPathById('public/application/$id/type-of-application', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
@@ -230,7 +230,7 @@ function validateChildrenStateForReview({ context, childrenState, state, params 
     const ageCategory = getContextualAgeCategoryFromDate(information.dateOfBirth, context);
 
     if (ageCategory === 'adults' || ageCategory === 'seniors') {
-      throw redirect(getPathById('public/application/$id/type-of-application', params));
+      throw redirect(getPathById('public/application/$id/your-application', params));
     }
 
     if (dentalInsurance === undefined) {

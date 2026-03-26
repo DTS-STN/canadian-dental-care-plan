@@ -269,7 +269,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
           >
             {t('application-full-child:parent-or-guardian.childrens-application')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Back click">
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Back click">
             {t('application-full-child:parent-or-guardian.your-application')}
           </NavigationButtonLink>
         </div>

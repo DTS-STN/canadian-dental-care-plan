@@ -120,14 +120,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
           </ButtonLink>
         </CardFooter>
       </Card>
-      <NavigationButtonLink
-        disabled={!allSectionsCompleted}
-        variant="primary"
-        direction="next"
-        routeId="public/application/$id/type-of-application"
-        params={params}
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Continue click"
-      >
+      <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Continue click">
         {t('application:eligibility-requirements.next-button')}
       </NavigationButtonLink>
     </div>

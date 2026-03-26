@@ -2,7 +2,7 @@ import { faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { format, parseISO } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
-import type { Route } from './+types/type-application';
+import type { Route } from './+types/your-application';
 
 import { getTypeOfApplicationSectionCompletionResult, isPersonalInformationSectionCompleted } from '~/.server/routes/helpers/public-application-entry-section-checks';
 import type { ApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';

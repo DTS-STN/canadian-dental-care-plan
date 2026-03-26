@@ -225,7 +225,7 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
           >
             {t('application-simplified-adult:contact-information.next-btn')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Back click">
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Back click">
             {t('application-simplified-adult:contact-information.prev-btn')}
           </NavigationButtonLink>
         </div>

@@ -18,9 +18,9 @@ export const routes = [
             paths: { en: '/:lang/application/:id/eligibility-requirements', fr: '/:lang/demande/:id/criteres-admissibilite' },
           },
           {
-            id: 'public/application/$id/type-of-application',
-            file: 'routes/public/application/entry/type-application.tsx',
-            paths: { en: '/:lang/application/:id/type-of-application', fr: '/:lang/demande/:id/type-de-demande' },
+            id: 'public/application/$id/your-application',
+            file: 'routes/public/application/entry/your-application.tsx',
+            paths: { en: '/:lang/application/:id/your-application', fr: '/:lang/demande/:id/votre-demande' },
           },
           {
             id: 'public/application/$id/full-adult/marital-status',
