@@ -11,7 +11,7 @@ import { loadPublicApplicationFullAdultStateForReview } from '~/.server/routes/h
 import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
-import { Button, ButtonLink } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DebugPayload } from '~/components/debug-payload';
 import { ErrorSummary } from '~/components/error-summary';
@@ -27,6 +27,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { LoadingButton } from '~/components/loading-button';
 
 const CHECKBOX_VALUE = {
   yes: 'yes',
@@ -158,10 +159,10 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
                   {t('application-full-adult:submit.i-understand')}
                 </InputCheckbox>
               </div>
-              <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_150px]">
-                <Button variant="green" className="order-first h-full text-base sm:order-last sm:text-lg" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Submit click">
+              <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_170px]">
+                <LoadingButton loading={isSubmitting} variant="green" className="order-first h-full text-base sm:order-last sm:text-lg" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Submit click">
                   {t('application-full-adult:submit.submit')}
-                </Button>
+                </LoadingButton>
                 <NavigationButtonLink
                   disabled={isSubmitting}
                   variant="secondary"
