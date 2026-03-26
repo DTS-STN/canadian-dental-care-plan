@@ -213,11 +213,24 @@ export async function action({ context: { appContainer, session }, params, reque
     );
   }
 
-  // validate that for a renewal the child's memberId is contained in the clientApplication
+  // Validate renewal eligibility: ensure the child's memberId belongs to a child in the client application and is eligible for renewal.
+  // Note: eligibleClientNumbers may also include the primary applicant's client number (for family applications),
+  // so we must first confirm the provided clientNumber belongs to a child before checking eligibility.
   if (state.context === 'renewal') {
     invariant(state.clientApplication, 'state.clientApplication must be defined for a renewal application');
-    const child = state.clientApplication.children.find((child) => child.information.clientNumber === parsedDataResult.data.memberId);
-    if (!child) return { status: 'not-eligible' } as const;
+
+    const clientNumber = parsedDataResult.data.memberId;
+    const isEligibleChild =
+      // A memberId (client number) must be provided
+      clientNumber &&
+      // The client number must belong to a child in the application
+      state.clientApplication.children.some((child) => child.information.clientNumber === clientNumber) &&
+      // The client number must be included in the set of eligible client numbers for renewal
+      state.clientApplication.eligibleClientNumbers.includes(clientNumber);
+
+    if (!isEligibleChild) {
+      return { status: 'not-eligible' } as const;
+    }
   }
 
   savePublicApplicationState({
