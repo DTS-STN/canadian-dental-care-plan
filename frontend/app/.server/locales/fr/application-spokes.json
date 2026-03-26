@@ -408,6 +408,7 @@
       "error-message": {
         "member-id-required": "Entrez le numéro d'identification du membre à 11 chiffres",
         "member-id-valid": "Le numéro d'identification du membre doit comporter 11 chiffres",
+        "member-id-unique": "Le numéro d'identification du membre doit être unique pour tous les enfants de cette demande",
         "first-name-required": "Entrez le prénom de l'enfant",
         "last-name-required": "Entrez le nom de famille de l'enfant",
         "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",

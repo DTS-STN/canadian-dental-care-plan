@@ -100,6 +100,17 @@ export async function action({ context: { appContainer, session }, params, reque
         .trim()
         .min(1, t('application-spokes:children.information.error-message.member-id-required'))
         .refine(isValidClientNumberRenewal, t('application-spokes:children.information.error-message.member-id-valid'))
+        .refine((memberId) => {
+          // memberId is only required to be unique across children in the application for renewal applications since
+          // only renewal applications have eligible client numbers tied to children in the application
+          if (state.context !== 'renewal') return true;
+
+          // memberId must be unique within the application across all children unless the memberId belongs to the
+          // current child being edited (i.e. in edit mode the memberId can be unchanged and match the existing memberId)
+          return !state.children //
+            .filter((child) => child.id !== childState.id)
+            .some((child) => child.information?.memberId === extractDigits(memberId));
+        }, t('application-spokes:children.information.error-message.member-id-unique'))
         .transform((code) => extractDigits(code))
         .optional(),
       firstName: z
@@ -213,22 +224,22 @@ export async function action({ context: { appContainer, session }, params, reque
     );
   }
 
-  // Validate renewal eligibility: ensure the child's memberId belongs to a child in the client application and is eligible for renewal.
-  // Note: eligibleClientNumbers may also include the primary applicant's client number (for family applications),
-  // so we must first confirm the provided clientNumber belongs to a child before checking eligibility.
+  // For renewal applications, the memberId must match both a child in the client application (by clientNumber and
+  // dateOfBirth) and appear in eligibleClientNumbers. Note: eligibleClientNumbers may also include the primary
+  // applicant's clientNumber (family applications), so the children check is required to prevent false positives.
   if (state.context === 'renewal') {
     invariant(state.clientApplication, 'state.clientApplication must be defined for a renewal application');
-
-    const clientNumber = parsedDataResult.data.memberId;
-    const isEligibleChild =
-      // A memberId (client number) must be provided
-      clientNumber &&
-      // The client number must belong to a child in the application
-      state.clientApplication.children.some((child) => child.information.clientNumber === clientNumber) &&
-      // The client number must be included in the set of eligible client numbers for renewal
-      state.clientApplication.eligibleClientNumbers.includes(clientNumber);
-
-    if (!isEligibleChild) {
+    const memberId = parsedDataResult.data.memberId;
+    if (
+      !memberId || // memberId must be provided
+      !state.clientApplication.children.some((child) => {
+        return (
+          child.information.clientNumber === memberId && //
+          child.information.dateOfBirth === parsedDataResult.data.dateOfBirth
+        );
+      }) ||
+      !state.clientApplication.eligibleClientNumbers.includes(memberId)
+    ) {
       return { status: 'not-eligible' } as const;
     }
   }
