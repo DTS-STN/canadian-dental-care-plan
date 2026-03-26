@@ -44,7 +44,7 @@ export function loadProtectedApplicationRenewalFamilyState({ params, request, se
 
   // Redirect to the first flow page if the application has not been submitted and
   // the current route is the confirmation page.
-  const typeOfApplicationRouteUrl = getPathById('protected/application/$id/type-of-application', params);
+  const typeOfApplicationRouteUrl = getPathById('protected/application/$id/your-application', params);
   if (!applicationState.submissionInfo && pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has not been submitted; sessionId: [%s], ', typeOfApplicationRouteUrl, applicationState.id);
     throw redirect(typeOfApplicationRouteUrl);
@@ -109,15 +109,15 @@ export function validateProtectedApplicationFamilyStateForReview({ params, state
   }
 
   if (context !== 'renewal') {
-    throw redirect(getPathById('protected/application/$id/type-of-application', params));
+    throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 
   if (typeOfApplication !== 'family') {
-    throw redirect(getPathById('protected/application/$id/type-of-application', params));
+    throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 
   if (getAllowedTypeOfApplication({ context, clientApplication }).includes(typeOfApplication) === false) {
-    throw redirect(getPathById('protected/application/$id/type-of-application', params));
+    throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 
   if (hasFiledTaxes === undefined) {
@@ -129,13 +129,13 @@ export function validateProtectedApplicationFamilyStateForReview({ params, state
   }
 
   if (applicantInformation === undefined) {
-    throw redirect(getPathById('protected/application/$id/type-of-application', params));
+    throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 
   const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
 
   if (ageCategory === 'children') {
-    throw redirect(getPathById('protected/application/$id/type-of-application', params));
+    throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
@@ -247,7 +247,7 @@ function validateChildrenStateForReview({ context, childrenState, state, params 
     const ageCategory = getContextualAgeCategoryFromDate(information.dateOfBirth, context);
 
     if (ageCategory === 'adults' || ageCategory === 'seniors') {
-      throw redirect(getPathById('protected/application/$id/type-of-application', params));
+      throw redirect(getPathById('protected/application/$id/your-application', params));
     }
 
     if (dentalInsurance === undefined) {

@@ -117,7 +117,7 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
           >
             {t('protected-application-intake-adult:marital-status.next-btn')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Back click">
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Back click">
             {t('protected-application-intake-adult:marital-status.prev-btn')}
           </NavigationButtonLink>
         </div>

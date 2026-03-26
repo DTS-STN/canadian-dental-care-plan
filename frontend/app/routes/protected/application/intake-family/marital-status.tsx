@@ -117,7 +117,7 @@ export default function ProtectedNewFamilyMaritalStatus({ loaderData, params }: 
           >
             {t('protected-application-intake-family:marital-status.contact-information')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Back click">
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Back click">
             {t('protected-application-intake-family:marital-status.your-application')}
           </NavigationButtonLink>
         </div>

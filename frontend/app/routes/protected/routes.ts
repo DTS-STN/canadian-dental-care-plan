@@ -18,9 +18,9 @@ export const routes = [
             paths: { en: '/:lang/protected/application/:id/eligibility-requirements', fr: '/:lang/protege/demande/:id/criteres-admissibilite' },
           },
           {
-            id: 'protected/application/$id/type-of-application',
-            file: 'routes/protected/application/entry/type-application.tsx',
-            paths: { en: '/:lang/protected/application/:id/type-of-application', fr: '/:lang/protege/demande/:id/type-de-demande' },
+            id: 'protected/application/$id/your-application',
+            file: 'routes/protected/application/entry/your-application.tsx',
+            paths: { en: '/:lang/protected/application/:id/your-application', fr: '/:lang/protege/demande/:id/votre-demande' },
           },
           {
             id: 'protected/application/$id/renew',
