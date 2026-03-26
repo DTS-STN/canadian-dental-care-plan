@@ -408,6 +408,7 @@
       "error-message": {
         "member-id-required": "Enter 11-digit member ID",
         "member-id-valid": "Member ID must be 11-digit",
+        "member-id-unique": "Member ID must be unique across all children in this application",
         "first-name-required": "Enter child's first name",
         "last-name-required": "Enter child's last name",
         "sin-required": "Enter 9-digit SIN, for example 123 456 789",
