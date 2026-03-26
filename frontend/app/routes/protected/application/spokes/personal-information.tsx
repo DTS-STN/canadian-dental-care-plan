@@ -163,7 +163,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('protected/application/$id/parent-or-guardian', params));
   }
 
-  return redirect(getPathById('protected/application/$id/type-of-application', params));
+  return redirect(getPathById('protected/application/$id/your-application', params));
 }
 
 export default function ApplicationPersonalInformation({ loaderData, params }: Route.ComponentProps) {
@@ -258,7 +258,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId={`protected/application/$id/type-of-application`}
+              routeId={`protected/application/$id/your-application`}
               params={params}
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Applicant information click"

@@ -67,7 +67,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/application/$id/application-delegate', params));
   }
 
-  return redirect(getPathById('public/application/$id/type-of-application', params));
+  return redirect(getPathById('public/application/$id/your-application', params));
 }
 
 export default function ApplicationTypeOfApplication({ loaderData, params }: Route.ComponentProps) {
@@ -106,7 +106,7 @@ export default function ApplicationTypeOfApplication({ loaderData, params }: Rou
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId="public/application/$id/type-of-application"
+              routeId="public/application/$id/your-application"
               params={params}
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Type of application click"

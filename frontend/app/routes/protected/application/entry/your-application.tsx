@@ -2,7 +2,7 @@ import { faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { format, parseISO } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
-import type { Route } from './+types/type-application';
+import type { Route } from './+types/your-application';
 
 import { TYPES } from '~/.server/constants';
 import { isPersonalInformationSectionCompleted, isTypeOfApplicationSectionCompleted } from '~/.server/routes/helpers/protected-application-entry-section-checks';
@@ -28,7 +28,7 @@ const APPLICANT_TYPE = { adult: 'adult', family: 'family', children: 'children' 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application', 'gcweb'),
   pageIdentifier: pageIds.protected.application.typeOfApplication,
-  pageTitleI18nKey: 'protected-application:type-of-application.page-title',
+  pageTitleI18nKey: 'protected-application:your-application.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -41,7 +41,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateProtectedApplicationContext(state, params, 'intake');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:type-of-application.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:your-application.page-title') }) };
 
   const applicationFlow: ApplicationFlow = state.typeOfApplication ? `${state.context}-${state.typeOfApplication}` : 'entry';
   const nextRouteId = getInitialApplicationFlowUrl(applicationFlow, params);
@@ -67,13 +67,13 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
   function getTypeOfApplication(typeOfApplication: string) {
     switch (typeOfApplication) {
       case APPLICANT_TYPE.adult: {
-        return t('protected-application:type-of-application.type-application-personal');
+        return t('protected-application:your-application.type-application-personal');
       }
       case APPLICANT_TYPE.family: {
-        return t('protected-application:type-of-application.type-application-family');
+        return t('protected-application:your-application.type-application-family');
       }
       case APPLICANT_TYPE.children: {
-        return t('protected-application:type-of-application.type-application-children');
+        return t('protected-application:your-application.type-application-children');
       }
       default: {
         return '';
@@ -93,15 +93,15 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>{t('protected-application:type-of-application.type-application-heading')}</CardTitle>
+          <CardTitle>{t('protected-application:your-application.type-application-heading')}</CardTitle>
           <CardAction>{sections.typeOfApplication.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {defaultState.typeOfApplication === undefined ? (
-            <p>{t('protected-application:type-of-application.type-application-description')}</p>
+            <p>{t('protected-application:your-application.type-application-description')}</p>
           ) : (
             <DefinitionList layout="single-column">
-              <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:type-of-application.type-application-legend')}>
+              <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:your-application.type-application-legend')}>
                 {getTypeOfApplication(defaultState.typeOfApplication)}
               </DefinitionListItem>
             </DefinitionList>
@@ -118,33 +118,33 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit type of application click"
           >
-            {defaultState.typeOfApplication === undefined ? t('protected-application:type-of-application.add-type-application') : t('protected-application:type-of-application.edit-type-application')}
+            {defaultState.typeOfApplication === undefined ? t('protected-application:your-application.add-type-application') : t('protected-application:your-application.edit-type-application')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>{t('protected-application:type-of-application.personal-info-heading')}</CardTitle>
+          <CardTitle>{t('protected-application:your-application.personal-info-heading')}</CardTitle>
           <CardAction>{sections.personalInformation.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {defaultState.personalInformation === undefined ? (
-            <p>{t('protected-application:type-of-application.personal-info-description')}</p>
+            <p>{t('protected-application:your-application.personal-info-description')}</p>
           ) : (
             <DefinitionList layout="single-column">
               {defaultState.personalInformation.memberId && (
-                <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:type-of-application.member-id')}>
+                <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:your-application.member-id')}>
                   {formatClientNumber(defaultState.personalInformation.memberId)}
                 </DefinitionListItem>
               )}
-              <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:type-of-application.full-name')}>
+              <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:your-application.full-name')}>
                 {`${defaultState.personalInformation.firstName} ${defaultState.personalInformation.lastName}`}
               </DefinitionListItem>
-              <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:type-of-application.date-of-birth')}>
+              <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:your-application.date-of-birth')}>
                 {formattedDate}
               </DefinitionListItem>
-              <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:type-of-application.sin')}>
+              <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:your-application.sin')}>
                 {formatSin(defaultState.personalInformation.socialInsuranceNumber)}
               </DefinitionListItem>
             </DefinitionList>
@@ -161,17 +161,17 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit personal information click"
           >
-            {defaultState.personalInformation === undefined ? t('protected-application:type-of-application.add-personal-information') : t('protected-application:type-of-application.edit-personal-information')}
+            {defaultState.personalInformation === undefined ? t('protected-application:your-application.add-personal-information') : t('protected-application:your-application.edit-personal-information')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Continue click">
-          {t('protected-application:type-of-application.application')}
+          {t('protected-application:your-application.application')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/eligibility-requirements" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Back click">
-          {t('protected-application:type-of-application.before-you-start')}
+          {t('protected-application:your-application.before-you-start')}
         </NavigationButtonLink>
       </div>
     </div>

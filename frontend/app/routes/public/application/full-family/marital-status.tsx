@@ -114,8 +114,8 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
           >
             {t('application-full-family:marital-status.contact-information')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Back click">
-            {t('application-full-family:marital-status.type-of-application')}
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Back click">
+            {t('application-full-family:marital-status.your-application')}
           </NavigationButtonLink>
         </div>
       </div>

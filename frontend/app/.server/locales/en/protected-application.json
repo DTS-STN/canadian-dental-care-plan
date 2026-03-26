@@ -13,7 +13,7 @@
     "page-title": "Before you start your application",
     "page-heading": "Before you start your application",
     "next-button": {
-      "intake": "Type of application",
+      "intake": "Your application",
       "renewal": "Renew your Canadian Dental Care Plan benefits"
     },
     "terms-conditions-section": {
@@ -68,8 +68,8 @@
     "add-type-application": "Select member(s)",
     "edit-type-application": "Edit selection"
   },
-  "type-of-application": {
-    "page-title": "Type of application",
+  "your-application": {
+    "page-title": "Your application",
     "type-application-heading": "Type of application",
     "type-application-legend": "Who are you applying for?",
     "type-application-description": "Tell us who you are applying for. Are you applying for yourself, your child(ren) or on behalf of someone else?",

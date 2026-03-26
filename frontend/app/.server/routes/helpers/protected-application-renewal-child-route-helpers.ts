@@ -114,7 +114,7 @@ export function validateProtectedApplicationRenewalChildStateForReview({ params,
   }
 
   if (getAllowedTypeOfApplication({ context, clientApplication }).includes(typeOfApplication) === false) {
-    throw redirect(getPathById('protected/application/$id/type-of-application', params));
+    throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 
   if (hasFiledTaxes === undefined) {

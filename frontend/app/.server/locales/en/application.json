@@ -11,7 +11,7 @@
   "eligibility-requirements": {
     "page-title": "Before you start your application",
     "page-heading": "Before you start your application",
-    "next-button": "Type of application",
+    "next-button": "Your application",
     "terms-conditions-section": {
       "title": "Terms and conditions of use and privacy statement",
       "instructions": "Read the terms and conditions of use and privacy statement.",
@@ -54,8 +54,8 @@
     "exit-btn": "Exit application",
     "exit-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   },
-  "type-of-application": {
-    "page-title": "Type of application",
+  "your-application": {
+    "page-title": "Your application",
     "type-application-heading": "Type of application",
     "type-application-legend": "Who are you applying for?",
     "type-application-description": "Tell us who you are applying for. Are you applying for yourself, your child(ren) or on behalf of someone else?",

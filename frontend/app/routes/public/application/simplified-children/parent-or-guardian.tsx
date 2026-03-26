@@ -225,8 +225,8 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
           >
             {t('application-simplified-child:parent-or-guardian.childrens-application')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Back click">
-            {t('application-simplified-child:parent-or-guardian.type-of-application')}
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Back click">
+            {t('application-simplified-child:parent-or-guardian.your-application')}
           </NavigationButtonLink>
         </div>
       </div>

@@ -225,7 +225,7 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
           >
             {t('application-simplified-family:contact-information.next-btn')}
           </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Back click">
+          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Back click">
             {t('application-simplified-family:contact-information.prev-btn')}
           </NavigationButtonLink>
         </div>
