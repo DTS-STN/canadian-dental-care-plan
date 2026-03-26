@@ -191,7 +191,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
           {hasDentalInsurance === true && (
             <div className="mb-4 space-y-4">
               <ContextualAlert type="info">
-                <h3 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.yes.alert-title')}</h3>
+                <h2 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.yes.alert-title')}</h2>
                 <p>{t('dental-insurance.yes.alert-body')}</p>
               </ContextualAlert>
               <InputCheckbox
