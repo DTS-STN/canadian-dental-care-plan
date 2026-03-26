@@ -192,14 +192,14 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
 
   const sunLifeCommunicationMethodOptions: InputRadiosProps['options'] = sunLifeCommunicationMethods.map((method) => ({
     value: method.id,
-    children: method.name,
+    children: <span className="font-semibold">{method.name}</span>,
     defaultChecked: selectedPreferredMethodSunLife === method.id,
     onChange: () => setSelectedPreferredMethodSunLife(method.id),
     'data-gc-analytics-value': method.code,
   }));
 
   const gcCommunicationMethodOptions: InputRadiosProps['options'] = gcCommunicationMethods.map((method) => {
-    let children: ReactNode = method.name;
+    let children: ReactNode = <span className="font-semibold">{method.name}</span>;
 
     if (method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
       children = <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-communication-preferences.preferred-method-gc-digital" values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;

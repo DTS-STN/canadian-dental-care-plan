@@ -203,7 +203,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
   }));
 
   const sunLifeCommunicationMethodOptions: InputRadiosProps['options'] = sunLifeCommunicationMethods.map((method) => {
-    let children: ReactNode = method.name;
+    let children: ReactNode = <span className="font-semibold">{method.name}</span>;
 
     if (method.id === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID) {
       children = <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:communication-preferences.by-email" values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
@@ -219,7 +219,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
   });
 
   const gcCommunicationMethodOptions: InputRadiosProps['options'] = gcCommunicationMethods.map((method) => {
-    let children: ReactNode = method.name;
+    let children: ReactNode = <span className="font-semibold">{method.name}</span>;
 
     if (method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
       children = (
