@@ -13,7 +13,7 @@
     "page-title": "Avant de commencer votre demande",
     "page-heading": "Avant de commencer votre demande",
     "next-button": {
-      "intake": "Type de demande",
+      "intake": "Votre demande",
       "renewal": "Renouveler votre demande de prestations du Régime canadien de soins dentaires"
     },
     "terms-conditions-section": {
@@ -68,8 +68,8 @@
     "add-type-application": "Sélectionner le ou les membre(s)",
     "edit-type-application": "Modifier la sélection"
   },
-  "type-of-application": {
-    "page-title": "Type de demande",
+  "your-application": {
+    "page-title": "Votre demande",
     "type-application-heading": "Type de demande",
     "type-application-legend": "Pour qui présentez-vous une demande?",
     "type-application-description": "Indiquez pour qui vous présentez une demande. Présentez-vous une demande pour vous-même, pour votre ou vos enfants, ou au nom de quelqu'un d'autre?",

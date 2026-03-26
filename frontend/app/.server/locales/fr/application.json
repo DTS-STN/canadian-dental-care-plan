@@ -11,7 +11,7 @@
   "eligibility-requirements": {
     "page-title": "Avant de commencer votre demande",
     "page-heading": "Avant de commencer votre demande",
-    "next-button": "Type de demande",
+    "next-button": "Votre demande",
     "terms-conditions-section": {
       "title": "Conditions générales d'utilisation et énoncé de confidentialité",
       "instructions": "Veuillez lire les conditions générales d'utilisation et l'énoncé de confidentialité.",
@@ -54,8 +54,8 @@
     "exit-btn": "Quitter la demande",
     "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
-  "type-of-application": {
-    "page-title": "Type de demande",
+  "your-application": {
+    "page-title": "Votre demande",
     "type-application-heading": "Type de demande",
     "type-application-legend": "Pour qui présentez-vous une demande?",
     "type-application-description": "Indiquez pour qui vous présentez une demande. Présentez-vous une demande pour vous-même, pour votre ou vos enfants, ou au nom de quelqu'un d'autre?",

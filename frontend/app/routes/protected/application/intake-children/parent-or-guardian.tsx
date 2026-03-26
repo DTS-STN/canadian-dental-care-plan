@@ -273,7 +273,7 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
             {t('protected-application-intake-child:parent-or-guardian.childrens-application')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/type-of-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Back click">
-            {t('protected-application-intake-child:parent-or-guardian.type-of-application')}
+            {t('protected-application-intake-child:parent-or-guardian.your-application')}
           </NavigationButtonLink>
         </div>
       </div>

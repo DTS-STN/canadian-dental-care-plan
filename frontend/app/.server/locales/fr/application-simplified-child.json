@@ -38,7 +38,7 @@
     "update-communication-preferences": "Mettre à jour mes préférences de communication",
     "communication-preferences-unchanged": "Mes préférences de communication n'ont pas changé",
     "no-change": "Pas de mise à jour.",
-    "type-of-application": "Type de demande",
+    "your-application": "Votre demande",
     "childrens-application": "La demande de votre/vos enfant(s)"
   },
   "submit": {
