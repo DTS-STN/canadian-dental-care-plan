@@ -59,7 +59,7 @@
     "fast-xml-parser": "^5.5.9",
     "file-type": "^21.3.4",
     "filesize": "^11.0.14",
-    "i18next": "^25.10.9",
+    "i18next": "^25.10.10",
     "i18next-http-backend": "^3.0.2",
     "inversify": "^8.1.0",
     "isbot": "^5.1.36",
