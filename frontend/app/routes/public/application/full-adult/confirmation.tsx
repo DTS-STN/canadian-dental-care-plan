@@ -180,9 +180,9 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
 
       <ContextualAlert type="comment">
         <div className="space-y-4">
-          <h3 className="text-2xl">
+          <h2 className="text-2xl">
             <strong>{t('confirm.survey.title')}</strong>
-          </h3>
+          </h2>
           <p>{t('confirm.survey.info')}</p>
           <ButtonLink
             id="survey-button"
