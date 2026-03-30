@@ -82,6 +82,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
             startIcon={sections.termsAndConditions.completed ? faPenToSquare : faCircleCheck}
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Edit terms conditions click"
+            aria-label={sections.termsAndConditions.completed ? `${t('application:eligibility-requirements.terms-conditions-section.edit-button')} - ${t('application:eligibility-requirements.terms-conditions-section.title')}` : undefined}
           >
             {sections.termsAndConditions.completed //
               ? t('application:eligibility-requirements.terms-conditions-section.edit-button')
@@ -113,6 +114,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
             startIcon={sections.taxFiling.completed ? faPenToSquare : faCircleCheck}
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Edit tax filing click"
+            aria-label={sections.taxFiling.completed ? `${t('application:eligibility-requirements.tax-filing-section.edit-button')} - ${t('application:eligibility-requirements.tax-filing-section.title')}` : undefined}
           >
             {sections.taxFiling.completed //
               ? t('application:eligibility-requirements.tax-filing-section.edit-button')

@@ -115,6 +115,9 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
               startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus}
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Edit insurance click"
+              aria-label={
+                state.dentalInsurance === undefined ? undefined : `${t('protected-application-intake-adult:dental-insurance.edit-access-to-dental-insurance')} - ${t('protected-application-intake-adult:dental-insurance.access-to-dental-insurance')}`
+              }
             >
               {state.dentalInsurance === undefined ? t('protected-application-intake-adult:dental-insurance.add-answer') : t('protected-application-intake-adult:dental-insurance.edit-access-to-dental-insurance')}
             </ButtonLink>
@@ -159,6 +162,7 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
               startIcon={sections.dentalBenefits.completed ? faPenToSquare : faCirclePlus}
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Edit benefits click"
+              aria-label={state.dentalBenefits === undefined ? undefined : `${t('protected-application-intake-adult:dental-insurance.edit-access-to-government-benefits')} - ${t('protected-application-intake-adult:dental-insurance.other-benefits')}`}
             >
               {state.dentalBenefits === undefined ? t('protected-application-intake-adult:dental-insurance.add-answer') : t('protected-application-intake-adult:dental-insurance.edit-access-to-government-benefits')}
             </ButtonLink>

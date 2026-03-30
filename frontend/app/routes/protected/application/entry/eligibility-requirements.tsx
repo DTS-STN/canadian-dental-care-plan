@@ -92,6 +92,9 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
             params={params}
             startIcon={sections.termsAndConditions.completed ? faPenToSquare : faCircleCheck}
             size="lg"
+            aria-label={
+              sections.termsAndConditions.completed ? `${t('protected-application:eligibility-requirements.terms-conditions-section.edit-button')} - ${t('protected-application:eligibility-requirements.terms-conditions-section.title')}` : undefined
+            }
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit terms conditions click"
           >
             {sections.termsAndConditions.completed //
@@ -117,6 +120,7 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
             params={params}
             startIcon={sections.taxFiling.completed ? faPenToSquare : faCircleCheck}
             size="lg"
+            aria-label={sections.taxFiling.completed ? `${t('protected-application:eligibility-requirements.tax-filing-section.edit-button')} - ${t('protected-application:eligibility-requirements.tax-filing-section.title')}` : undefined}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit tax filing click"
           >
             {sections.taxFiling.completed ? t('protected-application:eligibility-requirements.tax-filing-section.edit-button') : t('protected-application:eligibility-requirements.tax-filing-section.add-button')}
