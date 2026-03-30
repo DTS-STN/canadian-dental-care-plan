@@ -115,7 +115,7 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
               startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus}
               size="lg"
               aria-label={
-                state.dentalBenefits === undefined
+                state.dentalInsurance === undefined
                   ? `${t('protected-application-intake-adult:dental-insurance.add-answer')} - ${t('protected-application-intake-adult:dental-insurance.access-to-dental-insurance')}`
                   : t('protected-application-intake-adult:dental-insurance.edit-access-to-dental-insurance')
               }
