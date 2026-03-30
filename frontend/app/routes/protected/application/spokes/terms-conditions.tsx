@@ -177,7 +177,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
   return (
     <div className="max-w-prose">
       <div className="space-y-6">
-        <p className="font-bold">{t('protected-application-spokes:terms-conditions.before-you-begin')}</p>
+        <h2 className="font-bold">{t('protected-application-spokes:terms-conditions.before-you-begin')}</h2>
         <ul className="list-disc space-y-1 pl-7">
           <li>
             <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:terms-conditions.review-confirm" components={{ eligibilityRequirements }} />

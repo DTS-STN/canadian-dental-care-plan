@@ -191,11 +191,11 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
       </section>
 
       <div className="space-y-4">
-        <p className="text-3xl">
+        <h2 className="text-3xl">
           <strong>{t('confirm.app-code-is')}</strong>
           <br />
           <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
-        </p>
+        </h2>
         <p>{t('confirm.make-note')}</p>
       </div>
 
@@ -218,9 +218,9 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
 
       <ContextualAlert type="comment">
         <div className="space-y-4">
-          <p className="text-2xl">
+          <h3 className="text-2xl">
             <strong>{t('confirm.survey.title')}</strong>
-          </p>
+          </h3>
           <p>{t('confirm.survey.info')}</p>
           <ButtonLink
             id="survey-button"
