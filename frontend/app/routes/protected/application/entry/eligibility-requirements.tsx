@@ -127,7 +127,7 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
         disabled={!allSectionsCompleted}
         variant="primary"
         direction="next"
-        routeId={`protected/application/$id/${isIntake ? 'type-of-application' : 'renew'}`}
+        routeId={`protected/application/$id/${isIntake ? 'your-application' : 'renew'}`}
         params={params}
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Continue click"
       >
