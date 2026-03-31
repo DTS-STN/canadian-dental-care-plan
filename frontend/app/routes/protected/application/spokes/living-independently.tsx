@@ -81,8 +81,8 @@ export async function action({ context: { appContainer, session }, params, reque
   if (isLivingindependently) {
     const redirectUrl =
       state.context === 'intake' //
-        ? getPathById('protected/application/$id/personal-information', params)
-        : getPathById('protected/application/$id/renewal-selection', params);
+        ? getPathById('protected/application/$id/your-application', params)
+        : getPathById('protected/application/$id/renew', params);
     return redirect(redirectUrl);
   }
 

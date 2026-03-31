@@ -45,16 +45,6 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-
-  if (state.context === 'renewal' && state.applicantInformation !== undefined) {
-    // If youth applicant allow access to personal-information if livingIndependently is undefined
-    const isYouthWithIncompleteLivingIndependently = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context) === 'youth' && state.livingIndependently === undefined;
-
-    if (!isYouthWithIncompleteLivingIndependently) {
-      return redirect(getPathById(`public/application/$id/your-application`, params));
-    }
-  }
-
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:personal-information.page-title') }) };
