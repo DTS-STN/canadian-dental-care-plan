@@ -237,8 +237,7 @@ export async function action({ context: { appContainer, session }, params, reque
           child.information.clientNumber === memberId && //
           child.information.dateOfBirth === parsedDataResult.data.dateOfBirth
         );
-      }) ||
-      !state.clientApplication.eligibleClientNumbers.includes(memberId)
+      })
     ) {
       return { status: 'not-eligible' } as const;
     }
