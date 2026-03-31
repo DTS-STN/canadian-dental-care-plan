@@ -131,11 +131,7 @@ export function validateProtectedApplicationIntakeAdultStateForReview({ params, 
     throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 
-  if (ageCategory === 'youth' && livingIndependently === undefined) {
-    throw redirect(getPathById('protected/application/$id/your-application', params));
-  }
-
-  if (ageCategory === 'youth' && livingIndependently === false) {
+  if (ageCategory === 'youth' && livingIndependently !== true) {
     throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 

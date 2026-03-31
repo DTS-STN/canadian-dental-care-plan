@@ -136,15 +136,11 @@ export function validateProtectedRenewAdultStateForReview({ params, state }: Val
   const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
 
   if (ageCategory === 'children') {
-    throw redirect(getPathById('protected/application/$id/your-application', params));
+    throw redirect(getPathById('protected/application/$id/renew', params));
   }
 
-  if (ageCategory === 'youth' && livingIndependently === undefined) {
-    throw redirect(getPathById('protected/application/$id/your-application', params));
-  }
-
-  if (ageCategory === 'youth' && livingIndependently === false) {
-    throw redirect(getPathById('protected/application/$id/your-application', params));
+  if (ageCategory === 'youth' && livingIndependently !== true) {
+    throw redirect(getPathById('protected/application/$id/renew', params));
   }
 
   if (phoneNumber === undefined) {

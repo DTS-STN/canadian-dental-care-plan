@@ -129,6 +129,10 @@ export function validateProtectedApplicationFamilyStateForReview({ params, state
     throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 
+  if (ageCategory === 'youth' && livingIndependently !== true) {
+    throw redirect(getPathById('protected/application/$id/your-application', params));
+  }
+
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
     throw redirect(getPathById('protected/application/$id/intake-family/marital-status', params));
   }

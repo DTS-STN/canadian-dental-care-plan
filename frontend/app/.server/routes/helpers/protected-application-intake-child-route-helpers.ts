@@ -82,6 +82,7 @@ export function validateProtectedApplicationIntakeChildStateForReview({ params, 
     id,
     isHomeAddressSameAsMailingAddress,
     lastUpdatedOn,
+    livingIndependently,
     mailingAddress,
     maritalStatus,
     partnerInformation,
@@ -128,6 +129,10 @@ export function validateProtectedApplicationIntakeChildStateForReview({ params, 
     throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 
+  if (ageCategory === 'youth' && livingIndependently !== true) {
+    throw redirect(getPathById('protected/application/$id/your-application', params));
+  }
+
   if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
     throw redirect(getPathById('protected/application/$id/intake-children/parent-or-guardian', params));
   }
@@ -167,6 +172,7 @@ export function validateProtectedApplicationIntakeChildStateForReview({ params, 
     id,
     isHomeAddressSameAsMailingAddress,
     lastUpdatedOn,
+    livingIndependently,
     mailingAddress,
     maritalStatus,
     partnerInformation,

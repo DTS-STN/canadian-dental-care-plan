@@ -91,6 +91,7 @@ export function validateProtectedApplicationRenewalChildStateForReview({ params,
     id,
     isHomeAddressSameAsMailingAddress,
     lastUpdatedOn,
+    livingIndependently,
     mailingAddress,
     maritalStatus,
     partnerInformation,
@@ -134,6 +135,10 @@ export function validateProtectedApplicationRenewalChildStateForReview({ params,
   const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
 
   if (ageCategory === 'children') {
+    throw redirect(getPathById('protected/application/$id/renew', params));
+  }
+
+  if (ageCategory === 'youth' && livingIndependently !== true) {
     throw redirect(getPathById('protected/application/$id/renew', params));
   }
 
@@ -185,6 +190,7 @@ export function validateProtectedApplicationRenewalChildStateForReview({ params,
     id,
     isHomeAddressSameAsMailingAddress,
     lastUpdatedOn,
+    livingIndependently,
     mailingAddress,
     maritalStatus,
     partnerInformation,
