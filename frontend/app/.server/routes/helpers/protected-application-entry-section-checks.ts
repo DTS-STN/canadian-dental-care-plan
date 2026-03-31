@@ -1,4 +1,5 @@
 import type { ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getContextualAgeCategoryFromDate } from '~/.server/routes/helpers/protected-application-route-helpers';
 
 /**
  * Checks if the type of application section is completed.
@@ -10,8 +11,23 @@ export function isTypeOfApplicationSectionCompleted(state: Pick<ProtectedApplica
 /**
  * Checks if the personal information section is completed.
  */
-export function isPersonalInformationSectionCompleted(state: Pick<ProtectedApplicationState, 'applicantInformation'>): boolean {
-  return state.applicantInformation !== undefined;
+export function isPersonalInformationSectionCompleted(state: Pick<ProtectedApplicationState, 'applicantInformation' | 'livingIndependently'>): boolean {
+  if (!state.applicantInformation?.dateOfBirth) {
+    return false;
+  }
+
+  const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, 'renewal');
+
+  if (ageCategory === 'children') {
+    return false;
+  }
+
+  if (ageCategory === 'youth') {
+    return state.livingIndependently === true;
+  }
+
+  // adults or seniors
+  return true;
 }
 
 /**
@@ -35,6 +51,21 @@ export function isTaxFilingSectionCompleted(state: Pick<ProtectedApplicationStat
 /**
  * Checks if the renewal selection section is completed.
  */
-export function isRenewalSelectionCompleted(state: Pick<ProtectedApplicationState, 'applicantClientIdsToRenew'>): boolean {
-  return state.applicantClientIdsToRenew !== undefined;
+export function isRenewalSelectionCompleted(state: Pick<ProtectedApplicationState, 'applicantClientIdsToRenew' | 'applicantInformation' | 'livingIndependently'>): boolean {
+  if (!state.applicantClientIdsToRenew || state.applicantClientIdsToRenew.length === 0 || !state.applicantInformation) {
+    return false;
+  }
+
+  const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, 'renewal');
+
+  if (ageCategory === 'children') {
+    return false;
+  }
+
+  if (ageCategory === 'youth') {
+    return state.livingIndependently === true;
+  }
+
+  // adults or seniors
+  return true;
 }
