@@ -57,7 +57,7 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "fast-xml-parser": "^5.5.9",
-    "file-type": "^21.3.4",
+    "file-type": "^22.0.0",
     "filesize": "^11.0.15",
     "i18next": "^25.10.10",
     "i18next-http-backend": "^3.0.2",
