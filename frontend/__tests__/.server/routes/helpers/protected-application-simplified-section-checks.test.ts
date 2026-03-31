@@ -300,7 +300,6 @@ describe('protected-application-simplified-section-checks', () => {
     it('should return true when child information is defined with valid date of birth', () => {
       expect(
         isChildInformationSectionCompleted(
-          'renewal',
           {
             information: {
               firstName: 'Test',
@@ -317,7 +316,7 @@ describe('protected-application-simplified-section-checks', () => {
 
     it('should return false when date of birth is empty string', () => {
       expect(
-        isChildInformationSectionCompleted('renewal', {
+        isChildInformationSectionCompleted({
           information: {
             firstName: 'Test',
             lastName: 'Child',
@@ -330,7 +329,7 @@ describe('protected-application-simplified-section-checks', () => {
     });
 
     it('should return false when information is undefined', () => {
-      expect(isChildInformationSectionCompleted('renewal', { information: undefined })).toBe(false);
+      expect(isChildInformationSectionCompleted({ information: undefined })).toBe(false);
     });
   });
 
