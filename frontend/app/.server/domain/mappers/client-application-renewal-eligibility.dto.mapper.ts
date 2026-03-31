@@ -103,9 +103,7 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
       return { result: 'INELIGIBLE-ALREADY-RENEWED', clientApplication: clientApplicationDto };
     }
 
-    const filteredClientApplicationDto = this.filterEligibleChildrenByAge(clientApplicationDto);
-
-    const clientNumbers = this.listClientNumbers(filteredClientApplicationDto);
+    const clientNumbers = this.listClientNumbers(clientApplicationDto);
     if (clientNumbers.length === 0) {
       this.log.debug('No client numbers found for client application, returning ineligible result');
       return {
@@ -146,16 +144,6 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
   }
 
   /**
-   * Returns a copy of the DTO keeping only children in the `'children'` or `'youth'` age category
-   * as of the renewal reference date (determined by `isChildOrYouth`).
-   */
-  private filterEligibleChildrenByAge(clientApplicationDto: ClientApplicationDto): ClientApplicationDto {
-    const eligibleChildren = clientApplicationDto.children.filter((child) => isChildOrYouth(child.information.dateOfBirth, 'renewal'));
-    this.log.trace('Filtered children by age: [%d] of [%d] children eligible for renewal', eligibleChildren.length, clientApplicationDto.children.length);
-    return { ...clientApplicationDto, children: eligibleChildren };
-  }
-
-  /**
    * Returns client numbers for the application:
    * - `'adult'` → applicant only
    * - `'children'` → children only
@@ -165,6 +153,8 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
    * which also produces a TypeScript compile error if the union ever gains a new variant.
    */
   private listClientNumbers(clientApplicationDto: Pick<ClientApplicationDto, 'typeOfApplication' | 'applicantInformation' | 'children'>): ReadonlyArray<string> {
+    const eligibleChildren = clientApplicationDto.children.filter((child) => isChildOrYouth(child.information.dateOfBirth, 'renewal'));
+
     switch (clientApplicationDto.typeOfApplication) {
       case 'adult': {
         // primary applicant client number only
@@ -173,14 +163,14 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
 
       case 'children': {
         // children client numbers only
-        return clientApplicationDto.children.map((child) => child.information.clientNumber);
+        return eligibleChildren.map((child) => child.information.clientNumber);
       }
 
       case 'family': {
         // primary applicant client number and children client numbers
         return [
           clientApplicationDto.applicantInformation.clientNumber, //
-          ...clientApplicationDto.children.map((child) => child.information.clientNumber),
+          ...eligibleChildren.map((child) => child.information.clientNumber),
         ];
       }
 

@@ -159,6 +159,13 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
         const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(makeApplicant({ dateOfBirth: '2000-01-01' }), 'year-2024');
         expect(result.result).toBe('INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD');
       });
+
+      it('does not include clientApplication in the result', async () => {
+        // Born 2008-04-16: on 2026-04-15 the applicant is 17 years, 364 days old
+        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(makeApplicant({ dateOfBirth: '2008-04-16' }), 'year-2024');
+        assert(result.result === 'INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD');
+        expect(result.clientApplication).toBeUndefined();
+      });
     });
 
     describe('delegation to mapClientApplicationDtoToClientApplicationRenewalEligibilityDto', () => {
@@ -199,6 +206,17 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
 
         expect(mockClientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto).toHaveBeenCalledWith({ applicantDto, applicationYearId: 'year-2024', typeOfApplication: 'adult' });
         expect(result.result).toBe('ELIGIBLE');
+      });
+
+      it('passes a downstream ineligible result through unchanged', async () => {
+        // Born 2008-04-15: on 2026-04-15 the applicant is exactly 18 years old
+        const applicantDto = makeApplicant({ dateOfBirth: '2008-04-15' });
+        mockClientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto.mockReturnValue(makeClientApplication());
+        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001', { enrollmentStatusCode: 'not-enrolled' })]]));
+
+        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicantDto, 'year-2024');
+
+        expect(result.result).toBe('INELIGIBLE-NOT-ENROLLED');
       });
     });
   });
