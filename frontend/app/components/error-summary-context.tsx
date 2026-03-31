@@ -106,14 +106,14 @@ export function ErrorSummaryProvider({ children, actionData }: ErrorSummaryProvi
  * The `useEffect` hook intentionally has no dependency array, causing `commitErrors`
  * to be called on every render.
  *
- * @returns `undefined` - This component does not render any UI elements.
+ * @returns `null` - This component does not render any UI elements.
  *
  * @example
  * ```tsx
  * <ErrorSummaryCommitter />
  * ```
  */
-function ErrorSummaryCommitter(): undefined {
+function ErrorSummaryCommitter(): null {
   const errorSummaryContext = useErrorSummaryContext();
 
   useEffect(() => {
@@ -128,5 +128,5 @@ function ErrorSummaryCommitter(): undefined {
   });
 
   // This component does not render anything
-  return undefined;
+  return null;
 }
