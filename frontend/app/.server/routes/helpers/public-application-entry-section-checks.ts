@@ -56,7 +56,17 @@ export function getTypeOfApplicationSectionCompletionResult(
  */
 export function isPersonalInformationSectionCompleted(state: Pick<PublicApplicationState, 'context' | 'inputModel' | 'applicantInformation' | 'livingIndependently'>): boolean {
   if (state.inputModel === undefined || state.applicantInformation === undefined) return false;
-  if (getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context) === 'youth' && state.livingIndependently === undefined) return false;
+  const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, 'renewal');
+
+  if (ageCategory === 'children') {
+    return false;
+  }
+
+  if (ageCategory === 'youth') {
+    return state.livingIndependently === true;
+  }
+
+  // adults or seniors
   return true;
 }
 

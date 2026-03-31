@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { getAllowedTypeOfApplication } from '~/.server/routes/helpers/base-application-route-helpers';
 import { getTypeOfApplicationSectionCompletionResult, isPersonalInformationSectionCompleted, isTaxFilingSectionCompleted, isTermsAndConditionsSectionCompleted } from '~/.server/routes/helpers/public-application-entry-section-checks';
@@ -64,19 +64,13 @@ describe('getTypeOfApplicationSectionCompletionResult', () => {
 });
 
 describe('isPersonalInformationSectionCompleted', () => {
-  it('should return true when inputModel and applicantInformation are defined', () => {
-    expect(
-      isPersonalInformationSectionCompleted({
-        context: 'intake',
-        inputModel: 'full',
-        applicantInformation: {
-          dateOfBirth: '1990-01-01',
-          firstName: 'John',
-          lastName: 'Doe',
-          socialInsuranceNumber: '123456789',
-        },
-      }),
-    ).toBe(true);
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime('2026-03-04T12:00:00.000Z');
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('should return false when inputModel is undefined', () => {
@@ -108,15 +102,30 @@ describe('isPersonalInformationSectionCompleted', () => {
     expect(isPersonalInformationSectionCompleted({ context: 'intake' })).toBe(false);
   });
 
-  it('should return false when livingIndependently is undefined and applicant is youth', () => {
-    const youthDateOfBirth = new Date();
-    youthDateOfBirth.setFullYear(youthDateOfBirth.getFullYear() - 17);
+  it('should return false when ageCategory is children', () => {
+    // born 2012-01-01 → age 14 on reference date 2026-06-30
     expect(
       isPersonalInformationSectionCompleted({
         context: 'intake',
         inputModel: 'full',
         applicantInformation: {
-          dateOfBirth: youthDateOfBirth.toISOString().split('T')[0],
+          dateOfBirth: '2012-01-01',
+          firstName: 'John',
+          lastName: 'Doe',
+          socialInsuranceNumber: '123456789',
+        },
+      }),
+    ).toBe(false);
+  });
+
+  it('should return false when ageCategory is youth and livingIndependently is undefined', () => {
+    // born 2009-01-01 → age 17 on reference date 2026-06-30
+    expect(
+      isPersonalInformationSectionCompleted({
+        context: 'intake',
+        inputModel: 'full',
+        applicantInformation: {
+          dateOfBirth: '2009-01-01',
           firstName: 'John',
           lastName: 'Doe',
           socialInsuranceNumber: '123456789',
@@ -126,15 +135,31 @@ describe('isPersonalInformationSectionCompleted', () => {
     ).toBe(false);
   });
 
-  it('should return true when livingIndependently is true and applicant is youth', () => {
-    const youthDateOfBirth = new Date();
-    youthDateOfBirth.setFullYear(youthDateOfBirth.getFullYear() - 17);
+  it('should return false when ageCategory is youth and livingIndependently is false', () => {
+    // born 2009-01-01 → age 17 on reference date 2026-06-30
     expect(
       isPersonalInformationSectionCompleted({
         context: 'intake',
         inputModel: 'full',
         applicantInformation: {
-          dateOfBirth: youthDateOfBirth.toISOString().split('T')[0],
+          dateOfBirth: '2009-01-01',
+          firstName: 'John',
+          lastName: 'Doe',
+          socialInsuranceNumber: '123456789',
+        },
+        livingIndependently: false,
+      }),
+    ).toBe(false);
+  });
+
+  it('should return true when ageCategory is youth and livingIndependently is true', () => {
+    // born 2009-01-01 → age 17 on reference date 2026-06-30
+    expect(
+      isPersonalInformationSectionCompleted({
+        context: 'intake',
+        inputModel: 'full',
+        applicantInformation: {
+          dateOfBirth: '2009-01-01',
           firstName: 'John',
           lastName: 'Doe',
           socialInsuranceNumber: '123456789',
@@ -144,20 +169,34 @@ describe('isPersonalInformationSectionCompleted', () => {
     ).toBe(true);
   });
 
-  it('should return true when livingIndependently is false and applicant is youth', () => {
-    const youthDateOfBirth = new Date();
-    youthDateOfBirth.setFullYear(youthDateOfBirth.getFullYear() - 16);
+  it('should return true when ageCategory is adults', () => {
+    // born 1990-01-01 → age 36 on reference date 2026-06-30
     expect(
       isPersonalInformationSectionCompleted({
         context: 'intake',
         inputModel: 'full',
         applicantInformation: {
-          dateOfBirth: youthDateOfBirth.toISOString().split('T')[0],
+          dateOfBirth: '1990-01-01',
           firstName: 'John',
           lastName: 'Doe',
           socialInsuranceNumber: '123456789',
         },
-        livingIndependently: false,
+      }),
+    ).toBe(true);
+  });
+
+  it('should return true when ageCategory is seniors', () => {
+    // born 1950-01-01 → age 76 on reference date 2026-06-30
+    expect(
+      isPersonalInformationSectionCompleted({
+        context: 'intake',
+        inputModel: 'full',
+        applicantInformation: {
+          dateOfBirth: '1950-01-01',
+          firstName: 'John',
+          lastName: 'Doe',
+          socialInsuranceNumber: '123456789',
+        },
       }),
     ).toBe(true);
   });
