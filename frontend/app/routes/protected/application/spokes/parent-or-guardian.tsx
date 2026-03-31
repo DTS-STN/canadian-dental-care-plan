@@ -40,10 +40,14 @@ export async function loader({ context: { appContainer, session }, params, reque
   const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context);
 
   if (ageCategory !== 'children' && ageCategory !== 'youth') {
-    return redirect(getPathById('protected/application/$id/personal-information', params));
+    const redirectUrl =
+      state.context === 'intake' //
+        ? getPathById('protected/application/$id/personal-information', params)
+        : getPathById('protected/application/$id/renewal-selection', params);
+    return redirect(redirectUrl);
   }
 
-  return { ageCategory, meta };
+  return { ageCategory, context: state.context, meta };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -62,7 +66,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { ageCategory } = loaderData;
+  const { ageCategory, context } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
@@ -74,7 +78,9 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
       return 'protected/application/$id/living-independently';
     }
 
-    return 'protected/application/$id/personal-information';
+    return context === 'intake' //
+      ? 'protected/application/$id/personal-information'
+      : 'protected/application/$id/renewal-selection';
   }
 
   async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {

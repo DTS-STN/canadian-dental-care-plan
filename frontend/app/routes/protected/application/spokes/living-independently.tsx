@@ -44,7 +44,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:living-independently.page-title') }) };
-  return { meta, defaultState: state.livingIndependently };
+  return { meta, defaultState: state.livingIndependently, context: state.context };
 }
 
 export async function action({ context: { appContainer, session }, params, request }: Route.ActionArgs) {
@@ -52,6 +52,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
+
+  const state = getProtectedApplicationState({ params, session });
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   /**
@@ -76,7 +79,11 @@ export async function action({ context: { appContainer, session }, params, reque
   saveProtectedApplicationState({ params, session, state: { livingIndependently: isLivingindependently } });
 
   if (isLivingindependently) {
-    return redirect(getPathById('protected/application/$id/personal-information', params));
+    const redirectUrl =
+      state.context === 'intake' //
+        ? getPathById('protected/application/$id/personal-information', params)
+        : getPathById('protected/application/$id/renewal-selection', params);
+    return redirect(redirectUrl);
   }
 
   return redirect(getPathById('protected/application/$id/parent-or-guardian', params));
@@ -84,7 +91,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplyFlowLivingIndependently({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = loaderData;
+  const { defaultState, context } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
@@ -125,7 +132,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId="protected/application/$id/personal-information"
+              routeId={context === 'intake' ? 'protected/application/$id/personal-information' : 'protected/application/$id/renewal-selection'}
               params={params}
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Living independently click"

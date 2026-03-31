@@ -7,7 +7,13 @@ import { z } from 'zod';
 import type { Route } from './+types/renewal-selection';
 
 import { TYPES } from '~/.server/constants';
-import { getProtectedApplicationState, getTypeOfApplicationFromRenewalSelectionClientIds, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
+import {
+  getContextualAgeCategoryFromDate,
+  getProtectedApplicationState,
+  getTypeOfApplicationFromRenewalSelectionClientIds,
+  saveProtectedApplicationState,
+  validateProtectedApplicationContext,
+} from '~/.server/routes/helpers/protected-application-route-helpers';
 import type { ChildInformationState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -121,6 +127,16 @@ export async function action({ context: { appContainer, session }, params, reque
       children,
     },
   });
+
+  const ageCategory = getContextualAgeCategoryFromDate(state.clientApplication.dateOfBirth, state.context);
+
+  if (ageCategory === 'youth') {
+    return redirect(getPathById('protected/application/$id/living-independently', params));
+  }
+
+  if (ageCategory === 'children') {
+    return redirect(getPathById('protected/application/$id/parent-or-guardian', params));
+  }
 
   return redirect(getPathById('protected/application/$id/renew', params));
 }
