@@ -207,12 +207,17 @@ describe('isChildClientNumberValid', () => {
       expect(isChildClientNumberValid('renewal', mockClientApplication, undefined)).toBe(true);
     });
 
-    it('returns true when clientNumber is in eligibleClientNumbers (excluding applicant)', () => {
-      expect(isChildClientNumberValid('renewal', mockClientApplication, 'OTHER-001')).toBe(true);
+    it('returns false when clientNumber is only in eligibleClientNumbers but not in children', () => {
+      expect(isChildClientNumberValid('renewal', mockClientApplication, 'OTHER-001')).toBe(false);
     });
 
-    it('returns true when clientNumber is in children client numbers', () => {
-      expect(isChildClientNumberValid('renewal', mockClientApplication, 'CHILD-003')).toBe(true);
+    it('returns false when clientNumber is only in children but not in eligibleClientNumbers', () => {
+      expect(isChildClientNumberValid('renewal', mockClientApplication, 'CHILD-003')).toBe(false);
+    });
+
+    it('returns true when clientNumber is in both children and eligibleClientNumbers', () => {
+      expect(isChildClientNumberValid('renewal', mockClientApplication, 'CHILD-001')).toBe(true);
+      expect(isChildClientNumberValid('renewal', mockClientApplication, 'CHILD-002')).toBe(true);
     });
 
     it('returns false when clientNumber is not in eligibleClientNumbers or children client numbers', () => {
@@ -244,7 +249,7 @@ describe('isChildClientNumberValid', () => {
         eligibleClientNumbers: [],
       };
 
-      expect(isChildClientNumberValid('renewal', mockAppEmptyEligible, 'CHILD-001')).toBe(true);
+      expect(isChildClientNumberValid('renewal', mockAppEmptyEligible, 'CHILD-001')).toBe(false);
       expect(isChildClientNumberValid('renewal', mockAppEmptyEligible, 'OTHER-001')).toBe(false);
     });
 
@@ -254,8 +259,8 @@ describe('isChildClientNumberValid', () => {
         children: [],
       };
 
-      expect(isChildClientNumberValid('renewal', mockAppEmptyChildren, 'OTHER-001')).toBe(true);
-      expect(isChildClientNumberValid('renewal', mockAppEmptyChildren, 'CHILD-001')).toBe(true);
+      expect(isChildClientNumberValid('renewal', mockAppEmptyChildren, 'OTHER-001')).toBe(false);
+      expect(isChildClientNumberValid('renewal', mockAppEmptyChildren, 'CHILD-001')).toBe(false);
     });
 
     it('handles both empty arrays', () => {
@@ -283,7 +288,7 @@ describe('isChildClientNumberValid', () => {
         ],
       } as unknown as ClientApplicationRenewalEligibleDto;
 
-      // Should still work correctly with duplicates (Set will handle uniqueness)
+      // Should still work correctly with duplicates in either list
       expect(isChildClientNumberValid('renewal', mockAppWithDuplicates, 'CHILD-001')).toBe(true);
       expect(isChildClientNumberValid('renewal', mockAppWithDuplicates, 'CHILD-002')).toBe(true);
     });
@@ -294,12 +299,11 @@ describe('isChildClientNumberValid', () => {
           clientNumber: 'APP-123',
         },
         eligibleClientNumbers: ['CHILD@123', 'CHILD#456'],
-        children: [{ information: { clientNumber: 'CHILD$789' } }],
+        children: [{ information: { clientNumber: 'CHILD@123' } }, { information: { clientNumber: 'CHILD#456' } }],
       } as unknown as ClientApplicationRenewalEligibleDto;
 
       expect(isChildClientNumberValid('renewal', mockAppWithSpecialChars, 'CHILD@123')).toBe(true);
       expect(isChildClientNumberValid('renewal', mockAppWithSpecialChars, 'CHILD#456')).toBe(true);
-      expect(isChildClientNumberValid('renewal', mockAppWithSpecialChars, 'CHILD$789')).toBe(true);
       expect(isChildClientNumberValid('renewal', mockAppWithSpecialChars, 'CHILD%000')).toBe(false);
     });
 
@@ -309,12 +313,11 @@ describe('isChildClientNumberValid', () => {
           clientNumber: 'APP-001',
         },
         eligibleClientNumbers: ['CHILD-001', 'child-002'],
-        children: [{ information: { clientNumber: 'Child-003' } }],
+        children: [{ information: { clientNumber: 'CHILD-001' } }, { information: { clientNumber: 'child-002' } }],
       } as unknown as ClientApplicationRenewalEligibleDto;
 
       expect(isChildClientNumberValid('renewal', mockAppCaseSensitive, 'CHILD-001')).toBe(true);
       expect(isChildClientNumberValid('renewal', mockAppCaseSensitive, 'child-002')).toBe(true);
-      expect(isChildClientNumberValid('renewal', mockAppCaseSensitive, 'Child-003')).toBe(true);
       expect(isChildClientNumberValid('renewal', mockAppCaseSensitive, 'child-001')).toBe(false);
       expect(isChildClientNumberValid('renewal', mockAppCaseSensitive, 'CHILD-002')).toBe(false);
     });

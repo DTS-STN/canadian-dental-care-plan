@@ -109,7 +109,7 @@ export function getEligibilityStatus({ hasPrivateDentalInsurance, privateDentalI
  * In the "intake" context, this function always returns true as client number validation
  * is not required during initial application submission.
  *
- * In the "renewal" context, a client number is considered valid if it exists in either:
+ * In the "renewal" context, a client number is considered valid if it exists in both:
  * - The list of eligible client numbers (excluding the applicant's own client number)
  * - The list of client numbers associated with the applicant's children
  *
@@ -124,17 +124,14 @@ export function getEligibilityStatus({ hasPrivateDentalInsurance, privateDentalI
  *          - Always true for intake context
  *          - True for renewal context if:
  *            - clientApplication or clientNumber is undefined
- *            - clientNumber exists in the set of eligible non-applicant client numbers or children's client numbers
+ *          - clientNumber exists in both the set of eligible non-applicant client numbers and children's client numbers
  *          - False for renewal context if clientNumber is not found in the valid set
  */
 export function isChildClientNumberValid(context: 'intake' | 'renewal', clientApplication?: ClientApplicationRenewalEligibleDto, clientNumber?: string) {
   if (context === 'intake' || clientApplication === undefined || clientNumber === undefined) return true;
-  return new Set(
-    [
-      ...clientApplication.eligibleClientNumbers, //
-      ...clientApplication.children.map((child) => child.information.clientNumber),
-    ].filter((val) => val !== clientApplication.applicantInformation.clientNumber),
-  ).has(clientNumber);
+  const isChildrensClientNumberValid = clientApplication.children.some((child) => child.information.clientNumber === clientNumber);
+  const isEligibleClientNumberValid = clientApplication.eligibleClientNumbers.includes(clientNumber) && clientNumber !== clientApplication.applicantInformation.clientNumber;
+  return isChildrensClientNumberValid && isEligibleClientNumberValid;
 }
 
 /**
