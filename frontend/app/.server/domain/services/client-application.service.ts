@@ -94,7 +94,7 @@ export class DefaultClientApplicationService implements ClientApplicationService
     const clientApplication = clientApplicationOption.unwrap();
 
     if (clientApplication.applicantInformation.socialInsuranceNumber.replaceAll(/\D/g, '') !== sin.replaceAll(/\D/g, '')) {
-      this.log.trace('Client application found with basic info, but SIN does not match. Basic info: [%j], SIN: [%s]', basicInfoRequestDto, sin);
+      this.log.trace('Client application found with basic info, but SIN does not match. Basic info: [%j], SIN: [***-***-%s]', basicInfoRequestDto, sin.slice(-3));
       return None;
     }
 

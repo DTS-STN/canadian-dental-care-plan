@@ -337,11 +337,11 @@ export class DefaultSecurityHandler implements SecurityHandler {
 
     if (clientApplicationOption.isNone()) {
       const redirectUrl = options?.redirectUrl ?? getPathById('protected/data-unavailable', params);
-      this.log.debug('No client application found for SIN [%s]; session [%s]; redirecting to [%s]', userInfoToken.sin, session.id, redirectUrl);
+      this.log.debug('No client application found for SIN [***-***-%s]; session [%s]; redirecting to [%s]', userInfoToken.sin.slice(-3), session.id, redirectUrl);
       throw redirect(redirectUrl);
     }
 
-    this.log.debug('Client application found for SIN [%s]; session [%s]', userInfoToken.sin, session.id);
+    this.log.debug('Client application found for SIN [***-***-%s]; session [%s]', userInfoToken.sin.slice(-3), session.id);
     return clientApplicationOption.unwrap();
   }
 
@@ -369,7 +369,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
     });
 
     if (applicantOption.isNone()) {
-      this.log.debug('No applicant found for SIN [%s]; session [%s]; redirecting to data unavailable', userInfoToken.sin, session.id);
+      this.log.debug('No applicant found for SIN [***-***-%s]; session [%s]; redirecting to data unavailable', userInfoToken.sin.slice(-3), session.id);
       throw redirect(getPathById('protected/data-unavailable', params));
     }
 
@@ -377,7 +377,7 @@ export class DefaultSecurityHandler implements SecurityHandler {
 
     session.set('applicant', applicant);
 
-    this.log.debug('Applicant found for SIN [%s]; session [%s]', userInfoToken.sin, session.id);
+    this.log.debug('Applicant found for SIN [***-***-%s]; session [%s]', userInfoToken.sin.slice(-3), session.id);
     return applicant;
   }
 
