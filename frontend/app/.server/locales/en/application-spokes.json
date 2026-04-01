@@ -223,7 +223,7 @@
       "alert": {
         "heading": "We couldn't find your Canadian Dental Care Plan (CDCP) account with the information you entered.",
         "detail": "Check that your information is correct and try again. If the problem continues, call us at <noWrap>1-833-537-4342</noWrap> to update your information.",
-        "applyDate": "<strong>Note:</strong> Only current CDCP members can renew benefits now. If you are not enrolled, you can apply for the upcoming benefit year starting {{startDate}}."
+        "apply-date": "<strong>Note:</strong> Only current CDCP members can renew benefits now. If you are not enrolled, you can apply for the upcoming benefit year starting {{startDate}}."
       }
     }
   },
@@ -436,7 +436,8 @@
         "alert": {
           "heading": "We couldn't find your child's Canadian Dental Care Plan (CDCP) account with the information you entered",
           "detail": "Check that the child's information is correct and try again. If the problem continues, call us at <noWrap>1-833-537-4342</noWrap> to update your information.",
-          "applyDate": "Note: only current CDCP members can renew benefits now. If your child is not enrolled, you can apply for the upcoming benefit year starting June 2, 2026."
+          "detail-adult-must-apply": "If the child is 18, they must submit their own application.",
+          "apply-date": "Note: only current CDCP members can renew benefits now. If your child is not enrolled, you can apply for the upcoming benefit year starting June 2, 2026."
         }
       }
     },

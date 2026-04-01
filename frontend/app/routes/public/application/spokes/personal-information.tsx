@@ -231,7 +231,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
           <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.error-message.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
         </p>
         <p className="mb-2">
-          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.error-message.alert.applyDate" values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.error-message.alert.apply-date" values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
         </p>
       </ErrorAlert>
       <ErrorSummaryProvider actionData={fetcher.data}>

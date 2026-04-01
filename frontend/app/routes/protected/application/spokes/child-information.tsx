@@ -286,7 +286,8 @@ export default function ChildInformation({ loaderData, params }: Route.Component
           <p className="mb-2">
             <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:children.information.error-message.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
           </p>
-          <p className="mb-2">{t('protected-application-spokes:children.information.error-message.alert.applyDate')}</p>
+          <p className="mb-2">{t('protected-application-spokes:children.information.error-message.alert.detail-adult-must-apply')}</p>
+          <p className="mb-2">{t('protected-application-spokes:children.information.error-message.alert.apply-date')}</p>
         </ErrorAlert>
         <p className="mb-4">{t('protected-application-spokes:children.information.form-instructions-sin')}</p>
         <p className="mb-4 italic">{t('protected-application:required-label')}</p>
