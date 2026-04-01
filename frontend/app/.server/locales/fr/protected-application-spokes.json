@@ -295,10 +295,10 @@
     "in-person": "En personne\u00a0: <findOffice>trouvez un bureau de Service Canada</findOffice>.",
     "office-link": "https://bureaux.service.canada.ca/fr",
     "error-message": {
-      "phone-number-valid": "Numéro de téléphone invalide",
-      "phone-number-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
-      "phone-number-alt-valid": "Autre numéro de téléphone invalide",
-      "phone-number-alt-valid-international": "L'autre numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-number-valid": "Un numéro du Canada a 10 chiffres. Par exemple\u00a0: 800\u2011622\u20116232. Si c'est un numéro d'un autre pays, ajoutez un + puis le code du pays.",
+      "phone-number-valid-international": "Un numéro du Canada a 10 chiffres. Par exemple\u00a0: 800\u2011622\u20116232. Si c'est un numéro d'un autre pays, ajoutez un + puis le code du pays.",
+      "phone-number-alt-valid": "Pour un autre numéro de téléphone, s'il vient du Canada, entrez 10 chiffres (par exemple\u00a0: 800\u2011598\u20114567). Si c'est un numéro d'un autre pays, ajoutez un + puis le code du pays.",
+      "phone-number-alt-valid-international": "Pour un autre numéro de téléphone, s'il vient du Canada, entrez 10 chiffres (par exemple\u00a0: 800\u2011598\u20114567). Si c'est un numéro d'un autre pays, ajoutez un + puis le code du pays.",
       "phone-required": "Entrez un numéro de téléphone"
     }
   },
