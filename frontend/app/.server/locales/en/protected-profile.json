@@ -148,12 +148,6 @@
     "option-yes": "Yes",
     "option-no": "No",
     "help-message": "Adding your phone number helps us reach you quickly if there's a problem with your application. If you don't give a number, we'll contact you by mail.",
-    "phone-format-description": "Enter a Canadian phone number without a + sign or country code. For international numbers, include the + sign followed by the country code.",
-    "phone-format-canadian-intro": "Example of accepted Canadian phone number format:",
-    "phone-format-canadian-example": "(506) 234-5678",
-    "phone-format-international-intro": "Examples of accepted International phone number formats:",
-    "phone-format-international-example-1": "+44 20 7946 0958 (United Kingdom)",
-    "phone-format-international-example-2": "+33 1 23 45 67 89 (France)",
     "error-message": {
       "phone-number-valid": "Invalid phone number",
       "phone-number-valid-international": "Phone number does not exist. If it's an international phone number, add '+' in front",

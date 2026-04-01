@@ -139,19 +139,6 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-6">
-            <div className="mb-6 space-y-2">
-              <p>{t('protected-application-spokes:phone-number.phone-format-description')}</p>
-              <p>
-                <strong>{t('protected-application-spokes:phone-number.phone-format-canadian-intro')}</strong> {t('protected-application-spokes:phone-number.phone-format-canadian-example')}
-              </p>
-              <p>
-                <strong>{t('protected-application-spokes:phone-number.phone-format-international-intro')}</strong>
-              </p>
-              <ul className="list-disc space-y-1 pl-7">
-                <li>{t('protected-application-spokes:phone-number.phone-format-international-example-1')}</li>
-                <li>{t('protected-application-spokes:phone-number.phone-format-international-example-2')}</li>
-              </ul>
-            </div>
             <p className="mb-4 italic">{t('protected-application:optional-label')}</p>
             <div className="grid items-end gap-6">
               <InputPhoneField

@@ -294,12 +294,6 @@
     "service-canada": "Par téléphone\u00a0: contactez Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
     "in-person": "En personne\u00a0: <findOffice>trouvez un bureau de Service Canada</findOffice>.",
     "office-link": "https://bureaux.service.canada.ca/fr",
-    "phone-format-description": "Entrez un numéro de téléphone canadien sans signe + ni indicatif de pays. Pour les numéros internationaux, incluez le signe + suivi de l'indicatif de pays.",
-    "phone-format-canadian-intro": "Exemple de format de numéro de téléphone canadien accepté\u00a0:",
-    "phone-format-canadian-example": "(506)\u00a0234\u20115678",
-    "phone-format-international-intro": "Exemples de formats de numéro de téléphone international acceptés\u00a0:",
-    "phone-format-international-example-1": "+44\u00a020\u00a07946\u00a00958 (Royaume-Uni)",
-    "phone-format-international-example-2": "+33\u00a01\u00a023\u00a045\u00a067\u00a089 (France)",
     "error-message": {
       "phone-number-valid": "Numéro de téléphone invalide",
       "phone-number-valid-international": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
