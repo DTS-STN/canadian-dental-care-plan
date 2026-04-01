@@ -5,6 +5,7 @@ import { format } from 'winston';
 import type { Logform } from 'winston';
 
 import { maxLogLevelNameLength } from '~/.server/logging/log-levels';
+import { isValidSin } from '~/utils/sin-utils';
 
 type FormatLevelsOptions = {
   /**
@@ -108,3 +109,38 @@ export function formatPrintf(): Logform.Format {
     return msg;
   });
 }
+
+/**
+ * Matches Canadian SIN patterns in any formatting:
+ *   - 9 consecutive digits: 123456789
+ *   - space-separated:      123 456 789
+ *   - hyphen-separated:     123-456-789
+ *
+ * Negative digit lookahead/lookbehind ensures sequences longer than 9 digits
+ * (e.g. 123456789009890) are never matched.
+ *
+ * Only the last 3 digits are preserved: ***-***-789
+ */
+const SIN_PATTERN = /(?<!["\d])("?)(\d{3}[\s-]?\d{3}[\s-]?(\d{3}))\1(?!["\d])/g;
+
+/**
+ * Winston format transform that masks SIN values in log messages after splat
+ * interpolation has already expanded all %s/%j tokens into the message string.
+ * This provides a safety net so that SINs are never emitted to any transport,
+ * regardless of how individual log call sites are written.
+ *
+ * Candidate matches are verified with `isValidSin` (Luhn checksum + format rules)
+ * to avoid masking legitimate 9-digit reference codes and option-set IDs.
+ *
+ * The replacement is always emitted as a quoted string (e.g. `"***-***-782"`) because
+ * the masked value is not a valid number type. Surrounding quotes from the original match
+ * are consumed by the regex so that a string SIN (`"123456782"`) is never double-quoted.
+ */
+export const formatSensitiveData = format((info) => {
+  if (typeof info.message === 'string') {
+    info.message = info.message.replaceAll(SIN_PATTERN, (_match, _quote, sin, last3: string) => {
+      return isValidSin(sin) ? `"***-***-${last3}"` : _match;
+    });
+  }
+  return info;
+});
