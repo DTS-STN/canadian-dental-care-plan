@@ -14,7 +14,7 @@ interface ErrorAlertProps extends ComponentProps<'section'> {
 export function ErrorAlert({ className, children, type = 'danger', tabIndex = -1, ...props }: ErrorAlertProps) {
   return (
     <section className={cn('mb-4', className)} {...props}>
-      <ContextualAlert type={type} role="alert" aria-atomic="true">
+      <ContextualAlert type={type} role="alert">
         {children}
       </ContextualAlert>
     </section>
