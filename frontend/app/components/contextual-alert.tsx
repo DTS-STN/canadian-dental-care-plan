@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import type React from 'react';
+import type { AriaRole, ReactNode } from 'react';
 
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
 import { faCheckCircle, faCircleInfo, faExclamationCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +11,7 @@ export type AlertType = 'warning' | 'success' | 'danger' | 'info' | 'comment';
 interface ContextualAlertProps {
   children: ReactNode;
   type: AlertType;
-  role?: React.AriaRole;
+  role?: AriaRole;
 }
 
 const alertBackgroundColors: Partial<Record<AlertType, string>> & { default: string } = {
