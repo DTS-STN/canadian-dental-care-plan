@@ -1,7 +1,7 @@
 import { data } from 'react-router';
 
+import contentDisposition from 'content-disposition';
 import { Buffer } from 'node:buffer';
-import { sanitize } from 'sanitize-filename-ts';
 
 import type { Route } from './+types/$id.download';
 
@@ -33,7 +33,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const locale = getLocale(request);
   const letterType = await appContainer.get(TYPES.LetterTypeService).getLocalizedLetterTypeById(letter.letterTypeId, locale);
-  const documentName = sanitize(letterType.name);
+  const documentName = `${letterType.name}.pdf`;
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
 
@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     headers: {
       'Content-Type': 'application/pdf',
       'Content-Length': decodedPdfBytes.length.toString(),
-      'Content-Disposition': `inline; filename="${documentName}.pdf"`,
+      'Content-Disposition': contentDisposition(documentName, { type: 'inline' }),
     },
   });
 }
