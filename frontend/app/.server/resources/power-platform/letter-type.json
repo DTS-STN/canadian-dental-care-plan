@@ -1,325 +1,611 @@
 {
-  "@odata.context": "https://canadadental-sandbox.crm3.dynamics.com/api/data/v9.2/$metadata#esdc_cctlettertypes(esdc_portalnameenglish,esdc_portalnamefrench,_esdc_parentid_value,esdc_value,esdc_ParentId(esdc_portalnameenglish,esdc_portalnamefrench))",
+  "@odata.context": "https://canadadental-uat.crm3.dynamics.com/api/data/v9.2/$metadata#esdc_cctlettertypes(esdc_portalnameenglish,esdc_portalnamefrench,_esdc_parentid_value,esdc_value,esdc_ParentId(esdc_portalnameenglish,esdc_portalnamefrench))",
   "value": [
     {
-      "@odata.etag": "W/\"179302828\"",
+      "@odata.etag": "W/\"271775491\"",
       "esdc_portalnamefrench": "Lettre d'invitation à renouveler  - Principal",
-      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Invitation to Renew Letter - Primary",
       "esdc_value": "invite-775170013",
-      "esdc_cctlettertypeid": "cc101d6b-5798-ef11-8a69-000d3a09dfc2",
-      "esdc_ParentId": {
-        "esdc_portalnamefrench": "Lettre d'invitation",
-        "esdc_portalnameenglish": "Invitation Letter",
-        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2"
-      }
-    },
-    {
-      "@odata.etag": "W/\"179302831\"",
-      "esdc_portalnamefrench": "Lettre d'invitation à postuler",
       "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Invitation to Apply Letter",
-      "esdc_value": "775170000",
-      "esdc_cctlettertypeid": "fe29d928-0a8b-ef11-8a6a-000d3a09dfc2",
+      "esdc_cctlettertypeid": "cc101d6b-5798-ef11-8a69-000d3a09dfc2",
+      "esdc_portalnameenglish": "Invitation to Renew Letter - Primary",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre d'invitation",
-        "esdc_portalnameenglish": "Invitation Letter",
-        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Invitation Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302833\"",
+      "@odata.etag": "W/\"271775510\"",
+      "esdc_portalnamefrench": "Lettre d'invitation à présenter une demande",
+      "esdc_value": "775170000",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+      "esdc_cctlettertypeid": "fe29d928-0a8b-ef11-8a6a-000d3a09dfc2",
+      "esdc_portalnameenglish": "Invitation to Apply Letter",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'invitation",
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Invitation Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775485\"",
       "esdc_portalnamefrench": "Lettre de détermination",
-      "_esdc_parentid_value": null,
-      "esdc_portalnameenglish": "Determination Letter",
       "esdc_value": "775170001",
+      "_esdc_parentid_value": null,
       "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Determination Letter",
       "esdc_ParentId": null
     },
     {
-      "@odata.etag": "W/\"179302835\"",
+      "@odata.etag": "W/\"271775511\"",
       "esdc_portalnamefrench": "Admissible",
-      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Eligible",
       "esdc_value": "775170001-775170000",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
       "esdc_cctlettertypeid": "4523d434-e363-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Eligible",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre de détermination",
-        "esdc_portalnameenglish": "Determination Letter",
-        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Determination Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302836\"",
+      "@odata.etag": "W/\"271775482\"",
       "esdc_portalnamefrench": "Non admissible",
-      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Ineligible",
       "esdc_value": "775170001-775170001",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
       "esdc_cctlettertypeid": "b27b7f1a-e563-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Ineligible",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre de détermination",
-        "esdc_portalnameenglish": "Determination Letter",
-        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Determination Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302837\"",
+      "@odata.etag": "W/\"271775495\"",
       "esdc_portalnamefrench": "Doublon",
-      "_esdc_parentid_value": "8afa7d9d-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Duplicate",
       "esdc_value": "775170002-775170002",
+      "_esdc_parentid_value": "8afa7d9d-e163-ef11-a671-000d3a09dfc2",
       "esdc_cctlettertypeid": "a91df267-e963-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Duplicate",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre de validation",
-        "esdc_portalnameenglish": "Validation Letter",
-        "esdc_cctlettertypeid": "8afa7d9d-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "8afa7d9d-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Validation Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302845\"",
-      "esdc_portalnamefrench": "Personne à charge admissible",
-      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Eligible Dependent",
+      "@odata.etag": "W/\"271775484\"",
+      "esdc_portalnamefrench": "Admissible - Personne à charge ",
       "esdc_value": "775170001-775170007",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
       "esdc_cctlettertypeid": "4eb26ca7-ea63-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Eligible Dependent",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre de détermination",
-        "esdc_portalnameenglish": "Determination Letter",
-        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Determination Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302846\"",
-      "esdc_portalnamefrench": "Personne à charge non admissible",
-      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Ineligible Dependent",
+      "@odata.etag": "W/\"271775500\"",
+      "esdc_portalnamefrench": "Non admissible - Personne à charge",
       "esdc_value": "775170001-775170008",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
       "esdc_cctlettertypeid": "6488acd9-ea63-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Ineligible Dependent",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre de détermination",
-        "esdc_portalnameenglish": "Determination Letter",
-        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Determination Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302847\"",
-      "esdc_portalnamefrench": "Réévaluer l’enfant à charge",
-      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Re-Assess Child Dependent",
+      "@odata.etag": "W/\"271775512\"",
+      "esdc_portalnamefrench": "Réévaluation - Enfant à charge",
       "esdc_value": "775170001-775170009",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
       "esdc_cctlettertypeid": "a09b34f2-ea63-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Re-Assess Child Dependent",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre de détermination",
-        "esdc_portalnameenglish": "Determination Letter",
-        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Determination Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302848\"",
-      "esdc_portalnamefrench": "Réévaluer le demandeur",
-      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Re-Assess Applicant",
+      "@odata.etag": "W/\"271775489\"",
+      "esdc_portalnamefrench": "Réévaluation - Demandeur",
       "esdc_value": "775170001-775170010",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
       "esdc_cctlettertypeid": "ba1d1d0e-eb63-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Re-Assess Applicant",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre de détermination",
-        "esdc_portalnameenglish": "Determination Letter",
-        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Determination Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302849\"",
+      "@odata.etag": "W/\"271775494\"",
       "esdc_portalnamefrench": "Doublon - Enfant",
-      "_esdc_parentid_value": "8afa7d9d-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Duplicate Child",
       "esdc_value": "775170002-775170011",
-      "esdc_cctlettertypeid": "209e0e29-eb63-ef11-a671-000d3a09dfc2",
-      "esdc_ParentId": {
-        "esdc_portalnamefrench": "Lettre de validation",
-        "esdc_portalnameenglish": "Validation Letter",
-        "esdc_cctlettertypeid": "8afa7d9d-e163-ef11-a671-000d3a09dfc2"
-      }
-    },
-    {
-      "@odata.etag": "W/\"179302851\"",
-      "esdc_portalnamefrench": "Enfant indépendant",
       "_esdc_parentid_value": "8afa7d9d-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Independent Child",
-      "esdc_value": "775170002-775170012",
-      "esdc_cctlettertypeid": "9e17106b-eb63-ef11-a671-000d3a09dfc2",
+      "esdc_cctlettertypeid": "209e0e29-eb63-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Duplicate Child",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre de validation",
-        "esdc_portalnameenglish": "Validation Letter",
-        "esdc_cctlettertypeid": "8afa7d9d-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "8afa7d9d-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Validation Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302852\"",
+      "@odata.etag": "W/\"271775514\"",
+      "esdc_portalnamefrench": "Enfant indépendant",
+      "esdc_value": "775170002-775170012",
+      "_esdc_parentid_value": "8afa7d9d-e163-ef11-a671-000d3a09dfc2",
+      "esdc_cctlettertypeid": "9e17106b-eb63-ef11-a671-000d3a09dfc2",
+      "esdc_portalnameenglish": "Independent Child",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de validation",
+        "esdc_cctlettertypeid": "8afa7d9d-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Validation Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775526\"",
       "esdc_portalnamefrench": "Renouvellement Admissible - Principal",
-      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Eligible Renewal - Primary",
       "esdc_value": "775170001-775170002",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
       "esdc_cctlettertypeid": "107895a1-50b7-ef11-b8e9-000d3a09dfc2",
+      "esdc_portalnameenglish": "Eligible Renewal - Primary",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre de détermination",
-        "esdc_portalnameenglish": "Determination Letter",
-        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Determination Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302854\"",
+      "@odata.etag": "W/\"271775498\"",
       "esdc_portalnamefrench": "Renouvellement Admissible - Personne à charge",
-      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Eligible Renewal - Dependant",
       "esdc_value": "775170001-775170003",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
       "esdc_cctlettertypeid": "b5ab92c0-50b7-ef11-b8e9-000d3a09dfc2",
+      "esdc_portalnameenglish": "Eligible Renewal - Dependant",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre de détermination",
-        "esdc_portalnameenglish": "Determination Letter",
-        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Determination Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302856\"",
+      "@odata.etag": "W/\"271775490\"",
       "esdc_portalnamefrench": "Renouvellement Non admissible  - Principal",
-      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Ineligible Renewal - Primary",
       "esdc_value": "775170001-775170004",
-      "esdc_cctlettertypeid": "e42e21d0-50b7-ef11-b8e9-000d3a09dfc2",
-      "esdc_ParentId": {
-        "esdc_portalnamefrench": "Lettre de détermination",
-        "esdc_portalnameenglish": "Determination Letter",
-        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
-      }
-    },
-    {
-      "@odata.etag": "W/\"179302858\"",
-      "esdc_portalnamefrench": "Renouvellement Non admissible - Personne à charge",
       "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Ineligible Renewal -  Dependant",
-      "esdc_value": "775170001-775170005",
-      "esdc_cctlettertypeid": "cb6af4ea-50b7-ef11-b8e9-000d3a09dfc2",
+      "esdc_cctlettertypeid": "e42e21d0-50b7-ef11-b8e9-000d3a09dfc2",
+      "esdc_portalnameenglish": "Ineligible Renewal - Primary",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre de détermination",
-        "esdc_portalnameenglish": "Determination Letter",
-        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Determination Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302860\"",
-      "esdc_portalnamefrench": "Lettre d'invitation à renouveler dependant",
-      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Invitation to Renew Letter Dependant",
+      "@odata.etag": "W/\"271775515\"",
+      "esdc_portalnamefrench": "Renouvellement Non admissible - Personne à charge",
+      "esdc_value": "775170001-775170005",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
+      "esdc_cctlettertypeid": "cb6af4ea-50b7-ef11-b8e9-000d3a09dfc2",
+      "esdc_portalnameenglish": "Ineligible Renewal -  Dependant",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre de détermination",
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Determination Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775527\"",
+      "esdc_portalnamefrench": "Lettre d'invitation à renouveler - Personne à charge",
       "esdc_value": "invite-775170014",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
       "esdc_cctlettertypeid": "07f87f65-bb9a-ef11-8a69-000d3a0a072d",
+      "esdc_portalnameenglish": "Invitation to Renew Letter Dependant",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre d'invitation",
-        "esdc_portalnameenglish": "Invitation Letter",
-        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Invitation Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302863\"",
+      "@odata.etag": "W/\"271775487\"",
       "esdc_portalnamefrench": "Invitation - Nouveaux adultes",
-      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "New Adult Invitation",
       "esdc_value": "invite-775170015",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
       "esdc_cctlettertypeid": "5ac02587-959b-ef11-8a6a-000d3af47c23",
+      "esdc_portalnameenglish": "New Adult Invitation",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre d'invitation",
-        "esdc_portalnameenglish": "Invitation Letter",
-        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Invitation Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302865\"",
-      "esdc_portalnamefrench": "Rappel de renouvellement pour le demandeur principal",
-      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Renewal Reminder Primary",
+      "@odata.etag": "W/\"271775509\"",
+      "esdc_portalnamefrench": "Rappel de renouvellement - Demandeur principal",
       "esdc_value": "invite-775170016",
-      "esdc_cctlettertypeid": "2520f025-c4a5-ef11-b8e9-000d3af47c23",
-      "esdc_ParentId": {
-        "esdc_portalnamefrench": "Lettre d'invitation",
-        "esdc_portalnameenglish": "Invitation Letter",
-        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2"
-      }
-    },
-    {
-      "@odata.etag": "W/\"179302867\"",
-      "esdc_portalnamefrench": "Rappel de renouvellement pour les personnes à charge",
       "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
-      "esdc_portalnameenglish": "Renewal Reminder Dependant",
-      "esdc_value": "invite-775170017",
-      "esdc_cctlettertypeid": "3545053a-c4a5-ef11-b8e9-000d3af47c23",
+      "esdc_cctlettertypeid": "2520f025-c4a5-ef11-b8e9-000d3af47c23",
+      "esdc_portalnameenglish": "Renewal Reminder Primary",
       "esdc_ParentId": {
         "esdc_portalnamefrench": "Lettre d'invitation",
-        "esdc_portalnameenglish": "Invitation Letter",
-        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2"
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Invitation Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302869\"",
-      "esdc_portalnamefrench": "Prestations expirées pour le demandeur principal",
-      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
-      "esdc_portalnameenglish": "Benefits Expired Primary",
+      "@odata.etag": "W/\"271775524\"",
+      "esdc_portalnamefrench": "Rappel de renouvellement - Personnes à charge",
+      "esdc_value": "invite-775170017",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+      "esdc_cctlettertypeid": "3545053a-c4a5-ef11-b8e9-000d3af47c23",
+      "esdc_portalnameenglish": "Renewal Reminder Dependant",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'invitation",
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Invitation Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775497\"",
+      "esdc_portalnamefrench": "Prestations expirées - Demandeur principal",
       "esdc_value": "notice-775170018",
+      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
       "esdc_cctlettertypeid": "11b9fd67-c4a5-ef11-b8e9-000d3af47c23",
+      "esdc_portalnameenglish": "Benefits Expired Primary",
       "esdc_ParentId": {
-        "esdc_portalnamefrench": "Lettre de préavis",
-        "esdc_portalnameenglish": "Notice Letter",
-        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29"
+        "esdc_portalnamefrench": "Lettre d'avis",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+        "esdc_portalnameenglish": "Notice Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302871\"",
-      "esdc_portalnamefrench": "Prestations expirées pour les personnes à charge",
-      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
-      "esdc_portalnameenglish": "Benefits Expired Dependant",
+      "@odata.etag": "W/\"271775525\"",
+      "esdc_portalnamefrench": "Prestations expirées - Personnes à charge",
       "esdc_value": "notice-775170019",
+      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
       "esdc_cctlettertypeid": "645e8883-c4a5-ef11-b8e9-000d3af47c23",
+      "esdc_portalnameenglish": "Benefits Expired Dependant",
       "esdc_ParentId": {
-        "esdc_portalnamefrench": "Lettre de préavis",
-        "esdc_portalnameenglish": "Notice Letter",
-        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29"
+        "esdc_portalnamefrench": "Lettre d'avis",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+        "esdc_portalnameenglish": "Notice Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179302873\"",
-      "esdc_portalnamefrench": "Lettre de révision du dossier RAS pré-renouvellement",
+      "@odata.etag": "W/\"271775517\"",
+      "esdc_portalnamefrench": "Date de fin incorrecte (Pas de demande réussie) - Principal",
+      "esdc_value": "notice-coverage-correction-1",
       "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
-      "esdc_portalnameenglish": "Pre-Renewal SIR Account Revision Letter",
-      "esdc_value": "notice-775170020",
-      "esdc_cctlettertypeid": "4fd9a5db-c5a5-ef11-b8e9-000d3af47c23",
+      "esdc_cctlettertypeid": "609f28f7-bc73-f011-b4cc-002248d56650",
+      "esdc_portalnameenglish": "Incorrect End Date (No Successful Application) - Primary",
       "esdc_ParentId": {
-        "esdc_portalnamefrench": "Lettre de préavis",
-        "esdc_portalnameenglish": "Notice Letter",
-        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29"
+        "esdc_portalnamefrench": "Lettre d'avis",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+        "esdc_portalnameenglish": "Notice Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179329698\"",
-      "esdc_portalnamefrench": "Suspendu",
+      "@odata.etag": "W/\"271775492\"",
+      "esdc_portalnamefrench": "Date de fin incorrecte (Pas de demande réussie) - Personne à charge",
+      "esdc_value": "notice-coverage-correction-2",
       "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
-      "esdc_portalnameenglish": "Suspended",
-      "esdc_value": "notice-775170017",
+      "esdc_cctlettertypeid": "ec150a2f-bd73-f011-b4cc-002248d56650",
+      "esdc_portalnameenglish": "Incorrect End Date (No Successful Application) - Dependant",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'avis",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+        "esdc_portalnameenglish": "Notice Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775538\"",
+      "esdc_portalnamefrench": "Date de fin incorrecte (Demande inadmissible) - Principal",
+      "esdc_value": "notice-coverage-correction-3",
+      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+      "esdc_cctlettertypeid": "7b4c0e54-bd73-f011-b4cc-002248d56650",
+      "esdc_portalnameenglish": "Incorrect End Date (Ineligible Application) - Primary",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'avis",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+        "esdc_portalnameenglish": "Notice Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775518\"",
+      "esdc_portalnamefrench": "Date de fin incorrecte (Demande inadmissible) - Personne à charge",
+      "esdc_value": "notice-coverage-correction-4",
+      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+      "esdc_cctlettertypeid": "e62ac974-bd73-f011-b4cc-002248d56650",
+      "esdc_portalnameenglish": "Incorrect End Date (Ineligible Application) - Dependant",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'avis",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+        "esdc_portalnameenglish": "Notice Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775530\"",
+      "esdc_portalnamefrench": "Lettre d'invitation à renouveler – Avertissement éligible - Demandeur principal",
+      "esdc_value": "invite-775170030",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+      "esdc_cctlettertypeid": "2b481f25-13f6-f011-8406-6045bdf97756",
+      "esdc_portalnameenglish": "Invitation to Renew Letter - Eligible Warning - Primary",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'invitation",
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Invitation Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775539\"",
+      "esdc_portalnamefrench": "Suspendu - Demandeur principal",
+      "esdc_value": "775170001-775170017",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
       "esdc_cctlettertypeid": "be56e6d6-292c-f011-8c4d-7c1e5240714d",
+      "esdc_portalnameenglish": "Suspended",
       "esdc_ParentId": {
-        "esdc_portalnamefrench": "Lettre de préavis",
-        "esdc_portalnameenglish": "Notice Letter",
-        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29"
+        "esdc_portalnamefrench": "Lettre de détermination",
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Determination Letter"
       }
     },
     {
-      "@odata.etag": "W/\"179329775\"",
-      "esdc_portalnamefrench": "Suspendu pour les personnes à charge",
-      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
-      "esdc_portalnameenglish": "Suspended - Dependent",
-      "esdc_value": "notice-775170016",
+      "@odata.etag": "W/\"271775519\"",
+      "esdc_portalnamefrench": "Suspendu - Personnes à charge",
+      "esdc_value": "775170001-775170016",
+      "_esdc_parentid_value": "2476d390-e163-ef11-a671-000d3a09dfc2",
       "esdc_cctlettertypeid": "82f28ed2-193b-f011-b4cb-7c1e5240714d",
+      "esdc_portalnameenglish": "Suspended - Dependent",
       "esdc_ParentId": {
-        "esdc_portalnamefrench": "Lettre de préavis",
-        "esdc_portalnameenglish": "Notice Letter",
-        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29"
+        "esdc_portalnamefrench": "Lettre de détermination",
+        "esdc_cctlettertypeid": "2476d390-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Determination Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775503\"",
+      "esdc_portalnamefrench": "Lettre d'invitation à renouveler – Demandeur principal admissible",
+      "esdc_value": "invite-775170025",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+      "esdc_cctlettertypeid": "1f0ada4e-59ba-f011-bbd3-7c1e52408057",
+      "esdc_portalnameenglish": "Invitation to Renew Letter – Eligible Primary",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'invitation",
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Invitation Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775534\"",
+      "esdc_portalnamefrench": "Lettre d'invitation à renouveler – Personne à charge admissible",
+      "esdc_value": "invite-775170026",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+      "esdc_cctlettertypeid": "9c5ed7ed-59ba-f011-bbd3-7c1e52408057",
+      "esdc_portalnameenglish": "Invitation to Renew Letter – Eligible Dependant",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'invitation",
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Invitation Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775513\"",
+      "esdc_portalnamefrench": "Lettre d'invitation à renouveler – Admissibilité inconnue - Demandeur principal",
+      "esdc_value": "invite-775170027",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+      "esdc_cctlettertypeid": "bd07b377-5aba-f011-bbd3-7c1e52408057",
+      "esdc_portalnameenglish": "Invitation to Renew Letter – Unknown Eligibility - Primary",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'invitation",
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Invitation Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775529\"",
+      "esdc_portalnamefrench": "Lettre d'invitation à renouveler – Admissibilité inconnue - Personne à charge",
+      "esdc_value": "invite-775170028",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+      "esdc_cctlettertypeid": "27c576cf-5aba-f011-bbd3-7c1e52408057",
+      "esdc_portalnameenglish": "Invitation to Renew Letter – Unknown Eligibility - Dependant",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'invitation",
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Invitation Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775501\"",
+      "esdc_portalnamefrench": "Lettre d'invitation à renouveler – Preuve requise - Demandeur principal",
+      "esdc_value": "invite-775170029",
+      "_esdc_parentid_value": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+      "esdc_cctlettertypeid": "9768ed31-5bba-f011-bbd3-7c1e52408057",
+      "esdc_portalnameenglish": "Invitation to Renew Letter – Proof Required - Primary",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'invitation",
+        "esdc_cctlettertypeid": "58cfda75-e163-ef11-a671-000d3a09dfc2",
+        "esdc_portalnameenglish": "Invitation Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775528\"",
+      "esdc_portalnamefrench": "Non admissible – Lettre de fin de couverture - Demandeur principal",
+      "esdc_value": "notice-775170030",
+      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+      "esdc_cctlettertypeid": "ab5daf00-5cba-f011-bbd3-7c1e52408057",
+      "esdc_portalnameenglish": "Ineligible - Coverage Termination Letter - Primary",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'avis",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+        "esdc_portalnameenglish": "Notice Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775508\"",
+      "esdc_portalnamefrench": "Non admissible – Lettre de fin de couverture - Personne à charge",
+      "esdc_value": "notice-775170031",
+      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+      "esdc_cctlettertypeid": "61cd0e39-5cba-f011-bbd3-7c1e52408057",
+      "esdc_portalnameenglish": "Ineligible - Coverage Termination Letter - Dependant",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'avis",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+        "esdc_portalnameenglish": "Notice Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775521\"",
+      "esdc_portalnamefrench": "Avis - RFNR Quote-part - Personne à charge",
+      "esdc_value": "notice-775170023",
+      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+      "esdc_cctlettertypeid": "a468db40-87a3-f011-bbd2-7ced8d05477c",
+      "esdc_portalnameenglish": "Notice - AFNI CoPay - Dependant",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'avis",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+        "esdc_portalnameenglish": "Notice Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775540\"",
+      "esdc_portalnamefrench": "SC - Avis d’examen de l'admissibilité",
+      "esdc_value": "HC-100",
+      "_esdc_parentid_value": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+      "esdc_cctlettertypeid": "58153fb9-6292-f011-b4cb-7ced8d0591a2",
+      "esdc_portalnameenglish": "HC Notice of Eligibility",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Santé Canada",
+        "esdc_cctlettertypeid": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+        "esdc_portalnameenglish": "Health Canada"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775523\"",
+      "esdc_portalnamefrench": "SC - Rappel",
+      "esdc_value": "HC-101",
+      "_esdc_parentid_value": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+      "esdc_cctlettertypeid": "517a04e4-6292-f011-b4cb-7ced8d0591a2",
+      "esdc_portalnameenglish": "HC Reminder",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Santé Canada",
+        "esdc_cctlettertypeid": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+        "esdc_portalnameenglish": "Health Canada"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775532\"",
+      "esdc_portalnamefrench": "SC - Renseignements insuffisants",
+      "esdc_value": "HC-102",
+      "_esdc_parentid_value": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+      "esdc_cctlettertypeid": "ef7b2102-6392-f011-b4cb-7ced8d0591a2",
+      "esdc_portalnameenglish": "HC Insufficient Information",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Santé Canada",
+        "esdc_cctlettertypeid": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+        "esdc_portalnameenglish": "Health Canada"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775506\"",
+      "esdc_portalnamefrench": "SC - Aucune réponse",
+      "esdc_value": "HC-103",
+      "_esdc_parentid_value": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+      "esdc_cctlettertypeid": "ac27001f-6392-f011-b4cb-7ced8d0591a2",
+      "esdc_portalnameenglish": "HC No Response",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Santé Canada",
+        "esdc_cctlettertypeid": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+        "esdc_portalnameenglish": "Health Canada"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775541\"",
+      "esdc_portalnamefrench": "SC - Avis de décision – admissible",
+      "esdc_value": "HC-104",
+      "_esdc_parentid_value": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+      "esdc_cctlettertypeid": "13c63e38-6392-f011-b4cb-7ced8d0591a2",
+      "esdc_portalnameenglish": "HC Notice of Decision - Eligible",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Santé Canada",
+        "esdc_cctlettertypeid": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+        "esdc_portalnameenglish": "Health Canada"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775522\"",
+      "esdc_portalnamefrench": "SC - Avis de décision – inadmissible, en ligne",
+      "esdc_value": "HC-105",
+      "_esdc_parentid_value": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+      "esdc_cctlettertypeid": "04831956-6392-f011-b4cb-7ced8d0591a2",
+      "esdc_portalnameenglish": "HC Notice of Decision - Ineligible Online",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Santé Canada",
+        "esdc_cctlettertypeid": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+        "esdc_portalnameenglish": "Health Canada"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775535\"",
+      "esdc_portalnamefrench": "SC - Avis de décision – inadmissible, RVI",
+      "esdc_value": "HC-106",
+      "_esdc_parentid_value": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+      "esdc_cctlettertypeid": "af4e0775-6392-f011-b4cb-7ced8d0591a2",
+      "esdc_portalnameenglish": "HC Notice of Decision - Ineligible IVR",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Santé Canada",
+        "esdc_cctlettertypeid": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+        "esdc_portalnameenglish": "Health Canada"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775507\"",
+      "esdc_portalnamefrench": "SC - Autodéclaration",
+      "esdc_value": "HC-107",
+      "_esdc_parentid_value": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+      "esdc_cctlettertypeid": "1fe1b292-6392-f011-b4cb-7ced8d0591a2",
+      "esdc_portalnameenglish": "HC Self Reported",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Santé Canada",
+        "esdc_cctlettertypeid": "2943be2d-6292-f011-b4cb-7ced8d0591a2",
+        "esdc_portalnameenglish": "Health Canada"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775537\"",
+      "esdc_portalnamefrench": "Avis - RFNR Terminé",
+      "esdc_value": "notice-775170021",
+      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+      "esdc_cctlettertypeid": "03260e40-1f9a-f011-bbd2-7ced8d05d4ca",
+      "esdc_portalnameenglish": "Notice - AFNI Terminate",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'avis",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+        "esdc_portalnameenglish": "Notice Letter"
+      }
+    },
+    {
+      "@odata.etag": "W/\"271775516\"",
+      "esdc_portalnamefrench": "Avis - RFNR Quote-part",
+      "esdc_value": "notice-775170022",
+      "_esdc_parentid_value": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+      "esdc_cctlettertypeid": "d3b890bc-219a-f011-bbd2-7ced8d05d4ca",
+      "esdc_portalnameenglish": "Notice - AFNI CoPay",
+      "esdc_ParentId": {
+        "esdc_portalnamefrench": "Lettre d'avis",
+        "esdc_cctlettertypeid": "d40d2432-6cae-ef11-8a69-000d3a0a1a29",
+        "esdc_portalnameenglish": "Notice Letter"
       }
     }
   ]
