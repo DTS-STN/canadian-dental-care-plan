@@ -109,7 +109,7 @@
     "@types/express-session": "^1.18.2",
     "@types/jsdom": "^28.0.1",
     "@types/morgan": "^1.9.10",
-    "@types/node": "^24.12.0",
+    "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/source-map-support": "^0.5.10",
@@ -142,10 +142,10 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.58.0",
     "vite": "^7.3.1",
-    "vite-plugin-static-copy": "^4.0.0",
+    "vite-plugin-static-copy": "^4.0.1",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.1.2",
-    "vitest-mock-extended": "^3.1.0"
+    "vitest-mock-extended": "^3.1.1"
   },
   "engines": {
     "node": ">=24.13.0",
