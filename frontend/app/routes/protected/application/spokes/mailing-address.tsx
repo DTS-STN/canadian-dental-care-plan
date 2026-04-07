@@ -280,6 +280,22 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
 
   const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedMailingCountry);
 
+  let postalCodeHelpMessage: string | undefined;
+  switch (selectedMailingCountry) {
+    case CANADA_COUNTRY_ID: {
+      postalCodeHelpMessage = t('protected-application-spokes:address.address-field.postal-code-help');
+      break;
+    }
+    case USA_COUNTRY_ID: {
+      postalCodeHelpMessage = t('protected-application-spokes:address.address-field.postal-code-help-us');
+      break;
+    }
+    default: {
+      postalCodeHelpMessage = undefined;
+      break;
+    }
+  }
+
   return (
     <div className="max-w-prose">
       <p className="mb-4 italic">{t('protected-application:optional-label')}</p>
@@ -336,6 +352,8 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                   defaultValue={defaultState.postalCode}
                   errorMessage={errors?.postalZipCode}
                   required={isPostalCodeRequired}
+                  helpMessagePrimary={postalCodeHelpMessage}
+                  helpMessagePrimaryClassName="text-black"
                 />
               </div>
 
