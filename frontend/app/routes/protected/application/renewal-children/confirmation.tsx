@@ -448,11 +448,8 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
         </Button>
       </div>
       <Dialog>
-        <DialogTrigger
-          className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Exit - Application successfully submitted click"
-        >
-          {t('protected-application-renewal-child:confirm.close-application')}
+        <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Exit - Application successfully submitted click" asChild>
+          <Button variant="secondary">{t('protected-application-renewal-child:confirm.close-application')}</Button>
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
