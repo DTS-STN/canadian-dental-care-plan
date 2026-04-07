@@ -434,11 +434,8 @@ export default function NewFamilyConfirmation({ loaderData, params }: Route.Comp
         </Button>
       </div>
       <Dialog>
-        <DialogTrigger
-          className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden"
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Exit - Application successfully submitted click"
-        >
-          {t('application-full-family:confirm.close-application')}
+        <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Exit - Application successfully submitted click" asChild>
+          <Button variant="secondary">{t('application-full-family:confirm.close-application')}</Button>
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
