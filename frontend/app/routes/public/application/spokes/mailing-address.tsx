@@ -273,8 +273,22 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
   const dummyOption: InputOptionProps = { children: t('application-spokes:address.address-field.select-one'), value: '' };
 
   const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedMailingCountry);
-  const postalCodeHelpMessage =
-    selectedMailingCountry === CANADA_COUNTRY_ID ? t('application-spokes:address.address-field.postal-code-help') : selectedMailingCountry === USA_COUNTRY_ID ? t('application-spokes:address.address-field.postal-code-help-us') : undefined;
+
+  let postalCodeHelpMessage: string | undefined;
+  switch (selectedMailingCountry) {
+    case CANADA_COUNTRY_ID: {
+      postalCodeHelpMessage = t('application-spokes:address.address-field.postal-code-help');
+      break;
+    }
+    case USA_COUNTRY_ID: {
+      postalCodeHelpMessage = t('application-spokes:address.address-field.postal-code-help-us');
+      break;
+    }
+    default: {
+      postalCodeHelpMessage = undefined;
+      break;
+    }
+  }
 
   return (
     <div className="max-w-prose">
