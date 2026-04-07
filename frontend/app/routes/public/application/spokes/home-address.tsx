@@ -238,6 +238,23 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
   const dummyOption: InputOptionProps = { children: t('application-spokes:address.address-field.select-one'), value: '' };
 
   const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedHomeCountry);
+
+  let postalCodeHelpMessage: string | undefined;
+  switch (selectedHomeCountry) {
+    case CANADA_COUNTRY_ID: {
+      postalCodeHelpMessage = t('application-spokes:address.address-field.postal-code-help');
+      break;
+    }
+    case USA_COUNTRY_ID: {
+      postalCodeHelpMessage = t('application-spokes:address.address-field.postal-code-help-us');
+      break;
+    }
+    default: {
+      postalCodeHelpMessage = undefined;
+      break;
+    }
+  }
+
   return (
     <div className="max-w-prose">
       <p className="mb-4 italic">{t('application:optional-label')}</p>
@@ -294,6 +311,8 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   defaultValue={defaultState.postalCode ?? ''}
                   errorMessage={errors?.postalZipCode}
                   required={isPostalCodeRequired}
+                  helpMessagePrimary={postalCodeHelpMessage}
+                  helpMessagePrimaryClassName="text-black"
                 />
               </div>
               {homeRegions.length > 0 && (
