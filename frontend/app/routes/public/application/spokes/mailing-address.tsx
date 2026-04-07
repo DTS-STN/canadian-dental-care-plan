@@ -347,6 +347,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                   errorMessage={errors?.postalZipCode}
                   required={isPostalCodeRequired}
                   helpMessagePrimary={postalCodeHelpMessage}
+                  helpMessagePrimaryClassName="text-black"
                 />
               </div>
 
