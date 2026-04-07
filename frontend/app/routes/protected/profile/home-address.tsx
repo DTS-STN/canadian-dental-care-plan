@@ -258,6 +258,22 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
 
   const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedHomeCountry);
 
+  let postalCodeHelpMessage: string | undefined;
+  switch (selectedHomeCountry) {
+    case CANADA_COUNTRY_ID: {
+      postalCodeHelpMessage = t('protected-profile:home-address.postal-code-help');
+      break;
+    }
+    case USA_COUNTRY_ID: {
+      postalCodeHelpMessage = t('protected-profile:home-address.postal-code-help-us');
+      break;
+    }
+    default: {
+      postalCodeHelpMessage = undefined;
+      break;
+    }
+  }
+
   return (
     <div className="max-w-prose">
       <p className="mb-4 italic">{t('protected-profile:optional-label')}</p>
@@ -304,6 +320,8 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
                   defaultValue={defaultState.postalCode}
                   errorMessage={errors?.postalZipCode}
                   required={isPostalCodeRequired}
+                  helpMessagePrimary={postalCodeHelpMessage}
+                  helpMessagePrimaryClassName="text-black"
                 />
               </div>
 

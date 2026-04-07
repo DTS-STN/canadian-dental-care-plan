@@ -224,7 +224,9 @@
     "back-btn": "Retour",
     "save-btn": "Sauvegarder",
     "continue-btn": "Continuer",
-    "select-one": "Sélectionnez une option"
+    "select-one": "Sélectionnez une option",
+    "postal-code-help": "Format\u00a0: A1A 1A1. Les lettres D, F, I, O, Q ou U ne peuvent pas être utilisées.",
+    "postal-code-help-us": "Format\u00a0: 12345 ou 12345-6789"
   },
   "home-address": {
     "page-title": "Adresse du domicile",
@@ -239,6 +241,8 @@
     "country": "Pays",
     "back-btn": "Retour",
     "save-btn": "Sauvegarder",
-    "select-one": "Sélectionnez une option"
+    "select-one": "Sélectionnez une option",
+    "postal-code-help": "Format\u00a0: A1A 1A1. Les lettres D, F, I, O, Q ou U ne peuvent pas être utilisées.",
+    "postal-code-help-us": "Format\u00a0: 12345 ou 12345-6789"
   }
 }
