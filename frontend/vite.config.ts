@@ -3,7 +3,6 @@ import { reactRouter } from '@react-router/dev/vite';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import { coverageConfigDefaults } from 'vitest/config';
 
 /**
@@ -20,13 +19,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    esbuildOptions: {
-      target: 'es2022',
-    },
-    // Configure Remix plugin optimizeDeps entries since is has a bug on Windows
-    // TODO: Check if the issue has been fixed
-    // @see https://github.com/remix-run/remix/pull/10258
-    entries: ['./app/entry.client.tsx', './app/root.tsx', './app/routes/**/*.tsx'],
     // exclude the otlp-exporter-base package because it causes
     // issues with vite's dependency optimization
     // see: https://github.com/open-telemetry/opentelemetry-js/issues/4794
@@ -34,12 +26,14 @@ export default defineConfig({
   },
   plugins: [
     tailwindcss(),
-    tsconfigPaths(),
     //
     // see https://github.com/remix-run/remix/issues/9871
     //
     process.env.NODE_ENV === 'test' ? react() : reactRouter(),
   ],
+  resolve: {
+    tsconfigPaths: true,
+  },
 
   //
   // Vitest config. For more test configuration, see vitest.workspace.ts

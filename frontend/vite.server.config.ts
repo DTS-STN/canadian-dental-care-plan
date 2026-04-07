@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 /**
  * This file is used separately from `vite.config.ts` to build the server
@@ -38,9 +37,6 @@ export default defineConfig({
     target: 'node22',
   },
   plugins: [
-    // Integrates TypeScript path aliasing using the `vite-tsconfig-paths` plugin,
-    // which resolves paths defined in `tsconfig.json` for cleaner imports.
-    tsconfigPaths(),
     viteStaticCopy({
       // Copies static assets from the specified source directory to the build output directory.
       // This is necessary to bundle assets required by the server runtime, such as html templates
@@ -48,4 +44,7 @@ export default defineConfig({
       targets: [{ src: './app/.server/express-server/assets/', dest: './' }],
     }),
   ],
+  resolve: {
+    tsconfigPaths: true,
+  },
 });
