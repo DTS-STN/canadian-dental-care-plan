@@ -321,7 +321,9 @@
       "city": "Ville ou municipalité",
       "postal-code": "Code postal ou de zone",
       "postal-code-optional": "Code postal ou de zone (facultatif)",
-      "select-one": "Sélectionnez une option"
+      "select-one": "Sélectionnez une option",
+      "postal-code-help": "Format\u00a0: A1A 1A1. Les lettres D, F, I, O, Q ou U ne peuvent pas être utilisées.",
+      "postal-code-help-us": "Format\u00a0: 12345 ou 12345-6789"
     },
     "back": "Retour",
     "continue": "Continuer",
