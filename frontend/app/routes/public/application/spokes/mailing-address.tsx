@@ -330,6 +330,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                   defaultValue={defaultState.postalCode}
                   errorMessage={errors?.postalZipCode}
                   required={isPostalCodeRequired}
+                  helpMessagePrimary={selectedMailingCountry === CANADA_COUNTRY_ID ? t('application-spokes:address.address-field.postal-code-help') : selectedMailingCountry === USA_COUNTRY_ID ? t('application-spokes:address.address-field.postal-code-help-us') : undefined}
                 />
               </div>
 
