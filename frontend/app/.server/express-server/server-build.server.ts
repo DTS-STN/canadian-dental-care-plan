@@ -8,6 +8,6 @@ export async function initServerBuild(viteDevServer?: ViteDevServer): Promise<Se
   }
 
   // dynamically declare the path to avoid static analysis errors 💩
-  const remixServerBuild = './app.js';
+  const remixServerBuild = '~/../build/server/app.js';
   return await import(remixServerBuild);
 }
