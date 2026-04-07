@@ -13,7 +13,7 @@ describe('mergeMeta', () => {
     ];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    type MetaArgs = GetAnnotations<any, false>['MetaArgs'];
+    type MetaArgs = GetAnnotations<any>['MetaArgs'];
 
     const args: MetaArgs = {
       data: undefined,
