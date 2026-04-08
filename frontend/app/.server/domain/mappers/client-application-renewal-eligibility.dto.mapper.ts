@@ -9,7 +9,6 @@ import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
 import { isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
 import { isValidCoverageCopayTierCode } from '~/.server/utils/coverage.utils';
-import { getAgeFromDateString } from '~/utils/date-utils';
 
 export interface ClientApplicationRenewalEligibilityDtoMapper {
   /**
@@ -52,8 +51,8 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
   /**
    * Maps an applicant DTO to a client application renewal eligibility DTO:
    *
-   * 1. Calculate the applicant's age at intake using `dateOfBirth` and today's date.
-   * 2. If the applicant is not 18 years old at intake, return `INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD`.
+   * 1. Determine if the applicant is a child or youth at intake using `dateOfBirth`.
+   * 2. If the applicant is a child or youth at intake, return `INELIGIBLE-APPLICANT-IS-CHILD-OR-YOUTH-AT-INTAKE`.
    * 3. Otherwise, map the applicant DTO to a client application DTO and delegate to
    * `mapClientApplicationDtoToClientApplicationRenewalEligibilityDto`.
    *
@@ -64,14 +63,12 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
   async mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicantDto: ApplicantDto, applicationYearId: string): Promise<ClientApplicationRenewalEligibilityDto> {
     this.log.trace('Mapping applicant dto to client application renewal eligibility dto: [%j]', applicantDto);
 
-    const ageReferenceDate = new Date().toISOString().slice(0, 10); // today - yyyy-mm-dd
-    const applicantAge = getAgeFromDateString(applicantDto.dateOfBirth, ageReferenceDate);
-    this.log.trace('Applicant age: [%s], date of birth: [%s], intake age reference date: [%s]', applicantAge, applicantDto.dateOfBirth, ageReferenceDate);
+    const isChildOrYouthAtIntake = isChildOrYouth(applicantDto.dateOfBirth, 'intake');
+    this.log.trace('Applicant age category: [%s], date of birth: [%s]', isChildOrYouthAtIntake ? 'child/youth' : 'adult', applicantDto.dateOfBirth);
 
-    const applicantAgeIs18YearsOld = applicantAge >= 18 && applicantAge < 19;
-    if (!applicantAgeIs18YearsOld) {
-      this.log.debug('Applicant age is not 18 years old at intake, returning ineligible result');
-      return { result: 'INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD' };
+    if (isChildOrYouthAtIntake) {
+      this.log.debug('Applicant age is child/youth at intake, returning ineligible result');
+      return { result: 'INELIGIBLE-APPLICANT-IS-CHILD-OR-YOUTH-AT-INTAKE' };
     }
 
     const clientApplicationDto = this.clientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto({ applicantDto, applicationYearId, typeOfApplication: 'adult' });

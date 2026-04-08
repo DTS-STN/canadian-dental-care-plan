@@ -19,11 +19,11 @@ type ClientApplicationRenewalApplicantSinMismatchResult = {
 };
 
 /**
- * Represents the result of a client application renewal eligibility check when the application is found but the
- * applicant is not 18 years old, which makes it ineligible for renewal.
+ * Represents the result of a client application renewal eligibility check when the applicant is found but the
+ * applicant is a child or youth at intake, which makes it ineligible for renewal.
  */
-export type ClientApplicationRenewalIneligibleApplicantNot18YearsOldResult = {
-  result: 'INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD';
+export type ClientApplicationRenewalIneligibleApplicantIsChildOrYouthAtIntakeResult = {
+  result: 'INELIGIBLE-APPLICANT-IS-CHILD-OR-YOUTH-AT-INTAKE';
   clientApplication?: undefined;
 };
 
@@ -91,7 +91,7 @@ export type ClientApplicationRenewalEligibilityDto =
   | ClientApplicationRenewalApplicantNotFoundResult //
   | ClientApplicationRenewalApplicantSinMismatchResult
   | ClientApplicationRenewalIneligibleAlreadyRenewedResult
-  | ClientApplicationRenewalIneligibleApplicantNot18YearsOldResult
+  | ClientApplicationRenewalIneligibleApplicantIsChildOrYouthAtIntakeResult
   | ClientApplicationRenewalIneligibleNoClientNumbersResult
   | ClientApplicationRenewalIneligibleNoEligibilitiesResult
   | ClientApplicationRenewalIneligibleNotEnrolledResult
