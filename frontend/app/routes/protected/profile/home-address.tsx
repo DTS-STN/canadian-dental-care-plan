@@ -308,23 +308,20 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
                 defaultValue={defaultState.apartment}
                 errorMessage={errors?.apartment}
               />
-              <div className="grid items-end gap-6 md:grid-cols-2">
-                <InputSanitizeField id="home-city" name="city" className="w-full" label={t('protected-profile:home-address.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
-                <InputSanitizeField
-                  id="home-postal-code"
-                  name="postalZipCode"
-                  className="w-full"
-                  label={isPostalCodeRequired ? t('protected-profile:home-address.postal-code') : t('protected-profile:home-address.postal-code-optional')}
-                  maxLength={100}
-                  autoComplete="postal-code"
-                  defaultValue={defaultState.postalCode}
-                  errorMessage={errors?.postalZipCode}
-                  required={isPostalCodeRequired}
-                  helpMessagePrimary={postalCodeHelpMessage}
-                  helpMessagePrimaryClassName="text-black"
-                />
-              </div>
-
+              <InputSanitizeField id="home-city" name="city" className="w-full" label={t('protected-profile:home-address.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
+              <InputSanitizeField
+                id="home-postal-code"
+                name="postalZipCode"
+                className="w-full sm:w-1/2"
+                label={isPostalCodeRequired ? t('protected-profile:home-address.postal-code') : t('protected-profile:home-address.postal-code-optional')}
+                maxLength={100}
+                autoComplete="postal-code"
+                defaultValue={defaultState.postalCode}
+                errorMessage={errors?.postalZipCode}
+                required={isPostalCodeRequired}
+                helpMessagePrimary={postalCodeHelpMessage}
+                helpMessagePrimaryClassName="text-black"
+              />
               {homeRegions.length > 0 && (
                 <InputSelect
                   id="home-province"

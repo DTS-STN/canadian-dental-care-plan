@@ -294,32 +294,30 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 defaultValue=""
                 errorMessage={errors?.apartment}
               />
-              <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
-                <InputSanitizeField
-                  id="home-city"
-                  name="city"
-                  className="w-full"
-                  label={t('protected-application-spokes:address.address-field.city')}
-                  maxLength={100}
-                  autoComplete="address-level2"
-                  defaultValue={defaultState.city}
-                  errorMessage={errors?.city}
-                  required
-                />
-                <InputSanitizeField
-                  id="home-postal-code"
-                  name="postalZipCode"
-                  className="w-full"
-                  label={isPostalCodeRequired ? t('protected-application-spokes:address.address-field.postal-code') : t('protected-application-spokes:address.address-field.postal-code-optional')}
-                  maxLength={100}
-                  autoComplete="postal-code"
-                  defaultValue={defaultState.postalCode ?? ''}
-                  errorMessage={errors?.postalZipCode}
-                  required={isPostalCodeRequired}
-                  helpMessagePrimary={postalCodeHelpMessage}
-                  helpMessagePrimaryClassName="text-black"
-                />
-              </div>
+              <InputSanitizeField
+                id="home-city"
+                name="city"
+                className="w-full"
+                label={t('protected-application-spokes:address.address-field.city')}
+                maxLength={100}
+                autoComplete="address-level2"
+                defaultValue={defaultState.city}
+                errorMessage={errors?.city}
+                required
+              />
+              <InputSanitizeField
+                id="home-postal-code"
+                name="postalZipCode"
+                className="w-full sm:w-1/2"
+                label={isPostalCodeRequired ? t('protected-application-spokes:address.address-field.postal-code') : t('protected-application-spokes:address.address-field.postal-code-optional')}
+                maxLength={100}
+                autoComplete="postal-code"
+                defaultValue={defaultState.postalCode ?? ''}
+                errorMessage={errors?.postalZipCode}
+                required={isPostalCodeRequired}
+                helpMessagePrimary={postalCodeHelpMessage}
+                helpMessagePrimaryClassName="text-black"
+              />
               {homeRegions.length > 0 && (
                 <InputSelect
                   id="home-province"
