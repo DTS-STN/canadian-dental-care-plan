@@ -131,13 +131,13 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
 
   const helpMessage = (
     <div className="mb-4 space-y-4">
-      <ul className="list-disc space-y-1 pl-7">
+      <ul className="list-disc space-y-1 pl-7 font-semibold">
         <li>{t('children.dental-insurance.detail.additional-info.list.employer')}</li>
         <li>{t('children.dental-insurance.detail.additional-info.list.pension')}</li>
         <li>{t('children.dental-insurance.detail.additional-info.list.organization')}</li>
         <li>{t('children.dental-insurance.detail.additional-info.list.private')}</li>
       </ul>
-      <p>{t('children.dental-insurance.detail.additional-info.eligible')}</p>
+      <p className="font-semibold">{t('children.dental-insurance.detail.additional-info.eligible')}</p>
       <p>{t('children.dental-insurance.detail.additional-info.access')}</p>
     </div>
   );
