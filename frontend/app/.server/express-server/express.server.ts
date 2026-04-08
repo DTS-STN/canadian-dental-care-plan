@@ -3,7 +3,7 @@ import express from 'express';
 import sourceMapSupport from 'source-map-support';
 
 import { routeRequestCounter } from '~/.server/express-server/instrumentation.server';
-import { logging, securityHeaders, session } from '~/.server/express-server/middleware.server';
+import { logging, responseMaxListeners, securityHeaders, session } from '~/.server/express-server/middleware.server';
 import { globalErrorHandler, rrRequestHandler } from '~/.server/express-server/request-handlers.server';
 import { createViteDevServer } from '~/.server/express-server/vite.server';
 import { createLogger } from '~/.server/logging';
@@ -34,6 +34,9 @@ log.info('  ✓ enabling reverse proxy support');
 app.set('trust proxy', true);
 
 log.info('  ‼️ configuring express middlewares...');
+
+log.info('    ✓ increasing response max listeners to prevent EventEmitter warnings');
+app.use(responseMaxListeners());
 
 log.info('    ✓ compression middleware');
 app.use(compression());

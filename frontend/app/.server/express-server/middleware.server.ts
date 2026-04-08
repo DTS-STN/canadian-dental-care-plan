@@ -19,6 +19,20 @@ function shouldIgnore(ignorePatterns: string[], path: string): boolean {
   return ignorePatterns.some((entry) => minimatch(path, entry, { dot: true }));
 }
 
+/**
+ * Multiple middleware (compression, morgan, express-session, etc.) each attach
+ * internal 'finish' listeners to the response via on-finished, and our custom
+ * routeRequestCounter adds one more. Combined, these exceed Node's default
+ * limit of 10, triggering a MaxListenersExceededWarning. Raising to 15
+ * accommodates all current listeners with headroom.
+ */
+export function responseMaxListeners(maxListeners = 15): RequestHandler {
+  return (_req, res, next) => {
+    res.setMaxListeners(maxListeners);
+    next();
+  };
+}
+
 // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
 export function securityHeaders(): RequestHandler {
   const log = createLogger('express.server/securityHeadersRequestHandler');
