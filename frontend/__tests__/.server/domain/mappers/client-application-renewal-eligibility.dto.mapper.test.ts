@@ -141,37 +141,31 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
   });
 
   describe('mapApplicantDtoToClientApplicationRenewalEligibilityDto', () => {
-    describe('INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD', () => {
-      it('returns INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD when applicant is 17 (turns 18 tomorrow)', async () => {
-        // Born 2008-04-16: on 2026-04-15 the applicant is 17 years, 364 days old
-        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(makeApplicant({ dateOfBirth: '2008-04-16' }), 'year-2024');
-        expect(result.result).toBe('INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD');
+    describe('INELIGIBLE-APPLICANT-IS-CHILD-OR-YOUTH-AT-INTAKE', () => {
+      it('returns INELIGIBLE-APPLICANT-IS-CHILD-OR-YOUTH-AT-INTAKE when isChildOrYouth returns true for intake', async () => {
+        vi.mocked(isChildOrYouth).mockReturnValue(true);
+        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(makeApplicant(), 'year-2024');
+        expect(result.result).toBe('INELIGIBLE-APPLICANT-IS-CHILD-OR-YOUTH-AT-INTAKE');
       });
 
-      it('returns INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD when applicant turns 19 today', async () => {
-        // Born 2007-04-15: on 2026-04-15 the applicant is exactly 19 years old
-        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(makeApplicant({ dateOfBirth: '2007-04-15' }), 'year-2024');
-        expect(result.result).toBe('INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD');
-      });
-
-      it('returns INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD when applicant is 26 years old', async () => {
-        // Born 2000-01-01: on 2026-04-15 the applicant is 26 years old
-        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(makeApplicant({ dateOfBirth: '2000-01-01' }), 'year-2024');
-        expect(result.result).toBe('INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD');
+      it('calls isChildOrYouth with the applicant date of birth and intake context', async () => {
+        vi.mocked(isChildOrYouth).mockReturnValue(true);
+        await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(makeApplicant({ dateOfBirth: '2010-05-20' }), 'year-2024');
+        expect(isChildOrYouth).toHaveBeenCalledWith('2010-05-20', 'intake');
       });
 
       it('does not include clientApplication in the result', async () => {
-        // Born 2008-04-16: on 2026-04-15 the applicant is 17 years, 364 days old
-        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(makeApplicant({ dateOfBirth: '2008-04-16' }), 'year-2024');
-        assert(result.result === 'INELIGIBLE-APPLICANT-NOT-18-YEARS-OLD');
+        vi.mocked(isChildOrYouth).mockReturnValue(true);
+        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(makeApplicant(), 'year-2024');
+        assert(result.result === 'INELIGIBLE-APPLICANT-IS-CHILD-OR-YOUTH-AT-INTAKE');
         expect(result.clientApplication).toBeUndefined();
       });
     });
 
     describe('delegation to mapClientApplicationDtoToClientApplicationRenewalEligibilityDto', () => {
-      it('delegates when applicant turns 18 today and passes the downstream result through', async () => {
-        // Born 2008-04-15: on 2026-04-15 the applicant is exactly 18 years old
-        const applicantDto = makeApplicant({ dateOfBirth: '2008-04-15' });
+      it('delegates when applicant is not a child or youth at intake and passes the downstream result through', async () => {
+        vi.mocked(isChildOrYouth).mockReturnValue(false);
+        const applicantDto = makeApplicant();
         const clientApplicationDto = makeClientApplication();
         mockClientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto.mockReturnValue(clientApplicationDto);
         mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001')]]));
@@ -183,8 +177,8 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
       });
 
       it('sets applicationCategoryCodeName to New when coming through mapApplicantDtoToClientApplicationRenewalEligibilityDto', async () => {
-        // Born 2008-04-15: on 2026-04-15 the applicant is exactly 18 years old
-        const applicantDto = makeApplicant({ dateOfBirth: '2008-04-15' });
+        vi.mocked(isChildOrYouth).mockReturnValue(false);
+        const applicantDto = makeApplicant();
         const clientApplicationDto = makeClientApplication();
         mockClientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto.mockReturnValue(clientApplicationDto);
         mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001')]]));
@@ -195,22 +189,9 @@ describe('DefaultClientApplicationRenewalEligibilityDtoMapper', () => {
         expect(result.clientApplication.applicationCategoryCodeName).toBe('New');
       });
 
-      it('delegates when applicant is 18 years and 364 days old and passes the downstream result through', async () => {
-        // Born 2007-04-16: on 2026-04-15 the applicant is 18 years, 364 days old (just before turning 19)
-        const applicantDto = makeApplicant({ dateOfBirth: '2007-04-16' });
-        const clientApplicationDto = makeClientApplication();
-        mockClientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto.mockReturnValue(clientApplicationDto);
-        mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001')]]));
-
-        const result = await mapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicantDto, 'year-2024');
-
-        expect(mockClientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto).toHaveBeenCalledWith({ applicantDto, applicationYearId: 'year-2024', typeOfApplication: 'adult' });
-        expect(result.result).toBe('ELIGIBLE');
-      });
-
       it('passes a downstream ineligible result through unchanged', async () => {
-        // Born 2008-04-15: on 2026-04-15 the applicant is exactly 18 years old
-        const applicantDto = makeApplicant({ dateOfBirth: '2008-04-15' });
+        vi.mocked(isChildOrYouth).mockReturnValue(false);
+        const applicantDto = makeApplicant();
         mockClientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto.mockReturnValue(makeClientApplication());
         mockClientEligibilityService.listClientEligibilitiesByClientNumbers.mockResolvedValue(new Map([['client-001', makeEligibility('client-001', { enrollmentStatusCode: 'not-enrolled' })]]));
 
