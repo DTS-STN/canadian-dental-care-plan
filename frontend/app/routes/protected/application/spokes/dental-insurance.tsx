@@ -141,14 +141,14 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
 
   const helpMessage = (
     <div className="mb-4 space-y-4">
-      <ul className="list-disc space-y-1 pl-7">
+      <ul className="list-disc space-y-1 pl-7 font-semibold">
         <li>{t('dental-insurance.detail.additional-info.list.employer')}</li>
         <li>{t('dental-insurance.detail.additional-info.list.pension')}</li>
         <li>{t('dental-insurance.detail.additional-info.list.pension-plans')}</li>
         <li>{t('dental-insurance.detail.additional-info.list.organization')}</li>
         <li>{t('dental-insurance.detail.additional-info.list.company')}</li>
       </ul>
-      <p>{t('dental-insurance.detail.additional-info.eligible')}</p>
+      <p className="font-semibold">{t('dental-insurance.detail.additional-info.eligible')}</p>
       <p>{t('dental-insurance.detail.additional-info.access')}</p>
     </div>
   );
