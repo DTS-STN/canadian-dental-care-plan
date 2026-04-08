@@ -96,7 +96,7 @@ export default function ProtectedTypeOfApplication({ loaderData, params }: Route
             <p>{t('protected-application:renewal-selection.type-application-description')}</p>
           ) : (
             <DefinitionList layout="single-column">
-              <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:renewal-selection.type-application-legend')}>
+              <DefinitionListItem term={t('protected-application:renewal-selection.type-application-legend')}>
                 <ul className="list-disc space-y-1 pl-7">
                   {applicants.map(({ id, name }) => (
                     <li key={id}>{name}</li>
@@ -104,7 +104,7 @@ export default function ProtectedTypeOfApplication({ loaderData, params }: Route
                 </ul>
               </DefinitionListItem>
               {defaultState.livingIndependently !== undefined && (
-                <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:renewal-selection.living-independently')}>
+                <DefinitionListItem term={t('protected-application:renewal-selection.living-independently')}>
                   {defaultState.livingIndependently ? t('protected-application:renewal-selection.living-independently-yes') : t('protected-application:renewal-selection.living-independently-no')}
                 </DefinitionListItem>
               )}
