@@ -19,6 +19,10 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
+    // Configure Remix plugin optimizeDeps entries since is has a bug on Windows
+    // TODO: Check if the issue has been fixed
+    // @see https://github.com/remix-run/remix/pull/10258
+    entries: ['~/entry.client.tsx', '~/root.tsx', '~/routes/**/*.tsx'],
     // exclude the otlp-exporter-base package because it causes
     // issues with vite's dependency optimization
     // see: https://github.com/open-telemetry/opentelemetry-js/issues/4794
