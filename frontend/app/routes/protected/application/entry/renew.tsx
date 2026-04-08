@@ -6,7 +6,7 @@ import type { Route } from './+types/renew';
 
 import { TYPES } from '~/.server/constants';
 import { isRenewalSelectionCompleted } from '~/.server/routes/helpers/protected-application-entry-section-checks';
-import { getInitialApplicationFlowUrl, getProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getContextualAgeCategoryFromDate, getInitialApplicationFlowUrl, getProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import type { ApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
@@ -56,11 +56,14 @@ export async function loader({ context: { appContainer, session }, request, para
       ].filter(({ id }) => state.applicantClientIdsToRenew?.includes(id))
     : [];
 
+  const ageCategory = state.applicantInformation?.dateOfBirth ? getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context) : undefined;
+
   return {
     defaultState: {
       context: state.context,
       typeOfApplication: state.typeOfApplication,
       applicantClientIdsToRenew: state.applicantClientIdsToRenew,
+      livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
     },
     applicants,
     nextRouteId,
@@ -93,13 +96,18 @@ export default function ProtectedTypeOfApplication({ loaderData, params }: Route
             <p>{t('protected-application:renewal-selection.type-application-description')}</p>
           ) : (
             <DefinitionList layout="single-column">
-              <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:renewal-selection.type-application-legend')}>
+              <DefinitionListItem term={t('protected-application:renewal-selection.type-application-legend')}>
                 <ul className="list-disc space-y-1 pl-7">
                   {applicants.map(({ id, name }) => (
                     <li key={id}>{name}</li>
                   ))}
                 </ul>
               </DefinitionListItem>
+              {defaultState.livingIndependently !== undefined && (
+                <DefinitionListItem term={t('protected-application:renewal-selection.living-independently')}>
+                  {defaultState.livingIndependently ? t('protected-application:renewal-selection.living-independently-yes') : t('protected-application:renewal-selection.living-independently-no')}
+                </DefinitionListItem>
+              )}
             </DefinitionList>
           )}
         </CardContent>
