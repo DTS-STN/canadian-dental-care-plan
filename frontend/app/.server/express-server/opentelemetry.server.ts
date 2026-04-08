@@ -108,10 +108,12 @@ new NodeSDK({
     [ATTR_DEPLOYMENT_ENVIRONMENT_NAME]: getEnvValue('localhost', process.env.OTEL_ENVIRONMENT),
   }),
 
-  metricReader: new PeriodicExportingMetricReader({
-    exporter: getMetricExporter(),
-    exportIntervalMillis: toNumber(process.env.OTEL_METRICS_EXPORT_INTERVAL_MILLIS),
-    exportTimeoutMillis: toNumber(process.env.OTEL_METRICS_EXPORT_TIMEOUT_MILLIS),
-  }),
+  metricReaders: [
+    new PeriodicExportingMetricReader({
+      exporter: getMetricExporter(),
+      exportIntervalMillis: toNumber(process.env.OTEL_METRICS_EXPORT_INTERVAL_MILLIS),
+      exportTimeoutMillis: toNumber(process.env.OTEL_METRICS_EXPORT_TIMEOUT_MILLIS),
+    }),
+  ],
   traceExporter: getTraceExporter(),
 }).start();
