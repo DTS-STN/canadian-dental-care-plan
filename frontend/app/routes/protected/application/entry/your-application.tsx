@@ -7,7 +7,7 @@ import type { Route } from './+types/your-application';
 import { TYPES } from '~/.server/constants';
 import { isPersonalInformationSectionCompleted, isTypeOfApplicationSectionCompleted } from '~/.server/routes/helpers/protected-application-entry-section-checks';
 import type { ApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getInitialApplicationFlowUrl, getProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getContextualAgeCategoryFromDate, getInitialApplicationFlowUrl, getProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -45,11 +45,15 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const applicationFlow: ApplicationFlow = state.typeOfApplication ? `${state.context}-${state.typeOfApplication}` : 'entry';
   const nextRouteId = getInitialApplicationFlowUrl(applicationFlow, params);
+
+  const ageCategory = state.applicantInformation?.dateOfBirth ? getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context) : undefined;
+
   return {
     defaultState: {
       context: state.context,
       typeOfApplication: state.typeOfApplication,
       personalInformation: state.applicantInformation,
+      livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
     },
     nextRouteId,
     sections: {
@@ -147,6 +151,11 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
               <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:your-application.sin')}>
                 {formatSin(defaultState.personalInformation.socialInsuranceNumber)}
               </DefinitionListItem>
+              {defaultState.livingIndependently !== undefined && (
+                <DefinitionListItem className="sm:grid-cols-none" term={t('protected-application:your-application.living-independently')}>
+                  {defaultState.livingIndependently ? t('protected-application:your-application.living-independently-yes') : t('protected-application:your-application.living-independently-no')}
+                </DefinitionListItem>
+              )}
             </DefinitionList>
           )}
         </CardContent>
