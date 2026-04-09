@@ -176,7 +176,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
           </div>
           {hasDentalInsurance && (
             <div className="space-y-4">
-              <ContextualAlert type="info">
+              <ContextualAlert type="info" id="child-dental-insurance-confirmation">
                 <h2 className="font-lato mb-2 text-xl font-semibold">{t('children.dental-insurance.alert.title')}</h2>
                 <p>{t('children.dental-insurance.alert.body', { childName: childName })}</p>
               </ContextualAlert>
@@ -187,6 +187,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                 defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmation}
                 errorMessage={errors?.dentalInsuranceEligibilityConfirmation}
                 required
+                aria-describedby="child-dental-insurance-confirmation"
               >
                 {t('children.dental-insurance.dental-insurance-eligibility-confirmation', { childName: childName })}
               </InputCheckbox>
