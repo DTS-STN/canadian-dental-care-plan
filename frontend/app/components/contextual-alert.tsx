@@ -27,12 +27,12 @@ const alertBorderColors: Partial<Record<AlertType, string>> & { default: string 
   success: 'border-l-green-700',
 };
 
-export function ContextualAlert({ children, type, ...props }: ContextualAlertProps) {
+export function ContextualAlert({ children, className, type, ...props }: ContextualAlertProps) {
   const alertBackgroundColor = alertBackgroundColors[type] ?? alertBackgroundColors.default;
   const alertBorderColor = alertBorderColors[type] ?? alertBorderColors.default;
 
   return (
-    <div className={cn('relative pl-4 sm:pl-6', alertBackgroundColor)} aria-atomic="true" {...props}>
+    <div className={cn('relative pl-4 sm:pl-6', alertBackgroundColor, className)} aria-atomic="true" {...props}>
       <div className={cn('absolute top-3 left-1.5 pt-1 sm:left-3.5', alertBackgroundColor)}>
         <Icon type={type} />
       </div>
