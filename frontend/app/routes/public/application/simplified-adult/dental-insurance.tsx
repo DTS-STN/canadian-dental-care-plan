@@ -401,7 +401,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
             params={params}
             startIcon={faPenToSquare}
             size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Update button government benefits click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Adult:Update button government benefits click"
           >
             {t('application-simplified-adult:dental-insurance.update-my-access')}
           </ButtonLink>
@@ -415,7 +415,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
             className="mt-5 p-0"
             startIcon={faCircleCheck}
             size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Complete benefits click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Adult:Complete benefits click"
           >
             <span className="text-left">{t('application-simplified-adult:dental-insurance.access-not-changed')}</span>
           </Button>
@@ -434,7 +434,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
         params={params}
         startIcon={faPenToSquare}
         size="lg"
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Add button dental benefits click"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Adult:Add button dental benefits click"
         aria-label={`${t('application-simplified-adult:dental-insurance.add-answer')} - ${t('application-simplified-adult:dental-insurance.other-benefits')}`}
       >
         {t('application-simplified-adult:dental-insurance.add-answer')}
