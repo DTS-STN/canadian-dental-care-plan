@@ -277,6 +277,7 @@ function DentalInsuranceCardFooter(): JSX.Element {
         startIcon={faCirclePlus}
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Family:Add button dental insurance click"
+        aria-label={`${t('application-simplified-family:dental-insurance.add-answer')} - ${t('application-simplified-family:dental-insurance.access-to-dental-insurance')}`}
       >
         {t('application-simplified-family:dental-insurance.add-answer')}
       </ButtonLink>
@@ -434,6 +435,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
         startIcon={faPenToSquare}
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Add button dental benefits click"
+        aria-label={`${t('application-simplified-family:dental-insurance.add-answer')} - ${t('application-simplified-family:dental-insurance.other-benefits')}`}
       >
         {t('application-simplified-family:dental-insurance.add-answer')}
       </ButtonLink>

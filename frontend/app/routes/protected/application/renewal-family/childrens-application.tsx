@@ -516,6 +516,7 @@ function ChildDentalInsuranceCardFooter({
         startIcon={faCirclePlus}
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Action click"
+        aria-label={`${t('protected-application-renewal-family:childrens-application.add-answer')} - ${t('protected-application-renewal-family:childrens-application.child-dental-insurance-card-title')}`}
       >
         {t('protected-application-renewal-family:childrens-application.add-answer')}
       </ButtonLink>
