@@ -236,6 +236,11 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                     startIcon={sections.childDentalInsurance.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Action click"
+                    aria-label={
+                      child.dentalInsurance === undefined
+                        ? `${t('application-full-child:childrens-application.add-answer')} - ${t('application-full-child:childrens-application.dental-insurance-title')}`
+                        : t('application-full-child:childrens-application.edit-child-dental-insurance', { childNumber: index + 1 })
+                    }
                   >
                     {child.dentalInsurance === undefined ? t('application-full-child:childrens-application.add-answer') : t('application-full-child:childrens-application.edit-child-dental-insurance', { childNumber: index + 1 })}
                   </ButtonLink>
@@ -280,6 +285,11 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                     startIcon={sections.childDentalBenefits.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Action click"
+                    aria-label={
+                      child.dentalBenefits === undefined
+                        ? `${t('application-full-child:childrens-application.add-answer')} - ${t('application-full-child:childrens-application.dental-benefits-title')}`
+                        : t('application-full-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })
+                    }
                   >
                     {child.dentalBenefits === undefined ? t('application-full-child:childrens-application.add-answer') : t('application-full-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })}
                   </ButtonLink>

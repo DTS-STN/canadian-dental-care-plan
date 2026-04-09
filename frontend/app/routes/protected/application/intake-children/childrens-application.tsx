@@ -236,6 +236,11 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                     startIcon={sections.childDentalInsurance.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit insurance click"
+                    aria-label={
+                      child.dentalInsurance === undefined
+                        ? `${t('protected-application-intake-child:childrens-application.add-answer')} - ${t('protected-application-intake-child:childrens-application.child-dental-insurance-card-title')}`
+                        : t('protected-application-intake-child:childrens-application.edit-child-dental-insurance', { childNumber: index + 1 })
+                    }
                   >
                     {child.dentalInsurance === undefined ? t('protected-application-intake-child:childrens-application.add-answer') : t('protected-application-intake-child:childrens-application.edit-child-dental-insurance', { childNumber: index + 1 })}
                   </ButtonLink>
@@ -280,6 +285,11 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                     startIcon={sections.childDentalBenefits.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit benefits click"
+                    aria-label={
+                      child.dentalBenefits === undefined
+                        ? `${t('protected-application-intake-child:childrens-application.add-answer')} - ${t('protected-application-intake-child:childrens-application.child-dental-benefits-card-title')}`
+                        : t('protected-application-intake-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })
+                    }
                   >
                     {child.dentalBenefits === undefined ? t('protected-application-intake-child:childrens-application.add-answer') : t('protected-application-intake-child:childrens-application.edit-child-dental-benefits', { childNumber: index + 1 })}
                   </ButtonLink>

@@ -277,6 +277,7 @@ function DentalInsuranceCardFooter(): JSX.Element {
         startIcon={faCirclePlus}
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Family:Add button dental insurance click"
+        aria-label={`${t('application-simplified-family:dental-insurance.add-answer')} - ${t('application-simplified-family:dental-insurance.access-to-dental-insurance')}`}
       >
         {t('application-simplified-family:dental-insurance.add-answer')}
       </ButtonLink>
@@ -400,7 +401,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
             params={params}
             startIcon={faPenToSquare}
             size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Update button government benefits click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Family:Update button government benefits click"
           >
             {t('application-simplified-family:dental-insurance.update-my-access')}
           </ButtonLink>
@@ -414,7 +415,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
             className="mt-5 p-0"
             startIcon={faCircleCheck}
             size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Complete benefits click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Family:Complete benefits click"
           >
             <span className="text-left">{t('application-simplified-family:dental-insurance.access-not-changed')}</span>
           </Button>
@@ -433,7 +434,8 @@ function DentalBenefitsCardFooter(): JSX.Element {
         params={params}
         startIcon={faPenToSquare}
         size="lg"
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Add button dental benefits click"
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Family:Add button dental benefits click"
+        aria-label={`${t('application-simplified-family:dental-insurance.add-answer')} - ${t('application-simplified-family:dental-insurance.other-benefits')}`}
       >
         {t('application-simplified-family:dental-insurance.add-answer')}
       </ButtonLink>

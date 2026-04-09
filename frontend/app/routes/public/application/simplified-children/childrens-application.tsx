@@ -253,6 +253,11 @@ export default function RenewChildChildrensApplication({ loaderData, params }: R
                     startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus}
                     size="lg"
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Action click"
+                    aria-label={
+                      child.dentalInsurance === undefined
+                        ? `${t('application-simplified-child:childrens-application.add-answer')} - ${t('application-simplified-child:childrens-application.child-dental-insurance-card-title')}`
+                        : t('application-simplified-child:childrens-application.edit-child-dental-insurance')
+                    }
                   >
                     {child.dentalInsurance === undefined ? t('application-simplified-child:childrens-application.add-answer') : t('application-simplified-child:childrens-application.edit-child-dental-insurance')}
                   </ButtonLink>
