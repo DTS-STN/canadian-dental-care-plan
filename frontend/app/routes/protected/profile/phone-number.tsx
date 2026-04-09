@@ -111,7 +111,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-6">
-            <p className="mb-4">{t('protected-profile:phone-number.help-message')}</p>
+            <p className="mb-4">{t('protected-profile:phone-number.add-phone-number')}</p>
             <p className="mb-4 italic">{t('protected-profile:all-optional-label')}</p>
             <div className="grid items-end gap-6">
               <InputPhoneField
@@ -125,7 +125,8 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 errorMessage={errors?.phoneNumber}
                 label={t('protected-profile:phone-number.phone-number')}
                 maxLength={100}
-                aria-describedby="adding-phone"
+                helpMessagePrimary={t('protected-profile:phone-number.help-message')}
+                helpMessagePrimaryClassName="text-gray-600"
               />
               <InputPhoneField
                 id="phone-number-alt"
@@ -138,7 +139,8 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 errorMessage={errors?.phoneNumberAlt}
                 label={t('protected-profile:phone-number.phone-number-alt')}
                 maxLength={100}
-                aria-describedby="adding-phone"
+                helpMessagePrimary={t('protected-profile:phone-number.help-message-alt')}
+                helpMessagePrimaryClassName="text-gray-600"
               />
             </div>
           </div>

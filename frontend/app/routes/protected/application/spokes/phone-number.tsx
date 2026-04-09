@@ -152,6 +152,8 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 errorMessage={errors?.phoneNumber}
                 label={t('protected-application-spokes:phone-number.phone-number')}
                 maxLength={100}
+                helpMessagePrimary={t('protected-application-spokes:phone-number.help-message')}
+                helpMessagePrimaryClassName="text-gray-600"
               />
               <InputPhoneField
                 id="phone-number-alt"
@@ -164,6 +166,8 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 errorMessage={errors?.phoneNumberAlt}
                 label={t('protected-application-spokes:phone-number.phone-number-alt')}
                 maxLength={100}
+                helpMessagePrimary={t('protected-application-spokes:phone-number.help-message-alt')}
+                helpMessagePrimaryClassName="text-gray-600"
               />
             </div>
           </div>
