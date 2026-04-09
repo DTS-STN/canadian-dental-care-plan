@@ -182,7 +182,7 @@ export default function ChildDentalInsurance({ loaderData, params }: Route.Compo
           {hasDentalInsurance && (
             <div className="space-y-4">
               <ContextualAlert type="info">
-                <h3 className="font-lato mb-2 text-xl font-semibold">{t('children.dental-insurance.alert.title')}</h3>
+                <h2 className="font-lato mb-2 text-xl font-semibold">{t('children.dental-insurance.alert.title')}</h2>
                 <p>{t('children.dental-insurance.alert.body', { childName: childName })}</p>
               </ContextualAlert>
               <InputCheckbox
