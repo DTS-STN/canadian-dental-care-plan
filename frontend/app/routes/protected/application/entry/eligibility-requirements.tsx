@@ -84,20 +84,34 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
           )}
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink
-            id="edit-terms-conditions-button"
-            variant="link"
-            className="p-0"
-            routeId="protected/application/$id/terms-conditions"
-            params={params}
-            startIcon={sections.termsAndConditions.completed ? faPenToSquare : faCircleCheck}
-            size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit terms conditions click"
-          >
-            {sections.termsAndConditions.completed //
-              ? t('protected-application:eligibility-requirements.terms-conditions-section.edit-button')
-              : t('protected-application:eligibility-requirements.terms-conditions-section.add-button')}
-          </ButtonLink>
+          {sections.termsAndConditions.completed ? (
+            <ButtonLink
+              id="edit-terms-conditions-button"
+              variant="link"
+              className="p-0"
+              routeId="protected/application/$id/terms-conditions"
+              params={params}
+              startIcon={faPenToSquare}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit terms conditions click"
+              aria-label={t('protected-application:eligibility-requirements.terms-conditions-section.edit-button-aria')}
+            >
+              {t('protected-application:eligibility-requirements.terms-conditions-section.edit-button')}
+            </ButtonLink>
+          ) : (
+            <ButtonLink
+              id="add-terms-conditions-button"
+              variant="link"
+              className="p-0"
+              routeId="protected/application/$id/terms-conditions"
+              params={params}
+              startIcon={faCircleCheck}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Add terms conditions click"
+            >
+              {t('protected-application:eligibility-requirements.terms-conditions-section.add-button')}
+            </ButtonLink>
+          )}
         </CardFooter>
       </Card>
       <Card>
@@ -109,18 +123,34 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
           <p>{state.hasFiledTaxes === true ? t('protected-application:eligibility-requirements.tax-filing-section.have-filed-taxes') : t('protected-application:eligibility-requirements.tax-filing-section.instructions')}</p>
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
-          <ButtonLink
-            id="edit-tax-filing-button"
-            variant="link"
-            className="p-0"
-            routeId="protected/application/$id/tax-filing"
-            params={params}
-            startIcon={sections.taxFiling.completed ? faPenToSquare : faCircleCheck}
-            size="lg"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit tax filing click"
-          >
-            {sections.taxFiling.completed ? t('protected-application:eligibility-requirements.tax-filing-section.edit-button') : t('protected-application:eligibility-requirements.tax-filing-section.add-button')}
-          </ButtonLink>
+          {sections.taxFiling.completed ? (
+            <ButtonLink
+              id="edit-tax-filing-button"
+              variant="link"
+              className="p-0"
+              routeId="protected/application/$id/tax-filing"
+              params={params}
+              startIcon={faPenToSquare}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit tax filing click"
+              aria-label={t('protected-application:eligibility-requirements.tax-filing-section.edit-button-aria')}
+            >
+              {t('protected-application:eligibility-requirements.tax-filing-section.edit-button')}
+            </ButtonLink>
+          ) : (
+            <ButtonLink
+              id="add-tax-filing-button"
+              variant="link"
+              className="p-0"
+              routeId="protected/application/$id/tax-filing"
+              params={params}
+              startIcon={faCircleCheck}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Add tax filing click"
+            >
+              {t('protected-application:eligibility-requirements.tax-filing-section.add-button')}
+            </ButtonLink>
+          )}
         </CardFooter>
       </Card>
       <NavigationButtonLink
