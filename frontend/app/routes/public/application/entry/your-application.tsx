@@ -114,7 +114,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             </DefinitionList>
           )}
           {isTypeOfApplicationTypeMismatched && (
-            <ContextualAlert type="danger">
+            <ContextualAlert type="danger" role="region" aria-live="polite">
               <p>{t('application:your-application.type-application-mismatch')}</p>
             </ContextualAlert>
           )}
