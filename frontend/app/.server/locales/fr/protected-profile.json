@@ -147,7 +147,9 @@
     "save-btn": "Sauvegarder",
     "option-yes": "Oui",
     "option-no": "Non",
-    "help-message": "L'ajout de votre numéro de téléphone nous permet de vous joindre rapidement en cas de problème avec votre demande. Si vous n'indiquez pas de numéro, nous vous contacterons par courrier.",
+    "add-phone-number": "L'ajout de votre numéro de téléphone nous permet de vous joindre rapidement en cas de problème avec votre demande. Si vous n'indiquez pas de numéro, nous vous contacterons par courrier.",
+    "help-message": "Les numéros de téléphone canadiens doivent comporter 10 chiffres (par exemple\u00a0: 800\u2011622\u20116232). S'il s'agit d'un numéro provenant d'un autre pays, ajoutez un signe +, puis le code du pays (par exemple\u00a0: +44 20 7946 0958) Alternate phone number",
+    "help-message-alt": "Pour le numéro de téléphone secondaire, saisissez 10 chiffres s'il s'agit d'un numéro canadien (par exemple\u00a0: 800\u2011598\u20114567). S'il s'agit d'un numéro provenant d'un autre pays, ajoutez un signe +, puis le code du pays (par exemple\u00a0: +44 20 7946 0958).",
     "error-message": {
       "phone-number-valid": "Un numéro du Canada a 10 chiffres. Par exemple\u00a0: 800\u2011622\u20116232. Si c'est un numéro d'un autre pays, ajoutez un + puis le code du pays.",
       "phone-number-valid-international": "Un numéro du Canada a 10 chiffres. Par exemple\u00a0: 800\u2011622\u20116232. Si c'est un numéro d'un autre pays, ajoutez un + puis le code du pays.",
