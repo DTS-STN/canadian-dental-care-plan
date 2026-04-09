@@ -125,7 +125,6 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 errorMessage={errors?.phoneNumber}
                 label={t('protected-profile:phone-number.phone-number')}
                 maxLength={100}
-                aria-describedby="adding-phone"
                 helpMessagePrimary={t('protected-profile:phone-number.help-message')}
                 helpMessagePrimaryClassName="text-gray-600"
               />
@@ -140,7 +139,6 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 errorMessage={errors?.phoneNumberAlt}
                 label={t('protected-profile:phone-number.phone-number-alt')}
                 maxLength={100}
-                aria-describedby="adding-phone"
                 helpMessagePrimary={t('protected-profile:phone-number.help-message-alt')}
                 helpMessagePrimaryClassName="text-gray-600"
               />
