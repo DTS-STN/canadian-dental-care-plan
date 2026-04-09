@@ -1,4 +1,4 @@
-import type { AriaRole, ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
 import { faCheckCircle, faCircleInfo, faExclamationCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
@@ -8,12 +8,10 @@ import { cn } from '~/utils/tw-utils';
 
 export type AlertType = 'warning' | 'success' | 'danger' | 'info' | 'comment';
 
-interface ContextualAlertProps {
+type ContextualAlertProps = ComponentProps<'div'> & {
   children: ReactNode;
   type: AlertType;
-  role?: AriaRole;
-  id?: string;
-}
+};
 
 const alertBackgroundColors: Partial<Record<AlertType, string>> & { default: string } = {
   comment: 'bg-sky-50',
@@ -29,14 +27,12 @@ const alertBorderColors: Partial<Record<AlertType, string>> & { default: string 
   success: 'border-l-green-700',
 };
 
-export function ContextualAlert(props: ContextualAlertProps) {
-  const { children, type, role, id } = props;
-
+export function ContextualAlert({ children, type, ...props }: ContextualAlertProps) {
   const alertBackgroundColor = alertBackgroundColors[type] ?? alertBackgroundColors.default;
   const alertBorderColor = alertBorderColors[type] ?? alertBorderColors.default;
 
   return (
-    <div className={cn('relative pl-4 sm:pl-6', alertBackgroundColor)} role={role} aria-atomic="true" id={id}>
+    <div className={cn('relative pl-4 sm:pl-6', alertBackgroundColor)} aria-atomic="true" {...props}>
       <div className={cn('absolute top-3 left-1.5 pt-1 sm:left-3.5', alertBackgroundColor)}>
         <Icon type={type} />
       </div>
@@ -45,7 +41,7 @@ export function ContextualAlert(props: ContextualAlertProps) {
   );
 }
 
-function Icon({ type }: { type: string }) {
+function Icon({ type }: { type: AlertType }) {
   switch (type) {
     case 'warning': {
       return <FontAwesomeIcon icon={faExclamationTriangle} className="h-6 w-6 text-amber-700" />;
