@@ -294,8 +294,8 @@
     "service-canada": "Par téléphone\u00a0: contactez Service Canada en composant le <noWrap>1-833-537-4342</noWrap>.",
     "in-person": "En personne\u00a0: <findOffice>trouvez un bureau de Service Canada</findOffice>.",
     "office-link": "https://bureaux.service.canada.ca/fr",
-    "help-message": "Les numéros de téléphone canadiens doivent comporter 10 chiffres (par exemple\u00a0: 800\u2011622\u20116232). S'il s'agit d'un numéro provenant d'un autre pays, ajoutez un signe +, puis le code du pays (par exemple\u00a0: +44 20 7946 0958).",
-    "help-message-alt": "Pour le numéro de téléphone secondaire, saisissez 10 chiffres s'il s'agit d'un numéro canadien (par exemple\u00a0: 800\u2011598\u20114567). S'il s'agit d'un numéro provenant d'un autre pays, ajoutez un signe +, puis le code du pays (par exemple\u00a0: +44 20 7946 0958).",
+    "help-message": "Les numéros de téléphone canadiens doivent comporter 10 chiffres (par exemple\u00a0: 800\u2011622\u20116232). S'il s'agit d'un numéro provenant d'un autre pays, ajoutez un signe +, puis le code du pays (par exemple\u00a0: +44\u00a020\u00a07946\u00a00958).",
+    "help-message-alt": "Pour le numéro de téléphone secondaire, saisissez 10 chiffres s'il s'agit d'un numéro canadien (par exemple\u00a0: 800\u2011598\u20114567). S'il s'agit d'un numéro provenant d'un autre pays, ajoutez un signe +, puis le code du pays (par exemple\u00a0: +44\u00a020\u00a07946\u00a00958).",
     "error-message": {
       "phone-number-valid": "Un numéro du Canada a 10 chiffres. Par exemple\u00a0: 800\u2011622\u20116232. Si c'est un numéro d'un autre pays, ajoutez un + puis le code du pays.",
       "phone-number-valid-international": "Un numéro du Canada a 10 chiffres. Par exemple\u00a0: 800\u2011622\u20116232. Si c'est un numéro d'un autre pays, ajoutez un + puis le code du pays.",
