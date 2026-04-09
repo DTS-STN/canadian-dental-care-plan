@@ -23,14 +23,16 @@
       "acknowledge-privacy": "J'ai lu l'énoncé de confidentialité",
       "share-data": "Je consens à l'échange des données",
       "add-button": "Veuillez accepter les conditions générales d'utilisation et l'énoncé de confidentialité",
-      "edit-button": "Modifier la réponse"
+      "edit-button": "Modifier la réponse",
+      "edit-button-aria": "Modifier la réponse pour les conditions générales d'utilisation et l'énoncé de confidentialité"
     },
     "tax-filing-section": {
       "title": "Déclaration de revenus",
       "instructions": "Vos renseignements fiscaux sont utilisés pour confirmer votre admissibilité au Régime canadien de soins dentaires.",
       "have-filed-taxes": "Moi-même et mon époux ou épouse ou conjoint ou conjointe de fait (le cas échéant) avons reçu nos avis de cotisation de l'Agence du revenu du Canada.",
       "add-button": "Confirmer la production de la déclaration de revenus",
-      "edit-button": "Modifier la réponse"
+      "edit-button": "Modifier la réponse",
+      "edit-button-aria": "Modifier la réponse pour la déclaration de revenus"
     }
   },
   "tax-filing": {
