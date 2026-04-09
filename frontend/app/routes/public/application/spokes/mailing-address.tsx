@@ -324,33 +324,30 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 defaultValue=""
                 errorMessage={errors?.apartment}
               />
-              <div className="grid items-end gap-6 md:grid-cols-2">
-                <InputSanitizeField
-                  id="mailing-city"
-                  name="city"
-                  className="w-full"
-                  label={t('application-spokes:address.address-field.city')}
-                  maxLength={100}
-                  autoComplete="address-level2"
-                  defaultValue={defaultState.city}
-                  errorMessage={errors?.city}
-                  required
-                />
-                <InputSanitizeField
-                  id="mailing-postal-code"
-                  name="postalZipCode"
-                  className="w-full"
-                  label={isPostalCodeRequired ? t('application-spokes:address.address-field.postal-code') : t('application-spokes:address.address-field.postal-code-optional')}
-                  maxLength={100}
-                  autoComplete="postal-code"
-                  defaultValue={defaultState.postalCode}
-                  errorMessage={errors?.postalZipCode}
-                  required={isPostalCodeRequired}
-                  helpMessagePrimary={postalCodeHelpMessage}
-                  helpMessagePrimaryClassName="text-black"
-                />
-              </div>
-
+              <InputSanitizeField
+                id="mailing-city"
+                name="city"
+                className="w-full"
+                label={t('application-spokes:address.address-field.city')}
+                maxLength={100}
+                autoComplete="address-level2"
+                defaultValue={defaultState.city}
+                errorMessage={errors?.city}
+                required
+              />
+              <InputSanitizeField
+                id="mailing-postal-code"
+                name="postalZipCode"
+                className="w-full sm:w-1/2"
+                label={isPostalCodeRequired ? t('application-spokes:address.address-field.postal-code') : t('application-spokes:address.address-field.postal-code-optional')}
+                maxLength={100}
+                autoComplete="postal-code"
+                defaultValue={defaultState.postalCode}
+                errorMessage={errors?.postalZipCode}
+                required={isPostalCodeRequired}
+                helpMessagePrimary={postalCodeHelpMessage}
+                helpMessagePrimaryClassName="text-black"
+              />
               {mailingRegions.length > 0 && (
                 <InputSelect
                   id="mailing-province"

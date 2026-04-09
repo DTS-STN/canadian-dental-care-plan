@@ -321,23 +321,20 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                 defaultValue={defaultState.apartment}
                 errorMessage={errors?.apartment}
               />
-              <div className="grid items-end gap-6 md:grid-cols-2">
-                <InputSanitizeField id="mailing-city" name="city" className="w-full" label={t('protected-profile:mailing-address.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
-                <InputSanitizeField
-                  id="mailing-postal-code"
-                  name="postalZipCode"
-                  className="w-full"
-                  label={isPostalCodeRequired ? t('protected-profile:mailing-address.postal-code') : t('protected-profile:mailing-address.postal-code-optional')}
-                  maxLength={100}
-                  autoComplete="postal-code"
-                  defaultValue={defaultState.postalCode}
-                  errorMessage={errors?.postalZipCode}
-                  required={isPostalCodeRequired}
-                  helpMessagePrimary={postalCodeHelpMessage}
-                  helpMessagePrimaryClassName="text-black"
-                />
-              </div>
-
+              <InputSanitizeField id="mailing-city" name="city" className="w-full" label={t('protected-profile:mailing-address.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
+              <InputSanitizeField
+                id="mailing-postal-code"
+                name="postalZipCode"
+                className="w-full sm:w-1/2"
+                label={isPostalCodeRequired ? t('protected-profile:mailing-address.postal-code') : t('protected-profile:mailing-address.postal-code-optional')}
+                maxLength={100}
+                autoComplete="postal-code"
+                defaultValue={defaultState.postalCode}
+                errorMessage={errors?.postalZipCode}
+                required={isPostalCodeRequired}
+                helpMessagePrimary={postalCodeHelpMessage}
+                helpMessagePrimaryClassName="text-black"
+              />
               {mailingRegions.length > 0 && (
                 <InputSelect
                   id="mailing-province"
