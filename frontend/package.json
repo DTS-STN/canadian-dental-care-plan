@@ -58,7 +58,7 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "fast-xml-parser": "^5.5.11",
-    "file-type": "^22.0.0",
+    "file-type": "^22.0.1",
     "filesize": "^11.0.15",
     "i18next": "^26.0.4",
     "i18next-http-backend": "^3.0.4",
@@ -118,7 +118,7 @@
     "@vitejs/plugin-react": "^6.0.1",
     "@vitest/coverage-v8": "^4.1.4",
     "@vitest/eslint-plugin": "^1.6.15",
-    "@vitest/ui": "^4.1.3",
+    "@vitest/ui": "^4.1.4",
     "eslint": "^9.39.4",
     "eslint-formatter-summary": "^2.0.2",
     "eslint-import-resolver-typescript": "^4.4.4",
@@ -143,7 +143,7 @@
     "typescript-eslint": "^8.58.1",
     "vite": "^8.0.8",
     "vite-plugin-static-copy": "^4.0.1",
-    "vitest": "^4.1.3",
+    "vitest": "^4.1.4",
     "vitest-mock-extended": "^4.0.0"
   },
   "engines": {
