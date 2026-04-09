@@ -186,7 +186,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
           </div>
           {hasDentalInsurance === true && (
             <div className="mb-4 space-y-4">
-              <ContextualAlert type="info">
+              <ContextualAlert type="info" id="dental-insurance-confirmation-yes">
                 <h2 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.yes.alert-title')}</h2>
                 <p>{t('dental-insurance.yes.alert-body')}</p>
               </ContextualAlert>
@@ -197,6 +197,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
                 defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmationYes}
                 errorMessage={errors?.dentalInsuranceEligibilityConfirmationYes}
                 required
+                aria-describedby="dental-insurance-confirmation-yes"
               >
                 {t('dental-insurance.yes.confirmation')}
               </InputCheckbox>
@@ -204,7 +205,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
           )}
           {hasDentalInsurance === false && (
             <div className="mb-4 space-y-4">
-              <ContextualAlert type="info" id="dental-insurance-confirmation">
+              <ContextualAlert type="info" id="dental-insurance-confirmation-no">
                 <h2 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.no.alert-title')}</h2>
                 <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:dental-insurance.no.alert-body" components={{ t4Href, t4aHref }} />
               </ContextualAlert>
@@ -215,7 +216,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
                 defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmationNo}
                 errorMessage={errors?.dentalInsuranceEligibilityConfirmationNo}
                 required
-                aria-describedby="dental-insurance-confirmation"
+                aria-describedby="dental-insurance-confirmation-no"
               >
                 {t('dental-insurance.no.confirmation')}
               </InputCheckbox>
