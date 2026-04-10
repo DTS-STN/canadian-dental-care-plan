@@ -11,13 +11,10 @@ All resources deploy to the `canada-dental-care-plan` namespace. Environments ar
 ```text
 gitops/
 ├── base/                   # Environment-agnostic resource definitions
-│   ├── backend/            # Java/Spring Boot API service
 │   ├── error-pages/404/    # Custom nginx 404 error page
 │   ├── fluentd-archiver/   # Centralized audit log aggregation
 │   ├── frontend/           # Node.js/React web application
 │   ├── maintenance/        # 503 maintenance page
-│   ├── postgres/           # Crunchy Data PostgreSQL HA cluster
-│   ├── postgres-operator/  # Crunchy Data Postgres Operator
 │   ├── redis/              # Redis with Sentinel high availability
 │   ├── reloader/           # Stakater Reloader (auto-restart on config changes)
 │   └── squid-proxy/        # HTTP/HTTPS forward proxy

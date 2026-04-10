@@ -24,15 +24,6 @@ Node.js/React web application serving the public-facing dental care plan site.
 - `configMapGenerator`: `frontend` from `configs/config.conf`
 - `secretGenerator`: `frontend` from `configs/secrets.conf`
 
-### Backend
-
-Java/Spring Boot API service.
-
-| Property | Value                                         |
-| -------- | --------------------------------------------- |
-| Port     | 8080                                          |
-| Probes   | `/actuator/health` for liveness and readiness |
-
 ### Redis
 
 Redis with Sentinel for high-availability session storage.
@@ -49,24 +40,6 @@ An init container runs `init.sh` to configure primary/replica modes and Sentinel
 
 - `configMapGenerator`: `redis` from `configs/init.sh`, `configs/primary.conf`, `configs/replica.conf`, `configs/sentinel.conf`
 - `secretGenerator`: `redis` from `configs/secrets.conf`
-
-### PostgreSQL (Crunchy Data)
-
-PostgreSQL 16 cluster managed by the Crunchy Data Postgres Operator (PGO).
-
-| Property           | Value                                                             |
-| ------------------ | ----------------------------------------------------------------- |
-| Version            | 16.3                                                              |
-| Instances          | 3 replicas with pod anti-affinity                                 |
-| Storage            | 265Gi per instance                                                |
-| Backups            | pgBackRest — full backup every 8 hours, 3-backup retention        |
-| Connection pooling | pgBouncer with 3 replicas                                         |
-| Users              | `postgres` (superuser), `canadian-dental-care-plan` (application) |
-
-### Postgres Operator
-
-Crunchy Data Postgres Operator (v5.6.0) controller for managing PostgreSQL clusters. Includes RBAC resources
-(Role, RoleBinding, ServiceAccount) with permissions to manage core Kubernetes resources.
 
 ### Fluentd Archiver
 
