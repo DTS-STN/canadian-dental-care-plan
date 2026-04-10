@@ -45,6 +45,11 @@ configMapGenerator:
   # TODO :: Remove when letters maintenance is no longer needed
     files:
       - ./configs/maintenance/503.html
+    literals:
+      - startTimeEn=08:00pm EST April 14, 2026
+      - startTimeFr=20 h 00 HNE le 14 avril 2026
+      - endTimeEn=07:00am EST April 15, 2026
+      - endTimeFr=07 h 00 HNE le 15 avril 2026
 secretGenerator:
   - name: frontend
     behavior: replace
