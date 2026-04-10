@@ -18,7 +18,14 @@ resources:
   - ../../base/maintenance/
   - ../../base/redis/
   - ./external-secrets.yaml
+  #
+  # Note: to enable maintenance mode:
+  #
+  #   1. comment ./ingresses.yaml
+  #   2. uncomment ./ingresses-maintenance.yaml
+  #
   - ./ingresses.yaml
+  # - ./ingresses-maintenance.yaml
 patches:
   - path: ./patches/deployments.yaml
   - path: ./patches/deployments-maintenance.yaml
