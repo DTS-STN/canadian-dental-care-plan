@@ -49,9 +49,9 @@ configMapGenerator:
       - ./configs/oauth-proxy/config.conf
   - name: maintenance
     behavior: merge
-  # TODO :: Remove when letters maintenance is no longer needed
-    files:
-      - ./configs/maintenance/503.html
+    # TODO :: Remove when letters maintenance is no longer enabled
+    # files:
+    #   - ./configs/maintenance/503.html
     literals:
       - startTimeEn=08:00pm EST April 14, 2026
       - startTimeFr=20 h 00 HNE le 14 avril 2026
