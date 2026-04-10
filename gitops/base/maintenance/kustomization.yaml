@@ -10,7 +10,7 @@ configMapGenerator:
       - ./configs/503.html
       - ./configs/config.conf
     literals:
-      - startTimeEn=12:00am EST January 1, 2000
-      - startTimeFr=00 h 00 HNE le 1 janvier 2000
-      - endTimeEn=12:00am EST January 1, 2000
-      - endTimeFr=00 h 00 HNE le 1 janvier 2000
+      - startTimeEn=January 1, 2000, at 12:00 a.m.
+      - startTimeFr=1 janvier 2000 à 00 h 00
+      - endTimeEn=January 1, 2000, at 12:00 a.m. (EST)
+      - endTimeFr=1 janvier 2000 à 00 h 00 (HNE)

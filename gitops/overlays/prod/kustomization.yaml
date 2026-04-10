@@ -67,10 +67,10 @@ configMapGenerator:
     # files:
     #   - ./configs/maintenance/503.html
     literals:
-      - startTimeEn=10:00pm EDT April 30, 2025
-      - startTimeFr=30 avril 2025 à 22 h 00 HAE
-      - endTimeEn=7:00am EDT May 1, 2025
-      - endTimeFr=1 mai 2025 à 7 h 00 HAE
+      - startTimeEn=April 14, 2026, at 8:00 p.m.
+      - startTimeFr=14 avril 2026 à 20 h 00
+      - endTimeEn=April 15, 2026, at 8:00 a.m. (EST)
+      - endTimeFr=15 avril 2026 à 08 h 00 (HNE)
 secretGenerator:
   - name: frontend
     behavior: replace
