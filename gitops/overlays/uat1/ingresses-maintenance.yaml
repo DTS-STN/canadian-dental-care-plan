@@ -1,7 +1,7 @@
 # This file defines ingress resources that effectively put the frontend application in "maintenance mode".
 #
 # To enable maintenance mode, reference this file in kustomization.yaml.
-# This will route traffic to the maintenance and OAuth proxy services instead of the main application.
+# This will route public traffic to the maintenance service instead of the main application.
 #
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -22,18 +22,6 @@ spec:
                 name: maintenance
                 port:
                   name: http
-
----
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: frontend-internal
-  labels:
-    app.kubernetes.io/name: frontend
-spec:
-  ingressClassName: nginx
-  rules:
     - host: cdcp-uat1.dev-dp-internal.dts-stn.com
       http:
         paths:
@@ -43,4 +31,4 @@ spec:
               service:
                 name: frontend
                 port:
-                  name: http
+                  name: application
