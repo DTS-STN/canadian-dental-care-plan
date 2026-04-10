@@ -133,7 +133,7 @@
     "npm-run-all2": "^8.0.4",
     "patch-package": "^8.0.1",
     "playwright-teamcity-reporter": "^1.0.5",
-    "prettier": "^3.8.1",
+    "prettier": "^3.8.2",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4.2.2",
     "tailwindcss-animate": "^1.0.7",
