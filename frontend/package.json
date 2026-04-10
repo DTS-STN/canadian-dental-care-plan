@@ -149,30 +149,5 @@
   "engines": {
     "node": ">=24.13.0",
     "npm": ">=11.6.2"
-  },
-  "prettier": {
-    "semi": true,
-    "tabWidth": 2,
-    "singleQuote": true,
-    "printWidth": 256,
-    "importOrder": [
-      "^react(-dom/.*)?$",
-      "^@testing-library/(.*)$",
-      "^[@]?react-router(/.*)?",
-      "<THIRD_PARTY_MODULES>",
-      "^[\\.]",
-      "^[~]"
-    ],
-    "importOrderParserPlugins": [
-      "typescript",
-      "jsx",
-      "decorators-legacy"
-    ],
-    "importOrderSeparation": true,
-    "importOrderSortSpecifiers": true,
-    "plugins": [
-      "@trivago/prettier-plugin-sort-imports",
-      "prettier-plugin-tailwindcss"
-    ]
   }
 }
