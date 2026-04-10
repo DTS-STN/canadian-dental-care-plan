@@ -13,6 +13,7 @@ User acceptance testing environment 2 for the Canadian Dental Care Plan.
 ## Base Components
 
 - Frontend
+- Maintenance
 - Redis
 
 ## Additional Resources
@@ -23,6 +24,7 @@ User acceptance testing environment 2 for the Canadian Dental Care Plan.
 ## Patches
 
 - `patches/deployments.yaml` — Adds OAuth proxy sidecar to the frontend deployment
+- `patches/deployments-maintenance.yaml` — Maintenance page deployment overrides
 - `patches/services.yaml` — Service customizations
 - `patches/stateful-sets.yaml` — Redis StatefulSet overrides
 
@@ -31,3 +33,12 @@ User acceptance testing environment 2 for the Canadian Dental Care Plan.
 - `configs/frontend/config.conf` — Environment-specific frontend settings
 - `configs/redis/` — Redis configuration overrides
 - OAuth proxy secret created via `secretGenerator`
+
+## Notes
+
+Includes maintenance page support for testing downtime scenarios.
+
+### Enabling maintenance mode
+
+1. In `kustomization.yaml`, comment out `./ingresses.yaml`
+2. Uncomment `./ingresses-maintenance.yaml`

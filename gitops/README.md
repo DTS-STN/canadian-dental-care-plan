@@ -51,7 +51,7 @@ environment-specific configuration.
 | [Staging](overlays/staging/README.md)     | np   | ✅       | ✅    | ✅          | ✅              | ✅                 | ✅                | ❌               | ❌       | ❌          |
 | [Training](overlays/training/README.md)   | np   | ✅       | ❌    | ❌          | ❌              | ❌                 | ❌                | ❌               | ❌       | ❌          |
 | [UAT1](overlays/uat1/README.md)           | np   | ✅       | ✅    | ✅          | ❌              | ❌                 | ❌                | ✅               | ❌       | ❌          |
-| [UAT2](overlays/uat2/README.md)           | np   | ✅       | ✅    | ✅          | ❌              | ❌                 | ❌                | ❌               | ❌       | ❌          |
+| [UAT2](overlays/uat2/README.md)           | np   | ✅       | ✅    | ✅          | ❌              | ❌                 | ❌                | ✅               | ❌       | ❌          |
 
 > **np** = nonprod
 

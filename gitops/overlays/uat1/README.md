@@ -37,5 +37,10 @@ User acceptance testing environment 1 for the Canadian Dental Care Plan.
 
 ## Notes
 
-Includes maintenance page support for testing downtime scenarios. Commented ingress alternatives are available for
-switching to a maintenance or letters-maintenance page.
+Includes maintenance page support for testing downtime scenarios.
+
+### Enabling maintenance mode
+
+1. In `kustomization.yaml`, comment out `./ingresses.yaml`
+2. Uncomment `./ingresses-maintenance.yaml`
+3. For letters-only maintenance, uncomment `./ingresses-letters-maintenance.yaml` instead
