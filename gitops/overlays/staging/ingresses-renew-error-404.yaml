@@ -10,6 +10,16 @@ metadata:
     app.kubernetes.io/name: frontend
 spec:
   ingressClassName: nginx
+  tls:
+    # TLS secret `devdpdtsstncom` and `devdpinternaldtsstncom` are provisioned
+    # out-of-band by the dev cluster platform (e.g., shared certificate management)
+    # and are not managed in this repo.
+    - secretName: devdpdtsstncom
+      hosts:
+        - cdcp-staging.dev-dp.dts-stn.com
+    - secretName: devdpinternaldtsstncom
+      hosts:
+        - cdcp-staging.dev-dp-internal.dts-stn.com
   rules:
     - host: cdcp-staging.dev-dp.dts-stn.com
       http:
