@@ -139,7 +139,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.21.0",
     "type-fest": "^5.5.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.8",
     "vite-plugin-static-copy": "^4.0.1",
