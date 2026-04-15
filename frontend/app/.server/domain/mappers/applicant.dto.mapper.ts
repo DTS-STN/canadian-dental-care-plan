@@ -1,9 +1,9 @@
 import { invariant } from '@dts-stn/invariant';
 import { injectable } from 'inversify';
-import { Result } from 'oxide.ts';
 
 import type { ApplicantDto, FindApplicantByBasicInfoDto, FindApplicantBySinRequestDto } from '~/.server/domain/dtos';
 import type { ApplicantResponseEntity, FindApplicantByBasicInfoRequestEntity, FindApplicantBySinRequestEntity } from '~/.server/domain/entities';
+import { expectDefined } from '~/utils/assert-utils';
 
 export interface ApplicantDtoMapper {
   mapFindApplicantByBasicInfoRequestDtoToFindApplicantByBasicInfoRequestEntity(request: OmitStrict<FindApplicantByBasicInfoDto, 'userId'>): FindApplicantByBasicInfoRequestEntity;
@@ -55,26 +55,34 @@ export class DefaultApplicantDtoMapper implements ApplicantDtoMapper {
     invariant(mailingAddress, 'Expected mailing address to be defined'); // Mailing address is required for mapping to ApplicantDto
 
     return {
-      clientId: Result.from(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID).expect('Expected clientId to be defined'),
-      clientNumber: Result.from(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID).expect('Expected clientNumber to be defined'),
+      clientId: expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected clientId to be defined'),
+      clientNumber: expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected clientNumber to be defined'),
       dateOfBirth: applicant.PersonBirthDate.date,
-      firstName: Result.from(applicant.PersonName.at(0)?.PersonGivenName.at(0)).expect('Expected applicant.PersonName[0].PersonGivenName[0] to be defined'),
-      lastName: Result.from(applicant.PersonName.at(0)?.PersonSurName).expect('Expected applicant.PersonName[0].PersonSurName to be defined'),
+      firstName: expectDefined(applicant.PersonName.at(0)?.PersonGivenName.at(0), 'Expected applicant.PersonName[0].PersonGivenName[0] to be defined'),
+      lastName: expectDefined(applicant.PersonName.at(0)?.PersonSurName, 'Expected applicant.PersonName[0].PersonSurName to be defined'),
       socialInsuranceNumber: applicant.PersonSINIdentification?.IdentificationID,
       maritalStatus: applicant.PersonMaritalStatus?.StatusCode?.ReferenceDataID,
       contactInformation: {
-        homeAddress: homeAddress?.AddressStreet.StreetName,
-        homeApartment: homeAddress?.AddressSecondaryUnitText,
-        homeCity: homeAddress?.AddressCityName,
-        homeCountry: homeAddress?.AddressCountry.CountryCode.ReferenceDataID,
-        homePostalCode: homeAddress?.AddressPostalCode,
-        homeProvince: homeAddress?.AddressProvince?.ProvinceCode?.ReferenceDataID,
-        mailingAddress: mailingAddress.AddressStreet.StreetName,
-        mailingApartment: mailingAddress.AddressSecondaryUnitText,
-        mailingCity: mailingAddress.AddressCityName,
-        mailingCountry: mailingAddress.AddressCountry.CountryCode.ReferenceDataID,
-        mailingPostalCode: mailingAddress.AddressPostalCode,
-        mailingProvince: mailingAddress.AddressProvince?.ProvinceCode?.ReferenceDataID,
+        homeAddress:
+          // Only map home address if all required fields are present to ensure we don't return partial/invalid address data
+          homeAddress?.AddressStreet.StreetName && homeAddress.AddressCityName && homeAddress.AddressCountry.CountryCode.ReferenceDataID
+            ? {
+                address: homeAddress.AddressStreet.StreetName,
+                apartment: homeAddress.AddressSecondaryUnitText,
+                city: homeAddress.AddressCityName,
+                country: homeAddress.AddressCountry.CountryCode.ReferenceDataID,
+                postalCode: homeAddress.AddressPostalCode,
+                province: homeAddress.AddressProvince.ProvinceCode.ReferenceDataID,
+              }
+            : undefined,
+        mailingAddress: {
+          address: expectDefined(mailingAddress.AddressStreet.StreetName, 'Expected mailingAddress.AddressStreet to be defined'),
+          apartment: mailingAddress.AddressSecondaryUnitText,
+          city: expectDefined(mailingAddress.AddressCityName, 'Expected mailingAddress.AddressCityName to be defined'),
+          country: expectDefined(mailingAddress.AddressCountry.CountryCode.ReferenceDataID, 'Expected mailingAddress.AddressCountry to be defined'),
+          postalCode: mailingAddress.AddressPostalCode,
+          province: mailingAddress.AddressProvince.ProvinceCode.ReferenceDataID,
+        },
         phoneNumber: primaryPhone?.FullTelephoneNumber?.TelephoneNumberFullID,
         phoneNumberAlt: alternatePhone?.FullTelephoneNumber?.TelephoneNumberFullID,
         email: emailAddress?.EmailAddressID,
