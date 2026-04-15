@@ -240,6 +240,26 @@ describe('useMonths', () => {
     it('should throw an error for an invalid Canadian locale', () => {
       expect(() => toLocaleDateString(new UTCDate(2000, 0, 1), 'xy')).toThrowError();
     });
+
+    it('should format date in UTC when timeZone is explicitly set to UTC', () => {
+      // 2024-01-15 23:00 UTC is still Jan 15 in UTC
+      expect(toLocaleDateString(new UTCDate('2024-01-15T23:00:00.000Z'), 'en', { timeZone: 'UTC' })).toEqual('January 15, 2024');
+    });
+
+    it('should format date adjusted to the specified timeZone', () => {
+      // 2024-01-15 23:00 UTC is Jan 16 in Asia/Tokyo (UTC+9)
+      expect(toLocaleDateString(new UTCDate('2024-01-15T23:00:00.000Z'), 'en', { timeZone: 'Asia/Tokyo' })).toEqual('January 16, 2024');
+    });
+
+    it('should format date in a negative offset timeZone', () => {
+      // 2024-01-16 03:00 UTC is still Jan 15 in America/Vancouver (UTC-8)
+      expect(toLocaleDateString(new UTCDate('2024-01-16T03:00:00.000Z'), 'en', { timeZone: 'America/Vancouver' })).toEqual('January 15, 2024');
+    });
+
+    it('should format date in French with a timeZone option', () => {
+      // 2024-01-15 23:00 UTC is Jan 16 in Asia/Tokyo (UTC+9)
+      expect(toLocaleDateString(new UTCDate('2024-01-15T23:00:00.000Z'), 'fr', { timeZone: 'Asia/Tokyo' })).toEqual('16 janvier 2024');
+    });
   });
 });
 

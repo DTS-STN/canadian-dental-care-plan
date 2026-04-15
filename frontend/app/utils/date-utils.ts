@@ -212,9 +212,20 @@ export function parseDateTimeString(dateTime: string) {
   return new UTCDate(dateTime);
 }
 
-export function toLocaleDateString(date: UTCDate, locale: string) {
+/**
+ * Converts a UTC date to a localized date string using Canadian locale formats.
+ * @param date - The UTC date to convert
+ * @param locale - The language locale ('en' or 'fr' for English or French)
+ * @param options - Optional Intl.DateTimeFormatOptions, specifically for timeZone configuration
+ * @returns A localized date string formatted as "Month Day, Year" (e.g., "January 15, 2024" for English or "15 janvier 2024" for French)
+ * @throws {Error} If the provided locale is not 'en' or 'fr' (case-insensitive)
+ * @example
+ * const date = new Date('2024-01-15').toUTCDate();
+ * const result = toLocaleDateString(date, 'en'); // "January 15, 2024"
+ */
+export function toLocaleDateString(date: UTCDate, locale: string, options?: Pick<Intl.DateTimeFormatOptions, 'timeZone'>) {
   invariant(/^(en|fr)$/i.test(locale), `Canadian locale is invalid [${locale}]`);
-  return date.toLocaleDateString(`${locale}-CA`, { year: 'numeric', month: 'long', day: 'numeric' });
+  return date.toLocaleDateString(`${locale}-CA`, { ...options, dateStyle: 'long' });
 }
 
 /**
