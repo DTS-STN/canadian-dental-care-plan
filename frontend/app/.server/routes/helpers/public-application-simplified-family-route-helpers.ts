@@ -3,8 +3,8 @@ import { redirect } from 'react-router';
 import { invariant } from '@dts-stn/invariant';
 
 import { createLogger } from '~/.server/logging';
-import { getAllowedTypeOfApplication, isChildClientNumberValid } from '~/.server/routes/helpers/base-application-route-helpers';
-import { applicantInformationStateHasPartner, getChildrenState, getContextualAgeCategoryFromDate, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getAllowedTypeOfApplication, isChildClientNumberValid, maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
+import { getChildrenState, getContextualAgeCategoryFromDate, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { ApplicationStateParams, ChildrenState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
@@ -143,11 +143,11 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 
-  if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
+  if (maritalStatusHasPartner(maritalStatus) && !partnerInformation) {
     throw redirect(getPathById('public/application/$id/simplified-family/marital-status', params));
   }
 
-  if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
+  if (!maritalStatusHasPartner(maritalStatus) && partnerInformation) {
     throw redirect(getPathById('public/application/$id/simplified-family/marital-status', params));
   }
 

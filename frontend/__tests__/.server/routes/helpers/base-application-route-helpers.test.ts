@@ -1,11 +1,22 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
-import { getAgeCategoryFromAge, getAgeCategoryFromDateString, getAgeCategoryReferenceDate, getAllowedTypeOfApplication, getEligibilityStatus, isChildClientNumberValid, isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
+import {
+  getAgeCategoryFromAge,
+  getAgeCategoryFromDateString,
+  getAgeCategoryReferenceDate,
+  getAllowedTypeOfApplication,
+  getEligibilityStatus,
+  isChildClientNumberValid,
+  isChildOrYouth,
+  maritalStatusHasPartner,
+} from '~/.server/routes/helpers/base-application-route-helpers';
 
 vi.mock('~/.server/utils/env.utils', () => ({
   getEnv: vi.fn(() => ({
     ELIGIBILITY_STATUS_CODE_ELIGIBLE: 'ELIGIBLE',
+    MARITAL_STATUS_CODE_COMMON_LAW: 'COMMON_LAW',
+    MARITAL_STATUS_CODE_MARRIED: 'MARRIED',
   })),
 }));
 
@@ -382,6 +393,30 @@ describe('getAllowedTypeOfApplication', () => {
           },
         }),
       ).toEqual(['children']);
+    });
+  });
+
+  describe('maritalStatusHasPartner', () => {
+    it('returns true when marital status is MARITAL_STATUS_CODE_MARRIED', () => {
+      expect(maritalStatusHasPartner('MARRIED')).toBe(true);
+    });
+
+    it('returns true when marital status is MARITAL_STATUS_CODE_COMMON_LAW', () => {
+      expect(maritalStatusHasPartner('COMMON_LAW')).toBe(true);
+    });
+
+    it('returns false when marital status is undefined', () => {
+      expect(maritalStatusHasPartner(undefined)).toBe(false);
+    });
+
+    it('returns false when marital status is empty string', () => {
+      expect(maritalStatusHasPartner('')).toBe(false);
+    });
+
+    it('returns false when marital status is a value other than married or common law', () => {
+      expect(maritalStatusHasPartner('SINGLE')).toBe(false);
+      expect(maritalStatusHasPartner('DIVORCED')).toBe(false);
+      expect(maritalStatusHasPartner('WIDOWED')).toBe(false);
     });
   });
 });

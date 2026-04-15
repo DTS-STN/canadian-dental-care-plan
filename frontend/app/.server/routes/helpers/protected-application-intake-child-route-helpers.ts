@@ -1,9 +1,9 @@
 import { redirect } from 'react-router';
 
 import { createLogger } from '~/.server/logging';
-import { getAllowedTypeOfApplication } from '~/.server/routes/helpers/base-application-route-helpers';
+import { getAllowedTypeOfApplication, maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationStateParams, ChildrenState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { applicantInformationStateHasPartner, getChildrenState, getContextualAgeCategoryFromDate, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getChildrenState, getContextualAgeCategoryFromDate, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
@@ -133,11 +133,11 @@ export function validateProtectedApplicationIntakeChildStateForReview({ params, 
     throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 
-  if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
+  if (maritalStatusHasPartner(maritalStatus) && !partnerInformation) {
     throw redirect(getPathById('protected/application/$id/intake-children/parent-or-guardian', params));
   }
 
-  if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
+  if (!maritalStatusHasPartner(maritalStatus) && partnerInformation) {
     throw redirect(getPathById('protected/application/$id/intake-children/parent-or-guardian', params));
   }
 

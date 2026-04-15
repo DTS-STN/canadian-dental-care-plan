@@ -1,6 +1,7 @@
 import type { PickDeep } from 'type-fest';
 
 import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
+import { getEnv } from '~/.server/utils/env.utils';
 import type { EligibilityType } from '~/components/eligibility';
 import { getAgeFromDateString } from '~/utils/date-utils';
 
@@ -176,4 +177,16 @@ export function getAllowedTypeOfApplication({
   // If the primary applicant is not eligible for renewal but at least one child is eligible for renewal, we allow
   // 'children' applications to enable the user to submit an application on behalf of their eligible child(ren).
   return ['children'];
+}
+
+/**
+ * Determines whether a marital status indicates that a person has a partner.
+ *
+ * @param maritalStatus - The marital status code to check. If undefined or empty, returns false.
+ * @returns `true` if the marital status is either common law or married, `false` otherwise.
+ */
+export function maritalStatusHasPartner(maritalStatus?: string) {
+  if (!maritalStatus) return false;
+  const { MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED } = getEnv();
+  return [MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED].includes(maritalStatus);
 }
