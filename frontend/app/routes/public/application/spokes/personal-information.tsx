@@ -1,7 +1,7 @@
 import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import { addDays } from 'date-fns';
+import { addMinutes } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -26,7 +26,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { isValidClientNumberRenewal, renewalCodeInputPatternFormat } from '~/utils/application-code-utils';
-import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString, toLocaleDateString } from '~/utils/date-utils';
+import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString, parseDateTimeString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -64,7 +64,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const { RENEWAL_PERIOD_END_DATE } = appContainer.get(TYPES.ServerConfig);
+  const { RENEWAL_PERIOD_END_DATE, TIME_ZONE } = appContainer.get(TYPES.ServerConfig);
 
   const applicantInformationSchema = z
     .object({
@@ -173,7 +173,10 @@ export async function action({ context: { appContainer, session }, params, reque
     }
 
     if (clientApplicationRenewalEligibilityResult.result !== 'ELIGIBLE') {
-      const startDate = toLocaleDateString(addDays(RENEWAL_PERIOD_END_DATE, 1), locale);
+      const renewalPeriodEndDate = parseDateTimeString(RENEWAL_PERIOD_END_DATE);
+      // Add one minute to ensure the intake start date is after the renewal period end date
+      const intakeStartDate = addMinutes(renewalPeriodEndDate, 1);
+      const startDate = toLocaleDateString(intakeStartDate, locale, { timeZone: TIME_ZONE });
       return { status: 'client-not-found', startDate } as const;
     }
 
