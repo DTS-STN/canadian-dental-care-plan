@@ -42,27 +42,29 @@ export async function loader({ context: { appContainer, session }, params, reque
   const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
   const countryService = appContainer.get(TYPES.CountryService);
 
-  const mailingAddressProvince = clientApplication.contactInformation.mailingProvince ? await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(clientApplication.contactInformation.mailingProvince, locale) : undefined;
-  const mailingAddressCountry = clientApplication.contactInformation.mailingCountry ? await countryService.getLocalizedCountryById(clientApplication.contactInformation.mailingCountry, locale) : undefined;
+  const mailingAddressProvince = clientApplication.contactInformation.mailingAddress.province ? await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(clientApplication.contactInformation.mailingAddress.province, locale) : undefined;
+  const mailingAddressCountry = clientApplication.contactInformation.mailingAddress.country ? await countryService.getLocalizedCountryById(clientApplication.contactInformation.mailingAddress.country, locale) : undefined;
   const mailingAddressDetails: AddressDetails = {
-    address: clientApplication.contactInformation.mailingAddress,
-    apartment: clientApplication.contactInformation.mailingApartment,
-    city: clientApplication.contactInformation.mailingCity,
+    address: clientApplication.contactInformation.mailingAddress.address,
+    apartment: clientApplication.contactInformation.mailingAddress.apartment,
+    city: clientApplication.contactInformation.mailingAddress.city,
     provinceState: mailingAddressProvince?.name,
-    postalZipCode: clientApplication.contactInformation.mailingPostalCode,
+    postalZipCode: clientApplication.contactInformation.mailingAddress.postalCode,
     country: mailingAddressCountry?.name ?? '',
   };
 
-  const homeAddressProvince = clientApplication.contactInformation.homeProvince ? await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(clientApplication.contactInformation.homeProvince, locale) : undefined;
-  const homeAddressCountry = clientApplication.contactInformation.homeCountry ? await countryService.getLocalizedCountryById(clientApplication.contactInformation.homeCountry, locale) : undefined;
-  const homeAddressDetails: AddressDetails = {
-    address: clientApplication.contactInformation.homeAddress ?? '',
-    apartment: clientApplication.contactInformation.homeApartment,
-    city: clientApplication.contactInformation.homeCity ?? '',
-    provinceState: homeAddressProvince?.name,
-    postalZipCode: clientApplication.contactInformation.homePostalCode,
-    country: homeAddressCountry?.name ?? '',
-  };
+  const homeAddressProvince = clientApplication.contactInformation.homeAddress?.province ? await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(clientApplication.contactInformation.homeAddress.province, locale) : undefined;
+  const homeAddressCountry = clientApplication.contactInformation.homeAddress?.country ? await countryService.getLocalizedCountryById(clientApplication.contactInformation.homeAddress.country, locale) : undefined;
+  const homeAddressDetails: AddressDetails | undefined = clientApplication.contactInformation.homeAddress
+    ? {
+        address: clientApplication.contactInformation.homeAddress.address,
+        apartment: clientApplication.contactInformation.homeAddress.apartment,
+        city: clientApplication.contactInformation.homeAddress.city,
+        provinceState: homeAddressProvince?.name,
+        postalZipCode: clientApplication.contactInformation.homeAddress.postalCode,
+        country: homeAddressCountry?.name ?? '',
+      }
+    : undefined;
 
   return {
     meta,
@@ -121,7 +123,7 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
           </div>
         </DefinitionListItem>
         <DefinitionListItem term={t('protected-profile:contact-information.home-address')}>
-          <Address address={homeAddressDetails} />
+          {homeAddressDetails && <Address address={homeAddressDetails} />}
           <div className="mt-4 sm:mt-6">
             <InlineLink id="update-contact-information-home-address" routeId="protected/profile/contact/home-address" params={params}>
               {t('protected-profile:contact-information.update-home-address-link-text')}

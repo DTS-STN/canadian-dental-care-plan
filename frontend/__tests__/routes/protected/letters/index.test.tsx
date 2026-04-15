@@ -38,9 +38,11 @@ describe('Letters Page', () => {
               socialInsuranceNumber: '999999999',
               communicationPreferences: {},
               contactInformation: {
-                mailingAddress: '123 Main St',
-                mailingCity: 'Anytown',
-                mailingCountry: 'Canada',
+                mailingAddress: {
+                  address: '123 Main St',
+                  city: 'Anytown',
+                  country: 'Canada',
+                },
               },
             }),
         }),
@@ -102,9 +104,11 @@ describe('Letters Page', () => {
             socialInsuranceNumber: '999999999',
             communicationPreferences: {},
             contactInformation: {
-              mailingAddress: '123 Main St',
-              mailingCity: 'Anytown',
-              mailingCountry: 'Canada',
+              mailingAddress: {
+                address: '123 Main St',
+                city: 'Anytown',
+                country: 'Canada',
+              },
             },
           }),
       }),
