@@ -9,6 +9,7 @@ import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/table';
 import { pageIds } from '~/page-ids';
+import { parseDateTimeString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -44,14 +45,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.AuditService).createAudit('page-view.documents', { userId: idToken.sub });
 
   const { TIME_ZONE } = appContainer.get(TYPES.ClientConfig);
-  const dateFormatter = new Intl.DateTimeFormat(`${locale}-CA`, { timeZone: TIME_ZONE, dateStyle: 'long' });
 
   return {
     meta,
     documents: evidentiaryDocuments.map((document) => {
       return {
         ...document,
-        mscaUploadDateFormatted: dateFormatter.format(new Date(document.mscaUploadDate)),
+        mscaUploadDateFormatted: toLocaleDateString(parseDateTimeString(document.mscaUploadDate), locale, { timeZone: TIME_ZONE }),
       };
     }),
     SCCH_BASE_URI,
