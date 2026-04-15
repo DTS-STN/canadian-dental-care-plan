@@ -684,11 +684,11 @@ export async function resolveRenewalStateMailingAddressValue(
     PickDeep<
       ProtectedApplicationState,
       | 'mailingAddress'
-      | 'clientApplication.contactInformation.mailingAddress'
-      | 'clientApplication.contactInformation.mailingCity'
-      | 'clientApplication.contactInformation.mailingCountry'
-      | 'clientApplication.contactInformation.mailingPostalCode'
-      | 'clientApplication.contactInformation.mailingProvince'
+      | 'clientApplication.contactInformation.mailingAddress.address'
+      | 'clientApplication.contactInformation.mailingAddress.city'
+      | 'clientApplication.contactInformation.mailingAddress.country'
+      | 'clientApplication.contactInformation.mailingAddress.postalCode'
+      | 'clientApplication.contactInformation.mailingAddress.province'
     >
   >,
   locale: AppLocale,
@@ -715,11 +715,11 @@ export async function resolveRenewalStateMailingAddressValue(
 
   return {
     hasChanged: false,
-    address: state.clientApplication.contactInformation.mailingAddress,
-    city: state.clientApplication.contactInformation.mailingCity,
-    country: await countryService.getLocalizedCountryById(state.clientApplication.contactInformation.mailingCountry, locale),
-    postalCode: state.clientApplication.contactInformation.mailingPostalCode,
-    province: state.clientApplication.contactInformation.mailingProvince ? await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingProvince, locale) : undefined,
+    address: state.clientApplication.contactInformation.mailingAddress.address,
+    city: state.clientApplication.contactInformation.mailingAddress.city,
+    country: await countryService.getLocalizedCountryById(state.clientApplication.contactInformation.mailingAddress.country, locale),
+    postalCode: state.clientApplication.contactInformation.mailingAddress.postalCode,
+    province: state.clientApplication.contactInformation.mailingAddress.province ? await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingAddress.province, locale) : undefined,
   };
 }
 
@@ -739,11 +739,11 @@ export async function resolveRenewalStateHomeAddressValue(
     PickDeep<
       ProtectedApplicationState,
       | 'homeAddress'
-      | 'clientApplication.contactInformation.homeAddress'
-      | 'clientApplication.contactInformation.homeCity'
-      | 'clientApplication.contactInformation.homeCountry'
-      | 'clientApplication.contactInformation.homePostalCode'
-      | 'clientApplication.contactInformation.homeProvince'
+      | 'clientApplication.contactInformation.homeAddress.address'
+      | 'clientApplication.contactInformation.homeAddress.city'
+      | 'clientApplication.contactInformation.homeAddress.country'
+      | 'clientApplication.contactInformation.homeAddress.postalCode'
+      | 'clientApplication.contactInformation.homeAddress.province'
     >
   >,
   locale: AppLocale,
@@ -772,16 +772,14 @@ export async function resolveRenewalStateHomeAddressValue(
   // been set on the state when the user made a change to the home address step, which requires client
   // application home address to be defined.
   invariant(state.clientApplication.contactInformation.homeAddress, 'Expected clientApplication.contactInformation.homeAddress to be defined when homeAddress.hasChanged is false');
-  invariant(state.clientApplication.contactInformation.homeCity, 'Expected clientApplication.contactInformation.homeCity to be defined when homeAddress.hasChanged is false');
-  invariant(state.clientApplication.contactInformation.homeCountry, 'Expected clientApplication.contactInformation.homeCountry to be defined when homeAddress.hasChanged is false');
 
   return {
     hasChanged: false,
-    address: state.clientApplication.contactInformation.homeAddress,
-    city: state.clientApplication.contactInformation.homeCity,
-    country: await countryService.getLocalizedCountryById(state.clientApplication.contactInformation.homeCountry, locale),
-    postalCode: state.clientApplication.contactInformation.homePostalCode,
-    province: state.clientApplication.contactInformation.homeProvince ? await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(state.clientApplication.contactInformation.homeProvince, locale) : undefined,
+    address: state.clientApplication.contactInformation.homeAddress.address,
+    city: state.clientApplication.contactInformation.homeAddress.city,
+    country: await countryService.getLocalizedCountryById(state.clientApplication.contactInformation.homeAddress.country, locale),
+    postalCode: state.clientApplication.contactInformation.homeAddress.postalCode,
+    province: state.clientApplication.contactInformation.homeAddress.province ? await provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById(state.clientApplication.contactInformation.homeAddress.province, locale) : undefined,
   };
 }
 

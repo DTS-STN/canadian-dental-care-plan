@@ -408,41 +408,10 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   }
 
   private toContactInformation({ existingContactInformation, hasEmailChanged, isHomeAddressSameAsMailingAddress, renewedContactInformation, renewedHomeAddress, renewedMailingAddress, renewedEmail }: ToContactInformationArgs): RenewalContactInformationDto {
-    const hasAddressChanged = renewedHomeAddress?.hasChanged === true || renewedMailingAddress?.hasChanged === true;
     return {
-      ...(hasAddressChanged
-        ? {
-            copyMailingAddress: !!isHomeAddressSameAsMailingAddress,
-            ...this.toHomeAddress({ existingContactInformation, isHomeAddressSameAsMailingAddress, homeAddress: renewedHomeAddress, mailingAddress: renewedMailingAddress }),
-            ...this.toMailingAddress({ existingContactInformation, mailingAddress: renewedMailingAddress }),
-          }
-        : {
-            copyMailingAddress: existingContactInformation.copyMailingAddress ?? false,
-            homeAddress:
-              existingContactInformation.homeAddress ??
-              (() => {
-                throw new Error('Expected existingContactInformation.homeAddress to be defined');
-              })(),
-            homeApartment: existingContactInformation.homeApartment,
-            homeCity:
-              existingContactInformation.homeCity ??
-              (() => {
-                throw new Error('Expected existingContactInformation.homeCity to be defined');
-              })(),
-            homeCountry:
-              existingContactInformation.homeCountry ??
-              (() => {
-                throw new Error('Expected existingContactInformation.homeCountry to be defined');
-              })(),
-            homePostalCode: existingContactInformation.homePostalCode,
-            homeProvince: existingContactInformation.homeProvince,
-            mailingAddress: existingContactInformation.mailingAddress,
-            mailingApartment: existingContactInformation.mailingApartment,
-            mailingCity: existingContactInformation.mailingCity,
-            mailingCountry: existingContactInformation.mailingCountry,
-            mailingPostalCode: existingContactInformation.mailingPostalCode,
-            mailingProvince: existingContactInformation.mailingProvince,
-          }),
+      copyMailingAddress: !!isHomeAddressSameAsMailingAddress,
+      ...this.toHomeAddress({ existingContactInformation, isHomeAddressSameAsMailingAddress, homeAddress: renewedHomeAddress, mailingAddress: renewedMailingAddress }),
+      ...this.toMailingAddress({ existingContactInformation, mailingAddress: renewedMailingAddress }),
       ...(renewedContactInformation?.hasChanged
         ? {
             phoneNumber: renewedContactInformation.value.primary,
@@ -463,75 +432,82 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
   }
 
   private toHomeAddress({ existingContactInformation, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }: ToHomeAddressArgs) {
+    // If the home address is the same as the mailing address, we want to use the mailing address values, even if the
+    // mailing address has not changed, to ensure that any changes to the mailing address are reflected in the home address.
     if (isHomeAddressSameAsMailingAddress) {
-      return mailingAddress
-        ? {
-            homeAddress: mailingAddress.value?.address ?? '',
-            homeApartment: undefined,
-            homeCity: mailingAddress.value?.city ?? '',
-            homeCountry: mailingAddress.value?.country ?? '',
-            homePostalCode: mailingAddress.value?.postalCode ?? '',
-            homeProvince: mailingAddress.value?.province ?? '',
-          }
-        : {
-            homeAddress: existingContactInformation.mailingAddress,
-            homeApartment: existingContactInformation.mailingApartment,
-            homeCity: existingContactInformation.mailingCity,
-            homeCountry: existingContactInformation.mailingCountry,
-            homePostalCode: existingContactInformation.mailingPostalCode,
-            homeProvince: existingContactInformation.mailingProvince,
-          };
+      // If the mailing address has changed, use the new mailing address values for the home address.
+      if (mailingAddress?.hasChanged) {
+        return {
+          homeAddress: mailingAddress.value.address,
+          homeApartment: undefined,
+          homeCity: mailingAddress.value.city,
+          homeCountry: mailingAddress.value.country,
+          homePostalCode: mailingAddress.value.postalCode,
+          homeProvince: mailingAddress.value.province,
+        };
+      }
+
+      // If the mailing address has not changed, use the existing mailing address values for the home address.
+      return {
+        homeAddress: existingContactInformation.mailingAddress.address,
+        homeApartment: existingContactInformation.mailingAddress.apartment,
+        homeCity: existingContactInformation.mailingAddress.city,
+        homeCountry: existingContactInformation.mailingAddress.country,
+        homePostalCode: existingContactInformation.mailingAddress.postalCode,
+        homeProvince: existingContactInformation.mailingAddress.province,
+      };
     }
 
-    return homeAddress
-      ? {
-          homeAddress: homeAddress.value?.address ?? '',
-          homeApartment: undefined,
-          homeCity: homeAddress.value?.city ?? '',
-          homeCountry: homeAddress.value?.country ?? '',
-          homePostalCode: homeAddress.value?.postalCode ?? '',
-          homeProvince: homeAddress.value?.province ?? '',
-        }
-      : {
-          homeAddress:
-            existingContactInformation.homeAddress ??
-            (() => {
-              throw new Error('Expected existingContactInformation.homeAddress to be defined');
-            })(),
-          homeApartment: existingContactInformation.homeApartment,
-          homeCity:
-            existingContactInformation.homeCity ??
-            (() => {
-              throw new Error('Expected existingContactInformation.homeCity to be defined');
-            })(),
-          homeCountry:
-            existingContactInformation.homeCountry ??
-            (() => {
-              throw new Error('Expected existingContactInformation.homeCountry to be defined');
-            })(),
-          homePostalCode: existingContactInformation.homePostalCode,
-          homeProvince: existingContactInformation.homeProvince,
-        };
+    // If the home address is not the same as the mailing address, we want to use the home address values, and any
+    // changes to the home address, for the home address.
+    invariant(homeAddress, 'Expected homeAddress to be defined');
+
+    // If the home address has changed, use the new home address values.
+    if (homeAddress.hasChanged) {
+      return {
+        homeAddress: homeAddress.value.address,
+        homeApartment: undefined,
+        homeCity: homeAddress.value.city,
+        homeCountry: homeAddress.value.country,
+        homePostalCode: homeAddress.value.postalCode,
+        homeProvince: homeAddress.value.province,
+      };
+    }
+
+    // If the home address has not changed, use the existing home address values.
+    invariant(existingContactInformation.homeAddress, 'Expected existingContactInformation.homeAddress to be defined');
+    return {
+      homeAddress: existingContactInformation.homeAddress.address,
+      homeApartment: existingContactInformation.homeAddress.apartment,
+      homeCity: existingContactInformation.homeAddress.city,
+      homeCountry: existingContactInformation.homeAddress.country,
+      homePostalCode: existingContactInformation.homeAddress.postalCode,
+      homeProvince: existingContactInformation.homeAddress.province,
+    };
   }
 
   private toMailingAddress({ existingContactInformation, mailingAddress }: ToMailingAddressArgs) {
-    return mailingAddress
-      ? {
-          mailingAddress: mailingAddress.value?.address ?? '',
-          mailingApartment: undefined,
-          mailingCity: mailingAddress.value?.city ?? '',
-          mailingCountry: mailingAddress.value?.country ?? '',
-          mailingPostalCode: mailingAddress.value?.postalCode ?? '',
-          mailingProvince: mailingAddress.value?.province ?? '',
-        }
-      : {
-          mailingAddress: existingContactInformation.mailingAddress,
-          mailingApartment: existingContactInformation.mailingApartment,
-          mailingCity: existingContactInformation.mailingCity,
-          mailingCountry: existingContactInformation.mailingCountry,
-          mailingPostalCode: existingContactInformation.mailingPostalCode,
-          mailingProvince: existingContactInformation.mailingProvince,
-        };
+    // If the mailing address has changed, use the new mailing address values.
+    if (mailingAddress?.hasChanged) {
+      return {
+        mailingAddress: mailingAddress.value.address,
+        mailingApartment: undefined,
+        mailingCity: mailingAddress.value.city,
+        mailingCountry: mailingAddress.value.country,
+        mailingPostalCode: mailingAddress.value.postalCode,
+        mailingProvince: mailingAddress.value.province,
+      };
+    }
+
+    // If the mailing address has not changed, use the existing mailing address values.
+    return {
+      mailingAddress: existingContactInformation.mailingAddress.address,
+      mailingApartment: existingContactInformation.mailingAddress.apartment,
+      mailingCity: existingContactInformation.mailingAddress.city,
+      mailingCountry: existingContactInformation.mailingAddress.country,
+      mailingPostalCode: existingContactInformation.mailingAddress.postalCode,
+      mailingProvince: existingContactInformation.mailingAddress.province,
+    };
   }
 
   private toCommunicationPreferences({ existingCommunicationPreferences, communicationPreferences, email, emailVerified }: ToCommunicationPreferencesArgs): RenewalCommunicationPreferencesDto {

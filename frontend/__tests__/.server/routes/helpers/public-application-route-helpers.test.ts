@@ -129,7 +129,7 @@ describe('public-application-route-helpers', () => {
           hasChanged: true,
           value: { address: '123 Main St', city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A9', province: 'ON' },
         },
-        clientApplication: { contactInformation: { mailingAddress: '', mailingCity: '', mailingCountry: '', mailingPostalCode: undefined, mailingProvince: undefined } },
+        clientApplication: { contactInformation: { mailingAddress: { address: '', city: '', country: '', postalCode: undefined, province: undefined } } },
       } as const;
 
       const countryService = mock<CountryService>();
@@ -148,7 +148,7 @@ describe('public-application-route-helpers', () => {
           hasChanged: true,
           value: { address: '123 Main St', city: 'Ottawa', country: 'CA', postalCode: undefined, province: undefined },
         },
-        clientApplication: { contactInformation: { mailingAddress: '', mailingCity: '', mailingCountry: '', mailingPostalCode: undefined, mailingProvince: undefined } },
+        clientApplication: { contactInformation: { mailingAddress: { address: '', city: '', country: '', postalCode: undefined, province: undefined } } },
       } as const;
 
       const countryService = mock<CountryService>();
@@ -165,7 +165,7 @@ describe('public-application-route-helpers', () => {
       const state = {
         mailingAddress: { hasChanged: false },
         clientApplication: {
-          contactInformation: { mailingAddress: '456 Elm St', mailingCity: 'Toronto', mailingCountry: 'CA', mailingPostalCode: 'M5G 2C8', mailingProvince: 'ON' },
+          contactInformation: { mailingAddress: { address: '456 Elm St', city: 'Toronto', country: 'CA', postalCode: 'M5G 2C8', province: 'ON' } },
         },
       } as const;
 
@@ -183,7 +183,7 @@ describe('public-application-route-helpers', () => {
       const state = {
         mailingAddress: { hasChanged: false },
         clientApplication: {
-          contactInformation: { mailingAddress: '456 Elm St', mailingCity: 'Toronto', mailingCountry: 'CA', mailingPostalCode: undefined, mailingProvince: undefined },
+          contactInformation: { mailingAddress: { address: '456 Elm St', city: 'Toronto', country: 'CA', postalCode: undefined, province: undefined } },
         },
       } as const;
 
@@ -208,7 +208,7 @@ describe('public-application-route-helpers', () => {
           hasChanged: true,
           value: { address: '789 Oak Ave', city: 'Vancouver', country: 'CA', postalCode: 'V6B 1A1', province: 'BC' },
         },
-        clientApplication: { contactInformation: { homeAddress: '', homeCity: '', homeCountry: '', homePostalCode: undefined, homeProvince: undefined } },
+        clientApplication: { contactInformation: { homeAddress: { address: '', city: '', country: '', postalCode: undefined, province: undefined } } },
       } as const;
 
       const countryService = mock<CountryService>();
@@ -227,7 +227,7 @@ describe('public-application-route-helpers', () => {
           hasChanged: true,
           value: { address: '789 Oak Ave', city: 'Vancouver', country: 'CA', postalCode: undefined, province: undefined },
         },
-        clientApplication: { contactInformation: { homeAddress: '', homeCity: '', homeCountry: '', homePostalCode: undefined, homeProvince: undefined } },
+        clientApplication: { contactInformation: { homeAddress: { address: '', city: '', country: '', postalCode: undefined, province: undefined } } },
       } as const;
 
       const countryService = mock<CountryService>();
@@ -244,7 +244,7 @@ describe('public-application-route-helpers', () => {
       const state = {
         homeAddress: { hasChanged: false },
         clientApplication: {
-          contactInformation: { homeAddress: '321 Pine Rd', homeCity: 'Calgary', homeCountry: 'CA', homePostalCode: 'T2P 1J9', homeProvince: 'BC' },
+          contactInformation: { homeAddress: { address: '321 Pine Rd', city: 'Calgary', country: 'CA', postalCode: 'T2P 1J9', province: 'BC' } },
         },
       } as const;
 
@@ -262,7 +262,7 @@ describe('public-application-route-helpers', () => {
       const state = {
         homeAddress: { hasChanged: false },
         clientApplication: {
-          contactInformation: { homeAddress: '321 Pine Rd', homeCity: 'Calgary', homeCountry: 'CA', homePostalCode: undefined, homeProvince: undefined },
+          contactInformation: { homeAddress: { address: '321 Pine Rd', city: 'Calgary', country: 'CA', postalCode: undefined, province: undefined } },
         },
       } as const;
 
