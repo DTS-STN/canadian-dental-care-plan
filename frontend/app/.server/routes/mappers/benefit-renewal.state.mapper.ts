@@ -17,6 +17,7 @@ import type {
   RenewalContactInformationDto,
   RenewalPartnerInformationDto,
 } from '~/.server/domain/dtos';
+import { maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import type {
   ApplicationYearState,
   ChildState,
@@ -137,6 +138,7 @@ interface ToMailingAddressArgs {
 }
 
 interface ToPartnerInformationArgs {
+  effectiveMaritalStatus?: string;
   existingPartnerInformation?: ReadonlyDeep<ClientPartnerInformationDto>;
   renewedPartnerInformation?: PartnerInformationState;
 }
@@ -200,6 +202,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       dentalInsurance,
       partnerInformation: this.toPartnerInformation({
+        effectiveMaritalStatus: maritalStatus ?? clientApplication.applicantInformation.maritalStatus,
         existingPartnerInformation: clientApplication.partnerInformation,
         renewedPartnerInformation: partnerInformation,
       }),
@@ -276,6 +279,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       dentalInsurance,
       partnerInformation: this.toPartnerInformation({
+        effectiveMaritalStatus: maritalStatus ?? clientApplication.applicantInformation.maritalStatus,
         existingPartnerInformation: clientApplication.partnerInformation,
         renewedPartnerInformation: partnerInformation,
       }),
@@ -346,6 +350,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       dentalBenefits: [],
       dentalInsurance: undefined,
       partnerInformation: this.toPartnerInformation({
+        effectiveMaritalStatus: maritalStatus ?? clientApplication.applicantInformation.maritalStatus,
         existingPartnerInformation: clientApplication.partnerInformation,
         renewedPartnerInformation: partnerInformation,
       }),
@@ -576,7 +581,21 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     return dentalBenefits;
   }
 
-  private toPartnerInformation({ existingPartnerInformation, renewedPartnerInformation }: ToPartnerInformationArgs): RenewalPartnerInformationDto | undefined {
-    return renewedPartnerInformation;
+  private toPartnerInformation({ effectiveMaritalStatus, existingPartnerInformation, renewedPartnerInformation }: ToPartnerInformationArgs): RenewalPartnerInformationDto | undefined {
+    if (!maritalStatusHasPartner(effectiveMaritalStatus)) {
+      return undefined;
+    }
+
+    if (renewedPartnerInformation) {
+      return renewedPartnerInformation;
+    }
+
+    return existingPartnerInformation
+      ? {
+          confirm: existingPartnerInformation.confirm,
+          socialInsuranceNumber: existingPartnerInformation.socialInsuranceNumber ?? '',
+          yearOfBirth: existingPartnerInformation.yearOfBirth,
+        }
+      : undefined;
   }
 }

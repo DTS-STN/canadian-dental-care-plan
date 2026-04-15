@@ -340,12 +340,6 @@ export function getChildrenState<TState extends Pick<PublicApplicationState, 'ch
     : state.children.filter((child) => isNewChildState(child) === false);
 }
 
-export function applicantInformationStateHasPartner(maritalStatus?: string) {
-  if (!maritalStatus) return false;
-  const { MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED } = getEnv();
-  return [MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED].includes(maritalStatus);
-}
-
 /**
  * Extracts the input model and type of application from a combined string.
  *

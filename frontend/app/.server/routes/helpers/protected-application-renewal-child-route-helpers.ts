@@ -3,9 +3,9 @@ import { redirect } from 'react-router';
 import { invariant } from '@dts-stn/invariant';
 
 import { createLogger } from '~/.server/logging';
-import { getAllowedTypeOfApplication, isChildClientNumberValid } from '~/.server/routes/helpers/base-application-route-helpers';
+import { getAllowedTypeOfApplication, isChildClientNumberValid, maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationStateParams, ChildrenState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { applicantInformationStateHasPartner, getChildrenState, getContextualAgeCategoryFromDate, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getChildrenState, getContextualAgeCategoryFromDate, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
@@ -142,11 +142,11 @@ export function validateProtectedApplicationRenewalChildStateForReview({ params,
     throw redirect(getPathById('protected/application/$id/renew', params));
   }
 
-  if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
+  if (maritalStatusHasPartner(maritalStatus) && !partnerInformation) {
     throw redirect(getPathById('protected/application/$id/renewal-children/parent-or-guardian', params));
   }
 
-  if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
+  if (!maritalStatusHasPartner(maritalStatus) && partnerInformation) {
     throw redirect(getPathById('protected/application/$id/renewal-children/parent-or-guardian', params));
   }
 

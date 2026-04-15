@@ -9,8 +9,9 @@ import { z } from 'zod';
 import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
+import { maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationFlow, PartnerInformationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { applicantInformationStateHasPartner, getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -128,12 +129,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const parsedMaritalStatus = maritalStatusSchema.safeParse(maritalStatusData);
   const parsedPartnerInformation = partnerInformationSchema.safeParse(partnerInformationData);
 
-  if (!parsedMaritalStatus.success || (applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success)) {
+  if (!parsedMaritalStatus.success || (maritalStatusHasPartner(parsedMaritalStatus.data.maritalStatus) && !parsedPartnerInformation.success)) {
     return data(
       {
         errors: {
           ...(parsedMaritalStatus.error ? transformFlattenedError(z.flattenError(parsedMaritalStatus.error)) : {}),
-          ...(parsedMaritalStatus.success && applicantInformationStateHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(z.flattenError(parsedPartnerInformation.error)) : {}),
+          ...(parsedMaritalStatus.success && maritalStatusHasPartner(parsedMaritalStatus.data.maritalStatus) && parsedPartnerInformation.error ? transformFlattenedError(z.flattenError(parsedPartnerInformation.error)) : {}),
         },
       },
       { status: 400 },

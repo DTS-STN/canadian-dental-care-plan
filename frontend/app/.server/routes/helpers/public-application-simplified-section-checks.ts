@@ -1,4 +1,4 @@
-import type { PickDeep } from 'node_modules/type-fest/source/pick-deep';
+import type { PickDeep } from 'type-fest';
 
 import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import { isChildClientNumberValid, isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
