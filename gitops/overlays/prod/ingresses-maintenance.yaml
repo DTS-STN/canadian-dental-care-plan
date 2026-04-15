@@ -60,4 +60,4 @@ spec:
               service:
                 name: frontend
                 port:
-                  name: oauth-proxy
+                  name: http
