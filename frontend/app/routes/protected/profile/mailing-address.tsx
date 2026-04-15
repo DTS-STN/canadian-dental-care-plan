@@ -67,12 +67,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     meta,
     defaultState: {
-      address: clientApplication.contactInformation.mailingAddress,
-      apartment: clientApplication.contactInformation.mailingApartment,
-      city: clientApplication.contactInformation.mailingCity,
-      postalCode: clientApplication.contactInformation.mailingPostalCode,
-      province: clientApplication.contactInformation.mailingProvince,
-      country: clientApplication.contactInformation.mailingCountry,
+      address: clientApplication.contactInformation.mailingAddress.address,
+      apartment: clientApplication.contactInformation.mailingAddress.apartment,
+      city: clientApplication.contactInformation.mailingAddress.city,
+      postalCode: clientApplication.contactInformation.mailingAddress.postalCode,
+      province: clientApplication.contactInformation.mailingAddress.province,
+      country: clientApplication.contactInformation.mailingAddress.country,
       copyMailing: clientApplication.contactInformation.copyMailingAddress,
     },
     countryList,
@@ -137,11 +137,11 @@ export async function action({ context: { appContainer, session }, params, reque
         homeAddress: isCopyMailingToHome
           ? mailingAddress
           : {
-              address: clientApplication.contactInformation.homeAddress ?? '',
-              city: clientApplication.contactInformation.homeCity ?? '',
-              countryId: clientApplication.contactInformation.homeCountry ?? '',
-              postalZipCode: clientApplication.contactInformation.homePostalCode ?? '',
-              provinceStateId: clientApplication.contactInformation.homeProvince ?? '',
+              address: clientApplication.contactInformation.homeAddress?.address ?? '',
+              city: clientApplication.contactInformation.homeAddress?.city ?? '',
+              countryId: clientApplication.contactInformation.homeAddress?.country ?? '',
+              postalZipCode: clientApplication.contactInformation.homeAddress?.postalCode ?? '',
+              provinceStateId: clientApplication.contactInformation.homeAddress?.province ?? '',
             },
       },
       idToken.sub,
@@ -206,11 +206,11 @@ export async function action({ context: { appContainer, session }, params, reque
       homeAddress: isCopyMailingToHome
         ? mailingAddress
         : {
-            address: clientApplication.contactInformation.homeAddress ?? '',
-            city: clientApplication.contactInformation.homeCity ?? '',
-            countryId: clientApplication.contactInformation.homeCountry ?? '',
-            postalZipCode: clientApplication.contactInformation.homePostalCode ?? '',
-            provinceStateId: clientApplication.contactInformation.homeProvince ?? '',
+            address: clientApplication.contactInformation.homeAddress?.address ?? '',
+            city: clientApplication.contactInformation.homeAddress?.city ?? '',
+            countryId: clientApplication.contactInformation.homeAddress?.country ?? '',
+            postalZipCode: clientApplication.contactInformation.homeAddress?.postalCode ?? '',
+            provinceStateId: clientApplication.contactInformation.homeAddress?.province ?? '',
           },
     },
     idToken.sub,

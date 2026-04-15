@@ -60,19 +60,22 @@ export type ApplicantCommunicationPreferencesDto = ReadonlyDeep<{
 }>;
 
 export type ApplicantContactInformationDto = ReadonlyDeep<{
-  homeAddress?: string;
-  homeApartment?: string;
-  homeCity?: string;
-  homeCountry?: string;
-  homePostalCode?: string;
-  homeProvince?: string;
-  mailingAddress: string;
-  mailingApartment?: string;
-  mailingCity: string;
-  mailingCountry: string;
-  mailingPostalCode?: string;
-  mailingProvince?: string;
+  /** Home address is optional because ITA clients initially have no home address */
+  homeAddress?: ApplicantAddressDto;
+  mailingAddress: ApplicantAddressDto;
   phoneNumber?: string;
   phoneNumberAlt?: string;
   email?: string;
+}>;
+
+/**
+ * Represents an address with normalized fields for comparison purposes.
+ */
+type ApplicantAddressDto = ReadonlyDeep<{
+  address: string;
+  apartment?: string;
+  city: string;
+  country: string;
+  postalCode?: string;
+  province?: string;
 }>;

@@ -125,27 +125,27 @@ export async function loader({ context: { appContainer, session }, request, para
               preferredNotificationMethod: gcCommunicationMethodService.getLocalizedGCCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada, locale).name,
             }
           : undefined,
-      mailingAddress: state.clientApplication.contactInformation.mailingCountry
+      mailingAddress: state.clientApplication.contactInformation.mailingAddress.country
         ? {
-            address: state.clientApplication.contactInformation.mailingAddress,
-            city: state.clientApplication.contactInformation.mailingCity,
-            province: state.clientApplication.contactInformation.mailingProvince //
-              ? await provinceTerritoryStateService.getProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingProvince)
+            address: state.clientApplication.contactInformation.mailingAddress.address,
+            city: state.clientApplication.contactInformation.mailingAddress.city,
+            province: state.clientApplication.contactInformation.mailingAddress.province //
+              ? await provinceTerritoryStateService.getProvinceTerritoryStateById(state.clientApplication.contactInformation.mailingAddress.province)
               : undefined,
-            postalCode: state.clientApplication.contactInformation.mailingPostalCode,
-            country: await countryService.getLocalizedCountryById(state.clientApplication.contactInformation.mailingCountry, locale),
+            postalCode: state.clientApplication.contactInformation.mailingAddress.postalCode,
+            country: await countryService.getLocalizedCountryById(state.clientApplication.contactInformation.mailingAddress.country, locale),
             hasChanged: false,
           }
         : undefined,
-      homeAddress: state.clientApplication.contactInformation.homeCountry
+      homeAddress: state.clientApplication.contactInformation.homeAddress
         ? {
-            address: state.clientApplication.contactInformation.homeAddress,
-            city: state.clientApplication.contactInformation.homeCity,
-            province: state.clientApplication.contactInformation.homeProvince //
-              ? await provinceTerritoryStateService.getProvinceTerritoryStateById(state.clientApplication.contactInformation.homeProvince)
+            address: state.clientApplication.contactInformation.homeAddress.address,
+            city: state.clientApplication.contactInformation.homeAddress.city,
+            province: state.clientApplication.contactInformation.homeAddress.province //
+              ? await provinceTerritoryStateService.getProvinceTerritoryStateById(state.clientApplication.contactInformation.homeAddress.province)
               : undefined,
-            postalCode: state.clientApplication.contactInformation.homePostalCode,
-            country: await countryService.getLocalizedCountryById(state.clientApplication.contactInformation.homeCountry, locale),
+            postalCode: state.clientApplication.contactInformation.homeAddress.postalCode,
+            country: await countryService.getLocalizedCountryById(state.clientApplication.contactInformation.homeAddress.country, locale),
             hasChanged: false,
           }
         : undefined,
@@ -541,8 +541,8 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
           <DefinitionListItem term={t('protected-application-renewal-child:parent-or-guardian.home-address')}>
             <Address
               address={{
-                address: clientApplication.homeAddress.address ?? '',
-                city: clientApplication.homeAddress.city ?? '',
+                address: clientApplication.homeAddress.address,
+                city: clientApplication.homeAddress.city,
                 provinceState: clientApplication.homeAddress.province?.abbr,
                 postalZipCode: clientApplication.homeAddress.postalCode,
                 country: clientApplication.homeAddress.country.name,

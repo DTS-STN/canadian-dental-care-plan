@@ -1,5 +1,4 @@
 import { inject, injectable } from 'inversify';
-import { Result } from 'oxide.ts';
 
 import type { ClientEligibilityDto, ClientEligibilityRequestDto } from '../dtos/client-eligibility.dto';
 import type { ClientEligibilityEntity, ClientEligibilityRequestEntity } from '../entities/client-eligibility.entity';
@@ -7,6 +6,7 @@ import type { ClientEligibilityEntity, ClientEligibilityRequestEntity } from '..
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import { isValidCoverageCopayTierCode } from '~/.server/utils/coverage.utils';
+import { expectDefined } from '~/utils/assert-utils';
 
 export interface ClientEligibilityDtoMapper {
   mapClientEligibilityEntityToClientEligibilityDto(clientEligibilityEntity: ClientEligibilityEntity): ClientEligibilityDto;
@@ -27,10 +27,10 @@ export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMa
     const applicant = clientEligibilityEntity.Applicant;
 
     return {
-      clientId: Result.from(applicant.ClientIdentification.find(({ IdentificationCategoryText }) => IdentificationCategoryText === 'Client ID')?.IdentificationID).expect('Client ID not found'),
-      clientNumber: Result.from(applicant.ClientIdentification.find(({ IdentificationCategoryText }) => IdentificationCategoryText === 'Client Number')?.IdentificationID).expect('Client Number not found'),
-      firstName: Result.from(applicant.PersonName.at(0)?.PersonGivenName.at(0)).expect('First name not found'),
-      lastName: Result.from(applicant.PersonName.at(0)?.PersonSurName).expect('Last name not found'),
+      clientId: expectDefined(applicant.ClientIdentification.find(({ IdentificationCategoryText }) => IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Client ID not found'),
+      clientNumber: expectDefined(applicant.ClientIdentification.find(({ IdentificationCategoryText }) => IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Client Number not found'),
+      firstName: expectDefined(applicant.PersonName.at(0)?.PersonGivenName.at(0), 'First name not found'),
+      lastName: expectDefined(applicant.PersonName.at(0)?.PersonSurName, 'Last name not found'),
       earnings: applicant.ApplicantEarning.map((earning) => this.mapApplicantEarningToClientEligibilityEarning(earning)),
       eligibilityStatusCode: applicant.BenefitEligibilityStatus?.StatusCode?.ReferenceDataID,
       eligibilityStatusCodeNextYear: applicant.BenefitEligibilityNextYearStatus?.StatusCode?.ReferenceDataID,

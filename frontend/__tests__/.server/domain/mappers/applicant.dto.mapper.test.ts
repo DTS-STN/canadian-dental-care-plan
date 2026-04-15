@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import type { ApplicantDto } from '~/.server/domain/dtos';
 import type { ApplicantResponseEntity } from '~/.server/domain/entities';
 import { DefaultApplicantDtoMapper } from '~/.server/domain/mappers/applicant.dto.mapper';
 
@@ -21,16 +22,16 @@ describe('DefaultApplicantDtoMapper', () => {
               Address: [
                 {
                   AddressCategoryCode: { ReferenceDataName: 'Mailing' },
-                  AddressCityName: 'City',
-                  AddressCountry: { CountryCode: { ReferenceDataID: 'CA' } },
-                  AddressPostalCode: 'A1A1A1',
-                  AddressStreet: { StreetName: '123 Main St' },
-                  AddressProvince: { ProvinceCode: { ReferenceDataID: 'ON' } },
-                  AddressSecondaryUnitText: 'Unit 1',
+                  AddressCityName: 'Mailing City',
+                  AddressCountry: { CountryCode: { ReferenceDataID: 'US' } },
+                  AddressPostalCode: '12345',
+                  AddressStreet: { StreetName: '456 Main St' },
+                  AddressProvince: { ProvinceCode: { ReferenceDataID: 'NY' } },
+                  AddressSecondaryUnitText: 'Unit 2',
                 },
                 {
                   AddressCategoryCode: { ReferenceDataName: 'Home' },
-                  AddressCityName: 'City',
+                  AddressCityName: 'Home City',
                   AddressCountry: { CountryCode: { ReferenceDataID: 'CA' } },
                   AddressPostalCode: 'A1A1A1',
                   AddressStreet: { StreetName: '123 Main St' },
@@ -83,7 +84,7 @@ describe('DefaultApplicantDtoMapper', () => {
 
     it('should successfully map valid ApplicantResponseEntity to ApplicantDto', () => {
       const result = mapper.mapApplicantResponseEntityToApplicantDto(mockBaseEntity);
-      expect(result).toEqual({
+      expect(result).toEqual<ApplicantDto>({
         clientId: '12345',
         clientNumber: '67890',
         communicationPreferences: {
@@ -93,18 +94,22 @@ describe('DefaultApplicantDtoMapper', () => {
         },
         contactInformation: {
           email: 'john.doe@example.com',
-          homeAddress: '123 Main St',
-          homeApartment: 'Unit 1',
-          homeCity: 'City',
-          homeCountry: 'CA',
-          homePostalCode: 'A1A1A1',
-          homeProvince: 'ON',
-          mailingAddress: '123 Main St',
-          mailingApartment: 'Unit 1',
-          mailingCity: 'City',
-          mailingCountry: 'CA',
-          mailingPostalCode: 'A1A1A1',
-          mailingProvince: 'ON',
+          homeAddress: {
+            address: '123 Main St',
+            apartment: 'Unit 1',
+            city: 'Home City',
+            country: 'CA',
+            postalCode: 'A1A1A1',
+            province: 'ON',
+          },
+          mailingAddress: {
+            address: '456 Main St',
+            apartment: 'Unit 2',
+            city: 'Mailing City',
+            country: 'US',
+            postalCode: '12345',
+            province: 'NY',
+          },
           phoneNumber: '123-456-7890',
           phoneNumberAlt: '123-456-7891',
         },
