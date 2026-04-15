@@ -66,11 +66,6 @@ configMapGenerator:
     #                the project as a reference for future, similar deployments
     # files:
     #   - ./configs/maintenance/503.html
-    literals:
-      - startTimeEn=April 14, 2026, at 8:00 p.m.
-      - startTimeFr=14 avril 2026 à 20 h 00
-      - endTimeEn=April 15, 2026, at 8:00 a.m. (EST)
-      - endTimeFr=15 avril 2026 à 08 h 00 (HNE)
 secretGenerator:
   - name: frontend
     behavior: replace
