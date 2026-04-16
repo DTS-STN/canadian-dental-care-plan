@@ -1,9 +1,19 @@
+import { isDeepStrictEqual } from 'node:util';
 import type { PickDeep } from 'type-fest';
 
-import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
+import type { ClientApplicationDto, ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
+import type { DeclaredChange } from '~/.server/routes/helpers/declared-change-type';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { EligibilityType } from '~/components/eligibility';
 import { getAgeFromDateString } from '~/utils/date-utils';
+
+type DeclaredChangeAddress = DeclaredChange<{
+  address: string;
+  city: string;
+  country: string;
+  postalCode?: string;
+  province?: string;
+}>;
 
 /**
  * Age categories based on the age of the individual.
@@ -189,4 +199,74 @@ export function maritalStatusHasPartner(maritalStatus?: string) {
   if (!maritalStatus) return false;
   const { MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED } = getEnv();
   return [MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED].includes(maritalStatus);
+}
+
+/**
+ * Determines if the home address is the same as the mailing address by performing a deep equality check on the relevant address fields.
+ * Both addresses must be defined and have changes for the function to compare them; otherwise, it returns false.
+ *
+ * @param state - An object containing the home and mailing addresses, each of which may have changed.
+ * @returns `true` if both addresses are defined, have changes, and all relevant fields are deeply equal, `false` otherwise.
+ */
+export function isHomeAddressSameAsMailingAddress(state: { homeAddress?: DeclaredChangeAddress; mailingAddress?: DeclaredChangeAddress }): boolean {
+  const { homeAddress, mailingAddress } = state;
+
+  if (homeAddress?.hasChanged !== true || mailingAddress?.hasChanged !== true) {
+    // both addresses must be defined and have changes to be able to compare them, otherwise we cannot determine if
+    // they are the same or not, so we return false.
+    return false;
+  }
+
+  return isDeepStrictEqual(
+    {
+      address: homeAddress.value.address,
+      city: homeAddress.value.city,
+      country: homeAddress.value.country,
+      postalCode: homeAddress.value.postalCode,
+      province: homeAddress.value.province,
+    },
+    {
+      address: mailingAddress.value.address,
+      city: mailingAddress.value.city,
+      country: mailingAddress.value.country,
+      postalCode: mailingAddress.value.postalCode,
+      province: mailingAddress.value.province,
+    },
+  );
+}
+
+/**
+ * Determines if the client's home address is the same as their mailing address by performing a deep equality check on
+ * the relevant address fields.
+ *
+ * @param clientApplication - An object containing the client's application data, specifically the home and mailing addresses.
+ * @returns `true` if both addresses are defined and all relevant fields are deeply equal, `false` otherwise.
+ */
+export function isClientApplicationHomeAddressSameAsMailingAddress(clientApplication: PickDeep<ClientApplicationDto, 'contactInformation.homeAddress' | 'contactInformation.mailingAddress'>): boolean {
+  const { homeAddress, mailingAddress } = clientApplication.contactInformation;
+
+  if (!homeAddress) {
+    // both addresses must be defined to be able to compare them, otherwise we cannot determine if
+    // they are the same or not, so we return false.
+    return false;
+  }
+
+  return isDeepStrictEqual(
+    {
+      address: homeAddress.address,
+      apartment: homeAddress.apartment,
+      city: homeAddress.city,
+      country: homeAddress.country,
+      postalCode: homeAddress.postalCode,
+      province: homeAddress.province,
+    },
+    {
+      address: mailingAddress.address,
+      apartment: mailingAddress.apartment,
+      city: mailingAddress.city,
+      country: mailingAddress.country,
+      postalCode: mailingAddress.postalCode,
+      province: mailingAddress.province,
+    },
+  );
 }

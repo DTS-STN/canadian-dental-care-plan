@@ -9,6 +9,8 @@ import {
   getEligibilityStatus,
   isChildClientNumberValid,
   isChildOrYouth,
+  isClientApplicationHomeAddressSameAsMailingAddress,
+  isHomeAddressSameAsMailingAddress,
   maritalStatusHasPartner,
 } from '~/.server/routes/helpers/base-application-route-helpers';
 
@@ -418,5 +420,205 @@ describe('getAllowedTypeOfApplication', () => {
       expect(maritalStatusHasPartner('DIVORCED')).toBe(false);
       expect(maritalStatusHasPartner('WIDOWED')).toBe(false);
     });
+  });
+});
+
+describe('isHomeAddressSameAsMailingAddress', () => {
+  it('returns false when homeAddress is undefined', () => {
+    expect(isHomeAddressSameAsMailingAddress({ homeAddress: undefined, mailingAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Ottawa', country: 'CA' } } })).toBe(false);
+  });
+
+  it('returns false when mailingAddress is undefined', () => {
+    expect(isHomeAddressSameAsMailingAddress({ homeAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Ottawa', country: 'CA' } }, mailingAddress: undefined })).toBe(false);
+  });
+
+  it('returns false when both addresses are undefined', () => {
+    expect(isHomeAddressSameAsMailingAddress({ homeAddress: undefined, mailingAddress: undefined })).toBe(false);
+  });
+
+  it('returns false when homeAddress.hasChanged is false', () => {
+    expect(
+      isHomeAddressSameAsMailingAddress({
+        homeAddress: { hasChanged: false },
+        mailingAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Ottawa', country: 'CA' } },
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when mailingAddress.hasChanged is false', () => {
+    expect(
+      isHomeAddressSameAsMailingAddress({
+        homeAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Ottawa', country: 'CA' } },
+        mailingAddress: { hasChanged: false },
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when both addresses have hasChanged false', () => {
+    expect(isHomeAddressSameAsMailingAddress({ homeAddress: { hasChanged: false }, mailingAddress: { hasChanged: false } })).toBe(false);
+  });
+
+  it('returns true when both addresses have changed and all fields are equal', () => {
+    const value = { address: '123 Main St', city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6', province: 'ON' };
+    expect(isHomeAddressSameAsMailingAddress({ homeAddress: { hasChanged: true, value }, mailingAddress: { hasChanged: true, value } })).toBe(true);
+  });
+
+  it('returns true when both addresses are equal with optional fields omitted', () => {
+    const value = { address: '123 Main St', city: 'Ottawa', country: 'CA' };
+    expect(isHomeAddressSameAsMailingAddress({ homeAddress: { hasChanged: true, value }, mailingAddress: { hasChanged: true, value } })).toBe(true);
+  });
+
+  it('returns false when addresses differ by street address', () => {
+    expect(
+      isHomeAddressSameAsMailingAddress({
+        homeAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Ottawa', country: 'CA' } },
+        mailingAddress: { hasChanged: true, value: { address: '456 Elm St', city: 'Ottawa', country: 'CA' } },
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when addresses differ by city', () => {
+    expect(
+      isHomeAddressSameAsMailingAddress({
+        homeAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Ottawa', country: 'CA' } },
+        mailingAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Toronto', country: 'CA' } },
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when addresses differ by country', () => {
+    expect(
+      isHomeAddressSameAsMailingAddress({
+        homeAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Ottawa', country: 'CA' } },
+        mailingAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Ottawa', country: 'US' } },
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when addresses differ by postalCode', () => {
+    expect(
+      isHomeAddressSameAsMailingAddress({
+        homeAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6' } },
+        mailingAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Ottawa', country: 'CA', postalCode: 'K2B 1B7' } },
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when addresses differ by province', () => {
+    expect(
+      isHomeAddressSameAsMailingAddress({
+        homeAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Ottawa', country: 'CA', province: 'ON' } },
+        mailingAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Ottawa', country: 'CA', province: 'QC' } },
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when one address has postalCode and the other does not', () => {
+    expect(
+      isHomeAddressSameAsMailingAddress({
+        homeAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6' } },
+        mailingAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Ottawa', country: 'CA' } },
+      }),
+    ).toBe(false);
+  });
+});
+
+describe('isClientApplicationHomeAddressSameAsMailingAddress', () => {
+  it('returns false when homeAddress is undefined', () => {
+    expect(
+      isClientApplicationHomeAddressSameAsMailingAddress({
+        contactInformation: {
+          homeAddress: undefined,
+          mailingAddress: { address: '123 Main St', apartment: undefined, city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6', province: 'ON' },
+        },
+      }),
+    ).toBe(false);
+  });
+
+  it('returns true when all fields are identical', () => {
+    const address = { address: '123 Main St', apartment: '4B', city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6', province: 'ON' };
+    expect(isClientApplicationHomeAddressSameAsMailingAddress({ contactInformation: { homeAddress: address, mailingAddress: address } })).toBe(true);
+  });
+
+  it('returns true when all fields are equal with undefined optional fields', () => {
+    const address = { address: '123 Main St', apartment: undefined, city: 'Ottawa', country: 'CA', postalCode: undefined, province: undefined };
+    expect(isClientApplicationHomeAddressSameAsMailingAddress({ contactInformation: { homeAddress: address, mailingAddress: address } })).toBe(true);
+  });
+
+  it('returns false when addresses differ by street address', () => {
+    expect(
+      isClientApplicationHomeAddressSameAsMailingAddress({
+        contactInformation: {
+          homeAddress: { address: '123 Main St', apartment: undefined, city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6', province: 'ON' },
+          mailingAddress: { address: '456 Elm St', apartment: undefined, city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6', province: 'ON' },
+        },
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when addresses differ by apartment', () => {
+    expect(
+      isClientApplicationHomeAddressSameAsMailingAddress({
+        contactInformation: {
+          homeAddress: { address: '123 Main St', apartment: '4B', city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6', province: 'ON' },
+          mailingAddress: { address: '123 Main St', apartment: '5C', city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6', province: 'ON' },
+        },
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when one address has an apartment and the other does not', () => {
+    expect(
+      isClientApplicationHomeAddressSameAsMailingAddress({
+        contactInformation: {
+          homeAddress: { address: '123 Main St', apartment: '4B', city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6', province: 'ON' },
+          mailingAddress: { address: '123 Main St', apartment: undefined, city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6', province: 'ON' },
+        },
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when addresses differ by city', () => {
+    expect(
+      isClientApplicationHomeAddressSameAsMailingAddress({
+        contactInformation: {
+          homeAddress: { address: '123 Main St', apartment: undefined, city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6', province: 'ON' },
+          mailingAddress: { address: '123 Main St', apartment: undefined, city: 'Toronto', country: 'CA', postalCode: 'K1A 0A6', province: 'ON' },
+        },
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when addresses differ by country', () => {
+    expect(
+      isClientApplicationHomeAddressSameAsMailingAddress({
+        contactInformation: {
+          homeAddress: { address: '123 Main St', apartment: undefined, city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6', province: 'ON' },
+          mailingAddress: { address: '123 Main St', apartment: undefined, city: 'Ottawa', country: 'US', postalCode: 'K1A 0A6', province: 'ON' },
+        },
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when addresses differ by postalCode', () => {
+    expect(
+      isClientApplicationHomeAddressSameAsMailingAddress({
+        contactInformation: {
+          homeAddress: { address: '123 Main St', apartment: undefined, city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6', province: 'ON' },
+          mailingAddress: { address: '123 Main St', apartment: undefined, city: 'Ottawa', country: 'CA', postalCode: 'K2B 1B7', province: 'ON' },
+        },
+      }),
+    ).toBe(false);
+  });
+
+  it('returns false when addresses differ by province', () => {
+    expect(
+      isClientApplicationHomeAddressSameAsMailingAddress({
+        contactInformation: {
+          homeAddress: { address: '123 Main St', apartment: undefined, city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6', province: 'ON' },
+          mailingAddress: { address: '123 Main St', apartment: undefined, city: 'Ottawa', country: 'CA', postalCode: 'K1A 0A6', province: 'QC' },
+        },
+      }),
+    ).toBe(false);
   });
 });
