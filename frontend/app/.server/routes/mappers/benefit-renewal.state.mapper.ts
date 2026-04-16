@@ -455,10 +455,16 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       existingEmail: existingContactInformation.email,
     });
 
+    // Determine if the home address is the same as the mailing address. If either address has changed, use the
+    // isHomeAddressSameAsMailingAddress value provided by the user. If neither address has changed, use the existing
+    // copyMailingAddress value to maintain consistency with the existing data.
+    const haveAddressesChanged = renewedHomeAddress?.hasChanged === true || renewedMailingAddress?.hasChanged === true;
+    const resolvedIsHomeAddressSameAsMailingAddress = haveAddressesChanged ? isHomeAddressSameAsMailingAddress : existingContactInformation.copyMailingAddress;
+
     return {
       email: hasEmailChanged && renewedEmail ? renewedEmail : existingContactInformation.email,
-      copyMailingAddress: !!isHomeAddressSameAsMailingAddress,
-      ...this.toHomeAddress({ existingContactInformation, isHomeAddressSameAsMailingAddress, homeAddress: renewedHomeAddress, mailingAddress: renewedMailingAddress }),
+      copyMailingAddress: !!resolvedIsHomeAddressSameAsMailingAddress,
+      ...this.toHomeAddress({ existingContactInformation, isHomeAddressSameAsMailingAddress: resolvedIsHomeAddressSameAsMailingAddress, homeAddress: renewedHomeAddress, mailingAddress: renewedMailingAddress }),
       ...this.toMailingAddress({ existingContactInformation, mailingAddress: renewedMailingAddress }),
       ...phoneNumbers,
     };
