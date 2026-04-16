@@ -85,7 +85,7 @@ describe('protected-application-simplified-section-checks', () => {
       ).toBe(false);
     });
 
-    it('should return true when both addresses have changed', () => {
+    it('should return true when both addresses have changed and same-address question is answered', () => {
       expect(
         isAddressSectionCompleted({
           mailingAddress: {
@@ -96,8 +96,25 @@ describe('protected-application-simplified-section-checks', () => {
             hasChanged: true,
             value: { address: '456 Oak Ave', city: 'Othertown', province: 'BC', postalCode: 'B2B 2B2', country: 'CAN' },
           },
+          isHomeAddressSameAsMailingAddress: false,
         }),
       ).toBe(true);
+    });
+
+    it('should return false when both addresses have changed but same-address question is unanswered', () => {
+      expect(
+        isAddressSectionCompleted({
+          mailingAddress: {
+            hasChanged: true,
+            value: { address: '123 Main St', city: 'Anytown', province: 'ON', postalCode: 'A1A 1A1', country: 'CAN' },
+          },
+          homeAddress: {
+            hasChanged: true,
+            value: { address: '456 Oak Ave', city: 'Othertown', province: 'BC', postalCode: 'B2B 2B2', country: 'CAN' },
+          },
+          isHomeAddressSameAsMailingAddress: undefined,
+        }),
+      ).toBe(false);
     });
 
     it('should return true when neither address has changed and both are on file in the client application', () => {

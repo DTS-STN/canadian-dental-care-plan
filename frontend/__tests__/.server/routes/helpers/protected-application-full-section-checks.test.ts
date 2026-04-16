@@ -46,11 +46,24 @@ describe('protected-application-full-section-checks', () => {
 
   describe('isAddressSectionCompleted', () => {
     it('should return false when mailingAddress is undefined', () => {
-      expect(isAddressSectionCompleted({ mailingAddress: undefined, homeAddress: { hasChanged: true } })).toBe(false);
+      expect(
+        isAddressSectionCompleted({
+          mailingAddress: undefined,
+          homeAddress: {
+            hasChanged: true,
+            value: { address: '456 Oak Ave', city: 'Othertown', province: 'BC', postalCode: 'B2B 2B2', country: 'CAN' },
+          },
+        }),
+      ).toBe(false);
     });
 
     it('should return false when homeAddress is undefined', () => {
-      expect(isAddressSectionCompleted({ mailingAddress: { hasChanged: true }, homeAddress: undefined })).toBe(false);
+      expect(
+        isAddressSectionCompleted({
+          mailingAddress: { hasChanged: true, value: { address: '123 Main St', city: 'Anytown', province: 'ON', postalCode: 'A1A 1A1', country: 'CAN' } },
+          homeAddress: undefined,
+        }),
+      ).toBe(false);
     });
 
     it('should return false when both addresses are undefined', () => {

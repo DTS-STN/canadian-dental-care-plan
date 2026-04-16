@@ -18,20 +18,30 @@ export function isPhoneNumberSectionCompleted(state: Pick<ProtectedApplicationSt
  *
  * Both address change statuses must be answered before completion can be evaluated.
  * The section is then considered complete in two scenarios:
- * - Both addresses have changed: the user has provided updated mailing and home addresses, or
+ * - Both addresses have changed: the user has provided updated mailing and home addresses, and
+ *   the user has answered whether their home address is the same as their mailing address, or
  * - Neither address has changed: the client application must already have both a mailing and
  *   home address on file so the existing addresses can be carried forward.
  *
  * A mismatch in change status (one changed, one did not) is always considered incomplete.
  */
-export function isAddressSectionCompleted(state: PickDeep<ProtectedApplicationState, 'mailingAddress' | 'homeAddress' | 'clientApplication.contactInformation.homeAddress' | 'clientApplication.contactInformation.mailingAddress'>): boolean {
+export function isAddressSectionCompleted(
+  state: PickDeep<
+    ProtectedApplicationState,
+    | 'mailingAddress' //
+    | 'homeAddress'
+    | 'isHomeAddressSameAsMailingAddress'
+    | 'clientApplication.contactInformation.homeAddress'
+    | 'clientApplication.contactInformation.mailingAddress'
+  >,
+): boolean {
   // Both address change statuses must be answered before evaluating completion
   if (!state.mailingAddress || !state.homeAddress) {
     return false;
   }
 
-  // Both changed: user has provided updated mailing and home addresses
-  if (state.mailingAddress.hasChanged && state.homeAddress.hasChanged) {
+  // Both changed: user has provided updated mailing and home addresses, and the same-address question must be answered
+  if (state.mailingAddress.hasChanged && state.homeAddress.hasChanged && state.isHomeAddressSameAsMailingAddress !== undefined) {
     return true;
   }
 
