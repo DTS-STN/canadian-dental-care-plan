@@ -99,7 +99,6 @@ interface ToApplicantInformationArgs {
 interface ToChildrenArgs {
   existingChildren: readonly ReadonlyDeep<ClientChildDto>[];
   renewedChildren: ChildState[];
-  isProtectedRenewal?: boolean;
 }
 
 interface ToCommunicationPreferencesArgs {
@@ -400,7 +399,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     };
   }
 
-  private toChildren({ existingChildren, renewedChildren, isProtectedRenewal }: ToChildrenArgs): RenewalChildDto[] {
+  private toChildren({ existingChildren, renewedChildren }: ToChildrenArgs): RenewalChildDto[] {
     return renewedChildren.map((renewedChild) => {
       const existingChild = existingChildren.find((existingChild) => existingChild.information.clientNumber === renewedChild.information?.memberId);
       invariant(existingChild, 'Expected existingChild to be defined');
