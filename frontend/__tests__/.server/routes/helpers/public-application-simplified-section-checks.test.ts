@@ -54,46 +54,14 @@ describe('public-application-simplified-section-checks', () => {
   });
 
   describe('isAddressSectionCompleted', () => {
-    it('should return true when both mailingAddress and homeAddress are defined', () => {
-      expect(
-        isAddressSectionCompleted({
-          mailingAddress: {
-            hasChanged: true,
-            value: {
-              address: '123 Main St',
-              city: 'Anytown',
-              province: 'ON',
-              postalCode: 'A1A 1A1',
-              country: 'CAN',
-            },
-          },
-          homeAddress: {
-            hasChanged: true,
-            value: {
-              address: '456 Oak Ave',
-              city: 'Othertown',
-              province: 'BC',
-              postalCode: 'B2B 2B2',
-              country: 'CAN',
-            },
-          },
-        }),
-      ).toBe(true);
-    });
-
     it('should return false when mailingAddress is undefined', () => {
       expect(
         isAddressSectionCompleted({
+          context: 'intake',
           mailingAddress: undefined,
           homeAddress: {
             hasChanged: true,
-            value: {
-              address: '456 Oak Ave',
-              city: 'Othertown',
-              province: 'BC',
-              postalCode: 'B2B 2B2',
-              country: 'CAN',
-            },
+            value: { address: '456 Oak Ave', city: 'Othertown', province: 'BC', postalCode: 'B2B 2B2', country: 'CAN' },
           },
         }),
       ).toBe(false);
@@ -102,15 +70,10 @@ describe('public-application-simplified-section-checks', () => {
     it('should return false when homeAddress is undefined', () => {
       expect(
         isAddressSectionCompleted({
+          context: 'intake',
           mailingAddress: {
             hasChanged: true,
-            value: {
-              address: '123 Main St',
-              city: 'Anytown',
-              province: 'ON',
-              postalCode: 'A1A 1A1',
-              country: 'CAN',
-            },
+            value: { address: '123 Main St', city: 'Anytown', province: 'ON', postalCode: 'A1A 1A1', country: 'CAN' },
           },
           homeAddress: undefined,
         }),
@@ -120,8 +83,132 @@ describe('public-application-simplified-section-checks', () => {
     it('should return false when both addresses are undefined', () => {
       expect(
         isAddressSectionCompleted({
+          context: 'intake',
           mailingAddress: undefined,
           homeAddress: undefined,
+        }),
+      ).toBe(false);
+    });
+
+    it('should return true when both addresses have changed and same-address question is answered', () => {
+      expect(
+        isAddressSectionCompleted({
+          context: 'intake',
+          mailingAddress: {
+            hasChanged: true,
+            value: { address: '123 Main St', city: 'Anytown', province: 'ON', postalCode: 'A1A 1A1', country: 'CAN' },
+          },
+          homeAddress: {
+            hasChanged: true,
+            value: { address: '456 Oak Ave', city: 'Othertown', province: 'BC', postalCode: 'B2B 2B2', country: 'CAN' },
+          },
+          isHomeAddressSameAsMailingAddress: false,
+        }),
+      ).toBe(true);
+    });
+
+    it('should return false when both addresses have changed but same-address question is unanswered', () => {
+      expect(
+        isAddressSectionCompleted({
+          context: 'intake',
+          mailingAddress: {
+            hasChanged: true,
+            value: { address: '123 Main St', city: 'Anytown', province: 'ON', postalCode: 'A1A 1A1', country: 'CAN' },
+          },
+          homeAddress: {
+            hasChanged: true,
+            value: { address: '456 Oak Ave', city: 'Othertown', province: 'BC', postalCode: 'B2B 2B2', country: 'CAN' },
+          },
+          isHomeAddressSameAsMailingAddress: undefined,
+        }),
+      ).toBe(false);
+    });
+
+    it('should return true when neither address has changed on renewal and both are on file in the client application', () => {
+      expect(
+        isAddressSectionCompleted({
+          context: 'renewal',
+          mailingAddress: { hasChanged: false },
+          homeAddress: { hasChanged: false },
+          clientApplication: {
+            contactInformation: {
+              mailingAddress: { address: '123 Main St', city: 'Anytown', country: 'CAN' },
+              homeAddress: { address: '456 Oak Ave', city: 'Othertown', country: 'CAN' },
+            },
+          },
+        } as Parameters<typeof isAddressSectionCompleted>[0]),
+      ).toBe(true);
+    });
+
+    it('should return false when neither address has changed on renewal and home address is not on file', () => {
+      expect(
+        isAddressSectionCompleted({
+          context: 'renewal',
+          mailingAddress: { hasChanged: false },
+          homeAddress: { hasChanged: false },
+          clientApplication: {
+            contactInformation: {
+              mailingAddress: { address: '123 Main St', city: 'Anytown', country: 'CAN' },
+              homeAddress: undefined,
+            },
+          },
+        } as Parameters<typeof isAddressSectionCompleted>[0]),
+      ).toBe(false);
+    });
+
+    it('should return false when neither address has changed on renewal and no client application is present', () => {
+      expect(
+        isAddressSectionCompleted({
+          context: 'renewal',
+          mailingAddress: { hasChanged: false },
+          homeAddress: { hasChanged: false },
+          clientApplication: undefined,
+        } as Parameters<typeof isAddressSectionCompleted>[0]),
+      ).toBe(false);
+    });
+
+    it('should return false when neither address has changed on intake (carry-forward not allowed)', () => {
+      expect(
+        isAddressSectionCompleted({
+          context: 'intake',
+          mailingAddress: { hasChanged: false },
+          homeAddress: { hasChanged: false },
+          clientApplication: {
+            contactInformation: {
+              mailingAddress: { address: '123 Main St', city: 'Anytown', country: 'CAN' },
+              homeAddress: { address: '456 Oak Ave', city: 'Othertown', country: 'CAN' },
+            },
+          },
+        } as Parameters<typeof isAddressSectionCompleted>[0]),
+      ).toBe(false);
+    });
+
+    it('should return false when mailing address has changed but home address has not', () => {
+      expect(
+        isAddressSectionCompleted({
+          context: 'renewal',
+          mailingAddress: {
+            hasChanged: true,
+            value: { address: '123 Main St', city: 'Anytown', province: 'ON', postalCode: 'A1A 1A1', country: 'CAN' },
+          },
+          homeAddress: {
+            hasChanged: false,
+          },
+        }),
+      ).toBe(false);
+    });
+
+    it('should return false when home address has changed but mailing address has not', () => {
+      expect(
+        isAddressSectionCompleted({
+          context: 'renewal',
+          mailingAddress: {
+            hasChanged: false,
+          },
+          homeAddress: {
+            hasChanged: true,
+            value: { address: '456 Oak Ave', city: 'Othertown', province: 'BC', postalCode: 'B2B 2B2', country: 'CAN' },
+          },
         }),
       ).toBe(false);
     });

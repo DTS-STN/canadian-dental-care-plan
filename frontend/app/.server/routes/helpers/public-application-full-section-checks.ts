@@ -13,13 +13,20 @@ export function isPhoneNumberSectionCompleted(state: Pick<PublicApplicationState
 
 /**
  * Checks if the address section is completed for full application.
+ *
+ * The section is considered complete when all three conditions are met:
+ * - Both the mailing and home address responses are present,
+ * - Both addresses are marked as changed (the user has provided new addresses), and
+ * - The user has answered whether their home address is the same as their mailing address.
  */
 export function isAddressSectionCompleted(state: Pick<PublicApplicationState, 'mailingAddress' | 'homeAddress' | 'isHomeAddressSameAsMailingAddress'>): boolean {
-  return (
-    state.mailingAddress?.hasChanged === true && //
-    state.homeAddress?.hasChanged === true &&
-    state.isHomeAddressSameAsMailingAddress !== undefined
-  );
+  // Both address responses must be present before evaluating completion
+  if (!state.mailingAddress || !state.homeAddress) {
+    return false;
+  }
+
+  // Both addresses must be marked as changed and the same-address question must have been answered
+  return state.mailingAddress.hasChanged && state.homeAddress.hasChanged && state.isHomeAddressSameAsMailingAddress !== undefined;
 }
 
 /**

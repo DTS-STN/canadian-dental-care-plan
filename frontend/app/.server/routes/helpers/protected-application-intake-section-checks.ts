@@ -11,10 +11,21 @@ export function isPhoneNumberSectionCompleted(state: Pick<ProtectedApplicationSt
 }
 
 /**
- * Checks if the address section is completed for intake application.
+ * Checks if the address section is completed for a protected intake application.
+ *
+ * The section is considered complete when all three conditions are met:
+ * - Both the mailing and home address responses are present,
+ * - Both addresses are marked as changed (the user has provided new addresses), and
+ * - The user has answered whether their home address is the same as their mailing address.
  */
 export function isAddressSectionCompleted(state: Pick<ProtectedApplicationState, 'mailingAddress' | 'homeAddress' | 'isHomeAddressSameAsMailingAddress'>): boolean {
-  return state.mailingAddress !== undefined && (state.homeAddress !== undefined || state.isHomeAddressSameAsMailingAddress !== undefined);
+  // Both address responses must be present before evaluating completion
+  if (!state.mailingAddress || !state.homeAddress) {
+    return false;
+  }
+
+  // Both addresses must be marked as changed and the same-address question must have been answered
+  return state.mailingAddress.hasChanged && state.homeAddress.hasChanged && state.isHomeAddressSameAsMailingAddress !== undefined;
 }
 
 /**

@@ -14,10 +14,51 @@ export function isPhoneNumberSectionCompleted(state: Pick<PublicApplicationState
 }
 
 /**
- * Checks if the address section is completed for simplified application.
+ * Checks if the address section is completed for a public simplified application.
+ *
+ * Both address change statuses must be answered before completion can be evaluated.
+ * The section is then considered complete in two scenarios:
+ * - Both addresses have changed: the user has provided updated mailing and home addresses, and
+ *   the user has answered whether their home address is the same as their mailing address, or
+ * - Neither address has changed (renewal only): the client application must already have both
+ *   a mailing and home address on file so the existing addresses can be carried forward.
+ *
+ * A mismatch in change status (one changed, one did not) is always considered incomplete.
+ * The carry-forward path is not available for intake applications.
  */
-export function isAddressSectionCompleted(state: Pick<PublicApplicationState, 'mailingAddress' | 'homeAddress'>): boolean {
-  return state.mailingAddress !== undefined && state.homeAddress !== undefined;
+export function isAddressSectionCompleted(
+  state: PickDeep<
+    PublicApplicationState,
+    | 'context' //
+    | 'mailingAddress'
+    | 'homeAddress'
+    | 'isHomeAddressSameAsMailingAddress'
+    | 'clientApplication.contactInformation.homeAddress'
+    | 'clientApplication.contactInformation.mailingAddress'
+  >,
+): boolean {
+  // Both address change statuses must be answered before evaluating completion
+  if (!state.mailingAddress || !state.homeAddress) {
+    return false;
+  }
+
+  // Both changed: user has provided updated mailing and home addresses, and the same-address question must be answered
+  if (state.mailingAddress.hasChanged && state.homeAddress.hasChanged && state.isHomeAddressSameAsMailingAddress !== undefined) {
+    return true;
+  }
+
+  // Neither changed (renewal only): carry forward existing addresses only if both are on file.
+  // Intake applications must always provide addresses, so carry-forward is not allowed.
+  // mailingAddress is always required on the client application (eslint suppressed); homeAddress is optional.
+  // A mismatch (one changed, one did not) also falls through here and evaluates to false.
+  return (
+    state.context === 'renewal' && //
+    !state.mailingAddress.hasChanged &&
+    !state.homeAddress.hasChanged &&
+    state.clientApplication?.contactInformation.homeAddress !== undefined &&
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    state.clientApplication.contactInformation.mailingAddress !== undefined
+  );
 }
 
 /**
