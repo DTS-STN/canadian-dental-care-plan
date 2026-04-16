@@ -116,17 +116,11 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
 
   mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity: ClientApplicationEntity): ClientApplicationDto {
     const applicant = clientApplicationEntity.BenefitApplication.Applicant;
-    const clientId = expectDefined(
-      applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID,
-      "Expected applicant.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client ID'",
-    );
+    const clientId = expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected applicant.ClientIdentification.IdentificationID to be defined');
 
     const applicantInformation = {
       clientId,
-      clientNumber: expectDefined(
-        applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID,
-        "Expected applicant.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client Number'",
-      ),
+      clientNumber: expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected applicant.ClientIdentification.IdentificationID to be defined'),
       firstName: applicant.PersonName[0].PersonGivenName[0],
       lastName: applicant.PersonName[0].PersonSurName,
       maritalStatus: applicant.PersonMaritalStatus.StatusCode?.ReferenceDataID,
@@ -142,14 +136,8 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
           lastName: child.PersonName[0].PersonSurName,
           dateOfBirth: expectDefined(child.PersonBirthDate.date, 'Expected child.PersonBirthDate.date to be defined'),
           isParent: expectDefined(child.ApplicantDetail.AttestParentOrGuardianIndicator, 'Expected child.ApplicantDetail.AttestParentOrGuardianIndicator to be defined'),
-          clientId: expectDefined(
-            child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID,
-            "Expected child.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client ID'",
-          ),
-          clientNumber: expectDefined(
-            child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID,
-            "Expected child.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client Number'",
-          ),
+          clientId: expectDefined(child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected child.ClientIdentification.IdentificationID to be defined'),
+          clientNumber: expectDefined(child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected child.ClientIdentification.IdentificationID to be defined'),
           socialInsuranceNumber: child.PersonSINIdentification.IdentificationID,
         },
       })) ?? [];
@@ -175,6 +163,9 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
 
     const mailingAddress = applicant.PersonContactInformation[0].Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Mailing');
     invariant(mailingAddress, 'Expected mailingAddress to be defined');
+    invariant(mailingAddress.AddressStreet.StreetName, 'Expected mailingAddress.AddressStreet.StreetName to be defined');
+    invariant(mailingAddress.AddressCityName, 'Expected mailingAddress.AddressCityName to be defined');
+    invariant(mailingAddress.AddressCountry.CountryCode.ReferenceDataID, 'Expected mailingAddress.AddressCountry.CountryCode.ReferenceDataID to be defined');
 
     const contactInformation = {
       copyMailingAddress: applicant.MailingSameAsHomeIndicator,
@@ -189,10 +180,10 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
           }
         : undefined,
       mailingAddress: {
-        address: expectDefined(mailingAddress.AddressStreet.StreetName, 'Expected mailingAddress.AddressStreet.StreetName to be defined'),
+        address: mailingAddress.AddressStreet.StreetName,
         apartment: mailingAddress.AddressSecondaryUnitText,
-        city: expectDefined(mailingAddress.AddressCityName, 'Expected mailingAddress.AddressCityName to be defined'),
-        country: expectDefined(mailingAddress.AddressCountry.CountryCode.ReferenceDataID, 'Expected mailingAddress.AddressCountry.CountryCode.ReferenceDataID to be defined'),
+        city: mailingAddress.AddressCityName,
+        country: mailingAddress.AddressCountry.CountryCode.ReferenceDataID,
         postalCode: mailingAddress.AddressPostalCode,
         province: mailingAddress.AddressProvince.ProvinceCode.ReferenceDataID,
       },
