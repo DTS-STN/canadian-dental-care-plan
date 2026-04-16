@@ -27,6 +27,7 @@ export interface ApplicationAdultState {
   dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
   dentalInsurance: DentalInsuranceState;
   email?: string;
+  emailVerified?: boolean;
   homeAddress?: DeclaredChangeHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
@@ -46,6 +47,7 @@ export interface ApplicationFamilyState {
   dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
   dentalInsurance: DentalInsuranceState;
   email?: string;
+  emailVerified?: boolean;
   homeAddress?: DeclaredChangeHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
@@ -63,6 +65,7 @@ export interface ApplicationChildrenState {
   children: ChildState[];
   communicationPreferences: DeclaredChangeCommunicationPreferencesState;
   email?: string;
+  emailVerified?: boolean;
   homeAddress?: DeclaredChangeHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
@@ -80,6 +83,7 @@ interface ToBenefitApplicationDtoArgs {
   children?: ChildState[];
   communicationPreferences: DeclaredChangeCommunicationPreferencesState;
   email?: string;
+  emailVerified?: boolean;
   dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
   dentalInsurance?: DentalInsuranceState;
   livingIndependently?: boolean;
@@ -107,11 +111,11 @@ interface ToHomeAddressArgs {
 interface ToCommunicationPreferencesArgs {
   communicationPreferences: DeclaredChangeCommunicationPreferencesState;
   email?: string;
+  emailVerified?: boolean;
 }
 
 interface ToContactInformationArgs {
   phoneNumber: DeclaredChangePhoneNumberState;
-  email?: string;
   homeAddress?: DeclaredChangeHomeAddressState;
   isHomeAddressSameAsMailingAddress?: boolean;
   mailingAddress?: DeclaredChangeMailingAddressState;
@@ -169,6 +173,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     dentalBenefits,
     dentalInsurance,
     email,
+    emailVerified,
     homeAddress,
     isHomeAddressSameAsMailingAddress,
     livingIndependently,
@@ -185,8 +190,8 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
       }),
       applicationYearId: applicationYear.applicationYearId,
       children: this.toChildren(children),
-      communicationPreferences: this.toCommunicationPreferences({ communicationPreferences, email }),
-      contactInformation: this.toContactInformation({ phoneNumber, email, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }),
+      communicationPreferences: this.toCommunicationPreferences({ communicationPreferences, email, emailVerified }),
+      contactInformation: this.toContactInformation({ phoneNumber, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }),
       dateOfBirth: applicantInformation.dateOfBirth,
       maritalStatus,
       dentalBenefits: this.toDentalBenefits(dentalBenefits),
@@ -232,18 +237,28 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     });
   }
 
-  private toCommunicationPreferences({ communicationPreferences, email }: ToCommunicationPreferencesArgs): CommunicationPreferencesDto {
+  private toCommunicationPreferences({ communicationPreferences, email, emailVerified }: ToCommunicationPreferencesArgs): CommunicationPreferencesDto {
     invariant(communicationPreferences.value, 'Expected communicationPreferences.value to be defined');
+
+    // Only include the email if the user has verified it. This handles the case where the user entered
+    // an email, then navigated back and switched to a non-digital method.
+    const effectiveEmail = emailVerified ? email : undefined;
+
+    // The API expects emailVerified to be true if the email is verified, and undefined if it is not. It
+    // should never be false, because that would indicate that the email is not verified, but we would also
+    // not include the email in that case.
+    const effectiveEmailVerified = effectiveEmail ? true : undefined;
+
     return {
-      email,
-      emailVerified: communicationPreferences.value.preferredMethod === 'email' || communicationPreferences.value.preferredNotificationMethod === 'msca' ? true : undefined,
+      email: effectiveEmail,
+      emailVerified: effectiveEmailVerified,
       preferredLanguage: communicationPreferences.value.preferredLanguage,
       preferredMethod: communicationPreferences.value.preferredMethod,
       preferredMethodGovernmentOfCanada: communicationPreferences.value.preferredNotificationMethod,
     };
   }
 
-  private toContactInformation({ phoneNumber, email, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }: ToContactInformationArgs) {
+  private toContactInformation({ phoneNumber, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }: ToContactInformationArgs) {
     invariant(mailingAddress, 'Expected mailingAddress to be defined');
     invariant(phoneNumber.value, 'Expected phoneNumber.value to be defined');
     return {
@@ -251,7 +266,6 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
       ...this.toHomeAddress({ isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }),
       ...this.toMailingAddress(mailingAddress),
       ...phoneNumber.value,
-      email,
     };
   }
 

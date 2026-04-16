@@ -24,8 +24,7 @@ interface ToAddressArgs {
 }
 
 interface ToEmailAddressArgs {
-  contactEmail?: string;
-  communicationEmail?: string;
+  email?: string;
 }
 
 @injectable()
@@ -69,7 +68,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
           PersonContactInformation: [
             {
               Address: [this.toMailingAddress(contactInformation), this.toHomeAddress(contactInformation)],
-              EmailAddress: this.toEmailAddress({ contactEmail: contactInformation.email, communicationEmail: communicationPreferences.email }),
+              EmailAddress: this.toEmailAddress({ email: communicationPreferences.email }),
               TelephoneNumber: this.toTelephoneNumber(contactInformation),
             },
           ],
@@ -190,20 +189,10 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     };
   }
 
-  private toEmailAddress({ contactEmail, communicationEmail }: ToEmailAddressArgs) {
-    const emailAddress = [];
-
-    if (contactEmail && !validator.isEmpty(contactEmail)) {
-      emailAddress.push({
-        EmailAddressID: contactEmail,
-      });
-    } else if (communicationEmail && !validator.isEmpty(communicationEmail)) {
-      emailAddress.push({
-        EmailAddressID: communicationEmail,
-      });
-    }
-
-    return emailAddress;
+  private toEmailAddress({ email }: ToEmailAddressArgs) {
+    return email && !validator.isEmpty(email) //
+      ? [{ EmailAddressID: email }]
+      : [];
   }
 
   private toTelephoneNumber({ phoneNumber, phoneNumberAlt }: ContactInformationDto) {
