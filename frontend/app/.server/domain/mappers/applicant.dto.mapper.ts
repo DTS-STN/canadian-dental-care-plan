@@ -3,6 +3,8 @@ import { injectable } from 'inversify';
 
 import type { ApplicantDto, FindApplicantByBasicInfoDto, FindApplicantBySinRequestDto } from '~/.server/domain/dtos';
 import type { ApplicantResponseEntity, FindApplicantByBasicInfoRequestEntity, FindApplicantBySinRequestEntity } from '~/.server/domain/entities';
+import type { Logger } from '~/.server/logging';
+import { createLogger } from '~/.server/logging';
 import { expectDefined } from '~/utils/assert-utils';
 
 export interface ApplicantDtoMapper {
@@ -13,6 +15,12 @@ export interface ApplicantDtoMapper {
 
 @injectable()
 export class DefaultApplicantDtoMapper implements ApplicantDtoMapper {
+  private readonly log: Logger;
+
+  constructor() {
+    this.log = createLogger('DefaultApplicantDtoMapper');
+  }
+
   mapFindApplicantByBasicInfoRequestDtoToFindApplicantByBasicInfoRequestEntity(request: OmitStrict<FindApplicantByBasicInfoDto, 'userId'>): FindApplicantByBasicInfoRequestEntity {
     return {
       Applicant: {
@@ -45,14 +53,27 @@ export class DefaultApplicantDtoMapper implements ApplicantDtoMapper {
 
   mapApplicantResponseEntityToApplicantDto(applicantResponseEntity: ApplicantResponseEntity): ApplicantDto {
     const applicant = applicantResponseEntity.BenefitApplication.Applicant;
+    const clientId = expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected clientId to be defined');
     const personContactInformation = applicant.PersonContactInformation.at(0);
     const primaryPhone = personContactInformation?.TelephoneNumber.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary');
     const alternatePhone = personContactInformation?.TelephoneNumber.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate');
     const emailAddress = personContactInformation?.EmailAddress.at(0);
 
     const homeAddress = personContactInformation?.Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Home');
+
+    // Check if all required home address fields are present before including the home address in the response
+    const hasHomeAddressFields =
+      homeAddress !== undefined && //
+      !!homeAddress.AddressStreet.StreetName &&
+      !!homeAddress.AddressCityName &&
+      !!homeAddress.AddressCountry.CountryCode.ReferenceDataID;
+
+    if (!hasHomeAddressFields) {
+      this.log.warn(`Home address for client ${clientId} is missing required fields. Home address will be omitted from the response.`);
+    }
+
     const mailingAddress = personContactInformation?.Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Mailing');
-    invariant(mailingAddress, 'Expected mailing address to be defined'); // Mailing address is required for mapping to ApplicantDto
+    invariant(mailingAddress, `Expected mailing address to be defined for client: ${clientId}`);
 
     return {
       clientId: expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected clientId to be defined'),
@@ -63,18 +84,16 @@ export class DefaultApplicantDtoMapper implements ApplicantDtoMapper {
       socialInsuranceNumber: applicant.PersonSINIdentification?.IdentificationID,
       maritalStatus: applicant.PersonMaritalStatus?.StatusCode?.ReferenceDataID,
       contactInformation: {
-        homeAddress:
-          // Only map home address if all required fields are present to ensure we don't return partial/invalid address data
-          homeAddress?.AddressStreet.StreetName && homeAddress.AddressCityName && homeAddress.AddressCountry.CountryCode.ReferenceDataID
-            ? {
-                address: homeAddress.AddressStreet.StreetName,
-                apartment: homeAddress.AddressSecondaryUnitText,
-                city: homeAddress.AddressCityName,
-                country: homeAddress.AddressCountry.CountryCode.ReferenceDataID,
-                postalCode: homeAddress.AddressPostalCode,
-                province: homeAddress.AddressProvince.ProvinceCode.ReferenceDataID,
-              }
-            : undefined,
+        homeAddress: hasHomeAddressFields
+          ? {
+              address: homeAddress.AddressStreet.StreetName,
+              apartment: homeAddress.AddressSecondaryUnitText,
+              city: homeAddress.AddressCityName,
+              country: homeAddress.AddressCountry.CountryCode.ReferenceDataID,
+              postalCode: homeAddress.AddressPostalCode,
+              province: homeAddress.AddressProvince.ProvinceCode.ReferenceDataID,
+            }
+          : undefined,
         mailingAddress: {
           address: expectDefined(mailingAddress.AddressStreet.StreetName, 'Expected mailingAddress.AddressStreet to be defined'),
           apartment: mailingAddress.AddressSecondaryUnitText,

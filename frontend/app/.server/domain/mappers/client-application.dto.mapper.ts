@@ -5,6 +5,8 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicantDto, ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
 import type { ClientApplicationBasicInfoRequestEntity, ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
+import { createLogger } from '~/.server/logging';
+import type { Logger } from '~/.server/logging';
 import { isValidCoverageCopayTierCode } from '~/.server/utils/coverage.utils';
 import { expectDefined } from '~/utils/assert-utils';
 
@@ -29,12 +31,14 @@ export type DefaultClientApplicationDtoMapper_ServerConfig = Pick<
 
 @injectable()
 export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMapper {
+  private readonly log: Logger;
   private readonly serverConfig: DefaultClientApplicationDtoMapper_ServerConfig;
 
   constructor(
     @inject(TYPES.ServerConfig)
     serverConfig: DefaultClientApplicationDtoMapper_ServerConfig,
   ) {
+    this.log = createLogger('DefaultClientApplicationDtoMapper');
     this.serverConfig = serverConfig;
   }
 
@@ -112,19 +116,20 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
 
   mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity: ClientApplicationEntity): ClientApplicationDto {
     const applicant = clientApplicationEntity.BenefitApplication.Applicant;
+    const clientId = expectDefined(
+      applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID,
+      "Expected applicant.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client ID'",
+    );
 
     const applicantInformation = {
-      firstName: applicant.PersonName[0].PersonGivenName[0],
-      lastName: applicant.PersonName[0].PersonSurName,
-      maritalStatus: applicant.PersonMaritalStatus.StatusCode?.ReferenceDataID,
-      clientId: expectDefined(
-        applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID,
-        "Expected applicant.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client ID'",
-      ),
+      clientId,
       clientNumber: expectDefined(
         applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID,
         "Expected applicant.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client Number'",
       ),
+      firstName: applicant.PersonName[0].PersonGivenName[0],
+      lastName: applicant.PersonName[0].PersonSurName,
+      maritalStatus: applicant.PersonMaritalStatus.StatusCode?.ReferenceDataID,
       socialInsuranceNumber: applicant.PersonSINIdentification.IdentificationID,
     };
 
@@ -156,25 +161,33 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
     };
 
     const homeAddress = applicant.PersonContactInformation[0].Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Home');
-    invariant(homeAddress, 'Expected homeAddress to be defined');
+
+    // Check if all required home address fields are present before including the home address in the response
+    const hasHomeAddressFields =
+      homeAddress !== undefined && //
+      !!homeAddress.AddressStreet.StreetName &&
+      !!homeAddress.AddressCityName &&
+      !!homeAddress.AddressCountry.CountryCode.ReferenceDataID;
+
+    if (!hasHomeAddressFields) {
+      this.log.warn(`Home address for client ${clientId} is missing required fields. Home address will be omitted from the response.`);
+    }
 
     const mailingAddress = applicant.PersonContactInformation[0].Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Mailing');
     invariant(mailingAddress, 'Expected mailingAddress to be defined');
 
     const contactInformation = {
       copyMailingAddress: applicant.MailingSameAsHomeIndicator,
-      homeAddress:
-        // Only map home address if all required fields are present to ensure we don't return partial/invalid address data
-        homeAddress.AddressStreet.StreetName && homeAddress.AddressCityName && homeAddress.AddressCountry.CountryCode.ReferenceDataID
-          ? {
-              address: homeAddress.AddressStreet.StreetName,
-              apartment: homeAddress.AddressSecondaryUnitText,
-              city: homeAddress.AddressCityName,
-              country: homeAddress.AddressCountry.CountryCode.ReferenceDataID,
-              postalCode: homeAddress.AddressPostalCode,
-              province: homeAddress.AddressProvince.ProvinceCode.ReferenceDataID,
-            }
-          : undefined,
+      homeAddress: hasHomeAddressFields
+        ? {
+            address: homeAddress.AddressStreet.StreetName,
+            apartment: homeAddress.AddressSecondaryUnitText,
+            city: homeAddress.AddressCityName,
+            country: homeAddress.AddressCountry.CountryCode.ReferenceDataID,
+            postalCode: homeAddress.AddressPostalCode,
+            province: homeAddress.AddressProvince.ProvinceCode.ReferenceDataID,
+          }
+        : undefined,
       mailingAddress: {
         address: expectDefined(mailingAddress.AddressStreet.StreetName, 'Expected mailingAddress.AddressStreet.StreetName to be defined'),
         apartment: mailingAddress.AddressSecondaryUnitText,
