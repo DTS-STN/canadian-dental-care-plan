@@ -3,7 +3,7 @@ import { isValidId } from '~/utils/id.utils';
 /**
  * Transforms a URL for Adobe Analytics by sanitizing path segments containing dynamic identifiers.
  *
- * This function handles the removal or replacement of dynamic path segments such as NanoIDs or UUIDs,
+ * This function handles the removal or replacement of dynamic path segments such as UUIDs,
  * which is critical for grouping analytics data for logically identical pages.
  *
  * @param url - The input URL string (absolute) or URL object to transform.
@@ -13,12 +13,12 @@ import { isValidId } from '~/utils/id.utils';
  *
  * @example
  * // Remove ID segments (default)
- * const url = transformAdobeAnalyticsUrl('https://example.com/users/V1StGXR8_Z/details');
+ * const url = transformAdobeAnalyticsUrl('https://example.com/users/550e8400-e29b-41d4-a716-446655440000/details');
  * console.log(url.pathname); // Output: "/users/:id:/details"
  *
  * @example
  * // Replace ID segments with a placeholder
- * const url = transformAdobeAnalyticsUrl('https://example.com/users/V1StGXR8_Z/details', '');
+ * const url = transformAdobeAnalyticsUrl('https://example.com/users/550e8400-e29b-41d4-a716-446655440000/details', '');
  * console.log(url.pathname); // Output: "/users/details"
  */
 export function transformAdobeAnalyticsUrl(url: string | URL, replacement: string = ':id:'): URL {
