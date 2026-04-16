@@ -72,7 +72,6 @@
     "minimatch": "^10.2.5",
     "moderndash": "^4.0.2",
     "morgan": "^1.10.1",
-    "nanoid": "^5.1.7",
     "oxide.ts": "^1.1.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",

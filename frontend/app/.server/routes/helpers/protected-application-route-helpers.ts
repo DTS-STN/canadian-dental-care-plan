@@ -33,7 +33,7 @@ import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
 import { getAgeFromDateString } from '~/utils/date-utils';
-import { generateId, isValidId } from '~/utils/id.utils';
+import { generateId } from '~/utils/id.utils';
 import { getPathById } from '~/utils/route-utils';
 
 export type ProtectedApplicationStateSessionKey = `protected-application-flow-${string}`;
@@ -203,14 +203,12 @@ export function getProtectedApplicationState({ params, session }: LoadStateArgs)
   const locale = getLocaleFromParams(params);
   const cdcpWebsiteApplicationUrl = getCdcpWebsiteApplyUrl(locale);
 
-  const id = params.id;
-
-  if (!isValidId(id)) {
-    log.warn('Invalid "id" param format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteApplicationUrl, params.id, session.id);
+  if (!params.id) {
+    log.warn('Invalid "id" param; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteApplicationUrl, params.id, session.id);
     throw redirectDocument(cdcpWebsiteApplicationUrl);
   }
 
-  const sessionKey = getSessionKey(id);
+  const sessionKey = getSessionKey(params.id);
 
   if (!session.has(sessionKey)) {
     log.warn('Application session state has not been found; redirecting to [%s]; sessionKey: [%s], sessionId: [%s]', cdcpWebsiteApplicationUrl, sessionKey, session.id);
