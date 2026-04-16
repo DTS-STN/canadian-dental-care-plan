@@ -148,28 +148,37 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       preferredMethodGovernmentOfCanada: applicant.PreferredMethodCommunicationGCCode.ReferenceDataID,
     };
 
+    // Home address is not guaranteed to be present for all clients, so we need to check if it exists before trying to access its properties
     const homeAddress = applicant.PersonContactInformation[0].Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Home');
 
     // Check if all required home address fields are present before including the home address in the response
-    const hasHomeAddressFields =
-      homeAddress !== undefined && //
-      !!homeAddress.AddressStreet.StreetName &&
-      !!homeAddress.AddressCityName &&
-      !!homeAddress.AddressCountry.CountryCode.ReferenceDataID;
+    const isHomeAddressDefined =
+      homeAddress !== undefined && // Home address must exist
+      !!homeAddress.AddressStreet.StreetName && // StreetName is required for home address
+      !!homeAddress.AddressCityName && // CityName is required for home address
+      !!homeAddress.AddressCountry.CountryCode.ReferenceDataID; // CountryCode is required for home address
 
-    if (!hasHomeAddressFields) {
-      this.log.warn(`Home address for client ${clientId} is missing required fields. Home address will be omitted from the response.`);
+    if (!isHomeAddressDefined) {
+      this.log.warn(`Home address for client ${clientId} is missing required fields. Home address will be omitted from the response; homeAddress: [%j]`, homeAddress);
     }
 
+    // Mailing address is not guaranteed to be present for all clients, so we need to check if it exists before trying to access its properties
     const mailingAddress = applicant.PersonContactInformation[0].Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Mailing');
-    invariant(mailingAddress, 'Expected mailingAddress to be defined');
-    invariant(mailingAddress.AddressStreet.StreetName, 'Expected mailingAddress.AddressStreet.StreetName to be defined');
-    invariant(mailingAddress.AddressCityName, 'Expected mailingAddress.AddressCityName to be defined');
-    invariant(mailingAddress.AddressCountry.CountryCode.ReferenceDataID, 'Expected mailingAddress.AddressCountry.CountryCode.ReferenceDataID to be defined');
+
+    const isMailingAddressDefined =
+      mailingAddress !== undefined && // Mailing address must exist
+      !!mailingAddress.AddressStreet.StreetName && // StreetName is required for mailing address
+      !!mailingAddress.AddressCityName && // CityName is required for mailing address
+      !!mailingAddress.AddressCountry.CountryCode.ReferenceDataID; // CountryCode is required for mailing address
+
+    if (!isMailingAddressDefined) {
+      this.log.error(`Mailing address for client ${clientId} is missing required fields and is required for this operation; mailingAddress: [%j]`, mailingAddress);
+      throw new Error(`Mailing address for client ${clientId} is missing required fields`);
+    }
 
     const contactInformation = {
       copyMailingAddress: applicant.MailingSameAsHomeIndicator,
-      homeAddress: hasHomeAddressFields
+      homeAddress: isHomeAddressDefined
         ? {
             address: homeAddress.AddressStreet.StreetName,
             apartment: homeAddress.AddressSecondaryUnitText,
