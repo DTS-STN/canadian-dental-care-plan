@@ -47,18 +47,18 @@ export type ClientApplicationEntity = ReadonlyDeep<{
           };
           AddressCityName?: string;
           AddressCountry: {
-            CountryCode?: {
+            CountryCode: {
               ReferenceDataID?: string;
             };
           };
           AddressPostalCode?: string;
-          AddressProvince?: {
-            ProvinceCode?: {
+          AddressProvince: {
+            ProvinceCode: {
               ReferenceDataID?: string;
             };
           };
           AddressSecondaryUnitText?: string;
-          AddressStreet?: {
+          AddressStreet: {
             StreetName?: string;
           };
         }>;

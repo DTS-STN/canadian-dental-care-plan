@@ -1,9 +1,9 @@
 import { redirect } from 'react-router';
 
 import { createLogger } from '~/.server/logging';
-import { getAllowedTypeOfApplication } from '~/.server/routes/helpers/base-application-route-helpers';
+import { getAllowedTypeOfApplication, maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationStateParams, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { applicantInformationStateHasPartner, getContextualAgeCategoryFromDate, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getContextualAgeCategoryFromDate, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
@@ -140,11 +140,11 @@ export function validatePublicApplicationFullAdultStateForReview({ params, state
     throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 
-  if (applicantInformationStateHasPartner(maritalStatus) && !partnerInformation) {
+  if (maritalStatusHasPartner(maritalStatus) && !partnerInformation) {
     throw redirect(getPathById('public/application/$id/full-adult/marital-status', params));
   }
 
-  if (!applicantInformationStateHasPartner(maritalStatus) && partnerInformation) {
+  if (!maritalStatusHasPartner(maritalStatus) && partnerInformation) {
     throw redirect(getPathById('public/application/$id/full-adult/marital-status', params));
   }
 

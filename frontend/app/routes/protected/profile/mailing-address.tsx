@@ -67,12 +67,12 @@ export async function loader({ context: { appContainer, session }, params, reque
   return {
     meta,
     defaultState: {
-      address: clientApplication.contactInformation.mailingAddress,
-      apartment: clientApplication.contactInformation.mailingApartment,
-      city: clientApplication.contactInformation.mailingCity,
-      postalCode: clientApplication.contactInformation.mailingPostalCode,
-      province: clientApplication.contactInformation.mailingProvince,
-      country: clientApplication.contactInformation.mailingCountry,
+      address: clientApplication.contactInformation.mailingAddress.address,
+      apartment: clientApplication.contactInformation.mailingAddress.apartment,
+      city: clientApplication.contactInformation.mailingAddress.city,
+      postalCode: clientApplication.contactInformation.mailingAddress.postalCode,
+      province: clientApplication.contactInformation.mailingAddress.province,
+      country: clientApplication.contactInformation.mailingAddress.country,
       copyMailing: clientApplication.contactInformation.copyMailingAddress,
     },
     countryList,
@@ -134,15 +134,7 @@ export async function action({ context: { appContainer, session }, params, reque
       {
         clientId: clientApplication.applicantInformation.clientId,
         mailingAddress,
-        homeAddress: isCopyMailingToHome
-          ? mailingAddress
-          : {
-              address: clientApplication.contactInformation.homeAddress ?? '',
-              city: clientApplication.contactInformation.homeCity ?? '',
-              countryId: clientApplication.contactInformation.homeCountry ?? '',
-              postalZipCode: clientApplication.contactInformation.homePostalCode ?? '',
-              provinceStateId: clientApplication.contactInformation.homeProvince ?? '',
-            },
+        homeAddress: resolveHomeAddress(isCopyMailingToHome, mailingAddress, clientApplication.contactInformation.homeAddress),
       },
       idToken.sub,
     );
@@ -203,15 +195,7 @@ export async function action({ context: { appContainer, session }, params, reque
     {
       clientId: clientApplication.applicantInformation.clientId,
       mailingAddress,
-      homeAddress: isCopyMailingToHome
-        ? mailingAddress
-        : {
-            address: clientApplication.contactInformation.homeAddress ?? '',
-            city: clientApplication.contactInformation.homeCity ?? '',
-            countryId: clientApplication.contactInformation.homeCountry ?? '',
-            postalZipCode: clientApplication.contactInformation.homePostalCode ?? '',
-            provinceStateId: clientApplication.contactInformation.homeProvince ?? '',
-          },
+      homeAddress: resolveHomeAddress(isCopyMailingToHome, mailingAddress, clientApplication.contactInformation.homeAddress),
     },
     idToken.sub,
   );
@@ -221,6 +205,28 @@ export async function action({ context: { appContainer, session }, params, reque
 
 function isAddressResponse(data: unknown): data is AddressResponse {
   return typeof data === 'object' && data !== null && 'status' in data && typeof data.status === 'string';
+}
+
+/**
+ * Resolves the home address to send to the external service. If the user has chosen to copy the mailing address
+ * to home, or if there is no existing home address on file, uses the mailing address. Otherwise, preserves the
+ * existing home address. The external service requires both addresses to be sent in the same request.
+ */
+function resolveHomeAddress(
+  isCopyMailingToHome: boolean,
+  mailingAddress: { address: string; city: string; countryId: string; postalZipCode?: string; provinceStateId?: string },
+  existingHomeAddress: { address: string; city: string; country: string; postalCode?: string; province?: string } | null | undefined,
+) {
+  if (isCopyMailingToHome || !existingHomeAddress) {
+    return mailingAddress;
+  }
+  return {
+    address: existingHomeAddress.address,
+    city: existingHomeAddress.city,
+    countryId: existingHomeAddress.country,
+    postalZipCode: existingHomeAddress.postalCode,
+    provinceStateId: existingHomeAddress.province,
+  };
 }
 
 export default function EditMailingAddress({ loaderData, params }: Route.ComponentProps) {

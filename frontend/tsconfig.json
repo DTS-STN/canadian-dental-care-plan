@@ -9,7 +9,6 @@
     "jsx": "react-jsx",
     "rootDirs": [".", "./.react-router/types"],
     "paths": {
-      "*": ["./*"],
       "~/*": ["./app/*"]
     },
     "verbatimModuleSyntax": true,

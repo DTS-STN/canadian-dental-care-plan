@@ -17,6 +17,7 @@ import type {
   RenewalContactInformationDto,
   RenewalPartnerInformationDto,
 } from '~/.server/domain/dtos';
+import { maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import type {
   ApplicationYearState,
   ChildState,
@@ -98,7 +99,6 @@ interface ToApplicantInformationArgs {
 interface ToChildrenArgs {
   existingChildren: readonly ReadonlyDeep<ClientChildDto>[];
   renewedChildren: ChildState[];
-  isProtectedRenewal?: boolean;
 }
 
 interface ToCommunicationPreferencesArgs {
@@ -110,12 +110,12 @@ interface ToCommunicationPreferencesArgs {
 
 interface ToContactInformationArgs {
   existingContactInformation: ReadonlyDeep<ClientContactInformationDto>;
-  hasEmailChanged: boolean;
-  isHomeAddressSameAsMailingAddress?: boolean;
-  renewedContactInformation?: DeclaredChangePhoneNumberState;
-  renewedHomeAddress?: DeclaredChangeHomeAddressState;
-  renewedMailingAddress?: DeclaredChangeMailingAddressState;
-  renewedEmail?: string;
+  isHomeAddressSameAsMailingAddress: boolean | undefined;
+  renewedContactInformation: DeclaredChangePhoneNumberState | undefined;
+  renewedHomeAddress: DeclaredChangeHomeAddressState | undefined;
+  renewedMailingAddress: DeclaredChangeMailingAddressState | undefined;
+  renewedEmailVerified: boolean | undefined;
+  renewedEmail: string | undefined;
 }
 
 interface ToDentalBenefitsArgs {
@@ -137,8 +137,15 @@ interface ToMailingAddressArgs {
 }
 
 interface ToPartnerInformationArgs {
+  effectiveMaritalStatus?: string;
   existingPartnerInformation?: ReadonlyDeep<ClientPartnerInformationDto>;
   renewedPartnerInformation?: PartnerInformationState;
+}
+
+interface HasEmailChangedArgs {
+  emailVerified: boolean | undefined;
+  email: string | undefined;
+  existingEmail: string | undefined;
 }
 
 @injectable()
@@ -170,6 +177,12 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       throw new Error('Expected clientApplication to be defined');
     }
 
+    const hasEmailChanged = this.hasEmailChanged({
+      emailVerified,
+      email,
+      existingEmail: clientApplication.contactInformation.email,
+    });
+
     return {
       ...clientApplication,
       applicantInformation: this.toApplicantInformation({
@@ -186,11 +199,11 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
-        hasEmailChanged: !!email,
         isHomeAddressSameAsMailingAddress,
         renewedContactInformation: phoneNumber,
         renewedHomeAddress: homeAddress,
         renewedMailingAddress: mailingAddress,
+        renewedEmailVerified: emailVerified,
         renewedEmail: email,
       }),
       dentalBenefits: this.toDentalBenefits({
@@ -200,6 +213,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       dentalInsurance,
       partnerInformation: this.toPartnerInformation({
+        effectiveMaritalStatus: maritalStatus ?? clientApplication.applicantInformation.maritalStatus,
         existingPartnerInformation: clientApplication.partnerInformation,
         renewedPartnerInformation: partnerInformation,
       }),
@@ -210,7 +224,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged: !!maritalStatus,
         hasAddressChanged: mailingAddress?.hasChanged,
         hasPhoneChanged: phoneNumber.hasChanged,
-        hasEmailChanged: emailVerified && email !== clientApplication.contactInformation.email,
+        hasEmailChanged,
       },
     };
   }
@@ -262,11 +276,11 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
-        hasEmailChanged: !!email,
         isHomeAddressSameAsMailingAddress,
         renewedContactInformation: phoneNumber,
         renewedHomeAddress: homeAddress,
         renewedMailingAddress: mailingAddress,
+        renewedEmailVerified: emailVerified,
         renewedEmail: email,
       }),
       dentalBenefits: this.toDentalBenefits({
@@ -276,6 +290,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       dentalInsurance,
       partnerInformation: this.toPartnerInformation({
+        effectiveMaritalStatus: maritalStatus ?? clientApplication.applicantInformation.maritalStatus,
         existingPartnerInformation: clientApplication.partnerInformation,
         renewedPartnerInformation: partnerInformation,
       }),
@@ -286,7 +301,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged: !!maritalStatus,
         hasAddressChanged: mailingAddress?.hasChanged,
         hasPhoneChanged: phoneNumber.hasChanged,
-        hasEmailChanged: emailVerified && email !== clientApplication.contactInformation.email,
+        hasEmailChanged: this.hasEmailChanged({ emailVerified, email, existingEmail: clientApplication.contactInformation.email }),
       },
     };
   }
@@ -336,16 +351,17 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       contactInformation: this.toContactInformation({
         existingContactInformation: clientApplication.contactInformation,
-        hasEmailChanged: !!email,
         isHomeAddressSameAsMailingAddress,
         renewedContactInformation: phoneNumber,
         renewedHomeAddress: homeAddress,
         renewedMailingAddress: mailingAddress,
+        renewedEmailVerified: emailVerified,
         renewedEmail: email,
       }),
       dentalBenefits: [],
       dentalInsurance: undefined,
       partnerInformation: this.toPartnerInformation({
+        effectiveMaritalStatus: maritalStatus ?? clientApplication.applicantInformation.maritalStatus,
         existingPartnerInformation: clientApplication.partnerInformation,
         renewedPartnerInformation: partnerInformation,
       }),
@@ -356,9 +372,20 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         hasMaritalStatusChanged: !!maritalStatus,
         hasAddressChanged: mailingAddress?.hasChanged,
         hasPhoneChanged: phoneNumber.hasChanged,
-        hasEmailChanged: emailVerified && email !== clientApplication.contactInformation.email,
+        hasEmailChanged: this.hasEmailChanged({ emailVerified, email, existingEmail: clientApplication.contactInformation.email }),
       },
     };
+  }
+
+  /**
+   * Determines if the email has changed based on the emailVerified flag, the new email value, and the existing email
+   * value. The email is considered changed if it is verified, not empty, and different from the existing email.
+   *
+   * @param param0 - An object containing the emailVerified flag, the new email value, and the existing email value.
+   * @returns A boolean indicating whether the email has changed.
+   */
+  private hasEmailChanged({ emailVerified, email, existingEmail }: HasEmailChangedArgs): boolean {
+    return emailVerified === true && email !== undefined && email.trim().length > 0 && email !== existingEmail;
   }
 
   private toApplicantInformation({ existingApplicantInformation, renewedMaritalStatus }: ToApplicantInformationArgs): RenewalApplicantInformationDto {
@@ -372,7 +399,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     };
   }
 
-  private toChildren({ existingChildren, renewedChildren, isProtectedRenewal }: ToChildrenArgs): RenewalChildDto[] {
+  private toChildren({ existingChildren, renewedChildren }: ToChildrenArgs): RenewalChildDto[] {
     return renewedChildren.map((renewedChild) => {
       const existingChild = existingChildren.find((existingChild) => existingChild.information.clientNumber === renewedChild.information?.memberId);
       invariant(existingChild, 'Expected existingChild to be defined');
@@ -402,131 +429,118 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     });
   }
 
-  private toContactInformation({ existingContactInformation, hasEmailChanged, isHomeAddressSameAsMailingAddress, renewedContactInformation, renewedHomeAddress, renewedMailingAddress, renewedEmail }: ToContactInformationArgs): RenewalContactInformationDto {
-    const hasAddressChanged = renewedHomeAddress?.hasChanged === true || renewedMailingAddress?.hasChanged === true;
+  private toContactInformation({
+    existingContactInformation,
+    isHomeAddressSameAsMailingAddress,
+    renewedContactInformation,
+    renewedHomeAddress,
+    renewedMailingAddress,
+    renewedEmailVerified,
+    renewedEmail,
+  }: ToContactInformationArgs): RenewalContactInformationDto {
+    // If the phone number has changed, use the new phone number values. Otherwise, use the existing phone number values.
+    const phoneNumbers = renewedContactInformation?.hasChanged
+      ? {
+          phoneNumber: renewedContactInformation.value.primary,
+          phoneNumberAlt: renewedContactInformation.value.alternate,
+        }
+      : {
+          phoneNumber: existingContactInformation.phoneNumber,
+          phoneNumberAlt: existingContactInformation.phoneNumberAlt,
+        };
+
+    const hasEmailChanged = this.hasEmailChanged({
+      emailVerified: renewedEmailVerified,
+      email: renewedEmail,
+      existingEmail: existingContactInformation.email,
+    });
+
     return {
-      ...(hasAddressChanged
-        ? {
-            copyMailingAddress: !!isHomeAddressSameAsMailingAddress,
-            ...this.toHomeAddress({ existingContactInformation, isHomeAddressSameAsMailingAddress, homeAddress: renewedHomeAddress, mailingAddress: renewedMailingAddress }),
-            ...this.toMailingAddress({ existingContactInformation, mailingAddress: renewedMailingAddress }),
-          }
-        : {
-            copyMailingAddress: existingContactInformation.copyMailingAddress ?? false,
-            homeAddress:
-              existingContactInformation.homeAddress ??
-              (() => {
-                throw new Error('Expected existingContactInformation.homeAddress to be defined');
-              })(),
-            homeApartment: existingContactInformation.homeApartment,
-            homeCity:
-              existingContactInformation.homeCity ??
-              (() => {
-                throw new Error('Expected existingContactInformation.homeCity to be defined');
-              })(),
-            homeCountry:
-              existingContactInformation.homeCountry ??
-              (() => {
-                throw new Error('Expected existingContactInformation.homeCountry to be defined');
-              })(),
-            homePostalCode: existingContactInformation.homePostalCode,
-            homeProvince: existingContactInformation.homeProvince,
-            mailingAddress: existingContactInformation.mailingAddress,
-            mailingApartment: existingContactInformation.mailingApartment,
-            mailingCity: existingContactInformation.mailingCity,
-            mailingCountry: existingContactInformation.mailingCountry,
-            mailingPostalCode: existingContactInformation.mailingPostalCode,
-            mailingProvince: existingContactInformation.mailingProvince,
-          }),
-      ...(renewedContactInformation?.hasChanged
-        ? {
-            phoneNumber: renewedContactInformation.value.primary,
-            phoneNumberAlt: renewedContactInformation.value.alternate,
-          }
-        : {
-            phoneNumber: existingContactInformation.phoneNumber,
-            phoneNumberAlt: existingContactInformation.phoneNumberAlt,
-          }),
-      ...(hasEmailChanged
-        ? {
-            email: renewedEmail,
-          }
-        : {
-            email: existingContactInformation.email,
-          }),
+      email: hasEmailChanged && renewedEmail ? renewedEmail : existingContactInformation.email,
+      copyMailingAddress: !!isHomeAddressSameAsMailingAddress,
+      ...this.toHomeAddress({ existingContactInformation, isHomeAddressSameAsMailingAddress, homeAddress: renewedHomeAddress, mailingAddress: renewedMailingAddress }),
+      ...this.toMailingAddress({ existingContactInformation, mailingAddress: renewedMailingAddress }),
+      ...phoneNumbers,
     };
   }
 
   private toHomeAddress({ existingContactInformation, isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }: ToHomeAddressArgs) {
+    // If the home address is the same as the mailing address, we want to use the mailing address values, even if the
+    // mailing address has not changed, to ensure that any changes to the mailing address are reflected in the home address.
     if (isHomeAddressSameAsMailingAddress) {
-      return mailingAddress
-        ? {
-            homeAddress: mailingAddress.value?.address ?? '',
-            homeApartment: undefined,
-            homeCity: mailingAddress.value?.city ?? '',
-            homeCountry: mailingAddress.value?.country ?? '',
-            homePostalCode: mailingAddress.value?.postalCode ?? '',
-            homeProvince: mailingAddress.value?.province ?? '',
-          }
-        : {
-            homeAddress: existingContactInformation.mailingAddress,
-            homeApartment: existingContactInformation.mailingApartment,
-            homeCity: existingContactInformation.mailingCity,
-            homeCountry: existingContactInformation.mailingCountry,
-            homePostalCode: existingContactInformation.mailingPostalCode,
-            homeProvince: existingContactInformation.mailingProvince,
-          };
+      // If the mailing address has changed, use the new mailing address values for the home address.
+      if (mailingAddress?.hasChanged) {
+        return {
+          homeAddress: mailingAddress.value.address,
+          homeApartment: undefined,
+          homeCity: mailingAddress.value.city,
+          homeCountry: mailingAddress.value.country,
+          homePostalCode: mailingAddress.value.postalCode,
+          homeProvince: mailingAddress.value.province,
+        };
+      }
+
+      // If the mailing address has not changed, use the existing mailing address values for the home address.
+      return {
+        homeAddress: existingContactInformation.mailingAddress.address,
+        homeApartment: existingContactInformation.mailingAddress.apartment,
+        homeCity: existingContactInformation.mailingAddress.city,
+        homeCountry: existingContactInformation.mailingAddress.country,
+        homePostalCode: existingContactInformation.mailingAddress.postalCode,
+        homeProvince: existingContactInformation.mailingAddress.province,
+      };
     }
 
-    return homeAddress
-      ? {
-          homeAddress: homeAddress.value?.address ?? '',
-          homeApartment: undefined,
-          homeCity: homeAddress.value?.city ?? '',
-          homeCountry: homeAddress.value?.country ?? '',
-          homePostalCode: homeAddress.value?.postalCode ?? '',
-          homeProvince: homeAddress.value?.province ?? '',
-        }
-      : {
-          homeAddress:
-            existingContactInformation.homeAddress ??
-            (() => {
-              throw new Error('Expected existingContactInformation.homeAddress to be defined');
-            })(),
-          homeApartment: existingContactInformation.homeApartment,
-          homeCity:
-            existingContactInformation.homeCity ??
-            (() => {
-              throw new Error('Expected existingContactInformation.homeCity to be defined');
-            })(),
-          homeCountry:
-            existingContactInformation.homeCountry ??
-            (() => {
-              throw new Error('Expected existingContactInformation.homeCountry to be defined');
-            })(),
-          homePostalCode: existingContactInformation.homePostalCode,
-          homeProvince: existingContactInformation.homeProvince,
-        };
+    // If the home address is not the same as the mailing address, we want to use the home address values, and any
+    // changes to the home address, for the home address.
+    invariant(homeAddress, 'Expected homeAddress to be defined');
+
+    // If the home address has changed, use the new home address values.
+    if (homeAddress.hasChanged) {
+      return {
+        homeAddress: homeAddress.value.address,
+        homeApartment: undefined,
+        homeCity: homeAddress.value.city,
+        homeCountry: homeAddress.value.country,
+        homePostalCode: homeAddress.value.postalCode,
+        homeProvince: homeAddress.value.province,
+      };
+    }
+
+    // If the home address has not changed, use the existing home address values.
+    invariant(existingContactInformation.homeAddress, 'Expected existingContactInformation.homeAddress to be defined');
+    return {
+      homeAddress: existingContactInformation.homeAddress.address,
+      homeApartment: existingContactInformation.homeAddress.apartment,
+      homeCity: existingContactInformation.homeAddress.city,
+      homeCountry: existingContactInformation.homeAddress.country,
+      homePostalCode: existingContactInformation.homeAddress.postalCode,
+      homeProvince: existingContactInformation.homeAddress.province,
+    };
   }
 
   private toMailingAddress({ existingContactInformation, mailingAddress }: ToMailingAddressArgs) {
-    return mailingAddress
-      ? {
-          mailingAddress: mailingAddress.value?.address ?? '',
-          mailingApartment: undefined,
-          mailingCity: mailingAddress.value?.city ?? '',
-          mailingCountry: mailingAddress.value?.country ?? '',
-          mailingPostalCode: mailingAddress.value?.postalCode ?? '',
-          mailingProvince: mailingAddress.value?.province ?? '',
-        }
-      : {
-          mailingAddress: existingContactInformation.mailingAddress,
-          mailingApartment: existingContactInformation.mailingApartment,
-          mailingCity: existingContactInformation.mailingCity,
-          mailingCountry: existingContactInformation.mailingCountry,
-          mailingPostalCode: existingContactInformation.mailingPostalCode,
-          mailingProvince: existingContactInformation.mailingProvince,
-        };
+    // If the mailing address has changed, use the new mailing address values.
+    if (mailingAddress?.hasChanged) {
+      return {
+        mailingAddress: mailingAddress.value.address,
+        mailingApartment: undefined,
+        mailingCity: mailingAddress.value.city,
+        mailingCountry: mailingAddress.value.country,
+        mailingPostalCode: mailingAddress.value.postalCode,
+        mailingProvince: mailingAddress.value.province,
+      };
+    }
+
+    // If the mailing address has not changed, use the existing mailing address values.
+    return {
+      mailingAddress: existingContactInformation.mailingAddress.address,
+      mailingApartment: existingContactInformation.mailingAddress.apartment,
+      mailingCity: existingContactInformation.mailingAddress.city,
+      mailingCountry: existingContactInformation.mailingAddress.country,
+      mailingPostalCode: existingContactInformation.mailingAddress.postalCode,
+      mailingProvince: existingContactInformation.mailingAddress.province,
+    };
   }
 
   private toCommunicationPreferences({ existingCommunicationPreferences, communicationPreferences, email, emailVerified }: ToCommunicationPreferencesArgs): RenewalCommunicationPreferencesDto {
@@ -576,7 +590,21 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     return dentalBenefits;
   }
 
-  private toPartnerInformation({ existingPartnerInformation, renewedPartnerInformation }: ToPartnerInformationArgs): RenewalPartnerInformationDto | undefined {
-    return renewedPartnerInformation;
+  private toPartnerInformation({ effectiveMaritalStatus, existingPartnerInformation, renewedPartnerInformation }: ToPartnerInformationArgs): RenewalPartnerInformationDto | undefined {
+    if (!maritalStatusHasPartner(effectiveMaritalStatus)) {
+      return undefined;
+    }
+
+    if (renewedPartnerInformation) {
+      return renewedPartnerInformation;
+    }
+
+    return existingPartnerInformation
+      ? {
+          confirm: existingPartnerInformation.confirm,
+          socialInsuranceNumber: existingPartnerInformation.socialInsuranceNumber ?? '',
+          yearOfBirth: existingPartnerInformation.yearOfBirth,
+        }
+      : undefined;
   }
 }

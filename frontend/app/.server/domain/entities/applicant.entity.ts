@@ -42,21 +42,21 @@ export type ApplicantResponseEntity = ReadonlyDeep<{
           AddressCategoryCode: {
             ReferenceDataName: 'Mailing' | 'Home';
           };
-          AddressCityName: string;
+          AddressCityName?: string;
           AddressCountry: {
             CountryCode: {
-              ReferenceDataID: string;
+              ReferenceDataID?: string;
             };
           };
           AddressPostalCode?: string;
-          AddressProvince?: {
-            ProvinceCode?: {
+          AddressProvince: {
+            ProvinceCode: {
               ReferenceDataID?: string;
             };
           };
           AddressSecondaryUnitText?: string;
           AddressStreet: {
-            StreetName: string;
+            StreetName?: string;
           };
         }>;
         EmailAddress: Array<{

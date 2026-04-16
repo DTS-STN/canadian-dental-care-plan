@@ -37,9 +37,11 @@ function makeClientApplication(overrides: Partial<ClientApplicationDto> = {}): C
     },
     contactInformation: {
       copyMailingAddress: false,
-      mailingAddress: '123 Main St',
-      mailingCity: 'Ottawa',
-      mailingCountry: 'CA',
+      mailingAddress: {
+        address: '123 Main St',
+        city: 'Ottawa',
+        country: 'CA',
+      },
     },
     dateOfBirth: '1980-01-01',
     dentalBenefits: [],
@@ -102,9 +104,11 @@ function makeApplicant(overrides: Partial<ApplicantDto> = {}): ApplicantDto {
     lastName: 'Doe',
     communicationPreferences: {},
     contactInformation: {
-      mailingAddress: '123 Main St',
-      mailingCity: 'Ottawa',
-      mailingCountry: 'CA',
+      mailingAddress: {
+        address: '123 Main St',
+        city: 'Ottawa',
+        country: 'CA',
+      },
     },
     ...overrides,
   };

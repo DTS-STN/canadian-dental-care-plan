@@ -67,23 +67,22 @@ export type ClientCommunicationPreferencesDto = ReadonlyDeep<{
 
 export type ClientContactInformationDto = ReadonlyDeep<{
   copyMailingAddress?: boolean;
-  // home address fields are optional because ITA clients initially have no home address
-  homeAddress?: string;
-  homeApartment?: string;
-  homeCity?: string;
-  homeCountry?: string;
-  homePostalCode?: string;
-  homeProvince?: string;
-  mailingAddress: string;
-  mailingApartment?: string;
-  mailingCity: string;
-  mailingCountry: string;
-  mailingPostalCode?: string;
-  mailingProvince?: string;
+  /** Home address fields are optional because ITA clients initially have no home address */
+  homeAddress?: ClientAddressDto;
+  mailingAddress: ClientAddressDto;
   phoneNumber?: string;
   phoneNumberAlt?: string;
   email?: string;
   emailVerified?: boolean;
+}>;
+
+type ClientAddressDto = Readonly<{
+  address: string;
+  apartment?: string;
+  city: string;
+  country: string;
+  postalCode?: string;
+  province?: string;
 }>;
 
 export type ClientPartnerInformationDto = ReadonlyDeep<{

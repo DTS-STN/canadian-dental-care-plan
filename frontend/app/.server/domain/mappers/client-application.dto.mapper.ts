@@ -5,7 +5,10 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { ApplicantDto, ClientApplicationBasicInfoRequestDto, ClientApplicationDto, ClientApplicationSinRequestDto } from '~/.server/domain/dtos';
 import type { ClientApplicationBasicInfoRequestEntity, ClientApplicationEntity, ClientApplicationSinRequestEntity } from '~/.server/domain/entities';
+import { createLogger } from '~/.server/logging';
+import type { Logger } from '~/.server/logging';
 import { isValidCoverageCopayTierCode } from '~/.server/utils/coverage.utils';
+import { expectDefined } from '~/utils/assert-utils';
 
 interface MapApplicantDtoToClientApplicationDtoArgs {
   applicantDto: ApplicantDto;
@@ -28,12 +31,14 @@ export type DefaultClientApplicationDtoMapper_ServerConfig = Pick<
 
 @injectable()
 export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMapper {
+  private readonly log: Logger;
   private readonly serverConfig: DefaultClientApplicationDtoMapper_ServerConfig;
 
   constructor(
     @inject(TYPES.ServerConfig)
     serverConfig: DefaultClientApplicationDtoMapper_ServerConfig,
   ) {
+    this.log = createLogger('DefaultClientApplicationDtoMapper');
     this.serverConfig = serverConfig;
   }
 
@@ -58,17 +63,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       },
       contactInformation: {
         homeAddress: applicantDto.contactInformation.homeAddress,
-        homeApartment: applicantDto.contactInformation.homeApartment,
-        homeCity: applicantDto.contactInformation.homeCity,
-        homeCountry: applicantDto.contactInformation.homeCountry,
-        homePostalCode: applicantDto.contactInformation.homePostalCode,
-        homeProvince: applicantDto.contactInformation.homeProvince,
         mailingAddress: applicantDto.contactInformation.mailingAddress,
-        mailingApartment: applicantDto.contactInformation.mailingApartment,
-        mailingCity: applicantDto.contactInformation.mailingCity,
-        mailingCountry: applicantDto.contactInformation.mailingCountry,
-        mailingPostalCode: applicantDto.contactInformation.mailingPostalCode,
-        mailingProvince: applicantDto.contactInformation.mailingProvince,
         phoneNumber: applicantDto.contactInformation.phoneNumber,
         phoneNumberAlt: applicantDto.contactInformation.phoneNumberAlt,
         email: applicantDto.contactInformation.email,
@@ -121,55 +116,28 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
 
   mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity: ClientApplicationEntity): ClientApplicationDto {
     const applicant = clientApplicationEntity.BenefitApplication.Applicant;
+    const clientId = expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected applicant.ClientIdentification.IdentificationID to be defined');
 
     const applicantInformation = {
+      clientId,
+      clientNumber: expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected applicant.ClientIdentification.IdentificationID to be defined'),
       firstName: applicant.PersonName[0].PersonGivenName[0],
       lastName: applicant.PersonName[0].PersonSurName,
       maritalStatus: applicant.PersonMaritalStatus.StatusCode?.ReferenceDataID,
-      clientId:
-        applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID ??
-        (() => {
-          throw new Error("Expected applicant.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client ID'");
-        })(),
-      clientNumber:
-        applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID ??
-        (() => {
-          throw new Error("Expected applicant.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client Number'");
-        })(),
       socialInsuranceNumber: applicant.PersonSINIdentification.IdentificationID,
     };
 
     const children =
       applicant.RelatedPerson?.filter((person) => person.PersonRelationshipCode.ReferenceDataName === 'Dependant').map((child) => ({
         dentalBenefits: child.ApplicantDetail.InsurancePlan?.at(0)?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
-        privateDentalInsurance:
-          child.ApplicantDetail.PrivateDentalInsuranceIndicator ??
-          (() => {
-            throw new Error('Expected child.ApplicantDetail.PrivateDentalInsuranceIndicator to be defined');
-          })(),
+        privateDentalInsurance: expectDefined(child.ApplicantDetail.PrivateDentalInsuranceIndicator, 'Expected child.ApplicantDetail.PrivateDentalInsuranceIndicator to be defined'),
         information: {
           firstName: child.PersonName[0].PersonGivenName[0],
           lastName: child.PersonName[0].PersonSurName,
-          dateOfBirth:
-            child.PersonBirthDate.date ??
-            (() => {
-              throw new Error('Expected child.PersonBirthDate.date to be defined');
-            })(),
-          isParent:
-            child.ApplicantDetail.AttestParentOrGuardianIndicator ??
-            (() => {
-              throw new Error('Expected child.ApplicantDetail.AttestParentOrGuardianIndicator to be defined');
-            })(),
-          clientId:
-            child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID ??
-            (() => {
-              throw new Error("Expected child.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client ID'");
-            })(),
-          clientNumber:
-            child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID ??
-            (() => {
-              throw new Error("Expected child.ClientIdentification.IdentificationID to be defined when IdentificationCategoryText === 'Client Number'");
-            })(),
+          dateOfBirth: expectDefined(child.PersonBirthDate.date, 'Expected child.PersonBirthDate.date to be defined'),
+          isParent: expectDefined(child.ApplicantDetail.AttestParentOrGuardianIndicator, 'Expected child.ApplicantDetail.AttestParentOrGuardianIndicator to be defined'),
+          clientId: expectDefined(child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected child.ClientIdentification.IdentificationID to be defined'),
+          clientNumber: expectDefined(child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected child.ClientIdentification.IdentificationID to be defined'),
           socialInsuranceNumber: child.PersonSINIdentification.IdentificationID,
         },
       })) ?? [];
@@ -180,38 +148,54 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       preferredMethodGovernmentOfCanada: applicant.PreferredMethodCommunicationGCCode.ReferenceDataID,
     };
 
+    // Home address is not guaranteed to be present for all clients, so we need to check if it exists before trying to access its properties
     const homeAddress = applicant.PersonContactInformation[0].Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Home');
-    invariant(homeAddress, 'Expected homeAddress to be defined');
 
+    // Check if all required home address fields are present before including the home address in the response
+    const isHomeAddressDefined =
+      homeAddress !== undefined && // Home address must exist
+      !!homeAddress.AddressStreet.StreetName && // StreetName is required for home address
+      !!homeAddress.AddressCityName && // CityName is required for home address
+      !!homeAddress.AddressCountry.CountryCode.ReferenceDataID; // CountryCode is required for home address
+
+    if (!isHomeAddressDefined) {
+      this.log.warn(`Home address for client ${clientId} is missing required fields. Home address will be omitted from the response; homeAddress: [%j]`, homeAddress);
+    }
+
+    // Mailing address is not guaranteed to be present for all clients, so we need to check if it exists before trying to access its properties
     const mailingAddress = applicant.PersonContactInformation[0].Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Mailing');
-    invariant(mailingAddress, 'Expected mailingAddress to be defined');
+
+    const isMailingAddressDefined =
+      mailingAddress !== undefined && // Mailing address must exist
+      !!mailingAddress.AddressStreet.StreetName && // StreetName is required for mailing address
+      !!mailingAddress.AddressCityName && // CityName is required for mailing address
+      !!mailingAddress.AddressCountry.CountryCode.ReferenceDataID; // CountryCode is required for mailing address
+
+    if (!isMailingAddressDefined) {
+      this.log.error(`Mailing address for client ${clientId} is missing required fields and is required for this operation; mailingAddress: [%j]`, mailingAddress);
+      throw new Error(`Mailing address for client ${clientId} is missing required fields`);
+    }
 
     const contactInformation = {
       copyMailingAddress: applicant.MailingSameAsHomeIndicator,
-      homeAddress: homeAddress.AddressStreet?.StreetName,
-      homeApartment: homeAddress.AddressSecondaryUnitText,
-      homeCity: homeAddress.AddressCityName,
-      homeCountry: homeAddress.AddressCountry.CountryCode?.ReferenceDataID,
-      homePostalCode: homeAddress.AddressPostalCode,
-      homeProvince: homeAddress.AddressProvince?.ProvinceCode?.ReferenceDataID,
-      mailingAddress:
-        mailingAddress.AddressStreet?.StreetName ??
-        (() => {
-          throw new Error('Expected mailingAddress.AddressStreet.StreetName to be defined');
-        })(),
-      mailingApartment: mailingAddress.AddressSecondaryUnitText,
-      mailingCity:
-        mailingAddress.AddressCityName ??
-        (() => {
-          throw new Error('Expected mailingAddress.AddressCityName to be defined');
-        })(),
-      mailingCountry:
-        mailingAddress.AddressCountry.CountryCode?.ReferenceDataID ??
-        (() => {
-          throw new Error('Expected mailingAddress.AddressCountry.CountryCode.ReferenceDataID to be defined');
-        })(),
-      mailingPostalCode: mailingAddress.AddressPostalCode,
-      mailingProvince: mailingAddress.AddressProvince?.ProvinceCode?.ReferenceDataID,
+      homeAddress: isHomeAddressDefined
+        ? {
+            address: homeAddress.AddressStreet.StreetName,
+            apartment: homeAddress.AddressSecondaryUnitText,
+            city: homeAddress.AddressCityName,
+            country: homeAddress.AddressCountry.CountryCode.ReferenceDataID,
+            postalCode: homeAddress.AddressPostalCode,
+            province: homeAddress.AddressProvince.ProvinceCode.ReferenceDataID,
+          }
+        : undefined,
+      mailingAddress: {
+        address: mailingAddress.AddressStreet.StreetName,
+        apartment: mailingAddress.AddressSecondaryUnitText,
+        city: mailingAddress.AddressCityName,
+        country: mailingAddress.AddressCountry.CountryCode.ReferenceDataID,
+        postalCode: mailingAddress.AddressPostalCode,
+        province: mailingAddress.AddressProvince.ProvinceCode.ReferenceDataID,
+      },
       phoneNumber: applicant.PersonContactInformation[0].TelephoneNumber?.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary')?.TelephoneNumberCategoryCode.ReferenceDataID,
       phoneNumberAlt: applicant.PersonContactInformation[0].TelephoneNumber?.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')?.TelephoneNumberCategoryCode.ReferenceDataID,
       email: applicant.PersonContactInformation[0].EmailAddress?.at(0)?.EmailAddressID,
@@ -221,16 +205,8 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
     const partner = applicant.RelatedPerson?.find((person) => person.PersonRelationshipCode.ReferenceDataName === 'Spouse');
     const partnerInformation = partner
       ? {
-          confirm:
-            partner.ApplicantDetail.ConsentToSharePersonalInformationIndicator ??
-            (() => {
-              throw new Error('Expected partner.ApplicantDetail.ConsentToSharePersonalInformationIndicator to be defined');
-            })(),
-          yearOfBirth:
-            partner.PersonBirthDate.YearDate ??
-            (() => {
-              throw new Error('Expected partner.PersonBirthDate.YearDate to be defined');
-            })(),
+          confirm: expectDefined(partner.ApplicantDetail.ConsentToSharePersonalInformationIndicator, 'Expected partner.ApplicantDetail.ConsentToSharePersonalInformationIndicator to be defined'),
+          yearOfBirth: expectDefined(partner.PersonBirthDate.YearDate, 'Expected partner.PersonBirthDate.YearDate to be defined'),
           firstName: partner.PersonName[0].PersonGivenName[0],
           lastName: partner.PersonName[0].PersonSurName,
           socialInsuranceNumber: partner.PersonSINIdentification.IdentificationID,
