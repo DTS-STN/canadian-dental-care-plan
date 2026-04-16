@@ -1,4 +1,3 @@
-import { invariant } from '@dts-stn/invariant';
 import { injectable } from 'inversify';
 
 import type { ApplicantDto, FindApplicantByBasicInfoDto, FindApplicantBySinRequestDto } from '~/.server/domain/dtos';
@@ -59,21 +58,33 @@ export class DefaultApplicantDtoMapper implements ApplicantDtoMapper {
     const alternatePhone = personContactInformation?.TelephoneNumber.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate');
     const emailAddress = personContactInformation?.EmailAddress.at(0);
 
+    // Home address is not guaranteed to be present for all clients, so we need to check if it exists before trying to access its properties
     const homeAddress = personContactInformation?.Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Home');
 
     // Check if all required home address fields are present before including the home address in the response
-    const hasHomeAddressFields =
-      homeAddress !== undefined && //
-      !!homeAddress.AddressStreet.StreetName &&
-      !!homeAddress.AddressCityName &&
-      !!homeAddress.AddressCountry.CountryCode.ReferenceDataID;
+    const isHomeAddressDefined =
+      homeAddress !== undefined && // Home address must exist
+      !!homeAddress.AddressStreet.StreetName && // StreetName is required for home address
+      !!homeAddress.AddressCityName && // CityName is required for home address
+      !!homeAddress.AddressCountry.CountryCode.ReferenceDataID; // CountryCode is required for home address
 
-    if (!hasHomeAddressFields) {
-      this.log.warn(`Home address for client ${clientId} is missing required fields. Home address will be omitted from the response.`);
+    if (!isHomeAddressDefined) {
+      this.log.warn(`Home address for client ${clientId} is missing required fields. Home address will be omitted from the response; homeAddress: [%j]`, homeAddress);
     }
 
+    // Mailing address is not guaranteed to be present for all clients, so we need to check if it exists before trying to access its properties
     const mailingAddress = personContactInformation?.Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Mailing');
-    invariant(mailingAddress, `Expected mailing address to be defined for client: ${clientId}`);
+
+    const isMailingAddressDefined =
+      mailingAddress !== undefined && // Mailing address must exist
+      !!mailingAddress.AddressStreet.StreetName && // StreetName is required for mailing address
+      !!mailingAddress.AddressCityName && // CityName is required for mailing address
+      !!mailingAddress.AddressCountry.CountryCode.ReferenceDataID; // CountryCode is required for mailing address
+
+    if (!isMailingAddressDefined) {
+      this.log.error(`Mailing address for client ${clientId} is missing required fields and is required for this operation; mailingAddress: [%j]`, mailingAddress);
+      throw new Error(`Mailing address for client ${clientId} is missing required fields`);
+    }
 
     return {
       clientId: expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected clientId to be defined'),
@@ -84,7 +95,7 @@ export class DefaultApplicantDtoMapper implements ApplicantDtoMapper {
       socialInsuranceNumber: applicant.PersonSINIdentification?.IdentificationID,
       maritalStatus: applicant.PersonMaritalStatus?.StatusCode?.ReferenceDataID,
       contactInformation: {
-        homeAddress: hasHomeAddressFields
+        homeAddress: isHomeAddressDefined
           ? {
               address: homeAddress.AddressStreet.StreetName,
               apartment: homeAddress.AddressSecondaryUnitText,

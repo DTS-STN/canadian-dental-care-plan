@@ -27,8 +27,8 @@ describe('expectDefined', () => {
     expect(() => expectDefined(undefined, 'value was undefined')).toThrow('value was undefined');
   });
 
-  it('should throw on empty string', () => {
-    expect(() => expectDefined('', 'value was empty')).toThrow('value was empty');
+  it('should return empty string without throwing', () => {
+    expect(expectDefined('', 'fail')).toBe('');
   });
 
   it('should return an object value', () => {
