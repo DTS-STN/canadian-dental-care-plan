@@ -139,10 +139,9 @@ async function handleRaoidcCallbackRequest({ context: { appContainer, session },
   const state = session.find('authState');
 
   if (codeVerifier.isNone() || state.isNone()) {
-    const missingSessionKeys = [
-      codeVerifier.mapOr('authCodeVerifier', () => ''), //
-      state.mapOr('authState', () => ''),
-    ].filter(Boolean);
+    const missingSessionKeys: string[] = [];
+    if (codeVerifier.isNone()) missingSessionKeys.push('authCodeVerifier');
+    if (state.isNone()) missingSessionKeys.push('authState');
     const missingKeys = missingSessionKeys.join(' and ');
     const authLoginUrl = `/auth/login?${new URLSearchParams({ returnto: returnUrl })}`;
     log.warn('Missing %s in session [%s]; possible stale or replayed callback -- redirecting to [%s]', missingKeys, session.id, authLoginUrl);
