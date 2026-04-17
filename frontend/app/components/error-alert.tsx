@@ -38,8 +38,7 @@ export function useErrorAlert(showErrorAlert: boolean, errorAlertId: string = 'e
         adobeAnalytics.pushValidationErrorEvent([errorAlertId]);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [alertRef.current, errorAlertId, showErrorAlert]);
+  }, [errorAlertId, showErrorAlert]);
 
   const errorAlertComponent = useCallback(
     ({ children }: PropsWithChildren) => {
@@ -51,8 +50,7 @@ export function useErrorAlert(showErrorAlert: boolean, errorAlertId: string = 'e
         )
       );
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [alertRef.current, errorAlertId, showErrorAlert],
+    [errorAlertId, showErrorAlert],
   );
 
   return {
