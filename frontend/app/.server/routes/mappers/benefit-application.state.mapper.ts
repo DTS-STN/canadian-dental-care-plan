@@ -244,9 +244,8 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     // an email, then navigated back and switched to a non-digital method.
     const effectiveEmail = emailVerified ? email : undefined;
 
-    // The API expects emailVerified to be true if the email is verified, and undefined if it is not. It
-    // should never be false, because that would indicate that the email is not verified, but we would also
-    // not include the email in that case.
+    // Keep emailVerified aligned with the email value emitted by this mapper: when no effective email is
+    // sent, omit emailVerified as well so we do not send a stale or contradictory false value.
     const effectiveEmailVerified = effectiveEmail ? true : undefined;
 
     return {
