@@ -8,6 +8,23 @@ import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { generateCallbackUri } from '~/.server/utils/raoidc.utils';
 
 const defaultProviderId = 'raoidc';
+const defaultReturnUrl = '/';
+
+/**
+ * Checks if a given return URL is safe to redirect to. A safe return URL is one that is a relative path (starts with a
+ * single "/"), is not protocol-relative (does not start with "//"), and does not contain any backslashes, which could
+ * indicate an attempt at an open redirect or other malicious behavior.
+ *
+ * @param returnUrl The URL to check.
+ * @returns `true` if the URL is safe, `false` otherwise.
+ */
+function isSafeReturnUrl(returnUrl: string) {
+  return (
+    returnUrl.startsWith('/') && // Must start with a single slash to be considered a relative path
+    !returnUrl.startsWith('//') && // Must not start with double slashes, which could indicate a protocol-relative URL
+    !returnUrl.includes('\\') // Must not contain backslashes, which could be used in certain types of attacks
+  );
+}
 
 /**
  * A do-all authentication handler for the application
@@ -100,7 +117,7 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
   const { origin, searchParams } = new URL(request.url);
   const returnUrl = searchParams.get('returnto');
 
-  if (returnUrl && !returnUrl.startsWith('/')) {
+  if (returnUrl && !isSafeReturnUrl(returnUrl)) {
     log.warn('Invalid return URL [%s]', returnUrl);
     instrumentationService.createCounter('auth.login.raoidc.requests.invalid-return-url').add(1);
 
@@ -117,7 +134,7 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
 
   log.debug('Storing [codeVerifier] and [state] in session for future validation');
   session.set('authCodeVerifier', codeVerifier);
-  session.set('authReturnUrl', returnUrl ?? '/');
+  session.set('authReturnUrl', returnUrl ?? defaultReturnUrl);
   session.set('authState', state);
 
   log.debug('Redirecting to RAOIDC signin URL [%s]', authUrl.href);
@@ -134,14 +151,26 @@ async function handleRaoidcCallbackRequest({ context: { appContainer, session },
   instrumentationService.createCounter('auth.callback.raoidc.requests').add(1);
 
   const raoidcService = appContainer.get(TYPES.RaoidcService);
-  const codeVerifier = session.get('authCodeVerifier');
-  const returnUrl = session.find('authReturnUrl').unwrapOr('/');
-  const state = session.get('authState');
+  const codeVerifier = session.find('authCodeVerifier');
+  const rawReturnUrl = session.find('authReturnUrl').unwrapOr(defaultReturnUrl);
+  const returnUrl = isSafeReturnUrl(rawReturnUrl) ? rawReturnUrl : defaultReturnUrl;
+  const state = session.find('authState');
+
+  if (codeVerifier.isNone() || state.isNone()) {
+    const missingSessionKeys: string[] = [];
+    if (codeVerifier.isNone()) missingSessionKeys.push('authCodeVerifier');
+    if (state.isNone()) missingSessionKeys.push('authState');
+    const missingKeys = missingSessionKeys.join(' and ');
+    const authLoginUrl = `/auth/login?${new URLSearchParams({ returnto: returnUrl })}`;
+    log.warn('Missing %s in session [%s]; possible stale or replayed callback -- redirecting to [%s]', missingKeys, session.id, authLoginUrl);
+    instrumentationService.createCounter('auth.callback.raoidc.requests.stale-session').add(1);
+    throw redirectDocument(authLoginUrl);
+  }
 
   const redirectUri = generateCallbackUri(new URL(request.url).origin, 'raoidc');
 
   log.debug('Storing auth tokens and userinfo in session');
-  const { idToken, userInfoToken } = await raoidcService.handleCallback({ request, codeVerifier, expectedState: state, redirectUri });
+  const { idToken, userInfoToken } = await raoidcService.handleCallback({ request, codeVerifier: codeVerifier.unwrap(), expectedState: state.unwrap(), redirectUri });
   session.set('idToken', idToken);
   session.set('userInfoToken', userInfoToken);
 
