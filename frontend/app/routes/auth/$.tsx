@@ -8,6 +8,11 @@ import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { generateCallbackUri } from '~/.server/utils/raoidc.utils';
 
 const defaultProviderId = 'raoidc';
+const defaultReturnUrl = '/';
+
+function isSafeReturnUrl(returnUrl: string) {
+  return returnUrl.startsWith('/') && !returnUrl.startsWith('//') && !returnUrl.includes('\\');
+}
 
 /**
  * A do-all authentication handler for the application
@@ -100,7 +105,7 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
   const { origin, searchParams } = new URL(request.url);
   const returnUrl = searchParams.get('returnto');
 
-  if (returnUrl && !returnUrl.startsWith('/')) {
+  if (returnUrl && !isSafeReturnUrl(returnUrl)) {
     log.warn('Invalid return URL [%s]', returnUrl);
     instrumentationService.createCounter('auth.login.raoidc.requests.invalid-return-url').add(1);
 
@@ -117,7 +122,7 @@ async function handleRaoidcLoginRequest({ context: { appContainer, session }, re
 
   log.debug('Storing [codeVerifier] and [state] in session for future validation');
   session.set('authCodeVerifier', codeVerifier);
-  session.set('authReturnUrl', returnUrl ?? '/');
+  session.set('authReturnUrl', returnUrl ?? defaultReturnUrl);
   session.set('authState', state);
 
   log.debug('Redirecting to RAOIDC signin URL [%s]', authUrl.href);
@@ -135,7 +140,8 @@ async function handleRaoidcCallbackRequest({ context: { appContainer, session },
 
   const raoidcService = appContainer.get(TYPES.RaoidcService);
   const codeVerifier = session.find('authCodeVerifier');
-  const returnUrl = session.find('authReturnUrl').unwrapOr('/');
+  const rawReturnUrl = session.find('authReturnUrl').unwrapOr(defaultReturnUrl);
+  const returnUrl = isSafeReturnUrl(rawReturnUrl) ? rawReturnUrl : defaultReturnUrl;
   const state = session.find('authState');
 
   if (codeVerifier.isNone() || state.isNone()) {
