@@ -10,8 +10,20 @@ import { generateCallbackUri } from '~/.server/utils/raoidc.utils';
 const defaultProviderId = 'raoidc';
 const defaultReturnUrl = '/';
 
+/**
+ * Checks if a given return URL is safe to redirect to. A safe return URL is one that is a relative path (starts with a
+ * single "/") and does not contain any backslashes or double slashes, which could indicate an attempt at an open
+ * redirect or other malicious behavior.
+ *
+ * @param returnUrl The URL to check.
+ * @returns `true` if the URL is safe, `false` otherwise.
+ */
 function isSafeReturnUrl(returnUrl: string) {
-  return returnUrl.startsWith('/') && !returnUrl.startsWith('//') && !returnUrl.includes('\\');
+  return (
+    returnUrl.startsWith('/') && // Must start with a single slash to be considered a relative path
+    !returnUrl.startsWith('//') && // Must not start with double slashes, which could indicate a protocol-relative URL
+    !returnUrl.includes('\\') // Must not contain backslashes, which could be used in certain types of attacks
+  );
 }
 
 /**
