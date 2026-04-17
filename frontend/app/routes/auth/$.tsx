@@ -134,14 +134,26 @@ async function handleRaoidcCallbackRequest({ context: { appContainer, session },
   instrumentationService.createCounter('auth.callback.raoidc.requests').add(1);
 
   const raoidcService = appContainer.get(TYPES.RaoidcService);
-  const codeVerifier = session.get('authCodeVerifier');
+  const codeVerifier = session.find('authCodeVerifier');
   const returnUrl = session.find('authReturnUrl').unwrapOr('/');
-  const state = session.get('authState');
+  const state = session.find('authState');
+
+  if (codeVerifier.isNone() || state.isNone()) {
+    const missingSessionKeys = [
+      codeVerifier.mapOr('authCodeVerifier', () => ''), //
+      state.mapOr('authState', () => ''),
+    ].filter(Boolean);
+    const missingKeys = missingSessionKeys.join(' and ');
+    const authLoginUrl = `/auth/login?${new URLSearchParams({ returnto: returnUrl })}`;
+    log.warn('Missing %s in session [%s]; possible stale or replayed callback -- redirecting to [%s]', missingKeys, session.id, authLoginUrl);
+    instrumentationService.createCounter('auth.callback.raoidc.requests.stale-session').add(1);
+    throw redirectDocument(authLoginUrl);
+  }
 
   const redirectUri = generateCallbackUri(new URL(request.url).origin, 'raoidc');
 
   log.debug('Storing auth tokens and userinfo in session');
-  const { idToken, userInfoToken } = await raoidcService.handleCallback({ request, codeVerifier, expectedState: state, redirectUri });
+  const { idToken, userInfoToken } = await raoidcService.handleCallback({ request, codeVerifier: codeVerifier.unwrap(), expectedState: state.unwrap(), redirectUri });
   session.set('idToken', idToken);
   session.set('userInfoToken', userInfoToken);
 
