@@ -12,8 +12,8 @@ const defaultReturnUrl = '/';
 
 /**
  * Checks if a given return URL is safe to redirect to. A safe return URL is one that is a relative path (starts with a
- * single "/") and does not contain any backslashes or double slashes, which could indicate an attempt at an open
- * redirect or other malicious behavior.
+ * single "/"), is not protocol-relative (does not start with "//"), and does not contain any backslashes, which could
+ * indicate an attempt at an open redirect or other malicious behavior.
  *
  * @param returnUrl The URL to check.
  * @returns `true` if the URL is safe, `false` otherwise.
