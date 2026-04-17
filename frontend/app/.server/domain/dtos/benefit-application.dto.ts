@@ -62,7 +62,6 @@ export type ContactInformationDto = ReadonlyDeep<{
   mailingProvince?: string;
   phoneNumber?: string;
   phoneNumberAlt?: string;
-  email?: string;
 }>;
 
 export type DentalInsuranceDto = ReadonlyDeep<{
