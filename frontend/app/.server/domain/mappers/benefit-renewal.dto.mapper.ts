@@ -125,14 +125,8 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
           },
           BenefitApplicationDetail: [],
           ClientIdentification: [
-            {
-              IdentificationID: applicantInformation.clientId,
-              IdentificationCategoryText: 'Client ID',
-            },
-            {
-              IdentificationID: applicantInformation.clientNumber,
-              IdentificationCategoryText: 'Client Number',
-            },
+            { IdentificationID: applicantInformation.clientId, IdentificationCategoryText: 'Client ID' },
+            { IdentificationID: applicantInformation.clientNumber, IdentificationCategoryText: 'Client Number' },
           ],
           PersonBirthDate: this.toDate(dateOfBirth),
           PersonContactInformation: [
@@ -322,7 +316,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     return relatedPersons;
   }
 
-  private toRelatedPersonSpouse({ confirm, socialInsuranceNumber, yearOfBirth }: RenewalPartnerInformationDto) {
+  private toRelatedPersonSpouse({ clientId, confirm, socialInsuranceNumber, yearOfBirth }: RenewalPartnerInformationDto) {
     return {
       PersonBirthDate: {
         YearDate: yearOfBirth,
@@ -336,6 +330,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       ApplicantDetail: {
         ConsentToSharePersonalInformationIndicator: confirm,
       },
+      ClientIdentification: clientId ? [{ IdentificationID: clientId, IdentificationCategoryText: 'Client ID' }] : undefined,
     };
   }
 
@@ -361,14 +356,8 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
       },
       BenefitApplicationDetail: [],
       ClientIdentification: [
-        {
-          IdentificationID: child.clientId,
-          IdentificationCategoryText: 'Client ID',
-        },
-        {
-          IdentificationID: child.clientNumber,
-          IdentificationCategoryText: 'Client Number',
-        },
+        { IdentificationID: child.clientId, IdentificationCategoryText: 'Client ID' },
+        { IdentificationID: child.clientNumber, IdentificationCategoryText: 'Client Number' },
       ],
     }));
   }
