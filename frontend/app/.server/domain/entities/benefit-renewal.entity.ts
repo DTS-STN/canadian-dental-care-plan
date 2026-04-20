@@ -87,7 +87,7 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
         IdentificationID: string;
       };
       RelatedPerson: {
-        ApplicantDetail: {
+        ApplicantDetail?: {
           PrivateDentalInsuranceIndicator?: boolean;
           InsurancePlan?: {
             InsurancePlanIdentification?: {

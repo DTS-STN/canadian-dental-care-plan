@@ -79,16 +79,24 @@ export type RenewalContactInformationDto = ReadonlyDeep<{
   email?: string;
 }>;
 
-export type RenewalPartnerInformationDto = ReadonlyDeep<{
-  /**
-   * The unique identifier of the partner client. Required during simplified renewal when the client is not asked
-   * for marital status information, allowing the system to reuse existing partner information on file.
-   */
-  clientId?: string;
+/** Partner information provided during a full benefit renewal. */
+export type FullRenewalPartnerInformationDto = ReadonlyDeep<{
+  clientId?: never;
   consentToSharePersonalInformation: boolean;
-  yearOfBirth: string;
   socialInsuranceNumber: string;
+  yearOfBirth: string;
 }>;
+
+/** Partner information for a simplified benefit renewal. */
+export type SimplifiedRenewalPartnerInformationDto = ReadonlyDeep<{
+  clientId: string;
+  consentToSharePersonalInformation?: never;
+  socialInsuranceNumber: string;
+  yearOfBirth: string;
+}>;
+
+/** Partner information provided during a benefit renewal. */
+export type RenewalPartnerInformationDto = FullRenewalPartnerInformationDto | SimplifiedRenewalPartnerInformationDto;
 
 export type RenewalTypeOfApplicationDto = 'adult' | 'adult-child' | 'child';
 
