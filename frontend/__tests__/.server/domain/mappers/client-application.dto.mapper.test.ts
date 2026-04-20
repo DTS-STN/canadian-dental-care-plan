@@ -196,6 +196,10 @@ describe('DefaultClientApplicationDtoMapper', () => {
                 ClientIdentification: [
                   {
                     IdentificationID: '10000000003',
+                    IdentificationCategoryText: 'Client ID',
+                  },
+                  {
+                    IdentificationID: '10000000023',
                     IdentificationCategoryText: 'Client Number',
                   },
                 ],
@@ -260,6 +264,8 @@ describe('DefaultClientApplicationDtoMapper', () => {
         eligibilityStatusCode: '775170001',
         livingIndependently: true,
         partnerInformation: {
+          clientId: '10000000003',
+          clientNumber: '10000000023',
           confirm: false,
           yearOfBirth: '2000',
           firstName: 'Jane',

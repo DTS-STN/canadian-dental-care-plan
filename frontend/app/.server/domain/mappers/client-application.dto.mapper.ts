@@ -116,11 +116,11 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
 
   mapClientApplicationEntityToClientApplicationDto(clientApplicationEntity: ClientApplicationEntity): ClientApplicationDto {
     const applicant = clientApplicationEntity.BenefitApplication.Applicant;
-    const clientId = expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected applicant.ClientIdentification.IdentificationID to be defined');
+    const clientId = expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected applicant.ClientIdentification.IdentificationID with Client ID to be defined');
 
     const applicantInformation = {
       clientId,
-      clientNumber: expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected applicant.ClientIdentification.IdentificationID to be defined'),
+      clientNumber: expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected applicant.ClientIdentification.IdentificationID with Client Number to be defined'),
       firstName: applicant.PersonName[0].PersonGivenName[0],
       lastName: applicant.PersonName[0].PersonSurName,
       maritalStatus: applicant.PersonMaritalStatus.StatusCode?.ReferenceDataID,
@@ -136,8 +136,8 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
           lastName: child.PersonName[0].PersonSurName,
           dateOfBirth: expectDefined(child.PersonBirthDate.date, 'Expected child.PersonBirthDate.date to be defined'),
           isParent: expectDefined(child.ApplicantDetail.AttestParentOrGuardianIndicator, 'Expected child.ApplicantDetail.AttestParentOrGuardianIndicator to be defined'),
-          clientId: expectDefined(child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected child.ClientIdentification.IdentificationID to be defined'),
-          clientNumber: expectDefined(child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected child.ClientIdentification.IdentificationID to be defined'),
+          clientId: expectDefined(child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected child.ClientIdentification.IdentificationID with Client ID to be defined'),
+          clientNumber: expectDefined(child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected child.ClientIdentification.IdentificationID with Client Number to be defined'),
           socialInsuranceNumber: child.PersonSINIdentification.IdentificationID,
         },
       })) ?? [];
@@ -205,6 +205,8 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
     const partner = applicant.RelatedPerson?.find((person) => person.PersonRelationshipCode.ReferenceDataName === 'Spouse');
     const partnerInformation = partner
       ? {
+          clientId: expectDefined(partner.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected partner.ClientIdentification.IdentificationID with Client ID to be defined'),
+          clientNumber: expectDefined(partner.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected partner.ClientIdentification.IdentificationID with Client Number to be defined'),
           confirm: expectDefined(partner.ApplicantDetail.ConsentToSharePersonalInformationIndicator, 'Expected partner.ApplicantDetail.ConsentToSharePersonalInformationIndicator to be defined'),
           yearOfBirth: expectDefined(partner.PersonBirthDate.YearDate, 'Expected partner.PersonBirthDate.YearDate to be defined'),
           firstName: partner.PersonName[0].PersonGivenName[0],
