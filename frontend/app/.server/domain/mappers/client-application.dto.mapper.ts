@@ -207,7 +207,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       ? {
           clientId: expectDefined(partner.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected partner.ClientIdentification.IdentificationID with Client ID to be defined'),
           clientNumber: expectDefined(partner.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected partner.ClientIdentification.IdentificationID with Client Number to be defined'),
-          confirm: expectDefined(partner.ApplicantDetail.ConsentToSharePersonalInformationIndicator, 'Expected partner.ApplicantDetail.ConsentToSharePersonalInformationIndicator to be defined'),
+          consentToSharePersonalInformation: expectDefined(partner.ApplicantDetail.ConsentToSharePersonalInformationIndicator, 'Expected partner.ApplicantDetail.ConsentToSharePersonalInformationIndicator to be defined'),
           yearOfBirth: expectDefined(partner.PersonBirthDate.YearDate, 'Expected partner.PersonBirthDate.YearDate to be defined'),
           firstName: partner.PersonName[0].PersonGivenName[0],
           lastName: partner.PersonName[0].PersonSurName,

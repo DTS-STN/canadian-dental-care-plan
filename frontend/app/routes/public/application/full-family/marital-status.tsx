@@ -81,7 +81,7 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
                     <DefinitionListItem term={t('application-full-family:marital-status.spouse-sin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
                     <DefinitionListItem term={t('application-full-family:marital-status.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
                     <DefinitionListItem term={t('application-full-family:marital-status.consent')}>
-                      {state.partnerInformation.confirm ? t('application-full-family:marital-status.consent-yes') : t('application-full-family:marital-status.consent-no')}
+                      {state.partnerInformation.consentToSharePersonalInformation ? t('application-full-family:marital-status.consent-yes') : t('application-full-family:marital-status.consent-no')}
                     </DefinitionListItem>
                   </>
                 )}

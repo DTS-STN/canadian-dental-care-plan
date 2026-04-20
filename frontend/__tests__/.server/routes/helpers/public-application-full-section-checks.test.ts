@@ -295,7 +295,7 @@ describe('public-application-full-section-checks', () => {
         isMaritalStatusSectionCompleted({
           maritalStatus: 'married',
           partnerInformation: {
-            confirm: true,
+            consentToSharePersonalInformation: true,
             socialInsuranceNumber: '123-456-789',
             yearOfBirth: '1980',
           },

@@ -101,7 +101,7 @@ export function isMaritalStatusSectionCompleted(state: Pick<ProtectedApplication
   const partnerMaritalStatuses = [MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED]; // statuses that require partner information
 
   if (partnerMaritalStatuses.includes(state.maritalStatus)) {
-    return state.partnerInformation?.confirm === true; // partner information required and consent given
+    return state.partnerInformation?.consentToSharePersonalInformation === true; // partner information required and consent given
   }
 
   return true; // no partner information required

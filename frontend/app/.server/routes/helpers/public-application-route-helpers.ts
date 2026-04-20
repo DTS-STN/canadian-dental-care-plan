@@ -111,7 +111,7 @@ export type PublicApplicationState = ReadonlyDeep<{
   };
   livingIndependently?: boolean;
   partnerInformation?: {
-    confirm: boolean;
+    consentToSharePersonalInformation: boolean;
     yearOfBirth: string;
     socialInsuranceNumber: string;
   };

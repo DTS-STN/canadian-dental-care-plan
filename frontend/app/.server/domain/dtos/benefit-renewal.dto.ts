@@ -85,7 +85,7 @@ export type RenewalPartnerInformationDto = ReadonlyDeep<{
    * for marital status information, allowing the system to reuse existing partner information on file.
    */
   clientId?: string;
-  confirm: boolean;
+  consentToSharePersonalInformation: boolean;
   yearOfBirth: string;
   socialInsuranceNumber: string;
 }>;

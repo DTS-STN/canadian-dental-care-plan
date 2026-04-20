@@ -117,7 +117,7 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
                     <DefinitionListItem term={t('protected-application-intake-child:parent-or-guardian.spouse-sin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
                     <DefinitionListItem term={t('protected-application-intake-child:parent-or-guardian.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
                     <DefinitionListItem term={t('protected-application-intake-child:parent-or-guardian.consent')}>
-                      {state.partnerInformation.confirm ? t('protected-application-intake-child:parent-or-guardian.consent-yes') : t('protected-application-intake-child:parent-or-guardian.consent-no')}
+                      {state.partnerInformation.consentToSharePersonalInformation ? t('protected-application-intake-child:parent-or-guardian.consent-yes') : t('protected-application-intake-child:parent-or-guardian.consent-no')}
                     </DefinitionListItem>
                   </>
                 )}

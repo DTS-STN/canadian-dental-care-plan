@@ -98,7 +98,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const currentYear = new Date().getFullYear();
   const partnerInformationSchema = z.object({
-    confirm: z.boolean().refine((val) => val === true, t('protected-application-spokes:marital-status.error-message.confirm-required')),
+    consentToSharePersonalInformation: z.boolean().refine((val) => val === true, t('protected-application-spokes:marital-status.error-message.confirm-required')),
     yearOfBirth: z
       .string()
       .trim()
@@ -128,7 +128,7 @@ export async function action({ context: { appContainer, session }, params, reque
     maritalStatus: formData.get('maritalStatus') ? String(formData.get('maritalStatus')) : undefined,
   };
   const partnerInformationData = {
-    confirm: formData.get('confirm') === 'yes',
+    consentToSharePersonalInformation: formData.get('consentToSharePersonalInformation') === 'yes',
     yearOfBirth: String(formData.get('yearOfBirth') ?? ''),
     socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),
   };
@@ -231,7 +231,14 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
                   errorMessage={errors?.yearOfBirth}
                   required
                 />
-                <InputCheckbox id="confirm" name="confirm" value="yes" errorMessage={errors?.confirm} defaultChecked={defaultState.confirm === true} required>
+                <InputCheckbox
+                  id="consentToSharePersonalInformation"
+                  name="consentToSharePersonalInformation"
+                  value="yes"
+                  errorMessage={errors?.consentToSharePersonalInformation}
+                  defaultChecked={defaultState.consentToSharePersonalInformation === true}
+                  required
+                >
                   {t('protected-application-spokes:marital-status.confirm-checkbox')}
                 </InputCheckbox>
               </>

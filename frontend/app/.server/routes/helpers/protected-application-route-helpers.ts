@@ -111,7 +111,7 @@ export type ProtectedApplicationState = ReadonlyDeep<{
   };
   livingIndependently?: boolean;
   partnerInformation?: {
-    confirm: boolean;
+    consentToSharePersonalInformation: boolean;
     yearOfBirth: string;
     socialInsuranceNumber: string;
   };

@@ -248,7 +248,7 @@ export default function ProtectedRenewChildParentOrGuardian({ loaderData, params
                       <DefinitionListItem term={t('protected-application-renewal-child:parent-or-guardian.spouse-sin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
                       <DefinitionListItem term={t('protected-application-renewal-child:parent-or-guardian.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
                       <DefinitionListItem term={t('protected-application-renewal-child:parent-or-guardian.consent')}>
-                        {state.partnerInformation.confirm ? t('protected-application-renewal-child:parent-or-guardian.consent-yes') : t('protected-application-renewal-child:parent-or-guardian.consent-no')}
+                        {state.partnerInformation.consentToSharePersonalInformation ? t('protected-application-renewal-child:parent-or-guardian.consent-yes') : t('protected-application-renewal-child:parent-or-guardian.consent-no')}
                       </DefinitionListItem>
                     </>
                   )}

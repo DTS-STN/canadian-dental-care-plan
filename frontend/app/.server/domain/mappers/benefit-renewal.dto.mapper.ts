@@ -316,7 +316,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
     return relatedPersons;
   }
 
-  private toRelatedPersonSpouse({ clientId, confirm, socialInsuranceNumber, yearOfBirth }: RenewalPartnerInformationDto) {
+  private toRelatedPersonSpouse({ clientId, consentToSharePersonalInformation, socialInsuranceNumber, yearOfBirth }: RenewalPartnerInformationDto) {
     return {
       PersonBirthDate: {
         YearDate: yearOfBirth,
@@ -328,7 +328,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         IdentificationID: socialInsuranceNumber,
       },
       ApplicantDetail: {
-        ConsentToSharePersonalInformationIndicator: confirm,
+        ConsentToSharePersonalInformationIndicator: consentToSharePersonalInformation,
       },
       ClientIdentification: clientId ? [{ IdentificationID: clientId, IdentificationCategoryText: 'Client ID' }] : undefined,
     };

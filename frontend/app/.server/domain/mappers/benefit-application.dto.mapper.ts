@@ -232,7 +232,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
     return relatedPersons;
   }
 
-  private toRelatedPersonSpouse({ confirm, socialInsuranceNumber, yearOfBirth }: PartnerInformationDto) {
+  private toRelatedPersonSpouse({ consentToSharePersonalInformation, socialInsuranceNumber, yearOfBirth }: PartnerInformationDto) {
     return {
       PersonBirthDate: {
         YearDate: yearOfBirth,
@@ -244,7 +244,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
         IdentificationID: socialInsuranceNumber,
       },
       ApplicantDetail: {
-        ConsentToSharePersonalInformationIndicator: confirm,
+        ConsentToSharePersonalInformationIndicator: consentToSharePersonalInformation,
       },
     };
   }
