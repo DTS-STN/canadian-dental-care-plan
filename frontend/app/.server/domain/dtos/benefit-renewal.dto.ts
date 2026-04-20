@@ -80,6 +80,11 @@ export type RenewalContactInformationDto = ReadonlyDeep<{
 }>;
 
 export type RenewalPartnerInformationDto = ReadonlyDeep<{
+  /**
+   * The unique identifier of the partner client. Required during simplified renewal when the client is not asked
+   * for marital status information, allowing the system to reuse existing partner information on file.
+   */
+  clientId?: string;
   confirm: boolean;
   yearOfBirth: string;
   socialInsuranceNumber: string;

@@ -607,6 +607,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
 
     return existingPartnerInformation
       ? {
+          clientId: existingPartnerInformation.clientId,
           confirm: existingPartnerInformation.confirm,
           socialInsuranceNumber: existingPartnerInformation.socialInsuranceNumber ?? '',
           yearOfBirth: existingPartnerInformation.yearOfBirth,
