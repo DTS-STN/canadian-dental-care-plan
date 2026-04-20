@@ -90,8 +90,8 @@ export type ClientPartnerInformationDto = ReadonlyDeep<{
   clientNumber: string;
   consentToSharePersonalInformation: boolean;
   yearOfBirth: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   socialInsuranceNumber?: string;
 }>;
 

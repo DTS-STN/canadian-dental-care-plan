@@ -132,8 +132,8 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
         dentalBenefits: child.ApplicantDetail.InsurancePlan?.at(0)?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
         privateDentalInsurance: expectDefined(child.ApplicantDetail.PrivateDentalInsuranceIndicator, 'Expected child.ApplicantDetail.PrivateDentalInsuranceIndicator to be defined'),
         information: {
-          firstName: child.PersonName[0].PersonGivenName[0],
-          lastName: child.PersonName[0].PersonSurName,
+          firstName: expectDefined(child.PersonName.at(0)?.PersonGivenName.at(0), 'Expected child.PersonName[0].PersonGivenName[0] to be defined'),
+          lastName: expectDefined(child.PersonName.at(0)?.PersonSurName, 'Expected child.PersonName[0].PersonSurName to be defined'),
           dateOfBirth: expectDefined(child.PersonBirthDate.date, 'Expected child.PersonBirthDate.date to be defined'),
           isParent: expectDefined(child.ApplicantDetail.AttestParentOrGuardianIndicator, 'Expected child.ApplicantDetail.AttestParentOrGuardianIndicator to be defined'),
           clientId: expectDefined(child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected child.ClientIdentification.IdentificationID with Client ID to be defined'),
@@ -209,8 +209,8 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
           clientNumber: expectDefined(partner.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected partner.ClientIdentification.IdentificationID with Client Number to be defined'),
           consentToSharePersonalInformation: expectDefined(partner.ApplicantDetail.ConsentToSharePersonalInformationIndicator, 'Expected partner.ApplicantDetail.ConsentToSharePersonalInformationIndicator to be defined'),
           yearOfBirth: expectDefined(partner.PersonBirthDate.YearDate, 'Expected partner.PersonBirthDate.YearDate to be defined'),
-          firstName: partner.PersonName[0].PersonGivenName[0],
-          lastName: partner.PersonName[0].PersonSurName,
+          firstName: partner.PersonName.at(0)?.PersonGivenName.at(0) ?? undefined,
+          lastName: partner.PersonName.at(0)?.PersonSurName ?? undefined,
           socialInsuranceNumber: partner.PersonSINIdentification.IdentificationID,
         }
       : undefined;

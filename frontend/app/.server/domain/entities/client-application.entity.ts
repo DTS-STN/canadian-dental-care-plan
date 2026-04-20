@@ -103,8 +103,8 @@ export type ClientApplicationEntity = ReadonlyDeep<{
           YearDate?: string;
         };
         PersonName: Array<{
-          PersonGivenName: Array<string>;
-          PersonSurName: string;
+          PersonGivenName: Array<string | null>;
+          PersonSurName?: string;
         }>;
         PersonRelationshipCode: {
           ReferenceDataName: 'Spouse' | 'Dependant';
