@@ -132,7 +132,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
         </CardHeader>
         <CardContent>
           {defaultState.personalInformation === undefined ? (
-            <p>{t('protected-application:your-application.personal-info-description')}</p>
+            <p>{t(`protected-application:your-application.personal-info-description.${defaultState.context}`)}</p>
           ) : (
             <DefinitionList layout="single-column">
               {defaultState.personalInformation.memberId && <DefinitionListItem term={t('protected-application:your-application.member-id')}>{formatClientNumber(defaultState.personalInformation.memberId)}</DefinitionListItem>}

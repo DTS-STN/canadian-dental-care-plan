@@ -82,7 +82,10 @@
     "type-application-children": "I am applying for my child(ren)",
     "type-application-family": "I am applying for myself and my child(ren)",
     "personal-info-heading": "Personal information",
-    "personal-info-description": "Enter your Member ID, name, date of birth and Social Insurance Number (SIN).",
+    "personal-info-description": {
+      "intake": "Enter your name, date of birth and Social Insurance Number (SIN).",
+      "renewal": "Enter your Member ID, name, date of birth and Social Insurance Number (SIN)."
+    },
     "member-id": "Member ID",
     "full-name": "Full name",
     "date-of-birth": "Date of birth",

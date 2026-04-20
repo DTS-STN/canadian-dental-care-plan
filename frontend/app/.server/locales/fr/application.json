@@ -65,7 +65,10 @@
     "type-application-children": "Je présente une demande pour mon (mes) enfant(s)",
     "type-application-family": "Je présente une demande pour moi-même et mon (mes) enfant(s)",
     "personal-info-heading": "Renseignements personnels",
-    "personal-info-description": "Veuillez entrer votre numéro d'identification du membre, votre nom, votre date de naissance et votre numéro d'assurance sociale (NAS).",
+    "personal-info-description": {
+      "intake": "Veuillez entrer votre nom, votre date de naissance et votre numéro d'assurance sociale (NAS).",
+      "renewal": "Veuillez entrer votre numéro d'identification du membre, votre nom, votre date de naissance et votre numéro d'assurance sociale (NAS)."
+    },
     "member-id": "Numéro d'identification du membre",
     "full-name": "Nom complet",
     "date-of-birth": "Date de naissance",

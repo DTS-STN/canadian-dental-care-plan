@@ -47,6 +47,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   return {
     defaultState: {
+      context: state.context,
       inputModel: state.inputModel,
       typeOfApplication: state.typeOfApplication,
       personalInformation: state.applicantInformation,
@@ -143,7 +144,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
         </CardHeader>
         <CardContent>
           {defaultState.personalInformation === undefined ? (
-            <p>{t('application:your-application.personal-info-description')}</p>
+            <p>{t(`application:your-application.personal-info-description.${defaultState.context}`)}</p>
           ) : (
             <DefinitionList layout="single-column">
               {defaultState.personalInformation.memberId && <DefinitionListItem term={t('application:your-application.member-id')}>{formatClientNumber(defaultState.personalInformation.memberId)}</DefinitionListItem>}
