@@ -9,6 +9,7 @@ import type { ClientApplicationRepository } from '~/.server/domain/repositories'
 import type { AuditService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
+import { sanitizeSin } from '~/utils/sin-utils';
 
 /**
  * A service that provides access to client application data.
@@ -93,7 +94,7 @@ export class DefaultClientApplicationService implements ClientApplicationService
     // affect the comparison.
     const clientApplication = clientApplicationOption.unwrap();
 
-    if (clientApplication.applicantInformation.socialInsuranceNumber.replaceAll(/\D/g, '') !== sin.replaceAll(/\D/g, '')) {
+    if (sanitizeSin(clientApplication.applicantInformation.socialInsuranceNumber) !== sanitizeSin(sin)) {
       this.log.trace('Client application found with basic info, but SIN does not match. Basic info: [%j], SIN: [***-***-%s]', basicInfoRequestDto, sin.slice(-3));
       return None;
     }

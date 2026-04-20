@@ -4,6 +4,7 @@ import type { Option } from 'oxide.ts';
 
 import type { ApplicationStatusBasicInfoRequestDto, ApplicationStatusSinRequestDto } from '~/.server/domain/dtos';
 import type { ApplicationStatusBasicInfoRequestEntity, ApplicationStatusEntity, ApplicationStatusSinRequestEntity } from '~/.server/domain/entities';
+import { sanitizeSin } from '~/utils/sin-utils';
 
 export interface ApplicationStatusDtoMapper {
   mapApplicationStatusEntityToApplicationStatusId(applicationStatusEntity: ApplicationStatusEntity): Option<string>;
@@ -46,7 +47,7 @@ export class DefaultApplicationStatusDtoMapper implements ApplicationStatusDtoMa
       BenefitApplication: {
         Applicant: {
           PersonSINIdentification: {
-            IdentificationID: applicationStatusSinRequestDto.sin,
+            IdentificationID: sanitizeSin(applicationStatusSinRequestDto.sin),
           },
           ClientIdentification: [
             {

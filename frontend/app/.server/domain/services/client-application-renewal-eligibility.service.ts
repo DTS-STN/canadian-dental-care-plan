@@ -6,6 +6,7 @@ import type { ClientApplicationRenewalEligibilityDtoMapper } from '~/.server/dom
 import type { ApplicantService, AuditService, ClientApplicationService } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';
+import { sanitizeSin } from '~/utils/sin-utils';
 
 /**
  * A service that provides access to client application data for renewal eligibility.
@@ -91,7 +92,7 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
 
     if (!applicant.socialInsuranceNumber) {
       this.log.trace('Applicant found with basic info, but no SIN on file to compare against, skipping SIN check. Basic info: [%j]', request);
-    } else if (applicant.socialInsuranceNumber.replaceAll(/\D/g, '') !== request.sin.replaceAll(/\D/g, '')) {
+    } else if (sanitizeSin(applicant.socialInsuranceNumber) !== sanitizeSin(request.sin)) {
       this.log.trace('Applicant found with basic info, but SIN does not match. Basic info: [%j], SIN: [***-***-%s]', request, request.sin.slice(-3));
       return { result: 'INELIGIBLE-APPLICANT-SIN-MISMATCH' };
     }

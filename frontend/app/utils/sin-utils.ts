@@ -54,7 +54,7 @@ export const sinInputPatternFormat = '### ### ###';
  */
 export function isValidSin(sin: string): boolean {
   if (!sinFormatRegex.test(sin)) return false;
-  const multDigitString = [...sin.replaceAll(/\D/g, '')].map((digit, index) => Number(digit) * (index % 2 === 0 ? 1 : 2)).join('');
+  const multDigitString = [...sanitizeSin(sin)].map((digit, index) => Number(digit) * (index % 2 === 0 ? 1 : 2)).join('');
   const digitSum = [...multDigitString].reduce((acc, cur) => acc + Number(cur), 0);
   return digitSum % 10 === 0;
 }
@@ -66,5 +66,17 @@ export function isValidSin(sin: string): boolean {
  */
 export function formatSin(sin: string, separator = ' '): string {
   if (!isValidSin(sin)) throw new Error('Invalid SIN format');
-  return (sin.replaceAll(/\D/g, '').match(/.../g) ?? []).join(separator);
+  return (sanitizeSin(sin).match(/.../g) ?? []).join(separator);
+}
+
+/**
+ * Sanitizes a Social Insurance Number (SIN) by removing all non-digit characters.
+ * If the input does not match the expected SIN format, it is returned unchanged.
+ *
+ * @param sin - The SIN string to sanitize.
+ * @returns The sanitized SIN containing only digits, or the original string if it doesn't match the expected format.
+ */
+export function sanitizeSin(sin: string): string {
+  if (!sinFormatRegex.test(sin)) return sin;
+  return sin.replaceAll(/\D/g, '');
 }

@@ -5,6 +5,7 @@ import type { ApplicantResponseEntity, FindApplicantByBasicInfoRequestEntity, Fi
 import type { Logger } from '~/.server/logging';
 import { createLogger } from '~/.server/logging';
 import { expectDefined } from '~/utils/assert-utils';
+import { sanitizeSin } from '~/utils/sin-utils';
 
 export interface ApplicantDtoMapper {
   mapFindApplicantByBasicInfoRequestDtoToFindApplicantByBasicInfoRequestEntity(request: OmitStrict<FindApplicantByBasicInfoDto, 'userId'>): FindApplicantByBasicInfoRequestEntity;
@@ -44,7 +45,7 @@ export class DefaultApplicantDtoMapper implements ApplicantDtoMapper {
     return {
       Applicant: {
         PersonSINIdentification: {
-          IdentificationID: request.sin,
+          IdentificationID: sanitizeSin(request.sin),
         },
       },
     };

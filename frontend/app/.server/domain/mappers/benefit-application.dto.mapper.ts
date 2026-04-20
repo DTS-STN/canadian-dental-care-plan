@@ -7,6 +7,7 @@ import { TYPES } from '~/.server/constants';
 import type { BenefitApplicationDto, ChildDto, ContactInformationDto, PartnerInformationDto, TypeOfApplicationDto } from '~/.server/domain/dtos';
 import type { BenefitApplicationRequestEntity, BenefitApplicationResponseEntity } from '~/.server/domain/entities';
 import { parseDateString } from '~/utils/date-utils';
+import { sanitizeSin } from '~/utils/sin-utils';
 
 export interface BenefitApplicationDtoMapper {
   mapBenefitApplicationDtoToBenefitApplicationRequestEntity(benefitApplicationDto: BenefitApplicationDto, applicationChannelCode: 'protected' | 'public'): BenefitApplicationRequestEntity;
@@ -92,7 +93,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
             },
           ],
           PersonSINIdentification: {
-            IdentificationID: applicantInformation.socialInsuranceNumber,
+            IdentificationID: sanitizeSin(applicantInformation.socialInsuranceNumber),
           },
           RelatedPerson: this.toRelatedPersons(partnerInformation, children),
           MailingSameAsHomeIndicator: contactInformation.copyMailingAddress,
@@ -241,7 +242,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
         ReferenceDataName: 'Spouse' as const,
       },
       PersonSINIdentification: {
-        IdentificationID: socialInsuranceNumber,
+        IdentificationID: sanitizeSin(socialInsuranceNumber),
       },
       ApplicantDetail: {
         ConsentToSharePersonalInformationIndicator: consentToSharePersonalInformation,
@@ -262,7 +263,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
         ReferenceDataName: 'Dependant' as const,
       },
       PersonSINIdentification: {
-        IdentificationID: child.information.socialInsuranceNumber ?? '',
+        IdentificationID: child.information.socialInsuranceNumber ? sanitizeSin(child.information.socialInsuranceNumber) : '',
       },
       ApplicantDetail: {
         AttestParentOrGuardianIndicator: child.information.isParent,

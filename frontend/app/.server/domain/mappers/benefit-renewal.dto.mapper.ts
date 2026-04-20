@@ -17,6 +17,7 @@ import type {
 } from '~/.server/domain/dtos';
 import type { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '~/.server/domain/entities';
 import { parseDateString } from '~/utils/date-utils';
+import { sanitizeSin } from '~/utils/sin-utils';
 
 export interface BenefitRenewalDtoMapper {
   mapBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalDto: BenefitRenewalDto, applicationChannelCode: 'protected' | 'public'): BenefitRenewalRequestEntity;
@@ -156,7 +157,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
             },
           ],
           PersonSINIdentification: {
-            IdentificationID: applicantInformation.socialInsuranceNumber,
+            IdentificationID: sanitizeSin(applicantInformation.socialInsuranceNumber),
           },
           RelatedPerson: this.toRelatedPersons(partnerInformation, children),
           MailingSameAsHomeIndicator: contactInformation.copyMailingAddress,
@@ -325,7 +326,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         ReferenceDataName: 'Spouse' as const,
       },
       PersonSINIdentification: {
-        IdentificationID: socialInsuranceNumber,
+        IdentificationID: sanitizeSin(socialInsuranceNumber),
       },
       ApplicantDetail: {
         ConsentToSharePersonalInformationIndicator: consentToSharePersonalInformation,
@@ -347,7 +348,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
         ReferenceDataName: 'Dependant' as const,
       },
       PersonSINIdentification: {
-        IdentificationID: child.information.socialInsuranceNumber ?? '',
+        IdentificationID: child.information.socialInsuranceNumber ? sanitizeSin(child.information.socialInsuranceNumber) : '',
       },
       ApplicantDetail: {
         AttestParentOrGuardianIndicator: true,

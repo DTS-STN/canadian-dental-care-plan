@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
+import { formatSin, isValidSin, sanitizeSin, sinInputPatternFormat } from '~/utils/sin-utils';
 
 describe('isValidSin', () => {
   it.each([['900000001'], ['900 000 001'], ['900-000-001'], ['800000002'], ['800 000 002'], ['800-000-002']])('should return true for valid SIN "%s"', (sin) => {
@@ -41,5 +41,19 @@ describe('formatSin', () => {
 describe('sinInputPatternFormat', () => {
   it('should have correct format', () => {
     expect(sinInputPatternFormat).toBe('### ### ###');
+  });
+});
+
+describe('sanitizeSin', () => {
+  it.each([
+    ['123456789', '123456789'],
+    ['123 456 789', '123456789'],
+    ['123-456-789', '123456789'],
+  ])('should sanitize "%s" to "%s"', (input, expected) => {
+    expect(sanitizeSin(input)).toEqual(expected);
+  });
+
+  it.each([['abc'], [''], ['123-45-6789'], ['000 000 000']])('should return the original string "%s" if it does not match SIN format', (input) => {
+    expect(sanitizeSin(input)).toEqual(input);
   });
 });
