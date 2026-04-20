@@ -147,7 +147,7 @@ describe('DefaultClientApplicationService', () => {
               },
             ],
             PersonRelationshipCode: {
-              ReferenceDataName: 'Sibling',
+              ReferenceDataName: 'Spouse',
             },
             PersonSINIdentification: {
               IdentificationID: '90000001',

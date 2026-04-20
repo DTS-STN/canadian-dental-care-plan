@@ -95,7 +95,7 @@ export type BenefitApplicationRequestEntity = ReadonlyDeep<{
           PersonSurName: string;
         }[];
         PersonRelationshipCode: {
-          ReferenceDataName: string;
+          ReferenceDataName: 'Spouse' | 'Dependant';
         };
         PersonSINIdentification: {
           IdentificationID: string;

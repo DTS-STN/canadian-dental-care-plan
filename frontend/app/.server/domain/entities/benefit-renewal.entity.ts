@@ -116,7 +116,7 @@ export type BenefitRenewalRequestEntity = ReadonlyDeep<{
           PersonSurName: string;
         }[];
         PersonRelationshipCode: {
-          ReferenceDataName: string;
+          ReferenceDataName: 'Spouse' | 'Dependant';
         };
         PersonSINIdentification: {
           IdentificationID: string;
