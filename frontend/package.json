@@ -118,7 +118,7 @@
     "@vitest/coverage-v8": "^4.1.4",
     "@vitest/eslint-plugin": "^1.6.16",
     "@vitest/ui": "^4.1.4",
-    "eslint": "^9.39.4",
+    "eslint": "^10.2.1",
     "eslint-formatter-summary": "^2.0.2",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
