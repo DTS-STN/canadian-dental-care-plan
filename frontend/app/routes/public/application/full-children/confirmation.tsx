@@ -140,6 +140,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-child:confirm.page-title') }) };
 
   return {
+    context: state.context,
     homeAddressInfo,
     mailingAddressInfo,
     meta,
@@ -228,6 +229,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>
         <p className="mt-4">{t('confirm.begin-process')}</p>
+        {loaderData.context === 'intake' && <p className="mt-4">{t('confirm.proof-of-coverage')}</p>}
       </section>
 
       <section>
