@@ -88,7 +88,6 @@ type ClientAddressDto = Readonly<{
 export type ClientPartnerInformationDto = ReadonlyDeep<{
   clientId: string;
   clientNumber: string;
-  consentToSharePersonalInformation: boolean;
   yearOfBirth: string;
   firstName?: string;
   lastName?: string;

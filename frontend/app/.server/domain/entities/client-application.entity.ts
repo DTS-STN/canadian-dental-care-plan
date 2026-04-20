@@ -120,7 +120,6 @@ export type ClientApplicationEntity = ReadonlyDeep<{
               IdentificationCategoryText?: string;
             }>;
           }>;
-          ConsentToSharePersonalInformationIndicator?: boolean;
           AttestParentOrGuardianIndicator?: boolean;
         };
         ClientIdentification: Array<{

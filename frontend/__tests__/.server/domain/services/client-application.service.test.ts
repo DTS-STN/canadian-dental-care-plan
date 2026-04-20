@@ -155,7 +155,6 @@ describe('DefaultClientApplicationService', () => {
             ApplicantDetail: {
               PrivateDentalInsuranceIndicator: false,
               InsurancePlan: [],
-              ConsentToSharePersonalInformationIndicator: false,
               AttestParentOrGuardianIndicator: false,
             },
             ClientIdentification: [

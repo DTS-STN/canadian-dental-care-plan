@@ -190,7 +190,6 @@ describe('DefaultClientApplicationDtoMapper', () => {
                 ApplicantDetail: {
                   PrivateDentalInsuranceIndicator: false,
                   InsurancePlan: [],
-                  ConsentToSharePersonalInformationIndicator: false,
                   AttestParentOrGuardianIndicator: false,
                 },
                 ClientIdentification: [
@@ -266,7 +265,6 @@ describe('DefaultClientApplicationDtoMapper', () => {
         partnerInformation: {
           clientId: '10000000003',
           clientNumber: '10000000023',
-          consentToSharePersonalInformation: false,
           yearOfBirth: '2000',
           firstName: 'Jane',
           lastName: 'Doe',
