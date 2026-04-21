@@ -610,7 +610,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
           clientId: existingPartnerInformation.clientId,
           socialInsuranceNumber: existingPartnerInformation.socialInsuranceNumber,
           yearOfBirth: existingPartnerInformation.yearOfBirth,
-          // From a legal perspective it should be to true in all scenarios
+          // From a legal perspective, this should be true in all scenarios
           consentToSharePersonalInformation: true,
         }
       : undefined;
