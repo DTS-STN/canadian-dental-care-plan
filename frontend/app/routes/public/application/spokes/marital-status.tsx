@@ -91,7 +91,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const currentYear = new Date().getFullYear();
   const partnerInformationSchema = z.object({
-    consentToSharePersonalInformation: z.boolean().refine((val) => val === true, t('application-spokes:marital-status.error-message.confirm-required')),
+    consentToSharePersonalInformation: z.literal(true, t('application-spokes:marital-status.error-message.confirm-required')),
     yearOfBirth: z
       .string()
       .trim()
