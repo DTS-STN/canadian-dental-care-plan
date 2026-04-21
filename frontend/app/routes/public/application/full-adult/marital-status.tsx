@@ -80,9 +80,7 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
                   <>
                     <DefinitionListItem term={t('application-full-adult:marital-status.spouse-sin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
                     <DefinitionListItem term={t('application-full-adult:marital-status.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-adult:marital-status.consent')}>
-                      {state.partnerInformation.consentToSharePersonalInformation ? t('application-full-adult:marital-status.consent-yes') : t('application-full-adult:marital-status.consent-no')}
-                    </DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-adult:marital-status.consent')}>{t('application-full-adult:marital-status.consent-yes')}</DefinitionListItem>
                   </>
                 )}
               </DefinitionList>

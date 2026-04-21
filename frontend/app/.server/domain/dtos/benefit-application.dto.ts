@@ -76,7 +76,7 @@ export type TermsAndConditionsDto = ReadonlyDeep<{
 }>;
 
 export type PartnerInformationDto = ReadonlyDeep<{
-  consentToSharePersonalInformation: boolean;
+  consentToSharePersonalInformation: true;
   yearOfBirth: string;
   socialInsuranceNumber: string;
 }>;

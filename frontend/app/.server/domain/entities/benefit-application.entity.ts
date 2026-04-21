@@ -83,7 +83,7 @@ export type BenefitApplicationRequestEntity = ReadonlyDeep<{
               IdentificationID?: string;
             }[];
           }[];
-          ConsentToSharePersonalInformationIndicator?: boolean;
+          ConsentToSharePersonalInformationIndicator?: true;
           AttestParentOrGuardianIndicator?: boolean;
         };
         PersonBirthDate: {

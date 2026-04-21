@@ -113,9 +113,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
                   <>
                     <DefinitionListItem term={t('application-full-child:parent-or-guardian.spouse-sin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
                     <DefinitionListItem term={t('application-full-child:parent-or-guardian.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:parent-or-guardian.consent')}>
-                      {state.partnerInformation.consentToSharePersonalInformation ? t('application-full-child:parent-or-guardian.consent-yes') : t('application-full-child:parent-or-guardian.consent-no')}
-                    </DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-child:parent-or-guardian.consent')}>{t('application-full-child:parent-or-guardian.consent-yes')}</DefinitionListItem>
                   </>
                 )}
               </DefinitionList>
