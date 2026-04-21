@@ -79,24 +79,12 @@ export type RenewalContactInformationDto = ReadonlyDeep<{
   email?: string;
 }>;
 
-/** Partner information provided during a full benefit renewal. */
-export type FullRenewalPartnerInformationDto = ReadonlyDeep<{
-  clientId?: never;
-  consentToSharePersonalInformation: boolean;
+export type RenewalPartnerInformationDto = ReadonlyDeep<{
+  clientId?: string;
+  consentToSharePersonalInformation: true;
   socialInsuranceNumber: string;
   yearOfBirth: string;
 }>;
-
-/** Partner information for a simplified benefit renewal. */
-export type SimplifiedRenewalPartnerInformationDto = ReadonlyDeep<{
-  clientId: string;
-  consentToSharePersonalInformation?: never;
-  socialInsuranceNumber: string;
-  yearOfBirth: string;
-}>;
-
-/** Partner information provided during a benefit renewal. */
-export type RenewalPartnerInformationDto = FullRenewalPartnerInformationDto | SimplifiedRenewalPartnerInformationDto;
 
 export type RenewalTypeOfApplicationDto = 'adult' | 'adult-child' | 'child';
 

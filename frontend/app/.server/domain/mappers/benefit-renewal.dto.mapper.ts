@@ -318,19 +318,9 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
   }
 
   private toRelatedPersonSpouse(renewalPartnerInformation: RenewalPartnerInformationDto) {
-    if (renewalPartnerInformation.consentToSharePersonalInformation !== undefined) {
-      // Full partner information is provided during a full renewal
-      return {
-        ApplicantDetail: { ConsentToSharePersonalInformationIndicator: renewalPartnerInformation.consentToSharePersonalInformation },
-        PersonBirthDate: { YearDate: renewalPartnerInformation.yearOfBirth },
-        PersonRelationshipCode: { ReferenceDataName: 'Spouse' as const },
-        PersonSINIdentification: { IdentificationID: sanitizeSin(renewalPartnerInformation.socialInsuranceNumber) },
-      };
-    }
-
-    // Simplified partner information is provided during a simplified renewal
     return {
-      ClientIdentification: [{ IdentificationID: renewalPartnerInformation.clientId, IdentificationCategoryText: 'Client ID' }],
+      ApplicantDetail: { ConsentToSharePersonalInformationIndicator: renewalPartnerInformation.consentToSharePersonalInformation },
+      ClientIdentification: renewalPartnerInformation.clientId ? [{ IdentificationID: renewalPartnerInformation.clientId, IdentificationCategoryText: 'Client ID' }] : undefined,
       PersonBirthDate: { YearDate: renewalPartnerInformation.yearOfBirth },
       PersonRelationshipCode: { ReferenceDataName: 'Spouse' as const },
       PersonSINIdentification: { IdentificationID: sanitizeSin(renewalPartnerInformation.socialInsuranceNumber) },
