@@ -83,9 +83,7 @@ export default function ProtectedNewFamilyMaritalStatus({ loaderData, params }: 
                   <>
                     <DefinitionListItem term={t('protected-application-intake-family:marital-status.spouse-sin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
                     <DefinitionListItem term={t('protected-application-intake-family:marital-status.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-intake-family:marital-status.consent')}>
-                      {state.partnerInformation.consentToSharePersonalInformation ? t('protected-application-intake-family:marital-status.consent-yes') : t('protected-application-intake-family:marital-status.consent-no')}
-                    </DefinitionListItem>
+                    <DefinitionListItem term={t('protected-application-intake-family:marital-status.consent')}>{t('protected-application-intake-family:marital-status.consent-yes')}</DefinitionListItem>
                   </>
                 )}
               </DefinitionList>

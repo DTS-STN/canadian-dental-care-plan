@@ -90,9 +90,7 @@ export default function ProtectedNewAdultMaritalStatus({ loaderData, params }: R
                   <>
                     <DefinitionListItem term={t('protected-application-renewal-adult:marital-status.spouse-sin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
                     <DefinitionListItem term={t('protected-application-renewal-adult:marital-status.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-renewal-adult:marital-status.consent')}>
-                      {state.partnerInformation.consentToSharePersonalInformation ? t('protected-application-renewal-adult:marital-status.consent-yes') : t('protected-application-renewal-adult:marital-status.consent-no')}
-                    </DefinitionListItem>
+                    <DefinitionListItem term={t('protected-application-renewal-adult:marital-status.consent')}>{t('protected-application-renewal-adult:marital-status.consent-yes')}</DefinitionListItem>
                   </>
                 )}
               </DefinitionList>
