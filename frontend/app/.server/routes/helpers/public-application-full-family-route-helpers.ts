@@ -3,7 +3,7 @@ import { redirect } from 'react-router';
 import { createLogger } from '~/.server/logging';
 import { getAllowedTypeOfApplication, isChildClientNumberValid, maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import { getChildrenState, getContextualAgeCategoryFromDate, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import type { ApplicationStateParams, ChildrenState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { ApplicationStateParams, PublicApplicationChildrenState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
@@ -204,7 +204,7 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
 
 interface ValidateChildrenStateForReviewArgs {
   context: 'intake' | 'renewal';
-  childrenState: ChildrenState;
+  childrenState: PublicApplicationChildrenState;
   state: PublicApplicationState;
   params: ApplicationStateParams;
 }

@@ -10,7 +10,7 @@ import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
 import { maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
-import type { ApplicationFlow, PartnerInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import type { ApplicationFlow, ProtectedApplicationPartnerInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getProtectedApplicationState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -122,7 +122,7 @@ export async function action({ context: { appContainer, session }, params, reque
           ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:marital-status.error-message.sin-unique') });
         }
       }),
-  }) satisfies z.ZodType<PartnerInformationState>;
+  }) satisfies z.ZodType<ProtectedApplicationPartnerInformationState>;
 
   const maritalStatusData = {
     maritalStatus: formData.get('maritalStatus') ? String(formData.get('maritalStatus')) : undefined,

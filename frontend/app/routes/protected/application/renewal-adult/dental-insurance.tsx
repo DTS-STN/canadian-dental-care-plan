@@ -13,7 +13,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationRenewalAdultState } from '~/.server/routes/helpers/protected-application-renewal-adult-route-helpers';
 import { isDentalBenefitsSectionCompleted, isDentalInsuranceSectionCompleted } from '~/.server/routes/helpers/protected-application-renewal-section-checks';
 import { saveProtectedApplicationState, shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
-import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import type { ProtectedApplicationDentalFederalBenefitsState, ProtectedApplicationDentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -58,7 +58,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const federalGovernmentInsurancePlans = await federalGovernmentInsurancePlanService.listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
   const provincialGovernmentInsurancePlans = await provincialGovernmentInsurancePlanService.listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
-  const clientDentalBenefits = state.clientApplication.dentalBenefits?.reduce<DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState>(
+  const clientDentalBenefits = state.clientApplication.dentalBenefits?.reduce<ProtectedApplicationDentalFederalBenefitsState & ProtectedApplicationDentalProvincialTerritorialBenefitsState>(
     (benefits, planId) => {
       const federalProgram = federalGovernmentInsurancePlans.find(({ id }) => id === planId);
       if (federalProgram) {
@@ -80,7 +80,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
       return benefits;
     },
-    {} as DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState,
+    {} as ProtectedApplicationDentalFederalBenefitsState & ProtectedApplicationDentalProvincialTerritorialBenefitsState,
   );
 
   const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.value?.federalSocialProgram ? federalGovernmentInsurancePlans.find(({ id }) => id === state.dentalBenefits?.value?.federalSocialProgram) : undefined;

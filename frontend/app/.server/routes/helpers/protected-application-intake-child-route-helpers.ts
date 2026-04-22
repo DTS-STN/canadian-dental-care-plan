@@ -2,7 +2,7 @@ import { redirect } from 'react-router';
 
 import { createLogger } from '~/.server/logging';
 import { getAllowedTypeOfApplication, maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
-import type { ApplicationStateParams, ChildrenState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import type { ApplicationStateParams, ProtectedApplicationChildrenState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getChildrenState, getContextualAgeCategoryFromDate, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
@@ -184,7 +184,7 @@ export function validateProtectedApplicationIntakeChildStateForReview({ params, 
 
 interface ValidateChildrenStateForReviewArgs {
   context: 'intake' | 'renewal';
-  childrenState: ChildrenState;
+  childrenState: ProtectedApplicationChildrenState;
   params: ApplicationStateParams;
 }
 

@@ -26,8 +26,24 @@ import type {
   SunLifeCommunicationMethodService,
 } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
+import type {
+  BaseApplicationAddressDeclaredChangeState,
+  BaseApplicationApplicantInformationState,
+  BaseApplicationChildState,
+  BaseApplicationCommunicationPreferencesDeclaredChangeState,
+  BaseApplicationContextState,
+  BaseApplicationDentalBenefitsDeclaredChangeState,
+  BaseApplicationDentalInsuranceState,
+  BaseApplicationPartnerInformationState,
+  BaseApplicationPhoneNumberDeclaredChangeState,
+  BaseApplicationSubmissionInfoState,
+  BaseApplicationSubmitTermsState,
+  BaseApplicationTermsAndConditionsState,
+  BaseApplicationTypeOfApplicationState,
+  BaseApplicationVerifyEmailState,
+  BaseApplicationYearState,
+} from '~/.server/routes/helpers/base-application-route-helpers';
 import { getAgeCategoryFromAge, getAgeCategoryReferenceDate } from '~/.server/routes/helpers/base-application-route-helpers';
-import type { DeclaredChange } from '~/.server/routes/helpers/declared-change-type';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
@@ -43,137 +59,45 @@ export type ProtectedApplicationState = ReadonlyDeep<{
    * The unique identifier for the protected application.
    */
   id: string;
-
-  /**
-   * The context of the application, either 'intake' for new applications or 'renewal' for renewal applications.
-   * Immutable and set at the start of the application process based on renewal period status.
-   */
-  context: 'intake' | 'renewal';
-
+  context: BaseApplicationContextState;
   lastUpdatedOn: string;
-  applicantInformation?: {
-    memberId?: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    socialInsuranceNumber: string;
-  };
-  applicationYear: {
-    applicationYearId: string;
-    taxYear: string;
-    dependentEligibilityEndDate: string;
-  };
-  children: {
-    id: string;
-    dentalBenefits?: DeclaredChange<{
-      hasFederalBenefits: boolean;
-      federalSocialProgram?: string;
-      hasProvincialTerritorialBenefits: boolean;
-      provincialTerritorialSocialProgram?: string;
-      province?: string;
-    }>;
-    dentalInsurance?: {
-      hasDentalInsurance: boolean;
-      dentalInsuranceEligibilityConfirmation?: boolean;
-    };
-    information?: {
-      memberId?: string;
-      firstName: string;
-      lastName: string;
-      dateOfBirth: string;
-      isParent: boolean;
-      hasSocialInsuranceNumber: boolean;
-      socialInsuranceNumber?: string;
-    };
-  }[];
-  communicationPreferences?: DeclaredChange<{
-    preferredLanguage: string;
-    preferredMethod: string;
-    preferredNotificationMethod: string;
-  }>;
+  applicantInformation?: BaseApplicationApplicantInformationState;
+  applicationYear: BaseApplicationYearState;
+  children: BaseApplicationChildState[];
+  communicationPreferences?: BaseApplicationCommunicationPreferencesDeclaredChangeState;
   email?: string;
-  verifyEmail?: {
-    verificationCode: string;
-    verificationAttempts: number;
-  };
+  verifyEmail?: BaseApplicationVerifyEmailState;
   emailVerified?: boolean;
   maritalStatus?: string;
-  dentalBenefits?: DeclaredChange<{
-    hasFederalBenefits: boolean;
-    federalSocialProgram?: string;
-    hasProvincialTerritorialBenefits: boolean;
-    provincialTerritorialSocialProgram?: string;
-    province?: string;
-  }>;
-  dentalInsurance?: {
-    hasDentalInsurance: boolean;
-    dentalInsuranceEligibilityConfirmation: boolean;
-  };
+  dentalBenefits?: BaseApplicationDentalBenefitsDeclaredChangeState;
+  dentalInsurance?: BaseApplicationDentalInsuranceState;
   livingIndependently?: boolean;
-  partnerInformation?: {
-    consentToSharePersonalInformation: true;
-    yearOfBirth: string;
-    socialInsuranceNumber: string;
-  };
+  partnerInformation?: BaseApplicationPartnerInformationState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress?: DeclaredChange<{
-    address: string;
-    city: string;
-    country: string;
-    postalCode?: string;
-    province?: string;
-  }>;
-  homeAddress?: DeclaredChange<{
-    address: string;
-    city: string;
-    country: string;
-    postalCode?: string;
-    province?: string;
-  }>;
-  phoneNumber?: DeclaredChange<{
-    primary: string;
-    alternate?: string;
-  }>;
-  submitTerms?: {
-    acknowledgeInfo: boolean;
-    acknowledgeCriteria: boolean;
-  };
-  submissionInfo?: {
-    /**
-     * The confirmation code associated with the application submission.
-     */
-    confirmationCode: string;
-
-    /**
-     * The UTC date and time when the application was submitted.
-     * Format: ISO 8601 string (e.g., "YYYY-MM-DDTHH:mm:ss.sssZ")
-     */
-    submittedOn: string;
-  };
+  mailingAddress?: BaseApplicationAddressDeclaredChangeState;
+  homeAddress?: BaseApplicationAddressDeclaredChangeState;
+  phoneNumber?: BaseApplicationPhoneNumberDeclaredChangeState;
+  submitTerms?: BaseApplicationSubmitTermsState;
+  submissionInfo?: BaseApplicationSubmissionInfoState;
   hasFiledTaxes?: boolean;
-  termsAndConditions?: {
-    acknowledgeTerms: boolean;
-    acknowledgePrivacy: boolean;
-    shareData: boolean;
-  };
-
-  typeOfApplication?: 'adult' | 'children' | 'family' | 'delegate';
+  termsAndConditions?: BaseApplicationTermsAndConditionsState;
+  typeOfApplication?: BaseApplicationTypeOfApplicationState;
   clientApplication?: ClientApplicationRenewalEligibleDto;
   applicantClientIdsToRenew?: string[];
 }>;
 
-export type ApplicantInformationState = NonNullable<ProtectedApplicationState['applicantInformation']>;
-type ApplicationYearState = ProtectedApplicationState['applicationYear'];
-export type ChildrenState = ProtectedApplicationState['children'];
-export type ChildState = ChildrenState[number];
-export type ChildInformationState = NonNullable<ChildState['information']>;
-export type ChildSinState = Pick<NonNullable<ChildState['information']>, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>;
-export type CommunicationPreferencesState = NonNullable<NonNullable<ProtectedApplicationState['communicationPreferences']>['value']>;
-export type DentalFederalBenefitsState = Pick<NonNullable<NonNullable<ProtectedApplicationState['dentalBenefits']>['value']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
-export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<NonNullable<ProtectedApplicationState['dentalBenefits']>['value']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
-export type PartnerInformationState = NonNullable<ProtectedApplicationState['partnerInformation']>;
-export type ContextState = NonNullable<ProtectedApplicationState['context']>;
-export type TypeOfApplicationState = NonNullable<ProtectedApplicationState['typeOfApplication']>;
+export type ProtectedApplicationApplicantInformationState = NonNullable<ProtectedApplicationState['applicantInformation']>;
+export type ProtectedApplicationChildInformationState = NonNullable<ProtectedApplicationChildState['information']>;
+export type ProtectedApplicationChildrenState = ProtectedApplicationState['children'];
+export type ProtectedApplicationChildSinState = Pick<NonNullable<ProtectedApplicationChildState['information']>, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>;
+export type ProtectedApplicationChildState = ProtectedApplicationChildrenState[number];
+export type ProtectedApplicationCommunicationPreferencesState = NonNullable<NonNullable<ProtectedApplicationState['communicationPreferences']>['value']>;
+export type ProtectedApplicationContextState = ProtectedApplicationState['context'];
+export type ProtectedApplicationDentalFederalBenefitsState = Pick<NonNullable<NonNullable<ProtectedApplicationState['dentalBenefits']>['value']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
+export type ProtectedApplicationDentalProvincialTerritorialBenefitsState = Pick<NonNullable<NonNullable<ProtectedApplicationState['dentalBenefits']>['value']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
+export type ProtectedApplicationPartnerInformationState = NonNullable<ProtectedApplicationState['partnerInformation']>;
+export type ProtectedApplicationTypeOfApplicationState = NonNullable<ProtectedApplicationState['typeOfApplication']>;
+
 /**
  * Gets the protected application flow session key.
  * @param id - The protected application flow ID.
@@ -280,7 +204,7 @@ interface StartProtectedApplicationStateArgs {
   /**
    * The application year data used to determine the application year. This is required to initialize the state
    */
-  applicationYear: ApplicationYearState;
+  applicationYear: BaseApplicationYearState;
 
   /**
    * The client application data used to determine the input model for renewal applications. This should be
@@ -345,7 +269,7 @@ export function getContextualAgeCategoryFromDate(date: string, context: 'intake'
   return getAgeCategoryFromAge(age);
 }
 
-export function isNewChildState(child: ChildState) {
+export function isNewChildState(child: ProtectedApplicationChildState) {
   return child.dentalInsurance === undefined || child.information === undefined || child.dentalBenefits === undefined;
 }
 
@@ -370,8 +294,8 @@ export function getChildrenState<TState extends Pick<ProtectedApplicationState, 
  * ```
  */
 type ExtractStateFromApplicationFlow<S extends string> = S extends `${infer I}-${infer T}` //
-  ? I extends ContextState
-    ? T extends TypeOfApplicationState
+  ? I extends ProtectedApplicationContextState
+    ? T extends ProtectedApplicationTypeOfApplicationState
       ? { context: I; typeOfApplication: T }
       : never
     : never
@@ -393,7 +317,7 @@ type ExtractStateFromApplicationFlow<S extends string> = S extends `${infer I}-$
  * validateApplicationFlow(state, params, ['intake-adult', 'renewal-children']);
  * ```
  */
-export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${ContextState}-${TypeOfApplicationState}`>>(
+export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${ProtectedApplicationContextState}-${ProtectedApplicationTypeOfApplicationState}`>>(
   state: ProtectedApplicationState,
   params: Params,
   allowedFlows: TAllowedFlows,
@@ -423,7 +347,7 @@ export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${C
   }
 }
 
-export type ApplicationFlow = 'entry' | `${ContextState}-${TypeOfApplicationState}`;
+export type ApplicationFlow = 'entry' | `${ProtectedApplicationContextState}-${ProtectedApplicationTypeOfApplicationState}`;
 
 /**
  * Determines the initial URL path based on the context and type of application.
@@ -536,7 +460,7 @@ export function isPrimaryApplicantChild(state: ProtectedApplicationState, client
   return state.clientApplication.children.some((child) => child.information.clientId === clientId);
 }
 
-export function getTypeOfApplicationFromRenewalSelectionClientIds(state: ProtectedApplicationState, clientIds: string[]): TypeOfApplicationState {
+export function getTypeOfApplicationFromRenewalSelectionClientIds(state: ProtectedApplicationState, clientIds: string[]): ProtectedApplicationTypeOfApplicationState {
   invariant(state.clientApplication, 'Expected clientApplication to be defined');
   const hasPrimaryApplicant = clientIds.some((id) => isPrimaryApplicant(state, id));
   const hasDependent = clientIds.some((id) => isPrimaryApplicantChild(state, id));

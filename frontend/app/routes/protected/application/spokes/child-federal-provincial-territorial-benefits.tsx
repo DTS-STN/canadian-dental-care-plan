@@ -10,7 +10,7 @@ import type { Route } from './+types/child-federal-provincial-territorial-benefi
 
 import { TYPES } from '~/.server/constants';
 import { getProtectedApplicationState, getSingleChildState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
-import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import type { ProtectedApplicationDentalFederalBenefitsState, ProtectedApplicationDentalProvincialTerritorialBenefitsState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -115,7 +115,7 @@ export async function action({ context: { appContainer, session }, params, reque
         ...val,
         federalSocialProgram: val.hasFederalBenefits ? val.federalSocialProgram : undefined,
       };
-    }) satisfies z.ZodType<DentalFederalBenefitsState>;
+    }) satisfies z.ZodType<ProtectedApplicationDentalFederalBenefitsState>;
 
   const provincialTerritorialBenefitsSchema = z
     .object({
@@ -139,7 +139,7 @@ export async function action({ context: { appContainer, session }, params, reque
         province: val.hasProvincialTerritorialBenefits ? val.province : undefined,
         provincialTerritorialSocialProgram: val.hasProvincialTerritorialBenefits ? val.provincialTerritorialSocialProgram : undefined,
       };
-    }) satisfies z.ZodType<DentalProvincialTerritorialBenefitsState>;
+    }) satisfies z.ZodType<ProtectedApplicationDentalProvincialTerritorialBenefitsState>;
 
   const dentalBenefits = {
     hasFederalBenefits: formData.get('hasFederalBenefits') ? formData.get('hasFederalBenefits') === HAS_FEDERAL_BENEFITS_OPTION.yes : undefined,
