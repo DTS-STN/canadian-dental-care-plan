@@ -36,7 +36,11 @@ export function withAdobeAnalytics(callback: (adobeDataLayer: AdobeDataLayer) =>
     return;
   }
 
-  callback(window.adobeDataLayer);
+  try {
+    callback(window.adobeDataLayer);
+  } catch (error) {
+    console.warn('An error occurred while pushing an event to Adobe Analytics:', error);
+  }
 }
 
 /**
