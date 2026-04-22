@@ -174,7 +174,7 @@ export type BaseApplicationSubmitTermsState = ReadonlyDeep<{
 /**
  * Age categories based on the age of the individual.
  */
-export type AgeCategory = 'children' | 'youth' | 'adults' | 'seniors';
+type AgeCategory = 'children' | 'youth' | 'adults' | 'seniors';
 
 /**
  * Gets the age category based on the given date string and an optional reference date.

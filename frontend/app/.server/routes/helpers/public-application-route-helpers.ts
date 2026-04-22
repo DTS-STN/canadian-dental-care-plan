@@ -93,20 +93,11 @@ export type PublicApplicationChildInformationState = NonNullable<PublicApplicati
 export type PublicApplicationChildrenState = PublicApplicationState['children'];
 export type PublicApplicationChildSinState = Pick<NonNullable<PublicApplicationChildState['information']>, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>;
 export type PublicApplicationChildState = PublicApplicationChildrenState[number];
-export type PublicApplicationCommunicationPreferencesDeclaredChangeState = NonNullable<NonNullable<PublicApplicationState['communicationPreferences']>>;
 export type PublicApplicationCommunicationPreferencesState = NonNullable<NonNullable<PublicApplicationState['communicationPreferences']>['value']>;
-export type PublicApplicationDentalFederalBenefitsDeclaredChangeState = NonNullable<PublicApplicationState['dentalBenefits']>;
 export type PublicApplicationDentalFederalBenefitsState = Pick<NonNullable<NonNullable<PublicApplicationState['dentalBenefits']>['value']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
-export type PublicApplicationDentalInsuranceState = NonNullable<PublicApplicationState['dentalInsurance']>;
-export type PublicApplicationDentalProvincialTerritorialBenefitsDeclaredChangeState = NonNullable<PublicApplicationState['dentalBenefits']>;
 export type PublicApplicationDentalProvincialTerritorialBenefitsState = Pick<NonNullable<NonNullable<PublicApplicationState['dentalBenefits']>['value']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
-export type PublicApplicationHomeAddressDeclaredChangeState = NonNullable<PublicApplicationState['homeAddress']>;
-export type PublicApplicationMailingAddressDeclaredChangeState = NonNullable<PublicApplicationState['mailingAddress']>;
 export type PublicApplicationPartnerInformationState = NonNullable<PublicApplicationState['partnerInformation']>;
-export type PublicApplicationPhoneNumberDeclaredChangeState = NonNullable<NonNullable<PublicApplicationState['phoneNumber']>>;
-export type PublicApplicationTermsAndConditionsState = NonNullable<PublicApplicationState['termsAndConditions']>;
 export type PublicApplicationTypeOfApplicationState = NonNullable<PublicApplicationState['typeOfApplication']>;
-export type PublicApplicationYearState = PublicApplicationState['applicationYear'];
 
 /**
  * Gets the public application flow session key.
@@ -211,7 +202,7 @@ export function clearPublicApplicationState({ params, session }: ClearStateArgs)
 }
 
 interface StartArgs {
-  applicationYear: PublicApplicationYearState;
+  applicationYear: BaseApplicationYearState;
   session: Session;
 }
 
