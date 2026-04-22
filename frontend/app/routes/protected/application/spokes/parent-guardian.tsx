@@ -7,7 +7,7 @@ import type { Route } from './+types/parent-guardian';
 
 import { TYPES } from '~/.server/constants';
 import { getProtectedApplicationState, getSingleChildState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
-import type { ChildInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import type { ProtectedApplicationChildInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -93,7 +93,7 @@ export async function action({ context: { appContainer, session }, params, reque
           information: {
             ...child.information,
             isParent: parsedDataResult.data.isParent,
-          } as ChildInformationState,
+          } as ProtectedApplicationChildInformationState,
         };
       }),
     },

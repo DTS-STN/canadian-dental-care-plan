@@ -6,7 +6,7 @@ import { z } from 'zod';
 import type { Route } from './+types/personal-information';
 
 import { TYPES } from '~/.server/constants';
-import type { ApplicantInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import type { ProtectedApplicationApplicantInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getContextualAgeCategoryFromDate, getProtectedApplicationState, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -125,7 +125,7 @@ export async function action({ context: { appContainer, session }, params, reque
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
       return { ...val, dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}` };
-    }) satisfies z.ZodType<ApplicantInformationState>;
+    }) satisfies z.ZodType<ProtectedApplicationApplicantInformationState>;
 
   const parsedDataResult = applicantInformationSchema.safeParse({
     socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),

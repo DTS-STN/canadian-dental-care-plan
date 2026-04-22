@@ -4,121 +4,121 @@ import validator from 'validator';
 
 import type { ApplicantInformationDto, BenefitApplicationDto, CommunicationPreferencesDto } from '~/.server/domain/dtos';
 import type {
-  ApplicantInformationState,
-  ApplicationYearState,
-  ChildState,
-  DeclaredChangeCommunicationPreferencesState,
-  DeclaredChangeDentalFederalBenefitsState,
-  DeclaredChangeDentalProvincialTerritorialBenefitsState,
-  DeclaredChangeHomeAddressState,
-  DeclaredChangeMailingAddressState,
-  DeclaredChangePhoneNumberState,
-  DentalInsuranceState,
-  PartnerInformationState,
-  TermsAndConditionsState,
+  PublicApplicationApplicantInformationState,
+  PublicApplicationChildState,
+  PublicApplicationCommunicationPreferencesDeclaredChangeState,
+  PublicApplicationDentalFederalBenefitsDeclaredChangeState,
+  PublicApplicationDentalInsuranceState,
+  PublicApplicationDentalProvincialTerritorialBenefitsDeclaredChangeState,
+  PublicApplicationHomeAddressDeclaredChangeState,
+  PublicApplicationMailingAddressDeclaredChangeState,
+  PublicApplicationPartnerInformationState,
+  PublicApplicationPhoneNumberDeclaredChangeState,
+  PublicApplicationTermsAndConditionsState,
+  PublicApplicationYearState,
 } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getContextualAgeCategoryFromDate } from '~/.server/routes/helpers/public-application-route-helpers';
 
 export interface ApplicationAdultState {
   context: 'intake' | 'renewal';
-  applicantInformation: ApplicantInformationState;
-  applicationYear: ApplicationYearState;
-  communicationPreferences: DeclaredChangeCommunicationPreferencesState;
-  dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
-  dentalInsurance: DentalInsuranceState;
+  applicantInformation: PublicApplicationApplicantInformationState;
+  applicationYear: PublicApplicationYearState;
+  communicationPreferences: PublicApplicationCommunicationPreferencesDeclaredChangeState;
+  dentalBenefits?: PublicApplicationDentalFederalBenefitsDeclaredChangeState & PublicApplicationDentalProvincialTerritorialBenefitsDeclaredChangeState;
+  dentalInsurance: PublicApplicationDentalInsuranceState;
   email?: string;
   emailVerified?: boolean;
-  homeAddress?: DeclaredChangeHomeAddressState;
+  homeAddress?: PublicApplicationHomeAddressDeclaredChangeState;
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
-  mailingAddress?: DeclaredChangeMailingAddressState;
+  mailingAddress?: PublicApplicationMailingAddressDeclaredChangeState;
   maritalStatus?: string;
-  partnerInformation?: PartnerInformationState;
-  phoneNumber: DeclaredChangePhoneNumberState;
-  termsAndConditions: TermsAndConditionsState;
+  partnerInformation?: PublicApplicationPartnerInformationState;
+  phoneNumber: PublicApplicationPhoneNumberDeclaredChangeState;
+  termsAndConditions: PublicApplicationTermsAndConditionsState;
 }
 
 export interface ApplicationFamilyState {
   context: 'intake' | 'renewal';
-  applicantInformation: ApplicantInformationState;
-  applicationYear: ApplicationYearState;
-  children: ChildState[];
-  communicationPreferences: DeclaredChangeCommunicationPreferencesState;
-  dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
-  dentalInsurance: DentalInsuranceState;
+  applicantInformation: PublicApplicationApplicantInformationState;
+  applicationYear: PublicApplicationYearState;
+  children: PublicApplicationChildState[];
+  communicationPreferences: PublicApplicationCommunicationPreferencesDeclaredChangeState;
+  dentalBenefits?: PublicApplicationDentalFederalBenefitsDeclaredChangeState & PublicApplicationDentalProvincialTerritorialBenefitsDeclaredChangeState;
+  dentalInsurance: PublicApplicationDentalInsuranceState;
   email?: string;
   emailVerified?: boolean;
-  homeAddress?: DeclaredChangeHomeAddressState;
+  homeAddress?: PublicApplicationHomeAddressDeclaredChangeState;
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
-  mailingAddress?: DeclaredChangeMailingAddressState;
+  mailingAddress?: PublicApplicationMailingAddressDeclaredChangeState;
   maritalStatus?: string;
-  partnerInformation?: PartnerInformationState;
-  phoneNumber: DeclaredChangePhoneNumberState;
-  termsAndConditions: TermsAndConditionsState;
+  partnerInformation?: PublicApplicationPartnerInformationState;
+  phoneNumber: PublicApplicationPhoneNumberDeclaredChangeState;
+  termsAndConditions: PublicApplicationTermsAndConditionsState;
 }
 
 export interface ApplicationChildrenState {
   context: 'intake' | 'renewal';
-  applicantInformation: ApplicantInformationState;
-  applicationYear: ApplicationYearState;
-  children: ChildState[];
-  communicationPreferences: DeclaredChangeCommunicationPreferencesState;
+  applicantInformation: PublicApplicationApplicantInformationState;
+  applicationYear: PublicApplicationYearState;
+  children: PublicApplicationChildState[];
+  communicationPreferences: PublicApplicationCommunicationPreferencesDeclaredChangeState;
   email?: string;
   emailVerified?: boolean;
-  homeAddress?: DeclaredChangeHomeAddressState;
+  homeAddress?: PublicApplicationHomeAddressDeclaredChangeState;
   isHomeAddressSameAsMailingAddress?: boolean;
   livingIndependently?: boolean;
-  mailingAddress?: DeclaredChangeMailingAddressState;
+  mailingAddress?: PublicApplicationMailingAddressDeclaredChangeState;
   maritalStatus?: string;
-  partnerInformation?: PartnerInformationState;
-  phoneNumber: DeclaredChangePhoneNumberState;
-  termsAndConditions: TermsAndConditionsState;
+  partnerInformation?: PublicApplicationPartnerInformationState;
+  phoneNumber: PublicApplicationPhoneNumberDeclaredChangeState;
+  termsAndConditions: PublicApplicationTermsAndConditionsState;
 }
 
 interface ToBenefitApplicationDtoArgs {
   context: 'intake' | 'renewal';
-  applicantInformation: ApplicantInformationState;
-  applicationYear: ApplicationYearState;
-  children?: ChildState[];
-  communicationPreferences: DeclaredChangeCommunicationPreferencesState;
+  applicantInformation: PublicApplicationApplicantInformationState;
+  applicationYear: PublicApplicationYearState;
+  children?: PublicApplicationChildState[];
+  communicationPreferences: PublicApplicationCommunicationPreferencesDeclaredChangeState;
   email?: string;
   emailVerified?: boolean;
-  dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
-  dentalInsurance?: DentalInsuranceState;
+  dentalBenefits?: PublicApplicationDentalFederalBenefitsDeclaredChangeState & PublicApplicationDentalProvincialTerritorialBenefitsDeclaredChangeState;
+  dentalInsurance?: PublicApplicationDentalInsuranceState;
   livingIndependently?: boolean;
-  homeAddress?: DeclaredChangeHomeAddressState;
+  homeAddress?: PublicApplicationHomeAddressDeclaredChangeState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress?: DeclaredChangeMailingAddressState;
+  mailingAddress?: PublicApplicationMailingAddressDeclaredChangeState;
   maritalStatus?: string;
-  partnerInformation?: PartnerInformationState;
-  phoneNumber: DeclaredChangePhoneNumberState;
-  termsAndConditions: TermsAndConditionsState;
+  partnerInformation?: PublicApplicationPartnerInformationState;
+  phoneNumber: PublicApplicationPhoneNumberDeclaredChangeState;
+  termsAndConditions: PublicApplicationTermsAndConditionsState;
   typeOfApplication: 'adult' | 'adult-child' | 'child';
 }
 
 interface ToApplicantInformationArgs {
-  applicantInformation: ApplicantInformationState;
+  applicantInformation: PublicApplicationApplicantInformationState;
   maritalStatus?: string;
 }
 
 interface ToHomeAddressArgs {
-  homeAddress?: DeclaredChangeHomeAddressState;
+  homeAddress?: PublicApplicationHomeAddressDeclaredChangeState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress: DeclaredChangeMailingAddressState;
+  mailingAddress: PublicApplicationMailingAddressDeclaredChangeState;
 }
 
 interface ToCommunicationPreferencesArgs {
-  communicationPreferences: DeclaredChangeCommunicationPreferencesState;
+  communicationPreferences: PublicApplicationCommunicationPreferencesDeclaredChangeState;
   email?: string;
   emailVerified?: boolean;
 }
 
 interface ToContactInformationArgs {
-  phoneNumber: DeclaredChangePhoneNumberState;
-  homeAddress?: DeclaredChangeHomeAddressState;
+  phoneNumber: PublicApplicationPhoneNumberDeclaredChangeState;
+  homeAddress?: PublicApplicationHomeAddressDeclaredChangeState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress?: DeclaredChangeMailingAddressState;
+  mailingAddress?: PublicApplicationMailingAddressDeclaredChangeState;
 }
 
 export interface BenefitApplicationStateMapper {
@@ -212,7 +212,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     };
   }
 
-  private toChildren(children?: ChildState[]) {
+  private toChildren(children?: PublicApplicationChildState[]) {
     if (!children) return [];
 
     return children.map((child) => {
@@ -268,7 +268,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     };
   }
 
-  private toDentalBenefits(dentalBenefitsState?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState) {
+  private toDentalBenefits(dentalBenefitsState?: PublicApplicationDentalFederalBenefitsDeclaredChangeState & PublicApplicationDentalProvincialTerritorialBenefitsDeclaredChangeState) {
     if (!dentalBenefitsState) return [];
 
     const dentalBenefits = [];
@@ -305,7 +305,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     };
   }
 
-  private toMailingAddress(mailingAddress: DeclaredChangeMailingAddressState) {
+  private toMailingAddress(mailingAddress: PublicApplicationMailingAddressDeclaredChangeState) {
     return {
       mailingAddress: mailingAddress.value?.address ?? '',
       mailingApartment: undefined,

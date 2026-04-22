@@ -26,8 +26,24 @@ import type {
   SunLifeCommunicationMethodService,
 } from '~/.server/domain/services';
 import { createLogger } from '~/.server/logging';
+import type {
+  BaseApplicationAddressDeclaredChangeState,
+  BaseApplicationApplicantInformationState,
+  BaseApplicationChildState,
+  BaseApplicationCommunicationPreferencesDeclaredChangeState,
+  BaseApplicationContextState,
+  BaseApplicationDentalBenefitsDeclaredChangeState,
+  BaseApplicationDentalInsuranceState,
+  BaseApplicationPartnerInformationState,
+  BaseApplicationPhoneNumberDeclaredChangeState,
+  BaseApplicationSubmissionInfoState,
+  BaseApplicationSubmitTermsState,
+  BaseApplicationTermsAndConditionsState,
+  BaseApplicationTypeOfApplicationState,
+  BaseApplicationVerifyEmailState,
+  BaseApplicationYearState,
+} from '~/.server/routes/helpers/base-application-route-helpers';
 import { getAgeCategoryFromAge, getAgeCategoryReferenceDate } from '~/.server/routes/helpers/base-application-route-helpers';
-import type { DeclaredChange } from '~/.server/routes/helpers/declared-change-type';
 import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
@@ -38,149 +54,59 @@ import { getPathById } from '~/utils/route-utils';
 
 export type PublicApplicationStateSessionKey = `public-application-flow-${string}`;
 
+export type PublicApplicationInputModelState = 'full' | 'simplified';
+
 export type PublicApplicationState = ReadonlyDeep<{
   /**
    * The unique identifier for the public application.
    */
   id: string;
-
-  /**
-   * The context of the application, either 'intake' for new applications or 'renewal' for renewal applications.
-   * Immutable and set at the start of the application process based on renewal period status.
-   */
-  context: 'intake' | 'renewal';
-
+  context: BaseApplicationContextState;
+  inputModel?: PublicApplicationInputModelState;
   lastUpdatedOn: string;
-  applicantInformation?: {
-    memberId?: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    socialInsuranceNumber: string;
-  };
-  applicationYear: {
-    applicationYearId: string;
-    taxYear: string;
-    dependentEligibilityEndDate: string;
-  };
-  children: {
-    id: string;
-    dentalBenefits?: DeclaredChange<{
-      hasFederalBenefits: boolean;
-      federalSocialProgram?: string;
-      hasProvincialTerritorialBenefits: boolean;
-      provincialTerritorialSocialProgram?: string;
-      province?: string;
-    }>;
-    dentalInsurance?: {
-      hasDentalInsurance: boolean;
-      dentalInsuranceEligibilityConfirmation?: boolean;
-    };
-    information?: {
-      memberId?: string;
-      firstName: string;
-      lastName: string;
-      dateOfBirth: string;
-      isParent: boolean;
-      hasSocialInsuranceNumber: boolean;
-      socialInsuranceNumber?: string;
-    };
-  }[];
-  communicationPreferences?: DeclaredChange<{
-    preferredLanguage: string;
-    preferredMethod: string;
-    preferredNotificationMethod: string;
-  }>;
+  applicantInformation?: BaseApplicationApplicantInformationState;
+  applicationYear: BaseApplicationYearState;
+  children: BaseApplicationChildState[];
+  communicationPreferences?: BaseApplicationCommunicationPreferencesDeclaredChangeState;
   email?: string;
-  verifyEmail?: {
-    verificationCode: string;
-    verificationAttempts: number;
-  };
+  verifyEmail?: BaseApplicationVerifyEmailState;
   emailVerified?: boolean;
   maritalStatus?: string;
-  dentalBenefits?: DeclaredChange<{
-    hasFederalBenefits: boolean;
-    federalSocialProgram?: string;
-    hasProvincialTerritorialBenefits: boolean;
-    provincialTerritorialSocialProgram?: string;
-    province?: string;
-  }>;
-  dentalInsurance?: {
-    hasDentalInsurance: boolean;
-    dentalInsuranceEligibilityConfirmation: boolean;
-  };
+  dentalBenefits?: BaseApplicationDentalBenefitsDeclaredChangeState;
+  dentalInsurance?: BaseApplicationDentalInsuranceState;
   livingIndependently?: boolean;
-  partnerInformation?: {
-    consentToSharePersonalInformation: true;
-    yearOfBirth: string;
-    socialInsuranceNumber: string;
-  };
+  partnerInformation?: BaseApplicationPartnerInformationState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress?: DeclaredChange<{
-    address: string;
-    city: string;
-    country: string;
-    postalCode?: string;
-    province?: string;
-  }>;
-  homeAddress?: DeclaredChange<{
-    address: string;
-    city: string;
-    country: string;
-    postalCode?: string;
-    province?: string;
-  }>;
-  phoneNumber?: DeclaredChange<{
-    primary: string;
-    alternate?: string;
-  }>;
-  submitTerms?: {
-    acknowledgeInfo: boolean;
-    acknowledgeCriteria: boolean;
-  };
-  submissionInfo?: {
-    /**
-     * The confirmation code associated with the application submission.
-     */
-    confirmationCode: string;
-
-    /**
-     * The UTC date and time when the application was submitted.
-     * Format: ISO 8601 string (e.g., "YYYY-MM-DDTHH:mm:ss.sssZ")
-     */
-    submittedOn: string;
-  };
+  mailingAddress?: BaseApplicationAddressDeclaredChangeState;
+  homeAddress?: BaseApplicationAddressDeclaredChangeState;
+  phoneNumber?: BaseApplicationPhoneNumberDeclaredChangeState;
+  submitTerms?: BaseApplicationSubmitTermsState;
+  submissionInfo?: BaseApplicationSubmissionInfoState;
   hasFiledTaxes?: boolean;
-  termsAndConditions?: {
-    acknowledgeTerms: boolean;
-    acknowledgePrivacy: boolean;
-    shareData: boolean;
-  };
-  inputModel?: 'full' | 'simplified';
-  typeOfApplication?: 'adult' | 'children' | 'family' | 'delegate';
+  termsAndConditions?: BaseApplicationTermsAndConditionsState;
+  typeOfApplication?: BaseApplicationTypeOfApplicationState;
   clientApplication?: ClientApplicationRenewalEligibleDto;
 }>;
 
-export type ApplicantInformationState = NonNullable<PublicApplicationState['applicantInformation']>;
-export type ApplicationYearState = PublicApplicationState['applicationYear'];
-export type ChildrenState = PublicApplicationState['children'];
-export type ChildState = ChildrenState[number];
-export type ChildInformationState = NonNullable<ChildState['information']>;
-export type ChildSinState = Pick<NonNullable<ChildState['information']>, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>;
-export type DeclaredChangeCommunicationPreferencesState = NonNullable<NonNullable<PublicApplicationState['communicationPreferences']>>;
-export type CommunicationPreferencesState = NonNullable<NonNullable<PublicApplicationState['communicationPreferences']>['value']>;
-export type DeclaredChangePhoneNumberState = NonNullable<NonNullable<PublicApplicationState['phoneNumber']>>;
-export type DeclaredChangeDentalFederalBenefitsState = NonNullable<PublicApplicationState['dentalBenefits']>;
-export type DentalFederalBenefitsState = Pick<NonNullable<NonNullable<PublicApplicationState['dentalBenefits']>['value']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
-export type DentalInsuranceState = NonNullable<PublicApplicationState['dentalInsurance']>;
-export type DeclaredChangeDentalProvincialTerritorialBenefitsState = NonNullable<PublicApplicationState['dentalBenefits']>;
-export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<NonNullable<PublicApplicationState['dentalBenefits']>['value']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
-export type PartnerInformationState = NonNullable<PublicApplicationState['partnerInformation']>;
-export type TermsAndConditionsState = NonNullable<PublicApplicationState['termsAndConditions']>;
-export type InputModelState = NonNullable<PublicApplicationState['inputModel']>;
-export type TypeOfApplicationState = NonNullable<PublicApplicationState['typeOfApplication']>;
-export type DeclaredChangeHomeAddressState = NonNullable<PublicApplicationState['homeAddress']>;
-export type DeclaredChangeMailingAddressState = NonNullable<PublicApplicationState['mailingAddress']>;
+export type PublicApplicationApplicantInformationState = NonNullable<PublicApplicationState['applicantInformation']>;
+export type PublicApplicationChildInformationState = NonNullable<PublicApplicationChildState['information']>;
+export type PublicApplicationChildrenState = PublicApplicationState['children'];
+export type PublicApplicationChildSinState = Pick<NonNullable<PublicApplicationChildState['information']>, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>;
+export type PublicApplicationChildState = PublicApplicationChildrenState[number];
+export type PublicApplicationCommunicationPreferencesDeclaredChangeState = NonNullable<NonNullable<PublicApplicationState['communicationPreferences']>>;
+export type PublicApplicationCommunicationPreferencesState = NonNullable<NonNullable<PublicApplicationState['communicationPreferences']>['value']>;
+export type PublicApplicationDentalFederalBenefitsDeclaredChangeState = NonNullable<PublicApplicationState['dentalBenefits']>;
+export type PublicApplicationDentalFederalBenefitsState = Pick<NonNullable<NonNullable<PublicApplicationState['dentalBenefits']>['value']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
+export type PublicApplicationDentalInsuranceState = NonNullable<PublicApplicationState['dentalInsurance']>;
+export type PublicApplicationDentalProvincialTerritorialBenefitsDeclaredChangeState = NonNullable<PublicApplicationState['dentalBenefits']>;
+export type PublicApplicationDentalProvincialTerritorialBenefitsState = Pick<NonNullable<NonNullable<PublicApplicationState['dentalBenefits']>['value']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
+export type PublicApplicationHomeAddressDeclaredChangeState = NonNullable<PublicApplicationState['homeAddress']>;
+export type PublicApplicationMailingAddressDeclaredChangeState = NonNullable<PublicApplicationState['mailingAddress']>;
+export type PublicApplicationPartnerInformationState = NonNullable<PublicApplicationState['partnerInformation']>;
+export type PublicApplicationPhoneNumberDeclaredChangeState = NonNullable<NonNullable<PublicApplicationState['phoneNumber']>>;
+export type PublicApplicationTermsAndConditionsState = NonNullable<PublicApplicationState['termsAndConditions']>;
+export type PublicApplicationTypeOfApplicationState = NonNullable<PublicApplicationState['typeOfApplication']>;
+export type PublicApplicationYearState = PublicApplicationState['applicationYear'];
 
 /**
  * Gets the public application flow session key.
@@ -285,7 +211,7 @@ export function clearPublicApplicationState({ params, session }: ClearStateArgs)
 }
 
 interface StartArgs {
-  applicationYear: ApplicationYearState;
+  applicationYear: PublicApplicationYearState;
   session: Session;
 }
 
@@ -327,7 +253,7 @@ export function getContextualAgeCategoryFromDate(date: string, context: 'intake'
   return getAgeCategoryFromAge(age);
 }
 
-export function isNewChildState(child: ChildState) {
+export function isNewChildState(child: PublicApplicationChildState) {
   return child.dentalInsurance === undefined || child.information === undefined || child.dentalBenefits === undefined;
 }
 
@@ -352,8 +278,8 @@ export function getChildrenState<TState extends Pick<PublicApplicationState, 'ch
  * ```
  */
 type ExtractStateFromApplicationFlow<S extends string> = S extends `${infer I}-${infer T}` //
-  ? I extends InputModelState
-    ? T extends TypeOfApplicationState
+  ? I extends PublicApplicationInputModelState
+    ? T extends PublicApplicationTypeOfApplicationState
       ? { inputModel: I; typeOfApplication: T }
       : never
     : never
@@ -375,7 +301,7 @@ type ExtractStateFromApplicationFlow<S extends string> = S extends `${infer I}-$
  * validateApplicationFlow(state, params, ['full-adult', 'simplified-children']);
  * ```
  */
-export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${InputModelState}-${TypeOfApplicationState}`>>(
+export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${PublicApplicationInputModelState}-${PublicApplicationTypeOfApplicationState}`>>(
   state: PublicApplicationState,
   params: Params,
   allowedFlows: TAllowedFlows,
@@ -406,7 +332,7 @@ export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${I
   }
 }
 
-export type ApplicationFlow = 'entry' | `${InputModelState}-${TypeOfApplicationState}`;
+export type ApplicationFlow = 'entry' | `${PublicApplicationInputModelState}-${PublicApplicationTypeOfApplicationState}`;
 
 /**
  * Determines the initial URL path based on the input model and type of application.

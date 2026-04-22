@@ -2,7 +2,7 @@ import type { PickDeep } from 'type-fest';
 
 import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import { isChildClientNumberValid, isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
-import type { ChildState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import type { ProtectedApplicationChildState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import { isValidDateString } from '~/utils/date-utils';
 
@@ -110,7 +110,7 @@ export function isMaritalStatusSectionCompleted(state: Pick<ProtectedApplication
 /**
  * Checks if the child information section is completed for renewal application.
  */
-export function isChildInformationSectionCompleted(child: Pick<ChildState, 'information'>, clientApplication?: ClientApplicationRenewalEligibleDto): boolean {
+export function isChildInformationSectionCompleted(child: Pick<ProtectedApplicationChildState, 'information'>, clientApplication?: ClientApplicationRenewalEligibleDto): boolean {
   // TODO: Check with age category and live independently status
   return (
     child.information !== undefined && //
@@ -124,27 +124,27 @@ export function isChildInformationSectionCompleted(child: Pick<ChildState, 'info
 /**
  * Checks if the child parent or legal guardian section is completed for renewal application.
  */
-export function isChildParentGuardianSectionCompleted(child: Pick<ChildState, 'information'>): boolean {
+export function isChildParentGuardianSectionCompleted(child: Pick<ProtectedApplicationChildState, 'information'>): boolean {
   return child.information?.isParent !== undefined;
 }
 
 /**
  * Checks if the child Social Insurance Number section is completed for renewal application.
  */
-export function isChildSinSectionCompleted(child: Pick<ChildState, 'information'>): boolean {
+export function isChildSinSectionCompleted(child: Pick<ProtectedApplicationChildState, 'information'>): boolean {
   return child.information?.socialInsuranceNumber !== undefined;
 }
 
 /**
  * Checks if the child dental insurance section is completed for renewal application.
  */
-export function isChildDentalInsuranceSectionCompleted(child: Pick<ChildState, 'dentalInsurance'>): boolean {
+export function isChildDentalInsuranceSectionCompleted(child: Pick<ProtectedApplicationChildState, 'dentalInsurance'>): boolean {
   return child.dentalInsurance !== undefined;
 }
 
 /**
  * Checks if the child dental benefits section is completed for renewal application.
  */
-export function isChildDentalBenefitsSectionCompleted(child: Pick<ChildState, 'dentalBenefits'>): boolean {
+export function isChildDentalBenefitsSectionCompleted(child: Pick<ProtectedApplicationChildState, 'dentalBenefits'>): boolean {
   return child.dentalBenefits !== undefined;
 }

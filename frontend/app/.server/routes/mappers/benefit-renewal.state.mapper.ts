@@ -19,70 +19,70 @@ import type {
 } from '~/.server/domain/dtos';
 import { maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import type {
-  ApplicationYearState,
-  ChildState,
-  DeclaredChangeCommunicationPreferencesState,
-  DeclaredChangeDentalFederalBenefitsState,
-  DeclaredChangeDentalProvincialTerritorialBenefitsState,
-  DeclaredChangeHomeAddressState,
-  DeclaredChangeMailingAddressState,
-  DeclaredChangePhoneNumberState,
-  DentalFederalBenefitsState,
-  DentalInsuranceState,
-  DentalProvincialTerritorialBenefitsState,
-  PartnerInformationState,
-  TermsAndConditionsState,
+  PublicApplicationChildState,
+  PublicApplicationCommunicationPreferencesDeclaredChangeState,
+  PublicApplicationDentalFederalBenefitsDeclaredChangeState,
+  PublicApplicationDentalFederalBenefitsState,
+  PublicApplicationDentalInsuranceState,
+  PublicApplicationDentalProvincialTerritorialBenefitsDeclaredChangeState,
+  PublicApplicationDentalProvincialTerritorialBenefitsState,
+  PublicApplicationHomeAddressDeclaredChangeState,
+  PublicApplicationMailingAddressDeclaredChangeState,
+  PublicApplicationPartnerInformationState,
+  PublicApplicationPhoneNumberDeclaredChangeState,
+  PublicApplicationTermsAndConditionsState,
+  PublicApplicationYearState,
 } from '~/.server/routes/helpers/public-application-route-helpers';
 
 export interface BenefitRenewalAdultState {
-  applicationYear: ApplicationYearState;
+  applicationYear: PublicApplicationYearState;
   clientApplication?: ClientApplicationDto & { applicationCategoryCodeName: 'New' | 'Renewal' };
-  phoneNumber: DeclaredChangePhoneNumberState;
-  dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
-  dentalInsurance: DentalInsuranceState;
-  homeAddress?: DeclaredChangeHomeAddressState;
+  phoneNumber: PublicApplicationPhoneNumberDeclaredChangeState;
+  dentalBenefits?: PublicApplicationDentalFederalBenefitsDeclaredChangeState & PublicApplicationDentalProvincialTerritorialBenefitsDeclaredChangeState;
+  dentalInsurance: PublicApplicationDentalInsuranceState;
+  homeAddress?: PublicApplicationHomeAddressDeclaredChangeState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress?: DeclaredChangeMailingAddressState;
+  mailingAddress?: PublicApplicationMailingAddressDeclaredChangeState;
   maritalStatus?: string;
-  partnerInformation?: PartnerInformationState;
+  partnerInformation?: PublicApplicationPartnerInformationState;
   email?: string;
   emailVerified?: boolean;
-  communicationPreferences?: DeclaredChangeCommunicationPreferencesState;
-  termsAndConditions: TermsAndConditionsState;
+  communicationPreferences?: PublicApplicationCommunicationPreferencesDeclaredChangeState;
+  termsAndConditions: PublicApplicationTermsAndConditionsState;
 }
 
 export interface BenefitRenewalFamilyState {
-  applicationYear: ApplicationYearState;
-  children: ChildState[];
+  applicationYear: PublicApplicationYearState;
+  children: PublicApplicationChildState[];
   clientApplication?: ClientApplicationDto & { applicationCategoryCodeName: 'New' | 'Renewal' };
-  phoneNumber: DeclaredChangePhoneNumberState;
-  dentalBenefits?: DeclaredChangeDentalFederalBenefitsState & DeclaredChangeDentalProvincialTerritorialBenefitsState;
-  dentalInsurance: DentalInsuranceState;
-  homeAddress?: DeclaredChangeHomeAddressState;
+  phoneNumber: PublicApplicationPhoneNumberDeclaredChangeState;
+  dentalBenefits?: PublicApplicationDentalFederalBenefitsDeclaredChangeState & PublicApplicationDentalProvincialTerritorialBenefitsDeclaredChangeState;
+  dentalInsurance: PublicApplicationDentalInsuranceState;
+  homeAddress?: PublicApplicationHomeAddressDeclaredChangeState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress?: DeclaredChangeMailingAddressState;
+  mailingAddress?: PublicApplicationMailingAddressDeclaredChangeState;
   maritalStatus?: string;
-  partnerInformation?: PartnerInformationState;
+  partnerInformation?: PublicApplicationPartnerInformationState;
   email?: string;
   emailVerified?: boolean;
-  communicationPreferences?: DeclaredChangeCommunicationPreferencesState;
-  termsAndConditions: TermsAndConditionsState;
+  communicationPreferences?: PublicApplicationCommunicationPreferencesDeclaredChangeState;
+  termsAndConditions: PublicApplicationTermsAndConditionsState;
 }
 
 export interface BenefitRenewalChildState {
-  applicationYear: ApplicationYearState;
+  applicationYear: PublicApplicationYearState;
   clientApplication?: ClientApplicationDto & { applicationCategoryCodeName: 'New' | 'Renewal' };
-  children: ChildState[];
-  phoneNumber: DeclaredChangePhoneNumberState;
-  homeAddress?: DeclaredChangeHomeAddressState;
+  children: PublicApplicationChildState[];
+  phoneNumber: PublicApplicationPhoneNumberDeclaredChangeState;
+  homeAddress?: PublicApplicationHomeAddressDeclaredChangeState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress?: DeclaredChangeMailingAddressState;
+  mailingAddress?: PublicApplicationMailingAddressDeclaredChangeState;
   maritalStatus?: string;
-  partnerInformation?: PartnerInformationState;
+  partnerInformation?: PublicApplicationPartnerInformationState;
   email?: string;
   emailVerified?: boolean;
-  communicationPreferences?: DeclaredChangeCommunicationPreferencesState;
-  termsAndConditions: TermsAndConditionsState;
+  communicationPreferences?: PublicApplicationCommunicationPreferencesDeclaredChangeState;
+  termsAndConditions: PublicApplicationTermsAndConditionsState;
 }
 
 export interface BenefitRenewalStateMapper {
@@ -98,12 +98,12 @@ interface ToApplicantInformationArgs {
 
 interface ToChildrenArgs {
   existingChildren: readonly ReadonlyDeep<ClientChildDto>[];
-  renewedChildren: ChildState[];
+  renewedChildren: PublicApplicationChildState[];
 }
 
 interface ToCommunicationPreferencesArgs {
   existingCommunicationPreferences: ReadonlyDeep<ClientCommunicationPreferencesDto>;
-  communicationPreferences: DeclaredChangeCommunicationPreferencesState;
+  communicationPreferences: PublicApplicationCommunicationPreferencesDeclaredChangeState;
   email?: string;
   emailVerified?: boolean;
 }
@@ -111,9 +111,9 @@ interface ToCommunicationPreferencesArgs {
 interface ToContactInformationArgs {
   existingContactInformation: ReadonlyDeep<ClientContactInformationDto>;
   isHomeAddressSameAsMailingAddress: boolean | undefined;
-  renewedContactInformation: DeclaredChangePhoneNumberState | undefined;
-  renewedHomeAddress: DeclaredChangeHomeAddressState | undefined;
-  renewedMailingAddress: DeclaredChangeMailingAddressState | undefined;
+  renewedContactInformation: PublicApplicationPhoneNumberDeclaredChangeState | undefined;
+  renewedHomeAddress: PublicApplicationHomeAddressDeclaredChangeState | undefined;
+  renewedMailingAddress: PublicApplicationMailingAddressDeclaredChangeState | undefined;
   renewedEmailVerified: boolean | undefined;
   renewedEmail: string | undefined;
 }
@@ -121,25 +121,25 @@ interface ToContactInformationArgs {
 interface ToDentalBenefitsArgs {
   existingDentalBenefits?: readonly string[];
   hasFederalProvincialTerritorialBenefitsChanged: boolean;
-  renewedDentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+  renewedDentalBenefits?: PublicApplicationDentalFederalBenefitsState & PublicApplicationDentalProvincialTerritorialBenefitsState;
 }
 
 interface ToHomeAddressArgs {
   existingContactInformation: ReadonlyDeep<ClientContactInformationDto>;
-  homeAddress?: DeclaredChangeHomeAddressState;
+  homeAddress?: PublicApplicationHomeAddressDeclaredChangeState;
   isHomeAddressSameAsMailingAddress?: boolean;
-  mailingAddress?: DeclaredChangeMailingAddressState;
+  mailingAddress?: PublicApplicationMailingAddressDeclaredChangeState;
 }
 
 interface ToMailingAddressArgs {
   existingContactInformation: ReadonlyDeep<ClientContactInformationDto>;
-  mailingAddress?: DeclaredChangeMailingAddressState;
+  mailingAddress?: PublicApplicationMailingAddressDeclaredChangeState;
 }
 
 interface ToPartnerInformationArgs {
   effectiveMaritalStatus?: string;
   existingPartnerInformation?: ReadonlyDeep<ClientPartnerInformationDto>;
-  renewedPartnerInformation?: PartnerInformationState;
+  renewedPartnerInformation?: PublicApplicationPartnerInformationState;
 }
 
 interface HasEmailChangedArgs {

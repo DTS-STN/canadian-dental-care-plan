@@ -12,7 +12,7 @@ import type { Route } from './+types/child-information';
 import { TYPES } from '~/.server/constants';
 import { isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
 import { getPublicApplicationState, getSingleChildState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
-import type { ChildInformationState, ChildSinState } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { PublicApplicationChildInformationState, PublicApplicationChildSinState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -171,7 +171,7 @@ export async function action({ context: { appContainer, session }, params, reque
         ...val,
         dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`,
       };
-    }) satisfies z.ZodType<OmitStrict<ChildInformationState, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>>;
+    }) satisfies z.ZodType<OmitStrict<PublicApplicationChildInformationState, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>>;
 
   const childSinSchema = z
     .object({
@@ -194,7 +194,7 @@ export async function action({ context: { appContainer, session }, params, reque
           ctx.addIssue({ code: 'custom', message: t('application-spokes:children.information.error-message.sin-unique'), path: ['socialInsuranceNumber'] });
         }
       }
-    }) satisfies z.ZodType<ChildSinState>;
+    }) satisfies z.ZodType<PublicApplicationChildSinState>;
 
   const parsedDataResult = childInformationSchema.safeParse({
     memberId: formData.get('memberId')?.toString(),

@@ -1,5 +1,5 @@
 import { isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
-import type { ChildState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import type { ProtectedApplicationChildState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
 import { isValidDateString } from '~/utils/date-utils';
 
@@ -68,7 +68,7 @@ export function isMaritalStatusSectionCompleted(state: Pick<ProtectedApplication
 /**
  * Checks if the child information section is completed for intake application.
  */
-export function isChildInformationSectionCompleted(child: Pick<ChildState, 'information'>): boolean {
+export function isChildInformationSectionCompleted(child: Pick<ProtectedApplicationChildState, 'information'>): boolean {
   // TODO: Check with age category and live independently status
   return (
     child.information !== undefined && //
@@ -81,13 +81,13 @@ export function isChildInformationSectionCompleted(child: Pick<ChildState, 'info
 /**
  * Checks if the child dental insurance section is completed for intake application.
  */
-export function isChildDentalInsuranceSectionCompleted(child: Pick<ChildState, 'dentalInsurance'>): boolean {
+export function isChildDentalInsuranceSectionCompleted(child: Pick<ProtectedApplicationChildState, 'dentalInsurance'>): boolean {
   return child.dentalInsurance !== undefined;
 }
 
 /**
  * Checks if the child dental benefits section is completed for intake application.
  */
-export function isChildDentalBenefitsSectionCompleted(child: Pick<ChildState, 'dentalBenefits'>): boolean {
+export function isChildDentalBenefitsSectionCompleted(child: Pick<ProtectedApplicationChildState, 'dentalBenefits'>): boolean {
   return child.dentalBenefits?.hasChanged === true;
 }

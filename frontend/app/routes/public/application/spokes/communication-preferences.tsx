@@ -10,7 +10,7 @@ import type { Route } from './+types/communication-preferences';
 
 import { TYPES } from '~/.server/constants';
 import { getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
-import type { ApplicationFlow, CommunicationPreferencesState } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { ApplicationFlow, PublicApplicationCommunicationPreferencesState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -98,7 +98,7 @@ export async function action({ context: { appContainer, session }, params, reque
     preferredLanguage: z.string().trim().min(1, t('application-spokes:communication-preferences.error-message.preferred-language-required')),
     preferredMethod: z.string().trim().min(1, t('application-spokes:communication-preferences.error-message.preferred-method-required')),
     preferredNotificationMethod: z.string().trim().min(1, t('application-spokes:communication-preferences.error-message.preferred-notification-method-required')),
-  }) satisfies z.ZodType<CommunicationPreferencesState>;
+  }) satisfies z.ZodType<PublicApplicationCommunicationPreferencesState>;
 
   const parsedDataResult = communicationPreferencesSchema.safeParse({
     preferredLanguage: String(formData.get('preferredLanguage') ?? ''),

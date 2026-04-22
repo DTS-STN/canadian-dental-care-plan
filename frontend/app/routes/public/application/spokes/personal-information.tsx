@@ -9,7 +9,7 @@ import type { Route } from './+types/personal-information';
 
 import { TYPES } from '~/.server/constants';
 import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
-import type { ApplicantInformationState, InputModelState } from '~/.server/routes/helpers/public-application-route-helpers';
+import type { PublicApplicationApplicantInformationState, PublicApplicationInputModelState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getContextualAgeCategoryFromDate, getPublicApplicationState, savePublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
@@ -129,7 +129,7 @@ export async function action({ context: { appContainer, session }, params, reque
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
       return { ...val, dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}` };
-    }) satisfies z.ZodType<ApplicantInformationState>;
+    }) satisfies z.ZodType<PublicApplicationApplicantInformationState>;
 
   const parsedDataResult = applicantInformationSchema.safeParse({
     memberId: formData.get('memberId')?.toString(),
@@ -147,7 +147,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   // Determine input model based on context and data. 'intake' applications always use 'full' model
-  let inputModel: InputModelState = 'full';
+  let inputModel: PublicApplicationInputModelState = 'full';
   let clientApplication: ClientApplicationRenewalEligibleDto | undefined;
 
   // For renewal applications, use the provided member ID, first name, last name, date of birth and SIN to check if the

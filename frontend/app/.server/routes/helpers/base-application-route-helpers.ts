@@ -1,9 +1,175 @@
-import type { PickDeep } from 'type-fest';
+// Shared state field types for Public/Protected ApplicationState
+import type { PickDeep, ReadonlyDeep } from 'type-fest';
 
 import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
+import type { DeclaredChange } from '~/.server/routes/helpers/declared-change-type';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { EligibilityType } from '~/components/eligibility';
 import { getAgeFromDateString } from '~/utils/date-utils';
+
+/**
+ * The context of the application, either 'intake' for new applications or 'renewal' for renewal applications.
+ * Immutable and set at the start of the application process based on renewal period status.
+ */
+export type BaseApplicationContextState = 'intake' | 'renewal';
+
+/**
+ * The type of application being submitted.
+ * Can be 'adult', 'children', 'family', or 'delegate'.
+ */
+export type BaseApplicationTypeOfApplicationState = 'adult' | 'children' | 'family' | 'delegate';
+
+/**
+ * Applicant's personal information for the application state.
+ */
+export type BaseApplicationApplicantInformationState = ReadonlyDeep<{
+  memberId?: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  socialInsuranceNumber: string;
+}>;
+
+/**
+ * Application year information for the application state.
+ */
+export type BaseApplicationYearState = ReadonlyDeep<{
+  applicationYearId: string;
+  taxYear: string;
+  dependentEligibilityEndDate: string;
+}>;
+
+/**
+ * Child's personal information for the application state.
+ */
+export type BaseApplicationChildInformationState = ReadonlyDeep<{
+  memberId?: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  isParent: boolean;
+  hasSocialInsuranceNumber: boolean;
+  socialInsuranceNumber?: string;
+}>;
+
+/**
+ * Dental benefits information for the application state.
+ */
+export type BaseApplicationDentalBenefitsState = ReadonlyDeep<{
+  hasFederalBenefits: boolean;
+  federalSocialProgram?: string;
+  hasProvincialTerritorialBenefits: boolean;
+  provincialTerritorialSocialProgram?: string;
+  province?: string;
+}>;
+
+/**
+ * Dental benefits state wrapped in DeclaredChange for tracking changes in the application state.
+ */
+export type BaseApplicationDentalBenefitsDeclaredChangeState = ReadonlyDeep<DeclaredChange<BaseApplicationDentalBenefitsState>>;
+
+/**
+ * Dental insurance information for the application state.
+ */
+export type BaseApplicationDentalInsuranceState = ReadonlyDeep<{
+  hasDentalInsurance: boolean;
+  dentalInsuranceEligibilityConfirmation?: boolean;
+}>;
+
+/**
+ * Child state object for the application, including benefits and insurance.
+ */
+export type BaseApplicationChildState = ReadonlyDeep<{
+  id: string;
+  dentalBenefits?: BaseApplicationDentalBenefitsDeclaredChangeState;
+  dentalInsurance?: BaseApplicationDentalInsuranceState;
+  information?: BaseApplicationChildInformationState;
+}>;
+
+/**
+ * Communication preferences for the application state.
+ */
+export type BaseApplicationCommunicationPreferencesState = ReadonlyDeep<{
+  preferredLanguage: string;
+  preferredMethod: string;
+  preferredNotificationMethod: string;
+}>;
+
+/**
+ * Communication preferences state wrapped in DeclaredChange for tracking changes in the application state.
+ */
+export type BaseApplicationCommunicationPreferencesDeclaredChangeState = ReadonlyDeep<DeclaredChange<BaseApplicationCommunicationPreferencesState>>;
+
+/**
+ * Address information for the application state.
+ */
+export type BaseApplicationAddressState = ReadonlyDeep<{
+  address: string;
+  city: string;
+  country: string;
+  postalCode?: string;
+  province?: string;
+}>;
+
+/**
+ * Address state wrapped in DeclaredChange for tracking changes in the application state.
+ */
+export type BaseApplicationAddressDeclaredChangeState = ReadonlyDeep<DeclaredChange<BaseApplicationAddressState>>;
+
+/**
+ * Phone number information for the application state.
+ */
+export type BaseApplicationPhoneNumberState = ReadonlyDeep<{
+  primary: string;
+  alternate?: string;
+}>;
+
+/**
+ * Phone number state wrapped in DeclaredChange for tracking changes in the application state.
+ */
+export type BaseApplicationPhoneNumberDeclaredChangeState = ReadonlyDeep<DeclaredChange<BaseApplicationPhoneNumberState>>;
+
+/**
+ * Partner's information for the application state.
+ */
+export type BaseApplicationPartnerInformationState = ReadonlyDeep<{
+  consentToSharePersonalInformation: true;
+  yearOfBirth: string;
+  socialInsuranceNumber: string;
+}>;
+
+/**
+ * Terms and conditions acceptance for the application state.
+ */
+export type BaseApplicationTermsAndConditionsState = ReadonlyDeep<{
+  acknowledgeTerms: boolean;
+  acknowledgePrivacy: boolean;
+  shareData: boolean;
+}>;
+
+/**
+ * Submission info for the application state.
+ */
+export type BaseApplicationSubmissionInfoState = ReadonlyDeep<{
+  confirmationCode: string;
+  submittedOn: string; // ISO 8601
+}>;
+
+/**
+ * Email verification state for the application.
+ */
+export type BaseApplicationVerifyEmailState = ReadonlyDeep<{
+  verificationCode: string;
+  verificationAttempts: number;
+}>;
+
+/**
+ * Terms acceptance for submitting the application.
+ */
+export type BaseApplicationSubmitTermsState = ReadonlyDeep<{
+  acknowledgeInfo: boolean;
+  acknowledgeCriteria: boolean;
+}>;
 
 /**
  * Age categories based on the age of the individual.
