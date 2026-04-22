@@ -132,11 +132,11 @@ export function validatePublicApplicationFullChildStateForReview({ params, state
   const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
 
   if (ageCategory === 'children') {
-    throw redirect(getPathById('protected/application/$id/your-application', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   if (ageCategory === 'youth' && livingIndependently !== true) {
-    throw redirect(getPathById('protected/application/$id/your-application', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   if (maritalStatusHasPartner(maritalStatus) && !partnerInformation) {
@@ -160,7 +160,7 @@ export function validatePublicApplicationFullChildStateForReview({ params, state
   }
 
   if ((communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) && !emailVerified) {
-    throw redirect(getPathById('public/application/$id/full-children/contact-information', params));
+    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
   return {

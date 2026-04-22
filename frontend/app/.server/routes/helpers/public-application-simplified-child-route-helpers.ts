@@ -136,11 +136,11 @@ export function validatePublicApplicationSimplifiedChildStateForReview({ params,
   const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
 
   if (ageCategory === 'children') {
-    throw redirect(getPathById('protected/application/$id/your-application', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   if (ageCategory === 'youth' && livingIndependently !== true) {
-    throw redirect(getPathById('protected/application/$id/your-application', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   if (maritalStatusHasPartner(maritalStatus) && !partnerInformation) {

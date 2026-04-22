@@ -164,7 +164,7 @@ export function validateProtectedApplicationIntakeAdultStateForReview({ params, 
   }
 
   if (dentalBenefits?.hasChanged !== true) {
-    throw redirect(getPathById('protected/application/$id/intake-adult/federal-provincial-territorial-benefits', params));
+    throw redirect(getPathById('protected/application/$id/intake-adult/dental-insurance', params));
   }
 
   return {

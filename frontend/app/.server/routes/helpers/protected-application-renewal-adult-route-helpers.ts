@@ -177,7 +177,7 @@ export function validateProtectedRenewAdultStateForReview({ params, state }: Val
     // redirect to dental benefits page
     (!dentalBenefits.hasChanged && clientApplication.dentalBenefits === undefined)
   ) {
-    throw redirect(getPathById('protected/application/$id/renewal-adult/federal-provincial-territorial-benefits', params));
+    throw redirect(getPathById('protected/application/$id/renewal-adult/dental-insurance', params));
   }
 
   return {

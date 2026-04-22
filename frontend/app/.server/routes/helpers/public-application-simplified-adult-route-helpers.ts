@@ -137,11 +137,11 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
   const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
 
   if (ageCategory === 'children') {
-    throw redirect(getPathById('protected/application/$id/your-application', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   if (ageCategory === 'youth' && livingIndependently !== true) {
-    throw redirect(getPathById('protected/application/$id/your-application', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   if (phoneNumber === undefined) {
@@ -178,7 +178,7 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     // redirect to dental benefits page
     (!dentalBenefits.hasChanged && clientApplication.dentalBenefits === undefined)
   ) {
-    throw redirect(getPathById('public/application/$id/simplified-adult/federal-provincial-territorial-benefits', params));
+    throw redirect(getPathById('public/application/$id/simplified-adult/dental-insurance', params));
   }
 
   return {

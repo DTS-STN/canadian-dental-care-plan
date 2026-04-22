@@ -154,7 +154,7 @@ export function validateProtectedApplicationIntakeChildStateForReview({ params, 
   }
 
   if ((communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) && !emailVerified) {
-    throw redirect(getPathById('protected/application/$id/intake-children/contact-information', params));
+    throw redirect(getPathById('protected/application/$id/intake-children/parent-or-guardian', params));
   }
 
   return {

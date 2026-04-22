@@ -3,7 +3,7 @@ import { redirect } from 'react-router';
 import { invariant } from '@dts-stn/invariant';
 
 import { createLogger } from '~/.server/logging';
-import { getAllowedTypeOfApplication, isChildClientNumberValid, maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
+import { getAllowedTypeOfApplication, isChildClientNumberValid } from '~/.server/routes/helpers/base-application-route-helpers';
 import { getChildrenState, getContextualAgeCategoryFromDate, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import type { ApplicationStateParams, PublicApplicationChildrenState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
@@ -136,19 +136,11 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
   const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
 
   if (ageCategory === 'children') {
-    throw redirect(getPathById('protected/application/$id/your-application', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   if (ageCategory === 'youth' && livingIndependently !== true) {
-    throw redirect(getPathById('protected/application/$id/your-application', params));
-  }
-
-  if (maritalStatusHasPartner(maritalStatus) && !partnerInformation) {
-    throw redirect(getPathById('public/application/$id/simplified-family/marital-status', params));
-  }
-
-  if (!maritalStatusHasPartner(maritalStatus) && partnerInformation) {
-    throw redirect(getPathById('public/application/$id/simplified-family/marital-status', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   if (phoneNumber === undefined) {

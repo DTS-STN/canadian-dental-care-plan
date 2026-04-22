@@ -133,11 +133,11 @@ export function validatePublicApplicationFullAdultStateForReview({ params, state
   const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
 
   if (ageCategory === 'children') {
-    throw redirect(getPathById('protected/application/$id/your-application', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   if (ageCategory === 'youth' && livingIndependently !== true) {
-    throw redirect(getPathById('protected/application/$id/your-application', params));
+    throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
   if (maritalStatusHasPartner(maritalStatus) && !partnerInformation) {
@@ -169,7 +169,7 @@ export function validatePublicApplicationFullAdultStateForReview({ params, state
   }
 
   if (dentalBenefits?.hasChanged !== true) {
-    throw redirect(getPathById('public/application/$id/full-adult/federal-provincial-territorial-benefits', params));
+    throw redirect(getPathById('public/application/$id/full-adult/dental-insurance', params));
   }
 
   return {
