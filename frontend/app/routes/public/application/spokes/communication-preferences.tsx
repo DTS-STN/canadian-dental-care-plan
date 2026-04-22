@@ -127,17 +127,17 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (parsedDataResult.data.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || parsedDataResult.data.preferredNotificationMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
     const redirectUrl = getPathById('public/application/$id/email', params);
-    return data({ success: true, redirectUrl }, { status: 200 });
+    return { success: true, redirectUrl };
   }
 
   const redirectUrl = getPathById(getRouteFromApplicationFlow(applicationFlow), params);
-  return data({ success: true, redirectUrl }, { status: 200 });
+  return { success: true, redirectUrl };
 }
 
 export default function ApplicationSpokeCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, applicationFlow, gcCommunicationMethods, sunLifeCommunicationMethods, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = loaderData;
-
+  const navigate = useNavigate();
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
@@ -155,15 +155,17 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
   }
 
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+  const success = fetcher.data && 'success' in fetcher.data && fetcher.data.success === true;
+  const redirectUrl = fetcher.data && 'redirectUrl' in fetcher.data ? fetcher.data.redirectUrl : undefined;
 
-  const navigate = useNavigate();
+  // Consider the form to be in a submitting or successful state if it's currently being submitted or if it has been
+  // successfully submitted to prevent multiple submissions and navigating away from the page while the form is being submitted
+  const isSubmittingOrSuccess = isSubmitting || success === true;
 
   useEffect(() => {
-    const success = fetcher.data && 'success' in fetcher.data && fetcher.data.success === true;
-    const redirectUrl = fetcher.data && 'redirectUrl' in fetcher.data ? fetcher.data.redirectUrl : undefined;
-
-    // Only navigate when the action indicates success and provides a redirectUrl
-    if (success && redirectUrl) {
+    // Only navigate when the action indicates success and provides a redirectUrl and not currently submitting to avoid
+    // navigating away while the form is being submitted
+    if (!isSubmitting && success && redirectUrl) {
       // Push form submit event to Adobe Analytics with form values when the form is successfully submitted
       if (adobeAnalytics.isConfigured()) {
         const formName = 'ESDC-EDSC:CDCP Communication preferences in online application';
@@ -188,7 +190,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
 
       void navigate(redirectUrl);
     }
-  }, [fetcher.data, navigate]);
+  }, [isSubmitting, navigate, redirectUrl, success]);
 
   const preferredLanguageOptions: InputRadiosProps['options'] = loaderData.languages.map((language) => ({
     value: language.id,
@@ -260,7 +262,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
             />
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Communication preferences click">
+            <LoadingButton variant="primary" id="continue-button" loading={isSubmittingOrSuccess} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Communication preferences click">
               {preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || preferredNotification === COMMUNICATION_METHOD_GC_DIGITAL_ID ? t('application-spokes:communication-preferences.continue') : t('application-spokes:communication-preferences.save')}
             </LoadingButton>
             <ButtonLink
@@ -268,7 +270,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
               variant="secondary"
               routeId={getRouteFromApplicationFlow(applicationFlow)}
               params={params}
-              disabled={isSubmitting}
+              disabled={isSubmittingOrSuccess}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Communication preferences click"
             >
               {t('application-spokes:communication-preferences.back')}
