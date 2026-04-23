@@ -139,6 +139,14 @@ export type BaseApplicationPartnerInformationState = ReadonlyDeep<{
 }>;
 
 /**
+ * New or returning member state for the application state.
+ */
+export type BaseApplicationNewOrReturningMemberState = ReadonlyDeep<{
+  isNewOrReturningMember: boolean;
+  memberId?: string;
+}>;
+
+/**
  * Terms and conditions acceptance for the application state.
  */
 export type BaseApplicationTermsAndConditionsState = ReadonlyDeep<{

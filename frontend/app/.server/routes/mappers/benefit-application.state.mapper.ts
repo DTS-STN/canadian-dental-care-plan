@@ -10,6 +10,7 @@ import type {
   BaseApplicationCommunicationPreferencesDeclaredChangeState,
   BaseApplicationDentalBenefitsDeclaredChangeState,
   BaseApplicationDentalInsuranceState,
+  BaseApplicationNewOrReturningMemberState,
   BaseApplicationPartnerInformationState,
   BaseApplicationPhoneNumberDeclaredChangeState,
   BaseApplicationTermsAndConditionsState,
@@ -34,6 +35,7 @@ export interface ApplicationAdultState {
   partnerInformation?: BaseApplicationPartnerInformationState;
   phoneNumber: BaseApplicationPhoneNumberDeclaredChangeState;
   termsAndConditions: BaseApplicationTermsAndConditionsState;
+  newOrReturningMember?: BaseApplicationNewOrReturningMemberState;
 }
 
 export interface ApplicationFamilyState {
@@ -54,6 +56,7 @@ export interface ApplicationFamilyState {
   partnerInformation?: BaseApplicationPartnerInformationState;
   phoneNumber: BaseApplicationPhoneNumberDeclaredChangeState;
   termsAndConditions: BaseApplicationTermsAndConditionsState;
+  newOrReturningMember?: BaseApplicationNewOrReturningMemberState;
 }
 
 export interface ApplicationChildrenState {
@@ -72,6 +75,7 @@ export interface ApplicationChildrenState {
   partnerInformation?: BaseApplicationPartnerInformationState;
   phoneNumber: BaseApplicationPhoneNumberDeclaredChangeState;
   termsAndConditions: BaseApplicationTermsAndConditionsState;
+  newOrReturningMember?: BaseApplicationNewOrReturningMemberState;
 }
 
 interface ToBenefitApplicationDtoArgs {
@@ -92,12 +96,14 @@ interface ToBenefitApplicationDtoArgs {
   partnerInformation?: BaseApplicationPartnerInformationState;
   phoneNumber: BaseApplicationPhoneNumberDeclaredChangeState;
   termsAndConditions: BaseApplicationTermsAndConditionsState;
+  newOrReturningMember?: BaseApplicationNewOrReturningMemberState;
   typeOfApplication: 'adult' | 'adult-child' | 'child';
 }
 
 interface ToApplicantInformationArgs {
   applicantInformation: BaseApplicationApplicantInformationState;
   maritalStatus?: string;
+  newOrReturningMember?: BaseApplicationNewOrReturningMemberState;
 }
 
 interface ToHomeAddressArgs {
@@ -180,11 +186,13 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     phoneNumber,
     termsAndConditions,
     typeOfApplication,
+    newOrReturningMember,
   }: ToBenefitApplicationDtoArgs) {
     return {
       applicantInformation: this.toApplicantInformation({
         applicantInformation,
         maritalStatus,
+        newOrReturningMember,
       }),
       applicationYearId: applicationYear.applicationYearId,
       children: this.toChildren(children),
@@ -202,11 +210,12 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     };
   }
 
-  private toApplicantInformation({ applicantInformation, maritalStatus }: ToApplicantInformationArgs): ApplicantInformationDto {
+  private toApplicantInformation({ applicantInformation, maritalStatus, newOrReturningMember }: ToApplicantInformationArgs): ApplicantInformationDto {
     invariant(maritalStatus, 'Expected maritalStatus to be defined');
     return {
       ...applicantInformation,
       maritalStatus,
+      clientNumber: newOrReturningMember?.memberId,
     };
   }
 
