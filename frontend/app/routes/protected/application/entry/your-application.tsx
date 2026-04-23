@@ -169,7 +169,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
         </CardFooter>
       </Card>
 
-      {isNewOrReturningMember && (
+      {defaultState.context === 'intake' && isNewOrReturningMember && (
         <Card>
           <CardHeader>
             <CardTitle>{t('protected-application:your-application.new-or-returning-heading')}</CardTitle>
