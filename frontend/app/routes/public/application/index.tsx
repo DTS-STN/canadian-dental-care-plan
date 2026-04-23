@@ -37,16 +37,26 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   return { id: state.id, locale, meta };
 }
 
+// Set a delay to ensure the loading state is visible before navigating to the next page.
+const NAVIGATION_DELAY_MS = 500;
+
 export default function PublicApplicationIndex({ loaderData, params }: Route.ComponentProps) {
   const { id } = loaderData;
 
   const navigate = useNavigate();
-
   const path = getPathById('public/application/$id/eligibility-requirements', { ...params, id });
 
   useEffect(() => {
     sessionStorage.setItem('flow.state', 'active');
-    void navigate(path, { replace: true });
+
+    const timeout = setTimeout(() => {
+      // Use replace to avoid adding an extra entry in the history stack, preventing
+      // the user from going back to the loading page.
+      void navigate(path, { replace: true });
+    }, NAVIGATION_DELAY_MS);
+
+    // Cleanup in case component unmounts before the timeout
+    return () => clearTimeout(timeout);
   }, [navigate, path]);
 
   return (
