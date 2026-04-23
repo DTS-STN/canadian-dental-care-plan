@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Outlet, useNavigate } from 'react-router';
+import { Outlet, useNavigate, useNavigation, useLocation } from 'react-router';
 
 import { faLaptopCode } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,6 +21,7 @@ import { useApiSession } from '~/utils/api-session-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
+import { removeTrailingSlash } from '~/utils/url-utils';
 
 export const handle = {
   // Declare all i18n namespaces required by this route and its descendants.
@@ -56,18 +57,28 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export default function Layout({ loaderData, params }: Route.ComponentProps) {
   const { applicationStateDebugData, killswitchTimeout, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = loaderData;
-  const navigate = useNavigate();
+
   const { i18n } = useTranslation();
+  const location = useLocation();
+  const navigation = useNavigation();
+  const navigate = useNavigate();
+
+  const isIdle = navigation.state === 'idle';
   const path = getPathById('protected/application/index', params);
+  const isOnIndexPage = removeTrailingSlash(location.pathname) === removeTrailingSlash(path);
 
   useEffect(() => {
-    // redirect to start if the flow has not yet been initialized
-    const flowState = sessionStorage.getItem('flow.state');
+    // Only proceed if the app is idle and not already on the index page
+    if (isIdle && !isOnIndexPage) {
+      // Check the current flow state in sessionStorage
+      const flowState = sessionStorage.getItem('flow.state');
 
-    if (flowState !== 'active') {
-      void navigate(path, { replace: true });
+      // If the flow is not active, redirect to the index page and replace history entry to prevent going back
+      if (flowState !== 'active') {
+        void navigate(path, { replace: true });
+      }
     }
-  }, [navigate, path]);
+  }, [isIdle, isOnIndexPage, navigate, path]);
 
   const apiProtectedApplicationState = useApiProtectedApplicationState();
   const apiSession = useApiSession();
