@@ -173,10 +173,12 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
         <Card>
           <CardHeader>
             <CardTitle>{t('protected-application:your-application.new-or-returning-heading')}</CardTitle>
-            <CardAction>{sections.newOrReturningMember?.completed && <StatusTag status="complete" />}</CardAction>
+            <CardAction>{sections.newOrReturningMember.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           {/* TODO: Need to confirm the value to be displayed for new or returning member*/}
-          <CardContent>{defaultState.newOrReturningMember === undefined ? <p>{t('protected-application:your-application.new-or-returning-description')}</p> : <p>{defaultState.newOrReturningMember.isNewOrReturningMember}</p>}</CardContent>
+          <CardContent>
+            {defaultState.newOrReturningMember?.isNewOrReturningMember === undefined ? <p>{t('protected-application:your-application.new-or-returning-description')}</p> : <p>{defaultState.newOrReturningMember.isNewOrReturningMember}</p>}
+          </CardContent>
           <CardFooter className="border-t bg-zinc-100">
             <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus} size="lg">
               {defaultState.newOrReturningMember === undefined ? t('protected-application:your-application.add-answer') : t('protected-application:your-application.edit-answer')}
