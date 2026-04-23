@@ -89,6 +89,7 @@ export function validateProtectedApplicationIntakeChildStateForReview({ params, 
     submissionInfo,
     termsAndConditions,
     typeOfApplication,
+    newOrReturningMember,
   } = state;
 
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
@@ -179,6 +180,7 @@ export function validateProtectedApplicationIntakeChildStateForReview({ params, 
     submissionInfo,
     termsAndConditions,
     typeOfApplication,
+    newOrReturningMember,
   };
 }
 

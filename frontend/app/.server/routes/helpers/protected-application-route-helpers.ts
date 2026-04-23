@@ -84,6 +84,10 @@ export type ProtectedApplicationState = ReadonlyDeep<{
   typeOfApplication?: BaseApplicationTypeOfApplicationState;
   clientApplication?: ClientApplicationRenewalEligibleDto;
   applicantClientIdsToRenew?: string[];
+  newOrReturningMember?: {
+    isNewOrReturningMember: boolean;
+    memberId?: string;
+  };
 }>;
 
 export type ProtectedApplicationApplicantInformationState = NonNullable<ProtectedApplicationState['applicantInformation']>;
@@ -97,6 +101,7 @@ export type ProtectedApplicationDentalFederalBenefitsState = Pick<NonNullable<No
 export type ProtectedApplicationDentalProvincialTerritorialBenefitsState = Pick<NonNullable<NonNullable<ProtectedApplicationState['dentalBenefits']>['value']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type ProtectedApplicationPartnerInformationState = NonNullable<ProtectedApplicationState['partnerInformation']>;
 export type ProtectedApplicationTypeOfApplicationState = NonNullable<ProtectedApplicationState['typeOfApplication']>;
+export type ProtectedApplicationNewOrReturningMemberState = NonNullable<ProtectedApplicationState['newOrReturningMember']>;
 
 /**
  * Gets the protected application flow session key.

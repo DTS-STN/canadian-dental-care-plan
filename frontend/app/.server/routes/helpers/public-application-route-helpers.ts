@@ -86,6 +86,10 @@ export type PublicApplicationState = ReadonlyDeep<{
   termsAndConditions?: BaseApplicationTermsAndConditionsState;
   typeOfApplication?: BaseApplicationTypeOfApplicationState;
   clientApplication?: ClientApplicationRenewalEligibleDto;
+  newOrReturningMember?: {
+    isNewOrReturningMember: boolean;
+    memberId?: string;
+  };
 }>;
 
 export type PublicApplicationApplicantInformationState = NonNullable<PublicApplicationState['applicantInformation']>;
@@ -98,6 +102,7 @@ export type PublicApplicationDentalFederalBenefitsState = Pick<NonNullable<NonNu
 export type PublicApplicationDentalProvincialTerritorialBenefitsState = Pick<NonNullable<NonNullable<PublicApplicationState['dentalBenefits']>['value']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type PublicApplicationPartnerInformationState = NonNullable<PublicApplicationState['partnerInformation']>;
 export type PublicApplicationTypeOfApplicationState = NonNullable<PublicApplicationState['typeOfApplication']>;
+export type PublicApplicationNewOrReturningMemberState = NonNullable<PublicApplicationState['newOrReturningMember']>;
 
 /**
  * Gets the public application flow session key.
