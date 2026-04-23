@@ -2,7 +2,7 @@ import { redirect, useFetcher } from 'react-router';
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/result';
 

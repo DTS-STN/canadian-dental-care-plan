@@ -1,7 +1,7 @@
 import { data, redirect, useFetcher } from 'react-router';
 
 import { useTranslation } from 'react-i18next';
-import z from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/parent-guardian';
 

@@ -7,7 +7,7 @@ import { faArrowUpFromBracket, faTimes } from '@fortawesome/free-solid-svg-icons
 import { fileTypeFromBuffer } from 'file-type';
 import type { TFunction } from 'i18next';
 import { getI18n, useTranslation } from 'react-i18next';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/upload';
 

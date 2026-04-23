@@ -7,7 +7,7 @@ import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { randomUUID } from 'node:crypto';
 import type { Option } from 'oxide.ts';
 import { Trans, useTranslation } from 'react-i18next';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/child';
 

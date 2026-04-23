@@ -3,7 +3,7 @@
  */
 import { redirectDocument } from 'react-router';
 
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/session';
 

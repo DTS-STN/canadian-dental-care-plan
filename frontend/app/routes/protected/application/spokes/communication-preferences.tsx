@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { data, useFetcher, useNavigate } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/communication-preferences';
 

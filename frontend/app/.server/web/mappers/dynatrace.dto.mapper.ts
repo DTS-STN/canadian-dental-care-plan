@@ -1,6 +1,6 @@
 import { XMLParser } from 'fast-xml-parser';
 import { injectable } from 'inversify';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import { createLogger } from '~/.server/logging';
 import type { Logger } from '~/.server/logging';

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { data, redirect, useFetcher } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/child-information';
 

@@ -4,7 +4,7 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/edit-dental-benefits';
 

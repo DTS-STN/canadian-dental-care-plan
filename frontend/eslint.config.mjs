@@ -1,6 +1,7 @@
 import eslint from '@eslint/js';
 import vitestPlugin from '@vitest/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
+import importZod from 'eslint-plugin-import-zod';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
@@ -59,6 +60,7 @@ export default defineConfig(
       eslint.configs.recommended, //
       tseslint.configs.strict,
       importPlugin.flatConfigs.recommended,
+      importZod.configs.recommended,
     ],
     rules: {
       'no-param-reassign': 'error',

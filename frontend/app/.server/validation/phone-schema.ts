@@ -1,5 +1,5 @@
 import { isValidPhoneNumber, parsePhoneNumberWithError } from 'libphonenumber-js';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import { expandTemplate, extractDigits } from '~/utils/string-utils';
 

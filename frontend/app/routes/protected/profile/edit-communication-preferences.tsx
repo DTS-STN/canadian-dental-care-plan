@@ -5,7 +5,7 @@ import { data, useFetcher, useNavigate } from 'react-router';
 
 import { Trans, useTranslation } from 'react-i18next';
 import type { PickDeep } from 'type-fest';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/edit-communication-preferences';
 

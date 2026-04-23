@@ -3,7 +3,7 @@ import { redirect, useFetcher } from 'react-router';
 import { invariant } from '@dts-stn/invariant';
 import { faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/childrens-application';
 

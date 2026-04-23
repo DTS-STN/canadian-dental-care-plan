@@ -2,7 +2,7 @@ import { data, redirectDocument, useFetcher } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/stub-login';
 
