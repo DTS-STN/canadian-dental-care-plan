@@ -102,7 +102,7 @@ export type PublicApplicationDentalFederalBenefitsState = Pick<NonNullable<NonNu
 export type PublicApplicationDentalProvincialTerritorialBenefitsState = Pick<NonNullable<NonNullable<PublicApplicationState['dentalBenefits']>['value']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type PublicApplicationPartnerInformationState = NonNullable<PublicApplicationState['partnerInformation']>;
 export type PublicApplicationTypeOfApplicationState = NonNullable<PublicApplicationState['typeOfApplication']>;
-export type NewOrReturningMemberState = NonNullable<PublicApplicationState['newOrReturningMember']>;
+export type PublicApplicationNewOrReturningMemberState = NonNullable<PublicApplicationState['newOrReturningMember']>;
 
 /**
  * Gets the public application flow session key.
