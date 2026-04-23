@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Outlet, useNavigate, useNavigation, useLocation } from 'react-router';
+import { Outlet, useLocation, useNavigate, useNavigation } from 'react-router';
 
 import { faLaptopCode } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
