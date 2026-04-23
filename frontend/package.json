@@ -65,7 +65,7 @@
     "inversify": "^8.1.0",
     "isbot": "^5.1.39",
     "jose": "^6.2.2",
-    "libphonenumber-js": "^1.12.41",
+    "libphonenumber-js": "^1.12.42",
     "markdown-to-jsx": "^9.7.16",
     "micro-memoize": "^5.1.1",
     "mime": "^4.1.0",
