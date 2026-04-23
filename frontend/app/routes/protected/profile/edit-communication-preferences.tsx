@@ -116,7 +116,7 @@ export async function action({ context: { appContainer, session }, params, reque
     };
 
     const redirectUrl = getPathById('protected/profile/contact/email-address', params) + `?${new URLSearchParams(profileEmailContext)}`;
-    return { success: true, redirectUrl };
+    return { success: true, redirectUrl, revalidate: false };
   }
 
   // Update communication preferences
@@ -135,19 +135,20 @@ export async function action({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.AuditService).createAudit('update-data.profile.edit-communication-preferences', { userId: idToken.sub });
 
   const redirectUrl = getPathById('protected/profile/communication-preferences', params);
-  return { success: true, redirectUrl };
+  return { success: true, redirectUrl, revalidate: false };
 }
 
 export default function EditCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, languages, sunLifeCommunicationMethods, gcCommunicationMethods, isClientApplicationEmailAddressVerified } = loaderData;
   const { COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID } = useClientEnv();
+
   const [selectedPreferredMethodSunLife, setSelectedPreferredMethodSunLife] = useState(defaultState.preferredMethodSunLife);
   const [selectedPreferredMethodGovernmentOfCanada, setSelectedPreferredMethodGovernmentOfCanada] = useState(defaultState.preferredMethodGovernmentOfCanada);
+
   const navigate = useNavigate();
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
-
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const success = fetcher.data && 'success' in fetcher.data && fetcher.data.success === true;
   const redirectUrl = fetcher.data && 'redirectUrl' in fetcher.data ? fetcher.data.redirectUrl : undefined;
@@ -157,8 +158,8 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
   const isSubmittingOrSuccess = isSubmitting || success === true;
 
   useEffect(() => {
-    // Only navigate when the action indicates success and provides a redirectUrl and not currently submitting to avoid
-    // navigating away while the form is being submitted
+    // Only navigate when the form has been successfully submitted to avoid interrupting ongoing navigations or navigating
+    // away while the form is being submitted
     if (!isSubmitting && success && redirectUrl) {
       // Push form submit event to Adobe Analytics with form values when the form is successfully submitted
       if (adobeAnalytics.isConfigured()) {
@@ -197,7 +198,7 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
     value: method.id,
     children: <span className="font-semibold">{method.name}</span>,
     defaultChecked: selectedPreferredMethodSunLife === method.id,
-    onChange: () => setSelectedPreferredMethodSunLife(method.id),
+    onChange: (e) => setSelectedPreferredMethodSunLife(e.target.value),
     'data-gc-analytics-value': method.code,
   }));
 
@@ -214,7 +215,7 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
       value: method.id,
       children,
       defaultChecked: selectedPreferredMethodGovernmentOfCanada === method.id,
-      onChange: () => setSelectedPreferredMethodGovernmentOfCanada(method.id),
+      onChange: (e) => setSelectedPreferredMethodGovernmentOfCanada(e.target.value),
       'data-gc-analytics-value': method.code,
     };
   });

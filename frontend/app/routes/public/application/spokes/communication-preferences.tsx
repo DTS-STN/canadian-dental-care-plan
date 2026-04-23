@@ -127,32 +127,25 @@ export async function action({ context: { appContainer, session }, params, reque
 
   if (parsedDataResult.data.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || parsedDataResult.data.preferredNotificationMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
     const redirectUrl = getPathById('public/application/$id/email', params);
-    return { success: true, redirectUrl };
+    return { success: true, redirectUrl, revalidate: false };
   }
 
   const redirectUrl = getPathById(getRouteFromApplicationFlow(applicationFlow), params);
-  return { success: true, redirectUrl };
+  return { success: true, redirectUrl, revalidate: false };
 }
 
 export default function ApplicationSpokeCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, applicationFlow, gcCommunicationMethods, sunLifeCommunicationMethods, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = loaderData;
+
+  const [preferredMethod, setPreferredMethod] = useState(defaultState?.preferredMethod ?? COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID);
+  const [preferredNotification, setPreferredNotification] = useState(defaultState?.preferredNotificationMethod ?? COMMUNICATION_METHOD_GC_DIGITAL_ID);
+
   const navigate = useNavigate();
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   const mscaLinkAccount = <InlineLink to={t('application-spokes:communication-preferences.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
-
-  const [preferredMethod, setPreferredMethod] = useState(defaultState?.preferredMethod ?? COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID);
-  const [preferredNotification, setPreferredNotification] = useState(defaultState?.preferredNotificationMethod ?? COMMUNICATION_METHOD_GC_DIGITAL_ID);
-
-  function handleOnPreferredMethodChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setPreferredMethod(e.target.value);
-  }
-
-  function handleOnPreferredNotificationChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setPreferredNotification(e.target.value);
-  }
 
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const success = fetcher.data && 'success' in fetcher.data && fetcher.data.success === true;
@@ -163,8 +156,8 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
   const isSubmittingOrSuccess = isSubmitting || success === true;
 
   useEffect(() => {
-    // Only navigate when the action indicates success and provides a redirectUrl and not currently submitting to avoid
-    // navigating away while the form is being submitted
+    // Only navigate when the form has been successfully submitted to avoid interrupting ongoing navigations or navigating
+    // away while the form is being submitted
     if (!isSubmitting && success && redirectUrl) {
       // Push form submit event to Adobe Analytics with form values when the form is successfully submitted
       if (adobeAnalytics.isConfigured()) {
@@ -210,7 +203,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
       value: method.id,
       children,
       defaultChecked: defaultState ? defaultState.preferredMethod === method.id : method.id === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
-      onChange: handleOnPreferredMethodChanged,
+      onChange: (e) => setPreferredMethod(e.target.value),
       'data-gc-analytics-value': method.code,
     };
   });
@@ -228,7 +221,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
       value: method.id,
       children,
       defaultChecked: defaultState ? defaultState.preferredNotificationMethod === method.id : method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID,
-      onChange: handleOnPreferredNotificationChanged,
+      onChange: (e) => setPreferredNotification(e.target.value),
       'data-gc-analytics-value': method.code,
     };
   });
