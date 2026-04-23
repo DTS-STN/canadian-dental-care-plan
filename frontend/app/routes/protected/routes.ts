@@ -217,6 +217,11 @@ export const routes = [
             file: 'routes/protected/application/spokes/application-delegate.tsx',
             paths: { en: '/:lang/protected/application/:id/application-delegate', fr: '/:lang/protege/demande/:id/delegue-demande' },
           },
+          {
+            id: 'protected/application/$id/new-or-returning-member',
+            file: 'routes/protected/application/spokes/new-or-returning-member.tsx',
+            paths: { en: '/:lang/protected/application/:id/new-or-returning-member', fr: '/:lang/protege/demande/:id/new-or-returning-member' },
+          },
           { id: 'protected/application/$id/file-taxes', file: 'routes/protected/application/spokes/file-taxes.tsx', paths: { en: '/:lang/protected/application/:id/file-taxes', fr: '/:lang/protege/demande/:id/produire-declaration-revenus' } },
           { id: 'protected/application/$id/marital-status', file: 'routes/protected/application/spokes/marital-status.tsx', paths: { en: '/:lang/protected/application/:id/marital-status', fr: '/:lang/protege/demande/:id/etat-civil' } },
           { id: 'protected/application/$id/dental-insurance', file: 'routes/protected/application/spokes/dental-insurance.tsx', paths: { en: '/:lang/protected/application/:id/dental-insurance', fr: '/:lang/protege/demande/:id/assurance-dentaire' } },

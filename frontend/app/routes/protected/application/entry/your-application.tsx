@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import type { Route } from './+types/your-application';
 
 import { TYPES } from '~/.server/constants';
-import { isPersonalInformationSectionCompleted, isTypeOfApplicationSectionCompleted } from '~/.server/routes/helpers/protected-application-entry-section-checks';
+import { isNewOrReturningMemberSectionCompleted, isPersonalInformationSectionCompleted, isTypeOfApplicationSectionCompleted } from '~/.server/routes/helpers/protected-application-entry-section-checks';
 import type { ApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getContextualAgeCategoryFromDate, getInitialApplicationFlowUrl, getProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
@@ -54,11 +54,13 @@ export async function loader({ context: { appContainer, session }, request, para
       typeOfApplication: state.typeOfApplication,
       personalInformation: state.applicantInformation,
       livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
+      newOrReturningMember: state.newOrReturningMember,
     },
     nextRouteId,
     sections: {
       typeOfApplication: { completed: isTypeOfApplicationSectionCompleted(state) },
       personalInformation: { completed: isPersonalInformationSectionCompleted(state) },
+      newOrReturningMember: { completed: isNewOrReturningMemberSectionCompleted(state) },
     },
     meta,
   };
@@ -86,6 +88,10 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
   }
 
   const formattedDate = defaultState.personalInformation ? format(parseISO(defaultState.personalInformation.dateOfBirth), 'MMMM d, yyyy') : undefined;
+
+  const yearOfBirth = defaultState.personalInformation ? parseISO(defaultState.personalInformation.dateOfBirth).getFullYear() : undefined;
+
+  const isNewOrReturningMember = yearOfBirth !== undefined && yearOfBirth >= 2007;
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 
@@ -162,6 +168,21 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           </ButtonLink>
         </CardFooter>
       </Card>
+
+      {isNewOrReturningMember && (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('protected-application:your-application.new-or-returning-heading')}</CardTitle>
+            <CardAction>{sections.newOrReturningMember?.completed && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>{defaultState.newOrReturningMember === undefined ? <p>{t('protected-application:your-application.new-or-returning-description')}</p> : <p>{defaultState.newOrReturningMember.isNewOrReturningMember}</p>}</CardContent>
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus} size="lg">
+              {defaultState.newOrReturningMember === undefined ? t('protected-application:your-application.add-answer') : t('protected-application:your-application.edit-answer')}
+            </ButtonLink>
+          </CardFooter>
+        </Card>
+      )}
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Continue click">
