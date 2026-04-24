@@ -48,7 +48,7 @@ import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
-import { getAgeFromDateString } from '~/utils/date-utils';
+import { getAgeFromDateString, parseDateString } from '~/utils/date-utils';
 import { generateId } from '~/utils/id.utils';
 import { getPathById } from '~/utils/route-utils';
 
@@ -527,7 +527,7 @@ export function isNewOrReturningMember(state: PickDeep<ProtectedApplicationState
   if (state.context !== 'intake') return false;
   if (state.applicantInformation?.dateOfBirth === undefined) return false;
 
-  const yearOfBirth = Number(state.applicantInformation.dateOfBirth.slice(0, 4));
+  const yearOfBirth = parseDateString(state.applicantInformation.dateOfBirth).getFullYear();
   return yearOfBirth >= 2007;
 }
 
