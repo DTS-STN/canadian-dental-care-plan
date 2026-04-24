@@ -6,14 +6,7 @@ import type { Route } from './+types/your-application';
 import { TYPES } from '~/.server/constants';
 import { isNewOrReturningMemberSectionCompleted, isPersonalInformationSectionCompleted, isTypeOfApplicationSectionCompleted } from '~/.server/routes/helpers/protected-application-entry-section-checks';
 import type { ApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
-import {
-  getContextualAgeCategoryFromDate,
-  getInitialApplicationFlowUrl,
-  getProtectedApplicationState,
-  isNewOrReturningMember,
-  shouldSkipNewOrReturningMember,
-  validateProtectedApplicationContext,
-} from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getContextualAgeCategoryFromDate, getInitialApplicationFlowUrl, getProtectedApplicationState, shouldSkipNewOrReturningMember, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
