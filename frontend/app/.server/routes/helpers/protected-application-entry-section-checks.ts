@@ -31,6 +31,13 @@ export function isPersonalInformationSectionCompleted(state: Pick<ProtectedAppli
 }
 
 /**
+ * Checks if the new or returning member section is completed.
+ */
+export function isNewOrReturningMemberSectionCompleted(state: Pick<ProtectedApplicationState, 'context' | 'applicantInformation' | 'livingIndependently' | 'newOrReturningMember'>): boolean {
+  return state.context === 'intake' && isPersonalInformationSectionCompleted(state) && state.newOrReturningMember?.isNewOrReturningMember !== undefined;
+}
+
+/**
  * Checks if the terms and conditions section is completed.
  */
 export function isTermsAndConditionsSectionCompleted(state: Pick<ProtectedApplicationState, 'termsAndConditions'>): boolean {

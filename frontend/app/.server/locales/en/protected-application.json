@@ -100,7 +100,9 @@
     "add-type-application": "Add type of application",
     "edit-type-application": "Edit type of application",
     "add-personal-information": "Add personal information",
-    "edit-personal-information": "Edit personal information"
+    "edit-personal-information": "Edit personal information",
+    "new-or-returning-heading": "New or returning member",
+    "new-or-returning-description": "Select whether or not you have a Member ID."
   },
   "renewal-submitted": {
     "page-title": "Renewal application submitted",

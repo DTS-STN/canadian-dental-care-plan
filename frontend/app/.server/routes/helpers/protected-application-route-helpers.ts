@@ -48,7 +48,7 @@ import { getEnv } from '~/.server/utils/env.utils';
 import { getLocaleFromParams } from '~/.server/utils/locale.utils';
 import { getCdcpWebsiteApplyUrl } from '~/.server/utils/url.utils';
 import type { Session } from '~/.server/web/session';
-import { getAgeFromDateString } from '~/utils/date-utils';
+import { getAgeFromDateString, parseDateString } from '~/utils/date-utils';
 import { generateId } from '~/utils/id.utils';
 import { getPathById } from '~/utils/route-utils';
 
@@ -512,6 +512,27 @@ export function shouldSkipMaritalStatus(state: PickDeep<ProtectedApplicationStat
   if (state.context !== 'renewal') return false;
   if (state.clientApplication === undefined) return false;
   return state.clientApplication.inputModel === 'simplified';
+}
+
+/**
+ * Determines whether the new or returning member section is available.
+ *
+ * The section is available only for intake applications after personal information is completed,
+ * and when the applicant birth year is 2007 or later.
+ *
+ * @param state - The protected application state containing the applicant date of birth and living independently answer.
+ * @returns `true` when the section is available; otherwise, `false`.
+ */
+export function isNewOrReturningMember(state: PickDeep<ProtectedApplicationState, 'context' | 'applicantInformation.dateOfBirth'>): boolean {
+  if (state.context !== 'intake') return false;
+  if (state.applicantInformation?.dateOfBirth === undefined) return false;
+
+  const yearOfBirth = parseDateString(state.applicantInformation.dateOfBirth).getFullYear();
+  return yearOfBirth >= 2007;
+}
+
+export function shouldSkipNewOrReturningMember(state: PickDeep<ProtectedApplicationState, 'context' | 'applicantInformation.dateOfBirth' | 'livingIndependently'>): boolean {
+  return !isNewOrReturningMember(state);
 }
 
 /**

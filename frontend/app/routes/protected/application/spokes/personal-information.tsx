@@ -7,7 +7,7 @@ import type { Route } from './+types/personal-information';
 
 import { TYPES } from '~/.server/constants';
 import type { ProtectedApplicationApplicantInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getContextualAgeCategoryFromDate, getProtectedApplicationState, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getContextualAgeCategoryFromDate, getProtectedApplicationState, isNewOrReturningMember, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
@@ -141,18 +141,24 @@ export async function action({ context: { appContainer, session }, params, reque
     return data({ errors: transformFlattenedError(z.flattenError(parsedDataResult.error)) }, { status: 400 });
   }
 
-  const ageCategory = getContextualAgeCategoryFromDate(parsedDataResult.data.dateOfBirth, state.context);
+  const applicantInformation = {
+    firstName: parsedDataResult.data.firstName,
+    lastName: parsedDataResult.data.lastName,
+    dateOfBirth: parsedDataResult.data.dateOfBirth,
+    socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
+  };
+  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, state.context);
+  const showNewOrReturningMember = isNewOrReturningMember({
+    ...state,
+    applicantInformation,
+  });
 
   saveProtectedApplicationState({
     params,
     session,
     state: {
-      applicantInformation: {
-        firstName: parsedDataResult.data.firstName,
-        lastName: parsedDataResult.data.lastName,
-        dateOfBirth: parsedDataResult.data.dateOfBirth,
-        socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
-      },
+      applicantInformation,
+      newOrReturningMember: showNewOrReturningMember ? state.newOrReturningMember : undefined,
     },
   });
 
