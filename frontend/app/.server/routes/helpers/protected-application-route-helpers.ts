@@ -515,6 +515,27 @@ export function shouldSkipMaritalStatus(state: PickDeep<ProtectedApplicationStat
 }
 
 /**
+ * Determines whether the new or returning member section is available.
+ *
+ * The section is available only for intake applications after personal information is completed,
+ * and when the applicant birth year is 2007 or later.
+ *
+ * @param state - The protected application state containing the applicant date of birth and living independently answer.
+ * @returns `true` when the section is available; otherwise, `false`.
+ */
+export function isNewOrReturningMember(state: PickDeep<ProtectedApplicationState, 'context' | 'applicantInformation.dateOfBirth'>): boolean {
+  if (state.context !== 'intake') return false;
+  if (state.applicantInformation?.dateOfBirth === undefined) return false;
+
+  const yearOfBirth = Number(state.applicantInformation.dateOfBirth.slice(0, 4));
+  return yearOfBirth >= 2007;
+}
+
+export function shouldSkipNewOrReturningMember(state: PickDeep<ProtectedApplicationState, 'context' | 'applicantInformation.dateOfBirth' | 'livingIndependently'>): boolean {
+  return !isNewOrReturningMember(state);
+}
+
+/**
  * Resolves the effective communication preferences value for a renewal application state.
  * If the user has declared a change, the updated values from the state are used;
  * otherwise, the values are sourced from the client application data.

@@ -1,5 +1,4 @@
 import { faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import { format, parseISO } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/your-application';
@@ -7,8 +6,15 @@ import type { Route } from './+types/your-application';
 import { TYPES } from '~/.server/constants';
 import { isNewOrReturningMemberSectionCompleted, isPersonalInformationSectionCompleted, isTypeOfApplicationSectionCompleted } from '~/.server/routes/helpers/protected-application-entry-section-checks';
 import type { ApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getContextualAgeCategoryFromDate, getInitialApplicationFlowUrl, getProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getFixedT } from '~/.server/utils/locale.utils';
+import {
+  getContextualAgeCategoryFromDate,
+  getInitialApplicationFlowUrl,
+  getProtectedApplicationState,
+  isNewOrReturningMember,
+  shouldSkipNewOrReturningMember,
+  validateProtectedApplicationContext,
+} from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
@@ -17,6 +23,7 @@ import { StatusTag } from '~/components/status-tag';
 import { useSectionsStatus } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { formatClientNumber } from '~/utils/application-code-utils';
+import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -47,6 +54,8 @@ export async function loader({ context: { appContainer, session }, request, para
   const nextRouteId = getInitialApplicationFlowUrl(applicationFlow, params);
 
   const ageCategory = state.applicantInformation?.dateOfBirth ? getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context) : undefined;
+  const showNewOrReturningMemberSection = isNewOrReturningMember(state);
+  const shouldSkipNewOrReturningMemberStep = shouldSkipNewOrReturningMember(state);
 
   return {
     defaultState: {
@@ -57,17 +66,19 @@ export async function loader({ context: { appContainer, session }, request, para
       newOrReturningMember: state.newOrReturningMember,
     },
     nextRouteId,
+    showNewOrReturningMemberSection,
     sections: {
       typeOfApplication: { completed: isTypeOfApplicationSectionCompleted(state) },
       personalInformation: { completed: isPersonalInformationSectionCompleted(state) },
-      newOrReturningMember: { completed: isNewOrReturningMemberSectionCompleted(state) },
+      ...(shouldSkipNewOrReturningMemberStep ? {} : { newOrReturningMember: { completed: isNewOrReturningMemberSectionCompleted(state) } }),
     },
     meta,
+    locale: getLocale(request),
   };
 }
 
 export default function TypeOfApplication({ loaderData, params }: Route.ComponentProps) {
-  const { defaultState, nextRouteId, sections } = loaderData;
+  const { defaultState, nextRouteId, sections, showNewOrReturningMemberSection, locale } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   function getTypeOfApplication(typeOfApplication: string) {
@@ -87,11 +98,8 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
     }
   }
 
-  const formattedDate = defaultState.personalInformation ? format(parseISO(defaultState.personalInformation.dateOfBirth), 'MMMM d, yyyy') : undefined;
-
-  const yearOfBirth = defaultState.personalInformation ? parseISO(defaultState.personalInformation.dateOfBirth).getFullYear() : undefined;
-
-  const isNewOrReturningMember = yearOfBirth !== undefined && yearOfBirth >= 2007;
+  const parsedDateOfBirth = defaultState.personalInformation ? parseDateString(defaultState.personalInformation.dateOfBirth) : undefined;
+  const formattedDateOfBirth = parsedDateOfBirth ? toLocaleDateString(parsedDateOfBirth, locale) : undefined;
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 
@@ -143,7 +151,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             <DefinitionList layout="single-column">
               {defaultState.personalInformation.memberId && <DefinitionListItem term={t('protected-application:your-application.member-id')}>{formatClientNumber(defaultState.personalInformation.memberId)}</DefinitionListItem>}
               <DefinitionListItem term={t('protected-application:your-application.full-name')}>{`${defaultState.personalInformation.firstName} ${defaultState.personalInformation.lastName}`}</DefinitionListItem>
-              <DefinitionListItem term={t('protected-application:your-application.date-of-birth')}>{formattedDate}</DefinitionListItem>
+              <DefinitionListItem term={t('protected-application:your-application.date-of-birth')}>{formattedDateOfBirth}</DefinitionListItem>
               <DefinitionListItem term={t('protected-application:your-application.sin')}>{formatSin(defaultState.personalInformation.socialInsuranceNumber)}</DefinitionListItem>
               {defaultState.livingIndependently !== undefined && (
                 <DefinitionListItem term={t('protected-application:your-application.living-independently')}>
@@ -169,11 +177,11 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
         </CardFooter>
       </Card>
 
-      {isNewOrReturningMember && (
+      {showNewOrReturningMemberSection && (
         <Card>
           <CardHeader>
             <CardTitle>{t('protected-application:your-application.new-or-returning-heading')}</CardTitle>
-            <CardAction>{sections.newOrReturningMember.completed && <StatusTag status="complete" />}</CardAction>
+            <CardAction>{sections.newOrReturningMember?.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           {/* TODO: Need to confirm the value to be displayed for new or returning member*/}
           <CardContent>
@@ -188,7 +196,6 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
       )}
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-        {/* TODO: if newOrReturningMember is undefined, allSectionsCompleted should be not include newOrReturningMember */}
         <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Continue click">
           {t('protected-application:your-application.application')}
         </NavigationButtonLink>
