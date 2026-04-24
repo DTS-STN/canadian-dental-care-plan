@@ -28,15 +28,7 @@ export function ErrorSummary({ className, ...props }: OmitStrict<ComponentPropsW
   const errorSummaryContext = useErrorSummaryContext();
   const summaryRef = useRef<HTMLDivElement>(null);
   const errors = errorSummaryContext?.errors;
-
-  // Log a warning if the component is used outside of an ErrorSummaryProvider
-  // This helps developers understand that they need to wrap their component tree with ErrorSummaryProvider
-  // for the ErrorSummary component to function properly
-  useEffect(() => {
-    if (!errorSummaryContext) {
-      console.warn('ErrorSummary component must be used within an ErrorSummaryProvider. Please wrap your component tree with ErrorSummaryProvider to use this component.');
-    }
-  }, [errorSummaryContext]);
+  const validationRun = errorSummaryContext?.validationRun;
 
   useEffect(() => {
     if (errors && errors.length > 0 && summaryRef.current) {
@@ -48,7 +40,7 @@ export function ErrorSummary({ className, ...props }: OmitStrict<ComponentPropsW
         adobeAnalytics.pushValidationErrorEvent(fieldIds);
       }
     }
-  }, [errors]);
+  }, [errors, validationRun]);
 
   if (!errors || errors.length === 0) {
     return undefined;
@@ -58,8 +50,8 @@ export function ErrorSummary({ className, ...props }: OmitStrict<ComponentPropsW
     <section ref={summaryRef} tabIndex={-1} className={cn('my-5 border-4 border-red-600 p-4', className)} {...props}>
       <h2 className="font-lato text-lg font-semibold">{t('gcweb:error-summary.header', { count: errors.length })}</h2>
       <ul className="mt-1.5 list-disc space-y-2 pl-7">
-        {errors.map(({ fieldId, message }) => (
-          <li key={`${fieldId}-${message}`}>
+        {errors.map(({ id, fieldId, message }) => (
+          <li key={id}>
             <AnchorLink className="text-red-700 underline hover:decoration-2 focus:decoration-2" anchorElementId={fieldId}>
               {message}
             </AnchorLink>
