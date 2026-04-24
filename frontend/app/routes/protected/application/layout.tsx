@@ -60,12 +60,12 @@ export default function Layout({ loaderData, params }: Route.ComponentProps) {
 
   const { i18n } = useTranslation();
   const location = useLocation();
-  const navigation = useNavigation();
   const navigate = useNavigate();
+  const navigation = useNavigation();
 
   const isIdle = navigation.state === 'idle';
-  const path = getPathById('protected/application/index', params);
-  const isOnIndexPage = removeTrailingSlash(location.pathname) === removeTrailingSlash(path);
+  const applicationIndexPath = getPathById('protected/application/index', params);
+  const isOnIndexPage = removeTrailingSlash(location.pathname) === removeTrailingSlash(applicationIndexPath);
 
   useEffect(() => {
     // Only proceed if the app is idle and not already on the index page
@@ -75,10 +75,10 @@ export default function Layout({ loaderData, params }: Route.ComponentProps) {
 
       // If the flow is not active, redirect to the index page and replace history entry to prevent going back
       if (flowState !== 'active') {
-        void navigate(path, { replace: true });
+        void navigate(applicationIndexPath, { replace: true });
       }
     }
-  }, [isIdle, isOnIndexPage, navigate, path]);
+  }, [isIdle, isOnIndexPage, navigate, applicationIndexPath]);
 
   const apiProtectedApplicationState = useApiProtectedApplicationState();
   const apiSession = useApiSession();
