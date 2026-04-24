@@ -255,7 +255,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
 
   useEffect(() => {
     setAddressDialogContent(isAddressResponse(fetcher.data) ? fetcher.data : null);
-  }, [fetcher, fetcher.data]);
+  }, [fetcher.data]);
 
   function onDialogOpenChangeHandler(open: boolean) {
     if (!open) {

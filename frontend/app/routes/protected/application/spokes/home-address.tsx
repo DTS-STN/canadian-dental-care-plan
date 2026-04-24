@@ -223,7 +223,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
 
   useEffect(() => {
     setAddressDialogContent(isAddressResponse(fetcher.data) ? fetcher.data : null);
-  }, [fetcher, fetcher.data]);
+  }, [fetcher.data]);
 
   function onDialogOpenChangeHandler(open: boolean) {
     if (!open) {

@@ -236,7 +236,7 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
 
   useEffect(() => {
     setAddressDialogContent(isAddressResponse(fetcher.data) ? fetcher.data : null);
-  }, [fetcher, fetcher.data]);
+  }, [fetcher.data]);
 
   function onDialogOpenChangeHandler(open: boolean) {
     if (!open) {
