@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const ageCategory = state.applicantInformation?.dateOfBirth ? getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context) : undefined;
   const shouldSkipNewOrReturningMemberStep = shouldSkipNewOrReturningMember(state);
-  const showNewOrReturningMemberSection = !shouldSkipNewOrReturningMemberStep && isNewOrReturningMember(state);
+  const showNewOrReturningMemberSection = !shouldSkipNewOrReturningMemberStep;
 
   return {
     defaultState: {
