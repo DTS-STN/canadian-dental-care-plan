@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { redirect, useNavigate } from 'react-router';
+import { redirect, useNavigate, useNavigation } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
 
@@ -18,6 +18,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { secondsToMilliseconds } from '~/utils/units.utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application', 'gcweb'),
@@ -71,26 +72,38 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 // Set a delay to ensure the loading state is visible before navigating to the next page.
-const NAVIGATION_DELAY_MS = 500;
+const NAVIGATION_DELAY_MS = secondsToMilliseconds(1);
 
 export default function ProtectedApplicationIndex({ loaderData, params }: Route.ComponentProps) {
   const { id } = loaderData;
 
+  const navigation = useNavigation();
   const navigate = useNavigate();
-  const path = getPathById('protected/application/$id/eligibility-requirements', { ...params, id });
+
+  const isIdle = navigation.state === 'idle';
+  const eligibilityRequirementsPath = getPathById('protected/application/$id/eligibility-requirements', { ...params, id });
 
   useEffect(() => {
     sessionStorage.setItem('flow.state', 'active');
 
-    const timeout = setTimeout(() => {
-      // Use replace to avoid adding an extra entry in the history stack, preventing
-      // the user from going back to the loading page.
-      void navigate(path, { replace: true });
-    }, NAVIGATION_DELAY_MS);
+    // Only navigate if the app is idle and no navigation timeout is already set (to prevent multiple timeouts from
+    // being set if the effect runs multiple times).
+    let navigateTimeout: NodeJS.Timeout | undefined;
 
-    // Cleanup in case component unmounts before the timeout
-    return () => clearTimeout(timeout);
-  }, [navigate, path]);
+    if (isIdle && !navigateTimeout) {
+      navigateTimeout = setTimeout(() => {
+        // Use replace to avoid adding an extra entry in the history stack, preventing
+        // the user from going back to the loading page.
+        void navigate(eligibilityRequirementsPath, { replace: true });
+      }, NAVIGATION_DELAY_MS);
+    }
+
+    return () => {
+      if (navigateTimeout) {
+        clearTimeout(navigateTimeout);
+      }
+    };
+  }, [isIdle, navigate, eligibilityRequirementsPath]);
 
   return (
     <div className="max-w-prose animate-pulse space-y-8">
