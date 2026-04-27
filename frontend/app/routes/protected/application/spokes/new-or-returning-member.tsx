@@ -35,7 +35,7 @@ const NEW_OR_EXISTING_MEMBER_OPTION = { no: 'no', yes: 'yes' } as const;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
-  pageIdentifier: pageIds.public.application.spokes.newOrReturningMember,
+  pageIdentifier: pageIds.protected.application.spokes.newOrReturningMember,
   pageTitleI18nKey: 'protected-application-spokes:new-or-returning-member.page-title',
 } as const satisfies RouteHandleData;
 

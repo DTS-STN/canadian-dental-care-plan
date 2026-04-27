@@ -191,7 +191,9 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
                   <DefinitionList layout="single-column">
                     <DefinitionListItem term={t('protected-application:your-application.previously-enrolled')}>
                       <p>{t('protected-application:your-application.yes')}</p>
-                      <li className="ml-8">{defaultState.newOrReturningMember.memberId}</li>
+                      <ul className="list-disc">
+                        <li className="ml-8">{defaultState.newOrReturningMember.memberId}</li>
+                      </ul>
                     </DefinitionListItem>
                     <DefinitionListItem term={t('protected-application:your-application.full-name')}>{`${defaultState.personalInformation?.firstName} ${defaultState.personalInformation?.lastName}`}</DefinitionListItem>
                     <DefinitionListItem term={t('protected-application:your-application.date-of-birth')}>{formattedDateOfBirth}</DefinitionListItem>
