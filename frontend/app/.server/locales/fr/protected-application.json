@@ -102,7 +102,10 @@
     "add-personal-information": "Ajouter des renseignements personnels",
     "edit-personal-information": "Modifier des renseignements personnels",
     "new-or-returning-heading": "Nouvelle inscription ou membre actuel",
-    "new-or-returning-description": "Indiquez si vous possédez déjà un numéro d'identification de membre."
+    "new-or-returning-description": "Indiquez si vous possédez déjà un numéro d'identification de membre.",
+    "previously-enrolled": "Précédemment inscrit au Régime canadien de soins dentaires",
+    "yes": "Oui",
+    "non": "Non"
   },
   "renewal-submitted": {
     "page-title": "Demande de renouvellement déjà soumise",
