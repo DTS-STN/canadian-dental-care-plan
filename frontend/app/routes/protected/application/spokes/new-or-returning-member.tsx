@@ -60,7 +60,10 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
+<<<<<<< HEAD
   await securityHandler.validateAuthSession({ request, session });
+=======
+>>>>>>> c630474ab (add the new or returning member spoke to the protected space)
   securityHandler.validateCsrfToken({ formData, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
