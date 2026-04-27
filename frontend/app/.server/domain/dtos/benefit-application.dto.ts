@@ -60,7 +60,7 @@ export type ContactInformationDto = ReadonlyDeep<{
   mailingCountry: string;
   mailingPostalCode?: string;
   mailingProvince?: string;
-  phoneNumber?: string;
+  phoneNumber: string;
   phoneNumberAlt?: string;
 }>;
 
