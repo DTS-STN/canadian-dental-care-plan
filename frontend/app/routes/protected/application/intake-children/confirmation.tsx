@@ -81,6 +81,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     contactInformationEmail: state.email,
     communicationSunLifePreference: appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale),
     communicationGOCPreference: appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale),
+    previouslyEnrolled: state.newOrReturningMember,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -280,6 +281,18 @@ export default function ProtectedNewChildrenConfirmation({ loaderData, params }:
                 <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
               </DefinitionListItem>
               <DefinitionListItem term={t('confirm.marital-status')}>{userInfo.maritalStatus}</DefinitionListItem>
+              {userInfo.previouslyEnrolled && (
+                <DefinitionListItem term={t('confirm.previously-enrolled-title')}>
+                  {userInfo.previouslyEnrolled.isNewOrReturningMember ? (
+                    <div className="space-y-3">
+                      <p>{t('confirm.yes')}</p>
+                      <p>{userInfo.previouslyEnrolled.memberId}</p>
+                    </div>
+                  ) : (
+                    <p>{t('confirm.no')}</p>
+                  )}
+                </DefinitionListItem>
+              )}
             </DefinitionList>
           </section>
 
