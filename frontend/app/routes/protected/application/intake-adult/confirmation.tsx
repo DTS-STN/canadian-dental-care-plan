@@ -74,7 +74,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryHome = await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale);
 
   const userInfo = {
-    memberId: state.applicantInformation.memberId,
+    memberId: state.newOrReturningMember ? state.newOrReturningMember.memberId : undefined,
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.phoneNumber.value.primary,
@@ -86,7 +86,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     contactInformationEmail: state.email,
     communicationSunLifePreference: appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale),
     communicationGOCPreference: appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale),
-    previouslyEnrolled: state.newOrReturningMember,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -254,18 +253,6 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
                 <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
               </DefinitionListItem>
               <DefinitionListItem term={t('confirm.marital-status')}>{userInfo.maritalStatus}</DefinitionListItem>
-              {userInfo.previouslyEnrolled && (
-                <DefinitionListItem term={t('confirm.previously-enrolled-title')}>
-                  {userInfo.previouslyEnrolled.isNewOrReturningMember ? (
-                    <>
-                      <p>{t('confirm.yes')}</p>
-                      <p>{userInfo.previouslyEnrolled.memberId}</p>
-                    </>
-                  ) : (
-                    <p>{t('confirm.no')}</p>
-                  )}
-                </DefinitionListItem>
-              )}
             </DefinitionList>
           </section>
 
