@@ -271,7 +271,8 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
       copyMailingAddress: !!isHomeAddressSameAsMailingAddress,
       ...this.toHomeAddress({ isHomeAddressSameAsMailingAddress, homeAddress, mailingAddress }),
       ...this.toMailingAddress(mailingAddress),
-      ...phoneNumber.value,
+      phoneNumber: phoneNumber.value.primary,
+      phoneNumberAlt: phoneNumber.value.alternate,
     };
   }
 
