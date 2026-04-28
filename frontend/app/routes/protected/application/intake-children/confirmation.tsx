@@ -69,7 +69,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryHome = await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale);
 
   const userInfo = {
-    memberId: shouldSkipNewOrReturningMember(state) ? state.newOrReturningMember?.memberId : undefined,
+    memberId: shouldSkipNewOrReturningMember(state) ? undefined : state.newOrReturningMember?.memberId,
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.phoneNumber.value.primary,
