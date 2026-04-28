@@ -176,9 +176,31 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             <CardTitle>{t('protected-application:your-application.new-or-returning-heading')}</CardTitle>
             <CardAction>{sections.newOrReturningMember?.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
-          {/* TODO: Need to confirm the value to be displayed for new or returning member*/}
           <CardContent>
-            {defaultState.newOrReturningMember?.isNewOrReturningMember === undefined ? <p>{t('protected-application:your-application.new-or-returning-description')}</p> : <p>{defaultState.newOrReturningMember.isNewOrReturningMember}</p>}
+            {defaultState.newOrReturningMember?.isNewOrReturningMember === undefined ? (
+              <p>{t('protected-application:your-application.new-or-returning-description')}</p>
+            ) : (
+              <>
+                {defaultState.newOrReturningMember.isNewOrReturningMember === false ? (
+                  <DefinitionList layout="single-column">
+                    <DefinitionListItem term={t('protected-application:your-application.previously-enrolled')}>
+                      <p>{t('protected-application:your-application.non')}</p>
+                    </DefinitionListItem>
+                  </DefinitionList>
+                ) : (
+                  <DefinitionList layout="single-column">
+                    <DefinitionListItem term={t('protected-application:your-application.previously-enrolled')}>
+                      <p>{t('protected-application:your-application.yes')}</p>
+                      <ul className="list-disc">
+                        <li className="ml-8">{defaultState.newOrReturningMember.memberId}</li>
+                      </ul>
+                    </DefinitionListItem>
+                    <DefinitionListItem term={t('protected-application:your-application.full-name')}>{`${defaultState.personalInformation?.firstName} ${defaultState.personalInformation?.lastName}`}</DefinitionListItem>
+                    <DefinitionListItem term={t('protected-application:your-application.date-of-birth')}>{formattedDateOfBirth}</DefinitionListItem>
+                  </DefinitionList>
+                )}
+              </>
+            )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
             <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus} size="lg">

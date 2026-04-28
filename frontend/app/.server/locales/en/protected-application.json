@@ -102,7 +102,10 @@
     "add-personal-information": "Add personal information",
     "edit-personal-information": "Edit personal information",
     "new-or-returning-heading": "New or returning member",
-    "new-or-returning-description": "Select whether or not you have a Member ID."
+    "new-or-returning-description": "Select whether or not you have a Member ID.",
+    "previously-enrolled": "Previously enrolled in Canadian Dental Care Plan",
+    "yes": "Yes",
+    "non": "Non"
   },
   "renewal-submitted": {
     "page-title": "Renewal application submitted",
