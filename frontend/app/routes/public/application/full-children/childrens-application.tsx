@@ -175,11 +175,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                 </CardHeader>
                 <CardContent>
                   {child.information === undefined ? (
-                    state.context === 'intake' ? (
-                      <p>{t('application-full-child:childrens-application.child-information-indicate-status')}</p>
-                    ) : (
-                      <p>{t('application-full-child:childrens-application.child-information-indicate-status-renewal')}</p>
-                    )
+                    <p>{t(`application-full-child:childrens-application.child-information-indicate.${state.context}`)}</p>
                   ) : (
                     <DefinitionList layout="single-column">
                       {child.information.memberId && <DefinitionListItem term={t('application-full-child:childrens-application.member-id-title')}>{child.information.memberId}</DefinitionListItem>}
