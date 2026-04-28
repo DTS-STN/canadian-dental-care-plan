@@ -1,0 +1,56 @@
+diff --git a/node_modules/zod/v4/core/util.cjs b/node_modules/zod/v4/core/util.cjs
+index c6bc2a7..c3044cd 100644
+--- a/node_modules/zod/v4/core/util.cjs
++++ b/node_modules/zod/v4/core/util.cjs
+@@ -204,20 +204,9 @@ exports.captureStackTrace = ("captureStackTrace" in Error ? Error.captureStackTr
+ function isObject(data) {
+     return typeof data === "object" && data !== null && !Array.isArray(data);
+ }
+-exports.allowsEval = cached(() => {
+-    // @ts-ignore
+-    if (typeof navigator !== "undefined" && navigator?.userAgent?.includes("Cloudflare")) {
+-        return false;
+-    }
+-    try {
+-        const F = Function;
+-        new F("");
+-        return true;
+-    }
+-    catch (_) {
+-        return false;
+-    }
+-});
++// patch zod to remove CSP violation
++// more info: https://github.com/getsentry/sentry/pull/112860
++exports.allowsEval = cached(() => false);
+ function isPlainObject(o) {
+     if (isObject(o) === false)
+         return false;
+diff --git a/node_modules/zod/v4/core/util.js b/node_modules/zod/v4/core/util.js
+index 3fc99ca..65441e0 100644
+--- a/node_modules/zod/v4/core/util.js
++++ b/node_modules/zod/v4/core/util.js
+@@ -147,20 +147,9 @@ export const captureStackTrace = ("captureStackTrace" in Error ? Error.captureSt
+ export function isObject(data) {
+     return typeof data === "object" && data !== null && !Array.isArray(data);
+ }
+-export const allowsEval = cached(() => {
+-    // @ts-ignore
+-    if (typeof navigator !== "undefined" && navigator?.userAgent?.includes("Cloudflare")) {
+-        return false;
+-    }
+-    try {
+-        const F = Function;
+-        new F("");
+-        return true;
+-    }
+-    catch (_) {
+-        return false;
+-    }
+-});
++// patch zod to remove CSP violation
++// more info: https://github.com/getsentry/sentry/pull/112860
++export const allowsEval = cached(() => false);
+ export function isPlainObject(o) {
+     if (isObject(o) === false)
+         return false;

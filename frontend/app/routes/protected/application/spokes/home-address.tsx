@@ -4,7 +4,7 @@ import { data, redirect, useFetcher } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/home-address';
 
@@ -223,7 +223,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
 
   useEffect(() => {
     setAddressDialogContent(isAddressResponse(fetcher.data) ? fetcher.data : null);
-  }, [fetcher, fetcher.data]);
+  }, [fetcher.data]);
 
   function onDialogOpenChangeHandler(open: boolean) {
     if (!open) {

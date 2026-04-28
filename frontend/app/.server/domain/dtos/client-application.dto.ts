@@ -39,7 +39,14 @@ export type ClientApplicationDto = ReadonlyDeep<{
 export type ClientApplicantInformationDto = Readonly<{
   firstName: string;
   lastName: string;
-  maritalStatus?: string; // optional because ITA clients initially have no marital status
+  /**
+   * Marital status of the client. This field is optional, as ITA clients may not have an initial marital status.
+   */
+  maritalStatus?: string;
+  /**
+   * The client’s Social Insurance Number (SIN). This may be empty if the data is mapped from an ApplicantDto,
+   * where the SIN is optional, particularly for some dependent applicants who are not required to provide a SIN.
+   */
   socialInsuranceNumber: string;
   clientId: string;
   clientNumber: string;

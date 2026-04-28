@@ -20,6 +20,7 @@ import type {
 import { maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import type {
   BaseApplicationAddressDeclaredChangeState,
+  BaseApplicationApplicantInformationState,
   BaseApplicationChildState,
   BaseApplicationCommunicationPreferencesDeclaredChangeState,
   BaseApplicationDentalBenefitsDeclaredChangeState,
@@ -31,6 +32,7 @@ import type {
 } from '~/.server/routes/helpers/base-application-route-helpers';
 
 export interface BenefitRenewalAdultState {
+  applicantInformation: BaseApplicationApplicantInformationState;
   applicationYear: BaseApplicationYearState;
   clientApplication?: ClientApplicationDto & { applicationCategoryCodeName: 'New' | 'Renewal' };
   phoneNumber: BaseApplicationPhoneNumberDeclaredChangeState;
@@ -48,6 +50,7 @@ export interface BenefitRenewalAdultState {
 }
 
 export interface BenefitRenewalFamilyState {
+  applicantInformation: BaseApplicationApplicantInformationState;
   applicationYear: BaseApplicationYearState;
   children: BaseApplicationChildState[];
   clientApplication?: ClientApplicationDto & { applicationCategoryCodeName: 'New' | 'Renewal' };
@@ -66,6 +69,7 @@ export interface BenefitRenewalFamilyState {
 }
 
 export interface BenefitRenewalChildState {
+  applicantInformation: BaseApplicationApplicantInformationState;
   applicationYear: BaseApplicationYearState;
   clientApplication?: ClientApplicationDto & { applicationCategoryCodeName: 'New' | 'Renewal' };
   children: BaseApplicationChildState[];
@@ -89,6 +93,7 @@ export interface BenefitRenewalStateMapper {
 
 interface ToApplicantInformationArgs {
   existingApplicantInformation: ReadonlyDeep<ClientApplicantInformationDto>;
+  renewedSocialInsuranceNumber: string;
   renewedMaritalStatus?: string;
 }
 
@@ -147,19 +152,20 @@ interface HasEmailChangedArgs {
 export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapper {
   mapBenefitRenewalAdultStateToBenefitRenewalDto(
     {
+      applicantInformation,
       applicationYear,
       clientApplication,
-      phoneNumber,
+      communicationPreferences,
       dentalBenefits,
       dentalInsurance,
+      email,
+      emailVerified,
       homeAddress,
       isHomeAddressSameAsMailingAddress,
       mailingAddress,
       maritalStatus,
       partnerInformation,
-      email,
-      emailVerified,
-      communicationPreferences,
+      phoneNumber,
       termsAndConditions,
     }: BenefitRenewalAdultState,
     userId: string = 'anonymous',
@@ -182,6 +188,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       ...clientApplication,
       applicantInformation: this.toApplicantInformation({
         existingApplicantInformation: clientApplication.applicantInformation,
+        renewedSocialInsuranceNumber: applicantInformation.socialInsuranceNumber,
         renewedMaritalStatus: maritalStatus,
       }),
       applicationYearId: applicationYear.applicationYearId,
@@ -225,6 +232,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
 
   mapBenefitRenewalFamilyStateToBenefitRenewalDto(
     {
+      applicantInformation,
       applicationYear,
       children,
       clientApplication,
@@ -255,6 +263,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       ...clientApplication,
       applicantInformation: this.toApplicantInformation({
         existingApplicantInformation: clientApplication.applicantInformation,
+        renewedSocialInsuranceNumber: applicantInformation.socialInsuranceNumber,
         renewedMaritalStatus: maritalStatus,
       }),
       applicationYearId: applicationYear.applicationYearId,
@@ -301,6 +310,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
 
   mapBenefitRenewalChildStateToBenefitRenewalDto(
     {
+      applicantInformation,
       applicationYear,
       children,
       clientApplication,
@@ -329,6 +339,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       ...clientApplication,
       applicantInformation: this.toApplicantInformation({
         existingApplicantInformation: clientApplication.applicantInformation,
+        renewedSocialInsuranceNumber: applicantInformation.socialInsuranceNumber,
         renewedMaritalStatus: maritalStatus,
       }),
       applicationYearId: applicationYear.applicationYearId,
@@ -381,14 +392,31 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     return emailVerified === true && email !== undefined && email.trim().length > 0 && email !== existingEmail;
   }
 
-  private toApplicantInformation({ existingApplicantInformation, renewedMaritalStatus }: ToApplicantInformationArgs): RenewalApplicantInformationDto {
+  /**
+   * Merges the existing applicant information with the renewed social insurance number and marital status to create a
+   * RenewalApplicantInformationDto for the renewal application. The existing first name, last name, client ID, and
+   * client number are retained. Marital status is used with the renewed values if provided. Social insurance number
+   * is used with the renewed value if the existing social insurance number is empty; otherwise, the existing social
+   * insurance number is retained.
+   *
+   * @param param0 - An object containing the existing applicant information, the renewed social insurance number, and the renewed marital status.
+   * @returns A RenewalApplicantInformationDto object containing the merged applicant information for the renewal application.
+   */
+  private toApplicantInformation({ existingApplicantInformation, renewedSocialInsuranceNumber, renewedMaritalStatus }: ToApplicantInformationArgs): RenewalApplicantInformationDto {
+    // If the renewed marital status is provided, use it. Otherwise, use the existing marital status.
+    const maritalStatus = renewedMaritalStatus ?? existingApplicantInformation.maritalStatus;
+
+    // If the existing social insurance number is empty, use the renewed social insurance number. Otherwise, use the
+    // existing social insurance number.
+    const socialInsuranceNumber = existingApplicantInformation.socialInsuranceNumber || renewedSocialInsuranceNumber;
+
     return {
-      firstName: existingApplicantInformation.firstName,
-      lastName: existingApplicantInformation.lastName,
-      maritalStatus: renewedMaritalStatus ?? existingApplicantInformation.maritalStatus,
-      socialInsuranceNumber: existingApplicantInformation.socialInsuranceNumber,
       clientId: existingApplicantInformation.clientId,
       clientNumber: existingApplicantInformation.clientNumber,
+      firstName: existingApplicantInformation.firstName,
+      lastName: existingApplicantInformation.lastName,
+      maritalStatus,
+      socialInsuranceNumber,
     };
   }
 

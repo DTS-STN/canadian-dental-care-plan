@@ -5,7 +5,7 @@ import { data, useFetcher, useLoaderData, useParams } from 'react-router';
 import { faCircleCheck, faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import z from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/parent-or-guardian';
 

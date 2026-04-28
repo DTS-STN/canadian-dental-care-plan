@@ -2,7 +2,7 @@ import { redirectDocument } from 'react-router';
 
 import { CompactEncrypt, SignJWT } from 'jose';
 import { subtle } from 'node:crypto';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/$';
 

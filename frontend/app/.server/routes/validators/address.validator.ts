@@ -1,5 +1,5 @@
 import validator from 'validator';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { ServerConfig } from '~/.server/configs';
 import type { InvalidResult, ValidResult } from '~/.server/routes/validators/types.validator';

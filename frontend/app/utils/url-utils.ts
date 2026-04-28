@@ -49,3 +49,13 @@ export function parseUrl(url: string | URL, base?: string | URL): ParseUrlResult
     return { success: false, error: error as TypeError };
   }
 }
+
+/**
+ * Removes the trailing slash from a URL path if it exists, except when the path is just "/".
+ *
+ * @param path - The URL path string to be processed.
+ * @returns A string representing the URL path without a trailing slash.
+ */
+export function removeTrailingSlash(path: string): string {
+  return path !== '/' && path.endsWith('/') ? path.slice(0, -1) : path;
+}

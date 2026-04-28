@@ -1,7 +1,7 @@
 /**
  * An API route that can be used to perform actions with user's protected application state.
  */
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { Route } from './+types/protected-application-state';
 

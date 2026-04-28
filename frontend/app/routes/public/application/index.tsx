@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useNavigate } from 'react-router';
+import { useNavigate, useNavigation } from 'react-router';
 
 import type { Route } from './+types/index';
 
@@ -14,6 +14,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { secondsToMilliseconds } from '~/utils/units.utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'gcweb'),
@@ -37,17 +38,39 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   return { id: state.id, locale, meta };
 }
 
+// Set a delay to ensure the loading state is visible before navigating to the next page.
+const NAVIGATION_DELAY_MS = secondsToMilliseconds(1);
+
 export default function PublicApplicationIndex({ loaderData, params }: Route.ComponentProps) {
   const { id } = loaderData;
 
+  const navigation = useNavigation();
   const navigate = useNavigate();
 
-  const path = getPathById('public/application/$id/eligibility-requirements', { ...params, id });
+  const isIdle = navigation.state === 'idle';
+  const eligibilityRequirementsPath = getPathById('public/application/$id/eligibility-requirements', { ...params, id });
 
   useEffect(() => {
     sessionStorage.setItem('flow.state', 'active');
-    void navigate(path, { replace: true });
-  }, [navigate, path]);
+
+    // Only navigate if the app is idle and no navigation timeout is already set (to prevent multiple timeouts from
+    // being set if the effect runs multiple times).
+    let navigateTimeout: NodeJS.Timeout | undefined;
+
+    if (isIdle && !navigateTimeout) {
+      navigateTimeout = setTimeout(() => {
+        // Use replace to avoid adding an extra entry in the history stack, preventing
+        // the user from going back to the loading page.
+        void navigate(eligibilityRequirementsPath, { replace: true });
+      }, NAVIGATION_DELAY_MS);
+    }
+
+    return () => {
+      if (navigateTimeout) {
+        clearTimeout(navigateTimeout);
+      }
+    };
+  }, [isIdle, navigate, eligibilityRequirementsPath]);
 
   return (
     <div className="max-w-prose animate-pulse space-y-8">

@@ -1,5 +1,5 @@
 import { assert, describe, expect, it } from 'vitest';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import { phoneSchema } from '~/.server/validation/phone-schema';
 

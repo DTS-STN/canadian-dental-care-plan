@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { UTCDate } from '@date-fns/utc';
 import { invariant } from '@dts-stn/invariant';
 import { differenceInYears, isExists, isPast } from 'date-fns';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import { padWithZero } from './string-utils';
 

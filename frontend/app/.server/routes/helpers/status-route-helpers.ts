@@ -1,6 +1,6 @@
 import { redirectDocument } from 'react-router';
 
-import { z } from 'zod';
+import * as z from 'zod';
 
 import { createLogger } from '~/.server/logging';
 import type { Session } from '~/.server/web/session';

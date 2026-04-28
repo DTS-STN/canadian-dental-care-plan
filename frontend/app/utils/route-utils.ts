@@ -4,7 +4,7 @@ import { generatePath, useMatches } from 'react-router';
 import { invariant } from '@dts-stn/invariant';
 import type { FlatNamespace, KeysByTOptions, Namespace, ParseKeysByNamespaces, TOptions } from 'i18next';
 import validator from 'validator';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import type { I18nPageRoute, I18nRoute, Language } from '~/routes/routes';
 import { i18nRoutes, isI18nLayoutRoute, isI18nPageRoute } from '~/routes/routes';

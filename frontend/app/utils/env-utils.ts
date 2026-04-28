@@ -1,5 +1,5 @@
 import type { ReadonlyDeep } from 'type-fest';
-import { z } from 'zod';
+import * as z from 'zod';
 
 import { isValidTimeZone } from '~/utils/date-utils';
 import { isValidExtension } from '~/utils/file.utils';
