@@ -6,7 +6,7 @@ import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationIntakeChildState } from '~/.server/routes/helpers/protected-application-intake-child-route-helpers';
-import { clearProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { clearProtectedApplicationState, shouldSkipNewOrReturningMember, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -69,7 +69,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryHome = await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale);
 
   const userInfo = {
-    memberId: state.newOrReturningMember ? state.newOrReturningMember.memberId : undefined,
+    memberId: shouldSkipNewOrReturningMember(state) ? state.newOrReturningMember?.memberId : undefined,
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.phoneNumber.value.primary,
