@@ -87,3 +87,10 @@ export function isTermsAndConditionsSectionCompleted(state: Pick<PublicApplicati
 export function isTaxFilingSectionCompleted(state: Pick<PublicApplicationState, 'hasFiledTaxes'>): boolean {
   return state.hasFiledTaxes === true;
 }
+
+/**
+ * Checks if the new or returning member section is completed.
+ */
+export function isNewOrReturningMemberSectionCompleted(state: Pick<PublicApplicationState, 'context' | 'applicantInformation' | 'livingIndependently' | 'newOrReturningMember'>): boolean {
+  return state.context === 'intake' && isPersonalInformationSectionCompleted(state) && state.newOrReturningMember?.isNewOrReturningMember !== undefined;
+}
