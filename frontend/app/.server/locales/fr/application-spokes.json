@@ -539,5 +539,20 @@
     "back-btn": "Retour",
     "exit-btn": "Quitter la demande",
     "exit-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
+  "new-or-returning-member": {
+    "page-title": "Nouveau membre ou membre existant",
+    "previously-enrolled": "Êtes-vous actuellement, ou avez-vous déjà été inscrit au Régime canadien de soins dentaires?",
+    "yes": "Oui",
+    "no": "Non",
+    "member-id": "Numéro d'identification du membre du Régime canadien de soins dentaires",
+    "member-id-description": "Vous trouverez votre numéro d'identification du membre à 11 chiffres dans le coin supérieur droit de la lettre de Service Canada ou sur votre carte de membre du Régime canadien de soins dentaires.",
+    "save-btn": "Sauvegarder",
+    "back-btn": "Retour",
+    "error-message": {
+      "is-new-or-existing-member-required": "(FR) Sélectionnez si vous avez déjà été inscrit au Régime canadien de soins dentaires",
+      "member-id-required": "Entrez le numéro d'identification du membre à 11 chiffres",
+      "member-id-valid": "Le numéro d'identification du membre doit comporter 11 chiffres"
+    }
   }
 }

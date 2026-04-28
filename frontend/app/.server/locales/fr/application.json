@@ -84,6 +84,11 @@
     "edit-type-application": "Modifier le type de demande",
     "add-personal-information": "Ajouter des renseignements personnels",
     "edit-personal-information": "Modifier des renseignements personnels",
-    "type-application-mismatch": "Le type de demande que vous avez sélectionné ne correspond pas aux renseignements que nous avons dans votre dossier. Veuillez choisir une autre option."
+    "type-application-mismatch": "Le type de demande que vous avez sélectionné ne correspond pas aux renseignements que nous avons dans votre dossier. Veuillez choisir une autre option.",
+    "new-or-returning-heading": "Nouvelle inscription ou membre actuel",
+    "new-or-returning-description": "Indiquez si vous possédez déjà un numéro d'identification de membre.",
+    "previously-enrolled": "Précédemment inscrit au Régime canadien de soins dentaires",
+    "yes": "Oui",
+    "non": "Non"
   }
 }

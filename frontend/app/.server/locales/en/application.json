@@ -84,6 +84,11 @@
     "edit-type-application": "Edit type of application",
     "add-personal-information": "Add personal information",
     "edit-personal-information": "Edit personal information",
-    "type-application-mismatch": "The type of application you selected doesn't match the information we have on file for you. Please choose another option."
+    "type-application-mismatch": "The type of application you selected doesn't match the information we have on file for you. Please choose another option.",
+    "new-or-returning-heading": "New or returning member",
+    "new-or-returning-description": "Select whether or not you have a Member ID.",
+    "previously-enrolled": "Previously enrolled in Canadian Dental Care Plan",
+    "yes": "Yes",
+    "non": "Non"
   }
 }
