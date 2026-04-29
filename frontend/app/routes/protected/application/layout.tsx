@@ -15,6 +15,7 @@ import { DebugPayload } from '~/components/debug-payload';
 import { KillswitchDialog } from '~/components/killswitch-dialog';
 import { i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/protected-layout';
 import SessionTimeout from '~/components/session-timeout';
+import { useApplicationFlowStorage } from '~/hooks';
 import { transformAdobeAnalyticsUrl } from '~/route-helpers/adobe-analytics-route-helpers';
 import { useApiProtectedApplicationState } from '~/utils/api-protected-application-state.utils';
 import { useApiSession } from '~/utils/api-session-utils';
@@ -63,22 +64,18 @@ export default function Layout({ loaderData, params }: Route.ComponentProps) {
   const navigate = useNavigate();
   const navigation = useNavigation();
 
+  const { enabled: applicationFlowStorageEnabled, value: applicationFlowStorageValue } = useApplicationFlowStorage();
+
   const isIdle = navigation.state === 'idle';
   const applicationIndexPath = getPathById('protected/application/index', params);
   const isOnIndexPage = removeTrailingSlash(location.pathname) === removeTrailingSlash(applicationIndexPath);
 
   useEffect(() => {
-    // Only proceed if the app is idle and not already on the index page
-    if (isIdle && !isOnIndexPage) {
-      // Check the current flow state in sessionStorage
-      const flowState = sessionStorage.getItem('flow.state');
-
-      // If the flow is not active, redirect to the index page and replace history entry to prevent going back
-      if (flowState !== 'active') {
-        void navigate(applicationIndexPath, { replace: true });
-      }
+    // Only proceed if the app is idle, not already on the index page, storage is enabled, and the storage value is not already 'active'.
+    if (isIdle && !isOnIndexPage && applicationFlowStorageEnabled && applicationFlowStorageValue !== 'active') {
+      void navigate(applicationIndexPath, { replace: true });
     }
-  }, [isIdle, isOnIndexPage, navigate, applicationIndexPath]);
+  }, [applicationFlowStorageEnabled, applicationFlowStorageValue, applicationIndexPath, isIdle, isOnIndexPage, navigate]);
 
   const apiProtectedApplicationState = useApiProtectedApplicationState();
   const apiSession = useApiSession();
