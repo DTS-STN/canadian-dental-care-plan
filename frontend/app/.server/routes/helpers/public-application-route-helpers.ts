@@ -748,7 +748,7 @@ export async function resolveSimplifiedStateChildDentalBenefitsValue(
  * The section is available only for intake applications after personal information is completed,
  * and when the applicant birth year is 2007 or later.
  *
- * @param state - The protected application state containing the applicant date of birth and living independently answer.
+ * @param state - The public application state containing the applicant date of birth and living independently answer.
  * @returns `true` when the section is available; otherwise, `false`.
  */
 export function isNewOrReturningMember(state: PickDeep<PublicApplicationState, 'context' | 'applicantInformation.dateOfBirth'>): boolean {

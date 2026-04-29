@@ -202,7 +202,7 @@ export const routes = [
           {
             id: 'public/application/$id/new-or-returning-member',
             file: 'routes/public/application/spokes/new-or-returning-member.tsx',
-            paths: { en: '/:lang/public/application/:id/new-or-returning-member', fr: '/:lang/public/demande/:id/membre-nouveau-ou-actuel' },
+            paths: { en: '/:lang/application/:id/new-or-returning-member', fr: '/:lang/demande/:id/membre-nouveau-ou-actuel' },
           },
           {
             id: 'public/application/$id/dental-insurance-exit-application',
