@@ -15,7 +15,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
-import { useCurrentLanguage } from '~/hooks';
+import { useApplicationFlowStorage, useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { formatClientNumber, formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
@@ -193,6 +193,7 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, children } = loaderData;
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('protected-application-intake-family:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
@@ -459,7 +460,7 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
             </DialogClose>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
-              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Close confirm modal click">
+              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => removeApplicationFlowStorageValue()} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Close confirm modal click">
                 {t('protected-application-intake-family:confirm.modal.close-btn')}
               </Button>
             </fetcher.Form>

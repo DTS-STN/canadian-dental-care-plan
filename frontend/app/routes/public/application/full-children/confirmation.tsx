@@ -15,7 +15,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
-import { useCurrentLanguage } from '~/hooks';
+import { useApplicationFlowStorage, useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { formatClientNumber, formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
@@ -170,6 +170,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function NewChildrenConfirmation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
+
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo, surveyLink, children } = loaderData;
 
@@ -420,7 +422,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
                 id="confirm-modal-close"
                 variant="primary"
                 size="sm"
-                onClick={() => sessionStorage.removeItem('flow.state')}
+                onClick={() => removeApplicationFlowStorageValue()}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Confirmation exit modal - Application successfully submitted click"
               >
                 {t('application-full-child:confirm.modal.close-btn')}

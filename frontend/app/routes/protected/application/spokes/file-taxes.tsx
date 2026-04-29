@@ -11,7 +11,7 @@ import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { InlineLink } from '~/components/inline-link';
 import { LoadingButton } from '~/components/loading-button';
-import { useFetcherSubmissionState } from '~/hooks';
+import { useApplicationFlowStorage, useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -54,6 +54,8 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplicationFileYourTaxes({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { taxYear } = loaderData;
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
+
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
@@ -62,7 +64,7 @@ export default function ApplicationFileYourTaxes({ loaderData, params }: Route.C
   async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     await fetcher.submit(event.currentTarget, { method: 'POST' });
-    sessionStorage.removeItem('flow.state');
+    removeApplicationFlowStorageValue();
   }
 
   return (

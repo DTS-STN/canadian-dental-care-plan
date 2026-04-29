@@ -15,6 +15,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
+import { useApplicationFlowStorage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { formatClientNumber, formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
@@ -147,6 +148,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink } = loaderData;
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('application-full-adult:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
@@ -373,7 +375,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
                 id="confirm-modal-close"
                 variant="primary"
                 size="sm"
-                onClick={() => sessionStorage.removeItem('flow.state')}
+                onClick={() => removeApplicationFlowStorageValue()}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Confirmation exit modal - Application successfully submitted click"
               >
                 {t('application-full-adult:confirm.modal.close-btn')}

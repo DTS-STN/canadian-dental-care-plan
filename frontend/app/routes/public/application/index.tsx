@@ -7,6 +7,7 @@ import type { Route } from './+types/index';
 import { TYPES } from '~/.server/constants';
 import { startApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { useApplicationFlowStorage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { getCurrentDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -46,12 +47,13 @@ export default function PublicApplicationIndex({ loaderData, params }: Route.Com
 
   const navigation = useNavigation();
   const navigate = useNavigate();
+  const { set: setApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const isIdle = navigation.state === 'idle';
   const eligibilityRequirementsPath = getPathById('public/application/$id/eligibility-requirements', { ...params, id });
 
   useEffect(() => {
-    sessionStorage.setItem('flow.state', 'active');
+    setApplicationFlowStorageValue('active');
 
     // Only navigate if the app is idle and no navigation timeout is already set (to prevent multiple timeouts from
     // being set if the effect runs multiple times).
@@ -70,7 +72,7 @@ export default function PublicApplicationIndex({ loaderData, params }: Route.Com
         clearTimeout(navigateTimeout);
       }
     };
-  }, [isIdle, navigate, eligibilityRequirementsPath]);
+  }, [setApplicationFlowStorageValue, eligibilityRequirementsPath, isIdle, navigate]);
 
   return (
     <div className="max-w-prose animate-pulse space-y-8">

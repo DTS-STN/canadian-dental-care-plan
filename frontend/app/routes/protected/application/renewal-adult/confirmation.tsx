@@ -26,6 +26,7 @@ import { DefinitionList, DefinitionListItem } from '~/components/definition-list
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { Eligibility } from '~/components/eligibility';
 import { InlineLink } from '~/components/inline-link';
+import { useApplicationFlowStorage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { formatClientNumber, formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
@@ -176,6 +177,7 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, eligibility, isSimplifiedRenewal } = loaderData;
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('protected-application-renewal-adult:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
@@ -412,7 +414,7 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
             </DialogClose>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
-              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Close confirm modal click">
+              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => removeApplicationFlowStorageValue()} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Close confirm modal click">
                 {t('protected-application-renewal-adult:confirm.modal.close-btn')}
               </Button>
             </fetcher.Form>

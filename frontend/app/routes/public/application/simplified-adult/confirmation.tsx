@@ -26,6 +26,7 @@ import { DefinitionList, DefinitionListItem } from '~/components/definition-list
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { Eligibility } from '~/components/eligibility';
 import { InlineLink } from '~/components/inline-link';
+import { useApplicationFlowStorage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { formatClientNumber, formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
@@ -175,6 +176,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, eligibility } = loaderData;
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('application-simplified-adult:confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
@@ -409,7 +411,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
                 id="confirm-modal-close"
                 variant="primary"
                 size="sm"
-                onClick={() => sessionStorage.removeItem('flow.state')}
+                onClick={() => removeApplicationFlowStorageValue()}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Confirmation exit modal - Application successfully submitted click"
               >
                 {t('application-simplified-adult:confirm.modal.close-btn')}
