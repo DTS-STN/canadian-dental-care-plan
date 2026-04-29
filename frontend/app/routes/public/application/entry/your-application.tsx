@@ -4,11 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/your-application';
 
-import { isNewOrReturningMemberSectionCompleted } from '~/.server/routes/helpers/public-application-entry-section-checks';
-import { getTypeOfApplicationSectionCompletionResult, isPersonalInformationSectionCompleted } from '~/.server/routes/helpers/public-application-entry-section-checks';
-import { shouldSkipNewOrReturningMember } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getTypeOfApplicationSectionCompletionResult, isNewOrReturningMemberSectionCompleted, isPersonalInformationSectionCompleted } from '~/.server/routes/helpers/public-application-entry-section-checks';
 import type { ApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getContextualAgeCategoryFromDate, getInitialApplicationFlowUrl, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getContextualAgeCategoryFromDate, getInitialApplicationFlowUrl, getPublicApplicationState, shouldSkipNewOrReturningMember } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
