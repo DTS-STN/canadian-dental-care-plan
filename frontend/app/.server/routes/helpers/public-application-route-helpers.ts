@@ -762,3 +762,22 @@ export function isNewOrReturningMember(state: PickDeep<PublicApplicationState, '
 export function shouldSkipNewOrReturningMember(state: PickDeep<PublicApplicationState, 'context' | 'applicantInformation.dateOfBirth' | 'livingIndependently'>): boolean {
   return !isNewOrReturningMember(state);
 }
+
+/**
+ * get the member ID for full application based on the application context.
+ *
+ * - For 'intake' context: returns the new-or-returning member's `memberId` when the new-or-returning
+ *   member section applies; otherwise returns `undefined`.
+ * - For 'renewal' context: returns the applicant's `memberId` from
+ *   `applicantInformation`.
+ *
+ * @param state - The public application state containing context, applicant information, and
+ *                optional new-or-returning member info.
+ * @returns The resolved member ID, or `undefined` if not available.
+ */
+export function getMemberIdForFullApplication(state: PickDeep<PublicApplicationState, 'context' | 'applicantInformation.dateOfBirth' | 'applicantInformation.memberId' | 'newOrReturningMember.memberId'>): string | undefined {
+  if (state.context === 'intake') {
+    return shouldSkipNewOrReturningMember(state) ? undefined : state.newOrReturningMember?.memberId;
+  }
+  return state.applicantInformation?.memberId;
+}
