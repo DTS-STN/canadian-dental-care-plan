@@ -564,7 +564,7 @@
     "save-btn": "Sauvegarder",
     "back-btn": "Retour",
     "error-message": {
-      "is-new-or-existing-member-required": "(FR) Sélectionnez si vous avez déjà été inscrit au Régime canadien de soins dentaires",
+      "is-new-or-existing-member-required": "Sélectionnez si vous êtes actuellement, ou vous avez déjà été inscrit au Programme canadien de soins dentaires",
       "member-id-required": "Entrez le numéro d'identification du membre à 11 chiffres",
       "member-id-valid": "Le numéro d'identification du membre doit comporter 11 chiffres"
     }

@@ -200,6 +200,11 @@ export const routes = [
           { id: 'public/application/$id/marital-status', file: 'routes/public/application/spokes/marital-status.tsx', paths: { en: '/:lang/application/:id/marital-status', fr: '/:lang/demande/:id/etat-civil' } },
           { id: 'public/application/$id/dental-insurance', file: 'routes/public/application/spokes/dental-insurance.tsx', paths: { en: '/:lang/application/:id/dental-insurance', fr: '/:lang/demande/:id/assurance-dentaire' } },
           {
+            id: 'public/application/$id/new-or-returning-member',
+            file: 'routes/public/application/spokes/new-or-returning-member.tsx',
+            paths: { en: '/:lang/application/:id/new-or-returning-member', fr: '/:lang/demande/:id/membre-nouveau-ou-actuel' },
+          },
+          {
             id: 'public/application/$id/dental-insurance-exit-application',
             file: 'routes/public/application/spokes/dental-insurance-exit-application.tsx',
             paths: { en: '/:lang/application/:id/dental-insurance-exit-application', fr: '/:lang/demande/:id/quitter-demande-assurance-dentaire' },

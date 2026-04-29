@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/your-application';
 
-import { getTypeOfApplicationSectionCompletionResult, isPersonalInformationSectionCompleted } from '~/.server/routes/helpers/public-application-entry-section-checks';
+import { getTypeOfApplicationSectionCompletionResult, isNewOrReturningMemberSectionCompleted, isPersonalInformationSectionCompleted } from '~/.server/routes/helpers/public-application-entry-section-checks';
 import type { ApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getContextualAgeCategoryFromDate, getInitialApplicationFlowUrl, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getContextualAgeCategoryFromDate, getInitialApplicationFlowUrl, getPublicApplicationState, shouldSkipNewOrReturningMember } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
@@ -44,6 +44,8 @@ export async function loader({ context: { appContainer, session }, request, para
   const typeOfApplicationSectionCompletionResult = getTypeOfApplicationSectionCompletionResult(state);
 
   const ageCategory = state.applicantInformation?.dateOfBirth ? getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context) : undefined;
+  const shouldSkipNewOrReturningMemberStep = shouldSkipNewOrReturningMember(state);
+  const showNewOrReturningMemberSection = !shouldSkipNewOrReturningMemberStep;
 
   return {
     defaultState: {
@@ -52,20 +54,23 @@ export async function loader({ context: { appContainer, session }, request, para
       typeOfApplication: state.typeOfApplication,
       personalInformation: state.applicantInformation,
       livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
+      newOrReturningMember: state.newOrReturningMember,
     },
     isRenewalContext: state.context === 'renewal',
     nextRouteId,
+    showNewOrReturningMemberSection,
     typeOfApplicationSectionCompletionResult,
     sections: {
       typeOfApplication: { completed: typeOfApplicationSectionCompletionResult === 'COMPLETED' },
       personalInformation: { completed: isPersonalInformationSectionCompleted(state) },
+      ...(shouldSkipNewOrReturningMemberStep ? {} : { newOrReturningMember: { completed: isNewOrReturningMemberSectionCompleted(state) } }),
     },
     meta,
   };
 }
 
 export default function TypeOfApplication({ loaderData, params }: Route.ComponentProps) {
-  const { defaultState, isRenewalContext, nextRouteId, sections, typeOfApplicationSectionCompletionResult } = loaderData;
+  const { defaultState, isRenewalContext, nextRouteId, sections, showNewOrReturningMemberSection, typeOfApplicationSectionCompletionResult } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   function getTypeOfApplication(typeOfApplication: string) {
@@ -192,6 +197,46 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           </CardFooter>
         )}
       </Card>
+
+      {showNewOrReturningMemberSection && (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('application:your-application.new-or-returning-heading')}</CardTitle>
+            <CardAction>{sections.newOrReturningMember?.completed && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>
+            {defaultState.newOrReturningMember?.isNewOrReturningMember === undefined ? (
+              <p>{t('application:your-application.new-or-returning-description')}</p>
+            ) : (
+              <>
+                {defaultState.newOrReturningMember.isNewOrReturningMember === false ? (
+                  <DefinitionList layout="single-column">
+                    <DefinitionListItem term={t('application:your-application.previously-enrolled')}>
+                      <p>{t('application:your-application.non')}</p>
+                    </DefinitionListItem>
+                  </DefinitionList>
+                ) : (
+                  <DefinitionList layout="single-column">
+                    <DefinitionListItem term={t('application:your-application.previously-enrolled')}>
+                      <p>{t('application:your-application.yes')}</p>
+                      <ul className="list-disc">
+                        <li className="ml-8">{defaultState.newOrReturningMember.memberId}</li>
+                      </ul>
+                    </DefinitionListItem>
+                    <DefinitionListItem term={t('application:your-application.full-name')}>{`${defaultState.personalInformation?.firstName} ${defaultState.personalInformation?.lastName}`}</DefinitionListItem>
+                    <DefinitionListItem term={t('application:your-application.date-of-birth')}>{formattedDate}</DefinitionListItem>
+                  </DefinitionList>
+                )}
+              </>
+            )}
+          </CardContent>
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus} size="lg">
+              {defaultState.newOrReturningMember === undefined ? t('application:your-application.add-answer') : t('application:your-application.edit-answer')}
+            </ButtonLink>
+          </CardFooter>
+        </Card>
+      )}
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Continue click">
