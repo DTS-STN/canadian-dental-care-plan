@@ -233,7 +233,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus} size="lg">
+            <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus} size="lg">
               {defaultState.newOrReturningMember === undefined ? t('application:your-application.add-answer') : t('application:your-application.edit-answer')}
             </ButtonLink>
           </CardFooter>
