@@ -1,3 +1,5 @@
+import validator from 'validator';
+
 import { isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ProtectedApplicationChildState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
@@ -39,7 +41,7 @@ export function isCommunicationPreferencesSectionCompleted(state: Pick<Protected
  * Checks if the email section is completed for intake application.
  */
 export function isEmailSectionCompleted(state: Pick<ProtectedApplicationState, 'email' | 'emailVerified'>): boolean {
-  return state.email !== undefined && state.emailVerified === true;
+  return state.email !== undefined && validator.isEmail(state.email) && state.emailVerified === true;
 }
 
 /**
