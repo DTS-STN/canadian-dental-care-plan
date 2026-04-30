@@ -59,6 +59,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:email.page-title') }) };
   return {
     defaultState: state.email,
+    applicationFlow: `${state.context}-${state.typeOfApplication}` as const,
     meta,
   };
 }
@@ -132,7 +133,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplicationEmail({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState } = loaderData;
+  const { defaultState, applicationFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
@@ -170,7 +171,7 @@ export default function ApplicationEmail({ loaderData, params }: Route.Component
             <ButtonLink
               id="back-button"
               variant="secondary"
-              routeId="protected/application/$id/communication-preferences"
+              routeId={getRouteFromApplicationFlow(applicationFlow)}
               params={params}
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Email click"

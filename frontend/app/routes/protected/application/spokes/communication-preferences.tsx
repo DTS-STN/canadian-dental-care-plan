@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { data, useFetcher, useNavigate } from 'react-router';
 
@@ -95,7 +95,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const applicationFlow: ApplicationFlow = `${state.context}-${state.typeOfApplication}`;
 
-  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
+  const { COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 
   // state validation schema
   const communicationPreferencesSchema = z.object({
@@ -127,11 +127,6 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  if (parsedDataResult.data.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID) {
-    const redirectUrl = getPathById('protected/application/$id/email', params);
-    return { success: true, redirectUrl, revalidate: false };
-  }
-
   const redirectUrl = getPathById(getRouteFromApplicationFlow(applicationFlow), params);
   return { success: true, redirectUrl, revalidate: false };
 }
@@ -139,7 +134,6 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ApplicationSpokeCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, applicationFlow, sunLifeCommunicationMethods, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID } = loaderData;
-  const [preferredMethod, setPreferredMethod] = useState(defaultState?.preferredMethod ?? COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID);
 
   const navigate = useNavigate();
   const fetcher = useFetcher<typeof action>();
@@ -173,7 +167,6 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
 
         getCheckedValue('preferredLanguage', 'preferred-language');
         getCheckedValue('preferredMethod', 'preferred-method-sunlife');
-        getCheckedValue('preferredNotificationMethod', 'preferred-method-government-of-canada');
 
         adobeAnalytics.pushFormSubmitEvent(formName, formValues);
       }
@@ -200,7 +193,6 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
       value: method.id,
       children,
       defaultChecked: defaultState ? defaultState.preferredMethod === method.id : method.id === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
-      onChange: (e) => setPreferredMethod(e.target.value),
       'data-gc-analytics-value': method.code,
     };
   });
@@ -226,8 +218,8 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
             />
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmittingOrSuccess} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Communication preferences click">
-              {preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID ? t('protected-application-spokes:communication-preferences.continue') : t('protected-application-spokes:communication-preferences.save')}
+            <LoadingButton variant="primary" id="save-button" loading={isSubmittingOrSuccess} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Communication preferences click">
+              {t('protected-application-spokes:communication-preferences.save')}
             </LoadingButton>
             <ButtonLink
               id="back-button"

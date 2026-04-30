@@ -6,7 +6,7 @@ import type { Route } from './+types/contact-information';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationIntakeFamilyState } from '~/.server/routes/helpers/protected-application-intake-family-route-helpers';
-import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-intake-section-checks';
+import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isEmailSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-intake-section-checks';
 import { validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
@@ -76,6 +76,7 @@ export async function loader({ context: { appContainer, session }, request, para
       phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
       address: { completed: isAddressSectionCompleted(state) },
       communicationPreferences: { completed: isCommunicationPreferencesSectionCompleted(state) },
+      email: { completed: isEmailSectionCompleted(state) },
     },
     meta,
   };
@@ -211,6 +212,30 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Edit comms click"
             >
               {sections.communicationPreferences.completed ? t('protected-application-intake-family:contact-information.edit-communication-preferences') : t('protected-application-intake-family:contact-information.add-communication-preferences')}
+            </ButtonLink>
+          </CardFooter>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle asChild>
+              <h2>{t('protected-application-intake-family:contact-information.email')}</h2>
+            </CardTitle>
+            <CardAction>{sections.email.completed && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>{state.email === undefined ? <p>{t('protected-application-intake-family:contact-information.email-help')}</p> : <p>{state.email}</p>}</CardContent>
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink
+              id="edit-email-button"
+              variant="link"
+              className="p-0"
+              routeId="protected/application/$id/email"
+              params={params}
+              startIcon={sections.email.completed ? faPenToSquare : faCirclePlus}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Edit email click"
+            >
+              {sections.email.completed ? t('protected-application-intake-family:contact-information.edit-email') : t('protected-application-intake-family:contact-information.add-email')}
             </ButtonLink>
           </CardFooter>
         </Card>
