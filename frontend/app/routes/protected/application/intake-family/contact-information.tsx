@@ -72,7 +72,6 @@ export async function loader({ context: { appContainer, session }, request, para
     homeAddressInfo,
     preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     preferredMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale) : undefined,
-    preferredNotificationMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale) : undefined,
     sections: {
       phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
       address: { completed: isAddressSectionCompleted(state) },
@@ -83,7 +82,7 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export default function NewFamilyContactInformation({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, sections } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
@@ -194,7 +193,6 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t('protected-application-intake-family:contact-information.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
                 <DefinitionListItem term={t('protected-application-intake-family:contact-information.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
-                <DefinitionListItem term={t('protected-application-intake-family:contact-information.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
                 {state.email && <DefinitionListItem term={t('protected-application-intake-family:contact-information.email')}>{state.email}</DefinitionListItem>}
               </DefinitionList>
             ) : (

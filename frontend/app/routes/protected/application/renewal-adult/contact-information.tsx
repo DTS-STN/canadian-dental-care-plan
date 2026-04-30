@@ -58,7 +58,6 @@ export async function loader({ context: { appContainer, session }, request, para
   const languageService = appContainer.get(TYPES.LanguageService);
   const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
   const sunLifeCommunicationMethodService = appContainer.get(TYPES.SunLifeCommunicationMethodService);
-  const gcCommunicationMethodService = appContainer.get(TYPES.GCCommunicationMethodService);
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 
   return {
@@ -75,7 +74,6 @@ export async function loader({ context: { appContainer, session }, request, para
         ? {
             preferredLanguage: languageService.getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale).name,
             preferredMethod: sunLifeCommunicationMethodService.getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale).name,
-            preferredNotificationMethod: gcCommunicationMethodService.getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale).name,
           }
         : undefined,
       mailingAddress: state.mailingAddress?.hasChanged
@@ -118,7 +116,6 @@ export async function loader({ context: { appContainer, session }, request, para
           ? {
               preferredLanguage: languageService.getLocalizedLanguageById(state.clientApplication.communicationPreferences.preferredLanguage, locale).name,
               preferredMethod: sunLifeCommunicationMethodService.getLocalizedSunLifeCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethodSunLife, locale).name,
-              preferredNotificationMethod: gcCommunicationMethodService.getLocalizedGCCommunicationMethodById(state.clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada, locale).name,
             }
           : undefined,
       mailingAddress: state.clientApplication.contactInformation.mailingAddress.country
@@ -650,7 +647,6 @@ function CommunicationPreferencesCardContent(): JSX.Element {
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.preferred-language')}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
           <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.preferred-method')}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
-          <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.preferred-notification-method')}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
           {state.email && <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.email')}>{state.email}</DefinitionListItem>}
         </DefinitionList>
       </CardContent>
@@ -663,7 +659,6 @@ function CommunicationPreferencesCardContent(): JSX.Element {
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.preferred-language')}>{clientApplication.communicationPreferences.preferredLanguage}</DefinitionListItem>
           <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.preferred-method')}>{clientApplication.communicationPreferences.preferredMethod}</DefinitionListItem>
-          <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.preferred-notification-method')}>{clientApplication.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
           {clientApplication.email && <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.email')}>{clientApplication.email}</DefinitionListItem>}
         </DefinitionList>
       </CardContent>

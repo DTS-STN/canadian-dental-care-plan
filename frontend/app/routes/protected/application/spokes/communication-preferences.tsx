@@ -10,14 +10,13 @@ import type { Route } from './+types/communication-preferences';
 
 import { TYPES } from '~/.server/constants';
 import { getProtectedApplicationState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
-import type { ApplicationFlow, ProtectedApplicationCommunicationPreferencesState } from '~/.server/routes/helpers/protected-application-route-helpers';
+import type { ApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
 import { ErrorSummaryProvider } from '~/components/error-summary-context';
-import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
@@ -102,13 +101,11 @@ export async function action({ context: { appContainer, session }, params, reque
   const communicationPreferencesSchema = z.object({
     preferredLanguage: z.string().trim().min(1, t('protected-application-spokes:communication-preferences.error-message.preferred-language-required')),
     preferredMethod: z.string().trim().min(1, t('protected-application-spokes:communication-preferences.error-message.preferred-method-required')),
-    preferredNotificationMethod: z.string().trim().min(1, t('protected-application-spokes:communication-preferences.error-message.preferred-notification-method-required')),
-  }) satisfies z.ZodType<ProtectedApplicationCommunicationPreferencesState>;
+  });
 
   const parsedDataResult = communicationPreferencesSchema.safeParse({
     preferredLanguage: String(formData.get('preferredLanguage') ?? ''),
     preferredMethod: String(formData.get('preferredMethod') ?? ''),
-    preferredNotificationMethod: String(formData.get('preferredNotificationMethod') ?? ''),
   });
 
   if (!parsedDataResult.success) {
@@ -124,13 +121,13 @@ export async function action({ context: { appContainer, session }, params, reque
         value: {
           preferredLanguage: parsedDataResult.data.preferredLanguage,
           preferredMethod: parsedDataResult.data.preferredMethod,
-          preferredNotificationMethod: parsedDataResult.data.preferredNotificationMethod,
+          preferredNotificationMethod: COMMUNICATION_METHOD_GC_DIGITAL_ID,
         },
       },
     },
   });
 
-  if (parsedDataResult.data.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || parsedDataResult.data.preferredNotificationMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
+  if (parsedDataResult.data.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID) {
     const redirectUrl = getPathById('protected/application/$id/email', params);
     return { success: true, redirectUrl, revalidate: false };
   }
@@ -141,9 +138,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplicationSpokeCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, applicationFlow, gcCommunicationMethods, sunLifeCommunicationMethods, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = loaderData;
+  const { defaultState, applicationFlow, sunLifeCommunicationMethods, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID } = loaderData;
   const [preferredMethod, setPreferredMethod] = useState(defaultState?.preferredMethod ?? COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID);
-  const [preferredNotification, setPreferredNotification] = useState(defaultState?.preferredNotificationMethod ?? COMMUNICATION_METHOD_GC_DIGITAL_ID);
 
   const navigate = useNavigate();
   const fetcher = useFetcher<typeof action>();
@@ -151,8 +147,6 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const success = fetcher.data && 'success' in fetcher.data && fetcher.data.success === true;
   const redirectUrl = fetcher.data && 'redirectUrl' in fetcher.data ? fetcher.data.redirectUrl : undefined;
-
-  const mscaLinkAccount = <InlineLink to={t('protected-application-spokes:communication-preferences.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
 
   // Consider the form to be in a submitting or successful state if it's currently being submitted or if it has been
   // successfully submitted to prevent multiple submissions and navigating away from the page while the form is being submitted
@@ -211,28 +205,6 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
     };
   });
 
-  const gcCommunicationMethodOptions: InputRadiosProps['options'] = gcCommunicationMethods.map((method) => {
-    let children: ReactNode = <span className="font-semibold">{method.name}</span>;
-
-    if (method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
-      children = (
-        <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:communication-preferences.preferred-notification-method-msca" values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />
-      );
-    } else if (method.id === COMMUNICATION_METHOD_GC_MAIL_ID) {
-      children = (
-        <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:communication-preferences.preferred-notification-method-mail" values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />
-      );
-    }
-
-    return {
-      value: method.id,
-      children,
-      defaultChecked: defaultState ? defaultState.preferredNotificationMethod === method.id : method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID,
-      onChange: (e) => setPreferredNotification(e.target.value),
-      'data-gc-analytics-value': method.code,
-    };
-  });
-
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
       <div className="max-w-prose">
@@ -252,20 +224,10 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
               errorMessage={errors?.preferredMethod}
               required
             />
-            <InputRadios
-              id="preferred-method-gc"
-              name="preferredNotificationMethod"
-              legend={t('protected-application-spokes:communication-preferences.preferred-notification-method')}
-              options={gcCommunicationMethodOptions}
-              required
-              errorMessage={errors?.preferredNotificationMethod}
-            />
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="continue-button" loading={isSubmittingOrSuccess} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Communication preferences click">
-              {preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || preferredNotification === COMMUNICATION_METHOD_GC_DIGITAL_ID
-                ? t('protected-application-spokes:communication-preferences.continue')
-                : t('protected-application-spokes:communication-preferences.save')}
+              {preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID ? t('protected-application-spokes:communication-preferences.continue') : t('protected-application-spokes:communication-preferences.save')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
