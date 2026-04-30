@@ -650,7 +650,6 @@ function CommunicationPreferencesCardContent(): JSX.Element {
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.preferred-language')}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
           <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.preferred-method')}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
-          <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.preferred-notification-method')}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
           {state.email && <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.email')}>{state.email}</DefinitionListItem>}
         </DefinitionList>
       </CardContent>
@@ -663,7 +662,6 @@ function CommunicationPreferencesCardContent(): JSX.Element {
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.preferred-language')}>{clientApplication.communicationPreferences.preferredLanguage}</DefinitionListItem>
           <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.preferred-method')}>{clientApplication.communicationPreferences.preferredMethod}</DefinitionListItem>
-          <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.preferred-notification-method')}>{clientApplication.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
           {clientApplication.email && <DefinitionListItem term={t('protected-application-renewal-adult:contact-information.email')}>{clientApplication.email}</DefinitionListItem>}
         </DefinitionList>
       </CardContent>

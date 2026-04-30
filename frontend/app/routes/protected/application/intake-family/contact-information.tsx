@@ -83,7 +83,7 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export default function NewFamilyContactInformation({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, sections } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
@@ -194,7 +194,6 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t('protected-application-intake-family:contact-information.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
                 <DefinitionListItem term={t('protected-application-intake-family:contact-information.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
-                <DefinitionListItem term={t('protected-application-intake-family:contact-information.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
                 {state.email && <DefinitionListItem term={t('protected-application-intake-family:contact-information.email')}>{state.email}</DefinitionListItem>}
               </DefinitionList>
             ) : (
