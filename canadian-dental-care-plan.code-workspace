@@ -15,7 +15,7 @@
   ],
   "settings": {
     "files.trimTrailingWhitespace": true,
-    "tailwindCSS.classFunctions": ["cva", "cx"],
+    "tailwindCSS.classFunctions": ["clsx", "cn", "cva"],
     "tailwindCSS.experimental.configFile": "frontend/app/tailwind.css"
   }
 }

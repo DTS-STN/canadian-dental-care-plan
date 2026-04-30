@@ -9,7 +9,7 @@ describe('cn function tests', () => {
   });
 
   it('should merge class names correctly', () => {
-    const result = cn('px-2 py-1 bg-red hover:bg-dark-red', 'p-3 bg-[#B91C1C]');
+    const result = cn('bg-red hover:bg-dark-red px-2 py-1', 'bg-[#B91C1C] p-3');
     expect(result).toEqual('hover:bg-dark-red p-3 bg-[#B91C1C]');
   });
 
