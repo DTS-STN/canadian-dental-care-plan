@@ -1,19 +1,13 @@
 {
-  "[javascript][json][jsonc][typescript][typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.tabSize": 2
-  },
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.removeUnusedImports": "explicit",
-    // rely on prettier to sort imports
-    "source.sortImports": "never"
+    "source.fixAll.eslint": "always",
+    "source.fixAll.prettier": "always"
   },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
   // always import files from the root (~) of the project
   "js/ts.preferences.importModuleSpecifier": "non-relative",
-  // Only format when Prettier config is present
-  "prettier.requireConfig": true,
   // Tailwind Regex List
   // see: https://github.com/paolotiu/tailwind-intellisense-regex-list?tab=readme-ov-file#classnames
   "tailwindCSS.experimental.classRegex": [
