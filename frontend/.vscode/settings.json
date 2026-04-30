@@ -10,11 +10,16 @@
     // rely on prettier to sort imports
     "source.sortImports": "never"
   },
+  // always import files from the root (~) of the project
+  "js/ts.preferences.importModuleSpecifier": "non-relative",
+  // Only format when Prettier config is present
+  "prettier.requireConfig": true,
   // Tailwind Regex List
   // see: https://github.com/paolotiu/tailwind-intellisense-regex-list?tab=readme-ov-file#classnames
   "tailwindCSS.experimental.classRegex": [
     ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
     ["cn\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+    ["cva\\(([^;]*)[\\);]", "[`'\"`]([^'\"`;]*)[`'\"`]"],
     [
       // JavaScript string that likely contains tailwind classes.
       // This regex looks for lines of JavaScript code that:
@@ -29,7 +34,5 @@
     // https://github.com/paolotiu/tailwind-intellisense-regex-list/pull/44
     ["(?:\\b(?:const|let|var)\\s+)?[\\w$_]*(?:[Ss]tyles|[Cc]lasses|[Cc]lassnames)[\\w\\d]*\\s*=\\s*{([\\s\\S]*?)}", "\\s?[\\w].*:\\s*?[\"'`]([^\"'`]*).*?,?\\s?"]
   ],
-  // always import files from the root (~) of the project
-  "typescript.preferences.importModuleSpecifier": "non-relative",
   "vitest.disableWorkspaceWarning": true
 }
