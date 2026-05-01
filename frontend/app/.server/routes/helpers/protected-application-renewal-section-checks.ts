@@ -1,4 +1,5 @@
 import type { PickDeep } from 'type-fest';
+import validator from 'validator';
 
 import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import { isChildClientNumberValid, isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
@@ -62,6 +63,13 @@ export function isAddressSectionCompleted(
  */
 export function isCommunicationPreferencesSectionCompleted(state: Pick<ProtectedApplicationState, 'communicationPreferences'>): boolean {
   return state.communicationPreferences !== undefined;
+}
+
+/**
+ * Checks if the email section is completed for renewal application.
+ */
+export function isEmailSectionCompleted(state: Pick<ProtectedApplicationState, 'email' | 'emailVerified'>): boolean {
+  return state.email !== undefined && validator.isEmail(state.email) && state.emailVerified === true;
 }
 
 /**

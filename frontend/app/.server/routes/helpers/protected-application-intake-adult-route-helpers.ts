@@ -1,5 +1,7 @@
 import { redirect } from 'react-router';
 
+import validator from 'validator';
+
 import { createLogger } from '~/.server/logging';
 import { getAllowedTypeOfApplication, maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationStateParams, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
@@ -153,11 +155,7 @@ export function validateProtectedApplicationIntakeAdultStateForReview({ params, 
     throw redirect(getPathById('protected/application/$id/intake-adult/contact-information', params));
   }
 
-  if (email === undefined) {
-    throw redirect(getPathById('protected/application/$id/intake-adult/contact-information', params));
-  }
-
-  if (email && !emailVerified) {
+  if (!email || !validator.isEmail(email) || !emailVerified) {
     throw redirect(getPathById('protected/application/$id/intake-adult/contact-information', params));
   }
 
