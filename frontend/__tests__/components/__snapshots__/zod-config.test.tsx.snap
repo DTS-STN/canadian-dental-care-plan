@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ZodConfig component > should render the ZodConfig component correctly > expected html 1`] = `
+<div>
+  <script
+    nonce="test-nonce"
+  >
+    globalThis.__zod_globalConfig = Object.assign(globalThis.__zod_globalConfig ?? {}, {"jitless":true});
+  </script>
+</div>
+`;
