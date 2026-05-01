@@ -264,13 +264,13 @@
   "living-independently": {
     "page-title": "Personne vivant de manière indépendante",
     "description": "Vivre de manière indépendante de vos parents signifie que vous avez 16 ou 17 ans, que vous ne recevez pas d'aide financière de vos parents et que votre résidence principale est différente de la leur.",
-    "form-instructions": "Vivez-vous de manière indépendante de vos parents?",
+    "form-instructions": "Vivez-vous indépendamment de vos parents?",
     "radio-options": {
       "yes": "Oui",
       "no": "Non"
     },
     "error-message": {
-      "living-independently-required": "Sélectionnez si vous vivez de manière indépendante de vos parents"
+      "living-independently-required": "Sélectionnez si vous vivez indépendamment de vos parents"
     },
     "back-btn": "Retour",
     "save-btn": "Sauvegarder"
