@@ -64,9 +64,7 @@ export function isCommunicationPreferencesSectionCompleted(state: Pick<Protected
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
   return (
     state.communicationPreferences !== undefined &&
-    (state.communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || state.communicationPreferences.value?.preferredNotificationMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID
-      ? state.email !== undefined && state.emailVerified === true
-      : true)
+    (state.communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || state.communicationPreferences.value?.preferredNotificationMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID)
   );
 }
 

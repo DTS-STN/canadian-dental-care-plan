@@ -139,6 +139,11 @@
         "IdentificationID": "98f8ad43-4069-ee11-9ae7-000d3a09d1b8",
         "IdentificationCategoryText": "Application Year ID"
       },
+      "BenefitEligibilityStatus": {
+        "StatusCode": {
+          "ReferenceDataID": "775170000"
+        }
+      },
       "ClientIdentification": [
         {
           "IdentificationID": "1e97fe42-0263-ee11-8df0-000d3a09df08",

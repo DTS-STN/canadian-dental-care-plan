@@ -4,7 +4,6 @@ import { createLogger } from '~/.server/logging';
 import { getAllowedTypeOfApplication, maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationStateParams, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getContextualAgeCategoryFromDate, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
@@ -96,8 +95,6 @@ export function validateProtectedApplicationIntakeAdultStateForReview({ params, 
     newOrReturningMember,
   } = state;
 
-  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
-
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('protected/application/$id/eligibility-requirements', params));
   }
@@ -156,7 +153,11 @@ export function validateProtectedApplicationIntakeAdultStateForReview({ params, 
     throw redirect(getPathById('protected/application/$id/intake-adult/contact-information', params));
   }
 
-  if ((communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) && !emailVerified) {
+  if (email === undefined) {
+    throw redirect(getPathById('protected/application/$id/intake-adult/contact-information', params));
+  }
+
+  if (email && !emailVerified) {
     throw redirect(getPathById('protected/application/$id/intake-adult/contact-information', params));
   }
 

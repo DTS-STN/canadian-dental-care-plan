@@ -155,7 +155,11 @@ export function validateProtectedRenewAdultStateForReview({ params, state }: Val
     throw redirect(getPathById('protected/application/$id/renewal-adult/contact-information', params));
   }
 
-  if ((communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) && !emailVerified) {
+  if (email === undefined) {
+    throw redirect(getPathById('protected/application/$id/renewal-adult/contact-information', params));
+  }
+
+  if (email && !emailVerified) {
     throw redirect(getPathById('protected/application/$id/renewal-adult/contact-information', params));
   }
 
