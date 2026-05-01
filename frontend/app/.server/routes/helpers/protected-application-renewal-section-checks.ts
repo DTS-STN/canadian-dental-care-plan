@@ -60,12 +60,8 @@ export function isAddressSectionCompleted(
 /**
  * Checks if the communication preferences section is completed for renewal application.
  */
-export function isCommunicationPreferencesSectionCompleted(state: Pick<ProtectedApplicationState, 'communicationPreferences' | 'email' | 'emailVerified'>): boolean {
-  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
-  return (
-    state.communicationPreferences !== undefined &&
-    (state.communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || state.communicationPreferences.value?.preferredNotificationMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID)
-  );
+export function isCommunicationPreferencesSectionCompleted(state: Pick<ProtectedApplicationState, 'communicationPreferences'>): boolean {
+  return state.communicationPreferences !== undefined;
 }
 
 /**
