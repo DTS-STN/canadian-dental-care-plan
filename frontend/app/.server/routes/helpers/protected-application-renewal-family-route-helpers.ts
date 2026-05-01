@@ -7,7 +7,6 @@ import { createLogger } from '~/.server/logging';
 import { getAllowedTypeOfApplication, isChildClientNumberValid, maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import { getChildrenState, getContextualAgeCategoryFromDate, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import type { ApplicationStateParams, ProtectedApplicationChildrenState, ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getEnv } from '~/.server/utils/env.utils';
 import type { Session } from '~/.server/web/session';
 import { getPathById } from '~/utils/route-utils';
 
@@ -103,8 +102,6 @@ export function validateProtectedApplicationFamilyStateForReview({ params, state
     typeOfApplication,
   } = state;
 
-  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = getEnv();
-
   if (termsAndConditions === undefined) {
     throw redirect(getPathById('protected/application/$id/eligibility-requirements', params));
   }
@@ -164,14 +161,6 @@ export function validateProtectedApplicationFamilyStateForReview({ params, state
   }
 
   if (!email || !validator.isEmail(email) || !emailVerified) {
-    throw redirect(getPathById('protected/application/$id/renewal-family/contact-information', params));
-  }
-
-  if (
-    communicationPreferences.hasChanged === false &&
-    (clientApplication.communicationPreferences.preferredMethodSunLife === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID) &&
-    !(clientApplication.contactInformation.email && clientApplication.contactInformation.emailVerified)
-  ) {
     throw redirect(getPathById('protected/application/$id/renewal-family/contact-information', params));
   }
 
