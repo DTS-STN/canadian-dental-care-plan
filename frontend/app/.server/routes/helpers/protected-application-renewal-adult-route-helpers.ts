@@ -1,6 +1,7 @@
 import { redirect } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
+import validator from 'validator';
 
 import { createLogger } from '~/.server/logging';
 import { getAllowedTypeOfApplication } from '~/.server/routes/helpers/base-application-route-helpers';
@@ -155,7 +156,7 @@ export function validateProtectedRenewAdultStateForReview({ params, state }: Val
     throw redirect(getPathById('protected/application/$id/renewal-adult/contact-information', params));
   }
 
-  if ((communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) && !emailVerified) {
+  if (!email || !validator.isEmail(email) || !emailVerified) {
     throw redirect(getPathById('protected/application/$id/renewal-adult/contact-information', params));
   }
 

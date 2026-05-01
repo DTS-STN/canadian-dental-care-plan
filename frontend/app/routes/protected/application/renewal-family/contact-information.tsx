@@ -11,7 +11,7 @@ import type { Route } from './+types/contact-information';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationRenewalFamilyState } from '~/.server/routes/helpers/protected-application-renewal-family-route-helpers';
-import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-renewal-section-checks';
+import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isEmailSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-renewal-section-checks';
 import { saveProtectedApplicationState, shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
@@ -148,6 +148,7 @@ export async function loader({ context: { appContainer, session }, request, para
       phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
       address: { completed: isAddressSectionCompleted(state) },
       communicationPreferences: { completed: isCommunicationPreferencesSectionCompleted(state) },
+      email: { completed: isEmailSectionCompleted(state) },
     },
     meta,
   };
@@ -251,6 +252,30 @@ export default function ProtectedRenewFamilyContactInformation({ loaderData, par
           </CardHeader>
           <CommunicationPreferencesCardContent />
           <CommunicationPreferencesCardFooter />
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle asChild>
+              <h2>{t('protected-application-renewal-family:contact-information.email')}</h2>
+            </CardTitle>
+            <CardAction>{sections.email.completed && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>{loaderData.state.email === undefined ? <p>{t('protected-application-renewal-family:contact-information.email-help')}</p> : <p>{loaderData.state.email}</p>}</CardContent>
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink
+              id="edit-email-button"
+              variant="link"
+              className="p-0"
+              routeId="protected/application/$id/email"
+              params={params}
+              startIcon={sections.email.completed ? faPenToSquare : faCirclePlus}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Edit email click"
+            >
+              {sections.email.completed ? t('protected-application-renewal-family:contact-information.edit-email') : t('protected-application-renewal-family:contact-information.add-email')}
+            </ButtonLink>
+          </CardFooter>
         </Card>
 
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
@@ -647,7 +672,6 @@ function CommunicationPreferencesCardContent(): JSX.Element {
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t('protected-application-renewal-family:contact-information.preferred-language')}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
           <DefinitionListItem term={t('protected-application-renewal-family:contact-information.preferred-method')}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
-          {state.email && <DefinitionListItem term={t('protected-application-renewal-family:contact-information.email')}>{state.email}</DefinitionListItem>}
         </DefinitionList>
       </CardContent>
     );
@@ -659,7 +683,6 @@ function CommunicationPreferencesCardContent(): JSX.Element {
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t('protected-application-renewal-family:contact-information.preferred-language')}>{clientApplication.communicationPreferences.preferredLanguage}</DefinitionListItem>
           <DefinitionListItem term={t('protected-application-renewal-family:contact-information.preferred-method')}>{clientApplication.communicationPreferences.preferredMethod}</DefinitionListItem>
-          {clientApplication.email && <DefinitionListItem term={t('protected-application-renewal-family:contact-information.email')}>{clientApplication.email}</DefinitionListItem>}
         </DefinitionList>
       </CardContent>
     );

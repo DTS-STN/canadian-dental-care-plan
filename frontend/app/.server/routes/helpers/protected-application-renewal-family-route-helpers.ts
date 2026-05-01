@@ -1,6 +1,7 @@
 import { redirect } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
+import validator from 'validator';
 
 import { createLogger } from '~/.server/logging';
 import { getAllowedTypeOfApplication, isChildClientNumberValid, maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
@@ -162,7 +163,7 @@ export function validateProtectedApplicationFamilyStateForReview({ params, state
     throw redirect(getPathById('protected/application/$id/renewal-family/contact-information', params));
   }
 
-  if ((communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) && !emailVerified) {
+  if (!email || !validator.isEmail(email) || !emailVerified) {
     throw redirect(getPathById('protected/application/$id/renewal-family/contact-information', params));
   }
 

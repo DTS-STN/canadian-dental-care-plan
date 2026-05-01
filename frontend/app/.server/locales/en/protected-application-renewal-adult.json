@@ -71,6 +71,9 @@
     "edit-communication-preferences": "Edit communication preferences",
     "communication-preferences-unchanged": "My communication preference has not changed",
     "email": "Email address",
+    "email-help": "Enter your email address.",
+    "add-email": "Add email address",
+    "edit-email": "Edit email address",
     "next-btn": "Access to dental insurance",
     "prev-btn": {
       "marital-status": "Your marital status",
