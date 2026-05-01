@@ -133,7 +133,7 @@ export default function RenewChildrenSubmit({ loaderData, params }: Route.Compon
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-child:submit.review-your-application')}</h2>
             <p>{t('application-simplified-child:submit.please-review')}</p>
-            <ButtonLink variant="primary" routeId="public/application/$id/simplified-children/parent-or-guardian" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Action click">
+            <ButtonLink variant="primary" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Action click">
               {t('application-simplified-child:submit.review-application')}
             </ButtonLink>
           </section>

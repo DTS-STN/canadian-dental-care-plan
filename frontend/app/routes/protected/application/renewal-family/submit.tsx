@@ -143,15 +143,9 @@ export default function ProtectedRenewalFamilySubmit({ loaderData, params }: Rou
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-renewal-family:submit.review-your-application')}</h2>
             <p>{t('protected-application-renewal-family:submit.please-review')}</p>
-            {shouldSkipMaritalStatusStep ? (
-              <ButtonLink variant="primary" routeId="protected/application/$id/renewal-family/contact-information" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Action click">
-                {t('protected-application-renewal-family:submit.review-application')}
-              </ButtonLink>
-            ) : (
-              <ButtonLink variant="primary" routeId="protected/application/$id/renewal-family/marital-status" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Action click">
-                {t('protected-application-renewal-family:submit.review-application')}
-              </ButtonLink>
-            )}
+            <ButtonLink variant="primary" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Action click">
+              {t('protected-application-renewal-family:submit.review-application')}
+            </ButtonLink>
           </section>
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-renewal-family:submit.submit-your-application')}</h2>

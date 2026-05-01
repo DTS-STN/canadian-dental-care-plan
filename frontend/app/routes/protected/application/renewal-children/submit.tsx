@@ -140,7 +140,7 @@ export default function ProtectedRenewChildrenSubmit({ loaderData, params }: Rou
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-renewal-child:submit.review-your-application')}</h2>
             <p>{t('protected-application-renewal-child:submit.please-review')}</p>
-            <ButtonLink variant="primary" routeId="protected/application/$id/renewal-children/parent-or-guardian" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click">
+            <ButtonLink variant="primary" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click">
               {t('protected-application-renewal-child:submit.review-application')}
             </ButtonLink>
           </section>
