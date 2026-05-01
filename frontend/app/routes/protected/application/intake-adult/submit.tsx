@@ -128,7 +128,7 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-intake-adult:submit.review-your-application')}</h2>
             <p>{t('protected-application-intake-adult:submit.please-review')}</p>
-            <ButtonLink variant="primary" routeId="protected/application/$id/intake-adult/marital-status" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Action click">
+            <ButtonLink variant="primary" routeId="protected/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Action click">
               {t('protected-application-intake-adult:submit.review-application')}
             </ButtonLink>
           </section>

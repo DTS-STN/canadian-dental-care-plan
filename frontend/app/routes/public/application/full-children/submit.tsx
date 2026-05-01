@@ -148,7 +148,7 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-child:submit.review-your-application')}</h2>
             <p>{t('application-full-child:submit.please-review')}</p>
-            <ButtonLink variant="primary" routeId="public/application/$id/full-children/parent-or-guardian" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Action click">
+            <ButtonLink variant="primary" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Action click">
               {t('application-full-child:submit.review-application')}
             </ButtonLink>
           </section>

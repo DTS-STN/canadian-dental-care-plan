@@ -150,7 +150,7 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.review-your-application')}</h2>
             <p>{t('application-full-family:submit.please-review')}</p>
-            <ButtonLink variant="primary" routeId="public/application/$id/full-family/marital-status" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Action click">
+            <ButtonLink variant="primary" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Action click">
               {t('application-full-family:submit.review-application')}
             </ButtonLink>
           </section>
