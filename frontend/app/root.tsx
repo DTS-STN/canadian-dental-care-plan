@@ -15,6 +15,7 @@ import { InlineLink } from '~/components/inline-link';
 import { NonceContext } from '~/components/nonce-context';
 import { PageTitle } from '~/components/page-title';
 import { RouteChangeAnnouncer } from '~/components/route-change-announcer';
+import { ZodConfig } from '~/components/zod-config';
 import indexStyleSheet from '~/index.css?url';
 import tailwindStyleSheet from '~/tailwind.css?url';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
@@ -118,7 +119,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
         {alternateLanguages.map(({ href, hrefLang }) => (
           <link key={hrefLang} rel="alternate" hrefLang={hrefLang} href={href} />
         ))}
-        <Links />
+        <Links nonce={nonce} />
         {dynatraceRumScript && <script src={dynatraceRumScript.src} data-dtconfig={dynatraceRumScript['data-dtconfig']} nonce={nonce} suppressHydrationWarning />}
         {env.ADOBE_ANALYTICS_SRC && env.ADOBE_ANALYTICS_JQUERY_SRC && (
           <>
@@ -131,8 +132,9 @@ export default function App({ loaderData }: Route.ComponentProps) {
         <RouteChangeAnnouncer />
         <Outlet />
         <ScrollRestoration nonce={nonce} />
-        <Scripts nonce={nonce} />
         <ClientEnv env={env} nonce={nonce} />
+        <ZodConfig nonce={nonce} />
+        <Scripts nonce={nonce} />
       </body>
     </html>
   );
@@ -181,6 +183,7 @@ export function useFeature(feature: FeatureName) {
 }
 
 export function ErrorBoundary() {
+  const { nonce } = useContext(NonceContext);
   const { i18n } = useTranslation();
   const en = i18n.getFixedT('en', ['gcweb']);
   const fr = i18n.getFixedT('fr', ['gcweb']);
@@ -191,7 +194,7 @@ export function ErrorBoundary() {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
-        <Links />
+        <Links nonce={nonce} />
       </head>
       <body vocab="http://schema.org/" typeof="WebPage">
         <header className="border-b-[3px] border-slate-700 print:hidden">
@@ -250,6 +253,7 @@ export function ErrorBoundary() {
             </div>
           </div>
         </footer>
+        <ZodConfig nonce={nonce} />
       </body>
     </html>
   );
