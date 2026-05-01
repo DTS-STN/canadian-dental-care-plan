@@ -230,7 +230,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
 
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>
-        <p className="mt-4">{t('confirm.begin-process')}</p>
+        <p className="mt-4">{t(`confirm.begin-process.${loaderData.context}`)}</p>
         {loaderData.context === 'intake' && <p className="mt-4">{t('confirm.proof-of-coverage')}</p>}
       </section>
 
