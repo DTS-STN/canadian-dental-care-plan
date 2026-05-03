@@ -108,7 +108,7 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t('protected-application-intake-adult:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t('protected-application-intake-adult:submit.do-you-qualify-href')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>

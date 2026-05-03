@@ -127,7 +127,7 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
       <ButtonLink
         variant="primary"
         id="back-button"
-        to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}
+        to={t('gcweb:header.menu-dashboard-href', { baseUri: SCCH_BASE_URI })}
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - Member eligibility return button click"
       >
         {t('protected-profile:eligibility.return-button')}

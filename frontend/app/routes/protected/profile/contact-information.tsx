@@ -134,7 +134,7 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
       <ButtonLink
         variant="primary"
         id="back-button"
-        to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}
+        to={t('gcweb:header.menu-dashboard-href', { baseUri: SCCH_BASE_URI })}
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - My contact information return button click"
       >
         {t('protected-profile:contact-information.return-button')}

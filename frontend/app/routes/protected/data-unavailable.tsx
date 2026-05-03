@@ -41,8 +41,8 @@ export default function DataUnavailable({ loaderData, params }: Route.ComponentP
   const { SCCH_BASE_URI } = loaderData;
 
   const statusCheckerLink = <InlineLink routeId="public/status/index" className="external-link" newTabIndicator target="_blank" params={params} />;
-  const cdcpLink = <InlineLink to={t('data-unavailable:do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
-  const contactLink = <InlineLink to={t('data-unavailable:contact-us.href')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('data-unavailable:do-you-qualify-href')} className="external-link" newTabIndicator target="_blank" />;
+  const contactLink = <InlineLink to={t('data-unavailable:contact-us-href')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose">
@@ -59,7 +59,7 @@ export default function DataUnavailable({ loaderData, params }: Route.ComponentP
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Return to dashboard - You have not applied for CDCP click">
+        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard-href', { baseUri: SCCH_BASE_URI })} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Return to dashboard - You have not applied for CDCP click">
           {t('data-unavailable:back-button')}
         </ButtonLink>
       </div>

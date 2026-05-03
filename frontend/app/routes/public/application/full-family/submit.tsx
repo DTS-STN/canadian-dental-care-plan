@@ -127,7 +127,7 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
 
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t('application-full-family:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t('application-full-family:submit.do-you-qualify-href')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>

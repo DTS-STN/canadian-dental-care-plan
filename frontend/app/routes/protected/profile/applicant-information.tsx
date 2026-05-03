@@ -91,7 +91,7 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
       <ButtonLink
         variant="primary"
         id="back-button"
-        to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}
+        to={t('gcweb:header.menu-dashboard-href', { baseUri: SCCH_BASE_URI })}
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - Applicant information return button click"
       >
         {t('protected-profile:applicant-information.return-button')}

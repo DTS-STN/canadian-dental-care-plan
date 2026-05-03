@@ -116,7 +116,7 @@ export default function ProtectedNewChildrenSubmit({ loaderData, params }: Route
 
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t('protected-application-intake-child:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t('protected-application-intake-child:submit.do-you-qualify-href')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>

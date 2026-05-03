@@ -120,7 +120,7 @@ export default function ProtectedRenewalFamilySubmit({ loaderData, params }: Rou
 
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t('protected-application-renewal-family:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t('protected-application-renewal-family:submit.do-you-qualify-href')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>

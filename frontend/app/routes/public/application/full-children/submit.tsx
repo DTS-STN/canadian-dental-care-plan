@@ -126,7 +126,7 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
 
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t('application-full-child:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t('application-full-child:submit.do-you-qualify-href')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>

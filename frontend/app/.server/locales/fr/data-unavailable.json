@@ -1,9 +1,9 @@
 {
   "page-title": "Vous n'êtes pas inscrit au Régime canadien de soins dentaires",
   "service-eligible": "Si vous avez présenté une demande récemment, il est possible qu'un certain temps s'écoule avant que vos renseignements apparaissent dans Mon dossier Service Canada. Vous pouvez <statusCheckerLink>vérifier l'état</statusCheckerLink> de votre demande en cours de traitement.",
-  "do-you-qualify.href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/admissibilite.html",
+  "do-you-qualify-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/admissibilite.html",
   "other-enquiry": "Si vous n'avez pas présenté de demande, découvrez si vous êtes admissible au <cdcpLink>Régime canadien de soins dentaires</cdcpLink>.",
-  "contact-us.href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
+  "contact-us-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
   "service-delay": "<contactLink>Communiquez avec nous</contactLink> pour toute autre question ou demande de renseignements.",
   "back-button": "Retour au tableau de bord"
 }

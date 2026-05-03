@@ -112,7 +112,7 @@ export default function SimplifiedFamilySubmit({ loaderData, params }: Route.Com
 
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t('application-simplified-family:submit.do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t('application-simplified-family:submit.do-you-qualify-href')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>

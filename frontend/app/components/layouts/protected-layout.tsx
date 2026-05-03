@@ -83,22 +83,22 @@ function NavigationMenu() {
         {/* Use of a workaround (onFocusOutside={(e) => e.preventDefault()}) for the drowndownmenucontent with the resize issue raised by accessibility : https://github.com/radix-ui/primitives/issues/2754 */}
         <DropdownMenuContent onFocusOutside={(e) => e.preventDefault()} side="bottom" avoidCollisions={false} className="w-svw rounded-t-none sm:w-[260px]" sideOffset={0} align="center">
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:my-dashboard">
+            <Link to={t('gcweb:header.menu-dashboard-href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:my-dashboard">
               {t('gcweb:header.menu-dashboard.text')}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to={t('gcweb:header.menu-profile.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:profile">
+            <Link to={t('gcweb:header.menu-profile-href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:profile">
               {t('gcweb:header.menu-profile.text')}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to={t('gcweb:header.menu-security-settings.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:security">
+            <Link to={t('gcweb:header.menu-security-settings-href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:security">
               {t('gcweb:header.menu-security-settings.text')}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to={t('gcweb:header.menu-contact-us.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:contact">
+            <Link to={t('gcweb:header.menu-contact-us-href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:contact">
               {t('gcweb:header.menu-contact-us.text')}
             </Link>
           </DropdownMenuItem>
@@ -136,7 +136,7 @@ function PageHeader() {
         <div className="sm:container">
           <div className="flex flex-col items-stretch justify-between sm:flex-row sm:items-center">
             <h2 className="font-lato p-4 text-xl font-semibold sm:p-0 sm:py-3 sm:text-2xl">
-              <AppLink to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} className="hover:underline">
+              <AppLink to={t('gcweb:header.menu-dashboard-href', { baseUri: SCCH_BASE_URI })} className="hover:underline">
                 {t('gcweb:header.application-title-msca')}
               </AppLink>
             </h2>
@@ -146,7 +146,7 @@ function PageHeader() {
                 startIcon={faEnvelope}
                 startIconProps={{ size: 'xl' }}
                 className="hidden px-3 py-1.5 font-sans text-xl text-gray-700 md:flex"
-                to={t('gcweb:header.menu-inbox.href', { baseUri: SCCH_BASE_URI })}
+                to={t('gcweb:header.menu-inbox-href', { baseUri: SCCH_BASE_URI })}
                 data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:my-dashboard"
               >
                 {t('gcweb:header.menu-inbox.text')}
@@ -162,7 +162,7 @@ function PageHeader() {
           startIcon={faEnvelope}
           startIconProps={{ size: 'xl' }}
           className="px-3 py-1.5 font-sans text-xl text-gray-700"
-          to={t('gcweb:header.menu-inbox.href', { baseUri: SCCH_BASE_URI })}
+          to={t('gcweb:header.menu-inbox-href', { baseUri: SCCH_BASE_URI })}
           data-gc-analytics-customclick="ESDC-EDSC_MSCA-MSDC-SCH:Nav Menu:my-dashboard"
         >
           {t('gcweb:header.menu-inbox.text')}
@@ -181,7 +181,7 @@ function PageBreadcrumbs() {
     <Breadcrumbs
       className="my-4"
       items={[
-        { content: t('gcweb:breadcrumbs.dashboard'), to: t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }) },
+        { content: t('gcweb:breadcrumbs.dashboard'), to: t('gcweb:header.menu-dashboard-href', { baseUri: SCCH_BASE_URI }) },
         ...breadcrumbs.map((item) => ({
           content: translateFromKey(i18n, item.labelI18nKey),
           routeId: item.routeId,
@@ -241,7 +241,7 @@ interface NotFoundErrorProps {
 export function NotFoundError({ error }: NotFoundErrorProps) {
   const { t } = useTranslation(i18nNamespaces);
   const { SCCH_BASE_URI } = getClientEnv();
-  const dashboard = <InlineLink to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} />;
+  const dashboard = <InlineLink to={t('gcweb:header.menu-dashboard-href', { baseUri: SCCH_BASE_URI })} />;
 
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {
