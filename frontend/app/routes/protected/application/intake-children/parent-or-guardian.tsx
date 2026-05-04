@@ -5,7 +5,7 @@ import type { Route } from './+types/parent-or-guardian';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationIntakeChildState } from '~/.server/routes/helpers/protected-application-intake-child-route-helpers';
-import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isMaritalStatusSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-intake-section-checks';
+import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isEmailSectionCompleted, isMaritalStatusSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/protected-application-intake-section-checks';
 import { validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
@@ -80,6 +80,7 @@ export async function loader({ context: { appContainer, session }, request, para
       phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
       address: { completed: isAddressSectionCompleted(state) },
       communicationPreferences: { completed: isCommunicationPreferencesSectionCompleted(state) },
+      email: { completed: isEmailSectionCompleted(state) },
     },
     meta,
   };
@@ -237,7 +238,6 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
                 <DefinitionListItem term={t('protected-application-intake-child:parent-or-guardian.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
                 <DefinitionListItem term={t('protected-application-intake-child:parent-or-guardian.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
                 <DefinitionListItem term={t('protected-application-intake-child:parent-or-guardian.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
-                <DefinitionListItem term={t('protected-application-intake-child:parent-or-guardian.email')}>{state.email}</DefinitionListItem>
               </DefinitionList>
             ) : (
               <p>{t('protected-application-intake-child:parent-or-guardian.communication-preferences-help')}</p>
@@ -255,6 +255,30 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit comms click"
             >
               {sections.communicationPreferences.completed ? t('protected-application-intake-child:parent-or-guardian.edit-communication-preferences') : t('protected-application-intake-child:parent-or-guardian.add-communication-preferences')}
+            </ButtonLink>
+          </CardFooter>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle asChild>
+              <h2>{t('protected-application-intake-child:parent-or-guardian.email')}</h2>
+            </CardTitle>
+            <CardAction>{sections.email.completed && <StatusTag status="complete" />}</CardAction>
+          </CardHeader>
+          <CardContent>{loaderData.state.email === undefined ? <p>{t('protected-application-intake-child:parent-or-guardian.email-help')}</p> : <p>{loaderData.state.email}</p>}</CardContent>
+          <CardFooter className="border-t bg-zinc-100">
+            <ButtonLink
+              id="edit-email-button"
+              variant="link"
+              className="p-0"
+              routeId="protected/application/$id/email"
+              params={params}
+              startIcon={sections.email.completed ? faPenToSquare : faCirclePlus}
+              size="lg"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit email click"
+            >
+              {sections.email.completed ? t('protected-application-intake-child:parent-or-guardian.edit-email') : t('protected-application-intake-child:parent-or-guardian.add-email')}
             </ButtonLink>
           </CardFooter>
         </Card>
