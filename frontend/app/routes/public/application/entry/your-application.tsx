@@ -209,18 +209,8 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
               <p>{t('application:yourApplication.newOrReturningDescription')}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application:yourApplication.previouslyEnrolled')}>
-                  {defaultState.newOrReturningMember.isNewOrReturningMember === true ? (
-                    <>
-                      <p className="mb-4">{t('application:yourApplication.yes')}</p>
-                      <ul className="list-disc space-y-1 pl-7">
-                        <li>{defaultState.newOrReturningMember.memberId}</li>
-                      </ul>
-                    </>
-                  ) : (
-                    <p>{t('application:yourApplication.no')}</p>
-                  )}
-                </DefinitionListItem>
+                <DefinitionListItem term={t('application:yourApplication.previouslyEnrolled')}>{defaultState.newOrReturningMember.isNewOrReturningMember ? t('application:yourApplication.yes') : t('application:yourApplication.no')}</DefinitionListItem>
+                {defaultState.newOrReturningMember.isNewOrReturningMember === true && <DefinitionListItem term={t('application:yourApplication.memberId')}>{defaultState.newOrReturningMember.memberId}</DefinitionListItem>}
               </DefinitionList>
             )}
           </CardContent>

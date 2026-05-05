@@ -182,17 +182,9 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             ) : (
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t('protectedApplication:yourApplication.previouslyEnrolled')}>
-                  {defaultState.newOrReturningMember.isNewOrReturningMember === true ? (
-                    <>
-                      <p className="mb-4">{t('protectedApplication:yourApplication.yes')}</p>
-                      <ul className="list-disc space-y-1 pl-7">
-                        <li>{defaultState.newOrReturningMember.memberId}</li>
-                      </ul>
-                    </>
-                  ) : (
-                    <p>{t('protectedApplication:yourApplication.no')}</p>
-                  )}
+                  {defaultState.newOrReturningMember.isNewOrReturningMember ? t('protectedApplication:yourApplication.yes') : t('protectedApplication:yourApplication.no')}
                 </DefinitionListItem>
+                {defaultState.newOrReturningMember.isNewOrReturningMember === true && <DefinitionListItem term={t('protectedApplication:yourApplication.memberId')}>{defaultState.newOrReturningMember.memberId}</DefinitionListItem>}
               </DefinitionList>
             )}
           </CardContent>
