@@ -1,0 +1,160 @@
+const ns = {
+  "meta": {
+    "author": "Emploi et Développement social Canada",
+    "description": "Le Régime canadien de soins dentaires (RCSD) permet de couvrir une partie du coût de divers services de santé buccodentaire pour les résidents canadiens éligibles.",
+    "site-name": "Régime canadien de soins dentaires - Canada.ca",
+    "subject": "Économie et industrie;Assurance;Assurance dentaire",
+    "title": {
+      "default": "Régime canadien de soins dentaires - Canada.ca",
+      "template": "{{title}} - Régime canadien de soins dentaires - Canada.ca",
+      "msca-template": "{{title}} - Mon dossier Service Canada - Régime canadien de soins dentaires - Canada.ca",
+    },
+  },
+  "nav": {
+    "skip-to-content": "Passer au contenu principal",
+    "skip-to-about": "Passer à « À propos de ce site »",
+  },
+  "header": {
+    "application-title": "Régime canadien de soins dentaires",
+    "application-title-msca": "Mon dossier Service Canada",
+    "language-selection": "Sélection de la langue",
+    "govt-of-canada.text": "Gouvernement du Canada",
+    "govt-of-canada-href": "https://www.canada.ca/fr.html",
+    "menu-title": "Compte",
+    "menu-inbox.text": "Boîte de réception",
+    "menu-inbox-href": "{{baseUri}}/fr/boite-reception",
+    "menu-dashboard.text": "Mon tableau de bord",
+    "menu-dashboard-href": "{{baseUri}}/fr/mon-tableau-de-bord",
+    "menu-msca-home-href": "{{baseUri}}/sc/msca-mdsc/portal-portail/pro/home-accueil?Lang=fra",
+    "menu-profile.text": "Profil",
+    "menu-profile-href": "{{baseUri}}/fr/profil",
+    "menu-security-settings.text": "Paramètres de sécurité",
+    "menu-security-settings-href": "{{baseUri}}/fr/parametres-securite",
+    "menu-contact-us.text": "Contactez-nous",
+    "menu-contact-us-href": "{{baseUri}}/fr/contactez-nous",
+    "menu-sign-out.text": "Se déconnecter",
+    "banner": {
+      "alert": "Alpha",
+      "desc": "Il s'agit d'un environnement prototype. Aucune donnée n'est conservée.",
+    },
+  },
+  "footer": {
+    "about-site": "À propos de ce site",
+    "gc-corporate": "Organisation du gouvernement du Canada",
+    "terms-conditions": {
+      "text": "Avis",
+      "public-href": "https://www.canada.ca/fr/transparence/avis.html",
+      "protected-href": "{{baseUri}}/TC.aspx?mode=ReadOnly&lang=fra#terms",
+    },
+    "privacy": {
+      "text": "Confidentialité",
+      "public-href": "https://www.canada.ca/fr/transparence/confidentialite.html",
+      "protected-href": "{{baseUri}}/TC.aspx?mode=ReadOnly&lang=fra#privacy",
+    },
+    "gc-symbol": "Symbole du gouvernement du Canada",
+    "main-band": {
+      "header": {
+        "public": "Service Canada",
+        "protected": "Mon dossier Service Canada",
+      },
+      "links": {
+        "contact-us": {
+          "content": "Contactez-nous",
+          "public-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
+          "protected-href": "{{baseUri}}/fr/contactez-nous",
+        },
+      },
+    },
+  },
+  "language-switcher": {
+    "alt-lang": "English",
+    "alt-lang-abbr": "EN",
+    "alt-lang-abbr-prop": "en",
+  },
+  "breadcrumbs": {
+    "you-are-here": "Vous êtes ici\u00A0:",
+    "home": "Mon dossier Service Canada",
+    "dashboard": "Mon tableau de bord",
+    "canada-ca": "Canada.ca",
+    "canada-ca-url": "https://www.canada.ca/fr.html",
+    "benefits": "Prestations",
+    "benefits-url": "https://www.canada.ca/fr/services/prestations.html",
+    "dental-coverage": "Couverture dentaire",
+    "dental-coverage-url": "https://www.canada.ca/fr/services/prestations/dentaire.html",
+    "canadian-dental-care-plan": "Régime canadien de soins dentaires",
+    "canadian-dental-care-plan-url": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html",
+  },
+  "page-details": {
+    "page-details": "Détails de la page",
+    "date-modfied": "Date de modification\u00A0:",
+    "screen-id": "Identificateur d'écran\u00A0:",
+    "version": "Version\u00A0:",
+  },
+  "protected-not-found": {
+    "document-title": "Page introuvable",
+    "page-title": "Nous ne pouvons trouver cette page",
+    "page-subtitle": "(Erreur 404)",
+    "page-message": "Nous sommes désolés que vous ayez abouti ici. Il arrive parfois qu'une page ait été déplacée ou supprimée. Heureusement, nous pouvons vous aider à trouver ce que vous cherchez.",
+    "page-link": "Retour au <dashboard>tableau de bord</dashboard>",
+  },
+  "public-not-found": {
+    "document-title": "Page introuvable",
+    "page-title": "Nous ne pouvons trouver cette page",
+    "page-subtitle": "(Erreur 404)",
+    "page-message": "Nous sommes désolés que vous ayez abouti ici. Il arrive parfois qu'une page ait été déplacée ou supprimée. Heureusement, nous pouvons vous aider à trouver ce que vous cherchez.",
+    "unilingual-return-cdcp": "Retournez à la page d'accueil du <cdcpLink>Régime canadien de soins dentaires</cdcpLink>.",
+    "return-cdcp": "Retournez à la page d'accueil du <frenchCdcpLink>Régime canadien de soins dentaires</frenchCdcpLink>.",
+    "cdcp-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html",
+  },
+  "server-error": {
+    "document-title": "Erreur interne du serveur",
+    "page-title": "Nous éprouvons des difficultés avec cette page",
+    "page-subtitle": "(Erreur 500)",
+    "page-message": "Nous espérons résoudre le problème sous peu. Il ne s'agit pas d'un problème avec votre ordinateur ou Internet, mais plutôt avec le serveur de notre site Web. Que faire?",
+    "option-01": "Actualisez la page ou réessayez plus tard",
+    "option-02": "Retournez à la <home>page d'accueil</home>",
+  },
+  "input-label": {
+    "required": "requis",
+  },
+  "input-legend": {
+    "required": "requis",
+  },
+  "error-summary": {
+    "header_one": "L'erreur suivante a été trouvée dans le formulaire\u00A0:",
+    "header_other": "Les {{count}} erreurs suivantes ont été trouvées dans le formulaire\u00A0:",
+  },
+  "asterisk-indicates-required-field": "Un astérisque (*) indique un champ requis",
+  "session-timeout": {
+    "continue-session": "Continuer la session",
+    "description": "Votre session expirera automatiquement dans {{timeRemaining}}. Sélectionnez «\u00A0Continuer la session\u00A0» pour prolonger votre session.",
+    "end-session": "Mettre fin à la session",
+    "header": "Avertissement d'expiration de la session",
+  },
+  "dialog": {
+    "close": "Fermer",
+  },
+  "date-picker": {
+    "day": {
+      "label": "Jour (JJ)",
+    },
+    "month": {
+      "label": "Mois",
+      "placeholder": "Sélectionnez le mois",
+    },
+    "year": {
+      "label": "Année (AAAA)",
+    },
+  },
+  "screen-reader": {
+    "new-tab": "s'ouvre dans un nouvel onglet",
+  },
+  "browser-compatibility-banner": {
+    "content": "Vous utilisez un navigateur plus ancien qui n'est pas compatible avec ce site Web. Certaines fonctions importantes pourraient ne pas fonctionner correctement et il se peut que vous ayez de la difficulté à remplir le formulaire. Pour améliorer votre expérience, nous vous recommandons de mettre à jour votre navigateur vers une version plus récente. Il est possible que vous deviez mettre à jour votre appareil ou en utiliser un autre.",
+    "contact": "Si le problème persiste, contactez Service Canada en appelant le <noWrap>1-833-537-4342</noWrap>.",
+    "dismiss": "Fermer",
+    "title": "Mettez à niveau votre navigateur",
+  },
+};
+
+export default ns;

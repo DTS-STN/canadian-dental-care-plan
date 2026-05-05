@@ -1,0 +1,18 @@
+const ns = {
+  "index": {
+    "page-title": "Letters",
+    "breadcrumbs": {
+      "letters": "Letters",
+    },
+    "no-letter": "There are no letters on file.",
+    "date": "Date: {{date}}",
+    "filter": "Filter by:",
+    "newest": "Newest first",
+    "oldest": "Oldest first",
+    "button": {
+      "back": "Back",
+    },
+  },
+};
+
+export default ns;

@@ -1,0 +1,53 @@
+const ns = {
+  "index": {
+    "page-title": "Submitted documents",
+    "has-documents": "You have submitted the following documents for the Canadian Dental Care Plan:",
+    "no-documents": "You have not submitted any documents for the Canadian Dental Care Plan.",
+    "upload-documents": "Upload documents",
+    "return-dashboard": "Return to dashboard",
+    "received-status-pending": "Pending",
+    "table-headers": {
+      "applicant": "Applicant",
+      "date-uploaded": "Date uploaded",
+      "file-name": "File name",
+      "type-of-document": "Type of document",
+    },
+  },
+  "upload": {
+    "page-title": "Upload my documents",
+    "who-are-you-uploading-for": "Who are you uploading for",
+    "upload-document": "Upload document",
+    "max-files_one": "You can upload one file at once.",
+    "max-files_other": "You can upload up to {{count}} files at once.",
+    "max-size": "Maximum file size is {{filesize}}. File types accepted: {{extensions}}",
+    "add-file": "Add file",
+    "file-name": "File name",
+    "remove": "Remove",
+    "document-type": "Document Type",
+    "submit": "Submit",
+    "select-one": "Select one",
+    "return-dashboard": "Return to dashboard",
+    "error-message": {
+      "applicant-required": "Select a person from the drop down list.",
+      "file-required": "Select a file.",
+      "document-type-required": "Select a document type for file “{{filename}}”.",
+      "invalid-file-type": "File “{{filename}}” is not supported. You can upload a file in one of the following formats: {{extensions}}",
+      "too-many-files_one": "A maximum of one file can be uploaded at a time. Remove at least one file to continue.",
+      "too-many-files_other": "A maximum of {{count}} files can be uploaded at a time. Remove at least one file to continue.",
+      "duplicate-file": "File “{{filename}}” has already been selected.",
+      "file-too-large": "File “{{filename}}” is too large. Make sure the file size is less than {{filesize}}.",
+      "scan-failed": "File(s) scan failed: {{error}} (Code: {{code}})",
+      "scan-incomplete": "File(s) scan could not be completed.",
+      "scan-error": "Error during file(s) scanning.",
+      "upload-failed": "File(s) upload failed: {{error}} (Code: {{code}})",
+      "upload-error": "Error during file(s) upload.",
+    },
+  },
+  "not-required": {
+    "page-title": "Documents not required",
+    "description": "You do not need to upload any documents at this time.",
+    "return-button": "Return to dashboard",
+  },
+};
+
+export default ns;

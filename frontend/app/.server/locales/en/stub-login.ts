@@ -1,0 +1,20 @@
+const ns = {
+  "index": {
+    "page-title": "Stub Login",
+    "sin": "Social Insurance Number (SIN)",
+    "destination": "Destination Page",
+    "raoidc": "RAOIDC's ID Token Claims",
+    "sid": "Session Identifier (sid)",
+    "sub": "Subject Identifier (sub)",
+    "login": "Login",
+    "error-message": {
+      "sin-required": "Enter a SIN",
+      "sin-invalid": "Enter a valid SIN",
+      "destination-required": "Select a destination page",
+      "sid-required": "Enter a sid",
+      "sub-required": "Enter a sub",
+    },
+  },
+};
+
+export default ns;
