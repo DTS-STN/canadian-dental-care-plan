@@ -20,7 +20,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.cannotApplyChild,
-  pageTitleI18nKey: 'protected-application-spokes:children.cannot-apply-child.page-title',
+  pageTitleI18nKey: 'protected-application-spokes:children.cannotApplyChild.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -32,7 +32,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   getSingleChildState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.cannot-apply-child.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.cannotApplyChild.pageTitle') }) };
 
   return { meta };
 }
@@ -49,7 +49,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearProtectedApplicationState({ params, session });
 
-  return redirect(t('protected-application-spokes:children.cannot-apply-child.exit-btn-link'));
+  return redirect(t('protected-application-spokes:children.cannotApplyChild.exitBtnLink'));
 }
 
 export default function CannotApplyChild({ loaderData, params }: Route.ComponentProps) {
@@ -63,9 +63,9 @@ export default function CannotApplyChild({ loaderData, params }: Route.Component
   return (
     <div className="max-w-prose">
       <div className="mb-6 space-y-4">
-        <p>{t('protected-application-spokes:children.cannot-apply-child.ineligible-to-apply')}</p>
+        <p>{t('protected-application-spokes:children.cannotApplyChild.ineligibleToApply')}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:children.cannot-apply-child.eligibility-info" components={{ noWrap }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:children.cannotApplyChild.eligibilityInfo" components={{ noWrap }} />
         </p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
@@ -78,10 +78,10 @@ export default function CannotApplyChild({ loaderData, params }: Route.Component
           disabled={isSubmitting}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child apply for yourself click"
         >
-          {t('protected-application-spokes:children.cannot-apply-child.back-btn')}
+          {t('protected-application-spokes:children.cannotApplyChild.backBtn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - Child apply for yourself click">
-          {t('protected-application-spokes:children.cannot-apply-child.exit-btn')}
+          {t('protected-application-spokes:children.cannotApplyChild.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

@@ -30,7 +30,7 @@ const FORM_ACTION = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
   pageIdentifier: pageIds.public.status.result,
-  pageTitleI18nKey: 'status:result.page-title',
+  pageTitleI18nKey: 'status:result.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -45,7 +45,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const locale = getLocale(request);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('status:result.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('status:result.pageTitle') }) };
 
   const statusId = statusCheckResult.statusId ?? null;
   const alertType = getContextualAlertType(statusId);
@@ -76,7 +76,7 @@ export async function action({ context: { appContainer, session }, params, reque
   }
 
   clearStatusState({ id, params, session });
-  return redirect(t('status:result.exit-link'));
+  return redirect(t('status:result.exitLink'));
 }
 
 export default function StatusCheckerResult({ loaderData, params }: Route.ComponentProps) {
@@ -91,7 +91,7 @@ export default function StatusCheckerResult({ loaderData, params }: Route.Compon
       <div className="max-w-prose">
         {statusResult.clientFriendlyStatus ? (
           <ContextualAlert type={statusResult.alertType}>
-            <h2 className="mb-2 font-bold">{t('status:result.status-heading')}</h2>
+            <h2 className="mb-2 font-bold">{t('status:result.statusHeading')}</h2>
             <ClientFriendlyStatusMarkdown content={statusResult.clientFriendlyStatus.name} />
           </ContextualAlert>
         ) : (
@@ -99,12 +99,12 @@ export default function StatusCheckerResult({ loaderData, params }: Route.Compon
         )}
         <div className="mt-12">
           <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} variant="primary" endIcon={faChevronRight}>
-            {t('status:result.check-another')}
+            {t('status:result.checkAnother')}
           </Button>
         </div>
         <div className="mt-6">
           <Button id="exit-button" name="_action" value={FORM_ACTION.exit} disabled={isSubmitting} className="mt-6" variant="secondary">
-            {t('status:result.exit-btn')}
+            {t('status:result.exitBtn')}
           </Button>
         </div>
       </div>
@@ -118,11 +118,11 @@ function StatusNotFound() {
   return (
     <div className="mb-4">
       <ContextualAlert type="danger">
-        <h2 className="mb-2 font-bold">{t('result.status-not-found.heading')}</h2>
-        <p className="mb-2">{t('result.status-not-found.please-review')}</p>
-        <p className="mb-2">{t('result.status-not-found.if-submitted')}</p>
+        <h2 className="mb-2 font-bold">{t('result.statusNotFound.heading')}</h2>
+        <p className="mb-2">{t('result.statusNotFound.pleaseReview')}</p>
+        <p className="mb-2">{t('result.statusNotFound.ifSubmitted')}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="result.status-not-found.contact-service-canada" components={{ noWrap }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="result.statusNotFound.contactServiceCanada" components={{ noWrap }} />
         </p>
       </ContextualAlert>
     </div>

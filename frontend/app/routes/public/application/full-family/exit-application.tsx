@@ -22,7 +22,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-full-family', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.fullFamily.exitApplication,
-  pageTitleI18nKey: 'application-full-family:exit-application.page-title',
+  pageTitleI18nKey: 'application-full-family:exitApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -32,7 +32,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['full-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:exit-application.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:exitApplication.pageTitle') }) };
   return { meta };
 }
 
@@ -49,7 +49,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearPublicApplicationState({ params, session });
 
-  return redirect(t('application-full-family:exit-application.exit-link'));
+  return redirect(t('application-full-family:exitApplication.exitLink'));
 }
 
 export default function NewFamilyExitApplication({ loaderData, params }: Route.ComponentProps) {
@@ -61,8 +61,8 @@ export default function NewFamilyExitApplication({ loaderData, params }: Route.C
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('application-full-family:exit-application.are-you-sure')}</p>
-        <p>{t('application-full-family:exit-application.click-back')}</p>
+        <p>{t('application-full-family:exitApplication.areYouSure')}</p>
+        <p>{t('application-full-family:exitApplication.clickBack')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -75,10 +75,10 @@ export default function NewFamilyExitApplication({ loaderData, params }: Route.C
           startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Back - Exiting the application click"
         >
-          {t('application-full-family:exit-application.back-btn')}
+          {t('application-full-family:exitApplication.backBtn')}
         </ButtonLink>
         <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Exit - Exiting the application click">
-          {t('application-full-family:exit-application.exit-btn')}
+          {t('application-full-family:exitApplication.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

@@ -34,7 +34,7 @@ import { extractDigits } from '~/utils/string-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
   pageIdentifier: pageIds.public.status.myself,
-  pageTitleI18nKey: 'status:myself.page-title',
+  pageTitleI18nKey: 'status:myself.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -43,7 +43,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('status');
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('status:myself.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('status:myself.pageTitle') }) };
   return { meta };
 }
 
@@ -61,16 +61,16 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formDataSchema = z.object({
     sin: z
-      .string({ error: (issue) => (issue.input === undefined ? t('status:myself.form.error-message.sin-required') : undefined) })
+      .string({ error: (issue) => (issue.input === undefined ? t('status:myself.form.errorMessage.sinRequired') : undefined) })
       .trim()
       .min(1)
-      .refine(isValidSin, t('status:myself.form.error-message.sin-valid'))
+      .refine(isValidSin, t('status:myself.form.errorMessage.sinValid'))
       .transform((sin) => formatSin(sin, '')),
     code: z
-      .string({ error: (issue) => (issue.input === undefined ? t('status:myself.form.error-message.application-code-required') : undefined) })
+      .string({ error: (issue) => (issue.input === undefined ? t('status:myself.form.errorMessage.applicationCodeRequired') : undefined) })
       .trim()
       .min(1)
-      .refine(isValidCodeOrNumber, t('status:myself.form.error-message.application-code-valid'))
+      .refine(isValidCodeOrNumber, t('status:myself.form.errorMessage.applicationCodeValid'))
       .transform((code) => extractDigits(code)),
   });
 
@@ -137,7 +137,7 @@ export default function StatusCheckerMyself({ loaderData, params }: Route.Compon
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('status:myself.form.complete-fields')}</p>
+      <p className="mb-4 italic">{t('status:myself.form.completeFields')}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
@@ -148,18 +148,18 @@ export default function StatusCheckerMyself({ loaderData, params }: Route.Compon
               id="code"
               name="code"
               format={applicationCodeInputPatternFormat}
-              label={t('status:myself.form.application-code-label')}
+              label={t('status:myself.form.applicationCodeLabel')}
               inputMode="numeric"
-              helpMessagePrimary={t('status:myself.form.application-code-description')}
+              helpMessagePrimary={t('status:myself.form.applicationCodeDescription')}
               required
               errorMessage={errors?.code}
               defaultValue=""
             />
-            <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
+            <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sinLabel')} helpMessagePrimary={t('status:myself.form.sinDescription')} required errorMessage={errors?.sin} defaultValue="" />
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
-              {t('status:myself.form.back-btn')}
+              {t('status:myself.form.backBtn')}
             </ButtonLink>
             <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
               {t('status:myself.form.submit')}

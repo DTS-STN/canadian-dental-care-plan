@@ -24,8 +24,8 @@ describe('SkipNavigationLinks', () => {
       },
     ]);
     const { getByText } = render(<RoutesStub />);
-    expect(getByText('gcweb:nav.skip-to-content')).toBeInTheDocument();
-    expect(getByText('gcweb:nav.skip-to-about')).toBeInTheDocument();
+    expect(getByText('gcweb:nav.skipToContent')).toBeInTheDocument();
+    expect(getByText('gcweb:nav.skipToAbout')).toBeInTheDocument();
   });
 
   it('calls scrollAndFocusFromAnchorLink when skip link is clicked', () => {
@@ -36,7 +36,7 @@ describe('SkipNavigationLinks', () => {
       },
     ]);
     const { getByText } = render(<RoutesStub />);
-    const skipToContentButton = getByText('gcweb:nav.skip-to-content');
+    const skipToContentButton = getByText('gcweb:nav.skipToContent');
     fireEvent.click(skipToContentButton);
     expect(scrollAndFocusFromAnchorLink).toHaveBeenCalled();
   });

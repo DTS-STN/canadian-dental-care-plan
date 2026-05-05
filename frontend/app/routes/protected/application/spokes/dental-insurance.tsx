@@ -39,7 +39,7 @@ const HAS_DENTAL_INSURANCE_OPTION = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.dentalInsurance,
-  pageTitleI18nKey: 'protected-application-spokes:dental-insurance.title',
+  pageTitleI18nKey: 'protected-application-spokes:dentalInsurance.title',
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -53,7 +53,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:dental-insurance.title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:dentalInsurance.title') }) };
 
   return {
     defaultState: state.dentalInsurance
@@ -82,15 +82,15 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const dentalInsuranceSchema = z
     .object({
-      hasDentalInsurance: z.boolean({ error: t('protected-application-spokes:dental-insurance.error-message.dental-insurance-required') }),
-      dentalInsuranceEligibilityConfirmationYes: z.boolean({ error: t('protected-application-spokes:dental-insurance.error-message.dental-insurance-eligibility-confirmation-required') }),
-      dentalInsuranceEligibilityConfirmationNo: z.boolean({ error: t('protected-application-spokes:dental-insurance.error-message.dental-insurance-eligibility-confirmation-required') }),
+      hasDentalInsurance: z.boolean({ error: t('protected-application-spokes:dentalInsurance.errorMessage.dentalInsuranceRequired') }),
+      dentalInsuranceEligibilityConfirmationYes: z.boolean({ error: t('protected-application-spokes:dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired') }),
+      dentalInsuranceEligibilityConfirmationNo: z.boolean({ error: t('protected-application-spokes:dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired') }),
     })
     .superRefine(({ hasDentalInsurance, dentalInsuranceEligibilityConfirmationYes }, ctx) => {
       if (hasDentalInsurance && dentalInsuranceEligibilityConfirmationYes === false) {
         return ctx.addIssue({
           code: 'custom',
-          message: t('protected-application-spokes:dental-insurance.error-message.dental-insurance-eligibility-confirmation-required'),
+          message: t('protected-application-spokes:dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired'),
           path: ['dentalInsuranceEligibilityConfirmationYes'],
         });
       }
@@ -142,24 +142,24 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
   const helpMessage = (
     <div className="mb-4 space-y-4">
       <ul className="list-disc space-y-1 pl-7 font-semibold">
-        <li>{t('dental-insurance.detail.additional-info.list.employer')}</li>
-        <li>{t('dental-insurance.detail.additional-info.list.pension')}</li>
-        <li>{t('dental-insurance.detail.additional-info.list.pension-plans')}</li>
-        <li>{t('dental-insurance.detail.additional-info.list.organization')}</li>
-        <li>{t('dental-insurance.detail.additional-info.list.company')}</li>
+        <li>{t('dentalInsurance.detail.additionalInfo.list.employer')}</li>
+        <li>{t('dentalInsurance.detail.additionalInfo.list.pension')}</li>
+        <li>{t('dentalInsurance.detail.additionalInfo.list.pensionPlans')}</li>
+        <li>{t('dentalInsurance.detail.additionalInfo.list.organization')}</li>
+        <li>{t('dentalInsurance.detail.additionalInfo.list.company')}</li>
       </ul>
-      <p className="font-semibold">{t('dental-insurance.detail.additional-info.eligible')}</p>
-      <p>{t('dental-insurance.detail.additional-info.access')}</p>
+      <p className="font-semibold">{t('dentalInsurance.detail.additionalInfo.eligible')}</p>
+      <p>{t('dentalInsurance.detail.additionalInfo.access')}</p>
     </div>
   );
 
-  const t4Href = <InlineLink to={t('protected-application-spokes:dental-insurance.no.alert-t4-href')} className="external-link" newTabIndicator target="_blank" />;
-  const t4aHref = <InlineLink to={t('protected-application-spokes:dental-insurance.no.alert-t4a-href')} className="external-link" newTabIndicator target="_blank" />;
+  const t4Href = <InlineLink to={t('protected-application-spokes:dentalInsurance.no.alertT4Href')} className="external-link" newTabIndicator target="_blank" />;
+  const t4aHref = <InlineLink to={t('protected-application-spokes:dentalInsurance.no.alertT4aHref')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('protected-application:required-label')}</p>
+        <p className="mb-4 italic">{t('protected-application:requiredLabel')}</p>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
@@ -167,16 +167,16 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
             <InputRadios
               id="has-dental-insurance"
               name="hasDentalInsurance"
-              legend={t('dental-insurance.legend')}
+              legend={t('dentalInsurance.legend')}
               options={[
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.option-yes" />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="dentalInsurance.optionYes" />,
                   value: HAS_DENTAL_INSURANCE_OPTION.yes,
                   defaultChecked: defaultState?.hasDentalInsurance === true,
                   onChange: handleOnHasDentalInsuranceChanged,
                 },
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.option-no" />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="dentalInsurance.optionNo" />,
                   value: HAS_DENTAL_INSURANCE_OPTION.no,
                   defaultChecked: defaultState?.hasDentalInsurance === false,
                   onChange: handleOnHasDentalInsuranceChanged,
@@ -191,8 +191,8 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
           {hasDentalInsurance === true && (
             <div className="mb-4 space-y-4">
               <ContextualAlert type="info" id="dental-insurance-confirmation-yes">
-                <h2 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.yes.alert-title')}</h2>
-                <p>{t('dental-insurance.yes.alert-body')}</p>
+                <h2 className="font-lato mb-2 text-xl font-semibold">{t('dentalInsurance.yes.alertTitle')}</h2>
+                <p>{t('dentalInsurance.yes.alertBody')}</p>
               </ContextualAlert>
               <InputCheckbox
                 id="dental-insurance-eligibility-confirmation-yes"
@@ -203,15 +203,15 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
                 required
                 aria-describedby="dental-insurance-confirmation-yes"
               >
-                {t('dental-insurance.yes.confirmation')}
+                {t('dentalInsurance.yes.confirmation')}
               </InputCheckbox>
             </div>
           )}
           {hasDentalInsurance === false && (
             <div className="mb-4 space-y-4">
               <ContextualAlert type="info" id="dental-insurance-confirmation-no">
-                <h2 className="font-lato mb-2 text-xl font-semibold">{t('dental-insurance.no.alert-title')}</h2>
-                <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:dental-insurance.no.alert-body" components={{ t4Href, t4aHref }} />
+                <h2 className="font-lato mb-2 text-xl font-semibold">{t('dentalInsurance.no.alertTitle')}</h2>
+                <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:dentalInsurance.no.alertBody" components={{ t4Href, t4aHref }} />
               </ContextualAlert>
               <InputCheckbox
                 id="dental-insurance-eligibility-confirmation-no"
@@ -222,14 +222,14 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
                 required
                 aria-describedby="dental-insurance-confirmation-no"
               >
-                {t('dental-insurance.no.confirmation')}
+                {t('dentalInsurance.no.confirmation')}
               </InputCheckbox>
             </div>
           )}
 
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Access to other dental insurance click">
-              {t('dental-insurance.save-btn')}
+              {t('dentalInsurance.saveBtn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -239,7 +239,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Access to other dental insurance click"
             >
-              {t('dental-insurance.back-btn')}
+              {t('dentalInsurance.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

@@ -25,7 +25,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const TAX_FILING_OPTION = { no: 'no', yes: 'yes' } as const;
 
-export const handle = { i18nNamespaces: getTypedI18nNamespaces('application', 'gcweb'), pageIdentifier: pageIds.public.application.spokes.taxFiling, pageTitleI18nKey: 'application:tax-filing.page-title' } as const satisfies RouteHandleData;
+export const handle = { i18nNamespaces: getTypedI18nNamespaces('application', 'gcweb'), pageIdentifier: pageIds.public.application.spokes.taxFiling, pageTitleI18nKey: 'application:taxFiling.pageTitle' } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
@@ -33,7 +33,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application:tax-filing.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application:taxFiling.pageTitle') }) };
 
   return { meta, defaultState: state.hasFiledTaxes, taxYear: state.applicationYear.taxYear };
 }
@@ -46,7 +46,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const taxFilingSchema = z.object({ hasFiledTaxes: z.enum(TAX_FILING_OPTION, { error: t('application:tax-filing.error-message.tax-filing-required') }) });
+  const taxFilingSchema = z.object({ hasFiledTaxes: z.enum(TAX_FILING_OPTION, { error: t('application:taxFiling.errorMessage.taxFilingRequired') }) });
 
   const parsedDataResult = taxFilingSchema.safeParse({ hasFiledTaxes: formData.get('hasFiledTaxes') });
 
@@ -72,7 +72,7 @@ export default function ApplicationTaxFiling({ loaderData, params }: Route.Compo
   const errors = fetcher.data?.errors;
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('application:required-label')}</p>
+      <p className="mb-4 italic">{t('application:requiredLabel')}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -80,17 +80,17 @@ export default function ApplicationTaxFiling({ loaderData, params }: Route.Compo
           <InputRadios
             id="tax-filing"
             name="hasFiledTaxes"
-            legend={t('application:tax-filing.form-instructions', { taxYear })}
+            legend={t('application:taxFiling.formInstructions', { taxYear })}
             options={[
-              { value: TAX_FILING_OPTION.yes, children: t('application:tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
-              { value: TAX_FILING_OPTION.no, children: t('application:tax-filing.radio-options.no'), defaultChecked: defaultState === false },
+              { value: TAX_FILING_OPTION.yes, children: t('application:taxFiling.radioOptions.yes'), defaultChecked: defaultState === true },
+              { value: TAX_FILING_OPTION.no, children: t('application:taxFiling.radioOptions.no'), defaultChecked: defaultState === false },
             ]}
             errorMessage={errors?.hasFiledTaxes}
             required
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Tax filing click">
-              {t('application:tax-filing.save-btn')}
+              {t('application:taxFiling.saveBtn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -100,7 +100,7 @@ export default function ApplicationTaxFiling({ loaderData, params }: Route.Compo
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Tax filing click"
             >
-              {t('application:tax-filing.back-btn')}
+              {t('application:taxFiling.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

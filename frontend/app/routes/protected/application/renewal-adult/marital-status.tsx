@@ -28,7 +28,7 @@ import { formatSin } from '~/utils/sin-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application', 'protected-application-renewal-adult', 'gcweb'),
   pageIdentifier: pageIds.protected.application.renewalAdult.maritalStatus,
-  pageTitleI18nKey: 'protected-application-renewal-adult:marital-status.page-heading',
+  pageTitleI18nKey: 'protected-application-renewal-adult:maritalStatus.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -45,7 +45,7 @@ export async function loader({ context: { appContainer, session }, request, para
   }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-renewal-adult:marital-status.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-renewal-adult:maritalStatus.pageTitle') }) };
   const locale = getLocale(request);
   return {
     state: {
@@ -67,30 +67,30 @@ export default function ProtectedNewAdultMaritalStatus({ loaderData, params }: R
 
   return (
     <>
-      <ProgressStepper activeStep="marital-status" className="mb-8" />
+      <ProgressStepper activeStep="maritalStatus" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('protected-application:complete-all-sections')}</p>
+          <p>{t('protected-application:completeAllSections')}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protected-application-renewal-adult:marital-status.marital-status')}</h2>
+              <h2>{t('protected-application-renewal-adult:maritalStatus.maritalStatus')}</h2>
             </CardTitle>
             <CardAction>{sections.maritalStatus.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.maritalStatus === undefined ? (
-              <p>{t('protected-application-renewal-adult:marital-status.select-your-status')}</p>
+              <p>{t('protected-application-renewal-adult:maritalStatus.selectYourStatus')}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('protected-application-renewal-adult:marital-status.marital-status')}>{state.maritalStatus.name}</DefinitionListItem>
+                <DefinitionListItem term={t('protected-application-renewal-adult:maritalStatus.maritalStatus')}>{state.maritalStatus.name}</DefinitionListItem>
                 {state.partnerInformation && (
                   <>
-                    <DefinitionListItem term={t('protected-application-renewal-adult:marital-status.spouse-sin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-renewal-adult:marital-status.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-renewal-adult:marital-status.consent')}>{t('protected-application-renewal-adult:marital-status.consent-yes')}</DefinitionListItem>
+                    <DefinitionListItem term={t('protected-application-renewal-adult:maritalStatus.spouseSin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
+                    <DefinitionListItem term={t('protected-application-renewal-adult:maritalStatus.spouseYob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t('protected-application-renewal-adult:maritalStatus.consent')}>{t('protected-application-renewal-adult:maritalStatus.consentYes')}</DefinitionListItem>
                   </>
                 )}
               </DefinitionList>
@@ -107,7 +107,7 @@ export default function ProtectedNewAdultMaritalStatus({ loaderData, params }: R
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Edit marital click"
             >
-              {state.maritalStatus === undefined ? t('protected-application-renewal-adult:marital-status.add-marital-status') : t('protected-application-renewal-adult:marital-status.edit-marital-status')}
+              {state.maritalStatus === undefined ? t('protected-application-renewal-adult:maritalStatus.addMaritalStatus') : t('protected-application-renewal-adult:maritalStatus.editMaritalStatus')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -120,10 +120,10 @@ export default function ProtectedNewAdultMaritalStatus({ loaderData, params }: R
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Continue click"
           >
-            {t('protected-application-renewal-adult:marital-status.next-btn')}
+            {t('protected-application-renewal-adult:maritalStatus.nextBtn')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Back click">
-            {t('protected-application-renewal-adult:marital-status.prev-btn')}
+            {t('protected-application-renewal-adult:maritalStatus.prevBtn')}
           </NavigationButtonLink>
         </div>
       </div>

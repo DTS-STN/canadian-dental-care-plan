@@ -58,10 +58,10 @@ function requireProfileEmailContext({ request, params }: Pick<Route.LoaderArgs |
 }
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'protected-profile:contact-information.page-title', routeId: 'protected/profile/contact-information' }],
+  breadcrumbs: [{ labelI18nKey: 'protected-profile:contactInformation.pageTitle', routeId: 'protected/profile/contact-information' }],
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.email,
-  pageTitleI18nKey: 'protected-profile:email.page-title',
+  pageTitleI18nKey: 'protected-profile:email.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -73,7 +73,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const profileEmailContext = requireProfileEmailContext({ request, params });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:email.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protected-profile:email.pageTitle') }) };
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.email-address', { userId: idToken.sub });
@@ -100,12 +100,12 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const emailSchema = z.object({
     email: z
-      .string(t('protected-profile:email.error-message.email-required'))
+      .string(t('protected-profile:email.errorMessage.emailRequired'))
       .trim()
       .toLowerCase()
       .min(1)
       .max(64)
-      .refine((val) => validator.isEmail(val), t('protected-profile:email.error-message.email-valid')),
+      .refine((val) => validator.isEmail(val), t('protected-profile:email.errorMessage.emailValid')),
   });
 
   const parsedDataResult = emailSchema.safeParse({
@@ -180,16 +180,16 @@ export default function ProtectedProfileEmailAddress({ loaderData, params }: Rou
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <p className="mb-4">{t('protected-profile:email.provide-email')}</p>
-          <p className="mb-8">{t('protected-profile:email.verify-email')}</p>
-          <p className="mb-4 italic">{t('protected-profile:required-label')}</p>
+          <p className="mb-4">{t('protected-profile:email.provideEmail')}</p>
+          <p className="mb-8">{t('protected-profile:email.verifyEmail')}</p>
+          <p className="mb-4 italic">{t('protected-profile:requiredLabel')}</p>
           <div className="mb-6">
-            <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t('protected-profile:email.email-legend')} maxLength={64} required />
+            <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t('protected-profile:email.emailLegend')} maxLength={64} required />
           </div>
 
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Email address click">
-              {t('protected-profile:email.continue-btn')}
+              {t('protected-profile:email.continueBtn')}
             </LoadingButton>
             <ButtonLink variant="secondary" id="back-button" routeId={backButtonRouteId} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Email address click">
               {t('protected-profile:email.back')}

@@ -36,7 +36,7 @@ const CHECKBOX_VALUE = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'application-simplified-child', 'gcweb'),
   pageIdentifier: pageIds.public.application.simplifiedChild.submit,
-  pageTitleI18nKey: 'application-simplified-child:submit.page-heading',
+  pageTitleI18nKey: 'application-simplified-child:submit.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -46,7 +46,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['simplified-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-child:submit.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-child:submit.pageTitle') }) };
 
   const children = [];
   for (const child of state.children) {
@@ -81,8 +81,8 @@ export async function action({ context: { appContainer, session }, request, para
   securityHandler.validateCsrfToken({ formData, session });
 
   const submitTermsSchema = z.object({
-    acknowledgeInfo: z.literal(true, { error: t('application-simplified-child:submit.error-message.acknowledge-info-required') }),
-    acknowledgeCriteria: z.literal(true, { error: t('application-simplified-child:submit.error-message.acknowledge-criteria-required') }),
+    acknowledgeInfo: z.literal(true, { error: t('application-simplified-child:submit.errorMessage.acknowledgeInfoRequired') }),
+    acknowledgeCriteria: z.literal(true, { error: t('application-simplified-child:submit.errorMessage.acknowledgeCriteriaRequired') }),
   });
 
   const parsedDataResult = submitTermsSchema.safeParse({
@@ -111,7 +111,7 @@ export default function RenewChildrenSubmit({ loaderData, params }: Route.Compon
 
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t('application-simplified-child:submit.do-you-qualify-href')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t('application-simplified-child:submit.doYouQualifyHref')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
@@ -122,7 +122,7 @@ export default function RenewChildrenSubmit({ loaderData, params }: Route.Compon
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-child:submit.overview')}</h2>
             <div className="space-y-4">
-              <p>{t('application-simplified-child:submit.you-are-submitting')}</p>
+              <p>{t('application-simplified-child:submit.youAreSubmitting')}</p>
               <ul className="list-disc space-y-1 pl-7">
                 {state.children.map((child, index) => (
                   <li key={index}>{child}</li>
@@ -131,26 +131,26 @@ export default function RenewChildrenSubmit({ loaderData, params }: Route.Compon
             </div>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-child:submit.review-your-application')}</h2>
-            <p>{t('application-simplified-child:submit.please-review')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-child:submit.reviewYourApplication')}</h2>
+            <p>{t('application-simplified-child:submit.pleaseReview')}</p>
             <ButtonLink variant="primary" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Action click">
-              {t('application-simplified-child:submit.review-application')}
+              {t('application-simplified-child:submit.reviewApplication')}
             </ButtonLink>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-child:submit.submit-your-application')}</h2>
-            <p>{t('application-simplified-child:submit.by-submitting')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-child:submit.submitYourApplication')}</h2>
+            <p>{t('application-simplified-child:submit.bySubmitting')}</p>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey="application-simplified-child:submit.review-eligibility-criteria" components={{ eligibilityLink }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey="application-simplified-child:submit.reviewEligibilityCriteria" components={{ eligibilityLink }} />
             </p>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
               <div className="space-y-2">
                 <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
-                  {t('application-simplified-child:submit.info-is-correct')}
+                  {t('application-simplified-child:submit.infoIsCorrect')}
                 </InputCheckbox>
                 <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
-                  {t('application-simplified-child:submit.i-understand')}
+                  {t('application-simplified-child:submit.iUnderstand')}
                 </InputCheckbox>
               </div>
               <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_170px]">
@@ -165,7 +165,7 @@ export default function RenewChildrenSubmit({ loaderData, params }: Route.Compon
                   params={params}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Back click"
                 >
-                  {t('application-simplified-child:submit.childrens-application')}
+                  {t('application-simplified-child:submit.childrensApplication')}
                 </NavigationButtonLink>
               </div>
             </fetcher.Form>
@@ -173,7 +173,7 @@ export default function RenewChildrenSubmit({ loaderData, params }: Route.Compon
         </div>
         <div className="mt-8">
           <InlineLink routeId="public/application/$id/simplified-children/exit-application" params={params}>
-            {t('application-simplified-child:submit.exit-application')}
+            {t('application-simplified-child:submit.exitApplication')}
           </InlineLink>
         </div>
       </div>

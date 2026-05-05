@@ -42,7 +42,7 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.email,
-  pageTitleI18nKey: 'protected-application-spokes:email.page-title',
+  pageTitleI18nKey: 'protected-application-spokes:email.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -56,7 +56,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:email.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:email.pageTitle') }) };
   return {
     defaultState: state.email,
     applicationFlow: `${state.context}-${state.typeOfApplication}` as const,
@@ -84,9 +84,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const emailSchema = z.object({
     email: z
-      .string({ error: t('protected-application-spokes:email.error-message.email-required') })
-      .nonempty(t('protected-application-spokes:email.error-message.email-required'))
-      .refine((val) => validator.isEmail(val), t('protected-application-spokes:email.error-message.email-valid')),
+      .string({ error: t('protected-application-spokes:email.errorMessage.emailRequired') })
+      .nonempty(t('protected-application-spokes:email.errorMessage.emailRequired'))
+      .refine((val) => validator.isEmail(val), t('protected-application-spokes:email.errorMessage.emailValid')),
   });
 
   const parsedDataResult = emailSchema.safeParse({
@@ -146,9 +146,9 @@ export default function ApplicationEmail({ loaderData, params }: Route.Component
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <p className="mb-4">{t('protected-application-spokes:email.provide-email')}</p>
-          <p className="mb-8">{t('protected-application-spokes:email.verify-email')}</p>
-          <p className="mb-4 italic">{t('protected-application:required-label')}</p>
+          <p className="mb-4">{t('protected-application-spokes:email.provideEmail')}</p>
+          <p className="mb-8">{t('protected-application-spokes:email.verifyEmail')}</p>
+          <p className="mb-4 italic">{t('protected-application:requiredLabel')}</p>
           <div className="mb-6">
             <InputField
               id="email"
@@ -159,7 +159,7 @@ export default function ApplicationEmail({ loaderData, params }: Route.Component
               autoComplete="email"
               defaultValue={defaultState}
               errorMessage={errors?.email}
-              label={t('protected-application-spokes:email.email-legend')}
+              label={t('protected-application-spokes:email.emailLegend')}
               maxLength={64}
               required
             />

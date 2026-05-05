@@ -20,7 +20,7 @@ describe('AddressInvalidDialogContent', () => {
       <Dialog open={true} defaultOpen={true}>
         <AddressInvalidDialogContent
           formAction="use-invalid-address"
-          addressContext="mailing-address"
+          addressContext="mailingAddress"
           invalidAddress={{
             address: '1234 Retemele ST',
             city: 'Ottawa',

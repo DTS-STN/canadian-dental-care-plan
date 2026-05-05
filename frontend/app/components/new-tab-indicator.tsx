@@ -9,7 +9,7 @@ export function NewTabIndicator({ className, ...props }: OmitStrict<ComponentPro
   // Following whitespace is important to ensure the content's text is seperated for the screen-reader text
   return (
     <span className={cn('sr-only', className)} {...props}>
-      {` (${t('screen-reader.new-tab')})`}
+      {` (${t('screenReader.newTab')})`}
     </span>
   );
 }

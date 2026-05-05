@@ -36,7 +36,7 @@ const CHECKBOX_VALUE = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application', 'protected-application-renewal-adult', 'gcweb'),
   pageIdentifier: pageIds.protected.application.renewalAdult.submit,
-  pageTitleI18nKey: 'protected-application-renewal-adult:submit.page-heading',
+  pageTitleI18nKey: 'protected-application-renewal-adult:submit.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['renewal-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-renewal-adult:submit.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-renewal-adult:submit.pageTitle') }) };
 
   const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
 
@@ -83,8 +83,8 @@ export async function action({ context: { appContainer, session }, request, para
   securityHandler.validateCsrfToken({ formData, session });
 
   const submitTermsSchema = z.object({
-    acknowledgeInfo: z.literal(true, { error: t('protected-application-renewal-adult:submit.error-message.acknowledge-info-required') }),
-    acknowledgeCriteria: z.literal(true, { error: t('protected-application-renewal-adult:submit.error-message.acknowledge-criteria-required') }),
+    acknowledgeInfo: z.literal(true, { error: t('protected-application-renewal-adult:submit.errorMessage.acknowledgeInfoRequired') }),
+    acknowledgeCriteria: z.literal(true, { error: t('protected-application-renewal-adult:submit.errorMessage.acknowledgeCriteriaRequired') }),
   });
 
   const parsedDataResult = submitTermsSchema.safeParse({
@@ -112,7 +112,7 @@ export default function ProtectedNewAdultSubmit({ loaderData, params }: Route.Co
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t('protected-application-renewal-adult:submit.do-you-qualify-href')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t('protected-application-renewal-adult:submit.doYouQualifyHref')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
@@ -123,33 +123,33 @@ export default function ProtectedNewAdultSubmit({ loaderData, params }: Route.Co
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-renewal-adult:submit.overview')}</h2>
             <div className="space-y-4">
-              <p>{t('protected-application-renewal-adult:submit.you-are-submitting')}</p>
+              <p>{t('protected-application-renewal-adult:submit.youAreSubmitting')}</p>
               <ul className="list-disc space-y-1 pl-7">
                 <li>{state.applicantName}</li>
               </ul>
             </div>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-renewal-adult:submit.review-your-application')}</h2>
-            <p>{t('protected-application-renewal-adult:submit.please-review')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-renewal-adult:submit.reviewYourApplication')}</h2>
+            <p>{t('protected-application-renewal-adult:submit.pleaseReview')}</p>
             <ButtonLink variant="primary" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Action click">
-              {t('protected-application-renewal-adult:submit.review-application')}
+              {t('protected-application-renewal-adult:submit.reviewApplication')}
             </ButtonLink>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-renewal-adult:submit.submit-your-application')}</h2>
-            <p>{t('protected-application-renewal-adult:submit.by-submitting')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-renewal-adult:submit.submitYourApplication')}</h2>
+            <p>{t('protected-application-renewal-adult:submit.bySubmitting')}</p>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-renewal-adult:submit.review-eligibility-criteria" components={{ eligibilityLink }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-renewal-adult:submit.reviewEligibilityCriteria" components={{ eligibilityLink }} />
             </p>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
               <div className="space-y-2">
                 <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
-                  {t('protected-application-renewal-adult:submit.info-is-correct')}
+                  {t('protected-application-renewal-adult:submit.infoIsCorrect')}
                 </InputCheckbox>
                 <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
-                  {t('protected-application-renewal-adult:submit.i-understand')}
+                  {t('protected-application-renewal-adult:submit.iUnderstand')}
                 </InputCheckbox>
               </div>
               <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_170px]">
@@ -164,7 +164,7 @@ export default function ProtectedNewAdultSubmit({ loaderData, params }: Route.Co
                   params={params}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Back click"
                 >
-                  {t('protected-application-renewal-adult:submit.dental-insurance')}
+                  {t('protected-application-renewal-adult:submit.dentalInsurance')}
                 </NavigationButtonLink>
               </div>
             </fetcher.Form>
@@ -172,7 +172,7 @@ export default function ProtectedNewAdultSubmit({ loaderData, params }: Route.Co
         </div>
         <div className="mt-8">
           <InlineLink routeId="protected/application/$id/renewal-adult/exit-application" params={params}>
-            {t('protected-application-renewal-adult:submit.exit-application')}
+            {t('protected-application-renewal-adult:submit.exitApplication')}
           </InlineLink>
         </div>
       </div>

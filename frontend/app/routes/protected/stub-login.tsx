@@ -26,7 +26,7 @@ import { isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('stub-login', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
-  pageTitleI18nKey: 'stub-login:index.page-title',
+  pageTitleI18nKey: 'stub-login:index.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -36,7 +36,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   securityHandler.validateFeatureEnabled('stub-login');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('stub-login:index.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('stub-login:index.pageTitle') }) };
 
   const idTokenOption = session.find('idToken');
   const userInfoTokenOption = session.find('userInfoToken');
@@ -57,10 +57,10 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const stubLoginSchema = z.object({
-    sin: z.string().trim().nonempty(t('stub-login:index.error-message.sin-required')).refine(isValidSin, t('stub-login:index.error-message.sin-invalid')),
-    destinationRouteId: z.string().trim().nonempty(t('stub-login:index.error-message.destination-required')),
-    sid: z.string().trim().nonempty(t('stub-login:index.error-message.sid-required')),
-    sub: z.string().trim().nonempty(t('stub-login:index.error-message.sub-required')),
+    sin: z.string().trim().nonempty(t('stub-login:index.errorMessage.sinRequired')).refine(isValidSin, t('stub-login:index.errorMessage.sinInvalid')),
+    destinationRouteId: z.string().trim().nonempty(t('stub-login:index.errorMessage.destinationRequired')),
+    sid: z.string().trim().nonempty(t('stub-login:index.errorMessage.sidRequired')),
+    sub: z.string().trim().nonempty(t('stub-login:index.errorMessage.subRequired')),
   });
 
   const formData = await request.formData();

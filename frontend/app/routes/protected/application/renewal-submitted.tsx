@@ -19,7 +19,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application', 'gcweb'),
   pageIdentifier: pageIds.protected.application.renewalSubmitted,
-  pageTitleI18nKey: 'protected-application:renewal-submitted.page-title',
+  pageTitleI18nKey: 'protected-application:renewalSubmitted.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -29,7 +29,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:renewal-submitted.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:renewalSubmitted.pageTitle') }) };
 
   return { meta };
 }
@@ -42,7 +42,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  return redirect(t('protected-application:renewal-submitted.exit-btn-link'));
+  return redirect(t('protected-application:renewalSubmitted.exitBtnLink'));
 }
 
 export default function RenewalApplicationSubmitted({ loaderData, params }: Route.ComponentProps) {
@@ -53,23 +53,23 @@ export default function RenewalApplicationSubmitted({ loaderData, params }: Rout
 
   const noWrap = <span className="whitespace-nowrap" />;
   const statusCheckerLink = <InlineLink routeId="public/status/index" className="external-link" newTabIndicator target="_blank" params={params} />;
-  const mscaLinkAccount = <InlineLink to={t('protected-application:renewal-submitted.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
+  const mscaLinkAccount = <InlineLink to={t('protected-application:renewalSubmitted.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose">
       <div className="mb-6 space-y-4">
-        <p>{t('protected-application:renewal-submitted.records-show-application-submitted')}</p>
+        <p>{t('protected-application:renewalSubmitted.recordsShowApplicationSubmitted')}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application:renewal-submitted.status-checker-info" components={{ statusCheckerLink }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application:renewalSubmitted.statusCheckerInfo" components={{ statusCheckerLink }} />
         </p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application:renewal-submitted.update-profile-info" components={{ mscaLinkAccount, noWrap }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application:renewalSubmitted.updateProfileInfo" components={{ mscaLinkAccount, noWrap }} />
         </p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
         <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - Renewal application submitted click">
-          {t('protected-application:renewal-submitted.exit-btn')}
+          {t('protected-application:renewalSubmitted.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

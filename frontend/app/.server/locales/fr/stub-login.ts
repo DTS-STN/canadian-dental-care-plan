@@ -1,18 +1,18 @@
 const ns = {
-  "index": {
-    "page-title": "Connexion factice",
-    "sin": "Numéro d'assurance sociale (NAS)",
-    "destination": "Page de destination",
-    "raoidc": "Revendications du jeton d'identité RAOIDC",
-    "sid": "Identifiant de session (sid)",
-    "sub": "Identifiant du sujet (sub)",
-    "login": "Connexion",
-    "error-message": {
-      "sin-required": "Entrez un NAS",
-      "sin-invalid": "Entrez un NAS valide",
-      "destination-required": "Sélectionnez une page de destination",
-      "sid-required": "Entrez un sid",
-      "sub-required": "Entrez un sub",
+  index: {
+    pageTitle: "Connexion factice",
+    sin: "Numéro d'assurance sociale (NAS)",
+    destination: "Page de destination",
+    raoidc: "Revendications du jeton d'identité RAOIDC",
+    sid: "Identifiant de session (sid)",
+    sub: "Identifiant du sujet (sub)",
+    login: "Connexion",
+    errorMessage: {
+      sinRequired: "Entrez un NAS",
+      sinInvalid: "Entrez un NAS valide",
+      destinationRequired: "Sélectionnez une page de destination",
+      sidRequired: "Entrez un sid",
+      subRequired: "Entrez un sub",
     },
   },
 };

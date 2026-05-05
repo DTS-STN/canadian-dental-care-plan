@@ -47,7 +47,7 @@ describe('AppLink', () => {
   it('should render the NewTabIndicator when newTabIndicator is true', () => {
     const propsWithIndicator: AppLinkProps = { ...defaultProps, newTabIndicator: true };
     render(<AppLink {...propsWithIndicator} />);
-    expect(screen.getByText('(screen-reader.new-tab)')).toBeInTheDocument();
+    expect(screen.getByText('(screenReader.newTab)')).toBeInTheDocument();
   });
 
   it('should call getPathById with the correct arguments', () => {

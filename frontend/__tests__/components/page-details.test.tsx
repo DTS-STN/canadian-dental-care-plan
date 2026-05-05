@@ -23,37 +23,37 @@ describe('PageDetails', () => {
 
   it('displays page identifier if available', () => {
     const { getByText } = render(<PageDetails />);
-    expect(getByText('gcweb:page-details.screen-id')).toBeInTheDocument();
+    expect(getByText('gcweb:pageDetails.screenId')).toBeInTheDocument();
     expect(getByText('page123')).toBeInTheDocument();
   });
 
   it('displays build date if available', () => {
     const { getByText } = render(<PageDetails />);
-    expect(getByText('gcweb:page-details.date-modfied')).toBeInTheDocument();
+    expect(getByText('gcweb:pageDetails.dateModfied')).toBeInTheDocument();
     expect(getByText('2024-03-11')).toBeInTheDocument();
   });
 
   it('displays build version if available', () => {
     const { getByText } = render(<PageDetails />);
-    expect(getByText('gcweb:page-details.version')).toBeInTheDocument();
+    expect(getByText('gcweb:pageDetails.version')).toBeInTheDocument();
     expect(getByText('1.0.0')).toBeInTheDocument();
   });
 
   it('does not display page identifier if not available', () => {
     vi.mocked(usePageIdentifier).mockReturnValueOnce('');
     const { queryByText } = render(<PageDetails />);
-    expect(queryByText('gcweb:page-details.screen-id')).not.toBeInTheDocument();
+    expect(queryByText('gcweb:pageDetails.screenId')).not.toBeInTheDocument();
   });
 
   it('does not display build date if not available', () => {
     vi.mocked(useBuildInfo, { partial: true }).mockReturnValueOnce({});
     const { queryByText } = render(<PageDetails />);
-    expect(queryByText('gcweb:page-details.date-modfied')).not.toBeInTheDocument();
+    expect(queryByText('gcweb:pageDetails.dateModfied')).not.toBeInTheDocument();
   });
 
   it('does not display build version if not available', () => {
     vi.mocked(useBuildInfo, { partial: true }).mockReturnValueOnce({ buildVersion: '' });
     const { queryByText } = render(<PageDetails />);
-    expect(queryByText('gcweb:page-details.version')).not.toBeInTheDocument();
+    expect(queryByText('gcweb:pageDetails.version')).not.toBeInTheDocument();
   });
 });

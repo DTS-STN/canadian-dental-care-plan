@@ -28,7 +28,6 @@ const config: Config = {
       files: 'app/.server/locales/**/*.ts',
       options: {
         singleQuote: false,
-        quoteProps: 'preserve',
         printWidth: Number.POSITIVE_INFINITY,
       },
     },

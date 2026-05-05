@@ -28,7 +28,7 @@ import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils'
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.childSocialInsuranceNumber,
-  pageTitleI18nKey: 'protected-application-spokes:children.social-insurance-number.page-title',
+  pageTitleI18nKey: 'protected-application-spokes:children.socialInsuranceNumber.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -43,12 +43,12 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const childNumber = t('protected-application-spokes:children.child-number', { childNumber: childState.childNumber });
+  const childNumber = t('protected-application-spokes:children.childNumber', { childNumber: childState.childNumber });
   const childName = childState.information?.firstName ?? childNumber;
 
   const meta = {
-    title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.social-insurance-number.page-title', { childName }) }),
-    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.social-insurance-number.page-title', { childName: childNumber }) }),
+    title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.socialInsuranceNumber.pageTitle', { childName }) }),
+    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.socialInsuranceNumber.pageTitle', { childName: childNumber }) }),
   };
 
   return {
@@ -84,7 +84,7 @@ export async function action({ context: { appContainer, session }, params, reque
           ctx.addIssue({
             code: 'custom',
             path: ['socialInsuranceNumber'],
-            message: t('protected-application-spokes:children.social-insurance-number.sin-valid'),
+            message: t('protected-application-spokes:children.socialInsuranceNumber.sinValid'),
           });
         } else if (
           sin &&
@@ -96,7 +96,7 @@ export async function action({ context: { appContainer, session }, params, reque
           ctx.addIssue({
             code: 'custom',
             path: ['socialInsuranceNumber'],
-            message: t('protected-application-spokes:children.social-insurance-number.sin-unique'),
+            message: t('protected-application-spokes:children.socialInsuranceNumber.sinUnique'),
           });
         }
       }),
@@ -146,15 +146,15 @@ export default function ChildSocialInsuranceNumber({ loaderData, params }: Route
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <p className="mb-4 italic">{t('protected-application:all-optional')}</p>
+          <p className="mb-4 italic">{t('protected-application:allOptional')}</p>
           <div className="mb-6">
             <InputPatternField
               id="social-insurance-number"
               name="socialInsuranceNumber"
               format={sinInputPatternFormat}
-              label={t('protected-application-spokes:children.social-insurance-number.legend', { childName })}
+              label={t('protected-application-spokes:children.socialInsuranceNumber.legend', { childName })}
               inputMode="numeric"
-              helpMessagePrimary={t('protected-application-spokes:children.social-insurance-number.help-message')}
+              helpMessagePrimary={t('protected-application-spokes:children.socialInsuranceNumber.helpMessage')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={childSin ?? ''}
               errorMessage={errors?.socialInsuranceNumber}
@@ -162,7 +162,7 @@ export default function ChildSocialInsuranceNumber({ loaderData, params }: Route
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Child social insurance number click">
-              {t('protected-application-spokes:children.social-insurance-number.save-btn')}
+              {t('protected-application-spokes:children.socialInsuranceNumber.saveBtn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -172,7 +172,7 @@ export default function ChildSocialInsuranceNumber({ loaderData, params }: Route
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child social insurance number click"
             >
-              {t('protected-application-spokes:children.social-insurance-number.back-btn')}
+              {t('protected-application-spokes:children.socialInsuranceNumber.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

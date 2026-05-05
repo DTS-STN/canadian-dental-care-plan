@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ProgressStepper as ReusableProgressStepper } from '~/components/progress-stepper';
 
-const applicationSimplifiedFamilySteps = ['contact-information', 'dental-insurance', 'childrens-application', 'submit'] as const;
+const applicationSimplifiedFamilySteps = ['contactInformation', 'dentalInsurance', 'childrensApplication', 'submit'] as const;
 type ApplicationSimplifiedFamilySteps = (typeof applicationSimplifiedFamilySteps)[number];
 
 type ProgressStepperProps = OmitStrict<ComponentProps<typeof ReusableProgressStepper>, 'activeStep' | 'steps'> & {
@@ -22,7 +22,7 @@ export function ProgressStepper({ activeStep, ...props }: ProgressStepperProps):
     function () {
       return applicationSimplifiedFamilySteps.map((step) => ({
         id: step,
-        label: t(`application-simplified-family:progress-stepper.${step}`),
+        label: t(`application-simplified-family:progressStepper.${step}`),
       }));
     },
     [t],

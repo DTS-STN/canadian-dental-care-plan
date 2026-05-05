@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ProgressStepper as ReusableProgressStepper } from '~/components/progress-stepper';
 
-const applicationRenewalAdultSteps = ['marital-status', 'contact-information', 'dental-insurance', 'submit'] as const;
+const applicationRenewalAdultSteps = ['maritalStatus', 'contactInformation', 'dentalInsurance', 'submit'] as const;
 type ApplicationRenewalAdultSteps = (typeof applicationRenewalAdultSteps)[number];
 
 type ProgressStepperProps = OmitStrict<ComponentProps<typeof ReusableProgressStepper>, 'activeStep' | 'steps'> & {
@@ -25,10 +25,10 @@ export function ProgressStepper({ activeStep, excludeMaritalStatus, ...props }: 
   const steps = useMemo(
     function () {
       return applicationRenewalAdultSteps
-        .filter((step) => !excludeMaritalStatus || step !== 'marital-status')
+        .filter((step) => !excludeMaritalStatus || step !== 'maritalStatus')
         .map((step) => ({
           id: step,
-          label: t(`protected-application-renewal-adult:progress-stepper.${step}`),
+          label: t(`protected-application-renewal-adult:progressStepper.${step}`),
         }));
     },
     [excludeMaritalStatus, t],

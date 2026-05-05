@@ -36,7 +36,7 @@ const CHECKBOX_VALUE = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'application-full-family', 'gcweb'),
   pageIdentifier: pageIds.public.application.fullFamily.submit,
-  pageTitleI18nKey: 'application-full-family:submit.page-heading',
+  pageTitleI18nKey: 'application-full-family:submit.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -46,7 +46,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['full-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:submit.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:submit.pageTitle') }) };
 
   const children = [];
   for (const child of state.children) {
@@ -90,8 +90,8 @@ export async function action({ context: { appContainer, session }, request, para
   securityHandler.validateCsrfToken({ formData, session });
 
   const submitTermsSchema = z.object({
-    acknowledgeInfo: z.literal(true, { error: t('application-full-family:submit.error-message.acknowledge-info-required') }),
-    acknowledgeCriteria: z.literal(true, { error: t('application-full-family:submit.error-message.acknowledge-criteria-required') }),
+    acknowledgeInfo: z.literal(true, { error: t('application-full-family:submit.errorMessage.acknowledgeInfoRequired') }),
+    acknowledgeCriteria: z.literal(true, { error: t('application-full-family:submit.errorMessage.acknowledgeCriteriaRequired') }),
   });
 
   const parsedDataResult = submitTermsSchema.safeParse({
@@ -127,7 +127,7 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
 
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t('application-full-family:submit.do-you-qualify-href')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t('application-full-family:submit.doYouQualifyHref')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
@@ -138,7 +138,7 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
           <section className="space-y-4">
             <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.overview')}</h2>
             <div className="space-y-4">
-              <p>{t('application-full-family:submit.you-are-submitting')}</p>
+              <p>{t('application-full-family:submit.youAreSubmitting')}</p>
               <ul className="list-disc space-y-1 pl-7">
                 <li>{state.applicantName}</li>
                 {state.children.map((child, index) => (
@@ -148,26 +148,26 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
             </div>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.review-your-application')}</h2>
-            <p>{t('application-full-family:submit.please-review')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.reviewYourApplication')}</h2>
+            <p>{t('application-full-family:submit.pleaseReview')}</p>
             <ButtonLink variant="primary" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Action click">
-              {t('application-full-family:submit.review-application')}
+              {t('application-full-family:submit.reviewApplication')}
             </ButtonLink>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.submit-your-application')}</h2>
-            <p>{t('application-full-family:submit.by-submitting')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('application-full-family:submit.submitYourApplication')}</h2>
+            <p>{t('application-full-family:submit.bySubmitting')}</p>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey="application-full-family:submit.review-eligibility-criteria" components={{ eligibilityLink }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey="application-full-family:submit.reviewEligibilityCriteria" components={{ eligibilityLink }} />
             </p>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
               <div className="space-y-2">
                 <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
-                  {t('application-full-family:submit.info-is-correct')}
+                  {t('application-full-family:submit.infoIsCorrect')}
                 </InputCheckbox>
                 <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
-                  {t('application-full-family:submit.i-understand')}
+                  {t('application-full-family:submit.iUnderstand')}
                 </InputCheckbox>
               </div>
               <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_170px]">
@@ -182,7 +182,7 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
                   params={params}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Back click"
                 >
-                  {t('application-full-family:submit.children-application')}
+                  {t('application-full-family:submit.childrenApplication')}
                 </NavigationButtonLink>
               </div>
             </fetcher.Form>
@@ -190,7 +190,7 @@ export default function NewFamilySubmit({ loaderData, params }: Route.ComponentP
         </div>
         <div className="mt-8">
           <InlineLink routeId="public/application/$id/full-family/exit-application" params={params}>
-            {t('application-full-family:submit.exit-application')}
+            {t('application-full-family:submit.exitApplication')}
           </InlineLink>
         </div>
       </div>

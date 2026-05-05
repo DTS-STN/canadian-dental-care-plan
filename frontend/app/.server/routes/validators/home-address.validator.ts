@@ -33,29 +33,29 @@ export class DefaultHomeAddressValidator implements HomeAddressValidator {
     const t = await getFixedT(this.locale, ['common']);
     return {
       address: {
-        invalidCharacters: t('common:error-message.home.characters-valid'),
-        required: t('common:error-message.home.address-required'),
+        invalidCharacters: t('common:errorMessage.home.charactersValid'),
+        required: t('common:errorMessage.home.addressRequired'),
       },
       apartment: {
-        invalidCharacters: t('common:error-message.mailing.characters-valid'),
+        invalidCharacters: t('common:errorMessage.mailing.charactersValid'),
       },
       city: {
-        required: t('common:error-message.home.city-required'),
-        invalidCharacters: t('common:error-message.home.characters-valid'),
+        required: t('common:errorMessage.home.cityRequired'),
+        invalidCharacters: t('common:errorMessage.home.charactersValid'),
       },
       country: {
-        required: t('common:error-message.home.country-required'),
+        required: t('common:errorMessage.home.countryRequired'),
       },
       provinceState: {
-        required: t('common:error-message.home.province-state-required'),
+        required: t('common:errorMessage.home.provinceStateRequired'),
       },
       postalZipCode: {
-        invalidCharacters: t('common:error-message.home.characters-valid'),
-        invalidPostalCode: t('common:error-message.home.postal-zip-code-valid'),
-        invalidPostalCodeForProvince: t('common:error-message.home.invalid-postal-zip-code-for-province'),
-        invalidPostalZipCodeForCountry: t('common:error-message.home.invalid-postal-zip-code-for-country'),
-        invalidZipCode: t('common:error-message.home.zip-code-valid'),
-        required: t('common:error-message.home.postal-zip-code-required'),
+        invalidCharacters: t('common:errorMessage.home.charactersValid'),
+        invalidPostalCode: t('common:errorMessage.home.postalZipCodeValid'),
+        invalidPostalCodeForProvince: t('common:errorMessage.home.invalidPostalZipCodeForProvince'),
+        invalidPostalZipCodeForCountry: t('common:errorMessage.home.invalidPostalZipCodeForCountry'),
+        invalidZipCode: t('common:errorMessage.home.zipCodeValid'),
+        required: t('common:errorMessage.home.postalZipCodeRequired'),
       },
     };
   }

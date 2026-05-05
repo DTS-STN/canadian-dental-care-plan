@@ -88,17 +88,17 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
       <DialogHeader>
         <DialogTitle className="flex items-center gap-2">
           <FontAwesomeIcon icon={faTriangleExclamation} className="text-lg text-amber-600" />
-          <span>{t('common:dialog.address-suggestion.header')}</span>
+          <span>{t('common:dialog.addressSuggestion.header')}</span>
         </DialogTitle>
       </DialogHeader>
       <div className="space-y-6">
         <p id={dialogDescriptionId}>
-          <Trans ns={['common']} i18nKey="common:dialog.address-suggestion.description" />
+          <Trans ns={['common']} i18nKey="common:dialog.addressSuggestion.description" />
         </p>
         <InputRadios
           id="addressSelection"
           name="addressSelection"
-          legend={t('common:dialog.address-suggestion.address-selection-legend')}
+          legend={t('common:dialog.addressSuggestion.addressSelectionLegend')}
           outerAriaDescribedById={dialogDescriptionId}
           options={[
             {
@@ -106,7 +106,7 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
               children: (
                 <>
                   <p className="mb-2">
-                    <strong>{t('common:dialog.address-suggestion.entered-address-option')}</strong>
+                    <strong>{t('common:dialog.addressSuggestion.enteredAddressOption')}</strong>
                   </p>
                   <Address address={enteredAddress} />
                 </>
@@ -117,7 +117,7 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
               children: (
                 <>
                   <p className="mb-2">
-                    <strong>{t('common:dialog.address-suggestion.suggested-address-option')}</strong>
+                    <strong>{t('common:dialog.addressSuggestion.suggestedAddressOption')}</strong>
                   </p>
                   <Address address={suggestedAddress} />
                 </>
@@ -135,7 +135,7 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
       <DialogFooter>
         <DialogClose asChild>
           <Button id="dialog.corrected-address-close-button" disabled={isSubmitting} variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Suggestion click">
-            {t('common:dialog.address-suggestion.cancel-button')}
+            {t('common:dialog.addressSuggestion.cancelButton')}
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
@@ -150,7 +150,7 @@ export function AddressSuggestionDialogContent({ enteredAddress, suggestedAddres
             size="sm"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Use Selected Address - Address Suggestion click"
           >
-            {t('common:dialog.address-suggestion.use-selected-address-button')}
+            {t('common:dialog.addressSuggestion.useSelectedAddressButton')}
           </LoadingButton>
         </fetcher.Form>
       </DialogFooter>
@@ -162,7 +162,7 @@ interface AddressInvalidDialogContentProps {
   invalidAddress: CanadianAddress;
   formAction: string;
   syncAddresses?: boolean;
-  addressContext: 'home-address' | 'mailing-address';
+  addressContext: 'homeAddress' | 'mailingAddress';
 }
 
 export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAddresses = false, addressContext }: AddressInvalidDialogContentProps) {
@@ -198,31 +198,31 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
       <DialogHeader>
         <DialogTitle className="flex items-center gap-2">
           <FontAwesomeIcon icon={faTriangleExclamation} className="text-lg text-amber-600" />
-          <span>{t('common:dialog.address-invalid.header')}</span>
+          <span>{t('common:dialog.addressInvalid.header')}</span>
         </DialogTitle>
       </DialogHeader>
       <div className="mb-6 space-y-6">
         <p>
-          <Trans ns={['common']} i18nKey="common:dialog.address-invalid.description" />
+          <Trans ns={['common']} i18nKey="common:dialog.addressInvalid.description" />
         </p>
         <p>
-          <Trans ns={['common']} i18nKey="common:dialog.address-invalid.important" />
+          <Trans ns={['common']} i18nKey="common:dialog.addressInvalid.important" />
         </p>
-        <h3 className="font-lato text-xl font-bold">{t(`common:dialog.address-invalid.context.${addressContext}`)}</h3>
+        <h3 className="font-lato text-xl font-bold">{t(`common:dialog.addressInvalid.context.${addressContext}`)}</h3>
         <div className="space-y-2">
           <p>
-            <strong>{t('common:dialog.address-invalid.entered-address')}</strong>
+            <strong>{t('common:dialog.addressInvalid.enteredAddress')}</strong>
           </p>
           <Address address={invalidAddress} />
         </div>
         <InputCheckbox id="confirm-checkbox" name="confirm-checkbox" onChange={() => setIsCheckboxChecked((prev) => !prev)}>
-          {t('common:dialog.address-invalid.checkbox')}
+          {t('common:dialog.addressInvalid.checkbox')}
         </InputCheckbox>
       </div>
       <DialogFooter>
         <DialogClose asChild>
           <Button id="dialog.address-invalid-close-button" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Back - Address Invalid click">
-            {t('common:dialog.address-invalid.close-button')}
+            {t('common:dialog.addressInvalid.closeButton')}
           </Button>
         </DialogClose>
         <fetcher.Form method="post" noValidate onSubmit={onSubmitHandler}>
@@ -238,7 +238,7 @@ export function AddressInvalidDialogContent({ formAction, invalidAddress, syncAd
             size="sm"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Dialog Use entered address - Address Invalid click"
           >
-            {t('common:dialog.address-invalid.continue-button')}
+            {t('common:dialog.addressInvalid.continueButton')}
           </LoadingButton>
         </fetcher.Form>
       </DialogFooter>

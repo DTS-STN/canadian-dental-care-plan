@@ -53,7 +53,7 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.verifyEmail,
-  pageTitleI18nKey: 'protected-application-spokes:verify-email.page-title',
+  pageTitleI18nKey: 'protected-application-spokes:verifyEmail.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -67,7 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:verify-email.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:verifyEmail.pageTitle') }) };
   return {
     defaultState: state.email,
     meta,
@@ -124,12 +124,12 @@ export async function action({ context: { appContainer, session }, params, reque
       verificationCode: z
         .string()
         .trim()
-        .min(1, t('protected-application-spokes:verify-email.error-message.verification-code-required'))
+        .min(1, t('protected-application-spokes:verifyEmail.errorMessage.verificationCodeRequired'))
         .transform(extractDigits)
 
         .superRefine((val, ctx) => {
           if (state.verifyEmail && state.verifyEmail.verificationAttempts >= MAX_ATTEMPTS) {
-            ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:verify-email.error-message.verification-code-max-attempts'), path: ['verificationCode'] });
+            ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:verifyEmail.errorMessage.verificationCodeMaxAttempts'), path: ['verificationCode'] });
           }
         }),
     });
@@ -225,24 +225,24 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
   return (
     <div className="max-w-prose">
       <ErrorAlert>
-        <h2 className="mb-2 font-bold">{t('protected-application-spokes:verify-email.verification-code-alert.heading')}</h2>
+        <h2 className="mb-2 font-bold">{t('protected-application-spokes:verifyEmail.verificationCodeAlert.heading')}</h2>
         <p className="-mb-3">
-          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:verify-email.verification-code-alert.detail" components={{ requestLink }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:verifyEmail.verificationCodeAlert.detail" components={{ requestLink }} />
         </p>
       </ErrorAlert>
       <ErrorSummaryProvider actionData={fetcher.data}>
-        <p className="mb-4">{t('protected-application-spokes:verify-email.verification-code', { email: defaultState })}</p>
-        <p className="mb-4">{t('protected-application-spokes:verify-email.request-new')}</p>
+        <p className="mb-4">{t('protected-application-spokes:verifyEmail.verificationCode', { email: defaultState })}</p>
+        <p className="mb-4">{t('protected-application-spokes:verifyEmail.requestNew')}</p>
         <p className="mb-8">
-          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:verify-email.unable-to-verify" components={{ communicationLink }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:verifyEmail.unableToVerify" components={{ communicationLink }} />
         </p>
-        <p className="mb-4 italic">{t('protected-application:required-label')}</p>
+        <p className="mb-4 italic">{t('protected-application:requiredLabel')}</p>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-6">
             <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t('protected-application-spokes:verify-email.verification-code-label')} inputMode="numeric" required />
+              <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t('protected-application-spokes:verifyEmail.verificationCodeLabel')} inputMode="numeric" required />
             </div>
             <LoadingButton
               id="request-button"
@@ -262,7 +262,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
                 await fetcher.submit(formData, { method: 'post' });
               }}
             >
-              {t('protected-application-spokes:verify-email.request-new-code')}
+              {t('protected-application-spokes:verifyEmail.requestNewCode')}
             </LoadingButton>
           </div>
 
@@ -276,10 +276,10 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
               loading={isSubmitting && submittedAction === FORM_ACTION.submit}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Verify email click"
             >
-              {t('protected-application-spokes:verify-email.continue')}
+              {t('protected-application-spokes:verifyEmail.continue')}
             </LoadingButton>
             <ButtonLink id="back-button" variant="secondary" routeId="protected/application/$id/email" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Verify email click">
-              {t('protected-application-spokes:verify-email.back')}
+              {t('protected-application-spokes:verifyEmail.back')}
             </ButtonLink>
           </div>
         </fetcher.Form>
@@ -287,13 +287,13 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t('protected-application-spokes:verify-email.code-sent.heading')}</DialogTitle>
+            <DialogTitle>{t('protected-application-spokes:verifyEmail.codeSent.heading')}</DialogTitle>
           </DialogHeader>
-          <DialogDescription>{t('protected-application-spokes:verify-email.code-sent.detail', { email: defaultState })}</DialogDescription>
+          <DialogDescription>{t('protected-application-spokes:verifyEmail.codeSent.detail', { email: defaultState })}</DialogDescription>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="modal-continue" disabled={isSubmitting} variant="primary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Modal Continue - Verify email click">
-                {t('protected-application-spokes:verify-email.continue')}
+                {t('protected-application-spokes:verifyEmail.continue')}
               </Button>
             </DialogClose>
           </DialogFooter>

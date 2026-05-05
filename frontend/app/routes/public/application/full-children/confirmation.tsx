@@ -28,7 +28,7 @@ import { formatSin } from '~/utils/sin-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-full-child', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.fullChild.confirmation,
-  pageTitleI18nKey: 'application-full-child:confirm.page-title',
+  pageTitleI18nKey: 'application-full-child:confirm.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -137,7 +137,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     }),
   );
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-child:confirm.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-child:confirm.pageTitle') }) };
 
   return {
     context: state.context,
@@ -165,7 +165,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearPublicApplicationState({ params, session });
 
-  return redirect(t('confirm.exit-link'));
+  return redirect(t('confirm.exitLink'));
 }
 
 export default function NewChildrenConfirmation({ loaderData, params }: Route.ComponentProps) {
@@ -175,8 +175,8 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo, surveyLink, children } = loaderData;
 
-  const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('application-full-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
+  const mscaLinkAccount = <InlineLink to={t('confirm.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('application-full-child:confirm.statusCheckerLink')} className="external-link" newTabIndicator target="_blank" />;
 
   const { currentLanguage } = useCurrentLanguage();
 
@@ -184,16 +184,16 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
     <div className="max-w-prose space-y-10">
       <div className="space-y-4">
         <h2 className="text-3xl">
-          <strong>{t('confirm.app-code-is')}</strong>
+          <strong>{t('confirm.appCodeIs')}</strong>
           <br />
           <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
         </h2>
-        <p>{t('confirm.make-note')}</p>
+        <p>{t('confirm.makeNote')}</p>
       </div>
 
       <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.keep-copy')}</h2>
-        <p className="mt-4">{t('confirm.print-copy-important')}</p>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.keepCopy')}</h2>
+        <p className="mt-4">{t('confirm.printCopyImportant')}</p>
         <Button
           variant="primary"
           size="lg"
@@ -204,7 +204,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
           }}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Print top - Application successfully submitted click"
         >
-          {t('confirm.print-btn')}
+          {t('confirm.printBtn')}
         </Button>
       </section>
 
@@ -229,25 +229,25 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
       </ContextualAlert>
 
       <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>
-        <p className="mt-4">{t(`confirm.begin-process.${loaderData.context}`)}</p>
-        {loaderData.context === 'intake' && <p className="mt-4">{t('confirm.proof-of-coverage')}</p>}
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.whatsNext')}</h2>
+        <p className="mt-4">{t(`confirm.beginProcess.${loaderData.context}`)}</p>
+        {loaderData.context === 'intake' && <p className="mt-4">{t('confirm.proofOfCoverage')}</p>}
       </section>
 
       <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.check-status')}</h2>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.checkStatus')}</h2>
         <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcpChecker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
         </p>
-        <p className="mt-4">{t('confirm.use-code')}</p>
+        <p className="mt-4">{t('confirm.useCode')}</p>
       </section>
 
       <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.get-updates-title')}</h2>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.getUpdatesTitle')}</h2>
         <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey={'confirm.get-updates-text'} components={{ mscaLinkAccount }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey={'confirm.getUpdatesText'} components={{ mscaLinkAccount }} />
         </p>
-        <p className="mt-4">{t('confirm.get-updates-info')}</p>
+        <p className="mt-4">{t('confirm.getUpdatesInfo')}</p>
         <ul className="list-disc space-y-1 pl-7">
           <li>{t('confirm.view')}</li>
           <li>{t('confirm.update')}</li>
@@ -257,50 +257,50 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
 
       <section className="space-y-8">
         <div className="space-y-6">
-          <h2 className="font-lato text-3xl font-bold">{t('confirm.application-summ')}</h2>
+          <h2 className="font-lato text-3xl font-bold">{t('confirm.applicationSumm')}</h2>
           <DefinitionList border className="text-xl">
-            <DefinitionListItem term={t('confirm.application-code')}>
+            <DefinitionListItem term={t('confirm.applicationCode')}>
               <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
             </DefinitionListItem>
           </DefinitionList>
         </div>
 
         <section className="space-y-8">
-          <h2 className="font-lato text-3xl font-bold">{t('confirm.parent-or-guardian')}</h2>
+          <h2 className="font-lato text-3xl font-bold">{t('confirm.parentOrGuardian')}</h2>
 
           <section className="space-y-6">
-            <h3 className="font-lato text-2xl font-bold">{t('confirm.parent-or-guardian-info')}</h3>
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.parentOrGuardianInfo')}</h3>
             <DefinitionList border>
-              {userInfo.memberId && <DefinitionListItem term={t('confirm.member-id')}>{formatClientNumber(userInfo.memberId)}</DefinitionListItem>}
-              <DefinitionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
+              {userInfo.memberId && <DefinitionListItem term={t('confirm.memberId')}>{formatClientNumber(userInfo.memberId)}</DefinitionListItem>}
+              <DefinitionListItem term={t('confirm.fullName')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.dob')}>{userInfo.birthday}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.sin')}>
                 <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
               </DefinitionListItem>
-              <DefinitionListItem term={t('confirm.marital-status')}>{userInfo.maritalStatus}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.maritalStatus')}>{userInfo.maritalStatus}</DefinitionListItem>
             </DefinitionList>
           </section>
 
           {spouseInfo && (
             <section className="space-y-6">
-              <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
+              <h3 className="font-lato text-2xl font-bold">{t('confirm.spouseInfo')}</h3>
               <DefinitionList border>
-                <DefinitionListItem term={t('confirm.year-birth')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
+                <DefinitionListItem term={t('confirm.yearBirth')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
                 <DefinitionListItem term={t('confirm.sin')}>
                   <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
                 </DefinitionListItem>
-                <DefinitionListItem term={t('confirm.consent')}>{t('confirm.consent-answer')}</DefinitionListItem>
+                <DefinitionListItem term={t('confirm.consent')}>{t('confirm.consentAnswer')}</DefinitionListItem>
               </DefinitionList>
             </section>
           )}
 
           <section className="space-y-6">
-            <h3 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h3>
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.contactInfo')}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.phone-number')}>
+              <DefinitionListItem term={t('confirm.phoneNumber')}>
                 <span className="text-nowrap">{userInfo.phoneNumber}</span>
               </DefinitionListItem>
-              <DefinitionListItem term={t('confirm.alt-phone-number')}>
+              <DefinitionListItem term={t('confirm.altPhoneNumber')}>
                 <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
               </DefinitionListItem>
               {userInfo.contactInformationEmail && (
@@ -334,11 +334,11 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
           </section>
 
           <section className="space-y-6">
-            <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-pref')}</h3>
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.commPref')}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage.name}</DefinitionListItem>
-              <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.communicationSunLifePreference.name}</DefinitionListItem>
-              <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.communicationGOCPreference.name}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.langPref')}>{userInfo.preferredLanguage.name}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.sunLifeCommPrefTitle')}>{userInfo.communicationSunLifePreference.name}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.gocCommPrefTitle')}>{userInfo.communicationGOCPreference.name}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.email')}>{userInfo.contactInformationEmail}</DefinitionListItem>
             </DefinitionList>
           </section>
@@ -351,24 +351,24 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
               <section key={child.id} className="space-y-10">
                 <h2 className="font-lato text-3xl font-bold">{child.firstName}</h2>
                 <div>
-                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-full-child:confirm.page-sub-title', { child: child.firstName })}</h3>
+                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-full-child:confirm.pageSubTitle', { child: child.firstName })}</h3>
                   <DefinitionList border>
-                    <DefinitionListItem term={t('confirm.member-id')}>{child.memberId}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:confirm.full-name')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
+                    <DefinitionListItem term={t('confirm.memberId')}>{child.memberId}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-child:confirm.fullName')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
                     <DefinitionListItem term={t('application-full-child:confirm.dob')}>{dateOfBirth}</DefinitionListItem>
                     <DefinitionListItem term={t('application-full-child:confirm.sin')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:confirm.is-parent')}>{child.isParent ? t('application-full-child:confirm.yes') : t('application-full-child:confirm.no')}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-child:confirm.isParent')}>{child.isParent ? t('application-full-child:confirm.yes') : t('application-full-child:confirm.no')}</DefinitionListItem>
                   </DefinitionList>
                 </div>
                 <div>
-                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-full-child:confirm.dental-title', { child: child.firstName })}</h3>
+                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-full-child:confirm.dentalTitle', { child: child.firstName })}</h3>
                   <DefinitionList border>
-                    <DefinitionListItem term={t('application-full-child:confirm.dental-private')}>{child.dentalInsurance.accessToDentalInsurance ? t('application-full-child:confirm.yes') : t('application-full-child:confirm.no')}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-child:confirm.dental-public')}>
+                    <DefinitionListItem term={t('application-full-child:confirm.dentalPrivate')}>{child.dentalInsurance.accessToDentalInsurance ? t('application-full-child:confirm.yes') : t('application-full-child:confirm.no')}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-child:confirm.dentalPublic')}>
                       {child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access ? (
                         <div className="space-y-3">
                           <p>{t('application-full-child:confirm.yes')}</p>
-                          <p>{t('application-full-child:confirm.dental-benefit-has-access')}</p>
+                          <p>{t('application-full-child:confirm.dentalBenefitHasAccess')}</p>
                           <ul className="list-disc space-y-1 pl-7">
                             {child.dentalInsurance.federalBenefit.access && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
                             {child.dentalInsurance.provTerrBenefit.access && <li>{child.dentalInsurance.provTerrBenefit.benefit}</li>}
@@ -397,23 +397,23 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
           }}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Print bottom - Application successfully submitted click"
         >
-          {t('confirm.print-btn')}
+          {t('confirm.printBtn')}
         </Button>
       </div>
       <Dialog>
         <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Exit - Application successfully submitted click" asChild>
-          <Button variant="secondary">{t('application-full-child:confirm.close-application')}</Button>
+          <Button variant="secondary">{t('application-full-child:confirm.closeApplication')}</Button>
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{t('application-full-child:confirm.modal.header')}</DialogTitle>
           </DialogHeader>
           <p>{t('application-full-child:confirm.modal.info')}</p>
-          <p>{t('application-full-child:confirm.modal.are-you-sure')}</p>
+          <p>{t('application-full-child:confirm.modal.areYouSure')}</p>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Back exit modal - Application successfully submitted click">
-                {t('application-full-child:confirm.modal.back-btn')}
+                {t('application-full-child:confirm.modal.backBtn')}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
@@ -425,7 +425,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
                 onClick={() => removeApplicationFlowStorageValue()}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Confirmation exit modal - Application successfully submitted click"
               >
-                {t('application-full-child:confirm.modal.close-btn')}
+                {t('application-full-child:confirm.modal.closeBtn')}
               </Button>
             </fetcher.Form>
           </DialogFooter>

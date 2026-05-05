@@ -20,7 +20,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.childParentOrGuardian,
-  pageTitleI18nKey: 'application-spokes:children.parent-or-guardian.page-title',
+  pageTitleI18nKey: 'application-spokes:children.parentOrGuardian.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -29,7 +29,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:children.parent-or-guardian.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:children.parentOrGuardian.pageTitle') }) };
 
   return { meta };
 }
@@ -45,7 +45,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   clearPublicApplicationState({ params, session });
-  return redirect(t('application-spokes:children.parent-or-guardian.exit-btn-link'));
+  return redirect(t('application-spokes:children.parentOrGuardian.exitBtnLink'));
 }
 
 export default function ParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
@@ -64,7 +64,7 @@ export default function ParentOrGuardian({ loaderData, params }: Route.Component
   return (
     <>
       <div className="mb-8 space-y-4">
-        <p>{t('application-spokes:children.parent-or-guardian.unable-to-apply')}</p>
+        <p>{t('application-spokes:children.parentOrGuardian.unableToApply')}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -76,10 +76,10 @@ export default function ParentOrGuardian({ loaderData, params }: Route.Component
           disabled={isSubmitting}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Child parent or guardian needs to apply click"
         >
-          {t('application-spokes:children.parent-or-guardian.back-btn')}
+          {t('application-spokes:children.parentOrGuardian.backBtn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - Child parent or guardian needs to apply click">
-          {t('application-spokes:children.parent-or-guardian.exit-btn')}
+          {t('application-spokes:children.parentOrGuardian.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </>

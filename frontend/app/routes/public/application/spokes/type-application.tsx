@@ -28,7 +28,7 @@ const APPLICANT_TYPE = { adult: 'adult', family: 'family', children: 'children',
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'application-spokes', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.typeOfApplication,
-  pageTitleI18nKey: 'application-spokes:type-of-application.page-title',
+  pageTitleI18nKey: 'application-spokes:typeOfApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -37,7 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:type-of-application.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:typeOfApplication.pageTitle') }) };
 
   return { meta, defaultState: state.typeOfApplication };
 }
@@ -53,7 +53,7 @@ export async function action({ context: { appContainer, session }, params, reque
   /**
    * Schema for application delegate.
    */
-  const typeOfApplicationSchema = z.object({ typeOfApplication: z.enum(APPLICANT_TYPE, { error: t('application-spokes:type-of-application.error-message.type-of-application-required') }) });
+  const typeOfApplicationSchema = z.object({ typeOfApplication: z.enum(APPLICANT_TYPE, { error: t('application-spokes:typeOfApplication.errorMessage.typeOfApplicationRequired') }) });
 
   const parsedDataResult = typeOfApplicationSchema.safeParse({ typeOfApplication: String(formData.get('typeOfApplication') ?? '') });
 
@@ -81,7 +81,7 @@ export default function ApplicationTypeOfApplication({ loaderData, params }: Rou
 
   return (
     <div className="max-w-prose">
-      <p className="mt-8 mb-4 italic">{t('application:required-label')}</p>
+      <p className="mt-8 mb-4 italic">{t('application:requiredLabel')}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -89,19 +89,19 @@ export default function ApplicationTypeOfApplication({ loaderData, params }: Rou
           <InputRadios
             id="type-of-application"
             name="typeOfApplication"
-            legend={t('application-spokes:type-of-application.form-instructions')}
+            legend={t('application-spokes:typeOfApplication.formInstructions')}
             options={[
-              { value: APPLICANT_TYPE.adult, children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:type-of-application.radio-options.personal" />, defaultChecked: defaultState === APPLICANT_TYPE.adult },
-              { value: APPLICANT_TYPE.children, children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:type-of-application.radio-options.child" />, defaultChecked: defaultState === APPLICANT_TYPE.children },
-              { value: APPLICANT_TYPE.family, children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:type-of-application.radio-options.personal-and-child" />, defaultChecked: defaultState === APPLICANT_TYPE.family },
-              { value: APPLICANT_TYPE.delegate, children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:type-of-application.radio-options.delegate" />, defaultChecked: defaultState === APPLICANT_TYPE.delegate },
+              { value: APPLICANT_TYPE.adult, children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:typeOfApplication.radioOptions.personal" />, defaultChecked: defaultState === APPLICANT_TYPE.adult },
+              { value: APPLICANT_TYPE.children, children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:typeOfApplication.radioOptions.child" />, defaultChecked: defaultState === APPLICANT_TYPE.children },
+              { value: APPLICANT_TYPE.family, children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:typeOfApplication.radioOptions.personalAndChild" />, defaultChecked: defaultState === APPLICANT_TYPE.family },
+              { value: APPLICANT_TYPE.delegate, children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:typeOfApplication.radioOptions.delegate" />, defaultChecked: defaultState === APPLICANT_TYPE.delegate },
             ]}
             required
             errorMessage={errors?.typeOfApplication}
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Type of application click">
-              {t('application-spokes:type-of-application.save-btn')}
+              {t('application-spokes:typeOfApplication.saveBtn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -111,7 +111,7 @@ export default function ApplicationTypeOfApplication({ loaderData, params }: Rou
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Type of application click"
             >
-              {t('application-spokes:type-of-application.back-btn')}
+              {t('application-spokes:typeOfApplication.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

@@ -44,11 +44,11 @@ const HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION = {
 } as const;
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'protected-profile:edit-child-dental-benefits.breadcrumb', routeId: 'protected/profile/dental-benefits' }],
+  breadcrumbs: [{ labelI18nKey: 'protected-profile:editChildDentalBenefits.breadcrumb', routeId: 'protected/profile/dental-benefits' }],
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
   transformAdobeAnalyticsUrl,
   pageIdentifier: pageIds.protected.profile.editChildDentalBenefits,
-  pageTitleI18nKey: 'protected-profile:edit-child-dental-benefits.title',
+  pageTitleI18nKey: 'protected-profile:editChildDentalBenefits.title',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
@@ -82,8 +82,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const childName = child.information.firstName;
 
   const meta = {
-    title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:edit-child-dental-benefits.title', { childName }) }),
-    dcTermsTitle: t('gcweb:meta.title.msca-template', { title: t('protected-profile:edit-child-dental-benefits.dc-terms-title') }),
+    title: t('gcweb:meta.title.mscaTemplate', { title: t('protected-profile:editChildDentalBenefits.title', { childName }) }),
+    dcTermsTitle: t('gcweb:meta.title.mscaTemplate', { title: t('protected-profile:editChildDentalBenefits.dcTermsTitle') }),
   };
 
   const idToken = session.get('idToken');
@@ -121,12 +121,12 @@ export async function action({ context: { appContainer, session }, params, reque
   // both question first before the superRefine can be executed
   const federalBenefitsSchema = z
     .object({
-      hasFederalBenefits: z.boolean({ error: t('protected-profile:edit-child-dental-benefits.error-message.federal-benefit-required') }),
+      hasFederalBenefits: z.boolean({ error: t('protected-profile:editChildDentalBenefits.errorMessage.federalBenefitRequired') }),
       federalSocialProgram: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
       if (val.hasFederalBenefits && (!val.federalSocialProgram || validator.isEmpty(val.federalSocialProgram))) {
-        ctx.addIssue({ code: 'custom', message: t('protected-profile:edit-child-dental-benefits.error-message.federal-benefit-program-required'), path: ['federalSocialProgram'] });
+        ctx.addIssue({ code: 'custom', message: t('protected-profile:editChildDentalBenefits.errorMessage.federalBenefitProgramRequired'), path: ['federalSocialProgram'] });
       }
     })
     .transform((val) => {
@@ -138,16 +138,16 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const provincialTerritorialBenefitsSchema = z
     .object({
-      hasProvincialTerritorialBenefits: z.boolean({ error: t('protected-profile:edit-child-dental-benefits.error-message.provincial-benefit-required') }),
+      hasProvincialTerritorialBenefits: z.boolean({ error: t('protected-profile:editChildDentalBenefits.errorMessage.provincialBenefitRequired') }),
       provincialTerritorialSocialProgram: z.string().trim().optional(),
       province: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
       if (val.hasProvincialTerritorialBenefits) {
         if (!val.province || validator.isEmpty(val.province)) {
-          ctx.addIssue({ code: 'custom', message: t('protected-profile:edit-child-dental-benefits.error-message.provincial-territorial-required'), path: ['province'] });
+          ctx.addIssue({ code: 'custom', message: t('protected-profile:editChildDentalBenefits.errorMessage.provincialTerritorialRequired'), path: ['province'] });
         } else if (!val.provincialTerritorialSocialProgram || validator.isEmpty(val.provincialTerritorialSocialProgram)) {
-          ctx.addIssue({ code: 'custom', message: t('protected-profile:edit-child-dental-benefits.error-message.provincial-benefit-program-required'), path: ['provincialTerritorialSocialProgram'] });
+          ctx.addIssue({ code: 'custom', message: t('protected-profile:editChildDentalBenefits.errorMessage.provincialBenefitProgramRequired'), path: ['provincialTerritorialSocialProgram'] });
         }
       }
     })
@@ -236,22 +236,22 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4">{t('protected-profile:edit-child-dental-benefits.access-to-dental')}</p>
-      <p className="mb-4">{t('protected-profile:edit-child-dental-benefits.eligibility-criteria')}</p>
-      <p className="mb-4 italic">{t('protected-profile:required-label')}</p>
+      <p className="mb-4">{t('protected-profile:editChildDentalBenefits.accessToDental')}</p>
+      <p className="mb-4">{t('protected-profile:editChildDentalBenefits.eligibilityCriteria')}</p>
+      <p className="mb-4 italic">{t('protected-profile:requiredLabel')}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <fieldset className="mb-6">
-            <legend className="font-lato mb-4 text-2xl font-bold">{t('protected-profile:edit-child-dental-benefits.federal-benefits.title', { childName })}</legend>
+            <legend className="font-lato mb-4 text-2xl font-bold">{t('protected-profile:editChildDentalBenefits.federalBenefits.title', { childName })}</legend>
             <InputRadios
               id="has-federal-benefits"
               name="hasFederalBenefits"
-              legend={t('protected-profile:edit-child-dental-benefits.federal-benefits.legend', { childName })}
+              legend={t('protected-profile:editChildDentalBenefits.federalBenefits.legend', { childName })}
               options={[
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-child-dental-benefits.federal-benefits.option-yes" />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:editChildDentalBenefits.federalBenefits.optionYes" />,
                   value: HAS_FEDERAL_BENEFITS_OPTION.yes,
                   defaultChecked: hasFederalBenefitValue === true,
                   onChange: handleOnHasFederalBenefitChanged,
@@ -259,7 +259,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                     <InputRadios
                       id="federal-social-programs"
                       name="federalSocialProgram"
-                      legend={t('protected-profile:edit-child-dental-benefits.federal-benefits.social-programs.legend')}
+                      legend={t('protected-profile:editChildDentalBenefits.federalBenefits.socialPrograms.legend')}
                       legendClassName="font-normal"
                       options={federalSocialPrograms.map((option) => ({
                         children: option.name,
@@ -272,7 +272,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                   ),
                 },
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-child-dental-benefits.federal-benefits.option-no" />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:editChildDentalBenefits.federalBenefits.optionNo" />,
                   value: HAS_FEDERAL_BENEFITS_OPTION.no,
                   defaultChecked: hasFederalBenefitValue === false,
                   onChange: handleOnHasFederalBenefitChanged,
@@ -283,14 +283,14 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
             />
           </fieldset>
           <fieldset className="mb-8">
-            <legend className="font-lato mb-4 text-2xl font-bold">{t('protected-profile:edit-child-dental-benefits.provincial-territorial-benefits.title')}</legend>
+            <legend className="font-lato mb-4 text-2xl font-bold">{t('protected-profile:editChildDentalBenefits.provincialTerritorialBenefits.title')}</legend>
             <InputRadios
               id="has-provincial-territorial-benefits"
               name="hasProvincialTerritorialBenefits"
-              legend={t('protected-profile:edit-child-dental-benefits.provincial-territorial-benefits.legend', { childName })}
+              legend={t('protected-profile:editChildDentalBenefits.provincialTerritorialBenefits.legend', { childName })}
               options={[
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-child-dental-benefits.provincial-territorial-benefits.option-yes" />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:editChildDentalBenefits.provincialTerritorialBenefits.optionYes" />,
                   value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes,
                   defaultChecked: provincialTerritorialProgram !== undefined,
                   onChange: handleOnHasProvincialTerritorialBenefitChanged,
@@ -300,11 +300,11 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                         id="province"
                         name="province"
                         className="w-full sm:w-1/2"
-                        label={t('protected-profile:edit-child-dental-benefits.provincial-territorial-benefits.social-programs.input-legend')}
+                        label={t('protected-profile:editChildDentalBenefits.provincialTerritorialBenefits.socialPrograms.inputLegend')}
                         onChange={handleOnRegionChanged}
                         options={[
                           {
-                            children: t('protected-profile:edit-child-dental-benefits.select-one'),
+                            children: t('protected-profile:editChildDentalBenefits.selectOne'),
                             value: '',
                             hidden: true,
                           },
@@ -318,7 +318,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                         <InputRadios
                           id="provincial-territorial-social-programs"
                           name="provincialTerritorialSocialProgram"
-                          legend={t('protected-profile:edit-child-dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}
+                          legend={t('protected-profile:editChildDentalBenefits.provincialTerritorialBenefits.socialPrograms.radioLegend')}
                           legendClassName="font-normal"
                           errorMessage={errors?.provincialTerritorialSocialProgram}
                           options={provincialTerritorialSocialPrograms
@@ -336,7 +336,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
                   ),
                 },
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:edit-child-dental-benefits.provincial-territorial-benefits.option-no" />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:editChildDentalBenefits.provincialTerritorialBenefits.optionNo" />,
                   value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.no,
                   defaultChecked: provincialTerritorialProgram === undefined,
                   onChange: handleOnHasProvincialTerritorialBenefitChanged,
@@ -348,7 +348,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
           </fieldset>
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" name="_action" value={FORM_ACTION.save} loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Access to other dental benefits click">
-              {t('protected-profile:edit-dental-benefits.button.save-btn')}
+              {t('protected-profile:editDentalBenefits.button.saveBtn')}
             </LoadingButton>
             <ButtonLink
               variant="secondary"
@@ -358,7 +358,7 @@ export default function AccessToDentalInsuranceQuestion({ loaderData, params }: 
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Access to other dental benefits click"
             >
-              {t('protected-profile:edit-dental-benefits.button.back')}
+              {t('protected-profile:editDentalBenefits.button.back')}
             </ButtonLink>
           </div>
         </fetcher.Form>

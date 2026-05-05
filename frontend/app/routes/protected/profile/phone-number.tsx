@@ -24,10 +24,10 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'protected-profile:contact-information.page-title', routeId: 'protected/profile/contact-information' }],
+  breadcrumbs: [{ labelI18nKey: 'protected-profile:contactInformation.pageTitle', routeId: 'protected/profile/contact-information' }],
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.phoneNumber,
-  pageTitleI18nKey: 'protected-profile:phone-number.page-title',
+  pageTitleI18nKey: 'protected-profile:phoneNumber.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -38,7 +38,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:phone-number.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protected-profile:phoneNumber.pageTitle') }) };
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.phone-number', { userId: idToken.sub });
@@ -64,12 +64,12 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const phoneNumberSchema = z.object({
     phoneNumber: phoneSchema({
-      invalid_phone_canadian_error: t('protected-profile:phone-number.error-message.phone-number-valid'),
-      invalid_phone_international_error: t('protected-profile:phone-number.error-message.phone-number-valid-international'),
+      invalid_phone_canadian_error: t('protected-profile:phoneNumber.errorMessage.phoneNumberValid'),
+      invalid_phone_international_error: t('protected-profile:phoneNumber.errorMessage.phoneNumberValidInternational'),
     }).optional(),
     phoneNumberAlt: phoneSchema({
-      invalid_phone_canadian_error: t('protected-profile:phone-number.error-message.phone-number-alt-valid'),
-      invalid_phone_international_error: t('protected-profile:phone-number.error-message.phone-number-alt-valid-international'),
+      invalid_phone_canadian_error: t('protected-profile:phoneNumber.errorMessage.phoneNumberAltValid'),
+      invalid_phone_international_error: t('protected-profile:phoneNumber.errorMessage.phoneNumberAltValidInternational'),
     }).optional(),
   });
 
@@ -111,8 +111,8 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-6">
-            <p className="mb-4">{t('protected-profile:phone-number.add-phone-number')}</p>
-            <p className="mb-4 italic">{t('protected-profile:all-optional-label')}</p>
+            <p className="mb-4">{t('protected-profile:phoneNumber.addPhoneNumber')}</p>
+            <p className="mb-4 italic">{t('protected-profile:allOptionalLabel')}</p>
             <div className="grid items-end gap-6">
               <InputPhoneField
                 id="phone-number"
@@ -123,9 +123,9 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 autoComplete="tel"
                 defaultValue={defaultState.phoneNumber ?? ''}
                 errorMessage={errors?.phoneNumber}
-                label={t('protected-profile:phone-number.phone-number')}
+                label={t('protected-profile:phoneNumber.phoneNumber')}
                 maxLength={100}
-                helpMessagePrimary={t('protected-profile:phone-number.help-message')}
+                helpMessagePrimary={t('protected-profile:phoneNumber.helpMessage')}
                 helpMessagePrimaryClassName="text-gray-600"
               />
               <InputPhoneField
@@ -137,19 +137,19 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 autoComplete="tel"
                 defaultValue={defaultState.phoneNumberAlt ?? ''}
                 errorMessage={errors?.phoneNumberAlt}
-                label={t('protected-profile:phone-number.phone-number-alt')}
+                label={t('protected-profile:phoneNumber.phoneNumberAlt')}
                 maxLength={100}
-                helpMessagePrimary={t('protected-profile:phone-number.help-message-alt')}
+                helpMessagePrimary={t('protected-profile:phoneNumber.helpMessageAlt')}
                 helpMessagePrimaryClassName="text-gray-600"
               />
             </div>
           </div>
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Phone number click">
-              {t('protected-profile:phone-number.save-btn')}
+              {t('protected-profile:phoneNumber.saveBtn')}
             </LoadingButton>
             <ButtonLink variant="secondary" id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Phone number click">
-              {t('protected-profile:phone-number.back-btn')}
+              {t('protected-profile:phoneNumber.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

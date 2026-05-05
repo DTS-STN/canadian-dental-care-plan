@@ -20,7 +20,7 @@ import { secondsToMilliseconds } from '~/utils/units.utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'gcweb'),
   pageIdentifier: pageIds.public.application.index,
-  pageTitleI18nKey: 'application:eligibility-requirements.page-heading',
+  pageTitleI18nKey: 'application:eligibilityRequirements.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -34,7 +34,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   const applicationYear = applicationYearService.getIntakeApplicationYear(currentDate);
   const state = startApplicationState({ session, applicationYear });
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application:index.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application:index.pageTitle') }) };
 
   return { id: state.id, locale, meta };
 }

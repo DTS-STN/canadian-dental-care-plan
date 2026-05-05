@@ -38,7 +38,7 @@ import { extractDigits, hasDigits, isAllValidInputCharacters } from '~/utils/str
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.personalInformation,
-  pageTitleI18nKey: 'application-spokes:personal-information.page-title',
+  pageTitleI18nKey: 'application-spokes:personalInformation.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:personal-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:personalInformation.pageTitle') }) };
   return {
     state: state.applicantInformation,
     isRenewalContext: state.context === 'renewal',
@@ -71,45 +71,45 @@ export async function action({ context: { appContainer, session }, params, reque
       memberId: z
         .string()
         .trim()
-        .min(1, t('application-spokes:personal-information.error-message.member-id-required'))
-        .refine(isValidClientNumberRenewal, t('application-spokes:personal-information.error-message.member-id-valid'))
+        .min(1, t('application-spokes:personalInformation.errorMessage.memberIdRequired'))
+        .refine(isValidClientNumberRenewal, t('application-spokes:personalInformation.errorMessage.memberIdValid'))
         .transform((code) => extractDigits(code))
         .optional(),
       socialInsuranceNumber: z
         .string()
         .trim()
-        .min(1, t('application-spokes:personal-information.error-message.sin-required'))
+        .min(1, t('application-spokes:personalInformation.errorMessage.sinRequired'))
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
-            ctx.addIssue({ code: 'custom', message: t('application-spokes:personal-information.error-message.sin-valid') });
+            ctx.addIssue({ code: 'custom', message: t('application-spokes:personalInformation.errorMessage.sinValid') });
           } else if (
             [state.partnerInformation?.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
               .filter((sin) => sin !== undefined)
               .map((sin) => formatSin(sin))
               .includes(formatSin(sin))
           ) {
-            ctx.addIssue({ code: 'custom', message: t('application-spokes:personal-information.error-message.sin-unique') });
+            ctx.addIssue({ code: 'custom', message: t('application-spokes:personalInformation.errorMessage.sinUnique') });
           }
         }),
       firstName: z
         .string()
         .trim()
-        .min(1, t('application-spokes:personal-information.error-message.first-name-required'))
+        .min(1, t('application-spokes:personalInformation.errorMessage.firstNameRequired'))
         .max(100)
-        .refine(isAllValidInputCharacters, t('application-spokes:personal-information.error-message.characters-valid'))
-        .refine((firstName) => !hasDigits(firstName), t('application-spokes:personal-information.error-message.first-name-no-digits')),
+        .refine(isAllValidInputCharacters, t('application-spokes:personalInformation.errorMessage.charactersValid'))
+        .refine((firstName) => !hasDigits(firstName), t('application-spokes:personalInformation.errorMessage.firstNameNoDigits')),
       lastName: z
         .string()
         .trim()
-        .min(1, t('application-spokes:personal-information.error-message.last-name-required'))
+        .min(1, t('application-spokes:personalInformation.errorMessage.lastNameRequired'))
         .max(100)
-        .refine(isAllValidInputCharacters, t('application-spokes:personal-information.error-message.characters-valid'))
-        .refine((lastName) => !hasDigits(lastName), t('application-spokes:personal-information.error-message.last-name-no-digits')),
+        .refine(isAllValidInputCharacters, t('application-spokes:personalInformation.errorMessage.charactersValid'))
+        .refine((lastName) => !hasDigits(lastName), t('application-spokes:personalInformation.errorMessage.lastNameNoDigits')),
       dateOfBirthYear: z.number({
-        error: (issue) => (issue.input === undefined ? t('application-spokes:personal-information.error-message.date-of-birth-year-required') : t('application-spokes:personal-information.error-message.date-of-birth-year-number')),
+        error: (issue) => (issue.input === undefined ? t('application-spokes:personalInformation.errorMessage.dateOfBirthYearRequired') : t('application-spokes:personalInformation.errorMessage.dateOfBirthYearNumber')),
       }),
-      dateOfBirthMonth: z.number({ error: (issue) => (issue.input === undefined ? t('application-spokes:personal-information.error-message.date-of-birth-month-required') : undefined) }),
-      dateOfBirthDay: z.number({ error: (issue) => (issue.input === undefined ? t('application-spokes:personal-information.error-message.date-of-birth-day-required') : t('application-spokes:personal-information.error-message.date-of-birth-day-number')) }),
+      dateOfBirthMonth: z.number({ error: (issue) => (issue.input === undefined ? t('application-spokes:personalInformation.errorMessage.dateOfBirthMonthRequired') : undefined) }),
+      dateOfBirthDay: z.number({ error: (issue) => (issue.input === undefined ? t('application-spokes:personalInformation.errorMessage.dateOfBirthDayRequired') : t('application-spokes:personalInformation.errorMessage.dateOfBirthDayNumber')) }),
       dateOfBirth: z.string(),
     })
 
@@ -118,11 +118,11 @@ export async function action({ context: { appContainer, session }, params, reque
       const dateOfBirth = `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`;
 
       if (!isValidDateString(dateOfBirth)) {
-        ctx.addIssue({ code: 'custom', message: t('application-spokes:personal-information.error-message.date-of-birth-valid'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: 'custom', message: t('application-spokes:personalInformation.errorMessage.dateOfBirthValid'), path: ['dateOfBirth'] });
       } else if (!isPastDateString(dateOfBirth)) {
-        ctx.addIssue({ code: 'custom', message: t('application-spokes:personal-information.error-message.date-of-birth-is-past'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: 'custom', message: t('application-spokes:personalInformation.errorMessage.dateOfBirthIsPast'), path: ['dateOfBirth'] });
       } else if (getAgeFromDateString(dateOfBirth) > 150) {
-        ctx.addIssue({ code: 'custom', message: t('application-spokes:personal-information.error-message.date-of-birth-is-past-valid'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: 'custom', message: t('application-spokes:personalInformation.errorMessage.dateOfBirthIsPastValid'), path: ['dateOfBirth'] });
       }
     })
     .transform((val) => {
@@ -229,19 +229,19 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
   return (
     <div className="max-w-prose">
       <ErrorAlert>
-        <h2 className="mb-2 font-bold">{t('application-spokes:personal-information.error-message.alert.heading')}</h2>
+        <h2 className="mb-2 font-bold">{t('application-spokes:personalInformation.errorMessage.alert.heading')}</h2>
         <p className="mb-2">
-          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.error-message.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personalInformation.errorMessage.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
         </p>
         <p className="mb-2">
-          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.error-message.alert.apply-date" values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personalInformation.errorMessage.alert.applyDate" values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
         </p>
       </ErrorAlert>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
-        <p className="mb-4">{t('application-spokes:personal-information.form-instructions-sin')}</p>
-        <p className="mb-6">{t('application-spokes:personal-information.form-instructions-info')}</p>
-        <p className="mb-4 italic">{t('application:required-label')}</p>
+        <p className="mb-4">{t('application-spokes:personalInformation.formInstructionsSin')}</p>
+        <p className="mb-6">{t('application-spokes:personalInformation.formInstructionsInfo')}</p>
+        <p className="mb-4 italic">{t('application:requiredLabel')}</p>
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
@@ -249,10 +249,10 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               <InputPatternField
                 id="member-id"
                 name="memberId"
-                label={t('application-spokes:personal-information.member-id')}
+                label={t('application-spokes:personalInformation.memberId')}
                 inputMode="numeric"
                 format={renewalCodeInputPatternFormat}
-                helpMessagePrimary={t('application-spokes:personal-information.help-message.member-id')}
+                helpMessagePrimary={t('application-spokes:personalInformation.helpMessage.memberId')}
                 helpMessagePrimaryClassName="text-black"
                 defaultValue={state?.memberId ?? ''}
                 errorMessage={errors?.memberId}
@@ -263,10 +263,10 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               <InputSanitizeField
                 id="first-name"
                 name="firstName"
-                label={t('application-spokes:personal-information.first-name')}
+                label={t('application-spokes:personalInformation.firstName')}
                 className="w-full"
                 maxLength={100}
-                aria-description={t('application-spokes:personal-information.name-instructions')}
+                aria-description={t('application-spokes:personalInformation.nameInstructions')}
                 autoComplete="given-name"
                 defaultValue={state?.firstName ?? ''}
                 errorMessage={errors?.firstName}
@@ -275,26 +275,26 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               <InputSanitizeField
                 id="last-name"
                 name="lastName"
-                label={t('application-spokes:personal-information.last-name')}
+                label={t('application-spokes:personalInformation.lastName')}
                 className="w-full"
                 maxLength={100}
-                aria-description={t('application-spokes:personal-information.name-instructions')}
+                aria-description={t('application-spokes:personalInformation.nameInstructions')}
                 autoComplete="family-name"
                 defaultValue={state?.lastName ?? ''}
                 errorMessage={errors?.lastName}
                 required
               />
             </div>
-            <Collapsible id="name-instructions" summary={t('application-spokes:personal-information.single-legal-name')}>
+            <Collapsible id="name-instructions" summary={t('application-spokes:personalInformation.singleLegalName')}>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personal-information.name-instructions" />
+                <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:personalInformation.nameInstructions" />
               </p>
             </Collapsible>
             <DatePickerField
               id="date-of-birth"
               names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
               defaultValue={state?.dateOfBirth ?? ''}
-              legend={t('application-spokes:personal-information.dob')}
+              legend={t('application-spokes:personalInformation.dob')}
               errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
               required
             />
@@ -302,9 +302,9 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               id="social-insurance-number"
               name="socialInsuranceNumber"
               format={sinInputPatternFormat}
-              label={t('application-spokes:personal-information.sin')}
+              label={t('application-spokes:personalInformation.sin')}
               inputMode="numeric"
-              helpMessagePrimary={t('application-spokes:personal-information.help-message.sin')}
+              helpMessagePrimary={t('application-spokes:personalInformation.helpMessage.sin')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={state?.socialInsuranceNumber ?? ''}
               errorMessage={errors?.socialInsuranceNumber}
@@ -313,7 +313,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Applicant information click">
-              {t('application-spokes:personal-information.save-btn')}
+              {t('application-spokes:personalInformation.saveBtn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -323,7 +323,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Applicant information click"
             >
-              {t('application-spokes:personal-information.back-btn')}
+              {t('application-spokes:personalInformation.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

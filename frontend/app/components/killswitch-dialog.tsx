@@ -52,9 +52,9 @@ export function KillswitchDialog({ timeoutSecs }: KillswitchDialogProps) {
           </DialogHeader>
           <div className="flex flex-col gap-4">
             <p>{t('killswitch.overloaded')}</p>
-            <p>{t('killswitch.dont-worry-be-happy')}</p>
+            <p>{t('killswitch.dontWorryBeHappy')}</p>
           </div>
-          <DialogFooter>{t('killswitch.remaining-time', { mins, secs })}</DialogFooter>
+          <DialogFooter>{t('killswitch.remainingTime', { mins, secs })}</DialogFooter>
         </DialogContent>
       </Dialog>
     );

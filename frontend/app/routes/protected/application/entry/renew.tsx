@@ -25,7 +25,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application', 'gcweb'),
   pageIdentifier: pageIds.protected.application.typeOfApplication,
-  pageTitleI18nKey: 'protected-application:renewal-selection.page-title',
+  pageTitleI18nKey: 'protected-application:renewalSelection.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -44,7 +44,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateProtectedApplicationContext(state, params, 'renewal');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:renewal-selection.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:renewalSelection.pageTitle') }) };
 
   const applicationFlow: ApplicationFlow = state.typeOfApplication ? `${state.context}-${state.typeOfApplication}` : 'entry';
   const nextRouteId = getInitialApplicationFlowUrl(applicationFlow, params);
@@ -83,20 +83,20 @@ export default function ProtectedTypeOfApplication({ loaderData, params }: Route
   return (
     <div className="max-w-prose space-y-8">
       <div className="space-y-4">
-        <p>{t('protected-application:complete-all-sections')}</p>
+        <p>{t('protected-application:completeAllSections')}</p>
         <p>{completedSectionsLabel}</p>
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>{t('protected-application:renewal-selection.type-application-heading')}</CardTitle>
+          <CardTitle>{t('protected-application:renewalSelection.typeApplicationHeading')}</CardTitle>
           <CardAction>{sections.applicantClientIdsToRenew.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {defaultState.applicantClientIdsToRenew === undefined ? (
-            <p>{t('protected-application:renewal-selection.type-application-description')}</p>
+            <p>{t('protected-application:renewalSelection.typeApplicationDescription')}</p>
           ) : (
             <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('protected-application:renewal-selection.type-application-legend')}>
+              <DefinitionListItem term={t('protected-application:renewalSelection.typeApplicationLegend')}>
                 <ul className="list-disc space-y-1 pl-7">
                   {applicants.map(({ id, name }) => (
                     <li key={id}>{name}</li>
@@ -104,8 +104,8 @@ export default function ProtectedTypeOfApplication({ loaderData, params }: Route
                 </ul>
               </DefinitionListItem>
               {defaultState.livingIndependently !== undefined && (
-                <DefinitionListItem term={t('protected-application:renewal-selection.living-independently')}>
-                  {defaultState.livingIndependently ? t('protected-application:renewal-selection.living-independently-yes') : t('protected-application:renewal-selection.living-independently-no')}
+                <DefinitionListItem term={t('protected-application:renewalSelection.livingIndependently')}>
+                  {defaultState.livingIndependently ? t('protected-application:renewalSelection.livingIndependentlyYes') : t('protected-application:renewalSelection.livingIndependentlyNo')}
                 </DefinitionListItem>
               )}
             </DefinitionList>
@@ -122,17 +122,17 @@ export default function ProtectedTypeOfApplication({ loaderData, params }: Route
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit type of application click"
           >
-            {defaultState.applicantClientIdsToRenew === undefined ? t('protected-application:renewal-selection.add-type-application') : t('protected-application:renewal-selection.edit-type-application')}
+            {defaultState.applicantClientIdsToRenew === undefined ? t('protected-application:renewalSelection.addTypeApplication') : t('protected-application:renewalSelection.editTypeApplication')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Continue click">
-          {t('protected-application:renewal-selection.application')}
+          {t('protected-application:renewalSelection.application')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/eligibility-requirements" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Back click">
-          {t('protected-application:renewal-selection.before-you-start')}
+          {t('protected-application:renewalSelection.beforeYouStart')}
         </NavigationButtonLink>
       </div>
     </div>
