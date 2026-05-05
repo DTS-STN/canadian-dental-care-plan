@@ -31,7 +31,7 @@ exports[`AddressInvalidDialogContent > should render the AddressInvalidDialogCon
         />
       </svg>
       <span>
-        common:dialog.address-invalid.header
+        common:dialog.addressInvalid.header
       </span>
     </h2>
   </div>
@@ -39,22 +39,22 @@ exports[`AddressInvalidDialogContent > should render the AddressInvalidDialogCon
     class="mb-6 space-y-6"
   >
     <p>
-      common:dialog.address-invalid.description
+      common:dialog.addressInvalid.description
     </p>
     <p>
-      common:dialog.address-invalid.important
+      common:dialog.addressInvalid.important
     </p>
     <h3
       class="font-lato text-xl font-bold"
     >
-      common:dialog.address-invalid.context.mailing-address
+      common:dialog.addressInvalid.context.mailingAddress
     </h3>
     <div
       class="space-y-2"
     >
       <p>
         <strong>
-          common:dialog.address-invalid.entered-address
+          common:dialog.addressInvalid.enteredAddress
         </strong>
       </p>
       <address
@@ -81,7 +81,7 @@ CA
           for="input-checkbox-confirm-checkbox"
           id="input-checkbox-confirm-checkbox-label"
         >
-          common:dialog.address-invalid.checkbox
+          common:dialog.addressInvalid.checkbox
         </label>
       </div>
     </div>
@@ -95,7 +95,7 @@ CA
       id="dialog.address-invalid-close-button"
       type="button"
     >
-      common:dialog.address-invalid.close-button
+      common:dialog.addressInvalid.closeButton
     </button>
     <form
       method="post"
@@ -110,7 +110,7 @@ CA
         value="use-invalid-address"
       >
         <span>
-          common:dialog.address-invalid.continue-button
+          common:dialog.addressInvalid.continueButton
         </span>
       </button>
     </form>
@@ -172,7 +172,7 @@ exports[`AddressSuggestionDialogContent > should render the AddressSuggestionDia
         />
       </svg>
       <span>
-        common:dialog.address-suggestion.header
+        common:dialog.addressSuggestion.header
       </span>
     </h2>
   </div>
@@ -182,7 +182,7 @@ exports[`AddressSuggestionDialogContent > should render the AddressSuggestionDia
     <p
       id="_r_a_"
     >
-      common:dialog.address-suggestion.description
+      common:dialog.addressSuggestion.description
     </p>
     <fieldset
       aria-describedby="_r_a_"
@@ -196,7 +196,7 @@ exports[`AddressSuggestionDialogContent > should render the AddressSuggestionDia
         id="input-radios-addressSelection-legend"
       >
         <span>
-          common:dialog.address-suggestion.address-selection-legend
+          common:dialog.addressSuggestion.addressSelectionLegend
         </span>
       </legend>
       <ul
@@ -225,7 +225,7 @@ exports[`AddressSuggestionDialogContent > should render the AddressSuggestionDia
                   class="mb-2"
                 >
                   <strong>
-                    common:dialog.address-suggestion.entered-address-option
+                    common:dialog.addressSuggestion.enteredAddressOption
                   </strong>
                 </p>
                 <address
@@ -263,7 +263,7 @@ CA
                   class="mb-2"
                 >
                   <strong>
-                    common:dialog.address-suggestion.suggested-address-option
+                    common:dialog.addressSuggestion.suggestedAddressOption
                   </strong>
                 </p>
                 <address
@@ -289,7 +289,7 @@ CA
       id="dialog.corrected-address-close-button"
       type="button"
     >
-      common:dialog.address-suggestion.cancel-button
+      common:dialog.addressSuggestion.cancelButton
     </button>
     <form
       method="post"
@@ -303,7 +303,7 @@ CA
         value="use-suggested-address"
       >
         <span>
-          common:dialog.address-suggestion.use-selected-address-button
+          common:dialog.addressSuggestion.useSelectedAddressButton
         </span>
       </button>
     </form>

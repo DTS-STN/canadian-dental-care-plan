@@ -36,7 +36,7 @@ const FORM_ACTION = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application', 'protected-application-renewal-family', 'gcweb'),
   pageIdentifier: pageIds.protected.application.renewalFamily.dentalInsurance,
-  pageTitleI18nKey: 'protected-application-renewal-family:dental-insurance.page-heading',
+  pageTitleI18nKey: 'protected-application-renewal-family:dentalInsurance.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -50,7 +50,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-renewal-family:dental-insurance.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-renewal-family:dentalInsurance.pageTitle') }) };
 
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
@@ -158,17 +158,17 @@ export default function ProtectedRenewFamilyDentalInsurance({ loaderData, params
   return (
     <fetcher.Form method="post" noValidate>
       <CsrfTokenInput />
-      <ProgressStepper activeStep="dental-insurance" excludeMaritalStatus={shouldSkipMaritalStatusStep} className="mb-8" />
+      <ProgressStepper activeStep="dentalInsurance" excludeMaritalStatus={shouldSkipMaritalStatusStep} className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('protected-application:complete-all-sections')}</p>
+          <p>{t('protected-application:completeAllSections')}</p>
           <p>{completedSectionsLabel}</p>
         </div>
 
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protected-application-renewal-family:dental-insurance.access-to-dental-insurance')}</h2>
+              <h2>{t('protected-application-renewal-family:dentalInsurance.accessToDentalInsurance')}</h2>
             </CardTitle>
             <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
@@ -179,7 +179,7 @@ export default function ProtectedRenewFamilyDentalInsurance({ loaderData, params
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protected-application-renewal-family:dental-insurance.other-benefits')}</h2>
+              <h2>{t('protected-application-renewal-family:dentalInsurance.otherBenefits')}</h2>
             </CardTitle>
             <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
@@ -196,7 +196,7 @@ export default function ProtectedRenewFamilyDentalInsurance({ loaderData, params
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Continue click"
           >
-            {t('protected-application-renewal-family:dental-insurance.childrens-application')}
+            {t('protected-application-renewal-family:dentalInsurance.childrensApplication')}
           </NavigationButtonLink>
           <NavigationButtonLink
             variant="secondary"
@@ -205,7 +205,7 @@ export default function ProtectedRenewFamilyDentalInsurance({ loaderData, params
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Back click"
           >
-            {t('protected-application-renewal-family:dental-insurance.contact-information')}
+            {t('protected-application-renewal-family:dentalInsurance.contactInformation')}
           </NavigationButtonLink>
         </div>
       </div>
@@ -233,8 +233,8 @@ function DentalInsuranceCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-family:dental-insurance.access-to-dental-insurance-or-coverage')}>
-            {state.dentalInsurance ? t('protected-application-renewal-family:dental-insurance.dental-insurance-yes') : t('protected-application-renewal-family:dental-insurance.dental-insurance-no')}
+          <DefinitionListItem term={t('protected-application-renewal-family:dentalInsurance.accessToDentalInsuranceOrCoverage')}>
+            {state.dentalInsurance ? t('protected-application-renewal-family:dentalInsurance.dentalInsuranceYes') : t('protected-application-renewal-family:dentalInsurance.dentalInsuranceNo')}
           </DefinitionListItem>
         </DefinitionList>
       </CardContent>
@@ -243,7 +243,7 @@ function DentalInsuranceCardContent(): JSX.Element {
 
   return (
     <CardContent>
-      <p>{t('protected-application-renewal-family:dental-insurance.dental-insurance-indicate-status')}</p>
+      <p>{t('protected-application-renewal-family:dentalInsurance.dentalInsuranceIndicateStatus')}</p>
     </CardContent>
   );
 }
@@ -276,7 +276,7 @@ function DentalInsuranceCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Edit button dental insurance click"
         >
-          {t('protected-application-renewal-family:dental-insurance.edit-access-to-dental-insurance')}
+          {t('protected-application-renewal-family:dentalInsurance.editAccessToDentalInsurance')}
         </ButtonLink>
       </CardFooter>
     );
@@ -293,9 +293,9 @@ function DentalInsuranceCardFooter(): JSX.Element {
         startIcon={faCirclePlus}
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Add button dental insurance click"
-        aria-label={`${t('protected-application-renewal-family:dental-insurance.add-answer')} - ${t('protected-application-renewal-family:dental-insurance.access-to-dental-insurance')}`}
+        aria-label={`${t('protected-application-renewal-family:dentalInsurance.addAnswer')} - ${t('protected-application-renewal-family:dentalInsurance.accessToDentalInsurance')}`}
       >
-        {t('protected-application-renewal-family:dental-insurance.add-answer')}
+        {t('protected-application-renewal-family:dentalInsurance.addAnswer')}
       </ButtonLink>
     </CardFooter>
   );
@@ -322,17 +322,17 @@ function DentalBenefitsCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-family:dental-insurance.access-to-government-benefits')}>
+          <DefinitionListItem term={t('protected-application-renewal-family:dentalInsurance.accessToGovernmentBenefits')}>
             {state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
               <div className="space-y-3">
-                <p>{t('protected-application-renewal-family:dental-insurance.access-to-government-benefits-yes')}</p>
+                <p>{t('protected-application-renewal-family:dentalInsurance.accessToGovernmentBenefitsYes')}</p>
                 <ul className="list-disc space-y-1 pl-7">
                   {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
                   {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
                 </ul>
               </div>
             ) : (
-              <p>{t('protected-application-renewal-family:dental-insurance.access-to-government-benefits-no')}</p>
+              <p>{t('protected-application-renewal-family:dentalInsurance.accessToGovernmentBenefitsNo')}</p>
             )}
           </DefinitionListItem>
         </DefinitionList>
@@ -344,17 +344,17 @@ function DentalBenefitsCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-family:dental-insurance.access-to-government-benefits')}>
+          <DefinitionListItem term={t('protected-application-renewal-family:dentalInsurance.accessToGovernmentBenefits')}>
             {clientApplication.dentalBenefits.hasFederalBenefits || clientApplication.dentalBenefits.hasProvincialTerritorialBenefits ? (
               <div className="space-y-3">
-                <p>{t('protected-application-renewal-family:dental-insurance.access-to-government-benefits-yes')}</p>
+                <p>{t('protected-application-renewal-family:dentalInsurance.accessToGovernmentBenefitsYes')}</p>
                 <ul className="list-disc space-y-1 pl-7">
                   {clientApplication.dentalBenefits.hasFederalBenefits && <li>{clientApplication.dentalBenefits.federalSocialProgram}</li>}
                   {clientApplication.dentalBenefits.hasProvincialTerritorialBenefits && <li>{clientApplication.dentalBenefits.provincialTerritorialSocialProgram}</li>}
                 </ul>
               </div>
             ) : (
-              <p>{t('protected-application-renewal-family:dental-insurance.access-to-government-benefits-no')}</p>
+              <p>{t('protected-application-renewal-family:dentalInsurance.accessToGovernmentBenefitsNo')}</p>
             )}
           </DefinitionListItem>
         </DefinitionList>
@@ -364,7 +364,7 @@ function DentalBenefitsCardContent(): JSX.Element {
 
   return (
     <CardContent>
-      <p>{t('protected-application-renewal-family:dental-insurance.dental-benefits-indicate-status')}</p>
+      <p>{t('protected-application-renewal-family:dentalInsurance.dentalBenefitsIndicateStatus')}</p>
     </CardContent>
   );
 }
@@ -399,7 +399,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Edit button government benefits click"
         >
-          {t('protected-application-renewal-family:dental-insurance.edit-access-to-government-benefits')}
+          {t('protected-application-renewal-family:dentalInsurance.editAccessToGovernmentBenefits')}
         </ButtonLink>
       </CardFooter>
     );
@@ -419,7 +419,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Update button government benefits click"
           >
-            {t('protected-application-renewal-family:dental-insurance.update-my-access')}
+            {t('protected-application-renewal-family:dentalInsurance.updateMyAccess')}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -433,7 +433,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Complete benefits click"
           >
-            <span className="text-left">{t('protected-application-renewal-family:dental-insurance.access-not-changed')}</span>
+            <span className="text-left">{t('protected-application-renewal-family:dentalInsurance.accessNotChanged')}</span>
           </Button>
         </div>
       </CardFooter>
@@ -451,9 +451,9 @@ function DentalBenefitsCardFooter(): JSX.Element {
         startIcon={faPenToSquare}
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Add button dental benefits click"
-        aria-label={`${t('protected-application-renewal-family:dental-insurance.add-answer')} - ${t('protected-application-renewal-family:dental-insurance.other-benefits')}`}
+        aria-label={`${t('protected-application-renewal-family:dentalInsurance.addAnswer')} - ${t('protected-application-renewal-family:dentalInsurance.otherBenefits')}`}
       >
-        {t('protected-application-renewal-family:dental-insurance.add-answer')}
+        {t('protected-application-renewal-family:dentalInsurance.addAnswer')}
       </ButtonLink>
     </CardFooter>
   );

@@ -202,12 +202,12 @@ export function useAppLocale(locale: string): AppLocale {
  * and resolves its namespace(s) before translation.
  *
  * This helper extracts the base key and namespace(s) from a composed key
- * (e.g. `common:app-title`) and forwards them to `i18n.t`, preserving strong
+ * (e.g. `common:appTitle`) and forwards them to `i18n.t`, preserving strong
  * typing for both the key and the options.
  *
  * @typeParam TOpt - The i18next options type associated with the translation key.
  * @param i18n - The i18next instance to use for translation.
- * @param key - A composed translation key including its namespace (for example: `common:app-title`).
+ * @param key - A composed translation key including its namespace (for example: `common:appTitle`).
  * @param options - Optional i18next translation options.
  * @returns The resolved translated string.
  */

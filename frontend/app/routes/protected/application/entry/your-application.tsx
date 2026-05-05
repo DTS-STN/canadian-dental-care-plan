@@ -28,7 +28,7 @@ const APPLICANT_TYPE = { adult: 'adult', family: 'family', children: 'children' 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application', 'gcweb'),
   pageIdentifier: pageIds.protected.application.typeOfApplication,
-  pageTitleI18nKey: 'protected-application:your-application.page-title',
+  pageTitleI18nKey: 'protected-application:yourApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -41,7 +41,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateProtectedApplicationContext(state, params, 'intake');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:your-application.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:yourApplication.pageTitle') }) };
 
   const applicationFlow: ApplicationFlow = state.typeOfApplication ? `${state.context}-${state.typeOfApplication}` : 'entry';
   const nextRouteId = getInitialApplicationFlowUrl(applicationFlow, params);
@@ -77,13 +77,13 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
   function getTypeOfApplication(typeOfApplication: string) {
     switch (typeOfApplication) {
       case APPLICANT_TYPE.adult: {
-        return t('protected-application:your-application.type-application-personal');
+        return t('protected-application:yourApplication.typeApplicationPersonal');
       }
       case APPLICANT_TYPE.family: {
-        return t('protected-application:your-application.type-application-family');
+        return t('protected-application:yourApplication.typeApplicationFamily');
       }
       case APPLICANT_TYPE.children: {
-        return t('protected-application:your-application.type-application-children');
+        return t('protected-application:yourApplication.typeApplicationChildren');
       }
       default: {
         return '';
@@ -99,20 +99,20 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
   return (
     <div className="max-w-prose space-y-8">
       <div className="space-y-4">
-        <p>{t('protected-application:complete-all-sections')}</p>
+        <p>{t('protected-application:completeAllSections')}</p>
         <p>{completedSectionsLabel}</p>
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>{t('protected-application:your-application.type-application-heading')}</CardTitle>
+          <CardTitle>{t('protected-application:yourApplication.typeApplicationHeading')}</CardTitle>
           <CardAction>{sections.typeOfApplication.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {defaultState.typeOfApplication === undefined ? (
-            <p>{t('protected-application:your-application.type-application-description')}</p>
+            <p>{t('protected-application:yourApplication.typeApplicationDescription')}</p>
           ) : (
             <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('protected-application:your-application.type-application-legend')}>{getTypeOfApplication(defaultState.typeOfApplication)}</DefinitionListItem>
+              <DefinitionListItem term={t('protected-application:yourApplication.typeApplicationLegend')}>{getTypeOfApplication(defaultState.typeOfApplication)}</DefinitionListItem>
             </DefinitionList>
           )}
         </CardContent>
@@ -127,28 +127,28 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit type of application click"
           >
-            {defaultState.typeOfApplication === undefined ? t('protected-application:your-application.add-type-application') : t('protected-application:your-application.edit-type-application')}
+            {defaultState.typeOfApplication === undefined ? t('protected-application:yourApplication.addTypeApplication') : t('protected-application:yourApplication.editTypeApplication')}
           </ButtonLink>
         </CardFooter>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>{t('protected-application:your-application.personal-info-heading')}</CardTitle>
+          <CardTitle>{t('protected-application:yourApplication.personalInfoHeading')}</CardTitle>
           <CardAction>{sections.personalInformation.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {defaultState.personalInformation === undefined ? (
-            <p>{t(`protected-application:your-application.personal-info-description.${defaultState.context}`)}</p>
+            <p>{t(`protected-application:yourApplication.personalInfoDescription.${defaultState.context}`)}</p>
           ) : (
             <DefinitionList layout="single-column">
-              {defaultState.personalInformation.memberId && <DefinitionListItem term={t('protected-application:your-application.member-id')}>{formatClientNumber(defaultState.personalInformation.memberId)}</DefinitionListItem>}
-              <DefinitionListItem term={t('protected-application:your-application.full-name')}>{`${defaultState.personalInformation.firstName} ${defaultState.personalInformation.lastName}`}</DefinitionListItem>
-              <DefinitionListItem term={t('protected-application:your-application.date-of-birth')}>{formattedDateOfBirth}</DefinitionListItem>
-              <DefinitionListItem term={t('protected-application:your-application.sin')}>{formatSin(defaultState.personalInformation.socialInsuranceNumber)}</DefinitionListItem>
+              {defaultState.personalInformation.memberId && <DefinitionListItem term={t('protected-application:yourApplication.memberId')}>{formatClientNumber(defaultState.personalInformation.memberId)}</DefinitionListItem>}
+              <DefinitionListItem term={t('protected-application:yourApplication.fullName')}>{`${defaultState.personalInformation.firstName} ${defaultState.personalInformation.lastName}`}</DefinitionListItem>
+              <DefinitionListItem term={t('protected-application:yourApplication.dateOfBirth')}>{formattedDateOfBirth}</DefinitionListItem>
+              <DefinitionListItem term={t('protected-application:yourApplication.sin')}>{formatSin(defaultState.personalInformation.socialInsuranceNumber)}</DefinitionListItem>
               {defaultState.livingIndependently !== undefined && (
-                <DefinitionListItem term={t('protected-application:your-application.living-independently')}>
-                  {defaultState.livingIndependently ? t('protected-application:your-application.living-independently-yes') : t('protected-application:your-application.living-independently-no')}
+                <DefinitionListItem term={t('protected-application:yourApplication.livingIndependently')}>
+                  {defaultState.livingIndependently ? t('protected-application:yourApplication.livingIndependentlyYes') : t('protected-application:yourApplication.livingIndependentlyNo')}
                 </DefinitionListItem>
               )}
             </DefinitionList>
@@ -165,7 +165,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit personal information click"
           >
-            {defaultState.personalInformation === undefined ? t('protected-application:your-application.add-personal-information') : t('protected-application:your-application.edit-personal-information')}
+            {defaultState.personalInformation === undefined ? t('protected-application:yourApplication.addPersonalInformation') : t('protected-application:yourApplication.editPersonalInformation')}
           </ButtonLink>
         </CardFooter>
       </Card>
@@ -173,30 +173,30 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
       {showNewOrReturningMemberSection && (
         <Card>
           <CardHeader>
-            <CardTitle>{t('protected-application:your-application.new-or-returning-heading')}</CardTitle>
+            <CardTitle>{t('protected-application:yourApplication.newOrReturningHeading')}</CardTitle>
             <CardAction>{sections.newOrReturningMember?.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {defaultState.newOrReturningMember?.isNewOrReturningMember === undefined ? (
-              <p>{t('protected-application:your-application.new-or-returning-description')}</p>
+              <p>{t('protected-application:yourApplication.newOrReturningDescription')}</p>
             ) : (
               <>
                 {defaultState.newOrReturningMember.isNewOrReturningMember === false ? (
                   <DefinitionList layout="single-column">
-                    <DefinitionListItem term={t('protected-application:your-application.previously-enrolled')}>
-                      <p>{t('protected-application:your-application.no')}</p>
+                    <DefinitionListItem term={t('protected-application:yourApplication.previouslyEnrolled')}>
+                      <p>{t('protected-application:yourApplication.no')}</p>
                     </DefinitionListItem>
                   </DefinitionList>
                 ) : (
                   <DefinitionList layout="single-column">
-                    <DefinitionListItem term={t('protected-application:your-application.previously-enrolled')}>
-                      <p>{t('protected-application:your-application.yes')}</p>
+                    <DefinitionListItem term={t('protected-application:yourApplication.previouslyEnrolled')}>
+                      <p>{t('protected-application:yourApplication.yes')}</p>
                       <ul className="list-disc">
                         <li className="ml-8">{defaultState.newOrReturningMember.memberId}</li>
                       </ul>
                     </DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application:your-application.full-name')}>{`${defaultState.personalInformation?.firstName} ${defaultState.personalInformation?.lastName}`}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application:your-application.date-of-birth')}>{formattedDateOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t('protected-application:yourApplication.fullName')}>{`${defaultState.personalInformation?.firstName} ${defaultState.personalInformation?.lastName}`}</DefinitionListItem>
+                    <DefinitionListItem term={t('protected-application:yourApplication.dateOfBirth')}>{formattedDateOfBirth}</DefinitionListItem>
                   </DefinitionList>
                 )}
               </>
@@ -204,7 +204,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
             <ButtonLink id="edit-button" variant="link" className="p-0" routeId="protected/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus} size="lg">
-              {defaultState.newOrReturningMember === undefined ? t('protected-application:your-application.add-answer') : t('protected-application:your-application.edit-answer')}
+              {defaultState.newOrReturningMember === undefined ? t('protected-application:yourApplication.addAnswer') : t('protected-application:yourApplication.editAnswer')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -212,10 +212,10 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
 
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Continue click">
-          {t('protected-application:your-application.application')}
+          {t('protected-application:yourApplication.application')}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/eligibility-requirements" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Back click">
-          {t('protected-application:your-application.before-you-start')}
+          {t('protected-application:yourApplication.beforeYouStart')}
         </NavigationButtonLink>
       </div>
     </div>

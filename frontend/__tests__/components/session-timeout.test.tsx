@@ -52,9 +52,9 @@ describe('SessionTimeout', () => {
 
     setup();
 
-    expect(screen.getByText('session-timeout.header')).toBeInTheDocument();
-    expect(screen.getByText('session-timeout.end-session')).toBeInTheDocument();
-    expect(screen.getByText('session-timeout.continue-session')).toBeInTheDocument();
+    expect(screen.getByText('sessionTimeout.header')).toBeInTheDocument();
+    expect(screen.getByText('sessionTimeout.endSession')).toBeInTheDocument();
+    expect(screen.getByText('sessionTimeout.continueSession')).toBeInTheDocument();
   });
 
   it('should call `onSessionEnd` when the "End Session" button is clicked', () => {
@@ -63,7 +63,7 @@ describe('SessionTimeout', () => {
 
     setup({ onSessionEnd });
 
-    const endSessionButton = screen.getByText('session-timeout.end-session');
+    const endSessionButton = screen.getByText('sessionTimeout.endSession');
 
     act(() => {
       fireEvent.click(endSessionButton);
@@ -78,7 +78,7 @@ describe('SessionTimeout', () => {
 
     setup({ onSessionExtend });
 
-    const continueSessionButton = screen.getByText('session-timeout.continue-session');
+    const continueSessionButton = screen.getByText('sessionTimeout.continueSession');
 
     act(() => {
       fireEvent.click(continueSessionButton);
@@ -103,14 +103,14 @@ describe('SessionTimeout', () => {
 
     setup();
 
-    expect(screen.getByText(`session-timeout.description{"timeRemaining":"0:50"}`)).toBeInTheDocument();
+    expect(screen.getByText(`sessionTimeout.description{"timeRemaining":"0:50"}`)).toBeInTheDocument();
 
     act(() => {
       mockGetRemainingTime.mockReturnValue(49_000);
       vi.advanceTimersByTime(1000);
     });
 
-    expect(screen.getByText(`session-timeout.description{"timeRemaining":"0:49"}`)).toBeInTheDocument();
+    expect(screen.getByText(`sessionTimeout.description{"timeRemaining":"0:49"}`)).toBeInTheDocument();
 
     vi.useRealTimers();
   });

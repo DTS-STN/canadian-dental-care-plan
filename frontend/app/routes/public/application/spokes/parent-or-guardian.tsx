@@ -22,7 +22,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.parentOrGuardian,
-  pageTitleI18nKey: 'application-spokes:parent-or-guardian.page-title',
+  pageTitleI18nKey: 'application-spokes:parentOrGuardian.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -31,7 +31,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:parent-or-guardian.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:parentOrGuardian.pageTitle') }) };
 
   invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
   const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context);
@@ -53,7 +53,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearPublicApplicationState({ params, session });
 
-  return redirect(t('application-spokes:parent-or-guardian.exit-btn-link'));
+  return redirect(t('application-spokes:parentOrGuardian.exitBtnLink'));
 }
 
 export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
@@ -83,18 +83,18 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
   return (
     <>
       <div className="mb-8 max-w-prose space-y-4">
-        <p className="mb-4">{t('application-spokes:parent-or-guardian.unable-to-apply')}</p>
+        <p className="mb-4">{t('application-spokes:parentOrGuardian.unableToApply')}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:parent-or-guardian.apply-for-yourself" components={{ noWrap }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:parentOrGuardian.applyForYourself" components={{ noWrap }} />
         </p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
         <ButtonLink id="back-button" variant="secondary" routeId={getBackButtonRouteId()} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Parent or guardian needs to apply click">
-          {t('application-spokes:parent-or-guardian.back-btn')}
+          {t('application-spokes:parentOrGuardian.backBtn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - Parent or guardian needs to apply click">
-          {t('application-spokes:parent-or-guardian.exit-btn')}
+          {t('application-spokes:parentOrGuardian.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </>

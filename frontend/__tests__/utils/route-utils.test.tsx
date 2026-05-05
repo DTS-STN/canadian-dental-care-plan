@@ -51,7 +51,7 @@ describe('useBreadcrumbs()', () => {
 
   it('expect correctly coalesced breadcrumbs from useBreadcrumbs() if the loaders provide data', async () => {
     const breadcrumbs: Breadcrumbs = [
-      { labelI18nKey: 'gcweb:breadcrumbs.canada-ca', to: 'canada.ca' },
+      { labelI18nKey: 'gcweb:breadcrumbs.canadaCa', to: 'canada.ca' },
       { labelI18nKey: 'gcweb:breadcrumbs.home', to: '/home' },
       { labelI18nKey: 'gcweb:breadcrumbs.benefits', to: '/benefits' },
     ];
@@ -291,11 +291,11 @@ describe('usePageTitle()', () => {
     const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
-        handle: { pageTitleI18nKey: 'protected-application:index.page-title' } satisfies RouteHandleData,
+        handle: { pageTitleI18nKey: 'protected-application:index.pageTitle' } satisfies RouteHandleData,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(usePageTitleI18nKey())}</div>,
-            handle: { pageTitleI18nKey: 'protected-application:index.page-title' } satisfies RouteHandleData,
+            handle: { pageTitleI18nKey: 'protected-application:index.pageTitle' } satisfies RouteHandleData,
             path: '/',
           },
         ],
@@ -305,6 +305,6 @@ describe('usePageTitle()', () => {
     render(<RoutesStub />);
 
     const element = await waitFor(async () => await screen.findByTestId('data'));
-    expect(element.textContent).toEqual('"protected-application:index.page-title"');
+    expect(element.textContent).toEqual('"protected-application:index.pageTitle"');
   });
 });

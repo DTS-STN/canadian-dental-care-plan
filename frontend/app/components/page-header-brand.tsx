@@ -20,8 +20,8 @@ export function PageHeaderBrand({ headerLogoUrl }: PageHeaderBrandProps) {
 
   const headerLogo = (
     <>
-      <img className="h-8 w-auto" src={`/assets/sig-blk-${currentLanguage}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
-      <span className="sr-only">{<span lang={altLanguage}>{altT('gcweb:header.govt-of-canada.text')}</span>}</span>
+      <img className="h-8 w-auto" src={`/assets/sig-blk-${currentLanguage}.svg`} alt={t('gcweb:header.govtOfCanada.text')} property="logo" width="300" height="28" decoding="async" />
+      <span className="sr-only">{<span lang={altLanguage}>{altT('gcweb:header.govtOfCanada.text')}</span>}</span>
     </>
   );
 
@@ -37,18 +37,18 @@ export function PageHeaderBrand({ headerLogoUrl }: PageHeaderBrandProps) {
             headerLogo
           )}
 
-          <meta property="name" content={t('gcweb:header.govt-of-canada.text')} />
+          <meta property="name" content={t('gcweb:header.govtOfCanada.text')} />
           <meta property="areaServed" typeof="Country" content="Canada" />
           <link property="logo" href="/assets/wmms-blk.svg" />
         </div>
         <section id="wb-lng">
-          <h2 className="sr-only">{t('gcweb:header.language-selection')}</h2>
+          <h2 className="sr-only">{t('gcweb:header.languageSelection')}</h2>
           <LanguageSwitcher>
-            <span className="hidden md:block" lang={t('gcweb:language-switcher.alt-lang-abbr-prop')}>
-              {t('gcweb:language-switcher.alt-lang')}
+            <span className="hidden md:block" lang={t('gcweb:languageSwitcher.altLangAbbrProp')}>
+              {t('gcweb:languageSwitcher.altLang')}
             </span>
-            <abbr title={t('gcweb:language-switcher.alt-lang')} className="cursor-help uppercase md:hidden">
-              {t('gcweb:language-switcher.alt-lang-abbr')}
+            <abbr title={t('gcweb:languageSwitcher.altLang')} className="cursor-help uppercase md:hidden">
+              {t('gcweb:languageSwitcher.altLangAbbr')}
             </abbr>
           </LanguageSwitcher>
         </section>

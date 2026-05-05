@@ -31,7 +31,7 @@ const LIVING_INDEPENDENTLY_OPTION = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.livingIndependently,
-  pageTitleI18nKey: 'application-spokes:living-independently.page-title',
+  pageTitleI18nKey: 'application-spokes:livingIndependently.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -40,7 +40,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:living-independently.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:livingIndependently.pageTitle') }) };
   return { meta, defaultState: state.livingIndependently };
 }
 
@@ -55,7 +55,7 @@ export async function action({ context: { appContainer, session }, params, reque
    */
   const livingIndependentlySchema = z.object({
     livingIndependently: z.enum(LIVING_INDEPENDENTLY_OPTION, {
-      error: t('application-spokes:living-independently.error-message.living-independently-required'),
+      error: t('application-spokes:livingIndependently.errorMessage.livingIndependentlyRequired'),
     }),
   });
 
@@ -89,8 +89,8 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
 
   return (
     <div className="max-w-prose">
-      <p className="mb-6">{t('application-spokes:living-independently.description')}</p>
-      <p className="mb-4 italic">{t('application:required-label')}</p>
+      <p className="mb-6">{t('application-spokes:livingIndependently.description')}</p>
+      <p className="mb-4 italic">{t('application:requiredLabel')}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -98,16 +98,16 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
           <InputRadios
             id="living-independently"
             name="livingIndependently"
-            legend={t('application-spokes:living-independently.form-instructions')}
+            legend={t('application-spokes:livingIndependently.formInstructions')}
             options={[
               {
                 value: LIVING_INDEPENDENTLY_OPTION.yes,
-                children: t('application-spokes:living-independently.radio-options.yes'),
+                children: t('application-spokes:livingIndependently.radioOptions.yes'),
                 defaultChecked: defaultState === true,
               },
               {
                 value: LIVING_INDEPENDENTLY_OPTION.no,
-                children: t('application-spokes:living-independently.radio-options.no'),
+                children: t('application-spokes:livingIndependently.radioOptions.no'),
                 defaultChecked: defaultState === false,
               },
             ]}
@@ -116,7 +116,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Living independently click">
-              {t('application-spokes:living-independently.save-btn')}
+              {t('application-spokes:livingIndependently.saveBtn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -126,7 +126,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Living independently click"
             >
-              {t('application-spokes:living-independently.back-btn')}
+              {t('application-spokes:livingIndependently.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

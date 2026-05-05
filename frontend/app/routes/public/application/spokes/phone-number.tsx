@@ -44,7 +44,7 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.phoneNumber,
-  pageTitleI18nKey: 'application-spokes:phone-number.page-title',
+  pageTitleI18nKey: 'application-spokes:phoneNumber.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -55,7 +55,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:phone-number.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:phoneNumber.pageTitle') }) };
   return {
     defaultState: {
       phoneNumber: state.phoneNumber?.value?.primary,
@@ -81,13 +81,13 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const phoneNumberSchema = z.object({
     phoneNumber: phoneSchema({
-      required_error: t('application-spokes:phone-number.error-message.phone-required'),
-      invalid_phone_canadian_error: t('application-spokes:phone-number.error-message.phone-number-valid'),
-      invalid_phone_international_error: t('application-spokes:phone-number.error-message.phone-number-valid-international'),
+      required_error: t('application-spokes:phoneNumber.errorMessage.phoneRequired'),
+      invalid_phone_canadian_error: t('application-spokes:phoneNumber.errorMessage.phoneNumberValid'),
+      invalid_phone_international_error: t('application-spokes:phoneNumber.errorMessage.phoneNumberValidInternational'),
     }),
     phoneNumberAlt: phoneSchema({
-      invalid_phone_canadian_error: t('application-spokes:phone-number.error-message.phone-number-alt-valid'),
-      invalid_phone_international_error: t('application-spokes:phone-number.error-message.phone-number-alt-valid-international'),
+      invalid_phone_canadian_error: t('application-spokes:phoneNumber.errorMessage.phoneNumberAltValid'),
+      invalid_phone_international_error: t('application-spokes:phoneNumber.errorMessage.phoneNumberAltValidInternational'),
     }).optional(),
   });
 
@@ -126,7 +126,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
 
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
 
-  const findOffice = <InlineLink to={t('application-spokes:phone-number.office-link')} className="external-link" newTabIndicator target="_blank" />;
+  const findOffice = <InlineLink to={t('application-spokes:phoneNumber.officeLink')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose">
@@ -135,7 +135,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-6">
-            <p className="mb-4 italic">{t('application:optional-label')}</p>
+            <p className="mb-4 italic">{t('application:optionalLabel')}</p>
             <div className="grid items-end gap-6">
               <InputPhoneField
                 id="phone-number"
@@ -146,9 +146,9 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 autoComplete="tel"
                 defaultValue={defaultState.phoneNumber ?? ''}
                 errorMessage={errors?.phoneNumber}
-                label={t('application-spokes:phone-number.phone-number')}
+                label={t('application-spokes:phoneNumber.phoneNumber')}
                 maxLength={100}
-                helpMessagePrimary={t('application-spokes:phone-number.help-message')}
+                helpMessagePrimary={t('application-spokes:phoneNumber.helpMessage')}
                 helpMessagePrimaryClassName="text-gray-600"
               />
               <InputPhoneField
@@ -160,23 +160,23 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 autoComplete="tel"
                 defaultValue={defaultState.phoneNumberAlt ?? ''}
                 errorMessage={errors?.phoneNumberAlt}
-                label={t('application-spokes:phone-number.phone-number-alt')}
+                label={t('application-spokes:phoneNumber.phoneNumberAlt')}
                 maxLength={100}
-                helpMessagePrimary={t('application-spokes:phone-number.help-message-alt')}
+                helpMessagePrimary={t('application-spokes:phoneNumber.helpMessageAlt')}
                 helpMessagePrimaryClassName="text-gray-600"
               />
             </div>
           </div>
-          <Collapsible summary={t('application-spokes:phone-number.dont-have-number')}>
+          <Collapsible summary={t('application-spokes:phoneNumber.dontHaveNumber')}>
             <div className="space-y-6">
               <section className="space-y-4">
-                <p>{t('application-spokes:phone-number.need-phone-number')}</p>
+                <p>{t('application-spokes:phoneNumber.needPhoneNumber')}</p>
                 <ul className="list-disc space-y-1 pl-7">
                   <li>
-                    <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:phone-number.service-canada" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+                    <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:phoneNumber.serviceCanada" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
                   </li>
                   <li>
-                    <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:phone-number.in-person" components={{ findOffice }} />
+                    <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:phoneNumber.inPerson" components={{ findOffice }} />
                   </li>
                 </ul>
               </section>
@@ -184,7 +184,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
           </Collapsible>
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Phone number click">
-              {t('application-spokes:phone-number.save-btn')}
+              {t('application-spokes:phoneNumber.saveBtn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -194,7 +194,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Phone number click"
             >
-              {t('application-spokes:phone-number.back-btn')}
+              {t('application-spokes:phoneNumber.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

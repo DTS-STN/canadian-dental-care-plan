@@ -20,7 +20,7 @@ export function Breadcrumbs({ className, items }: BreadcrumbsProps) {
   return (
     <nav id="wb-bc" className={className} property="breadcrumb" aria-labelledby="breadcrumbs">
       <h2 id="breadcrumbs" className="sr-only">
-        {t('gcweb:breadcrumbs.you-are-here')}
+        {t('gcweb:breadcrumbs.youAreHere')}
       </h2>
       <div className="container">
         <ol className="flex flex-wrap items-center gap-x-3 gap-y-1" typeof="BreadcrumbList">

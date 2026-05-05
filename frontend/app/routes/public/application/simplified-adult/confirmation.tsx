@@ -39,7 +39,7 @@ import { formatSin } from '~/utils/sin-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application-simplified-adult', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.simplifiedAdult.confirmation,
-  pageTitleI18nKey: 'application-simplified-adult:confirm.page-title',
+  pageTitleI18nKey: 'application-simplified-adult:confirm.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -136,7 +136,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     selectedProvincialBenefits: dentalBenefits.provincialGovernmentInsurancePlan?.name,
   };
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-adult:confirm.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-adult:confirm.pageTitle') }) };
 
   const eligibility = getEligibilityStatus({
     hasPrivateDentalInsurance: state.dentalInsurance.hasDentalInsurance,
@@ -169,7 +169,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearPublicApplicationState({ params, session });
 
-  return redirect(t('confirm.exit-link'));
+  return redirect(t('confirm.exitLink'));
 }
 
 export default function RenewAdultConfirm({ loaderData, params }: Route.ComponentProps) {
@@ -178,13 +178,13 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, eligibility } = loaderData;
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
-  const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('application-simplified-adult:confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
+  const mscaLinkAccount = <InlineLink to={t('confirm.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('application-simplified-adult:confirm.mscaLinkChecker')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose space-y-10">
       <section className="space-y-6">
-        <h3 className="font-lato text-2xl font-bold">{t('confirm.your-eligibility')}</h3>
+        <h3 className="font-lato text-2xl font-bold">{t('confirm.yourEligibility')}</h3>
         <DefinitionList border>
           <DefinitionListItem term={`${userInfo.firstName} ${userInfo.lastName}`}>
             <Eligibility type={eligibility} />
@@ -194,16 +194,16 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
 
       <div className="space-y-4">
         <h2 className="text-3xl">
-          <strong>{t('confirm.app-code-is')}</strong>
+          <strong>{t('confirm.appCodeIs')}</strong>
           <br />
           <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
         </h2>
-        <p>{t('confirm.make-note')}</p>
+        <p>{t('confirm.makeNote')}</p>
       </div>
 
       <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.keep-copy')}</h2>
-        <p className="mt-4">{t('confirm.print-copy-important')}</p>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.keepCopy')}</h2>
+        <p className="mt-4">{t('confirm.printCopyImportant')}</p>
         <Button
           variant="primary"
           size="lg"
@@ -214,7 +214,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
           }}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Print top - Application successfully submitted click"
         >
-          {t('confirm.print-btn')}
+          {t('confirm.printBtn')}
         </Button>
       </section>
 
@@ -239,16 +239,16 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
       </ContextualAlert>
 
       <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.whatsNext')}</h2>
         <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.begin-process" components={{ cdcpLink, mscaLinkAccount }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.beginProcess" components={{ cdcpLink, mscaLinkAccount }} />
         </p>
       </section>
 
       <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.get-updates-title')}</h2>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.getUpdatesTitle')}</h2>
         <p className="my-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.get-updates-text" components={{ mscaLinkAccount }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.getUpdatesText" components={{ mscaLinkAccount }} />
         </p>
         <ul className="list-disc space-y-1 pl-7">
           <li>{t('confirm.view')}</li>
@@ -259,9 +259,9 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
 
       <section className="space-y-8">
         <div className="space-y-6">
-          <h2 className="font-lato text-3xl font-bold">{t('confirm.application-summ')}</h2>
+          <h2 className="font-lato text-3xl font-bold">{t('confirm.applicationSumm')}</h2>
           <DefinitionList border className="text-xl">
-            <DefinitionListItem term={t('confirm.application-code')}>
+            <DefinitionListItem term={t('confirm.applicationCode')}>
               <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
             </DefinitionListItem>
           </DefinitionList>
@@ -271,10 +271,10 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
           <h2 className="font-lato text-3xl font-bold">{t('confirm.applicant')}</h2>
 
           <section className="space-y-6">
-            <h3 className="font-lato text-2xl font-bold">{t('confirm.applicant-info')}</h3>
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.applicantInfo')}</h3>
             <DefinitionList border>
               {userInfo.memberId && <DefinitionListItem term={t('confirm.memberId')}>{formatClientNumber(userInfo.memberId)}</DefinitionListItem>}
-              <DefinitionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.fullName')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.dob')}>{userInfo.birthday}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.sin')}>
                 <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
@@ -284,29 +284,29 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
 
           {spouseInfo && (
             <section className="space-y-6">
-              <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
+              <h3 className="font-lato text-2xl font-bold">{t('confirm.spouseInfo')}</h3>
               <DefinitionList border>
-                <DefinitionListItem term={t('confirm.year-birth')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
+                <DefinitionListItem term={t('confirm.yearBirth')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
                 <DefinitionListItem term={t('confirm.sin')}>
                   <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
                 </DefinitionListItem>
-                <DefinitionListItem term={t('confirm.consent')}>{t('confirm.consent-answer')}</DefinitionListItem>
+                <DefinitionListItem term={t('confirm.consent')}>{t('confirm.consentAnswer')}</DefinitionListItem>
               </DefinitionList>
             </section>
           )}
 
           <section className="space-y-6">
-            <h3 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h3>
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.contactInfo')}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.phone-number')}>
-                <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.phoneNumber : t('confirm.no-update')}</span>
+              <DefinitionListItem term={t('confirm.phoneNumber')}>
+                <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.phoneNumber : t('confirm.noUpdate')}</span>
               </DefinitionListItem>
-              <DefinitionListItem term={t('confirm.alt-phone-number')}>
-                <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.altPhoneNumber : t('confirm.no-update')}</span>
+              <DefinitionListItem term={t('confirm.altPhoneNumber')}>
+                <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.altPhoneNumber : t('confirm.noUpdate')}</span>
               </DefinitionListItem>
               {userInfo.contactInformationEmail && (
                 <DefinitionListItem term={t('confirm.email')}>
-                  <span className="text-nowrap">{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')} </span>
+                  <span className="text-nowrap">{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.noUpdate')} </span>
                 </DefinitionListItem>
               )}
               <DefinitionListItem term={t('confirm.mailing')}>
@@ -321,7 +321,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
                     }}
                   />
                 ) : (
-                  <span className="text-nowrap">{t('confirm.no-update')}</span>
+                  <span className="text-nowrap">{t('confirm.noUpdate')}</span>
                 )}
               </DefinitionListItem>
               <DefinitionListItem term={t('confirm.home')}>
@@ -336,38 +336,38 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
                     }}
                   />
                 ) : (
-                  <span className="text-nowrap">{t('confirm.no-update')}</span>
+                  <span className="text-nowrap">{t('confirm.noUpdate')}</span>
                 )}
               </DefinitionListItem>
             </DefinitionList>
           </section>
 
           <section className="space-y-6">
-            <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-pref')}</h3>
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.commPref')}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.preferredLanguage.name : t('confirm.no-update')}</DefinitionListItem>
-              <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationSunLifePreference.name : t('confirm.no-update')}</DefinitionListItem>
-              <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationGOCPreference.name : t('confirm.no-update')}</DefinitionListItem>
-              <DefinitionListItem term={t('confirm.email')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.no-update')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.langPref')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.preferredLanguage.name : t('confirm.noUpdate')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.sunLifeCommPrefTitle')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationSunLifePreference.name : t('confirm.noUpdate')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.gocCommPrefTitle')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationGOCPreference.name : t('confirm.noUpdate')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.email')}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t('confirm.noUpdate')}</DefinitionListItem>
             </DefinitionList>
           </section>
 
           <section className="space-y-6">
-            <h3 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h3>
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.dentalInsurance')}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.dental-private')}>{dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DefinitionListItem>
-              <DefinitionListItem term={t('confirm.dental-public')}>
+              <DefinitionListItem term={t('confirm.dentalPrivate')}>{dentalInsurance.accessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DefinitionListItem>
+              <DefinitionListItem term={t('confirm.dentalPublic')}>
                 {dentalInsurance.hasDentalBenefitsChanged && (dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits) ? (
                   <div className="space-y-3">
                     <p>{t('application-simplified-adult:confirm.yes')}</p>
-                    <p>{t('application-simplified-adult:confirm.dental-benefit-has-access')}</p>
+                    <p>{t('application-simplified-adult:confirm.dentalBenefitHasAccess')}</p>
                     <ul className="list-disc space-y-1 pl-7">
                       {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
                       {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
                     </ul>
                   </div>
                 ) : (
-                  <p>{dentalInsurance.hasDentalBenefitsChanged ? t('confirm.no') : t('confirm.no-update')}</p>
+                  <p>{dentalInsurance.hasDentalBenefitsChanged ? t('confirm.no') : t('confirm.noUpdate')}</p>
                 )}
               </DefinitionListItem>
             </DefinitionList>
@@ -386,23 +386,23 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
           }}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Print bottom - Application successfully submitted click"
         >
-          {t('confirm.print-btn')}
+          {t('confirm.printBtn')}
         </Button>
       </div>
       <Dialog>
         <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Exit - Application successfully submitted click" asChild>
-          <Button variant="secondary">{t('application-simplified-adult:confirm.close-application')}</Button>
+          <Button variant="secondary">{t('application-simplified-adult:confirm.closeApplication')}</Button>
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{t('application-simplified-adult:confirm.modal.header')}</DialogTitle>
           </DialogHeader>
           <p>{t('application-simplified-adult:confirm.modal.info')}</p>
-          <p>{t('application-simplified-adult:confirm.modal.are-you-sure')}</p>
+          <p>{t('application-simplified-adult:confirm.modal.areYouSure')}</p>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Back exit modal - Application successfully submitted click">
-                {t('application-simplified-adult:confirm.modal.back-btn')}
+                {t('application-simplified-adult:confirm.modal.backBtn')}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
@@ -414,7 +414,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
                 onClick={() => removeApplicationFlowStorageValue()}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Confirmation exit modal - Application successfully submitted click"
               >
-                {t('application-simplified-adult:confirm.modal.close-btn')}
+                {t('application-simplified-adult:confirm.modal.closeBtn')}
               </Button>
             </fetcher.Form>
           </DialogFooter>

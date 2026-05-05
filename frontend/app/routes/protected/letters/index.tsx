@@ -23,10 +23,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'letters:index.page-title' }],
+  breadcrumbs: [{ labelI18nKey: 'letters:index.pageTitle' }],
   i18nNamespaces: getTypedI18nNamespaces('letters', 'gcweb'),
   pageIdentifier: pageIds.protected.letters.index,
-  pageTitleI18nKey: 'letters:index.page-title',
+  pageTitleI18nKey: 'letters:index.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -53,7 +53,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   session.set('letters', letters);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('letters:index.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('letters:index.pageTitle') }) };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   const idToken: IdToken = session.get('idToken');
@@ -79,7 +79,7 @@ export default function LettersIndex({ loaderData, params }: Route.ComponentProp
     <>
       {letters.length === 0 ? (
         <ContextualAlert type="info">
-          <p>{t('letters:index.no-letter')}</p>
+          <p>{t('letters:index.noLetter')}</p>
         </ContextualAlert>
       ) : (
         <>
@@ -118,7 +118,7 @@ export default function LettersIndex({ loaderData, params }: Route.ComponentProp
       )}
 
       <div className="my-6 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" variant="secondary" to={t('gcweb:header.menu-dashboard-href', { baseUri: SCCH_BASE_URI })}>
+        <ButtonLink id="back-button" variant="secondary" to={t('gcweb:header.menuDashboardHref', { baseUri: SCCH_BASE_URI })}>
           {t('letters:index.button.back')}
         </ButtonLink>
       </div>

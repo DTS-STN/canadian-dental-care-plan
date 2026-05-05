@@ -36,13 +36,13 @@ exports[`BrowserCompatibilityBanner > should render the BrowserCompatibilityBann
           <h2
             class="font-lato font-bold"
           >
-            gcweb:browser-compatibility-banner.title
+            gcweb:browserCompatibilityBanner.title
           </h2>
           <p>
-            gcweb:browser-compatibility-banner.content
+            gcweb:browserCompatibilityBanner.content
           </p>
           <p>
-            gcweb:browser-compatibility-banner.contact
+            gcweb:browserCompatibilityBanner.contact
           </p>
           <div
             class="text-right"
@@ -51,7 +51,7 @@ exports[`BrowserCompatibilityBanner > should render the BrowserCompatibilityBann
               class="font-lato rounded-sm border border-red-300 px-3 py-2 text-sm text-red-700 outline-offset-4 hover:border-red-400 hover:bg-red-100 focus:border-red-400 focus:bg-red-100"
               type="button"
             >
-              gcweb:browser-compatibility-banner.dismiss
+              gcweb:browserCompatibilityBanner.dismiss
             </button>
           </div>
         </div>

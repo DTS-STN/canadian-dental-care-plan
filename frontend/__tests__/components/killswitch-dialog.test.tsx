@@ -21,13 +21,13 @@ describe('KillswitchDialog', () => {
 
   it('should decrement the remaining time every second', () => {
     render(<KillswitchDialog timeoutSecs={300} />);
-    expect(screen.queryByText('{"key":"killswitch.remaining-time","options":{"mins":5,"secs":0}}')).toBeInTheDocument();
+    expect(screen.queryByText('{"key":"killswitch.remainingTime","options":{"mins":5,"secs":0}}')).toBeInTheDocument();
 
     act(() => void vi.advanceTimersByTime(1000));
-    expect(screen.queryByText('{"key":"killswitch.remaining-time","options":{"mins":4,"secs":59}}')).toBeInTheDocument();
+    expect(screen.queryByText('{"key":"killswitch.remainingTime","options":{"mins":4,"secs":59}}')).toBeInTheDocument();
 
     act(() => void vi.advanceTimersByTime(1000));
-    expect(screen.queryByText('{"key":"killswitch.remaining-time","options":{"mins":4,"secs":58}}')).toBeInTheDocument();
+    expect(screen.queryByText('{"key":"killswitch.remainingTime","options":{"mins":4,"secs":58}}')).toBeInTheDocument();
   });
 
   it('should hide the dialog when the timer reaches zero', () => {

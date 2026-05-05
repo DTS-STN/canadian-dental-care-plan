@@ -45,7 +45,7 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.communicationPreferences,
-  pageTitleI18nKey: 'protected-application-spokes:communication-preferences.page-title',
+  pageTitleI18nKey: 'protected-application-spokes:communicationPreferences.pageTitle',
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:communication-preferences.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:communicationPreferences.pageTitle') }) };
 
   const languages = appContainer.get(TYPES.LanguageService).listAndSortLocalizedLanguages(locale);
   const gcCommunicationMethods = appContainer.get(TYPES.GCCommunicationMethodService).listLocalizedGCCommunicationMethods(locale);
@@ -99,8 +99,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
   // state validation schema
   const communicationPreferencesSchema = z.object({
-    preferredLanguage: z.string().trim().min(1, t('protected-application-spokes:communication-preferences.error-message.preferred-language-required')),
-    preferredMethod: z.string().trim().min(1, t('protected-application-spokes:communication-preferences.error-message.preferred-method-required')),
+    preferredLanguage: z.string().trim().min(1, t('protected-application-spokes:communicationPreferences.errorMessage.preferredLanguageRequired')),
+    preferredMethod: z.string().trim().min(1, t('protected-application-spokes:communicationPreferences.errorMessage.preferredMethodRequired')),
   });
 
   const parsedDataResult = communicationPreferencesSchema.safeParse({
@@ -186,7 +186,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
     let children: ReactNode = <span className="font-semibold">{method.name}</span>;
 
     if (method.id === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:communication-preferences.by-email" values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
+      children = <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:communicationPreferences.byEmail" values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
     }
 
     return {
@@ -200,17 +200,17 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('protected-application:required-label')}</p>
+        <p className="mb-4 italic">{t('protected-application:requiredLabel')}</p>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
-            <InputRadios id="preferred-language" name="preferredLanguage" legend={t('protected-application-spokes:communication-preferences.preferred-language')} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
+            <InputRadios id="preferred-language" name="preferredLanguage" legend={t('protected-application-spokes:communicationPreferences.preferredLanguage')} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
             <InputRadios
               id="preferred-method-sunlife"
-              legend={t('protected-application-spokes:communication-preferences.preferred-method')}
+              legend={t('protected-application-spokes:communicationPreferences.preferredMethod')}
               name="preferredMethod"
-              helpMessagePrimary={t('protected-application-spokes:communication-preferences.preferred-method-help-message')}
+              helpMessagePrimary={t('protected-application-spokes:communicationPreferences.preferredMethodHelpMessage')}
               helpMessagePrimaryClassName="text-black"
               options={sunLifeCommunicationMethodOptions}
               errorMessage={errors?.preferredMethod}
@@ -219,7 +219,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmittingOrSuccess} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Communication preferences click">
-              {t('protected-application-spokes:communication-preferences.save')}
+              {t('protected-application-spokes:communicationPreferences.save')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -229,7 +229,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
               disabled={isSubmittingOrSuccess}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Communication preferences click"
             >
-              {t('protected-application-spokes:communication-preferences.back')}
+              {t('protected-application-spokes:communicationPreferences.back')}
             </ButtonLink>
           </div>
         </fetcher.Form>

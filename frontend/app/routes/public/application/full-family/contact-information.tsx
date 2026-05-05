@@ -26,7 +26,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'application-full-family', 'gcweb'),
   pageIdentifier: pageIds.public.application.fullFamily.contactInformation,
-  pageTitleI18nKey: 'application-full-family:contact-information.page-heading',
+  pageTitleI18nKey: 'application-full-family:contactInformation.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -36,7 +36,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['full-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:contact-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:contactInformation.pageTitle') }) };
   const locale = getLocale(request);
 
   const mailingAddressInfo = state.mailingAddress?.hasChanged
@@ -87,27 +87,27 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
 
   return (
     <>
-      <ProgressStepper activeStep="contact-information" className="mb-8" />
+      <ProgressStepper activeStep="contactInformation" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('application:complete-all-sections')}</p>
+          <p>{t('application:completeAllSections')}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('application-full-family:contact-information.phone-number')}</h2>
+              <h2>{t('application-full-family:contactInformation.phoneNumber')}</h2>
             </CardTitle>
             <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.phoneNumber?.hasChanged ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-full-family:contact-information.phone-number')}>{state.phoneNumber.value.primary}</DefinitionListItem>
-                {state.phoneNumber.value.alternate && <DefinitionListItem term={t('application-full-family:contact-information.alt-phone-number')}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
+                <DefinitionListItem term={t('application-full-family:contactInformation.phoneNumber')}>{state.phoneNumber.value.primary}</DefinitionListItem>
+                {state.phoneNumber.value.alternate && <DefinitionListItem term={t('application-full-family:contactInformation.altPhoneNumber')}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
               </DefinitionList>
             ) : (
-              <p>{t('application-full-family:contact-information.phone-number-help')}</p>
+              <p>{t('application-full-family:contactInformation.phoneNumberHelp')}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -121,7 +121,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Edit phone click"
             >
-              {sections.phoneNumber.completed ? t('application-full-family:contact-information.edit-phone-number') : t('application-full-family:contact-information.add-phone-number')}
+              {sections.phoneNumber.completed ? t('application-full-family:contactInformation.editPhoneNumber') : t('application-full-family:contactInformation.addPhoneNumber')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -129,16 +129,16 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('application-full-family:contact-information.mailing-and-home-address')}</h2>
+              <h2>{t('application-full-family:contactInformation.mailingAndHomeAddress')}</h2>
             </CardTitle>
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {mailingAddressInfo === undefined || homeAddressInfo === undefined ? (
-              <p>{t('application-full-family:contact-information.address-help')}</p>
+              <p>{t('application-full-family:contactInformation.addressHelp')}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-full-family:contact-information.mailing-address')}>
+                <DefinitionListItem term={t('application-full-family:contactInformation.mailingAddress')}>
                   <Address
                     address={{
                       address: mailingAddressInfo.address,
@@ -149,7 +149,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
                     }}
                   />
                 </DefinitionListItem>
-                <DefinitionListItem term={t('application-full-family:contact-information.home-address')}>
+                <DefinitionListItem term={t('application-full-family:contactInformation.homeAddress')}>
                   <Address
                     address={{
                       address: homeAddressInfo.address,
@@ -174,7 +174,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Edit address click"
             >
-              {sections.address.completed ? t('application-full-family:contact-information.edit-address') : t('application-full-family:contact-information.add-address')}
+              {sections.address.completed ? t('application-full-family:contactInformation.editAddress') : t('application-full-family:contactInformation.addAddress')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -182,20 +182,20 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('application-full-family:contact-information.communication-preferences')}</h2>
+              <h2>{t('application-full-family:contactInformation.communicationPreferences')}</h2>
             </CardTitle>
             <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.communicationPreferences?.hasChanged ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-full-family:contact-information.preferred-language')}>{preferredLanguage?.name}</DefinitionListItem>
-                <DefinitionListItem term={t('application-full-family:contact-information.preferred-method')}>{preferredMethod?.name}</DefinitionListItem>
-                <DefinitionListItem term={t('application-full-family:contact-information.preferred-notification-method')}>{preferredNotificationMethod?.name}</DefinitionListItem>
-                {state.email && <DefinitionListItem term={t('application-full-family:contact-information.email')}>{state.email}</DefinitionListItem>}
+                <DefinitionListItem term={t('application-full-family:contactInformation.preferredLanguage')}>{preferredLanguage?.name}</DefinitionListItem>
+                <DefinitionListItem term={t('application-full-family:contactInformation.preferredMethod')}>{preferredMethod?.name}</DefinitionListItem>
+                <DefinitionListItem term={t('application-full-family:contactInformation.preferredNotificationMethod')}>{preferredNotificationMethod?.name}</DefinitionListItem>
+                {state.email && <DefinitionListItem term={t('application-full-family:contactInformation.email')}>{state.email}</DefinitionListItem>}
               </DefinitionList>
             ) : (
-              <p>{t('application-full-family:contact-information.communication-preferences-help')}</p>
+              <p>{t('application-full-family:contactInformation.communicationPreferencesHelp')}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -209,7 +209,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Edit comms click"
             >
-              {sections.communicationPreferences.completed ? t('application-full-family:contact-information.edit-communication-preferences') : t('application-full-family:contact-information.add-communication-preferences')}
+              {sections.communicationPreferences.completed ? t('application-full-family:contactInformation.editCommunicationPreferences') : t('application-full-family:contactInformation.addCommunicationPreferences')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -223,10 +223,10 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Continue click"
           >
-            {t('application-full-family:contact-information.next-btn')}
+            {t('application-full-family:contactInformation.nextBtn')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-family/marital-status" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Back click">
-            {t('application-full-family:contact-information.prev-btn')}
+            {t('application-full-family:contactInformation.prevBtn')}
           </NavigationButtonLink>
         </div>
       </div>

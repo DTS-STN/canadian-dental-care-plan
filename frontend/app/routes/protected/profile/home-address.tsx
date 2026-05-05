@@ -39,10 +39,10 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'protected-profile:contact-information.page-title', routeId: 'protected/profile/contact-information' }],
+  breadcrumbs: [{ labelI18nKey: 'protected-profile:contactInformation.pageTitle', routeId: 'protected/profile/contact-information' }],
   i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.editHomeAddress,
-  pageTitleI18nKey: 'protected-profile:home-address.page-title',
+  pageTitleI18nKey: 'protected-profile:homeAddress.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -58,7 +58,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryList = await appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('protected-profile:home-address.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protected-profile:homeAddress.pageTitle') }) };
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.home-address', { userId: idToken.sub });
@@ -254,18 +254,18 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
 
   const homeRegions = useMemo<InputOptionProps[]>(() => homeCountryRegions.map(({ id, name }) => ({ children: name, value: id })), [homeCountryRegions]);
 
-  const dummyOption: InputOptionProps = { children: t('protected-profile:home-address.select-one'), value: '' };
+  const dummyOption: InputOptionProps = { children: t('protected-profile:homeAddress.selectOne'), value: '' };
 
   const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedHomeCountry);
 
   let postalCodeHelpMessage: string | undefined;
   switch (selectedHomeCountry) {
     case CANADA_COUNTRY_ID: {
-      postalCodeHelpMessage = t('protected-profile:home-address.postal-code-help');
+      postalCodeHelpMessage = t('protected-profile:homeAddress.postalCodeHelp');
       break;
     }
     case USA_COUNTRY_ID: {
-      postalCodeHelpMessage = t('protected-profile:home-address.postal-code-help-us');
+      postalCodeHelpMessage = t('protected-profile:homeAddress.postalCodeHelpUs');
       break;
     }
     default: {
@@ -276,7 +276,7 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('protected-profile:optional-label')}</p>
+      <p className="mb-4 italic">{t('protected-profile:optionalLabel')}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -284,12 +284,12 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
           <fieldset className="mb-6">
             <div className="space-y-6">
               <InputSanitizeField
-                id="home-address"
+                id="homeAddress"
                 name="address"
                 className="w-full"
-                label={t('protected-profile:home-address.address')}
+                label={t('protected-profile:homeAddress.address')}
                 maxLength={100}
-                helpMessagePrimary={t('protected-profile:home-address.address-help')}
+                helpMessagePrimary={t('protected-profile:homeAddress.addressHelp')}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line1"
                 defaultValue={defaultState.address}
@@ -300,20 +300,20 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
                 id="apartment"
                 name="apartment"
                 className="w-full"
-                label={t('protected-profile:home-address.apartment')}
+                label={t('protected-profile:homeAddress.apartment')}
                 maxLength={100}
-                helpMessagePrimary={t('protected-profile:home-address.apartment-help')}
+                helpMessagePrimary={t('protected-profile:homeAddress.apartmentHelp')}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line2"
                 defaultValue={defaultState.apartment}
                 errorMessage={errors?.apartment}
               />
-              <InputSanitizeField id="home-city" name="city" className="w-full" label={t('protected-profile:home-address.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
+              <InputSanitizeField id="home-city" name="city" className="w-full" label={t('protected-profile:homeAddress.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
               <InputSanitizeField
                 id="home-postal-code"
                 name="postalZipCode"
                 className="w-full sm:w-1/2"
-                label={isPostalCodeRequired ? t('protected-profile:home-address.postal-code') : t('protected-profile:home-address.postal-code-optional')}
+                label={isPostalCodeRequired ? t('protected-profile:homeAddress.postalCode') : t('protected-profile:homeAddress.postalCodeOptional')}
                 maxLength={100}
                 autoComplete="postal-code"
                 defaultValue={defaultState.postalCode}
@@ -327,7 +327,7 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
                   id="home-province"
                   name="provinceStateId"
                   className="w-full sm:w-1/2"
-                  label={t('protected-profile:home-address.province')}
+                  label={t('protected-profile:homeAddress.province')}
                   defaultValue={defaultState.province}
                   errorMessage={errors?.provinceStateId}
                   options={[dummyOption, ...homeRegions]}
@@ -338,7 +338,7 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
                 id="home-country"
                 name="countryId"
                 className="w-full sm:w-1/2"
-                label={t('protected-profile:home-address.country')}
+                label={t('protected-profile:homeAddress.country')}
                 autoComplete="country"
                 defaultValue={defaultState.country}
                 errorMessage={errors?.countryId}
@@ -361,7 +361,7 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
                   loading={isSubmitting}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Home address click"
                 >
-                  {t('protected-profile:home-address.save-btn')}
+                  {t('protected-profile:homeAddress.saveBtn')}
                 </LoadingButton>
               </DialogTrigger>
               {!isSubmitting && addressDialogContent && (
@@ -369,12 +369,12 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
                   {addressDialogContent.status === 'address-suggestion' && (
                     <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
                   )}
-                  {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent addressContext="home-address" invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
+                  {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent addressContext="homeAddress" invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
                 </>
               )}
             </Dialog>
             <ButtonLink variant="secondary" id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Home address click">
-              {t('protected-profile:home-address.back-btn')}
+              {t('protected-profile:homeAddress.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

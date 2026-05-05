@@ -137,15 +137,15 @@ const SessionTimeout = ({ promptBeforeIdle, timeout, onSessionEnd, onSessionExte
     <Dialog open={isPrompted()} onOpenChange={handleOnDialogOpenChange}>
       <DialogContent aria-describedby={undefined} className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{t('session-timeout.header')}</DialogTitle>
+          <DialogTitle>{t('sessionTimeout.header')}</DialogTitle>
         </DialogHeader>
-        {t('session-timeout.description', { timeRemaining })}
+        {t('sessionTimeout.description', { timeRemaining })}
         <DialogFooter>
           <Button id="end-session-button" variant="secondary" size="sm" onClick={handleOnEndSessionButtonClick} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:End session now">
-            {t('session-timeout.end-session')}
+            {t('sessionTimeout.endSession')}
           </Button>
           <Button id="continue-session-button" variant="primary" size="sm" onClick={handleOnExtendSessionButtonClick} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue session">
-            {t('session-timeout.continue-session')}
+            {t('sessionTimeout.continueSession')}
           </Button>
         </DialogFooter>
       </DialogContent>

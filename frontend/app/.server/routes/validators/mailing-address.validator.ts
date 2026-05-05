@@ -33,29 +33,29 @@ export class DefaultMailingAddressValidator implements MailingAddressValidator {
     const t = await getFixedT(this.locale, ['common']);
     return {
       address: {
-        invalidCharacters: t('common:error-message.mailing.characters-valid'),
-        required: t('common:error-message.mailing.address-required'),
+        invalidCharacters: t('common:errorMessage.mailing.charactersValid'),
+        required: t('common:errorMessage.mailing.addressRequired'),
       },
       apartment: {
-        invalidCharacters: t('common:error-message.mailing.characters-valid'),
+        invalidCharacters: t('common:errorMessage.mailing.charactersValid'),
       },
       city: {
-        required: t('common:error-message.mailing.city-required'),
-        invalidCharacters: t('common:error-message.mailing.characters-valid'),
+        required: t('common:errorMessage.mailing.cityRequired'),
+        invalidCharacters: t('common:errorMessage.mailing.charactersValid'),
       },
       country: {
-        required: t('common:error-message.mailing.country-required'),
+        required: t('common:errorMessage.mailing.countryRequired'),
       },
       provinceState: {
-        required: t('common:error-message.mailing.province-state-required'),
+        required: t('common:errorMessage.mailing.provinceStateRequired'),
       },
       postalZipCode: {
-        invalidCharacters: t('common:error-message.mailing.characters-valid'),
-        invalidPostalCode: t('common:error-message.mailing.postal-zip-code-valid'),
-        invalidPostalCodeForProvince: t('common:error-message.mailing.invalid-postal-zip-code-for-province'),
-        invalidPostalZipCodeForCountry: t('common:error-message.mailing.invalid-postal-zip-code-for-country'),
-        invalidZipCode: t('common:error-message.mailing.zip-code-valid'),
-        required: t('common:error-message.mailing.postal-zip-code-required'),
+        invalidCharacters: t('common:errorMessage.mailing.charactersValid'),
+        invalidPostalCode: t('common:errorMessage.mailing.postalZipCodeValid'),
+        invalidPostalCodeForProvince: t('common:errorMessage.mailing.invalidPostalZipCodeForProvince'),
+        invalidPostalZipCodeForCountry: t('common:errorMessage.mailing.invalidPostalZipCodeForCountry'),
+        invalidZipCode: t('common:errorMessage.mailing.zipCodeValid'),
+        required: t('common:errorMessage.mailing.postalZipCodeRequired'),
       },
     };
   }

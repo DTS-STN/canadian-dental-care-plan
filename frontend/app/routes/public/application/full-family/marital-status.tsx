@@ -25,7 +25,7 @@ import { formatSin } from '~/utils/sin-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'application-full-family', 'gcweb'),
   pageIdentifier: pageIds.public.application.fullFamily.maritalStatus,
-  pageTitleI18nKey: 'application-full-family:marital-status.page-heading',
+  pageTitleI18nKey: 'application-full-family:maritalStatus.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -35,7 +35,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['full-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:marital-status.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-family:maritalStatus.pageTitle') }) };
   const locale = getLocale(request);
   return {
     state: {
@@ -57,30 +57,30 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
 
   return (
     <>
-      <ProgressStepper activeStep="marital-status" className="mb-8" />
+      <ProgressStepper activeStep="maritalStatus" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('application:complete-all-sections')}</p>
+          <p>{t('application:completeAllSections')}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('application-full-family:marital-status.marital-status')}</h2>
+              <h2>{t('application-full-family:maritalStatus.maritalStatus')}</h2>
             </CardTitle>
             <CardAction>{sections.maritalStatus.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.maritalStatus === undefined ? (
-              <p>{t('application-full-family:marital-status.select-your-status')}</p>
+              <p>{t('application-full-family:maritalStatus.selectYourStatus')}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-full-family:marital-status.marital-status')}>{state.maritalStatus.name}</DefinitionListItem>
+                <DefinitionListItem term={t('application-full-family:maritalStatus.maritalStatus')}>{state.maritalStatus.name}</DefinitionListItem>
                 {state.partnerInformation && (
                   <>
-                    <DefinitionListItem term={t('application-full-family:marital-status.spouse-sin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-family:marital-status.spouse-yob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-full-family:marital-status.consent')}>{t('application-full-family:marital-status.consent-yes')}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-family:maritalStatus.spouseSin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-family:maritalStatus.spouseYob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t('application-full-family:maritalStatus.consent')}>{t('application-full-family:maritalStatus.consentYes')}</DefinitionListItem>
                   </>
                 )}
               </DefinitionList>
@@ -97,7 +97,7 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Edit marital click"
             >
-              {state.maritalStatus === undefined ? t('application-full-family:marital-status.add-marital-status') : t('application-full-family:marital-status.edit-marital-status')}
+              {state.maritalStatus === undefined ? t('application-full-family:maritalStatus.addMaritalStatus') : t('application-full-family:maritalStatus.editMaritalStatus')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -110,10 +110,10 @@ export default function NewFamilyMaritalStatus({ loaderData, params }: Route.Com
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Continue click"
           >
-            {t('application-full-family:marital-status.contact-information')}
+            {t('application-full-family:maritalStatus.contactInformation')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Back click">
-            {t('application-full-family:marital-status.your-application')}
+            {t('application-full-family:maritalStatus.yourApplication')}
           </NavigationButtonLink>
         </div>
       </div>

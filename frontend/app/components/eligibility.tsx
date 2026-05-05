@@ -33,7 +33,7 @@ export function Eligibility(props: EligibilityProps) {
   const { type, title, children, className } = props;
   const { t } = useTranslation('common');
 
-  const mscaLink = <InlineLink to={t('eligibility.msca-link')} className="external-link" newTabIndicator target="_blank" />;
+  const mscaLink = <InlineLink to={t('eligibility.mscaLink')} className="external-link" newTabIndicator target="_blank" />;
 
   const defaultContent: Record<EligibilityType, ReactNode> = {
     eligible: (
@@ -45,9 +45,9 @@ export function Eligibility(props: EligibilityProps) {
     ineligible: <p>{t('eligibility.ineligible.description')}</p>,
     'eligible-proof': (
       <>
-        <p>{t('eligibility.eligible-proof.description')}</p>
-        <p>{t('eligibility.eligible-proof.continue')}</p>
-        <Trans ns="common" i18nKey="eligibility.eligible-proof.instructions" components={{ mscaLink }} />
+        <p>{t('eligibility.eligibleProof.description')}</p>
+        <p>{t('eligibility.eligibleProof.continue')}</p>
+        <Trans ns="common" i18nKey="eligibility.eligibleProof.instructions" components={{ mscaLink }} />
       </>
     ),
   };
@@ -55,7 +55,7 @@ export function Eligibility(props: EligibilityProps) {
   const defaultTitles: Record<EligibilityType, string> = {
     eligible: t('eligibility.eligible.title'),
     ineligible: t('eligibility.ineligible.title'),
-    'eligible-proof': t('eligibility.eligible-proof.title'),
+    'eligible-proof': t('eligibility.eligibleProof.title'),
   };
 
   return (

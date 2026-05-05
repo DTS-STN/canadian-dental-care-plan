@@ -14,7 +14,7 @@ exports[`ClientFriendlyStatusMarkdown Component > renders inline-links from pars
       <span
         class="sr-only"
       >
-         (screen-reader.new-tab)
+         (screenReader.newTab)
       </span>
     </a>
   </div>

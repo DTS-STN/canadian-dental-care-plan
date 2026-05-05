@@ -13,10 +13,10 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'documents:index.page-title', routeId: 'protected/documents/index' }],
+  breadcrumbs: [{ labelI18nKey: 'documents:index.pageTitle', routeId: 'protected/documents/index' }],
   i18nNamespaces: getTypedI18nNamespaces('documents', 'gcweb'),
   pageIdentifier: pageIds.protected.documents.notRequired,
-  pageTitleI18nKey: 'documents:not-required.page-title',
+  pageTitleI18nKey: 'documents:notRequired.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -27,7 +27,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   await securityHandler.validateAuthSession({ request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.msca-template', { title: t('documents:not-required.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('documents:notRequired.pageTitle') }) };
 
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
@@ -43,15 +43,15 @@ export default function NotRequired({ loaderData, params }: Route.ComponentProps
 
   return (
     <>
-      <p>{t('documents:not-required.description')}</p>
+      <p>{t('documents:notRequired.description')}</p>
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <ButtonLink
           id="back-button"
           variant="primary"
-          to={t('gcweb:header.menu-dashboard-href', { baseUri: SCCH_BASE_URI })}
+          to={t('gcweb:header.menuDashboardHref', { baseUri: SCCH_BASE_URI })}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Documents not required button click"
         >
-          {t('documents:not-required.return-button')}
+          {t('documents:notRequired.returnButton')}
         </ButtonLink>
       </div>
     </>

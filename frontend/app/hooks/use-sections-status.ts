@@ -12,7 +12,7 @@ export function useSectionsStatus(sectionsObject: Record<string, { completed: bo
   const totalSectionsCount = sections.length;
   const allSectionsCompleted = completedSectionsCount === totalSectionsCount;
 
-  const completedSectionsLabel = t('common:sections-completed', {
+  const completedSectionsLabel = t('common:sectionsCompleted', {
     number: completedSectionsCount,
     count: totalSectionsCount,
   });

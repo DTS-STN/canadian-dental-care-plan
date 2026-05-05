@@ -60,7 +60,7 @@ exports[`Eligibility > should render eligible-proof status 1`] = `
         data-slot="card-title"
       >
         <span>
-          eligibility.eligible-proof.title
+          eligibility.eligibleProof.title
         </span>
         <svg
           aria-hidden="true"
@@ -82,12 +82,12 @@ exports[`Eligibility > should render eligible-proof status 1`] = `
       data-slot="card-content"
     >
       <p>
-        eligibility.eligible-proof.description
+        eligibility.eligibleProof.description
       </p>
       <p>
-        eligibility.eligible-proof.continue
+        eligibility.eligibleProof.continue
       </p>
-      eligibility.eligible-proof.instructions
+      eligibility.eligibleProof.instructions
     </div>
   </div>
 </div>

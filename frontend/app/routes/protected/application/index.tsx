@@ -24,7 +24,7 @@ import { secondsToMilliseconds } from '~/utils/units.utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protected-application', 'gcweb'),
   pageIdentifier: pageIds.protected.application.index,
-  pageTitleI18nKey: 'protected-application:eligibility-requirements.page-heading',
+  pageTitleI18nKey: 'protected-application:eligibilityRequirements.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -67,7 +67,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = startProtectedApplicationState({ session, applicationYear, clientApplication });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:index.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:index.pageTitle') }) };
 
   return { id: state.id, meta };
 }
