@@ -18,9 +18,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.dentalInsuranceExitApplication,
-  pageTitleI18nKey: 'protected-application-spokes:dentalInsuranceExitApplication.pageTitle',
+  pageTitleI18nKey: 'protectedApplicationSpokes:dentalInsuranceExitApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -33,7 +33,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:dentalInsuranceExitApplication.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:dentalInsuranceExitApplication.pageTitle') }) };
   return { meta };
 }
 
@@ -51,7 +51,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearProtectedApplicationState({ params, session });
 
-  return redirect(t('protected-application-spokes:dentalInsuranceExitApplication.exitLink'));
+  return redirect(t('protectedApplicationSpokes:dentalInsuranceExitApplication.exitLink'));
 }
 
 export default function ApplicationSpokeDentalInsuranceExitApplication({ loaderData, params }: Route.ComponentProps) {
@@ -63,8 +63,8 @@ export default function ApplicationSpokeDentalInsuranceExitApplication({ loaderD
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('protected-application-spokes:dentalInsuranceExitApplication.areYouSure')}</p>
-        <p>{t('protected-application-spokes:dentalInsuranceExitApplication.clickBack')}</p>
+        <p>{t('protectedApplicationSpokes:dentalInsuranceExitApplication.areYouSure')}</p>
+        <p>{t('protectedApplicationSpokes:dentalInsuranceExitApplication.clickBack')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -76,10 +76,10 @@ export default function ApplicationSpokeDentalInsuranceExitApplication({ loaderD
           disabled={isSubmitting}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Exiting the application click"
         >
-          {t('protected-application-spokes:dentalInsuranceExitApplication.backBtn')}
+          {t('protectedApplicationSpokes:dentalInsuranceExitApplication.backBtn')}
         </ButtonLink>
         <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - Exiting the application click">
-          {t('protected-application-spokes:dentalInsuranceExitApplication.exitBtn')}
+          {t('protectedApplicationSpokes:dentalInsuranceExitApplication.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

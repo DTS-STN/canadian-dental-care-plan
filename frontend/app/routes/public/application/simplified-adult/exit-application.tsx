@@ -20,9 +20,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-simplified-adult', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSimplifiedAdult', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.simplifiedAdult.exitApplication,
-  pageTitleI18nKey: 'application-simplified-adult:exitApplication.pageTitle',
+  pageTitleI18nKey: 'applicationSimplifiedAdult:exitApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -32,7 +32,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['simplified-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-adult:exitApplication.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSimplifiedAdult:exitApplication.pageTitle') }) };
   return { meta };
 }
 
@@ -49,7 +49,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearPublicApplicationState({ params, session });
 
-  return redirect(t('application-simplified-adult:exitApplication.exitLink'));
+  return redirect(t('applicationSimplifiedAdult:exitApplication.exitLink'));
 }
 
 export default function RenewAdultExitApplication({ loaderData, params }: Route.ComponentProps) {
@@ -61,8 +61,8 @@ export default function RenewAdultExitApplication({ loaderData, params }: Route.
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('application-simplified-adult:exitApplication.areYouSure')}</p>
-        <p>{t('application-simplified-adult:exitApplication.clickBack')}</p>
+        <p>{t('applicationSimplifiedAdult:exitApplication.areYouSure')}</p>
+        <p>{t('applicationSimplifiedAdult:exitApplication.clickBack')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -75,10 +75,10 @@ export default function RenewAdultExitApplication({ loaderData, params }: Route.
           startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Back - Exiting the application click"
         >
-          {t('application-simplified-adult:exitApplication.backBtn')}
+          {t('applicationSimplifiedAdult:exitApplication.backBtn')}
         </ButtonLink>
         <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Exit - Exiting the application click">
-          {t('application-simplified-adult:exitApplication.exitBtn')}
+          {t('applicationSimplifiedAdult:exitApplication.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

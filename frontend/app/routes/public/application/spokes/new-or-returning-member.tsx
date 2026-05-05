@@ -34,9 +34,9 @@ import { extractDigits } from '~/utils/string-utils';
 const NEW_OR_EXISTING_MEMBER_OPTION = { no: 'no', yes: 'yes' } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.newOrReturningMember,
-  pageTitleI18nKey: 'application-spokes:newOrReturningMember.pageTitle',
+  pageTitleI18nKey: 'applicationSpokes:newOrReturningMember.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -45,7 +45,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:newOrReturningMember.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:newOrReturningMember.pageTitle') }) };
 
   invariant(state.applicantInformation?.dateOfBirth, 'Expected applicantInformation.dateOfBirth to be defined');
   const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context);
@@ -64,7 +64,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const newOrExistingMemberSchema = z
     .object({
       newOrExistingMember: z.enum(NEW_OR_EXISTING_MEMBER_OPTION, {
-        error: t('application-spokes:newOrReturningMember.errorMessage.isNewOrExistingMemberRequired'),
+        error: t('applicationSpokes:newOrReturningMember.errorMessage.isNewOrExistingMemberRequired'),
       }),
       memberId: z
         .string()
@@ -78,13 +78,13 @@ export async function action({ context: { appContainer, session }, params, reque
         if (!val.memberId) {
           ctx.addIssue({
             code: 'custom',
-            message: t('application-spokes:newOrReturningMember.errorMessage.memberIdRequired'),
+            message: t('applicationSpokes:newOrReturningMember.errorMessage.memberIdRequired'),
             path: ['memberId'],
           });
         } else if (!isValidClientNumberRenewal(val.memberId)) {
           ctx.addIssue({
             code: 'custom',
-            message: t('application-spokes:newOrReturningMember.errorMessage.memberIdValid'),
+            message: t('applicationSpokes:newOrReturningMember.errorMessage.memberIdValid'),
             path: ['memberId'],
           });
         }
@@ -129,13 +129,13 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
 
   const options: InputRadiosProps['options'] = [
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:newOrReturningMember.yes" components={{ bold: <strong /> }} />,
+      children: <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:newOrReturningMember.yes" components={{ bold: <strong /> }} />,
       value: NEW_OR_EXISTING_MEMBER_OPTION.yes,
       defaultChecked: defaultState?.isNewOrReturningMember === true,
       onChange: handleNewOrReturningMemberSelection,
     },
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:newOrReturningMember.no" components={{ bold: <strong /> }} />,
+      children: <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:newOrReturningMember.no" components={{ bold: <strong /> }} />,
       value: NEW_OR_EXISTING_MEMBER_OPTION.no,
       defaultChecked: defaultState?.isNewOrReturningMember === false,
       onChange: handleNewOrReturningMemberSelection,
@@ -149,25 +149,25 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <InputRadios id="new-or-existing-member" name="newOrExistingMember" legend={t('application-spokes:newOrReturningMember.previouslyEnrolled')} options={options} errorMessage={errors?.newOrExistingMember} required />
+          <InputRadios id="new-or-existing-member" name="newOrExistingMember" legend={t('applicationSpokes:newOrReturningMember.previouslyEnrolled')} options={options} errorMessage={errors?.newOrExistingMember} required />
           {isNewOrReturningMember && (
             <div className="my-8">
               <InputPatternField
                 id="member-id"
                 name="memberId"
                 format={renewalCodeInputPatternFormat}
-                label={t('application-spokes:newOrReturningMember.memberId')}
+                label={t('applicationSpokes:newOrReturningMember.memberId')}
                 inputMode="numeric"
                 defaultValue={defaultState?.memberId ?? ''}
                 errorMessage={errors?.memberId}
-                helpMessagePrimary={t('application-spokes:newOrReturningMember.memberIdDescription')}
+                helpMessagePrimary={t('applicationSpokes:newOrReturningMember.memberIdDescription')}
                 required={isNewOrReturningMember}
               />
             </div>
           )}
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - New or existing member click">
-              {t('application-spokes:newOrReturningMember.saveBtn')}
+              {t('applicationSpokes:newOrReturningMember.saveBtn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -178,7 +178,7 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
               startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - New or existing member click"
             >
-              {t('application-spokes:newOrReturningMember.backBtn')}
+              {t('applicationSpokes:newOrReturningMember.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

@@ -34,9 +34,9 @@ const CHECKBOX_VALUE = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'application-simplified-adult', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application', 'applicationSimplifiedAdult', 'gcweb'),
   pageIdentifier: pageIds.public.application.simplifiedAdult.submit,
-  pageTitleI18nKey: 'application-simplified-adult:submit.pageHeading',
+  pageTitleI18nKey: 'applicationSimplifiedAdult:submit.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -46,7 +46,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['simplified-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-adult:submit.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSimplifiedAdult:submit.pageTitle') }) };
 
   const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
 
@@ -76,8 +76,8 @@ export async function action({ context: { appContainer, session }, request, para
   securityHandler.validateCsrfToken({ formData, session });
 
   const submitTermsSchema = z.object({
-    acknowledgeInfo: z.literal(true, { error: t('application-simplified-adult:submit.errorMessage.acknowledgeInfoRequired') }),
-    acknowledgeCriteria: z.literal(true, { error: t('application-simplified-adult:submit.errorMessage.acknowledgeCriteriaRequired') }),
+    acknowledgeInfo: z.literal(true, { error: t('applicationSimplifiedAdult:submit.errorMessage.acknowledgeInfoRequired') }),
+    acknowledgeCriteria: z.literal(true, { error: t('applicationSimplifiedAdult:submit.errorMessage.acknowledgeCriteriaRequired') }),
   });
 
   const parsedDataResult = submitTermsSchema.safeParse({
@@ -106,7 +106,7 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
 
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t('application-simplified-adult:submit.doYouQualifyHref')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t('applicationSimplifiedAdult:submit.doYouQualifyHref')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
@@ -115,40 +115,40 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
         <ErrorSummary />
         <div className="space-y-8">
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-adult:submit.overview')}</h2>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('applicationSimplifiedAdult:submit.overview')}</h2>
             <div className="space-y-4">
-              <p>{t('application-simplified-adult:submit.youAreSubmitting')}</p>
+              <p>{t('applicationSimplifiedAdult:submit.youAreSubmitting')}</p>
               <ul className="list-disc space-y-1 pl-7">
                 <li>{state.applicantName}</li>
               </ul>
             </div>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-adult:submit.reviewYourApplication')}</h2>
-            <p>{t('application-simplified-adult:submit.pleaseReview')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('applicationSimplifiedAdult:submit.reviewYourApplication')}</h2>
+            <p>{t('applicationSimplifiedAdult:submit.pleaseReview')}</p>
             <ButtonLink variant="primary" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Action click">
-              {t('application-simplified-adult:submit.reviewApplication')}
+              {t('applicationSimplifiedAdult:submit.reviewApplication')}
             </ButtonLink>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('application-simplified-adult:submit.submitYourApplication')}</h2>
-            <p>{t('application-simplified-adult:submit.bySubmitting')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('applicationSimplifiedAdult:submit.submitYourApplication')}</h2>
+            <p>{t('applicationSimplifiedAdult:submit.bySubmitting')}</p>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey="application-simplified-adult:submit.reviewEligibilityCriteria" components={{ eligibilityLink }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey="applicationSimplifiedAdult:submit.reviewEligibilityCriteria" components={{ eligibilityLink }} />
             </p>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
               <div className="space-y-2">
                 <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
-                  {t('application-simplified-adult:submit.infoIsCorrect')}
+                  {t('applicationSimplifiedAdult:submit.infoIsCorrect')}
                 </InputCheckbox>
                 <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
-                  {t('application-simplified-adult:submit.iUnderstand')}
+                  {t('applicationSimplifiedAdult:submit.iUnderstand')}
                 </InputCheckbox>
               </div>
               <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_170px]">
                 <LoadingButton loading={isSubmitting} variant="green" className="order-first h-full text-base sm:order-last sm:text-lg" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Submit click">
-                  {t('application-simplified-adult:submit.submit')}
+                  {t('applicationSimplifiedAdult:submit.submit')}
                 </LoadingButton>
                 <NavigationButtonLink
                   disabled={isSubmitting}
@@ -158,7 +158,7 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
                   params={params}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Back click"
                 >
-                  {t('application-simplified-adult:submit.dentalInsurance')}
+                  {t('applicationSimplifiedAdult:submit.dentalInsurance')}
                 </NavigationButtonLink>
               </div>
             </fetcher.Form>
@@ -166,7 +166,7 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
         </div>
         <div className="mt-8">
           <InlineLink routeId="public/application/$id/simplified-adult/exit-application" params={params}>
-            {t('application-simplified-adult:submit.exitApplication')}
+            {t('applicationSimplifiedAdult:submit.exitApplication')}
           </InlineLink>
         </div>
       </div>

@@ -36,9 +36,9 @@ const HAS_DENTAL_INSURANCE_OPTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.childDentalInsurance,
-  pageTitleI18nKey: 'application-spokes:children.dentalInsurance.title',
+  pageTitleI18nKey: 'applicationSpokes:children.dentalInsurance.title',
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
@@ -52,12 +52,12 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const childNumber = t('application-spokes:children.childNumber', { childNumber: childState.childNumber });
+  const childNumber = t('applicationSpokes:children.childNumber', { childNumber: childState.childNumber });
   const childName = childState.information?.firstName ?? childNumber;
 
   const meta = {
-    title: t('gcweb:meta.title.template', { title: t('application-spokes:children.dentalInsurance.title', { childName }) }),
-    dcTermsTitle: t('gcweb:meta.title.template', { title: t('application-spokes:children.dentalInsurance.title', { childName: childNumber }) }),
+    title: t('gcweb:meta.title.template', { title: t('applicationSpokes:children.dentalInsurance.title', { childName }) }),
+    dcTermsTitle: t('gcweb:meta.title.template', { title: t('applicationSpokes:children.dentalInsurance.title', { childName: childNumber }) }),
   };
 
   return { meta, defaultState: childState.dentalInsurance, childName, i18nOptions: { childName }, applicationFlow: `${state.inputModel}-${state.typeOfApplication}` };
@@ -78,12 +78,12 @@ export async function action({ context: { appContainer, session }, params, reque
   // state validation schema
   const dentalInsuranceSchema = z
     .object({
-      hasDentalInsurance: z.boolean({ error: t('application-spokes:children.dentalInsurance.errorMessage.dentalInsuranceRequired') }),
+      hasDentalInsurance: z.boolean({ error: t('applicationSpokes:children.dentalInsurance.errorMessage.dentalInsuranceRequired') }),
       dentalInsuranceEligibilityConfirmation: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
       if (val.hasDentalInsurance && !val.dentalInsuranceEligibilityConfirmation) {
-        ctx.addIssue({ code: 'custom', message: t('application-spokes:children.dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired'), path: ['dentalInsuranceEligibilityConfirmation'] });
+        ctx.addIssue({ code: 'custom', message: t('applicationSpokes:children.dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired'), path: ['dentalInsuranceEligibilityConfirmation'] });
       }
     })
     .transform((val) => ({

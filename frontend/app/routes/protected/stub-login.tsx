@@ -24,9 +24,9 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('stub-login', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('stubLogin', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
-  pageTitleI18nKey: 'stub-login:index.pageTitle',
+  pageTitleI18nKey: 'stubLogin:index.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -36,7 +36,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   securityHandler.validateFeatureEnabled('stub-login');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('stub-login:index.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('stubLogin:index.pageTitle') }) };
 
   const idTokenOption = session.find('idToken');
   const userInfoTokenOption = session.find('userInfoToken');
@@ -57,10 +57,10 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const stubLoginSchema = z.object({
-    sin: z.string().trim().nonempty(t('stub-login:index.errorMessage.sinRequired')).refine(isValidSin, t('stub-login:index.errorMessage.sinInvalid')),
-    destinationRouteId: z.string().trim().nonempty(t('stub-login:index.errorMessage.destinationRequired')),
-    sid: z.string().trim().nonempty(t('stub-login:index.errorMessage.sidRequired')),
-    sub: z.string().trim().nonempty(t('stub-login:index.errorMessage.subRequired')),
+    sin: z.string().trim().nonempty(t('stubLogin:index.errorMessage.sinRequired')).refine(isValidSin, t('stubLogin:index.errorMessage.sinInvalid')),
+    destinationRouteId: z.string().trim().nonempty(t('stubLogin:index.errorMessage.destinationRequired')),
+    sid: z.string().trim().nonempty(t('stubLogin:index.errorMessage.sidRequired')),
+    sub: z.string().trim().nonempty(t('stubLogin:index.errorMessage.subRequired')),
   });
 
   const formData = await request.formData();
@@ -137,11 +137,11 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate className="space-y-6">
-          <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('stub-login:index.sin')} required inputMode="numeric" defaultValue={defaultValues.sin} errorMessage={errors?.sin} />
+          <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('stubLogin:index.sin')} required inputMode="numeric" defaultValue={defaultValues.sin} errorMessage={errors?.sin} />
           <InputSelect
             id="destination-page"
             name="destinationRouteId"
-            label={t('stub-login:index.destination')}
+            label={t('stubLogin:index.destination')}
             errorMessage={errors?.destinationRouteId}
             defaultValue=""
             required
@@ -182,14 +182,14 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
             ]}
           />
           <fieldset>
-            <legend className="mb-2 text-xl font-semibold">{t('stub-login:index.raoidc')}</legend>
+            <legend className="mb-2 text-xl font-semibold">{t('stubLogin:index.raoidc')}</legend>
             <div className="space-y-6">
-              <InputField id="sid" name="sid" className="w-full" inputMode="text" label={t('stub-login:index.sid')} defaultValue={defaultValues.sid} errorMessage={errors?.sid} />
-              <InputField id="sub" name="sub" className="w-full" inputMode="text" label={t('stub-login:index.sub')} defaultValue={defaultValues.sub} errorMessage={errors?.sub} />
+              <InputField id="sid" name="sid" className="w-full" inputMode="text" label={t('stubLogin:index.sid')} defaultValue={defaultValues.sid} errorMessage={errors?.sid} />
+              <InputField id="sub" name="sub" className="w-full" inputMode="text" label={t('stubLogin:index.sub')} defaultValue={defaultValues.sub} errorMessage={errors?.sub} />
             </div>
           </fieldset>
           <Button variant="primary" id="login-button">
-            {t('stub-login:index.login')}
+            {t('stubLogin:index.login')}
           </Button>
         </fetcher.Form>
       </ErrorSummaryProvider>

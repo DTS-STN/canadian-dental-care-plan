@@ -22,9 +22,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'application-full-adult', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application', 'applicationFullAdult', 'gcweb'),
   pageIdentifier: pageIds.public.application.fullAdult.dentalInsurance,
-  pageTitleI18nKey: 'application-full-adult:dentalInsurance.pageHeading',
+  pageTitleI18nKey: 'applicationFullAdult:dentalInsurance.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -35,7 +35,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-adult:dentalInsurance.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationFullAdult:dentalInsurance.pageTitle') }) };
 
   const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.value?.federalSocialProgram
     ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale)
@@ -87,19 +87,19 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('application-full-adult:dentalInsurance.accessToDentalInsurance')}</h2>
+              <h2>{t('applicationFullAdult:dentalInsurance.accessToDentalInsurance')}</h2>
             </CardTitle>
             <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.dentalInsurance?.dentalInsuranceEligibilityConfirmation === true ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-full-adult:dentalInsurance.accessToDentalInsuranceOrCoverage')}>
-                  {state.dentalInsurance.hasDentalInsurance ? t('application-full-adult:dentalInsurance.dentalInsuranceYes') : t('application-full-adult:dentalInsurance.dentalInsuranceNo')}
+                <DefinitionListItem term={t('applicationFullAdult:dentalInsurance.accessToDentalInsuranceOrCoverage')}>
+                  {state.dentalInsurance.hasDentalInsurance ? t('applicationFullAdult:dentalInsurance.dentalInsuranceYes') : t('applicationFullAdult:dentalInsurance.dentalInsuranceNo')}
                 </DefinitionListItem>
               </DefinitionList>
             ) : (
-              <p>{t('application-full-adult:dentalInsurance.dentalInsuranceIndicateStatus')}</p>
+              <p>{t('applicationFullAdult:dentalInsurance.dentalInsuranceIndicateStatus')}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -112,13 +112,11 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
               startIcon={sections.dentalInsurance.completed ? faPenToSquare : faCirclePlus}
               size="lg"
               aria-label={
-                state.dentalInsurance === undefined
-                  ? `${t('application-full-adult:dentalInsurance.addAnswer')} - ${t('application-full-adult:dentalInsurance.accessToDentalInsurance')}`
-                  : t('application-full-adult:dentalInsurance.editAccessToDentalInsurance')
+                state.dentalInsurance === undefined ? `${t('applicationFullAdult:dentalInsurance.addAnswer')} - ${t('applicationFullAdult:dentalInsurance.accessToDentalInsurance')}` : t('applicationFullAdult:dentalInsurance.editAccessToDentalInsurance')
               }
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Edit insurance click"
             >
-              {state.dentalInsurance === undefined ? t('application-full-adult:dentalInsurance.addAnswer') : t('application-full-adult:dentalInsurance.editAccessToDentalInsurance')}
+              {state.dentalInsurance === undefined ? t('applicationFullAdult:dentalInsurance.addAnswer') : t('applicationFullAdult:dentalInsurance.editAccessToDentalInsurance')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -126,29 +124,29 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('application-full-adult:dentalInsurance.otherBenefits')}</h2>
+              <h2>{t('applicationFullAdult:dentalInsurance.otherBenefits')}</h2>
             </CardTitle>
             <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.dentalBenefits ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application-full-adult:dentalInsurance.accessToGovernmentBenefits')}>
+                <DefinitionListItem term={t('applicationFullAdult:dentalInsurance.accessToGovernmentBenefits')}>
                   {state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
                     <div className="space-y-3">
-                      <p>{t('application-full-adult:dentalInsurance.accessToGovernmentBenefitsYes')}</p>
+                      <p>{t('applicationFullAdult:dentalInsurance.accessToGovernmentBenefitsYes')}</p>
                       <ul className="list-disc space-y-1 pl-7">
                         {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
                         {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
                       </ul>
                     </div>
                   ) : (
-                    <p>{t('application-full-adult:dentalInsurance.accessToGovernmentBenefitsNo')}</p>
+                    <p>{t('applicationFullAdult:dentalInsurance.accessToGovernmentBenefitsNo')}</p>
                   )}
                 </DefinitionListItem>
               </DefinitionList>
             ) : (
-              <p>{t('application-full-adult:dentalInsurance.dentalBenefitsIndicateStatus')}</p>
+              <p>{t('applicationFullAdult:dentalInsurance.dentalBenefitsIndicateStatus')}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -160,12 +158,10 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
               params={params}
               startIcon={sections.dentalBenefits.completed ? faPenToSquare : faCirclePlus}
               size="lg"
-              aria-label={
-                state.dentalBenefits === undefined ? `${t('application-full-adult:dentalInsurance.addAnswer')} - ${t('application-full-adult:dentalInsurance.otherBenefits')}` : t('application-full-adult:dentalInsurance.editAccessToGovernmentBenefits')
-              }
+              aria-label={state.dentalBenefits === undefined ? `${t('applicationFullAdult:dentalInsurance.addAnswer')} - ${t('applicationFullAdult:dentalInsurance.otherBenefits')}` : t('applicationFullAdult:dentalInsurance.editAccessToGovernmentBenefits')}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Edit benefits click"
             >
-              {state.dentalBenefits === undefined ? t('application-full-adult:dentalInsurance.addAnswer') : t('application-full-adult:dentalInsurance.editAccessToGovernmentBenefits')}
+              {state.dentalBenefits === undefined ? t('applicationFullAdult:dentalInsurance.addAnswer') : t('applicationFullAdult:dentalInsurance.editAccessToGovernmentBenefits')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -179,10 +175,10 @@ export default function NewAdultDentalInsurance({ loaderData, params }: Route.Co
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Continue click"
           >
-            {t('application-full-adult:dentalInsurance.submit')}
+            {t('applicationFullAdult:dentalInsurance.submit')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-adult/contact-information" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Back click">
-            {t('application-full-adult:dentalInsurance.contactInformation')}
+            {t('applicationFullAdult:dentalInsurance.contactInformation')}
           </NavigationButtonLink>
         </div>
       </div>

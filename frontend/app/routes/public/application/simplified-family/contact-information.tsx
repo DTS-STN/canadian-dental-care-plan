@@ -37,9 +37,9 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'application-simplified-family', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application', 'applicationSimplifiedFamily', 'gcweb'),
   pageIdentifier: pageIds.public.application.simplifiedFamily.contactInformation,
-  pageTitleI18nKey: 'application-simplified-family:contactInformation.pageHeading',
+  pageTitleI18nKey: 'applicationSimplifiedFamily:contactInformation.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['simplified-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-family:contactInformation.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSimplifiedFamily:contactInformation.pageTitle') }) };
   const locale = getLocale(request);
 
   const mailingProvinceTerritoryStateAbbr = state.mailingAddress?.value?.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
@@ -184,7 +184,7 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('application-simplified-family:contactInformation.phoneNumber')}</h2>
+              <h2>{t('applicationSimplifiedFamily:contactInformation.phoneNumber')}</h2>
             </CardTitle>
             <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
@@ -195,7 +195,7 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('application-simplified-family:contactInformation.mailingAndHomeAddress')}</h2>
+              <h2>{t('applicationSimplifiedFamily:contactInformation.mailingAndHomeAddress')}</h2>
             </CardTitle>
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
@@ -206,7 +206,7 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('application-simplified-family:contactInformation.communicationPreferences')}</h2>
+              <h2>{t('applicationSimplifiedFamily:contactInformation.communicationPreferences')}</h2>
             </CardTitle>
             <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
@@ -223,10 +223,10 @@ export default function RenewFamilyContactInformation({ loaderData, params }: Ro
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Continue click"
           >
-            {t('application-simplified-family:contactInformation.nextBtn')}
+            {t('applicationSimplifiedFamily:contactInformation.nextBtn')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Back click">
-            {t('application-simplified-family:contactInformation.prevBtn')}
+            {t('applicationSimplifiedFamily:contactInformation.prevBtn')}
           </NavigationButtonLink>
         </div>
       </div>
@@ -258,11 +258,11 @@ function PhoneNumberCardContent(): JSX.Element {
   if (state.phoneNumber) {
     return (
       <CardContent>
-        {!state.phoneNumber.hasChanged && <p>{t('application-simplified-family:contactInformation.noChange')}</p>}
+        {!state.phoneNumber.hasChanged && <p>{t('applicationSimplifiedFamily:contactInformation.noChange')}</p>}
         {state.phoneNumber.hasChanged && (
           <DefinitionList layout="single-column">
-            <DefinitionListItem term={t('application-simplified-family:contactInformation.phoneNumber')}>{state.phoneNumber.primary}</DefinitionListItem>
-            {state.phoneNumber.alternate && <DefinitionListItem term={t('application-simplified-family:contactInformation.altPhoneNumber')}>{state.phoneNumber.alternate}</DefinitionListItem>}
+            <DefinitionListItem term={t('applicationSimplifiedFamily:contactInformation.phoneNumber')}>{state.phoneNumber.primary}</DefinitionListItem>
+            {state.phoneNumber.alternate && <DefinitionListItem term={t('applicationSimplifiedFamily:contactInformation.altPhoneNumber')}>{state.phoneNumber.alternate}</DefinitionListItem>}
           </DefinitionList>
         )}
       </CardContent>
@@ -272,14 +272,14 @@ function PhoneNumberCardContent(): JSX.Element {
   if (clientApplication.hasPhoneNumber) {
     return (
       <CardContent>
-        <p>{t('application-simplified-family:contactInformation.updatePhoneNumberHelp')}</p>
+        <p>{t('applicationSimplifiedFamily:contactInformation.updatePhoneNumberHelp')}</p>
       </CardContent>
     );
   }
 
   return (
     <CardContent>
-      <p>{t('application-simplified-family:contactInformation.phoneNumberHelp')}</p>
+      <p>{t('applicationSimplifiedFamily:contactInformation.phoneNumberHelp')}</p>
     </CardContent>
   );
 }
@@ -319,7 +319,7 @@ function PhoneNumberCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit phone click"
         >
-          {sections.phoneNumber.completed ? t('application-simplified-family:contactInformation.editPhoneNumber') : t('application-simplified-family:contactInformation.addPhoneNumber')}
+          {sections.phoneNumber.completed ? t('applicationSimplifiedFamily:contactInformation.editPhoneNumber') : t('applicationSimplifiedFamily:contactInformation.addPhoneNumber')}
         </ButtonLink>
       </CardFooter>
     );
@@ -339,7 +339,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Update phone click"
           >
-            {t('application-simplified-family:contactInformation.updatePhoneNumber')}
+            {t('applicationSimplifiedFamily:contactInformation.updatePhoneNumber')}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -353,7 +353,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Complete phone click"
           >
-            <span className="text-left">{t('application-simplified-family:contactInformation.phoneNumberUnchanged')}</span>
+            <span className="text-left">{t('applicationSimplifiedFamily:contactInformation.phoneNumberUnchanged')}</span>
           </Button>
         </div>
       </CardFooter>
@@ -372,7 +372,7 @@ function PhoneNumberCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Add phone click"
       >
-        {t('application-simplified-family:contactInformation.addPhoneNumber')}
+        {t('applicationSimplifiedFamily:contactInformation.addPhoneNumber')}
       </ButtonLink>
     </CardFooter>
   );
@@ -405,10 +405,10 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
   if (state.mailingAddress && state.homeAddress) {
     return (
       <CardContent>
-        {!state.mailingAddress.hasChanged && !state.homeAddress.hasChanged && <p>{t('application-simplified-family:contactInformation.noChange')}</p>}
+        {!state.mailingAddress.hasChanged && !state.homeAddress.hasChanged && <p>{t('applicationSimplifiedFamily:contactInformation.noChange')}</p>}
         {state.mailingAddress.hasChanged && (
           <DefinitionList layout="single-column">
-            <DefinitionListItem term={t('application-simplified-family:contactInformation.mailingAddress')}>
+            <DefinitionListItem term={t('applicationSimplifiedFamily:contactInformation.mailingAddress')}>
               <Address
                 address={{
                   address: state.mailingAddress.address ?? '',
@@ -421,7 +421,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
             </DefinitionListItem>
 
             {state.homeAddress.hasChanged && (
-              <DefinitionListItem term={t('application-simplified-family:contactInformation.homeAddress')}>
+              <DefinitionListItem term={t('applicationSimplifiedFamily:contactInformation.homeAddress')}>
                 <Address
                   address={{
                     address: state.homeAddress.address ?? '',
@@ -443,7 +443,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
   if (clientApplication.hasMailingAddress && clientApplication.hasHomeAddress) {
     return (
       <CardContent>
-        <p>{t('application-simplified-family:contactInformation.updateAddressHelp')}</p>
+        <p>{t('applicationSimplifiedFamily:contactInformation.updateAddressHelp')}</p>
       </CardContent>
     );
   }
@@ -451,7 +451,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
   // Case 3: No data at all
   return (
     <CardContent>
-      <p>{t('application-simplified-family:contactInformation.addressHelp')}</p>
+      <p>{t('applicationSimplifiedFamily:contactInformation.addressHelp')}</p>
     </CardContent>
   );
 }
@@ -492,7 +492,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit address click"
         >
-          {sections.address.completed ? t('application-simplified-family:contactInformation.editAddress') : t('application-simplified-family:contactInformation.addAddress')}
+          {sections.address.completed ? t('applicationSimplifiedFamily:contactInformation.editAddress') : t('applicationSimplifiedFamily:contactInformation.addAddress')}
         </ButtonLink>
       </CardFooter>
     );
@@ -512,7 +512,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Update address click"
           >
-            {t('application-simplified-family:contactInformation.updateAddress')}
+            {t('applicationSimplifiedFamily:contactInformation.updateAddress')}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -526,7 +526,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Complete address click"
           >
-            <span className="text-left">{t('application-simplified-family:contactInformation.addressUnchanged')}</span>
+            <span className="text-left">{t('applicationSimplifiedFamily:contactInformation.addressUnchanged')}</span>
           </Button>
         </div>
       </CardFooter>
@@ -545,7 +545,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Add address click"
       >
-        {t('application-simplified-family:contactInformation.addAddress')}
+        {t('applicationSimplifiedFamily:contactInformation.addAddress')}
       </ButtonLink>
     </CardFooter>
   );
@@ -577,13 +577,13 @@ function CommunicationPreferencesCardContent(): JSX.Element {
   if (state.communicationPreferences) {
     return (
       <CardContent>
-        {!state.communicationPreferences.hasChanged && <p>{t('application-simplified-family:contactInformation.noChange')}</p>}
+        {!state.communicationPreferences.hasChanged && <p>{t('applicationSimplifiedFamily:contactInformation.noChange')}</p>}
         {state.communicationPreferences.hasChanged && (
           <DefinitionList layout="single-column">
-            <DefinitionListItem term={t('application-simplified-family:contactInformation.preferredLanguage')}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
-            <DefinitionListItem term={t('application-simplified-family:contactInformation.preferredMethod')}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
-            <DefinitionListItem term={t('application-simplified-family:contactInformation.preferredNotificationMethod')}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
-            {state.email && <DefinitionListItem term={t('application-simplified-family:contactInformation.email')}>{state.email}</DefinitionListItem>}
+            <DefinitionListItem term={t('applicationSimplifiedFamily:contactInformation.preferredLanguage')}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
+            <DefinitionListItem term={t('applicationSimplifiedFamily:contactInformation.preferredMethod')}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
+            <DefinitionListItem term={t('applicationSimplifiedFamily:contactInformation.preferredNotificationMethod')}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
+            {state.email && <DefinitionListItem term={t('applicationSimplifiedFamily:contactInformation.email')}>{state.email}</DefinitionListItem>}
           </DefinitionList>
         )}
       </CardContent>
@@ -594,7 +594,7 @@ function CommunicationPreferencesCardContent(): JSX.Element {
   if (clientApplication.hasCommunicationPreferences) {
     return (
       <CardContent>
-        <p>{t('application-simplified-family:contactInformation.updateCommunicationPreferencesHelp')}</p>
+        <p>{t('applicationSimplifiedFamily:contactInformation.updateCommunicationPreferencesHelp')}</p>
       </CardContent>
     );
   }
@@ -602,7 +602,7 @@ function CommunicationPreferencesCardContent(): JSX.Element {
   // Case 3: No data at all
   return (
     <CardContent>
-      <p>{t('application-simplified-family:contactInformation.communicationPreferencesHelp')}</p>
+      <p>{t('applicationSimplifiedFamily:contactInformation.communicationPreferencesHelp')}</p>
     </CardContent>
   );
 }
@@ -644,7 +644,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit comms click"
         >
-          {sections.communicationPreferences.completed ? t('application-simplified-family:contactInformation.editCommunicationPreferences') : t('application-simplified-family:contactInformation.addCommunicationPreferences')}
+          {sections.communicationPreferences.completed ? t('applicationSimplifiedFamily:contactInformation.editCommunicationPreferences') : t('applicationSimplifiedFamily:contactInformation.addCommunicationPreferences')}
         </ButtonLink>
       </CardFooter>
     );
@@ -664,7 +664,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Update comms click"
           >
-            {t('application-simplified-family:contactInformation.updateCommunicationPreferences')}
+            {t('applicationSimplifiedFamily:contactInformation.updateCommunicationPreferences')}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -678,7 +678,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Complete comms click"
           >
-            <span className="text-left">{t('application-simplified-family:contactInformation.communicationPreferencesUnchanged')}</span>
+            <span className="text-left">{t('applicationSimplifiedFamily:contactInformation.communicationPreferencesUnchanged')}</span>
           </LoadingButton>
         </div>
       </CardFooter>
@@ -697,7 +697,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Add comms click"
       >
-        {t('application-simplified-family:contactInformation.addCommunicationPreferences')}
+        {t('applicationSimplifiedFamily:contactInformation.addCommunicationPreferences')}
       </ButtonLink>
     </CardFooter>
   );

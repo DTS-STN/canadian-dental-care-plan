@@ -19,9 +19,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.fileYourTaxes,
-  pageTitleI18nKey: 'protected-application:fileYourTaxes.pageTitle',
+  pageTitleI18nKey: 'protectedApplication:fileYourTaxes.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -33,7 +33,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const { applicationYear } = getProtectedApplicationState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application:fileYourTaxes.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplication:fileYourTaxes.pageTitle') }) };
 
   return { meta, taxYear: applicationYear.taxYear };
 }
@@ -48,7 +48,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   clearProtectedApplicationState({ params, session });
-  return redirect(t('protected-application:fileYourTaxes.exitBtnLink'));
+  return redirect(t('protectedApplication:fileYourTaxes.exitBtnLink'));
 }
 
 export default function ApplicationFileYourTaxes({ loaderData, params }: Route.ComponentProps) {
@@ -59,7 +59,7 @@ export default function ApplicationFileYourTaxes({ loaderData, params }: Route.C
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
-  const taxInfo = <InlineLink to={t('protected-application:fileYourTaxes.taxInfoHref')} className="external-link" newTabIndicator target="_blank" />;
+  const taxInfo = <InlineLink to={t('protectedApplication:fileYourTaxes.taxInfoHref')} className="external-link" newTabIndicator target="_blank" />;
 
   async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
@@ -70,14 +70,14 @@ export default function ApplicationFileYourTaxes({ loaderData, params }: Route.C
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('protected-application:fileYourTaxes.ineligibleToApply')}</p>
-        <p>{t('protected-application:fileYourTaxes.taxNotFiled', { taxYear })}</p>
-        <p>{t('protected-application:fileYourTaxes.unableToAssess')}</p>
+        <p>{t('protectedApplication:fileYourTaxes.ineligibleToApply')}</p>
+        <p>{t('protectedApplication:fileYourTaxes.taxNotFiled', { taxYear })}</p>
+        <p>{t('protectedApplication:fileYourTaxes.unableToAssess')}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application:fileYourTaxes.taxInfo" components={{ taxInfo }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplication:fileYourTaxes.taxInfo" components={{ taxInfo }} />
         </p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application:fileYourTaxes.applyAfter" />
+          <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplication:fileYourTaxes.applyAfter" />
         </p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
@@ -90,10 +90,10 @@ export default function ApplicationFileYourTaxes({ loaderData, params }: Route.C
           disabled={isSubmitting}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - File your taxes click"
         >
-          {t('protected-application:fileYourTaxes.backBtn')}
+          {t('protectedApplication:fileYourTaxes.backBtn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - File your taxes click">
-          {t('protected-application:fileYourTaxes.exitBtn')}
+          {t('protectedApplication:fileYourTaxes.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

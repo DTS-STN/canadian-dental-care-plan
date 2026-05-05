@@ -40,9 +40,9 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 }
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.email,
-  pageTitleI18nKey: 'application-spokes:email.pageTitle',
+  pageTitleI18nKey: 'applicationSpokes:email.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -53,7 +53,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:email.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:email.pageTitle') }) };
   return {
     defaultState: state.email,
     meta,
@@ -79,9 +79,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const emailSchema = z.object({
     email: z
-      .string({ error: t('application-spokes:email.errorMessage.emailRequired') })
-      .nonempty(t('application-spokes:email.errorMessage.emailRequired'))
-      .refine((val) => validator.isEmail(val), t('application-spokes:email.errorMessage.emailValid')),
+      .string({ error: t('applicationSpokes:email.errorMessage.emailRequired') })
+      .nonempty(t('applicationSpokes:email.errorMessage.emailRequired'))
+      .refine((val) => validator.isEmail(val), t('applicationSpokes:email.errorMessage.emailValid')),
   });
 
   const parsedDataResult = emailSchema.safeParse({
@@ -141,18 +141,18 @@ export default function ApplicationEmail({ loaderData, params }: Route.Component
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <p className="mb-4">{t('application-spokes:email.provideEmail')}</p>
-          <p className="mb-8">{t('application-spokes:email.verifyEmail')}</p>
+          <p className="mb-4">{t('applicationSpokes:email.provideEmail')}</p>
+          <p className="mb-8">{t('applicationSpokes:email.verifyEmail')}</p>
           <p className="mb-4 italic">{t('application:requiredLabel')}</p>
           <div className="mb-6">
-            <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t('application-spokes:email.emailLegend')} maxLength={64} required />
+            <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t('applicationSpokes:email.emailLegend')} maxLength={64} required />
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Email click">
-              {t('application-spokes:email.continue')}
+              {t('applicationSpokes:email.continue')}
             </LoadingButton>
             <ButtonLink id="back-button" variant="secondary" routeId="public/application/$id/communication-preferences" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Email click">
-              {t('application-spokes:email.back')}
+              {t('applicationSpokes:email.back')}
             </ButtonLink>
           </div>
         </fetcher.Form>

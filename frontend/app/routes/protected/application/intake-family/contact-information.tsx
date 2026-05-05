@@ -24,9 +24,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application', 'protected-application-intake-family', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'protectedApplicationIntakeFamily', 'gcweb'),
   pageIdentifier: pageIds.protected.application.intakeFamily.contactInformation,
-  pageTitleI18nKey: 'protected-application-intake-family:contactInformation.pageHeading',
+  pageTitleI18nKey: 'protectedApplicationIntakeFamily:contactInformation.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -39,7 +39,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['intake-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-intake-family:contactInformation.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationIntakeFamily:contactInformation.pageTitle') }) };
   const locale = getLocale(request);
 
   const mailingAddressInfo = state.mailingAddress?.hasChanged
@@ -93,24 +93,24 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
       <ProgressStepper activeStep="contactInformation" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('protected-application:completeAllSections')}</p>
+          <p>{t('protectedApplication:completeAllSections')}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protected-application-intake-family:contactInformation.phoneNumber')}</h2>
+              <h2>{t('protectedApplicationIntakeFamily:contactInformation.phoneNumber')}</h2>
             </CardTitle>
             <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.phoneNumber?.hasChanged ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('protected-application-intake-family:contactInformation.phoneNumber')}>{state.phoneNumber.value.primary}</DefinitionListItem>
-                {state.phoneNumber.value.alternate && <DefinitionListItem term={t('protected-application-intake-family:contactInformation.altPhoneNumber')}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
+                <DefinitionListItem term={t('protectedApplicationIntakeFamily:contactInformation.phoneNumber')}>{state.phoneNumber.value.primary}</DefinitionListItem>
+                {state.phoneNumber.value.alternate && <DefinitionListItem term={t('protectedApplicationIntakeFamily:contactInformation.altPhoneNumber')}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
               </DefinitionList>
             ) : (
-              <p>{t('protected-application-intake-family:contactInformation.phoneNumberHelp')}</p>
+              <p>{t('protectedApplicationIntakeFamily:contactInformation.phoneNumberHelp')}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -124,7 +124,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Edit phone click"
             >
-              {sections.phoneNumber.completed ? t('protected-application-intake-family:contactInformation.editPhoneNumber') : t('protected-application-intake-family:contactInformation.addPhoneNumber')}
+              {sections.phoneNumber.completed ? t('protectedApplicationIntakeFamily:contactInformation.editPhoneNumber') : t('protectedApplicationIntakeFamily:contactInformation.addPhoneNumber')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -132,16 +132,16 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protected-application-intake-family:contactInformation.mailingAndHomeAddress')}</h2>
+              <h2>{t('protectedApplicationIntakeFamily:contactInformation.mailingAndHomeAddress')}</h2>
             </CardTitle>
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {mailingAddressInfo === undefined || homeAddressInfo === undefined ? (
-              <p>{t('protected-application-intake-family:contactInformation.addressHelp')}</p>
+              <p>{t('protectedApplicationIntakeFamily:contactInformation.addressHelp')}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('protected-application-intake-family:contactInformation.mailingAddress')}>
+                <DefinitionListItem term={t('protectedApplicationIntakeFamily:contactInformation.mailingAddress')}>
                   <Address
                     address={{
                       address: mailingAddressInfo.address,
@@ -152,7 +152,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
                     }}
                   />
                 </DefinitionListItem>
-                <DefinitionListItem term={t('protected-application-intake-family:contactInformation.homeAddress')}>
+                <DefinitionListItem term={t('protectedApplicationIntakeFamily:contactInformation.homeAddress')}>
                   <Address
                     address={{
                       address: homeAddressInfo.address,
@@ -177,7 +177,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Edit address click"
             >
-              {sections.address.completed ? t('protected-application-intake-family:contactInformation.editAddress') : t('protected-application-intake-family:contactInformation.addAddress')}
+              {sections.address.completed ? t('protectedApplicationIntakeFamily:contactInformation.editAddress') : t('protectedApplicationIntakeFamily:contactInformation.addAddress')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -185,19 +185,19 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protected-application-intake-family:contactInformation.communicationPreferences')}</h2>
+              <h2>{t('protectedApplicationIntakeFamily:contactInformation.communicationPreferences')}</h2>
             </CardTitle>
             <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.communicationPreferences?.hasChanged ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('protected-application-intake-family:contactInformation.preferredLanguage')}>{preferredLanguage?.name}</DefinitionListItem>
-                <DefinitionListItem term={t('protected-application-intake-family:contactInformation.preferredMethod')}>{preferredMethod?.name}</DefinitionListItem>
-                {state.email && <DefinitionListItem term={t('protected-application-intake-family:contactInformation.email')}>{state.email}</DefinitionListItem>}
+                <DefinitionListItem term={t('protectedApplicationIntakeFamily:contactInformation.preferredLanguage')}>{preferredLanguage?.name}</DefinitionListItem>
+                <DefinitionListItem term={t('protectedApplicationIntakeFamily:contactInformation.preferredMethod')}>{preferredMethod?.name}</DefinitionListItem>
+                {state.email && <DefinitionListItem term={t('protectedApplicationIntakeFamily:contactInformation.email')}>{state.email}</DefinitionListItem>}
               </DefinitionList>
             ) : (
-              <p>{t('protected-application-intake-family:contactInformation.communicationPreferencesHelp')}</p>
+              <p>{t('protectedApplicationIntakeFamily:contactInformation.communicationPreferencesHelp')}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -211,7 +211,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Edit comms click"
             >
-              {sections.communicationPreferences.completed ? t('protected-application-intake-family:contactInformation.editCommunicationPreferences') : t('protected-application-intake-family:contactInformation.addCommunicationPreferences')}
+              {sections.communicationPreferences.completed ? t('protectedApplicationIntakeFamily:contactInformation.editCommunicationPreferences') : t('protectedApplicationIntakeFamily:contactInformation.addCommunicationPreferences')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -219,11 +219,11 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protected-application-intake-family:contactInformation.email')}</h2>
+              <h2>{t('protectedApplicationIntakeFamily:contactInformation.email')}</h2>
             </CardTitle>
             <CardAction>{sections.email.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
-          <CardContent>{state.email === undefined ? <p>{t('protected-application-intake-family:contactInformation.emailHelp')}</p> : <p>{state.email}</p>}</CardContent>
+          <CardContent>{state.email === undefined ? <p>{t('protectedApplicationIntakeFamily:contactInformation.emailHelp')}</p> : <p>{state.email}</p>}</CardContent>
           <CardFooter className="border-t bg-zinc-100">
             <ButtonLink
               id="edit-email-button"
@@ -235,7 +235,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Edit email click"
             >
-              {sections.email.completed ? t('protected-application-intake-family:contactInformation.editEmail') : t('protected-application-intake-family:contactInformation.addEmail')}
+              {sections.email.completed ? t('protectedApplicationIntakeFamily:contactInformation.editEmail') : t('protectedApplicationIntakeFamily:contactInformation.addEmail')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -249,7 +249,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Continue click"
           >
-            {t('protected-application-intake-family:contactInformation.nextBtn')}
+            {t('protectedApplicationIntakeFamily:contactInformation.nextBtn')}
           </NavigationButtonLink>
           <NavigationButtonLink
             variant="secondary"
@@ -258,7 +258,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Back click"
           >
-            {t('protected-application-intake-family:contactInformation.prevBtn')}
+            {t('protectedApplicationIntakeFamily:contactInformation.prevBtn')}
           </NavigationButtonLink>
         </div>
       </div>

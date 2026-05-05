@@ -36,9 +36,9 @@ const HAS_DENTAL_INSURANCE_OPTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.childDentalInsurance,
-  pageTitleI18nKey: 'protected-application-spokes:children.dentalInsurance.title',
+  pageTitleI18nKey: 'protectedApplicationSpokes:children.dentalInsurance.title',
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
@@ -55,12 +55,12 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const childNumber = t('protected-application-spokes:children.childNumber', { childNumber: childState.childNumber });
+  const childNumber = t('protectedApplicationSpokes:children.childNumber', { childNumber: childState.childNumber });
   const childName = childState.information?.firstName ?? childNumber;
 
   const meta = {
-    title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.dentalInsurance.title', { childName }) }),
-    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.dentalInsurance.title', { childName: childNumber }) }),
+    title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:children.dentalInsurance.title', { childName }) }),
+    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:children.dentalInsurance.title', { childName: childNumber }) }),
   };
 
   return { meta, defaultState: childState.dentalInsurance, childName, i18nOptions: { childName }, applicationFlow: `${state.context}-${state.typeOfApplication}` };
@@ -83,12 +83,12 @@ export async function action({ context: { appContainer, session }, params, reque
   // state validation schema
   const dentalInsuranceSchema = z
     .object({
-      hasDentalInsurance: z.boolean({ error: t('protected-application-spokes:children.dentalInsurance.errorMessage.dentalInsuranceRequired') }),
+      hasDentalInsurance: z.boolean({ error: t('protectedApplicationSpokes:children.dentalInsurance.errorMessage.dentalInsuranceRequired') }),
       dentalInsuranceEligibilityConfirmation: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
       if (val.hasDentalInsurance && !val.dentalInsuranceEligibilityConfirmation) {
-        ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:children.dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired'), path: ['dentalInsuranceEligibilityConfirmation'] });
+        ctx.addIssue({ code: 'custom', message: t('protectedApplicationSpokes:children.dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired'), path: ['dentalInsuranceEligibilityConfirmation'] });
       }
     })
     .transform((val) => ({
@@ -150,7 +150,7 @@ export default function ChildDentalInsurance({ loaderData, params }: Route.Compo
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('protected-application:requiredLabel')}</p>
+        <p className="mb-4 italic">{t('protectedApplication:requiredLabel')}</p>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />

@@ -19,16 +19,16 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.applicationDelegate,
-  pageTitleI18nKey: 'application-spokes:applicationDelegate.pageTitle',
+  pageTitleI18nKey: 'applicationSpokes:applicationDelegate.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:applicationDelegate.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:applicationDelegate.pageTitle') }) };
 
   return { meta };
 }
@@ -43,7 +43,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearPublicApplicationState({ params, session });
 
-  return redirect(t('application-spokes:applicationDelegate.exitBtnLink'));
+  return redirect(t('applicationSpokes:applicationDelegate.exitBtnLink'));
 }
 
 export default function ApplicationDelegate({ loaderData, params }: Route.ComponentProps) {
@@ -53,8 +53,8 @@ export default function ApplicationDelegate({ loaderData, params }: Route.Compon
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
-  const contactServiceCanada = <InlineLink to={t('application-spokes:applicationDelegate.contactServiceCanadaHref')} className="external-link" newTabIndicator target="_blank" />;
-  const preparingToApply = <InlineLink to={t('application-spokes:applicationDelegate.preparingToApplyHref')} className="external-link" newTabIndicator target="_blank" />;
+  const contactServiceCanada = <InlineLink to={t('applicationSpokes:applicationDelegate.contactServiceCanadaHref')} className="external-link" newTabIndicator target="_blank" />;
+  const preparingToApply = <InlineLink to={t('applicationSpokes:applicationDelegate.preparingToApplyHref')} className="external-link" newTabIndicator target="_blank" />;
   const noWrap = <span className="whitespace-nowrap" />;
 
   async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
@@ -67,10 +67,10 @@ export default function ApplicationDelegate({ loaderData, params }: Route.Compon
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:applicationDelegate.contactRepresentative" components={{ contactServiceCanada, noWrap }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:applicationDelegate.contactRepresentative" components={{ contactServiceCanada, noWrap }} />
         </p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:applicationDelegate.prepareToApply" components={{ preparingToApply }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:applicationDelegate.prepareToApply" components={{ preparingToApply }} />
         </p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
@@ -83,10 +83,10 @@ export default function ApplicationDelegate({ loaderData, params }: Route.Compon
           disabled={isSubmitting}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Applying on behalf of someone click"
         >
-          {t('application-spokes:applicationDelegate.backBtn')}
+          {t('applicationSpokes:applicationDelegate.backBtn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - Applying on behalf of someone click">
-          {t('application-spokes:applicationDelegate.exitBtn')}
+          {t('applicationSpokes:applicationDelegate.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

@@ -94,12 +94,12 @@ describe('locale-utils', () => {
 
   describe('getTypedI18nNamespaces', () => {
     it('should return a typed tuple of namespaces', () => {
-      const result = getTypedI18nNamespaces('common', 'gcweb', 'unable-to-process-request');
-      expect(result).toEqual(['common', 'gcweb', 'unable-to-process-request']);
+      const result = getTypedI18nNamespaces('common', 'gcweb', 'unableToProcessRequest');
+      expect(result).toEqual(['common', 'gcweb', 'unableToProcessRequest']);
 
-      type ExpectedType = readonly ['common', 'gcweb', 'unable-to-process-request'];
+      type ExpectedType = readonly ['common', 'gcweb', 'unableToProcessRequest'];
       const typedResult: ExpectedType = result; // No TypeScript error
-      expect(typedResult).toEqual(['common', 'gcweb', 'unable-to-process-request']);
+      expect(typedResult).toEqual(['common', 'gcweb', 'unableToProcessRequest']);
     });
   });
 

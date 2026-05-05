@@ -20,9 +20,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-intake-child', 'protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationIntakeChild', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.intakeChild.exitApplication,
-  pageTitleI18nKey: 'protected-application-intake-child:exitApplication.pageTitle',
+  pageTitleI18nKey: 'protectedApplicationIntakeChild:exitApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -35,7 +35,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['intake-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-intake-child:exitApplication.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationIntakeChild:exitApplication.pageTitle') }) };
   return { meta };
 }
 
@@ -54,7 +54,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearProtectedApplicationState({ params, session });
 
-  return redirect(t('protected-application-intake-child:exitApplication.exitLink'));
+  return redirect(t('protectedApplicationIntakeChild:exitApplication.exitLink'));
 }
 
 export default function ProtectedNewChildrenExitApplication({ loaderData, params }: Route.ComponentProps) {
@@ -66,8 +66,8 @@ export default function ProtectedNewChildrenExitApplication({ loaderData, params
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('protected-application-intake-child:exitApplication.areYouSure')}</p>
-        <p>{t('protected-application-intake-child:exitApplication.clickBack')}</p>
+        <p>{t('protectedApplicationIntakeChild:exitApplication.areYouSure')}</p>
+        <p>{t('protectedApplicationIntakeChild:exitApplication.clickBack')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -80,10 +80,10 @@ export default function ProtectedNewChildrenExitApplication({ loaderData, params
           startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Back - Exiting the application click"
         >
-          {t('protected-application-intake-child:exitApplication.backBtn')}
+          {t('protectedApplicationIntakeChild:exitApplication.backBtn')}
         </ButtonLink>
         <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Exit - Exiting the application click">
-          {t('protected-application-intake-child:exitApplication.exitBtn')}
+          {t('protectedApplicationIntakeChild:exitApplication.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

@@ -23,9 +23,9 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application', 'protected-application-intake-adult', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'protectedApplicationIntakeAdult', 'gcweb'),
   pageIdentifier: pageIds.protected.application.intakeAdult.maritalStatus,
-  pageTitleI18nKey: 'protected-application-intake-adult:maritalStatus.pageHeading',
+  pageTitleI18nKey: 'protectedApplicationIntakeAdult:maritalStatus.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -38,7 +38,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['intake-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-intake-adult:maritalStatus.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationIntakeAdult:maritalStatus.pageTitle') }) };
   const locale = getLocale(request);
   return {
     state: {
@@ -63,27 +63,27 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
       <ProgressStepper activeStep="maritalStatus" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('protected-application:completeAllSections')}</p>
+          <p>{t('protectedApplication:completeAllSections')}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protected-application-intake-adult:maritalStatus.maritalStatus')}</h2>
+              <h2>{t('protectedApplicationIntakeAdult:maritalStatus.maritalStatus')}</h2>
             </CardTitle>
             <CardAction>{sections.maritalStatus.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.maritalStatus === undefined ? (
-              <p>{t('protected-application-intake-adult:maritalStatus.selectYourStatus')}</p>
+              <p>{t('protectedApplicationIntakeAdult:maritalStatus.selectYourStatus')}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('protected-application-intake-adult:maritalStatus.maritalStatus')}>{state.maritalStatus.name}</DefinitionListItem>
+                <DefinitionListItem term={t('protectedApplicationIntakeAdult:maritalStatus.maritalStatus')}>{state.maritalStatus.name}</DefinitionListItem>
                 {state.partnerInformation && (
                   <>
-                    <DefinitionListItem term={t('protected-application-intake-adult:maritalStatus.spouseSin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-intake-adult:maritalStatus.spouseYob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-intake-adult:maritalStatus.consent')}>{t('protected-application-intake-adult:maritalStatus.consentYes')}</DefinitionListItem>
+                    <DefinitionListItem term={t('protectedApplicationIntakeAdult:maritalStatus.spouseSin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
+                    <DefinitionListItem term={t('protectedApplicationIntakeAdult:maritalStatus.spouseYob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t('protectedApplicationIntakeAdult:maritalStatus.consent')}>{t('protectedApplicationIntakeAdult:maritalStatus.consentYes')}</DefinitionListItem>
                   </>
                 )}
               </DefinitionList>
@@ -100,7 +100,7 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Edit marital click"
             >
-              {state.maritalStatus === undefined ? t('protected-application-intake-adult:maritalStatus.addMaritalStatus') : t('protected-application-intake-adult:maritalStatus.editMaritalStatus')}
+              {state.maritalStatus === undefined ? t('protectedApplicationIntakeAdult:maritalStatus.addMaritalStatus') : t('protectedApplicationIntakeAdult:maritalStatus.editMaritalStatus')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -113,10 +113,10 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Continue click"
           >
-            {t('protected-application-intake-adult:maritalStatus.nextBtn')}
+            {t('protectedApplicationIntakeAdult:maritalStatus.nextBtn')}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Back click">
-            {t('protected-application-intake-adult:maritalStatus.prevBtn')}
+            {t('protectedApplicationIntakeAdult:maritalStatus.prevBtn')}
           </NavigationButtonLink>
         </div>
       </div>

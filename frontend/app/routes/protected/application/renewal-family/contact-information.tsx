@@ -36,9 +36,9 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application', 'protected-application-renewal-family', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'protectedApplicationRenewalFamily', 'gcweb'),
   pageIdentifier: pageIds.protected.application.renewalFamily.contactInformation,
-  pageTitleI18nKey: 'protected-application-renewal-family:contactInformation.pageHeading',
+  pageTitleI18nKey: 'protectedApplicationRenewalFamily:contactInformation.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -51,7 +51,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['renewal-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-renewal-family:contactInformation.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationRenewalFamily:contactInformation.pageTitle') }) };
   const locale = getLocale(request);
 
   const countryService = appContainer.get(TYPES.CountryService);
@@ -217,14 +217,14 @@ export default function ProtectedRenewFamilyContactInformation({ loaderData, par
       <ProgressStepper activeStep="contactInformation" excludeMaritalStatus={shouldSkipMaritalStatusStep} className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('protected-application:completeAllSections')}</p>
+          <p>{t('protectedApplication:completeAllSections')}</p>
           <p>{completedSectionsLabel}</p>
-          <p>{t('protected-application:confirmInformation')}</p>
+          <p>{t('protectedApplication:confirmInformation')}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protected-application-renewal-family:contactInformation.phoneNumber')}</h2>
+              <h2>{t('protectedApplicationRenewalFamily:contactInformation.phoneNumber')}</h2>
             </CardTitle>
             <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
@@ -235,7 +235,7 @@ export default function ProtectedRenewFamilyContactInformation({ loaderData, par
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protected-application-renewal-family:contactInformation.mailingAndHomeAddress')}</h2>
+              <h2>{t('protectedApplicationRenewalFamily:contactInformation.mailingAndHomeAddress')}</h2>
             </CardTitle>
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
@@ -246,7 +246,7 @@ export default function ProtectedRenewFamilyContactInformation({ loaderData, par
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protected-application-renewal-family:contactInformation.communicationPreferences')}</h2>
+              <h2>{t('protectedApplicationRenewalFamily:contactInformation.communicationPreferences')}</h2>
             </CardTitle>
             <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
@@ -257,11 +257,11 @@ export default function ProtectedRenewFamilyContactInformation({ loaderData, par
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protected-application-renewal-family:contactInformation.email')}</h2>
+              <h2>{t('protectedApplicationRenewalFamily:contactInformation.email')}</h2>
             </CardTitle>
             <CardAction>{sections.email.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
-          <CardContent>{loaderData.state.email === undefined ? <p>{t('protected-application-renewal-family:contactInformation.emailHelp')}</p> : <p>{loaderData.state.email}</p>}</CardContent>
+          <CardContent>{loaderData.state.email === undefined ? <p>{t('protectedApplicationRenewalFamily:contactInformation.emailHelp')}</p> : <p>{loaderData.state.email}</p>}</CardContent>
           <CardFooter className="border-t bg-zinc-100">
             <ButtonLink
               id="edit-email-button"
@@ -273,7 +273,7 @@ export default function ProtectedRenewFamilyContactInformation({ loaderData, par
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Edit email click"
             >
-              {sections.email.completed ? t('protected-application-renewal-family:contactInformation.editEmail') : t('protected-application-renewal-family:contactInformation.addEmail')}
+              {sections.email.completed ? t('protectedApplicationRenewalFamily:contactInformation.editEmail') : t('protectedApplicationRenewalFamily:contactInformation.addEmail')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -287,11 +287,11 @@ export default function ProtectedRenewFamilyContactInformation({ loaderData, par
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Continue click"
           >
-            {t('protected-application-renewal-family:contactInformation.nextBtn')}
+            {t('protectedApplicationRenewalFamily:contactInformation.nextBtn')}
           </NavigationButtonLink>
           {shouldSkipMaritalStatusStep ? (
             <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Back click">
-              {t('protected-application-renewal-family:contactInformation.prevBtn.renew')}
+              {t('protectedApplicationRenewalFamily:contactInformation.prevBtn.renew')}
             </NavigationButtonLink>
           ) : (
             <NavigationButtonLink
@@ -301,7 +301,7 @@ export default function ProtectedRenewFamilyContactInformation({ loaderData, par
               params={params}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Back click"
             >
-              {t('protected-application-renewal-family:contactInformation.prevBtn.maritalStatus')}
+              {t('protectedApplicationRenewalFamily:contactInformation.prevBtn.maritalStatus')}
             </NavigationButtonLink>
           )}
         </div>
@@ -334,8 +334,8 @@ function PhoneNumberCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-family:contactInformation.phoneNumber')}>{state.phoneNumber.primary}</DefinitionListItem>
-          {state.phoneNumber.alternate && <DefinitionListItem term={t('protected-application-renewal-family:contactInformation.altPhoneNumber')}>{state.phoneNumber.alternate}</DefinitionListItem>}
+          <DefinitionListItem term={t('protectedApplicationRenewalFamily:contactInformation.phoneNumber')}>{state.phoneNumber.primary}</DefinitionListItem>
+          {state.phoneNumber.alternate && <DefinitionListItem term={t('protectedApplicationRenewalFamily:contactInformation.altPhoneNumber')}>{state.phoneNumber.alternate}</DefinitionListItem>}
         </DefinitionList>
       </CardContent>
     );
@@ -345,8 +345,8 @@ function PhoneNumberCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-family:contactInformation.phoneNumber')}>{clientApplication.phoneNumber.primary}</DefinitionListItem>
-          {clientApplication.phoneNumber.alternate && <DefinitionListItem term={t('protected-application-renewal-family:contactInformation.altPhoneNumber')}>{clientApplication.phoneNumber.alternate}</DefinitionListItem>}
+          <DefinitionListItem term={t('protectedApplicationRenewalFamily:contactInformation.phoneNumber')}>{clientApplication.phoneNumber.primary}</DefinitionListItem>
+          {clientApplication.phoneNumber.alternate && <DefinitionListItem term={t('protectedApplicationRenewalFamily:contactInformation.altPhoneNumber')}>{clientApplication.phoneNumber.alternate}</DefinitionListItem>}
         </DefinitionList>
       </CardContent>
     );
@@ -354,7 +354,7 @@ function PhoneNumberCardContent(): JSX.Element {
 
   return (
     <CardContent>
-      <p>{t('protected-application-renewal-family:contactInformation.phoneNumberHelp')}</p>
+      <p>{t('protectedApplicationRenewalFamily:contactInformation.phoneNumberHelp')}</p>
     </CardContent>
   );
 }
@@ -396,7 +396,7 @@ function PhoneNumberCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Edit phone click"
         >
-          {t('protected-application-renewal-family:contactInformation.editPhoneNumber')}
+          {t('protectedApplicationRenewalFamily:contactInformation.editPhoneNumber')}
         </ButtonLink>
       </CardFooter>
     );
@@ -416,7 +416,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Update phone click"
           >
-            {t('protected-application-renewal-family:contactInformation.updatePhoneNumber')}
+            {t('protectedApplicationRenewalFamily:contactInformation.updatePhoneNumber')}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -430,7 +430,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Complete phone click"
           >
-            <span className="text-left">{t('protected-application-renewal-family:contactInformation.phoneNumberUnchanged')}</span>
+            <span className="text-left">{t('protectedApplicationRenewalFamily:contactInformation.phoneNumberUnchanged')}</span>
           </Button>
         </div>
       </CardFooter>
@@ -449,7 +449,7 @@ function PhoneNumberCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Add phone click"
       >
-        {t('protected-application-renewal-family:contactInformation.addPhoneNumber')}
+        {t('protectedApplicationRenewalFamily:contactInformation.addPhoneNumber')}
       </ButtonLink>
     </CardFooter>
   );
@@ -481,7 +481,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-family:contactInformation.mailingAddress')}>
+          <DefinitionListItem term={t('protectedApplicationRenewalFamily:contactInformation.mailingAddress')}>
             <Address
               address={{
                 address: state.mailingAddress.address,
@@ -492,7 +492,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
               }}
             />
           </DefinitionListItem>
-          <DefinitionListItem term={t('protected-application-renewal-family:contactInformation.homeAddress')}>
+          <DefinitionListItem term={t('protectedApplicationRenewalFamily:contactInformation.homeAddress')}>
             <Address
               address={{
                 address: state.homeAddress.address,
@@ -512,7 +512,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-family:contactInformation.mailingAddress')}>
+          <DefinitionListItem term={t('protectedApplicationRenewalFamily:contactInformation.mailingAddress')}>
             <Address
               address={{
                 address: clientApplication.mailingAddress.address,
@@ -523,7 +523,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
               }}
             />
           </DefinitionListItem>
-          <DefinitionListItem term={t('protected-application-renewal-family:contactInformation.homeAddress')}>
+          <DefinitionListItem term={t('protectedApplicationRenewalFamily:contactInformation.homeAddress')}>
             <Address
               address={{
                 address: clientApplication.homeAddress.address,
@@ -541,7 +541,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
 
   return (
     <CardContent>
-      <p>{t('protected-application-renewal-family:contactInformation.addressHelp')}</p>
+      <p>{t('protectedApplicationRenewalFamily:contactInformation.addressHelp')}</p>
     </CardContent>
   );
 }
@@ -585,7 +585,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Edit address click"
         >
-          {t('protected-application-renewal-family:contactInformation.editAddress')}
+          {t('protectedApplicationRenewalFamily:contactInformation.editAddress')}
         </ButtonLink>
       </CardFooter>
     );
@@ -605,7 +605,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Update address click"
           >
-            {t('protected-application-renewal-family:contactInformation.updateAddress')}
+            {t('protectedApplicationRenewalFamily:contactInformation.updateAddress')}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -619,7 +619,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Complete address click"
           >
-            <span className="text-left">{t('protected-application-renewal-family:contactInformation.addressUnchanged')}</span>
+            <span className="text-left">{t('protectedApplicationRenewalFamily:contactInformation.addressUnchanged')}</span>
           </Button>
         </div>
       </CardFooter>
@@ -638,7 +638,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Add address click"
       >
-        {t('protected-application-renewal-family:contactInformation.addAddress')}
+        {t('protectedApplicationRenewalFamily:contactInformation.addAddress')}
       </ButtonLink>
     </CardFooter>
   );
@@ -670,8 +670,8 @@ function CommunicationPreferencesCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-family:contactInformation.preferredLanguage')}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
-          <DefinitionListItem term={t('protected-application-renewal-family:contactInformation.preferredMethod')}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
+          <DefinitionListItem term={t('protectedApplicationRenewalFamily:contactInformation.preferredLanguage')}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
+          <DefinitionListItem term={t('protectedApplicationRenewalFamily:contactInformation.preferredMethod')}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
         </DefinitionList>
       </CardContent>
     );
@@ -681,8 +681,8 @@ function CommunicationPreferencesCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-family:contactInformation.preferredLanguage')}>{clientApplication.communicationPreferences.preferredLanguage}</DefinitionListItem>
-          <DefinitionListItem term={t('protected-application-renewal-family:contactInformation.preferredMethod')}>{clientApplication.communicationPreferences.preferredMethod}</DefinitionListItem>
+          <DefinitionListItem term={t('protectedApplicationRenewalFamily:contactInformation.preferredLanguage')}>{clientApplication.communicationPreferences.preferredLanguage}</DefinitionListItem>
+          <DefinitionListItem term={t('protectedApplicationRenewalFamily:contactInformation.preferredMethod')}>{clientApplication.communicationPreferences.preferredMethod}</DefinitionListItem>
         </DefinitionList>
       </CardContent>
     );
@@ -690,7 +690,7 @@ function CommunicationPreferencesCardContent(): JSX.Element {
 
   return (
     <CardContent>
-      <p>{t('protected-application-renewal-family:contactInformation.communicationPreferencesHelp')}</p>
+      <p>{t('protectedApplicationRenewalFamily:contactInformation.communicationPreferencesHelp')}</p>
     </CardContent>
   );
 }
@@ -733,7 +733,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Edit comms click"
         >
-          {t('protected-application-renewal-family:contactInformation.editCommunicationPreferences')}
+          {t('protectedApplicationRenewalFamily:contactInformation.editCommunicationPreferences')}
         </ButtonLink>
       </CardFooter>
     );
@@ -753,7 +753,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Update comms click"
           >
-            {t('protected-application-renewal-family:contactInformation.updateCommunicationPreferences')}
+            {t('protectedApplicationRenewalFamily:contactInformation.updateCommunicationPreferences')}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -767,7 +767,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Complete comms click"
           >
-            <span className="text-left">{t('protected-application-renewal-family:contactInformation.communicationPreferencesUnchanged')}</span>
+            <span className="text-left">{t('protectedApplicationRenewalFamily:contactInformation.communicationPreferencesUnchanged')}</span>
           </Button>
         </div>
       </CardFooter>
@@ -786,7 +786,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Add comms click"
       >
-        {t('protected-application-renewal-family:contactInformation.addCommunicationPreferences')}
+        {t('protectedApplicationRenewalFamily:contactInformation.addCommunicationPreferences')}
       </ButtonLink>
     </CardFooter>
   );

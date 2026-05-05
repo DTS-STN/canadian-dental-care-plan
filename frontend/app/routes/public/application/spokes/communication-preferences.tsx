@@ -44,9 +44,9 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 }
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.communicationPreferences,
-  pageTitleI18nKey: 'application-spokes:communicationPreferences.pageTitle',
+  pageTitleI18nKey: 'applicationSpokes:communicationPreferences.pageTitle',
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -58,7 +58,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:communicationPreferences.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:communicationPreferences.pageTitle') }) };
 
   const languages = appContainer.get(TYPES.LanguageService).listAndSortLocalizedLanguages(locale);
   const gcCommunicationMethods = appContainer.get(TYPES.GCCommunicationMethodService).listLocalizedGCCommunicationMethods(locale);
@@ -95,9 +95,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   // state validation schema
   const communicationPreferencesSchema = z.object({
-    preferredLanguage: z.string().trim().min(1, t('application-spokes:communicationPreferences.errorMessage.preferredLanguageRequired')),
-    preferredMethod: z.string().trim().min(1, t('application-spokes:communicationPreferences.errorMessage.preferredMethodRequired')),
-    preferredNotificationMethod: z.string().trim().min(1, t('application-spokes:communicationPreferences.errorMessage.preferredNotificationMethodRequired')),
+    preferredLanguage: z.string().trim().min(1, t('applicationSpokes:communicationPreferences.errorMessage.preferredLanguageRequired')),
+    preferredMethod: z.string().trim().min(1, t('applicationSpokes:communicationPreferences.errorMessage.preferredMethodRequired')),
+    preferredNotificationMethod: z.string().trim().min(1, t('applicationSpokes:communicationPreferences.errorMessage.preferredNotificationMethodRequired')),
   }) satisfies z.ZodType<PublicApplicationCommunicationPreferencesState>;
 
   const parsedDataResult = communicationPreferencesSchema.safeParse({
@@ -145,7 +145,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
-  const mscaLinkAccount = <InlineLink to={t('application-spokes:communicationPreferences.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
+  const mscaLinkAccount = <InlineLink to={t('applicationSpokes:communicationPreferences.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
 
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const success = fetcher.data && 'success' in fetcher.data && fetcher.data.success === true;
@@ -196,7 +196,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
     let children: ReactNode = <span className="font-semibold">{method.name}</span>;
 
     if (method.id === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communicationPreferences.byEmail" values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
+      children = <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:communicationPreferences.byEmail" values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
     }
 
     return {
@@ -212,9 +212,9 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
     let children: ReactNode = <span className="font-semibold">{method.name}</span>;
 
     if (method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communicationPreferences.preferredNotificationMethodMsca" values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />;
+      children = <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:communicationPreferences.preferredNotificationMethodMsca" values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />;
     } else if (method.id === COMMUNICATION_METHOD_GC_MAIL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:communicationPreferences.preferredNotificationMethodMail" values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />;
+      children = <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:communicationPreferences.preferredNotificationMethodMail" values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />;
     }
 
     return {
@@ -234,12 +234,12 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
-            <InputRadios id="preferred-language" name="preferredLanguage" legend={t('application-spokes:communicationPreferences.preferredLanguage')} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
+            <InputRadios id="preferred-language" name="preferredLanguage" legend={t('applicationSpokes:communicationPreferences.preferredLanguage')} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
             <InputRadios
               id="preferred-method-sunlife"
-              legend={t('application-spokes:communicationPreferences.preferredMethod')}
+              legend={t('applicationSpokes:communicationPreferences.preferredMethod')}
               name="preferredMethod"
-              helpMessagePrimary={t('application-spokes:communicationPreferences.preferredMethodHelpMessage')}
+              helpMessagePrimary={t('applicationSpokes:communicationPreferences.preferredMethodHelpMessage')}
               helpMessagePrimaryClassName="text-black"
               options={sunLifeCommunicationMethodOptions}
               errorMessage={errors?.preferredMethod}
@@ -248,7 +248,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
             <InputRadios
               id="preferred-method-gc"
               name="preferredNotificationMethod"
-              legend={t('application-spokes:communicationPreferences.preferredNotificationMethod')}
+              legend={t('applicationSpokes:communicationPreferences.preferredNotificationMethod')}
               options={gcCommunicationMethodOptions}
               required
               errorMessage={errors?.preferredNotificationMethod}
@@ -256,7 +256,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="continue-button" loading={isSubmittingOrSuccess} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Communication preferences click">
-              {preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || preferredNotification === COMMUNICATION_METHOD_GC_DIGITAL_ID ? t('application-spokes:communicationPreferences.continue') : t('application-spokes:communicationPreferences.save')}
+              {preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || preferredNotification === COMMUNICATION_METHOD_GC_DIGITAL_ID ? t('applicationSpokes:communicationPreferences.continue') : t('applicationSpokes:communicationPreferences.save')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -266,7 +266,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
               disabled={isSubmittingOrSuccess}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Communication preferences click"
             >
-              {t('application-spokes:communicationPreferences.back')}
+              {t('applicationSpokes:communicationPreferences.back')}
             </ButtonLink>
           </div>
         </fetcher.Form>

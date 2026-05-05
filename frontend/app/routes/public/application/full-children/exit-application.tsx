@@ -20,9 +20,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-full-child', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationFullChild', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.fullChild.exitApplication,
-  pageTitleI18nKey: 'application-full-child:exitApplication.pageTitle',
+  pageTitleI18nKey: 'applicationFullChild:exitApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -32,7 +32,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['full-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-child:exitApplication.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationFullChild:exitApplication.pageTitle') }) };
   return { meta };
 }
 
@@ -49,7 +49,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearPublicApplicationState({ params, session });
 
-  return redirect(t('application-full-child:exitApplication.exitLink'));
+  return redirect(t('applicationFullChild:exitApplication.exitLink'));
 }
 
 export default function NewChildrenExitApplication({ loaderData, params }: Route.ComponentProps) {
@@ -61,8 +61,8 @@ export default function NewChildrenExitApplication({ loaderData, params }: Route
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('application-full-child:exitApplication.areYouSure')}</p>
-        <p>{t('application-full-child:exitApplication.clickBack')}</p>
+        <p>{t('applicationFullChild:exitApplication.areYouSure')}</p>
+        <p>{t('applicationFullChild:exitApplication.clickBack')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -75,10 +75,10 @@ export default function NewChildrenExitApplication({ loaderData, params }: Route
           startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Back - Exiting the application click"
         >
-          {t('application-full-child:exitApplication.backBtn')}
+          {t('applicationFullChild:exitApplication.backBtn')}
         </ButtonLink>
         <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Exit - Exiting the application click">
-          {t('application-full-child:exitApplication.exitBtn')}
+          {t('applicationFullChild:exitApplication.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

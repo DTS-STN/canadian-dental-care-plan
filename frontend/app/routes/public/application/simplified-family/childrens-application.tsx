@@ -34,9 +34,9 @@ import { formatSin } from '~/utils/sin-utils';
 const FORM_ACTION = { add: 'add', remove: 'remove', DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed' } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-simplified-family', 'application', 'gcweb', 'common'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSimplifiedFamily', 'application', 'gcweb', 'common'),
   pageIdentifier: pageIds.public.application.simplifiedFamily.childApplication,
-  pageTitleI18nKey: 'application-simplified-family:childrensApplication.pageTitle',
+  pageTitleI18nKey: 'applicationSimplifiedFamily:childrensApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-family:childrensApplication.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSimplifiedFamily:childrensApplication.pageTitle') }) };
 
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
@@ -181,7 +181,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
 
           return (
             <div key={child.id}>
-              <h2 className="font-lato mb-4 text-2xl font-bold">{t('application-simplified-family:childrensApplication.childTitle', { childNumber: index + 1 })}</h2>
+              <h2 className="font-lato mb-4 text-2xl font-bold">{t('applicationSimplifiedFamily:childrensApplication.childTitle', { childNumber: index + 1 })}</h2>
               <div className="space-y-4">
                 <p>{t('application:completeAllSections')}</p>
                 <p>{t('common:sectionsCompleted', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
@@ -189,21 +189,21 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle asChild>
-                    <h2>{t('application-simplified-family:childrensApplication.childInformationCardTitle', { childNumber: index + 1 })}</h2>
+                    <h2>{t('applicationSimplifiedFamily:childrensApplication.childInformationCardTitle', { childNumber: index + 1 })}</h2>
                   </CardTitle>
                   <CardAction>{sections.childInformation.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.information === undefined ? (
-                    <p>{t('application-simplified-family:childrensApplication.childInformationIndicateStatus')}</p>
+                    <p>{t('applicationSimplifiedFamily:childrensApplication.childInformationIndicateStatus')}</p>
                   ) : (
                     <DefinitionList layout="single-column">
-                      <DefinitionListItem term={t('application-simplified-family:childrensApplication.memberIdTitle')}>{child.information.memberId}</DefinitionListItem>
-                      <DefinitionListItem term={t('application-simplified-family:childrensApplication.fullNameTitle')}>{childName}</DefinitionListItem>
-                      <DefinitionListItem term={t('application-simplified-family:childrensApplication.dobTitle')}>{dateOfBirth}</DefinitionListItem>
-                      <DefinitionListItem term={t('application-simplified-family:childrensApplication.sinTitle')}>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</DefinitionListItem>
-                      <DefinitionListItem term={t('application-simplified-family:childrensApplication.parentGuardianTitle')}>
-                        {child.information.isParent ? t('application-simplified-family:childrensApplication.yes') : t('application-simplified-family:childrensApplication.no')}
+                      <DefinitionListItem term={t('applicationSimplifiedFamily:childrensApplication.memberIdTitle')}>{child.information.memberId}</DefinitionListItem>
+                      <DefinitionListItem term={t('applicationSimplifiedFamily:childrensApplication.fullNameTitle')}>{childName}</DefinitionListItem>
+                      <DefinitionListItem term={t('applicationSimplifiedFamily:childrensApplication.dobTitle')}>{dateOfBirth}</DefinitionListItem>
+                      <DefinitionListItem term={t('applicationSimplifiedFamily:childrensApplication.sinTitle')}>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</DefinitionListItem>
+                      <DefinitionListItem term={t('applicationSimplifiedFamily:childrensApplication.parentGuardianTitle')}>
+                        {child.information.isParent ? t('applicationSimplifiedFamily:childrensApplication.yes') : t('applicationSimplifiedFamily:childrensApplication.no')}
                       </DefinitionListItem>
                     </DefinitionList>
                   )}
@@ -219,7 +219,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                     size="lg"
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Action click"
                   >
-                    {child.information === undefined ? t('application-simplified-family:childrensApplication.addChildInformation') : t('application-simplified-family:childrensApplication.editChildInformation', { childNumber: index + 1 })}
+                    {child.information === undefined ? t('applicationSimplifiedFamily:childrensApplication.addChildInformation') : t('applicationSimplifiedFamily:childrensApplication.editChildInformation', { childNumber: index + 1 })}
                   </ButtonLink>
                 </CardFooter>
               </Card>
@@ -227,17 +227,17 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle asChild>
-                    <h2>{t('application-simplified-family:childrensApplication.childDentalInsuranceCardTitle')}</h2>
+                    <h2>{t('applicationSimplifiedFamily:childrensApplication.childDentalInsuranceCardTitle')}</h2>
                   </CardTitle>
                   <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.dentalInsurance === undefined ? (
-                    <p>{t('application-simplified-family:childrensApplication.childDentalInsuranceIndicateStatus')}</p>
+                    <p>{t('applicationSimplifiedFamily:childrensApplication.childDentalInsuranceIndicateStatus')}</p>
                   ) : (
                     <DefinitionList layout="single-column">
-                      <DefinitionListItem term={t('application-simplified-family:childrensApplication.dentalInsuranceTitle')}>
-                        {child.dentalInsurance.hasDentalInsurance ? t('application-simplified-family:childrensApplication.dentalInsuranceYes') : t('application-simplified-family:childrensApplication.dentalInsuranceNo')}
+                      <DefinitionListItem term={t('applicationSimplifiedFamily:childrensApplication.dentalInsuranceTitle')}>
+                        {child.dentalInsurance.hasDentalInsurance ? t('applicationSimplifiedFamily:childrensApplication.dentalInsuranceYes') : t('applicationSimplifiedFamily:childrensApplication.dentalInsuranceNo')}
                       </DefinitionListItem>
                     </DefinitionList>
                   )}
@@ -254,11 +254,11 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Action click"
                     aria-label={
                       child.dentalInsurance === undefined
-                        ? `${t('application-simplified-family:childrensApplication.addAnswer')} - ${t('application-simplified-family:childrensApplication.childDentalInsuranceCardTitle')}`
-                        : t('application-simplified-family:childrensApplication.editChildDentalInsurance')
+                        ? `${t('applicationSimplifiedFamily:childrensApplication.addAnswer')} - ${t('applicationSimplifiedFamily:childrensApplication.childDentalInsuranceCardTitle')}`
+                        : t('applicationSimplifiedFamily:childrensApplication.editChildDentalInsurance')
                     }
                   >
-                    {child.dentalInsurance === undefined ? t('application-simplified-family:childrensApplication.addAnswer') : t('application-simplified-family:childrensApplication.editChildDentalInsurance')}
+                    {child.dentalInsurance === undefined ? t('applicationSimplifiedFamily:childrensApplication.addAnswer') : t('applicationSimplifiedFamily:childrensApplication.editChildDentalInsurance')}
                   </ButtonLink>
                 </CardFooter>
               </Card>
@@ -266,30 +266,30 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle asChild>
-                    <h2>{t('application-simplified-family:childrensApplication.childDentalBenefitsCardTitle')}</h2>
+                    <h2>{t('applicationSimplifiedFamily:childrensApplication.childDentalBenefitsCardTitle')}</h2>
                   </CardTitle>
                   <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.dentalBenefits === undefined ? (
-                    <p>{t('application-simplified-family:childrensApplication.childDentalBenefitsIndicateStatus')}</p>
+                    <p>{t('applicationSimplifiedFamily:childrensApplication.childDentalBenefitsIndicateStatus')}</p>
                   ) : (
                     <DefinitionList layout="single-column">
-                      <DefinitionListItem term={t('application-simplified-family:childrensApplication.dentalBenefitsTitle')}>
+                      <DefinitionListItem term={t('applicationSimplifiedFamily:childrensApplication.dentalBenefitsTitle')}>
                         {child.dentalBenefits.hasChanged ? (
                           child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
                             <div className="space-y-3">
-                              <p>{t('application-simplified-family:childrensApplication.dentalBenefitsYes')}</p>
+                              <p>{t('applicationSimplifiedFamily:childrensApplication.dentalBenefitsYes')}</p>
                               <ul className="list-disc space-y-1 pl-7">
                                 {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
                                 {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
                               </ul>
                             </div>
                           ) : (
-                            <p>{t('application-simplified-family:childrensApplication.dentalBenefitsNo')}</p>
+                            <p>{t('applicationSimplifiedFamily:childrensApplication.dentalBenefitsNo')}</p>
                           )
                         ) : (
-                          <p>{t('application-simplified-family:childrensApplication.noChange')}</p>
+                          <p>{t('applicationSimplifiedFamily:childrensApplication.noChange')}</p>
                         )}
                       </DefinitionListItem>
                     </DefinitionList>
@@ -307,7 +307,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                       size="lg"
                       data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Action click"
                     >
-                      {t('application-simplified-family:childrensApplication.editChildDentalBenefits')}
+                      {t('applicationSimplifiedFamily:childrensApplication.editChildDentalBenefits')}
                     </ButtonLink>
                   </CardFooter>
                 ) : (
@@ -323,7 +323,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                         size="lg"
                         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit button update access click"
                       >
-                        {t('application-simplified-family:childrensApplication.updateDentalBenefits')}
+                        {t('applicationSimplifiedFamily:childrensApplication.updateDentalBenefits')}
                       </ButtonLink>
                     </div>
                     <fetcher.Form method="post" noValidate>
@@ -341,7 +341,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                           size="lg"
                           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Edit button not changed click"
                         >
-                          <span className="text-left">{t('application-simplified-family:childrensApplication.benefitsNotChanged')}</span>
+                          <span className="text-left">{t('applicationSimplifiedFamily:childrensApplication.benefitsNotChanged')}</span>
                         </Button>
                       </div>
                     </fetcher.Form>
@@ -362,7 +362,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                     size="sm"
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Family:Remove child - Child(ren) application click"
                   >
-                    {t('application-simplified-family:childrensApplication.removeChild')}
+                    {t('applicationSimplifiedFamily:childrensApplication.removeChild')}
                   </Button>
                 </fetcher.Form>
               )}
@@ -372,7 +372,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <Button variant="primary" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Family:Add child - Child(ren) application click">
-            {t('application-simplified-family:childrensApplication.addChild')}
+            {t('applicationSimplifiedFamily:childrensApplication.addChild')}
           </Button>
         </fetcher.Form>
 
@@ -385,7 +385,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Continue click"
           >
-            {t('application-simplified-family:childrensApplication.submitBtn')}
+            {t('applicationSimplifiedFamily:childrensApplication.submitBtn')}
           </NavigationButtonLink>
           <NavigationButtonLink
             variant="secondary"
@@ -394,7 +394,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Back click"
           >
-            {t('application-simplified-family:childrensApplication.backBtn')}
+            {t('applicationSimplifiedFamily:childrensApplication.backBtn')}
           </NavigationButtonLink>
         </div>
       </div>

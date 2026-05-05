@@ -13,9 +13,9 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.communicationPreferences,
-  pageTitleI18nKey: 'protected-profile:communicationPreferences.pageTitle',
+  pageTitleI18nKey: 'protectedProfile:communicationPreferences.pageTitle',
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -27,7 +27,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const locale = getLocale(request);
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protected-profile:communicationPreferences.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protectedProfile:communicationPreferences.pageTitle') }) };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 
@@ -58,13 +58,13 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
   return (
     <div className="max-w-prose space-y-10">
       <DefinitionList border>
-        <DefinitionListItem term={t('protected-profile:communicationPreferences.languagePreference')}>{preferredLanguage?.name}</DefinitionListItem>
-        <DefinitionListItem term={t('protected-profile:communicationPreferences.sunlifeCommunicationPreference')}>{preferredMethodSunLife?.name}</DefinitionListItem>
-        <DefinitionListItem term={t('protected-profile:communicationPreferences.gocCommunicationPreference')}>{preferredMethodGovernmentOfCanada?.name}</DefinitionListItem>
+        <DefinitionListItem term={t('protectedProfile:communicationPreferences.languagePreference')}>{preferredLanguage?.name}</DefinitionListItem>
+        <DefinitionListItem term={t('protectedProfile:communicationPreferences.sunlifeCommunicationPreference')}>{preferredMethodSunLife?.name}</DefinitionListItem>
+        <DefinitionListItem term={t('protectedProfile:communicationPreferences.gocCommunicationPreference')}>{preferredMethodGovernmentOfCanada?.name}</DefinitionListItem>
       </DefinitionList>
       <div>
         <InlineLink id="update-communication-preferences" routeId="protected/profile/communication-preferences/edit" params={params}>
-          {t('protected-profile:communicationPreferences.updateLinkText')}
+          {t('protectedProfile:communicationPreferences.updateLinkText')}
         </InlineLink>
       </div>
       <ButtonLink
@@ -73,7 +73,7 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
         to={t('gcweb:header.menuDashboardHref', { baseUri: SCCH_BASE_URI })}
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - My communication preferences return button click"
       >
-        {t('protected-profile:communicationPreferences.returnButton')}
+        {t('protectedProfile:communicationPreferences.returnButton')}
       </ButtonLink>
     </div>
   );

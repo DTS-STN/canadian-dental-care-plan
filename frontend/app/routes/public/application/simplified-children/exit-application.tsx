@@ -20,9 +20,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-simplified-child', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSimplifiedChild', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.simplifiedChild.exitApplication,
-  pageTitleI18nKey: 'application-simplified-child:exitApplication.pageTitle',
+  pageTitleI18nKey: 'applicationSimplifiedChild:exitApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -32,7 +32,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['simplified-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-child:exitApplication.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSimplifiedChild:exitApplication.pageTitle') }) };
   return { meta };
 }
 
@@ -49,7 +49,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearPublicApplicationState({ params, session });
 
-  return redirect(t('application-simplified-child:exitApplication.exitLink'));
+  return redirect(t('applicationSimplifiedChild:exitApplication.exitLink'));
 }
 
 export default function RenewChildrenExitApplication({ loaderData, params }: Route.ComponentProps) {
@@ -61,8 +61,8 @@ export default function RenewChildrenExitApplication({ loaderData, params }: Rou
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('application-simplified-child:exitApplication.areYouSure')}</p>
-        <p>{t('application-simplified-child:exitApplication.clickBack')}</p>
+        <p>{t('applicationSimplifiedChild:exitApplication.areYouSure')}</p>
+        <p>{t('applicationSimplifiedChild:exitApplication.clickBack')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -75,10 +75,10 @@ export default function RenewChildrenExitApplication({ loaderData, params }: Rou
           startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Back - Exiting the application click"
         >
-          {t('application-simplified-child:exitApplication.backBtn')}
+          {t('applicationSimplifiedChild:exitApplication.backBtn')}
         </ButtonLink>
         <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Exit - Exiting the application click">
-          {t('application-simplified-child:exitApplication.exitBtn')}
+          {t('applicationSimplifiedChild:exitApplication.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

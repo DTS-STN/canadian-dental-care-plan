@@ -13,9 +13,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('unable-to-process-request', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('unableToProcessRequest', 'gcweb'),
   pageIdentifier: pageIds.protected.unableToProcessRequest,
-  pageTitleI18nKey: 'unable-to-process-request:pageTitle',
+  pageTitleI18nKey: 'unableToProcessRequest:pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -25,7 +25,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   await securityHandler.validateAuthSession({ request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('unable-to-process-request:pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('unableToProcessRequest:pageTitle') }) };
 
   const idToken: IdToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.renew.unable-to-process-request', { userId: idToken.sub });
@@ -37,30 +37,30 @@ export default function ProtectedUnableToProcessRequest({ loaderData, params }: 
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const noWrap = <span className="whitespace-nowrap" />;
-  const eServiceCanadaLink = <InlineLink to={t('unable-to-process-request:eServiceCanadaLink')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('unable-to-process-request:cdcpLink')} className="external-link" newTabIndicator target="_blank" />;
+  const eServiceCanadaLink = <InlineLink to={t('unableToProcessRequest:eServiceCanadaLink')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('unableToProcessRequest:cdcpLink')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose">
       <div className="space-y-4">
-        <p>{t('unable-to-process-request:unableToProcess')}</p>
-        <p>{t('unable-to-process-request:tryAgain')}</p>
+        <p>{t('unableToProcessRequest:unableToProcess')}</p>
+        <p>{t('unableToProcessRequest:tryAgain')}</p>
         <ul className="list-disc space-y-1 pl-7">
-          <li>{t('unable-to-process-request:disableVpn')}</li>
-          <li>{t('unable-to-process-request:anotherDevice')}</li>
+          <li>{t('unableToProcessRequest:disableVpn')}</li>
+          <li>{t('unableToProcessRequest:anotherDevice')}</li>
         </ul>
-        <p>{t('unable-to-process-request:difficulties')}</p>
+        <p>{t('unableToProcessRequest:difficulties')}</p>
         <ul className="list-disc space-y-1 pl-7">
           <li>
-            <Trans ns={handle.i18nNamespaces} i18nKey="unable-to-process-request:callCentre" components={{ noWrap }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey="unableToProcessRequest:callCentre" components={{ noWrap }} />
           </li>
-          <li>{t('unable-to-process-request:visitCentre')}</li>
+          <li>{t('unableToProcessRequest:visitCentre')}</li>
           <li>
-            <Trans ns={handle.i18nNamespaces} i18nKey="unable-to-process-request:submitRequest" components={{ eServiceCanadaLink }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey="unableToProcessRequest:submitRequest" components={{ eServiceCanadaLink }} />
           </li>
         </ul>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="unable-to-process-request:returnCdcp" components={{ cdcpLink }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="unableToProcessRequest:returnCdcp" components={{ cdcpLink }} />
         </p>
       </div>
     </div>
