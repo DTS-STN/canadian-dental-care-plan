@@ -212,7 +212,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
                 {defaultState.newOrReturningMember.isNewOrReturningMember === false ? (
                   <DefinitionList layout="single-column">
                     <DefinitionListItem term={t('application:your-application.previously-enrolled')}>
-                      <p>{t('application:your-application.non')}</p>
+                      <p>{t('application:your-application.no')}</p>
                     </DefinitionListItem>
                   </DefinitionList>
                 ) : (

@@ -184,7 +184,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
                 {defaultState.newOrReturningMember.isNewOrReturningMember === false ? (
                   <DefinitionList layout="single-column">
                     <DefinitionListItem term={t('protected-application:your-application.previously-enrolled')}>
-                      <p>{t('protected-application:your-application.non')}</p>
+                      <p>{t('protected-application:your-application.no')}</p>
                     </DefinitionListItem>
                   </DefinitionList>
                 ) : (
