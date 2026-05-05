@@ -22,6 +22,17 @@ const config: Config = {
   // prettier-plugin-tailwindcss options
   // @see https://github.com/tailwindlabs/prettier-plugin-tailwindcss#options
   tailwindFunctions: ['clsx', 'cn', 'cva'],
+  overrides: [
+    // Override for localization files to preserve the formatting of the text content
+    {
+      files: 'app/.server/locales/**/*.ts',
+      options: {
+        singleQuote: false,
+        quoteProps: 'preserve',
+        printWidth: Number.POSITIVE_INFINITY,
+      },
+    },
+  ],
 };
 
 export default config;
