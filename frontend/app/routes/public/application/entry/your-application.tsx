@@ -205,29 +205,23 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             <CardAction>{sections.newOrReturningMember?.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
-            {defaultState.newOrReturningMember?.isNewOrReturningMember === undefined ? (
+            {defaultState.newOrReturningMember === undefined ? (
               <p>{t('application:yourApplication.newOrReturningDescription')}</p>
             ) : (
-              <>
-                {defaultState.newOrReturningMember.isNewOrReturningMember === false ? (
-                  <DefinitionList layout="single-column">
-                    <DefinitionListItem term={t('application:yourApplication.previouslyEnrolled')}>
-                      <p>{t('application:yourApplication.no')}</p>
-                    </DefinitionListItem>
-                  </DefinitionList>
-                ) : (
-                  <DefinitionList layout="single-column">
-                    <DefinitionListItem term={t('application:yourApplication.previouslyEnrolled')}>
-                      <p>{t('application:yourApplication.yes')}</p>
-                      <ul className="list-disc">
-                        <li className="ml-8">{defaultState.newOrReturningMember.memberId}</li>
+              <DefinitionList layout="single-column">
+                <DefinitionListItem term={t('application:yourApplication.previouslyEnrolled')}>
+                  {defaultState.newOrReturningMember.isNewOrReturningMember === true ? (
+                    <>
+                      <p className="mb-4">{t('application:yourApplication.yes')}</p>
+                      <ul className="list-disc space-y-1 pl-7">
+                        <li>{defaultState.newOrReturningMember.memberId}</li>
                       </ul>
-                    </DefinitionListItem>
-                    <DefinitionListItem term={t('application:yourApplication.fullName')}>{`${defaultState.personalInformation?.firstName} ${defaultState.personalInformation?.lastName}`}</DefinitionListItem>
-                    <DefinitionListItem term={t('application:yourApplication.dateOfBirth')}>{formattedDate}</DefinitionListItem>
-                  </DefinitionList>
-                )}
-              </>
+                    </>
+                  ) : (
+                    <p>{t('application:yourApplication.no')}</p>
+                  )}
+                </DefinitionListItem>
+              </DefinitionList>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
