@@ -26,9 +26,9 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-intake-family', 'protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationIntakeFamily', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.intakeFamily.confirmation,
-  pageTitleI18nKey: 'protected-application-intake-family:confirm.pageTitle',
+  pageTitleI18nKey: 'protectedApplicationIntakeFamily:confirm.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -155,7 +155,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     }),
   );
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-intake-family:confirm.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationIntakeFamily:confirm.pageTitle') }) };
 
   return {
     dentalInsurance,
@@ -195,7 +195,7 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const mscaLinkAccount = <InlineLink to={t('confirm.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('protected-application-intake-family:confirm.statusCheckerLink')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('protectedApplicationIntakeFamily:confirm.statusCheckerLink')} className="external-link" newTabIndicator target="_blank" />;
   const { currentLanguage } = useCurrentLanguage();
 
   return (
@@ -367,8 +367,8 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
               <DefinitionListItem term={t('confirm.dentalPublic')}>
                 {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
                   <div className="space-y-3">
-                    <p>{t('protected-application-intake-family:confirm.yes')}</p>
-                    <p>{t('protected-application-intake-family:confirm.dentalBenefitHasAccess')}</p>
+                    <p>{t('protectedApplicationIntakeFamily:confirm.yes')}</p>
+                    <p>{t('protectedApplicationIntakeFamily:confirm.dentalBenefitHasAccess')}</p>
                     <ul className="list-disc space-y-1 pl-7">
                       {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
                       {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
@@ -389,33 +389,33 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
               <section key={child.id} className="space-y-10">
                 <h2 className="font-lato text-3xl font-bold">{child.firstName}</h2>
                 <div>
-                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('protected-application-intake-family:confirm.pageSubTitle', { child: child.firstName })}</h3>
+                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('protectedApplicationIntakeFamily:confirm.pageSubTitle', { child: child.firstName })}</h3>
                   <DefinitionList border>
                     <DefinitionListItem term={t('confirm.memberId')}>{child.memberId}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-intake-family:confirm.fullName')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-intake-family:confirm.dob')}>{dateOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-intake-family:confirm.sin')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-intake-family:confirm.isParent')}>{child.isParent ? t('protected-application-intake-family:confirm.yes') : t('protected-application-intake-family:confirm.no')}</DefinitionListItem>
+                    <DefinitionListItem term={t('protectedApplicationIntakeFamily:confirm.fullName')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
+                    <DefinitionListItem term={t('protectedApplicationIntakeFamily:confirm.dob')}>{dateOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t('protectedApplicationIntakeFamily:confirm.sin')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
+                    <DefinitionListItem term={t('protectedApplicationIntakeFamily:confirm.isParent')}>{child.isParent ? t('protectedApplicationIntakeFamily:confirm.yes') : t('protectedApplicationIntakeFamily:confirm.no')}</DefinitionListItem>
                   </DefinitionList>
                 </div>
                 <div>
-                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('protected-application-intake-family:confirm.dentalTitle', { child: child.firstName })}</h3>
+                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('protectedApplicationIntakeFamily:confirm.dentalTitle', { child: child.firstName })}</h3>
                   <DefinitionList border>
-                    <DefinitionListItem term={t('protected-application-intake-family:confirm.dentalPrivate')}>
-                      {child.dentalInsurance.accessToDentalInsurance ? t('protected-application-intake-family:confirm.yes') : t('protected-application-intake-family:confirm.no')}
+                    <DefinitionListItem term={t('protectedApplicationIntakeFamily:confirm.dentalPrivate')}>
+                      {child.dentalInsurance.accessToDentalInsurance ? t('protectedApplicationIntakeFamily:confirm.yes') : t('protectedApplicationIntakeFamily:confirm.no')}
                     </DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-intake-family:confirm.dentalPublic')}>
+                    <DefinitionListItem term={t('protectedApplicationIntakeFamily:confirm.dentalPublic')}>
                       {child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access ? (
                         <div className="space-y-3">
-                          <p>{t('protected-application-intake-family:confirm.yes')}</p>
-                          <p>{t('protected-application-intake-family:confirm.dentalBenefitHasAccess')}</p>
+                          <p>{t('protectedApplicationIntakeFamily:confirm.yes')}</p>
+                          <p>{t('protectedApplicationIntakeFamily:confirm.dentalBenefitHasAccess')}</p>
                           <ul className="list-disc space-y-1 pl-7">
                             {child.dentalInsurance.federalBenefit.access && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
                             {child.dentalInsurance.provTerrBenefit.access && <li>{child.dentalInsurance.provTerrBenefit.benefit}</li>}
                           </ul>
                         </div>
                       ) : (
-                        <>{t('protected-application-intake-family:confirm.no')}</>
+                        <>{t('protectedApplicationIntakeFamily:confirm.no')}</>
                       )}
                     </DefinitionListItem>
                   </DefinitionList>
@@ -442,24 +442,24 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
       </div>
       <Dialog>
         <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Exit - Application successfully submitted click" asChild>
-          <Button variant="secondary">{t('protected-application-intake-family:confirm.closeApplication')}</Button>
+          <Button variant="secondary">{t('protectedApplicationIntakeFamily:confirm.closeApplication')}</Button>
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{t('protected-application-intake-family:confirm.modal.header')}</DialogTitle>
+            <DialogTitle>{t('protectedApplicationIntakeFamily:confirm.modal.header')}</DialogTitle>
           </DialogHeader>
-          <p>{t('protected-application-intake-family:confirm.modal.info')}</p>
-          <p>{t('protected-application-intake-family:confirm.modal.areYouSure')}</p>
+          <p>{t('protectedApplicationIntakeFamily:confirm.modal.info')}</p>
+          <p>{t('protectedApplicationIntakeFamily:confirm.modal.areYouSure')}</p>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Back exit modal - Application successfully submitted click">
-                {t('protected-application-intake-family:confirm.modal.backBtn')}
+                {t('protectedApplicationIntakeFamily:confirm.modal.backBtn')}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
               <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => removeApplicationFlowStorageValue()} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Close confirm modal click">
-                {t('protected-application-intake-family:confirm.modal.closeBtn')}
+                {t('protectedApplicationIntakeFamily:confirm.modal.closeBtn')}
               </Button>
             </fetcher.Form>
           </DialogFooter>

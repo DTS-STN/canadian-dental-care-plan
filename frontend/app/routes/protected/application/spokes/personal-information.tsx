@@ -32,9 +32,9 @@ import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils'
 import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.personalInformation,
-  pageTitleI18nKey: 'protected-application-spokes:personalInformation.pageTitle',
+  pageTitleI18nKey: 'protectedApplicationSpokes:personalInformation.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateProtectedApplicationContext(state, params, 'intake');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:personalInformation.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:personalInformation.pageTitle') }) };
 
   return {
     state: state.applicantInformation,
@@ -72,39 +72,39 @@ export async function action({ context: { appContainer, session }, params, reque
       socialInsuranceNumber: z
         .string()
         .trim()
-        .min(1, t('protected-application-spokes:personalInformation.errorMessage.sinRequired'))
+        .min(1, t('protectedApplicationSpokes:personalInformation.errorMessage.sinRequired'))
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
-            ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:personalInformation.errorMessage.sinValid') });
+            ctx.addIssue({ code: 'custom', message: t('protectedApplicationSpokes:personalInformation.errorMessage.sinValid') });
           } else if (
             [state.partnerInformation?.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
               .filter((sin) => sin !== undefined)
               .map((sin) => formatSin(sin))
               .includes(formatSin(sin))
           ) {
-            ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:personalInformation.errorMessage.sinUnique') });
+            ctx.addIssue({ code: 'custom', message: t('protectedApplicationSpokes:personalInformation.errorMessage.sinUnique') });
           }
         }),
       firstName: z
         .string()
         .trim()
-        .min(1, t('protected-application-spokes:personalInformation.errorMessage.firstNameRequired'))
+        .min(1, t('protectedApplicationSpokes:personalInformation.errorMessage.firstNameRequired'))
         .max(100)
-        .refine(isAllValidInputCharacters, t('protected-application-spokes:personalInformation.errorMessage.charactersValid'))
-        .refine((firstName) => !hasDigits(firstName), t('protected-application-spokes:personalInformation.errorMessage.firstNameNoDigits')),
+        .refine(isAllValidInputCharacters, t('protectedApplicationSpokes:personalInformation.errorMessage.charactersValid'))
+        .refine((firstName) => !hasDigits(firstName), t('protectedApplicationSpokes:personalInformation.errorMessage.firstNameNoDigits')),
       lastName: z
         .string()
         .trim()
-        .min(1, t('protected-application-spokes:personalInformation.errorMessage.lastNameRequired'))
+        .min(1, t('protectedApplicationSpokes:personalInformation.errorMessage.lastNameRequired'))
         .max(100)
-        .refine(isAllValidInputCharacters, t('protected-application-spokes:personalInformation.errorMessage.charactersValid'))
-        .refine((lastName) => !hasDigits(lastName), t('protected-application-spokes:personalInformation.errorMessage.lastNameNoDigits')),
+        .refine(isAllValidInputCharacters, t('protectedApplicationSpokes:personalInformation.errorMessage.charactersValid'))
+        .refine((lastName) => !hasDigits(lastName), t('protectedApplicationSpokes:personalInformation.errorMessage.lastNameNoDigits')),
       dateOfBirthYear: z.number({
-        error: (issue) => (issue.input === undefined ? t('protected-application-spokes:personalInformation.errorMessage.dateOfBirthYearRequired') : t('protected-application-spokes:personalInformation.errorMessage.dateOfBirthYearNumber')),
+        error: (issue) => (issue.input === undefined ? t('protectedApplicationSpokes:personalInformation.errorMessage.dateOfBirthYearRequired') : t('protectedApplicationSpokes:personalInformation.errorMessage.dateOfBirthYearNumber')),
       }),
-      dateOfBirthMonth: z.number({ error: (issue) => (issue.input === undefined ? t('protected-application-spokes:personalInformation.errorMessage.dateOfBirthMonthRequired') : undefined) }),
+      dateOfBirthMonth: z.number({ error: (issue) => (issue.input === undefined ? t('protectedApplicationSpokes:personalInformation.errorMessage.dateOfBirthMonthRequired') : undefined) }),
       dateOfBirthDay: z.number({
-        error: (issue) => (issue.input === undefined ? t('protected-application-spokes:personalInformation.errorMessage.dateOfBirthDayRequired') : t('protected-application-spokes:personalInformation.errorMessage.dateOfBirthDayNumber')),
+        error: (issue) => (issue.input === undefined ? t('protectedApplicationSpokes:personalInformation.errorMessage.dateOfBirthDayRequired') : t('protectedApplicationSpokes:personalInformation.errorMessage.dateOfBirthDayNumber')),
       }),
       dateOfBirth: z.string(),
     })
@@ -114,11 +114,11 @@ export async function action({ context: { appContainer, session }, params, reque
       const dateOfBirth = `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`;
 
       if (!isValidDateString(dateOfBirth)) {
-        ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:personalInformation.errorMessage.dateOfBirthValid'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: 'custom', message: t('protectedApplicationSpokes:personalInformation.errorMessage.dateOfBirthValid'), path: ['dateOfBirth'] });
       } else if (!isPastDateString(dateOfBirth)) {
-        ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:personalInformation.errorMessage.dateOfBirthIsPast'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: 'custom', message: t('protectedApplicationSpokes:personalInformation.errorMessage.dateOfBirthIsPast'), path: ['dateOfBirth'] });
       } else if (getAgeFromDateString(dateOfBirth) > 150) {
-        ctx.addIssue({ code: 'custom', message: t('protected-application-spokes:personalInformation.errorMessage.dateOfBirthIsPastValid'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: 'custom', message: t('protectedApplicationSpokes:personalInformation.errorMessage.dateOfBirthIsPastValid'), path: ['dateOfBirth'] });
       }
     })
     .transform((val) => {
@@ -189,19 +189,19 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
   return (
     <div className="max-w-prose">
       <ErrorAlert>
-        <h2 className="mb-2 font-bold">{t('protected-application-spokes:personalInformation.errorMessage.alert.heading')}</h2>
+        <h2 className="mb-2 font-bold">{t('protectedApplicationSpokes:personalInformation.errorMessage.alert.heading')}</h2>
         <p className="mb-2">
-          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:personalInformation.errorMessage.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplicationSpokes:personalInformation.errorMessage.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
         </p>
         <p className="mb-2">
-          <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:personalInformation.errorMessage.alert.applyDate" values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplicationSpokes:personalInformation.errorMessage.alert.applyDate" values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
         </p>
       </ErrorAlert>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
-        <p className="mb-4">{t('protected-application-spokes:personalInformation.formInstructionsSin')}</p>
-        <p className="mb-6">{t('protected-application-spokes:personalInformation.formInstructionsInfo')}</p>
-        <p className="mb-4 italic">{t('protected-application:requiredLabel')}</p>
+        <p className="mb-4">{t('protectedApplicationSpokes:personalInformation.formInstructionsSin')}</p>
+        <p className="mb-6">{t('protectedApplicationSpokes:personalInformation.formInstructionsInfo')}</p>
+        <p className="mb-4 italic">{t('protectedApplication:requiredLabel')}</p>
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
@@ -209,10 +209,10 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               <InputSanitizeField
                 id="first-name"
                 name="firstName"
-                label={t('protected-application-spokes:personalInformation.firstName')}
+                label={t('protectedApplicationSpokes:personalInformation.firstName')}
                 className="w-full"
                 maxLength={100}
-                aria-description={t('protected-application-spokes:personalInformation.nameInstructions')}
+                aria-description={t('protectedApplicationSpokes:personalInformation.nameInstructions')}
                 autoComplete="given-name"
                 defaultValue={state?.firstName ?? ''}
                 errorMessage={errors?.firstName}
@@ -221,26 +221,26 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               <InputSanitizeField
                 id="last-name"
                 name="lastName"
-                label={t('protected-application-spokes:personalInformation.lastName')}
+                label={t('protectedApplicationSpokes:personalInformation.lastName')}
                 className="w-full"
                 maxLength={100}
-                aria-description={t('protected-application-spokes:personalInformation.nameInstructions')}
+                aria-description={t('protectedApplicationSpokes:personalInformation.nameInstructions')}
                 autoComplete="family-name"
                 defaultValue={state?.lastName ?? ''}
                 errorMessage={errors?.lastName}
                 required
               />
             </div>
-            <Collapsible id="name-instructions" summary={t('protected-application-spokes:personalInformation.singleLegalName')}>
+            <Collapsible id="name-instructions" summary={t('protectedApplicationSpokes:personalInformation.singleLegalName')}>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:personalInformation.nameInstructions" />
+                <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplicationSpokes:personalInformation.nameInstructions" />
               </p>
             </Collapsible>
             <DatePickerField
               id="date-of-birth"
               names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
               defaultValue={state?.dateOfBirth ?? ''}
-              legend={t('protected-application-spokes:personalInformation.dob')}
+              legend={t('protectedApplicationSpokes:personalInformation.dob')}
               errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
               required
             />
@@ -248,9 +248,9 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               id="social-insurance-number"
               name="socialInsuranceNumber"
               format={sinInputPatternFormat}
-              label={t('protected-application-spokes:personalInformation.sin')}
+              label={t('protectedApplicationSpokes:personalInformation.sin')}
               inputMode="numeric"
-              helpMessagePrimary={t('protected-application-spokes:personalInformation.helpMessage.sin')}
+              helpMessagePrimary={t('protectedApplicationSpokes:personalInformation.helpMessage.sin')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={state?.socialInsuranceNumber ?? ''}
               errorMessage={errors?.socialInsuranceNumber}
@@ -259,7 +259,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Applicant information click">
-              {t('protected-application-spokes:personalInformation.saveBtn')}
+              {t('protectedApplicationSpokes:personalInformation.saveBtn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -269,7 +269,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Applicant information click"
             >
-              {t('protected-application-spokes:personalInformation.backBtn')}
+              {t('protectedApplicationSpokes:personalInformation.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

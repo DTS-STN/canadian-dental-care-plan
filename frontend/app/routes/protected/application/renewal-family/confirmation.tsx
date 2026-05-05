@@ -39,9 +39,9 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-renewal-family', 'protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationRenewalFamily', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.renewalFamily.confirmation,
-  pageTitleI18nKey: 'protected-application-renewal-family:confirm.pageTitle',
+  pageTitleI18nKey: 'protectedApplicationRenewalFamily:confirm.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -180,7 +180,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     }),
   );
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-renewal-family:confirm.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationRenewalFamily:confirm.pageTitle') }) };
 
   const eligibility = getEligibilityStatus({
     hasPrivateDentalInsurance: state.dentalInsurance.hasDentalInsurance,
@@ -227,7 +227,7 @@ export default function ProtectedRenewalFamilyConfirmation({ loaderData, params 
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const mscaLinkAccount = <InlineLink to={t('confirm.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('protected-application-renewal-family:confirm.mscaLinkChecker')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('protectedApplicationRenewalFamily:confirm.mscaLinkChecker')} className="external-link" newTabIndicator target="_blank" />;
 
   const { currentLanguage } = useCurrentLanguage();
 
@@ -417,8 +417,8 @@ export default function ProtectedRenewalFamilyConfirmation({ loaderData, params 
               <DefinitionListItem term={t('confirm.dentalPublic')}>
                 {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
                   <div className="space-y-3">
-                    <p>{t('protected-application-renewal-family:confirm.yes')}</p>
-                    <p>{t('protected-application-renewal-family:confirm.dentalBenefitHasAccess')}</p>
+                    <p>{t('protectedApplicationRenewalFamily:confirm.yes')}</p>
+                    <p>{t('protectedApplicationRenewalFamily:confirm.dentalBenefitHasAccess')}</p>
                     <ul className="list-disc space-y-1 pl-7">
                       {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
                       {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
@@ -439,33 +439,33 @@ export default function ProtectedRenewalFamilyConfirmation({ loaderData, params 
               <section key={child.id} className="space-y-10">
                 <h2 className="font-lato text-3xl font-bold">{child.firstName}</h2>
                 <div>
-                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('protected-application-renewal-family:confirm.pageSubTitle', { child: child.firstName })}</h3>
+                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('protectedApplicationRenewalFamily:confirm.pageSubTitle', { child: child.firstName })}</h3>
                   <DefinitionList border>
                     <DefinitionListItem term={t('confirm.memberId')}>{child.memberId}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-renewal-family:confirm.fullName')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-renewal-family:confirm.dob')}>{dateOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-renewal-family:confirm.sin')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-renewal-family:confirm.isParent')}>{child.isParent ? t('protected-application-renewal-family:confirm.yes') : t('protected-application-renewal-family:confirm.no')}</DefinitionListItem>
+                    <DefinitionListItem term={t('protectedApplicationRenewalFamily:confirm.fullName')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
+                    <DefinitionListItem term={t('protectedApplicationRenewalFamily:confirm.dob')}>{dateOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t('protectedApplicationRenewalFamily:confirm.sin')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
+                    <DefinitionListItem term={t('protectedApplicationRenewalFamily:confirm.isParent')}>{child.isParent ? t('protectedApplicationRenewalFamily:confirm.yes') : t('protectedApplicationRenewalFamily:confirm.no')}</DefinitionListItem>
                   </DefinitionList>
                 </div>
                 <div>
-                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('protected-application-renewal-family:confirm.dentalTitle', { child: child.firstName })}</h3>
+                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('protectedApplicationRenewalFamily:confirm.dentalTitle', { child: child.firstName })}</h3>
                   <DefinitionList border>
-                    <DefinitionListItem term={t('protected-application-renewal-family:confirm.dentalPrivate')}>
-                      {child.dentalInsurance.accessToDentalInsurance ? t('protected-application-renewal-family:confirm.yes') : t('protected-application-renewal-family:confirm.no')}
+                    <DefinitionListItem term={t('protectedApplicationRenewalFamily:confirm.dentalPrivate')}>
+                      {child.dentalInsurance.accessToDentalInsurance ? t('protectedApplicationRenewalFamily:confirm.yes') : t('protectedApplicationRenewalFamily:confirm.no')}
                     </DefinitionListItem>
-                    <DefinitionListItem term={t('protected-application-renewal-family:confirm.dentalPublic')}>
+                    <DefinitionListItem term={t('protectedApplicationRenewalFamily:confirm.dentalPublic')}>
                       {child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access ? (
                         <div className="space-y-3">
-                          <p>{t('protected-application-renewal-family:confirm.yes')}</p>
-                          <p>{t('protected-application-renewal-family:confirm.dentalBenefitHasAccess')}</p>
+                          <p>{t('protectedApplicationRenewalFamily:confirm.yes')}</p>
+                          <p>{t('protectedApplicationRenewalFamily:confirm.dentalBenefitHasAccess')}</p>
                           <ul className="list-disc space-y-1 pl-7">
                             {child.dentalInsurance.federalBenefit.access && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
                             {child.dentalInsurance.provTerrBenefit.access && <li>{child.dentalInsurance.provTerrBenefit.benefit}</li>}
                           </ul>
                         </div>
                       ) : (
-                        <>{t('protected-application-renewal-family:confirm.no')}</>
+                        <>{t('protectedApplicationRenewalFamily:confirm.no')}</>
                       )}
                     </DefinitionListItem>
                   </DefinitionList>
@@ -492,24 +492,24 @@ export default function ProtectedRenewalFamilyConfirmation({ loaderData, params 
       </div>
       <Dialog>
         <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Exit - Application successfully submitted click" asChild>
-          <Button variant="secondary">{t('protected-application-renewal-family:confirm.closeApplication')}</Button>
+          <Button variant="secondary">{t('protectedApplicationRenewalFamily:confirm.closeApplication')}</Button>
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{t('protected-application-renewal-family:confirm.modal.header')}</DialogTitle>
+            <DialogTitle>{t('protectedApplicationRenewalFamily:confirm.modal.header')}</DialogTitle>
           </DialogHeader>
-          <p>{t('protected-application-renewal-family:confirm.modal.info')}</p>
-          <p>{t('protected-application-renewal-family:confirm.modal.areYouSure')}</p>
+          <p>{t('protectedApplicationRenewalFamily:confirm.modal.info')}</p>
+          <p>{t('protectedApplicationRenewalFamily:confirm.modal.areYouSure')}</p>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Back exit modal - Application successfully submitted click">
-                {t('protected-application-renewal-family:confirm.modal.backBtn')}
+                {t('protectedApplicationRenewalFamily:confirm.modal.backBtn')}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
               <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => removeApplicationFlowStorageValue()} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Close confirm modal click">
-                {t('protected-application-renewal-family:confirm.modal.closeBtn')}
+                {t('protectedApplicationRenewalFamily:confirm.modal.closeBtn')}
               </Button>
             </fetcher.Form>
           </DialogFooter>

@@ -26,9 +26,9 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-full-adult', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationFullAdult', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.fullAdult.confirmation,
-  pageTitleI18nKey: 'application-full-adult:confirm.pageTitle',
+  pageTitleI18nKey: 'applicationFullAdult:confirm.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -113,7 +113,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     selectedProvincialBenefits: selectedProvincialBenefits?.name,
   };
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-full-adult:confirm.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationFullAdult:confirm.pageTitle') }) };
 
   return {
     context: state.context,
@@ -151,7 +151,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const mscaLinkAccount = <InlineLink to={t('confirm.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('application-full-adult:confirm.statusCheckerLink')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('applicationFullAdult:confirm.statusCheckerLink')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose space-y-10">
@@ -323,8 +323,8 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
               <DefinitionListItem term={t('confirm.dentalPublic')}>
                 {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
                   <div className="space-y-3">
-                    <p>{t('application-full-adult:confirm.yes')}</p>
-                    <p>{t('application-full-adult:confirm.dentalBenefitHasAccess')}</p>
+                    <p>{t('applicationFullAdult:confirm.yes')}</p>
+                    <p>{t('applicationFullAdult:confirm.dentalBenefitHasAccess')}</p>
                     <ul className="list-disc space-y-1 pl-7">
                       {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
                       {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
@@ -355,18 +355,18 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
       </div>
       <Dialog>
         <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Exit - Application successfully submitted click" asChild>
-          <Button variant="secondary">{t('application-full-adult:confirm.closeApplication')}</Button>
+          <Button variant="secondary">{t('applicationFullAdult:confirm.closeApplication')}</Button>
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{t('application-full-adult:confirm.modal.header')}</DialogTitle>
+            <DialogTitle>{t('applicationFullAdult:confirm.modal.header')}</DialogTitle>
           </DialogHeader>
-          <p>{t('application-full-adult:confirm.modal.info')}</p>
-          <p>{t('application-full-adult:confirm.modal.areYouSure')}</p>
+          <p>{t('applicationFullAdult:confirm.modal.info')}</p>
+          <p>{t('applicationFullAdult:confirm.modal.areYouSure')}</p>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Back exit modal - Application successfully submitted click">
-                {t('application-full-adult:confirm.modal.backBtn')}
+                {t('applicationFullAdult:confirm.modal.backBtn')}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
@@ -378,7 +378,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
                 onClick={() => removeApplicationFlowStorageValue()}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Confirmation exit modal - Application successfully submitted click"
               >
-                {t('application-full-adult:confirm.modal.closeBtn')}
+                {t('applicationFullAdult:confirm.modal.closeBtn')}
               </Button>
             </fetcher.Form>
           </DialogFooter>

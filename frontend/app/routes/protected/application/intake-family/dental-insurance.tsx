@@ -22,9 +22,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application', 'protected-application-intake-family', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'protectedApplicationIntakeFamily', 'gcweb'),
   pageIdentifier: pageIds.protected.application.intakeFamily.dentalInsurance,
-  pageTitleI18nKey: 'protected-application-intake-family:dentalInsurance.pageHeading',
+  pageTitleI18nKey: 'protectedApplicationIntakeFamily:dentalInsurance.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -38,7 +38,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-intake-family:dentalInsurance.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationIntakeFamily:dentalInsurance.pageTitle') }) };
 
   const selectedFederalGovernmentInsurancePlan = state.dentalBenefits?.value?.federalSocialProgram
     ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale)
@@ -84,23 +84,23 @@ export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }
       <ProgressStepper activeStep="dentalInsurance" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('protected-application:completeAllSections')}</p>
+          <p>{t('protectedApplication:completeAllSections')}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protected-application-intake-family:dentalInsurance.accessToDentalInsurance')}</h2>
+              <h2>{t('protectedApplicationIntakeFamily:dentalInsurance.accessToDentalInsurance')}</h2>
             </CardTitle>
             <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.dentalInsurance === undefined ? (
-              <p>{t('protected-application-intake-family:dentalInsurance.dentalInsuranceIndicateStatus')}</p>
+              <p>{t('protectedApplicationIntakeFamily:dentalInsurance.dentalInsuranceIndicateStatus')}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('protected-application-intake-family:dentalInsurance.accessToDentalInsuranceOrCoverage')}>
-                  {state.dentalInsurance ? t('protected-application-intake-family:dentalInsurance.dentalInsuranceYes') : t('protected-application-intake-family:dentalInsurance.dentalInsuranceNo')}
+                <DefinitionListItem term={t('protectedApplicationIntakeFamily:dentalInsurance.accessToDentalInsuranceOrCoverage')}>
+                  {state.dentalInsurance ? t('protectedApplicationIntakeFamily:dentalInsurance.dentalInsuranceYes') : t('protectedApplicationIntakeFamily:dentalInsurance.dentalInsuranceNo')}
                 </DefinitionListItem>
               </DefinitionList>
             )}
@@ -116,12 +116,12 @@ export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }
               size="lg"
               aria-label={
                 state.dentalInsurance === undefined
-                  ? `${t('protected-application-intake-family:dentalInsurance.addAnswer')} - ${t('protected-application-intake-family:dentalInsurance.accessToDentalInsurance')}`
-                  : t('protected-application-intake-family:dentalInsurance.editAccessToDentalInsurance')
+                  ? `${t('protectedApplicationIntakeFamily:dentalInsurance.addAnswer')} - ${t('protectedApplicationIntakeFamily:dentalInsurance.accessToDentalInsurance')}`
+                  : t('protectedApplicationIntakeFamily:dentalInsurance.editAccessToDentalInsurance')
               }
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Edit insurance click"
             >
-              {state.dentalInsurance === undefined ? t('protected-application-intake-family:dentalInsurance.addAnswer') : t('protected-application-intake-family:dentalInsurance.editAccessToDentalInsurance')}
+              {state.dentalInsurance === undefined ? t('protectedApplicationIntakeFamily:dentalInsurance.addAnswer') : t('protectedApplicationIntakeFamily:dentalInsurance.editAccessToDentalInsurance')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -129,29 +129,29 @@ export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protected-application-intake-family:dentalInsurance.otherBenefits')}</h2>
+              <h2>{t('protectedApplicationIntakeFamily:dentalInsurance.otherBenefits')}</h2>
             </CardTitle>
             <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.dentalBenefits ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('protected-application-intake-family:dentalInsurance.accessToGovernmentBenefits')}>
+                <DefinitionListItem term={t('protectedApplicationIntakeFamily:dentalInsurance.accessToGovernmentBenefits')}>
                   {state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
                     <div className="space-y-3">
-                      <p>{t('protected-application-intake-family:dentalInsurance.accessToGovernmentBenefitsYes')}</p>
+                      <p>{t('protectedApplicationIntakeFamily:dentalInsurance.accessToGovernmentBenefitsYes')}</p>
                       <ul className="list-disc space-y-1 pl-7">
                         {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
                         {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
                       </ul>
                     </div>
                   ) : (
-                    <p>{t('protected-application-intake-family:dentalInsurance.accessToGovernmentBenefitsNo')}</p>
+                    <p>{t('protectedApplicationIntakeFamily:dentalInsurance.accessToGovernmentBenefitsNo')}</p>
                   )}
                 </DefinitionListItem>
               </DefinitionList>
             ) : (
-              <p>{t('protected-application-intake-family:dentalInsurance.dentalBenefitsIndicateStatus')}</p>
+              <p>{t('protectedApplicationIntakeFamily:dentalInsurance.dentalBenefitsIndicateStatus')}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -165,12 +165,12 @@ export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }
               size="lg"
               aria-label={
                 state.dentalBenefits === undefined
-                  ? `${t('protected-application-intake-family:dentalInsurance.addAnswer')} - ${t('protected-application-intake-family:dentalInsurance.otherBenefits')}`
-                  : t('protected-application-intake-family:dentalInsurance.editAccessToGovernmentBenefits')
+                  ? `${t('protectedApplicationIntakeFamily:dentalInsurance.addAnswer')} - ${t('protectedApplicationIntakeFamily:dentalInsurance.otherBenefits')}`
+                  : t('protectedApplicationIntakeFamily:dentalInsurance.editAccessToGovernmentBenefits')
               }
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Edit benefits click"
             >
-              {state.dentalBenefits === undefined ? t('protected-application-intake-family:dentalInsurance.addAnswer') : t('protected-application-intake-family:dentalInsurance.editAccessToGovernmentBenefits')}
+              {state.dentalBenefits === undefined ? t('protectedApplicationIntakeFamily:dentalInsurance.addAnswer') : t('protectedApplicationIntakeFamily:dentalInsurance.editAccessToGovernmentBenefits')}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -184,7 +184,7 @@ export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Continue click"
           >
-            {t('protected-application-intake-family:dentalInsurance.childrensApplication')}
+            {t('protectedApplicationIntakeFamily:dentalInsurance.childrensApplication')}
           </NavigationButtonLink>
           <NavigationButtonLink
             variant="secondary"
@@ -193,7 +193,7 @@ export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Back click"
           >
-            {t('protected-application-intake-family:dentalInsurance.contactInformation')}
+            {t('protectedApplicationIntakeFamily:dentalInsurance.contactInformation')}
           </NavigationButtonLink>
         </div>
       </div>

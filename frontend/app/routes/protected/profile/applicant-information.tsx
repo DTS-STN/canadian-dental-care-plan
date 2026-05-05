@@ -14,9 +14,9 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.applicantInformation,
-  pageTitleI18nKey: 'protected-profile:applicantInformation.pageTitle',
+  pageTitleI18nKey: 'protectedProfile:applicantInformation.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -27,7 +27,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protected-profile:applicantInformation.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protectedProfile:applicantInformation.pageTitle') }) };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   const primaryApplicant = {
@@ -64,14 +64,14 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
   return (
     <div className="max-w-prose space-y-10">
       <p>
-        <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:applicantInformation.formInstructions" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+        <Trans ns={handle.i18nNamespaces} i18nKey="protectedProfile:applicantInformation.formInstructions" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
       </p>
       <section className="space-y-6">
         <h2 className="font-lato text-2xl font-bold">{`${primaryApplicant.firstName} ${primaryApplicant.lastName}`}</h2>
         <DefinitionList border>
-          <DefinitionListItem term={t('protected-profile:applicantInformation.memberId')}>{primaryApplicant.id}</DefinitionListItem>
-          <DefinitionListItem term={t('protected-profile:applicantInformation.dob')}>{primaryApplicant.dob}</DefinitionListItem>
-          <DefinitionListItem term={t('protected-profile:applicantInformation.sin')}>{isValidSin(primaryApplicant.sin) ? formatSin(primaryApplicant.sin) : primaryApplicant.sin}</DefinitionListItem>
+          <DefinitionListItem term={t('protectedProfile:applicantInformation.memberId')}>{primaryApplicant.id}</DefinitionListItem>
+          <DefinitionListItem term={t('protectedProfile:applicantInformation.dob')}>{primaryApplicant.dob}</DefinitionListItem>
+          <DefinitionListItem term={t('protectedProfile:applicantInformation.sin')}>{isValidSin(primaryApplicant.sin) ? formatSin(primaryApplicant.sin) : primaryApplicant.sin}</DefinitionListItem>
         </DefinitionList>
       </section>
 
@@ -80,9 +80,9 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
           <section className="space-y-6" key={child.id}>
             <h2 className="font-lato text-2xl font-bold">{`${child.firstName} ${child.lastName}`}</h2>
             <DefinitionList border>
-              <DefinitionListItem term={t('protected-profile:applicantInformation.memberId')}>{child.id}</DefinitionListItem>
-              <DefinitionListItem term={t('protected-profile:applicantInformation.dob')}>{child.dob}</DefinitionListItem>
-              <DefinitionListItem term={t('protected-profile:applicantInformation.sin')}>{typeof child.sin === 'string' && isValidSin(child.sin) ? formatSin(child.sin) : child.sin}</DefinitionListItem>
+              <DefinitionListItem term={t('protectedProfile:applicantInformation.memberId')}>{child.id}</DefinitionListItem>
+              <DefinitionListItem term={t('protectedProfile:applicantInformation.dob')}>{child.dob}</DefinitionListItem>
+              <DefinitionListItem term={t('protectedProfile:applicantInformation.sin')}>{typeof child.sin === 'string' && isValidSin(child.sin) ? formatSin(child.sin) : child.sin}</DefinitionListItem>
             </DefinitionList>
           </section>
         );
@@ -94,7 +94,7 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
         to={t('gcweb:header.menuDashboardHref', { baseUri: SCCH_BASE_URI })}
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - Applicant information return button click"
       >
-        {t('protected-profile:applicantInformation.returnButton')}
+        {t('protectedProfile:applicantInformation.returnButton')}
       </ButtonLink>
     </div>
   );

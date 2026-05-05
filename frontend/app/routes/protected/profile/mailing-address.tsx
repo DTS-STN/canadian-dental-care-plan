@@ -40,10 +40,10 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'protected-profile:contactInformation.pageTitle', routeId: 'protected/profile/contact-information' }],
-  i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
+  breadcrumbs: [{ labelI18nKey: 'protectedProfile:contactInformation.pageTitle', routeId: 'protected/profile/contact-information' }],
+  i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.editMailingAddress,
-  pageTitleI18nKey: 'protected-profile:mailingAddress.pageTitle',
+  pageTitleI18nKey: 'protectedProfile:mailingAddress.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -59,7 +59,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryList = await appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protected-profile:mailingAddress.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protectedProfile:mailingAddress.pageTitle') }) };
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.mailing-address', { userId: idToken.sub });
@@ -273,18 +273,18 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
 
   const mailingRegions = useMemo<InputOptionProps[]>(() => mailingCountryRegions.map(({ id, name }) => ({ children: name, value: id })), [mailingCountryRegions]);
 
-  const dummyOption: InputOptionProps = { children: t('protected-profile:mailingAddress.selectOne'), value: '' };
+  const dummyOption: InputOptionProps = { children: t('protectedProfile:mailingAddress.selectOne'), value: '' };
 
   const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedMailingCountry);
 
   let postalCodeHelpMessage: string | undefined;
   switch (selectedMailingCountry) {
     case CANADA_COUNTRY_ID: {
-      postalCodeHelpMessage = t('protected-profile:mailingAddress.postalCodeHelp');
+      postalCodeHelpMessage = t('protectedProfile:mailingAddress.postalCodeHelp');
       break;
     }
     case USA_COUNTRY_ID: {
-      postalCodeHelpMessage = t('protected-profile:mailingAddress.postalCodeHelpUs');
+      postalCodeHelpMessage = t('protectedProfile:mailingAddress.postalCodeHelpUs');
       break;
     }
     default: {
@@ -295,7 +295,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('protected-profile:optionalLabel')}</p>
+      <p className="mb-4 italic">{t('protectedProfile:optionalLabel')}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -306,9 +306,9 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                 id="mailingAddress"
                 name="address"
                 className="w-full"
-                label={t('protected-profile:mailingAddress.address')}
+                label={t('protectedProfile:mailingAddress.address')}
                 maxLength={100}
-                helpMessagePrimary={t('protected-profile:mailingAddress.addressHelp')}
+                helpMessagePrimary={t('protectedProfile:mailingAddress.addressHelp')}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line1"
                 defaultValue={defaultState.address}
@@ -319,20 +319,20 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                 id="apartment"
                 name="apartment"
                 className="w-full"
-                label={t('protected-profile:mailingAddress.apartment')}
+                label={t('protectedProfile:mailingAddress.apartment')}
                 maxLength={100}
-                helpMessagePrimary={t('protected-profile:mailingAddress.apartmentHelp')}
+                helpMessagePrimary={t('protectedProfile:mailingAddress.apartmentHelp')}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line2"
                 defaultValue={defaultState.apartment}
                 errorMessage={errors?.apartment}
               />
-              <InputSanitizeField id="mailing-city" name="city" className="w-full" label={t('protected-profile:mailingAddress.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
+              <InputSanitizeField id="mailing-city" name="city" className="w-full" label={t('protectedProfile:mailingAddress.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
               <InputSanitizeField
                 id="mailing-postal-code"
                 name="postalZipCode"
                 className="w-full sm:w-1/2"
-                label={isPostalCodeRequired ? t('protected-profile:mailingAddress.postalCode') : t('protected-profile:mailingAddress.postalCodeOptional')}
+                label={isPostalCodeRequired ? t('protectedProfile:mailingAddress.postalCode') : t('protectedProfile:mailingAddress.postalCodeOptional')}
                 maxLength={100}
                 autoComplete="postal-code"
                 defaultValue={defaultState.postalCode}
@@ -346,7 +346,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                   id="mailing-province"
                   name="provinceStateId"
                   className="w-full sm:w-1/2"
-                  label={t('protected-profile:mailingAddress.province')}
+                  label={t('protectedProfile:mailingAddress.province')}
                   defaultValue={defaultState.province}
                   errorMessage={errors?.provinceStateId}
                   options={[dummyOption, ...mailingRegions]}
@@ -357,7 +357,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                 id="mailing-country"
                 name="countryId"
                 className="w-full sm:w-1/2"
-                label={t('protected-profile:mailingAddress.country')}
+                label={t('protectedProfile:mailingAddress.country')}
                 autoComplete="country"
                 defaultValue={defaultState.country}
                 errorMessage={errors?.countryId}
@@ -366,7 +366,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                 required
               />
               <InputCheckbox id="sync-addresses" name="syncAddresses" value="true" checked={copyAddressChecked} onChange={checkHandler}>
-                {t('protected-profile:mailingAddress.useMailingAddress')}
+                {t('protectedProfile:mailingAddress.useMailingAddress')}
               </InputCheckbox>
             </div>
           </fieldset>
@@ -383,7 +383,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                   loading={isSubmitting}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Mailing address click"
                 >
-                  {copyAddressChecked ? t('protected-profile:mailingAddress.saveBtn') : t('protected-profile:mailingAddress.continueBtn')}
+                  {copyAddressChecked ? t('protectedProfile:mailingAddress.saveBtn') : t('protectedProfile:mailingAddress.continueBtn')}
                 </LoadingButton>
               </DialogTrigger>
               {!isSubmitting && addressDialogContent && (
@@ -398,7 +398,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
               )}
             </Dialog>
             <ButtonLink variant="secondary" id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Mailing address click">
-              {t('protected-profile:mailingAddress.backBtn')}
+              {t('protectedProfile:mailingAddress.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

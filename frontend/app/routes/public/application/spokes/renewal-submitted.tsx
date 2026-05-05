@@ -19,9 +19,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.renewalSubmitted,
-  pageTitleI18nKey: 'application-spokes:renewalSubmitted.pageTitle',
+  pageTitleI18nKey: 'applicationSpokes:renewalSubmitted.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -30,7 +30,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   getPublicApplicationState({ params, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:renewalSubmitted.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:renewalSubmitted.pageTitle') }) };
 
   return { meta };
 }
@@ -46,7 +46,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearPublicApplicationState({ params, session });
 
-  return redirect(t('application-spokes:renewalSubmitted.exitBtnLink'));
+  return redirect(t('applicationSpokes:renewalSubmitted.exitBtnLink'));
 }
 
 export default function RenewalApplicationSubmitted({ loaderData, params }: Route.ComponentProps) {
@@ -57,17 +57,17 @@ export default function RenewalApplicationSubmitted({ loaderData, params }: Rout
 
   const noWrap = <span className="whitespace-nowrap" />;
   const statusCheckerLink = <InlineLink routeId="public/status/index" className="external-link" newTabIndicator target="_blank" params={params} />;
-  const mscaLinkAccount = <InlineLink to={t('application-spokes:renewalSubmitted.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
+  const mscaLinkAccount = <InlineLink to={t('applicationSpokes:renewalSubmitted.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose">
       <div className="mb-6 space-y-4">
-        <p>{t('application-spokes:renewalSubmitted.recordsShowApplicationSubmitted')}</p>
+        <p>{t('applicationSpokes:renewalSubmitted.recordsShowApplicationSubmitted')}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:renewalSubmitted.statusCheckerInfo" components={{ statusCheckerLink }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:renewalSubmitted.statusCheckerInfo" components={{ statusCheckerLink }} />
         </p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:renewalSubmitted.updateProfileInfo" components={{ mscaLinkAccount, noWrap }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:renewalSubmitted.updateProfileInfo" components={{ mscaLinkAccount, noWrap }} />
         </p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
@@ -80,10 +80,10 @@ export default function RenewalApplicationSubmitted({ loaderData, params }: Rout
           disabled={isSubmitting}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Renewal application submitted click"
         >
-          {t('application-spokes:renewalSubmitted.backBtn')}
+          {t('applicationSpokes:renewalSubmitted.backBtn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - Renewal application submitted click">
-          {t('application-spokes:renewalSubmitted.exitBtn')}
+          {t('applicationSpokes:renewalSubmitted.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

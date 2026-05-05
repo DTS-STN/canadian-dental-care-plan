@@ -33,9 +33,9 @@ import { formatSin } from '~/utils/sin-utils';
 const FORM_ACTION = { add: 'add', remove: 'remove' } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-intake-child', 'protected-application', 'gcweb', 'common'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationIntakeChild', 'protectedApplication', 'gcweb', 'common'),
   pageIdentifier: pageIds.protected.application.intakeChild.childApplication,
-  pageTitleI18nKey: 'protected-application-intake-child:childrensApplication.pageTitle',
+  pageTitleI18nKey: 'protectedApplicationIntakeChild:childrensApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-intake-child:childrensApplication.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationIntakeChild:childrensApplication.pageTitle') }) };
 
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
@@ -165,29 +165,29 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
 
           return (
             <div key={child.id}>
-              <h2 className="font-lato mb-4 text-2xl font-bold">{t('protected-application-intake-child:childrensApplication.childTitle', { childNumber: index + 1 })}</h2>
+              <h2 className="font-lato mb-4 text-2xl font-bold">{t('protectedApplicationIntakeChild:childrensApplication.childTitle', { childNumber: index + 1 })}</h2>
               <div className="space-y-4">
-                <p>{t('protected-application:completeAllSections')}</p>
+                <p>{t('protectedApplication:completeAllSections')}</p>
                 <p>{t('common:sectionsCompleted', { number: sectionCompletedCount, count: sectionsCount })}</p>
               </div>
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle asChild>
-                    <h2>{t('protected-application-intake-child:childrensApplication.childInformationCardTitle', { childNumber: index + 1 })}</h2>
+                    <h2>{t('protectedApplicationIntakeChild:childrensApplication.childInformationCardTitle', { childNumber: index + 1 })}</h2>
                   </CardTitle>
                   <CardAction>{sections.childInformation.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.information === undefined ? (
-                    <p>{t('protected-application-intake-child:childrensApplication.childInformationIndicateStatus')}</p>
+                    <p>{t('protectedApplicationIntakeChild:childrensApplication.childInformationIndicateStatus')}</p>
                   ) : (
                     <DefinitionList layout="single-column">
-                      {child.information.memberId && <DefinitionListItem term={t('protected-application-intake-child:childrensApplication.memberIdTitle')}>{child.information.memberId}</DefinitionListItem>}
-                      <DefinitionListItem term={t('protected-application-intake-child:childrensApplication.fullNameTitle')}>{childName}</DefinitionListItem>
-                      <DefinitionListItem term={t('protected-application-intake-child:childrensApplication.dobTitle')}>{dateOfBirth}</DefinitionListItem>
-                      <DefinitionListItem term={t('protected-application-intake-child:childrensApplication.sinTitle')}>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</DefinitionListItem>
-                      <DefinitionListItem term={t('protected-application-intake-child:childrensApplication.parentGuardianTitle')}>
-                        {child.information.isParent ? t('protected-application-intake-child:childrensApplication.yes') : t('protected-application-intake-child:childrensApplication.no')}
+                      {child.information.memberId && <DefinitionListItem term={t('protectedApplicationIntakeChild:childrensApplication.memberIdTitle')}>{child.information.memberId}</DefinitionListItem>}
+                      <DefinitionListItem term={t('protectedApplicationIntakeChild:childrensApplication.fullNameTitle')}>{childName}</DefinitionListItem>
+                      <DefinitionListItem term={t('protectedApplicationIntakeChild:childrensApplication.dobTitle')}>{dateOfBirth}</DefinitionListItem>
+                      <DefinitionListItem term={t('protectedApplicationIntakeChild:childrensApplication.sinTitle')}>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</DefinitionListItem>
+                      <DefinitionListItem term={t('protectedApplicationIntakeChild:childrensApplication.parentGuardianTitle')}>
+                        {child.information.isParent ? t('protectedApplicationIntakeChild:childrensApplication.yes') : t('protectedApplicationIntakeChild:childrensApplication.no')}
                       </DefinitionListItem>
                     </DefinitionList>
                   )}
@@ -203,7 +203,7 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                     size="lg"
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit info click"
                   >
-                    {child.information === undefined ? t('protected-application-intake-child:childrensApplication.addChildInformation') : t('protected-application-intake-child:childrensApplication.editChildInformation', { childNumber: index + 1 })}
+                    {child.information === undefined ? t('protectedApplicationIntakeChild:childrensApplication.addChildInformation') : t('protectedApplicationIntakeChild:childrensApplication.editChildInformation', { childNumber: index + 1 })}
                   </ButtonLink>
                 </CardFooter>
               </Card>
@@ -211,17 +211,17 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle asChild>
-                    <h2>{t('protected-application-intake-child:childrensApplication.childDentalInsuranceCardTitle')}</h2>
+                    <h2>{t('protectedApplicationIntakeChild:childrensApplication.childDentalInsuranceCardTitle')}</h2>
                   </CardTitle>
                   <CardAction>{sections.childDentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.dentalInsurance === undefined ? (
-                    <p>{t('protected-application-intake-child:childrensApplication.childDentalInsuranceIndicateStatus')}</p>
+                    <p>{t('protectedApplicationIntakeChild:childrensApplication.childDentalInsuranceIndicateStatus')}</p>
                   ) : (
                     <DefinitionList layout="single-column">
-                      <DefinitionListItem term={t('protected-application-intake-child:childrensApplication.dentalInsuranceTitle')}>
-                        {child.dentalInsurance.hasDentalInsurance ? t('protected-application-intake-child:childrensApplication.dentalInsuranceYes') : t('protected-application-intake-child:childrensApplication.dentalInsuranceNo')}
+                      <DefinitionListItem term={t('protectedApplicationIntakeChild:childrensApplication.dentalInsuranceTitle')}>
+                        {child.dentalInsurance.hasDentalInsurance ? t('protectedApplicationIntakeChild:childrensApplication.dentalInsuranceYes') : t('protectedApplicationIntakeChild:childrensApplication.dentalInsuranceNo')}
                       </DefinitionListItem>
                     </DefinitionList>
                   )}
@@ -238,11 +238,11 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit insurance click"
                     aria-label={
                       child.dentalInsurance === undefined
-                        ? `${t('protected-application-intake-child:childrensApplication.addAnswer')} - ${t('protected-application-intake-child:childrensApplication.childDentalInsuranceCardTitle')}`
-                        : t('protected-application-intake-child:childrensApplication.editChildDentalInsurance', { childNumber: index + 1 })
+                        ? `${t('protectedApplicationIntakeChild:childrensApplication.addAnswer')} - ${t('protectedApplicationIntakeChild:childrensApplication.childDentalInsuranceCardTitle')}`
+                        : t('protectedApplicationIntakeChild:childrensApplication.editChildDentalInsurance', { childNumber: index + 1 })
                     }
                   >
-                    {child.dentalInsurance === undefined ? t('protected-application-intake-child:childrensApplication.addAnswer') : t('protected-application-intake-child:childrensApplication.editChildDentalInsurance', { childNumber: index + 1 })}
+                    {child.dentalInsurance === undefined ? t('protectedApplicationIntakeChild:childrensApplication.addAnswer') : t('protectedApplicationIntakeChild:childrensApplication.editChildDentalInsurance', { childNumber: index + 1 })}
                   </ButtonLink>
                 </CardFooter>
               </Card>
@@ -250,26 +250,26 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
               <Card className="my-2">
                 <CardHeader>
                   <CardTitle asChild>
-                    <h2>{t('protected-application-intake-child:childrensApplication.childDentalBenefitsCardTitle')}</h2>
+                    <h2>{t('protectedApplicationIntakeChild:childrensApplication.childDentalBenefitsCardTitle')}</h2>
                   </CardTitle>
                   <CardAction>{sections.childDentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
                 <CardContent>
                   {child.dentalBenefits === undefined ? (
-                    <p>{t('protected-application-intake-child:childrensApplication.childDentalBenefitsIndicateStatus')}</p>
+                    <p>{t('protectedApplicationIntakeChild:childrensApplication.childDentalBenefitsIndicateStatus')}</p>
                   ) : (
                     <DefinitionList layout="single-column">
-                      <DefinitionListItem term={t('protected-application-intake-child:childrensApplication.dentalBenefitsTitle')}>
+                      <DefinitionListItem term={t('protectedApplicationIntakeChild:childrensApplication.dentalBenefitsTitle')}>
                         {child.dentalBenefits.federalBenefit.access || child.dentalBenefits.provTerrBenefit.access ? (
                           <div className="space-y-3">
-                            <p>{t('protected-application-intake-child:childrensApplication.dentalBenefitsYes')}</p>
+                            <p>{t('protectedApplicationIntakeChild:childrensApplication.dentalBenefitsYes')}</p>
                             <ul className="list-disc space-y-1 pl-7">
                               {child.dentalBenefits.federalBenefit.access && <li>{child.dentalBenefits.federalBenefit.benefit}</li>}
                               {child.dentalBenefits.provTerrBenefit.access && <li>{child.dentalBenefits.provTerrBenefit.benefit}</li>}
                             </ul>
                           </div>
                         ) : (
-                          <p>{t('protected-application-intake-child:childrensApplication.dentalBenefitsNo')}</p>
+                          <p>{t('protectedApplicationIntakeChild:childrensApplication.dentalBenefitsNo')}</p>
                         )}
                       </DefinitionListItem>
                     </DefinitionList>
@@ -287,11 +287,11 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit benefits click"
                     aria-label={
                       child.dentalBenefits === undefined
-                        ? `${t('protected-application-intake-child:childrensApplication.addAnswer')} - ${t('protected-application-intake-child:childrensApplication.childDentalBenefitsCardTitle')}`
-                        : t('protected-application-intake-child:childrensApplication.editChildDentalBenefits', { childNumber: index + 1 })
+                        ? `${t('protectedApplicationIntakeChild:childrensApplication.addAnswer')} - ${t('protectedApplicationIntakeChild:childrensApplication.childDentalBenefitsCardTitle')}`
+                        : t('protectedApplicationIntakeChild:childrensApplication.editChildDentalBenefits', { childNumber: index + 1 })
                     }
                   >
-                    {child.dentalBenefits === undefined ? t('protected-application-intake-child:childrensApplication.addAnswer') : t('protected-application-intake-child:childrensApplication.editChildDentalBenefits', { childNumber: index + 1 })}
+                    {child.dentalBenefits === undefined ? t('protectedApplicationIntakeChild:childrensApplication.addAnswer') : t('protectedApplicationIntakeChild:childrensApplication.editChildDentalBenefits', { childNumber: index + 1 })}
                   </ButtonLink>
                 </CardFooter>
               </Card>
@@ -309,7 +309,7 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                     size="sm"
                     data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Remove child - Child(ren) application click"
                   >
-                    {t('protected-application-intake-child:childrensApplication.removeChild')}
+                    {t('protectedApplicationIntakeChild:childrensApplication.removeChild')}
                   </Button>
                 </fetcher.Form>
               )}
@@ -319,7 +319,7 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <Button variant="primary" id="add-child" name="_action" value={FORM_ACTION.add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Add child - Child(ren) application click">
-            {t('protected-application-intake-child:childrensApplication.addChild')}
+            {t('protectedApplicationIntakeChild:childrensApplication.addChild')}
           </Button>
         </fetcher.Form>
 
@@ -332,7 +332,7 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Continue click"
           >
-            {t('protected-application-intake-child:childrensApplication.submitBtn')}
+            {t('protectedApplicationIntakeChild:childrensApplication.submitBtn')}
           </NavigationButtonLink>
           <NavigationButtonLink
             variant="secondary"
@@ -341,7 +341,7 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Back click"
           >
-            {t('protected-application-intake-child:childrensApplication.backBtn')}
+            {t('protectedApplicationIntakeChild:childrensApplication.backBtn')}
           </NavigationButtonLink>
         </div>
       </div>

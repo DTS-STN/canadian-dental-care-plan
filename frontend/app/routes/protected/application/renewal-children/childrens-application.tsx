@@ -45,9 +45,9 @@ type ClientDentalBenefits = {
 const FORM_ACTION = { DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed' } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-renewal-child', 'protected-application', 'gcweb', 'common'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationRenewalChild', 'protectedApplication', 'gcweb', 'common'),
   pageIdentifier: pageIds.protected.application.renewalChild.childApplication,
-  pageTitleI18nKey: 'protected-application-renewal-child:childrensApplication.pageTitle',
+  pageTitleI18nKey: 'protectedApplicationRenewalChild:childrensApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -61,7 +61,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-renewal-child:childrensApplication.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationRenewalChild:childrensApplication.pageTitle') }) };
 
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
@@ -205,13 +205,13 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
             <div key={child.id}>
               <h2 className="font-lato mb-4 text-2xl font-bold">{`${child.information?.firstName} ${child.information?.lastName}`}</h2>
               <div className="space-y-4">
-                <p>{t('protected-application:completeAllSections')}</p>
+                <p>{t('protectedApplication:completeAllSections')}</p>
                 <p>{t('common:sectionsCompleted', { number: completedSectionsCount, count: Object.keys(sections).length })}</p>
               </div>
               <Card className="my-4">
                 <CardHeader>
                   <CardTitle asChild>
-                    <h2>{t('protected-application-renewal-child:childrensApplication.sinCardTitle')}</h2>
+                    <h2>{t('protectedApplicationRenewalChild:childrensApplication.sinCardTitle')}</h2>
                   </CardTitle>
                   <CardAction>
                     <StatusTag status="optional" />
@@ -224,7 +224,7 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
               <Card className="my-4">
                 <CardHeader>
                   <CardTitle asChild>
-                    <h2>{t('protected-application-renewal-child:childrensApplication.parentGuardianCardTitle')}</h2>
+                    <h2>{t('protectedApplicationRenewalChild:childrensApplication.parentGuardianCardTitle')}</h2>
                   </CardTitle>
                   <CardAction>{sections.parentGuardian.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
@@ -235,7 +235,7 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
               <Card className="my-4">
                 <CardHeader>
                   <CardTitle asChild>
-                    <h2>{t('protected-application-renewal-child:childrensApplication.childDentalInsuranceCardTitle')}</h2>
+                    <h2>{t('protectedApplicationRenewalChild:childrensApplication.childDentalInsuranceCardTitle')}</h2>
                   </CardTitle>
                   <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
@@ -246,7 +246,7 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
               <Card className="my-4">
                 <CardHeader>
                   <CardTitle asChild>
-                    <h2>{t('protected-application-renewal-child:childrensApplication.childDentalBenefitsCardTitle')}</h2>
+                    <h2>{t('protectedApplicationRenewalChild:childrensApplication.childDentalBenefitsCardTitle')}</h2>
                   </CardTitle>
                   <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
                 </CardHeader>
@@ -266,7 +266,7 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Continue click"
           >
-            {t('protected-application-renewal-child:childrensApplication.submitBtn')}
+            {t('protectedApplicationRenewalChild:childrensApplication.submitBtn')}
           </NavigationButtonLink>
           <NavigationButtonLink
             variant="secondary"
@@ -275,7 +275,7 @@ export default function ProtectedRenewChildChildrensApplication({ loaderData, pa
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Back click"
           >
-            {t('protected-application-renewal-child:childrensApplication.backBtn')}
+            {t('protectedApplicationRenewalChild:childrensApplication.backBtn')}
           </NavigationButtonLink>
         </div>
       </div>
@@ -298,7 +298,7 @@ function ChildSinCardContent({ child }: { child: Route.ComponentProps['loaderDat
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-child:childrensApplication.sinTitle')}>{formatSin(child.information.socialInsuranceNumber)}</DefinitionListItem>
+          <DefinitionListItem term={t('protectedApplicationRenewalChild:childrensApplication.sinTitle')}>{formatSin(child.information.socialInsuranceNumber)}</DefinitionListItem>
         </DefinitionList>
       </CardContent>
     );
@@ -307,7 +307,7 @@ function ChildSinCardContent({ child }: { child: Route.ComponentProps['loaderDat
   // No SIN at all
   return (
     <CardContent>
-      <p>{t('protected-application-renewal-child:childrensApplication.sinHelp')}</p>
+      <p>{t('protectedApplicationRenewalChild:childrensApplication.sinHelp')}</p>
     </CardContent>
   );
 }
@@ -335,7 +335,7 @@ function ChildSinCardFooter({ child, params }: { child: Route.ComponentProps['lo
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
         >
-          {t('protected-application-renewal-child:childrensApplication.editSin')}
+          {t('protectedApplicationRenewalChild:childrensApplication.editSin')}
         </ButtonLink>
       </CardFooter>
     );
@@ -353,7 +353,7 @@ function ChildSinCardFooter({ child, params }: { child: Route.ComponentProps['lo
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
       >
-        {t('protected-application-renewal-child:childrensApplication.addSin')}
+        {t('protectedApplicationRenewalChild:childrensApplication.addSin')}
       </ButtonLink>
     </CardFooter>
   );
@@ -374,8 +374,8 @@ function ChildParentGuardianCardContent({ child }: { child: Route.ComponentProps
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-child:childrensApplication.parentGuardianTitle')}>
-            {child.information.isParent ? t('protected-application-renewal-child:childrensApplication.yes') : t('protected-application-renewal-child:childrensApplication.no')}
+          <DefinitionListItem term={t('protectedApplicationRenewalChild:childrensApplication.parentGuardianTitle')}>
+            {child.information.isParent ? t('protectedApplicationRenewalChild:childrensApplication.yes') : t('protectedApplicationRenewalChild:childrensApplication.no')}
           </DefinitionListItem>
         </DefinitionList>
       </CardContent>
@@ -385,7 +385,7 @@ function ChildParentGuardianCardContent({ child }: { child: Route.ComponentProps
   // No value at all
   return (
     <CardContent>
-      <p>{t('protected-application-renewal-child:childrensApplication.parentGuardianHelp')}</p>
+      <p>{t('protectedApplicationRenewalChild:childrensApplication.parentGuardianHelp')}</p>
     </CardContent>
   );
 }
@@ -413,7 +413,7 @@ function ChildParentGuardianCardFooter({ child, sectionCompleted, params }: { ch
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
         >
-          {t('protected-application-renewal-child:childrensApplication.editParentGuardian')}
+          {t('protectedApplicationRenewalChild:childrensApplication.editParentGuardian')}
         </ButtonLink>
       </CardFooter>
     );
@@ -431,7 +431,7 @@ function ChildParentGuardianCardFooter({ child, sectionCompleted, params }: { ch
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
       >
-        {t('protected-application-renewal-child:childrensApplication.addParentGuardian')}
+        {t('protectedApplicationRenewalChild:childrensApplication.addParentGuardian')}
       </ButtonLink>
     </CardFooter>
   );
@@ -451,8 +451,8 @@ function ChildDentalInsuranceCardContent({ child }: { child: Route.ComponentProp
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-child:childrensApplication.dentalInsuranceTitle')}>
-            {child.dentalInsurance.hasDentalInsurance ? t('protected-application-renewal-child:childrensApplication.dentalInsuranceYes') : t('protected-application-renewal-child:childrensApplication.dentalInsuranceNo')}
+          <DefinitionListItem term={t('protectedApplicationRenewalChild:childrensApplication.dentalInsuranceTitle')}>
+            {child.dentalInsurance.hasDentalInsurance ? t('protectedApplicationRenewalChild:childrensApplication.dentalInsuranceYes') : t('protectedApplicationRenewalChild:childrensApplication.dentalInsuranceNo')}
           </DefinitionListItem>
         </DefinitionList>
       </CardContent>
@@ -461,7 +461,7 @@ function ChildDentalInsuranceCardContent({ child }: { child: Route.ComponentProp
 
   return (
     <CardContent>
-      <p>{t('protected-application-renewal-child:childrensApplication.childDentalInsuranceIndicateStatus')}</p>
+      <p>{t('protectedApplicationRenewalChild:childrensApplication.childDentalInsuranceIndicateStatus')}</p>
     </CardContent>
   );
 }
@@ -499,7 +499,7 @@ function ChildDentalInsuranceCardFooter({
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
         >
-          {t('protected-application-renewal-child:childrensApplication.editChildDentalInsurance')}
+          {t('protectedApplicationRenewalChild:childrensApplication.editChildDentalInsurance')}
         </ButtonLink>
       </CardFooter>
     );
@@ -516,9 +516,9 @@ function ChildDentalInsuranceCardFooter({
         startIcon={faCirclePlus}
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
-        aria-label={`${t('protected-application-renewal-child:childrensApplication.addAnswer')} - ${t('protected-application-renewal-child:childrensApplication.childDentalInsuranceCardTitle')}`}
+        aria-label={`${t('protectedApplicationRenewalChild:childrensApplication.addAnswer')} - ${t('protectedApplicationRenewalChild:childrensApplication.childDentalInsuranceCardTitle')}`}
       >
-        {t('protected-application-renewal-child:childrensApplication.addAnswer')}
+        {t('protectedApplicationRenewalChild:childrensApplication.addAnswer')}
       </ButtonLink>
     </CardFooter>
   );
@@ -547,7 +547,7 @@ function ChildDentalBenefitsCardContent({ child }: { child: Route.ComponentProps
     if (hasBenefits) {
       return (
         <div className="space-y-3">
-          <p>{t('protected-application-renewal-child:childrensApplication.dentalBenefitsYes')}</p>
+          <p>{t('protectedApplicationRenewalChild:childrensApplication.dentalBenefitsYes')}</p>
           <ul className="list-disc space-y-1 pl-7">
             {benefits.federalBenefit?.access && <li>{benefits.federalBenefit.benefit}</li>}
             {benefits.provTerrBenefit?.access && <li>{benefits.provTerrBenefit.benefit}</li>}
@@ -556,7 +556,7 @@ function ChildDentalBenefitsCardContent({ child }: { child: Route.ComponentProps
       );
     }
 
-    return <p>{t('protected-application-renewal-child:childrensApplication.dentalBenefitsNo')}</p>;
+    return <p>{t('protectedApplicationRenewalChild:childrensApplication.dentalBenefitsNo')}</p>;
   };
 
   // Case 1: User has made changes (hasChanged true) - show their selections
@@ -564,7 +564,7 @@ function ChildDentalBenefitsCardContent({ child }: { child: Route.ComponentProps
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t('protected-application-renewal-child:childrensApplication.dentalBenefitsTitle')}>{renderBenefits(child.dentalBenefits)}</DefinitionListItem>
+          <DefinitionListItem term={t('protectedApplicationRenewalChild:childrensApplication.dentalBenefitsTitle')}>{renderBenefits(child.dentalBenefits)}</DefinitionListItem>
         </DefinitionList>
       </CardContent>
     );
@@ -573,7 +573,7 @@ function ChildDentalBenefitsCardContent({ child }: { child: Route.ComponentProps
   return (
     <CardContent>
       <DefinitionList layout="single-column">
-        <DefinitionListItem term={t('protected-application-renewal-child:childrensApplication.dentalBenefitsTitle')}>{renderBenefits(child.clientApplication.clientDentalBenefits)}</DefinitionListItem>
+        <DefinitionListItem term={t('protectedApplicationRenewalChild:childrensApplication.dentalBenefitsTitle')}>{renderBenefits(child.clientApplication.clientDentalBenefits)}</DefinitionListItem>
       </DefinitionList>
     </CardContent>
   );
@@ -609,7 +609,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
         >
-          {t('protected-application-renewal-child:childrensApplication.editChildDentalBenefits')}
+          {t('protectedApplicationRenewalChild:childrensApplication.editChildDentalBenefits')}
         </ButtonLink>
       </CardFooter>
     );
@@ -628,7 +628,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
         >
-          {t('protected-application-renewal-child:childrensApplication.updateDentalBenefits')}
+          {t('protectedApplicationRenewalChild:childrensApplication.updateDentalBenefits')}
         </ButtonLink>
       </div>
       <fetcher.Form method="post" noValidate>
@@ -646,7 +646,7 @@ function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { ch
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Action click"
           >
-            <span className="text-left">{t('protected-application-renewal-child:childrensApplication.benefitsNotChanged')}</span>
+            <span className="text-left">{t('protectedApplicationRenewalChild:childrensApplication.benefitsNotChanged')}</span>
           </Button>
         </div>
       </fetcher.Form>

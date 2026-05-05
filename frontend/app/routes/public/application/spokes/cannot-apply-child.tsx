@@ -20,9 +20,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.cannotApplyChild,
-  pageTitleI18nKey: 'application-spokes:children.cannotApplyChild.pageTitle',
+  pageTitleI18nKey: 'applicationSpokes:children.cannotApplyChild.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -31,7 +31,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const childState = getSingleChildState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:children.cannotApplyChild.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:children.cannotApplyChild.pageTitle') }) };
 
   invariant(childState.information?.dateOfBirth, 'Child date of birth must be defined');
   const ageCategory = getAgeCategoryFromDateString(childState.information.dateOfBirth);
@@ -54,7 +54,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearPublicApplicationState({ params, session });
 
-  return redirect(t('application-spokes:children.cannotApplyChild.exitBtnLink'));
+  return redirect(t('applicationSpokes:children.cannotApplyChild.exitBtnLink'));
 }
 
 export default function ApplyForYourself({ loaderData, params }: Route.ComponentProps) {
@@ -71,11 +71,11 @@ export default function ApplyForYourself({ loaderData, params }: Route.Component
       <div className="mb-6 space-y-4">
         <p>
           {isChildrenOrYouth //
-            ? t(`application-spokes:children.cannotApplyChild.ineligibleToApply.cutoffApplication`)
-            : t(`application-spokes:children.cannotApplyChild.ineligibleToApply.adultApplication`)}
+            ? t(`applicationSpokes:children.cannotApplyChild.ineligibleToApply.cutoffApplication`)
+            : t(`applicationSpokes:children.cannotApplyChild.ineligibleToApply.adultApplication`)}
         </p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:children.cannotApplyChild.eligibilityInfo" components={{ noWrap }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:children.cannotApplyChild.eligibilityInfo" components={{ noWrap }} />
         </p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
@@ -88,10 +88,10 @@ export default function ApplyForYourself({ loaderData, params }: Route.Component
           disabled={isSubmitting}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Child apply for yourself click"
         >
-          {t('application-spokes:children.cannotApplyChild.backBtn')}
+          {t('applicationSpokes:children.cannotApplyChild.backBtn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - Child apply for yourself click">
-          {t('application-spokes:children.cannotApplyChild.exitBtn')}
+          {t('applicationSpokes:children.cannotApplyChild.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

@@ -46,7 +46,7 @@ const YES_NO_OPTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-spokes', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.childInformation,
 } as const satisfies RouteHandleData;
 
@@ -61,12 +61,12 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const childNumber = t('application-spokes:children.childNumber', { childNumber: childState.childNumber });
+  const childNumber = t('applicationSpokes:children.childNumber', { childNumber: childState.childNumber });
   const childName = childState.isNew ? childNumber : (childState.information?.firstName ?? childNumber);
 
   const meta = {
-    title: t('gcweb:meta.title.template', { title: t('application-spokes:children.information.pageTitle', { childName }) }),
-    dcTermsTitle: t('gcweb:meta.title.template', { title: t('application-spokes:children.information.pageTitle', { childName: childNumber }) }),
+    title: t('gcweb:meta.title.template', { title: t('applicationSpokes:children.information.pageTitle', { childName }) }),
+    dcTermsTitle: t('gcweb:meta.title.template', { title: t('applicationSpokes:children.information.pageTitle', { childName: childNumber }) }),
   };
 
   return {
@@ -98,8 +98,8 @@ export async function action({ context: { appContainer, session }, params, reque
       memberId: z
         .string()
         .trim()
-        .min(1, t('application-spokes:children.information.errorMessage.memberIdRequired'))
-        .refine(isValidClientNumberRenewal, t('application-spokes:children.information.errorMessage.memberIdValid'))
+        .min(1, t('applicationSpokes:children.information.errorMessage.memberIdRequired'))
+        .refine(isValidClientNumberRenewal, t('applicationSpokes:children.information.errorMessage.memberIdValid'))
         .refine((memberId) => {
           // memberId is only required to be unique across children in the application for renewal applications since
           // only renewal applications have eligible client numbers tied to children in the application
@@ -110,34 +110,34 @@ export async function action({ context: { appContainer, session }, params, reque
           return !state.children //
             .filter((child) => child.id !== childState.id)
             .some((child) => child.information?.memberId === extractDigits(memberId));
-        }, t('application-spokes:children.information.errorMessage.memberIdUnique'))
+        }, t('applicationSpokes:children.information.errorMessage.memberIdUnique'))
         .transform((code) => extractDigits(code))
         .optional(),
       firstName: z
         .string()
         .trim()
-        .min(1, t('application-spokes:children.information.errorMessage.firstNameRequired'))
+        .min(1, t('applicationSpokes:children.information.errorMessage.firstNameRequired'))
         .max(100)
-        .refine(isAllValidInputCharacters, t('application-spokes:children.information.errorMessage.charactersValid'))
-        .refine((firstName) => !hasDigits(firstName), t('application-spokes:children.information.errorMessage.firstNameNoDigits')),
+        .refine(isAllValidInputCharacters, t('applicationSpokes:children.information.errorMessage.charactersValid'))
+        .refine((firstName) => !hasDigits(firstName), t('applicationSpokes:children.information.errorMessage.firstNameNoDigits')),
       lastName: z
         .string()
         .trim()
-        .min(1, t('application-spokes:children.information.errorMessage.lastNameRequired'))
+        .min(1, t('applicationSpokes:children.information.errorMessage.lastNameRequired'))
         .max(100)
-        .refine(isAllValidInputCharacters, t('application-spokes:children.information.errorMessage.charactersValid'))
-        .refine((lastName) => !hasDigits(lastName), t('application-spokes:children.information.errorMessage.lastNameNoDigits')),
+        .refine(isAllValidInputCharacters, t('applicationSpokes:children.information.errorMessage.charactersValid'))
+        .refine((lastName) => !hasDigits(lastName), t('applicationSpokes:children.information.errorMessage.lastNameNoDigits')),
       dateOfBirthYear: z.number({
-        error: (issue) => (issue.input === undefined ? t('application-spokes:children.information.errorMessage.dateOfBirthYearRequired') : t('application-spokes:children.information.errorMessage.dateOfBirthYearNumber')),
+        error: (issue) => (issue.input === undefined ? t('applicationSpokes:children.information.errorMessage.dateOfBirthYearRequired') : t('applicationSpokes:children.information.errorMessage.dateOfBirthYearNumber')),
       }),
       dateOfBirthMonth: z.number({
-        error: (issue) => (issue.input === undefined ? t('application-spokes:children.information.errorMessage.dateOfBirthMonthRequired') : undefined),
+        error: (issue) => (issue.input === undefined ? t('applicationSpokes:children.information.errorMessage.dateOfBirthMonthRequired') : undefined),
       }),
       dateOfBirthDay: z.number({
-        error: (issue) => (issue.input === undefined ? t('application-spokes:children.information.errorMessage.dateOfBirthDayRequired') : t('application-spokes:children.information.errorMessage.dateOfBirthDayNumber')),
+        error: (issue) => (issue.input === undefined ? t('applicationSpokes:children.information.errorMessage.dateOfBirthDayRequired') : t('applicationSpokes:children.information.errorMessage.dateOfBirthDayNumber')),
       }),
       dateOfBirth: z.string(),
-      isParent: z.boolean({ error: t('application-spokes:children.information.errorMessage.isParent') }),
+      isParent: z.boolean({ error: t('applicationSpokes:children.information.errorMessage.isParent') }),
     })
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
@@ -147,19 +147,19 @@ export async function action({ context: { appContainer, session }, params, reque
       if (!isValidDateString(dateOfBirth)) {
         ctx.addIssue({
           code: 'custom',
-          message: t('application-spokes:children.information.errorMessage.dateOfBirthValid'),
+          message: t('applicationSpokes:children.information.errorMessage.dateOfBirthValid'),
           path: ['dateOfBirth'],
         });
       } else if (!isPastDateString(dateOfBirth)) {
         ctx.addIssue({
           code: 'custom',
-          message: t('application-spokes:children.information.errorMessage.dateOfBirthIsPast'),
+          message: t('applicationSpokes:children.information.errorMessage.dateOfBirthIsPast'),
           path: ['dateOfBirth'],
         });
       } else if (getAgeFromDateString(dateOfBirth) > 150) {
         ctx.addIssue({
           code: 'custom',
-          message: t('application-spokes:children.information.errorMessage.dateOfBirthIsPastValid'),
+          message: t('applicationSpokes:children.information.errorMessage.dateOfBirthIsPastValid'),
           path: ['dateOfBirth'],
         });
       }
@@ -175,15 +175,15 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const childSinSchema = z
     .object({
-      hasSocialInsuranceNumber: z.boolean({ error: t('application-spokes:children.information.errorMessage.hasSocialInsuranceNumber') }),
+      hasSocialInsuranceNumber: z.boolean({ error: t('applicationSpokes:children.information.errorMessage.hasSocialInsuranceNumber') }),
       socialInsuranceNumber: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
       if (val.hasSocialInsuranceNumber) {
         if (!val.socialInsuranceNumber) {
-          ctx.addIssue({ code: 'custom', message: t('application-spokes:children.information.errorMessage.sinRequired'), path: ['socialInsuranceNumber'] });
+          ctx.addIssue({ code: 'custom', message: t('applicationSpokes:children.information.errorMessage.sinRequired'), path: ['socialInsuranceNumber'] });
         } else if (!isValidSin(val.socialInsuranceNumber)) {
-          ctx.addIssue({ code: 'custom', message: t('application-spokes:children.information.errorMessage.sinValid'), path: ['socialInsuranceNumber'] });
+          ctx.addIssue({ code: 'custom', message: t('applicationSpokes:children.information.errorMessage.sinValid'), path: ['socialInsuranceNumber'] });
         } else if (
           val.socialInsuranceNumber &&
           [state.applicantInformation?.socialInsuranceNumber, state.partnerInformation?.socialInsuranceNumber, ...state.children.filter((child) => childState.id !== child.id).map((child) => child.information?.socialInsuranceNumber)]
@@ -191,7 +191,7 @@ export async function action({ context: { appContainer, session }, params, reque
             .map((sin) => formatSin(sin))
             .includes(formatSin(val.socialInsuranceNumber))
         ) {
-          ctx.addIssue({ code: 'custom', message: t('application-spokes:children.information.errorMessage.sinUnique'), path: ['socialInsuranceNumber'] });
+          ctx.addIssue({ code: 'custom', message: t('applicationSpokes:children.information.errorMessage.sinUnique'), path: ['socialInsuranceNumber'] });
         }
       }
     }) satisfies z.ZodType<PublicApplicationChildSinState>;
@@ -286,7 +286,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
 
   const options: InputRadiosProps['options'] = [
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:children.information.sinYes" components={{ bold: <strong /> }} />,
+      children: <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:children.information.sinYes" components={{ bold: <strong /> }} />,
       value: YES_NO_OPTION.yes,
       defaultChecked: defaultState?.hasSocialInsuranceNumber ?? true,
       append: hasSocialInsuranceNumberValue === true && (
@@ -295,7 +295,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
             id="social-insurance-number"
             name="socialInsuranceNumber"
             format={sinInputPatternFormat}
-            label={t('application-spokes:children.information.sin')}
+            label={t('applicationSpokes:children.information.sin')}
             inputMode="numeric"
             defaultValue={defaultState?.socialInsuranceNumber ?? ''}
             errorMessage={errors?.socialInsuranceNumber}
@@ -306,7 +306,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
       onChange: handleSocialInsuranceNumberSelection,
     },
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:children.information.sinNo" components={{ bold: <strong /> }} />,
+      children: <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:children.information.sinNo" components={{ bold: <strong /> }} />,
       value: YES_NO_OPTION.no,
       defaultChecked: defaultState?.hasSocialInsuranceNumber === false,
       onChange: handleSocialInsuranceNumberSelection,
@@ -315,17 +315,17 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
-      <AppPageTitle>{t('application-spokes:children.information.pageTitle', { childName })}</AppPageTitle>
+      <AppPageTitle>{t('applicationSpokes:children.information.pageTitle', { childName })}</AppPageTitle>
       <div className="max-w-prose">
         <ErrorAlert>
-          <h2 className="mb-2 font-bold">{t('application-spokes:children.information.errorMessage.alert.heading')}</h2>
+          <h2 className="mb-2 font-bold">{t('applicationSpokes:children.information.errorMessage.alert.heading')}</h2>
           <p className="mb-2">
-            <Trans ns={handle.i18nNamespaces} i18nKey="application-spokes:children.information.errorMessage.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:children.information.errorMessage.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
           </p>
-          <p className="mb-2">{t('application-spokes:children.information.errorMessage.alert.detailAdultMustApply')}</p>
-          <p className="mb-2">{t('application-spokes:children.information.errorMessage.alert.applyDate')}</p>
+          <p className="mb-2">{t('applicationSpokes:children.information.errorMessage.alert.detailAdultMustApply')}</p>
+          <p className="mb-2">{t('applicationSpokes:children.information.errorMessage.alert.applyDate')}</p>
         </ErrorAlert>
-        <p className="mb-4">{t('application-spokes:children.information.formInstructionsSin')}</p>
+        <p className="mb-4">{t('applicationSpokes:children.information.formInstructionsSin')}</p>
         <p className="mb-4 italic">{t('application:requiredLabel')}</p>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -335,10 +335,10 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
               <InputPatternField
                 id="member-id"
                 name="memberId"
-                label={t('application-spokes:children.information.memberId')}
+                label={t('applicationSpokes:children.information.memberId')}
                 inputMode="numeric"
                 format={renewalCodeInputPatternFormat}
-                helpMessagePrimary={t('application-spokes:children.information.helpMessage.memberId')}
+                helpMessagePrimary={t('applicationSpokes:children.information.helpMessage.memberId')}
                 helpMessagePrimaryClassName="text-black"
                 defaultValue={defaultState?.memberId ?? ''}
                 errorMessage={errors?.memberId}
@@ -349,10 +349,10 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
               <InputSanitizeField
                 id="first-name"
                 name="firstName"
-                label={t('application-spokes:children.information.firstName')}
+                label={t('applicationSpokes:children.information.firstName')}
                 className="w-full"
                 maxLength={100}
-                aria-description={t('application-spokes:children.information.nameInstructions')}
+                aria-description={t('applicationSpokes:children.information.nameInstructions')}
                 autoComplete="given-name"
                 errorMessage={errors?.firstName}
                 defaultValue={defaultState?.firstName ?? ''}
@@ -361,18 +361,18 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
               <InputSanitizeField
                 id="last-name"
                 name="lastName"
-                label={t('application-spokes:children.information.lastName')}
+                label={t('applicationSpokes:children.information.lastName')}
                 className="w-full"
                 maxLength={100}
                 autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={errors?.lastName}
-                aria-description={t('application-spokes:children.information.nameInstructions')}
+                aria-description={t('applicationSpokes:children.information.nameInstructions')}
                 required
               />
             </div>
-            <Collapsible id="name-instructions" summary={t('application-spokes:children.information.singleLegalName')}>
-              <p>{t('application-spokes:children.information.nameInstructions')}</p>
+            <Collapsible id="name-instructions" summary={t('applicationSpokes:children.information.singleLegalName')}>
+              <p>{t('applicationSpokes:children.information.nameInstructions')}</p>
             </Collapsible>
             <DatePickerField
               id="date-of-birth"
@@ -382,7 +382,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
                 year: 'dateOfBirthYear',
               }}
               defaultValue={defaultState?.dateOfBirth ?? ''}
-              legend={t('application-spokes:children.information.dateOfBirth')}
+              legend={t('applicationSpokes:children.information.dateOfBirth')}
               errorMessages={{
                 all: errors?.dateOfBirth,
                 year: errors?.dateOfBirthYear,
@@ -392,15 +392,15 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
               required
             />
 
-            <InputRadios id="has-social-insurance-number" legend={t('application-spokes:children.information.sinLegend')} name="hasSocialInsuranceNumber" options={options} errorMessage={errors?.hasSocialInsuranceNumber} required />
+            <InputRadios id="has-social-insurance-number" legend={t('applicationSpokes:children.information.sinLegend')} name="hasSocialInsuranceNumber" options={options} errorMessage={errors?.hasSocialInsuranceNumber} required />
 
             <InputRadios
               id="is-parent-radios"
               name="isParent"
-              legend={t('application-spokes:children.information.parentLegend')}
+              legend={t('applicationSpokes:children.information.parentLegend')}
               options={[
-                { value: YES_NO_OPTION.yes, children: t('application-spokes:children.information.radioOptions.yes'), defaultChecked: defaultState?.isParent === true, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
-                { value: YES_NO_OPTION.no, children: t('application-spokes:children.information.radioOptions.no'), defaultChecked: defaultState?.isParent === false, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
+                { value: YES_NO_OPTION.yes, children: t('applicationSpokes:children.information.radioOptions.yes'), defaultChecked: defaultState?.isParent === true, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
+                { value: YES_NO_OPTION.no, children: t('applicationSpokes:children.information.radioOptions.no'), defaultChecked: defaultState?.isParent === false, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
               ]}
               errorMessage={errors?.isParent}
               required
@@ -408,7 +408,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Child Information click">
-              {t('application-spokes:children.information.saveBtn')}
+              {t('applicationSpokes:children.information.saveBtn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -418,7 +418,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Child Information click"
             >
-              {t('application-spokes:children.information.backBtn')}
+              {t('applicationSpokes:children.information.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

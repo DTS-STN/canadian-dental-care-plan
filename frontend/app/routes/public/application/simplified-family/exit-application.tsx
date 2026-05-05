@@ -20,9 +20,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-simplified-family', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSimplifiedFamily', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.simplifiedFamily.exitApplication,
-  pageTitleI18nKey: 'application-simplified-family:exitApplication.pageTitle',
+  pageTitleI18nKey: 'applicationSimplifiedFamily:exitApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -32,7 +32,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['simplified-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-family:exitApplication.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSimplifiedFamily:exitApplication.pageTitle') }) };
   return { meta };
 }
 
@@ -49,7 +49,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearPublicApplicationState({ params, session });
 
-  return redirect(t('application-simplified-family:exitApplication.exitLink'));
+  return redirect(t('applicationSimplifiedFamily:exitApplication.exitLink'));
 }
 
 export default function SimplifiedFamilyExitApplication({ loaderData, params }: Route.ComponentProps) {
@@ -61,8 +61,8 @@ export default function SimplifiedFamilyExitApplication({ loaderData, params }: 
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('application-simplified-family:exitApplication.areYouSure')}</p>
-        <p>{t('application-simplified-family:exitApplication.clickBack')}</p>
+        <p>{t('applicationSimplifiedFamily:exitApplication.areYouSure')}</p>
+        <p>{t('applicationSimplifiedFamily:exitApplication.clickBack')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -75,10 +75,10 @@ export default function SimplifiedFamilyExitApplication({ loaderData, params }: 
           startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Back - Exiting the application click"
         >
-          {t('application-simplified-family:exitApplication.backBtn')}
+          {t('applicationSimplifiedFamily:exitApplication.backBtn')}
         </ButtonLink>
         <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Exit - Exiting the application click">
-          {t('application-simplified-family:exitApplication.exitBtn')}
+          {t('applicationSimplifiedFamily:exitApplication.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

@@ -55,9 +55,9 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 }
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.mailingAddress,
-  pageTitleI18nKey: 'protected-application-spokes:address.mailingAddress.pageTitle',
+  pageTitleI18nKey: 'protectedApplicationSpokes:address.mailingAddress.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -74,7 +74,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryList = await appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:address.mailingAddress.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:address.mailingAddress.pageTitle') }) };
 
   return {
     defaultState: {
@@ -276,18 +276,18 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
   // populate mailing region/province/state list with selected country or current address country
   const mailingRegions = useMemo<InputOptionProps[]>(() => mailingCountryRegions.map(({ id, name }) => ({ children: name, value: id })), [mailingCountryRegions]);
 
-  const dummyOption: InputOptionProps = { children: t('protected-application-spokes:address.addressField.selectOne'), value: '' };
+  const dummyOption: InputOptionProps = { children: t('protectedApplicationSpokes:address.addressField.selectOne'), value: '' };
 
   const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedMailingCountry);
 
   let postalCodeHelpMessage: string | undefined;
   switch (selectedMailingCountry) {
     case CANADA_COUNTRY_ID: {
-      postalCodeHelpMessage = t('protected-application-spokes:address.addressField.postalCodeHelp');
+      postalCodeHelpMessage = t('protectedApplicationSpokes:address.addressField.postalCodeHelp');
       break;
     }
     case USA_COUNTRY_ID: {
-      postalCodeHelpMessage = t('protected-application-spokes:address.addressField.postalCodeHelpUs');
+      postalCodeHelpMessage = t('protectedApplicationSpokes:address.addressField.postalCodeHelpUs');
       break;
     }
     default: {
@@ -298,7 +298,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('protected-application:optionalLabel')}</p>
+      <p className="mb-4 italic">{t('protectedApplication:optionalLabel')}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -309,9 +309,9 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 id="mailingAddress"
                 name="address"
                 className="w-full"
-                label={t('protected-application-spokes:address.addressField.address')}
+                label={t('protectedApplicationSpokes:address.addressField.address')}
                 maxLength={100}
-                helpMessagePrimary={t('protected-application-spokes:address.addressField.addressHelp')}
+                helpMessagePrimary={t('protectedApplicationSpokes:address.addressField.addressHelp')}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line1"
                 defaultValue={defaultState.address}
@@ -322,9 +322,9 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 id="mailing-apartment"
                 name="apartment"
                 className="w-full"
-                label={t('protected-application-spokes:address.addressField.apartment')}
+                label={t('protectedApplicationSpokes:address.addressField.apartment')}
                 maxLength={100}
-                helpMessagePrimary={t('protected-application-spokes:address.addressField.apartmentHelp')}
+                helpMessagePrimary={t('protectedApplicationSpokes:address.addressField.apartmentHelp')}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line2"
                 defaultValue=""
@@ -334,7 +334,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 id="mailing-city"
                 name="city"
                 className="w-full"
-                label={t('protected-application-spokes:address.addressField.city')}
+                label={t('protectedApplicationSpokes:address.addressField.city')}
                 maxLength={100}
                 autoComplete="address-level2"
                 defaultValue={defaultState.city}
@@ -345,7 +345,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 id="mailing-postal-code"
                 name="postalZipCode"
                 className="w-full sm:w-1/2"
-                label={isPostalCodeRequired ? t('protected-application-spokes:address.addressField.postalCode') : t('protected-application-spokes:address.addressField.postalCodeOptional')}
+                label={isPostalCodeRequired ? t('protectedApplicationSpokes:address.addressField.postalCode') : t('protectedApplicationSpokes:address.addressField.postalCodeOptional')}
                 maxLength={100}
                 autoComplete="postal-code"
                 defaultValue={defaultState.postalCode}
@@ -359,7 +359,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                   id="mailing-province"
                   name="provinceStateId"
                   className="w-full sm:w-1/2"
-                  label={t('protected-application-spokes:address.addressField.province')}
+                  label={t('protectedApplicationSpokes:address.addressField.province')}
                   defaultValue={defaultState.province}
                   errorMessage={errors?.provinceStateId}
                   options={[dummyOption, ...mailingRegions]}
@@ -370,7 +370,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 id="mailing-country"
                 name="countryId"
                 className="w-full sm:w-1/2"
-                label={t('protected-application-spokes:address.addressField.country')}
+                label={t('protectedApplicationSpokes:address.addressField.country')}
                 autoComplete="country"
                 defaultValue={defaultState.country}
                 errorMessage={errors?.countryId}
@@ -379,7 +379,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                 required
               />
               <InputCheckbox id="sync-addresses" name="syncAddresses" value="true" checked={copyAddressChecked} onChange={checkHandler}>
-                {t('protected-application-spokes:address.homeAddress.useMailingAddress')}
+                {t('protectedApplicationSpokes:address.homeAddress.useMailingAddress')}
               </InputCheckbox>
             </div>
           </fieldset>
@@ -396,7 +396,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
                   loading={isSubmitting}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Mailing address click"
                 >
-                  {copyAddressChecked ? t('protected-application-spokes:address.saveBtn') : t('protected-application-spokes:address.continue')}
+                  {copyAddressChecked ? t('protectedApplicationSpokes:address.saveBtn') : t('protectedApplicationSpokes:address.continue')}
                 </LoadingButton>
               </DialogTrigger>
               {!isSubmitting && addressDialogContent && (
@@ -418,7 +418,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Mailing address click"
             >
-              {t('protected-application-spokes:address.back')}
+              {t('protectedApplicationSpokes:address.back')}
             </ButtonLink>
           </div>
         </fetcher.Form>

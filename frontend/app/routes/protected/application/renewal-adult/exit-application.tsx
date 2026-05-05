@@ -20,9 +20,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-renewal-adult', 'protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationRenewalAdult', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.renewalAdult.exitApplication,
-  pageTitleI18nKey: 'protected-application-renewal-adult:exitApplication.pageTitle',
+  pageTitleI18nKey: 'protectedApplicationRenewalAdult:exitApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -35,7 +35,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['renewal-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-renewal-adult:exitApplication.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationRenewalAdult:exitApplication.pageTitle') }) };
   return { meta };
 }
 
@@ -54,7 +54,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearProtectedApplicationState({ params, session });
 
-  return redirect(t('protected-application-renewal-adult:exitApplication.exitLink'));
+  return redirect(t('protectedApplicationRenewalAdult:exitApplication.exitLink'));
 }
 
 export default function ProtectedNewAdultExitApplication({ loaderData, params }: Route.ComponentProps) {
@@ -66,8 +66,8 @@ export default function ProtectedNewAdultExitApplication({ loaderData, params }:
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('protected-application-renewal-adult:exitApplication.areYouSure')}</p>
-        <p>{t('protected-application-renewal-adult:exitApplication.clickBack')}</p>
+        <p>{t('protectedApplicationRenewalAdult:exitApplication.areYouSure')}</p>
+        <p>{t('protectedApplicationRenewalAdult:exitApplication.clickBack')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -80,10 +80,10 @@ export default function ProtectedNewAdultExitApplication({ loaderData, params }:
           startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Back - Exiting the application click"
         >
-          {t('protected-application-renewal-adult:exitApplication.backBtn')}
+          {t('protectedApplicationRenewalAdult:exitApplication.backBtn')}
         </ButtonLink>
         <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Exit - Exiting the application click">
-          {t('protected-application-renewal-adult:exitApplication.exitBtn')}
+          {t('protectedApplicationRenewalAdult:exitApplication.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

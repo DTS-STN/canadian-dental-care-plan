@@ -37,9 +37,9 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-renewal-adult', 'protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationRenewalAdult', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.renewalAdult.confirmation,
-  pageTitleI18nKey: 'protected-application-renewal-adult:confirm.pageTitle',
+  pageTitleI18nKey: 'protectedApplicationRenewalAdult:confirm.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -133,7 +133,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     selectedProvincialBenefits: dentalBenefits.provincialGovernmentInsurancePlan?.name,
   };
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-renewal-adult:confirm.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationRenewalAdult:confirm.pageTitle') }) };
 
   const eligibility = getEligibilityStatus({
     hasPrivateDentalInsurance: state.dentalInsurance.hasDentalInsurance,
@@ -179,7 +179,7 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const mscaLinkAccount = <InlineLink to={t('confirm.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('protected-application-renewal-adult:confirm.statusCheckerLink')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('protectedApplicationRenewalAdult:confirm.statusCheckerLink')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose space-y-10">
@@ -364,8 +364,8 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
               <DefinitionListItem term={t('confirm.dentalPublic')}>
                 {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
                   <div className="space-y-3">
-                    <p>{t('protected-application-renewal-adult:confirm.yes')}</p>
-                    <p>{t('protected-application-renewal-adult:confirm.dentalBenefitHasAccess')}</p>
+                    <p>{t('protectedApplicationRenewalAdult:confirm.yes')}</p>
+                    <p>{t('protectedApplicationRenewalAdult:confirm.dentalBenefitHasAccess')}</p>
                     <ul className="list-disc space-y-1 pl-7">
                       {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
                       {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
@@ -396,24 +396,24 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
       </div>
       <Dialog>
         <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Exit - Application successfully submitted click" asChild>
-          <Button variant="secondary">{t('protected-application-renewal-adult:confirm.closeApplication')}</Button>
+          <Button variant="secondary">{t('protectedApplicationRenewalAdult:confirm.closeApplication')}</Button>
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{t('protected-application-renewal-adult:confirm.modal.header')}</DialogTitle>
+            <DialogTitle>{t('protectedApplicationRenewalAdult:confirm.modal.header')}</DialogTitle>
           </DialogHeader>
-          <p>{t('protected-application-renewal-adult:confirm.modal.info')}</p>
-          <p>{t('protected-application-renewal-adult:confirm.modal.areYouSure')}</p>
+          <p>{t('protectedApplicationRenewalAdult:confirm.modal.info')}</p>
+          <p>{t('protectedApplicationRenewalAdult:confirm.modal.areYouSure')}</p>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Back exit modal - Application successfully submitted click">
-                {t('protected-application-renewal-adult:confirm.modal.backBtn')}
+                {t('protectedApplicationRenewalAdult:confirm.modal.backBtn')}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
               <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => removeApplicationFlowStorageValue()} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Close confirm modal click">
-                {t('protected-application-renewal-adult:confirm.modal.closeBtn')}
+                {t('protectedApplicationRenewalAdult:confirm.modal.closeBtn')}
               </Button>
             </fetcher.Form>
           </DialogFooter>

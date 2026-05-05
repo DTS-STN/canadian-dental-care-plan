@@ -46,12 +46,12 @@ function requireProfileEmailAddressFlowState({ session, params }: { session: Rou
 
 export const handle = {
   breadcrumbs: [
-    { labelI18nKey: 'protected-profile:contactInformation.pageTitle', routeId: 'protected/profile/contact-information' },
-    { labelI18nKey: 'protected-profile:email.pageTitle', routeId: 'protected/profile/contact/email-address' },
+    { labelI18nKey: 'protectedProfile:contactInformation.pageTitle', routeId: 'protected/profile/contact-information' },
+    { labelI18nKey: 'protectedProfile:email.pageTitle', routeId: 'protected/profile/contact/email-address' },
   ],
-  i18nNamespaces: getTypedI18nNamespaces('protected-profile', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.verifyEmail,
-  pageTitleI18nKey: 'protected-profile:verifyEmail.pageTitle',
+  pageTitleI18nKey: 'protectedProfile:verifyEmail.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -64,7 +64,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const profileEmailAddressFlowState = requireProfileEmailAddressFlowState({ session, params });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protected-profile:verifyEmail.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protectedProfile:verifyEmail.pageTitle') }) };
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.verify-email', { userId: idToken.sub });
@@ -133,9 +133,9 @@ export async function action({ context: { appContainer, session }, params, reque
     verificationCode: z
       .string()
       .trim()
-      .min(1, t('protected-profile:verifyEmail.errorMessage.verificationCodeRequired'))
+      .min(1, t('protectedProfile:verifyEmail.errorMessage.verificationCodeRequired'))
       .transform(extractDigits)
-      .refine(() => profileEmailAddressFlowState.verificationAttempts < MAX_ATTEMPTS, t('protected-profile:verifyEmail.errorMessage.verificationCodeMaxAttempts')),
+      .refine(() => profileEmailAddressFlowState.verificationAttempts < MAX_ATTEMPTS, t('protectedProfile:verifyEmail.errorMessage.verificationCodeMaxAttempts')),
   });
 
   const parsedDataResult = verificationCodeSchema.safeParse({
@@ -228,8 +228,8 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
   return (
     <div className="max-w-prose">
       <ErrorAlert>
-        <h2 className="mb-2 font-bold">{t('protected-profile:verifyEmail.verificationCodeAlert.heading')}</h2>
-        <p className="-mb-3">{t('protected-profile:verifyEmail.verificationCodeAlert.detail')}</p>
+        <h2 className="mb-2 font-bold">{t('protectedProfile:verifyEmail.verificationCodeAlert.heading')}</h2>
+        <p className="-mb-3">{t('protectedProfile:verifyEmail.verificationCodeAlert.detail')}</p>
         <LoadingButton
           id="request-button"
           type="button"
@@ -241,7 +241,7 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
           value={FORM_ACTION.request}
           onClick={handleRequestNewCode}
         >
-          {t('protected-profile:verifyEmail.verificationCodeAlert.requestNewCode')}
+          {t('protectedProfile:verifyEmail.verificationCodeAlert.requestNewCode')}
         </LoadingButton>
       </ErrorAlert>
       <ErrorSummaryProvider actionData={fetcher.data}>
@@ -249,14 +249,14 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <fieldset className="mb-6">
-            <p className="mb-4">{t('protected-profile:verifyEmail.verificationCode', { email })}</p>
-            <p className="mb-4">{t('protected-profile:verifyEmail.requestNew')}</p>
+            <p className="mb-4">{t('protectedProfile:verifyEmail.verificationCode', { email })}</p>
+            <p className="mb-4">{t('protectedProfile:verifyEmail.requestNew')}</p>
             <p className="mb-8">
-              <Trans ns={handle.i18nNamespaces} i18nKey="protected-profile:verifyEmail.unableToVerify" components={{ communicationLink }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey="protectedProfile:verifyEmail.unableToVerify" components={{ communicationLink }} />
             </p>
-            <p className="mb-4 italic">{t('protected-profile:requiredLabel')}</p>
+            <p className="mb-4 italic">{t('protectedProfile:requiredLabel')}</p>
             <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t('protected-profile:verifyEmail.verificationCodeLabel')} inputMode="numeric" required />
+              <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t('protectedProfile:verifyEmail.verificationCodeLabel')} inputMode="numeric" required />
             </div>
             <LoadingButton
               id="request-button"
@@ -269,7 +269,7 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
               value={FORM_ACTION.request}
               onClick={handleRequestNewCode}
             >
-              {t('protected-profile:verifyEmail.requestNewCode')}
+              {t('protectedProfile:verifyEmail.requestNewCode')}
             </LoadingButton>
           </fieldset>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
@@ -282,10 +282,10 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
               loading={isSubmitting && submittedAction === FORM_ACTION.submit}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Verify your email address click"
             >
-              {t('protected-profile:verifyEmail.continue')}
+              {t('protectedProfile:verifyEmail.continue')}
             </LoadingButton>
             <ButtonLink variant="secondary" id="back-button" to={backButtonTo} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Verify your email address click">
-              {t('protected-profile:verifyEmail.back')}
+              {t('protectedProfile:verifyEmail.back')}
             </ButtonLink>
           </div>
         </fetcher.Form>
@@ -293,13 +293,13 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t('protected-profile:verifyEmail.codeSent.heading')}</DialogTitle>
+            <DialogTitle>{t('protectedProfile:verifyEmail.codeSent.heading')}</DialogTitle>
           </DialogHeader>
-          <DialogDescription>{t('protected-profile:verifyEmail.codeSent.detail', { email })}</DialogDescription>
+          <DialogDescription>{t('protectedProfile:verifyEmail.codeSent.detail', { email })}</DialogDescription>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="modal-continue" disabled={isSubmitting} variant="primary" size="sm">
-                {t('protected-profile:verifyEmail.continue')}
+                {t('protectedProfile:verifyEmail.continue')}
               </Button>
             </DialogClose>
           </DialogFooter>

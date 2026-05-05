@@ -34,9 +34,9 @@ const CHECKBOX_VALUE = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application', 'protected-application-renewal-family', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'protectedApplicationRenewalFamily', 'gcweb'),
   pageIdentifier: pageIds.protected.application.renewalFamily.submit,
-  pageTitleI18nKey: 'protected-application-renewal-family:submit.pageHeading',
+  pageTitleI18nKey: 'protectedApplicationRenewalFamily:submit.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['renewal-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-renewal-family:submit.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationRenewalFamily:submit.pageTitle') }) };
 
   const children = [];
   for (const child of state.children) {
@@ -89,8 +89,8 @@ export async function action({ context: { appContainer, session }, request, para
   securityHandler.validateCsrfToken({ formData, session });
 
   const submitTermsSchema = z.object({
-    acknowledgeInfo: z.literal(true, { error: t('protected-application-renewal-family:submit.errorMessage.acknowledgeInfoRequired') }),
-    acknowledgeCriteria: z.literal(true, { error: t('protected-application-renewal-family:submit.errorMessage.acknowledgeCriteriaRequired') }),
+    acknowledgeInfo: z.literal(true, { error: t('protectedApplicationRenewalFamily:submit.errorMessage.acknowledgeInfoRequired') }),
+    acknowledgeCriteria: z.literal(true, { error: t('protectedApplicationRenewalFamily:submit.errorMessage.acknowledgeCriteriaRequired') }),
   });
 
   const parsedDataResult = submitTermsSchema.safeParse({
@@ -120,7 +120,7 @@ export default function ProtectedRenewalFamilySubmit({ loaderData, params }: Rou
 
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t('protected-application-renewal-family:submit.doYouQualifyHref')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t('protectedApplicationRenewalFamily:submit.doYouQualifyHref')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
@@ -129,9 +129,9 @@ export default function ProtectedRenewalFamilySubmit({ loaderData, params }: Rou
         <ErrorSummary />
         <div className="space-y-8">
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-renewal-family:submit.overview')}</h2>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('protectedApplicationRenewalFamily:submit.overview')}</h2>
             <div className="space-y-4">
-              <p>{t('protected-application-renewal-family:submit.youAreSubmitting')}</p>
+              <p>{t('protectedApplicationRenewalFamily:submit.youAreSubmitting')}</p>
               <ul className="list-disc space-y-1 pl-7">
                 <li>{state.applicantName}</li>
                 {state.children.map((child, index) => (
@@ -141,31 +141,31 @@ export default function ProtectedRenewalFamilySubmit({ loaderData, params }: Rou
             </div>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-renewal-family:submit.reviewYourApplication')}</h2>
-            <p>{t('protected-application-renewal-family:submit.pleaseReview')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('protectedApplicationRenewalFamily:submit.reviewYourApplication')}</h2>
+            <p>{t('protectedApplicationRenewalFamily:submit.pleaseReview')}</p>
             <ButtonLink variant="primary" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Action click">
-              {t('protected-application-renewal-family:submit.reviewApplication')}
+              {t('protectedApplicationRenewalFamily:submit.reviewApplication')}
             </ButtonLink>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-renewal-family:submit.submitYourApplication')}</h2>
-            <p>{t('protected-application-renewal-family:submit.bySubmitting')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('protectedApplicationRenewalFamily:submit.submitYourApplication')}</h2>
+            <p>{t('protectedApplicationRenewalFamily:submit.bySubmitting')}</p>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-renewal-family:submit.reviewEligibilityCriteria" components={{ eligibilityLink }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplicationRenewalFamily:submit.reviewEligibilityCriteria" components={{ eligibilityLink }} />
             </p>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
               <div className="space-y-2">
                 <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
-                  {t('protected-application-renewal-family:submit.infoIsCorrect')}
+                  {t('protectedApplicationRenewalFamily:submit.infoIsCorrect')}
                 </InputCheckbox>
                 <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
-                  {t('protected-application-renewal-family:submit.iUnderstand')}
+                  {t('protectedApplicationRenewalFamily:submit.iUnderstand')}
                 </InputCheckbox>
               </div>
               <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_170px]">
                 <LoadingButton loading={isSubmitting} variant="green" className="order-first h-full text-base sm:order-last sm:text-lg" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Submit click">
-                  {t('protected-application-renewal-family:submit.submit')}
+                  {t('protectedApplicationRenewalFamily:submit.submit')}
                 </LoadingButton>
                 <NavigationButtonLink
                   disabled={isSubmitting}
@@ -175,7 +175,7 @@ export default function ProtectedRenewalFamilySubmit({ loaderData, params }: Rou
                   params={params}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Back click"
                 >
-                  {t('protected-application-renewal-family:submit.childrensApplication')}
+                  {t('protectedApplicationRenewalFamily:submit.childrensApplication')}
                 </NavigationButtonLink>
               </div>
             </fetcher.Form>
@@ -183,7 +183,7 @@ export default function ProtectedRenewalFamilySubmit({ loaderData, params }: Rou
         </div>
         <div className="mt-8">
           <InlineLink routeId="protected/application/$id/renewal-family/exit-application" params={params}>
-            {t('protected-application-renewal-family:submit.exitApplication')}
+            {t('protectedApplicationRenewalFamily:submit.exitApplication')}
           </InlineLink>
         </div>
       </div>

@@ -32,9 +32,9 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.renewalSelection,
-  pageTitleI18nKey: 'protected-application-spokes:renewalSelection.pageTitle',
+  pageTitleI18nKey: 'protectedApplicationSpokes:renewalSelection.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateProtectedApplicationContext(state, params, 'renewal');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:renewalSelection.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:renewalSelection.pageTitle') }) };
 
   return {
     meta,
@@ -99,7 +99,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const applicantsSchema = z.object({ applicants: z.array(z.string().trim()).nonempty(t('protected-application-spokes:renewalSelection.errorMessage.renewalSelectionRequired')) });
+  const applicantsSchema = z.object({ applicants: z.array(z.string().trim()).nonempty(t('protectedApplicationSpokes:renewalSelection.errorMessage.renewalSelectionRequired')) });
 
   const parsedDataResult = applicantsSchema.safeParse({ applicants: formData.getAll('applicants') });
 
@@ -183,7 +183,7 @@ export default function ProtectedSpokesRenewalSelection({ loaderData, params }: 
   const errors = fetcher.data?.errors;
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('protected-application:requiredLabel')}</p>
+      <p className="mb-4 italic">{t('protectedApplication:requiredLabel')}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -191,7 +191,7 @@ export default function ProtectedSpokesRenewalSelection({ loaderData, params }: 
           <InputCheckboxes
             id="applicants"
             name="applicants"
-            legend={t('protected-application-spokes:renewalSelection.select')}
+            legend={t('protectedApplicationSpokes:renewalSelection.select')}
             options={applicants.map((applicant) => ({
               value: applicant.id,
               children: applicant.name,
@@ -202,7 +202,7 @@ export default function ProtectedSpokesRenewalSelection({ loaderData, params }: 
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Renewal selection click">
-              {t('protected-application-spokes:renewalSelection.saveBtn')}
+              {t('protectedApplicationSpokes:renewalSelection.saveBtn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -212,7 +212,7 @@ export default function ProtectedSpokesRenewalSelection({ loaderData, params }: 
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Renewal selection click"
             >
-              {t('protected-application-spokes:renewalSelection.backBtn')}
+              {t('protectedApplicationSpokes:renewalSelection.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

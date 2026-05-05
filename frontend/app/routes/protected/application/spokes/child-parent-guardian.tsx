@@ -18,9 +18,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.childParentOrGuardian,
-  pageTitleI18nKey: 'protected-application-spokes:children.parentOrGuardian.pageTitle',
+  pageTitleI18nKey: 'protectedApplicationSpokes:children.parentOrGuardian.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -32,7 +32,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getProtectedApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.parentOrGuardian.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:children.parentOrGuardian.pageTitle') }) };
 
   return {
     meta,
@@ -51,7 +51,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   clearProtectedApplicationState({ params, session });
-  return redirect(t('protected-application-spokes:children.parentOrGuardian.exitBtnLink'));
+  return redirect(t('protectedApplicationSpokes:children.parentOrGuardian.exitBtnLink'));
 }
 
 export default function ChildParentGuardian({ loaderData, params }: Route.ComponentProps) {
@@ -71,7 +71,7 @@ export default function ChildParentGuardian({ loaderData, params }: Route.Compon
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('protected-application-spokes:children.parentOrGuardian.unableToApply')}</p>
+        <p>{t('protectedApplicationSpokes:children.parentOrGuardian.unableToApply')}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -83,10 +83,10 @@ export default function ChildParentGuardian({ loaderData, params }: Route.Compon
           disabled={isSubmitting}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child parent or guardian needs to apply click"
         >
-          {t('protected-application-spokes:children.parentOrGuardian.backBtn')}
+          {t('protectedApplicationSpokes:children.parentOrGuardian.backBtn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - Child parent or guardian needs to apply click">
-          {t('protected-application-spokes:children.parentOrGuardian.exitBtn')}
+          {t('protectedApplicationSpokes:children.parentOrGuardian.exitBtn')}
         </LoadingButton>
       </fetcher.Form>
     </div>

@@ -37,9 +37,9 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-simplified-adult', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSimplifiedAdult', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.simplifiedAdult.confirmation,
-  pageTitleI18nKey: 'application-simplified-adult:confirm.pageTitle',
+  pageTitleI18nKey: 'applicationSimplifiedAdult:confirm.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -136,7 +136,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     selectedProvincialBenefits: dentalBenefits.provincialGovernmentInsurancePlan?.name,
   };
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-adult:confirm.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSimplifiedAdult:confirm.pageTitle') }) };
 
   const eligibility = getEligibilityStatus({
     hasPrivateDentalInsurance: state.dentalInsurance.hasDentalInsurance,
@@ -179,7 +179,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const mscaLinkAccount = <InlineLink to={t('confirm.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('application-simplified-adult:confirm.mscaLinkChecker')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('applicationSimplifiedAdult:confirm.mscaLinkChecker')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose space-y-10">
@@ -359,8 +359,8 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
               <DefinitionListItem term={t('confirm.dentalPublic')}>
                 {dentalInsurance.hasDentalBenefitsChanged && (dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits) ? (
                   <div className="space-y-3">
-                    <p>{t('application-simplified-adult:confirm.yes')}</p>
-                    <p>{t('application-simplified-adult:confirm.dentalBenefitHasAccess')}</p>
+                    <p>{t('applicationSimplifiedAdult:confirm.yes')}</p>
+                    <p>{t('applicationSimplifiedAdult:confirm.dentalBenefitHasAccess')}</p>
                     <ul className="list-disc space-y-1 pl-7">
                       {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
                       {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
@@ -391,18 +391,18 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
       </div>
       <Dialog>
         <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Exit - Application successfully submitted click" asChild>
-          <Button variant="secondary">{t('application-simplified-adult:confirm.closeApplication')}</Button>
+          <Button variant="secondary">{t('applicationSimplifiedAdult:confirm.closeApplication')}</Button>
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{t('application-simplified-adult:confirm.modal.header')}</DialogTitle>
+            <DialogTitle>{t('applicationSimplifiedAdult:confirm.modal.header')}</DialogTitle>
           </DialogHeader>
-          <p>{t('application-simplified-adult:confirm.modal.info')}</p>
-          <p>{t('application-simplified-adult:confirm.modal.areYouSure')}</p>
+          <p>{t('applicationSimplifiedAdult:confirm.modal.info')}</p>
+          <p>{t('applicationSimplifiedAdult:confirm.modal.areYouSure')}</p>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Back exit modal - Application successfully submitted click">
-                {t('application-simplified-adult:confirm.modal.backBtn')}
+                {t('applicationSimplifiedAdult:confirm.modal.backBtn')}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
@@ -414,7 +414,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
                 onClick={() => removeApplicationFlowStorageValue()}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Confirmation exit modal - Application successfully submitted click"
               >
-                {t('application-simplified-adult:confirm.modal.closeBtn')}
+                {t('applicationSimplifiedAdult:confirm.modal.closeBtn')}
               </Button>
             </fetcher.Form>
           </DialogFooter>

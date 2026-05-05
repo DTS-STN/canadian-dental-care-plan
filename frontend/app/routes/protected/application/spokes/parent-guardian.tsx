@@ -28,9 +28,9 @@ const YES_NO_OPTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.parentGuardian,
-  pageTitleI18nKey: 'protected-application-spokes:children.parentGuardian.pageTitle',
+  pageTitleI18nKey: 'protectedApplicationSpokes:children.parentGuardian.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -45,10 +45,10 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const childNumber = t('protected-application-spokes:children.childNumber', { childNumber: childState.childNumber });
+  const childNumber = t('protectedApplicationSpokes:children.childNumber', { childNumber: childState.childNumber });
   const childName = childState.information?.firstName ?? childNumber;
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:children.parentGuardian.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:children.parentGuardian.pageTitle') }) };
 
   return { meta, defaultState: childState.information, childName, applicationFlow: `${state.context}-${state.typeOfApplication}` as const };
 }
@@ -67,7 +67,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const parentGuardianSchema = z.object({
-    isParent: z.boolean({ error: t('protected-application-spokes:children.parentGuardian.isParent') }),
+    isParent: z.boolean({ error: t('protectedApplicationSpokes:children.parentGuardian.isParent') }),
   });
 
   const parsedDataResult = parentGuardianSchema.safeParse({
@@ -114,15 +114,15 @@ export default function ParentGuardian({ loaderData, params }: Route.ComponentPr
   return (
     <div className="max-w-prose">
       <fetcher.Form method="post" noValidate>
-        <p className="mb-4 italic">{t('protected-application:requiredLabel')}</p>
+        <p className="mb-4 italic">{t('protectedApplication:requiredLabel')}</p>
         <div className="mb-8 space-y-4">
           <InputRadios
             id="is-parent-radios"
             name="isParent"
-            legend={t('protected-application-spokes:children.parentGuardian.parentLegend', { childName })}
+            legend={t('protectedApplicationSpokes:children.parentGuardian.parentLegend', { childName })}
             options={[
-              { value: YES_NO_OPTION.yes, children: t('protected-application-spokes:children.parentGuardian.radioOptions.yes'), defaultChecked: defaultState?.isParent === true },
-              { value: YES_NO_OPTION.no, children: t('protected-application-spokes:children.parentGuardian.radioOptions.no'), defaultChecked: defaultState?.isParent === false },
+              { value: YES_NO_OPTION.yes, children: t('protectedApplicationSpokes:children.parentGuardian.radioOptions.yes'), defaultChecked: defaultState?.isParent === true },
+              { value: YES_NO_OPTION.no, children: t('protectedApplicationSpokes:children.parentGuardian.radioOptions.no'), defaultChecked: defaultState?.isParent === false },
             ]}
             errorMessage={errors?.isParent}
             required
@@ -138,10 +138,10 @@ export default function ParentGuardian({ loaderData, params }: Route.ComponentPr
             disabled={isSubmitting}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child parent or guardian needs to apply click"
           >
-            {t('protected-application-spokes:children.parentGuardian.backBtn')}
+            {t('protectedApplicationSpokes:children.parentGuardian.backBtn')}
           </ButtonLink>
           <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Child Information click">
-            {t('protected-application-spokes:children.parentGuardian.saveBtn')}
+            {t('protectedApplicationSpokes:children.parentGuardian.saveBtn')}
           </LoadingButton>
         </div>
       </fetcher.Form>

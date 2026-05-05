@@ -37,9 +37,9 @@ const HAS_DENTAL_INSURANCE_OPTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-spokes', 'protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.dentalInsurance,
-  pageTitleI18nKey: 'protected-application-spokes:dentalInsurance.title',
+  pageTitleI18nKey: 'protectedApplicationSpokes:dentalInsurance.title',
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -53,7 +53,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-spokes:dentalInsurance.title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:dentalInsurance.title') }) };
 
   return {
     defaultState: state.dentalInsurance
@@ -82,15 +82,15 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const dentalInsuranceSchema = z
     .object({
-      hasDentalInsurance: z.boolean({ error: t('protected-application-spokes:dentalInsurance.errorMessage.dentalInsuranceRequired') }),
-      dentalInsuranceEligibilityConfirmationYes: z.boolean({ error: t('protected-application-spokes:dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired') }),
-      dentalInsuranceEligibilityConfirmationNo: z.boolean({ error: t('protected-application-spokes:dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired') }),
+      hasDentalInsurance: z.boolean({ error: t('protectedApplicationSpokes:dentalInsurance.errorMessage.dentalInsuranceRequired') }),
+      dentalInsuranceEligibilityConfirmationYes: z.boolean({ error: t('protectedApplicationSpokes:dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired') }),
+      dentalInsuranceEligibilityConfirmationNo: z.boolean({ error: t('protectedApplicationSpokes:dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired') }),
     })
     .superRefine(({ hasDentalInsurance, dentalInsuranceEligibilityConfirmationYes }, ctx) => {
       if (hasDentalInsurance && dentalInsuranceEligibilityConfirmationYes === false) {
         return ctx.addIssue({
           code: 'custom',
-          message: t('protected-application-spokes:dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired'),
+          message: t('protectedApplicationSpokes:dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired'),
           path: ['dentalInsuranceEligibilityConfirmationYes'],
         });
       }
@@ -153,13 +153,13 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
     </div>
   );
 
-  const t4Href = <InlineLink to={t('protected-application-spokes:dentalInsurance.no.alertT4Href')} className="external-link" newTabIndicator target="_blank" />;
-  const t4aHref = <InlineLink to={t('protected-application-spokes:dentalInsurance.no.alertT4aHref')} className="external-link" newTabIndicator target="_blank" />;
+  const t4Href = <InlineLink to={t('protectedApplicationSpokes:dentalInsurance.no.alertT4Href')} className="external-link" newTabIndicator target="_blank" />;
+  const t4aHref = <InlineLink to={t('protectedApplicationSpokes:dentalInsurance.no.alertT4aHref')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('protected-application:requiredLabel')}</p>
+        <p className="mb-4 italic">{t('protectedApplication:requiredLabel')}</p>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
@@ -211,7 +211,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
             <div className="mb-4 space-y-4">
               <ContextualAlert type="info" id="dental-insurance-confirmation-no">
                 <h2 className="font-lato mb-2 text-xl font-semibold">{t('dentalInsurance.no.alertTitle')}</h2>
-                <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-spokes:dentalInsurance.no.alertBody" components={{ t4Href, t4aHref }} />
+                <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplicationSpokes:dentalInsurance.no.alertBody" components={{ t4Href, t4aHref }} />
               </ContextualAlert>
               <InputCheckbox
                 id="dental-insurance-eligibility-confirmation-no"

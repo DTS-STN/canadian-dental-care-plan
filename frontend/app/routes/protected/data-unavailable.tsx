@@ -14,9 +14,9 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('data-unavailable', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('dataUnavailable', 'gcweb'),
   pageIdentifier: pageIds.protected.dataUnavailable,
-  pageTitleI18nKey: 'data-unavailable:pageTitle',
+  pageTitleI18nKey: 'dataUnavailable:pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -26,7 +26,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   await securityHandler.validateAuthSession({ request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('data-unavailable:pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('dataUnavailable:pageTitle') }) };
 
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
@@ -41,26 +41,26 @@ export default function DataUnavailable({ loaderData, params }: Route.ComponentP
   const { SCCH_BASE_URI } = loaderData;
 
   const statusCheckerLink = <InlineLink routeId="public/status/index" className="external-link" newTabIndicator target="_blank" params={params} />;
-  const cdcpLink = <InlineLink to={t('data-unavailable:doYouQualifyHref')} className="external-link" newTabIndicator target="_blank" />;
-  const contactLink = <InlineLink to={t('data-unavailable:contactUsHref')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('dataUnavailable:doYouQualifyHref')} className="external-link" newTabIndicator target="_blank" />;
+  const contactLink = <InlineLink to={t('dataUnavailable:contactUsHref')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose">
       <div className="space-y-4">
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="data-unavailable:serviceEligible" components={{ statusCheckerLink }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="dataUnavailable:serviceEligible" components={{ statusCheckerLink }} />
         </p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="data-unavailable:otherEnquiry" components={{ cdcpLink }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="dataUnavailable:otherEnquiry" components={{ cdcpLink }} />
         </p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="data-unavailable:serviceDelay" components={{ contactLink }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="dataUnavailable:serviceDelay" components={{ contactLink }} />
         </p>
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <ButtonLink id="back-button" to={t('gcweb:header.menuDashboardHref', { baseUri: SCCH_BASE_URI })} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Return to dashboard - You have not applied for CDCP click">
-          {t('data-unavailable:backButton')}
+          {t('dataUnavailable:backButton')}
         </ButtonLink>
       </div>
     </div>

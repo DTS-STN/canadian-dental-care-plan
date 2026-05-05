@@ -34,9 +34,9 @@ const CHECKBOX_VALUE = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application', 'protected-application-intake-adult', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'protectedApplicationIntakeAdult', 'gcweb'),
   pageIdentifier: pageIds.protected.application.intakeAdult.submit,
-  pageTitleI18nKey: 'protected-application-intake-adult:submit.pageHeading',
+  pageTitleI18nKey: 'protectedApplicationIntakeAdult:submit.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -49,7 +49,7 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['intake-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-intake-adult:submit.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationIntakeAdult:submit.pageTitle') }) };
 
   const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
@@ -80,8 +80,8 @@ export async function action({ context: { appContainer, session }, request, para
   securityHandler.validateCsrfToken({ formData, session });
 
   const submitTermsSchema = z.object({
-    acknowledgeInfo: z.literal(true, { error: t('protected-application-intake-adult:submit.errorMessage.acknowledgeInfoRequired') }),
-    acknowledgeCriteria: z.literal(true, { error: t('protected-application-intake-adult:submit.errorMessage.acknowledgeCriteriaRequired') }),
+    acknowledgeInfo: z.literal(true, { error: t('protectedApplicationIntakeAdult:submit.errorMessage.acknowledgeInfoRequired') }),
+    acknowledgeCriteria: z.literal(true, { error: t('protectedApplicationIntakeAdult:submit.errorMessage.acknowledgeCriteriaRequired') }),
   });
 
   const parsedDataResult = submitTermsSchema.safeParse({
@@ -108,7 +108,7 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t('protected-application-intake-adult:submit.doYouQualifyHref')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t('protectedApplicationIntakeAdult:submit.doYouQualifyHref')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
@@ -117,40 +117,40 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
         <ErrorSummary />
         <div className="space-y-8">
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-intake-adult:submit.overview')}</h2>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('protectedApplicationIntakeAdult:submit.overview')}</h2>
             <div className="space-y-4">
-              <p>{t('protected-application-intake-adult:submit.youAreSubmitting')}</p>
+              <p>{t('protectedApplicationIntakeAdult:submit.youAreSubmitting')}</p>
               <ul className="list-disc space-y-1 pl-7">
                 <li>{state.applicantName}</li>
               </ul>
             </div>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-intake-adult:submit.reviewYourApplication')}</h2>
-            <p>{t('protected-application-intake-adult:submit.pleaseReview')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('protectedApplicationIntakeAdult:submit.reviewYourApplication')}</h2>
+            <p>{t('protectedApplicationIntakeAdult:submit.pleaseReview')}</p>
             <ButtonLink variant="primary" routeId="protected/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Action click">
-              {t('protected-application-intake-adult:submit.reviewApplication')}
+              {t('protectedApplicationIntakeAdult:submit.reviewApplication')}
             </ButtonLink>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('protected-application-intake-adult:submit.submitYourApplication')}</h2>
-            <p>{t('protected-application-intake-adult:submit.bySubmitting')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t('protectedApplicationIntakeAdult:submit.submitYourApplication')}</h2>
+            <p>{t('protectedApplicationIntakeAdult:submit.bySubmitting')}</p>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey="protected-application-intake-adult:submit.reviewEligibilityCriteria" components={{ eligibilityLink }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplicationIntakeAdult:submit.reviewEligibilityCriteria" components={{ eligibilityLink }} />
             </p>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
               <div className="space-y-2">
                 <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
-                  {t('protected-application-intake-adult:submit.infoIsCorrect')}
+                  {t('protectedApplicationIntakeAdult:submit.infoIsCorrect')}
                 </InputCheckbox>
                 <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
-                  {t('protected-application-intake-adult:submit.iUnderstand')}
+                  {t('protectedApplicationIntakeAdult:submit.iUnderstand')}
                 </InputCheckbox>
               </div>
               <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_170px]">
                 <LoadingButton loading={isSubmitting} variant="green" className="order-first h-full text-base sm:order-last sm:text-lg" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Submit click">
-                  {t('protected-application-intake-adult:submit.submit')}
+                  {t('protectedApplicationIntakeAdult:submit.submit')}
                 </LoadingButton>
                 <NavigationButtonLink
                   disabled={isSubmitting}
@@ -160,7 +160,7 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
                   params={params}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Back click"
                 >
-                  {t('protected-application-intake-adult:submit.dentalInsurance')}
+                  {t('protectedApplicationIntakeAdult:submit.dentalInsurance')}
                 </NavigationButtonLink>
               </div>
             </fetcher.Form>
@@ -168,7 +168,7 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
         </div>
         <div className="mt-8">
           <InlineLink routeId="protected/application/$id/intake-adult/exit-application" params={params}>
-            {t('protected-application-intake-adult:submit.exitApplication')}
+            {t('protectedApplicationIntakeAdult:submit.exitApplication')}
           </InlineLink>
         </div>
       </div>

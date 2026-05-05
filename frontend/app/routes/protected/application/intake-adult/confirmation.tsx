@@ -26,9 +26,9 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protected-application-intake-adult', 'protected-application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationIntakeAdult', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.intakeAdult.confirmation,
-  pageTitleI18nKey: 'protected-application-intake-adult:confirm.pageTitle',
+  pageTitleI18nKey: 'protectedApplicationIntakeAdult:confirm.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -115,7 +115,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     selectedProvincialBenefits: selectedProvincialBenefits?.name,
   };
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protected-application-intake-adult:confirm.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationIntakeAdult:confirm.pageTitle') }) };
 
   return {
     dentalInsurance,
@@ -154,7 +154,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const mscaLinkAccount = <InlineLink to={t('confirm.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('protected-application-intake-adult:confirm.statusCheckerLink')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('protectedApplicationIntakeAdult:confirm.statusCheckerLink')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose space-y-10">
@@ -325,8 +325,8 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
               <DefinitionListItem term={t('confirm.dentalPublic')}>
                 {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
                   <div className="space-y-3">
-                    <p>{t('protected-application-intake-adult:confirm.yes')}</p>
-                    <p>{t('protected-application-intake-adult:confirm.dentalBenefitHasAccess')}</p>
+                    <p>{t('protectedApplicationIntakeAdult:confirm.yes')}</p>
+                    <p>{t('protectedApplicationIntakeAdult:confirm.dentalBenefitHasAccess')}</p>
                     <ul className="list-disc space-y-1 pl-7">
                       {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
                       {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
@@ -357,24 +357,24 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
       </div>
       <Dialog>
         <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Exit - Application successfully submitted click" asChild>
-          <Button variant="secondary">{t('protected-application-intake-adult:confirm.closeApplication')}</Button>
+          <Button variant="secondary">{t('protectedApplicationIntakeAdult:confirm.closeApplication')}</Button>
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{t('protected-application-intake-adult:confirm.modal.header')}</DialogTitle>
+            <DialogTitle>{t('protectedApplicationIntakeAdult:confirm.modal.header')}</DialogTitle>
           </DialogHeader>
-          <p>{t('protected-application-intake-adult:confirm.modal.info')}</p>
-          <p>{t('protected-application-intake-adult:confirm.modal.areYouSure')}</p>
+          <p>{t('protectedApplicationIntakeAdult:confirm.modal.info')}</p>
+          <p>{t('protectedApplicationIntakeAdult:confirm.modal.areYouSure')}</p>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Back exit modal - Application successfully submitted click">
-                {t('protected-application-intake-adult:confirm.modal.backBtn')}
+                {t('protectedApplicationIntakeAdult:confirm.modal.backBtn')}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
               <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => removeApplicationFlowStorageValue()} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Close confirm modal click">
-                {t('protected-application-intake-adult:confirm.modal.closeBtn')}
+                {t('protectedApplicationIntakeAdult:confirm.modal.closeBtn')}
               </Button>
             </fetcher.Form>
           </DialogFooter>

@@ -45,9 +45,9 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 }
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'application-spokes', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('application', 'applicationSpokes', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.maritalStatus,
-  pageTitleI18nKey: 'application-spokes:maritalStatus.pageTitle',
+  pageTitleI18nKey: 'applicationSpokes:maritalStatus.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -58,7 +58,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-spokes:maritalStatus.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:maritalStatus.pageTitle') }) };
   const maritalStatuses = appContainer.get(TYPES.MaritalStatusService).listLocalizedMaritalStatuses(locale);
   return {
     defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation },
@@ -84,35 +84,35 @@ export async function action({ context: { appContainer, session }, params, reque
   // state validation schema
   const maritalStatusSchema = z.object({
     maritalStatus: z
-      .string({ error: t('application-spokes:maritalStatus.errorMessage.maritalStatusRequired') })
+      .string({ error: t('applicationSpokes:maritalStatus.errorMessage.maritalStatusRequired') })
       .trim()
-      .min(1, t('application-spokes:maritalStatus.errorMessage.maritalStatusRequired')),
+      .min(1, t('applicationSpokes:maritalStatus.errorMessage.maritalStatusRequired')),
   });
 
   const currentYear = new Date().getFullYear();
   const partnerInformationSchema = z.object({
-    consentToSharePersonalInformation: z.literal(true, t('application-spokes:maritalStatus.errorMessage.confirmRequired')),
+    consentToSharePersonalInformation: z.literal(true, t('applicationSpokes:maritalStatus.errorMessage.confirmRequired')),
     yearOfBirth: z
       .string()
       .trim()
-      .min(1, t('application-spokes:maritalStatus.errorMessage.dateOfBirthYearRequired'))
-      .refine((year) => Number.parseInt(year) > currentYear - 150, t('application-spokes:maritalStatus.errorMessage.yobIsPast'))
-      .refine((year) => Number.parseInt(year) < currentYear, t('application-spokes:maritalStatus.errorMessage.yobIsFuture')),
+      .min(1, t('applicationSpokes:maritalStatus.errorMessage.dateOfBirthYearRequired'))
+      .refine((year) => Number.parseInt(year) > currentYear - 150, t('applicationSpokes:maritalStatus.errorMessage.yobIsPast'))
+      .refine((year) => Number.parseInt(year) < currentYear, t('applicationSpokes:maritalStatus.errorMessage.yobIsFuture')),
     socialInsuranceNumber: z
       .string()
       .trim()
-      .min(1, t('application-spokes:maritalStatus.errorMessage.sinRequired'))
+      .min(1, t('applicationSpokes:maritalStatus.errorMessage.sinRequired'))
 
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
-          ctx.addIssue({ code: 'custom', message: t('application-spokes:maritalStatus.errorMessage.sinValid') });
+          ctx.addIssue({ code: 'custom', message: t('applicationSpokes:maritalStatus.errorMessage.sinValid') });
         } else if (
           [state.applicantInformation?.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
             .filter((sin) => sin !== undefined)
             .map((sin) => formatSin(sin))
             .includes(formatSin(sin))
         ) {
-          ctx.addIssue({ code: 'custom', message: t('application-spokes:maritalStatus.errorMessage.sinUnique') });
+          ctx.addIssue({ code: 'custom', message: t('applicationSpokes:maritalStatus.errorMessage.sinUnique') });
         }
       }),
   }) satisfies z.ZodType<PublicApplicationPartnerInformationState>;
@@ -188,8 +188,8 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
             <InputRadios
               id="maritalStatus"
               name="maritalStatus"
-              legend={t('application-spokes:maritalStatus.maritalStatus')}
-              helpMessagePrimary={t('application-spokes:maritalStatus.primaryHelpMessage')}
+              legend={t('applicationSpokes:maritalStatus.maritalStatus')}
+              helpMessagePrimary={t('applicationSpokes:maritalStatus.primaryHelpMessage')}
               options={maritalStatusOptions}
               errorMessage={errors?.maritalStatus}
               required
@@ -197,16 +197,16 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
 
             {(selectedMaritalStatus === MARITAL_STATUS_CODE_COMMON_LAW || selectedMaritalStatus === MARITAL_STATUS_CODE_MARRIED) && (
               <>
-                <h2 className="font-lato mb-6 text-2xl font-bold">{t('application-spokes:maritalStatus.spouseOrCommonlaw')}</h2>
-                <p className="mb-4">{t('application-spokes:maritalStatus.provideSin')}</p>
-                <p className="mb-6">{t('application-spokes:maritalStatus.requiredInformation')}</p>
+                <h2 className="font-lato mb-6 text-2xl font-bold">{t('applicationSpokes:maritalStatus.spouseOrCommonlaw')}</h2>
+                <p className="mb-4">{t('applicationSpokes:maritalStatus.provideSin')}</p>
+                <p className="mb-6">{t('applicationSpokes:maritalStatus.requiredInformation')}</p>
                 <InputPatternField
                   id="social-insurance-number"
                   name="socialInsuranceNumber"
                   format={sinInputPatternFormat}
-                  label={t('application-spokes:maritalStatus.sin')}
+                  label={t('applicationSpokes:maritalStatus.sin')}
                   inputMode="numeric"
-                  helpMessagePrimary={t('application-spokes:maritalStatus.sinHelp')}
+                  helpMessagePrimary={t('applicationSpokes:maritalStatus.sinHelp')}
                   helpMessagePrimaryClassName="text-black"
                   defaultValue={defaultState.socialInsuranceNumber ?? ''}
                   errorMessage={errors?.socialInsuranceNumber}
@@ -218,8 +218,8 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
                   inputMode="numeric"
                   format="####"
                   defaultValue={defaultState.yearOfBirth ?? ''}
-                  label={t('application-spokes:maritalStatus.yearOfBirth')}
-                  helpMessagePrimary={t('application-spokes:maritalStatus.yearOfBirthHelp')}
+                  label={t('applicationSpokes:maritalStatus.yearOfBirth')}
+                  helpMessagePrimary={t('applicationSpokes:maritalStatus.yearOfBirthHelp')}
                   helpMessagePrimaryClassName="text-black"
                   errorMessage={errors?.yearOfBirth}
                   required
@@ -232,14 +232,14 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
                   defaultChecked={defaultState.consentToSharePersonalInformation === true}
                   required
                 >
-                  {t('application-spokes:maritalStatus.confirmCheckbox')}
+                  {t('applicationSpokes:maritalStatus.confirmCheckbox')}
                 </InputCheckbox>
               </>
             )}
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Marital status click">
-              {t('application-spokes:maritalStatus.saveBtn')}
+              {t('applicationSpokes:maritalStatus.saveBtn')}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -249,7 +249,7 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Marital status click"
             >
-              {t('application-spokes:maritalStatus.backBtn')}
+              {t('applicationSpokes:maritalStatus.backBtn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

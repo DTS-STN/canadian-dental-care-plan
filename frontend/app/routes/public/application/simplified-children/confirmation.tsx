@@ -38,9 +38,9 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application-simplified-child', 'application', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSimplifiedChild', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.simplifiedChild.confirmation,
-  pageTitleI18nKey: 'application-simplified-child:confirm.pageTitle',
+  pageTitleI18nKey: 'applicationSimplifiedChild:confirm.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -168,7 +168,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     }),
   );
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application-simplified-child:confirm.pageTitle') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSimplifiedChild:confirm.pageTitle') }) };
 
   return {
     homeAddressInfo,
@@ -205,7 +205,7 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const mscaLinkAccount = <InlineLink to={t('confirm.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('application-simplified-child:confirm.mscaLinkChecker')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('applicationSimplifiedChild:confirm.mscaLinkChecker')} className="external-link" newTabIndicator target="_blank" />;
 
   const { currentLanguage } = useCurrentLanguage();
 
@@ -390,33 +390,33 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
               <section key={child.id} className="space-y-10">
                 <h2 className="font-lato text-3xl font-bold">{child.firstName}</h2>
                 <div>
-                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-simplified-child:confirm.pageSubTitle', { child: child.firstName })}</h3>
+                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('applicationSimplifiedChild:confirm.pageSubTitle', { child: child.firstName })}</h3>
                   <DefinitionList border>
-                    <DefinitionListItem term={t('application-simplified-child:confirm.memberId')}>{child.memberId}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-simplified-child:confirm.fullName')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-simplified-child:confirm.dob')}>{dateOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-simplified-child:confirm.sin')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
-                    <DefinitionListItem term={t('application-simplified-child:confirm.isParent')}>{child.isParent ? t('application-simplified-child:confirm.yes') : t('application-simplified-child:confirm.no')}</DefinitionListItem>
+                    <DefinitionListItem term={t('applicationSimplifiedChild:confirm.memberId')}>{child.memberId}</DefinitionListItem>
+                    <DefinitionListItem term={t('applicationSimplifiedChild:confirm.fullName')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
+                    <DefinitionListItem term={t('applicationSimplifiedChild:confirm.dob')}>{dateOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t('applicationSimplifiedChild:confirm.sin')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
+                    <DefinitionListItem term={t('applicationSimplifiedChild:confirm.isParent')}>{child.isParent ? t('applicationSimplifiedChild:confirm.yes') : t('applicationSimplifiedChild:confirm.no')}</DefinitionListItem>
                   </DefinitionList>
                 </div>
                 <div>
-                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('application-simplified-child:confirm.dentalTitle', { child: child.firstName })}</h3>
+                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('applicationSimplifiedChild:confirm.dentalTitle', { child: child.firstName })}</h3>
                   <DefinitionList border>
-                    <DefinitionListItem term={t('application-simplified-child:confirm.dentalPrivate')}>
-                      {child.dentalInsurance.accessToDentalInsurance ? t('application-simplified-child:confirm.yes') : t('application-simplified-child:confirm.no')}
+                    <DefinitionListItem term={t('applicationSimplifiedChild:confirm.dentalPrivate')}>
+                      {child.dentalInsurance.accessToDentalInsurance ? t('applicationSimplifiedChild:confirm.yes') : t('applicationSimplifiedChild:confirm.no')}
                     </DefinitionListItem>
-                    <DefinitionListItem term={t('application-simplified-child:confirm.dentalPublic')}>
+                    <DefinitionListItem term={t('applicationSimplifiedChild:confirm.dentalPublic')}>
                       {child.dentalInsurance.hasDentalBenefitsChanged && (child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access) ? (
                         <div className="space-y-3">
-                          <p>{t('application-simplified-child:confirm.yes')}</p>
-                          <p>{t('application-simplified-child:confirm.dentalBenefitHasAccess')}</p>
+                          <p>{t('applicationSimplifiedChild:confirm.yes')}</p>
+                          <p>{t('applicationSimplifiedChild:confirm.dentalBenefitHasAccess')}</p>
                           <ul className="list-disc space-y-1 pl-7">
                             {child.dentalInsurance.federalBenefit.access && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
                             {child.dentalInsurance.provTerrBenefit.access && <li>{child.dentalInsurance.provTerrBenefit.benefit}</li>}
                           </ul>
                         </div>
                       ) : (
-                        <p>{child.dentalInsurance.hasDentalBenefitsChanged ? t('application-simplified-child:confirm.no') : t('application-simplified-child:confirm.noUpdate')}</p>
+                        <p>{child.dentalInsurance.hasDentalBenefitsChanged ? t('applicationSimplifiedChild:confirm.no') : t('applicationSimplifiedChild:confirm.noUpdate')}</p>
                       )}
                     </DefinitionListItem>
                   </DefinitionList>
@@ -443,18 +443,18 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
       </div>
       <Dialog>
         <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Exit - Application successfully submitted click" asChild>
-          <Button variant="secondary">{t('application-simplified-child:confirm.closeApplication')}</Button>
+          <Button variant="secondary">{t('applicationSimplifiedChild:confirm.closeApplication')}</Button>
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{t('application-simplified-child:confirm.modal.header')}</DialogTitle>
+            <DialogTitle>{t('applicationSimplifiedChild:confirm.modal.header')}</DialogTitle>
           </DialogHeader>
-          <p>{t('application-simplified-child:confirm.modal.info')}</p>
-          <p>{t('application-simplified-child:confirm.modal.areYouSure')}</p>
+          <p>{t('applicationSimplifiedChild:confirm.modal.info')}</p>
+          <p>{t('applicationSimplifiedChild:confirm.modal.areYouSure')}</p>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Back exit modal - Application successfully submitted click">
-                {t('application-simplified-child:confirm.modal.backBtn')}
+                {t('applicationSimplifiedChild:confirm.modal.backBtn')}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
@@ -466,7 +466,7 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
                 onClick={() => removeApplicationFlowStorageValue()}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Confirmation exit modal - Application successfully submitted click"
               >
-                {t('application-simplified-child:confirm.modal.closeBtn')}
+                {t('applicationSimplifiedChild:confirm.modal.closeBtn')}
               </Button>
             </fetcher.Form>
           </DialogFooter>
