@@ -104,7 +104,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
     contactInformationEmail: email,
     communicationSunLifePreference: communicationPreferences.preferredMethodSunLife,
-    communicationGOCPreference: communicationPreferences.preferredMethodGovernmentOfCanada,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -354,7 +353,6 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
             <DefinitionList border>
               <DefinitionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage.name}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.sun-life-comm-pref-title')}>{userInfo.communicationSunLifePreference.name}</DefinitionListItem>
-              <DefinitionListItem term={t('confirm.goc-comm-pref-title')}>{userInfo.communicationGOCPreference.name}</DefinitionListItem>
               <DefinitionListItem term={t('confirm.email')}>{userInfo.contactInformationEmail}</DefinitionListItem>
             </DefinitionList>
           </section>
