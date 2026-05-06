@@ -50,7 +50,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:dentalInsurance.title') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.dentalInsurance.title) }),
+  };
 
   return {
     defaultState: state.dentalInsurance
@@ -78,15 +80,21 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const dentalInsuranceSchema = z
     .object({
-      hasDentalInsurance: z.boolean({ error: t('applicationSpokes:dentalInsurance.errorMessage.dentalInsuranceRequired') }),
-      dentalInsuranceEligibilityConfirmationYes: z.boolean({ error: t('applicationSpokes:dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired') }),
-      dentalInsuranceEligibilityConfirmationNo: z.boolean({ error: t('applicationSpokes:dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired') }),
+      hasDentalInsurance: z.boolean({
+        error: t(($) => $.dentalInsurance.errorMessage.dentalInsuranceRequired),
+      }),
+      dentalInsuranceEligibilityConfirmationYes: z.boolean({
+        error: t(($) => $.dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired),
+      }),
+      dentalInsuranceEligibilityConfirmationNo: z.boolean({
+        error: t(($) => $.dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired),
+      }),
     })
     .superRefine(({ hasDentalInsurance, dentalInsuranceEligibilityConfirmationYes }, ctx) => {
       if (hasDentalInsurance && dentalInsuranceEligibilityConfirmationYes === false) {
         return ctx.addIssue({
           code: 'custom',
-          message: t('applicationSpokes:dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired'),
+          message: t(($) => $.dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired),
           path: ['dentalInsuranceEligibilityConfirmationYes'],
         });
       }
@@ -138,24 +146,24 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
   const helpMessage = (
     <div className="mb-4 space-y-4">
       <ul className="list-disc space-y-1 pl-7 font-semibold">
-        <li>{t('dentalInsurance.detail.additionalInfo.list.employer')}</li>
-        <li>{t('dentalInsurance.detail.additionalInfo.list.pension')}</li>
-        <li>{t('dentalInsurance.detail.additionalInfo.list.pensionPlans')}</li>
-        <li>{t('dentalInsurance.detail.additionalInfo.list.organization')}</li>
-        <li>{t('dentalInsurance.detail.additionalInfo.list.company')}</li>
+        <li>{t(($) => $.dentalInsurance.detail.additionalInfo.list.employer)}</li>
+        <li>{t(($) => $.dentalInsurance.detail.additionalInfo.list.pension)}</li>
+        <li>{t(($) => $.dentalInsurance.detail.additionalInfo.list.pensionPlans)}</li>
+        <li>{t(($) => $.dentalInsurance.detail.additionalInfo.list.organization)}</li>
+        <li>{t(($) => $.dentalInsurance.detail.additionalInfo.list.company)}</li>
       </ul>
-      <p className="font-semibold">{t('dentalInsurance.detail.additionalInfo.eligible')}</p>
-      <p>{t('dentalInsurance.detail.additionalInfo.access')}</p>
+      <p className="font-semibold">{t(($) => $.dentalInsurance.detail.additionalInfo.eligible)}</p>
+      <p>{t(($) => $.dentalInsurance.detail.additionalInfo.access)}</p>
     </div>
   );
 
-  const t4Href = <InlineLink to={t('applicationSpokes:dentalInsurance.no.alertT4Href')} className="external-link" newTabIndicator target="_blank" />;
-  const t4aHref = <InlineLink to={t('applicationSpokes:dentalInsurance.no.alertT4aHref')} className="external-link" newTabIndicator target="_blank" />;
+  const t4Href = <InlineLink to={t(($) => $.dentalInsurance.no.alertT4Href)} className="external-link" newTabIndicator target="_blank" />;
+  const t4aHref = <InlineLink to={t(($) => $.dentalInsurance.no.alertT4aHref)} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('application:requiredLabel')}</p>
+        <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'application' })}</p>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
@@ -163,16 +171,16 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
             <InputRadios
               id="has-dental-insurance"
               name="hasDentalInsurance"
-              legend={t('dentalInsurance.legend')}
+              legend={t(($) => $.dentalInsurance.legend)}
               options={[
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="dentalInsurance.optionYes" />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.optionYes} />,
                   value: HAS_DENTAL_INSURANCE_OPTION.yes,
                   defaultChecked: defaultState?.hasDentalInsurance === true,
                   onChange: handleOnHasDentalInsuranceChanged,
                 },
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="dentalInsurance.optionNo" />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.optionNo} />,
                   value: HAS_DENTAL_INSURANCE_OPTION.no,
                   defaultChecked: defaultState?.hasDentalInsurance === false,
                   onChange: handleOnHasDentalInsuranceChanged,
@@ -187,8 +195,8 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
           {hasDentalInsurance === true && (
             <div className="mb-4 space-y-4">
               <ContextualAlert type="info" id="dental-insurance-confirmation-yes">
-                <h2 className="font-lato mb-2 text-xl font-semibold">{t('dentalInsurance.yes.alertTitle')}</h2>
-                <p>{t('dentalInsurance.yes.alertBody')}</p>
+                <h2 className="font-lato mb-2 text-xl font-semibold">{t(($) => $.dentalInsurance.yes.alertTitle)}</h2>
+                <p>{t(($) => $.dentalInsurance.yes.alertBody)}</p>
               </ContextualAlert>
               <InputCheckbox
                 id="dental-insurance-eligibility-confirmation-yes"
@@ -199,15 +207,15 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
                 required
                 aria-describedby="dental-insurance-confirmation-yes"
               >
-                {t('dentalInsurance.yes.confirmation')}
+                {t(($) => $.dentalInsurance.yes.confirmation)}
               </InputCheckbox>
             </div>
           )}
           {hasDentalInsurance === false && (
             <div className="mb-4 space-y-4">
               <ContextualAlert type="info" id="dental-insurance-confirmation-no">
-                <h2 className="font-lato mb-2 text-xl font-semibold">{t('dentalInsurance.no.alertTitle')}</h2>
-                <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:dentalInsurance.no.alertBody" components={{ t4Href, t4aHref }} />
+                <h2 className="font-lato mb-2 text-xl font-semibold">{t(($) => $.dentalInsurance.no.alertTitle)}</h2>
+                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.no.alertBody} components={{ t4Href, t4aHref }} />
               </ContextualAlert>
               <InputCheckbox
                 id="dental-insurance-eligibility-confirmation-no"
@@ -218,14 +226,14 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
                 required
                 aria-describedby="dental-insurance-confirmation-no"
               >
-                {t('dentalInsurance.no.confirmation')}
+                {t(($) => $.dentalInsurance.no.confirmation)}
               </InputCheckbox>
             </div>
           )}
 
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Access to other dental insurance click">
-              {t('dentalInsurance.saveBtn')}
+              {t(($) => $.dentalInsurance.saveBtn)}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -235,7 +243,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Access to other dental insurance click"
             >
-              {t('dentalInsurance.backBtn')}
+              {t(($) => $.dentalInsurance.backBtn)}
             </ButtonLink>
           </div>
         </fetcher.Form>

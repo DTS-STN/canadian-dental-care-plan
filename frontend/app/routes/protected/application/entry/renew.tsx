@@ -44,7 +44,9 @@ export async function loader({ context: { appContainer, session }, request, para
   validateProtectedApplicationContext(state, params, 'renewal');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplication:renewalSelection.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.renewalSelection.pageTitle) }),
+  };
 
   const applicationFlow: ApplicationFlow = state.typeOfApplication ? `${state.context}-${state.typeOfApplication}` : 'entry';
   const nextRouteId = getInitialApplicationFlowUrl(applicationFlow, params);
@@ -83,20 +85,20 @@ export default function ProtectedTypeOfApplication({ loaderData, params }: Route
   return (
     <div className="max-w-prose space-y-8">
       <div className="space-y-4">
-        <p>{t('protectedApplication:completeAllSections')}</p>
+        <p>{t(($) => $.completeAllSections)}</p>
         <p>{completedSectionsLabel}</p>
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>{t('protectedApplication:renewalSelection.typeApplicationHeading')}</CardTitle>
+          <CardTitle>{t(($) => $.renewalSelection.typeApplicationHeading)}</CardTitle>
           <CardAction>{sections.applicantClientIdsToRenew.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {defaultState.applicantClientIdsToRenew === undefined ? (
-            <p>{t('protectedApplication:renewalSelection.typeApplicationDescription')}</p>
+            <p>{t(($) => $.renewalSelection.typeApplicationDescription)}</p>
           ) : (
             <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('protectedApplication:renewalSelection.typeApplicationLegend')}>
+              <DefinitionListItem term={t(($) => $.renewalSelection.typeApplicationLegend)}>
                 <ul className="list-disc space-y-1 pl-7">
                   {applicants.map(({ id, name }) => (
                     <li key={id}>{name}</li>
@@ -104,9 +106,7 @@ export default function ProtectedTypeOfApplication({ loaderData, params }: Route
                 </ul>
               </DefinitionListItem>
               {defaultState.livingIndependently !== undefined && (
-                <DefinitionListItem term={t('protectedApplication:renewalSelection.livingIndependently')}>
-                  {defaultState.livingIndependently ? t('protectedApplication:renewalSelection.livingIndependentlyYes') : t('protectedApplication:renewalSelection.livingIndependentlyNo')}
-                </DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.renewalSelection.livingIndependently)}>{defaultState.livingIndependently ? t(($) => $.renewalSelection.livingIndependentlyYes) : t(($) => $.renewalSelection.livingIndependentlyNo)}</DefinitionListItem>
               )}
             </DefinitionList>
           )}
@@ -122,17 +122,16 @@ export default function ProtectedTypeOfApplication({ loaderData, params }: Route
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit type of application click"
           >
-            {defaultState.applicantClientIdsToRenew === undefined ? t('protectedApplication:renewalSelection.addTypeApplication') : t('protectedApplication:renewalSelection.editTypeApplication')}
+            {defaultState.applicantClientIdsToRenew === undefined ? t(($) => $.renewalSelection.addTypeApplication) : t(($) => $.renewalSelection.editTypeApplication)}
           </ButtonLink>
         </CardFooter>
       </Card>
-
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Continue click">
-          {t('protectedApplication:renewalSelection.application')}
+          {t(($) => $.renewalSelection.application)}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/eligibility-requirements" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Back click">
-          {t('protectedApplication:renewalSelection.beforeYouStart')}
+          {t(($) => $.renewalSelection.beforeYouStart)}
         </NavigationButtonLink>
       </div>
     </div>

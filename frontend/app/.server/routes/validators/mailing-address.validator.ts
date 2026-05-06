@@ -30,32 +30,32 @@ export class DefaultMailingAddressValidator implements MailingAddressValidator {
   }
 
   private async buildMailingAddressSchemaErrorMessages(): Promise<AddressValidatorErrorMessages> {
-    const t = await getFixedT(this.locale, ['common']);
+    const t = await getFixedT(this.locale, 'common');
     return {
       address: {
-        invalidCharacters: t('common:errorMessage.mailing.charactersValid'),
-        required: t('common:errorMessage.mailing.addressRequired'),
+        invalidCharacters: t(($) => $.errorMessage.mailing.charactersValid),
+        required: t(($) => $.errorMessage.mailing.addressRequired),
       },
       apartment: {
-        invalidCharacters: t('common:errorMessage.mailing.charactersValid'),
+        invalidCharacters: t(($) => $.errorMessage.mailing.charactersValid),
       },
       city: {
-        required: t('common:errorMessage.mailing.cityRequired'),
-        invalidCharacters: t('common:errorMessage.mailing.charactersValid'),
+        required: t(($) => $.errorMessage.mailing.cityRequired),
+        invalidCharacters: t(($) => $.errorMessage.mailing.charactersValid),
       },
       country: {
-        required: t('common:errorMessage.mailing.countryRequired'),
+        required: t(($) => $.errorMessage.mailing.countryRequired),
       },
       provinceState: {
-        required: t('common:errorMessage.mailing.provinceStateRequired'),
+        required: t(($) => $.errorMessage.mailing.provinceStateRequired),
       },
       postalZipCode: {
-        invalidCharacters: t('common:errorMessage.mailing.charactersValid'),
-        invalidPostalCode: t('common:errorMessage.mailing.postalZipCodeValid'),
-        invalidPostalCodeForProvince: t('common:errorMessage.mailing.invalidPostalZipCodeForProvince'),
-        invalidPostalZipCodeForCountry: t('common:errorMessage.mailing.invalidPostalZipCodeForCountry'),
-        invalidZipCode: t('common:errorMessage.mailing.zipCodeValid'),
-        required: t('common:errorMessage.mailing.postalZipCodeRequired'),
+        invalidCharacters: t(($) => $.errorMessage.mailing.charactersValid),
+        invalidPostalCode: t(($) => $.errorMessage.mailing.postalZipCodeValid),
+        invalidPostalCodeForProvince: t(($) => $.errorMessage.mailing.invalidPostalZipCodeForProvince),
+        invalidPostalZipCodeForCountry: t(($) => $.errorMessage.mailing.invalidPostalZipCodeForCountry),
+        invalidZipCode: t(($) => $.errorMessage.mailing.zipCodeValid),
+        required: t(($) => $.errorMessage.mailing.postalZipCodeRequired),
       },
     };
   }

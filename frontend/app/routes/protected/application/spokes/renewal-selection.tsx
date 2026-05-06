@@ -47,7 +47,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateProtectedApplicationContext(state, params, 'renewal');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:renewalSelection.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.renewalSelection.pageTitle) }),
+  };
 
   return {
     meta,
@@ -99,7 +101,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const applicantsSchema = z.object({ applicants: z.array(z.string().trim()).nonempty(t('protectedApplicationSpokes:renewalSelection.errorMessage.renewalSelectionRequired')) });
+  const applicantsSchema = z.object({
+    applicants: z.array(z.string().trim()).nonempty(t(($) => $.renewalSelection.errorMessage.renewalSelectionRequired)),
+  });
 
   const parsedDataResult = applicantsSchema.safeParse({ applicants: formData.getAll('applicants') });
 
@@ -183,7 +187,7 @@ export default function ProtectedSpokesRenewalSelection({ loaderData, params }: 
   const errors = fetcher.data?.errors;
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('protectedApplication:requiredLabel')}</p>
+      <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -191,7 +195,7 @@ export default function ProtectedSpokesRenewalSelection({ loaderData, params }: 
           <InputCheckboxes
             id="applicants"
             name="applicants"
-            legend={t('protectedApplicationSpokes:renewalSelection.select')}
+            legend={t(($) => $.renewalSelection.select)}
             options={applicants.map((applicant) => ({
               value: applicant.id,
               children: applicant.name,
@@ -202,7 +206,7 @@ export default function ProtectedSpokesRenewalSelection({ loaderData, params }: 
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Renewal selection click">
-              {t('protectedApplicationSpokes:renewalSelection.saveBtn')}
+              {t(($) => $.renewalSelection.saveBtn)}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -212,7 +216,7 @@ export default function ProtectedSpokesRenewalSelection({ loaderData, params }: 
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Renewal selection click"
             >
-              {t('protectedApplicationSpokes:renewalSelection.backBtn')}
+              {t(($) => $.renewalSelection.backBtn)}
             </ButtonLink>
           </div>
         </fetcher.Form>

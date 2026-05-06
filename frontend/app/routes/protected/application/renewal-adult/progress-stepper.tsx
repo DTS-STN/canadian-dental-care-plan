@@ -20,7 +20,7 @@ type ProgressStepperProps = OmitStrict<ComponentProps<typeof ReusableProgressSte
 };
 
 export function ProgressStepper({ activeStep, excludeMaritalStatus, ...props }: ProgressStepperProps): JSX.Element {
-  const { t } = useTranslation(['protectedApplicationRenewalAdult']);
+  const { t } = useTranslation('protectedApplicationRenewalAdult');
 
   const steps = useMemo(
     function () {
@@ -28,7 +28,7 @@ export function ProgressStepper({ activeStep, excludeMaritalStatus, ...props }: 
         .filter((step) => !excludeMaritalStatus || step !== 'maritalStatus')
         .map((step) => ({
           id: step,
-          label: t(`protectedApplicationRenewalAdult:progressStepper.${step}`),
+          label: t(($) => $.progressStepper[step]),
         }));
     },
     [excludeMaritalStatus, t],

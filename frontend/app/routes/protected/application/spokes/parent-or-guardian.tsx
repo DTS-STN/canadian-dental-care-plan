@@ -34,7 +34,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getProtectedApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:parentOrGuardian.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.parentOrGuardian.pageTitle) }),
+  };
 
   invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
   const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context);
@@ -61,7 +63,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearProtectedApplicationState({ params, session });
 
-  return redirect(t('protectedApplicationSpokes:parentOrGuardian.exitBtnLink'));
+  return redirect(t(($) => $.parentOrGuardian.exitBtnLink));
 }
 
 export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
@@ -93,9 +95,9 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p className="mb-4">{t('protectedApplicationSpokes:parentOrGuardian.unableToApply')}</p>
+        <p className="mb-4">{t(($) => $.parentOrGuardian.unableToApply)}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplicationSpokes:parentOrGuardian.applyForYourself" components={{ noWrap }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.parentOrGuardian.applyForYourself} components={{ noWrap }} />
         </p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
@@ -108,10 +110,10 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
           disabled={isSubmitting}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Parent or guardian needs to apply click"
         >
-          {t('protectedApplicationSpokes:parentOrGuardian.backBtn')}
+          {t(($) => $.parentOrGuardian.backBtn)}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - Parent or guardian needs to apply click">
-          {t('protectedApplicationSpokes:parentOrGuardian.exitBtn')}
+          {t(($) => $.parentOrGuardian.exitBtn)}
         </LoadingButton>
       </fetcher.Form>
     </div>

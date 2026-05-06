@@ -74,7 +74,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryList = await appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:address.homeAddress.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.address.homeAddress.pageTitle) }),
+  };
 
   return {
     defaultState: {
@@ -240,18 +242,21 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
 
   const homeRegions = useMemo<InputOptionProps[]>(() => homeCountryRegions.map(({ id, name }) => ({ children: name, value: id })), [homeCountryRegions]);
 
-  const dummyOption: InputOptionProps = { children: t('protectedApplicationSpokes:address.addressField.selectOne'), value: '' };
+  const dummyOption: InputOptionProps = {
+    children: t(($) => $.address.addressField.selectOne),
+    value: '',
+  };
 
   const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedHomeCountry);
 
   let postalCodeHelpMessage: string | undefined;
   switch (selectedHomeCountry) {
     case CANADA_COUNTRY_ID: {
-      postalCodeHelpMessage = t('protectedApplicationSpokes:address.addressField.postalCodeHelp');
+      postalCodeHelpMessage = t(($) => $.address.addressField.postalCodeHelp);
       break;
     }
     case USA_COUNTRY_ID: {
-      postalCodeHelpMessage = t('protectedApplicationSpokes:address.addressField.postalCodeHelpUs');
+      postalCodeHelpMessage = t(($) => $.address.addressField.postalCodeHelpUs);
       break;
     }
     default: {
@@ -262,7 +267,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('protectedApplication:optionalLabel')}</p>
+      <p className="mb-4 italic">{t(($) => $.optionalLabel, { ns: 'protectedApplication' })}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -273,8 +278,8 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 id="homeAddress"
                 name="address"
                 className="w-full"
-                label={t('protectedApplicationSpokes:address.addressField.address')}
-                helpMessagePrimary={t('protectedApplicationSpokes:address.addressField.addressHelp')}
+                label={t(($) => $.address.addressField.address)}
+                helpMessagePrimary={t(($) => $.address.addressField.addressHelp)}
                 helpMessagePrimaryClassName="text-black"
                 maxLength={100}
                 autoComplete="address-line1"
@@ -286,30 +291,20 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 id="home-apartment"
                 name="apartment"
                 className="w-full"
-                label={t('protectedApplicationSpokes:address.addressField.apartment')}
+                label={t(($) => $.address.addressField.apartment)}
                 maxLength={100}
-                helpMessagePrimary={t('protectedApplicationSpokes:address.addressField.apartmentHelp')}
+                helpMessagePrimary={t(($) => $.address.addressField.apartmentHelp)}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line2"
                 defaultValue=""
                 errorMessage={errors?.apartment}
               />
-              <InputSanitizeField
-                id="home-city"
-                name="city"
-                className="w-full"
-                label={t('protectedApplicationSpokes:address.addressField.city')}
-                maxLength={100}
-                autoComplete="address-level2"
-                defaultValue={defaultState.city}
-                errorMessage={errors?.city}
-                required
-              />
+              <InputSanitizeField id="home-city" name="city" className="w-full" label={t(($) => $.address.addressField.city)} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
               <InputSanitizeField
                 id="home-postal-code"
                 name="postalZipCode"
                 className="w-full sm:w-1/2"
-                label={isPostalCodeRequired ? t('protectedApplicationSpokes:address.addressField.postalCode') : t('protectedApplicationSpokes:address.addressField.postalCodeOptional')}
+                label={isPostalCodeRequired ? t(($) => $.address.addressField.postalCode) : t(($) => $.address.addressField.postalCodeOptional)}
                 maxLength={100}
                 autoComplete="postal-code"
                 defaultValue={defaultState.postalCode ?? ''}
@@ -323,7 +318,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   id="home-province"
                   name="provinceStateId"
                   className="w-full sm:w-1/2"
-                  label={t('protectedApplicationSpokes:address.addressField.province')}
+                  label={t(($) => $.address.addressField.province)}
                   defaultValue={defaultState.province}
                   errorMessage={errors?.provinceStateId}
                   options={[dummyOption, ...homeRegions]}
@@ -334,7 +329,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                 id="home-country"
                 name="countryId"
                 className="w-full sm:w-1/2"
-                label={t('protectedApplicationSpokes:address.addressField.country')}
+                label={t(($) => $.address.addressField.country)}
                 autoComplete="country"
                 defaultValue={defaultState.country ?? ''}
                 errorMessage={errors?.countryId}
@@ -357,7 +352,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
                   loading={isSubmitting}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Home address click"
                 >
-                  {t('protectedApplicationSpokes:address.saveBtn')}
+                  {t(($) => $.address.saveBtn)}
                 </LoadingButton>
               </DialogTrigger>
               {!isSubmitting && addressDialogContent && (
@@ -377,7 +372,7 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Home address click"
             >
-              {t('protectedApplicationSpokes:address.back')}
+              {t(($) => $.address.back)}
             </ButtonLink>
           </div>
         </fetcher.Form>

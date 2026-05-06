@@ -58,7 +58,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:maritalStatus.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.maritalStatus.pageTitle, { ns: 'applicationSpokes' }) }),
+  };
   const maritalStatuses = appContainer.get(TYPES.MaritalStatusService).listLocalizedMaritalStatuses(locale);
   return {
     defaultState: { maritalStatus: state.maritalStatus, ...state.partnerInformation },
@@ -84,35 +86,61 @@ export async function action({ context: { appContainer, session }, params, reque
   // state validation schema
   const maritalStatusSchema = z.object({
     maritalStatus: z
-      .string({ error: t('applicationSpokes:maritalStatus.errorMessage.maritalStatusRequired') })
+      .string({
+        error: t(($) => $.maritalStatus.errorMessage.maritalStatusRequired, { ns: 'applicationSpokes' }),
+      })
       .trim()
-      .min(1, t('applicationSpokes:maritalStatus.errorMessage.maritalStatusRequired')),
+      .min(
+        1,
+        t(($) => $.maritalStatus.errorMessage.maritalStatusRequired, { ns: 'applicationSpokes' }),
+      ),
   });
 
   const currentYear = new Date().getFullYear();
   const partnerInformationSchema = z.object({
-    consentToSharePersonalInformation: z.literal(true, t('applicationSpokes:maritalStatus.errorMessage.confirmRequired')),
+    consentToSharePersonalInformation: z.literal(
+      true,
+      t(($) => $.maritalStatus.errorMessage.confirmRequired, { ns: 'applicationSpokes' }),
+    ),
     yearOfBirth: z
       .string()
       .trim()
-      .min(1, t('applicationSpokes:maritalStatus.errorMessage.dateOfBirthYearRequired'))
-      .refine((year) => Number.parseInt(year) > currentYear - 150, t('applicationSpokes:maritalStatus.errorMessage.yobIsPast'))
-      .refine((year) => Number.parseInt(year) < currentYear, t('applicationSpokes:maritalStatus.errorMessage.yobIsFuture')),
+      .min(
+        1,
+        t(($) => $.maritalStatus.errorMessage.dateOfBirthYearRequired, { ns: 'applicationSpokes' }),
+      )
+      .refine(
+        (year) => Number.parseInt(year) > currentYear - 150,
+        t(($) => $.maritalStatus.errorMessage.yobIsPast, { ns: 'applicationSpokes' }),
+      )
+      .refine(
+        (year) => Number.parseInt(year) < currentYear,
+        t(($) => $.maritalStatus.errorMessage.yobIsFuture, { ns: 'applicationSpokes' }),
+      ),
     socialInsuranceNumber: z
       .string()
       .trim()
-      .min(1, t('applicationSpokes:maritalStatus.errorMessage.sinRequired'))
+      .min(
+        1,
+        t(($) => $.maritalStatus.errorMessage.sinRequired, { ns: 'applicationSpokes' }),
+      )
 
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
-          ctx.addIssue({ code: 'custom', message: t('applicationSpokes:maritalStatus.errorMessage.sinValid') });
+          ctx.addIssue({
+            code: 'custom',
+            message: t(($) => $.maritalStatus.errorMessage.sinValid, { ns: 'applicationSpokes' }),
+          });
         } else if (
           [state.applicantInformation?.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
             .filter((sin) => sin !== undefined)
             .map((sin) => formatSin(sin))
             .includes(formatSin(sin))
         ) {
-          ctx.addIssue({ code: 'custom', message: t('applicationSpokes:maritalStatus.errorMessage.sinUnique') });
+          ctx.addIssue({
+            code: 'custom',
+            message: t(($) => $.maritalStatus.errorMessage.sinUnique, { ns: 'applicationSpokes' }),
+          });
         }
       }),
   }) satisfies z.ZodType<PublicApplicationPartnerInformationState>;
@@ -179,7 +207,7 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('application:requiredLabel')}</p>
+      <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -188,8 +216,8 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
             <InputRadios
               id="maritalStatus"
               name="maritalStatus"
-              legend={t('applicationSpokes:maritalStatus.maritalStatus')}
-              helpMessagePrimary={t('applicationSpokes:maritalStatus.primaryHelpMessage')}
+              legend={t(($) => $.maritalStatus.maritalStatus, { ns: 'applicationSpokes' })}
+              helpMessagePrimary={t(($) => $.maritalStatus.primaryHelpMessage, { ns: 'applicationSpokes' })}
               options={maritalStatusOptions}
               errorMessage={errors?.maritalStatus}
               required
@@ -197,16 +225,16 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
 
             {(selectedMaritalStatus === MARITAL_STATUS_CODE_COMMON_LAW || selectedMaritalStatus === MARITAL_STATUS_CODE_MARRIED) && (
               <>
-                <h2 className="font-lato mb-6 text-2xl font-bold">{t('applicationSpokes:maritalStatus.spouseOrCommonlaw')}</h2>
-                <p className="mb-4">{t('applicationSpokes:maritalStatus.provideSin')}</p>
-                <p className="mb-6">{t('applicationSpokes:maritalStatus.requiredInformation')}</p>
+                <h2 className="font-lato mb-6 text-2xl font-bold">{t(($) => $.maritalStatus.spouseOrCommonlaw, { ns: 'applicationSpokes' })}</h2>
+                <p className="mb-4">{t(($) => $.maritalStatus.provideSin, { ns: 'applicationSpokes' })}</p>
+                <p className="mb-6">{t(($) => $.maritalStatus.requiredInformation, { ns: 'applicationSpokes' })}</p>
                 <InputPatternField
                   id="social-insurance-number"
                   name="socialInsuranceNumber"
                   format={sinInputPatternFormat}
-                  label={t('applicationSpokes:maritalStatus.sin')}
+                  label={t(($) => $.maritalStatus.sin, { ns: 'applicationSpokes' })}
                   inputMode="numeric"
-                  helpMessagePrimary={t('applicationSpokes:maritalStatus.sinHelp')}
+                  helpMessagePrimary={t(($) => $.maritalStatus.sinHelp, { ns: 'applicationSpokes' })}
                   helpMessagePrimaryClassName="text-black"
                   defaultValue={defaultState.socialInsuranceNumber ?? ''}
                   errorMessage={errors?.socialInsuranceNumber}
@@ -218,8 +246,8 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
                   inputMode="numeric"
                   format="####"
                   defaultValue={defaultState.yearOfBirth ?? ''}
-                  label={t('applicationSpokes:maritalStatus.yearOfBirth')}
-                  helpMessagePrimary={t('applicationSpokes:maritalStatus.yearOfBirthHelp')}
+                  label={t(($) => $.maritalStatus.yearOfBirth, { ns: 'applicationSpokes' })}
+                  helpMessagePrimary={t(($) => $.maritalStatus.yearOfBirthHelp, { ns: 'applicationSpokes' })}
                   helpMessagePrimaryClassName="text-black"
                   errorMessage={errors?.yearOfBirth}
                   required
@@ -232,14 +260,14 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
                   defaultChecked={defaultState.consentToSharePersonalInformation === true}
                   required
                 >
-                  {t('applicationSpokes:maritalStatus.confirmCheckbox')}
+                  {t(($) => $.maritalStatus.confirmCheckbox, { ns: 'applicationSpokes' })}
                 </InputCheckbox>
               </>
             )}
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Marital status click">
-              {t('applicationSpokes:maritalStatus.saveBtn')}
+              {t(($) => $.maritalStatus.saveBtn, { ns: 'applicationSpokes' })}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -249,7 +277,7 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Marital status click"
             >
-              {t('applicationSpokes:maritalStatus.backBtn')}
+              {t(($) => $.maritalStatus.backBtn, { ns: 'applicationSpokes' })}
             </ButtonLink>
           </div>
         </fetcher.Form>

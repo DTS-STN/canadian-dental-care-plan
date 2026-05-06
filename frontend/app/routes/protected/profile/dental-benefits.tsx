@@ -57,7 +57,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     return { ...child, dentalBenefits };
   });
 
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protectedProfile:dentalBenefits.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.dentalBenefits.pageTitle) }),
+  };
 
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
@@ -73,14 +75,14 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
 
   return (
     <div className="max-w-prose space-y-10">
-      <p className="mb-4">{t('protectedProfile:dentalBenefits.accessToDental')}</p>
-      <p className="mb-4">{t('protectedProfile:dentalBenefits.eligibilityCriteria')}</p>
+      <p className="mb-4">{t(($) => $.dentalBenefits.accessToDental)}</p>
+      <p className="mb-4">{t(($) => $.dentalBenefits.eligibilityCriteria)}</p>
       <section className="space-y-6">
         <h2 className="font-lato text-2xl font-bold">{`${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`}</h2>
         <DefinitionList border>
-          <DefinitionListItem term={t('protectedProfile:dentalBenefits.haveAccess')}>
+          <DefinitionListItem term={t(($) => $.dentalBenefits.haveAccess)}>
             <div className="space-y-4">
-              <p>{clientDentalBenefits && clientDentalBenefits.length > 0 ? t('protectedProfile:dentalBenefits.yes') : t('protectedProfile:dentalBenefits.no')}</p>
+              <p>{clientDentalBenefits && clientDentalBenefits.length > 0 ? t(($) => $.dentalBenefits.yes) : t(($) => $.dentalBenefits.no)}</p>
               {clientDentalBenefits && clientDentalBenefits.length > 0 && (
                 <ul className="list-disc space-y-2 pl-10">
                   {clientDentalBenefits.map((benefit, index) => (
@@ -91,13 +93,12 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
             </div>
             <div className="mt-4 sm:mt-6">
               <InlineLink routeId="protected/profile/dental-benefits/edit" params={params}>
-                {t('protectedProfile:dentalBenefits.updateLinkText')}
+                {t(($) => $.dentalBenefits.updateLinkText)}
               </InlineLink>
             </div>
           </DefinitionListItem>
         </DefinitionList>
       </section>
-
       {children.map((child) => {
         const childParams = { ...params, childId: child.information.clientId };
         const childName = `${child.information.firstName} ${child.information.lastName}`;
@@ -105,9 +106,9 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
           <section className="space-y-6" key={child.information.clientId}>
             <h2 className="font-lato text-2xl font-bold">{childName}</h2>
             <DefinitionList border>
-              <DefinitionListItem term={t('protectedProfile:dentalBenefits.haveAccess')}>
+              <DefinitionListItem term={t(($) => $.dentalBenefits.haveAccess)}>
                 <div className="space-y-4">
-                  <p>{child.dentalBenefits.length > 0 ? t('protectedProfile:dentalBenefits.yes') : t('protectedProfile:dentalBenefits.no')}</p>
+                  <p>{child.dentalBenefits.length > 0 ? t(($) => $.dentalBenefits.yes) : t(($) => $.dentalBenefits.no)}</p>
                   {child.dentalBenefits.length > 0 && (
                     <ul className="list-disc space-y-2 pl-10">
                       {child.dentalBenefits.map((benefit) => (
@@ -118,7 +119,7 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
                 </div>
                 <div className="mt-4 sm:mt-6">
                   <InlineLink routeId="protected/profile/dental-benefits/:childId/edit" params={childParams}>
-                    {t('protectedProfile:dentalBenefits.updateLinkText')}
+                    {t(($) => $.dentalBenefits.updateLinkText)}
                   </InlineLink>
                 </div>
               </DefinitionListItem>
@@ -126,14 +127,16 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
           </section>
         );
       })}
-
       <ButtonLink
         variant="primary"
         id="back-button"
-        to={t('gcweb:header.menuDashboardHref', { baseUri: SCCH_BASE_URI })}
+        to={t(($) => $.header.menuDashboardHref, {
+          baseUri: SCCH_BASE_URI,
+          ns: 'gcweb',
+        })}
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - Other government dental benefits return button click"
       >
-        {t('protectedProfile:dentalBenefits.returnButton')}
+        {t(($) => $.dentalBenefits.returnButton)}
       </ButtonLink>
     </div>
   );

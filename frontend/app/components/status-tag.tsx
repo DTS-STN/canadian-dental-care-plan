@@ -10,14 +10,14 @@ interface StatusTagProps {
 }
 
 export function StatusTag({ status, ariaLabel }: StatusTagProps) {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation('common');
 
   switch (status) {
     case 'complete': {
       return (
         <Badge variant="success" role="status" aria-label={ariaLabel}>
           <FontAwesomeIcon icon={faCheck} />
-          <span>{t('common:status.complete')}</span>
+          <span>{t(($) => $.status.complete)}</span>
         </Badge>
       );
     }
@@ -25,7 +25,7 @@ export function StatusTag({ status, ariaLabel }: StatusTagProps) {
     case 'error': {
       return (
         <Badge variant="danger" role="status" aria-label={ariaLabel}>
-          {t('common:status.error')}
+          {t(($) => $.status.error)}
         </Badge>
       );
     }
@@ -33,7 +33,7 @@ export function StatusTag({ status, ariaLabel }: StatusTagProps) {
     case 'new': {
       return (
         <Badge variant="info" role="status" aria-label={ariaLabel}>
-          {t('common:status.new')}
+          {t(($) => $.status.new)}
         </Badge>
       );
     }
@@ -41,7 +41,7 @@ export function StatusTag({ status, ariaLabel }: StatusTagProps) {
     case 'optional': {
       return (
         <Badge variant="gray" role="status" aria-label={ariaLabel}>
-          {t('common:status.optional')}
+          {t(($) => $.status.optional)}
         </Badge>
       );
     }

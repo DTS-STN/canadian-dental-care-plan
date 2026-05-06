@@ -32,7 +32,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getProtectedApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:children.parentOrGuardian.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.children.parentOrGuardian.pageTitle) }),
+  };
 
   return {
     meta,
@@ -51,7 +53,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   clearProtectedApplicationState({ params, session });
-  return redirect(t('protectedApplicationSpokes:children.parentOrGuardian.exitBtnLink'));
+  return redirect(t(($) => $.children.parentOrGuardian.exitBtnLink));
 }
 
 export default function ChildParentGuardian({ loaderData, params }: Route.ComponentProps) {
@@ -71,7 +73,7 @@ export default function ChildParentGuardian({ loaderData, params }: Route.Compon
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('protectedApplicationSpokes:children.parentOrGuardian.unableToApply')}</p>
+        <p>{t(($) => $.children.parentOrGuardian.unableToApply)}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -83,10 +85,10 @@ export default function ChildParentGuardian({ loaderData, params }: Route.Compon
           disabled={isSubmitting}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child parent or guardian needs to apply click"
         >
-          {t('protectedApplicationSpokes:children.parentOrGuardian.backBtn')}
+          {t(($) => $.children.parentOrGuardian.backBtn)}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - Child parent or guardian needs to apply click">
-          {t('protectedApplicationSpokes:children.parentOrGuardian.exitBtn')}
+          {t(($) => $.children.parentOrGuardian.exitBtn)}
         </LoadingButton>
       </fetcher.Form>
     </div>

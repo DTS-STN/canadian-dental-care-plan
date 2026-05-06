@@ -39,7 +39,9 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['intake-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationIntakeChild:parentOrGuardian.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.parentOrGuardian.pageTitle, { ns: 'protectedApplicationIntakeChild' }) }),
+  };
   const locale = getLocale(request);
 
   const mailingAddressInfo = state.mailingAddress?.hasChanged
@@ -97,27 +99,27 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
       <ProgressStepper activeStep="parentOrGuardian" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('protectedApplication:completeAllSections')}</p>
+          <p>{t(($) => $.completeAllSections)}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protectedApplicationIntakeChild:parentOrGuardian.maritalStatus')}</h2>
+              <h2>{t(($) => $.parentOrGuardian.maritalStatus, { ns: 'protectedApplicationIntakeChild' })}</h2>
             </CardTitle>
             <CardAction>{sections.maritalStatus.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.maritalStatus === undefined ? (
-              <p>{t('protectedApplicationIntakeChild:parentOrGuardian.selectYourStatus')}</p>
+              <p>{t(($) => $.parentOrGuardian.selectYourStatus, { ns: 'protectedApplicationIntakeChild' })}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('protectedApplicationIntakeChild:parentOrGuardian.maritalStatus')}>{state.maritalStatus.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.maritalStatus, { ns: 'protectedApplicationIntakeChild' })}>{state.maritalStatus.name}</DefinitionListItem>
                 {state.partnerInformation && (
                   <>
-                    <DefinitionListItem term={t('protectedApplicationIntakeChild:parentOrGuardian.spouseSin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
-                    <DefinitionListItem term={t('protectedApplicationIntakeChild:parentOrGuardian.spouseYob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('protectedApplicationIntakeChild:parentOrGuardian.consent')}>{t('protectedApplicationIntakeChild:parentOrGuardian.consentYes')}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.parentOrGuardian.spouseSin, { ns: 'protectedApplicationIntakeChild' })}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.parentOrGuardian.spouseYob, { ns: 'protectedApplicationIntakeChild' })}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.parentOrGuardian.consent, { ns: 'protectedApplicationIntakeChild' })}>{t(($) => $.parentOrGuardian.consentYes, { ns: 'protectedApplicationIntakeChild' })}</DefinitionListItem>
                   </>
                 )}
               </DefinitionList>
@@ -134,7 +136,7 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit marital click"
             >
-              {state.maritalStatus === undefined ? t('protectedApplicationIntakeChild:parentOrGuardian.addMaritalStatus') : t('protectedApplicationIntakeChild:parentOrGuardian.editMaritalStatus')}
+              {state.maritalStatus === undefined ? t(($) => $.parentOrGuardian.addMaritalStatus, { ns: 'protectedApplicationIntakeChild' }) : t(($) => $.parentOrGuardian.editMaritalStatus, { ns: 'protectedApplicationIntakeChild' })}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -142,18 +144,18 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protectedApplicationIntakeChild:parentOrGuardian.phoneNumber')}</h2>
+              <h2>{t(($) => $.parentOrGuardian.phoneNumber, { ns: 'protectedApplicationIntakeChild' })}</h2>
             </CardTitle>
             <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.phoneNumber?.hasChanged ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('protectedApplicationIntakeChild:parentOrGuardian.phoneNumber')}>{state.phoneNumber.value.primary}</DefinitionListItem>
-                {state.phoneNumber.value.alternate && <DefinitionListItem term={t('protectedApplicationIntakeChild:parentOrGuardian.altPhoneNumber')}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.phoneNumber, { ns: 'protectedApplicationIntakeChild' })}>{state.phoneNumber.value.primary}</DefinitionListItem>
+                {state.phoneNumber.value.alternate && <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber, { ns: 'protectedApplicationIntakeChild' })}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
               </DefinitionList>
             ) : (
-              <p>{t('protectedApplicationIntakeChild:parentOrGuardian.phoneNumberHelp')}</p>
+              <p>{t(($) => $.parentOrGuardian.phoneNumberHelp, { ns: 'protectedApplicationIntakeChild' })}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -167,7 +169,7 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit phone click"
             >
-              {sections.phoneNumber.completed ? t('protectedApplicationIntakeChild:parentOrGuardian.editPhoneNumber') : t('protectedApplicationIntakeChild:parentOrGuardian.addPhoneNumber')}
+              {sections.phoneNumber.completed ? t(($) => $.parentOrGuardian.editPhoneNumber, { ns: 'protectedApplicationIntakeChild' }) : t(($) => $.parentOrGuardian.addPhoneNumber, { ns: 'protectedApplicationIntakeChild' })}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -175,16 +177,16 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protectedApplicationIntakeChild:parentOrGuardian.mailingAndHomeAddress')}</h2>
+              <h2>{t(($) => $.parentOrGuardian.mailingAndHomeAddress, { ns: 'protectedApplicationIntakeChild' })}</h2>
             </CardTitle>
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {mailingAddressInfo === undefined || homeAddressInfo === undefined ? (
-              <p>{t('protectedApplicationIntakeChild:parentOrGuardian.addressHelp')}</p>
+              <p>{t(($) => $.parentOrGuardian.addressHelp, { ns: 'protectedApplicationIntakeChild' })}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('protectedApplicationIntakeChild:parentOrGuardian.mailingAddress')}>
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.mailingAddress, { ns: 'protectedApplicationIntakeChild' })}>
                   <Address
                     address={{
                       address: mailingAddressInfo.address,
@@ -195,7 +197,7 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
                     }}
                   />
                 </DefinitionListItem>
-                <DefinitionListItem term={t('protectedApplicationIntakeChild:parentOrGuardian.homeAddress')}>
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.homeAddress, { ns: 'protectedApplicationIntakeChild' })}>
                   <Address
                     address={{
                       address: homeAddressInfo.address,
@@ -220,7 +222,7 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit address click"
             >
-              {sections.address.completed ? t('protectedApplicationIntakeChild:parentOrGuardian.editAddress') : t('protectedApplicationIntakeChild:parentOrGuardian.addAddress')}
+              {sections.address.completed ? t(($) => $.parentOrGuardian.editAddress, { ns: 'protectedApplicationIntakeChild' }) : t(($) => $.parentOrGuardian.addAddress, { ns: 'protectedApplicationIntakeChild' })}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -228,19 +230,19 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protectedApplicationIntakeChild:parentOrGuardian.communicationPreferences')}</h2>
+              <h2>{t(($) => $.parentOrGuardian.communicationPreferences, { ns: 'protectedApplicationIntakeChild' })}</h2>
             </CardTitle>
             <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.communicationPreferences?.hasChanged ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('protectedApplicationIntakeChild:parentOrGuardian.preferredLanguage')}>{preferredLanguage?.name}</DefinitionListItem>
-                <DefinitionListItem term={t('protectedApplicationIntakeChild:parentOrGuardian.preferredMethod')}>{preferredMethod?.name}</DefinitionListItem>
-                <DefinitionListItem term={t('protectedApplicationIntakeChild:parentOrGuardian.preferredNotificationMethod')}>{preferredNotificationMethod?.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredLanguage, { ns: 'protectedApplicationIntakeChild' })}>{preferredLanguage?.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredMethod, { ns: 'protectedApplicationIntakeChild' })}>{preferredMethod?.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredNotificationMethod, { ns: 'protectedApplicationIntakeChild' })}>{preferredNotificationMethod?.name}</DefinitionListItem>
               </DefinitionList>
             ) : (
-              <p>{t('protectedApplicationIntakeChild:parentOrGuardian.communicationPreferencesHelp')}</p>
+              <p>{t(($) => $.parentOrGuardian.communicationPreferencesHelp, { ns: 'protectedApplicationIntakeChild' })}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -254,7 +256,9 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit comms click"
             >
-              {sections.communicationPreferences.completed ? t('protectedApplicationIntakeChild:parentOrGuardian.editCommunicationPreferences') : t('protectedApplicationIntakeChild:parentOrGuardian.addCommunicationPreferences')}
+              {sections.communicationPreferences.completed
+                ? t(($) => $.parentOrGuardian.editCommunicationPreferences, { ns: 'protectedApplicationIntakeChild' })
+                : t(($) => $.parentOrGuardian.addCommunicationPreferences, { ns: 'protectedApplicationIntakeChild' })}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -262,11 +266,11 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protectedApplicationIntakeChild:parentOrGuardian.email')}</h2>
+              <h2>{t(($) => $.parentOrGuardian.email, { ns: 'protectedApplicationIntakeChild' })}</h2>
             </CardTitle>
             <CardAction>{sections.email.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
-          <CardContent>{loaderData.state.email === undefined ? <p>{t('protectedApplicationIntakeChild:parentOrGuardian.emailHelp')}</p> : <p>{loaderData.state.email}</p>}</CardContent>
+          <CardContent>{loaderData.state.email === undefined ? <p>{t(($) => $.parentOrGuardian.emailHelp, { ns: 'protectedApplicationIntakeChild' })}</p> : <p>{loaderData.state.email}</p>}</CardContent>
           <CardFooter className="border-t bg-zinc-100">
             <ButtonLink
               id="edit-email-button"
@@ -278,7 +282,7 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Edit email click"
             >
-              {sections.email.completed ? t('protectedApplicationIntakeChild:parentOrGuardian.editEmail') : t('protectedApplicationIntakeChild:parentOrGuardian.addEmail')}
+              {sections.email.completed ? t(($) => $.parentOrGuardian.editEmail, { ns: 'protectedApplicationIntakeChild' }) : t(($) => $.parentOrGuardian.addEmail, { ns: 'protectedApplicationIntakeChild' })}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -292,10 +296,10 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Continue click"
           >
-            {t('protectedApplicationIntakeChild:parentOrGuardian.childrensApplication')}
+            {t(($) => $.parentOrGuardian.childrensApplication, { ns: 'protectedApplicationIntakeChild' })}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Back click">
-            {t('protectedApplicationIntakeChild:parentOrGuardian.yourApplication')}
+            {t(($) => $.parentOrGuardian.yourApplication, { ns: 'protectedApplicationIntakeChild' })}
           </NavigationButtonLink>
         </div>
       </div>

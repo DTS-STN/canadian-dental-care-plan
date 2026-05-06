@@ -40,7 +40,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:livingIndependently.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.livingIndependently.pageTitle) }),
+  };
   return { meta, defaultState: state.livingIndependently };
 }
 
@@ -55,7 +57,7 @@ export async function action({ context: { appContainer, session }, params, reque
    */
   const livingIndependentlySchema = z.object({
     livingIndependently: z.enum(LIVING_INDEPENDENTLY_OPTION, {
-      error: t('applicationSpokes:livingIndependently.errorMessage.livingIndependentlyRequired'),
+      error: t(($) => $.livingIndependently.errorMessage.livingIndependentlyRequired),
     }),
   });
 
@@ -89,8 +91,8 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
 
   return (
     <div className="max-w-prose">
-      <p className="mb-6">{t('applicationSpokes:livingIndependently.description')}</p>
-      <p className="mb-4 italic">{t('application:requiredLabel')}</p>
+      <p className="mb-6">{t(($) => $.livingIndependently.description)}</p>
+      <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'application' })}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -98,16 +100,16 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
           <InputRadios
             id="living-independently"
             name="livingIndependently"
-            legend={t('applicationSpokes:livingIndependently.formInstructions')}
+            legend={t(($) => $.livingIndependently.formInstructions)}
             options={[
               {
                 value: LIVING_INDEPENDENTLY_OPTION.yes,
-                children: t('applicationSpokes:livingIndependently.radioOptions.yes'),
+                children: t(($) => $.livingIndependently.radioOptions.yes),
                 defaultChecked: defaultState === true,
               },
               {
                 value: LIVING_INDEPENDENTLY_OPTION.no,
-                children: t('applicationSpokes:livingIndependently.radioOptions.no'),
+                children: t(($) => $.livingIndependently.radioOptions.no),
                 defaultChecked: defaultState === false,
               },
             ]}
@@ -116,7 +118,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Living independently click">
-              {t('applicationSpokes:livingIndependently.saveBtn')}
+              {t(($) => $.livingIndependently.saveBtn)}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -126,7 +128,7 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Living independently click"
             >
-              {t('applicationSpokes:livingIndependently.backBtn')}
+              {t(($) => $.livingIndependently.backBtn)}
             </ButtonLink>
           </div>
         </fetcher.Form>

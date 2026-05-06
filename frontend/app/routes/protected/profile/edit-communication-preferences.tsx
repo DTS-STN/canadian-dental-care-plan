@@ -55,7 +55,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protectedProfile:editCommunicationPreferences.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.editCommunicationPreferences.pageTitle) }),
+  };
 
   const languages = appContainer.get(TYPES.LanguageService).listAndSortLocalizedLanguages(locale);
   const gcCommunicationMethods = appContainer.get(TYPES.GCCommunicationMethodService).listLocalizedGCCommunicationMethods(locale);
@@ -90,9 +92,27 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formSchema = z.object({
-    preferredLanguage: z.string().trim().min(1, t('protectedProfile:editCommunicationPreferences.errorMessage.preferredLanguageRequired')),
-    preferredMethodSunLife: z.string().trim().min(1, t('protectedProfile:editCommunicationPreferences.errorMessage.preferredMethodSunlifeRequired')),
-    preferredMethodGovernmentOfCanada: z.string().trim().min(1, t('protectedProfile:editCommunicationPreferences.errorMessage.preferredMethodGcRequired')),
+    preferredLanguage: z
+      .string()
+      .trim()
+      .min(
+        1,
+        t(($) => $.editCommunicationPreferences.errorMessage.preferredLanguageRequired),
+      ),
+    preferredMethodSunLife: z
+      .string()
+      .trim()
+      .min(
+        1,
+        t(($) => $.editCommunicationPreferences.errorMessage.preferredMethodSunlifeRequired),
+      ),
+    preferredMethodGovernmentOfCanada: z
+      .string()
+      .trim()
+      .min(
+        1,
+        t(($) => $.editCommunicationPreferences.errorMessage.preferredMethodGcRequired),
+      ),
   });
 
   const parsedDataResult = formSchema.safeParse({
@@ -206,9 +226,9 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
     let children: ReactNode = <span className="font-semibold">{method.name}</span>;
 
     if (method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey="protectedProfile:editCommunicationPreferences.preferredMethodGcDigital" values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
+      children = <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.editCommunicationPreferences.preferredMethodGcDigital} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
     } else if (method.id === COMMUNICATION_METHOD_GC_MAIL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey="protectedProfile:editCommunicationPreferences.preferredMethodGcMail" values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
+      children = <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.editCommunicationPreferences.preferredMethodGcMail} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
     }
 
     return {
@@ -221,20 +241,20 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
   });
 
   const isDigitalCommunicationMethodSelected = selectedPreferredMethodSunLife === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || selectedPreferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID;
-  const submitButtonText = isDigitalCommunicationMethodSelected && !isClientApplicationEmailAddressVerified ? t('protectedProfile:editCommunicationPreferences.continue') : t('protectedProfile:editCommunicationPreferences.save');
+  const submitButtonText = isDigitalCommunicationMethodSelected && !isClientApplicationEmailAddressVerified ? t(($) => $.editCommunicationPreferences.continue) : t(($) => $.editCommunicationPreferences.save);
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('protectedProfile:requiredLabel')}</p>
+      <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
-            <InputRadios id="preferred-language" name="preferredLanguage" legend={t('protectedProfile:editCommunicationPreferences.preferredLanguage')} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
+            <InputRadios id="preferred-language" name="preferredLanguage" legend={t(($) => $.editCommunicationPreferences.preferredLanguage)} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
             <InputRadios
               id="preferred-method-sunlife"
-              legend={t('protectedProfile:editCommunicationPreferences.preferredMethodSunlife')}
+              legend={t(($) => $.editCommunicationPreferences.preferredMethodSunlife)}
               name="preferredMethodSunLife"
               options={sunLifeCommunicationMethodOptions}
               errorMessage={errors?.preferredMethodSunLife}
@@ -243,7 +263,7 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
             <InputRadios
               id="preferred-method-gc"
               name="preferredMethodGovernmentOfCanada"
-              legend={t('protectedProfile:editCommunicationPreferences.preferredMethodGc')}
+              legend={t(($) => $.editCommunicationPreferences.preferredMethodGc)}
               options={gcCommunicationMethodOptions}
               required
               errorMessage={errors?.preferredMethodGovernmentOfCanada}
@@ -261,7 +281,7 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
               disabled={isSubmittingOrSuccess}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Communication preferences click"
             >
-              {t('protectedProfile:editCommunicationPreferences.back')}
+              {t(($) => $.editCommunicationPreferences.back)}
             </ButtonLink>
           </div>
         </fetcher.Form>

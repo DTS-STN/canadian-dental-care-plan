@@ -64,7 +64,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const profileEmailAddressFlowState = requireProfileEmailAddressFlowState({ session, params });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protectedProfile:verifyEmail.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.verifyEmail.pageTitle) }),
+  };
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.verify-email', { userId: idToken.sub });
@@ -133,9 +135,15 @@ export async function action({ context: { appContainer, session }, params, reque
     verificationCode: z
       .string()
       .trim()
-      .min(1, t('protectedProfile:verifyEmail.errorMessage.verificationCodeRequired'))
+      .min(
+        1,
+        t(($) => $.verifyEmail.errorMessage.verificationCodeRequired),
+      )
       .transform(extractDigits)
-      .refine(() => profileEmailAddressFlowState.verificationAttempts < MAX_ATTEMPTS, t('protectedProfile:verifyEmail.errorMessage.verificationCodeMaxAttempts')),
+      .refine(
+        () => profileEmailAddressFlowState.verificationAttempts < MAX_ATTEMPTS,
+        t(($) => $.verifyEmail.errorMessage.verificationCodeMaxAttempts),
+      ),
   });
 
   const parsedDataResult = verificationCodeSchema.safeParse({
@@ -228,8 +236,8 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
   return (
     <div className="max-w-prose">
       <ErrorAlert>
-        <h2 className="mb-2 font-bold">{t('protectedProfile:verifyEmail.verificationCodeAlert.heading')}</h2>
-        <p className="-mb-3">{t('protectedProfile:verifyEmail.verificationCodeAlert.detail')}</p>
+        <h2 className="mb-2 font-bold">{t(($) => $.verifyEmail.verificationCodeAlert.heading)}</h2>
+        <p className="-mb-3">{t(($) => $.verifyEmail.verificationCodeAlert.detail)}</p>
         <LoadingButton
           id="request-button"
           type="button"
@@ -241,7 +249,7 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
           value={FORM_ACTION.request}
           onClick={handleRequestNewCode}
         >
-          {t('protectedProfile:verifyEmail.verificationCodeAlert.requestNewCode')}
+          {t(($) => $.verifyEmail.verificationCodeAlert.requestNewCode)}
         </LoadingButton>
       </ErrorAlert>
       <ErrorSummaryProvider actionData={fetcher.data}>
@@ -249,14 +257,19 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <fieldset className="mb-6">
-            <p className="mb-4">{t('protectedProfile:verifyEmail.verificationCode', { email })}</p>
-            <p className="mb-4">{t('protectedProfile:verifyEmail.requestNew')}</p>
-            <p className="mb-8">
-              <Trans ns={handle.i18nNamespaces} i18nKey="protectedProfile:verifyEmail.unableToVerify" components={{ communicationLink }} />
+            <p className="mb-4">
+              {t(($) => $.verifyEmail.verificationCode, {
+                email: email,
+                ns: 'protectedProfile',
+              })}
             </p>
-            <p className="mb-4 italic">{t('protectedProfile:requiredLabel')}</p>
+            <p className="mb-4">{t(($) => $.verifyEmail.requestNew)}</p>
+            <p className="mb-8">
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
+            </p>
+            <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
             <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t('protectedProfile:verifyEmail.verificationCodeLabel')} inputMode="numeric" required />
+              <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t(($) => $.verifyEmail.verificationCodeLabel)} inputMode="numeric" required />
             </div>
             <LoadingButton
               id="request-button"
@@ -269,7 +282,7 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
               value={FORM_ACTION.request}
               onClick={handleRequestNewCode}
             >
-              {t('protectedProfile:verifyEmail.requestNewCode')}
+              {t(($) => $.verifyEmail.requestNewCode)}
             </LoadingButton>
           </fieldset>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
@@ -282,10 +295,10 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
               loading={isSubmitting && submittedAction === FORM_ACTION.submit}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Verify your email address click"
             >
-              {t('protectedProfile:verifyEmail.continue')}
+              {t(($) => $.verifyEmail.continue)}
             </LoadingButton>
             <ButtonLink variant="secondary" id="back-button" to={backButtonTo} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Verify your email address click">
-              {t('protectedProfile:verifyEmail.back')}
+              {t(($) => $.verifyEmail.back)}
             </ButtonLink>
           </div>
         </fetcher.Form>
@@ -293,13 +306,18 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t('protectedProfile:verifyEmail.codeSent.heading')}</DialogTitle>
+            <DialogTitle>{t(($) => $.verifyEmail.codeSent.heading)}</DialogTitle>
           </DialogHeader>
-          <DialogDescription>{t('protectedProfile:verifyEmail.codeSent.detail', { email })}</DialogDescription>
+          <DialogDescription>
+            {t(($) => $.verifyEmail.codeSent.detail, {
+              email: email,
+              ns: 'protectedProfile',
+            })}
+          </DialogDescription>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="modal-continue" disabled={isSubmitting} variant="primary" size="sm">
-                {t('protectedProfile:verifyEmail.continue')}
+                {t(($) => $.verifyEmail.continue)}
               </Button>
             </DialogClose>
           </DialogFooter>

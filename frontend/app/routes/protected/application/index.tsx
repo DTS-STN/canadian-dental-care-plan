@@ -67,7 +67,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = startProtectedApplicationState({ session, applicationYear, clientApplication });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplication:index.pageTitle') }) };
+  const meta = { title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.index.pageTitle) }) };
 
   return { id: state.id, meta };
 }

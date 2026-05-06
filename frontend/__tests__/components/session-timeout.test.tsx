@@ -2,7 +2,6 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import { createRoutesStub } from 'react-router';
 
-import { useTranslation } from 'react-i18next';
 import { useIdleTimer } from 'react-idle-timer';
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -22,10 +21,6 @@ describe('SessionTimeout', () => {
       activate: mockActivate,
       isPrompted: mockIsPrompted,
       getRemainingTime: mockGetRemainingTime,
-    });
-
-    (useTranslation as Mock).mockReturnValue({
-      t: (key: string, options?: { [key: string]: string | number }) => key + (options ? JSON.stringify(options) : ''),
     });
   });
 
@@ -103,14 +98,14 @@ describe('SessionTimeout', () => {
 
     setup();
 
-    expect(screen.getByText(`sessionTimeout.description{"timeRemaining":"0:50"}`)).toBeInTheDocument();
+    expect(screen.getByText(`{"key":"sessionTimeout.description","options":{"timeRemaining":"0:50"}}`)).toBeInTheDocument();
 
     act(() => {
       mockGetRemainingTime.mockReturnValue(49_000);
       vi.advanceTimersByTime(1000);
     });
 
-    expect(screen.getByText(`sessionTimeout.description{"timeRemaining":"0:49"}`)).toBeInTheDocument();
+    expect(screen.getByText(`{"key":"sessionTimeout.description","options":{"timeRemaining":"0:49"}}`)).toBeInTheDocument();
 
     vi.useRealTimers();
   });

@@ -46,7 +46,9 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['simplified-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSimplifiedFamily:submit.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.submit.pageTitle, { ns: 'applicationSimplifiedFamily' }) }),
+  };
 
   const children = [];
   for (const child of state.children) {
@@ -82,8 +84,12 @@ export async function action({ context: { appContainer, session }, request, para
   securityHandler.validateCsrfToken({ formData, session });
 
   const submitTermsSchema = z.object({
-    acknowledgeInfo: z.literal(true, { error: t('applicationSimplifiedFamily:submit.errorMessage.acknowledgeInfoRequired') }),
-    acknowledgeCriteria: z.literal(true, { error: t('applicationSimplifiedFamily:submit.errorMessage.acknowledgeCriteriaRequired') }),
+    acknowledgeInfo: z.literal(true, {
+      error: t(($) => $.submit.errorMessage.acknowledgeInfoRequired, { ns: 'applicationSimplifiedFamily' }),
+    }),
+    acknowledgeCriteria: z.literal(true, {
+      error: t(($) => $.submit.errorMessage.acknowledgeCriteriaRequired, { ns: 'applicationSimplifiedFamily' }),
+    }),
   });
 
   const parsedDataResult = submitTermsSchema.safeParse({
@@ -112,7 +118,7 @@ export default function SimplifiedFamilySubmit({ loaderData, params }: Route.Com
 
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t('applicationSimplifiedFamily:submit.doYouQualifyHref')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t(($) => $.submit.doYouQualifyHref, { ns: 'applicationSimplifiedFamily' })} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
@@ -121,9 +127,9 @@ export default function SimplifiedFamilySubmit({ loaderData, params }: Route.Com
         <ErrorSummary />
         <div className="space-y-8">
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('applicationSimplifiedFamily:submit.overview')}</h2>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.overview, { ns: 'applicationSimplifiedFamily' })}</h2>
             <div className="space-y-4">
-              <p>{t('applicationSimplifiedFamily:submit.youAreSubmitting')}</p>
+              <p>{t(($) => $.submit.youAreSubmitting, { ns: 'applicationSimplifiedFamily' })}</p>
               <ul className="list-disc space-y-1 pl-7">
                 <li>{state.applicantName}</li>
                 {state.children.map((child, index) => (
@@ -133,31 +139,31 @@ export default function SimplifiedFamilySubmit({ loaderData, params }: Route.Com
             </div>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('applicationSimplifiedFamily:submit.reviewYourApplication')}</h2>
-            <p>{t('applicationSimplifiedFamily:submit.pleaseReview')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.reviewYourApplication, { ns: 'applicationSimplifiedFamily' })}</h2>
+            <p>{t(($) => $.submit.pleaseReview, { ns: 'applicationSimplifiedFamily' })}</p>
             <ButtonLink variant="primary" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Action click">
-              {t('applicationSimplifiedFamily:submit.reviewApplication')}
+              {t(($) => $.submit.reviewApplication, { ns: 'applicationSimplifiedFamily' })}
             </ButtonLink>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('applicationSimplifiedFamily:submit.submitYourApplication')}</h2>
-            <p>{t('applicationSimplifiedFamily:submit.bySubmitting')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.submitYourApplication, { ns: 'applicationSimplifiedFamily' })}</h2>
+            <p>{t(($) => $.submit.bySubmitting, { ns: 'applicationSimplifiedFamily' })}</p>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey="applicationSimplifiedFamily:submit.reviewEligibilityCriteria" components={{ eligibilityLink }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.applicationSimplifiedFamily.submit.reviewEligibilityCriteria} components={{ eligibilityLink }} />
             </p>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
               <div className="space-y-2">
                 <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
-                  {t('applicationSimplifiedFamily:submit.infoIsCorrect')}
+                  {t(($) => $.submit.infoIsCorrect, { ns: 'applicationSimplifiedFamily' })}
                 </InputCheckbox>
                 <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
-                  {t('applicationSimplifiedFamily:submit.iUnderstand')}
+                  {t(($) => $.submit.iUnderstand, { ns: 'applicationSimplifiedFamily' })}
                 </InputCheckbox>
               </div>
               <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_170px]">
                 <LoadingButton loading={isSubmitting} variant="green" className="order-first h-full text-base sm:order-last sm:text-lg" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Submit click">
-                  {t('applicationSimplifiedFamily:submit.submit')}
+                  {t(($) => $.submit.submit, { ns: 'applicationSimplifiedFamily' })}
                 </LoadingButton>
                 <NavigationButtonLink
                   disabled={isSubmitting}
@@ -167,7 +173,7 @@ export default function SimplifiedFamilySubmit({ loaderData, params }: Route.Com
                   params={params}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Back click"
                 >
-                  {t('applicationSimplifiedFamily:submit.childrensApplication')}
+                  {t(($) => $.submit.childrensApplication, { ns: 'applicationSimplifiedFamily' })}
                 </NavigationButtonLink>
               </div>
             </fetcher.Form>
@@ -175,7 +181,7 @@ export default function SimplifiedFamilySubmit({ loaderData, params }: Route.Com
         </div>
         <div className="mt-8">
           <InlineLink routeId="public/application/$id/simplified-family/exit-application" params={params}>
-            {t('applicationSimplifiedFamily:submit.exitApplication')}
+            {t(($) => $.submit.exitApplication, { ns: 'applicationSimplifiedFamily' })}
           </InlineLink>
         </div>
       </div>

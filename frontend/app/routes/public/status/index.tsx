@@ -44,7 +44,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('status');
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('status:pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.pageTitle) }),
+  };
   return { meta };
 }
 
@@ -60,7 +62,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const formDataSchema = z.object({
-    checkFor: z.enum(CHECK_FOR, { error: t('status:form.errorMessage.selectionRequired') }),
+    checkFor: z.enum(CHECK_FOR, {
+      error: t(($) => $.form.errorMessage.selectionRequired),
+    }),
   });
 
   const parsedCheckFor = formDataSchema.safeParse({
@@ -107,69 +111,69 @@ export default function StatusChecker({ loaderData, params }: Route.ComponentPro
     await fetcher.submit(formData, { method: 'POST' });
   }
 
-  const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} className="external-link" newTabIndicator target="_blank" />;
-  const microsoftDataPrivacyPolicy = <InlineLink to={t('status:links.microsoftDataPrivacyPolicy')} className="external-link" newTabIndicator target="_blank" />;
-  const microsoftServiceAgreement = <InlineLink to={t('status:links.microsoftServiceAgreement')} className="external-link" newTabIndicator target="_blank" />;
-  const fileacomplaint = <InlineLink to={t('status:links.fileComplaint')} className="external-link" newTabIndicator target="_blank" />;
-  const canadaTermsConditions = <InlineLink to={t('status:links.canadaTermsConditions')} className="external-link" newTabIndicator target="_blank" />;
+  const hcaptchaTermsOfService = <InlineLink to={t(($) => $.links.hcaptcha)} className="external-link" newTabIndicator target="_blank" />;
+  const microsoftDataPrivacyPolicy = <InlineLink to={t(($) => $.links.microsoftDataPrivacyPolicy)} className="external-link" newTabIndicator target="_blank" />;
+  const microsoftServiceAgreement = <InlineLink to={t(($) => $.links.microsoftServiceAgreement)} className="external-link" newTabIndicator target="_blank" />;
+  const fileacomplaint = <InlineLink to={t(($) => $.links.fileComplaint)} className="external-link" newTabIndicator target="_blank" />;
+  const canadaTermsConditions = <InlineLink to={t(($) => $.links.canadaTermsConditions)} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose">
       <div>
-        <h2 className="font-bold">{t('status:statusCheckerHeading')}</h2>
-        <p className="mb-4">{t('status:statusCheckerContent')}</p>
-        <h2 className="font-bold">{t('status:onlineStatusHeading')}</h2>
-        <p className="mb-4">{t('status:onlineStatusContent')}</p>
-        <p className="mb-4">{t('status:termsConditions')}</p>
+        <h2 className="font-bold">{t(($) => $.statusCheckerHeading)}</h2>
+        <p className="mb-4">{t(($) => $.statusCheckerContent)}</p>
+        <h2 className="font-bold">{t(($) => $.onlineStatusHeading)}</h2>
+        <p className="mb-4">{t(($) => $.onlineStatusContent)}</p>
+        <p className="mb-4">{t(($) => $.termsConditions)}</p>
       </div>
-      <Collapsible summary={t('status:termsOfUse.summary')} className="mt-8">
+      <Collapsible summary={t(($) => $.termsOfUse.summary)} className="mt-8">
         <div className="space-y-4">
-          <h2 className="mb-4 font-bold">{t('status:termsOfUse.heading')}</h2>
-          <p>{t('status:termsOfUse.thankYou')}</p>
+          <h2 className="mb-4 font-bold">{t(($) => $.termsOfUse.heading)}</h2>
+          <p>{t(($) => $.termsOfUse.thankYou)}</p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey="status:termsOfUse.legalTerms" components={{ canadaTermsConditions }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsOfUse.legalTerms} components={{ canadaTermsConditions }} />
           </p>
-          <p>{t('status:termsOfUse.accessTerms')}</p>
-          <p>{t('status:termsOfUse.maintenance')}</p>
-          <p>{t('status:termsOfUse.inactive')}</p>
-          <p>{t('status:termsOfUse.termsRejectionPolicy')}</p>
+          <p>{t(($) => $.termsOfUse.accessTerms)}</p>
+          <p>{t(($) => $.termsOfUse.maintenance)}</p>
+          <p>{t(($) => $.termsOfUse.inactive)}</p>
+          <p>{t(($) => $.termsOfUse.termsRejectionPolicy)}</p>
 
-          <p>{t('status:termsOfUse.esdcDefinitionClarification')}</p>
-          <p className="font-bold">{t('status:termsOfUse.statusChecker.heading')}</p>
+          <p>{t(($) => $.termsOfUse.esdcDefinitionClarification)}</p>
+          <p className="font-bold">{t(($) => $.termsOfUse.statusChecker.heading)}</p>
           <ul className="list-disc space-y-1 pl-7">
-            <li>{t('status:termsOfUse.statusChecker.selfAgreement')}</li>
-            <li>{t('status:termsOfUse.statusChecker.onBehalfOfSomeoneElse')}</li>
-            <li>{t('status:termsOfUse.statusChecker.atYourOwnRisk')}</li>
-            <li>{t('status:termsOfUse.statusChecker.onlyUse')}</li>
+            <li>{t(($) => $.termsOfUse.statusChecker.selfAgreement)}</li>
+            <li>{t(($) => $.termsOfUse.statusChecker.onBehalfOfSomeoneElse)}</li>
+            <li>{t(($) => $.termsOfUse.statusChecker.atYourOwnRisk)}</li>
+            <li>{t(($) => $.termsOfUse.statusChecker.onlyUse)}</li>
             <li>
-              <Trans ns={handle.i18nNamespaces} i18nKey="status:termsOfUse.statusChecker.msdc" components={{ microsoftServiceAgreement }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsOfUse.statusChecker.msdc} components={{ microsoftServiceAgreement }} />
             </li>
             <li>
-              <Trans ns={handle.i18nNamespaces} i18nKey="status:termsOfUse.statusChecker.antibot" components={{ hcaptchaTermsOfService }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsOfUse.statusChecker.antibot} components={{ hcaptchaTermsOfService }} />
             </li>
           </ul>
-          <h2 className="font-bold">{t('status:termsOfUse.changesToTheseTermsOfUse.heading')}</h2>
-          <p>{t('status:termsOfUse.changesToTheseTermsOfUse.esdcTermsAmendmentPolicy')}</p>
+          <h2 className="font-bold">{t(($) => $.termsOfUse.changesToTheseTermsOfUse.heading)}</h2>
+          <p>{t(($) => $.termsOfUse.changesToTheseTermsOfUse.esdcTermsAmendmentPolicy)}</p>
         </div>
       </Collapsible>
-      <Collapsible summary={t('status:privacyNoticeStatement.summary')} className="my-8">
+      <Collapsible summary={t(($) => $.privacyNoticeStatement.summary)} className="my-8">
         <div className="space-y-4">
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey="status:privacyNoticeStatement.collectionOfUse" components={{ cite: <cite /> }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.collectionOfUse} components={{ cite: <cite /> }} />
           </p>
-          <p>{t('status:privacyNoticeStatement.providedInformation')}</p>
+          <p>{t(($) => $.privacyNoticeStatement.providedInformation)}</p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey="status:privacyNoticeStatement.thirdPartyProvider" components={{ microsoftDataPrivacyPolicy }} />
-          </p>
-          <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey="status:privacyNoticeStatement.personalInformation" components={{ cite: <cite /> }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.thirdPartyProvider} components={{ microsoftDataPrivacyPolicy }} />
           </p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey="status:privacyNoticeStatement.reportAConcern" components={{ fileacomplaint }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.personalInformation} components={{ cite: <cite /> }} />
+          </p>
+          <p>
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.reportAConcern} components={{ fileacomplaint }} />
           </p>
         </div>
       </Collapsible>
-      <p className="mb-4 italic">{t('status:form.completeFields')}</p>
+      <p className="mb-4 italic">{t(($) => $.form.completeFields)}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
@@ -178,14 +182,14 @@ export default function StatusChecker({ loaderData, params }: Route.ComponentPro
           <InputRadios
             id="status-check-for"
             name="statusCheckFor"
-            legend={t('status:form.radioLegend')}
+            legend={t(($) => $.form.radioLegend)}
             options={[
               {
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radioText.myself" />,
+                children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.form.radioText.myself} />,
                 value: CHECK_FOR.myself,
               },
               {
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radioText.child" />,
+                children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.form.radioText.child} />,
                 value: CHECK_FOR.child,
               },
             ]}
@@ -193,7 +197,7 @@ export default function StatusChecker({ loaderData, params }: Route.ComponentPro
             errorMessage={errors?.checkFor}
           />
           <LoadingButton variant="primary" id="submit" loading={isSubmitting} className="my-8" data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
-            {t('status:form.continue')}
+            {t(($) => $.form.continue)}
           </LoadingButton>
         </fetcher.Form>
       </ErrorSummaryProvider>

@@ -16,13 +16,13 @@ type ProgressStepperProps = OmitStrict<ComponentProps<typeof ReusableProgressSte
 };
 
 export function ProgressStepper({ activeStep, ...props }: ProgressStepperProps): JSX.Element {
-  const { t } = useTranslation(['applicationSimplifiedAdult']);
+  const { t } = useTranslation('applicationSimplifiedAdult');
 
   const steps = useMemo(
     function () {
       return applicationSimplifiedAdultSteps.map((step) => ({
         id: step,
-        label: t(`applicationSimplifiedAdult:progressStepper.${step}`),
+        label: t(($) => $.progressStepper[step]),
       }));
     },
     [t],

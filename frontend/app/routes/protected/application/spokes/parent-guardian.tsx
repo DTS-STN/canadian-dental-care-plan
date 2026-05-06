@@ -45,10 +45,15 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const childNumber = t('protectedApplicationSpokes:children.childNumber', { childNumber: childState.childNumber });
+  const childNumber = t(($) => $.children.childNumber, {
+    childNumber: childState.childNumber,
+    ns: 'protectedApplicationSpokes',
+  });
   const childName = childState.information?.firstName ?? childNumber;
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:children.parentGuardian.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.children.parentGuardian.pageTitle) }),
+  };
 
   return { meta, defaultState: childState.information, childName, applicationFlow: `${state.context}-${state.typeOfApplication}` as const };
 }
@@ -67,7 +72,9 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const parentGuardianSchema = z.object({
-    isParent: z.boolean({ error: t('protectedApplicationSpokes:children.parentGuardian.isParent') }),
+    isParent: z.boolean({
+      error: t(($) => $.children.parentGuardian.isParent),
+    }),
   });
 
   const parsedDataResult = parentGuardianSchema.safeParse({
@@ -114,15 +121,26 @@ export default function ParentGuardian({ loaderData, params }: Route.ComponentPr
   return (
     <div className="max-w-prose">
       <fetcher.Form method="post" noValidate>
-        <p className="mb-4 italic">{t('protectedApplication:requiredLabel')}</p>
+        <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
         <div className="mb-8 space-y-4">
           <InputRadios
             id="is-parent-radios"
             name="isParent"
-            legend={t('protectedApplicationSpokes:children.parentGuardian.parentLegend', { childName })}
+            legend={t(($) => $.children.parentGuardian.parentLegend, {
+              childName: childName,
+              ns: 'protectedApplicationSpokes',
+            })}
             options={[
-              { value: YES_NO_OPTION.yes, children: t('protectedApplicationSpokes:children.parentGuardian.radioOptions.yes'), defaultChecked: defaultState?.isParent === true },
-              { value: YES_NO_OPTION.no, children: t('protectedApplicationSpokes:children.parentGuardian.radioOptions.no'), defaultChecked: defaultState?.isParent === false },
+              {
+                value: YES_NO_OPTION.yes,
+                children: t(($) => $.children.parentGuardian.radioOptions.yes),
+                defaultChecked: defaultState?.isParent === true,
+              },
+              {
+                value: YES_NO_OPTION.no,
+                children: t(($) => $.children.parentGuardian.radioOptions.no),
+                defaultChecked: defaultState?.isParent === false,
+              },
             ]}
             errorMessage={errors?.isParent}
             required
@@ -138,10 +156,10 @@ export default function ParentGuardian({ loaderData, params }: Route.ComponentPr
             disabled={isSubmitting}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child parent or guardian needs to apply click"
           >
-            {t('protectedApplicationSpokes:children.parentGuardian.backBtn')}
+            {t(($) => $.children.parentGuardian.backBtn)}
           </ButtonLink>
           <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Child Information click">
-            {t('protectedApplicationSpokes:children.parentGuardian.saveBtn')}
+            {t(($) => $.children.parentGuardian.saveBtn)}
           </LoadingButton>
         </div>
       </fetcher.Form>

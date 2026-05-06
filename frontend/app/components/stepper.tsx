@@ -68,13 +68,12 @@ interface StepItemProps {
 }
 
 function StepItem({ label, status, isLast, customIcon }: StepItemProps) {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation('common');
 
   return (
     <li className="relative flex grow items-start gap-3 sm:min-w-0 sm:flex-1 sm:flex-col" aria-current={status === 'current' ? 'true' : undefined}>
       {/* Connection Line */}
       {!isLast && <div className={cn('absolute top-2.5 left-2.25 z-0 mt-2.5 h-full w-0.5 bg-gray-300 transition-colors duration-200 sm:top-2.75 sm:mt-auto sm:ml-2.5 sm:h-0.5 sm:w-full', status === 'completed' && 'bg-green-700')} aria-hidden="true" />}
-
       {/* Indicator Box */}
       <div
         className={cn(
@@ -93,7 +92,6 @@ function StepItem({ label, status, isLast, customIcon }: StepItemProps) {
           </>
         )}
       </div>
-
       {/* Label */}
       <span
         className={cn(
@@ -103,8 +101,8 @@ function StepItem({ label, status, isLast, customIcon }: StepItemProps) {
         )}
       >
         {label}
-        {status === 'completed' && <span className="sr-only">{t('common:stepper.status.completed')}</span>}
-        {status === 'upcoming' && <span className="sr-only">{t('common:stepper.status.upcoming')}</span>}
+        {status === 'completed' && <span className="sr-only">{t(($) => $.stepper.status.completed)}</span>}
+        {status === 'upcoming' && <span className="sr-only">{t(($) => $.stepper.status.upcoming)}</span>}
       </span>
     </li>
   );

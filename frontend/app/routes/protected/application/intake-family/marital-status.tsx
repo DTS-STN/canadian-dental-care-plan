@@ -38,7 +38,9 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['intake-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationIntakeFamily:maritalStatus.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.maritalStatus.pageTitle, { ns: 'protectedApplicationIntakeFamily' }) }),
+  };
   const locale = getLocale(request);
   return {
     state: {
@@ -63,27 +65,27 @@ export default function ProtectedNewFamilyMaritalStatus({ loaderData, params }: 
       <ProgressStepper activeStep="maritalStatus" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('protectedApplication:completeAllSections')}</p>
+          <p>{t(($) => $.completeAllSections)}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('protectedApplicationIntakeFamily:maritalStatus.maritalStatus')}</h2>
+              <h2>{t(($) => $.maritalStatus.maritalStatus, { ns: 'protectedApplicationIntakeFamily' })}</h2>
             </CardTitle>
             <CardAction>{sections.maritalStatus.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.maritalStatus === undefined ? (
-              <p>{t('protectedApplicationIntakeFamily:maritalStatus.selectYourStatus')}</p>
+              <p>{t(($) => $.maritalStatus.selectYourStatus, { ns: 'protectedApplicationIntakeFamily' })}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('protectedApplicationIntakeFamily:maritalStatus.maritalStatus')}>{state.maritalStatus.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.maritalStatus.maritalStatus, { ns: 'protectedApplicationIntakeFamily' })}>{state.maritalStatus.name}</DefinitionListItem>
                 {state.partnerInformation && (
                   <>
-                    <DefinitionListItem term={t('protectedApplicationIntakeFamily:maritalStatus.spouseSin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
-                    <DefinitionListItem term={t('protectedApplicationIntakeFamily:maritalStatus.spouseYob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('protectedApplicationIntakeFamily:maritalStatus.consent')}>{t('protectedApplicationIntakeFamily:maritalStatus.consentYes')}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.maritalStatus.spouseSin, { ns: 'protectedApplicationIntakeFamily' })}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.maritalStatus.spouseYob, { ns: 'protectedApplicationIntakeFamily' })}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.maritalStatus.consent, { ns: 'protectedApplicationIntakeFamily' })}>{t(($) => $.maritalStatus.consentYes, { ns: 'protectedApplicationIntakeFamily' })}</DefinitionListItem>
                   </>
                 )}
               </DefinitionList>
@@ -100,7 +102,7 @@ export default function ProtectedNewFamilyMaritalStatus({ loaderData, params }: 
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Edit marital click"
             >
-              {state.maritalStatus === undefined ? t('protectedApplicationIntakeFamily:maritalStatus.addMaritalStatus') : t('protectedApplicationIntakeFamily:maritalStatus.editMaritalStatus')}
+              {state.maritalStatus === undefined ? t(($) => $.maritalStatus.addMaritalStatus, { ns: 'protectedApplicationIntakeFamily' }) : t(($) => $.maritalStatus.editMaritalStatus, { ns: 'protectedApplicationIntakeFamily' })}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -113,10 +115,10 @@ export default function ProtectedNewFamilyMaritalStatus({ loaderData, params }: 
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Continue click"
           >
-            {t('protectedApplicationIntakeFamily:maritalStatus.contactInformation')}
+            {t(($) => $.maritalStatus.contactInformation, { ns: 'protectedApplicationIntakeFamily' })}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Back click">
-            {t('protectedApplicationIntakeFamily:maritalStatus.yourApplication')}
+            {t(($) => $.maritalStatus.yourApplication, { ns: 'protectedApplicationIntakeFamily' })}
           </NavigationButtonLink>
         </div>
       </div>

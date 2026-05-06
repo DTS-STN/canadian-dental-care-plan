@@ -53,7 +53,7 @@ export function AppPageTitle({ children }: PropsWithChildren) {
 
   return (
     <div className="my-8 max-w-prose after:mt-2 after:block after:h-1.5 after:w-18 after:bg-[#a62a1e] after:content-['']">
-      <h2 className="font-lato mb-2 font-semibold">{t('gcweb:header.applicationTitle')}</h2>
+      <h2 className="font-lato mb-2 font-semibold">{t(($) => $.header.applicationTitle)}</h2>
       <PageTitle ref={focusableElementRef}>{children}</PageTitle>
     </div>
   );
@@ -72,7 +72,7 @@ function PageHeader() {
     <header className="border-b-[3px] border-slate-700 print:hidden">
       <SkipNavigationLinks />
       {browserCompatiblityBanner}
-      {useFeature('show-prototype-banner') && <Banner alert={t('gcweb:header.banner.alert')} description={t('gcweb:header.banner.desc')} />}
+      {useFeature('show-prototype-banner') && <Banner alert={t(($) => $.header.banner.alert)} description={t(($) => $.header.banner.desc)} />}
       <PageHeaderBrand headerLogoUrl={headerLogoUrl} />
     </header>
   );
@@ -84,48 +84,60 @@ function PageBreadcrumbs() {
     <Breadcrumbs
       className="my-4 print:hidden"
       items={[
-        { content: t('gcweb:breadcrumbs.canadaCa'), to: t('gcweb:breadcrumbs.canadaCaUrl') },
-        { content: t('gcweb:breadcrumbs.benefits'), to: t('gcweb:breadcrumbs.benefitsUrl') },
-        { content: t('gcweb:breadcrumbs.dentalCoverage'), to: t('gcweb:breadcrumbs.dentalCoverageUrl') },
-        { content: t('gcweb:breadcrumbs.canadianDentalCarePlan'), to: t('gcweb:breadcrumbs.canadianDentalCarePlanUrl') },
+        {
+          content: t(($) => $.breadcrumbs.canadaCa),
+          to: t(($) => $.breadcrumbs.canadaCaUrl),
+        },
+        {
+          content: t(($) => $.breadcrumbs.benefits),
+          to: t(($) => $.breadcrumbs.benefitsUrl),
+        },
+        {
+          content: t(($) => $.breadcrumbs.dentalCoverage),
+          to: t(($) => $.breadcrumbs.dentalCoverageUrl),
+        },
+        {
+          content: t(($) => $.breadcrumbs.canadianDentalCarePlan),
+          to: t(($) => $.breadcrumbs.canadianDentalCarePlanUrl),
+        },
       ]}
     />
   );
 }
 
 function PageFooter() {
-  const { t } = useTranslation(['gcweb']);
+  const { t } = useTranslation('gcweb');
   return (
     <footer id="wb-info" tabIndex={-1} className="bg-stone-50 print:hidden">
       <div className="bg-gray-700 text-white">
         <section className="container py-6">
-          <h2 className="mb-4">{t('gcweb:footer.mainBand.header.public')}</h2>
+          <h2 className="mb-4">{t(($) => $.footer.mainBand.header.public)}</h2>
           <div className="grid gap-x-4 gap-y-2 text-sm sm:grid-cols-3">
-            <Link className="hover:underline" to={t('gcweb:footer.mainBand.links.contactUs.publicHref')} data-gc-analytics-navigation={`Footer:Footer:${t('gcweb:footer.mainBand.links.contactUs.content')}`}>
-              {t('gcweb:footer.mainBand.links.contactUs.content')}
+            <Link className="hover:underline" to={t(($) => $.footer.mainBand.links.contactUs.publicHref)} data-gc-analytics-navigation={`Footer:Footer:${t(($) => $.footer.mainBand.links.contactUs.content)}`}>
+              {t(($) => $.footer.mainBand.links.contactUs.content)}
             </Link>
           </div>
         </section>
       </div>
       <div className="container py-7">
-        <h2 className="sr-only">{t('gcweb:footer.aboutSite')}</h2>
+        <h2 className="sr-only">{t(($) => $.footer.aboutSite)}</h2>
         <div className="flex items-center justify-between gap-4">
           <nav aria-labelledby="gc-corporate">
             <h3 id="gc-corporate" className="sr-only">
-              {t('gcweb:footer.gcCorporate')}
+              {t(($) => $.footer.gcCorporate)}
             </h3>
             <div className="flex flex-col items-start gap-2 text-sm leading-6 sm:flex-row sm:items-center sm:gap-4">
-              <Link className="text-slate-700 hover:underline" to={t('gcweb:footer.termsConditions.publicHref')} data-gc-analytics-navigation={`Footer:Footer:${t('gcweb:footer.termsConditions.text')}`}>
-                {t('gcweb:footer.termsConditions.text')}
+              <Link className="text-slate-700 hover:underline" to={t(($) => $.footer.termsConditions.publicHref)} data-gc-analytics-navigation={`Footer:Footer:${t(($) => $.footer.termsConditions.text)}`}>
+                {t(($) => $.footer.termsConditions.text)}
               </Link>
               <div className="hidden size-0 rounded-full border-[3px] border-slate-700 sm:block"></div>
-              <Link className="text-slate-700 hover:underline" to={t('gcweb:footer.privacy.publicHref')} data-gc-analytics-navigation={`Footer:Footer:${t('gcweb:footer.privacy.text')}`}>
-                {t('gcweb:footer.privacy.text')}
+              <Link className="text-slate-700 hover:underline" to={t(($) => $.footer.privacy.publicHref)} data-gc-analytics-navigation={`Footer:Footer:${t(($) => $.footer.privacy.text)}`}>
+                {t(($) => $.footer.privacy.text)}
               </Link>
             </div>
           </nav>
           <div>
-            <img src="/assets/wmms-blk.svg" alt={t('gcweb:footer.gcSymbol')} width={300} height={71} className="h-10 w-auto" />
+            <img src="/assets/wmms-blk.svg" alt={t(($) => $.footer.gcSymbol)} width={300} height={71} className="h-10 w-auto" />
           </div>
         </div>
       </div>
@@ -158,12 +170,12 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
           <div className="container flex items-center justify-between gap-6 py-2.5 sm:py-3.5">
             <div property="publisher" typeof="GovernmentOrganization">
               <a href="https://canada.ca/" property="url">
-                <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt={en('gcweb:header.govtOfCanada.text')} property="logo" width="300" height="28" decoding="async" />
+                <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt={en(($) => $.header.govtOfCanadaText)} property="logo" width="300" height="28" decoding="async" />
                 <span className="sr-only">
-                  / <span lang="fr">{fr('gcweb:header.govtOfCanada.text')}</span>
+                  / <span lang="fr">{fr(($) => $.header.govtOfCanadaText)}</span>
                 </span>
               </a>
-              <meta property="name" content={`${en('gcweb:header.govtOfCanada.text')} / ${fr('gcweb:header.govtOfCanada.text')}`} />
+              <meta property="name" content={`${en(($) => $.header.govtOfCanadaText)} / ${fr(($) => $.header.govtOfCanadaText)}`} />
               <meta property="areaServed" typeof="Country" content="Canada" />
               <link property="logo" href="/assets/wmms-blk.svg" />
             </div>
@@ -174,25 +186,25 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
         <div className="grid grid-cols-1 gap-6 py-2.5 sm:grid-cols-2 sm:py-3.5">
           <div id="english" lang="en">
             <PageTitle className="my-8">
-              <span>{en('gcweb:publicNotFound.pageTitle')}</span>
-              <small className="block text-2xl font-normal text-neutral-500">{en('gcweb:publicNotFound.pageSubtitle')}</small>
+              <span>{en(($) => $.publicNotFound.pageTitle)}</span>
+              <small className="block text-2xl font-normal text-neutral-500">{en(($) => $.publicNotFound.pageSubtitle)}</small>
             </PageTitle>
-            <p className="mb-8 text-lg text-gray-500">{en('gcweb:publicNotFound.pageMessage')}</p>
+            <p className="mb-8 text-lg text-gray-500">{en(($) => $.publicNotFound.pageMessage)}</p>
             <ul className="list-disc space-y-2 pl-10">
               <li>
-                <Trans t={en} ns={['gcweb']} i18nKey="gcweb:publicNotFound.returnCdcp" components={{ englishCdcpLink: <InlineLink to={en('gcweb:publicNotFound.cdcpLink')} className="external-link" newTabIndicator target="_blank" /> }} />
+                <Trans t={en} ns={['gcweb']} i18nKey={($) => $.publicNotFound.returnCdcp} components={{ englishCdcpLink: <InlineLink to={en(($) => $.publicNotFound.cdcpLink)} className="external-link" newTabIndicator target="_blank" /> }} />
               </li>
             </ul>
           </div>
           <div id="french" lang="fr">
             <PageTitle className="my-8">
-              <span>{fr('gcweb:publicNotFound.pageTitle')}</span>
-              <small className="block text-2xl font-normal text-neutral-500">{fr('gcweb:publicNotFound.pageSubtitle')}</small>
+              <span>{fr(($) => $.publicNotFound.pageTitle)}</span>
+              <small className="block text-2xl font-normal text-neutral-500">{fr(($) => $.publicNotFound.pageSubtitle)}</small>
             </PageTitle>
-            <p className="mb-8 text-lg text-gray-500">{fr('gcweb:publicNotFound.pageMessage')}</p>
+            <p className="mb-8 text-lg text-gray-500">{fr(($) => $.publicNotFound.pageMessage)}</p>
             <ul className="list-disc space-y-2 pl-10">
               <li>
-                <Trans t={fr} ns={['gcweb']} i18nKey="gcweb:publicNotFound.returnCdcp" components={{ frenchCdcpLink: <InlineLink to={fr('gcweb:publicNotFound.cdcpLink')} className="external-link" newTabIndicator target="_blank" /> }} />
+                <Trans t={fr} ns={['gcweb']} i18nKey={($) => $.publicNotFound.returnCdcp} components={{ frenchCdcpLink: <InlineLink to={fr(($) => $.publicNotFound.cdcpLink)} className="external-link" newTabIndicator target="_blank" /> }} />
               </li>
             </ul>
           </div>
@@ -202,10 +214,10 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
         <div className="container flex items-center justify-end gap-6 py-2.5 sm:py-3.5">
           <div>
             <h2 className="sr-only">
-              <span lang="en">{en('gcweb:footer.aboutSite')}</span> / <span lang="fr">{fr('gcweb:footer.aboutSite')}</span>
+              <span lang="en">{en(($) => $.footer.aboutSite)}</span> / <span lang="fr">{fr(($) => $.footer.aboutSite)}</span>
             </h2>
             <div>
-              <img src="/assets/wmms-blk.svg" alt={`${en('gcweb:footer.gcSymbol')} / ${fr('gcweb:footer.gcSymbol')}`} width={300} height={71} className="h-10 w-auto" />
+              <img src="/assets/wmms-blk.svg" alt={`${en(($) => $.footer.gcSymbol)} / ${fr(($) => $.footer.gcSymbol)}`} width={300} height={71} className="h-10 w-auto" />
             </div>
           </div>
         </div>
@@ -220,7 +232,7 @@ interface NotFoundErrorProps {
 
 export function NotFoundError({ error }: NotFoundErrorProps) {
   const { t } = useTranslation(i18nNamespaces);
-  const cdcpLink = <InlineLink to={t('gcweb:publicNotFound.cdcpLink')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t(($) => $.publicNotFound.cdcpLink)} className="external-link" newTabIndicator target="_blank" />;
 
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {
@@ -233,13 +245,13 @@ export function NotFoundError({ error }: NotFoundErrorProps) {
       <PageHeader />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         <PageTitle className="my-8">
-          <span>{t('gcweb:publicNotFound.pageTitle')}</span>
-          <small className="block text-2xl font-normal text-neutral-500">{t('gcweb:publicNotFound.pageSubtitle')}</small>
+          <span>{t(($) => $.publicNotFound.pageTitle)}</span>
+          <small className="block text-2xl font-normal text-neutral-500">{t(($) => $.publicNotFound.pageSubtitle)}</small>
         </PageTitle>
-        <p className="mb-8 text-lg text-gray-500">{t('gcweb:publicNotFound.pageMessage')}</p>
+        <p className="mb-8 text-lg text-gray-500">{t(($) => $.publicNotFound.pageMessage)}</p>
         <ul className="list-disc space-y-2 pl-10">
           <li>
-            <Trans ns={i18nNamespaces} i18nKey="gcweb:publicNotFound.unilingualReturnCdcp" components={{ cdcpLink }} />
+            <Trans ns={i18nNamespaces} i18nKey={($) => $.publicNotFound.unilingualReturnCdcp} components={{ cdcpLink }} />
           </li>
         </ul>
         <PageDetails />
@@ -258,7 +270,7 @@ export function ServerError({ error }: ServerErrorProps) {
   const home = <InlineLink to="/" />;
 
   useEffect(() => {
-    document.title = t('gcweb:meta.title.template', { title: t('gcweb:serverError.documentTitle') });
+    document.title = t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.serverError.documentTitle) });
   }, [t]);
 
   useEffect(() => {
@@ -272,14 +284,14 @@ export function ServerError({ error }: ServerErrorProps) {
       <PageHeader />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         <PageTitle className="my-8">
-          <span>{t('gcweb:serverError.pageTitle')}</span>
-          <small className="block text-2xl font-normal text-neutral-500">{t('gcweb:serverError.pageSubtitle')}</small>
+          <span>{t(($) => $.serverError.pageTitle)}</span>
+          <small className="block text-2xl font-normal text-neutral-500">{t(($) => $.serverError.pageSubtitle)}</small>
         </PageTitle>
-        <p className="mb-8 text-lg text-gray-500">{t('gcweb:serverError.pageMessage')}</p>
+        <p className="mb-8 text-lg text-gray-500">{t(($) => $.serverError.pageMessage)}</p>
         <ul className="list-disc space-y-2 pl-10">
-          <li>{t('gcweb:serverError.option01')}</li>
+          <li>{t(($) => $.serverError.option01)}</li>
           <li>
-            <Trans ns={i18nNamespaces} i18nKey="gcweb:serverError.option02" components={{ home }} />
+            <Trans ns={i18nNamespaces} i18nKey={($) => $.serverError.option02} components={{ home }} />
           </li>
         </ul>
         <PageDetails />

@@ -53,7 +53,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   session.set('letters', letters);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('letters:index.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.index.pageTitle) }),
+  };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   const idToken: IdToken = session.get('idToken');
@@ -79,7 +81,7 @@ export default function LettersIndex({ loaderData, params }: Route.ComponentProp
     <>
       {letters.length === 0 ? (
         <ContextualAlert type="info">
-          <p>{t('letters:index.noLetter')}</p>
+          <p>{t(($) => $.index.noLetter)}</p>
         </ContextualAlert>
       ) : (
         <>
@@ -89,11 +91,17 @@ export default function LettersIndex({ loaderData, params }: Route.ComponentProp
               id="sort-order"
               value={sortOrder}
               onChange={handleOnSortOrderChange}
-              label={t('letters:index.filter')}
+              label={t(($) => $.index.filter)}
               name="sortOrder"
               options={[
-                { value: orderEnumSchema.enum.desc, children: t('letters:index.newest') },
-                { value: orderEnumSchema.enum.asc, children: t('letters:index.oldest') },
+                {
+                  value: orderEnumSchema.enum.desc,
+                  children: t(($) => $.index.newest),
+                },
+                {
+                  value: orderEnumSchema.enum.asc,
+                  children: t(($) => $.index.oldest),
+                },
               ]}
             />
           </div>
@@ -109,17 +117,28 @@ export default function LettersIndex({ loaderData, params }: Route.ComponentProp
                   <InlineLink reloadDocument routeId="protected/letters/$id.download" params={{ ...params, id: letter.id }} className="external-link" newTabIndicator target="_blank" data-gc-analytics-customclick={gcAnalyticsCustomClickValue}>
                     {letterName}
                   </InlineLink>
-                  <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.date })}</p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    {t(($) => $.index.date, {
+                      date: letter.date,
+                      ns: 'letters',
+                    })}
+                  </p>
                 </li>
               );
             })}
           </ul>
         </>
       )}
-
       <div className="my-6 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" variant="secondary" to={t('gcweb:header.menuDashboardHref', { baseUri: SCCH_BASE_URI })}>
-          {t('letters:index.button.back')}
+        <ButtonLink
+          id="back-button"
+          variant="secondary"
+          to={t(($) => $.header.menuDashboardHref, {
+            baseUri: SCCH_BASE_URI,
+            ns: 'gcweb',
+          })}
+        >
+          {t(($) => $.index.button.back)}
         </ButtonLink>
       </div>
     </>

@@ -21,7 +21,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   // Get meta title
   const locale = getLocale(request);
   const t = await getFixedT(locale, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('gcweb:publicNotFound.documentTitle') }) };
+  const meta = { title: t(($) => $.meta.title.template, { title: t(($) => $.publicNotFound.documentTitle) }) };
 
   // Get request lang param
   const { pathname } = new URL(request.url);

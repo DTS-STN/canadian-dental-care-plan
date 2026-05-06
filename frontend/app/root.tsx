@@ -70,13 +70,13 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   const dynatraceRumScript = await dynatraceService.findDynatraceRumScript();
   const env = appContainer.get(TYPES.ClientConfig);
   const meta = {
-    author: t('gcweb:meta.author'),
-    description: t('gcweb:meta.description'),
+    author: t(($) => $.meta.author),
+    description: t(($) => $.meta.description),
     language: locale === 'fr' ? 'fra' : 'eng',
     locale: `${locale}_CA`,
-    siteName: t('gcweb:meta.siteName'),
-    subject: t('gcweb:meta.subject'),
-    title: t('gcweb:meta.title.default'),
+    siteName: t(($) => $.meta.siteName),
+    subject: t(($) => $.meta.subject),
+    title: t(($) => $.meta.title.default),
   };
   const origin = requestUrl.origin;
   const csrfToken = session.get('csrfToken');
@@ -202,9 +202,9 @@ export function ErrorBoundary() {
             <div className="container flex items-center justify-between gap-6 py-2.5 sm:py-3.5">
               <div property="publisher" typeof="GovernmentOrganization">
                 <a href="https://canada.ca/" property="url">
-                  <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt={`${en('gcweb:header.govtOfCanada.text')} / ${fr('gcweb:header.govtOfCanada.text')}`} property="logo" width="300" height="28" decoding="async" />
+                  <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt={`${en(($) => $.header.govtOfCanadaText)} / ${fr(($) => $.header.govtOfCanadaText)}`} property="logo" width="300" height="28" decoding="async" />
                 </a>
-                <meta property="name" content={`${en('gcweb:header.govtOfCanada.text')} / ${fr('gcweb:header.govtOfCanada.text')}`} />
+                <meta property="name" content={`${en(($) => $.header.govtOfCanadaText)} / ${fr(($) => $.header.govtOfCanadaText)}`} />
                 <meta property="areaServed" typeof="Country" content="Canada" />
                 <link property="logo" href="/assets/wmms-blk.svg" />
               </div>
@@ -215,27 +215,27 @@ export function ErrorBoundary() {
           <div className="grid grid-cols-1 gap-6 py-2.5 sm:grid-cols-2 sm:py-3.5">
             <div id="english" lang="en">
               <PageTitle className="my-8">
-                <span>{en('gcweb:serverError.pageTitle')}</span>
-                <small className="block text-2xl font-normal text-neutral-500">{en('gcweb:serverError.pageSubtitle')}</small>
+                <span>{en(($) => $.serverError.pageTitle)}</span>
+                <small className="block text-2xl font-normal text-neutral-500">{en(($) => $.serverError.pageSubtitle)}</small>
               </PageTitle>
-              <p className="mb-8 text-lg text-gray-500">{en('gcweb:serverError.pageMessage')}</p>
+              <p className="mb-8 text-lg text-gray-500">{en(($) => $.serverError.pageMessage)}</p>
               <ul className="list-disc space-y-2 pl-10">
-                <li>{en('gcweb:serverError.option01')}</li>
+                <li>{en(($) => $.serverError.option01)}</li>
                 <li>
-                  <Trans t={en} ns={['gcweb']} i18nKey="gcweb:serverError.option02" components={{ home: <InlineLink to="/" /> }} />
+                  <Trans t={en} ns={['gcweb']} i18nKey={($) => $.serverError.option02} components={{ home: <InlineLink to="/" /> }} />
                 </li>
               </ul>
             </div>
             <div id="french" lang="fr">
               <PageTitle className="my-8">
-                <span>{fr('gcweb:serverError.pageTitle')}</span>
-                <small className="block text-2xl font-normal text-neutral-500">{fr('gcweb:serverError.pageSubtitle')}</small>
+                <span>{fr(($) => $.serverError.pageTitle)}</span>
+                <small className="block text-2xl font-normal text-neutral-500">{fr(($) => $.serverError.pageSubtitle)}</small>
               </PageTitle>
-              <p className="mb-8 text-lg text-gray-500">{fr('gcweb:serverError.pageMessage')}</p>
+              <p className="mb-8 text-lg text-gray-500">{fr(($) => $.serverError.pageMessage)}</p>
               <ul className="list-disc space-y-2 pl-10">
-                <li>{fr('gcweb:serverError.option01')}</li>
+                <li>{fr(($) => $.serverError.option01)}</li>
                 <li>
-                  <Trans t={fr} ns={['gcweb']} i18nKey="gcweb:serverError.option02" components={{ home: <InlineLink to="/" /> }} />
+                  <Trans t={fr} ns={['gcweb']} i18nKey={($) => $.serverError.option02} components={{ home: <InlineLink to="/" /> }} />
                 </li>
               </ul>
             </div>
@@ -245,10 +245,10 @@ export function ErrorBoundary() {
           <div className="container flex items-center justify-end gap-6 py-2.5 sm:py-3.5">
             <div>
               <h2 className="sr-only">
-                <span lang="en">{en('gcweb:footer.aboutSite')}</span> / <span lang="fr">{fr('gcweb:footer.aboutSite')}</span>
+                <span lang="en">{en(($) => $.footer.aboutSite)}</span> / <span lang="fr">{fr(($) => $.footer.aboutSite)}</span>
               </h2>
               <div>
-                <img src="/assets/wmms-blk.svg" alt={`${en('gcweb:footer.gcSymbol')} / ${fr('gcweb:footer.gcSymbol')}`} width={300} height={71} className="h-10 w-auto" />
+                <img src="/assets/wmms-blk.svg" alt={`${en(($) => $.footer.gcSymbol)} / ${fr(($) => $.footer.gcSymbol)}`} width={300} height={71} className="h-10 w-auto" />
               </div>
             </div>
           </div>

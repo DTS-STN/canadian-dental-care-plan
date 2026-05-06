@@ -48,7 +48,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getProtectedApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:newOrReturningMember.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.newOrReturningMember.pageTitle) }),
+  };
 
   invariant(state.applicantInformation?.dateOfBirth, 'Expected applicantInformation.dateOfBirth to be defined');
   const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context);
@@ -68,7 +70,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const newOrExistingMemberSchema = z
     .object({
       newOrExistingMember: z.enum(NEW_OR_EXISTING_MEMBER_OPTION, {
-        error: t('protectedApplicationSpokes:newOrReturningMember.errorMessage.isNewOrExistingMemberRequired'),
+        error: t(($) => $.newOrReturningMember.errorMessage.isNewOrExistingMemberRequired),
       }),
       memberId: z
         .string()
@@ -82,13 +84,13 @@ export async function action({ context: { appContainer, session }, params, reque
         if (!val.memberId) {
           ctx.addIssue({
             code: 'custom',
-            message: t('protectedApplicationSpokes:newOrReturningMember.errorMessage.memberIdRequired'),
+            message: t(($) => $.newOrReturningMember.errorMessage.memberIdRequired),
             path: ['memberId'],
           });
         } else if (!isValidClientNumberRenewal(val.memberId)) {
           ctx.addIssue({
             code: 'custom',
-            message: t('protectedApplicationSpokes:newOrReturningMember.errorMessage.memberIdValid'),
+            message: t(($) => $.newOrReturningMember.errorMessage.memberIdValid),
             path: ['memberId'],
           });
         }
@@ -133,13 +135,13 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
 
   const options: InputRadiosProps['options'] = [
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplicationSpokes:newOrReturningMember.yes" components={{ bold: <strong /> }} />,
+      children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.newOrReturningMember.yes} components={{ bold: <strong /> }} />,
       value: NEW_OR_EXISTING_MEMBER_OPTION.yes,
       defaultChecked: defaultState?.isNewOrReturningMember === true,
       onChange: handleNewOrReturningMemberSelection,
     },
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplicationSpokes:newOrReturningMember.no" components={{ bold: <strong /> }} />,
+      children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.newOrReturningMember.no} components={{ bold: <strong /> }} />,
       value: NEW_OR_EXISTING_MEMBER_OPTION.no,
       defaultChecked: defaultState?.isNewOrReturningMember === false,
       onChange: handleNewOrReturningMemberSelection,
@@ -148,30 +150,30 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('protectedApplication:requiredLabel')}</p>
+      <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <InputRadios id="new-or-existing-member" name="newOrExistingMember" legend={t('protectedApplicationSpokes:newOrReturningMember.previouslyEnrolled')} options={options} errorMessage={errors?.newOrExistingMember} required />
+          <InputRadios id="new-or-existing-member" name="newOrExistingMember" legend={t(($) => $.newOrReturningMember.previouslyEnrolled)} options={options} errorMessage={errors?.newOrExistingMember} required />
           {isNewOrReturningMember && (
             <div className="my-8">
               <InputPatternField
                 id="member-id"
                 name="memberId"
                 format={renewalCodeInputPatternFormat}
-                label={t('protectedApplicationSpokes:newOrReturningMember.memberId')}
+                label={t(($) => $.newOrReturningMember.memberId)}
                 inputMode="numeric"
                 defaultValue={defaultState?.memberId ?? ''}
                 errorMessage={errors?.memberId}
-                helpMessagePrimary={t('protectedApplicationSpokes:newOrReturningMember.memberIdDescription')}
+                helpMessagePrimary={t(($) => $.newOrReturningMember.memberIdDescription)}
                 required={isNewOrReturningMember}
               />
             </div>
           )}
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - New or existing member click">
-              {t('protectedApplicationSpokes:newOrReturningMember.saveBtn')}
+              {t(($) => $.newOrReturningMember.saveBtn)}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -182,7 +184,7 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
               startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - New or existing member click"
             >
-              {t('protectedApplicationSpokes:newOrReturningMember.backBtn')}
+              {t(($) => $.newOrReturningMember.backBtn)}
             </ButtonLink>
           </div>
         </fetcher.Form>

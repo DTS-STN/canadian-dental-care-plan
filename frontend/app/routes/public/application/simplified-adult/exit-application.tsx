@@ -32,7 +32,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['simplified-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSimplifiedAdult:exitApplication.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.exitApplication.pageTitle) }),
+  };
   return { meta };
 }
 
@@ -49,7 +51,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearPublicApplicationState({ params, session });
 
-  return redirect(t('applicationSimplifiedAdult:exitApplication.exitLink'));
+  return redirect(t(($) => $.exitApplication.exitLink));
 }
 
 export default function RenewAdultExitApplication({ loaderData, params }: Route.ComponentProps) {
@@ -61,8 +63,8 @@ export default function RenewAdultExitApplication({ loaderData, params }: Route.
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('applicationSimplifiedAdult:exitApplication.areYouSure')}</p>
-        <p>{t('applicationSimplifiedAdult:exitApplication.clickBack')}</p>
+        <p>{t(($) => $.exitApplication.areYouSure)}</p>
+        <p>{t(($) => $.exitApplication.clickBack)}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -75,10 +77,10 @@ export default function RenewAdultExitApplication({ loaderData, params }: Route.
           startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Back - Exiting the application click"
         >
-          {t('applicationSimplifiedAdult:exitApplication.backBtn')}
+          {t(($) => $.exitApplication.backBtn)}
         </ButtonLink>
         <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Exit - Exiting the application click">
-          {t('applicationSimplifiedAdult:exitApplication.exitBtn')}
+          {t(($) => $.exitApplication.exitBtn)}
         </LoadingButton>
       </fetcher.Form>
     </div>

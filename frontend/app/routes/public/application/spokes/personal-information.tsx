@@ -47,7 +47,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:personalInformation.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.personalInformation.pageTitle) }),
+  };
   return {
     state: state.applicantInformation,
     isRenewalContext: state.context === 'renewal',
@@ -71,45 +73,82 @@ export async function action({ context: { appContainer, session }, params, reque
       memberId: z
         .string()
         .trim()
-        .min(1, t('applicationSpokes:personalInformation.errorMessage.memberIdRequired'))
-        .refine(isValidClientNumberRenewal, t('applicationSpokes:personalInformation.errorMessage.memberIdValid'))
+        .min(
+          1,
+          t(($) => $.personalInformation.errorMessage.memberIdRequired),
+        )
+        .refine(
+          isValidClientNumberRenewal,
+          t(($) => $.personalInformation.errorMessage.memberIdValid),
+        )
         .transform((code) => extractDigits(code))
         .optional(),
       socialInsuranceNumber: z
         .string()
         .trim()
-        .min(1, t('applicationSpokes:personalInformation.errorMessage.sinRequired'))
+        .min(
+          1,
+          t(($) => $.personalInformation.errorMessage.sinRequired),
+        )
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
-            ctx.addIssue({ code: 'custom', message: t('applicationSpokes:personalInformation.errorMessage.sinValid') });
+            ctx.addIssue({
+              code: 'custom',
+              message: t(($) => $.personalInformation.errorMessage.sinValid),
+            });
           } else if (
             [state.partnerInformation?.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
               .filter((sin) => sin !== undefined)
               .map((sin) => formatSin(sin))
               .includes(formatSin(sin))
           ) {
-            ctx.addIssue({ code: 'custom', message: t('applicationSpokes:personalInformation.errorMessage.sinUnique') });
+            ctx.addIssue({
+              code: 'custom',
+              message: t(($) => $.personalInformation.errorMessage.sinUnique),
+            });
           }
         }),
       firstName: z
         .string()
         .trim()
-        .min(1, t('applicationSpokes:personalInformation.errorMessage.firstNameRequired'))
+        .min(
+          1,
+          t(($) => $.personalInformation.errorMessage.firstNameRequired),
+        )
         .max(100)
-        .refine(isAllValidInputCharacters, t('applicationSpokes:personalInformation.errorMessage.charactersValid'))
-        .refine((firstName) => !hasDigits(firstName), t('applicationSpokes:personalInformation.errorMessage.firstNameNoDigits')),
+        .refine(
+          isAllValidInputCharacters,
+          t(($) => $.personalInformation.errorMessage.charactersValid),
+        )
+        .refine(
+          (firstName) => !hasDigits(firstName),
+          t(($) => $.personalInformation.errorMessage.firstNameNoDigits),
+        ),
       lastName: z
         .string()
         .trim()
-        .min(1, t('applicationSpokes:personalInformation.errorMessage.lastNameRequired'))
+        .min(
+          1,
+          t(($) => $.personalInformation.errorMessage.lastNameRequired),
+        )
         .max(100)
-        .refine(isAllValidInputCharacters, t('applicationSpokes:personalInformation.errorMessage.charactersValid'))
-        .refine((lastName) => !hasDigits(lastName), t('applicationSpokes:personalInformation.errorMessage.lastNameNoDigits')),
+        .refine(
+          isAllValidInputCharacters,
+          t(($) => $.personalInformation.errorMessage.charactersValid),
+        )
+        .refine(
+          (lastName) => !hasDigits(lastName),
+          t(($) => $.personalInformation.errorMessage.lastNameNoDigits),
+        ),
       dateOfBirthYear: z.number({
-        error: (issue) => (issue.input === undefined ? t('applicationSpokes:personalInformation.errorMessage.dateOfBirthYearRequired') : t('applicationSpokes:personalInformation.errorMessage.dateOfBirthYearNumber')),
+        error: (issue) => (issue.input === undefined ? t(($) => $.personalInformation.errorMessage.dateOfBirthYearRequired) : t(($) => $.personalInformation.errorMessage.dateOfBirthYearNumber)),
       }),
-      dateOfBirthMonth: z.number({ error: (issue) => (issue.input === undefined ? t('applicationSpokes:personalInformation.errorMessage.dateOfBirthMonthRequired') : undefined) }),
-      dateOfBirthDay: z.number({ error: (issue) => (issue.input === undefined ? t('applicationSpokes:personalInformation.errorMessage.dateOfBirthDayRequired') : t('applicationSpokes:personalInformation.errorMessage.dateOfBirthDayNumber')) }),
+      dateOfBirthMonth: z.number({
+        error: (issue) => (issue.input === undefined ? t(($) => $.personalInformation.errorMessage.dateOfBirthMonthRequired) : undefined),
+      }),
+      dateOfBirthDay: z.number({
+        error: (issue) => (issue.input === undefined ? t(($) => $.personalInformation.errorMessage.dateOfBirthDayRequired) : t(($) => $.personalInformation.errorMessage.dateOfBirthDayNumber)),
+      }),
       dateOfBirth: z.string(),
     })
 
@@ -118,11 +157,23 @@ export async function action({ context: { appContainer, session }, params, reque
       const dateOfBirth = `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`;
 
       if (!isValidDateString(dateOfBirth)) {
-        ctx.addIssue({ code: 'custom', message: t('applicationSpokes:personalInformation.errorMessage.dateOfBirthValid'), path: ['dateOfBirth'] });
+        ctx.addIssue({
+          code: 'custom',
+          message: t(($) => $.personalInformation.errorMessage.dateOfBirthValid),
+          path: ['dateOfBirth'],
+        });
       } else if (!isPastDateString(dateOfBirth)) {
-        ctx.addIssue({ code: 'custom', message: t('applicationSpokes:personalInformation.errorMessage.dateOfBirthIsPast'), path: ['dateOfBirth'] });
+        ctx.addIssue({
+          code: 'custom',
+          message: t(($) => $.personalInformation.errorMessage.dateOfBirthIsPast),
+          path: ['dateOfBirth'],
+        });
       } else if (getAgeFromDateString(dateOfBirth) > 150) {
-        ctx.addIssue({ code: 'custom', message: t('applicationSpokes:personalInformation.errorMessage.dateOfBirthIsPastValid'), path: ['dateOfBirth'] });
+        ctx.addIssue({
+          code: 'custom',
+          message: t(($) => $.personalInformation.errorMessage.dateOfBirthIsPastValid),
+          path: ['dateOfBirth'],
+        });
       }
     })
     .transform((val) => {
@@ -229,19 +280,19 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
   return (
     <div className="max-w-prose">
       <ErrorAlert>
-        <h2 className="mb-2 font-bold">{t('applicationSpokes:personalInformation.errorMessage.alert.heading')}</h2>
+        <h2 className="mb-2 font-bold">{t(($) => $.personalInformation.errorMessage.alert.heading)}</h2>
         <p className="mb-2">
-          <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:personalInformation.errorMessage.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.errorMessage.alert.detail} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
         </p>
         <p className="mb-2">
-          <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:personalInformation.errorMessage.alert.applyDate" values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.errorMessage.alert.applyDate} values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
         </p>
       </ErrorAlert>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
-        <p className="mb-4">{t('applicationSpokes:personalInformation.formInstructionsSin')}</p>
-        <p className="mb-6">{t('applicationSpokes:personalInformation.formInstructionsInfo')}</p>
-        <p className="mb-4 italic">{t('application:requiredLabel')}</p>
+        <p className="mb-4">{t(($) => $.personalInformation.formInstructionsSin)}</p>
+        <p className="mb-6">{t(($) => $.personalInformation.formInstructionsInfo)}</p>
+        <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'application' })}</p>
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
@@ -249,10 +300,10 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               <InputPatternField
                 id="member-id"
                 name="memberId"
-                label={t('applicationSpokes:personalInformation.memberId')}
+                label={t(($) => $.personalInformation.memberId)}
                 inputMode="numeric"
                 format={renewalCodeInputPatternFormat}
-                helpMessagePrimary={t('applicationSpokes:personalInformation.helpMessage.memberId')}
+                helpMessagePrimary={t(($) => $.personalInformation.helpMessage.memberId)}
                 helpMessagePrimaryClassName="text-black"
                 defaultValue={state?.memberId ?? ''}
                 errorMessage={errors?.memberId}
@@ -263,10 +314,10 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               <InputSanitizeField
                 id="first-name"
                 name="firstName"
-                label={t('applicationSpokes:personalInformation.firstName')}
+                label={t(($) => $.personalInformation.firstName)}
                 className="w-full"
                 maxLength={100}
-                aria-description={t('applicationSpokes:personalInformation.nameInstructions')}
+                aria-description={t(($) => $.personalInformation.nameInstructions)}
                 autoComplete="given-name"
                 defaultValue={state?.firstName ?? ''}
                 errorMessage={errors?.firstName}
@@ -275,26 +326,26 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               <InputSanitizeField
                 id="last-name"
                 name="lastName"
-                label={t('applicationSpokes:personalInformation.lastName')}
+                label={t(($) => $.personalInformation.lastName)}
                 className="w-full"
                 maxLength={100}
-                aria-description={t('applicationSpokes:personalInformation.nameInstructions')}
+                aria-description={t(($) => $.personalInformation.nameInstructions)}
                 autoComplete="family-name"
                 defaultValue={state?.lastName ?? ''}
                 errorMessage={errors?.lastName}
                 required
               />
             </div>
-            <Collapsible id="name-instructions" summary={t('applicationSpokes:personalInformation.singleLegalName')}>
+            <Collapsible id="name-instructions" summary={t(($) => $.personalInformation.singleLegalName)}>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:personalInformation.nameInstructions" />
+                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.nameInstructions} />
               </p>
             </Collapsible>
             <DatePickerField
               id="date-of-birth"
               names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
               defaultValue={state?.dateOfBirth ?? ''}
-              legend={t('applicationSpokes:personalInformation.dob')}
+              legend={t(($) => $.personalInformation.dob)}
               errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
               required
             />
@@ -302,9 +353,9 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               id="social-insurance-number"
               name="socialInsuranceNumber"
               format={sinInputPatternFormat}
-              label={t('applicationSpokes:personalInformation.sin')}
+              label={t(($) => $.personalInformation.sin)}
               inputMode="numeric"
-              helpMessagePrimary={t('applicationSpokes:personalInformation.helpMessage.sin')}
+              helpMessagePrimary={t(($) => $.personalInformation.helpMessage.sin)}
               helpMessagePrimaryClassName="text-black"
               defaultValue={state?.socialInsuranceNumber ?? ''}
               errorMessage={errors?.socialInsuranceNumber}
@@ -313,7 +364,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Applicant information click">
-              {t('applicationSpokes:personalInformation.saveBtn')}
+              {t(($) => $.personalInformation.saveBtn)}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -323,7 +374,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Applicant information click"
             >
-              {t('applicationSpokes:personalInformation.backBtn')}
+              {t(($) => $.personalInformation.backBtn)}
             </ButtonLink>
           </div>
         </fetcher.Form>

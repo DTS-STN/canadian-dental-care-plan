@@ -35,7 +35,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['intake-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationIntakeFamily:exitApplication.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.exitApplication.pageTitle) }),
+  };
   return { meta };
 }
 
@@ -54,7 +56,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearProtectedApplicationState({ params, session });
 
-  return redirect(t('protectedApplicationIntakeFamily:exitApplication.exitLink'));
+  return redirect(t(($) => $.exitApplication.exitLink));
 }
 
 export default function ProtectedNewFamilyExitApplication({ loaderData, params }: Route.ComponentProps) {
@@ -66,8 +68,8 @@ export default function ProtectedNewFamilyExitApplication({ loaderData, params }
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('protectedApplicationIntakeFamily:exitApplication.areYouSure')}</p>
-        <p>{t('protectedApplicationIntakeFamily:exitApplication.clickBack')}</p>
+        <p>{t(($) => $.exitApplication.areYouSure)}</p>
+        <p>{t(($) => $.exitApplication.clickBack)}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -80,10 +82,10 @@ export default function ProtectedNewFamilyExitApplication({ loaderData, params }
           startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Back - Exiting the application click"
         >
-          {t('protectedApplicationIntakeFamily:exitApplication.backBtn')}
+          {t(($) => $.exitApplication.backBtn)}
         </ButtonLink>
         <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Exit - Exiting the application click">
-          {t('protectedApplicationIntakeFamily:exitApplication.exitBtn')}
+          {t(($) => $.exitApplication.exitBtn)}
         </LoadingButton>
       </fetcher.Form>
     </div>

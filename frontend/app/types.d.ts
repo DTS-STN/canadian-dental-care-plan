@@ -56,8 +56,10 @@ declare global {
 declare module 'i18next' {
   /**
    * @see https://www.i18next.com/overview/typescript
+   * @see https://www.i18next.com/overview/typescript#selector-api
    */
   interface CustomTypeOptions {
+    enableSelector: true;
     defaultNS: ExtractStrict<FlatNamespace, 'common'>;
     resources: (typeof i18nResources)['en'];
   }

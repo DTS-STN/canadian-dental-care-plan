@@ -16,7 +16,7 @@ type KillswitchDialogProps = {
 
 export function KillswitchDialog({ timeoutSecs }: KillswitchDialogProps) {
   const [remainingTime, setRemainingTime] = useState(timeoutSecs);
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation('common');
 
   // the dialog should only activate when `remainingTime` is not zero
   const isDialogActive = remainingTime > 0;
@@ -47,14 +47,19 @@ export function KillswitchDialog({ timeoutSecs }: KillswitchDialogProps) {
           <DialogHeader>
             <DialogTitle>
               <FontAwesomeIcon icon={faExclamationTriangle} className="inline" />
-              <span> {t('killswitch.title')}</span>
+              <span> {t(($) => $.killswitch.title)}</span>
             </DialogTitle>
           </DialogHeader>
           <div className="flex flex-col gap-4">
-            <p>{t('killswitch.overloaded')}</p>
-            <p>{t('killswitch.dontWorryBeHappy')}</p>
+            <p>{t(($) => $.killswitch.overloaded)}</p>
+            <p>{t(($) => $.killswitch.dontWorryBeHappy)}</p>
           </div>
-          <DialogFooter>{t('killswitch.remainingTime', { mins, secs })}</DialogFooter>
+          <DialogFooter>
+            {t(($) => $.killswitch.remainingTime, {
+              mins: mins,
+              secs: secs,
+            })}
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     );

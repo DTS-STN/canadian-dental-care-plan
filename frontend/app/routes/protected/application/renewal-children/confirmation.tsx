@@ -170,7 +170,9 @@ export async function loader({ context: { appContainer, session }, params, reque
     }),
   );
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationRenewalChild:confirm.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.confirm.pageTitle) }),
+  };
 
   return {
     homeAddressInfo,
@@ -200,7 +202,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearProtectedApplicationState({ params, session });
 
-  return redirect(t('confirm.exitLink'));
+  return redirect(t(($) => $.confirm.exitLink));
 }
 
 export default function ProtectedRenewChildrenConfirmation({ loaderData, params }: Route.ComponentProps) {
@@ -209,8 +211,8 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo, surveyLink, children, isSimplifiedRenewal } = loaderData;
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
-  const mscaLinkAccount = <InlineLink to={t('confirm.mscaLinkAccount')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('protectedApplicationRenewalChild:confirm.mscaLinkChecker')} className="external-link" newTabIndicator target="_blank" />;
+  const mscaLinkAccount = <InlineLink to={t(($) => $.confirm.mscaLinkAccount)} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t(($) => $.confirm.mscaLinkChecker)} className="external-link" newTabIndicator target="_blank" />;
 
   const { currentLanguage } = useCurrentLanguage();
 
@@ -218,7 +220,7 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
     <div className="max-w-prose space-y-10">
       {isSimplifiedRenewal && (
         <section className="space-y-6">
-          <h3 className="font-lato text-2xl font-bold">{t('confirm.yourEligibility')}</h3>
+          <h3 className="font-lato text-2xl font-bold">{t(($) => $.confirm.yourEligibility)}</h3>
           {children.map((child) => (
             <DefinitionList border key={child.id}>
               <DefinitionListItem term={`${child.firstName} ${child.lastName}`}>
@@ -228,19 +230,17 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
           ))}
         </section>
       )}
-
       <div className="space-y-4">
         <h2 className="text-3xl">
-          <strong>{t('confirm.appCodeIs')}</strong>
+          <strong>{t(($) => $.confirm.appCodeIs)}</strong>
           <br />
           <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
         </h2>
-        <p>{t('confirm.makeNote')}</p>
+        <p>{t(($) => $.confirm.makeNote)}</p>
       </div>
-
       <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.keepCopy')}</h2>
-        <p className="mt-4">{t('confirm.printCopyImportant')}</p>
+        <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.keepCopy)}</h2>
+        <p className="mt-4">{t(($) => $.confirm.printCopyImportant)}</p>
         <Button
           variant="primary"
           size="lg"
@@ -251,16 +251,15 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
           }}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Print top - Application successfully submitted click"
         >
-          {t('confirm.printBtn')}
+          {t(($) => $.confirm.printBtn)}
         </Button>
       </section>
-
       <ContextualAlert type="comment">
         <div className="space-y-4">
           <h2 className="text-2xl">
-            <strong>{t('confirm.survey.title')}</strong>
+            <strong>{t(($) => $.confirm.survey.title)}</strong>
           </h2>
-          <p>{t('confirm.survey.info')}</p>
+          <p>{t(($) => $.confirm.survey.info)}</p>
           <ButtonLink
             id="survey-button"
             to={surveyLink}
@@ -270,57 +269,54 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Confirmation survey button - Take the survey click"
             variant="primary"
           >
-            {t('confirm.survey.button')}
+            {t(($) => $.confirm.survey.button)}
           </ButtonLink>
         </div>
       </ContextualAlert>
-
       {!isSimplifiedRenewal && (
         <>
           <section>
-            <h2 className="font-lato text-3xl font-bold">{t('confirm.fullWhatsNext')}</h2>
-            <p className="mt-4">{t('confirm.fullBeginProcess')}</p>
+            <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.fullWhatsNext)}</h2>
+            <p className="mt-4">{t(($) => $.confirm.fullBeginProcess)}</p>
           </section>
 
           <section>
-            <h2 className="font-lato text-3xl font-bold">{t('confirm.checkStatus')}</h2>
+            <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.checkStatus)}</h2>
             <p className="mt-4">
-              <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcpChecker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.cdcpChecker} components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
             </p>
-            <p className="mt-4">{t('confirm.useCode')}</p>
+            <p className="mt-4">{t(($) => $.confirm.useCode)}</p>
           </section>
         </>
       )}
-
       {isSimplifiedRenewal && (
         <section>
-          <h2 className="font-lato text-3xl font-bold">{t('confirm.simplifiedWhatsNext')}</h2>
+          <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.simplifiedWhatsNext)}</h2>
           <p className="mt-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey="confirm.simplifiedBeginProcess" components={{ cdcpLink, mscaLinkAccount }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.simplifiedBeginProcess} components={{ cdcpLink, mscaLinkAccount }} />
           </p>
         </section>
       )}
-
       <section className="space-y-8">
         <div className="space-y-6">
-          <h2 className="font-lato text-3xl font-bold">{t('confirm.applicationSumm')}</h2>
+          <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.applicationSumm)}</h2>
           <DefinitionList border className="text-xl">
-            <DefinitionListItem term={t('confirm.applicationCode')}>
+            <DefinitionListItem term={t(($) => $.confirm.applicationCode)}>
               <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
             </DefinitionListItem>
           </DefinitionList>
         </div>
 
         <section className="space-y-8">
-          <h2 className="font-lato text-3xl font-bold">{t('confirm.parentOrGuardian')}</h2>
+          <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.parentOrGuardian)}</h2>
 
           <section className="space-y-6">
-            <h3 className="font-lato text-2xl font-bold">{t('confirm.parentOrGuardianInfo')}</h3>
+            <h3 className="font-lato text-2xl font-bold">{t(($) => $.confirm.parentOrGuardianInfo)}</h3>
             <DefinitionList border>
-              {userInfo.memberId && <DefinitionListItem term={t('confirm.memberId')}>{formatClientNumber(userInfo.memberId)}</DefinitionListItem>}
-              <DefinitionListItem term={t('confirm.fullName')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
-              <DefinitionListItem term={t('confirm.dob')}>{userInfo.birthday}</DefinitionListItem>
-              <DefinitionListItem term={t('confirm.sin')}>
+              {userInfo.memberId && <DefinitionListItem term={t(($) => $.confirm.memberId)}>{formatClientNumber(userInfo.memberId)}</DefinitionListItem>}
+              <DefinitionListItem term={t(($) => $.confirm.fullName)}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
+              <DefinitionListItem term={t(($) => $.confirm.dob)}>{userInfo.birthday}</DefinitionListItem>
+              <DefinitionListItem term={t(($) => $.confirm.sin)}>
                 <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
               </DefinitionListItem>
             </DefinitionList>
@@ -328,32 +324,32 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
 
           {spouseInfo && (
             <section className="space-y-6">
-              <h3 className="font-lato text-2xl font-bold">{t('confirm.spouseInfo')}</h3>
+              <h3 className="font-lato text-2xl font-bold">{t(($) => $.confirm.spouseInfo)}</h3>
               <DefinitionList border>
-                <DefinitionListItem term={t('confirm.yearBirth')}>{spouseInfo.yearOfBirth}</DefinitionListItem>
-                <DefinitionListItem term={t('confirm.sin')}>
+                <DefinitionListItem term={t(($) => $.confirm.yearBirth)}>{spouseInfo.yearOfBirth}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.confirm.sin)}>
                   <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
                 </DefinitionListItem>
-                <DefinitionListItem term={t('confirm.consent')}>{t('confirm.consentAnswer')}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.confirm.consent)}>{t(($) => $.confirm.consentAnswer)}</DefinitionListItem>
               </DefinitionList>
             </section>
           )}
 
           <section className="space-y-6">
-            <h3 className="font-lato text-2xl font-bold">{t('confirm.contactInfo')}</h3>
+            <h3 className="font-lato text-2xl font-bold">{t(($) => $.confirm.contactInfo)}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.phoneNumber')}>
+              <DefinitionListItem term={t(($) => $.confirm.phoneNumber)}>
                 <span className="text-nowrap">{userInfo.phoneNumber}</span>
               </DefinitionListItem>
-              <DefinitionListItem term={t('confirm.altPhoneNumber')}>
+              <DefinitionListItem term={t(($) => $.confirm.altPhoneNumber)}>
                 <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
               </DefinitionListItem>
               {userInfo.contactInformationEmail && (
-                <DefinitionListItem term={t('confirm.email')}>
+                <DefinitionListItem term={t(($) => $.confirm.email)}>
                   <span className="text-nowrap">{userInfo.contactInformationEmail} </span>
                 </DefinitionListItem>
               )}
-              <DefinitionListItem term={t('confirm.mailing')}>
+              <DefinitionListItem term={t(($) => $.confirm.mailing)}>
                 <Address
                   address={{
                     address: mailingAddressInfo.address,
@@ -364,7 +360,7 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
                   }}
                 />
               </DefinitionListItem>
-              <DefinitionListItem term={t('confirm.home')}>
+              <DefinitionListItem term={t(($) => $.confirm.home)}>
                 <Address
                   address={{
                     address: homeAddressInfo.address,
@@ -379,11 +375,11 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
           </section>
 
           <section className="space-y-6">
-            <h3 className="font-lato text-2xl font-bold">{t('confirm.commPref')}</h3>
+            <h3 className="font-lato text-2xl font-bold">{t(($) => $.confirm.commPref)}</h3>
             <DefinitionList border>
-              <DefinitionListItem term={t('confirm.langPref')}>{userInfo.preferredLanguage.name}</DefinitionListItem>
-              <DefinitionListItem term={t('confirm.sunLifeCommPrefTitle')}>{userInfo.communicationSunLifePreference.name}</DefinitionListItem>
-              <DefinitionListItem term={t('confirm.email')}>{userInfo.contactInformationEmail}</DefinitionListItem>
+              <DefinitionListItem term={t(($) => $.confirm.langPref)}>{userInfo.preferredLanguage.name}</DefinitionListItem>
+              <DefinitionListItem term={t(($) => $.confirm.sunLifeCommPrefTitle)}>{userInfo.communicationSunLifePreference.name}</DefinitionListItem>
+              <DefinitionListItem term={t(($) => $.confirm.email)}>{userInfo.contactInformationEmail}</DefinitionListItem>
             </DefinitionList>
           </section>
         </section>
@@ -395,33 +391,41 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
               <section key={child.id} className="space-y-10">
                 <h2 className="font-lato text-3xl font-bold">{child.firstName}</h2>
                 <div>
-                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('protectedApplicationRenewalChild:confirm.pageSubTitle', { child: child.firstName })}</h3>
+                  <h3 className="font-lato mb-6 text-2xl font-bold">
+                    {t(($) => $.confirm.pageSubTitle, {
+                      child: child.firstName,
+                      ns: 'protectedApplicationRenewalChild',
+                    })}
+                  </h3>
                   <DefinitionList border>
-                    <DefinitionListItem term={t('protectedApplicationRenewalChild:confirm.memberId')}>{child.memberId}</DefinitionListItem>
-                    <DefinitionListItem term={t('protectedApplicationRenewalChild:confirm.fullName')}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
-                    <DefinitionListItem term={t('protectedApplicationRenewalChild:confirm.dob')}>{dateOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('protectedApplicationRenewalChild:confirm.sin')}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
-                    <DefinitionListItem term={t('protectedApplicationRenewalChild:confirm.isParent')}>{child.isParent ? t('protectedApplicationRenewalChild:confirm.yes') : t('protectedApplicationRenewalChild:confirm.no')}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.confirm.memberId)}>{child.memberId}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.confirm.fullName)}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.confirm.dob)}>{dateOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.confirm.sin)}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.confirm.isParent)}>{child.isParent ? t(($) => $.confirm.yes) : t(($) => $.confirm.no)}</DefinitionListItem>
                   </DefinitionList>
                 </div>
                 <div>
-                  <h3 className="font-lato mb-6 text-2xl font-bold">{t('protectedApplicationRenewalChild:confirm.dentalTitle', { child: child.firstName })}</h3>
+                  <h3 className="font-lato mb-6 text-2xl font-bold">
+                    {t(($) => $.confirm.dentalTitle, {
+                      child: child.firstName,
+                      ns: 'protectedApplicationRenewalChild',
+                    })}
+                  </h3>
                   <DefinitionList border>
-                    <DefinitionListItem term={t('protectedApplicationRenewalChild:confirm.dentalPrivate')}>
-                      {child.dentalInsurance.accessToDentalInsurance ? t('protectedApplicationRenewalChild:confirm.yes') : t('protectedApplicationRenewalChild:confirm.no')}
-                    </DefinitionListItem>
-                    <DefinitionListItem term={t('protectedApplicationRenewalChild:confirm.dentalPublic')}>
+                    <DefinitionListItem term={t(($) => $.confirm.dentalPrivate)}>{child.dentalInsurance.accessToDentalInsurance ? t(($) => $.confirm.yes) : t(($) => $.confirm.no)}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.confirm.dentalPublic)}>
                       {child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access ? (
                         <div className="space-y-3">
-                          <p>{t('protectedApplicationRenewalChild:confirm.yes')}</p>
-                          <p>{t('protectedApplicationRenewalChild:confirm.dentalBenefitHasAccess')}</p>
+                          <p>{t(($) => $.confirm.yes)}</p>
+                          <p>{t(($) => $.confirm.dentalBenefitHasAccess)}</p>
                           <ul className="list-disc space-y-1 pl-7">
                             {child.dentalInsurance.federalBenefit.access && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
                             {child.dentalInsurance.provTerrBenefit.access && <li>{child.dentalInsurance.provTerrBenefit.benefit}</li>}
                           </ul>
                         </div>
                       ) : (
-                        <>{t('protectedApplicationRenewalChild:confirm.no')}</>
+                        <>{t(($) => $.confirm.no)}</>
                       )}
                     </DefinitionListItem>
                   </DefinitionList>
@@ -431,7 +435,6 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
           })}
         </div>
       </section>
-
       <div className="my-6">
         <Button
           className="px-12 print:hidden"
@@ -443,23 +446,23 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
           }}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Print bottom - Application successfully submitted click"
         >
-          {t('confirm.printBtn')}
+          {t(($) => $.confirm.printBtn)}
         </Button>
       </div>
       <Dialog>
         <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Exit - Application successfully submitted click" asChild>
-          <Button variant="secondary">{t('protectedApplicationRenewalChild:confirm.closeApplication')}</Button>
+          <Button variant="secondary">{t(($) => $.confirm.closeApplication)}</Button>
         </DialogTrigger>
         <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{t('protectedApplicationRenewalChild:confirm.modal.header')}</DialogTitle>
+            <DialogTitle>{t(($) => $.confirm.modal.header)}</DialogTitle>
           </DialogHeader>
-          <p>{t('protectedApplicationRenewalChild:confirm.modal.info')}</p>
-          <p>{t('protectedApplicationRenewalChild:confirm.modal.areYouSure')}</p>
+          <p>{t(($) => $.confirm.modal.info)}</p>
+          <p>{t(($) => $.confirm.modal.areYouSure)}</p>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="confirm-modal-back" variant="secondary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Back exit modal - Application successfully submitted click">
-                {t('protectedApplicationRenewalChild:confirm.modal.backBtn')}
+                {t(($) => $.confirm.modal.backBtn)}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
@@ -471,7 +474,7 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
                 onClick={() => removeApplicationFlowStorageValue()}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Confirmation exit modal - Application successfully submitted click"
               >
-                {t('protectedApplicationRenewalChild:confirm.modal.closeBtn')}
+                {t(($) => $.confirm.modal.closeBtn)}
               </Button>
             </fetcher.Form>
           </DialogFooter>

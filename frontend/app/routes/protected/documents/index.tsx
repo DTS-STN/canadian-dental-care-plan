@@ -38,7 +38,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const evidentiaryDocuments = await evidentiaryDocumentService.listLocalizedEvidentiaryDocuments({ clientId: applicant.clientId, userId: userInfoToken.sub }, locale);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('documents:index.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.index.pageTitle) }),
+  };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   const idToken: IdToken = session.get('idToken');
@@ -66,15 +68,15 @@ export default function DocumentsIndex({ loaderData, params }: Route.ComponentPr
   return (
     <div className="space-y-8">
       <div className="space-y-4">
-        <p>{hasDocuments ? t('documents:index.hasDocuments') : t('documents:index.noDocuments')}</p>
+        <p>{hasDocuments ? t(($) => $.index.hasDocuments) : t(($) => $.index.noDocuments)}</p>
         {hasDocuments && (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t('documents:index.tableHeaders.fileName')}</TableHead>
-                <TableHead>{t('documents:index.tableHeaders.applicant')}</TableHead>
-                <TableHead>{t('documents:index.tableHeaders.typeOfDocument')}</TableHead>
-                <TableHead>{t('documents:index.tableHeaders.dateUploaded')}</TableHead>
+                <TableHead>{t(($) => $.index.tableHeaders.fileName)}</TableHead>
+                <TableHead>{t(($) => $.index.tableHeaders.applicant)}</TableHead>
+                <TableHead>{t(($) => $.index.tableHeaders.typeOfDocument)}</TableHead>
+                <TableHead>{t(($) => $.index.tableHeaders.dateUploaded)}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -92,12 +94,20 @@ export default function DocumentsIndex({ loaderData, params }: Route.ComponentPr
       </div>
       <div>
         <ButtonLink id="upload-button" routeId="protected/documents/upload" params={params} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Upload documents - Submitted documents click">
-          {t('documents:index.uploadDocuments')}
+          {t(($) => $.index.uploadDocuments)}
         </ButtonLink>
       </div>
       <div>
-        <ButtonLink id="back-button" variant="secondary" to={t('gcweb:header.menuDashboardHref', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Submitted documents click">
-          {t('documents:index.returnDashboard')}
+        <ButtonLink
+          id="back-button"
+          variant="secondary"
+          to={t(($) => $.header.menuDashboardHref, {
+            baseUri: SCCH_BASE_URI,
+            ns: 'gcweb',
+          })}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Submitted documents click"
+        >
+          {t(($) => $.index.returnDashboard)}
         </ButtonLink>
       </div>
     </div>

@@ -36,7 +36,9 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['full-children']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationFullChild:parentOrGuardian.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.parentOrGuardian.pageTitle, { ns: 'applicationFullChild' }) }),
+  };
   const locale = getLocale(request);
 
   const mailingAddressInfo = state.mailingAddress?.hasChanged
@@ -93,27 +95,27 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
       <ProgressStepper activeStep="parentOrGuardian" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('application:completeAllSections')}</p>
+          <p>{t(($) => $.completeAllSections)}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('applicationFullChild:parentOrGuardian.maritalStatus')}</h2>
+              <h2>{t(($) => $.parentOrGuardian.maritalStatus, { ns: 'applicationFullChild' })}</h2>
             </CardTitle>
             <CardAction>{sections.maritalStatus.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.maritalStatus === undefined ? (
-              <p>{t('applicationFullChild:parentOrGuardian.selectYourStatus')}</p>
+              <p>{t(($) => $.parentOrGuardian.selectYourStatus, { ns: 'applicationFullChild' })}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('applicationFullChild:parentOrGuardian.maritalStatus')}>{state.maritalStatus.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.maritalStatus, { ns: 'applicationFullChild' })}>{state.maritalStatus.name}</DefinitionListItem>
                 {state.partnerInformation && (
                   <>
-                    <DefinitionListItem term={t('applicationFullChild:parentOrGuardian.spouseSin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
-                    <DefinitionListItem term={t('applicationFullChild:parentOrGuardian.spouseYob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('applicationFullChild:parentOrGuardian.consent')}>{t('applicationFullChild:parentOrGuardian.consentYes')}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.parentOrGuardian.spouseSin, { ns: 'applicationFullChild' })}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.parentOrGuardian.spouseYob, { ns: 'applicationFullChild' })}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.parentOrGuardian.consent, { ns: 'applicationFullChild' })}>{t(($) => $.parentOrGuardian.consentYes, { ns: 'applicationFullChild' })}</DefinitionListItem>
                   </>
                 )}
               </DefinitionList>
@@ -130,7 +132,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Edit marital click"
             >
-              {state.maritalStatus === undefined ? t('applicationFullChild:parentOrGuardian.addMaritalStatus') : t('applicationFullChild:parentOrGuardian.editMaritalStatus')}
+              {state.maritalStatus === undefined ? t(($) => $.parentOrGuardian.addMaritalStatus, { ns: 'applicationFullChild' }) : t(($) => $.parentOrGuardian.editMaritalStatus, { ns: 'applicationFullChild' })}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -138,18 +140,18 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('applicationFullChild:parentOrGuardian.phoneNumber')}</h2>
+              <h2>{t(($) => $.parentOrGuardian.phoneNumber, { ns: 'applicationFullChild' })}</h2>
             </CardTitle>
             <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.phoneNumber?.hasChanged ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('applicationFullChild:parentOrGuardian.phoneNumber')}>{state.phoneNumber.value.primary}</DefinitionListItem>
-                {state.phoneNumber.value.alternate && <DefinitionListItem term={t('applicationFullChild:parentOrGuardian.altPhoneNumber')}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.phoneNumber, { ns: 'applicationFullChild' })}>{state.phoneNumber.value.primary}</DefinitionListItem>
+                {state.phoneNumber.value.alternate && <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber, { ns: 'applicationFullChild' })}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
               </DefinitionList>
             ) : (
-              <p>{t('applicationFullChild:parentOrGuardian.phoneNumberHelp')}</p>
+              <p>{t(($) => $.parentOrGuardian.phoneNumberHelp, { ns: 'applicationFullChild' })}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -163,7 +165,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Edit phone click"
             >
-              {sections.phoneNumber.completed ? t('applicationFullChild:parentOrGuardian.editPhoneNumber') : t('applicationFullChild:parentOrGuardian.addPhoneNumber')}
+              {sections.phoneNumber.completed ? t(($) => $.parentOrGuardian.editPhoneNumber, { ns: 'applicationFullChild' }) : t(($) => $.parentOrGuardian.addPhoneNumber, { ns: 'applicationFullChild' })}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -171,16 +173,16 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('applicationFullChild:parentOrGuardian.mailingAndHomeAddress')}</h2>
+              <h2>{t(($) => $.parentOrGuardian.mailingAndHomeAddress, { ns: 'applicationFullChild' })}</h2>
             </CardTitle>
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {mailingAddressInfo === undefined || homeAddressInfo === undefined ? (
-              <p>{t('applicationFullChild:parentOrGuardian.addressHelp')}</p>
+              <p>{t(($) => $.parentOrGuardian.addressHelp, { ns: 'applicationFullChild' })}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('applicationFullChild:parentOrGuardian.mailingAddress')}>
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.mailingAddress, { ns: 'applicationFullChild' })}>
                   <Address
                     address={{
                       address: mailingAddressInfo.address,
@@ -191,7 +193,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
                     }}
                   />
                 </DefinitionListItem>
-                <DefinitionListItem term={t('applicationFullChild:parentOrGuardian.homeAddress')}>
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.homeAddress, { ns: 'applicationFullChild' })}>
                   <Address
                     address={{
                       address: homeAddressInfo.address,
@@ -216,7 +218,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Edit address click"
             >
-              {sections.address.completed ? t('applicationFullChild:parentOrGuardian.editAddress') : t('applicationFullChild:parentOrGuardian.addAddress')}
+              {sections.address.completed ? t(($) => $.parentOrGuardian.editAddress, { ns: 'applicationFullChild' }) : t(($) => $.parentOrGuardian.addAddress, { ns: 'applicationFullChild' })}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -224,20 +226,20 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('applicationFullChild:parentOrGuardian.communicationPreferences')}</h2>
+              <h2>{t(($) => $.parentOrGuardian.communicationPreferences, { ns: 'applicationFullChild' })}</h2>
             </CardTitle>
             <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.communicationPreferences?.hasChanged ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('applicationFullChild:parentOrGuardian.preferredLanguage')}>{preferredLanguage?.name}</DefinitionListItem>
-                <DefinitionListItem term={t('applicationFullChild:parentOrGuardian.preferredMethod')}>{preferredMethod?.name}</DefinitionListItem>
-                <DefinitionListItem term={t('applicationFullChild:parentOrGuardian.preferredNotificationMethod')}>{preferredNotificationMethod?.name}</DefinitionListItem>
-                <DefinitionListItem term={t('applicationFullChild:parentOrGuardian.email')}>{state.email}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredLanguage, { ns: 'applicationFullChild' })}>{preferredLanguage?.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredMethod, { ns: 'applicationFullChild' })}>{preferredMethod?.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredNotificationMethod, { ns: 'applicationFullChild' })}>{preferredNotificationMethod?.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.email, { ns: 'applicationFullChild' })}>{state.email}</DefinitionListItem>
               </DefinitionList>
             ) : (
-              <p>{t('applicationFullChild:parentOrGuardian.communicationPreferencesHelp')}</p>
+              <p>{t(($) => $.parentOrGuardian.communicationPreferencesHelp, { ns: 'applicationFullChild' })}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -251,7 +253,7 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Edit comms click"
             >
-              {sections.communicationPreferences.completed ? t('applicationFullChild:parentOrGuardian.editCommunicationPreferences') : t('applicationFullChild:parentOrGuardian.addCommunicationPreferences')}
+              {sections.communicationPreferences.completed ? t(($) => $.parentOrGuardian.editCommunicationPreferences, { ns: 'applicationFullChild' }) : t(($) => $.parentOrGuardian.addCommunicationPreferences, { ns: 'applicationFullChild' })}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -265,10 +267,10 @@ export default function NewChildParentOrGuardian({ loaderData, params }: Route.C
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Continue click"
           >
-            {t('applicationFullChild:parentOrGuardian.childrensApplication')}
+            {t(($) => $.parentOrGuardian.childrensApplication, { ns: 'applicationFullChild' })}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Back click">
-            {t('applicationFullChild:parentOrGuardian.yourApplication')}
+            {t(($) => $.parentOrGuardian.yourApplication, { ns: 'applicationFullChild' })}
           </NavigationButtonLink>
         </div>
       </div>
