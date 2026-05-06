@@ -29,7 +29,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:children.parentOrGuardian.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.children.parentOrGuardian.pageTitle) }),
+  };
 
   return { meta };
 }
@@ -45,7 +47,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   clearPublicApplicationState({ params, session });
-  return redirect(t('applicationSpokes:children.parentOrGuardian.exitBtnLink'));
+  return redirect(t(($) => $.children.parentOrGuardian.exitBtnLink));
 }
 
 export default function ParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
@@ -64,7 +66,7 @@ export default function ParentOrGuardian({ loaderData, params }: Route.Component
   return (
     <>
       <div className="mb-8 space-y-4">
-        <p>{t('applicationSpokes:children.parentOrGuardian.unableToApply')}</p>
+        <p>{t(($) => $.children.parentOrGuardian.unableToApply)}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -76,10 +78,10 @@ export default function ParentOrGuardian({ loaderData, params }: Route.Component
           disabled={isSubmitting}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Child parent or guardian needs to apply click"
         >
-          {t('applicationSpokes:children.parentOrGuardian.backBtn')}
+          {t(($) => $.children.parentOrGuardian.backBtn)}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - Child parent or guardian needs to apply click">
-          {t('applicationSpokes:children.parentOrGuardian.exitBtn')}
+          {t(($) => $.children.parentOrGuardian.exitBtn)}
         </LoadingButton>
       </fetcher.Form>
     </>

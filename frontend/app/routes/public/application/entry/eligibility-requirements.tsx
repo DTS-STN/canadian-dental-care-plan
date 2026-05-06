@@ -28,7 +28,9 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application:eligibilityRequirements.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.eligibilityRequirements.pageTitle) }),
+  };
   return {
     state: {
       termsAndConditions: state.termsAndConditions,
@@ -51,24 +53,24 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
   return (
     <div className="max-w-prose space-y-8">
       <div className="space-y-4">
-        <p>{t('application:completeAllSections')}</p>
+        <p>{t(($) => $.completeAllSections)}</p>
         <p>{completedSectionsLabel}</p>
       </div>
       <Card>
         <CardHeader>
           <CardTitle asChild>
-            <h2>{t('application:eligibilityRequirements.termsConditionsSection.title')}</h2>
+            <h2>{t(($) => $.eligibilityRequirements.termsConditionsSection.title)}</h2>
           </CardTitle>
           <CardAction>{sections.termsAndConditions.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {state.termsAndConditions === undefined ? (
-            <p>{t('application:eligibilityRequirements.termsConditionsSection.instructions')}</p>
+            <p>{t(($) => $.eligibilityRequirements.termsConditionsSection.instructions)}</p>
           ) : (
             <ul className="list-disc space-y-1 pl-7">
-              {state.termsAndConditions.acknowledgeTerms && <li>{t('application:eligibilityRequirements.termsConditionsSection.acknowledgeTerms')}</li>}
-              {state.termsAndConditions.acknowledgePrivacy && <li>{t('application:eligibilityRequirements.termsConditionsSection.acknowledgePrivacy')}</li>}
-              {state.termsAndConditions.shareData && <li>{t('application:eligibilityRequirements.termsConditionsSection.shareData')}</li>}
+              {state.termsAndConditions.acknowledgeTerms && <li>{t(($) => $.eligibilityRequirements.termsConditionsSection.acknowledgeTerms)}</li>}
+              {state.termsAndConditions.acknowledgePrivacy && <li>{t(($) => $.eligibilityRequirements.termsConditionsSection.acknowledgePrivacy)}</li>}
+              {state.termsAndConditions.shareData && <li>{t(($) => $.eligibilityRequirements.termsConditionsSection.shareData)}</li>}
             </ul>
           )}
         </CardContent>
@@ -83,9 +85,9 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               startIcon={faPenToSquare}
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Edit terms conditions click"
-              aria-label={t('application:eligibilityRequirements.termsConditionsSection.editButtonAria')}
+              aria-label={t(($) => $.eligibilityRequirements.termsConditionsSection.editButtonAria)}
             >
-              {t('application:eligibilityRequirements.termsConditionsSection.editButton')}
+              {t(($) => $.eligibilityRequirements.termsConditionsSection.editButton)}
             </ButtonLink>
           ) : (
             <ButtonLink
@@ -98,7 +100,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Add terms conditions click"
             >
-              {t('application:eligibilityRequirements.termsConditionsSection.addButton')}
+              {t(($) => $.eligibilityRequirements.termsConditionsSection.addButton)}
             </ButtonLink>
           )}
         </CardFooter>
@@ -106,15 +108,15 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
       <Card>
         <CardHeader>
           <CardTitle asChild>
-            <h2>{t('application:eligibilityRequirements.taxFilingSection.title')}</h2>
+            <h2>{t(($) => $.eligibilityRequirements.taxFilingSection.title)}</h2>
           </CardTitle>
           <CardAction>{sections.taxFiling.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           <p>
             {state.hasFiledTaxes === true //
-              ? t('application:eligibilityRequirements.taxFilingSection.haveFiledTaxes')
-              : t('application:eligibilityRequirements.taxFilingSection.instructions')}
+              ? t(($) => $.eligibilityRequirements.taxFilingSection.haveFiledTaxes)
+              : t(($) => $.eligibilityRequirements.taxFilingSection.instructions)}
           </p>
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
@@ -128,9 +130,9 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               startIcon={faPenToSquare}
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Edit tax filing click"
-              aria-label={t('application:eligibilityRequirements.taxFilingSection.editButtonAria')}
+              aria-label={t(($) => $.eligibilityRequirements.taxFilingSection.editButtonAria)}
             >
-              {t('application:eligibilityRequirements.taxFilingSection.editButton')}
+              {t(($) => $.eligibilityRequirements.taxFilingSection.editButton)}
             </ButtonLink>
           ) : (
             <ButtonLink
@@ -143,13 +145,13 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Add tax filing click"
             >
-              {t('application:eligibilityRequirements.taxFilingSection.addButton')}
+              {t(($) => $.eligibilityRequirements.taxFilingSection.addButton)}
             </ButtonLink>
           )}
         </CardFooter>
       </Card>
       <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Continue click">
-        {t('application:eligibilityRequirements.nextButton')}
+        {t(($) => $.eligibilityRequirements.nextButton)}
       </NavigationButtonLink>
     </div>
   );

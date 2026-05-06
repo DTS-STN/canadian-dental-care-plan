@@ -65,7 +65,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const applicants = [primaryApplicant, ...children];
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protectedProfile:eligibility.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.eligibility.pageTitle) }),
+  };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   const idToken = session.get('idToken');
@@ -90,10 +92,15 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
 
   return (
     <div className="max-w-prose space-y-10">
-      <p>{t('protectedProfile:eligibility.details')}</p>
+      <p>{t(($) => $.eligibility.details)}</p>
       <section className="space-y-6">
-        <h2 className="font-lato text-2xl font-bold">{t('protectedProfile:eligibility.currentYear')}</h2>
-        <p>{t('protectedProfile:eligibility.currentYearDetails', { end: currentCoverage.endYear })}</p>
+        <h2 className="font-lato text-2xl font-bold">{t(($) => $.eligibility.currentYear)}</h2>
+        <p>
+          {t(($) => $.eligibility.currentYearDetails, {
+            end: currentCoverage.endYear,
+            ns: 'protectedProfile',
+          })}
+        </p>
         <DefinitionList border>
           {applicants.map((applicant) => {
             const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear: currentCoverage.taxationYear, isNextYear: false, ELIGIBILITY_STATUS_CODE_ELIGIBLE });
@@ -105,10 +112,15 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
           })}
         </DefinitionList>
       </section>
-
       <section className="space-y-6">
-        <h2 className="font-lato text-2xl font-bold">{t('protectedProfile:eligibility.nextYear')}</h2>
-        <p>{t('protectedProfile:eligibility.benefitYearRange', { start: currentCoverage.startYear + 1, end: currentCoverage.endYear + 1 })}</p>
+        <h2 className="font-lato text-2xl font-bold">{t(($) => $.eligibility.nextYear)}</h2>
+        <p>
+          {t(($) => $.eligibility.benefitYearRange, {
+            start: currentCoverage.startYear + 1,
+            end: currentCoverage.endYear + 1,
+            ns: 'protectedProfile',
+          })}
+        </p>
         <DefinitionList border>
           {applicants.map((applicant) => {
             const taxationYear = currentCoverage.taxationYear + 1;
@@ -123,14 +135,16 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
           })}
         </DefinitionList>
       </section>
-
       <ButtonLink
         variant="primary"
         id="back-button"
-        to={t('gcweb:header.menuDashboardHref', { baseUri: SCCH_BASE_URI })}
+        to={t(($) => $.header.menuDashboardHref, {
+          baseUri: SCCH_BASE_URI,
+          ns: 'gcweb',
+        })}
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - Member eligibility return button click"
       >
-        {t('protectedProfile:eligibility.returnButton')}
+        {t(($) => $.eligibility.returnButton)}
       </ButtonLink>
     </div>
   );
@@ -175,7 +189,7 @@ export function EligibilityStatusIndicator({ status, coverageStartYear, coverage
     return (
       <div className="flex items-center gap-2">
         <FontAwesomeIcon icon={faCheckCircle} className="text-green-700" />
-        <span className="text-nowrap">{t('protectedProfile:eligibility.eligible')}</span>
+        <span className="text-nowrap">{t(($) => $.eligibility.eligible)}</span>
       </div>
     );
   }
@@ -184,7 +198,7 @@ export function EligibilityStatusIndicator({ status, coverageStartYear, coverage
     return (
       <div className="flex items-center gap-2">
         <FontAwesomeIcon icon={faCircleXmark} className="text-red-700" />
-        <span className="text-nowrap">{t('protectedProfile:eligibility.notEligible')}</span>
+        <span className="text-nowrap">{t(($) => $.eligibility.notEligible)}</span>
       </div>
     );
   }
@@ -193,11 +207,15 @@ export function EligibilityStatusIndicator({ status, coverageStartYear, coverage
     <div className="flex flex-col items-start gap-2 sm:flex-row sm:gap-6">
       <div className="flex items-center gap-2">
         <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-700" />
-        <span className="text-nowrap">{t('protectedProfile:eligibility.notEnrolled')}</span>
+        <span className="text-nowrap">{t(($) => $.eligibility.notEnrolled)}</span>
       </div>
       {showApplyLink && (
         <InlineLink routeId="protected/application/index" params={params}>
-          {t('protectedProfile:eligibility.apply', { start: coverageStartYear, end: coverageEndYear })}
+          {t(($) => $.eligibility.apply, {
+            start: coverageStartYear,
+            end: coverageEndYear,
+            ns: 'protectedProfile',
+          })}
         </InlineLink>
       )}
     </div>

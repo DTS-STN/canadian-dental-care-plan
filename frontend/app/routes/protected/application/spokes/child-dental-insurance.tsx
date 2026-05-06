@@ -55,12 +55,29 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const childNumber = t('protectedApplicationSpokes:children.childNumber', { childNumber: childState.childNumber });
+  const childNumber = t(($) => $.children.childNumber, {
+    childNumber: childState.childNumber,
+    ns: 'protectedApplicationSpokes',
+  });
   const childName = childState.information?.firstName ?? childNumber;
 
   const meta = {
-    title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:children.dentalInsurance.title', { childName }) }),
-    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:children.dentalInsurance.title', { childName: childNumber }) }),
+    title: t(($) => $.meta.title.template, {
+      title: t(($) => $.children.dentalInsurance.title, {
+        childName: childName,
+        ns: 'protectedApplicationSpokes',
+      }),
+
+      ns: 'gcweb',
+    }),
+    dcTermsTitle: t(($) => $.meta.title.template, {
+      title: t(($) => $.children.dentalInsurance.title, {
+        childName: childNumber,
+        ns: 'protectedApplicationSpokes',
+      }),
+
+      ns: 'gcweb',
+    }),
   };
 
   return { meta, defaultState: childState.dentalInsurance, childName, i18nOptions: { childName }, applicationFlow: `${state.context}-${state.typeOfApplication}` };
@@ -83,12 +100,18 @@ export async function action({ context: { appContainer, session }, params, reque
   // state validation schema
   const dentalInsuranceSchema = z
     .object({
-      hasDentalInsurance: z.boolean({ error: t('protectedApplicationSpokes:children.dentalInsurance.errorMessage.dentalInsuranceRequired') }),
+      hasDentalInsurance: z.boolean({
+        error: t(($) => $.children.dentalInsurance.errorMessage.dentalInsuranceRequired),
+      }),
       dentalInsuranceEligibilityConfirmation: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
       if (val.hasDentalInsurance && !val.dentalInsuranceEligibilityConfirmation) {
-        ctx.addIssue({ code: 'custom', message: t('protectedApplicationSpokes:children.dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired'), path: ['dentalInsuranceEligibilityConfirmation'] });
+        ctx.addIssue({
+          code: 'custom',
+          message: t(($) => $.children.dentalInsurance.errorMessage.dentalInsuranceEligibilityConfirmationRequired),
+          path: ['dentalInsuranceEligibilityConfirmation'],
+        });
       }
     })
     .transform((val) => ({
@@ -137,20 +160,20 @@ export default function ChildDentalInsurance({ loaderData, params }: Route.Compo
   const helpMessage = (
     <div className="mb-4 space-y-4">
       <ul className="list-disc space-y-1 pl-7 font-bold">
-        <li>{t('children.dentalInsurance.detail.additionalInfo.list.employer')}</li>
-        <li>{t('children.dentalInsurance.detail.additionalInfo.list.pension')}</li>
-        <li>{t('children.dentalInsurance.detail.additionalInfo.list.organization')}</li>
-        <li>{t('children.dentalInsurance.detail.additionalInfo.list.private')}</li>
+        <li>{t(($) => $.children.dentalInsurance.detail.additionalInfo.list.employer)}</li>
+        <li>{t(($) => $.children.dentalInsurance.detail.additionalInfo.list.pension)}</li>
+        <li>{t(($) => $.children.dentalInsurance.detail.additionalInfo.list.organization)}</li>
+        <li>{t(($) => $.children.dentalInsurance.detail.additionalInfo.list.private)}</li>
       </ul>
-      <p className="font-bold">{t('children.dentalInsurance.detail.additionalInfo.eligible')}</p>
-      <p>{t('children.dentalInsurance.detail.additionalInfo.access')}</p>
+      <p className="font-bold">{t(($) => $.children.dentalInsurance.detail.additionalInfo.eligible)}</p>
+      <p>{t(($) => $.children.dentalInsurance.detail.additionalInfo.access)}</p>
     </div>
   );
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
       <div className="max-w-prose">
-        <p className="mb-4 italic">{t('protectedApplication:requiredLabel')}</p>
+        <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
@@ -158,16 +181,18 @@ export default function ChildDentalInsurance({ loaderData, params }: Route.Compo
             <InputRadios
               id="has-dental-insurance"
               name="hasDentalInsurance"
-              legend={t('children.dentalInsurance.legend', { childName: childName })}
+              legend={t(($) => $.children.dentalInsurance.legend, {
+                childName: childName,
+              })}
               options={[
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="children.dentalInsurance.optionYes" />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.dentalInsurance.optionYes} />,
                   value: HAS_DENTAL_INSURANCE_OPTION.yes,
                   defaultChecked: defaultState?.hasDentalInsurance === true,
                   onChange: handleOnHasDentalInsuranceChanged,
                 },
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="children.dentalInsurance.optionNo" />,
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.dentalInsurance.optionNo} />,
                   value: HAS_DENTAL_INSURANCE_OPTION.no,
                   defaultChecked: defaultState?.hasDentalInsurance === false,
                   onChange: handleOnHasDentalInsuranceChanged,
@@ -182,8 +207,12 @@ export default function ChildDentalInsurance({ loaderData, params }: Route.Compo
           {hasDentalInsurance && (
             <div className="space-y-4">
               <ContextualAlert type="info" id="child-dental-insurance-confirmation">
-                <h2 className="font-lato mb-2 text-xl font-semibold">{t('children.dentalInsurance.alert.title')}</h2>
-                <p>{t('children.dentalInsurance.alert.body', { childName: childName })}</p>
+                <h2 className="font-lato mb-2 text-xl font-semibold">{t(($) => $.children.dentalInsurance.alert.title)}</h2>
+                <p>
+                  {t(($) => $.children.dentalInsurance.alert.body, {
+                    childName: childName,
+                  })}
+                </p>
               </ContextualAlert>
               <InputCheckbox
                 id="dental-insurance-eligibility-confirmation"
@@ -194,13 +223,15 @@ export default function ChildDentalInsurance({ loaderData, params }: Route.Compo
                 required
                 aria-describedby="child-dental-insurance-confirmation"
               >
-                {t('children.dentalInsurance.dentalInsuranceEligibilityConfirmation', { childName: childName })}
+                {t(($) => $.children.dentalInsurance.dentalInsuranceEligibilityConfirmation, {
+                  childName: childName,
+                })}
               </InputCheckbox>
             </div>
           )}
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Child access to other dental insurance click">
-              {t('children.dentalInsurance.saveBtn')}
+              {t(($) => $.children.dentalInsurance.saveBtn)}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -210,7 +241,7 @@ export default function ChildDentalInsurance({ loaderData, params }: Route.Compo
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child access to other dental insurance click"
             >
-              {t('children.dentalInsurance.backBtn')}
+              {t(($) => $.children.dentalInsurance.backBtn)}
             </ButtonLink>
           </div>
         </fetcher.Form>

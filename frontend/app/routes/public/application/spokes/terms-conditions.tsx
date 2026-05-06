@@ -53,7 +53,9 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:termsConditions.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.termsConditions.pageTitle) }),
+  };
   return { defaultState: state.termsAndConditions, meta };
 }
 
@@ -76,16 +78,32 @@ export async function action({ context: { appContainer, session }, request, para
 
     .superRefine((val, ctx) => {
       if (val.doNotConsent) {
-        ctx.addIssue({ code: 'custom', message: t('applicationSpokes:termsConditions.checkboxes.errorMessage.consentRequired'), path: ['doNotConsent'] });
+        ctx.addIssue({
+          code: 'custom',
+          message: t(($) => $.termsConditions.checkboxes.errorMessage.consentRequired),
+          path: ['doNotConsent'],
+        });
       }
       if (!val.doNotConsent && !val.acknowledgeTerms) {
-        ctx.addIssue({ code: 'custom', message: t('applicationSpokes:termsConditions.checkboxes.errorMessage.acknowledgeTermsRequired'), path: ['acknowledgeTerms'] });
+        ctx.addIssue({
+          code: 'custom',
+          message: t(($) => $.termsConditions.checkboxes.errorMessage.acknowledgeTermsRequired),
+          path: ['acknowledgeTerms'],
+        });
       }
       if (!val.doNotConsent && !val.acknowledgePrivacy) {
-        ctx.addIssue({ code: 'custom', message: t('applicationSpokes:termsConditions.checkboxes.errorMessage.acknowledgePrivacyRequired'), path: ['acknowledgePrivacy'] });
+        ctx.addIssue({
+          code: 'custom',
+          message: t(($) => $.termsConditions.checkboxes.errorMessage.acknowledgePrivacyRequired),
+          path: ['acknowledgePrivacy'],
+        });
       }
       if (!val.doNotConsent && !val.shareData) {
-        ctx.addIssue({ code: 'custom', message: t('applicationSpokes:termsConditions.checkboxes.errorMessage.shareDataRequired'), path: ['shareData'] });
+        ctx.addIssue({
+          code: 'custom',
+          message: t(($) => $.termsConditions.checkboxes.errorMessage.shareDataRequired),
+          path: ['shareData'],
+        });
       }
     })
     .transform((val) => ({
@@ -157,124 +175,124 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
     }
   };
 
-  const esdcPib = <InlineLink to={t('applicationSpokes:termsConditions.links.esdcPib')} className="external-link" newTabIndicator target="_blank" />;
-  const hcPib = <InlineLink to={t('applicationSpokes:termsConditions.links.hcPib')} className="external-link" newTabIndicator target="_blank" />;
+  const esdcPib = <InlineLink to={t(($) => $.termsConditions.links.esdcPib)} className="external-link" newTabIndicator target="_blank" />;
+  const hcPib = <InlineLink to={t(($) => $.termsConditions.links.hcPib)} className="external-link" newTabIndicator target="_blank" />;
 
-  const canadaTermsConditions = <InlineLink to={t('applicationSpokes:termsConditions.links.canadaCaTermsAndConditions')} className="external-link" newTabIndicator target="_blank" />;
-  const contactServiceCanada = <InlineLink to={t('applicationSpokes:termsConditions.links.serviceCanada')} className="external-link" newTabIndicator target="_blank" />;
-  const eligibilityRequirements = <InlineLink to={t('applicationSpokes:termsConditions.links.eligibilityRequirements')} className="external-link" newTabIndicator target="_blank" />;
-  const fileacomplaint = <InlineLink to={t('applicationSpokes:termsConditions.links.fileComplaint')} className="external-link" newTabIndicator target="_blank" />;
-  const hcaptchaTermsOfService = <InlineLink to={t('applicationSpokes:termsConditions.links.hcaptcha')} className="external-link" newTabIndicator target="_blank" />;
-  const infosource = <InlineLink to={t('applicationSpokes:termsConditions.links.infoSource')} className="external-link" newTabIndicator target="_blank" />;
-  const microsoftDataPrivacyPolicy = <InlineLink to={t('applicationSpokes:termsConditions.links.microsoftDataPrivacyPolicy')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpPrivacyPolicy = <InlineLink to={t('applicationSpokes:termsConditions.links.cdcpPrivacyPolicy')} className="external-link" newTabIndicator target="_blank" />;
+  const canadaTermsConditions = <InlineLink to={t(($) => $.termsConditions.links.canadaCaTermsAndConditions)} className="external-link" newTabIndicator target="_blank" />;
+  const contactServiceCanada = <InlineLink to={t(($) => $.termsConditions.links.serviceCanada)} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityRequirements = <InlineLink to={t(($) => $.termsConditions.links.eligibilityRequirements)} className="external-link" newTabIndicator target="_blank" />;
+  const fileacomplaint = <InlineLink to={t(($) => $.termsConditions.links.fileComplaint)} className="external-link" newTabIndicator target="_blank" />;
+  const hcaptchaTermsOfService = <InlineLink to={t(($) => $.termsConditions.links.hcaptcha)} className="external-link" newTabIndicator target="_blank" />;
+  const infosource = <InlineLink to={t(($) => $.termsConditions.links.infoSource)} className="external-link" newTabIndicator target="_blank" />;
+  const microsoftDataPrivacyPolicy = <InlineLink to={t(($) => $.termsConditions.links.microsoftDataPrivacyPolicy)} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpPrivacyPolicy = <InlineLink to={t(($) => $.termsConditions.links.cdcpPrivacyPolicy)} className="external-link" newTabIndicator target="_blank" />;
   const cite = <cite />;
 
   return (
     <div className="max-w-prose">
       <div className="space-y-6">
-        <h2 className="font-bold">{t('applicationSpokes:termsConditions.beforeYouBegin')}</h2>
+        <h2 className="font-bold">{t(($) => $.termsConditions.beforeYouBegin)}</h2>
         <ul className="list-disc space-y-1 pl-7">
           <li>
-            <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:termsConditions.reviewConfirm" components={{ eligibilityRequirements }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.reviewConfirm} components={{ eligibilityRequirements }} />
           </li>
-          <li>{t('applicationSpokes:termsConditions.resolveActions')}</li>
-          <li>{t('applicationSpokes:termsConditions.reviewStatements')}</li>
+          <li>{t(($) => $.termsConditions.resolveActions)}</li>
+          <li>{t(($) => $.termsConditions.reviewStatements)}</li>
         </ul>
-        <Collapsible summary={t('applicationSpokes:termsConditions.termsAndConditionsOfUse.summary')}>
+        <Collapsible summary={t(($) => $.termsConditions.termsAndConditionsOfUse.summary)}>
           <div className="space-y-6">
             <div className="space-y-4">
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:termsConditions.termsAndConditionsOfUse.onlineApplicationLegalTerms" components={{ canadaTermsConditions }} />
+                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.termsAndConditionsOfUse.onlineApplicationLegalTerms} components={{ canadaTermsConditions }} />
               </p>
-              <p>{t('applicationSpokes:termsConditions.termsAndConditionsOfUse.esdcDefinitionClarification')}</p>
+              <p>{t(($) => $.termsConditions.termsAndConditionsOfUse.esdcDefinitionClarification)}</p>
             </div>
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold">{t('applicationSpokes:termsConditions.termsAndConditionsOfUse.onlineApplication.heading')}</h2>
+              <h2 className="font-lato text-lg font-bold">{t(($) => $.termsConditions.termsAndConditionsOfUse.onlineApplication.heading)}</h2>
               <ul className="list-disc space-y-1 pl-7">
-                <li>{t('applicationSpokes:termsConditions.termsAndConditionsOfUse.onlineApplication.selfAgreement')}</li>
-                <li>{t('applicationSpokes:termsConditions.termsAndConditionsOfUse.onlineApplication.timeout')}</li>
-                <li>{t('applicationSpokes:termsConditions.termsAndConditionsOfUse.onlineApplication.incorrectInformation')}</li>
-                <li>{t('applicationSpokes:termsConditions.termsAndConditionsOfUse.onlineApplication.onBehalfOfSomeoneElse')}</li>
-                <li>{t('applicationSpokes:termsConditions.termsAndConditionsOfUse.onlineApplication.atYourOwnRisk')}</li>
+                <li>{t(($) => $.termsConditions.termsAndConditionsOfUse.onlineApplication.selfAgreement)}</li>
+                <li>{t(($) => $.termsConditions.termsAndConditionsOfUse.onlineApplication.timeout)}</li>
+                <li>{t(($) => $.termsConditions.termsAndConditionsOfUse.onlineApplication.incorrectInformation)}</li>
+                <li>{t(($) => $.termsConditions.termsAndConditionsOfUse.onlineApplication.onBehalfOfSomeoneElse)}</li>
+                <li>{t(($) => $.termsConditions.termsAndConditionsOfUse.onlineApplication.atYourOwnRisk)}</li>
                 <li>
-                  <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:termsConditions.termsAndConditionsOfUse.onlineApplication.msdc" components={{ microsoftDataPrivacyPolicy }} />
+                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.termsAndConditionsOfUse.onlineApplication.msdc} components={{ microsoftDataPrivacyPolicy }} />
                 </li>
                 <li>
-                  <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:termsConditions.termsAndConditionsOfUse.onlineApplication.antibot" components={{ hcaptchaTermsOfService }} />
+                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.termsAndConditionsOfUse.onlineApplication.antibot} components={{ hcaptchaTermsOfService }} />
                 </li>
               </ul>
             </section>
             <section className="space-y-4">
-              <p>{t('applicationSpokes:termsConditions.termsAndConditionsOfUse.changesToTheseTermsOfUse.esdcTermsAmendmentPolicy')}</p>
+              <p>{t(($) => $.termsConditions.termsAndConditionsOfUse.changesToTheseTermsOfUse.esdcTermsAmendmentPolicy)}</p>
             </section>
           </div>
         </Collapsible>
 
-        <Collapsible summary={t('applicationSpokes:termsConditions.privacyNoticeStatement.summary')}>
+        <Collapsible summary={t(($) => $.termsConditions.privacyNoticeStatement.summary)}>
           <div className="space-y-6">
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold">{t('applicationSpokes:termsConditions.privacyNoticeStatement.personalInformation.heading')}</h2>
-              <p>{t('applicationSpokes:termsConditions.privacyNoticeStatement.personalInformation.serviceCanadaApplicationAdministration')}</p>
-              <p>{t('applicationSpokes:termsConditions.privacyNoticeStatement.personalInformation.serviceCanadaInformationCollection')}</p>
+              <h2 className="font-lato text-lg font-bold">{t(($) => $.termsConditions.privacyNoticeStatement.personalInformation.heading)}</h2>
+              <p>{t(($) => $.termsConditions.privacyNoticeStatement.personalInformation.serviceCanadaApplicationAdministration)}</p>
+              <p>{t(($) => $.termsConditions.privacyNoticeStatement.personalInformation.serviceCanadaInformationCollection)}</p>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:termsConditions.privacyNoticeStatement.personalInformation.participation" components={{ contactServiceCanada }} />
+                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.personalInformation.participation} components={{ contactServiceCanada }} />
               </p>
-              <p>{t('applicationSpokes:termsConditions.privacyNoticeStatement.personalInformation.policyAnalysis')}</p>
-              <p>{t('applicationSpokes:termsConditions.privacyNoticeStatement.personalInformation.digitalCommunications')}</p>
+              <p>{t(($) => $.termsConditions.privacyNoticeStatement.personalInformation.policyAnalysis)}</p>
+              <p>{t(($) => $.termsConditions.privacyNoticeStatement.personalInformation.digitalCommunications)}</p>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:termsConditions.privacyNoticeStatement.personalInformation.collectionUse" components={{ cite }} />
+                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.personalInformation.collectionUse} components={{ cite }} />
               </p>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:termsConditions.privacyNoticeStatement.personalInformation.microsoftPolicy" components={{ microsoftDataPrivacyPolicy, cite }} />
+                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.personalInformation.microsoftPolicy} components={{ microsoftDataPrivacyPolicy, cite }} />
               </p>
             </section>
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold">{t('applicationSpokes:termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.heading')}</h2>
-              <p>{t('applicationSpokes:termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationRightsAndAccess')}</p>
+              <h2 className="font-lato text-lg font-bold">{t(($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.heading)}</h2>
+              <p>{t(($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationRightsAndAccess)}</p>
               <ul className="list-disc space-y-1 pl-7">
                 <li>
-                  <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationBanks.hcPpu440" components={{ hcPib }} />
+                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationBanks.hcPpu440} components={{ hcPib }} />
                 </li>
                 <li>
-                  <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationBanks.esdcPpu712" components={{ esdcPib }} />
+                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationBanks.esdcPpu712} components={{ esdcPib }} />
                 </li>
               </ul>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.infoSourceAccess" components={{ infosource }} />
+                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.infoSourceAccess} components={{ infosource }} />
               </p>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.privacyContact" components={{ contactServiceCanada }} />
+                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.privacyContact} components={{ contactServiceCanada }} />
               </p>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationHandlingComplaintProcess" components={{ fileacomplaint }} />
+                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationHandlingComplaintProcess} components={{ fileacomplaint }} />
               </p>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.privacyProtection" components={{ cdcpPrivacyPolicy }} />
+                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.privacyProtection} components={{ cdcpPrivacyPolicy }} />
               </p>
             </section>
           </div>
         </Collapsible>
-        <Collapsible summary={t('applicationSpokes:termsConditions.sharingYourInformation.summary')}>
+        <Collapsible summary={t(($) => $.termsConditions.sharingYourInformation.summary)}>
           <div className="space-y-6">
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold">{t('applicationSpokes:termsConditions.sharingYourInformation.governmentOfCanadaAndSunLife.heading')}</h2>
-              <p>{t('applicationSpokes:termsConditions.sharingYourInformation.governmentOfCanadaAndSunLife.shareInfo')}</p>
-              <p>{t('applicationSpokes:termsConditions.sharingYourInformation.governmentOfCanadaAndSunLife.policyAnalysis')}</p>
-              <p>{t('applicationSpokes:termsConditions.sharingYourInformation.governmentOfCanadaAndSunLife.sendLetters')}</p>
-              <p>{t('applicationSpokes:termsConditions.sharingYourInformation.governmentOfCanadaAndSunLife.discloseInfo')}</p>
-              <p>{t('applicationSpokes:termsConditions.sharingYourInformation.governmentOfCanadaAndSunLife.sunLifeAuthorization')}</p>
+              <h2 className="font-lato text-lg font-bold">{t(($) => $.termsConditions.sharingYourInformation.governmentOfCanadaAndSunLife.heading)}</h2>
+              <p>{t(($) => $.termsConditions.sharingYourInformation.governmentOfCanadaAndSunLife.shareInfo)}</p>
+              <p>{t(($) => $.termsConditions.sharingYourInformation.governmentOfCanadaAndSunLife.policyAnalysis)}</p>
+              <p>{t(($) => $.termsConditions.sharingYourInformation.governmentOfCanadaAndSunLife.sendLetters)}</p>
+              <p>{t(($) => $.termsConditions.sharingYourInformation.governmentOfCanadaAndSunLife.discloseInfo)}</p>
+              <p>{t(($) => $.termsConditions.sharingYourInformation.governmentOfCanadaAndSunLife.sunLifeAuthorization)}</p>
             </section>
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold">{t('applicationSpokes:termsConditions.sharingYourInformation.sharingOfInformationAndOralHealthProviders.heading')}</h2>
-              <p>{t('applicationSpokes:termsConditions.sharingYourInformation.sharingOfInformationAndOralHealthProviders.enrolConsent')}</p>
-              <p>{t('applicationSpokes:termsConditions.sharingYourInformation.sharingOfInformationAndOralHealthProviders.consideredMinor')}</p>
+              <h2 className="font-lato text-lg font-bold">{t(($) => $.termsConditions.sharingYourInformation.sharingOfInformationAndOralHealthProviders.heading)}</h2>
+              <p>{t(($) => $.termsConditions.sharingYourInformation.sharingOfInformationAndOralHealthProviders.enrolConsent)}</p>
+              <p>{t(($) => $.termsConditions.sharingYourInformation.sharingOfInformationAndOralHealthProviders.consideredMinor)}</p>
             </section>
           </div>
         </Collapsible>
       </div>
       <p className="my-8" id="application-consent">
-        {t('applicationSpokes:termsConditions.apply.applicationConsent')}
+        {t(($) => $.termsConditions.apply.applicationConsent)}
       </p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <fetcher.Form method="post" noValidate>
@@ -290,7 +308,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               errorMessage={errors?.acknowledgeTerms}
               required
             >
-              {t('applicationSpokes:termsConditions.checkboxes.acknowledgeTerms')}
+              {t(($) => $.termsConditions.checkboxes.acknowledgeTerms)}
             </InputCheckbox>
 
             <InputCheckbox
@@ -302,7 +320,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               errorMessage={errors?.acknowledgePrivacy}
               required
             >
-              {t('applicationSpokes:termsConditions.checkboxes.acknowledgePrivacy')}
+              {t(($) => $.termsConditions.checkboxes.acknowledgePrivacy)}
             </InputCheckbox>
 
             <InputCheckbox
@@ -314,7 +332,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               errorMessage={errors?.shareData}
               required
             >
-              {t('applicationSpokes:termsConditions.checkboxes.shareData')}
+              {t(($) => $.termsConditions.checkboxes.shareData)}
             </InputCheckbox>
           </div>
 
@@ -327,12 +345,12 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
             onChange={(e) => handleCheckboxChange(CHECKBOX_IDS.DO_NOT_CONSENT, e.target.checked)}
             errorMessage={errors?.doNotConsent}
           >
-            <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:termsConditions.checkboxes.doNotConsent" />
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.checkboxes.doNotConsent} />
           </InputCheckbox>
 
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton aria-describedby="application-consent" variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Terms and Conditions click">
-              {t('applicationSpokes:termsConditions.apply.continueButton')}
+              {t(($) => $.termsConditions.apply.continueButton)}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -342,7 +360,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Terms and Conditions click"
             >
-              {t('applicationSpokes:termsConditions.apply.backButton')}
+              {t(($) => $.termsConditions.apply.backButton)}
             </ButtonLink>
           </div>
         </fetcher.Form>

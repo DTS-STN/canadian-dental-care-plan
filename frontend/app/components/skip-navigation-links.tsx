@@ -17,12 +17,18 @@ function handleOnSkipLinkClick(e: MouseEvent<HTMLAnchorElement>) {
 }
 
 export function SkipNavigationLinks() {
-  const { t } = useTranslation(['gcweb']);
+  const { t } = useTranslation('gcweb');
   return (
     <div id="skip-to-content">
       {[
-        { to: '#wb-cont', children: t('gcweb:nav.skipToContent') },
-        { to: '#wb-info', children: t('gcweb:nav.skipToAbout') },
+        {
+          to: '#wb-cont',
+          children: t(($) => $.nav.skipToContent),
+        },
+        {
+          to: '#wb-info',
+          children: t(($) => $.nav.skipToAbout),
+        },
       ].map(({ to, children }) => (
         <ButtonLink key={to} to={to} onClick={handleOnSkipLinkClick} variant="primary" className="absolute z-10 mx-2 -translate-y-full transition-all focus:mt-2 focus:translate-y-0">
           {children}

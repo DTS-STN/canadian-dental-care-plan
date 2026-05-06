@@ -40,7 +40,9 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const state = getProtectedApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplication:eligibilityRequirements.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.eligibilityRequirements.pageTitle) }),
+  };
   return {
     state: {
       termsAndConditions: state.termsAndConditions,
@@ -64,22 +66,22 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
   return (
     <div className="max-w-prose space-y-8">
       <div className="space-y-4">
-        <p>{t('protectedApplication:completeAllSections')}</p>
+        <p>{t(($) => $.completeAllSections)}</p>
         <p>{completedSectionsLabel}</p>
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>{t('protectedApplication:eligibilityRequirements.termsConditionsSection.title')}</CardTitle>
+          <CardTitle>{t(($) => $.eligibilityRequirements.termsConditionsSection.title)}</CardTitle>
           <CardAction>{sections.termsAndConditions.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {state.termsAndConditions === undefined ? (
-            <p>{t('protectedApplication:eligibilityRequirements.termsConditionsSection.instructions')}</p>
+            <p>{t(($) => $.eligibilityRequirements.termsConditionsSection.instructions)}</p>
           ) : (
             <ul className="list-disc space-y-1 pl-7">
-              {state.termsAndConditions.acknowledgeTerms && <li>{t('protectedApplication:eligibilityRequirements.termsConditionsSection.acknowledgeTerms')}</li>}
-              {state.termsAndConditions.acknowledgePrivacy && <li>{t('protectedApplication:eligibilityRequirements.termsConditionsSection.acknowledgePrivacy')}</li>}
-              {state.termsAndConditions.shareData && <li>{t('protectedApplication:eligibilityRequirements.termsConditionsSection.shareData')}</li>}
+              {state.termsAndConditions.acknowledgeTerms && <li>{t(($) => $.eligibilityRequirements.termsConditionsSection.acknowledgeTerms)}</li>}
+              {state.termsAndConditions.acknowledgePrivacy && <li>{t(($) => $.eligibilityRequirements.termsConditionsSection.acknowledgePrivacy)}</li>}
+              {state.termsAndConditions.shareData && <li>{t(($) => $.eligibilityRequirements.termsConditionsSection.shareData)}</li>}
             </ul>
           )}
         </CardContent>
@@ -94,9 +96,9 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
               startIcon={faPenToSquare}
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit terms conditions click"
-              aria-label={t('protectedApplication:eligibilityRequirements.termsConditionsSection.editButtonAria')}
+              aria-label={t(($) => $.eligibilityRequirements.termsConditionsSection.editButtonAria)}
             >
-              {t('protectedApplication:eligibilityRequirements.termsConditionsSection.editButton')}
+              {t(($) => $.eligibilityRequirements.termsConditionsSection.editButton)}
             </ButtonLink>
           ) : (
             <ButtonLink
@@ -109,18 +111,18 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Add terms conditions click"
             >
-              {t('protectedApplication:eligibilityRequirements.termsConditionsSection.addButton')}
+              {t(($) => $.eligibilityRequirements.termsConditionsSection.addButton)}
             </ButtonLink>
           )}
         </CardFooter>
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle>{t('protectedApplication:eligibilityRequirements.taxFilingSection.title')}</CardTitle>
+          <CardTitle>{t(($) => $.eligibilityRequirements.taxFilingSection.title)}</CardTitle>
           <CardAction>{sections.taxFiling.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
-          <p>{state.hasFiledTaxes === true ? t('protectedApplication:eligibilityRequirements.taxFilingSection.haveFiledTaxes') : t('protectedApplication:eligibilityRequirements.taxFilingSection.instructions')}</p>
+          <p>{state.hasFiledTaxes === true ? t(($) => $.eligibilityRequirements.taxFilingSection.haveFiledTaxes) : t(($) => $.eligibilityRequirements.taxFilingSection.instructions)}</p>
         </CardContent>
         <CardFooter className="border-t bg-zinc-100">
           {sections.taxFiling.completed ? (
@@ -133,9 +135,9 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
               startIcon={faPenToSquare}
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Edit tax filing click"
-              aria-label={t('protectedApplication:eligibilityRequirements.taxFilingSection.editButtonAria')}
+              aria-label={t(($) => $.eligibilityRequirements.taxFilingSection.editButtonAria)}
             >
-              {t('protectedApplication:eligibilityRequirements.taxFilingSection.editButton')}
+              {t(($) => $.eligibilityRequirements.taxFilingSection.editButton)}
             </ButtonLink>
           ) : (
             <ButtonLink
@@ -148,7 +150,7 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Add tax filing click"
             >
-              {t('protectedApplication:eligibilityRequirements.taxFilingSection.addButton')}
+              {t(($) => $.eligibilityRequirements.taxFilingSection.addButton)}
             </ButtonLink>
           )}
         </CardFooter>
@@ -161,7 +163,7 @@ export default function ProtectedApplicationEligibilityRequirements({ loaderData
         params={params}
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Entry:Continue click"
       >
-        {t(`protectedApplication:eligibilityRequirements.nextButton.${isIntake ? 'intake' : 'renewal'}`)}
+        {t(($) => $.eligibilityRequirements.nextButton[isIntake ? 'intake' : 'renewal'])}
       </NavigationButtonLink>
     </div>
   );

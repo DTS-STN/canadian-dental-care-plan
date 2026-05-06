@@ -38,7 +38,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protectedProfile:phoneNumber.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.phoneNumber.pageTitle) }),
+  };
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.phone-number', { userId: idToken.sub });
@@ -64,12 +66,12 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const phoneNumberSchema = z.object({
     phoneNumber: phoneSchema({
-      invalid_phone_canadian_error: t('protectedProfile:phoneNumber.errorMessage.phoneNumberValid'),
-      invalid_phone_international_error: t('protectedProfile:phoneNumber.errorMessage.phoneNumberValidInternational'),
+      invalid_phone_canadian_error: t(($) => $.phoneNumber.errorMessage.phoneNumberValid),
+      invalid_phone_international_error: t(($) => $.phoneNumber.errorMessage.phoneNumberValidInternational),
     }).optional(),
     phoneNumberAlt: phoneSchema({
-      invalid_phone_canadian_error: t('protectedProfile:phoneNumber.errorMessage.phoneNumberAltValid'),
-      invalid_phone_international_error: t('protectedProfile:phoneNumber.errorMessage.phoneNumberAltValidInternational'),
+      invalid_phone_canadian_error: t(($) => $.phoneNumber.errorMessage.phoneNumberAltValid),
+      invalid_phone_international_error: t(($) => $.phoneNumber.errorMessage.phoneNumberAltValidInternational),
     }).optional(),
   });
 
@@ -111,8 +113,8 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-6">
-            <p className="mb-4">{t('protectedProfile:phoneNumber.addPhoneNumber')}</p>
-            <p className="mb-4 italic">{t('protectedProfile:allOptionalLabel')}</p>
+            <p className="mb-4">{t(($) => $.phoneNumber.addPhoneNumber)}</p>
+            <p className="mb-4 italic">{t(($) => $.allOptionalLabel)}</p>
             <div className="grid items-end gap-6">
               <InputPhoneField
                 id="phone-number"
@@ -123,9 +125,9 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 autoComplete="tel"
                 defaultValue={defaultState.phoneNumber ?? ''}
                 errorMessage={errors?.phoneNumber}
-                label={t('protectedProfile:phoneNumber.phoneNumber')}
+                label={t(($) => $.phoneNumber.phoneNumber)}
                 maxLength={100}
-                helpMessagePrimary={t('protectedProfile:phoneNumber.helpMessage')}
+                helpMessagePrimary={t(($) => $.phoneNumber.helpMessage)}
                 helpMessagePrimaryClassName="text-gray-600"
               />
               <InputPhoneField
@@ -137,19 +139,19 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 autoComplete="tel"
                 defaultValue={defaultState.phoneNumberAlt ?? ''}
                 errorMessage={errors?.phoneNumberAlt}
-                label={t('protectedProfile:phoneNumber.phoneNumberAlt')}
+                label={t(($) => $.phoneNumber.phoneNumberAlt)}
                 maxLength={100}
-                helpMessagePrimary={t('protectedProfile:phoneNumber.helpMessageAlt')}
+                helpMessagePrimary={t(($) => $.phoneNumber.helpMessageAlt)}
                 helpMessagePrimaryClassName="text-gray-600"
               />
             </div>
           </div>
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Phone number click">
-              {t('protectedProfile:phoneNumber.saveBtn')}
+              {t(($) => $.phoneNumber.saveBtn)}
             </LoadingButton>
             <ButtonLink variant="secondary" id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Phone number click">
-              {t('protectedProfile:phoneNumber.backBtn')}
+              {t(($) => $.phoneNumber.backBtn)}
             </ButtonLink>
           </div>
         </fetcher.Form>

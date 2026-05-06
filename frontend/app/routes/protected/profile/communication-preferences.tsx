@@ -27,7 +27,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const locale = getLocale(request);
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protectedProfile:communicationPreferences.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.communicationPreferences.pageTitle) }),
+  };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 
@@ -58,22 +60,25 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
   return (
     <div className="max-w-prose space-y-10">
       <DefinitionList border>
-        <DefinitionListItem term={t('protectedProfile:communicationPreferences.languagePreference')}>{preferredLanguage?.name}</DefinitionListItem>
-        <DefinitionListItem term={t('protectedProfile:communicationPreferences.sunlifeCommunicationPreference')}>{preferredMethodSunLife?.name}</DefinitionListItem>
-        <DefinitionListItem term={t('protectedProfile:communicationPreferences.gocCommunicationPreference')}>{preferredMethodGovernmentOfCanada?.name}</DefinitionListItem>
+        <DefinitionListItem term={t(($) => $.communicationPreferences.languagePreference)}>{preferredLanguage?.name}</DefinitionListItem>
+        <DefinitionListItem term={t(($) => $.communicationPreferences.sunlifeCommunicationPreference)}>{preferredMethodSunLife?.name}</DefinitionListItem>
+        <DefinitionListItem term={t(($) => $.communicationPreferences.gocCommunicationPreference)}>{preferredMethodGovernmentOfCanada?.name}</DefinitionListItem>
       </DefinitionList>
       <div>
         <InlineLink id="update-communication-preferences" routeId="protected/profile/communication-preferences/edit" params={params}>
-          {t('protectedProfile:communicationPreferences.updateLinkText')}
+          {t(($) => $.communicationPreferences.updateLinkText)}
         </InlineLink>
       </div>
       <ButtonLink
         variant="primary"
         id="back-button"
-        to={t('gcweb:header.menuDashboardHref', { baseUri: SCCH_BASE_URI })}
+        to={t(($) => $.header.menuDashboardHref, {
+          baseUri: SCCH_BASE_URI,
+          ns: 'gcweb',
+        })}
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - My communication preferences return button click"
       >
-        {t('protectedProfile:communicationPreferences.returnButton')}
+        {t(($) => $.communicationPreferences.returnButton)}
       </ButtonLink>
     </div>
   );

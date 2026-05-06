@@ -24,7 +24,7 @@ import { cn } from '~/utils/tw-utils';
  *          if there are no errors to display.
  */
 export function ErrorSummary({ className, ...props }: OmitStrict<ComponentPropsWithoutRef<'section'>, 'children' | 'tabIndex'>): JSX.Element | undefined {
-  const { t } = useTranslation(['gcweb']);
+  const { t } = useTranslation('gcweb');
   const errorSummaryContext = useErrorSummaryContext();
   const summaryRef = useRef<HTMLDivElement>(null);
   const errors = errorSummaryContext?.errors;
@@ -48,7 +48,7 @@ export function ErrorSummary({ className, ...props }: OmitStrict<ComponentPropsW
 
   return (
     <section ref={summaryRef} tabIndex={-1} className={cn('my-5 border-4 border-red-600 p-4', className)} {...props}>
-      <h2 className="font-lato text-lg font-semibold">{t('gcweb:errorSummary.header', { count: errors.length })}</h2>
+      <h2 className="font-lato text-lg font-semibold">{t(($) => $.errorSummary.header, { count: errors.length })}</h2>
       <ul className="mt-1.5 list-disc space-y-2 pl-7">
         {errors.map(({ id, fieldId, message }) => (
           <li key={id}>

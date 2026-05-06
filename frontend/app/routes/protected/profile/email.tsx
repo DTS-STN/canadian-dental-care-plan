@@ -73,7 +73,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const profileEmailContext = requireProfileEmailContext({ request, params });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protectedProfile:email.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.email.pageTitle) }),
+  };
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.email-address', { userId: idToken.sub });
@@ -100,12 +102,15 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const emailSchema = z.object({
     email: z
-      .string(t('protectedProfile:email.errorMessage.emailRequired'))
+      .string(t(($) => $.email.errorMessage.emailRequired))
       .trim()
       .toLowerCase()
       .min(1)
       .max(64)
-      .refine((val) => validator.isEmail(val), t('protectedProfile:email.errorMessage.emailValid')),
+      .refine(
+        (val) => validator.isEmail(val),
+        t(($) => $.email.errorMessage.emailValid),
+      ),
   });
 
   const parsedDataResult = emailSchema.safeParse({
@@ -180,19 +185,19 @@ export default function ProtectedProfileEmailAddress({ loaderData, params }: Rou
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <p className="mb-4">{t('protectedProfile:email.provideEmail')}</p>
-          <p className="mb-8">{t('protectedProfile:email.verifyEmail')}</p>
-          <p className="mb-4 italic">{t('protectedProfile:requiredLabel')}</p>
+          <p className="mb-4">{t(($) => $.email.provideEmail)}</p>
+          <p className="mb-8">{t(($) => $.email.verifyEmail)}</p>
+          <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
           <div className="mb-6">
-            <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t('protectedProfile:email.emailLegend')} maxLength={64} required />
+            <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t(($) => $.email.emailLegend)} maxLength={64} required />
           </div>
 
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Email address click">
-              {t('protectedProfile:email.continueBtn')}
+              {t(($) => $.email.continueBtn)}
             </LoadingButton>
             <ButtonLink variant="secondary" id="back-button" routeId={backButtonRouteId} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Email address click">
-              {t('protectedProfile:email.back')}
+              {t(($) => $.email.back)}
             </ButtonLink>
           </div>
         </fetcher.Form>

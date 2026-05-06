@@ -21,7 +21,9 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ request }: Route.LoaderArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('unableToProcessRequest:pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.pageTitle) }),
+  };
 
   return { meta };
 }
@@ -30,31 +32,31 @@ export default function UnableToProcessRequest({ loaderData, params }: Route.Com
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const noWrap = <span className="whitespace-nowrap" />;
-  const eServiceCanadaLink = <InlineLink to={t('unableToProcessRequest:eServiceCanadaLink')} className="external-link" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('unableToProcessRequest:cdcpLink')} className="external-link" newTabIndicator target="_blank" />;
+  const eServiceCanadaLink = <InlineLink to={t(($) => $.eServiceCanadaLink)} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t(($) => $.cdcpLink)} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <PublicLayout>
       <div className="max-w-prose">
         <div className="space-y-4">
-          <p>{t('unableToProcessRequest:unableToProcess')}</p>
-          <p>{t('unableToProcessRequest:tryAgain')}</p>
+          <p>{t(($) => $.unableToProcess)}</p>
+          <p>{t(($) => $.tryAgain)}</p>
           <ul className="list-disc space-y-1 pl-7">
-            <li>{t('unableToProcessRequest:disableVpn')}</li>
-            <li>{t('unableToProcessRequest:anotherDevice')}</li>
+            <li>{t(($) => $.disableVpn)}</li>
+            <li>{t(($) => $.anotherDevice)}</li>
           </ul>
-          <p>{t('unableToProcessRequest:difficulties')}</p>
+          <p>{t(($) => $.difficulties)}</p>
           <ul className="list-disc space-y-1 pl-7">
             <li>
-              <Trans ns={handle.i18nNamespaces} i18nKey="unableToProcessRequest:callCentre" components={{ noWrap }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.callCentre} components={{ noWrap }} />
             </li>
-            <li>{t('unableToProcessRequest:visitCentre')}</li>
+            <li>{t(($) => $.visitCentre)}</li>
             <li>
-              <Trans ns={handle.i18nNamespaces} i18nKey="unableToProcessRequest:submitRequest" components={{ eServiceCanadaLink }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.submitRequest} components={{ eServiceCanadaLink }} />
             </li>
           </ul>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey="unableToProcessRequest:returnCdcp" components={{ cdcpLink }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.returnCdcp} components={{ cdcpLink }} />
           </p>
         </div>
       </div>

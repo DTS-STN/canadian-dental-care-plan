@@ -55,7 +55,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:phoneNumber.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.phoneNumber.pageTitle) }),
+  };
   return {
     defaultState: {
       phoneNumber: state.phoneNumber?.value?.primary,
@@ -81,13 +83,13 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const phoneNumberSchema = z.object({
     phoneNumber: phoneSchema({
-      required_error: t('applicationSpokes:phoneNumber.errorMessage.phoneRequired'),
-      invalid_phone_canadian_error: t('applicationSpokes:phoneNumber.errorMessage.phoneNumberValid'),
-      invalid_phone_international_error: t('applicationSpokes:phoneNumber.errorMessage.phoneNumberValidInternational'),
+      required_error: t(($) => $.phoneNumber.errorMessage.phoneRequired),
+      invalid_phone_canadian_error: t(($) => $.phoneNumber.errorMessage.phoneNumberValid),
+      invalid_phone_international_error: t(($) => $.phoneNumber.errorMessage.phoneNumberValidInternational),
     }),
     phoneNumberAlt: phoneSchema({
-      invalid_phone_canadian_error: t('applicationSpokes:phoneNumber.errorMessage.phoneNumberAltValid'),
-      invalid_phone_international_error: t('applicationSpokes:phoneNumber.errorMessage.phoneNumberAltValidInternational'),
+      invalid_phone_canadian_error: t(($) => $.phoneNumber.errorMessage.phoneNumberAltValid),
+      invalid_phone_international_error: t(($) => $.phoneNumber.errorMessage.phoneNumberAltValidInternational),
     }).optional(),
   });
 
@@ -126,7 +128,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
 
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
 
-  const findOffice = <InlineLink to={t('applicationSpokes:phoneNumber.officeLink')} className="external-link" newTabIndicator target="_blank" />;
+  const findOffice = <InlineLink to={t(($) => $.phoneNumber.officeLink)} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose">
@@ -135,7 +137,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-6">
-            <p className="mb-4 italic">{t('application:optionalLabel')}</p>
+            <p className="mb-4 italic">{t(($) => $.optionalLabel, { ns: 'application' })}</p>
             <div className="grid items-end gap-6">
               <InputPhoneField
                 id="phone-number"
@@ -146,9 +148,9 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 autoComplete="tel"
                 defaultValue={defaultState.phoneNumber ?? ''}
                 errorMessage={errors?.phoneNumber}
-                label={t('applicationSpokes:phoneNumber.phoneNumber')}
+                label={t(($) => $.phoneNumber.phoneNumber)}
                 maxLength={100}
-                helpMessagePrimary={t('applicationSpokes:phoneNumber.helpMessage')}
+                helpMessagePrimary={t(($) => $.phoneNumber.helpMessage)}
                 helpMessagePrimaryClassName="text-gray-600"
               />
               <InputPhoneField
@@ -160,23 +162,23 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                 autoComplete="tel"
                 defaultValue={defaultState.phoneNumberAlt ?? ''}
                 errorMessage={errors?.phoneNumberAlt}
-                label={t('applicationSpokes:phoneNumber.phoneNumberAlt')}
+                label={t(($) => $.phoneNumber.phoneNumberAlt)}
                 maxLength={100}
-                helpMessagePrimary={t('applicationSpokes:phoneNumber.helpMessageAlt')}
+                helpMessagePrimary={t(($) => $.phoneNumber.helpMessageAlt)}
                 helpMessagePrimaryClassName="text-gray-600"
               />
             </div>
           </div>
-          <Collapsible summary={t('applicationSpokes:phoneNumber.dontHaveNumber')}>
+          <Collapsible summary={t(($) => $.phoneNumber.dontHaveNumber)}>
             <div className="space-y-6">
               <section className="space-y-4">
-                <p>{t('applicationSpokes:phoneNumber.needPhoneNumber')}</p>
+                <p>{t(($) => $.phoneNumber.needPhoneNumber)}</p>
                 <ul className="list-disc space-y-1 pl-7">
                   <li>
-                    <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:phoneNumber.serviceCanada" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+                    <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.phoneNumber.serviceCanada} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
                   </li>
                   <li>
-                    <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:phoneNumber.inPerson" components={{ findOffice }} />
+                    <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.phoneNumber.inPerson} components={{ findOffice }} />
                   </li>
                 </ul>
               </section>
@@ -184,7 +186,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
           </Collapsible>
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Phone number click">
-              {t('applicationSpokes:phoneNumber.saveBtn')}
+              {t(($) => $.phoneNumber.saveBtn)}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -194,7 +196,7 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Phone number click"
             >
-              {t('applicationSpokes:phoneNumber.backBtn')}
+              {t(($) => $.phoneNumber.backBtn)}
             </ButtonLink>
           </div>
         </fetcher.Form>

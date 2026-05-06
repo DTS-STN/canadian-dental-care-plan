@@ -32,7 +32,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   getSingleChildState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:children.cannotApplyChild.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.children.cannotApplyChild.pageTitle) }),
+  };
 
   return { meta };
 }
@@ -49,7 +51,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearProtectedApplicationState({ params, session });
 
-  return redirect(t('protectedApplicationSpokes:children.cannotApplyChild.exitBtnLink'));
+  return redirect(t(($) => $.children.cannotApplyChild.exitBtnLink));
 }
 
 export default function CannotApplyChild({ loaderData, params }: Route.ComponentProps) {
@@ -63,9 +65,9 @@ export default function CannotApplyChild({ loaderData, params }: Route.Component
   return (
     <div className="max-w-prose">
       <div className="mb-6 space-y-4">
-        <p>{t('protectedApplicationSpokes:children.cannotApplyChild.ineligibleToApply')}</p>
+        <p>{t(($) => $.children.cannotApplyChild.ineligibleToApply)}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplicationSpokes:children.cannotApplyChild.eligibilityInfo" components={{ noWrap }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.cannotApplyChild.eligibilityInfo} components={{ noWrap }} />
         </p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
@@ -78,10 +80,10 @@ export default function CannotApplyChild({ loaderData, params }: Route.Component
           disabled={isSubmitting}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child apply for yourself click"
         >
-          {t('protectedApplicationSpokes:children.cannotApplyChild.backBtn')}
+          {t(($) => $.children.cannotApplyChild.backBtn)}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - Child apply for yourself click">
-          {t('protectedApplicationSpokes:children.cannotApplyChild.exitBtn')}
+          {t(($) => $.children.cannotApplyChild.exitBtn)}
         </LoadingButton>
       </fetcher.Form>
     </div>

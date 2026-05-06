@@ -40,7 +40,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getProtectedApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplication:taxFiling.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.taxFiling.pageTitle) }),
+  };
 
   return { meta, defaultState: state.hasFiledTaxes, taxYear: state.applicationYear.taxYear };
 }
@@ -54,7 +56,11 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const taxFilingSchema = z.object({ hasFiledTaxes: z.enum(TAX_FILING_OPTION, { error: t('protectedApplication:taxFiling.errorMessage.taxFilingRequired') }) });
+  const taxFilingSchema = z.object({
+    hasFiledTaxes: z.enum(TAX_FILING_OPTION, {
+      error: t(($) => $.taxFiling.errorMessage.taxFilingRequired),
+    }),
+  });
 
   const parsedDataResult = taxFilingSchema.safeParse({ hasFiledTaxes: formData.get('hasFiledTaxes') });
 
@@ -80,7 +86,7 @@ export default function ApplicationTaxFiling({ loaderData, params }: Route.Compo
   const errors = fetcher.data?.errors;
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('protectedApplication:requiredLabel')}</p>
+      <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -88,17 +94,28 @@ export default function ApplicationTaxFiling({ loaderData, params }: Route.Compo
           <InputRadios
             id="tax-filing"
             name="hasFiledTaxes"
-            legend={t('protectedApplication:taxFiling.formInstructions', { taxYear })}
+            legend={t(($) => $.taxFiling.formInstructions, {
+              taxYear: taxYear,
+              ns: 'protectedApplication',
+            })}
             options={[
-              { value: TAX_FILING_OPTION.yes, children: t('protectedApplication:taxFiling.radioOptions.yes'), defaultChecked: defaultState === true },
-              { value: TAX_FILING_OPTION.no, children: t('protectedApplication:taxFiling.radioOptions.no'), defaultChecked: defaultState === false },
+              {
+                value: TAX_FILING_OPTION.yes,
+                children: t(($) => $.taxFiling.radioOptions.yes),
+                defaultChecked: defaultState === true,
+              },
+              {
+                value: TAX_FILING_OPTION.no,
+                children: t(($) => $.taxFiling.radioOptions.no),
+                defaultChecked: defaultState === false,
+              },
             ]}
             errorMessage={errors?.hasFiledTaxes}
             required
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Tax filing click">
-              {t('protectedApplication:taxFiling.saveBtn')}
+              {t(($) => $.taxFiling.saveBtn)}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -108,7 +125,7 @@ export default function ApplicationTaxFiling({ loaderData, params }: Route.Compo
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Tax filing click"
             >
-              {t('protectedApplication:taxFiling.backBtn')}
+              {t(($) => $.taxFiling.backBtn)}
             </ButtonLink>
           </div>
         </fetcher.Form>

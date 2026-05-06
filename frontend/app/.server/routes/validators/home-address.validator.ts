@@ -30,32 +30,32 @@ export class DefaultHomeAddressValidator implements HomeAddressValidator {
   }
 
   private async buildHomeAddressSchemaErrorMessages(): Promise<AddressValidatorErrorMessages> {
-    const t = await getFixedT(this.locale, ['common']);
+    const t = await getFixedT(this.locale, 'common');
     return {
       address: {
-        invalidCharacters: t('common:errorMessage.home.charactersValid'),
-        required: t('common:errorMessage.home.addressRequired'),
+        invalidCharacters: t(($) => $.errorMessage.home.charactersValid),
+        required: t(($) => $.errorMessage.home.addressRequired),
       },
       apartment: {
-        invalidCharacters: t('common:errorMessage.mailing.charactersValid'),
+        invalidCharacters: t(($) => $.errorMessage.home.charactersValid),
       },
       city: {
-        required: t('common:errorMessage.home.cityRequired'),
-        invalidCharacters: t('common:errorMessage.home.charactersValid'),
+        required: t(($) => $.errorMessage.home.cityRequired),
+        invalidCharacters: t(($) => $.errorMessage.home.charactersValid),
       },
       country: {
-        required: t('common:errorMessage.home.countryRequired'),
+        required: t(($) => $.errorMessage.home.countryRequired),
       },
       provinceState: {
-        required: t('common:errorMessage.home.provinceStateRequired'),
+        required: t(($) => $.errorMessage.home.provinceStateRequired),
       },
       postalZipCode: {
-        invalidCharacters: t('common:errorMessage.home.charactersValid'),
-        invalidPostalCode: t('common:errorMessage.home.postalZipCodeValid'),
-        invalidPostalCodeForProvince: t('common:errorMessage.home.invalidPostalZipCodeForProvince'),
-        invalidPostalZipCodeForCountry: t('common:errorMessage.home.invalidPostalZipCodeForCountry'),
-        invalidZipCode: t('common:errorMessage.home.zipCodeValid'),
-        required: t('common:errorMessage.home.postalZipCodeRequired'),
+        invalidCharacters: t(($) => $.errorMessage.home.charactersValid),
+        invalidPostalCode: t(($) => $.errorMessage.home.postalZipCodeValid),
+        invalidPostalCodeForProvince: t(($) => $.errorMessage.home.invalidPostalZipCodeForProvince),
+        invalidPostalZipCodeForCountry: t(($) => $.errorMessage.home.invalidPostalZipCodeForCountry),
+        invalidZipCode: t(($) => $.errorMessage.home.zipCodeValid),
+        required: t(($) => $.errorMessage.home.postalZipCodeRequired),
       },
     };
   }

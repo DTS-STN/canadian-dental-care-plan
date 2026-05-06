@@ -43,7 +43,7 @@ interface DatePickerFieldProps {
 
 export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, names, required }: DatePickerFieldProps) => {
   const { currentLanguage } = useCurrentLanguage();
-  const { t } = useTranslation(['gcweb']);
+  const { t } = useTranslation('gcweb');
   const [value] = useState(extractDateParts(defaultValue));
 
   const inputWrapperId = `date-picker-${id}`;
@@ -77,7 +77,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
       id={id} //
       defaultValue={value.year ?? ''}
       name={names.year}
-      label={t('gcweb:datePicker.year.label')}
+      label={t(($) => $.datePicker.year.label)}
       className="w-full sm:w-32"
       ariaErrorMessage={ariaErrorMessageYear}
       required={required}
@@ -98,8 +98,8 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
       id={id} //
       defaultValue={value.month ?? ''}
       name={names.month}
-      label={t('gcweb:datePicker.month.label')}
-      placeholder={t('gcweb:datePicker.month.placeholder')}
+      label={t(($) => $.datePicker.month.label)}
+      placeholder={t(($) => $.datePicker.month.placeholder)}
       className="w-full sm:w-auto"
       ariaErrorMessage={ariaErrorMessageMonth}
       required={required}
@@ -120,7 +120,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
       id={id} //
       defaultValue={value.day ?? ''}
       name={names.day}
-      label={t('gcweb:datePicker.day.label')}
+      label={t(($) => $.datePicker.day.label)}
       className="w-full sm:w-20"
       ariaErrorMessage={ariaErrorMessageDay}
       required={required}

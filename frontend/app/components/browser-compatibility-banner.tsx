@@ -9,7 +9,7 @@ interface BrowserCompatibilityBannerProps {
 }
 
 export function BrowserCompatibilityBanner({ onDismiss }: BrowserCompatibilityBannerProps): JSX.Element | undefined {
-  const { t } = useTranslation(['gcweb']);
+  const { t } = useTranslation('gcweb');
 
   return (
     <div id="browser-compatibility-banner" className="bg-red-50 shadow-md" role="alert">
@@ -19,14 +19,14 @@ export function BrowserCompatibilityBanner({ onDismiss }: BrowserCompatibilityBa
             <FontAwesomeIcon icon={faCircleExclamation} className="size-6 shrink-0 text-red-700" />
           </div>
           <div className="grow space-y-2 py-4 pl-4">
-            <h2 className="font-lato font-bold">{t('gcweb:browserCompatibilityBanner.title')}</h2>
-            <p>{t('gcweb:browserCompatibilityBanner.content')}</p>
+            <h2 className="font-lato font-bold">{t(($) => $.browserCompatibilityBanner.title)}</h2>
+            <p>{t(($) => $.browserCompatibilityBanner.content)}</p>
             <p>
-              <Trans ns={['gcweb']} i18nKey="gcweb:browserCompatibilityBanner.contact" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+              <Trans ns="gcweb" i18nKey={($) => $.browserCompatibilityBanner.contact} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
             </p>
             <div className="text-right">
               <button type="button" onClick={onDismiss} className="font-lato rounded-sm border border-red-300 px-3 py-2 text-sm text-red-700 outline-offset-4 hover:border-red-400 hover:bg-red-100 focus:border-red-400 focus:bg-red-100">
-                {t('gcweb:browserCompatibilityBanner.dismiss')}
+                {t(($) => $.browserCompatibilityBanner.dismiss)}
               </button>
             </div>
           </div>

@@ -62,12 +62,29 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const childNumber = t('protectedApplicationSpokes:children.childNumber', { childNumber: childState.childNumber });
+  const childNumber = t(($) => $.children.childNumber, {
+    childNumber: childState.childNumber,
+    ns: 'protectedApplicationSpokes',
+  });
   const childName = childState.isNew ? childNumber : (childState.information?.firstName ?? childNumber);
 
   const meta = {
-    title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:children.information.pageTitle', { childName }) }),
-    dcTermsTitle: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:children.information.pageTitle', { childName: childNumber }) }),
+    title: t(($) => $.meta.title.template, {
+      title: t(($) => $.children.information.pageTitle, {
+        childName: childName,
+        ns: 'protectedApplicationSpokes',
+      }),
+
+      ns: 'gcweb',
+    }),
+    dcTermsTitle: t(($) => $.meta.title.template, {
+      title: t(($) => $.children.information.pageTitle, {
+        childName: childNumber,
+        ns: 'protectedApplicationSpokes',
+      }),
+
+      ns: 'gcweb',
+    }),
   };
 
   return {
@@ -100,28 +117,48 @@ export async function action({ context: { appContainer, session }, params, reque
       firstName: z
         .string()
         .trim()
-        .min(1, t('protectedApplicationSpokes:children.information.errorMessage.firstNameRequired'))
+        .min(
+          1,
+          t(($) => $.children.information.errorMessage.firstNameRequired),
+        )
         .max(100)
-        .refine(isAllValidInputCharacters, t('protectedApplicationSpokes:children.information.errorMessage.charactersValid'))
-        .refine((firstName) => !hasDigits(firstName), t('protectedApplicationSpokes:children.information.errorMessage.firstNameNoDigits')),
+        .refine(
+          isAllValidInputCharacters,
+          t(($) => $.children.information.errorMessage.charactersValid),
+        )
+        .refine(
+          (firstName) => !hasDigits(firstName),
+          t(($) => $.children.information.errorMessage.firstNameNoDigits),
+        ),
       lastName: z
         .string()
         .trim()
-        .min(1, t('protectedApplicationSpokes:children.information.errorMessage.lastNameRequired'))
+        .min(
+          1,
+          t(($) => $.children.information.errorMessage.lastNameRequired),
+        )
         .max(100)
-        .refine(isAllValidInputCharacters, t('protectedApplicationSpokes:children.information.errorMessage.charactersValid'))
-        .refine((lastName) => !hasDigits(lastName), t('protectedApplicationSpokes:children.information.errorMessage.lastNameNoDigits')),
+        .refine(
+          isAllValidInputCharacters,
+          t(($) => $.children.information.errorMessage.charactersValid),
+        )
+        .refine(
+          (lastName) => !hasDigits(lastName),
+          t(($) => $.children.information.errorMessage.lastNameNoDigits),
+        ),
       dateOfBirthYear: z.number({
-        error: (issue) => (issue.input === undefined ? t('protectedApplicationSpokes:children.information.errorMessage.dateOfBirthYearRequired') : t('protectedApplicationSpokes:children.information.errorMessage.dateOfBirthYearNumber')),
+        error: (issue) => (issue.input === undefined ? t(($) => $.children.information.errorMessage.dateOfBirthYearRequired) : t(($) => $.children.information.errorMessage.dateOfBirthYearNumber)),
       }),
       dateOfBirthMonth: z.number({
-        error: (issue) => (issue.input === undefined ? t('protectedApplicationSpokes:children.information.errorMessage.dateOfBirthMonthRequired') : undefined),
+        error: (issue) => (issue.input === undefined ? t(($) => $.children.information.errorMessage.dateOfBirthMonthRequired) : undefined),
       }),
       dateOfBirthDay: z.number({
-        error: (issue) => (issue.input === undefined ? t('protectedApplicationSpokes:children.information.errorMessage.dateOfBirthDayRequired') : t('protectedApplicationSpokes:children.information.errorMessage.dateOfBirthDayNumber')),
+        error: (issue) => (issue.input === undefined ? t(($) => $.children.information.errorMessage.dateOfBirthDayRequired) : t(($) => $.children.information.errorMessage.dateOfBirthDayNumber)),
       }),
       dateOfBirth: z.string(),
-      isParent: z.boolean({ error: t('protectedApplicationSpokes:children.information.errorMessage.isParent') }),
+      isParent: z.boolean({
+        error: t(($) => $.children.information.errorMessage.isParent),
+      }),
     })
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
@@ -131,19 +168,19 @@ export async function action({ context: { appContainer, session }, params, reque
       if (!isValidDateString(dateOfBirth)) {
         ctx.addIssue({
           code: 'custom',
-          message: t('protectedApplicationSpokes:children.information.errorMessage.dateOfBirthValid'),
+          message: t(($) => $.children.information.errorMessage.dateOfBirthValid),
           path: ['dateOfBirth'],
         });
       } else if (!isPastDateString(dateOfBirth)) {
         ctx.addIssue({
           code: 'custom',
-          message: t('protectedApplicationSpokes:children.information.errorMessage.dateOfBirthIsPast'),
+          message: t(($) => $.children.information.errorMessage.dateOfBirthIsPast),
           path: ['dateOfBirth'],
         });
       } else if (getAgeFromDateString(dateOfBirth) > 150) {
         ctx.addIssue({
           code: 'custom',
-          message: t('protectedApplicationSpokes:children.information.errorMessage.dateOfBirthIsPastValid'),
+          message: t(($) => $.children.information.errorMessage.dateOfBirthIsPastValid),
           path: ['dateOfBirth'],
         });
       }
@@ -159,15 +196,25 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const childSinSchema = z
     .object({
-      hasSocialInsuranceNumber: z.boolean({ error: t('protectedApplicationSpokes:children.information.errorMessage.hasSocialInsuranceNumber') }),
+      hasSocialInsuranceNumber: z.boolean({
+        error: t(($) => $.children.information.errorMessage.hasSocialInsuranceNumber),
+      }),
       socialInsuranceNumber: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
       if (val.hasSocialInsuranceNumber) {
         if (!val.socialInsuranceNumber) {
-          ctx.addIssue({ code: 'custom', message: t('protectedApplicationSpokes:children.information.errorMessage.sinRequired'), path: ['socialInsuranceNumber'] });
+          ctx.addIssue({
+            code: 'custom',
+            message: t(($) => $.children.information.errorMessage.sinRequired),
+            path: ['socialInsuranceNumber'],
+          });
         } else if (!isValidSin(val.socialInsuranceNumber)) {
-          ctx.addIssue({ code: 'custom', message: t('protectedApplicationSpokes:children.information.errorMessage.sinValid'), path: ['socialInsuranceNumber'] });
+          ctx.addIssue({
+            code: 'custom',
+            message: t(($) => $.children.information.errorMessage.sinValid),
+            path: ['socialInsuranceNumber'],
+          });
         } else if (
           val.socialInsuranceNumber &&
           [state.applicantInformation?.socialInsuranceNumber, state.partnerInformation?.socialInsuranceNumber, ...state.children.filter((child) => childState.id !== child.id).map((child) => child.information?.socialInsuranceNumber)]
@@ -175,7 +222,11 @@ export async function action({ context: { appContainer, session }, params, reque
             .map((sin) => formatSin(sin))
             .includes(formatSin(val.socialInsuranceNumber))
         ) {
-          ctx.addIssue({ code: 'custom', message: t('protectedApplicationSpokes:children.information.errorMessage.sinUnique'), path: ['socialInsuranceNumber'] });
+          ctx.addIssue({
+            code: 'custom',
+            message: t(($) => $.children.information.errorMessage.sinUnique),
+            path: ['socialInsuranceNumber'],
+          });
         }
       }
     }) satisfies z.ZodType<ProtectedApplicationChildSinState>;
@@ -250,7 +301,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
 
   const options: InputRadiosProps['options'] = [
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplicationSpokes:children.information.sinYes" components={{ bold: <strong /> }} />,
+      children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.information.sinYes} components={{ bold: <strong /> }} />,
       value: YES_NO_OPTION.yes,
       defaultChecked: defaultState?.hasSocialInsuranceNumber ?? true,
       append: hasSocialInsuranceNumberValue === true && (
@@ -259,7 +310,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
             id="social-insurance-number"
             name="socialInsuranceNumber"
             format={sinInputPatternFormat}
-            label={t('protectedApplicationSpokes:children.information.sin')}
+            label={t(($) => $.children.information.sin)}
             inputMode="numeric"
             defaultValue={defaultState?.socialInsuranceNumber ?? ''}
             errorMessage={errors?.socialInsuranceNumber}
@@ -270,7 +321,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
       onChange: handleSocialInsuranceNumberSelection,
     },
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplicationSpokes:children.information.sinNo" components={{ bold: <strong /> }} />,
+      children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.information.sinNo} components={{ bold: <strong /> }} />,
       value: YES_NO_OPTION.no,
       defaultChecked: defaultState?.hasSocialInsuranceNumber === false,
       onChange: handleSocialInsuranceNumberSelection,
@@ -279,33 +330,38 @@ export default function ChildInformation({ loaderData, params }: Route.Component
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
-      <AppPageTitle>{t('protectedApplicationSpokes:children.information.pageTitle', { childName })}</AppPageTitle>
+      <AppPageTitle>
+        {t(($) => $.children.information.pageTitle, {
+          childName: childName,
+          ns: 'protectedApplicationSpokes',
+        })}
+      </AppPageTitle>
       <div className="max-w-prose">
         <ErrorAlert>
-          <h2 className="mb-2 font-bold">{t('protectedApplicationSpokes:children.information.errorMessage.alert.heading')}</h2>
+          <h2 className="mb-2 font-bold">{t(($) => $.children.information.errorMessage.alert.heading)}</h2>
           <p className="mb-2">
-            <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplicationSpokes:children.information.errorMessage.alert.detail" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.information.errorMessage.alert.detail} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
           </p>
-          <p className="mb-2">{t('protectedApplicationSpokes:children.information.errorMessage.alert.detailAdultMustApply')}</p>
-          <p className="mb-2">{t('protectedApplicationSpokes:children.information.errorMessage.alert.applyDate')}</p>
+          <p className="mb-2">{t(($) => $.children.information.errorMessage.alert.detailAdultMustApply)}</p>
+          <p className="mb-2">{t(($) => $.children.information.errorMessage.alert.applyDate)}</p>
         </ErrorAlert>
-        <p className="mb-4">{t('protectedApplicationSpokes:children.information.formInstructionsSin')}</p>
-        <p className="mb-4 italic">{t('protectedApplication:requiredLabel')}</p>
+        <p className="mb-4">{t(($) => $.children.information.formInstructionsSin)}</p>
+        <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-8 space-y-6">
-            <Collapsible id="name-instructions" summary={t('protectedApplicationSpokes:children.information.singleLegalName')}>
-              <p>{t('protectedApplicationSpokes:children.information.nameInstructions')}</p>
+            <Collapsible id="name-instructions" summary={t(($) => $.children.information.singleLegalName)}>
+              <p>{t(($) => $.children.information.nameInstructions)}</p>
             </Collapsible>
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputSanitizeField
                 id="first-name"
                 name="firstName"
-                label={t('protectedApplicationSpokes:children.information.firstName')}
+                label={t(($) => $.children.information.firstName)}
                 className="w-full"
                 maxLength={100}
-                aria-description={t('protectedApplicationSpokes:children.information.nameInstructions')}
+                aria-description={t(($) => $.children.information.nameInstructions)}
                 autoComplete="given-name"
                 errorMessage={errors?.firstName}
                 defaultValue={defaultState?.firstName ?? ''}
@@ -314,13 +370,13 @@ export default function ChildInformation({ loaderData, params }: Route.Component
               <InputSanitizeField
                 id="last-name"
                 name="lastName"
-                label={t('protectedApplicationSpokes:children.information.lastName')}
+                label={t(($) => $.children.information.lastName)}
                 className="w-full"
                 maxLength={100}
                 autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={errors?.lastName}
-                aria-description={t('protectedApplicationSpokes:children.information.nameInstructions')}
+                aria-description={t(($) => $.children.information.nameInstructions)}
                 required
               />
             </div>
@@ -332,7 +388,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
                 year: 'dateOfBirthYear',
               }}
               defaultValue={defaultState?.dateOfBirth ?? ''}
-              legend={t('protectedApplicationSpokes:children.information.dateOfBirth')}
+              legend={t(($) => $.children.information.dateOfBirth)}
               errorMessages={{
                 all: errors?.dateOfBirth,
                 year: errors?.dateOfBirthYear,
@@ -342,15 +398,27 @@ export default function ChildInformation({ loaderData, params }: Route.Component
               required
             />
 
-            <InputRadios id="has-social-insurance-number" legend={t('protectedApplicationSpokes:children.information.sinLegend')} name="hasSocialInsuranceNumber" options={options} errorMessage={errors?.hasSocialInsuranceNumber} required />
+            <InputRadios id="has-social-insurance-number" legend={t(($) => $.children.information.sinLegend)} name="hasSocialInsuranceNumber" options={options} errorMessage={errors?.hasSocialInsuranceNumber} required />
 
             <InputRadios
               id="is-parent-radios"
               name="isParent"
-              legend={t('protectedApplicationSpokes:children.information.parentLegend')}
+              legend={t(($) => $.children.information.parentLegend)}
               options={[
-                { value: YES_NO_OPTION.yes, children: t('protectedApplicationSpokes:children.information.radioOptions.yes'), defaultChecked: defaultState?.isParent === true, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
-                { value: YES_NO_OPTION.no, children: t('protectedApplicationSpokes:children.information.radioOptions.no'), defaultChecked: defaultState?.isParent === false, readOnly: !isNew, tabIndex: isNew ? 0 : -1 },
+                {
+                  value: YES_NO_OPTION.yes,
+                  children: t(($) => $.children.information.radioOptions.yes),
+                  defaultChecked: defaultState?.isParent === true,
+                  readOnly: !isNew,
+                  tabIndex: isNew ? 0 : -1,
+                },
+                {
+                  value: YES_NO_OPTION.no,
+                  children: t(($) => $.children.information.radioOptions.no),
+                  defaultChecked: defaultState?.isParent === false,
+                  readOnly: !isNew,
+                  tabIndex: isNew ? 0 : -1,
+                },
               ]}
               errorMessage={errors?.isParent}
               required
@@ -358,7 +426,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Child Information click">
-              {t('protectedApplicationSpokes:children.information.saveBtn')}
+              {t(($) => $.children.information.saveBtn)}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -368,7 +436,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child Information click"
             >
-              {t('protectedApplicationSpokes:children.information.backBtn')}
+              {t(($) => $.children.information.backBtn)}
             </ButtonLink>
           </div>
         </fetcher.Form>

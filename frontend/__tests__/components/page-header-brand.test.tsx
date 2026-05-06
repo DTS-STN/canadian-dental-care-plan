@@ -35,7 +35,7 @@ describe('PageHeaderBrand', () => {
       },
     ]);
     const { getByAltText } = render(<RoutesStub />);
-    expect(getByAltText('gcweb:header.govtOfCanada.text')).toBeInTheDocument();
+    expect(getByAltText('header.govtOfCanadaText')).toBeInTheDocument();
   });
 
   it('displays the Language Switcher', () => {
@@ -46,6 +46,6 @@ describe('PageHeaderBrand', () => {
       },
     ]);
     const { getByText } = render(<RoutesStub />);
-    expect(getByText('gcweb:languageSwitcher.altLang')).toBeInTheDocument();
+    expect(getByText('languageSwitcher.altLang')).toBeInTheDocument();
   });
 });

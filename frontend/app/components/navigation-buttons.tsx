@@ -26,14 +26,14 @@ interface NavigationButtonProps extends OmitStrict<ComponentProps<typeof Loading
  * ```
  */
 export function NavigationButton({ children, className, direction, ...props }: NavigationButtonProps) {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation('common');
   const endIcon = direction === 'next' ? faChevronCircleRight : undefined;
   const startIcon = direction === 'previous' ? faChevronCircleLeft : undefined;
 
   return (
     <LoadingButton className={cn('gap-2 text-left', className)} endIcon={endIcon} startIcon={startIcon} endIconProps={{ className: 'text-3xl' }} startIconProps={{ className: ' text-3xl' }} loadingIconProps={{ className: 'text-3xl' }} {...props}>
       <span className="space-y-1 sm:space-y-2">
-        <span className="block text-sm font-normal sm:text-base">{t(`common:navigation.${direction}`)}</span>
+        <span className="block text-sm font-normal sm:text-base">{t(($) => $.navigation[direction])}</span>
         <span className="text-base sm:text-lg">{children}</span>
       </span>
     </LoadingButton>
@@ -55,13 +55,13 @@ interface NavigationButtonLinkProps extends OmitStrict<ComponentProps<typeof But
  * ```
  */
 export function NavigationButtonLink({ children, className, direction, ...props }: NavigationButtonLinkProps) {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation('common');
   const endIcon = direction === 'next' ? faChevronCircleRight : undefined;
   const startIcon = direction === 'previous' ? faChevronCircleLeft : undefined;
   return (
     <ButtonLink className={cn('gap-2 text-left', className)} endIcon={endIcon} startIcon={startIcon} endIconProps={{ className: 'text-3xl' }} startIconProps={{ className: ' text-3xl' }} {...props}>
       <span className="space-y-1 sm:space-y-2">
-        <span className="block text-sm font-normal sm:text-base">{t(`common:navigation.${direction}`)}</span>
+        <span className="block text-sm font-normal sm:text-base">{t(($) => $.navigation[direction])}</span>
         <span className="text-base sm:text-lg">{children}</span>
       </span>
     </ButtonLink>

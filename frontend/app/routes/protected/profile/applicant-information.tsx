@@ -27,7 +27,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protectedProfile:applicantInformation.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.applicantInformation.pageTitle) }),
+  };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   const primaryApplicant = {
@@ -64,37 +66,38 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
   return (
     <div className="max-w-prose space-y-10">
       <p>
-        <Trans ns={handle.i18nNamespaces} i18nKey="protectedProfile:applicantInformation.formInstructions" components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+        <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.applicantInformation.formInstructions} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
       </p>
       <section className="space-y-6">
         <h2 className="font-lato text-2xl font-bold">{`${primaryApplicant.firstName} ${primaryApplicant.lastName}`}</h2>
         <DefinitionList border>
-          <DefinitionListItem term={t('protectedProfile:applicantInformation.memberId')}>{primaryApplicant.id}</DefinitionListItem>
-          <DefinitionListItem term={t('protectedProfile:applicantInformation.dob')}>{primaryApplicant.dob}</DefinitionListItem>
-          <DefinitionListItem term={t('protectedProfile:applicantInformation.sin')}>{isValidSin(primaryApplicant.sin) ? formatSin(primaryApplicant.sin) : primaryApplicant.sin}</DefinitionListItem>
+          <DefinitionListItem term={t(($) => $.applicantInformation.memberId)}>{primaryApplicant.id}</DefinitionListItem>
+          <DefinitionListItem term={t(($) => $.applicantInformation.dob)}>{primaryApplicant.dob}</DefinitionListItem>
+          <DefinitionListItem term={t(($) => $.applicantInformation.sin)}>{isValidSin(primaryApplicant.sin) ? formatSin(primaryApplicant.sin) : primaryApplicant.sin}</DefinitionListItem>
         </DefinitionList>
       </section>
-
       {children.map((child) => {
         return (
           <section className="space-y-6" key={child.id}>
             <h2 className="font-lato text-2xl font-bold">{`${child.firstName} ${child.lastName}`}</h2>
             <DefinitionList border>
-              <DefinitionListItem term={t('protectedProfile:applicantInformation.memberId')}>{child.id}</DefinitionListItem>
-              <DefinitionListItem term={t('protectedProfile:applicantInformation.dob')}>{child.dob}</DefinitionListItem>
-              <DefinitionListItem term={t('protectedProfile:applicantInformation.sin')}>{typeof child.sin === 'string' && isValidSin(child.sin) ? formatSin(child.sin) : child.sin}</DefinitionListItem>
+              <DefinitionListItem term={t(($) => $.applicantInformation.memberId)}>{child.id}</DefinitionListItem>
+              <DefinitionListItem term={t(($) => $.applicantInformation.dob)}>{child.dob}</DefinitionListItem>
+              <DefinitionListItem term={t(($) => $.applicantInformation.sin)}>{typeof child.sin === 'string' && isValidSin(child.sin) ? formatSin(child.sin) : child.sin}</DefinitionListItem>
             </DefinitionList>
           </section>
         );
       })}
-
       <ButtonLink
         variant="primary"
         id="back-button"
-        to={t('gcweb:header.menuDashboardHref', { baseUri: SCCH_BASE_URI })}
+        to={t(($) => $.header.menuDashboardHref, {
+          baseUri: SCCH_BASE_URI,
+          ns: 'gcweb',
+        })}
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - Applicant information return button click"
       >
-        {t('protectedProfile:applicantInformation.returnButton')}
+        {t(($) => $.applicantInformation.returnButton)}
       </ButtonLink>
     </div>
   );

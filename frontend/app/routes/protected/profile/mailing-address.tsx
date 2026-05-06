@@ -59,7 +59,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const countryList = await appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
   const regionList = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStates(locale);
 
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protectedProfile:mailingAddress.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.mailingAddress.pageTitle) }),
+  };
 
   const idToken = session.get('idToken');
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.mailing-address', { userId: idToken.sub });
@@ -273,18 +275,21 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
 
   const mailingRegions = useMemo<InputOptionProps[]>(() => mailingCountryRegions.map(({ id, name }) => ({ children: name, value: id })), [mailingCountryRegions]);
 
-  const dummyOption: InputOptionProps = { children: t('protectedProfile:mailingAddress.selectOne'), value: '' };
+  const dummyOption: InputOptionProps = {
+    children: t(($) => $.mailingAddress.selectOne),
+    value: '',
+  };
 
   const isPostalCodeRequired = [CANADA_COUNTRY_ID, USA_COUNTRY_ID].includes(selectedMailingCountry);
 
   let postalCodeHelpMessage: string | undefined;
   switch (selectedMailingCountry) {
     case CANADA_COUNTRY_ID: {
-      postalCodeHelpMessage = t('protectedProfile:mailingAddress.postalCodeHelp');
+      postalCodeHelpMessage = t(($) => $.mailingAddress.postalCodeHelp);
       break;
     }
     case USA_COUNTRY_ID: {
-      postalCodeHelpMessage = t('protectedProfile:mailingAddress.postalCodeHelpUs');
+      postalCodeHelpMessage = t(($) => $.mailingAddress.postalCodeHelpUs);
       break;
     }
     default: {
@@ -295,7 +300,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('protectedProfile:optionalLabel')}</p>
+      <p className="mb-4 italic">{t(($) => $.optionalLabel)}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
@@ -306,9 +311,9 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                 id="mailingAddress"
                 name="address"
                 className="w-full"
-                label={t('protectedProfile:mailingAddress.address')}
+                label={t(($) => $.mailingAddress.address)}
                 maxLength={100}
-                helpMessagePrimary={t('protectedProfile:mailingAddress.addressHelp')}
+                helpMessagePrimary={t(($) => $.mailingAddress.addressHelp)}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line1"
                 defaultValue={defaultState.address}
@@ -319,20 +324,20 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                 id="apartment"
                 name="apartment"
                 className="w-full"
-                label={t('protectedProfile:mailingAddress.apartment')}
+                label={t(($) => $.mailingAddress.apartment)}
                 maxLength={100}
-                helpMessagePrimary={t('protectedProfile:mailingAddress.apartmentHelp')}
+                helpMessagePrimary={t(($) => $.mailingAddress.apartmentHelp)}
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line2"
                 defaultValue={defaultState.apartment}
                 errorMessage={errors?.apartment}
               />
-              <InputSanitizeField id="mailing-city" name="city" className="w-full" label={t('protectedProfile:mailingAddress.city')} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
+              <InputSanitizeField id="mailing-city" name="city" className="w-full" label={t(($) => $.mailingAddress.city)} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
               <InputSanitizeField
                 id="mailing-postal-code"
                 name="postalZipCode"
                 className="w-full sm:w-1/2"
-                label={isPostalCodeRequired ? t('protectedProfile:mailingAddress.postalCode') : t('protectedProfile:mailingAddress.postalCodeOptional')}
+                label={isPostalCodeRequired ? t(($) => $.mailingAddress.postalCode) : t(($) => $.mailingAddress.postalCodeOptional)}
                 maxLength={100}
                 autoComplete="postal-code"
                 defaultValue={defaultState.postalCode}
@@ -346,7 +351,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                   id="mailing-province"
                   name="provinceStateId"
                   className="w-full sm:w-1/2"
-                  label={t('protectedProfile:mailingAddress.province')}
+                  label={t(($) => $.mailingAddress.province)}
                   defaultValue={defaultState.province}
                   errorMessage={errors?.provinceStateId}
                   options={[dummyOption, ...mailingRegions]}
@@ -357,7 +362,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                 id="mailing-country"
                 name="countryId"
                 className="w-full sm:w-1/2"
-                label={t('protectedProfile:mailingAddress.country')}
+                label={t(($) => $.mailingAddress.country)}
                 autoComplete="country"
                 defaultValue={defaultState.country}
                 errorMessage={errors?.countryId}
@@ -366,7 +371,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                 required
               />
               <InputCheckbox id="sync-addresses" name="syncAddresses" value="true" checked={copyAddressChecked} onChange={checkHandler}>
-                {t('protectedProfile:mailingAddress.useMailingAddress')}
+                {t(($) => $.mailingAddress.useMailingAddress)}
               </InputCheckbox>
             </div>
           </fieldset>
@@ -383,7 +388,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
                   loading={isSubmitting}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Mailing address click"
                 >
-                  {copyAddressChecked ? t('protectedProfile:mailingAddress.saveBtn') : t('protectedProfile:mailingAddress.continueBtn')}
+                  {copyAddressChecked ? t(($) => $.mailingAddress.saveBtn) : t(($) => $.mailingAddress.continueBtn)}
                 </LoadingButton>
               </DialogTrigger>
               {!isSubmitting && addressDialogContent && (
@@ -398,7 +403,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
               )}
             </Dialog>
             <ButtonLink variant="secondary" id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Mailing address click">
-              {t('protectedProfile:mailingAddress.backBtn')}
+              {t(($) => $.mailingAddress.backBtn)}
             </ButtonLink>
           </div>
         </fetcher.Form>

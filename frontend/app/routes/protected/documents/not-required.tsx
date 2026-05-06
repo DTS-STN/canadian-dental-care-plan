@@ -27,7 +27,9 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   await securityHandler.validateAuthSession({ request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('documents:notRequired.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.notRequired.pageTitle) }),
+  };
 
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
@@ -43,15 +45,18 @@ export default function NotRequired({ loaderData, params }: Route.ComponentProps
 
   return (
     <>
-      <p>{t('documents:notRequired.description')}</p>
+      <p>{t(($) => $.notRequired.description)}</p>
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <ButtonLink
           id="back-button"
           variant="primary"
-          to={t('gcweb:header.menuDashboardHref', { baseUri: SCCH_BASE_URI })}
+          to={t(($) => $.header.menuDashboardHref, {
+            baseUri: SCCH_BASE_URI,
+            ns: 'gcweb',
+          })}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Documents not required button click"
         >
-          {t('documents:notRequired.returnButton')}
+          {t(($) => $.notRequired.returnButton)}
         </ButtonLink>
       </div>
     </>

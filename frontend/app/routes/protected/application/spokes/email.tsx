@@ -56,7 +56,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:email.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.email.pageTitle) }),
+  };
   return {
     defaultState: state.email,
     applicationFlow: `${state.context}-${state.typeOfApplication}` as const,
@@ -84,9 +86,14 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const emailSchema = z.object({
     email: z
-      .string({ error: t('protectedApplicationSpokes:email.errorMessage.emailRequired') })
-      .nonempty(t('protectedApplicationSpokes:email.errorMessage.emailRequired'))
-      .refine((val) => validator.isEmail(val), t('protectedApplicationSpokes:email.errorMessage.emailValid')),
+      .string({
+        error: t(($) => $.email.errorMessage.emailRequired),
+      })
+      .nonempty(t(($) => $.email.errorMessage.emailRequired))
+      .refine(
+        (val) => validator.isEmail(val),
+        t(($) => $.email.errorMessage.emailValid),
+      ),
   });
 
   const parsedDataResult = emailSchema.safeParse({
@@ -146,27 +153,15 @@ export default function ApplicationEmail({ loaderData, params }: Route.Component
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
-          <p className="mb-4">{t('protectedApplicationSpokes:email.provideEmail')}</p>
-          <p className="mb-8">{t('protectedApplicationSpokes:email.verifyEmail')}</p>
-          <p className="mb-4 italic">{t('protectedApplication:requiredLabel')}</p>
+          <p className="mb-4">{t(($) => $.email.provideEmail)}</p>
+          <p className="mb-8">{t(($) => $.email.verifyEmail)}</p>
+          <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
           <div className="mb-6">
-            <InputField
-              id="email"
-              name="email"
-              type="email"
-              inputMode="email"
-              className="w-full"
-              autoComplete="email"
-              defaultValue={defaultState}
-              errorMessage={errors?.email}
-              label={t('protectedApplicationSpokes:email.emailLegend')}
-              maxLength={64}
-              required
-            />
+            <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t(($) => $.email.emailLegend)} maxLength={64} required />
           </div>
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Email click">
-              {t('protectedApplicationSpokes:email.continue')}
+              {t(($) => $.email.continue)}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -176,7 +171,7 @@ export default function ApplicationEmail({ loaderData, params }: Route.Component
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Email click"
             >
-              {t('protectedApplicationSpokes:email.back')}
+              {t(($) => $.email.back)}
             </ButtonLink>
           </div>
         </fetcher.Form>

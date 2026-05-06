@@ -56,7 +56,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('status');
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('status:child.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.child.pageTitle) }),
+  };
   return { meta };
 }
 
@@ -76,36 +78,72 @@ export async function action({ context: { appContainer, session }, params, reque
     code: z
       .string()
       .trim()
-      .min(1, t('status:child.form.errorMessage.applicationCodeRequired'))
-      .refine(isValidCodeOrNumber, t('status:child.form.errorMessage.applicationCodeValid'))
+      .min(
+        1,
+        t(($) => $.child.form.errorMessage.applicationCodeRequired),
+      )
+      .refine(
+        isValidCodeOrNumber,
+        t(($) => $.child.form.errorMessage.applicationCodeValid),
+      )
       .transform((code) => extractDigits(code)),
   });
 
   const childHasSinSchema = z.object({
-    childHasSin: z.boolean({ error: t('status:child.form.errorMessage.radioRequired') }),
+    childHasSin: z.boolean({
+      error: t(($) => $.child.form.errorMessage.radioRequired),
+    }),
   });
 
   const sinSchema = z.object({
     sin: z
       .string()
       .trim()
-      .min(1, t('status:child.form.errorMessage.sinRequired'))
-      .refine(isValidSin, t('status:child.form.errorMessage.sinValid'))
+      .min(
+        1,
+        t(($) => $.child.form.errorMessage.sinRequired),
+      )
+      .refine(
+        isValidSin,
+        t(($) => $.child.form.errorMessage.sinValid),
+      )
       .transform((sin) => formatSin(sin, '')),
   });
 
   const childInfoSchema = z
     .object({
-      firstName: z.string().trim().max(100, t('status:child.form.errorMessage.firstNameTooLong')).refine(isAllValidInputCharacters, t('status:child.form.errorMessage.charactersValid')).optional(),
-      lastName: z.string().trim().min(1, t('status:child.form.errorMessage.lastNameRequired')).max(100).refine(isAllValidInputCharacters, t('status:child.form.errorMessage.charactersValid')),
+      firstName: z
+        .string()
+        .trim()
+        .max(
+          100,
+          t(($) => $.child.form.errorMessage.firstNameTooLong),
+        )
+        .refine(
+          isAllValidInputCharacters,
+          t(($) => $.child.form.errorMessage.charactersValid),
+        )
+        .optional(),
+      lastName: z
+        .string()
+        .trim()
+        .min(
+          1,
+          t(($) => $.child.form.errorMessage.lastNameRequired),
+        )
+        .max(100)
+        .refine(
+          isAllValidInputCharacters,
+          t(($) => $.child.form.errorMessage.charactersValid),
+        ),
       dateOfBirthYear: z.number({
-        error: (issue) => (issue.input === undefined ? t('status:child.form.errorMessage.dateOfBirthYearRequired') : t('status:child.form.errorMessage.dateOfBirthYearNumber')),
+        error: (issue) => (issue.input === undefined ? t(($) => $.child.form.errorMessage.dateOfBirthYearRequired) : t(($) => $.child.form.errorMessage.dateOfBirthYearNumber)),
       }),
       dateOfBirthMonth: z.number({
-        error: (issue) => (issue.input === undefined ? t('status:child.form.errorMessage.dateOfBirthMonthRequired') : undefined),
+        error: (issue) => (issue.input === undefined ? t(($) => $.child.form.errorMessage.dateOfBirthMonthRequired) : undefined),
       }),
       dateOfBirthDay: z.number({
-        error: (issue) => (issue.input === undefined ? t('status:child.form.errorMessage.dateOfBirthDayRequired') : t('status:child.form.errorMessage.dateOfBirthDayNumber')),
+        error: (issue) => (issue.input === undefined ? t(($) => $.child.form.errorMessage.dateOfBirthDayRequired) : t(($) => $.child.form.errorMessage.dateOfBirthDayNumber)),
       }),
       dateOfBirth: z.string(),
     })
@@ -118,19 +156,19 @@ export async function action({ context: { appContainer, session }, params, reque
       if (!isValidDateString(dateOfBirth)) {
         ctx.addIssue({
           code: 'custom',
-          message: t('status:child.form.errorMessage.dateOfBirthValid'),
+          message: t(($) => $.child.form.errorMessage.dateOfBirthValid),
           path: ['dateOfBirth'],
         });
       } else if (!isPastDateString(dateOfBirth)) {
         ctx.addIssue({
           code: 'custom',
-          message: t('status:child.form.errorMessage.dateOfBirthIsPast'),
+          message: t(($) => $.child.form.errorMessage.dateOfBirthIsPast),
           path: ['dateOfBirth'],
         });
       } else if (getAgeFromDateString(dateOfBirth) > 150) {
         ctx.addIssue({
           code: 'custom',
-          message: t('status:child.form.errorMessage.dateOfBirthIsPastValid'),
+          message: t(($) => $.child.form.errorMessage.dateOfBirthIsPastValid),
           path: ['dateOfBirth'],
         });
       }
@@ -244,7 +282,7 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('status:child.form.completeFields')}</p>
+      <p className="mb-4 italic">{t(($) => $.child.form.completeFields)}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
@@ -255,9 +293,9 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
               id="code"
               name="code"
               format={applicationCodeInputPatternFormat}
-              label={t('status:child.form.applicationCodeLabel')}
+              label={t(($) => $.child.form.applicationCodeLabel)}
               inputMode="numeric"
-              helpMessagePrimary={t('status:child.form.applicationCodeDescription')}
+              helpMessagePrimary={t(($) => $.child.form.applicationCodeDescription)}
               required
               errorMessage={errors?.code}
               defaultValue=""
@@ -265,16 +303,16 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
             <InputRadios
               id="child-has-sin"
               name="childHasSin"
-              legend={t('status:child.form.radioLegend')}
+              legend={t(($) => $.child.form.radioLegend)}
               options={[
                 {
                   value: CHILD_HAS_SIN.yes,
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.optionYes" />,
+                  children: <Trans ns="status" i18nKey={($) => $.child.form.optionYes} />,
                   onChange: handleOnChildHasSinChanged,
                 },
                 {
                   value: CHILD_HAS_SIN.no,
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.optionNo" />,
+                  children: <Trans ns="status" i18nKey={($) => $.child.form.optionNo} />,
                   onChange: handleOnChildHasSinChanged,
                 },
               ]}
@@ -282,18 +320,18 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
               required
             />
             {childHasSinState === true && (
-              <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:child.form.sinLabel')} helpMessagePrimary={t('status:child.form.sinDescription')} required errorMessage={errors?.sin} defaultValue="" />
+              <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t(($) => $.child.form.sinLabel)} helpMessagePrimary={t(($) => $.child.form.sinDescription)} required errorMessage={errors?.sin} defaultValue="" />
             )}
             {childHasSinState === false && (
               <>
-                <Collapsible summary={t('status:child.form.ifChildSummary')} className="mt-8">
+                <Collapsible summary={t(($) => $.child.form.ifChildSummary)} className="mt-8">
                   <div className="space-y-4">
-                    <p>{t('status:child.form.ifChildDesc')}</p>
+                    <p>{t(($) => $.child.form.ifChildDesc)}</p>
                   </div>
                 </Collapsible>
                 <div className="grid items-end gap-6 md:grid-cols-2">
-                  <InputSanitizeField id="first-name" name="firstName" label={t('status:child.form.firstName')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.firstName} defaultValue="" />
-                  <InputSanitizeField id="last-name" name="lastName" label={t('status:child.form.lastName')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.lastName} defaultValue="" />
+                  <InputSanitizeField id="first-name" name="firstName" label={t(($) => $.child.form.firstName)} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.firstName} defaultValue="" />
+                  <InputSanitizeField id="last-name" name="lastName" label={t(($) => $.child.form.lastName)} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.lastName} defaultValue="" />
                 </div>
                 <DatePickerField
                   id="date-of-birth"
@@ -303,7 +341,7 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
                     year: 'dateOfBirthYear',
                   }}
                   defaultValue=""
-                  legend={t('status:child.form.dateOfBirthLabel')}
+                  legend={t(($) => $.child.form.dateOfBirthLabel)}
                   required
                   errorMessages={{
                     all: errors?.dateOfBirth,
@@ -317,10 +355,10 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
-              {t('status:child.form.backBtn')}
+              {t(($) => $.child.form.backBtn)}
             </ButtonLink>
             <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
-              {t('status:child.form.submit')}
+              {t(($) => $.child.form.submit)}
             </LoadingButton>
           </div>
         </fetcher.Form>

@@ -43,7 +43,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('status');
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('status:myself.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.myself.pageTitle) }),
+  };
   return { meta };
 }
 
@@ -61,16 +63,26 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const formDataSchema = z.object({
     sin: z
-      .string({ error: (issue) => (issue.input === undefined ? t('status:myself.form.errorMessage.sinRequired') : undefined) })
+      .string({
+        error: (issue) => (issue.input === undefined ? t(($) => $.myself.form.errorMessage.sinRequired) : undefined),
+      })
       .trim()
       .min(1)
-      .refine(isValidSin, t('status:myself.form.errorMessage.sinValid'))
+      .refine(
+        isValidSin,
+        t(($) => $.myself.form.errorMessage.sinValid),
+      )
       .transform((sin) => formatSin(sin, '')),
     code: z
-      .string({ error: (issue) => (issue.input === undefined ? t('status:myself.form.errorMessage.applicationCodeRequired') : undefined) })
+      .string({
+        error: (issue) => (issue.input === undefined ? t(($) => $.myself.form.errorMessage.applicationCodeRequired) : undefined),
+      })
       .trim()
       .min(1)
-      .refine(isValidCodeOrNumber, t('status:myself.form.errorMessage.applicationCodeValid'))
+      .refine(
+        isValidCodeOrNumber,
+        t(($) => $.myself.form.errorMessage.applicationCodeValid),
+      )
       .transform((code) => extractDigits(code)),
   });
 
@@ -137,7 +149,7 @@ export default function StatusCheckerMyself({ loaderData, params }: Route.Compon
 
   return (
     <div className="max-w-prose">
-      <p className="mb-4 italic">{t('status:myself.form.completeFields')}</p>
+      <p className="mb-4 italic">{t(($) => $.myself.form.completeFields)}</p>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <ErrorSummary />
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
@@ -148,21 +160,21 @@ export default function StatusCheckerMyself({ loaderData, params }: Route.Compon
               id="code"
               name="code"
               format={applicationCodeInputPatternFormat}
-              label={t('status:myself.form.applicationCodeLabel')}
+              label={t(($) => $.myself.form.applicationCodeLabel)}
               inputMode="numeric"
-              helpMessagePrimary={t('status:myself.form.applicationCodeDescription')}
+              helpMessagePrimary={t(($) => $.myself.form.applicationCodeDescription)}
               required
               errorMessage={errors?.code}
               defaultValue=""
             />
-            <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sinLabel')} helpMessagePrimary={t('status:myself.form.sinDescription')} required errorMessage={errors?.sin} defaultValue="" />
+            <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t(($) => $.myself.form.sinLabel)} helpMessagePrimary={t(($) => $.myself.form.sinDescription)} required errorMessage={errors?.sin} defaultValue="" />
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
-              {t('status:myself.form.backBtn')}
+              {t(($) => $.myself.form.backBtn)}
             </ButtonLink>
             <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
-              {t('status:myself.form.submit')}
+              {t(($) => $.myself.form.submit)}
             </LoadingButton>
           </div>
         </fetcher.Form>

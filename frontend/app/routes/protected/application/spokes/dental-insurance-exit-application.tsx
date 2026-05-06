@@ -33,7 +33,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationSpokes:dentalInsuranceExitApplication.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.dentalInsuranceExitApplication.pageTitle) }),
+  };
   return { meta };
 }
 
@@ -51,7 +53,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   clearProtectedApplicationState({ params, session });
 
-  return redirect(t('protectedApplicationSpokes:dentalInsuranceExitApplication.exitLink'));
+  return redirect(t(($) => $.dentalInsuranceExitApplication.exitLink));
 }
 
 export default function ApplicationSpokeDentalInsuranceExitApplication({ loaderData, params }: Route.ComponentProps) {
@@ -63,8 +65,8 @@ export default function ApplicationSpokeDentalInsuranceExitApplication({ loaderD
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('protectedApplicationSpokes:dentalInsuranceExitApplication.areYouSure')}</p>
-        <p>{t('protectedApplicationSpokes:dentalInsuranceExitApplication.clickBack')}</p>
+        <p>{t(($) => $.dentalInsuranceExitApplication.areYouSure)}</p>
+        <p>{t(($) => $.dentalInsuranceExitApplication.clickBack)}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <CsrfTokenInput />
@@ -76,10 +78,10 @@ export default function ApplicationSpokeDentalInsuranceExitApplication({ loaderD
           disabled={isSubmitting}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Exiting the application click"
         >
-          {t('protectedApplicationSpokes:dentalInsuranceExitApplication.backBtn')}
+          {t(($) => $.dentalInsuranceExitApplication.backBtn)}
         </ButtonLink>
         <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - Exiting the application click">
-          {t('protectedApplicationSpokes:dentalInsuranceExitApplication.exitBtn')}
+          {t(($) => $.dentalInsuranceExitApplication.exitBtn)}
         </LoadingButton>
       </fetcher.Form>
     </div>

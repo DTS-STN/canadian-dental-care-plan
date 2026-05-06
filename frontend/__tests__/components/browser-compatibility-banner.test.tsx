@@ -14,7 +14,7 @@ describe('BrowserCompatibilityBanner', () => {
     const onDismiss = vi.fn();
     const { getByRole } = render(<BrowserCompatibilityBanner onDismiss={onDismiss} />);
 
-    const dismissButton = getByRole('button', { name: 'gcweb:browserCompatibilityBanner.dismiss' });
+    const dismissButton = getByRole('button', { name: 'browserCompatibilityBanner.dismiss' });
     dismissButton.click();
 
     expect(onDismiss).toHaveBeenCalledTimes(1);

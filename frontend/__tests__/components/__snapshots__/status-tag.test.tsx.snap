@@ -21,7 +21,7 @@ exports[`StatusTag > should render complete status 1`] = `
       />
     </svg>
     <span>
-      common:status.complete
+      status.complete
     </span>
   </span>
 </div>
@@ -34,7 +34,7 @@ exports[`StatusTag > should render new status 1`] = `
     data-slot="badge"
     role="status"
   >
-    common:status.new
+    status.new
   </span>
 </div>
 `;

@@ -37,7 +37,7 @@ exports[`Stepper > renders correctly when all steps are completed > expected htm
         <span
           class="sr-only"
         >
-          common:stepper.status.completed
+          stepper.status.completed
         </span>
       </span>
     </li>
@@ -73,7 +73,7 @@ exports[`Stepper > renders correctly when all steps are completed > expected htm
         <span
           class="sr-only"
         >
-          common:stepper.status.completed
+          stepper.status.completed
         </span>
       </span>
     </li>
@@ -105,7 +105,7 @@ exports[`Stepper > renders correctly when all steps are completed > expected htm
         <span
           class="sr-only"
         >
-          common:stepper.status.completed
+          stepper.status.completed
         </span>
       </span>
     </li>
@@ -182,7 +182,7 @@ exports[`Stepper > renders correctly with active step 1 > expected html 1`] = `
         <span
           class="sr-only"
         >
-          common:stepper.status.upcoming
+          stepper.status.upcoming
         </span>
       </span>
     </li>
@@ -214,7 +214,7 @@ exports[`Stepper > renders correctly with active step 1 > expected html 1`] = `
         <span
           class="sr-only"
         >
-          common:stepper.status.upcoming
+          stepper.status.upcoming
         </span>
       </span>
     </li>
@@ -259,7 +259,7 @@ exports[`Stepper > renders correctly with active step 2 > expected html 1`] = `
         <span
           class="sr-only"
         >
-          common:stepper.status.completed
+          stepper.status.completed
         </span>
       </span>
     </li>
@@ -323,7 +323,7 @@ exports[`Stepper > renders correctly with active step 2 > expected html 1`] = `
         <span
           class="sr-only"
         >
-          common:stepper.status.upcoming
+          stepper.status.upcoming
         </span>
       </span>
     </li>

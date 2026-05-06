@@ -98,7 +98,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.AuditService).createAudit('page-view.documents-upload', { userId: idToken.sub });
 
   return {
-    meta: { title: t('gcweb:meta.title.mscaTemplate', { title: t('documents:upload.pageTitle') }) },
+    meta: {
+      title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.upload.pageTitle) }),
+    },
     applicants,
     documentTypes,
     SCCH_BASE_URI,
@@ -241,9 +243,10 @@ async function scanDocuments({ allowedExtensions, files, service, t, userId }: S
 
   const promises = Object.entries(files).map(async ([id, { file, fileBuffer }]) => {
     try {
-      const invalidTypeError = t('documents:upload.errorMessage.invalidFileType', {
+      const invalidTypeError = t(($) => $.upload.errorMessage.invalidFileType, {
         filename: file.name,
         extensions: allowedExtensions.join(', '),
+        ns: 'documents',
       });
 
       const detected = await fileTypeFromBuffer(fileBuffer);
@@ -270,12 +273,21 @@ async function scanDocuments({ allowedExtensions, files, service, t, userId }: S
       });
 
       if (scanResponse.Error) {
-        return { id, error: t('documents:upload.errorMessage.scanFailed', { error: scanResponse.Error.ErrorMessage }) };
+        return {
+          id,
+          error: t(($) => $.upload.errorMessage.scanFailed, {
+            error: scanResponse.Error.ErrorMessage,
+            ns: 'documents',
+          }),
+        };
       }
 
       return { id, success: true };
     } catch {
-      return { id, error: t('documents:upload.errorMessage.scanError') };
+      return {
+        id,
+        error: t(($) => $.upload.errorMessage.scanError),
+      };
     }
   });
 
@@ -308,10 +320,19 @@ async function uploadDocuments({ clientNumber, files, service, t, userId }: Uplo
       });
 
       return response.Error //
-        ? { id, error: t('documents:upload.errorMessage.uploadFailed', { error: response.Error.ErrorMessage }) }
+        ? {
+            id,
+            error: t(($) => $.upload.errorMessage.uploadFailed, {
+              error: response.Error.ErrorMessage,
+              ns: 'documents',
+            }),
+          }
         : { id, success: true };
     } catch {
-      return { id, error: t('documents:upload.errorMessage.uploadError') };
+      return {
+        id,
+        error: t(($) => $.upload.errorMessage.uploadError),
+      };
     }
   });
 
@@ -398,25 +419,30 @@ function createDocumentUploadSchema({ locale, t, allowedExtensions, maxFileSizeI
       if (!allowedExtensions.includes(getFileExtension(data.file.name))) {
         ctx.addIssue({
           code: 'custom',
-          message: t('documents:upload.errorMessage.invalidFileType', {
+          message: t(($) => $.upload.errorMessage.invalidFileType, {
             filename: data.file.name,
             extensions: allowedExtensions.join(', '),
+            ns: 'documents',
           }),
           path: ['file'],
         });
       } else if (data.file.size > maxFileSizeInBytes) {
         ctx.addIssue({
           code: 'custom',
-          message: t('documents:upload.errorMessage.fileTooLarge', {
+          message: t(($) => $.upload.errorMessage.fileTooLarge, {
             filename: data.file.name,
             filesize: bytesToFilesize(maxFileSizeInBytes, `${locale}-CA`),
+            ns: 'documents',
           }),
           path: ['file'],
         });
       } else if (!data.documentType) {
         ctx.addIssue({
           code: 'custom',
-          message: t('documents:upload.errorMessage.documentTypeRequired', { filename: data.file.name }),
+          message: t(($) => $.upload.errorMessage.documentTypeRequired, {
+            filename: data.file.name,
+            ns: 'documents',
+          }),
           path: ['documentType'],
         });
       }
@@ -424,13 +450,22 @@ function createDocumentUploadSchema({ locale, t, allowedExtensions, maxFileSizeI
 
   return z.object({
     applicant: z
-      .string(t('documents:upload.errorMessage.applicantRequired')) //
+      .string(t(($) => $.upload.errorMessage.applicantRequired)) //
       .trim()
-      .nonempty(t('documents:upload.errorMessage.applicantRequired')),
+      .nonempty(t(($) => $.upload.errorMessage.applicantRequired)),
     files: z
       .record(z.string(), fileSchema) //
-      .refine((value) => Object.keys(value).length > 0, t('documents:upload.errorMessage.fileRequired'))
-      .refine((value) => Object.keys(value).length <= maxFileCount, t('documents:upload.errorMessage.tooManyFiles', { count: maxFileCount }))
+      .refine(
+        (value) => Object.keys(value).length > 0,
+        t(($) => $.upload.errorMessage.fileRequired),
+      )
+      .refine(
+        (value) => Object.keys(value).length <= maxFileCount,
+        t(($) => $.upload.errorMessage.tooManyFiles, {
+          count: maxFileCount,
+          ns: 'documents',
+        }),
+      )
       .superRefine((files, ctx) => {
         const seenFiles = new Set<string>();
         for (const [id, { file, fileHash }] of Object.entries(files)) {
@@ -438,7 +473,10 @@ function createDocumentUploadSchema({ locale, t, allowedExtensions, maxFileSizeI
           if (seenFiles.has(fileKey)) {
             ctx.addIssue({
               code: 'custom',
-              message: t('documents:upload.errorMessage.duplicateFile', { filename: file.name }),
+              message: t(($) => $.upload.errorMessage.duplicateFile, {
+                filename: file.name,
+                ns: 'documents',
+              }),
               path: [id, 'file'],
             });
           } else {
@@ -500,14 +538,24 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
 
   const applicantOptions = useMemo<InputOptionProps[]>(() => {
     return [
-      { children: t('documents:upload.selectOne'), value: '', disabled: true, hidden: true }, //
+      {
+        children: t(($) => $.upload.selectOne),
+        value: '',
+        disabled: true,
+        hidden: true,
+      }, //
       ...applicants.map(({ clientId, clientNumber, name }) => ({ children: `${name} - ${clientNumber}`, value: clientId })),
     ];
   }, [applicants, t]);
 
   const docTypeOptions = useMemo<InputOptionProps[]>(() => {
     return [
-      { children: t('documents:upload.selectOne'), value: '', disabled: true, hidden: true }, //
+      {
+        children: t(($) => $.upload.selectOne),
+        value: '',
+        disabled: true,
+        hidden: true,
+      }, //
       ...documentTypes.map((d) => ({ children: d.name, value: d.id })),
     ];
   }, [documentTypes, t]);
@@ -519,22 +567,28 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
           <CsrfTokenInput />
           <div className="space-y-6">
-            <InputSelect id="applicant" name="applicant" label={t('documents:upload.whoAreYouUploadingFor')} required className="w-full" options={applicantOptions} defaultValue="" errorMessage={applicantError} />
+            <InputSelect id="applicant" name="applicant" label={t(($) => $.upload.whoAreYouUploadingFor)} required className="w-full" options={applicantOptions} defaultValue="" errorMessage={applicantError} />
             <fieldset>
-              <InputLegend className="mb-2">{t('documents:upload.uploadDocument')}</InputLegend>
-              <p>{t('documents:upload.maxFiles', { count: DOCUMENT_UPLOAD_MAX_FILE_COUNT })}</p>
+              <InputLegend className="mb-2">{t(($) => $.upload.uploadDocument)}</InputLegend>
+              <p>
+                {t(($) => $.upload.maxFiles, {
+                  count: DOCUMENT_UPLOAD_MAX_FILE_COUNT,
+                  ns: 'documents',
+                })}
+              </p>
               <p className="mb-2">
-                {t('documents:upload.maxSize', {
+                {t(($) => $.upload.maxSize, {
                   filesize: bytesToFilesize(megabytesToBytes(env.DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB), `${i18n.language}-CA`),
                   extensions: DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(', '),
+                  ns: 'documents',
                 })}
               </p>
               {filesError && <InputError id="files-error" className="mb-2" fieldId="fileUploadTrigger" message={filesError} />}
-              <FileUpload id="file-upload" label={t('documents:upload.uploadDocument')} value={filesWithTypes} onValueChange={handleFileChange} accept={DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(',')} className="gap-4 sm:gap-6">
+              <FileUpload id="file-upload" label={t(($) => $.upload.uploadDocument)} value={filesWithTypes} onValueChange={handleFileChange} accept={DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(',')} className="gap-4 sm:gap-6">
                 <div>
                   <FileUploadTrigger asChild>
                     <Button id="fileUploadTrigger" variant="secondary" className={cn(filesError !== undefined && 'border-red-500 text-red-500 hover:bg-red-100 focus:bg-red-100')} startIcon={faArrowUpFromBracket}>
-                      {t('documents:upload.addFile')}
+                      {t(($) => $.upload.addFile)}
                     </Button>
                   </FileUploadTrigger>
                 </div>
@@ -553,15 +607,14 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                         {fileError && <InputError id={`file-error-${id}`} fieldId={`file-upload-item-${id}`} message={fileError} />}
                         <dl className="space-y-3 sm:space-y-4">
                           <div className="space-y-2">
-                            <dt className="font-semibold">{t('documents:upload.fileName')}</dt>
+                            <dt className="font-semibold">{t(($) => $.upload.fileName)}</dt>
                             <dd>{file.name}</dd>
                           </div>
                         </dl>
-
                         <InputSelect
                           id={`document-type-${id}`}
                           name={`document-type-${id}`}
-                          label={t('documents:upload.documentType')}
+                          label={t(($) => $.upload.documentType)}
                           required
                           className="w-full"
                           options={docTypeOptions}
@@ -571,11 +624,10 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                           }}
                           errorMessage={documentTypeError}
                         />
-
                         <div className="mt-2">
                           <FileUploadItemDelete asChild>
                             <Button variant="secondary" size="sm" endIcon={faTimes}>
-                              {t('documents:upload.remove')}
+                              {t(($) => $.upload.remove)}
                             </Button>
                           </FileUploadItemDelete>
                         </div>
@@ -589,15 +641,22 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
 
           <div className="mt-8">
             <LoadingButton id="submit-button" variant="primary" type="submit" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Submit - Upload my documents click">
-              {t('documents:upload.submit')}
+              {t(($) => $.upload.submit)}
             </LoadingButton>
           </div>
         </fetcher.Form>
       </ErrorSummaryProvider>
-
       <div>
-        <ButtonLink id="back-button" variant="secondary" to={t('gcweb:header.menuDashboardHref', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Upload my documents click">
-          {t('documents:index.returnDashboard')}
+        <ButtonLink
+          id="back-button"
+          variant="secondary"
+          to={t(($) => $.header.menuDashboardHref, {
+            baseUri: SCCH_BASE_URI,
+            ns: 'gcweb',
+          })}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Upload my documents click"
+        >
+          {t(($) => $.index.returnDashboard)}
         </ButtonLink>
       </div>
     </div>

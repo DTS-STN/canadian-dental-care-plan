@@ -37,7 +37,7 @@ exports[`ProgressStepper > renders correctly when all steps are completed (activ
         <span
           class="sr-only"
         >
-          common:stepper.status.completed
+          stepper.status.completed
         </span>
       </span>
     </li>
@@ -73,7 +73,7 @@ exports[`ProgressStepper > renders correctly when all steps are completed (activ
         <span
           class="sr-only"
         >
-          common:stepper.status.completed
+          stepper.status.completed
         </span>
       </span>
     </li>
@@ -105,7 +105,7 @@ exports[`ProgressStepper > renders correctly when all steps are completed (activ
         <span
           class="sr-only"
         >
-          common:stepper.status.completed
+          stepper.status.completed
         </span>
       </span>
     </li>
@@ -182,7 +182,7 @@ exports[`ProgressStepper > renders correctly with the first step active > expect
         <span
           class="sr-only"
         >
-          common:stepper.status.upcoming
+          stepper.status.upcoming
         </span>
       </span>
     </li>
@@ -214,7 +214,7 @@ exports[`ProgressStepper > renders correctly with the first step active > expect
         <span
           class="sr-only"
         >
-          common:stepper.status.upcoming
+          stepper.status.upcoming
         </span>
       </span>
     </li>
@@ -259,7 +259,7 @@ exports[`ProgressStepper > renders correctly with the last step active > expecte
         <span
           class="sr-only"
         >
-          common:stepper.status.completed
+          stepper.status.completed
         </span>
       </span>
     </li>
@@ -295,7 +295,7 @@ exports[`ProgressStepper > renders correctly with the last step active > expecte
         <span
           class="sr-only"
         >
-          common:stepper.status.completed
+          stepper.status.completed
         </span>
       </span>
     </li>
@@ -368,7 +368,7 @@ exports[`ProgressStepper > renders correctly with the second step active > expec
         <span
           class="sr-only"
         >
-          common:stepper.status.completed
+          stepper.status.completed
         </span>
       </span>
     </li>
@@ -432,7 +432,7 @@ exports[`ProgressStepper > renders correctly with the second step active > expec
         <span
           class="sr-only"
         >
-          common:stepper.status.upcoming
+          stepper.status.upcoming
         </span>
       </span>
     </li>

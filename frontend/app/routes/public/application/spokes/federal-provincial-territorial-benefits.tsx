@@ -58,7 +58,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const provinceTerritoryStates = await appContainer.get(TYPES.ProvinceTerritoryStateService).listAndSortLocalizedProvinceTerritoryStatesByCountryId(CANADA_COUNTRY_ID, locale);
   const provincialTerritorialSocialPrograms = await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).listAndSortLocalizedProvincialGovernmentInsurancePlans(locale);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:dentalBenefits.title') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.dentalBenefits.title, { ns: 'applicationSpokes' }) }),
+  };
 
   return {
     defaultState: state.dentalBenefits?.value,
@@ -85,13 +87,19 @@ export async function action({ context: { appContainer, session }, params, reque
   // both question first before the superRefine can be executed
   const federalBenefitsSchema = z
     .object({
-      hasFederalBenefits: z.boolean({ error: t('applicationSpokes:dentalBenefits.errorMessage.federalBenefitRequired') }),
+      hasFederalBenefits: z.boolean({
+        error: t(($) => $.dentalBenefits.errorMessage.federalBenefitRequired, { ns: 'applicationSpokes' }),
+      }),
       federalSocialProgram: z.string().trim().optional(),
     })
 
     .superRefine((val, ctx) => {
       if (val.hasFederalBenefits && (!val.federalSocialProgram || validator.isEmpty(val.federalSocialProgram))) {
-        ctx.addIssue({ code: 'custom', message: t('applicationSpokes:dentalBenefits.errorMessage.federalBenefitProgramRequired'), path: ['federalSocialProgram'] });
+        ctx.addIssue({
+          code: 'custom',
+          message: t(($) => $.dentalBenefits.errorMessage.federalBenefitProgramRequired, { ns: 'applicationSpokes' }),
+          path: ['federalSocialProgram'],
+        });
       }
     })
     .transform((val) => {
@@ -103,7 +111,9 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const provincialTerritorialBenefitsSchema = z
     .object({
-      hasProvincialTerritorialBenefits: z.boolean({ error: t('applicationSpokes:dentalBenefits.errorMessage.provincialBenefitRequired') }),
+      hasProvincialTerritorialBenefits: z.boolean({
+        error: t(($) => $.dentalBenefits.errorMessage.provincialBenefitRequired, { ns: 'applicationSpokes' }),
+      }),
       provincialTerritorialSocialProgram: z.string().trim().optional(),
       province: z.string().trim().optional(),
     })
@@ -111,9 +121,17 @@ export async function action({ context: { appContainer, session }, params, reque
     .superRefine((val, ctx) => {
       if (val.hasProvincialTerritorialBenefits) {
         if (!val.province || validator.isEmpty(val.province)) {
-          ctx.addIssue({ code: 'custom', message: t('applicationSpokes:dentalBenefits.errorMessage.provincialTerritorialRequired'), path: ['province'] });
+          ctx.addIssue({
+            code: 'custom',
+            message: t(($) => $.dentalBenefits.errorMessage.provincialTerritorialRequired, { ns: 'applicationSpokes' }),
+            path: ['province'],
+          });
         } else if (!val.provincialTerritorialSocialProgram || validator.isEmpty(val.provincialTerritorialSocialProgram)) {
-          ctx.addIssue({ code: 'custom', message: t('applicationSpokes:dentalBenefits.errorMessage.provincialBenefitProgramRequired'), path: ['provincialTerritorialSocialProgram'] });
+          ctx.addIssue({
+            code: 'custom',
+            message: t(($) => $.dentalBenefits.errorMessage.provincialBenefitProgramRequired, { ns: 'applicationSpokes' }),
+            path: ['provincialTerritorialSocialProgram'],
+          });
         }
       }
     })
@@ -202,21 +220,21 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
   return (
     <div className="max-w-prose">
       <ErrorSummaryProvider actionData={fetcher.data}>
-        <p className="mb-4">{t('applicationSpokes:dentalBenefits.accessToDental')}</p>
-        <p className="mb-4">{t('applicationSpokes:dentalBenefits.eligibilityCriteria')}</p>
-        <p className="mb-4 italic">{t('application:requiredLabel')}</p>
+        <p className="mb-4">{t(($) => $.dentalBenefits.accessToDental, { ns: 'applicationSpokes' })}</p>
+        <p className="mb-4">{t(($) => $.dentalBenefits.eligibilityCriteria, { ns: 'applicationSpokes' })}</p>
+        <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <fieldset className="mb-6">
-            <legend className="font-lato mb-4 text-2xl font-bold">{t('applicationSpokes:dentalBenefits.federalBenefits.title')}</legend>
+            <legend className="font-lato mb-4 text-2xl font-bold">{t(($) => $.dentalBenefits.federalBenefits.title, { ns: 'applicationSpokes' })}</legend>
             <InputRadios
               id="has-federal-benefits"
               name="hasFederalBenefits"
-              legend={t('applicationSpokes:dentalBenefits.federalBenefits.legend')}
+              legend={t(($) => $.dentalBenefits.federalBenefits.legend, { ns: 'applicationSpokes' })}
               options={[
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:dentalBenefits.federalBenefits.optionYes" />,
+                  children: <Trans ns="applicationSpokes" i18nKey={($) => $.dentalBenefits.federalBenefits.optionYes} />,
                   value: HAS_FEDERAL_BENEFITS_OPTION.yes,
                   defaultChecked: hasFederalBenefitValue === true,
                   onChange: handleOnHasFederalBenefitChanged,
@@ -224,7 +242,7 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
                     <InputRadios
                       id="federal-social-programs"
                       name="federalSocialProgram"
-                      legend={t('applicationSpokes:dentalBenefits.federalBenefits.socialPrograms.legend')}
+                      legend={t(($) => $.dentalBenefits.federalBenefits.socialPrograms.legend, { ns: 'applicationSpokes' })}
                       legendClassName="font-normal"
                       options={federalSocialPrograms.map((option) => ({
                         children: option.name,
@@ -237,7 +255,7 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
                   ),
                 },
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:dentalBenefits.federalBenefits.optionNo" />,
+                  children: <Trans ns="applicationSpokes" i18nKey={($) => $.dentalBenefits.federalBenefits.optionNo} />,
                   value: HAS_FEDERAL_BENEFITS_OPTION.no,
                   defaultChecked: hasFederalBenefitValue === false,
                   onChange: handleOnHasFederalBenefitChanged,
@@ -248,14 +266,14 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
             />
           </fieldset>
           <fieldset className="mb-8">
-            <legend className="font-lato mb-4 text-2xl font-bold">{t('applicationSpokes:dentalBenefits.provincialTerritorialBenefits.title')}</legend>
+            <legend className="font-lato mb-4 text-2xl font-bold">{t(($) => $.dentalBenefits.provincialTerritorialBenefits.title, { ns: 'applicationSpokes' })}</legend>
             <InputRadios
               id="has-provincial-territorial-benefits"
               name="hasProvincialTerritorialBenefits"
-              legend={t('applicationSpokes:dentalBenefits.provincialTerritorialBenefits.legend')}
+              legend={t(($) => $.dentalBenefits.provincialTerritorialBenefits.legend, { ns: 'applicationSpokes' })}
               options={[
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:dentalBenefits.provincialTerritorialBenefits.optionYes" />,
+                  children: <Trans ns="applicationSpokes" i18nKey={($) => $.dentalBenefits.provincialTerritorialBenefits.optionYes} />,
                   value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes,
                   defaultChecked: defaultState?.hasProvincialTerritorialBenefits === true,
                   onChange: handleOnHasProvincialTerritorialBenefitChanged,
@@ -265,11 +283,11 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
                         id="province"
                         name="province"
                         className="w-full sm:w-1/2"
-                        label={t('applicationSpokes:dentalBenefits.provincialTerritorialBenefits.socialPrograms.inputLegend')}
+                        label={t(($) => $.dentalBenefits.provincialTerritorialBenefits.socialPrograms.inputLegend, { ns: 'applicationSpokes' })}
                         onChange={handleOnRegionChanged}
                         options={[
                           {
-                            children: t('applicationSpokes:dentalBenefits.selectOne'),
+                            children: t(($) => $.dentalBenefits.selectOne, { ns: 'applicationSpokes' }),
                             value: '',
                             hidden: true,
                           },
@@ -283,7 +301,7 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
                         <InputRadios
                           id="provincial-territorial-social-programs"
                           name="provincialTerritorialSocialProgram"
-                          legend={t('applicationSpokes:dentalBenefits.provincialTerritorialBenefits.socialPrograms.radioLegend')}
+                          legend={t(($) => $.dentalBenefits.provincialTerritorialBenefits.socialPrograms.radioLegend, { ns: 'applicationSpokes' })}
                           legendClassName="font-normal"
                           errorMessage={errors?.provincialTerritorialSocialProgram}
                           options={provincialTerritorialSocialPrograms
@@ -301,7 +319,7 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
                   ),
                 },
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:dentalBenefits.provincialTerritorialBenefits.optionNo" />,
+                  children: <Trans ns="applicationSpokes" i18nKey={($) => $.dentalBenefits.provincialTerritorialBenefits.optionNo} />,
                   value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.no,
                   defaultChecked: defaultState?.hasProvincialTerritorialBenefits === false,
                   onChange: handleOnHasProvincialTerritorialBenefitChanged,
@@ -313,7 +331,7 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
           </fieldset>
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Save - Access to other dental benefits click">
-              {t('applicationSpokes:dentalBenefits.saveBtn')}
+              {t(($) => $.dentalBenefits.saveBtn, { ns: 'applicationSpokes' })}
             </LoadingButton>
             <ButtonLink
               id="back-button"
@@ -323,7 +341,7 @@ export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ l
               disabled={isSubmitting}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Access to other dental benefits click"
             >
-              {t('applicationSpokes:dentalBenefits.backBtn')}
+              {t(($) => $.dentalBenefits.backBtn, { ns: 'applicationSpokes' })}
             </ButtonLink>
           </div>
         </fetcher.Form>

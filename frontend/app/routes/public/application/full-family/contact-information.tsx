@@ -36,7 +36,9 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['full-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationFullFamily:contactInformation.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.contactInformation.pageTitle, { ns: 'applicationFullFamily' }) }),
+  };
   const locale = getLocale(request);
 
   const mailingAddressInfo = state.mailingAddress?.hasChanged
@@ -90,24 +92,24 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
       <ProgressStepper activeStep="contactInformation" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('application:completeAllSections')}</p>
+          <p>{t(($) => $.completeAllSections)}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('applicationFullFamily:contactInformation.phoneNumber')}</h2>
+              <h2>{t(($) => $.contactInformation.phoneNumber, { ns: 'applicationFullFamily' })}</h2>
             </CardTitle>
             <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.phoneNumber?.hasChanged ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('applicationFullFamily:contactInformation.phoneNumber')}>{state.phoneNumber.value.primary}</DefinitionListItem>
-                {state.phoneNumber.value.alternate && <DefinitionListItem term={t('applicationFullFamily:contactInformation.altPhoneNumber')}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
+                <DefinitionListItem term={t(($) => $.contactInformation.phoneNumber, { ns: 'applicationFullFamily' })}>{state.phoneNumber.value.primary}</DefinitionListItem>
+                {state.phoneNumber.value.alternate && <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber, { ns: 'applicationFullFamily' })}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
               </DefinitionList>
             ) : (
-              <p>{t('applicationFullFamily:contactInformation.phoneNumberHelp')}</p>
+              <p>{t(($) => $.contactInformation.phoneNumberHelp, { ns: 'applicationFullFamily' })}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -121,7 +123,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Edit phone click"
             >
-              {sections.phoneNumber.completed ? t('applicationFullFamily:contactInformation.editPhoneNumber') : t('applicationFullFamily:contactInformation.addPhoneNumber')}
+              {sections.phoneNumber.completed ? t(($) => $.contactInformation.editPhoneNumber, { ns: 'applicationFullFamily' }) : t(($) => $.contactInformation.addPhoneNumber, { ns: 'applicationFullFamily' })}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -129,16 +131,16 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('applicationFullFamily:contactInformation.mailingAndHomeAddress')}</h2>
+              <h2>{t(($) => $.contactInformation.mailingAndHomeAddress, { ns: 'applicationFullFamily' })}</h2>
             </CardTitle>
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {mailingAddressInfo === undefined || homeAddressInfo === undefined ? (
-              <p>{t('applicationFullFamily:contactInformation.addressHelp')}</p>
+              <p>{t(($) => $.contactInformation.addressHelp, { ns: 'applicationFullFamily' })}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('applicationFullFamily:contactInformation.mailingAddress')}>
+                <DefinitionListItem term={t(($) => $.contactInformation.mailingAddress, { ns: 'applicationFullFamily' })}>
                   <Address
                     address={{
                       address: mailingAddressInfo.address,
@@ -149,7 +151,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
                     }}
                   />
                 </DefinitionListItem>
-                <DefinitionListItem term={t('applicationFullFamily:contactInformation.homeAddress')}>
+                <DefinitionListItem term={t(($) => $.contactInformation.homeAddress, { ns: 'applicationFullFamily' })}>
                   <Address
                     address={{
                       address: homeAddressInfo.address,
@@ -174,7 +176,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Edit address click"
             >
-              {sections.address.completed ? t('applicationFullFamily:contactInformation.editAddress') : t('applicationFullFamily:contactInformation.addAddress')}
+              {sections.address.completed ? t(($) => $.contactInformation.editAddress, { ns: 'applicationFullFamily' }) : t(($) => $.contactInformation.addAddress, { ns: 'applicationFullFamily' })}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -182,20 +184,20 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('applicationFullFamily:contactInformation.communicationPreferences')}</h2>
+              <h2>{t(($) => $.contactInformation.communicationPreferences, { ns: 'applicationFullFamily' })}</h2>
             </CardTitle>
             <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.communicationPreferences?.hasChanged ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('applicationFullFamily:contactInformation.preferredLanguage')}>{preferredLanguage?.name}</DefinitionListItem>
-                <DefinitionListItem term={t('applicationFullFamily:contactInformation.preferredMethod')}>{preferredMethod?.name}</DefinitionListItem>
-                <DefinitionListItem term={t('applicationFullFamily:contactInformation.preferredNotificationMethod')}>{preferredNotificationMethod?.name}</DefinitionListItem>
-                {state.email && <DefinitionListItem term={t('applicationFullFamily:contactInformation.email')}>{state.email}</DefinitionListItem>}
+                <DefinitionListItem term={t(($) => $.contactInformation.preferredLanguage, { ns: 'applicationFullFamily' })}>{preferredLanguage?.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.contactInformation.preferredMethod, { ns: 'applicationFullFamily' })}>{preferredMethod?.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.contactInformation.preferredNotificationMethod, { ns: 'applicationFullFamily' })}>{preferredNotificationMethod?.name}</DefinitionListItem>
+                {state.email && <DefinitionListItem term={t(($) => $.contactInformation.email, { ns: 'applicationFullFamily' })}>{state.email}</DefinitionListItem>}
               </DefinitionList>
             ) : (
-              <p>{t('applicationFullFamily:contactInformation.communicationPreferencesHelp')}</p>
+              <p>{t(($) => $.contactInformation.communicationPreferencesHelp, { ns: 'applicationFullFamily' })}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -209,7 +211,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Edit comms click"
             >
-              {sections.communicationPreferences.completed ? t('applicationFullFamily:contactInformation.editCommunicationPreferences') : t('applicationFullFamily:contactInformation.addCommunicationPreferences')}
+              {sections.communicationPreferences.completed ? t(($) => $.contactInformation.editCommunicationPreferences, { ns: 'applicationFullFamily' }) : t(($) => $.contactInformation.addCommunicationPreferences, { ns: 'applicationFullFamily' })}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -223,10 +225,10 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Continue click"
           >
-            {t('applicationFullFamily:contactInformation.nextBtn')}
+            {t(($) => $.contactInformation.nextBtn, { ns: 'applicationFullFamily' })}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/full-family/marital-status" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Family:Back click">
-            {t('applicationFullFamily:contactInformation.prevBtn')}
+            {t(($) => $.contactInformation.prevBtn, { ns: 'applicationFullFamily' })}
           </NavigationButtonLink>
         </div>
       </div>

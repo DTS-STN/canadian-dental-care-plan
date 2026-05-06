@@ -31,7 +31,9 @@ export async function loader({ context: { appContainer, session }, params, reque
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.mscaTemplate', { title: t('protectedProfile:contactInformation.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.contactInformation.pageTitle) }),
+  };
   const { SCCH_BASE_URI } = appContainer.get(TYPES.ClientConfig);
 
   const locale = getLocale(request);
@@ -87,46 +89,46 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
   return (
     <div className="max-w-prose space-y-10">
       <DefinitionList border>
-        <DefinitionListItem term={t('protectedProfile:contactInformation.phoneNumber')} className="border-none pb-0 sm:pb-0">
-          {phoneNumber ?? t('protectedProfile:none')}
+        <DefinitionListItem term={t(($) => $.contactInformation.phoneNumber)} className="border-none pb-0 sm:pb-0">
+          {phoneNumber ?? t(($) => $.none)}
         </DefinitionListItem>
-        <DefinitionListItem term={t('protectedProfile:contactInformation.altPhoneNumber')}>
-          <p>{altPhoneNumber ?? t('protectedProfile:none')}</p>
+        <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber)}>
+          <p>{altPhoneNumber ?? t(($) => $.none)}</p>
           <div className="mt-4 sm:mt-6">
             <InlineLink id="update-contact-information-phone" routeId="protected/profile/contact/phone" params={params}>
-              {t('protectedProfile:contactInformation.updatePhoneLinkText')}
+              {t(($) => $.contactInformation.updatePhoneLinkText)}
             </InlineLink>
           </div>
         </DefinitionListItem>
-        <DefinitionListItem term={t('protectedProfile:contactInformation.email')}>
-          <p>{emailAddress ?? t('protectedProfile:none')}</p>
+        <DefinitionListItem term={t(($) => $.contactInformation.email)}>
+          <p>{emailAddress ?? t(($) => $.none)}</p>
           {emailVerificationStatus && (
             <Badge asChild size="lg" variant={emailVerificationStatus === 'unverified' ? 'warning' : 'success'}>
               <p className="mt-3">
                 <FontAwesomeIcon icon={emailVerificationStatus === 'unverified' ? faExclamationTriangle : faCheckCircle} />
-                {t(`protectedProfile:contactInformation.emailVerificationStatus.${emailVerificationStatus}`)}
+                {t(($) => $.contactInformation.emailVerificationStatus[emailVerificationStatus])}
               </p>
             </Badge>
           )}
           <div className="mt-4 sm:mt-6">
             <InlineLink id="update-contact-information-email" routeId="protected/profile/contact/email-address" params={params}>
-              {t('protectedProfile:contactInformation.updateEmailLinkText')}
+              {t(($) => $.contactInformation.updateEmailLinkText)}
             </InlineLink>
           </div>
         </DefinitionListItem>
-        <DefinitionListItem term={t('protectedProfile:contactInformation.mailingAddress')}>
+        <DefinitionListItem term={t(($) => $.contactInformation.mailingAddress)}>
           <Address address={mailingAddressDetails} />
           <div className="mt-4 sm:mt-6">
             <InlineLink id="update-contact-information-mailing-address" routeId="protected/profile/contact/mailing-address" params={params}>
-              {t('protectedProfile:contactInformation.updateMailingAddressLinkText')}
+              {t(($) => $.contactInformation.updateMailingAddressLinkText)}
             </InlineLink>
           </div>
         </DefinitionListItem>
-        <DefinitionListItem term={t('protectedProfile:contactInformation.homeAddress')}>
+        <DefinitionListItem term={t(($) => $.contactInformation.homeAddress)}>
           {homeAddressDetails && <Address address={homeAddressDetails} />}
           <div className="mt-4 sm:mt-6">
             <InlineLink id="update-contact-information-home-address" routeId="protected/profile/contact/home-address" params={params}>
-              {t('protectedProfile:contactInformation.updateHomeAddressLinkText')}
+              {t(($) => $.contactInformation.updateHomeAddressLinkText)}
             </InlineLink>
           </div>
         </DefinitionListItem>
@@ -134,10 +136,13 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
       <ButtonLink
         variant="primary"
         id="back-button"
-        to={t('gcweb:header.menuDashboardHref', { baseUri: SCCH_BASE_URI })}
+        to={t(($) => $.header.menuDashboardHref, {
+          baseUri: SCCH_BASE_URI,
+          ns: 'gcweb',
+        })}
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - My contact information return button click"
       >
-        {t('protectedProfile:contactInformation.returnButton')}
+        {t(($) => $.contactInformation.returnButton)}
       </ButtonLink>
     </div>
   );

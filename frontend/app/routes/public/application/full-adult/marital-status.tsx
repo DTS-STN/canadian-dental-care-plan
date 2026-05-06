@@ -35,7 +35,9 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['full-adult']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationFullAdult:maritalStatus.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.maritalStatus.pageTitle, { ns: 'applicationFullAdult' }) }),
+  };
   const locale = getLocale(request);
   return {
     state: {
@@ -60,27 +62,27 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
       <ProgressStepper activeStep="maritalStatus" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t('application:completeAllSections')}</p>
+          <p>{t(($) => $.completeAllSections)}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t('applicationFullAdult:maritalStatus.maritalStatus')}</h2>
+              <h2>{t(($) => $.maritalStatus.maritalStatus, { ns: 'applicationFullAdult' })}</h2>
             </CardTitle>
             <CardAction>{sections.maritalStatus.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.maritalStatus === undefined ? (
-              <p>{t('applicationFullAdult:maritalStatus.selectYourStatus')}</p>
+              <p>{t(($) => $.maritalStatus.selectYourStatus, { ns: 'applicationFullAdult' })}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('applicationFullAdult:maritalStatus.maritalStatus')}>{state.maritalStatus.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.maritalStatus.maritalStatus, { ns: 'applicationFullAdult' })}>{state.maritalStatus.name}</DefinitionListItem>
                 {state.partnerInformation && (
                   <>
-                    <DefinitionListItem term={t('applicationFullAdult:maritalStatus.spouseSin')}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
-                    <DefinitionListItem term={t('applicationFullAdult:maritalStatus.spouseYob')}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t('applicationFullAdult:maritalStatus.consent')}>{t('applicationFullAdult:maritalStatus.consentYes')}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.maritalStatus.spouseSin, { ns: 'applicationFullAdult' })}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.maritalStatus.spouseYob, { ns: 'applicationFullAdult' })}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.maritalStatus.consent, { ns: 'applicationFullAdult' })}>{t(($) => $.maritalStatus.consentYes, { ns: 'applicationFullAdult' })}</DefinitionListItem>
                   </>
                 )}
               </DefinitionList>
@@ -97,7 +99,7 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Edit marital click"
             >
-              {state.maritalStatus === undefined ? t('applicationFullAdult:maritalStatus.addMaritalStatus') : t('applicationFullAdult:maritalStatus.editMaritalStatus')}
+              {state.maritalStatus === undefined ? t(($) => $.maritalStatus.addMaritalStatus, { ns: 'applicationFullAdult' }) : t(($) => $.maritalStatus.editMaritalStatus, { ns: 'applicationFullAdult' })}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -110,10 +112,10 @@ export default function NewAdultMaritalStatus({ loaderData, params }: Route.Comp
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Continue click"
           >
-            {t('applicationFullAdult:maritalStatus.contactInformation')}
+            {t(($) => $.maritalStatus.contactInformation, { ns: 'applicationFullAdult' })}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Adult:Back click">
-            {t('applicationFullAdult:maritalStatus.yourApplication')}
+            {t(($) => $.maritalStatus.yourApplication, { ns: 'applicationFullAdult' })}
           </NavigationButtonLink>
         </div>
       </div>

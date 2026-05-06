@@ -37,7 +37,9 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('application:yourApplication.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.yourApplication.pageTitle) }),
+  };
 
   const applicationFlow: ApplicationFlow = state.inputModel && state.typeOfApplication ? `${state.inputModel}-${state.typeOfApplication}` : 'entry';
   const nextRouteId = getInitialApplicationFlowUrl(applicationFlow, params);
@@ -76,13 +78,13 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
   function getTypeOfApplication(typeOfApplication: string) {
     switch (typeOfApplication) {
       case APPLICANT_TYPE.adult: {
-        return t('application:yourApplication.typeApplicationPersonal');
+        return t(($) => $.yourApplication.typeApplicationPersonal);
       }
       case APPLICANT_TYPE.family: {
-        return t('application:yourApplication.typeApplicationFamily');
+        return t(($) => $.yourApplication.typeApplicationFamily);
       }
       case APPLICANT_TYPE.children: {
-        return t('application:yourApplication.typeApplicationChildren');
+        return t(($) => $.yourApplication.typeApplicationChildren);
       }
       default: {
         return '';
@@ -98,13 +100,13 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
   return (
     <div className="max-w-prose space-y-8">
       <div className="space-y-4">
-        <p>{t('application:completeAllSections')}</p>
+        <p>{t(($) => $.completeAllSections)}</p>
         <p>{completedSectionsLabel}</p>
       </div>
       <Card className={cn(isTypeOfApplicationTypeMismatched && 'border-red-600')}>
         <CardHeader>
           <CardTitle asChild>
-            <h2>{t('application:yourApplication.typeApplicationHeading')}</h2>
+            <h2>{t(($) => $.yourApplication.typeApplicationHeading)}</h2>
           </CardTitle>
           <CardAction>
             {isTypeOfApplicationTypeMismatched && <StatusTag status="error" />}
@@ -113,15 +115,15 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
         </CardHeader>
         <CardContent className="space-y-6">
           {defaultState.typeOfApplication === undefined ? (
-            <p>{t('application:yourApplication.typeApplicationDescription')}</p>
+            <p>{t(($) => $.yourApplication.typeApplicationDescription)}</p>
           ) : (
             <DefinitionList layout="single-column">
-              <DefinitionListItem term={t('application:yourApplication.typeApplicationLegend')}>{getTypeOfApplication(defaultState.typeOfApplication)}</DefinitionListItem>
+              <DefinitionListItem term={t(($) => $.yourApplication.typeApplicationLegend)}>{getTypeOfApplication(defaultState.typeOfApplication)}</DefinitionListItem>
             </DefinitionList>
           )}
           {isTypeOfApplicationTypeMismatched && (
             <ContextualAlert type="danger" role="region" aria-live="polite">
-              <p>{t('application:yourApplication.typeApplicationMismatch')}</p>
+              <p>{t(($) => $.yourApplication.typeApplicationMismatch)}</p>
             </ContextualAlert>
           )}
         </CardContent>
@@ -136,30 +138,28 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Edit type of application click"
           >
-            {defaultState.typeOfApplication === undefined ? t('application:yourApplication.addTypeApplication') : t('application:yourApplication.editTypeApplication')}
+            {defaultState.typeOfApplication === undefined ? t(($) => $.yourApplication.addTypeApplication) : t(($) => $.yourApplication.editTypeApplication)}
           </ButtonLink>
         </CardFooter>
       </Card>
       <Card>
         <CardHeader>
           <CardTitle asChild>
-            <h2>{t('application:yourApplication.personalInfoHeading')}</h2>
+            <h2>{t(($) => $.yourApplication.personalInfoHeading)}</h2>
           </CardTitle>
           <CardAction>{sections.personalInformation.completed && <StatusTag status="complete" />}</CardAction>
         </CardHeader>
         <CardContent>
           {defaultState.personalInformation === undefined ? (
-            <p>{t(`application:yourApplication.personalInfoDescription.${defaultState.context}`)}</p>
+            <p>{t(($) => $.yourApplication.personalInfoDescription[defaultState.context])}</p>
           ) : (
             <DefinitionList layout="single-column">
-              {defaultState.personalInformation.memberId && <DefinitionListItem term={t('application:yourApplication.memberId')}>{formatClientNumber(defaultState.personalInformation.memberId)}</DefinitionListItem>}
-              <DefinitionListItem term={t('application:yourApplication.fullName')}>{`${defaultState.personalInformation.firstName} ${defaultState.personalInformation.lastName}`}</DefinitionListItem>
-              <DefinitionListItem term={t('application:yourApplication.dateOfBirth')}>{formattedDate}</DefinitionListItem>
-              <DefinitionListItem term={t('application:yourApplication.sin')}>{formatSin(defaultState.personalInformation.socialInsuranceNumber)}</DefinitionListItem>
+              {defaultState.personalInformation.memberId && <DefinitionListItem term={t(($) => $.yourApplication.memberId)}>{formatClientNumber(defaultState.personalInformation.memberId)}</DefinitionListItem>}
+              <DefinitionListItem term={t(($) => $.yourApplication.fullName)}>{`${defaultState.personalInformation.firstName} ${defaultState.personalInformation.lastName}`}</DefinitionListItem>
+              <DefinitionListItem term={t(($) => $.yourApplication.dateOfBirth)}>{formattedDate}</DefinitionListItem>
+              <DefinitionListItem term={t(($) => $.yourApplication.sin)}>{formatSin(defaultState.personalInformation.socialInsuranceNumber)}</DefinitionListItem>
               {defaultState.livingIndependently !== undefined && (
-                <DefinitionListItem term={t('application:yourApplication.livingIndependently')}>
-                  {defaultState.livingIndependently ? t('application:yourApplication.livingIndependentlyYes') : t('application:yourApplication.livingIndependentlyNo')}
-                </DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.yourApplication.livingIndependently)}>{defaultState.livingIndependently ? t(($) => $.yourApplication.livingIndependentlyYes) : t(($) => $.yourApplication.livingIndependentlyNo)}</DefinitionListItem>
               )}
             </DefinitionList>
           )}
@@ -176,7 +176,7 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Edit personal information click"
             >
-              {t('application:yourApplication.addPersonalInformation')}
+              {t(($) => $.yourApplication.addPersonalInformation)}
             </ButtonLink>
           </CardFooter>
         )}
@@ -192,42 +192,40 @@ export default function TypeOfApplication({ loaderData, params }: Route.Componen
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Edit personal information click"
             >
-              {defaultState.personalInformation === undefined ? t('application:yourApplication.addPersonalInformation') : t('application:yourApplication.editPersonalInformation')}
+              {defaultState.personalInformation === undefined ? t(($) => $.yourApplication.addPersonalInformation) : t(($) => $.yourApplication.editPersonalInformation)}
             </ButtonLink>
           </CardFooter>
         )}
       </Card>
-
       {showNewOrReturningMemberSection && (
         <Card>
           <CardHeader>
-            <CardTitle>{t('application:yourApplication.newOrReturningHeading')}</CardTitle>
+            <CardTitle>{t(($) => $.yourApplication.newOrReturningHeading)}</CardTitle>
             <CardAction>{sections.newOrReturningMember?.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {defaultState.newOrReturningMember === undefined ? (
-              <p>{t('application:yourApplication.newOrReturningDescription')}</p>
+              <p>{t(($) => $.yourApplication.newOrReturningDescription)}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t('application:yourApplication.previouslyEnrolled')}>{defaultState.newOrReturningMember.isNewOrReturningMember ? t('application:yourApplication.yes') : t('application:yourApplication.no')}</DefinitionListItem>
-                {defaultState.newOrReturningMember.isNewOrReturningMember === true && <DefinitionListItem term={t('application:yourApplication.memberId')}>{defaultState.newOrReturningMember.memberId}</DefinitionListItem>}
+                <DefinitionListItem term={t(($) => $.yourApplication.previouslyEnrolled)}>{defaultState.newOrReturningMember.isNewOrReturningMember ? t(($) => $.yourApplication.yes) : t(($) => $.yourApplication.no)}</DefinitionListItem>
+                {defaultState.newOrReturningMember.isNewOrReturningMember === true && <DefinitionListItem term={t(($) => $.yourApplication.memberId)}>{defaultState.newOrReturningMember.memberId}</DefinitionListItem>}
               </DefinitionList>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
             <ButtonLink id="edit-button" variant="link" className="p-0" routeId="public/application/$id/new-or-returning-member" params={params} startIcon={faCirclePlus} size="lg">
-              {defaultState.newOrReturningMember === undefined ? t('application:yourApplication.addAnswer') : t('application:yourApplication.editAnswer')}
+              {defaultState.newOrReturningMember === undefined ? t(($) => $.yourApplication.addAnswer) : t(($) => $.yourApplication.editAnswer)}
             </ButtonLink>
           </CardFooter>
         </Card>
       )}
-
       <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
         <NavigationButtonLink disabled={!allSectionsCompleted} variant="primary" direction="next" to={nextRouteId} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Continue click">
-          {t('application:yourApplication.application')}
+          {t(($) => $.yourApplication.application)}
         </NavigationButtonLink>
         <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/eligibility-requirements" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Entry:Back click">
-          {t('application:yourApplication.beforeYouStart')}
+          {t(($) => $.yourApplication.beforeYouStart)}
         </NavigationButtonLink>
       </div>
     </div>

@@ -64,7 +64,9 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applicationSpokes:verifyEmail.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.verifyEmail.pageTitle) }),
+  };
   return {
     defaultState: state.email,
     meta,
@@ -120,12 +122,19 @@ export async function action({ context: { appContainer, session }, params, reque
       verificationCode: z
         .string()
         .trim()
-        .min(1, t('applicationSpokes:verifyEmail.errorMessage.verificationCodeRequired'))
+        .min(
+          1,
+          t(($) => $.verifyEmail.errorMessage.verificationCodeRequired),
+        )
         .transform(extractDigits)
 
         .superRefine((val, ctx) => {
           if (state.verifyEmail && state.verifyEmail.verificationAttempts >= MAX_ATTEMPTS) {
-            ctx.addIssue({ code: 'custom', message: t('applicationSpokes:verifyEmail.errorMessage.verificationCodeMaxAttempts'), path: ['verificationCode'] });
+            ctx.addIssue({
+              code: 'custom',
+              message: t(($) => $.verifyEmail.errorMessage.verificationCodeMaxAttempts),
+              path: ['verificationCode'],
+            });
           }
         }),
     });
@@ -221,24 +230,29 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
   return (
     <div className="max-w-prose">
       <ErrorAlert>
-        <h2 className="mb-2 font-bold">{t('applicationSpokes:verifyEmail.verificationCodeAlert.heading')}</h2>
+        <h2 className="mb-2 font-bold">{t(($) => $.verifyEmail.verificationCodeAlert.heading)}</h2>
         <p className="-mb-3">
-          <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:verifyEmail.verificationCodeAlert.detail" components={{ requestLink }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.verificationCodeAlert.detail} components={{ requestLink }} />
         </p>
       </ErrorAlert>
       <ErrorSummaryProvider actionData={fetcher.data}>
-        <p className="mb-4">{t('applicationSpokes:verifyEmail.verificationCode', { email: defaultState })}</p>
-        <p className="mb-4">{t('applicationSpokes:verifyEmail.requestNew')}</p>
-        <p className="mb-8">
-          <Trans ns={handle.i18nNamespaces} i18nKey="applicationSpokes:verifyEmail.unableToVerify" components={{ communicationLink }} />
+        <p className="mb-4">
+          {t(($) => $.verifyEmail.verificationCode, {
+            email: defaultState,
+            ns: 'applicationSpokes',
+          })}
         </p>
-        <p className="mb-4 italic">{t('application:requiredLabel')}</p>
+        <p className="mb-4">{t(($) => $.verifyEmail.requestNew)}</p>
+        <p className="mb-8">
+          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
+        </p>
+        <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'application' })}</p>
         <ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <CsrfTokenInput />
           <div className="mb-6">
             <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t('applicationSpokes:verifyEmail.verificationCodeLabel')} inputMode="numeric" required />
+              <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t(($) => $.verifyEmail.verificationCodeLabel)} inputMode="numeric" required />
             </div>
             <LoadingButton
               id="request-button"
@@ -258,7 +272,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
                 await fetcher.submit(formData, { method: 'post' });
               }}
             >
-              {t('applicationSpokes:verifyEmail.requestNewCode')}
+              {t(($) => $.verifyEmail.requestNewCode)}
             </LoadingButton>
           </div>
 
@@ -272,10 +286,10 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
               loading={isSubmitting && submittedAction === FORM_ACTION.submit}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Verify email click"
             >
-              {t('applicationSpokes:verifyEmail.continue')}
+              {t(($) => $.verifyEmail.continue)}
             </LoadingButton>
             <ButtonLink id="back-button" variant="secondary" routeId="public/application/$id/email" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Verify email click">
-              {t('applicationSpokes:verifyEmail.back')}
+              {t(($) => $.verifyEmail.back)}
             </ButtonLink>
           </div>
         </fetcher.Form>
@@ -283,13 +297,18 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t('applicationSpokes:verifyEmail.codeSent.heading')}</DialogTitle>
+            <DialogTitle>{t(($) => $.verifyEmail.codeSent.heading)}</DialogTitle>
           </DialogHeader>
-          <DialogDescription>{t('applicationSpokes:verifyEmail.codeSent.detail', { email: defaultState })}</DialogDescription>
+          <DialogDescription>
+            {t(($) => $.verifyEmail.codeSent.detail, {
+              email: defaultState,
+              ns: 'applicationSpokes',
+            })}
+          </DialogDescription>
           <DialogFooter>
             <DialogClose asChild>
               <Button id="modal-continue" disabled={isSubmitting} variant="primary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Modal Continue - Verify email click">
-                {t('applicationSpokes:verifyEmail.continue')}
+                {t(($) => $.verifyEmail.continue)}
               </Button>
             </DialogClose>
           </DialogFooter>

@@ -49,7 +49,9 @@ export async function loader({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['renewal-family']);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('protectedApplicationRenewalFamily:submit.pageTitle') }) };
+  const meta = {
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.submit.pageTitle, { ns: 'protectedApplicationRenewalFamily' }) }),
+  };
 
   const children = [];
   for (const child of state.children) {
@@ -89,8 +91,12 @@ export async function action({ context: { appContainer, session }, request, para
   securityHandler.validateCsrfToken({ formData, session });
 
   const submitTermsSchema = z.object({
-    acknowledgeInfo: z.literal(true, { error: t('protectedApplicationRenewalFamily:submit.errorMessage.acknowledgeInfoRequired') }),
-    acknowledgeCriteria: z.literal(true, { error: t('protectedApplicationRenewalFamily:submit.errorMessage.acknowledgeCriteriaRequired') }),
+    acknowledgeInfo: z.literal(true, {
+      error: t(($) => $.submit.errorMessage.acknowledgeInfoRequired, { ns: 'protectedApplicationRenewalFamily' }),
+    }),
+    acknowledgeCriteria: z.literal(true, {
+      error: t(($) => $.submit.errorMessage.acknowledgeCriteriaRequired, { ns: 'protectedApplicationRenewalFamily' }),
+    }),
   });
 
   const parsedDataResult = submitTermsSchema.safeParse({
@@ -120,7 +126,7 @@ export default function ProtectedRenewalFamilySubmit({ loaderData, params }: Rou
 
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t('protectedApplicationRenewalFamily:submit.doYouQualifyHref')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t(($) => $.submit.doYouQualifyHref, { ns: 'protectedApplicationRenewalFamily' })} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
@@ -129,9 +135,9 @@ export default function ProtectedRenewalFamilySubmit({ loaderData, params }: Rou
         <ErrorSummary />
         <div className="space-y-8">
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('protectedApplicationRenewalFamily:submit.overview')}</h2>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.overview, { ns: 'protectedApplicationRenewalFamily' })}</h2>
             <div className="space-y-4">
-              <p>{t('protectedApplicationRenewalFamily:submit.youAreSubmitting')}</p>
+              <p>{t(($) => $.submit.youAreSubmitting, { ns: 'protectedApplicationRenewalFamily' })}</p>
               <ul className="list-disc space-y-1 pl-7">
                 <li>{state.applicantName}</li>
                 {state.children.map((child, index) => (
@@ -141,31 +147,31 @@ export default function ProtectedRenewalFamilySubmit({ loaderData, params }: Rou
             </div>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('protectedApplicationRenewalFamily:submit.reviewYourApplication')}</h2>
-            <p>{t('protectedApplicationRenewalFamily:submit.pleaseReview')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.reviewYourApplication, { ns: 'protectedApplicationRenewalFamily' })}</h2>
+            <p>{t(($) => $.submit.pleaseReview, { ns: 'protectedApplicationRenewalFamily' })}</p>
             <ButtonLink variant="primary" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Action click">
-              {t('protectedApplicationRenewalFamily:submit.reviewApplication')}
+              {t(($) => $.submit.reviewApplication, { ns: 'protectedApplicationRenewalFamily' })}
             </ButtonLink>
           </section>
           <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t('protectedApplicationRenewalFamily:submit.submitYourApplication')}</h2>
-            <p>{t('protectedApplicationRenewalFamily:submit.bySubmitting')}</p>
+            <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.submitYourApplication, { ns: 'protectedApplicationRenewalFamily' })}</h2>
+            <p>{t(($) => $.submit.bySubmitting, { ns: 'protectedApplicationRenewalFamily' })}</p>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey="protectedApplicationRenewalFamily:submit.reviewEligibilityCriteria" components={{ eligibilityLink }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.protectedApplicationRenewalFamily.submit.reviewEligibilityCriteria} components={{ eligibilityLink }} />
             </p>
             <fetcher.Form method="post" noValidate>
               <CsrfTokenInput />
               <div className="space-y-2">
                 <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
-                  {t('protectedApplicationRenewalFamily:submit.infoIsCorrect')}
+                  {t(($) => $.submit.infoIsCorrect, { ns: 'protectedApplicationRenewalFamily' })}
                 </InputCheckbox>
                 <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
-                  {t('protectedApplicationRenewalFamily:submit.iUnderstand')}
+                  {t(($) => $.submit.iUnderstand, { ns: 'protectedApplicationRenewalFamily' })}
                 </InputCheckbox>
               </div>
               <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_170px]">
                 <LoadingButton loading={isSubmitting} variant="green" className="order-first h-full text-base sm:order-last sm:text-lg" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Submit click">
-                  {t('protectedApplicationRenewalFamily:submit.submit')}
+                  {t(($) => $.submit.submit, { ns: 'protectedApplicationRenewalFamily' })}
                 </LoadingButton>
                 <NavigationButtonLink
                   disabled={isSubmitting}
@@ -175,7 +181,7 @@ export default function ProtectedRenewalFamilySubmit({ loaderData, params }: Rou
                   params={params}
                   data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Back click"
                 >
-                  {t('protectedApplicationRenewalFamily:submit.childrensApplication')}
+                  {t(($) => $.submit.childrensApplication, { ns: 'protectedApplicationRenewalFamily' })}
                 </NavigationButtonLink>
               </div>
             </fetcher.Form>
@@ -183,7 +189,7 @@ export default function ProtectedRenewalFamilySubmit({ loaderData, params }: Rou
         </div>
         <div className="mt-8">
           <InlineLink routeId="protected/application/$id/renewal-family/exit-application" params={params}>
-            {t('protectedApplicationRenewalFamily:submit.exitApplication')}
+            {t(($) => $.submit.exitApplication, { ns: 'protectedApplicationRenewalFamily' })}
           </InlineLink>
         </div>
       </div>
