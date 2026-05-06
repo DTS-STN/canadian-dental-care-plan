@@ -196,7 +196,6 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t(($) => $.contactInformation.preferredLanguage, { ns: 'protectedApplicationIntakeFamily' })}>{preferredLanguage?.name}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.contactInformation.preferredMethod, { ns: 'protectedApplicationIntakeFamily' })}>{preferredMethod?.name}</DefinitionListItem>
-                {state.email && <DefinitionListItem term={t(($) => $.contactInformation.email, { ns: 'protectedApplicationIntakeFamily' })}>{state.email}</DefinitionListItem>}
               </DefinitionList>
             ) : (
               <p>{t(($) => $.contactInformation.communicationPreferencesHelp, { ns: 'protectedApplicationIntakeFamily' })}</p>

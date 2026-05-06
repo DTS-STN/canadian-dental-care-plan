@@ -76,7 +76,6 @@ export async function loader({ context: { appContainer, session }, request, para
     homeAddressInfo,
     preferredLanguage: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale) : undefined,
     preferredMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale) : undefined,
-    preferredNotificationMethod: state.communicationPreferences?.hasChanged ? appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale) : undefined,
     sections: {
       maritalStatus: { completed: isMaritalStatusSectionCompleted(state) },
       phoneNumber: { completed: isPhoneNumberSectionCompleted(state) },
@@ -89,7 +88,7 @@ export async function loader({ context: { appContainer, session }, request, para
 }
 
 export default function ProtectedNewChildParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
-  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, sections } = loaderData;
+  const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, sections } = loaderData;
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
@@ -239,7 +238,6 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredLanguage, { ns: 'protectedApplicationIntakeChild' })}>{preferredLanguage?.name}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredMethod, { ns: 'protectedApplicationIntakeChild' })}>{preferredMethod?.name}</DefinitionListItem>
-                <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredNotificationMethod, { ns: 'protectedApplicationIntakeChild' })}>{preferredNotificationMethod?.name}</DefinitionListItem>
               </DefinitionList>
             ) : (
               <p>{t(($) => $.parentOrGuardian.communicationPreferencesHelp, { ns: 'protectedApplicationIntakeChild' })}</p>

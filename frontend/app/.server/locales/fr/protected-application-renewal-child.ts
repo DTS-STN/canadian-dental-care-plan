@@ -21,7 +21,6 @@ const ns = {
     communicationPreferencesHelp: "Veuillez choisir vos préférences de communication.",
     preferredLanguage: "Langue de préférence",
     preferredMethod: "Préférence de communication de Sun Life",
-    preferredNotificationMethod: "Préférence de communication du gouvernement du Canada",
     email: "Adresse courriel",
     emailHelp: "Veuillez entrer votre adresse courriel.",
     addEmail: "Ajouter une adresse courriel",

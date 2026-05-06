@@ -81,7 +81,6 @@ export async function loader({ context: { appContainer, session }, request, para
         ? {
             preferredLanguage: languageService.getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale).name,
             preferredMethod: sunLifeCommunicationMethodService.getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale).name,
-            preferredNotificationMethod: gcCommunicationMethodService.getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale).name,
           }
         : undefined,
       mailingAddress: state.mailingAddress?.hasChanged
@@ -712,7 +711,6 @@ function CommunicationPreferencesCardContent(): JSX.Element {
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredLanguage, { ns: 'protectedApplicationRenewalChild' })}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
           <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredMethod, { ns: 'protectedApplicationRenewalChild' })}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
-          <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredNotificationMethod, { ns: 'protectedApplicationRenewalChild' })}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
         </DefinitionList>
       </CardContent>
     );
@@ -723,8 +721,7 @@ function CommunicationPreferencesCardContent(): JSX.Element {
       <CardContent>
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredLanguage, { ns: 'protectedApplicationRenewalChild' })}>{clientApplication.communicationPreferences.preferredLanguage}</DefinitionListItem>
-          <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredMethod, { ns: 'protectedApplicationRenewalChild' })}>{clientApplication.communicationPreferences.preferredMethod}</DefinitionListItem>
-          <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredNotificationMethod, { ns: 'protectedApplicationRenewalChild' })}>{clientApplication.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
+          <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredMethod, { ns: 'protectedApplicationRenewalChild' })}>{clientApplication.communicationPreferences.preferredMethod}</DefinitionListItem>{' '}
         </DefinitionList>
       </CardContent>
     );

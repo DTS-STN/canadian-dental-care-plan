@@ -196,7 +196,6 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t(($) => $.contactInformation.preferredLanguage, { ns: 'protectedApplicationIntakeAdult' })}>{preferredLanguage?.name}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.contactInformation.preferredMethod, { ns: 'protectedApplicationIntakeAdult' })}>{preferredMethod?.name}</DefinitionListItem>
-                {state.email && <DefinitionListItem term={t(($) => $.contactInformation.email, { ns: 'protectedApplicationIntakeAdult' })}>{state.email}</DefinitionListItem>}
               </DefinitionList>
             ) : (
               <p>{t(($) => $.contactInformation.communicationPreferencesHelp, { ns: 'protectedApplicationIntakeAdult' })}</p>

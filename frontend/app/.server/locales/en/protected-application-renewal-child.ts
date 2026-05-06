@@ -29,7 +29,6 @@ const ns = {
     updateCommunicationPreferences: "Update my communication preferences",
     preferredLanguage: "Language preference",
     preferredMethod: "Sun Life communication preference",
-    preferredNotificationMethod: "Government of Canada communication preference",
     email: "Email address",
     emailHelp: "Enter your email address.",
     addEmail: "Add email address",
