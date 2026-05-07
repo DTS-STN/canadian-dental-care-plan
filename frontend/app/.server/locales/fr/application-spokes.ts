@@ -193,7 +193,7 @@ const ns = {
     lastName: "Nom de famille",
     firstName: "Prénom",
     dob: "Date de naissance",
-    singleLegalName: "Si vous utilisez un seul nom légal",
+    singleLegalName: "Si vous n'avez qu'un seul nom légal",
     nameInstructions: "Si vous n'avez qu'un seul nom légal, saisissez-le à la fois dans les champs «\u00A0Prénom\u00A0» et «\u00A0Nom de famille\u00A0».",
     backBtn: "Retour",
     saveBtn: "Sauvegarder",
