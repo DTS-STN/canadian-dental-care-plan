@@ -11,6 +11,7 @@ import { TYPES } from '~/.server/constants';
 import { getProtectedApplicationState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -39,7 +40,6 @@ const HAS_DENTAL_INSURANCE_OPTION = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.dentalInsurance,
-  pageTitleI18nKey: 'protectedApplicationSpokes:dentalInsurance.title',
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -165,93 +165,96 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
   const t4aHref = <InlineLink to={t(($) => $.dentalInsurance.no.alertT4aHref)} className="external-link" newTabIndicator target="_blank" />;
 
   return (
-    <ErrorSummaryProvider actionData={fetcher.data}>
-      <div className="max-w-prose">
-        <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
-        <ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <div className="my-6">
-            <InputRadios
-              id="has-dental-insurance"
-              name="hasDentalInsurance"
-              legend={t(($) => $.dentalInsurance.legend)}
-              options={[
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.optionYes} />,
-                  value: HAS_DENTAL_INSURANCE_OPTION.yes,
-                  defaultChecked: defaultState?.hasDentalInsurance === true,
-                  onChange: handleOnHasDentalInsuranceChanged,
-                },
-                {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.optionNo} />,
-                  value: HAS_DENTAL_INSURANCE_OPTION.no,
-                  defaultChecked: defaultState?.hasDentalInsurance === false,
-                  onChange: handleOnHasDentalInsuranceChanged,
-                },
-              ]}
-              helpMessagePrimary={helpMessage}
-              helpMessagePrimaryClassName="text-black"
-              errorMessage={errors?.hasDentalInsurance}
-              required
-            />
-          </div>
-          {hasDentalInsurance === true && (
-            <div className="mb-4 space-y-4">
-              <ContextualAlert type="info" id="dental-insurance-confirmation-yes">
-                <h2 className="font-lato mb-2 text-xl font-semibold">{t(($) => $.dentalInsurance.yes.alertTitle)}</h2>
-                <p>{t(($) => $.dentalInsurance.yes.alertBody)}</p>
-              </ContextualAlert>
-              <InputCheckbox
-                id="dental-insurance-eligibility-confirmation-yes"
-                name="dentalInsuranceEligibilityConfirmationYes"
-                value={CHECKBOX_VALUE.yes}
-                defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmationYes}
-                errorMessage={errors?.dentalInsuranceEligibilityConfirmationYes}
+    <>
+      <AppPageTitle>{t(($) => $.dentalInsurance.title)}</AppPageTitle>
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <div className="max-w-prose">
+          <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <div className="my-6">
+              <InputRadios
+                id="has-dental-insurance"
+                name="hasDentalInsurance"
+                legend={t(($) => $.dentalInsurance.legend)}
+                options={[
+                  {
+                    children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.optionYes} />,
+                    value: HAS_DENTAL_INSURANCE_OPTION.yes,
+                    defaultChecked: defaultState?.hasDentalInsurance === true,
+                    onChange: handleOnHasDentalInsuranceChanged,
+                  },
+                  {
+                    children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.optionNo} />,
+                    value: HAS_DENTAL_INSURANCE_OPTION.no,
+                    defaultChecked: defaultState?.hasDentalInsurance === false,
+                    onChange: handleOnHasDentalInsuranceChanged,
+                  },
+                ]}
+                helpMessagePrimary={helpMessage}
+                helpMessagePrimaryClassName="text-black"
+                errorMessage={errors?.hasDentalInsurance}
                 required
-                aria-describedby="dental-insurance-confirmation-yes"
-              >
-                {t(($) => $.dentalInsurance.yes.confirmation)}
-              </InputCheckbox>
+              />
             </div>
-          )}
-          {hasDentalInsurance === false && (
-            <div className="mb-4 space-y-4">
-              <ContextualAlert type="info" id="dental-insurance-confirmation-no">
-                <h2 className="font-lato mb-2 text-xl font-semibold">{t(($) => $.dentalInsurance.no.alertTitle)}</h2>
-                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.no.alertBody} components={{ t4Href, t4aHref }} />
-              </ContextualAlert>
-              <InputCheckbox
-                id="dental-insurance-eligibility-confirmation-no"
-                name="dentalInsuranceEligibilityConfirmationNo"
-                value={CHECKBOX_VALUE.yes}
-                defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmationNo}
-                errorMessage={errors?.dentalInsuranceEligibilityConfirmationNo}
-                required
-                aria-describedby="dental-insurance-confirmation-no"
-              >
-                {t(($) => $.dentalInsurance.no.confirmation)}
-              </InputCheckbox>
-            </div>
-          )}
+            {hasDentalInsurance === true && (
+              <div className="mb-4 space-y-4">
+                <ContextualAlert type="info" id="dental-insurance-confirmation-yes">
+                  <h2 className="font-lato mb-2 text-xl font-semibold">{t(($) => $.dentalInsurance.yes.alertTitle)}</h2>
+                  <p>{t(($) => $.dentalInsurance.yes.alertBody)}</p>
+                </ContextualAlert>
+                <InputCheckbox
+                  id="dental-insurance-eligibility-confirmation-yes"
+                  name="dentalInsuranceEligibilityConfirmationYes"
+                  value={CHECKBOX_VALUE.yes}
+                  defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmationYes}
+                  errorMessage={errors?.dentalInsuranceEligibilityConfirmationYes}
+                  required
+                  aria-describedby="dental-insurance-confirmation-yes"
+                >
+                  {t(($) => $.dentalInsurance.yes.confirmation)}
+                </InputCheckbox>
+              </div>
+            )}
+            {hasDentalInsurance === false && (
+              <div className="mb-4 space-y-4">
+                <ContextualAlert type="info" id="dental-insurance-confirmation-no">
+                  <h2 className="font-lato mb-2 text-xl font-semibold">{t(($) => $.dentalInsurance.no.alertTitle)}</h2>
+                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.no.alertBody} components={{ t4Href, t4aHref }} />
+                </ContextualAlert>
+                <InputCheckbox
+                  id="dental-insurance-eligibility-confirmation-no"
+                  name="dentalInsuranceEligibilityConfirmationNo"
+                  value={CHECKBOX_VALUE.yes}
+                  defaultChecked={defaultState?.dentalInsuranceEligibilityConfirmationNo}
+                  errorMessage={errors?.dentalInsuranceEligibilityConfirmationNo}
+                  required
+                  aria-describedby="dental-insurance-confirmation-no"
+                >
+                  {t(($) => $.dentalInsurance.no.confirmation)}
+                </InputCheckbox>
+              </div>
+            )}
 
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Access to other dental insurance click">
-              {t(($) => $.dentalInsurance.saveBtn)}
-            </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              variant="secondary"
-              routeId={`protected/application/$id/${applicationFlow}/dental-insurance`}
-              params={params}
-              disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Access to other dental insurance click"
-            >
-              {t(($) => $.dentalInsurance.backBtn)}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </div>
-    </ErrorSummaryProvider>
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Access to other dental insurance click">
+                {t(($) => $.dentalInsurance.saveBtn)}
+              </LoadingButton>
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId={`protected/application/$id/${applicationFlow}/dental-insurance`}
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Access to other dental insurance click"
+              >
+                {t(($) => $.dentalInsurance.backBtn)}
+              </ButtonLink>
+            </div>
+          </fetcher.Form>
+        </div>
+      </ErrorSummaryProvider>
+    </>
   );
 }

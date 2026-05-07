@@ -12,6 +12,7 @@ import { loadPublicApplicationFullChildState } from '~/.server/routes/helpers/pu
 import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildInformationSectionCompleted } from '~/.server/routes/helpers/public-application-full-section-checks';
 import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -35,7 +36,6 @@ const FORM_ACTION = { add: 'add', remove: 'remove' } as const;
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('applicationFullChild', 'application', 'gcweb', 'common'),
   pageIdentifier: pageIds.public.application.fullChild.childApplication,
-  pageTitleI18nKey: 'applicationFullChild:childrensApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -150,6 +150,7 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
 
   return (
     <>
+      <AppPageTitle>{t(($) => $.childrensApplication.pageTitle)}</AppPageTitle>
       <ProgressStepper activeStep="childrensApplication" className="mb-8" />
       <div className="max-w-prose space-y-8">
         {state.children.map((child, index) => {
@@ -166,7 +167,6 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
               <h2 className="font-lato mb-4 text-2xl font-bold">
                 {t(($) => $.childrensApplication.childTitle, {
                   childNumber: index + 1,
-                  ns: 'applicationFullChild',
                 })}
               </h2>
               <div className="space-y-4">
@@ -185,7 +185,6 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                     <h2>
                       {t(($) => $.childrensApplication.childInformationCardTitle, {
                         childNumber: index + 1,
-                        ns: 'applicationFullChild',
                       })}
                     </h2>
                   </CardTitle>
@@ -219,7 +218,6 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                       ? t(($) => $.childrensApplication.addChildInformation)
                       : t(($) => $.childrensApplication.editChildInformation, {
                           childNumber: index + 1,
-                          ns: 'applicationFullChild',
                         })}
                   </ButtonLink>
                 </CardFooter>
@@ -257,7 +255,6 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                         ? `${t(($) => $.childrensApplication.addAnswer)} - ${t(($) => $.childrensApplication.dentalInsuranceTitle)}`
                         : t(($) => $.childrensApplication.editChildDentalInsurance, {
                             childNumber: index + 1,
-                            ns: 'applicationFullChild',
                           })
                     }
                   >
@@ -265,7 +262,6 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                       ? t(($) => $.childrensApplication.addAnswer)
                       : t(($) => $.childrensApplication.editChildDentalInsurance, {
                           childNumber: index + 1,
-                          ns: 'applicationFullChild',
                         })}
                   </ButtonLink>
                 </CardFooter>
@@ -313,7 +309,6 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                         ? `${t(($) => $.childrensApplication.addAnswer)} - ${t(($) => $.childrensApplication.dentalBenefitsTitle)}`
                         : t(($) => $.childrensApplication.editChildDentalBenefits, {
                             childNumber: index + 1,
-                            ns: 'applicationFullChild',
                           })
                     }
                   >
@@ -321,7 +316,6 @@ export default function NewChildChildrensApplication({ loaderData, params }: Rou
                       ? t(($) => $.childrensApplication.addAnswer)
                       : t(($) => $.childrensApplication.editChildDentalBenefits, {
                           childNumber: index + 1,
-                          ns: 'applicationFullChild',
                         })}
                   </ButtonLink>
                 </CardFooter>

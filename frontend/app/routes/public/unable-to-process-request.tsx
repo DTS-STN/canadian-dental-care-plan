@@ -3,6 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { Route } from './+types/unable-to-process-request';
 
 import { getFixedT } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { InlineLink } from '~/components/inline-link';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { pageIds } from '~/page-ids';
@@ -14,7 +15,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('unableToProcessRequest', 'gcweb'),
   pageIdentifier: pageIds.public.unableToProcessRequest,
-  pageTitleI18nKey: 'unableToProcessRequest:pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -37,6 +37,7 @@ export default function UnableToProcessRequest({ loaderData, params }: Route.Com
 
   return (
     <PublicLayout>
+      <AppPageTitle>{t(($) => $.pageTitle)}</AppPageTitle>
       <div className="max-w-prose">
         <div className="space-y-4">
           <p>{t(($) => $.unableToProcess)}</p>

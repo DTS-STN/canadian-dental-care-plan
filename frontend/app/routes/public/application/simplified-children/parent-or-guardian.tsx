@@ -14,6 +14,7 @@ import { loadPublicApplicationSimplifiedChildState } from '~/.server/routes/help
 import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/public-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -35,9 +36,8 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'applicationSimplifiedChild', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSimplifiedChild', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.simplifiedChild.parentOrGuardian,
-  pageTitleI18nKey: 'applicationSimplifiedChild:parentOrGuardian.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -48,7 +48,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = {
-    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.parentOrGuardian.pageTitle, { ns: 'applicationSimplifiedChild' }) }),
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.parentOrGuardian.pageTitle) }),
   };
   const locale = getLocale(request);
 
@@ -174,65 +174,68 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
   const fetcher = useFetcher<typeof action>();
 
   return (
-    <fetcher.Form method="post" noValidate>
-      <CsrfTokenInput />
-      <ProgressStepper activeStep="parentOrGuardian" className="mb-8" />
-      <div className="max-w-prose space-y-8">
-        <div className="space-y-4">
-          <p>{t(($) => $.confirmInformation)}</p>
-          <p>{t(($) => $.completeAllSections)}</p>
-          <p>{completedSectionsLabel}</p>
+    <>
+      <AppPageTitle>{t(($) => $.parentOrGuardian.pageHeading)}</AppPageTitle>
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <ProgressStepper activeStep="parentOrGuardian" className="mb-8" />
+        <div className="max-w-prose space-y-8">
+          <div className="space-y-4">
+            <p>{t(($) => $.confirmInformation, { ns: 'application' })}</p>
+            <p>{t(($) => $.completeAllSections, { ns: 'application' })}</p>
+            <p>{completedSectionsLabel}</p>
+          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle asChild>
+                <h2>{t(($) => $.parentOrGuardian.phoneNumber)}</h2>
+              </CardTitle>
+              <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
+            </CardHeader>
+            <PhoneNumberCardContent />
+            <PhoneNumberCardFooter />
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle asChild>
+                <h2>{t(($) => $.parentOrGuardian.mailingAndHomeAddress)}</h2>
+              </CardTitle>
+              <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
+            </CardHeader>
+            <MailingAndHomeAddressCardContent />
+            <MailingAndHomeAddressCardFooter />
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle asChild>
+                <h2>{t(($) => $.parentOrGuardian.communicationPreferences)}</h2>
+              </CardTitle>
+              <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
+            </CardHeader>
+            <CommunicationPreferencesCardContent />
+            <CommunicationPreferencesCardFooter />
+          </Card>
+
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <NavigationButtonLink
+              disabled={!allSectionsCompleted}
+              variant="primary"
+              direction="next"
+              routeId="public/application/$id/simplified-children/childrens-application"
+              params={params}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Continue click"
+            >
+              {t(($) => $.parentOrGuardian.childrensApplication)}
+            </NavigationButtonLink>
+            <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Back click">
+              {t(($) => $.parentOrGuardian.yourApplication)}
+            </NavigationButtonLink>
+          </div>
         </div>
-        <Card>
-          <CardHeader>
-            <CardTitle asChild>
-              <h2>{t(($) => $.parentOrGuardian.phoneNumber, { ns: 'applicationSimplifiedChild' })}</h2>
-            </CardTitle>
-            <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          <PhoneNumberCardContent />
-          <PhoneNumberCardFooter />
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle asChild>
-              <h2>{t(($) => $.parentOrGuardian.mailingAndHomeAddress, { ns: 'applicationSimplifiedChild' })}</h2>
-            </CardTitle>
-            <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          <MailingAndHomeAddressCardContent />
-          <MailingAndHomeAddressCardFooter />
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle asChild>
-              <h2>{t(($) => $.parentOrGuardian.communicationPreferences, { ns: 'applicationSimplifiedChild' })}</h2>
-            </CardTitle>
-            <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          <CommunicationPreferencesCardContent />
-          <CommunicationPreferencesCardFooter />
-        </Card>
-
-        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink
-            disabled={!allSectionsCompleted}
-            variant="primary"
-            direction="next"
-            routeId="public/application/$id/simplified-children/childrens-application"
-            params={params}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Continue click"
-          >
-            {t(($) => $.parentOrGuardian.childrensApplication, { ns: 'applicationSimplifiedChild' })}
-          </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Back click">
-            {t(($) => $.parentOrGuardian.yourApplication, { ns: 'applicationSimplifiedChild' })}
-          </NavigationButtonLink>
-        </div>
-      </div>
-    </fetcher.Form>
+      </fetcher.Form>
+    </>
   );
 }
 
@@ -260,11 +263,11 @@ function PhoneNumberCardContent(): JSX.Element {
   if (state.phoneNumber) {
     return (
       <CardContent>
-        {!state.phoneNumber.hasChanged && <p>{t(($) => $.parentOrGuardian.noChange, { ns: 'applicationSimplifiedChild' })}</p>}
+        {!state.phoneNumber.hasChanged && <p>{t(($) => $.parentOrGuardian.noChange)}</p>}
         {state.phoneNumber.hasChanged && (
           <DefinitionList layout="single-column">
-            <DefinitionListItem term={t(($) => $.parentOrGuardian.phoneNumber, { ns: 'applicationSimplifiedChild' })}>{state.phoneNumber.primary}</DefinitionListItem>
-            {state.phoneNumber.alternate && <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber, { ns: 'applicationSimplifiedChild' })}>{state.phoneNumber.alternate}</DefinitionListItem>}
+            <DefinitionListItem term={t(($) => $.parentOrGuardian.phoneNumber)}>{state.phoneNumber.primary}</DefinitionListItem>
+            {state.phoneNumber.alternate && <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber)}>{state.phoneNumber.alternate}</DefinitionListItem>}
           </DefinitionList>
         )}
       </CardContent>
@@ -274,14 +277,14 @@ function PhoneNumberCardContent(): JSX.Element {
   if (clientApplication.hasPhoneNumber) {
     return (
       <CardContent>
-        <p>{t(($) => $.parentOrGuardian.updatePhoneNumberHelp, { ns: 'applicationSimplifiedChild' })}</p>
+        <p>{t(($) => $.parentOrGuardian.updatePhoneNumberHelp)}</p>
       </CardContent>
     );
   }
 
   return (
     <CardContent>
-      <p>{t(($) => $.parentOrGuardian.phoneNumberHelp, { ns: 'applicationSimplifiedChild' })}</p>
+      <p>{t(($) => $.parentOrGuardian.phoneNumberHelp)}</p>
     </CardContent>
   );
 }
@@ -321,7 +324,7 @@ function PhoneNumberCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Edit phone click"
         >
-          {sections.phoneNumber.completed ? t(($) => $.parentOrGuardian.editPhoneNumber, { ns: 'applicationSimplifiedChild' }) : t(($) => $.parentOrGuardian.addPhoneNumber, { ns: 'applicationSimplifiedChild' })}
+          {sections.phoneNumber.completed ? t(($) => $.parentOrGuardian.editPhoneNumber) : t(($) => $.parentOrGuardian.addPhoneNumber)}
         </ButtonLink>
       </CardFooter>
     );
@@ -341,7 +344,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Update phone click"
           >
-            {t(($) => $.parentOrGuardian.updatePhoneNumber, { ns: 'applicationSimplifiedChild' })}
+            {t(($) => $.parentOrGuardian.updatePhoneNumber)}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -355,7 +358,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Complete phone click"
           >
-            <span className="text-left">{t(($) => $.parentOrGuardian.phoneNumberUnchanged, { ns: 'applicationSimplifiedChild' })}</span>
+            <span className="text-left">{t(($) => $.parentOrGuardian.phoneNumberUnchanged)}</span>
           </Button>
         </div>
       </CardFooter>
@@ -374,7 +377,7 @@ function PhoneNumberCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Add phone click"
       >
-        {t(($) => $.parentOrGuardian.addPhoneNumber, { ns: 'applicationSimplifiedChild' })}
+        {t(($) => $.parentOrGuardian.addPhoneNumber)}
       </ButtonLink>
     </CardFooter>
   );
@@ -407,10 +410,10 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
   if (state.mailingAddress && state.homeAddress) {
     return (
       <CardContent>
-        {!state.mailingAddress.hasChanged && !state.homeAddress.hasChanged && <p>{t(($) => $.parentOrGuardian.noChange, { ns: 'applicationSimplifiedChild' })}</p>}
+        {!state.mailingAddress.hasChanged && !state.homeAddress.hasChanged && <p>{t(($) => $.parentOrGuardian.noChange)}</p>}
         {state.mailingAddress.hasChanged && (
           <DefinitionList layout="single-column">
-            <DefinitionListItem term={t(($) => $.parentOrGuardian.mailingAddress, { ns: 'applicationSimplifiedChild' })}>
+            <DefinitionListItem term={t(($) => $.parentOrGuardian.mailingAddress)}>
               <Address
                 address={{
                   address: state.mailingAddress.address ?? '',
@@ -423,7 +426,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
             </DefinitionListItem>
 
             {state.homeAddress.hasChanged && (
-              <DefinitionListItem term={t(($) => $.parentOrGuardian.homeAddress, { ns: 'applicationSimplifiedChild' })}>
+              <DefinitionListItem term={t(($) => $.parentOrGuardian.homeAddress)}>
                 <Address
                   address={{
                     address: state.homeAddress.address ?? '',
@@ -445,7 +448,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
   if (clientApplication.hasMailingAddress && clientApplication.hasHomeAddress) {
     return (
       <CardContent>
-        <p>{t(($) => $.parentOrGuardian.updateAddressHelp, { ns: 'applicationSimplifiedChild' })}</p>
+        <p>{t(($) => $.parentOrGuardian.updateAddressHelp)}</p>
       </CardContent>
     );
   }
@@ -453,7 +456,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
   // Case 3: No data at all
   return (
     <CardContent>
-      <p>{t(($) => $.parentOrGuardian.addressHelp, { ns: 'applicationSimplifiedChild' })}</p>
+      <p>{t(($) => $.parentOrGuardian.addressHelp)}</p>
     </CardContent>
   );
 }
@@ -494,7 +497,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Edit address click"
         >
-          {sections.address.completed ? t(($) => $.parentOrGuardian.editAddress, { ns: 'applicationSimplifiedChild' }) : t(($) => $.parentOrGuardian.addAddress, { ns: 'applicationSimplifiedChild' })}
+          {sections.address.completed ? t(($) => $.parentOrGuardian.editAddress) : t(($) => $.parentOrGuardian.addAddress)}
         </ButtonLink>
       </CardFooter>
     );
@@ -514,7 +517,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Update address click"
           >
-            {t(($) => $.parentOrGuardian.updateAddress, { ns: 'applicationSimplifiedChild' })}
+            {t(($) => $.parentOrGuardian.updateAddress)}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -528,7 +531,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Complete address click"
           >
-            <span className="text-left">{t(($) => $.parentOrGuardian.addressUnchanged, { ns: 'applicationSimplifiedChild' })}</span>
+            <span className="text-left">{t(($) => $.parentOrGuardian.addressUnchanged)}</span>
           </Button>
         </div>
       </CardFooter>
@@ -547,7 +550,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Add address click"
       >
-        {t(($) => $.parentOrGuardian.addAddress, { ns: 'applicationSimplifiedChild' })}
+        {t(($) => $.parentOrGuardian.addAddress)}
       </ButtonLink>
     </CardFooter>
   );
@@ -579,13 +582,13 @@ function CommunicationPreferencesCardContent(): JSX.Element {
   if (state.communicationPreferences) {
     return (
       <CardContent>
-        {!state.communicationPreferences.hasChanged && <p>{t(($) => $.parentOrGuardian.noChange, { ns: 'applicationSimplifiedChild' })}</p>}
+        {!state.communicationPreferences.hasChanged && <p>{t(($) => $.parentOrGuardian.noChange)}</p>}
         {state.communicationPreferences.hasChanged && (
           <DefinitionList layout="single-column">
-            <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredLanguage, { ns: 'applicationSimplifiedChild' })}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
-            <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredMethod, { ns: 'applicationSimplifiedChild' })}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
-            <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredNotificationMethod, { ns: 'applicationSimplifiedChild' })}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
-            {state.email && <DefinitionListItem term={t(($) => $.parentOrGuardian.email, { ns: 'applicationSimplifiedChild' })}>{state.email}</DefinitionListItem>}
+            <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredLanguage)}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
+            <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredMethod)}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
+            <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredNotificationMethod)}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
+            {state.email && <DefinitionListItem term={t(($) => $.parentOrGuardian.email)}>{state.email}</DefinitionListItem>}
           </DefinitionList>
         )}
       </CardContent>
@@ -596,7 +599,7 @@ function CommunicationPreferencesCardContent(): JSX.Element {
   if (clientApplication.hasCommunicationPreferences) {
     return (
       <CardContent>
-        <p>{t(($) => $.parentOrGuardian.updateCommunicationPreferencesHelp, { ns: 'applicationSimplifiedChild' })}</p>
+        <p>{t(($) => $.parentOrGuardian.updateCommunicationPreferencesHelp)}</p>
       </CardContent>
     );
   }
@@ -604,7 +607,7 @@ function CommunicationPreferencesCardContent(): JSX.Element {
   // Case 3: No data at all
   return (
     <CardContent>
-      <p>{t(($) => $.parentOrGuardian.communicationPreferencesHelp, { ns: 'applicationSimplifiedChild' })}</p>
+      <p>{t(($) => $.parentOrGuardian.communicationPreferencesHelp)}</p>
     </CardContent>
   );
 }
@@ -646,7 +649,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Edit comms click"
         >
-          {sections.communicationPreferences.completed ? t(($) => $.parentOrGuardian.editCommunicationPreferences, { ns: 'applicationSimplifiedChild' }) : t(($) => $.parentOrGuardian.addCommunicationPreferences, { ns: 'applicationSimplifiedChild' })}
+          {sections.communicationPreferences.completed ? t(($) => $.parentOrGuardian.editCommunicationPreferences) : t(($) => $.parentOrGuardian.addCommunicationPreferences)}
         </ButtonLink>
       </CardFooter>
     );
@@ -666,7 +669,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Update comms click"
           >
-            {t(($) => $.parentOrGuardian.updateCommunicationPreferences, { ns: 'applicationSimplifiedChild' })}
+            {t(($) => $.parentOrGuardian.updateCommunicationPreferences)}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -680,7 +683,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Complete comms click"
           >
-            <span className="text-left">{t(($) => $.parentOrGuardian.communicationPreferencesUnchanged, { ns: 'applicationSimplifiedChild' })}</span>
+            <span className="text-left">{t(($) => $.parentOrGuardian.communicationPreferencesUnchanged)}</span>
           </Button>
         </div>
       </CardFooter>
@@ -699,7 +702,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Add comms click"
       >
-        {t(($) => $.parentOrGuardian.addCommunicationPreferences, { ns: 'applicationSimplifiedChild' })}
+        {t(($) => $.parentOrGuardian.addCommunicationPreferences)}
       </ButtonLink>
     </CardFooter>
   );

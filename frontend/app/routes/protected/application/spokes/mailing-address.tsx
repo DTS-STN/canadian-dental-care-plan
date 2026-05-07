@@ -14,6 +14,7 @@ import type { ApplicationFlow } from '~/.server/routes/helpers/protected-applica
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogTrigger } from '~/components/dialog';
@@ -57,7 +58,6 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.mailingAddress,
-  pageTitleI18nKey: 'protectedApplicationSpokes:address.mailingAddress.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -302,122 +302,125 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
   }
 
   return (
-    <div className="max-w-prose">
-      <p className="mb-4 italic">{t(($) => $.optionalLabel, { ns: 'protectedApplication' })}</p>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <fieldset className="mb-6">
-            <div className="space-y-6">
-              <InputSanitizeField
-                id="mailingAddress"
-                name="address"
-                className="w-full"
-                label={t(($) => $.address.addressField.address)}
-                maxLength={100}
-                helpMessagePrimary={t(($) => $.address.addressField.addressHelp)}
-                helpMessagePrimaryClassName="text-black"
-                autoComplete="address-line1"
-                defaultValue={defaultState.address}
-                errorMessage={errors?.address}
-                required
-              />
-              <InputSanitizeField
-                id="mailing-apartment"
-                name="apartment"
-                className="w-full"
-                label={t(($) => $.address.addressField.apartment)}
-                maxLength={100}
-                helpMessagePrimary={t(($) => $.address.addressField.apartmentHelp)}
-                helpMessagePrimaryClassName="text-black"
-                autoComplete="address-line2"
-                defaultValue=""
-                errorMessage={errors?.apartment}
-              />
-              <InputSanitizeField id="mailing-city" name="city" className="w-full" label={t(($) => $.address.addressField.city)} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
-              <InputSanitizeField
-                id="mailing-postal-code"
-                name="postalZipCode"
-                className="w-full sm:w-1/2"
-                label={isPostalCodeRequired ? t(($) => $.address.addressField.postalCode) : t(($) => $.address.addressField.postalCodeOptional)}
-                maxLength={100}
-                autoComplete="postal-code"
-                defaultValue={defaultState.postalCode}
-                errorMessage={errors?.postalZipCode}
-                required={isPostalCodeRequired}
-                helpMessagePrimary={postalCodeHelpMessage}
-                helpMessagePrimaryClassName="text-black"
-              />
-              {mailingRegions.length > 0 && (
-                <InputSelect
-                  id="mailing-province"
-                  name="provinceStateId"
-                  className="w-full sm:w-1/2"
-                  label={t(($) => $.address.addressField.province)}
-                  defaultValue={defaultState.province}
-                  errorMessage={errors?.provinceStateId}
-                  options={[dummyOption, ...mailingRegions]}
+    <>
+      <AppPageTitle>{t(($) => $.address.mailingAddress.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <p className="mb-4 italic">{t(($) => $.optionalLabel, { ns: 'protectedApplication' })}</p>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <fieldset className="mb-6">
+              <div className="space-y-6">
+                <InputSanitizeField
+                  id="mailingAddress"
+                  name="address"
+                  className="w-full"
+                  label={t(($) => $.address.addressField.address)}
+                  maxLength={100}
+                  helpMessagePrimary={t(($) => $.address.addressField.addressHelp)}
+                  helpMessagePrimaryClassName="text-black"
+                  autoComplete="address-line1"
+                  defaultValue={defaultState.address}
+                  errorMessage={errors?.address}
                   required
                 />
-              )}
-              <InputSelect
-                id="mailing-country"
-                name="countryId"
-                className="w-full sm:w-1/2"
-                label={t(($) => $.address.addressField.country)}
-                autoComplete="country"
-                defaultValue={defaultState.country}
-                errorMessage={errors?.countryId}
-                options={countries}
-                onChange={mailingCountryChangeHandler}
-                required
-              />
-              <InputCheckbox id="sync-addresses" name="syncAddresses" value="true" checked={copyAddressChecked} onChange={checkHandler}>
-                {t(($) => $.address.homeAddress.useMailingAddress)}
-              </InputCheckbox>
+                <InputSanitizeField
+                  id="mailing-apartment"
+                  name="apartment"
+                  className="w-full"
+                  label={t(($) => $.address.addressField.apartment)}
+                  maxLength={100}
+                  helpMessagePrimary={t(($) => $.address.addressField.apartmentHelp)}
+                  helpMessagePrimaryClassName="text-black"
+                  autoComplete="address-line2"
+                  defaultValue=""
+                  errorMessage={errors?.apartment}
+                />
+                <InputSanitizeField id="mailing-city" name="city" className="w-full" label={t(($) => $.address.addressField.city)} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
+                <InputSanitizeField
+                  id="mailing-postal-code"
+                  name="postalZipCode"
+                  className="w-full sm:w-1/2"
+                  label={isPostalCodeRequired ? t(($) => $.address.addressField.postalCode) : t(($) => $.address.addressField.postalCodeOptional)}
+                  maxLength={100}
+                  autoComplete="postal-code"
+                  defaultValue={defaultState.postalCode}
+                  errorMessage={errors?.postalZipCode}
+                  required={isPostalCodeRequired}
+                  helpMessagePrimary={postalCodeHelpMessage}
+                  helpMessagePrimaryClassName="text-black"
+                />
+                {mailingRegions.length > 0 && (
+                  <InputSelect
+                    id="mailing-province"
+                    name="provinceStateId"
+                    className="w-full sm:w-1/2"
+                    label={t(($) => $.address.addressField.province)}
+                    defaultValue={defaultState.province}
+                    errorMessage={errors?.provinceStateId}
+                    options={[dummyOption, ...mailingRegions]}
+                    required
+                  />
+                )}
+                <InputSelect
+                  id="mailing-country"
+                  name="countryId"
+                  className="w-full sm:w-1/2"
+                  label={t(($) => $.address.addressField.country)}
+                  autoComplete="country"
+                  defaultValue={defaultState.country}
+                  errorMessage={errors?.countryId}
+                  options={countries}
+                  onChange={mailingCountryChangeHandler}
+                  required
+                />
+                <InputCheckbox id="sync-addresses" name="syncAddresses" value="true" checked={copyAddressChecked} onChange={checkHandler}>
+                  {t(($) => $.address.homeAddress.useMailingAddress)}
+                </InputCheckbox>
+              </div>
+            </fieldset>
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
+                <DialogTrigger asChild>
+                  <LoadingButton
+                    aria-expanded={undefined}
+                    variant="primary"
+                    id="continue-button"
+                    type="submit"
+                    name="_action"
+                    value={FORM_ACTION.submit}
+                    loading={isSubmitting}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Mailing address click"
+                  >
+                    {copyAddressChecked ? t(($) => $.address.saveBtn) : t(($) => $.address.continue)}
+                  </LoadingButton>
+                </DialogTrigger>
+                {!isSubmitting && addressDialogContent && (
+                  <>
+                    {addressDialogContent.status === 'address-suggestion' && (
+                      <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useSelectedAddress} />
+                    )}
+                    {addressDialogContent.status === 'address-invalid' && (
+                      <AddressInvalidDialogContent addressContext="mailingAddress" invalidAddress={addressDialogContent.invalidAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useInvalidAddress} />
+                    )}
+                  </>
+                )}
+              </Dialog>
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId={getRouteFromApplicationFlow(applicationFlow)}
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Mailing address click"
+              >
+                {t(($) => $.address.back)}
+              </ButtonLink>
             </div>
-          </fieldset>
-          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
-              <DialogTrigger asChild>
-                <LoadingButton
-                  aria-expanded={undefined}
-                  variant="primary"
-                  id="continue-button"
-                  type="submit"
-                  name="_action"
-                  value={FORM_ACTION.submit}
-                  loading={isSubmitting}
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Mailing address click"
-                >
-                  {copyAddressChecked ? t(($) => $.address.saveBtn) : t(($) => $.address.continue)}
-                </LoadingButton>
-              </DialogTrigger>
-              {!isSubmitting && addressDialogContent && (
-                <>
-                  {addressDialogContent.status === 'address-suggestion' && (
-                    <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useSelectedAddress} />
-                  )}
-                  {addressDialogContent.status === 'address-invalid' && (
-                    <AddressInvalidDialogContent addressContext="mailingAddress" invalidAddress={addressDialogContent.invalidAddress} syncAddresses={copyAddressChecked} formAction={FORM_ACTION.useInvalidAddress} />
-                  )}
-                </>
-              )}
-            </Dialog>
-            <ButtonLink
-              id="back-button"
-              variant="secondary"
-              routeId={getRouteFromApplicationFlow(applicationFlow)}
-              params={params}
-              disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Mailing address click"
-            >
-              {t(($) => $.address.back)}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

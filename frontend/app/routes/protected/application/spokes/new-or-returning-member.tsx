@@ -14,6 +14,7 @@ import { TYPES } from '~/.server/constants';
 import { getContextualAgeCategoryFromDate, getProtectedApplicationState, saveProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
@@ -36,7 +37,6 @@ const NEW_OR_EXISTING_MEMBER_OPTION = { no: 'no', yes: 'yes' } as const;
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.newOrReturningMember,
-  pageTitleI18nKey: 'protectedApplicationSpokes:newOrReturningMember.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -149,46 +149,49 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
   ];
 
   return (
-    <div className="max-w-prose">
-      <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <InputRadios id="new-or-existing-member" name="newOrExistingMember" legend={t(($) => $.newOrReturningMember.previouslyEnrolled)} options={options} errorMessage={errors?.newOrExistingMember} required />
-          {isNewOrReturningMember && (
-            <div className="my-8">
-              <InputPatternField
-                id="member-id"
-                name="memberId"
-                format={renewalCodeInputPatternFormat}
-                label={t(($) => $.newOrReturningMember.memberId)}
-                inputMode="numeric"
-                defaultValue={defaultState?.memberId ?? ''}
-                errorMessage={errors?.memberId}
-                helpMessagePrimary={t(($) => $.newOrReturningMember.memberIdDescription)}
-                required={isNewOrReturningMember}
-              />
+    <>
+      <AppPageTitle>{t(($) => $.newOrReturningMember.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <InputRadios id="new-or-existing-member" name="newOrExistingMember" legend={t(($) => $.newOrReturningMember.previouslyEnrolled)} options={options} errorMessage={errors?.newOrExistingMember} required />
+            {isNewOrReturningMember && (
+              <div className="my-8">
+                <InputPatternField
+                  id="member-id"
+                  name="memberId"
+                  format={renewalCodeInputPatternFormat}
+                  label={t(($) => $.newOrReturningMember.memberId)}
+                  inputMode="numeric"
+                  defaultValue={defaultState?.memberId ?? ''}
+                  errorMessage={errors?.memberId}
+                  helpMessagePrimary={t(($) => $.newOrReturningMember.memberIdDescription)}
+                  required={isNewOrReturningMember}
+                />
+              </div>
+            )}
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - New or existing member click">
+                {t(($) => $.newOrReturningMember.saveBtn)}
+              </LoadingButton>
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId={userAgeCategory === 'youth' ? 'protected/application/$id/living-independently' : 'protected/application/$id/your-application'}
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - New or existing member click"
+              >
+                {t(($) => $.newOrReturningMember.backBtn)}
+              </ButtonLink>
             </div>
-          )}
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - New or existing member click">
-              {t(($) => $.newOrReturningMember.saveBtn)}
-            </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              variant="secondary"
-              routeId={userAgeCategory === 'youth' ? 'protected/application/$id/living-independently' : 'protected/application/$id/your-application'}
-              params={params}
-              disabled={isSubmitting}
-              startIcon={faChevronLeft}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - New or existing member click"
-            >
-              {t(($) => $.newOrReturningMember.backBtn)}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

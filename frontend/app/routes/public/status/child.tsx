@@ -15,6 +15,7 @@ import { TYPES } from '~/.server/constants';
 import { getStatusResultUrl, saveStatusState, startStatusState } from '~/.server/routes/helpers/status-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -47,7 +48,6 @@ const CHILD_HAS_SIN = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
   pageIdentifier: pageIds.public.status.child,
-  pageTitleI18nKey: 'status:child.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -281,88 +281,91 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
   }
 
   return (
-    <div className="max-w-prose">
-      <p className="mb-4 italic">{t(($) => $.child.form.completeFields)}</p>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
-          <CsrfTokenInput />
-          {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
-          <div className="mb-8 space-y-6">
-            <InputPatternField
-              id="code"
-              name="code"
-              format={applicationCodeInputPatternFormat}
-              label={t(($) => $.child.form.applicationCodeLabel)}
-              inputMode="numeric"
-              helpMessagePrimary={t(($) => $.child.form.applicationCodeDescription)}
-              required
-              errorMessage={errors?.code}
-              defaultValue=""
-            />
-            <InputRadios
-              id="child-has-sin"
-              name="childHasSin"
-              legend={t(($) => $.child.form.radioLegend)}
-              options={[
-                {
-                  value: CHILD_HAS_SIN.yes,
-                  children: <Trans ns="status" i18nKey={($) => $.child.form.optionYes} />,
-                  onChange: handleOnChildHasSinChanged,
-                },
-                {
-                  value: CHILD_HAS_SIN.no,
-                  children: <Trans ns="status" i18nKey={($) => $.child.form.optionNo} />,
-                  onChange: handleOnChildHasSinChanged,
-                },
-              ]}
-              errorMessage={errors?.childHasSin}
-              required
-            />
-            {childHasSinState === true && (
-              <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t(($) => $.child.form.sinLabel)} helpMessagePrimary={t(($) => $.child.form.sinDescription)} required errorMessage={errors?.sin} defaultValue="" />
-            )}
-            {childHasSinState === false && (
-              <>
-                <Collapsible summary={t(($) => $.child.form.ifChildSummary)} className="mt-8">
-                  <div className="space-y-4">
-                    <p>{t(($) => $.child.form.ifChildDesc)}</p>
+    <>
+      <AppPageTitle>{t(($) => $.child.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <p className="mb-4 italic">{t(($) => $.child.form.completeFields)}</p>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
+            <CsrfTokenInput />
+            {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
+            <div className="mb-8 space-y-6">
+              <InputPatternField
+                id="code"
+                name="code"
+                format={applicationCodeInputPatternFormat}
+                label={t(($) => $.child.form.applicationCodeLabel)}
+                inputMode="numeric"
+                helpMessagePrimary={t(($) => $.child.form.applicationCodeDescription)}
+                required
+                errorMessage={errors?.code}
+                defaultValue=""
+              />
+              <InputRadios
+                id="child-has-sin"
+                name="childHasSin"
+                legend={t(($) => $.child.form.radioLegend)}
+                options={[
+                  {
+                    value: CHILD_HAS_SIN.yes,
+                    children: <Trans ns="status" i18nKey={($) => $.child.form.optionYes} />,
+                    onChange: handleOnChildHasSinChanged,
+                  },
+                  {
+                    value: CHILD_HAS_SIN.no,
+                    children: <Trans ns="status" i18nKey={($) => $.child.form.optionNo} />,
+                    onChange: handleOnChildHasSinChanged,
+                  },
+                ]}
+                errorMessage={errors?.childHasSin}
+                required
+              />
+              {childHasSinState === true && (
+                <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t(($) => $.child.form.sinLabel)} helpMessagePrimary={t(($) => $.child.form.sinDescription)} required errorMessage={errors?.sin} defaultValue="" />
+              )}
+              {childHasSinState === false && (
+                <>
+                  <Collapsible summary={t(($) => $.child.form.ifChildSummary)} className="mt-8">
+                    <div className="space-y-4">
+                      <p>{t(($) => $.child.form.ifChildDesc)}</p>
+                    </div>
+                  </Collapsible>
+                  <div className="grid items-end gap-6 md:grid-cols-2">
+                    <InputSanitizeField id="first-name" name="firstName" label={t(($) => $.child.form.firstName)} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.firstName} defaultValue="" />
+                    <InputSanitizeField id="last-name" name="lastName" label={t(($) => $.child.form.lastName)} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.lastName} defaultValue="" />
                   </div>
-                </Collapsible>
-                <div className="grid items-end gap-6 md:grid-cols-2">
-                  <InputSanitizeField id="first-name" name="firstName" label={t(($) => $.child.form.firstName)} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.firstName} defaultValue="" />
-                  <InputSanitizeField id="last-name" name="lastName" label={t(($) => $.child.form.lastName)} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.lastName} defaultValue="" />
-                </div>
-                <DatePickerField
-                  id="date-of-birth"
-                  names={{
-                    day: 'dateOfBirthDay',
-                    month: 'dateOfBirthMonth',
-                    year: 'dateOfBirthYear',
-                  }}
-                  defaultValue=""
-                  legend={t(($) => $.child.form.dateOfBirthLabel)}
-                  required
-                  errorMessages={{
-                    all: errors?.dateOfBirth,
-                    year: errors?.dateOfBirthYear,
-                    month: errors?.dateOfBirthMonth,
-                    day: errors?.dateOfBirthDay,
-                  }}
-                />
-              </>
-            )}
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
-              {t(($) => $.child.form.backBtn)}
-            </ButtonLink>
-            <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
-              {t(($) => $.child.form.submit)}
-            </LoadingButton>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+                  <DatePickerField
+                    id="date-of-birth"
+                    names={{
+                      day: 'dateOfBirthDay',
+                      month: 'dateOfBirthMonth',
+                      year: 'dateOfBirthYear',
+                    }}
+                    defaultValue=""
+                    legend={t(($) => $.child.form.dateOfBirthLabel)}
+                    required
+                    errorMessages={{
+                      all: errors?.dateOfBirth,
+                      year: errors?.dateOfBirthYear,
+                      month: errors?.dateOfBirthMonth,
+                      day: errors?.dateOfBirthDay,
+                    }}
+                  />
+                </>
+              )}
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
+                {t(($) => $.child.form.backBtn)}
+              </ButtonLink>
+              <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+                {t(($) => $.child.form.submit)}
+              </LoadingButton>
+            </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

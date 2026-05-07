@@ -10,6 +10,7 @@ import type { ProtectedApplicationApplicantInformationState } from '~/.server/ro
 import { getContextualAgeCategoryFromDate, getProtectedApplicationState, isNewOrReturningMember, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -34,7 +35,6 @@ import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.personalInformation,
-  pageTitleI18nKey: 'protectedApplicationSpokes:personalInformation.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -230,93 +230,96 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
   const { ErrorAlert } = useErrorAlert(fetcherStatus === 'client-not-found');
 
   return (
-    <div className="max-w-prose">
-      <ErrorAlert>
-        <h2 className="mb-2 font-bold">{t(($) => $.personalInformation.errorMessage.alert.heading)}</h2>
-        <p className="mb-2">
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.errorMessage.alert.detail} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
-        </p>
-        <p className="mb-2">
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.errorMessage.alert.applyDate} values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
-        </p>
-      </ErrorAlert>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <p className="mb-4">{t(($) => $.personalInformation.formInstructionsSin)}</p>
-        <p className="mb-6">{t(($) => $.personalInformation.formInstructionsInfo)}</p>
-        <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <div className="mb-8 space-y-6">
-            <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputSanitizeField
-                id="first-name"
-                name="firstName"
-                label={t(($) => $.personalInformation.firstName)}
-                className="w-full"
-                maxLength={100}
-                aria-description={t(($) => $.personalInformation.nameInstructions)}
-                autoComplete="given-name"
-                defaultValue={state?.firstName ?? ''}
-                errorMessage={errors?.firstName}
+    <>
+      <AppPageTitle>{t(($) => $.personalInformation.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <ErrorAlert>
+          <h2 className="mb-2 font-bold">{t(($) => $.personalInformation.errorMessage.alert.heading)}</h2>
+          <p className="mb-2">
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.errorMessage.alert.detail} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+          </p>
+          <p className="mb-2">
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.errorMessage.alert.applyDate} values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
+          </p>
+        </ErrorAlert>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <p className="mb-4">{t(($) => $.personalInformation.formInstructionsSin)}</p>
+          <p className="mb-6">{t(($) => $.personalInformation.formInstructionsInfo)}</p>
+          <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <div className="mb-8 space-y-6">
+              <div className="grid items-end gap-6 md:grid-cols-2">
+                <InputSanitizeField
+                  id="first-name"
+                  name="firstName"
+                  label={t(($) => $.personalInformation.firstName)}
+                  className="w-full"
+                  maxLength={100}
+                  aria-description={t(($) => $.personalInformation.nameInstructions)}
+                  autoComplete="given-name"
+                  defaultValue={state?.firstName ?? ''}
+                  errorMessage={errors?.firstName}
+                  required
+                />
+                <InputSanitizeField
+                  id="last-name"
+                  name="lastName"
+                  label={t(($) => $.personalInformation.lastName)}
+                  className="w-full"
+                  maxLength={100}
+                  aria-description={t(($) => $.personalInformation.nameInstructions)}
+                  autoComplete="family-name"
+                  defaultValue={state?.lastName ?? ''}
+                  errorMessage={errors?.lastName}
+                  required
+                />
+              </div>
+              <Collapsible id="name-instructions" summary={t(($) => $.personalInformation.singleLegalName)}>
+                <p>
+                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.nameInstructions} />
+                </p>
+              </Collapsible>
+              <DatePickerField
+                id="date-of-birth"
+                names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
+                defaultValue={state?.dateOfBirth ?? ''}
+                legend={t(($) => $.personalInformation.dob)}
+                errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
                 required
               />
-              <InputSanitizeField
-                id="last-name"
-                name="lastName"
-                label={t(($) => $.personalInformation.lastName)}
-                className="w-full"
-                maxLength={100}
-                aria-description={t(($) => $.personalInformation.nameInstructions)}
-                autoComplete="family-name"
-                defaultValue={state?.lastName ?? ''}
-                errorMessage={errors?.lastName}
+              <InputPatternField
+                id="social-insurance-number"
+                name="socialInsuranceNumber"
+                format={sinInputPatternFormat}
+                label={t(($) => $.personalInformation.sin)}
+                inputMode="numeric"
+                helpMessagePrimary={t(($) => $.personalInformation.helpMessage.sin)}
+                helpMessagePrimaryClassName="text-black"
+                defaultValue={state?.socialInsuranceNumber ?? ''}
+                errorMessage={errors?.socialInsuranceNumber}
                 required
               />
             </div>
-            <Collapsible id="name-instructions" summary={t(($) => $.personalInformation.singleLegalName)}>
-              <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.nameInstructions} />
-              </p>
-            </Collapsible>
-            <DatePickerField
-              id="date-of-birth"
-              names={{ day: 'dateOfBirthDay', month: 'dateOfBirthMonth', year: 'dateOfBirthYear' }}
-              defaultValue={state?.dateOfBirth ?? ''}
-              legend={t(($) => $.personalInformation.dob)}
-              errorMessages={{ all: errors?.dateOfBirth, year: errors?.dateOfBirthYear, month: errors?.dateOfBirthMonth, day: errors?.dateOfBirthDay }}
-              required
-            />
-            <InputPatternField
-              id="social-insurance-number"
-              name="socialInsuranceNumber"
-              format={sinInputPatternFormat}
-              label={t(($) => $.personalInformation.sin)}
-              inputMode="numeric"
-              helpMessagePrimary={t(($) => $.personalInformation.helpMessage.sin)}
-              helpMessagePrimaryClassName="text-black"
-              defaultValue={state?.socialInsuranceNumber ?? ''}
-              errorMessage={errors?.socialInsuranceNumber}
-              required
-            />
-          </div>
-          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Applicant information click">
-              {t(($) => $.personalInformation.saveBtn)}
-            </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              variant="secondary"
-              routeId={`protected/application/$id/your-application`}
-              params={params}
-              disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Applicant information click"
-            >
-              {t(($) => $.personalInformation.backBtn)}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Applicant information click">
+                {t(($) => $.personalInformation.saveBtn)}
+              </LoadingButton>
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId={`protected/application/$id/your-application`}
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Applicant information click"
+              >
+                {t(($) => $.personalInformation.backBtn)}
+              </ButtonLink>
+            </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

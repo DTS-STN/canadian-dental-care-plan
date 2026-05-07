@@ -9,6 +9,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationIntakeAdultState } from '~/.server/routes/helpers/protected-application-intake-adult-route-helpers';
 import { clearProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
@@ -22,7 +23,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedApplicationIntakeAdult', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.intakeAdult.exitApplication,
-  pageTitleI18nKey: 'protectedApplicationIntakeAdult:exitApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -66,28 +66,31 @@ export default function NewAdultExitApplication({ loaderData, params }: Route.Co
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   return (
-    <div className="max-w-prose">
-      <div className="mb-8 space-y-4">
-        <p>{t(($) => $.exitApplication.areYouSure)}</p>
-        <p>{t(($) => $.exitApplication.clickBack)}</p>
+    <>
+      <AppPageTitle>{t(($) => $.exitApplication.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <div className="mb-8 space-y-4">
+          <p>{t(($) => $.exitApplication.areYouSure)}</p>
+          <p>{t(($) => $.exitApplication.clickBack)}</p>
+        </div>
+        <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
+          <CsrfTokenInput />
+          <ButtonLink
+            id="back-button"
+            variant="secondary"
+            routeId="protected/application/$id/intake-adult/submit"
+            params={params}
+            disabled={isSubmitting}
+            startIcon={faChevronLeft}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Back - Exiting the application click"
+          >
+            {t(($) => $.exitApplication.backBtn)}
+          </ButtonLink>
+          <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Exit - Exiting the application click">
+            {t(($) => $.exitApplication.exitBtn)}
+          </LoadingButton>
+        </fetcher.Form>
       </div>
-      <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
-        <CsrfTokenInput />
-        <ButtonLink
-          id="back-button"
-          variant="secondary"
-          routeId="protected/application/$id/intake-adult/submit"
-          params={params}
-          disabled={isSubmitting}
-          startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Back - Exiting the application click"
-        >
-          {t(($) => $.exitApplication.backBtn)}
-        </ButtonLink>
-        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Exit - Exiting the application click">
-          {t(($) => $.exitApplication.exitBtn)}
-        </LoadingButton>
-      </fetcher.Form>
-    </div>
+    </>
   );
 }

@@ -10,6 +10,7 @@ import type { Route } from './+types/index';
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
@@ -35,7 +36,6 @@ const CHECK_FOR = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
   pageIdentifier: pageIds.public.status.index,
-  pageTitleI18nKey: 'status:pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -118,89 +118,92 @@ export default function StatusChecker({ loaderData, params }: Route.ComponentPro
   const canadaTermsConditions = <InlineLink to={t(($) => $.links.canadaTermsConditions)} className="external-link" newTabIndicator target="_blank" />;
 
   return (
-    <div className="max-w-prose">
-      <div>
-        <h2 className="font-bold">{t(($) => $.statusCheckerHeading)}</h2>
-        <p className="mb-4">{t(($) => $.statusCheckerContent)}</p>
-        <h2 className="font-bold">{t(($) => $.onlineStatusHeading)}</h2>
-        <p className="mb-4">{t(($) => $.onlineStatusContent)}</p>
-        <p className="mb-4">{t(($) => $.termsConditions)}</p>
-      </div>
-      <Collapsible summary={t(($) => $.termsOfUse.summary)} className="mt-8">
-        <div className="space-y-4">
-          <h2 className="mb-4 font-bold">{t(($) => $.termsOfUse.heading)}</h2>
-          <p>{t(($) => $.termsOfUse.thankYou)}</p>
-          <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsOfUse.legalTerms} components={{ canadaTermsConditions }} />
-          </p>
-          <p>{t(($) => $.termsOfUse.accessTerms)}</p>
-          <p>{t(($) => $.termsOfUse.maintenance)}</p>
-          <p>{t(($) => $.termsOfUse.inactive)}</p>
-          <p>{t(($) => $.termsOfUse.termsRejectionPolicy)}</p>
+    <>
+      <AppPageTitle>{t(($) => $.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <div>
+          <h2 className="font-bold">{t(($) => $.statusCheckerHeading)}</h2>
+          <p className="mb-4">{t(($) => $.statusCheckerContent)}</p>
+          <h2 className="font-bold">{t(($) => $.onlineStatusHeading)}</h2>
+          <p className="mb-4">{t(($) => $.onlineStatusContent)}</p>
+          <p className="mb-4">{t(($) => $.termsConditions)}</p>
+        </div>
+        <Collapsible summary={t(($) => $.termsOfUse.summary)} className="mt-8">
+          <div className="space-y-4">
+            <h2 className="mb-4 font-bold">{t(($) => $.termsOfUse.heading)}</h2>
+            <p>{t(($) => $.termsOfUse.thankYou)}</p>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsOfUse.legalTerms} components={{ canadaTermsConditions }} />
+            </p>
+            <p>{t(($) => $.termsOfUse.accessTerms)}</p>
+            <p>{t(($) => $.termsOfUse.maintenance)}</p>
+            <p>{t(($) => $.termsOfUse.inactive)}</p>
+            <p>{t(($) => $.termsOfUse.termsRejectionPolicy)}</p>
 
-          <p>{t(($) => $.termsOfUse.esdcDefinitionClarification)}</p>
-          <p className="font-bold">{t(($) => $.termsOfUse.statusChecker.heading)}</p>
-          <ul className="list-disc space-y-1 pl-7">
-            <li>{t(($) => $.termsOfUse.statusChecker.selfAgreement)}</li>
-            <li>{t(($) => $.termsOfUse.statusChecker.onBehalfOfSomeoneElse)}</li>
-            <li>{t(($) => $.termsOfUse.statusChecker.atYourOwnRisk)}</li>
-            <li>{t(($) => $.termsOfUse.statusChecker.onlyUse)}</li>
-            <li>
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsOfUse.statusChecker.msdc} components={{ microsoftServiceAgreement }} />
-            </li>
-            <li>
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsOfUse.statusChecker.antibot} components={{ hcaptchaTermsOfService }} />
-            </li>
-          </ul>
-          <h2 className="font-bold">{t(($) => $.termsOfUse.changesToTheseTermsOfUse.heading)}</h2>
-          <p>{t(($) => $.termsOfUse.changesToTheseTermsOfUse.esdcTermsAmendmentPolicy)}</p>
-        </div>
-      </Collapsible>
-      <Collapsible summary={t(($) => $.privacyNoticeStatement.summary)} className="my-8">
-        <div className="space-y-4">
-          <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.collectionOfUse} components={{ cite: <cite /> }} />
-          </p>
-          <p>{t(($) => $.privacyNoticeStatement.providedInformation)}</p>
-          <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.thirdPartyProvider} components={{ microsoftDataPrivacyPolicy }} />
-          </p>
-          <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.personalInformation} components={{ cite: <cite /> }} />
-          </p>
-          <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.reportAConcern} components={{ fileacomplaint }} />
-          </p>
-        </div>
-      </Collapsible>
-      <p className="mb-4 italic">{t(($) => $.form.completeFields)}</p>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
-          <CsrfTokenInput />
-          {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
-          <InputRadios
-            id="status-check-for"
-            name="statusCheckFor"
-            legend={t(($) => $.form.radioLegend)}
-            options={[
-              {
-                children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.form.radioText.myself} />,
-                value: CHECK_FOR.myself,
-              },
-              {
-                children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.form.radioText.child} />,
-                value: CHECK_FOR.child,
-              },
-            ]}
-            required
-            errorMessage={errors?.checkFor}
-          />
-          <LoadingButton variant="primary" id="submit" loading={isSubmitting} className="my-8" data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
-            {t(($) => $.form.continue)}
-          </LoadingButton>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+            <p>{t(($) => $.termsOfUse.esdcDefinitionClarification)}</p>
+            <p className="font-bold">{t(($) => $.termsOfUse.statusChecker.heading)}</p>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{t(($) => $.termsOfUse.statusChecker.selfAgreement)}</li>
+              <li>{t(($) => $.termsOfUse.statusChecker.onBehalfOfSomeoneElse)}</li>
+              <li>{t(($) => $.termsOfUse.statusChecker.atYourOwnRisk)}</li>
+              <li>{t(($) => $.termsOfUse.statusChecker.onlyUse)}</li>
+              <li>
+                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsOfUse.statusChecker.msdc} components={{ microsoftServiceAgreement }} />
+              </li>
+              <li>
+                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsOfUse.statusChecker.antibot} components={{ hcaptchaTermsOfService }} />
+              </li>
+            </ul>
+            <h2 className="font-bold">{t(($) => $.termsOfUse.changesToTheseTermsOfUse.heading)}</h2>
+            <p>{t(($) => $.termsOfUse.changesToTheseTermsOfUse.esdcTermsAmendmentPolicy)}</p>
+          </div>
+        </Collapsible>
+        <Collapsible summary={t(($) => $.privacyNoticeStatement.summary)} className="my-8">
+          <div className="space-y-4">
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.collectionOfUse} components={{ cite: <cite /> }} />
+            </p>
+            <p>{t(($) => $.privacyNoticeStatement.providedInformation)}</p>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.thirdPartyProvider} components={{ microsoftDataPrivacyPolicy }} />
+            </p>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.personalInformation} components={{ cite: <cite /> }} />
+            </p>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.reportAConcern} components={{ fileacomplaint }} />
+            </p>
+          </div>
+        </Collapsible>
+        <p className="mb-4 italic">{t(($) => $.form.completeFields)}</p>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
+            <CsrfTokenInput />
+            {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
+            <InputRadios
+              id="status-check-for"
+              name="statusCheckFor"
+              legend={t(($) => $.form.radioLegend)}
+              options={[
+                {
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.form.radioText.myself} />,
+                  value: CHECK_FOR.myself,
+                },
+                {
+                  children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.form.radioText.child} />,
+                  value: CHECK_FOR.child,
+                },
+              ]}
+              required
+              errorMessage={errors?.checkFor}
+            />
+            <LoadingButton variant="primary" id="submit" loading={isSubmitting} className="my-8" data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+              {t(($) => $.form.continue)}
+            </LoadingButton>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

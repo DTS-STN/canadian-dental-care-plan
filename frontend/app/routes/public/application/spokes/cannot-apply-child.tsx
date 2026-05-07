@@ -9,6 +9,7 @@ import { TYPES } from '~/.server/constants';
 import { getAgeCategoryFromDateString } from '~/.server/routes/helpers/base-application-route-helpers';
 import { clearPublicApplicationState, getSingleChildState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
@@ -22,7 +23,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.cannotApplyChild,
-  pageTitleI18nKey: 'applicationSpokes:children.cannotApplyChild.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -69,33 +69,36 @@ export default function ApplyForYourself({ loaderData, params }: Route.Component
   const noWrap = <span className="whitespace-nowrap" />;
 
   return (
-    <div className="max-w-prose">
-      <div className="mb-6 space-y-4">
-        <p>
-          {isChildrenOrYouth //
-            ? t(($) => $.children.cannotApplyChild.ineligibleToApply.cutoffApplication)
-            : t(($) => $.children.cannotApplyChild.ineligibleToApply.adultApplication)}
-        </p>
-        <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.cannotApplyChild.eligibilityInfo} components={{ noWrap }} />
-        </p>
+    <>
+      <AppPageTitle>{t(($) => $.children.cannotApplyChild.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <div className="mb-6 space-y-4">
+          <p>
+            {isChildrenOrYouth //
+              ? t(($) => $.children.cannotApplyChild.ineligibleToApply.cutoffApplication)
+              : t(($) => $.children.cannotApplyChild.ineligibleToApply.adultApplication)}
+          </p>
+          <p>
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.cannotApplyChild.eligibilityInfo} components={{ noWrap }} />
+          </p>
+        </div>
+        <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
+          <CsrfTokenInput />
+          <ButtonLink
+            id="back-button"
+            variant="secondary"
+            routeId="public/application/$id/children/$childId/information"
+            params={params}
+            disabled={isSubmitting}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Child apply for yourself click"
+          >
+            {t(($) => $.children.cannotApplyChild.backBtn)}
+          </ButtonLink>
+          <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - Child apply for yourself click">
+            {t(($) => $.children.cannotApplyChild.exitBtn)}
+          </LoadingButton>
+        </fetcher.Form>
       </div>
-      <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
-        <CsrfTokenInput />
-        <ButtonLink
-          id="back-button"
-          variant="secondary"
-          routeId="public/application/$id/children/$childId/information"
-          params={params}
-          disabled={isSubmitting}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Child apply for yourself click"
-        >
-          {t(($) => $.children.cannotApplyChild.backBtn)}
-        </ButtonLink>
-        <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - Child apply for yourself click">
-          {t(($) => $.children.cannotApplyChild.exitBtn)}
-        </LoadingButton>
-      </fetcher.Form>
-    </div>
+    </>
   );
 }

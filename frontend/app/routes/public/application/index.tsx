@@ -2,11 +2,14 @@ import { useEffect } from 'react';
 
 import { useNavigate, useNavigation } from 'react-router';
 
+import { useTranslation } from 'react-i18next';
+
 import type { Route } from './+types/index';
 
 import { TYPES } from '~/.server/constants';
 import { startApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { useApplicationFlowStorage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { getCurrentDateString } from '~/utils/date-utils';
@@ -20,7 +23,6 @@ import { secondsToMilliseconds } from '~/utils/units.utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('application', 'gcweb'),
   pageIdentifier: pageIds.public.application.index,
-  pageTitleI18nKey: 'application:eligibilityRequirements.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -45,6 +47,7 @@ const NAVIGATION_DELAY_MS = secondsToMilliseconds(1);
 export default function PublicApplicationIndex({ loaderData, params }: Route.ComponentProps) {
   const { id } = loaderData;
 
+  const { t } = useTranslation(handle.i18nNamespaces);
   const navigation = useNavigation();
   const navigate = useNavigate();
   const { set: setApplicationFlowStorageValue } = useApplicationFlowStorage();
@@ -75,57 +78,60 @@ export default function PublicApplicationIndex({ loaderData, params }: Route.Com
   }, [setApplicationFlowStorageValue, eligibilityRequirementsPath, isIdle, navigate]);
 
   return (
-    <div className="max-w-prose animate-pulse space-y-8">
-      {/* Intro text */}
-      <div className="space-y-4">
-        <div className="h-5 w-40 rounded bg-gray-200"></div>
-        <div className="h-5 w-56 rounded bg-gray-200"></div>
-      </div>
+    <>
+      <AppPageTitle>{t(($) => $.eligibilityRequirements.pageHeading)}</AppPageTitle>
+      <div className="max-w-prose animate-pulse space-y-8">
+        {/* Intro text */}
+        <div className="space-y-4">
+          <div className="h-5 w-40 rounded bg-gray-200"></div>
+          <div className="h-5 w-56 rounded bg-gray-200"></div>
+        </div>
 
-      {/* Card 1 */}
-      <div className="rounded-lg border border-gray-300">
-        <div className="space-y-8 p-6">
-          <div className="h-6 w-3/4 rounded bg-gray-300"></div>
+        {/* Card 1 */}
+        <div className="rounded-lg border border-gray-300">
+          <div className="space-y-8 p-6">
+            <div className="h-6 w-3/4 rounded bg-gray-300"></div>
+            <div className="space-y-3">
+              <div className="h-5 w-full rounded bg-gray-200"></div>
+              <div className="h-5 w-5/6 rounded bg-gray-200"></div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-300 bg-gray-50 px-6 py-4">
+            <div className="flex items-center gap-3">
+              <div className="h-6 w-6 rounded-full bg-gray-300"></div>
+              <div className="h-5 w-2/3 rounded bg-gray-200"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 2 */}
+        <div className="rounded-lg border border-gray-300">
+          <div className="space-y-8 p-6">
+            <div className="h-6 w-40 rounded bg-gray-300"></div>
+            <div className="space-y-3">
+              <div className="h-5 w-full rounded bg-gray-200"></div>
+              <div className="h-5 w-5/6 rounded bg-gray-200"></div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-300 bg-gray-50 px-6 py-4">
+            <div className="flex items-center gap-3">
+              <div className="h-6 w-6 rounded-full bg-gray-300"></div>
+              <div className="h-5 w-32 rounded bg-gray-200"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Next button */}
+        <div className="flex w-64 items-center justify-between rounded bg-gray-300 px-6 py-4">
           <div className="space-y-3">
-            <div className="h-5 w-full rounded bg-gray-200"></div>
-            <div className="h-5 w-5/6 rounded bg-gray-200"></div>
-          </div>
-        </div>
-
-        <div className="border-t border-gray-300 bg-gray-50 px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="h-6 w-6 rounded-full bg-gray-300"></div>
-            <div className="h-5 w-2/3 rounded bg-gray-200"></div>
-          </div>
-        </div>
-      </div>
-
-      {/* Card 2 */}
-      <div className="rounded-lg border border-gray-300">
-        <div className="space-y-8 p-6">
-          <div className="h-6 w-40 rounded bg-gray-300"></div>
-          <div className="space-y-3">
-            <div className="h-5 w-full rounded bg-gray-200"></div>
-            <div className="h-5 w-5/6 rounded bg-gray-200"></div>
-          </div>
-        </div>
-
-        <div className="border-t border-gray-300 bg-gray-50 px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="h-6 w-6 rounded-full bg-gray-300"></div>
+            <div className="h-4 w-10 rounded bg-gray-200"></div>
             <div className="h-5 w-32 rounded bg-gray-200"></div>
           </div>
+          <div className="h-8 w-8 rounded-full bg-gray-200"></div>
         </div>
       </div>
-
-      {/* Next button */}
-      <div className="flex w-64 items-center justify-between rounded bg-gray-300 px-6 py-4">
-        <div className="space-y-3">
-          <div className="h-4 w-10 rounded bg-gray-200"></div>
-          <div className="h-5 w-32 rounded bg-gray-200"></div>
-        </div>
-        <div className="h-8 w-8 rounded-full bg-gray-200"></div>
-      </div>
-    </div>
+    </>
   );
 }

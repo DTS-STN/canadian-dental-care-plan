@@ -14,6 +14,7 @@ import type { ApplicationFlow, ProtectedApplicationPartnerInformationState } fro
 import { getProtectedApplicationState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
@@ -48,9 +49,8 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 }
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'protectedApplicationSpokes', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.maritalStatus,
-  pageTitleI18nKey: 'protectedApplicationSpokes:maritalStatus.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -65,7 +65,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const meta = {
-    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.maritalStatus.pageTitle, { ns: 'protectedApplicationSpokes' }) }),
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.maritalStatus.pageTitle) }),
   };
   const maritalStatuses = appContainer.get(TYPES.MaritalStatusService).listLocalizedMaritalStatuses(locale);
   return {
@@ -94,12 +94,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const maritalStatusSchema = z.object({
     maritalStatus: z
       .string({
-        error: t(($) => $.maritalStatus.errorMessage.maritalStatusRequired, { ns: 'protectedApplicationSpokes' }),
+        error: t(($) => $.maritalStatus.errorMessage.maritalStatusRequired),
       })
       .trim()
       .min(
         1,
-        t(($) => $.maritalStatus.errorMessage.maritalStatusRequired, { ns: 'protectedApplicationSpokes' }),
+        t(($) => $.maritalStatus.errorMessage.maritalStatusRequired),
       ),
   });
 
@@ -107,36 +107,36 @@ export async function action({ context: { appContainer, session }, params, reque
   const partnerInformationSchema = z.object({
     consentToSharePersonalInformation: z.literal(
       true,
-      t(($) => $.maritalStatus.errorMessage.confirmRequired, { ns: 'protectedApplicationSpokes' }),
+      t(($) => $.maritalStatus.errorMessage.confirmRequired),
     ),
     yearOfBirth: z
       .string()
       .trim()
       .min(
         1,
-        t(($) => $.maritalStatus.errorMessage.dateOfBirthYearRequired, { ns: 'protectedApplicationSpokes' }),
+        t(($) => $.maritalStatus.errorMessage.dateOfBirthYearRequired),
       )
       .refine(
         (year) => Number.parseInt(year) > currentYear - 150,
-        t(($) => $.maritalStatus.errorMessage.yobIsPast, { ns: 'protectedApplicationSpokes' }),
+        t(($) => $.maritalStatus.errorMessage.yobIsPast),
       )
       .refine(
         (year) => Number.parseInt(year) < currentYear,
-        t(($) => $.maritalStatus.errorMessage.yobIsFuture, { ns: 'protectedApplicationSpokes' }),
+        t(($) => $.maritalStatus.errorMessage.yobIsFuture),
       ),
     socialInsuranceNumber: z
       .string()
       .trim()
       .min(
         1,
-        t(($) => $.maritalStatus.errorMessage.sinRequired, { ns: 'protectedApplicationSpokes' }),
+        t(($) => $.maritalStatus.errorMessage.sinRequired),
       )
 
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
           ctx.addIssue({
             code: 'custom',
-            message: t(($) => $.maritalStatus.errorMessage.sinValid, { ns: 'protectedApplicationSpokes' }),
+            message: t(($) => $.maritalStatus.errorMessage.sinValid),
           });
         } else if (
           [state.clientApplication?.applicantInformation.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
@@ -146,7 +146,7 @@ export async function action({ context: { appContainer, session }, params, reque
         ) {
           ctx.addIssue({
             code: 'custom',
-            message: t(($) => $.maritalStatus.errorMessage.sinUnique, { ns: 'protectedApplicationSpokes' }),
+            message: t(($) => $.maritalStatus.errorMessage.sinUnique),
           });
         }
       }),
@@ -213,82 +213,85 @@ export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Ro
   }, [defaultState, maritalStatuses]);
 
   return (
-    <div className="max-w-prose">
-      <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <div className="mb-8 space-y-6">
-            <InputRadios
-              id="maritalStatus"
-              name="maritalStatus"
-              legend={t(($) => $.maritalStatus.maritalStatus, { ns: 'protectedApplicationSpokes' })}
-              helpMessagePrimary={t(($) => $.maritalStatus.primaryHelpMessage, { ns: 'protectedApplicationSpokes' })}
-              options={maritalStatusOptions}
-              errorMessage={errors?.maritalStatus}
-              required
-            />
+    <>
+      <AppPageTitle>{t(($) => $.maritalStatus.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <div className="mb-8 space-y-6">
+              <InputRadios
+                id="maritalStatus"
+                name="maritalStatus"
+                legend={t(($) => $.maritalStatus.maritalStatus)}
+                helpMessagePrimary={t(($) => $.maritalStatus.primaryHelpMessage)}
+                options={maritalStatusOptions}
+                errorMessage={errors?.maritalStatus}
+                required
+              />
 
-            {(selectedMaritalStatus === MARITAL_STATUS_CODE_COMMON_LAW || selectedMaritalStatus === MARITAL_STATUS_CODE_MARRIED) && (
-              <>
-                <h2 className="font-lato mb-6 text-2xl font-bold">{t(($) => $.maritalStatus.spouseOrCommonlaw, { ns: 'protectedApplicationSpokes' })}</h2>
-                <p className="mb-4">{t(($) => $.maritalStatus.provideSin, { ns: 'protectedApplicationSpokes' })}</p>
-                <p className="mb-6">{t(($) => $.maritalStatus.requiredInformation, { ns: 'protectedApplicationSpokes' })}</p>
-                <InputPatternField
-                  id="social-insurance-number"
-                  name="socialInsuranceNumber"
-                  format={sinInputPatternFormat}
-                  label={t(($) => $.maritalStatus.sin, { ns: 'protectedApplicationSpokes' })}
-                  inputMode="numeric"
-                  helpMessagePrimary={t(($) => $.maritalStatus.sinHelp, { ns: 'protectedApplicationSpokes' })}
-                  helpMessagePrimaryClassName="text-black"
-                  defaultValue={defaultState.socialInsuranceNumber ?? ''}
-                  errorMessage={errors?.socialInsuranceNumber}
-                  required
-                />
-                <InputPatternField
-                  id="year-of-birth"
-                  name="yearOfBirth"
-                  inputMode="numeric"
-                  format="####"
-                  defaultValue={defaultState.yearOfBirth ?? ''}
-                  label={t(($) => $.maritalStatus.yearOfBirth, { ns: 'protectedApplicationSpokes' })}
-                  helpMessagePrimary={t(($) => $.maritalStatus.yearOfBirthHelp, { ns: 'protectedApplicationSpokes' })}
-                  helpMessagePrimaryClassName="text-black"
-                  errorMessage={errors?.yearOfBirth}
-                  required
-                />
-                <InputCheckbox
-                  id="consentToSharePersonalInformation"
-                  name="consentToSharePersonalInformation"
-                  value="yes"
-                  errorMessage={errors?.consentToSharePersonalInformation}
-                  defaultChecked={defaultState.consentToSharePersonalInformation === true}
-                  required
-                >
-                  {t(($) => $.maritalStatus.confirmCheckbox, { ns: 'protectedApplicationSpokes' })}
-                </InputCheckbox>
-              </>
-            )}
-          </div>
-          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Marital status click">
-              {t(($) => $.maritalStatus.saveBtn, { ns: 'protectedApplicationSpokes' })}
-            </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              variant="secondary"
-              routeId={getRouteFromApplicationFlow(applicationFlow)}
-              params={params}
-              disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Marital status click"
-            >
-              {t(($) => $.maritalStatus.backBtn, { ns: 'protectedApplicationSpokes' })}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+              {(selectedMaritalStatus === MARITAL_STATUS_CODE_COMMON_LAW || selectedMaritalStatus === MARITAL_STATUS_CODE_MARRIED) && (
+                <>
+                  <h2 className="font-lato mb-6 text-2xl font-bold">{t(($) => $.maritalStatus.spouseOrCommonlaw)}</h2>
+                  <p className="mb-4">{t(($) => $.maritalStatus.provideSin)}</p>
+                  <p className="mb-6">{t(($) => $.maritalStatus.requiredInformation)}</p>
+                  <InputPatternField
+                    id="social-insurance-number"
+                    name="socialInsuranceNumber"
+                    format={sinInputPatternFormat}
+                    label={t(($) => $.maritalStatus.sin)}
+                    inputMode="numeric"
+                    helpMessagePrimary={t(($) => $.maritalStatus.sinHelp)}
+                    helpMessagePrimaryClassName="text-black"
+                    defaultValue={defaultState.socialInsuranceNumber ?? ''}
+                    errorMessage={errors?.socialInsuranceNumber}
+                    required
+                  />
+                  <InputPatternField
+                    id="year-of-birth"
+                    name="yearOfBirth"
+                    inputMode="numeric"
+                    format="####"
+                    defaultValue={defaultState.yearOfBirth ?? ''}
+                    label={t(($) => $.maritalStatus.yearOfBirth)}
+                    helpMessagePrimary={t(($) => $.maritalStatus.yearOfBirthHelp)}
+                    helpMessagePrimaryClassName="text-black"
+                    errorMessage={errors?.yearOfBirth}
+                    required
+                  />
+                  <InputCheckbox
+                    id="consentToSharePersonalInformation"
+                    name="consentToSharePersonalInformation"
+                    value="yes"
+                    errorMessage={errors?.consentToSharePersonalInformation}
+                    defaultChecked={defaultState.consentToSharePersonalInformation === true}
+                    required
+                  >
+                    {t(($) => $.maritalStatus.confirmCheckbox)}
+                  </InputCheckbox>
+                </>
+              )}
+            </div>
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Marital status click">
+                {t(($) => $.maritalStatus.saveBtn)}
+              </LoadingButton>
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId={getRouteFromApplicationFlow(applicationFlow)}
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Marital status click"
+              >
+                {t(($) => $.maritalStatus.backBtn)}
+              </ButtonLink>
+            </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

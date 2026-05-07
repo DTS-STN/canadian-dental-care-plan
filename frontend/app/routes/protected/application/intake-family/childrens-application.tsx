@@ -12,6 +12,7 @@ import { loadProtectedApplicationIntakeFamilyState } from '~/.server/routes/help
 import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildInformationSectionCompleted } from '~/.server/routes/helpers/protected-application-intake-section-checks';
 import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -35,7 +36,6 @@ const FORM_ACTION = { add: 'add', remove: 'remove' } as const;
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedApplicationIntakeFamily', 'protectedApplication', 'gcweb', 'common'),
   pageIdentifier: pageIds.protected.application.intakeFamily.childApplication,
-  pageTitleI18nKey: 'protectedApplicationIntakeFamily:childrensApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -154,6 +154,7 @@ export default function ProtectedNewFamilyChildrensApplication({ loaderData, par
 
   return (
     <>
+      <AppPageTitle>{t(($) => $.childrensApplication.pageTitle)}</AppPageTitle>
       <ProgressStepper activeStep="childrensApplication" className="mb-8" />
       <div className="max-w-prose space-y-8">
         {state.children.map((child, index) => {
@@ -170,7 +171,6 @@ export default function ProtectedNewFamilyChildrensApplication({ loaderData, par
               <h2 className="font-lato mb-4 text-2xl font-bold">
                 {t(($) => $.childrensApplication.childTitle, {
                   childNumber: index + 1,
-                  ns: 'protectedApplicationIntakeFamily',
                 })}
               </h2>
               <div className="space-y-4">
@@ -189,7 +189,6 @@ export default function ProtectedNewFamilyChildrensApplication({ loaderData, par
                     <h2>
                       {t(($) => $.childrensApplication.childInformationCardTitle, {
                         childNumber: index + 1,
-                        ns: 'protectedApplicationIntakeFamily',
                       })}
                     </h2>
                   </CardTitle>
@@ -223,7 +222,6 @@ export default function ProtectedNewFamilyChildrensApplication({ loaderData, par
                       ? t(($) => $.childrensApplication.addChildInformation)
                       : t(($) => $.childrensApplication.editChildInformation, {
                           childNumber: index + 1,
-                          ns: 'protectedApplicationIntakeFamily',
                         })}
                   </ButtonLink>
                 </CardFooter>

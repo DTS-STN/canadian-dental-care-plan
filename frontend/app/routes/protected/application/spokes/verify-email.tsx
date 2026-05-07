@@ -12,6 +12,7 @@ import { getProtectedApplicationState, saveProtectedApplicationState, validateAp
 import type { ApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
@@ -53,7 +54,6 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.verifyEmail,
-  pageTitleI18nKey: 'protectedApplicationSpokes:verifyEmail.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -232,92 +232,100 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
   );
 
   return (
-    <div className="max-w-prose">
-      <ErrorAlert>
-        <h2 className="mb-2 font-bold">{t(($) => $.verifyEmail.verificationCodeAlert.heading)}</h2>
-        <p className="-mb-3">
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.verificationCodeAlert.detail} components={{ requestLink }} />
-        </p>
-      </ErrorAlert>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <p className="mb-4">
-          {t(($) => $.verifyEmail.verificationCode, {
-            email: defaultState,
-            ns: 'protectedApplicationSpokes',
-          })}
-        </p>
-        <p className="mb-4">{t(($) => $.verifyEmail.requestNew)}</p>
-        <p className="mb-8">
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
-        </p>
-        <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
-        <ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <div className="mb-6">
-            <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t(($) => $.verifyEmail.verificationCodeLabel)} inputMode="numeric" required />
-            </div>
-            <LoadingButton
-              id="request-button"
-              type="button"
-              name="_action"
-              variant="link"
-              className="no-underline hover:underline"
-              disabled={isSubmitting}
-              loading={isSubmitting && submittedAction === FORM_ACTION.request}
-              value={FORM_ACTION.request}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Request new verification code - Verify email click"
-              onClick={async () => {
-                const formData = new FormData();
-                formData.append('_action', FORM_ACTION.request);
-                formData.append('_csrf', csrfToken);
-
-                await fetcher.submit(formData, { method: 'post' });
-              }}
-            >
-              {t(($) => $.verifyEmail.requestNewCode)}
-            </LoadingButton>
-          </div>
-
-          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton
-              variant="primary"
-              id="continue-button"
-              name="_action"
-              value={FORM_ACTION.submit}
-              disabled={isSubmitting}
-              loading={isSubmitting && submittedAction === FORM_ACTION.submit}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Verify email click"
-            >
-              {t(($) => $.verifyEmail.continue)}
-            </LoadingButton>
-            <ButtonLink id="back-button" variant="secondary" routeId="protected/application/$id/email" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Verify email click">
-              {t(($) => $.verifyEmail.back)}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-      <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t(($) => $.verifyEmail.codeSent.heading)}</DialogTitle>
-          </DialogHeader>
-          <DialogDescription>
-            {t(($) => $.verifyEmail.codeSent.detail, {
+    <>
+      <AppPageTitle>{t(($) => $.verifyEmail.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <ErrorAlert>
+          <h2 className="mb-2 font-bold">{t(($) => $.verifyEmail.verificationCodeAlert.heading)}</h2>
+          <p className="-mb-3">
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.verificationCodeAlert.detail} components={{ requestLink }} />
+          </p>
+        </ErrorAlert>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <p className="mb-4">
+            {t(($) => $.verifyEmail.verificationCode, {
               email: defaultState,
-              ns: 'protectedApplicationSpokes',
             })}
-          </DialogDescription>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button id="modal-continue" disabled={isSubmitting} variant="primary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Modal Continue - Verify email click">
+          </p>
+          <p className="mb-4">{t(($) => $.verifyEmail.requestNew)}</p>
+          <p className="mb-8">
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
+          </p>
+          <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <div className="mb-6">
+              <div className="grid items-end gap-6 md:grid-cols-2">
+                <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t(($) => $.verifyEmail.verificationCodeLabel)} inputMode="numeric" required />
+              </div>
+              <LoadingButton
+                id="request-button"
+                type="button"
+                name="_action"
+                variant="link"
+                className="no-underline hover:underline"
+                disabled={isSubmitting}
+                loading={isSubmitting && submittedAction === FORM_ACTION.request}
+                value={FORM_ACTION.request}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Request new verification code - Verify email click"
+                onClick={async () => {
+                  const formData = new FormData();
+                  formData.append('_action', FORM_ACTION.request);
+                  formData.append('_csrf', csrfToken);
+
+                  await fetcher.submit(formData, { method: 'post' });
+                }}
+              >
+                {t(($) => $.verifyEmail.requestNewCode)}
+              </LoadingButton>
+            </div>
+
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton
+                variant="primary"
+                id="continue-button"
+                name="_action"
+                value={FORM_ACTION.submit}
+                disabled={isSubmitting}
+                loading={isSubmitting && submittedAction === FORM_ACTION.submit}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Verify email click"
+              >
                 {t(($) => $.verifyEmail.continue)}
-              </Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+              </LoadingButton>
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId="protected/application/$id/email"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Verify email click"
+              >
+                {t(($) => $.verifyEmail.back)}
+              </ButtonLink>
+            </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+        <Dialog open={showDialog} onOpenChange={setShowDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t(($) => $.verifyEmail.codeSent.heading)}</DialogTitle>
+            </DialogHeader>
+            <DialogDescription>
+              {t(($) => $.verifyEmail.codeSent.detail, {
+                email: defaultState,
+              })}
+            </DialogDescription>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button id="modal-continue" disabled={isSubmitting} variant="primary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Modal Continue - Verify email click">
+                  {t(($) => $.verifyEmail.continue)}
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </>
   );
 }

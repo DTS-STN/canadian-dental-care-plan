@@ -7,6 +7,7 @@ import type { Route } from './+types/child-parent-guardian';
 import { TYPES } from '~/.server/constants';
 import { clearProtectedApplicationState, getProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
@@ -20,7 +21,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.childParentOrGuardian,
-  pageTitleI18nKey: 'protectedApplicationSpokes:children.parentOrGuardian.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -71,26 +71,29 @@ export default function ChildParentGuardian({ loaderData, params }: Route.Compon
   }
 
   return (
-    <div className="max-w-prose">
-      <div className="mb-8 space-y-4">
-        <p>{t(($) => $.children.parentOrGuardian.unableToApply)}</p>
+    <>
+      <AppPageTitle>{t(($) => $.children.parentOrGuardian.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <div className="mb-8 space-y-4">
+          <p>{t(($) => $.children.parentOrGuardian.unableToApply)}</p>
+        </div>
+        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
+          <CsrfTokenInput />
+          <ButtonLink
+            id="back-button"
+            variant="secondary"
+            routeId={`protected/application/$id/children/$childId/${isRenewal ? 'parent-guardian' : 'information'}`}
+            params={params}
+            disabled={isSubmitting}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child parent or guardian needs to apply click"
+          >
+            {t(($) => $.children.parentOrGuardian.backBtn)}
+          </ButtonLink>
+          <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - Child parent or guardian needs to apply click">
+            {t(($) => $.children.parentOrGuardian.exitBtn)}
+          </LoadingButton>
+        </fetcher.Form>
       </div>
-      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
-        <CsrfTokenInput />
-        <ButtonLink
-          id="back-button"
-          variant="secondary"
-          routeId={`protected/application/$id/children/$childId/${isRenewal ? 'parent-guardian' : 'information'}`}
-          params={params}
-          disabled={isSubmitting}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child parent or guardian needs to apply click"
-        >
-          {t(($) => $.children.parentOrGuardian.backBtn)}
-        </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Exit - Child parent or guardian needs to apply click">
-          {t(($) => $.children.parentOrGuardian.exitBtn)}
-        </LoadingButton>
-      </fetcher.Form>
-    </div>
+    </>
   );
 }

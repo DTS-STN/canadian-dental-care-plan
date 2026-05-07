@@ -12,6 +12,7 @@ import { TYPES } from '~/.server/constants';
 import { getStatusResultUrl, saveStatusState, startStatusState } from '~/.server/routes/helpers/status-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
@@ -34,7 +35,6 @@ import { extractDigits } from '~/utils/string-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
   pageIdentifier: pageIds.public.status.myself,
-  pageTitleI18nKey: 'status:myself.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -148,37 +148,40 @@ export default function StatusCheckerMyself({ loaderData, params }: Route.Compon
   }
 
   return (
-    <div className="max-w-prose">
-      <p className="mb-4 italic">{t(($) => $.myself.form.completeFields)}</p>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
-          <CsrfTokenInput />
-          {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
-          <div className="mb-8 space-y-6">
-            <InputPatternField
-              id="code"
-              name="code"
-              format={applicationCodeInputPatternFormat}
-              label={t(($) => $.myself.form.applicationCodeLabel)}
-              inputMode="numeric"
-              helpMessagePrimary={t(($) => $.myself.form.applicationCodeDescription)}
-              required
-              errorMessage={errors?.code}
-              defaultValue=""
-            />
-            <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t(($) => $.myself.form.sinLabel)} helpMessagePrimary={t(($) => $.myself.form.sinDescription)} required errorMessage={errors?.sin} defaultValue="" />
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
-              {t(($) => $.myself.form.backBtn)}
-            </ButtonLink>
-            <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
-              {t(($) => $.myself.form.submit)}
-            </LoadingButton>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+    <>
+      <AppPageTitle>{t(($) => $.myself.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <p className="mb-4 italic">{t(($) => $.myself.form.completeFields)}</p>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
+            <CsrfTokenInput />
+            {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
+            <div className="mb-8 space-y-6">
+              <InputPatternField
+                id="code"
+                name="code"
+                format={applicationCodeInputPatternFormat}
+                label={t(($) => $.myself.form.applicationCodeLabel)}
+                inputMode="numeric"
+                helpMessagePrimary={t(($) => $.myself.form.applicationCodeDescription)}
+                required
+                errorMessage={errors?.code}
+                defaultValue=""
+              />
+              <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t(($) => $.myself.form.sinLabel)} helpMessagePrimary={t(($) => $.myself.form.sinDescription)} required errorMessage={errors?.sin} defaultValue="" />
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <ButtonLink id="back-button" variant="secondary" routeId="public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
+                {t(($) => $.myself.form.backBtn)}
+              </ButtonLink>
+              <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+                {t(($) => $.myself.form.submit)}
+              </LoadingButton>
+            </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

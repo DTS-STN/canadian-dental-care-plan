@@ -11,6 +11,7 @@ import type { Route } from './+types/index';
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
@@ -26,7 +27,6 @@ export const handle = {
   breadcrumbs: [{ labelI18nKey: 'letters:index.pageTitle' }],
   i18nNamespaces: getTypedI18nNamespaces('letters', 'gcweb'),
   pageIdentifier: pageIds.protected.letters.index,
-  pageTitleI18nKey: 'letters:index.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -79,6 +79,7 @@ export default function LettersIndex({ loaderData, params }: Route.ComponentProp
 
   return (
     <>
+      <AppPageTitle>{t(($) => $.index.pageTitle)}</AppPageTitle>
       {letters.length === 0 ? (
         <ContextualAlert type="info">
           <p>{t(($) => $.index.noLetter)}</p>

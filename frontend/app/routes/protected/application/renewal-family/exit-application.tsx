@@ -9,6 +9,7 @@ import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationRenewalFamilyState } from '~/.server/routes/helpers/protected-application-renewal-family-route-helpers';
 import { clearProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
@@ -22,7 +23,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedApplicationRenewalFamily', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.renewalFamily.exitApplication,
-  pageTitleI18nKey: 'protectedApplicationRenewalFamily:exitApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -66,28 +66,31 @@ export default function ProtectedRenewalFamilyExitApplication({ loaderData, para
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   return (
-    <div className="max-w-prose">
-      <div className="mb-8 space-y-4">
-        <p>{t(($) => $.exitApplication.areYouSure)}</p>
-        <p>{t(($) => $.exitApplication.clickBack)}</p>
+    <>
+      <AppPageTitle>{t(($) => $.exitApplication.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <div className="mb-8 space-y-4">
+          <p>{t(($) => $.exitApplication.areYouSure)}</p>
+          <p>{t(($) => $.exitApplication.clickBack)}</p>
+        </div>
+        <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
+          <CsrfTokenInput />
+          <ButtonLink
+            id="back-button"
+            variant="secondary"
+            routeId="protected/application/$id/renewal-family/submit"
+            params={params}
+            disabled={isSubmitting}
+            startIcon={faChevronLeft}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Back - Exiting the application click"
+          >
+            {t(($) => $.exitApplication.backBtn)}
+          </ButtonLink>
+          <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Exit - Exiting the application click">
+            {t(($) => $.exitApplication.exitBtn)}
+          </LoadingButton>
+        </fetcher.Form>
       </div>
-      <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
-        <CsrfTokenInput />
-        <ButtonLink
-          id="back-button"
-          variant="secondary"
-          routeId="protected/application/$id/renewal-family/submit"
-          params={params}
-          disabled={isSubmitting}
-          startIcon={faChevronLeft}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Back - Exiting the application click"
-        >
-          {t(($) => $.exitApplication.backBtn)}
-        </ButtonLink>
-        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Family:Exit - Exiting the application click">
-          {t(($) => $.exitApplication.exitBtn)}
-        </LoadingButton>
-      </fetcher.Form>
-    </div>
+    </>
   );
 }

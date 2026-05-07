@@ -5,7 +5,7 @@ import { Outlet, createRoutesStub } from 'react-router';
 import { describe, expect, it } from 'vitest';
 
 import type { Breadcrumbs, BuildInfo, RouteHandleData } from '~/utils/route-utils';
-import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
+import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
 
 /*
  * @vitest-environment jsdom
@@ -264,47 +264,5 @@ describe('usePageIdentifier()', () => {
 
     const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual('"CDCP-0001"');
-  });
-});
-
-describe('usePageTitle()', () => {
-  it('expect no page title from usePageTitle() if the loaders do not provide data', async () => {
-    const RoutesStub = createRoutesStub([
-      {
-        Component: () => <Outlet />,
-        children: [
-          {
-            Component: () => <div data-testid="data">{JSON.stringify(usePageTitleI18nKey())}</div>,
-            path: '/',
-          },
-        ],
-      },
-    ]);
-
-    render(<RoutesStub />);
-
-    const element = await waitFor(async () => await screen.findByTestId('data'));
-    expect(element.textContent).toEqual('');
-  });
-
-  it('expect correctly coalesced page title from usePageTitle() if the loaders provide data', async () => {
-    const RoutesStub = createRoutesStub([
-      {
-        Component: () => <Outlet />,
-        handle: { pageTitleI18nKey: 'protectedApplication:index.pageTitle' } satisfies RouteHandleData,
-        children: [
-          {
-            Component: () => <div data-testid="data">{JSON.stringify(usePageTitleI18nKey())}</div>,
-            handle: { pageTitleI18nKey: 'protectedApplication:index.pageTitle' } satisfies RouteHandleData,
-            path: '/',
-          },
-        ],
-      },
-    ]);
-
-    render(<RoutesStub />);
-
-    const element = await waitFor(async () => await screen.findByTestId('data'));
-    expect(element.textContent).toEqual('"protectedApplication:index.pageTitle"');
   });
 });

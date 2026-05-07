@@ -15,6 +15,7 @@ import { loadProtectedApplicationRenewalFamilyState } from '~/.server/routes/hel
 import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildParentGuardianSectionCompleted } from '~/.server/routes/helpers/protected-application-renewal-section-checks';
 import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -47,7 +48,6 @@ const FORM_ACTION = { DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed'
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedApplicationRenewalFamily', 'protectedApplication', 'gcweb', 'common'),
   pageIdentifier: pageIds.protected.application.renewalFamily.childApplication,
-  pageTitleI18nKey: 'protectedApplicationRenewalFamily:childrensApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -196,6 +196,7 @@ export default function ProtectedRenewFamilyChildrensApplication({ loaderData, p
 
   return (
     <>
+      <AppPageTitle>{t(($) => $.childrensApplication.pageTitle)}</AppPageTitle>
       <ProgressStepper activeStep="childrensApplication" className="mb-8" />
       <div className="max-w-prose space-y-8">
         {state.children.map((child) => {

@@ -8,6 +8,7 @@ import type { Route } from './+types/parent-or-guardian';
 import { TYPES } from '~/.server/constants';
 import { clearPublicApplicationState, getContextualAgeCategoryFromDate, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
@@ -22,7 +23,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.parentOrGuardian,
-  pageTitleI18nKey: 'applicationSpokes:parentOrGuardian.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -84,6 +84,7 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
 
   return (
     <>
+      <AppPageTitle>{t(($) => $.parentOrGuardian.pageTitle)}</AppPageTitle>
       <div className="mb-8 max-w-prose space-y-4">
         <p className="mb-4">{t(($) => $.parentOrGuardian.unableToApply)}</p>
         <p>

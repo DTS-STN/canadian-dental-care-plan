@@ -5,6 +5,7 @@ import type { Route } from './+types/data-unavailable';
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
@@ -16,7 +17,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('dataUnavailable', 'gcweb'),
   pageIdentifier: pageIds.protected.dataUnavailable,
-  pageTitleI18nKey: 'dataUnavailable:pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -47,31 +47,34 @@ export default function DataUnavailable({ loaderData, params }: Route.ComponentP
   const contactLink = <InlineLink to={t(($) => $.contactUsHref)} className="external-link" newTabIndicator target="_blank" />;
 
   return (
-    <div className="max-w-prose">
-      <div className="space-y-4">
-        <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.serviceEligible} components={{ statusCheckerLink }} />
-        </p>
-        <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.otherEnquiry} components={{ cdcpLink }} />
-        </p>
-        <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.serviceDelay} components={{ contactLink }} />
-        </p>
+    <>
+      <AppPageTitle>{t(($) => $.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <div className="space-y-4">
+          <p>
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.serviceEligible} components={{ statusCheckerLink }} />
+          </p>
+          <p>
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.otherEnquiry} components={{ cdcpLink }} />
+          </p>
+          <p>
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.serviceDelay} components={{ contactLink }} />
+          </p>
+        </div>
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <ButtonLink
+            id="back-button"
+            to={t(($) => $.header.menuDashboardHref, {
+              baseUri: SCCH_BASE_URI,
+              ns: 'gcweb',
+            })}
+            variant="primary"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Return to dashboard - You have not applied for CDCP click"
+          >
+            {t(($) => $.backButton)}
+          </ButtonLink>
+        </div>
       </div>
-      <div className="mt-6 flex flex-wrap items-center gap-3">
-        <ButtonLink
-          id="back-button"
-          to={t(($) => $.header.menuDashboardHref, {
-            baseUri: SCCH_BASE_URI,
-            ns: 'gcweb',
-          })}
-          variant="primary"
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Return to dashboard - You have not applied for CDCP click"
-        >
-          {t(($) => $.backButton)}
-        </ButtonLink>
-      </div>
-    </div>
+    </>
   );
 }

@@ -13,6 +13,7 @@ import { savePublicApplicationState, validateApplicationFlow } from '~/.server/r
 import { loadPublicApplicationSimplifiedFamilyState } from '~/.server/routes/helpers/public-application-simplified-family-route-helpers';
 import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildInformationSectionCompleted } from '~/.server/routes/helpers/public-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -36,7 +37,6 @@ const FORM_ACTION = { add: 'add', remove: 'remove', DENTAL_BENEFITS_NOT_CHANGED:
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('applicationSimplifiedFamily', 'application', 'gcweb', 'common'),
   pageIdentifier: pageIds.public.application.simplifiedFamily.childApplication,
-  pageTitleI18nKey: 'applicationSimplifiedFamily:childrensApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -171,6 +171,7 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
 
   return (
     <>
+      <AppPageTitle>{t(($) => $.childrensApplication.pageTitle)}</AppPageTitle>
       <ProgressStepper activeStep="childrensApplication" className="mb-8" />
       <div className="max-w-prose space-y-8">
         {state.children.map((child, index) => {
@@ -186,7 +187,6 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
               <h2 className="font-lato mb-4 text-2xl font-bold">
                 {t(($) => $.childrensApplication.childTitle, {
                   childNumber: index + 1,
-                  ns: 'applicationSimplifiedFamily',
                 })}
               </h2>
               <div className="space-y-4">
@@ -205,7 +205,6 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                     <h2>
                       {t(($) => $.childrensApplication.childInformationCardTitle, {
                         childNumber: index + 1,
-                        ns: 'applicationSimplifiedFamily',
                       })}
                     </h2>
                   </CardTitle>
@@ -239,7 +238,6 @@ export default function RenewFamilyChildrensApplication({ loaderData, params }: 
                       ? t(($) => $.childrensApplication.addChildInformation)
                       : t(($) => $.childrensApplication.editChildInformation, {
                           childNumber: index + 1,
-                          ns: 'applicationSimplifiedFamily',
                         })}
                   </ButtonLink>
                 </CardFooter>

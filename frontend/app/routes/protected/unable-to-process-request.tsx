@@ -5,6 +5,7 @@ import type { Route } from './+types/unable-to-process-request';
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -15,7 +16,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('unableToProcessRequest', 'gcweb'),
   pageIdentifier: pageIds.protected.unableToProcessRequest,
-  pageTitleI18nKey: 'unableToProcessRequest:pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -43,28 +43,31 @@ export default function ProtectedUnableToProcessRequest({ loaderData, params }: 
   const cdcpLink = <InlineLink to={t(($) => $.cdcpLink)} className="external-link" newTabIndicator target="_blank" />;
 
   return (
-    <div className="max-w-prose">
-      <div className="space-y-4">
-        <p>{t(($) => $.unableToProcess)}</p>
-        <p>{t(($) => $.tryAgain)}</p>
-        <ul className="list-disc space-y-1 pl-7">
-          <li>{t(($) => $.disableVpn)}</li>
-          <li>{t(($) => $.anotherDevice)}</li>
-        </ul>
-        <p>{t(($) => $.difficulties)}</p>
-        <ul className="list-disc space-y-1 pl-7">
-          <li>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.callCentre} components={{ noWrap }} />
-          </li>
-          <li>{t(($) => $.visitCentre)}</li>
-          <li>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.submitRequest} components={{ eServiceCanadaLink }} />
-          </li>
-        </ul>
-        <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.returnCdcp} components={{ cdcpLink }} />
-        </p>
+    <>
+      <AppPageTitle>{t(($) => $.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <div className="space-y-4">
+          <p>{t(($) => $.unableToProcess)}</p>
+          <p>{t(($) => $.tryAgain)}</p>
+          <ul className="list-disc space-y-1 pl-7">
+            <li>{t(($) => $.disableVpn)}</li>
+            <li>{t(($) => $.anotherDevice)}</li>
+          </ul>
+          <p>{t(($) => $.difficulties)}</p>
+          <ul className="list-disc space-y-1 pl-7">
+            <li>
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.callCentre} components={{ noWrap }} />
+            </li>
+            <li>{t(($) => $.visitCentre)}</li>
+            <li>
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.submitRequest} components={{ eServiceCanadaLink }} />
+            </li>
+          </ul>
+          <p>
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.returnCdcp} components={{ cdcpLink }} />
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

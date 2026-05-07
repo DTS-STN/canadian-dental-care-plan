@@ -15,6 +15,7 @@ import type { PublicApplicationDentalFederalBenefitsState, PublicApplicationDent
 import { loadPublicApplicationSimplifiedAdultState } from '~/.server/routes/helpers/public-application-simplified-adult-route-helpers';
 import { isDentalBenefitsSectionCompleted, isDentalInsuranceSectionCompleted } from '~/.server/routes/helpers/public-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -34,9 +35,8 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'applicationSimplifiedAdult', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSimplifiedAdult', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.simplifiedAdult.dentalInsurance,
-  pageTitleI18nKey: 'applicationSimplifiedAdult:dentalInsurance.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -48,7 +48,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const meta = {
-    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.dentalInsurance.pageTitle, { ns: 'applicationSimplifiedAdult' }) }),
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.dentalInsurance.pageTitle) }),
   };
 
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
@@ -143,59 +143,62 @@ export default function RenewAdultDentalInsurance({ loaderData, params }: Route.
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 
   return (
-    <fetcher.Form method="post" noValidate>
-      <CsrfTokenInput />
-      <ProgressStepper activeStep="dentalInsurance" className="mb-8" />
-      <div className="max-w-prose space-y-8">
-        <div className="space-y-4">
-          <p>{t(($) => $.completeAllSections)}</p>
-          <p>{completedSectionsLabel}</p>
-        </div>
-        <Card>
-          <CardHeader>
-            <CardTitle asChild>
-              <h2>{t(($) => $.dentalInsurance.accessToDentalInsurance, { ns: 'applicationSimplifiedAdult' })}</h2>
-            </CardTitle>
-            <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          <DentalInsuranceCardContent />
-          <DentalInsuranceCardFooter />
-        </Card>
+    <>
+      <AppPageTitle>{t(($) => $.dentalInsurance.pageHeading)}</AppPageTitle>
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <ProgressStepper activeStep="dentalInsurance" className="mb-8" />
+        <div className="max-w-prose space-y-8">
+          <div className="space-y-4">
+            <p>{t(($) => $.completeAllSections, { ns: 'application' })}</p>
+            <p>{completedSectionsLabel}</p>
+          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle asChild>
+                <h2>{t(($) => $.dentalInsurance.accessToDentalInsurance)}</h2>
+              </CardTitle>
+              <CardAction>{sections.dentalInsurance.completed && <StatusTag status="complete" />}</CardAction>
+            </CardHeader>
+            <DentalInsuranceCardContent />
+            <DentalInsuranceCardFooter />
+          </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle asChild>
-              <h2>{t(($) => $.dentalInsurance.otherBenefits, { ns: 'applicationSimplifiedAdult' })}</h2>
-            </CardTitle>
-            <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          <DentalBenefitsCardContent />
-          <DentalBenefitsCardFooter />
-        </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle asChild>
+                <h2>{t(($) => $.dentalInsurance.otherBenefits)}</h2>
+              </CardTitle>
+              <CardAction>{sections.dentalBenefits.completed && <StatusTag status="complete" />}</CardAction>
+            </CardHeader>
+            <DentalBenefitsCardContent />
+            <DentalBenefitsCardFooter />
+          </Card>
 
-        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink
-            disabled={!allSectionsCompleted}
-            variant="primary"
-            direction="next"
-            routeId="public/application/$id/simplified-adult/submit"
-            params={params}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Continue click"
-          >
-            {t(($) => $.dentalInsurance.submit, { ns: 'applicationSimplifiedAdult' })}
-          </NavigationButtonLink>
-          <NavigationButtonLink
-            variant="secondary"
-            direction="previous"
-            routeId="public/application/$id/simplified-adult/contact-information"
-            params={params}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Back click"
-          >
-            {t(($) => $.dentalInsurance.contactInformation, { ns: 'applicationSimplifiedAdult' })}
-          </NavigationButtonLink>
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <NavigationButtonLink
+              disabled={!allSectionsCompleted}
+              variant="primary"
+              direction="next"
+              routeId="public/application/$id/simplified-adult/submit"
+              params={params}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Continue click"
+            >
+              {t(($) => $.dentalInsurance.submit)}
+            </NavigationButtonLink>
+            <NavigationButtonLink
+              variant="secondary"
+              direction="previous"
+              routeId="public/application/$id/simplified-adult/contact-information"
+              params={params}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Back click"
+            >
+              {t(($) => $.dentalInsurance.contactInformation)}
+            </NavigationButtonLink>
+          </div>
         </div>
-      </div>
-    </fetcher.Form>
+      </fetcher.Form>
+    </>
   );
 }
 
@@ -219,9 +222,7 @@ function DentalInsuranceCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t(($) => $.dentalInsurance.accessToDentalInsuranceOrCoverage, { ns: 'applicationSimplifiedAdult' })}>
-            {state.dentalInsurance ? t(($) => $.dentalInsurance.dentalInsuranceYes, { ns: 'applicationSimplifiedAdult' }) : t(($) => $.dentalInsurance.dentalInsuranceNo, { ns: 'applicationSimplifiedAdult' })}
-          </DefinitionListItem>
+          <DefinitionListItem term={t(($) => $.dentalInsurance.accessToDentalInsuranceOrCoverage)}>{state.dentalInsurance ? t(($) => $.dentalInsurance.dentalInsuranceYes) : t(($) => $.dentalInsurance.dentalInsuranceNo)}</DefinitionListItem>
         </DefinitionList>
       </CardContent>
     );
@@ -229,7 +230,7 @@ function DentalInsuranceCardContent(): JSX.Element {
 
   return (
     <CardContent>
-      <p>{t(($) => $.dentalInsurance.dentalInsuranceIndicateStatus, { ns: 'applicationSimplifiedAdult' })}</p>
+      <p>{t(($) => $.dentalInsurance.dentalInsuranceIndicateStatus)}</p>
     </CardContent>
   );
 }
@@ -262,7 +263,7 @@ function DentalInsuranceCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Adult:Edit button dental insurance click"
         >
-          {t(($) => $.dentalInsurance.editAccessToDentalInsurance, { ns: 'applicationSimplifiedAdult' })}
+          {t(($) => $.dentalInsurance.editAccessToDentalInsurance)}
         </ButtonLink>
       </CardFooter>
     );
@@ -279,9 +280,9 @@ function DentalInsuranceCardFooter(): JSX.Element {
         startIcon={faCirclePlus}
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Adult:Add button dental insurance click"
-        aria-label={`${t(($) => $.dentalInsurance.addAnswer, { ns: 'applicationSimplifiedAdult' })} - ${t(($) => $.dentalInsurance.accessToDentalInsurance, { ns: 'applicationSimplifiedAdult' })}`}
+        aria-label={`${t(($) => $.dentalInsurance.addAnswer)} - ${t(($) => $.dentalInsurance.accessToDentalInsurance)}`}
       >
-        {t(($) => $.dentalInsurance.addAnswer, { ns: 'applicationSimplifiedAdult' })}
+        {t(($) => $.dentalInsurance.addAnswer)}
       </ButtonLink>
     </CardFooter>
   );
@@ -308,17 +309,17 @@ function DentalBenefitsCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t(($) => $.dentalInsurance.accessToGovernmentBenefits, { ns: 'applicationSimplifiedAdult' })}>
+          <DefinitionListItem term={t(($) => $.dentalInsurance.accessToGovernmentBenefits)}>
             {state.dentalBenefits.federalBenefit.access || state.dentalBenefits.provTerrBenefit.access ? (
               <div className="space-y-3">
-                <p>{t(($) => $.dentalInsurance.accessToGovernmentBenefitsYes, { ns: 'applicationSimplifiedAdult' })}</p>
+                <p>{t(($) => $.dentalInsurance.accessToGovernmentBenefitsYes)}</p>
                 <ul className="list-disc space-y-1 pl-7">
                   {state.dentalBenefits.federalBenefit.access && <li>{state.dentalBenefits.federalBenefit.benefit}</li>}
                   {state.dentalBenefits.provTerrBenefit.access && <li>{state.dentalBenefits.provTerrBenefit.benefit}</li>}
                 </ul>
               </div>
             ) : (
-              <p>{t(($) => $.dentalInsurance.accessToGovernmentBenefitsNo, { ns: 'applicationSimplifiedAdult' })}</p>
+              <p>{t(($) => $.dentalInsurance.accessToGovernmentBenefitsNo)}</p>
             )}
           </DefinitionListItem>
         </DefinitionList>
@@ -330,17 +331,17 @@ function DentalBenefitsCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t(($) => $.dentalInsurance.accessToGovernmentBenefits, { ns: 'applicationSimplifiedAdult' })}>
+          <DefinitionListItem term={t(($) => $.dentalInsurance.accessToGovernmentBenefits)}>
             {clientApplication.dentalBenefits.hasFederalBenefits || clientApplication.dentalBenefits.hasProvincialTerritorialBenefits ? (
               <div className="space-y-3">
-                <p>{t(($) => $.dentalInsurance.accessToGovernmentBenefitsYes, { ns: 'applicationSimplifiedAdult' })}</p>
+                <p>{t(($) => $.dentalInsurance.accessToGovernmentBenefitsYes)}</p>
                 <ul className="list-disc space-y-1 pl-7">
                   {clientApplication.dentalBenefits.hasFederalBenefits && <li>{clientApplication.dentalBenefits.federalSocialProgram}</li>}
                   {clientApplication.dentalBenefits.hasProvincialTerritorialBenefits && <li>{clientApplication.dentalBenefits.provincialTerritorialSocialProgram}</li>}
                 </ul>
               </div>
             ) : (
-              <p>{t(($) => $.dentalInsurance.accessToGovernmentBenefitsNo, { ns: 'applicationSimplifiedAdult' })}</p>
+              <p>{t(($) => $.dentalInsurance.accessToGovernmentBenefitsNo)}</p>
             )}
           </DefinitionListItem>
         </DefinitionList>
@@ -350,7 +351,7 @@ function DentalBenefitsCardContent(): JSX.Element {
 
   return (
     <CardContent>
-      <p>{t(($) => $.dentalInsurance.dentalBenefitsIndicateStatus, { ns: 'applicationSimplifiedAdult' })}</p>
+      <p>{t(($) => $.dentalInsurance.dentalBenefitsIndicateStatus)}</p>
     </CardContent>
   );
 }
@@ -385,7 +386,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Adult:Edit button government benefits click"
         >
-          {t(($) => $.dentalInsurance.editAccessToGovernmentBenefits, { ns: 'applicationSimplifiedAdult' })}
+          {t(($) => $.dentalInsurance.editAccessToGovernmentBenefits)}
         </ButtonLink>
       </CardFooter>
     );
@@ -405,7 +406,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Adult:Update button government benefits click"
           >
-            {t(($) => $.dentalInsurance.updateMyAccess, { ns: 'applicationSimplifiedAdult' })}
+            {t(($) => $.dentalInsurance.updateMyAccess)}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -419,7 +420,7 @@ function DentalBenefitsCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Adult:Complete benefits click"
           >
-            <span className="text-left">{t(($) => $.dentalInsurance.accessNotChanged, { ns: 'applicationSimplifiedAdult' })}</span>
+            <span className="text-left">{t(($) => $.dentalInsurance.accessNotChanged)}</span>
           </Button>
         </div>
       </CardFooter>
@@ -437,9 +438,9 @@ function DentalBenefitsCardFooter(): JSX.Element {
         startIcon={faPenToSquare}
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Public-Simplified_Adult:Add button dental benefits click"
-        aria-label={`${t(($) => $.dentalInsurance.addAnswer, { ns: 'applicationSimplifiedAdult' })} - ${t(($) => $.dentalInsurance.otherBenefits, { ns: 'applicationSimplifiedAdult' })}`}
+        aria-label={`${t(($) => $.dentalInsurance.addAnswer)} - ${t(($) => $.dentalInsurance.otherBenefits)}`}
       >
-        {t(($) => $.dentalInsurance.addAnswer, { ns: 'applicationSimplifiedAdult' })}
+        {t(($) => $.dentalInsurance.addAnswer)}
       </ButtonLink>
     </CardFooter>
   );
