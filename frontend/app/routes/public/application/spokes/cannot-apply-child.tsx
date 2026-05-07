@@ -15,13 +15,12 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'gcweb'),
+  i18nNamespaces: ['applicationSpokes', 'gcweb'],
   pageIdentifier: pageIds.public.application.spokes.cannotApplyChild,
 } as const satisfies RouteHandleData;
 

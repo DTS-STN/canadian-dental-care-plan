@@ -3,11 +3,20 @@ import { generatePath, useMatches } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
 import type { FlatNamespace, KeysByTOptions, Namespace, ParseKeysByNamespaces, TOptions } from 'i18next';
-import validator from 'validator';
 import * as z from 'zod';
 
 import type { I18nPageRoute, I18nRoute, Language } from '~/routes/routes';
 import { i18nRoutes, isI18nLayoutRoute, isI18nPageRoute } from '~/routes/routes';
+
+/**
+ * React-i18next internal Helpers
+ *
+ * A tuple type that requires at least one element of type T, but can contain additional elements of the same type.
+ *
+ * @template T - The type of the elements in the tuple.
+ * @see https://github.com/i18next/react-i18next/blob/5e892a27a78b243b5c2eb3691da76ea1daa41b65/helpers.d.ts#L2
+ */
+type $Tuple<T> = readonly [T?, ...T[]];
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByNamespaces<Namespace, KeysByTOptions<TOpt>>;
@@ -38,18 +47,13 @@ const buildInfoSchema = z
   })
   .readonly();
 
-export const i18nNamespacesSchema = z
-  .array(z.custom<FlatNamespace>())
-  .refine((arr) => Array.isArray(arr) && arr.every((val) => typeof val === 'string' && !validator.isEmpty(val)))
-  .readonly();
-
 const pageIdentifierSchema = z.string().readonly();
 
 export type Breadcrumbs = z.infer<typeof breadcrumbsSchema>;
 
 export type BuildInfo = z.infer<typeof buildInfoSchema>;
 
-export type I18nNamespaces = z.infer<typeof i18nNamespacesSchema>;
+export type I18nNamespaces = $Tuple<FlatNamespace>;
 
 export type TransformAdobeAnalyticsUrl = (url: string | URL) => URL;
 
@@ -93,8 +97,7 @@ export function useTransformAdobeAnalyticsUrl() {
 export function useI18nNamespaces() {
   const namespaces = useMatches()
     .map(({ handle }) => handle as RouteHandleData | undefined)
-    .map((handle) => i18nNamespacesSchema.safeParse(handle?.i18nNamespaces))
-    .flatMap((result) => (result.success ? result.data : undefined))
+    .flatMap((handle) => handle?.i18nNamespaces)
     .filter((i18nNamespaces) => i18nNamespaces !== undefined);
   return [...new Set(namespaces)];
 }

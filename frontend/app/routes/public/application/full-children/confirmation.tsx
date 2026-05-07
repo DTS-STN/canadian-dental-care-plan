@@ -20,14 +20,13 @@ import { useApplicationFlowStorage, useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { formatClientNumber, formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('applicationFullChild', 'application', 'gcweb'),
+  i18nNamespaces: ['applicationFullChild', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.fullChild.confirmation,
 } as const satisfies RouteHandleData;
 

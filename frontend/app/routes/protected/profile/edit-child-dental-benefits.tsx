@@ -22,7 +22,6 @@ import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { transformAdobeAnalyticsUrl } from '~/route-helpers/adobe-analytics-route-helpers';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -46,7 +45,7 @@ const HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION = {
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'protectedProfile:editChildDentalBenefits.breadcrumb', routeId: 'protected/profile/dental-benefits' }],
-  i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
+  i18nNamespaces: ['protectedProfile', 'gcweb'],
   transformAdobeAnalyticsUrl,
   pageIdentifier: pageIds.protected.profile.editChildDentalBenefits,
 } as const satisfies RouteHandleData;

@@ -18,7 +18,6 @@ import { useApplicationFlowStorage } from '~/hooks';
 import { transformAdobeAnalyticsUrl } from '~/route-helpers/adobe-analytics-route-helpers';
 import { useApiApplicationState } from '~/utils/api-application-state-utils';
 import { useApiSession } from '~/utils/api-session-utils';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { removeTrailingSlash } from '~/utils/url-utils';
@@ -26,8 +25,8 @@ import { removeTrailingSlash } from '~/utils/url-utils';
 export const handle = {
   // Declare all i18n namespaces required by this route and its descendants.
   // Preloading them upfront ensures translations are available on initial render.
-  i18nNamespaces: getTypedI18nNamespaces(
-    ...layoutI18nNamespaces,
+  i18nNamespaces: [
+    ...layoutI18nNamespaces, //
     'common',
     'application',
     'applicationFullAdult',
@@ -37,7 +36,7 @@ export const handle = {
     'applicationSimplifiedChild',
     'applicationSimplifiedFamily',
     'applicationSpokes',
-  ),
+  ],
   transformAdobeAnalyticsUrl,
 } as const satisfies RouteHandleData;
 

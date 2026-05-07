@@ -17,7 +17,6 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -29,7 +28,7 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
+  i18nNamespaces: ['status', 'gcweb'],
   pageIdentifier: pageIds.public.status.result,
 } as const satisfies RouteHandleData;
 

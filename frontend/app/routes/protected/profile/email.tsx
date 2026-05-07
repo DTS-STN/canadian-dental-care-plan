@@ -18,7 +18,6 @@ import { InputField } from '~/components/input-field';
 import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -60,7 +59,7 @@ function requireProfileEmailContext({ request, params }: Pick<Route.LoaderArgs |
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'protectedProfile:contactInformation.pageTitle', routeId: 'protected/profile/contact-information' }],
-  i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
+  i18nNamespaces: ['protectedProfile', 'gcweb'],
   pageIdentifier: pageIds.protected.profile.email,
 } as const satisfies RouteHandleData;
 

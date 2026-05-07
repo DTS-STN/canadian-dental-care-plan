@@ -33,7 +33,7 @@ import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
 import { getClientEnv } from '~/utils/env-utils';
 import { arrayBufferToBase64, getFileExtension, getMimeType } from '~/utils/file.utils';
-import { getLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getLanguage } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -49,7 +49,7 @@ type DocumentUploadSchemaErrorTree = z.core.$ZodErrorTree<DocumentUploadSchemaOu
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'documents:index.pageTitle', routeId: 'protected/documents/index' }],
-  i18nNamespaces: getTypedI18nNamespaces('documents', 'gcweb'),
+  i18nNamespaces: ['documents', 'gcweb'],
   pageIdentifier: pageIds.protected.documents.upload,
 } as const satisfies RouteHandleData;
 

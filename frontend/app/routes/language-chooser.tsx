@@ -1,13 +1,12 @@
 import type { Route } from './+types/language-chooser';
 
 import { ButtonLink } from '~/components/buttons';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getDescriptionMetaTags, getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('gcweb'),
+  i18nNamespaces: ['gcweb'],
 } as const satisfies RouteHandleData;
 
 // Meta tags are constructed for a bilingual page.

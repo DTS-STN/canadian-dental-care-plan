@@ -8,14 +8,13 @@ import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { pageIds } from '~/page-ids';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'documents:index.pageTitle', routeId: 'protected/documents/index' }],
-  i18nNamespaces: getTypedI18nNamespaces('documents', 'gcweb'),
+  i18nNamespaces: ['documents', 'gcweb'],
   pageIdentifier: pageIds.protected.documents.notRequired,
 } as const satisfies RouteHandleData;
 

@@ -25,7 +25,6 @@ import { StatusTag } from '~/components/status-tag';
 import { useSectionsStatus } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/protected/application/renewal-adult/progress-stepper';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -37,7 +36,7 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationRenewalAdult', 'protectedApplication', 'gcweb'),
+  i18nNamespaces: ['protectedApplicationRenewalAdult', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.renewalAdult.contactInformation,
 } as const satisfies RouteHandleData;
 

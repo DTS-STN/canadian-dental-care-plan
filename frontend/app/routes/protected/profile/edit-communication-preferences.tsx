@@ -26,7 +26,6 @@ import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
 import type { ProfileEmailContext } from '~/routes/protected/profile/email';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -34,7 +33,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'protectedProfile:communicationPreferences.pageTitle', routeId: 'protected/profile/communication-preferences' }],
-  i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
+  i18nNamespaces: ['protectedProfile', 'gcweb'],
   pageIdentifier: pageIds.protected.profile.editCommunicationPreferences,
 } as const satisfies RouteHandleData;
 

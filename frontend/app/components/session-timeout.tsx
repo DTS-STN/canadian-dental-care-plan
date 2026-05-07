@@ -8,9 +8,9 @@ import { useIdleTimer } from 'react-idle-timer';
 
 import { Button } from '~/components/buttons';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import type { I18nNamespaces } from '~/utils/route-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('gcweb');
+const i18nNamespaces = ['gcweb'] satisfies I18nNamespaces;
 
 export interface SessionTimeoutProps extends Required<Pick<IIdleTimerProps, 'promptBeforeIdle' | 'timeout'>> {
   /**

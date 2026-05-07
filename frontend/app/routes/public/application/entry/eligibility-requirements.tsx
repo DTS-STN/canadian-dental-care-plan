@@ -13,13 +13,12 @@ import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { StatusTag } from '~/components/status-tag';
 import { useSectionsStatus } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'gcweb'),
+  i18nNamespaces: ['application', 'gcweb'],
   pageIdentifier: pageIds.public.application.eligibilityRequirements,
 } as const satisfies RouteHandleData;
 

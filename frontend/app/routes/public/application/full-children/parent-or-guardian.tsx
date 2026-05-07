@@ -18,14 +18,13 @@ import { StatusTag } from '~/components/status-tag';
 import { useSectionsStatus } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/public/application/full-children/progress-stepper';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('applicationFullChild', 'application', 'gcweb'),
+  i18nNamespaces: ['applicationFullChild', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.fullChild.parentOrGuardian,
 } as const satisfies RouteHandleData;
 

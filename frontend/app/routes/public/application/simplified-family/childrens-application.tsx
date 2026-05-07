@@ -25,7 +25,6 @@ import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/public/application/simplified-family/progress-stepper';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { generateId } from '~/utils/id.utils';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -35,7 +34,7 @@ import { formatSin } from '~/utils/sin-utils';
 const FORM_ACTION = { add: 'add', remove: 'remove', DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed' } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('applicationSimplifiedFamily', 'application', 'gcweb', 'common'),
+  i18nNamespaces: ['applicationSimplifiedFamily', 'application', 'gcweb', 'common'],
   pageIdentifier: pageIds.public.application.simplifiedFamily.childApplication,
 } as const satisfies RouteHandleData;
 

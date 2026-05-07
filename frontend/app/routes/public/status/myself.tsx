@@ -24,7 +24,6 @@ import { pageIds } from '~/page-ids';
 import { useClientEnv, useFeature } from '~/root';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -33,7 +32,7 @@ import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils'
 import { extractDigits } from '~/utils/string-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
+  i18nNamespaces: ['status', 'gcweb'],
   pageIdentifier: pageIds.public.status.myself,
 } as const satisfies RouteHandleData;
 

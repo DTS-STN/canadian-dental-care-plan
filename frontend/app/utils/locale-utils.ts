@@ -1,11 +1,10 @@
-import type { FlatNamespace, LanguageDetectorModule, TOptions, i18n } from 'i18next';
+import type { LanguageDetectorModule, TOptions, i18n } from 'i18next';
 import { createInstance } from 'i18next';
 import I18NextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
 import { getClientEnv } from '~/utils/env-utils';
 import type { ParsedKeysByNamespaces, RouteHandleData } from '~/utils/route-utils';
-import { i18nNamespacesSchema } from '~/utils/route-utils';
 
 /**
  * A constant array representing the supported application locales.
@@ -100,8 +99,7 @@ export function getNamespaces(routes?: ({ handle?: unknown } | undefined)[]) {
 
   const namespaces = routes
     .map((route) => route?.handle as RouteHandleData | undefined)
-    .map((handle) => i18nNamespacesSchema.safeParse(handle?.i18nNamespaces))
-    .flatMap((result) => (result.success ? result.data : undefined))
+    .flatMap((handle) => handle?.i18nNamespaces)
     .filter((i18nNamespaces) => i18nNamespaces !== undefined);
 
   return [...new Set(namespaces)];
@@ -110,7 +108,7 @@ export function getNamespaces(routes?: ({ handle?: unknown } | undefined)[]) {
 /**
  * Initializes the client instance of i18next.
  */
-export async function initI18n(namespaces: Array<string>) {
+export async function initI18n(namespaces: ReadonlyArray<string>) {
   const { BUILD_REVISION, I18NEXT_DEBUG } = getClientEnv();
   const i18n = createInstance();
 
@@ -136,26 +134,6 @@ export async function initI18n(namespaces: Array<string>) {
     });
 
   return i18n;
-}
-
-/**
- * Returns a tuple representing a typed list of namespaces.
- *
- * @template T - The primary namespace to include in the tuple.
- * @template T2 - Additional namespaces to include in the tuple. Should only contain distinct values.
- * @param ns - The primary namespace of type T.
- * @param rest - Additional namespaces of type T2 (should be distinct).
- * @returns A tuple containing the primary namespace and additional namespaces.
- *
- * @note Ensure that the values in the `rest` parameter are distinct to avoid duplicates in the resulting tuple.
- *
- * @example
- * // Usage example:
- * const result = getTypedI18nNs("common", "gcweb", "other");
- * // result is of type: readonly ["common", "gcweb", "other"]
- */
-export function getTypedI18nNamespaces<const T extends Readonly<FlatNamespace>, const T2 extends ReadonlyArray<Exclude<FlatNamespace, T>>>(ns: T, ...rest: T2) {
-  return [ns, ...rest] as const;
 }
 
 /**

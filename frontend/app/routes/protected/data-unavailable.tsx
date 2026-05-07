@@ -9,13 +9,12 @@ import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { pageIds } from '~/page-ids';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('dataUnavailable', 'gcweb'),
+  i18nNamespaces: ['dataUnavailable', 'gcweb'],
   pageIdentifier: pageIds.protected.dataUnavailable,
 } as const satisfies RouteHandleData;
 

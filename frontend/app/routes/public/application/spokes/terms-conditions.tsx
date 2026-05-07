@@ -22,7 +22,6 @@ import { InputCheckbox } from '~/components/input-checkbox';
 import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -44,7 +43,7 @@ type CheckboxId = (typeof CHECKBOX_IDS)[keyof typeof CHECKBOX_IDS];
 const CONSENT_CHECKBOXES = [CHECKBOX_IDS.ACKNOWLEDGE_TERMS, CHECKBOX_IDS.ACKNOWLEDGE_PRIVACY, CHECKBOX_IDS.SHARE_DATA] as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'gcweb'),
+  i18nNamespaces: ['applicationSpokes', 'gcweb'],
   pageIdentifier: pageIds.public.application.spokes.termsConditions,
 } as const satisfies RouteHandleData;
 
