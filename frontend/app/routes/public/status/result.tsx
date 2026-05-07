@@ -10,6 +10,7 @@ import { TYPES } from '~/.server/constants';
 import { clearStatusState, getStatusStateIdFromUrl, loadStatusState } from '~/.server/routes/helpers/status-route-helpers';
 import { getContextualAlertType } from '~/.server/utils/application-code.utils';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Button } from '~/components/buttons';
 import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -30,7 +31,6 @@ const FORM_ACTION = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
   pageIdentifier: pageIds.public.status.result,
-  pageTitleI18nKey: 'status:result.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -88,29 +88,32 @@ export default function StatusCheckerResult({ loaderData, params }: Route.Compon
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   return (
-    <fetcher.Form method="post" noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
-      <CsrfTokenInput />
-      <div className="max-w-prose">
-        {statusResult.clientFriendlyStatus ? (
-          <ContextualAlert type={statusResult.alertType}>
-            <h2 className="mb-2 font-bold">{t(($) => $.result.statusHeading)}</h2>
-            <ClientFriendlyStatusMarkdown content={statusResult.clientFriendlyStatus.name} />
-          </ContextualAlert>
-        ) : (
-          <StatusNotFound />
-        )}
-        <div className="mt-12">
-          <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} variant="primary" endIcon={faChevronRight}>
-            {t(($) => $.result.checkAnother)}
-          </Button>
+    <>
+      <AppPageTitle>{t(($) => $.result.pageTitle)}</AppPageTitle>
+      <fetcher.Form method="post" noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
+        <CsrfTokenInput />
+        <div className="max-w-prose">
+          {statusResult.clientFriendlyStatus ? (
+            <ContextualAlert type={statusResult.alertType}>
+              <h2 className="mb-2 font-bold">{t(($) => $.result.statusHeading)}</h2>
+              <ClientFriendlyStatusMarkdown content={statusResult.clientFriendlyStatus.name} />
+            </ContextualAlert>
+          ) : (
+            <StatusNotFound />
+          )}
+          <div className="mt-12">
+            <Button id="cancel-button" name="_action" value={FORM_ACTION.cancel} disabled={isSubmitting} variant="primary" endIcon={faChevronRight}>
+              {t(($) => $.result.checkAnother)}
+            </Button>
+          </div>
+          <div className="mt-6">
+            <Button id="exit-button" name="_action" value={FORM_ACTION.exit} disabled={isSubmitting} className="mt-6" variant="secondary">
+              {t(($) => $.result.exitBtn)}
+            </Button>
+          </div>
         </div>
-        <div className="mt-6">
-          <Button id="exit-button" name="_action" value={FORM_ACTION.exit} disabled={isSubmitting} className="mt-6" variant="secondary">
-            {t(($) => $.result.exitBtn)}
-          </Button>
-        </div>
-      </div>
-    </fetcher.Form>
+      </fetcher.Form>
+    </>
   );
 }
 

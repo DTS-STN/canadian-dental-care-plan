@@ -14,6 +14,7 @@ import type { ApplicationFlow } from '~/.server/routes/helpers/public-applicatio
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogTrigger } from '~/components/dialog';
@@ -56,7 +57,6 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.homeAddress,
-  pageTitleI18nKey: 'applicationSpokes:address.homeAddress.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -261,110 +261,120 @@ export default function HomeAddress({ loaderData, params }: Route.ComponentProps
   }
 
   return (
-    <div className="max-w-prose">
-      <p className="mb-4 italic">{t(($) => $.optionalLabel, { ns: 'application' })}</p>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <fieldset className="mb-8">
-            <div className="space-y-6">
-              <InputSanitizeField
-                id="homeAddress"
-                name="address"
-                className="w-full"
-                label={t(($) => $.address.addressField.address)}
-                helpMessagePrimary={t(($) => $.address.addressField.addressHelp)}
-                helpMessagePrimaryClassName="text-black"
-                maxLength={100}
-                autoComplete="address-line1"
-                defaultValue={defaultState.address}
-                errorMessage={errors?.address}
-                required
-              />
-              <InputSanitizeField
-                id="home-apartment"
-                name="apartment"
-                className="w-full"
-                label={t(($) => $.address.addressField.apartment)}
-                maxLength={100}
-                helpMessagePrimary={t(($) => $.address.addressField.apartmentHelp)}
-                helpMessagePrimaryClassName="text-black"
-                autoComplete="address-line2"
-                defaultValue=""
-                errorMessage={errors?.apartment}
-              />
-              <InputSanitizeField id="home-city" name="city" className="w-full" label={t(($) => $.address.addressField.city)} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
-              <InputSanitizeField
-                id="home-postal-code"
-                name="postalZipCode"
-                className="w-full sm:w-1/2"
-                label={isPostalCodeRequired ? t(($) => $.address.addressField.postalCode) : t(($) => $.address.addressField.postalCodeOptional)}
-                maxLength={100}
-                autoComplete="postal-code"
-                defaultValue={defaultState.postalCode ?? ''}
-                errorMessage={errors?.postalZipCode}
-                required={isPostalCodeRequired}
-                helpMessagePrimary={postalCodeHelpMessage}
-                helpMessagePrimaryClassName="text-black"
-              />
-              {homeRegions.length > 0 && (
-                <InputSelect
-                  id="home-province"
-                  name="provinceStateId"
-                  className="w-full sm:w-1/2"
-                  label={t(($) => $.address.addressField.province)}
-                  defaultValue={defaultState.province}
-                  errorMessage={errors?.provinceStateId}
-                  options={[dummyOption, ...homeRegions]}
+    <>
+      <AppPageTitle>{t(($) => $.address.homeAddress.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <p className="mb-4 italic">{t(($) => $.optionalLabel, { ns: 'application' })}</p>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <fieldset className="mb-8">
+              <div className="space-y-6">
+                <InputSanitizeField
+                  id="homeAddress"
+                  name="address"
+                  className="w-full"
+                  label={t(($) => $.address.addressField.address)}
+                  helpMessagePrimary={t(($) => $.address.addressField.addressHelp)}
+                  helpMessagePrimaryClassName="text-black"
+                  maxLength={100}
+                  autoComplete="address-line1"
+                  defaultValue={defaultState.address}
+                  errorMessage={errors?.address}
                   required
                 />
-              )}
-              <InputSelect
-                id="home-country"
-                name="countryId"
-                className="w-full sm:w-1/2"
-                label={t(($) => $.address.addressField.country)}
-                autoComplete="country"
-                defaultValue={defaultState.country ?? ''}
-                errorMessage={errors?.countryId}
-                options={countries}
-                onChange={homeCountryChangeHandler}
-                required
-              />
+                <InputSanitizeField
+                  id="home-apartment"
+                  name="apartment"
+                  className="w-full"
+                  label={t(($) => $.address.addressField.apartment)}
+                  maxLength={100}
+                  helpMessagePrimary={t(($) => $.address.addressField.apartmentHelp)}
+                  helpMessagePrimaryClassName="text-black"
+                  autoComplete="address-line2"
+                  defaultValue=""
+                  errorMessage={errors?.apartment}
+                />
+                <InputSanitizeField id="home-city" name="city" className="w-full" label={t(($) => $.address.addressField.city)} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
+                <InputSanitizeField
+                  id="home-postal-code"
+                  name="postalZipCode"
+                  className="w-full sm:w-1/2"
+                  label={isPostalCodeRequired ? t(($) => $.address.addressField.postalCode) : t(($) => $.address.addressField.postalCodeOptional)}
+                  maxLength={100}
+                  autoComplete="postal-code"
+                  defaultValue={defaultState.postalCode ?? ''}
+                  errorMessage={errors?.postalZipCode}
+                  required={isPostalCodeRequired}
+                  helpMessagePrimary={postalCodeHelpMessage}
+                  helpMessagePrimaryClassName="text-black"
+                />
+                {homeRegions.length > 0 && (
+                  <InputSelect
+                    id="home-province"
+                    name="provinceStateId"
+                    className="w-full sm:w-1/2"
+                    label={t(($) => $.address.addressField.province)}
+                    defaultValue={defaultState.province}
+                    errorMessage={errors?.provinceStateId}
+                    options={[dummyOption, ...homeRegions]}
+                    required
+                  />
+                )}
+                <InputSelect
+                  id="home-country"
+                  name="countryId"
+                  className="w-full sm:w-1/2"
+                  label={t(($) => $.address.addressField.country)}
+                  autoComplete="country"
+                  defaultValue={defaultState.country ?? ''}
+                  errorMessage={errors?.countryId}
+                  options={countries}
+                  onChange={homeCountryChangeHandler}
+                  required
+                />
+              </div>
+            </fieldset>
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
+                <DialogTrigger asChild>
+                  <LoadingButton
+                    aria-expanded={undefined}
+                    variant="primary"
+                    id="continue-button"
+                    type="submit"
+                    name="_action"
+                    value={FORM_ACTION.submit}
+                    loading={isSubmitting}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Home address click"
+                  >
+                    {t(($) => $.address.saveBtn)}
+                  </LoadingButton>
+                </DialogTrigger>
+                {!isSubmitting && addressDialogContent && (
+                  <>
+                    {addressDialogContent.status === 'address-suggestion' && (
+                      <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
+                    )}
+                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent addressContext="homeAddress" invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
+                  </>
+                )}
+              </Dialog>
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId={`public/application/$id/mailing-address`}
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Home address click"
+              >
+                {t(($) => $.address.back)}
+              </ButtonLink>
             </div>
-          </fieldset>
-          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
-              <DialogTrigger asChild>
-                <LoadingButton
-                  aria-expanded={undefined}
-                  variant="primary"
-                  id="continue-button"
-                  type="submit"
-                  name="_action"
-                  value={FORM_ACTION.submit}
-                  loading={isSubmitting}
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Continue - Home address click"
-                >
-                  {t(($) => $.address.saveBtn)}
-                </LoadingButton>
-              </DialogTrigger>
-              {!isSubmitting && addressDialogContent && (
-                <>
-                  {addressDialogContent.status === 'address-suggestion' && (
-                    <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
-                  )}
-                  {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent addressContext="homeAddress" invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
-                </>
-              )}
-            </Dialog>
-            <ButtonLink id="back-button" variant="secondary" routeId={`public/application/$id/mailing-address`} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Home address click">
-              {t(($) => $.address.back)}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

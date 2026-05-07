@@ -9,6 +9,7 @@ import type { Route } from './+types/eligibility';
 import { TYPES } from '~/.server/constants';
 import { isWithinRenewalPeriod } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { InlineLink } from '~/components/inline-link';
@@ -22,7 +23,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.eligibility,
-  pageTitleI18nKey: 'protectedProfile:eligibility.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -91,62 +91,65 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
   const { ELIGIBILITY_STATUS_CODE_ELIGIBLE } = useClientEnv();
 
   return (
-    <div className="max-w-prose space-y-10">
-      <p>{t(($) => $.eligibility.details)}</p>
-      <section className="space-y-6">
-        <h2 className="font-lato text-2xl font-bold">{t(($) => $.eligibility.currentYear)}</h2>
-        <p>
-          {t(($) => $.eligibility.currentYearDetails, {
-            end: currentCoverage.endYear,
-            ns: 'protectedProfile',
+    <>
+      <AppPageTitle>{t(($) => $.eligibility.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose space-y-10">
+        <p>{t(($) => $.eligibility.details)}</p>
+        <section className="space-y-6">
+          <h2 className="font-lato text-2xl font-bold">{t(($) => $.eligibility.currentYear)}</h2>
+          <p>
+            {t(($) => $.eligibility.currentYearDetails, {
+              end: currentCoverage.endYear,
+              ns: 'protectedProfile',
+            })}
+          </p>
+          <DefinitionList border>
+            {applicants.map((applicant) => {
+              const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear: currentCoverage.taxationYear, isNextYear: false, ELIGIBILITY_STATUS_CODE_ELIGIBLE });
+              return (
+                <DefinitionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
+                  <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={currentCoverage.startYear} coverageEndYear={currentCoverage.endYear} />
+                </DefinitionListItem>
+              );
+            })}
+          </DefinitionList>
+        </section>
+        <section className="space-y-6">
+          <h2 className="font-lato text-2xl font-bold">{t(($) => $.eligibility.nextYear)}</h2>
+          <p>
+            {t(($) => $.eligibility.benefitYearRange, {
+              start: currentCoverage.startYear + 1,
+              end: currentCoverage.endYear + 1,
+              ns: 'protectedProfile',
+            })}
+          </p>
+          <DefinitionList border>
+            {applicants.map((applicant) => {
+              const taxationYear = currentCoverage.taxationYear + 1;
+              const coverageStartYear = currentCoverage.startYear + 1;
+              const coverageEndYear = currentCoverage.endYear + 1;
+              const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear, isNextYear: true, ELIGIBILITY_STATUS_CODE_ELIGIBLE });
+              return (
+                <DefinitionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
+                  <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={coverageStartYear} coverageEndYear={coverageEndYear} showApplyLink={showApplyLink} />
+                </DefinitionListItem>
+              );
+            })}
+          </DefinitionList>
+        </section>
+        <ButtonLink
+          variant="primary"
+          id="back-button"
+          to={t(($) => $.header.menuDashboardHref, {
+            baseUri: SCCH_BASE_URI,
+            ns: 'gcweb',
           })}
-        </p>
-        <DefinitionList border>
-          {applicants.map((applicant) => {
-            const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear: currentCoverage.taxationYear, isNextYear: false, ELIGIBILITY_STATUS_CODE_ELIGIBLE });
-            return (
-              <DefinitionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
-                <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={currentCoverage.startYear} coverageEndYear={currentCoverage.endYear} />
-              </DefinitionListItem>
-            );
-          })}
-        </DefinitionList>
-      </section>
-      <section className="space-y-6">
-        <h2 className="font-lato text-2xl font-bold">{t(($) => $.eligibility.nextYear)}</h2>
-        <p>
-          {t(($) => $.eligibility.benefitYearRange, {
-            start: currentCoverage.startYear + 1,
-            end: currentCoverage.endYear + 1,
-            ns: 'protectedProfile',
-          })}
-        </p>
-        <DefinitionList border>
-          {applicants.map((applicant) => {
-            const taxationYear = currentCoverage.taxationYear + 1;
-            const coverageStartYear = currentCoverage.startYear + 1;
-            const coverageEndYear = currentCoverage.endYear + 1;
-            const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear, isNextYear: true, ELIGIBILITY_STATUS_CODE_ELIGIBLE });
-            return (
-              <DefinitionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
-                <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={coverageStartYear} coverageEndYear={coverageEndYear} showApplyLink={showApplyLink} />
-              </DefinitionListItem>
-            );
-          })}
-        </DefinitionList>
-      </section>
-      <ButtonLink
-        variant="primary"
-        id="back-button"
-        to={t(($) => $.header.menuDashboardHref, {
-          baseUri: SCCH_BASE_URI,
-          ns: 'gcweb',
-        })}
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - Member eligibility return button click"
-      >
-        {t(($) => $.eligibility.returnButton)}
-      </ButtonLink>
-    </div>
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - Member eligibility return button click"
+        >
+          {t(($) => $.eligibility.returnButton)}
+        </ButtonLink>
+      </div>
+    </>
   );
 }
 

@@ -4,6 +4,7 @@ import type { Route } from './+types/communication-preferences';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { InlineLink } from '~/components/inline-link';
@@ -15,7 +16,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.communicationPreferences,
-  pageTitleI18nKey: 'protectedProfile:communicationPreferences.pageTitle',
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -58,28 +58,31 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
   const { preferredLanguage, preferredMethodSunLife, preferredMethodGovernmentOfCanada, SCCH_BASE_URI } = loaderData;
 
   return (
-    <div className="max-w-prose space-y-10">
-      <DefinitionList border>
-        <DefinitionListItem term={t(($) => $.communicationPreferences.languagePreference)}>{preferredLanguage?.name}</DefinitionListItem>
-        <DefinitionListItem term={t(($) => $.communicationPreferences.sunlifeCommunicationPreference)}>{preferredMethodSunLife?.name}</DefinitionListItem>
-        <DefinitionListItem term={t(($) => $.communicationPreferences.gocCommunicationPreference)}>{preferredMethodGovernmentOfCanada?.name}</DefinitionListItem>
-      </DefinitionList>
-      <div>
-        <InlineLink id="update-communication-preferences" routeId="protected/profile/communication-preferences/edit" params={params}>
-          {t(($) => $.communicationPreferences.updateLinkText)}
-        </InlineLink>
+    <>
+      <AppPageTitle>{t(($) => $.communicationPreferences.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose space-y-10">
+        <DefinitionList border>
+          <DefinitionListItem term={t(($) => $.communicationPreferences.languagePreference)}>{preferredLanguage?.name}</DefinitionListItem>
+          <DefinitionListItem term={t(($) => $.communicationPreferences.sunlifeCommunicationPreference)}>{preferredMethodSunLife?.name}</DefinitionListItem>
+          <DefinitionListItem term={t(($) => $.communicationPreferences.gocCommunicationPreference)}>{preferredMethodGovernmentOfCanada?.name}</DefinitionListItem>
+        </DefinitionList>
+        <div>
+          <InlineLink id="update-communication-preferences" routeId="protected/profile/communication-preferences/edit" params={params}>
+            {t(($) => $.communicationPreferences.updateLinkText)}
+          </InlineLink>
+        </div>
+        <ButtonLink
+          variant="primary"
+          id="back-button"
+          to={t(($) => $.header.menuDashboardHref, {
+            baseUri: SCCH_BASE_URI,
+            ns: 'gcweb',
+          })}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - My communication preferences return button click"
+        >
+          {t(($) => $.communicationPreferences.returnButton)}
+        </ButtonLink>
       </div>
-      <ButtonLink
-        variant="primary"
-        id="back-button"
-        to={t(($) => $.header.menuDashboardHref, {
-          baseUri: SCCH_BASE_URI,
-          ns: 'gcweb',
-        })}
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - My communication preferences return button click"
-      >
-        {t(($) => $.communicationPreferences.returnButton)}
-      </ButtonLink>
-    </div>
+    </>
   );
 }

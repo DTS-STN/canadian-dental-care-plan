@@ -9,6 +9,7 @@ import { TYPES } from '~/.server/constants';
 import { getProtectedApplicationState, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
@@ -26,9 +27,8 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 const APPLICANT_TYPE = { adult: 'adult', family: 'family', children: 'children', delegate: 'delegate' } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'protectedApplicationSpokes', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.typeOfApplication,
-  pageTitleI18nKey: 'protectedApplicationSpokes:typeOfApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -43,7 +43,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = {
-    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.typeOfApplication.pageTitle, { ns: 'protectedApplicationSpokes' }) }),
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.typeOfApplication.pageTitle) }),
   };
 
   return { meta, defaultState: state.typeOfApplication };
@@ -66,7 +66,7 @@ export async function action({ context: { appContainer, session }, params, reque
    */
   const typeOfApplicationSchema = z.object({
     typeOfApplication: z.enum(APPLICANT_TYPE, {
-      error: t(($) => $.typeOfApplication.errorMessage.typeOfApplicationRequired, { ns: 'protectedApplicationSpokes' }),
+      error: t(($) => $.typeOfApplication.errorMessage.typeOfApplicationRequired),
     }),
   });
 
@@ -95,42 +95,45 @@ export default function ApplicationTypeOfApplication({ loaderData, params }: Rou
   const errors = fetcher.data?.errors;
 
   return (
-    <div className="max-w-prose">
-      <p className="mt-8 mb-4 italic">{t(($) => $.requiredLabel)}</p>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <InputRadios
-            id="type-of-application"
-            name="typeOfApplication"
-            legend={t(($) => $.typeOfApplication.formInstructions, { ns: 'protectedApplicationSpokes' })}
-            options={[
-              { value: APPLICANT_TYPE.adult, children: <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.typeOfApplication.radioOptions.personal} />, defaultChecked: defaultState === APPLICANT_TYPE.adult },
-              { value: APPLICANT_TYPE.children, children: <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.typeOfApplication.radioOptions.child} />, defaultChecked: defaultState === APPLICANT_TYPE.children },
-              { value: APPLICANT_TYPE.family, children: <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.typeOfApplication.radioOptions.personalAndChild} />, defaultChecked: defaultState === APPLICANT_TYPE.family },
-              { value: APPLICANT_TYPE.delegate, children: <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.typeOfApplication.radioOptions.delegate} />, defaultChecked: defaultState === APPLICANT_TYPE.delegate },
-            ]}
-            required
-            errorMessage={errors?.typeOfApplication}
-          />
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Type of application click">
-              {t(($) => $.typeOfApplication.saveBtn, { ns: 'protectedApplicationSpokes' })}
-            </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              variant="secondary"
-              routeId="protected/application/$id/your-application"
-              params={params}
-              disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Type of application click"
-            >
-              {t(($) => $.typeOfApplication.backBtn, { ns: 'protectedApplicationSpokes' })}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+    <>
+      <AppPageTitle>{t(($) => $.typeOfApplication.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <p className="mt-8 mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <InputRadios
+              id="type-of-application"
+              name="typeOfApplication"
+              legend={t(($) => $.typeOfApplication.formInstructions)}
+              options={[
+                { value: APPLICANT_TYPE.adult, children: <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.typeOfApplication.radioOptions.personal} />, defaultChecked: defaultState === APPLICANT_TYPE.adult },
+                { value: APPLICANT_TYPE.children, children: <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.typeOfApplication.radioOptions.child} />, defaultChecked: defaultState === APPLICANT_TYPE.children },
+                { value: APPLICANT_TYPE.family, children: <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.typeOfApplication.radioOptions.personalAndChild} />, defaultChecked: defaultState === APPLICANT_TYPE.family },
+                { value: APPLICANT_TYPE.delegate, children: <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.typeOfApplication.radioOptions.delegate} />, defaultChecked: defaultState === APPLICANT_TYPE.delegate },
+              ]}
+              required
+              errorMessage={errors?.typeOfApplication}
+            />
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Type of application click">
+                {t(($) => $.typeOfApplication.saveBtn)}
+              </LoadingButton>
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId="protected/application/$id/your-application"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Type of application click"
+              >
+                {t(($) => $.typeOfApplication.backBtn)}
+              </ButtonLink>
+            </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

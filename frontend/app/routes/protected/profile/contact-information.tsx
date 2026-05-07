@@ -8,6 +8,7 @@ import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import type { AddressDetails } from '~/components/address';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Badge } from '~/components/badge';
 import { ButtonLink } from '~/components/buttons';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
@@ -20,7 +21,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.contactInformation,
-  pageTitleI18nKey: 'protectedProfile:contactInformation.pageTitle',
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -87,63 +87,66 @@ export default function ViewContactInformation({ loaderData, params }: Route.Com
   const emailVerificationStatus = loaderData.emailAddress ? (loaderData.emailAddressVerified ? 'verified' : 'unverified') : undefined;
 
   return (
-    <div className="max-w-prose space-y-10">
-      <DefinitionList border>
-        <DefinitionListItem term={t(($) => $.contactInformation.phoneNumber)} className="border-none pb-0 sm:pb-0">
-          {phoneNumber ?? t(($) => $.none)}
-        </DefinitionListItem>
-        <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber)}>
-          <p>{altPhoneNumber ?? t(($) => $.none)}</p>
-          <div className="mt-4 sm:mt-6">
-            <InlineLink id="update-contact-information-phone" routeId="protected/profile/contact/phone" params={params}>
-              {t(($) => $.contactInformation.updatePhoneLinkText)}
-            </InlineLink>
-          </div>
-        </DefinitionListItem>
-        <DefinitionListItem term={t(($) => $.contactInformation.email)}>
-          <p>{emailAddress ?? t(($) => $.none)}</p>
-          {emailVerificationStatus && (
-            <Badge asChild size="lg" variant={emailVerificationStatus === 'unverified' ? 'warning' : 'success'}>
-              <p className="mt-3">
-                <FontAwesomeIcon icon={emailVerificationStatus === 'unverified' ? faExclamationTriangle : faCheckCircle} />
-                {t(($) => $.contactInformation.emailVerificationStatus[emailVerificationStatus])}
-              </p>
-            </Badge>
-          )}
-          <div className="mt-4 sm:mt-6">
-            <InlineLink id="update-contact-information-email" routeId="protected/profile/contact/email-address" params={params}>
-              {t(($) => $.contactInformation.updateEmailLinkText)}
-            </InlineLink>
-          </div>
-        </DefinitionListItem>
-        <DefinitionListItem term={t(($) => $.contactInformation.mailingAddress)}>
-          <Address address={mailingAddressDetails} />
-          <div className="mt-4 sm:mt-6">
-            <InlineLink id="update-contact-information-mailing-address" routeId="protected/profile/contact/mailing-address" params={params}>
-              {t(($) => $.contactInformation.updateMailingAddressLinkText)}
-            </InlineLink>
-          </div>
-        </DefinitionListItem>
-        <DefinitionListItem term={t(($) => $.contactInformation.homeAddress)}>
-          {homeAddressDetails && <Address address={homeAddressDetails} />}
-          <div className="mt-4 sm:mt-6">
-            <InlineLink id="update-contact-information-home-address" routeId="protected/profile/contact/home-address" params={params}>
-              {t(($) => $.contactInformation.updateHomeAddressLinkText)}
-            </InlineLink>
-          </div>
-        </DefinitionListItem>
-      </DefinitionList>
-      <ButtonLink
-        variant="primary"
-        id="back-button"
-        to={t(($) => $.header.menuDashboardHref, {
-          baseUri: SCCH_BASE_URI,
-          ns: 'gcweb',
-        })}
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - My contact information return button click"
-      >
-        {t(($) => $.contactInformation.returnButton)}
-      </ButtonLink>
-    </div>
+    <>
+      <AppPageTitle>{t(($) => $.contactInformation.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose space-y-10">
+        <DefinitionList border>
+          <DefinitionListItem term={t(($) => $.contactInformation.phoneNumber)} className="border-none pb-0 sm:pb-0">
+            {phoneNumber ?? t(($) => $.none)}
+          </DefinitionListItem>
+          <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber)}>
+            <p>{altPhoneNumber ?? t(($) => $.none)}</p>
+            <div className="mt-4 sm:mt-6">
+              <InlineLink id="update-contact-information-phone" routeId="protected/profile/contact/phone" params={params}>
+                {t(($) => $.contactInformation.updatePhoneLinkText)}
+              </InlineLink>
+            </div>
+          </DefinitionListItem>
+          <DefinitionListItem term={t(($) => $.contactInformation.email)}>
+            <p>{emailAddress ?? t(($) => $.none)}</p>
+            {emailVerificationStatus && (
+              <Badge asChild size="lg" variant={emailVerificationStatus === 'unverified' ? 'warning' : 'success'}>
+                <p className="mt-3">
+                  <FontAwesomeIcon icon={emailVerificationStatus === 'unverified' ? faExclamationTriangle : faCheckCircle} />
+                  {t(($) => $.contactInformation.emailVerificationStatus[emailVerificationStatus])}
+                </p>
+              </Badge>
+            )}
+            <div className="mt-4 sm:mt-6">
+              <InlineLink id="update-contact-information-email" routeId="protected/profile/contact/email-address" params={params}>
+                {t(($) => $.contactInformation.updateEmailLinkText)}
+              </InlineLink>
+            </div>
+          </DefinitionListItem>
+          <DefinitionListItem term={t(($) => $.contactInformation.mailingAddress)}>
+            <Address address={mailingAddressDetails} />
+            <div className="mt-4 sm:mt-6">
+              <InlineLink id="update-contact-information-mailing-address" routeId="protected/profile/contact/mailing-address" params={params}>
+                {t(($) => $.contactInformation.updateMailingAddressLinkText)}
+              </InlineLink>
+            </div>
+          </DefinitionListItem>
+          <DefinitionListItem term={t(($) => $.contactInformation.homeAddress)}>
+            {homeAddressDetails && <Address address={homeAddressDetails} />}
+            <div className="mt-4 sm:mt-6">
+              <InlineLink id="update-contact-information-home-address" routeId="protected/profile/contact/home-address" params={params}>
+                {t(($) => $.contactInformation.updateHomeAddressLinkText)}
+              </InlineLink>
+            </div>
+          </DefinitionListItem>
+        </DefinitionList>
+        <ButtonLink
+          variant="primary"
+          id="back-button"
+          to={t(($) => $.header.menuDashboardHref, {
+            baseUri: SCCH_BASE_URI,
+            ns: 'gcweb',
+          })}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - My contact information return button click"
+        >
+          {t(($) => $.contactInformation.returnButton)}
+        </ButtonLink>
+      </div>
+    </>
   );
 }

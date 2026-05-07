@@ -10,6 +10,7 @@ import { getProtectedApplicationState, getSingleChildState, saveProtectedApplica
 import type { ProtectedApplicationChildInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { InputRadios } from '~/components/input-radios';
@@ -30,7 +31,6 @@ const YES_NO_OPTION = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.parentGuardian,
-  pageTitleI18nKey: 'protectedApplicationSpokes:children.parentGuardian.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -47,7 +47,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const childNumber = t(($) => $.children.childNumber, {
     childNumber: childState.childNumber,
-    ns: 'protectedApplicationSpokes',
   });
   const childName = childState.information?.firstName ?? childNumber;
 
@@ -119,50 +118,52 @@ export default function ParentGuardian({ loaderData, params }: Route.ComponentPr
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
 
   return (
-    <div className="max-w-prose">
-      <fetcher.Form method="post" noValidate>
-        <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
-        <div className="mb-8 space-y-4">
-          <InputRadios
-            id="is-parent-radios"
-            name="isParent"
-            legend={t(($) => $.children.parentGuardian.parentLegend, {
-              childName: childName,
-              ns: 'protectedApplicationSpokes',
-            })}
-            options={[
-              {
-                value: YES_NO_OPTION.yes,
-                children: t(($) => $.children.parentGuardian.radioOptions.yes),
-                defaultChecked: defaultState?.isParent === true,
-              },
-              {
-                value: YES_NO_OPTION.no,
-                children: t(($) => $.children.parentGuardian.radioOptions.no),
-                defaultChecked: defaultState?.isParent === false,
-              },
-            ]}
-            errorMessage={errors?.isParent}
-            required
-          />
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <CsrfTokenInput />
-          <ButtonLink
-            id="back-button"
-            variant="secondary"
-            routeId={`protected/application/$id/${applicationFlow}/childrens-application`}
-            params={params}
-            disabled={isSubmitting}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child parent or guardian needs to apply click"
-          >
-            {t(($) => $.children.parentGuardian.backBtn)}
-          </ButtonLink>
-          <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Child Information click">
-            {t(($) => $.children.parentGuardian.saveBtn)}
-          </LoadingButton>
-        </div>
-      </fetcher.Form>
-    </div>
+    <>
+      <AppPageTitle>{t(($) => $.children.parentGuardian.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <fetcher.Form method="post" noValidate>
+          <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
+          <div className="mb-8 space-y-4">
+            <InputRadios
+              id="is-parent-radios"
+              name="isParent"
+              legend={t(($) => $.children.parentGuardian.parentLegend, {
+                childName: childName,
+              })}
+              options={[
+                {
+                  value: YES_NO_OPTION.yes,
+                  children: t(($) => $.children.parentGuardian.radioOptions.yes),
+                  defaultChecked: defaultState?.isParent === true,
+                },
+                {
+                  value: YES_NO_OPTION.no,
+                  children: t(($) => $.children.parentGuardian.radioOptions.no),
+                  defaultChecked: defaultState?.isParent === false,
+                },
+              ]}
+              errorMessage={errors?.isParent}
+              required
+            />
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <CsrfTokenInput />
+            <ButtonLink
+              id="back-button"
+              variant="secondary"
+              routeId={`protected/application/$id/${applicationFlow}/childrens-application`}
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Child parent or guardian needs to apply click"
+            >
+              {t(($) => $.children.parentGuardian.backBtn)}
+            </ButtonLink>
+            <LoadingButton id="save-button" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Child Information click">
+              {t(($) => $.children.parentGuardian.saveBtn)}
+            </LoadingButton>
+          </div>
+        </fetcher.Form>
+      </div>
+    </>
   );
 }

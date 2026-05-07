@@ -10,6 +10,7 @@ import { loadProtectedApplicationRenewalAdultState } from '~/.server/routes/help
 import { isMaritalStatusSectionCompleted } from '~/.server/routes/helpers/protected-application-renewal-section-checks';
 import { shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
@@ -26,9 +27,8 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'protectedApplicationRenewalAdult', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationRenewalAdult', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.renewalAdult.maritalStatus,
-  pageTitleI18nKey: 'protectedApplicationRenewalAdult:maritalStatus.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -46,7 +46,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = {
-    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.maritalStatus.pageTitle, { ns: 'protectedApplicationRenewalAdult' }) }),
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.maritalStatus.pageTitle) }),
   };
   const locale = getLocale(request);
   return {
@@ -69,30 +69,31 @@ export default function ProtectedNewAdultMaritalStatus({ loaderData, params }: R
 
   return (
     <>
+      <AppPageTitle>{t(($) => $.maritalStatus.pageHeading)}</AppPageTitle>
       <ProgressStepper activeStep="maritalStatus" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t(($) => $.completeAllSections)}</p>
+          <p>{t(($) => $.completeAllSections, { ns: 'protectedApplication' })}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t(($) => $.maritalStatus.maritalStatus, { ns: 'protectedApplicationRenewalAdult' })}</h2>
+              <h2>{t(($) => $.maritalStatus.maritalStatus)}</h2>
             </CardTitle>
             <CardAction>{sections.maritalStatus.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.maritalStatus === undefined ? (
-              <p>{t(($) => $.maritalStatus.selectYourStatus, { ns: 'protectedApplicationRenewalAdult' })}</p>
+              <p>{t(($) => $.maritalStatus.selectYourStatus)}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t(($) => $.maritalStatus.maritalStatus, { ns: 'protectedApplicationRenewalAdult' })}>{state.maritalStatus.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.maritalStatus.maritalStatus)}>{state.maritalStatus.name}</DefinitionListItem>
                 {state.partnerInformation && (
                   <>
-                    <DefinitionListItem term={t(($) => $.maritalStatus.spouseSin, { ns: 'protectedApplicationRenewalAdult' })}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
-                    <DefinitionListItem term={t(($) => $.maritalStatus.spouseYob, { ns: 'protectedApplicationRenewalAdult' })}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t(($) => $.maritalStatus.consent, { ns: 'protectedApplicationRenewalAdult' })}>{t(($) => $.maritalStatus.consentYes, { ns: 'protectedApplicationRenewalAdult' })}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.maritalStatus.spouseSin)}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.maritalStatus.spouseYob)}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.maritalStatus.consent)}>{t(($) => $.maritalStatus.consentYes)}</DefinitionListItem>
                   </>
                 )}
               </DefinitionList>
@@ -109,7 +110,7 @@ export default function ProtectedNewAdultMaritalStatus({ loaderData, params }: R
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Edit marital click"
             >
-              {state.maritalStatus === undefined ? t(($) => $.maritalStatus.addMaritalStatus, { ns: 'protectedApplicationRenewalAdult' }) : t(($) => $.maritalStatus.editMaritalStatus, { ns: 'protectedApplicationRenewalAdult' })}
+              {state.maritalStatus === undefined ? t(($) => $.maritalStatus.addMaritalStatus) : t(($) => $.maritalStatus.editMaritalStatus)}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -122,10 +123,10 @@ export default function ProtectedNewAdultMaritalStatus({ loaderData, params }: R
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Continue click"
           >
-            {t(($) => $.maritalStatus.nextBtn, { ns: 'protectedApplicationRenewalAdult' })}
+            {t(($) => $.maritalStatus.nextBtn)}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Back click">
-            {t(($) => $.maritalStatus.prevBtn, { ns: 'protectedApplicationRenewalAdult' })}
+            {t(($) => $.maritalStatus.prevBtn)}
           </NavigationButtonLink>
         </div>
       </div>

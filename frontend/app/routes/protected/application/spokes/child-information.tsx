@@ -14,6 +14,7 @@ import type { ProtectedApplicationChildInformationState, ProtectedApplicationChi
 import { getProtectedApplicationState, getSingleChildState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -25,7 +26,6 @@ import { InputPatternField } from '~/components/input-pattern-field';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
-import { AppPageTitle } from '~/components/layouts/protected-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
@@ -64,7 +64,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const childNumber = t(($) => $.children.childNumber, {
     childNumber: childState.childNumber,
-    ns: 'protectedApplicationSpokes',
   });
   const childName = childState.isNew ? childNumber : (childState.information?.firstName ?? childNumber);
 
@@ -72,7 +71,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     title: t(($) => $.meta.title.template, {
       title: t(($) => $.children.information.pageTitle, {
         childName: childName,
-        ns: 'protectedApplicationSpokes',
       }),
 
       ns: 'gcweb',
@@ -80,7 +78,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     dcTermsTitle: t(($) => $.meta.title.template, {
       title: t(($) => $.children.information.pageTitle, {
         childName: childNumber,
-        ns: 'protectedApplicationSpokes',
       }),
 
       ns: 'gcweb',
@@ -333,7 +330,6 @@ export default function ChildInformation({ loaderData, params }: Route.Component
       <AppPageTitle>
         {t(($) => $.children.information.pageTitle, {
           childName: childName,
-          ns: 'protectedApplicationSpokes',
         })}
       </AppPageTitle>
       <div className="max-w-prose">

@@ -4,6 +4,7 @@ import type { Route } from './+types/dental-benefits';
 
 import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { InlineLink } from '~/components/inline-link';
@@ -15,7 +16,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.dentalBenefits,
-  pageTitleI18nKey: 'protectedProfile:dentalBenefits.pageTitle',
 };
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -74,70 +74,73 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
   const { clientApplication, clientDentalBenefits, children, SCCH_BASE_URI } = loaderData;
 
   return (
-    <div className="max-w-prose space-y-10">
-      <p className="mb-4">{t(($) => $.dentalBenefits.accessToDental)}</p>
-      <p className="mb-4">{t(($) => $.dentalBenefits.eligibilityCriteria)}</p>
-      <section className="space-y-6">
-        <h2 className="font-lato text-2xl font-bold">{`${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`}</h2>
-        <DefinitionList border>
-          <DefinitionListItem term={t(($) => $.dentalBenefits.haveAccess)}>
-            <div className="space-y-4">
-              <p>{clientDentalBenefits && clientDentalBenefits.length > 0 ? t(($) => $.dentalBenefits.yes) : t(($) => $.dentalBenefits.no)}</p>
-              {clientDentalBenefits && clientDentalBenefits.length > 0 && (
-                <ul className="list-disc space-y-2 pl-10">
-                  {clientDentalBenefits.map((benefit, index) => (
-                    <li key={index}>{benefit}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <div className="mt-4 sm:mt-6">
-              <InlineLink routeId="protected/profile/dental-benefits/edit" params={params}>
-                {t(($) => $.dentalBenefits.updateLinkText)}
-              </InlineLink>
-            </div>
-          </DefinitionListItem>
-        </DefinitionList>
-      </section>
-      {children.map((child) => {
-        const childParams = { ...params, childId: child.information.clientId };
-        const childName = `${child.information.firstName} ${child.information.lastName}`;
-        return (
-          <section className="space-y-6" key={child.information.clientId}>
-            <h2 className="font-lato text-2xl font-bold">{childName}</h2>
-            <DefinitionList border>
-              <DefinitionListItem term={t(($) => $.dentalBenefits.haveAccess)}>
-                <div className="space-y-4">
-                  <p>{child.dentalBenefits.length > 0 ? t(($) => $.dentalBenefits.yes) : t(($) => $.dentalBenefits.no)}</p>
-                  {child.dentalBenefits.length > 0 && (
-                    <ul className="list-disc space-y-2 pl-10">
-                      {child.dentalBenefits.map((benefit) => (
-                        <li key={benefit}>{benefit}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-                <div className="mt-4 sm:mt-6">
-                  <InlineLink routeId="protected/profile/dental-benefits/:childId/edit" params={childParams}>
-                    {t(($) => $.dentalBenefits.updateLinkText)}
-                  </InlineLink>
-                </div>
-              </DefinitionListItem>
-            </DefinitionList>
-          </section>
-        );
-      })}
-      <ButtonLink
-        variant="primary"
-        id="back-button"
-        to={t(($) => $.header.menuDashboardHref, {
-          baseUri: SCCH_BASE_URI,
-          ns: 'gcweb',
+    <>
+      <AppPageTitle>{t(($) => $.dentalBenefits.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose space-y-10">
+        <p className="mb-4">{t(($) => $.dentalBenefits.accessToDental)}</p>
+        <p className="mb-4">{t(($) => $.dentalBenefits.eligibilityCriteria)}</p>
+        <section className="space-y-6">
+          <h2 className="font-lato text-2xl font-bold">{`${clientApplication.applicantInformation.firstName} ${clientApplication.applicantInformation.lastName}`}</h2>
+          <DefinitionList border>
+            <DefinitionListItem term={t(($) => $.dentalBenefits.haveAccess)}>
+              <div className="space-y-4">
+                <p>{clientDentalBenefits && clientDentalBenefits.length > 0 ? t(($) => $.dentalBenefits.yes) : t(($) => $.dentalBenefits.no)}</p>
+                {clientDentalBenefits && clientDentalBenefits.length > 0 && (
+                  <ul className="list-disc space-y-2 pl-10">
+                    {clientDentalBenefits.map((benefit, index) => (
+                      <li key={index}>{benefit}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <div className="mt-4 sm:mt-6">
+                <InlineLink routeId="protected/profile/dental-benefits/edit" params={params}>
+                  {t(($) => $.dentalBenefits.updateLinkText)}
+                </InlineLink>
+              </div>
+            </DefinitionListItem>
+          </DefinitionList>
+        </section>
+        {children.map((child) => {
+          const childParams = { ...params, childId: child.information.clientId };
+          const childName = `${child.information.firstName} ${child.information.lastName}`;
+          return (
+            <section className="space-y-6" key={child.information.clientId}>
+              <h2 className="font-lato text-2xl font-bold">{childName}</h2>
+              <DefinitionList border>
+                <DefinitionListItem term={t(($) => $.dentalBenefits.haveAccess)}>
+                  <div className="space-y-4">
+                    <p>{child.dentalBenefits.length > 0 ? t(($) => $.dentalBenefits.yes) : t(($) => $.dentalBenefits.no)}</p>
+                    {child.dentalBenefits.length > 0 && (
+                      <ul className="list-disc space-y-2 pl-10">
+                        {child.dentalBenefits.map((benefit) => (
+                          <li key={benefit}>{benefit}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                  <div className="mt-4 sm:mt-6">
+                    <InlineLink routeId="protected/profile/dental-benefits/:childId/edit" params={childParams}>
+                      {t(($) => $.dentalBenefits.updateLinkText)}
+                    </InlineLink>
+                  </div>
+                </DefinitionListItem>
+              </DefinitionList>
+            </section>
+          );
         })}
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - Other government dental benefits return button click"
-      >
-        {t(($) => $.dentalBenefits.returnButton)}
-      </ButtonLink>
-    </div>
+        <ButtonLink
+          variant="primary"
+          id="back-button"
+          to={t(($) => $.header.menuDashboardHref, {
+            baseUri: SCCH_BASE_URI,
+            ns: 'gcweb',
+          })}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - Other government dental benefits return button click"
+        >
+          {t(($) => $.dentalBenefits.returnButton)}
+        </ButtonLink>
+      </div>
+    </>
   );
 }

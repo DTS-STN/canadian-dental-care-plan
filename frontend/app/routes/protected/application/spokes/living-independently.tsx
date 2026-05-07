@@ -9,6 +9,7 @@ import { TYPES } from '~/.server/constants';
 import { getProtectedApplicationState, saveProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
@@ -31,7 +32,6 @@ const LIVING_INDEPENDENTLY_OPTION = {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedApplicationSpokes', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.livingIndependently,
-  pageTitleI18nKey: 'protectedApplicationSpokes:livingIndependently.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -101,49 +101,52 @@ export default function ApplyFlowLivingIndependently({ loaderData, params }: Rou
   const errors = fetcher.data?.errors;
 
   return (
-    <div className="max-w-prose">
-      <p className="mb-6">{t(($) => $.livingIndependently.description)}</p>
-      <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <InputRadios
-            id="living-independently"
-            name="livingIndependently"
-            legend={t(($) => $.livingIndependently.formInstructions)}
-            options={[
-              {
-                value: LIVING_INDEPENDENTLY_OPTION.yes,
-                children: t(($) => $.livingIndependently.radioOptions.yes),
-                defaultChecked: defaultState === true,
-              },
-              {
-                value: LIVING_INDEPENDENTLY_OPTION.no,
-                children: t(($) => $.livingIndependently.radioOptions.no),
-                defaultChecked: defaultState === false,
-              },
-            ]}
-            required
-            errorMessage={errors?.livingIndependently}
-          />
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Living independently click">
-              {t(($) => $.livingIndependently.saveBtn)}
-            </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              variant="secondary"
-              routeId={context === 'intake' ? 'protected/application/$id/personal-information' : 'protected/application/$id/renewal-selection'}
-              params={params}
-              disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Living independently click"
-            >
-              {t(($) => $.livingIndependently.backBtn)}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+    <>
+      <AppPageTitle>{t(($) => $.livingIndependently.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <p className="mb-6">{t(($) => $.livingIndependently.description)}</p>
+        <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <InputRadios
+              id="living-independently"
+              name="livingIndependently"
+              legend={t(($) => $.livingIndependently.formInstructions)}
+              options={[
+                {
+                  value: LIVING_INDEPENDENTLY_OPTION.yes,
+                  children: t(($) => $.livingIndependently.radioOptions.yes),
+                  defaultChecked: defaultState === true,
+                },
+                {
+                  value: LIVING_INDEPENDENTLY_OPTION.no,
+                  children: t(($) => $.livingIndependently.radioOptions.no),
+                  defaultChecked: defaultState === false,
+                },
+              ]}
+              required
+              errorMessage={errors?.livingIndependently}
+            />
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Continue - Living independently click">
+                {t(($) => $.livingIndependently.saveBtn)}
+              </LoadingButton>
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId={context === 'intake' ? 'protected/application/$id/personal-information' : 'protected/application/$id/renewal-selection'}
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Living independently click"
+              >
+                {t(($) => $.livingIndependently.backBtn)}
+              </ButtonLink>
+            </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

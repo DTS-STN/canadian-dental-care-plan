@@ -8,6 +8,7 @@ import { loadProtectedApplicationIntakeFamilyState } from '~/.server/routes/help
 import { isMaritalStatusSectionCompleted } from '~/.server/routes/helpers/protected-application-intake-section-checks';
 import { validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
@@ -23,9 +24,8 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'protectedApplicationIntakeFamily', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationIntakeFamily', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.intakeFamily.maritalStatus,
-  pageTitleI18nKey: 'protectedApplicationIntakeFamily:maritalStatus.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -39,7 +39,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = {
-    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.maritalStatus.pageTitle, { ns: 'protectedApplicationIntakeFamily' }) }),
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.maritalStatus.pageTitle) }),
   };
   const locale = getLocale(request);
   return {
@@ -62,30 +62,31 @@ export default function ProtectedNewFamilyMaritalStatus({ loaderData, params }: 
 
   return (
     <>
+      <AppPageTitle>{t(($) => $.maritalStatus.pageHeading)}</AppPageTitle>
       <ProgressStepper activeStep="maritalStatus" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t(($) => $.completeAllSections)}</p>
+          <p>{t(($) => $.completeAllSections, { ns: 'protectedApplication' })}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t(($) => $.maritalStatus.maritalStatus, { ns: 'protectedApplicationIntakeFamily' })}</h2>
+              <h2>{t(($) => $.maritalStatus.maritalStatus)}</h2>
             </CardTitle>
             <CardAction>{sections.maritalStatus.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.maritalStatus === undefined ? (
-              <p>{t(($) => $.maritalStatus.selectYourStatus, { ns: 'protectedApplicationIntakeFamily' })}</p>
+              <p>{t(($) => $.maritalStatus.selectYourStatus)}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t(($) => $.maritalStatus.maritalStatus, { ns: 'protectedApplicationIntakeFamily' })}>{state.maritalStatus.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.maritalStatus.maritalStatus)}>{state.maritalStatus.name}</DefinitionListItem>
                 {state.partnerInformation && (
                   <>
-                    <DefinitionListItem term={t(($) => $.maritalStatus.spouseSin, { ns: 'protectedApplicationIntakeFamily' })}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
-                    <DefinitionListItem term={t(($) => $.maritalStatus.spouseYob, { ns: 'protectedApplicationIntakeFamily' })}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                    <DefinitionListItem term={t(($) => $.maritalStatus.consent, { ns: 'protectedApplicationIntakeFamily' })}>{t(($) => $.maritalStatus.consentYes, { ns: 'protectedApplicationIntakeFamily' })}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.maritalStatus.spouseSin)}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.maritalStatus.spouseYob)}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
+                    <DefinitionListItem term={t(($) => $.maritalStatus.consent)}>{t(($) => $.maritalStatus.consentYes)}</DefinitionListItem>
                   </>
                 )}
               </DefinitionList>
@@ -102,7 +103,7 @@ export default function ProtectedNewFamilyMaritalStatus({ loaderData, params }: 
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Edit marital click"
             >
-              {state.maritalStatus === undefined ? t(($) => $.maritalStatus.addMaritalStatus, { ns: 'protectedApplicationIntakeFamily' }) : t(($) => $.maritalStatus.editMaritalStatus, { ns: 'protectedApplicationIntakeFamily' })}
+              {state.maritalStatus === undefined ? t(($) => $.maritalStatus.addMaritalStatus) : t(($) => $.maritalStatus.editMaritalStatus)}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -115,10 +116,10 @@ export default function ProtectedNewFamilyMaritalStatus({ loaderData, params }: 
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Continue click"
           >
-            {t(($) => $.maritalStatus.contactInformation, { ns: 'protectedApplicationIntakeFamily' })}
+            {t(($) => $.maritalStatus.contactInformation)}
           </NavigationButtonLink>
           <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Back click">
-            {t(($) => $.maritalStatus.yourApplication, { ns: 'protectedApplicationIntakeFamily' })}
+            {t(($) => $.maritalStatus.yourApplication)}
           </NavigationButtonLink>
         </div>
       </div>

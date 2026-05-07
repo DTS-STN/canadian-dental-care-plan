@@ -11,6 +11,7 @@ import { loadProtectedApplicationRenewalAdultStateForReview } from '~/.server/ro
 import { saveProtectedApplicationState, shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DebugPayload } from '~/components/debug-payload';
@@ -34,9 +35,8 @@ const CHECKBOX_VALUE = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'protectedApplicationRenewalAdult', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationRenewalAdult', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.renewalAdult.submit,
-  pageTitleI18nKey: 'protectedApplicationRenewalAdult:submit.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -50,7 +50,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = {
-    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.submit.pageTitle, { ns: 'protectedApplicationRenewalAdult' }) }),
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.submit.pageTitle) }),
   };
 
   const { ENABLED_FEATURES } = appContainer.get(TYPES.ClientConfig);
@@ -86,10 +86,10 @@ export async function action({ context: { appContainer, session }, request, para
 
   const submitTermsSchema = z.object({
     acknowledgeInfo: z.literal(true, {
-      error: t(($) => $.submit.errorMessage.acknowledgeInfoRequired, { ns: 'protectedApplicationRenewalAdult' }),
+      error: t(($) => $.submit.errorMessage.acknowledgeInfoRequired),
     }),
     acknowledgeCriteria: z.literal(true, {
-      error: t(($) => $.submit.errorMessage.acknowledgeCriteriaRequired, { ns: 'protectedApplicationRenewalAdult' }),
+      error: t(($) => $.submit.errorMessage.acknowledgeCriteriaRequired),
     }),
   });
 
@@ -118,75 +118,78 @@ export default function ProtectedNewAdultSubmit({ loaderData, params }: Route.Co
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const errors = fetcher.data?.errors;
 
-  const eligibilityLink = <InlineLink to={t(($) => $.submit.doYouQualifyHref, { ns: 'protectedApplicationRenewalAdult' })} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityLink = <InlineLink to={t(($) => $.submit.doYouQualifyHref)} className="external-link" newTabIndicator target="_blank" />;
 
   return (
-    <ErrorSummaryProvider actionData={fetcher.data}>
-      <ProgressStepper activeStep="submit" excludeMaritalStatus={shouldSkipMaritalStatusStep} className="mb-8" />
-      <div className="max-w-prose space-y-8">
-        <ErrorSummary />
-        <div className="space-y-8">
-          <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.overview, { ns: 'protectedApplicationRenewalAdult' })}</h2>
-            <div className="space-y-4">
-              <p>{t(($) => $.submit.youAreSubmitting, { ns: 'protectedApplicationRenewalAdult' })}</p>
-              <ul className="list-disc space-y-1 pl-7">
-                <li>{state.applicantName}</li>
-              </ul>
-            </div>
-          </section>
-          <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.reviewYourApplication, { ns: 'protectedApplicationRenewalAdult' })}</h2>
-            <p>{t(($) => $.submit.pleaseReview, { ns: 'protectedApplicationRenewalAdult' })}</p>
-            <ButtonLink variant="primary" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Action click">
-              {t(($) => $.submit.reviewApplication, { ns: 'protectedApplicationRenewalAdult' })}
-            </ButtonLink>
-          </section>
-          <section className="space-y-4">
-            <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.submitYourApplication, { ns: 'protectedApplicationRenewalAdult' })}</h2>
-            <p>{t(($) => $.submit.bySubmitting, { ns: 'protectedApplicationRenewalAdult' })}</p>
-            <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.protectedApplicationRenewalAdult.submit.reviewEligibilityCriteria} components={{ eligibilityLink }} />
-            </p>
-            <fetcher.Form method="post" noValidate>
-              <CsrfTokenInput />
-              <div className="space-y-2">
-                <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
-                  {t(($) => $.submit.infoIsCorrect, { ns: 'protectedApplicationRenewalAdult' })}
-                </InputCheckbox>
-                <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
-                  {t(($) => $.submit.iUnderstand, { ns: 'protectedApplicationRenewalAdult' })}
-                </InputCheckbox>
+    <>
+      <AppPageTitle>{t(($) => $.submit.pageHeading)}</AppPageTitle>
+      <ErrorSummaryProvider actionData={fetcher.data}>
+        <ProgressStepper activeStep="submit" excludeMaritalStatus={shouldSkipMaritalStatusStep} className="mb-8" />
+        <div className="max-w-prose space-y-8">
+          <ErrorSummary />
+          <div className="space-y-8">
+            <section className="space-y-4">
+              <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.overview)}</h2>
+              <div className="space-y-4">
+                <p>{t(($) => $.submit.youAreSubmitting)}</p>
+                <ul className="list-disc space-y-1 pl-7">
+                  <li>{state.applicantName}</li>
+                </ul>
               </div>
-              <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_170px]">
-                <LoadingButton loading={isSubmitting} variant="green" className="order-first h-full text-base sm:order-last sm:text-lg" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Submit click">
-                  {t(($) => $.submit.submit, { ns: 'protectedApplicationRenewalAdult' })}
-                </LoadingButton>
-                <NavigationButtonLink
-                  disabled={isSubmitting}
-                  variant="secondary"
-                  direction="previous"
-                  routeId="protected/application/$id/renewal-adult/dental-insurance"
-                  params={params}
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Back click"
-                >
-                  {t(($) => $.submit.dentalInsurance, { ns: 'protectedApplicationRenewalAdult' })}
-                </NavigationButtonLink>
-              </div>
-            </fetcher.Form>
-          </section>
+            </section>
+            <section className="space-y-4">
+              <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.reviewYourApplication)}</h2>
+              <p>{t(($) => $.submit.pleaseReview)}</p>
+              <ButtonLink variant="primary" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Action click">
+                {t(($) => $.submit.reviewApplication)}
+              </ButtonLink>
+            </section>
+            <section className="space-y-4">
+              <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.submitYourApplication)}</h2>
+              <p>{t(($) => $.submit.bySubmitting)}</p>
+              <p>
+                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.protectedApplicationRenewalAdult.submit.reviewEligibilityCriteria} components={{ eligibilityLink }} />
+              </p>
+              <fetcher.Form method="post" noValidate>
+                <CsrfTokenInput />
+                <div className="space-y-2">
+                  <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
+                    {t(($) => $.submit.infoIsCorrect)}
+                  </InputCheckbox>
+                  <InputCheckbox id="acknowledge-criteria" name="acknowledgeCriteria" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeCriteria} required>
+                    {t(($) => $.submit.iUnderstand)}
+                  </InputCheckbox>
+                </div>
+                <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_170px]">
+                  <LoadingButton loading={isSubmitting} variant="green" className="order-first h-full text-base sm:order-last sm:text-lg" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Submit click">
+                    {t(($) => $.submit.submit)}
+                  </LoadingButton>
+                  <NavigationButtonLink
+                    disabled={isSubmitting}
+                    variant="secondary"
+                    direction="previous"
+                    routeId="protected/application/$id/renewal-adult/dental-insurance"
+                    params={params}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Back click"
+                  >
+                    {t(($) => $.submit.dentalInsurance)}
+                  </NavigationButtonLink>
+                </div>
+              </fetcher.Form>
+            </section>
+          </div>
+          <div className="mt-8">
+            <InlineLink routeId="protected/application/$id/renewal-adult/exit-application" params={params}>
+              {t(($) => $.submit.exitApplication)}
+            </InlineLink>
+          </div>
         </div>
-        <div className="mt-8">
-          <InlineLink routeId="protected/application/$id/renewal-adult/exit-application" params={params}>
-            {t(($) => $.submit.exitApplication, { ns: 'protectedApplicationRenewalAdult' })}
-          </InlineLink>
-        </div>
-      </div>
-      {payload && (
-        <div className="mt-8">
-          <DebugPayload data={payload} enableCopy />
-        </div>
-      )}
-    </ErrorSummaryProvider>
+        {payload && (
+          <div className="mt-8">
+            <DebugPayload data={payload} enableCopy />
+          </div>
+        )}
+      </ErrorSummaryProvider>
+    </>
   );
 }

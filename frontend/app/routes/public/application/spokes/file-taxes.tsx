@@ -7,6 +7,7 @@ import type { Route } from './+types/file-taxes';
 import { TYPES } from '~/.server/constants';
 import { clearPublicApplicationState, getPublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { InlineLink } from '~/components/inline-link';
@@ -18,7 +19,10 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-export const handle = { i18nNamespaces: getTypedI18nNamespaces('application', 'gcweb'), pageIdentifier: pageIds.public.application.spokes.fileYourTaxes, pageTitleI18nKey: 'application:fileYourTaxes.pageTitle' } as const satisfies RouteHandleData;
+export const handle = {
+  i18nNamespaces: getTypedI18nNamespaces('application', 'gcweb'),
+  pageIdentifier: pageIds.public.application.spokes.fileYourTaxes,
+} as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
@@ -62,32 +66,35 @@ export default function ApplicationFileYourTaxes({ loaderData, params }: Route.C
   }
 
   return (
-    <div className="max-w-prose">
-      <div className="mb-8 space-y-4">
-        <p>{t(($) => $.fileYourTaxes.ineligibleToApply)}</p>
-        <p>
-          {t(($) => $.fileYourTaxes.taxNotFiled, {
-            taxYear: taxYear,
-            ns: 'application',
-          })}
-        </p>
-        <p>{t(($) => $.fileYourTaxes.unableToAssess)}</p>
-        <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.fileYourTaxes.taxInfo} components={{ taxInfo }} />
-        </p>
-        <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.fileYourTaxes.applyAfter} />
-        </p>
+    <>
+      <AppPageTitle>{t(($) => $.fileYourTaxes.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <div className="mb-8 space-y-4">
+          <p>{t(($) => $.fileYourTaxes.ineligibleToApply)}</p>
+          <p>
+            {t(($) => $.fileYourTaxes.taxNotFiled, {
+              taxYear: taxYear,
+              ns: 'application',
+            })}
+          </p>
+          <p>{t(($) => $.fileYourTaxes.unableToAssess)}</p>
+          <p>
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.fileYourTaxes.taxInfo} components={{ taxInfo }} />
+          </p>
+          <p>
+            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.fileYourTaxes.applyAfter} />
+          </p>
+        </div>
+        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
+          <CsrfTokenInput />
+          <ButtonLink id="back-button" variant="secondary" routeId="public/application/$id/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - File your taxes click">
+            {t(($) => $.fileYourTaxes.backBtn)}
+          </ButtonLink>
+          <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - File your taxes click">
+            {t(($) => $.fileYourTaxes.exitBtn)}
+          </LoadingButton>
+        </fetcher.Form>
       </div>
-      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
-        <CsrfTokenInput />
-        <ButtonLink id="back-button" variant="secondary" routeId="public/application/$id/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - File your taxes click">
-          {t(($) => $.fileYourTaxes.backBtn)}
-        </ButtonLink>
-        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - File your taxes click">
-          {t(($) => $.fileYourTaxes.exitBtn)}
-        </LoadingButton>
-      </fetcher.Form>
-    </div>
+    </>
   );
 }

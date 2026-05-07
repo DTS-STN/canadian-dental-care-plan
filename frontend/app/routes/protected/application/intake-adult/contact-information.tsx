@@ -10,6 +10,7 @@ import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, 
 import { validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
@@ -24,9 +25,8 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'protectedApplicationIntakeAdult', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationIntakeAdult', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.intakeAdult.contactInformation,
-  pageTitleI18nKey: 'protectedApplicationIntakeAdult:contactInformation.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -40,7 +40,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = {
-    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.contactInformation.pageTitle, { ns: 'protectedApplicationIntakeAdult' }) }),
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.contactInformation.pageTitle) }),
   };
   const locale = getLocale(request);
 
@@ -92,27 +92,28 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
 
   return (
     <>
+      <AppPageTitle>{t(($) => $.contactInformation.pageHeading)}</AppPageTitle>
       <ProgressStepper activeStep="contactInformation" className="mb-8" />
       <div className="max-w-prose space-y-8">
         <div className="space-y-4">
-          <p>{t(($) => $.completeAllSections)}</p>
+          <p>{t(($) => $.completeAllSections, { ns: 'protectedApplication' })}</p>
           <p>{completedSectionsLabel}</p>
         </div>
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t(($) => $.contactInformation.phoneNumber, { ns: 'protectedApplicationIntakeAdult' })}</h2>
+              <h2>{t(($) => $.contactInformation.phoneNumber)}</h2>
             </CardTitle>
             <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.phoneNumber?.hasChanged ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t(($) => $.contactInformation.phoneNumber, { ns: 'protectedApplicationIntakeAdult' })}>{state.phoneNumber.value.primary}</DefinitionListItem>
-                {state.phoneNumber.value.alternate && <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber, { ns: 'protectedApplicationIntakeAdult' })}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
+                <DefinitionListItem term={t(($) => $.contactInformation.phoneNumber)}>{state.phoneNumber.value.primary}</DefinitionListItem>
+                {state.phoneNumber.value.alternate && <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber)}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
               </DefinitionList>
             ) : (
-              <p>{t(($) => $.contactInformation.phoneNumberHelp, { ns: 'protectedApplicationIntakeAdult' })}</p>
+              <p>{t(($) => $.contactInformation.phoneNumberHelp)}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -126,7 +127,7 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Edit phone click"
             >
-              {sections.phoneNumber.completed ? t(($) => $.contactInformation.editPhoneNumber, { ns: 'protectedApplicationIntakeAdult' }) : t(($) => $.contactInformation.addPhoneNumber, { ns: 'protectedApplicationIntakeAdult' })}
+              {sections.phoneNumber.completed ? t(($) => $.contactInformation.editPhoneNumber) : t(($) => $.contactInformation.addPhoneNumber)}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -134,16 +135,16 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t(($) => $.contactInformation.mailingAndHomeAddress, { ns: 'protectedApplicationIntakeAdult' })}</h2>
+              <h2>{t(($) => $.contactInformation.mailingAndHomeAddress)}</h2>
             </CardTitle>
             <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {mailingAddressInfo === undefined || homeAddressInfo === undefined ? (
-              <p>{t(($) => $.contactInformation.addressHelp, { ns: 'protectedApplicationIntakeAdult' })}</p>
+              <p>{t(($) => $.contactInformation.addressHelp)}</p>
             ) : (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t(($) => $.contactInformation.mailingAddress, { ns: 'protectedApplicationIntakeAdult' })}>
+                <DefinitionListItem term={t(($) => $.contactInformation.mailingAddress)}>
                   <Address
                     address={{
                       address: mailingAddressInfo.address,
@@ -154,7 +155,7 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
                     }}
                   />
                 </DefinitionListItem>
-                <DefinitionListItem term={t(($) => $.contactInformation.homeAddress, { ns: 'protectedApplicationIntakeAdult' })}>
+                <DefinitionListItem term={t(($) => $.contactInformation.homeAddress)}>
                   <Address
                     address={{
                       address: homeAddressInfo.address,
@@ -179,7 +180,7 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Edit address click"
             >
-              {sections.address.completed ? t(($) => $.contactInformation.editAddress, { ns: 'protectedApplicationIntakeAdult' }) : t(($) => $.contactInformation.addAddress, { ns: 'protectedApplicationIntakeAdult' })}
+              {sections.address.completed ? t(($) => $.contactInformation.editAddress) : t(($) => $.contactInformation.addAddress)}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -187,18 +188,18 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t(($) => $.contactInformation.communicationPreferences, { ns: 'protectedApplicationIntakeAdult' })}</h2>
+              <h2>{t(($) => $.contactInformation.communicationPreferences)}</h2>
             </CardTitle>
             <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
           <CardContent>
             {state.communicationPreferences?.hasChanged ? (
               <DefinitionList layout="single-column">
-                <DefinitionListItem term={t(($) => $.contactInformation.preferredLanguage, { ns: 'protectedApplicationIntakeAdult' })}>{preferredLanguage?.name}</DefinitionListItem>
-                <DefinitionListItem term={t(($) => $.contactInformation.preferredMethod, { ns: 'protectedApplicationIntakeAdult' })}>{preferredMethod?.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.contactInformation.preferredLanguage)}>{preferredLanguage?.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.contactInformation.preferredMethod)}>{preferredMethod?.name}</DefinitionListItem>
               </DefinitionList>
             ) : (
-              <p>{t(($) => $.contactInformation.communicationPreferencesHelp, { ns: 'protectedApplicationIntakeAdult' })}</p>
+              <p>{t(($) => $.contactInformation.communicationPreferencesHelp)}</p>
             )}
           </CardContent>
           <CardFooter className="border-t bg-zinc-100">
@@ -212,9 +213,7 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Edit comms click"
             >
-              {sections.communicationPreferences.completed
-                ? t(($) => $.contactInformation.editCommunicationPreferences, { ns: 'protectedApplicationIntakeAdult' })
-                : t(($) => $.contactInformation.addCommunicationPreferences, { ns: 'protectedApplicationIntakeAdult' })}
+              {sections.communicationPreferences.completed ? t(($) => $.contactInformation.editCommunicationPreferences) : t(($) => $.contactInformation.addCommunicationPreferences)}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -222,11 +221,11 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
         <Card>
           <CardHeader>
             <CardTitle asChild>
-              <h2>{t(($) => $.contactInformation.email, { ns: 'protectedApplicationIntakeAdult' })}</h2>
+              <h2>{t(($) => $.contactInformation.email)}</h2>
             </CardTitle>
             <CardAction>{sections.email.completed && <StatusTag status="complete" />}</CardAction>
           </CardHeader>
-          <CardContent>{state.email === undefined ? <p>{t(($) => $.contactInformation.emailHelp, { ns: 'protectedApplicationIntakeAdult' })}</p> : <p>{state.email}</p>}</CardContent>
+          <CardContent>{state.email === undefined ? <p>{t(($) => $.contactInformation.emailHelp)}</p> : <p>{state.email}</p>}</CardContent>
           <CardFooter className="border-t bg-zinc-100">
             <ButtonLink
               id="edit-email-button"
@@ -238,7 +237,7 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
               size="lg"
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Edit email click"
             >
-              {sections.email.completed ? t(($) => $.contactInformation.editEmail, { ns: 'protectedApplicationIntakeAdult' }) : t(($) => $.contactInformation.addEmail, { ns: 'protectedApplicationIntakeAdult' })}
+              {sections.email.completed ? t(($) => $.contactInformation.editEmail) : t(($) => $.contactInformation.addEmail)}
             </ButtonLink>
           </CardFooter>
         </Card>
@@ -252,7 +251,7 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Continue click"
           >
-            {t(($) => $.contactInformation.nextBtn, { ns: 'protectedApplicationIntakeAdult' })}
+            {t(($) => $.contactInformation.nextBtn)}
           </NavigationButtonLink>
           <NavigationButtonLink
             variant="secondary"
@@ -261,7 +260,7 @@ export default function ProtectedNewAdultContactInformation({ loaderData, params
             params={params}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Adult:Back click"
           >
-            {t(($) => $.contactInformation.prevBtn, { ns: 'protectedApplicationIntakeAdult' })}
+            {t(($) => $.contactInformation.prevBtn)}
           </NavigationButtonLink>
         </div>
       </div>

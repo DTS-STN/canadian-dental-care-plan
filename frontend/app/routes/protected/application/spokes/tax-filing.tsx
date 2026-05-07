@@ -9,6 +9,7 @@ import { TYPES } from '~/.server/constants';
 import { getProtectedApplicationState, saveProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
@@ -28,7 +29,6 @@ const TAX_FILING_OPTION = { no: 'no', yes: 'yes' } as const;
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.spokes.taxFiling,
-  pageTitleI18nKey: 'protectedApplication:taxFiling.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -85,51 +85,51 @@ export default function ApplicationTaxFiling({ loaderData, params }: Route.Compo
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const errors = fetcher.data?.errors;
   return (
-    <div className="max-w-prose">
-      <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <InputRadios
-            id="tax-filing"
-            name="hasFiledTaxes"
-            legend={t(($) => $.taxFiling.formInstructions, {
-              taxYear: taxYear,
-              ns: 'protectedApplication',
-            })}
-            options={[
-              {
-                value: TAX_FILING_OPTION.yes,
-                children: t(($) => $.taxFiling.radioOptions.yes),
-                defaultChecked: defaultState === true,
-              },
-              {
-                value: TAX_FILING_OPTION.no,
-                children: t(($) => $.taxFiling.radioOptions.no),
-                defaultChecked: defaultState === false,
-              },
-            ]}
-            errorMessage={errors?.hasFiledTaxes}
-            required
-          />
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Tax filing click">
-              {t(($) => $.taxFiling.saveBtn)}
-            </LoadingButton>
-            <ButtonLink
-              id="back-button"
-              variant="secondary"
-              routeId="protected/application/$id/eligibility-requirements"
-              params={params}
-              disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Tax filing click"
-            >
-              {t(($) => $.taxFiling.backBtn)}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+    <>
+      <AppPageTitle>{t(($) => $.taxFiling.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <InputRadios
+              id="tax-filing"
+              name="hasFiledTaxes"
+              legend={t(($) => $.taxFiling.formInstructions, { taxYear: taxYear })}
+              options={[
+                {
+                  value: TAX_FILING_OPTION.yes,
+                  children: t(($) => $.taxFiling.radioOptions.yes),
+                  defaultChecked: defaultState === true,
+                },
+                {
+                  value: TAX_FILING_OPTION.no,
+                  children: t(($) => $.taxFiling.radioOptions.no),
+                  defaultChecked: defaultState === false,
+                },
+              ]}
+              errorMessage={errors?.hasFiledTaxes}
+              required
+            />
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Save - Tax filing click">
+                {t(($) => $.taxFiling.saveBtn)}
+              </LoadingButton>
+              <ButtonLink
+                id="back-button"
+                variant="secondary"
+                routeId="protected/application/$id/eligibility-requirements"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Spoke:Back - Tax filing click"
+              >
+                {t(($) => $.taxFiling.backBtn)}
+              </ButtonLink>
+            </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

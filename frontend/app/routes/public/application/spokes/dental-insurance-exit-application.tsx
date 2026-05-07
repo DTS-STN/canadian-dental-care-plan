@@ -7,6 +7,7 @@ import type { Route } from './+types/dental-insurance-exit-application';
 import { TYPES } from '~/.server/constants';
 import { clearPublicApplicationState, getPublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { LoadingButton } from '~/components/loading-button';
@@ -20,7 +21,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.spokes.dentalInsuranceExitApplication,
-  pageTitleI18nKey: 'applicationSpokes:dentalInsuranceExitApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -59,27 +59,30 @@ export default function ApplicationSpokeDentalInsuranceExitApplication({ loaderD
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   return (
-    <div className="max-w-prose">
-      <div className="mb-8 space-y-4">
-        <p>{t(($) => $.dentalInsuranceExitApplication.areYouSure)}</p>
-        <p>{t(($) => $.dentalInsuranceExitApplication.clickBack)}</p>
+    <>
+      <AppPageTitle>{t(($) => $.dentalInsuranceExitApplication.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <div className="mb-8 space-y-4">
+          <p>{t(($) => $.dentalInsuranceExitApplication.areYouSure)}</p>
+          <p>{t(($) => $.dentalInsuranceExitApplication.clickBack)}</p>
+        </div>
+        <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
+          <CsrfTokenInput />
+          <ButtonLink
+            id="back-button"
+            variant="secondary"
+            routeId="public/application/$id/dental-insurance"
+            params={params}
+            disabled={isSubmitting}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Exiting the application click"
+          >
+            {t(($) => $.dentalInsuranceExitApplication.backBtn)}
+          </ButtonLink>
+          <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - Exiting the application click">
+            {t(($) => $.dentalInsuranceExitApplication.exitBtn)}
+          </LoadingButton>
+        </fetcher.Form>
       </div>
-      <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
-        <CsrfTokenInput />
-        <ButtonLink
-          id="back-button"
-          variant="secondary"
-          routeId="public/application/$id/dental-insurance"
-          params={params}
-          disabled={isSubmitting}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Back - Exiting the application click"
-        >
-          {t(($) => $.dentalInsuranceExitApplication.backBtn)}
-        </ButtonLink>
-        <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Exit - Exiting the application click">
-          {t(($) => $.dentalInsuranceExitApplication.exitBtn)}
-        </LoadingButton>
-      </fetcher.Form>
-    </div>
+    </>
   );
 }

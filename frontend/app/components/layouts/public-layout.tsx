@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 import { Link } from 'react-router';
 
@@ -13,12 +13,11 @@ import { PageDetails } from '~/components/page-details';
 import { PageHeaderBrand } from '~/components/page-header-brand';
 import { PageTitle } from '~/components/page-title';
 import { SkipNavigationLinks } from '~/components/skip-navigation-links';
-import { useAccessibleFocusManagement, useBrowserCompatiblityBanner, useCurrentLanguage } from '~/hooks';
+import { useBrowserCompatiblityBanner, useCurrentLanguage } from '~/hooks';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
-import { getTypedI18nNamespaces, translateFromKey } from '~/utils/locale-utils';
-import { usePageTitleI18nKey, usePageTitleI18nOptions } from '~/utils/route-utils';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
@@ -27,35 +26,16 @@ export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
  * see: https://wet-boew.github.io/GCWeb/templates/application/application-docs-en.html
  */
 export function PublicLayout({ children }: PropsWithChildren) {
-  const { i18n } = useTranslation();
-  const pageTitleI18nKey = usePageTitleI18nKey();
-  const i18nOptions = usePageTitleI18nOptions();
-  const pageTitle = pageTitleI18nKey ? translateFromKey(i18n, pageTitleI18nKey, i18nOptions) : undefined;
-
   return (
     <>
       <PageHeader />
       <PageBreadcrumbs />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
-        {pageTitle && <AppPageTitle>{pageTitle}</AppPageTitle>}
         {children}
         <PageDetails />
       </main>
       <PageFooter />
     </>
-  );
-}
-
-export function AppPageTitle({ children }: PropsWithChildren) {
-  const { t } = useTranslation(i18nNamespaces);
-  const focusableElementRef = useRef<HTMLHeadingElement | null>(null);
-  useAccessibleFocusManagement(focusableElementRef);
-
-  return (
-    <div className="my-8 max-w-prose after:mt-2 after:block after:h-1.5 after:w-18 after:bg-[#a62a1e] after:content-['']">
-      <h2 className="font-lato mb-2 font-semibold">{t(($) => $.header.applicationTitle)}</h2>
-      <PageTitle ref={focusableElementRef}>{children}</PageTitle>
-    </div>
   );
 }
 

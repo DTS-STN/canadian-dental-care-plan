@@ -9,6 +9,7 @@ import type { Route } from './+types/email';
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
@@ -61,7 +62,6 @@ export const handle = {
   breadcrumbs: [{ labelI18nKey: 'protectedProfile:contactInformation.pageTitle', routeId: 'protected/profile/contact-information' }],
   i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.email,
-  pageTitleI18nKey: 'protectedProfile:email.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -180,28 +180,31 @@ export default function ProtectedProfileEmailAddress({ loaderData, params }: Rou
   const backButtonRouteId = context === 'communication-preferences' ? 'protected/profile/communication-preferences/edit' : 'protected/profile/contact-information';
 
   return (
-    <div className="max-w-prose">
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <p className="mb-4">{t(($) => $.email.provideEmail)}</p>
-          <p className="mb-8">{t(($) => $.email.verifyEmail)}</p>
-          <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
-          <div className="mb-6">
-            <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t(($) => $.email.emailLegend)} maxLength={64} required />
-          </div>
+    <>
+      <AppPageTitle>{t(($) => $.email.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <p className="mb-4">{t(($) => $.email.provideEmail)}</p>
+            <p className="mb-8">{t(($) => $.email.verifyEmail)}</p>
+            <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
+            <div className="mb-6">
+              <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t(($) => $.email.emailLegend)} maxLength={64} required />
+            </div>
 
-          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Email address click">
-              {t(($) => $.email.continueBtn)}
-            </LoadingButton>
-            <ButtonLink variant="secondary" id="back-button" routeId={backButtonRouteId} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Email address click">
-              {t(($) => $.email.back)}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton variant="primary" id="save-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Email address click">
+                {t(($) => $.email.continueBtn)}
+              </LoadingButton>
+              <ButtonLink variant="secondary" id="back-button" routeId={backButtonRouteId} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Email address click">
+                {t(($) => $.email.back)}
+              </ButtonLink>
+            </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

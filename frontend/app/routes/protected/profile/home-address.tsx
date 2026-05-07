@@ -12,6 +12,7 @@ import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
 import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogTrigger } from '~/components/dialog';
@@ -42,7 +43,6 @@ export const handle = {
   breadcrumbs: [{ labelI18nKey: 'protectedProfile:contactInformation.pageTitle', routeId: 'protected/profile/contact-information' }],
   i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.editHomeAddress,
-  pageTitleI18nKey: 'protectedProfile:homeAddress.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -280,110 +280,113 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
   }
 
   return (
-    <div className="max-w-prose">
-      <p className="mb-4 italic">{t(($) => $.optionalLabel)}</p>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <fieldset className="mb-6">
-            <div className="space-y-6">
-              <InputSanitizeField
-                id="homeAddress"
-                name="address"
-                className="w-full"
-                label={t(($) => $.homeAddress.address)}
-                maxLength={100}
-                helpMessagePrimary={t(($) => $.homeAddress.addressHelp)}
-                helpMessagePrimaryClassName="text-black"
-                autoComplete="address-line1"
-                defaultValue={defaultState.address}
-                errorMessage={errors?.address}
-                required
-              />
-              <InputSanitizeField
-                id="apartment"
-                name="apartment"
-                className="w-full"
-                label={t(($) => $.homeAddress.apartment)}
-                maxLength={100}
-                helpMessagePrimary={t(($) => $.homeAddress.apartmentHelp)}
-                helpMessagePrimaryClassName="text-black"
-                autoComplete="address-line2"
-                defaultValue={defaultState.apartment}
-                errorMessage={errors?.apartment}
-              />
-              <InputSanitizeField id="home-city" name="city" className="w-full" label={t(($) => $.homeAddress.city)} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
-              <InputSanitizeField
-                id="home-postal-code"
-                name="postalZipCode"
-                className="w-full sm:w-1/2"
-                label={isPostalCodeRequired ? t(($) => $.homeAddress.postalCode) : t(($) => $.homeAddress.postalCodeOptional)}
-                maxLength={100}
-                autoComplete="postal-code"
-                defaultValue={defaultState.postalCode}
-                errorMessage={errors?.postalZipCode}
-                required={isPostalCodeRequired}
-                helpMessagePrimary={postalCodeHelpMessage}
-                helpMessagePrimaryClassName="text-black"
-              />
-              {homeRegions.length > 0 && (
-                <InputSelect
-                  id="home-province"
-                  name="provinceStateId"
-                  className="w-full sm:w-1/2"
-                  label={t(($) => $.homeAddress.province)}
-                  defaultValue={defaultState.province}
-                  errorMessage={errors?.provinceStateId}
-                  options={[dummyOption, ...homeRegions]}
+    <>
+      <AppPageTitle>{t(($) => $.homeAddress.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <p className="mb-4 italic">{t(($) => $.optionalLabel)}</p>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <fieldset className="mb-6">
+              <div className="space-y-6">
+                <InputSanitizeField
+                  id="homeAddress"
+                  name="address"
+                  className="w-full"
+                  label={t(($) => $.homeAddress.address)}
+                  maxLength={100}
+                  helpMessagePrimary={t(($) => $.homeAddress.addressHelp)}
+                  helpMessagePrimaryClassName="text-black"
+                  autoComplete="address-line1"
+                  defaultValue={defaultState.address}
+                  errorMessage={errors?.address}
                   required
                 />
-              )}
-              <InputSelect
-                id="home-country"
-                name="countryId"
-                className="w-full sm:w-1/2"
-                label={t(($) => $.homeAddress.country)}
-                autoComplete="country"
-                defaultValue={defaultState.country}
-                errorMessage={errors?.countryId}
-                options={countries}
-                onChange={homeCountryChangeHandler}
-                required
-              />
+                <InputSanitizeField
+                  id="apartment"
+                  name="apartment"
+                  className="w-full"
+                  label={t(($) => $.homeAddress.apartment)}
+                  maxLength={100}
+                  helpMessagePrimary={t(($) => $.homeAddress.apartmentHelp)}
+                  helpMessagePrimaryClassName="text-black"
+                  autoComplete="address-line2"
+                  defaultValue={defaultState.apartment}
+                  errorMessage={errors?.apartment}
+                />
+                <InputSanitizeField id="home-city" name="city" className="w-full" label={t(($) => $.homeAddress.city)} maxLength={100} autoComplete="address-level2" defaultValue={defaultState.city} errorMessage={errors?.city} required />
+                <InputSanitizeField
+                  id="home-postal-code"
+                  name="postalZipCode"
+                  className="w-full sm:w-1/2"
+                  label={isPostalCodeRequired ? t(($) => $.homeAddress.postalCode) : t(($) => $.homeAddress.postalCodeOptional)}
+                  maxLength={100}
+                  autoComplete="postal-code"
+                  defaultValue={defaultState.postalCode}
+                  errorMessage={errors?.postalZipCode}
+                  required={isPostalCodeRequired}
+                  helpMessagePrimary={postalCodeHelpMessage}
+                  helpMessagePrimaryClassName="text-black"
+                />
+                {homeRegions.length > 0 && (
+                  <InputSelect
+                    id="home-province"
+                    name="provinceStateId"
+                    className="w-full sm:w-1/2"
+                    label={t(($) => $.homeAddress.province)}
+                    defaultValue={defaultState.province}
+                    errorMessage={errors?.provinceStateId}
+                    options={[dummyOption, ...homeRegions]}
+                    required
+                  />
+                )}
+                <InputSelect
+                  id="home-country"
+                  name="countryId"
+                  className="w-full sm:w-1/2"
+                  label={t(($) => $.homeAddress.country)}
+                  autoComplete="country"
+                  defaultValue={defaultState.country}
+                  errorMessage={errors?.countryId}
+                  options={countries}
+                  onChange={homeCountryChangeHandler}
+                  required
+                />
+              </div>
+            </fieldset>
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
+                <DialogTrigger asChild>
+                  <LoadingButton
+                    aria-expanded={undefined}
+                    variant="primary"
+                    id="continue-button"
+                    type="submit"
+                    name="_action"
+                    value={FORM_ACTION.submit}
+                    loading={isSubmitting}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Home address click"
+                  >
+                    {t(($) => $.homeAddress.saveBtn)}
+                  </LoadingButton>
+                </DialogTrigger>
+                {!isSubmitting && addressDialogContent && (
+                  <>
+                    {addressDialogContent.status === 'address-suggestion' && (
+                      <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
+                    )}
+                    {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent addressContext="homeAddress" invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
+                  </>
+                )}
+              </Dialog>
+              <ButtonLink variant="secondary" id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Home address click">
+                {t(($) => $.homeAddress.backBtn)}
+              </ButtonLink>
             </div>
-          </fieldset>
-          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
-              <DialogTrigger asChild>
-                <LoadingButton
-                  aria-expanded={undefined}
-                  variant="primary"
-                  id="continue-button"
-                  type="submit"
-                  name="_action"
-                  value={FORM_ACTION.submit}
-                  loading={isSubmitting}
-                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Home address click"
-                >
-                  {t(($) => $.homeAddress.saveBtn)}
-                </LoadingButton>
-              </DialogTrigger>
-              {!isSubmitting && addressDialogContent && (
-                <>
-                  {addressDialogContent.status === 'address-suggestion' && (
-                    <AddressSuggestionDialogContent enteredAddress={addressDialogContent.enteredAddress} suggestedAddress={addressDialogContent.suggestedAddress} formAction={FORM_ACTION.useSelectedAddress} />
-                  )}
-                  {addressDialogContent.status === 'address-invalid' && <AddressInvalidDialogContent addressContext="homeAddress" invalidAddress={addressDialogContent.invalidAddress} formAction={FORM_ACTION.useInvalidAddress} />}
-                </>
-              )}
-            </Dialog>
-            <ButtonLink variant="secondary" id="back-button" routeId="protected/profile/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Home address click">
-              {t(($) => $.homeAddress.backBtn)}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

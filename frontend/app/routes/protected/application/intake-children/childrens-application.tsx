@@ -12,6 +12,7 @@ import { loadProtectedApplicationIntakeChildState } from '~/.server/routes/helpe
 import { isChildDentalBenefitsSectionCompleted, isChildDentalInsuranceSectionCompleted, isChildInformationSectionCompleted } from '~/.server/routes/helpers/protected-application-intake-section-checks';
 import { saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -35,7 +36,6 @@ const FORM_ACTION = { add: 'add', remove: 'remove' } as const;
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('protectedApplicationIntakeChild', 'protectedApplication', 'gcweb', 'common'),
   pageIdentifier: pageIds.protected.application.intakeChild.childApplication,
-  pageTitleI18nKey: 'protectedApplicationIntakeChild:childrensApplication.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -154,6 +154,7 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
 
   return (
     <>
+      <AppPageTitle>{t(($) => $.childrensApplication.pageTitle)}</AppPageTitle>
       <ProgressStepper activeStep="childrensApplication" className="mb-8" />
       <div className="max-w-prose space-y-8">
         {state.children.map((child, index) => {
@@ -170,7 +171,6 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
               <h2 className="font-lato mb-4 text-2xl font-bold">
                 {t(($) => $.childrensApplication.childTitle, {
                   childNumber: index + 1,
-                  ns: 'protectedApplicationIntakeChild',
                 })}
               </h2>
               <div className="space-y-4">
@@ -189,7 +189,6 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                     <h2>
                       {t(($) => $.childrensApplication.childInformationCardTitle, {
                         childNumber: index + 1,
-                        ns: 'protectedApplicationIntakeChild',
                       })}
                     </h2>
                   </CardTitle>
@@ -223,7 +222,6 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                       ? t(($) => $.childrensApplication.addChildInformation)
                       : t(($) => $.childrensApplication.editChildInformation, {
                           childNumber: index + 1,
-                          ns: 'protectedApplicationIntakeChild',
                         })}
                   </ButtonLink>
                 </CardFooter>
@@ -261,7 +259,6 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                         ? `${t(($) => $.childrensApplication.addAnswer)} - ${t(($) => $.childrensApplication.childDentalInsuranceCardTitle)}`
                         : t(($) => $.childrensApplication.editChildDentalInsurance, {
                             childNumber: index + 1,
-                            ns: 'protectedApplicationIntakeChild',
                           })
                     }
                   >
@@ -269,7 +266,6 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                       ? t(($) => $.childrensApplication.addAnswer)
                       : t(($) => $.childrensApplication.editChildDentalInsurance, {
                           childNumber: index + 1,
-                          ns: 'protectedApplicationIntakeChild',
                         })}
                   </ButtonLink>
                 </CardFooter>
@@ -317,7 +313,6 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                         ? `${t(($) => $.childrensApplication.addAnswer)} - ${t(($) => $.childrensApplication.childDentalBenefitsCardTitle)}`
                         : t(($) => $.childrensApplication.editChildDentalBenefits, {
                             childNumber: index + 1,
-                            ns: 'protectedApplicationIntakeChild',
                           })
                     }
                   >
@@ -325,7 +320,6 @@ export default function ProtectedNewChildChildrensApplication({ loaderData, para
                       ? t(($) => $.childrensApplication.addAnswer)
                       : t(($) => $.childrensApplication.editChildDentalBenefits, {
                           childNumber: index + 1,
-                          ns: 'protectedApplicationIntakeChild',
                         })}
                   </ButtonLink>
                 </CardFooter>

@@ -515,7 +515,7 @@ const ns = {
     },
     parentGuardian: {
       pageTitle: "Parent or legal guardian",
-      parentLegend: "Are you the parent or legal guardian of {{ childName }}?",
+      parentLegend: "Are you the parent or legal guardian of {{childName}}?",
       radioOptions: {
         yes: "Yes",
         no: "No",

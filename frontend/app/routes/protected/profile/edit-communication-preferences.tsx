@@ -13,6 +13,7 @@ import { TYPES } from '~/.server/constants';
 import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
@@ -35,7 +36,6 @@ export const handle = {
   breadcrumbs: [{ labelI18nKey: 'protectedProfile:communicationPreferences.pageTitle', routeId: 'protected/profile/communication-preferences' }],
   i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.editCommunicationPreferences,
-  pageTitleI18nKey: 'protectedProfile:editCommunicationPreferences.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -244,48 +244,51 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
   const submitButtonText = isDigitalCommunicationMethodSelected && !isClientApplicationEmailAddressVerified ? t(($) => $.editCommunicationPreferences.continue) : t(($) => $.editCommunicationPreferences.save);
 
   return (
-    <div className="max-w-prose">
-      <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <div className="mb-8 space-y-6">
-            <InputRadios id="preferred-language" name="preferredLanguage" legend={t(($) => $.editCommunicationPreferences.preferredLanguage)} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
-            <InputRadios
-              id="preferred-method-sunlife"
-              legend={t(($) => $.editCommunicationPreferences.preferredMethodSunlife)}
-              name="preferredMethodSunLife"
-              options={sunLifeCommunicationMethodOptions}
-              errorMessage={errors?.preferredMethodSunLife}
-              required
-            />
-            <InputRadios
-              id="preferred-method-gc"
-              name="preferredMethodGovernmentOfCanada"
-              legend={t(($) => $.editCommunicationPreferences.preferredMethodGc)}
-              options={gcCommunicationMethodOptions}
-              required
-              errorMessage={errors?.preferredMethodGovernmentOfCanada}
-            />
-          </div>
-          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton variant="primary" id="save-button" loading={isSubmittingOrSuccess} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Communication preferences click">
-              {submitButtonText}
-            </LoadingButton>
-            <ButtonLink
-              variant="secondary"
-              id="back-button"
-              routeId="protected/profile/communication-preferences"
-              params={params}
-              disabled={isSubmittingOrSuccess}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Communication preferences click"
-            >
-              {t(($) => $.editCommunicationPreferences.back)}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+    <>
+      <AppPageTitle>{t(($) => $.editCommunicationPreferences.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <div className="mb-8 space-y-6">
+              <InputRadios id="preferred-language" name="preferredLanguage" legend={t(($) => $.editCommunicationPreferences.preferredLanguage)} options={preferredLanguageOptions} errorMessage={errors?.preferredLanguage} required />
+              <InputRadios
+                id="preferred-method-sunlife"
+                legend={t(($) => $.editCommunicationPreferences.preferredMethodSunlife)}
+                name="preferredMethodSunLife"
+                options={sunLifeCommunicationMethodOptions}
+                errorMessage={errors?.preferredMethodSunLife}
+                required
+              />
+              <InputRadios
+                id="preferred-method-gc"
+                name="preferredMethodGovernmentOfCanada"
+                legend={t(($) => $.editCommunicationPreferences.preferredMethodGc)}
+                options={gcCommunicationMethodOptions}
+                required
+                errorMessage={errors?.preferredMethodGovernmentOfCanada}
+              />
+            </div>
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton variant="primary" id="save-button" loading={isSubmittingOrSuccess} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Save - Communication preferences click">
+                {submitButtonText}
+              </LoadingButton>
+              <ButtonLink
+                variant="secondary"
+                id="back-button"
+                routeId="protected/profile/communication-preferences"
+                params={params}
+                disabled={isSubmittingOrSuccess}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Communication preferences click"
+              >
+                {t(($) => $.editCommunicationPreferences.back)}
+              </ButtonLink>
+            </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

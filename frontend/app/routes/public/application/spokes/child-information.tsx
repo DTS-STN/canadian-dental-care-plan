@@ -15,6 +15,7 @@ import { getPublicApplicationState, getSingleChildState, savePublicApplicationSt
 import type { PublicApplicationChildInformationState, PublicApplicationChildSinState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -26,7 +27,6 @@ import { InputPatternField } from '~/components/input-pattern-field';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
-import { AppPageTitle } from '~/components/layouts/public-layout';
 import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
@@ -63,7 +63,6 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const childNumber = t(($) => $.children.childNumber, {
     childNumber: childState.childNumber,
-    ns: 'applicationSpokes',
   });
   const childName = childState.isNew ? childNumber : (childState.information?.firstName ?? childNumber);
 
@@ -71,7 +70,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     title: t(($) => $.meta.title.template, {
       title: t(($) => $.children.information.pageTitle, {
         childName: childName,
-        ns: 'applicationSpokes',
       }),
 
       ns: 'gcweb',
@@ -79,7 +77,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     dcTermsTitle: t(($) => $.meta.title.template, {
       title: t(($) => $.children.information.pageTitle, {
         childName: childNumber,
-        ns: 'applicationSpokes',
       }),
 
       ns: 'gcweb',
@@ -375,12 +372,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
 
   return (
     <ErrorSummaryProvider actionData={fetcher.data}>
-      <AppPageTitle>
-        {t(($) => $.children.information.pageTitle, {
-          childName: childName,
-          ns: 'applicationSpokes',
-        })}
-      </AppPageTitle>
+      <AppPageTitle>{t(($) => $.children.information.pageTitle, { childName: childName })}</AppPageTitle>
       <div className="max-w-prose">
         <ErrorAlert>
           <h2 className="mb-2 font-bold">{t(($) => $.children.information.errorMessage.alert.heading)}</h2>

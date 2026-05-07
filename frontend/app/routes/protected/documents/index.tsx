@@ -6,6 +6,7 @@ import type { Route } from './+types/index';
 import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/table';
 import { pageIds } from '~/page-ids';
@@ -18,7 +19,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('documents', 'gcweb'),
   pageIdentifier: pageIds.protected.documents.index,
-  pageTitleI18nKey: 'documents:index.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -66,50 +66,53 @@ export default function DocumentsIndex({ loaderData, params }: Route.ComponentPr
   const hasDocuments = documents.length > 0;
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-4">
-        <p>{hasDocuments ? t(($) => $.index.hasDocuments) : t(($) => $.index.noDocuments)}</p>
-        {hasDocuments && (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t(($) => $.index.tableHeaders.fileName)}</TableHead>
-                <TableHead>{t(($) => $.index.tableHeaders.applicant)}</TableHead>
-                <TableHead>{t(($) => $.index.tableHeaders.typeOfDocument)}</TableHead>
-                <TableHead>{t(($) => $.index.tableHeaders.dateUploaded)}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {documents.map((document) => (
-                <TableRow key={document.id} className="odd:bg-white even:bg-gray-50">
-                  <TableCell className="max-w-[200px] break-all">{document.fileName}</TableCell>
-                  <TableCell>{`${document.client.firstName} ${document.client.lastName}`}</TableCell>
-                  <TableCell>{document.documentType.name}</TableCell>
-                  <TableCell className="text-nowrap">{document.mscaUploadDateFormatted}</TableCell>
+    <>
+      <AppPageTitle>{t(($) => $.index.pageTitle)}</AppPageTitle>
+      <div className="space-y-8">
+        <div className="space-y-4">
+          <p>{hasDocuments ? t(($) => $.index.hasDocuments) : t(($) => $.index.noDocuments)}</p>
+          {hasDocuments && (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t(($) => $.index.tableHeaders.fileName)}</TableHead>
+                  <TableHead>{t(($) => $.index.tableHeaders.applicant)}</TableHead>
+                  <TableHead>{t(($) => $.index.tableHeaders.typeOfDocument)}</TableHead>
+                  <TableHead>{t(($) => $.index.tableHeaders.dateUploaded)}</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
+              </TableHeader>
+              <TableBody>
+                {documents.map((document) => (
+                  <TableRow key={document.id} className="odd:bg-white even:bg-gray-50">
+                    <TableCell className="max-w-[200px] break-all">{document.fileName}</TableCell>
+                    <TableCell>{`${document.client.firstName} ${document.client.lastName}`}</TableCell>
+                    <TableCell>{document.documentType.name}</TableCell>
+                    <TableCell className="text-nowrap">{document.mscaUploadDateFormatted}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </div>
+        <div>
+          <ButtonLink id="upload-button" routeId="protected/documents/upload" params={params} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Upload documents - Submitted documents click">
+            {t(($) => $.index.uploadDocuments)}
+          </ButtonLink>
+        </div>
+        <div>
+          <ButtonLink
+            id="back-button"
+            variant="secondary"
+            to={t(($) => $.header.menuDashboardHref, {
+              baseUri: SCCH_BASE_URI,
+              ns: 'gcweb',
+            })}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Submitted documents click"
+          >
+            {t(($) => $.index.returnDashboard)}
+          </ButtonLink>
+        </div>
       </div>
-      <div>
-        <ButtonLink id="upload-button" routeId="protected/documents/upload" params={params} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Upload documents - Submitted documents click">
-          {t(($) => $.index.uploadDocuments)}
-        </ButtonLink>
-      </div>
-      <div>
-        <ButtonLink
-          id="back-button"
-          variant="secondary"
-          to={t(($) => $.header.menuDashboardHref, {
-            baseUri: SCCH_BASE_URI,
-            ns: 'gcweb',
-          })}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Documents-Protected:Return to dashboard - Submitted documents click"
-        >
-          {t(($) => $.index.returnDashboard)}
-        </ButtonLink>
-      </div>
-    </div>
+    </>
   );
 }

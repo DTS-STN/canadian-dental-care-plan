@@ -15,6 +15,7 @@ import { loadPublicApplicationSimplifiedAdultState } from '~/.server/routes/help
 import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, isPhoneNumberSectionCompleted } from '~/.server/routes/helpers/public-application-simplified-section-checks';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -37,9 +38,8 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('application', 'applicationSimplifiedAdult', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('applicationSimplifiedAdult', 'application', 'gcweb'),
   pageIdentifier: pageIds.public.application.simplifiedAdult.contactInformation,
-  pageTitleI18nKey: 'applicationSimplifiedAdult:contactInformation.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -50,7 +50,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = {
-    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.contactInformation.pageTitle, { ns: 'applicationSimplifiedAdult' }) }),
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.contactInformation.pageTitle) }),
   };
   const locale = getLocale(request);
 
@@ -174,65 +174,68 @@ export default function RenewAdultContactInformation({ loaderData, params }: Rou
   const fetcher = useFetcher<typeof action>();
 
   return (
-    <fetcher.Form method="post" noValidate>
-      <CsrfTokenInput />
-      <ProgressStepper activeStep="contactInformation" className="mb-8" />
-      <div className="max-w-prose space-y-8">
-        <div className="space-y-4">
-          <p>{t(($) => $.confirmInformation)}</p>
-          <p>{t(($) => $.completeAllSections)}</p>
-          <p>{completedSectionsLabel}</p>
+    <>
+      <AppPageTitle>{t(($) => $.contactInformation.pageHeading)}</AppPageTitle>
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <ProgressStepper activeStep="contactInformation" className="mb-8" />
+        <div className="max-w-prose space-y-8">
+          <div className="space-y-4">
+            <p>{t(($) => $.confirmInformation, { ns: 'application' })}</p>
+            <p>{t(($) => $.completeAllSections, { ns: 'application' })}</p>
+            <p>{completedSectionsLabel}</p>
+          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle asChild>
+                <h2>{t(($) => $.contactInformation.phoneNumber)}</h2>
+              </CardTitle>
+              <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
+            </CardHeader>
+            <PhoneNumberCardContent />
+            <PhoneNumberCardFooter />
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle asChild>
+                <h2>{t(($) => $.contactInformation.mailingAndHomeAddress)}</h2>
+              </CardTitle>
+              <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
+            </CardHeader>
+            <MailingAndHomeAddressCardContent />
+            <MailingAndHomeAddressCardFooter />
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle asChild>
+                <h2>{t(($) => $.contactInformation.communicationPreferences)}</h2>
+              </CardTitle>
+              <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
+            </CardHeader>
+            <CommunicationPreferencesCardContent />
+            <CommunicationPreferencesCardFooter />
+          </Card>
+
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <NavigationButtonLink
+              disabled={!allSectionsCompleted}
+              variant="primary"
+              direction="next"
+              routeId="public/application/$id/simplified-adult/dental-insurance"
+              params={params}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Continue click"
+            >
+              {t(($) => $.contactInformation.nextBtn)}
+            </NavigationButtonLink>
+            <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Back click">
+              {t(($) => $.contactInformation.prevBtn)}
+            </NavigationButtonLink>
+          </div>
         </div>
-        <Card>
-          <CardHeader>
-            <CardTitle asChild>
-              <h2>{t(($) => $.contactInformation.phoneNumber, { ns: 'applicationSimplifiedAdult' })}</h2>
-            </CardTitle>
-            <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          <PhoneNumberCardContent />
-          <PhoneNumberCardFooter />
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle asChild>
-              <h2>{t(($) => $.contactInformation.mailingAndHomeAddress, { ns: 'applicationSimplifiedAdult' })}</h2>
-            </CardTitle>
-            <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          <MailingAndHomeAddressCardContent />
-          <MailingAndHomeAddressCardFooter />
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle asChild>
-              <h2>{t(($) => $.contactInformation.communicationPreferences, { ns: 'applicationSimplifiedAdult' })}</h2>
-            </CardTitle>
-            <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          <CommunicationPreferencesCardContent />
-          <CommunicationPreferencesCardFooter />
-        </Card>
-
-        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink
-            disabled={!allSectionsCompleted}
-            variant="primary"
-            direction="next"
-            routeId="public/application/$id/simplified-adult/dental-insurance"
-            params={params}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Continue click"
-          >
-            {t(($) => $.contactInformation.nextBtn, { ns: 'applicationSimplifiedAdult' })}
-          </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="public/application/$id/your-application" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Back click">
-            {t(($) => $.contactInformation.prevBtn, { ns: 'applicationSimplifiedAdult' })}
-          </NavigationButtonLink>
-        </div>
-      </div>
-    </fetcher.Form>
+      </fetcher.Form>
+    </>
   );
 }
 
@@ -260,11 +263,11 @@ function PhoneNumberCardContent(): JSX.Element {
   if (state.phoneNumber) {
     return (
       <CardContent>
-        {!state.phoneNumber.hasChanged && <p>{t(($) => $.contactInformation.noChange, { ns: 'applicationSimplifiedAdult' })}</p>}
+        {!state.phoneNumber.hasChanged && <p>{t(($) => $.contactInformation.noChange)}</p>}
         {state.phoneNumber.hasChanged && (
           <DefinitionList layout="single-column">
-            <DefinitionListItem term={t(($) => $.contactInformation.phoneNumber, { ns: 'applicationSimplifiedAdult' })}>{state.phoneNumber.primary}</DefinitionListItem>
-            {state.phoneNumber.alternate && <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber, { ns: 'applicationSimplifiedAdult' })}>{state.phoneNumber.alternate}</DefinitionListItem>}
+            <DefinitionListItem term={t(($) => $.contactInformation.phoneNumber)}>{state.phoneNumber.primary}</DefinitionListItem>
+            {state.phoneNumber.alternate && <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber)}>{state.phoneNumber.alternate}</DefinitionListItem>}
           </DefinitionList>
         )}
       </CardContent>
@@ -274,14 +277,14 @@ function PhoneNumberCardContent(): JSX.Element {
   if (clientApplication.hasPhoneNumber) {
     return (
       <CardContent>
-        <p>{t(($) => $.contactInformation.updatePhoneNumberHelp, { ns: 'applicationSimplifiedAdult' })}</p>
+        <p>{t(($) => $.contactInformation.updatePhoneNumberHelp)}</p>
       </CardContent>
     );
   }
 
   return (
     <CardContent>
-      <p>{t(($) => $.contactInformation.phoneNumberHelp, { ns: 'applicationSimplifiedAdult' })}</p>
+      <p>{t(($) => $.contactInformation.phoneNumberHelp)}</p>
     </CardContent>
   );
 }
@@ -321,7 +324,7 @@ function PhoneNumberCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Edit phone click"
         >
-          {sections.phoneNumber.completed ? t(($) => $.contactInformation.editPhoneNumber, { ns: 'applicationSimplifiedAdult' }) : t(($) => $.contactInformation.addPhoneNumber, { ns: 'applicationSimplifiedAdult' })}
+          {sections.phoneNumber.completed ? t(($) => $.contactInformation.editPhoneNumber) : t(($) => $.contactInformation.addPhoneNumber)}
         </ButtonLink>
       </CardFooter>
     );
@@ -341,7 +344,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Update phone click"
           >
-            {t(($) => $.contactInformation.updatePhoneNumber, { ns: 'applicationSimplifiedAdult' })}
+            {t(($) => $.contactInformation.updatePhoneNumber)}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -355,7 +358,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Complete phone click"
           >
-            <span className="text-left">{t(($) => $.contactInformation.phoneNumberUnchanged, { ns: 'applicationSimplifiedAdult' })}</span>
+            <span className="text-left">{t(($) => $.contactInformation.phoneNumberUnchanged)}</span>
           </Button>
         </div>
       </CardFooter>
@@ -374,7 +377,7 @@ function PhoneNumberCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Add phone click"
       >
-        {t(($) => $.contactInformation.addPhoneNumber, { ns: 'applicationSimplifiedAdult' })}
+        {t(($) => $.contactInformation.addPhoneNumber)}
       </ButtonLink>
     </CardFooter>
   );
@@ -407,10 +410,10 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
   if (state.mailingAddress && state.homeAddress) {
     return (
       <CardContent>
-        {!state.mailingAddress.hasChanged && !state.homeAddress.hasChanged && <p>{t(($) => $.contactInformation.noChange, { ns: 'applicationSimplifiedAdult' })}</p>}
+        {!state.mailingAddress.hasChanged && !state.homeAddress.hasChanged && <p>{t(($) => $.contactInformation.noChange)}</p>}
         {state.mailingAddress.hasChanged && (
           <DefinitionList layout="single-column">
-            <DefinitionListItem term={t(($) => $.contactInformation.mailingAddress, { ns: 'applicationSimplifiedAdult' })}>
+            <DefinitionListItem term={t(($) => $.contactInformation.mailingAddress)}>
               <Address
                 address={{
                   address: state.mailingAddress.address ?? '',
@@ -423,7 +426,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
             </DefinitionListItem>
 
             {state.homeAddress.hasChanged && (
-              <DefinitionListItem term={t(($) => $.contactInformation.homeAddress, { ns: 'applicationSimplifiedAdult' })}>
+              <DefinitionListItem term={t(($) => $.contactInformation.homeAddress)}>
                 <Address
                   address={{
                     address: state.homeAddress.address ?? '',
@@ -445,7 +448,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
   if (clientApplication.hasMailingAddress && clientApplication.hasHomeAddress) {
     return (
       <CardContent>
-        <p>{t(($) => $.contactInformation.updateAddressHelp, { ns: 'applicationSimplifiedAdult' })}</p>
+        <p>{t(($) => $.contactInformation.updateAddressHelp)}</p>
       </CardContent>
     );
   }
@@ -453,7 +456,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
   // Case 3: No data at all
   return (
     <CardContent>
-      <p>{t(($) => $.contactInformation.addressHelp, { ns: 'applicationSimplifiedAdult' })}</p>
+      <p>{t(($) => $.contactInformation.addressHelp)}</p>
     </CardContent>
   );
 }
@@ -494,7 +497,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Edit address click"
         >
-          {sections.address.completed ? t(($) => $.contactInformation.editAddress, { ns: 'applicationSimplifiedAdult' }) : t(($) => $.contactInformation.addAddress, { ns: 'applicationSimplifiedAdult' })}
+          {sections.address.completed ? t(($) => $.contactInformation.editAddress) : t(($) => $.contactInformation.addAddress)}
         </ButtonLink>
       </CardFooter>
     );
@@ -514,7 +517,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Update address click"
           >
-            {t(($) => $.contactInformation.updateAddress, { ns: 'applicationSimplifiedAdult' })}
+            {t(($) => $.contactInformation.updateAddress)}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -528,7 +531,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Complete address click"
           >
-            <span className="text-left">{t(($) => $.contactInformation.addressUnchanged, { ns: 'applicationSimplifiedAdult' })}</span>
+            <span className="text-left">{t(($) => $.contactInformation.addressUnchanged)}</span>
           </Button>
         </div>
       </CardFooter>
@@ -547,7 +550,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Add address click"
       >
-        {t(($) => $.contactInformation.addAddress, { ns: 'applicationSimplifiedAdult' })}
+        {t(($) => $.contactInformation.addAddress)}
       </ButtonLink>
     </CardFooter>
   );
@@ -579,14 +582,14 @@ function CommunicationPreferencesCardContent(): JSX.Element {
   if (state.communicationPreferences) {
     return (
       <CardContent>
-        {!state.communicationPreferences.hasChanged && <p>{t(($) => $.contactInformation.noChange, { ns: 'applicationSimplifiedAdult' })}</p>}
+        {!state.communicationPreferences.hasChanged && <p>{t(($) => $.contactInformation.noChange)}</p>}
         {state.communicationPreferences.hasChanged && (
           <DefinitionList layout="single-column">
             <>
-              <DefinitionListItem term={t(($) => $.contactInformation.preferredLanguage, { ns: 'applicationSimplifiedAdult' })}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
-              <DefinitionListItem term={t(($) => $.contactInformation.preferredMethod, { ns: 'applicationSimplifiedAdult' })}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
-              <DefinitionListItem term={t(($) => $.contactInformation.preferredNotificationMethod, { ns: 'applicationSimplifiedAdult' })}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
-              {state.email && <DefinitionListItem term={t(($) => $.contactInformation.email, { ns: 'applicationSimplifiedAdult' })}>{state.email}</DefinitionListItem>}
+              <DefinitionListItem term={t(($) => $.contactInformation.preferredLanguage)}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
+              <DefinitionListItem term={t(($) => $.contactInformation.preferredMethod)}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
+              <DefinitionListItem term={t(($) => $.contactInformation.preferredNotificationMethod)}>{state.communicationPreferences.preferredNotificationMethod}</DefinitionListItem>
+              {state.email && <DefinitionListItem term={t(($) => $.contactInformation.email)}>{state.email}</DefinitionListItem>}
             </>
           </DefinitionList>
         )}
@@ -598,7 +601,7 @@ function CommunicationPreferencesCardContent(): JSX.Element {
   if (clientApplication.hasCommunicationPreferences) {
     return (
       <CardContent>
-        <p>{t(($) => $.contactInformation.updateCommunicationPreferencesHelp, { ns: 'applicationSimplifiedAdult' })}</p>
+        <p>{t(($) => $.contactInformation.updateCommunicationPreferencesHelp)}</p>
       </CardContent>
     );
   }
@@ -606,7 +609,7 @@ function CommunicationPreferencesCardContent(): JSX.Element {
   // Case 3: No data at all
   return (
     <CardContent>
-      <p>{t(($) => $.contactInformation.communicationPreferencesHelp, { ns: 'applicationSimplifiedAdult' })}</p>
+      <p>{t(($) => $.contactInformation.communicationPreferencesHelp)}</p>
     </CardContent>
   );
 }
@@ -648,7 +651,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Edit comms click"
         >
-          {sections.communicationPreferences.completed ? t(($) => $.contactInformation.editCommunicationPreferences, { ns: 'applicationSimplifiedAdult' }) : t(($) => $.contactInformation.addCommunicationPreferences, { ns: 'applicationSimplifiedAdult' })}
+          {sections.communicationPreferences.completed ? t(($) => $.contactInformation.editCommunicationPreferences) : t(($) => $.contactInformation.addCommunicationPreferences)}
         </ButtonLink>
       </CardFooter>
     );
@@ -668,7 +671,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Update comms click"
           >
-            {t(($) => $.contactInformation.updateCommunicationPreferences, { ns: 'applicationSimplifiedAdult' })}
+            {t(($) => $.contactInformation.updateCommunicationPreferences)}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -682,7 +685,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Complete comms click"
           >
-            <span className="text-left">{t(($) => $.contactInformation.communicationPreferencesUnchanged, { ns: 'applicationSimplifiedAdult' })}</span>
+            <span className="text-left">{t(($) => $.contactInformation.communicationPreferencesUnchanged)}</span>
           </LoadingButton>
         </div>
       </CardFooter>
@@ -701,7 +704,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Adult:Add comms click"
       >
-        {t(($) => $.contactInformation.addCommunicationPreferences, { ns: 'applicationSimplifiedAdult' })}
+        {t(($) => $.contactInformation.addCommunicationPreferences)}
       </ButtonLink>
     </CardFooter>
   );

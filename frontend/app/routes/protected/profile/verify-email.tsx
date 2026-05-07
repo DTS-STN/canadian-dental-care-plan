@@ -11,6 +11,7 @@ import type { Route } from './+types/verify-email';
 import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
@@ -51,7 +52,6 @@ export const handle = {
   ],
   i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
   pageIdentifier: pageIds.protected.profile.verifyEmail,
-  pageTitleI18nKey: 'protectedProfile:verifyEmail.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -234,95 +234,98 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
   const backButtonTo = getPathById('protected/profile/contact/email-address', params) + (backButtonSearchParams ? `?${backButtonSearchParams.toString()}` : '');
 
   return (
-    <div className="max-w-prose">
-      <ErrorAlert>
-        <h2 className="mb-2 font-bold">{t(($) => $.verifyEmail.verificationCodeAlert.heading)}</h2>
-        <p className="-mb-3">{t(($) => $.verifyEmail.verificationCodeAlert.detail)}</p>
-        <LoadingButton
-          id="request-button"
-          type="button"
-          name="_action"
-          variant="link"
-          className="text-[17px]"
-          disabled={isSubmitting}
-          loading={isSubmitting && submittedAction === FORM_ACTION.request}
-          value={FORM_ACTION.request}
-          onClick={handleRequestNewCode}
-        >
-          {t(($) => $.verifyEmail.verificationCodeAlert.requestNewCode)}
-        </LoadingButton>
-      </ErrorAlert>
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" noValidate>
-          <CsrfTokenInput />
-          <fieldset className="mb-6">
-            <p className="mb-4">
-              {t(($) => $.verifyEmail.verificationCode, {
+    <>
+      <AppPageTitle>{t(($) => $.verifyEmail.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <ErrorAlert>
+          <h2 className="mb-2 font-bold">{t(($) => $.verifyEmail.verificationCodeAlert.heading)}</h2>
+          <p className="-mb-3">{t(($) => $.verifyEmail.verificationCodeAlert.detail)}</p>
+          <LoadingButton
+            id="request-button"
+            type="button"
+            name="_action"
+            variant="link"
+            className="text-[17px]"
+            disabled={isSubmitting}
+            loading={isSubmitting && submittedAction === FORM_ACTION.request}
+            value={FORM_ACTION.request}
+            onClick={handleRequestNewCode}
+          >
+            {t(($) => $.verifyEmail.verificationCodeAlert.requestNewCode)}
+          </LoadingButton>
+        </ErrorAlert>
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate>
+            <CsrfTokenInput />
+            <fieldset className="mb-6">
+              <p className="mb-4">
+                {t(($) => $.verifyEmail.verificationCode, {
+                  email: email,
+                  ns: 'protectedProfile',
+                })}
+              </p>
+              <p className="mb-4">{t(($) => $.verifyEmail.requestNew)}</p>
+              <p className="mb-8">
+                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
+              </p>
+              <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
+              <div className="grid items-end gap-6 md:grid-cols-2">
+                <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t(($) => $.verifyEmail.verificationCodeLabel)} inputMode="numeric" required />
+              </div>
+              <LoadingButton
+                id="request-button"
+                type="button"
+                name="_action"
+                variant="link"
+                className="no-underline hover:underline"
+                disabled={isSubmitting}
+                loading={isSubmitting && submittedAction === FORM_ACTION.request}
+                value={FORM_ACTION.request}
+                onClick={handleRequestNewCode}
+              >
+                {t(($) => $.verifyEmail.requestNewCode)}
+              </LoadingButton>
+            </fieldset>
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <LoadingButton
+                variant="primary"
+                id="continue-button"
+                name="_action"
+                value={FORM_ACTION.submit}
+                disabled={isSubmitting}
+                loading={isSubmitting && submittedAction === FORM_ACTION.submit}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Verify your email address click"
+              >
+                {t(($) => $.verifyEmail.continue)}
+              </LoadingButton>
+              <ButtonLink variant="secondary" id="back-button" to={backButtonTo} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Verify your email address click">
+                {t(($) => $.verifyEmail.back)}
+              </ButtonLink>
+            </div>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+        <Dialog open={showDialog} onOpenChange={setShowDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t(($) => $.verifyEmail.codeSent.heading)}</DialogTitle>
+            </DialogHeader>
+            <DialogDescription>
+              {t(($) => $.verifyEmail.codeSent.detail, {
                 email: email,
                 ns: 'protectedProfile',
               })}
-            </p>
-            <p className="mb-4">{t(($) => $.verifyEmail.requestNew)}</p>
-            <p className="mb-8">
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
-            </p>
-            <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
-            <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputField id="verification-code" name="verificationCode" className="w-full" errorMessage={errors?.verificationCode} label={t(($) => $.verifyEmail.verificationCodeLabel)} inputMode="numeric" required />
-            </div>
-            <LoadingButton
-              id="request-button"
-              type="button"
-              name="_action"
-              variant="link"
-              className="no-underline hover:underline"
-              disabled={isSubmitting}
-              loading={isSubmitting && submittedAction === FORM_ACTION.request}
-              value={FORM_ACTION.request}
-              onClick={handleRequestNewCode}
-            >
-              {t(($) => $.verifyEmail.requestNewCode)}
-            </LoadingButton>
-          </fieldset>
-          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <LoadingButton
-              variant="primary"
-              id="continue-button"
-              name="_action"
-              value={FORM_ACTION.submit}
-              disabled={isSubmitting}
-              loading={isSubmitting && submittedAction === FORM_ACTION.submit}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Verify your email address click"
-            >
-              {t(($) => $.verifyEmail.continue)}
-            </LoadingButton>
-            <ButtonLink variant="secondary" id="back-button" to={backButtonTo} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Back - Verify your email address click">
-              {t(($) => $.verifyEmail.back)}
-            </ButtonLink>
-          </div>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-      <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t(($) => $.verifyEmail.codeSent.heading)}</DialogTitle>
-          </DialogHeader>
-          <DialogDescription>
-            {t(($) => $.verifyEmail.codeSent.detail, {
-              email: email,
-              ns: 'protectedProfile',
-            })}
-          </DialogDescription>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button id="modal-continue" disabled={isSubmitting} variant="primary" size="sm">
-                {t(($) => $.verifyEmail.continue)}
-              </Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+            </DialogDescription>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button id="modal-continue" disabled={isSubmitting} variant="primary" size="sm">
+                  {t(($) => $.verifyEmail.continue)}
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </>
   );
 }

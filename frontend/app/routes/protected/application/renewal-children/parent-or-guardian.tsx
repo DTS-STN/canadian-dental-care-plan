@@ -15,6 +15,7 @@ import { isAddressSectionCompleted, isCommunicationPreferencesSectionCompleted, 
 import { saveProtectedApplicationState, shouldSkipMaritalStatus, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/card';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
@@ -37,9 +38,8 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'protectedApplicationRenewalChild', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationRenewalChild', 'protectedApplication', 'gcweb'),
   pageIdentifier: pageIds.protected.application.renewalChild.parentOrGuardian,
-  pageTitleI18nKey: 'protectedApplicationRenewalChild:parentOrGuardian.pageHeading',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -53,7 +53,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = {
-    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.parentOrGuardian.pageTitle, { ns: 'protectedApplicationRenewalChild' }) }),
+    title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.parentOrGuardian.pageTitle) }),
   };
   const locale = getLocale(request);
 
@@ -221,131 +221,134 @@ export default function ProtectedRenewChildParentOrGuardian({ loaderData, params
   const fetcher = useFetcher<typeof action>();
 
   return (
-    <fetcher.Form method="post" noValidate>
-      <CsrfTokenInput />
-      <ProgressStepper activeStep="parentOrGuardian" className="mb-8" />
-      <div className="max-w-prose space-y-8">
-        <div className="space-y-4">
-          <p>{t(($) => $.completeAllSections)}</p>
-          <p>{completedSectionsLabel}</p>
-          <p>{t(($) => $.confirmInformation)}</p>
-        </div>
+    <>
+      <AppPageTitle>{t(($) => $.parentOrGuardian.pageHeading)}</AppPageTitle>
+      <fetcher.Form method="post" noValidate>
+        <CsrfTokenInput />
+        <ProgressStepper activeStep="parentOrGuardian" className="mb-8" />
+        <div className="max-w-prose space-y-8">
+          <div className="space-y-4">
+            <p>{t(($) => $.completeAllSections, { ns: 'protectedApplication' })}</p>
+            <p>{completedSectionsLabel}</p>
+            <p>{t(($) => $.confirmInformation, { ns: 'protectedApplication' })}</p>
+          </div>
 
-        {!shouldSkipMaritalStatusStep && (
+          {!shouldSkipMaritalStatusStep && (
+            <Card>
+              <CardHeader>
+                <CardTitle asChild>
+                  <h2>{t(($) => $.parentOrGuardian.maritalStatus)}</h2>
+                </CardTitle>
+                <CardAction>{sections.maritalStatus?.completed && <StatusTag status="complete" />}</CardAction>
+              </CardHeader>
+              <CardContent>
+                {state.maritalStatus === undefined ? (
+                  <p>{t(($) => $.parentOrGuardian.selectYourStatus)}</p>
+                ) : (
+                  <DefinitionList layout="single-column">
+                    <DefinitionListItem term={t(($) => $.parentOrGuardian.maritalStatus)}>{state.maritalStatus.name}</DefinitionListItem>
+                    {state.partnerInformation && (
+                      <>
+                        <DefinitionListItem term={t(($) => $.parentOrGuardian.spouseSin)}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
+                        <DefinitionListItem term={t(($) => $.parentOrGuardian.spouseYob)}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
+                        <DefinitionListItem term={t(($) => $.parentOrGuardian.consent)}>{t(($) => $.parentOrGuardian.consentYes)}</DefinitionListItem>
+                      </>
+                    )}
+                  </DefinitionList>
+                )}
+              </CardContent>
+              <CardFooter className="border-t bg-zinc-100">
+                <ButtonLink
+                  id="edit-marital-button"
+                  variant="link"
+                  className="p-0"
+                  routeId="protected/application/$id/marital-status"
+                  params={params}
+                  startIcon={sections.maritalStatus?.completed ? faPenToSquare : faCirclePlus}
+                  size="lg"
+                  data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Edit marital click"
+                >
+                  {state.maritalStatus === undefined ? t(($) => $.parentOrGuardian.addMaritalStatus) : t(($) => $.parentOrGuardian.editMaritalStatus)}
+                </ButtonLink>
+              </CardFooter>
+            </Card>
+          )}
+
           <Card>
             <CardHeader>
               <CardTitle asChild>
-                <h2>{t(($) => $.parentOrGuardian.maritalStatus, { ns: 'protectedApplicationRenewalChild' })}</h2>
+                <h2>{t(($) => $.parentOrGuardian.phoneNumber)}</h2>
               </CardTitle>
-              <CardAction>{sections.maritalStatus?.completed && <StatusTag status="complete" />}</CardAction>
+              <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
             </CardHeader>
-            <CardContent>
-              {state.maritalStatus === undefined ? (
-                <p>{t(($) => $.parentOrGuardian.selectYourStatus, { ns: 'protectedApplicationRenewalChild' })}</p>
-              ) : (
-                <DefinitionList layout="single-column">
-                  <DefinitionListItem term={t(($) => $.parentOrGuardian.maritalStatus, { ns: 'protectedApplicationRenewalChild' })}>{state.maritalStatus.name}</DefinitionListItem>
-                  {state.partnerInformation && (
-                    <>
-                      <DefinitionListItem term={t(($) => $.parentOrGuardian.spouseSin, { ns: 'protectedApplicationRenewalChild' })}>{formatSin(state.partnerInformation.socialInsuranceNumber)}</DefinitionListItem>
-                      <DefinitionListItem term={t(($) => $.parentOrGuardian.spouseYob, { ns: 'protectedApplicationRenewalChild' })}>{state.partnerInformation.yearOfBirth}</DefinitionListItem>
-                      <DefinitionListItem term={t(($) => $.parentOrGuardian.consent, { ns: 'protectedApplicationRenewalChild' })}>{t(($) => $.parentOrGuardian.consentYes, { ns: 'protectedApplicationRenewalChild' })}</DefinitionListItem>
-                    </>
-                  )}
-                </DefinitionList>
-              )}
-            </CardContent>
+            <PhoneNumberCardContent />
+            <PhoneNumberCardFooter />
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle asChild>
+                <h2>{t(($) => $.parentOrGuardian.mailingAndHomeAddress)}</h2>
+              </CardTitle>
+              <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
+            </CardHeader>
+            <MailingAndHomeAddressCardContent />
+            <MailingAndHomeAddressCardFooter />
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle asChild>
+                <h2>{t(($) => $.parentOrGuardian.communicationPreferences)}</h2>
+              </CardTitle>
+              <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
+            </CardHeader>
+            <CommunicationPreferencesCardContent />
+            <CommunicationPreferencesCardFooter />
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle asChild>
+                <h2>{t(($) => $.parentOrGuardian.email)}</h2>
+              </CardTitle>
+              <CardAction>{sections.email.completed && <StatusTag status="complete" />}</CardAction>
+            </CardHeader>
+            <CardContent>{loaderData.state.email === undefined ? <p>{t(($) => $.parentOrGuardian.emailHelp)}</p> : <p>{loaderData.state.email}</p>}</CardContent>
             <CardFooter className="border-t bg-zinc-100">
               <ButtonLink
-                id="edit-marital-button"
+                id="edit-email-button"
                 variant="link"
                 className="p-0"
-                routeId="protected/application/$id/marital-status"
+                routeId="protected/application/$id/email"
                 params={params}
-                startIcon={sections.maritalStatus?.completed ? faPenToSquare : faCirclePlus}
+                startIcon={sections.email.completed ? faPenToSquare : faCirclePlus}
                 size="lg"
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Edit marital click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Edit email click"
               >
-                {state.maritalStatus === undefined ? t(($) => $.parentOrGuardian.addMaritalStatus, { ns: 'protectedApplicationRenewalChild' }) : t(($) => $.parentOrGuardian.editMaritalStatus, { ns: 'protectedApplicationRenewalChild' })}
+                {sections.email.completed ? t(($) => $.parentOrGuardian.editEmail) : t(($) => $.parentOrGuardian.addEmail)}
               </ButtonLink>
             </CardFooter>
           </Card>
-        )}
 
-        <Card>
-          <CardHeader>
-            <CardTitle asChild>
-              <h2>{t(($) => $.parentOrGuardian.phoneNumber, { ns: 'protectedApplicationRenewalChild' })}</h2>
-            </CardTitle>
-            <CardAction>{sections.phoneNumber.completed && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          <PhoneNumberCardContent />
-          <PhoneNumberCardFooter />
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle asChild>
-              <h2>{t(($) => $.parentOrGuardian.mailingAndHomeAddress, { ns: 'protectedApplicationRenewalChild' })}</h2>
-            </CardTitle>
-            <CardAction>{sections.address.completed && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          <MailingAndHomeAddressCardContent />
-          <MailingAndHomeAddressCardFooter />
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle asChild>
-              <h2>{t(($) => $.parentOrGuardian.communicationPreferences, { ns: 'protectedApplicationRenewalChild' })}</h2>
-            </CardTitle>
-            <CardAction>{sections.communicationPreferences.completed && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          <CommunicationPreferencesCardContent />
-          <CommunicationPreferencesCardFooter />
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle asChild>
-              <h2>{t(($) => $.parentOrGuardian.email, { ns: 'protectedApplicationRenewalChild' })}</h2>
-            </CardTitle>
-            <CardAction>{sections.email.completed && <StatusTag status="complete" />}</CardAction>
-          </CardHeader>
-          <CardContent>{loaderData.state.email === undefined ? <p>{t(($) => $.parentOrGuardian.emailHelp, { ns: 'protectedApplicationRenewalChild' })}</p> : <p>{loaderData.state.email}</p>}</CardContent>
-          <CardFooter className="border-t bg-zinc-100">
-            <ButtonLink
-              id="edit-email-button"
-              variant="link"
-              className="p-0"
-              routeId="protected/application/$id/email"
+          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <NavigationButtonLink
+              disabled={!allSectionsCompleted}
+              variant="primary"
+              direction="next"
+              routeId="protected/application/$id/renewal-children/childrens-application"
               params={params}
-              startIcon={sections.email.completed ? faPenToSquare : faCirclePlus}
-              size="lg"
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Edit email click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Continue click"
             >
-              {sections.email.completed ? t(($) => $.parentOrGuardian.editEmail, { ns: 'protectedApplicationRenewalChild' }) : t(($) => $.parentOrGuardian.addEmail, { ns: 'protectedApplicationRenewalChild' })}
-            </ButtonLink>
-          </CardFooter>
-        </Card>
-
-        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <NavigationButtonLink
-            disabled={!allSectionsCompleted}
-            variant="primary"
-            direction="next"
-            routeId="protected/application/$id/renewal-children/childrens-application"
-            params={params}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Continue click"
-          >
-            {t(($) => $.parentOrGuardian.nextBtn, { ns: 'protectedApplicationRenewalChild' })}
-          </NavigationButtonLink>
-          <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Back click">
-            {t(($) => $.parentOrGuardian.prevBtn, { ns: 'protectedApplicationRenewalChild' })}
-          </NavigationButtonLink>
+              {t(($) => $.parentOrGuardian.nextBtn)}
+            </NavigationButtonLink>
+            <NavigationButtonLink variant="secondary" direction="previous" routeId="protected/application/$id/renew" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Back click">
+              {t(($) => $.parentOrGuardian.prevBtn)}
+            </NavigationButtonLink>
+          </div>
         </div>
-      </div>
-    </fetcher.Form>
+      </fetcher.Form>
+    </>
   );
 }
 
@@ -373,8 +376,8 @@ function PhoneNumberCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t(($) => $.parentOrGuardian.phoneNumber, { ns: 'protectedApplicationRenewalChild' })}>{state.phoneNumber.primary}</DefinitionListItem>
-          {state.phoneNumber.alternate && <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber, { ns: 'protectedApplicationRenewalChild' })}>{state.phoneNumber.alternate}</DefinitionListItem>}
+          <DefinitionListItem term={t(($) => $.parentOrGuardian.phoneNumber)}>{state.phoneNumber.primary}</DefinitionListItem>
+          {state.phoneNumber.alternate && <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber)}>{state.phoneNumber.alternate}</DefinitionListItem>}
         </DefinitionList>
       </CardContent>
     );
@@ -384,8 +387,8 @@ function PhoneNumberCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t(($) => $.parentOrGuardian.phoneNumber, { ns: 'protectedApplicationRenewalChild' })}>{clientApplication.phoneNumber.primary}</DefinitionListItem>
-          {clientApplication.phoneNumber.alternate && <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber, { ns: 'protectedApplicationRenewalChild' })}>{clientApplication.phoneNumber.alternate}</DefinitionListItem>}
+          <DefinitionListItem term={t(($) => $.parentOrGuardian.phoneNumber)}>{clientApplication.phoneNumber.primary}</DefinitionListItem>
+          {clientApplication.phoneNumber.alternate && <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber)}>{clientApplication.phoneNumber.alternate}</DefinitionListItem>}
         </DefinitionList>
       </CardContent>
     );
@@ -393,7 +396,7 @@ function PhoneNumberCardContent(): JSX.Element {
 
   return (
     <CardContent>
-      <p>{t(($) => $.parentOrGuardian.phoneNumberHelp, { ns: 'protectedApplicationRenewalChild' })}</p>
+      <p>{t(($) => $.parentOrGuardian.phoneNumberHelp)}</p>
     </CardContent>
   );
 }
@@ -435,7 +438,7 @@ function PhoneNumberCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Edit phone click"
         >
-          {t(($) => $.parentOrGuardian.editPhoneNumber, { ns: 'protectedApplicationRenewalChild' })}
+          {t(($) => $.parentOrGuardian.editPhoneNumber)}
         </ButtonLink>
       </CardFooter>
     );
@@ -455,7 +458,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Update phone click"
           >
-            {t(($) => $.parentOrGuardian.updatePhoneNumber, { ns: 'protectedApplicationRenewalChild' })}
+            {t(($) => $.parentOrGuardian.updatePhoneNumber)}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -469,7 +472,7 @@ function PhoneNumberCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Complete phone click"
           >
-            <span className="text-left">{t(($) => $.parentOrGuardian.phoneNumberUnchanged, { ns: 'protectedApplicationRenewalChild' })}</span>
+            <span className="text-left">{t(($) => $.parentOrGuardian.phoneNumberUnchanged)}</span>
           </Button>
         </div>
       </CardFooter>
@@ -488,7 +491,7 @@ function PhoneNumberCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Add phone click"
       >
-        {t(($) => $.parentOrGuardian.addPhoneNumber, { ns: 'protectedApplicationRenewalChild' })}
+        {t(($) => $.parentOrGuardian.addPhoneNumber)}
       </ButtonLink>
     </CardFooter>
   );
@@ -520,7 +523,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t(($) => $.parentOrGuardian.mailingAddress, { ns: 'protectedApplicationRenewalChild' })}>
+          <DefinitionListItem term={t(($) => $.parentOrGuardian.mailingAddress)}>
             <Address
               address={{
                 address: state.mailingAddress.address,
@@ -531,7 +534,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
               }}
             />
           </DefinitionListItem>
-          <DefinitionListItem term={t(($) => $.parentOrGuardian.homeAddress, { ns: 'protectedApplicationRenewalChild' })}>
+          <DefinitionListItem term={t(($) => $.parentOrGuardian.homeAddress)}>
             <Address
               address={{
                 address: state.homeAddress.address,
@@ -551,7 +554,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t(($) => $.parentOrGuardian.mailingAddress, { ns: 'protectedApplicationRenewalChild' })}>
+          <DefinitionListItem term={t(($) => $.parentOrGuardian.mailingAddress)}>
             <Address
               address={{
                 address: clientApplication.mailingAddress.address,
@@ -562,7 +565,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
               }}
             />
           </DefinitionListItem>
-          <DefinitionListItem term={t(($) => $.parentOrGuardian.homeAddress, { ns: 'protectedApplicationRenewalChild' })}>
+          <DefinitionListItem term={t(($) => $.parentOrGuardian.homeAddress)}>
             <Address
               address={{
                 address: clientApplication.homeAddress.address,
@@ -580,7 +583,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
 
   return (
     <CardContent>
-      <p>{t(($) => $.parentOrGuardian.addressHelp, { ns: 'protectedApplicationRenewalChild' })}</p>
+      <p>{t(($) => $.parentOrGuardian.addressHelp)}</p>
     </CardContent>
   );
 }
@@ -624,7 +627,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Edit address click"
         >
-          {t(($) => $.parentOrGuardian.editAddress, { ns: 'protectedApplicationRenewalChild' })}
+          {t(($) => $.parentOrGuardian.editAddress)}
         </ButtonLink>
       </CardFooter>
     );
@@ -644,7 +647,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Update address click"
           >
-            {t(($) => $.parentOrGuardian.updateAddress, { ns: 'protectedApplicationRenewalChild' })}
+            {t(($) => $.parentOrGuardian.updateAddress)}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -658,7 +661,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Complete address click"
           >
-            <span className="text-left">{t(($) => $.parentOrGuardian.addressUnchanged, { ns: 'protectedApplicationRenewalChild' })}</span>
+            <span className="text-left">{t(($) => $.parentOrGuardian.addressUnchanged)}</span>
           </Button>
         </div>
       </CardFooter>
@@ -677,7 +680,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Add address click"
       >
-        {t(($) => $.parentOrGuardian.addAddress, { ns: 'protectedApplicationRenewalChild' })}
+        {t(($) => $.parentOrGuardian.addAddress)}
       </ButtonLink>
     </CardFooter>
   );
@@ -709,8 +712,8 @@ function CommunicationPreferencesCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredLanguage, { ns: 'protectedApplicationRenewalChild' })}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
-          <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredMethod, { ns: 'protectedApplicationRenewalChild' })}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
+          <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredLanguage)}>{state.communicationPreferences.preferredLanguage}</DefinitionListItem>
+          <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredMethod)}>{state.communicationPreferences.preferredMethod}</DefinitionListItem>
         </DefinitionList>
       </CardContent>
     );
@@ -720,8 +723,8 @@ function CommunicationPreferencesCardContent(): JSX.Element {
     return (
       <CardContent>
         <DefinitionList layout="single-column">
-          <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredLanguage, { ns: 'protectedApplicationRenewalChild' })}>{clientApplication.communicationPreferences.preferredLanguage}</DefinitionListItem>
-          <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredMethod, { ns: 'protectedApplicationRenewalChild' })}>{clientApplication.communicationPreferences.preferredMethod}</DefinitionListItem>{' '}
+          <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredLanguage)}>{clientApplication.communicationPreferences.preferredLanguage}</DefinitionListItem>
+          <DefinitionListItem term={t(($) => $.parentOrGuardian.preferredMethod)}>{clientApplication.communicationPreferences.preferredMethod}</DefinitionListItem>{' '}
         </DefinitionList>
       </CardContent>
     );
@@ -729,7 +732,7 @@ function CommunicationPreferencesCardContent(): JSX.Element {
 
   return (
     <CardContent>
-      <p>{t(($) => $.parentOrGuardian.communicationPreferencesHelp, { ns: 'protectedApplicationRenewalChild' })}</p>
+      <p>{t(($) => $.parentOrGuardian.communicationPreferencesHelp)}</p>
     </CardContent>
   );
 }
@@ -772,7 +775,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
           size="lg"
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Edit comms click"
         >
-          {t(($) => $.parentOrGuardian.editCommunicationPreferences, { ns: 'protectedApplicationRenewalChild' })}
+          {t(($) => $.parentOrGuardian.editCommunicationPreferences)}
         </ButtonLink>
       </CardFooter>
     );
@@ -792,7 +795,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Update comms click"
           >
-            {t(($) => $.parentOrGuardian.updateCommunicationPreferences, { ns: 'protectedApplicationRenewalChild' })}
+            {t(($) => $.parentOrGuardian.updateCommunicationPreferences)}
           </ButtonLink>
         </div>
         <div className="w-full px-6">
@@ -806,7 +809,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
             size="lg"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Complete comms click"
           >
-            <span className="text-left">{t(($) => $.parentOrGuardian.communicationPreferencesUnchanged, { ns: 'protectedApplicationRenewalChild' })}</span>
+            <span className="text-left">{t(($) => $.parentOrGuardian.communicationPreferencesUnchanged)}</span>
           </Button>
         </div>
       </CardFooter>
@@ -825,7 +828,7 @@ function CommunicationPreferencesCardFooter(): JSX.Element {
         size="lg"
         data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Child:Add comms click"
       >
-        {t(($) => $.parentOrGuardian.addCommunicationPreferences, { ns: 'protectedApplicationRenewalChild' })}
+        {t(($) => $.parentOrGuardian.addCommunicationPreferences)}
       </ButtonLink>
     </CardFooter>
   );

@@ -10,6 +10,7 @@ import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken, UserinfoToken } from '~/.server/utils/raoidc.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
+import { AppPageTitle } from '~/components/app-page-title';
 import { Button } from '~/components/buttons';
 import { ErrorSummary } from '~/components/error-summary';
 import { ErrorSummaryProvider } from '~/components/error-summary-context';
@@ -26,7 +27,6 @@ import { isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('stubLogin', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
-  pageTitleI18nKey: 'stubLogin:index.pageTitle',
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
@@ -151,66 +151,69 @@ export default function StubLogin({ loaderData, params }: Route.ComponentProps) 
   const errors = fetcher.data?.errors;
 
   return (
-    <div className="max-w-prose">
-      <ErrorSummaryProvider actionData={fetcher.data}>
-        <ErrorSummary />
-        <fetcher.Form method="post" noValidate className="space-y-6">
-          <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t(($) => $.index.sin)} required inputMode="numeric" defaultValue={defaultValues.sin} errorMessage={errors?.sin} />
-          <InputSelect
-            id="destination-page"
-            name="destinationRouteId"
-            label={t(($) => $.index.destination)}
-            errorMessage={errors?.destinationRouteId}
-            defaultValue=""
-            required
-            options={[
-              { children: 'Select a destination', value: '', disabled: true, hidden: true },
-              {
-                children: 'Application',
-                value: 'protected/application/index',
-              },
-              {
-                children: 'Documents',
-                value: 'protected/documents/index',
-              },
-              {
-                children: 'Letters',
-                value: 'protected/letters/index',
-              },
-              {
-                children: 'Member Eligibility',
-                value: 'protected/profile/eligibility',
-              },
-              {
-                children: 'Profile - Applicant Information',
-                value: 'protected/profile/applicant-information',
-              },
-              {
-                children: 'Profile - Communication Preferences',
-                value: 'protected/profile/communication-preferences',
-              },
-              {
-                children: 'Profile - Contact Information',
-                value: 'protected/profile/contact-information',
-              },
-              {
-                children: 'Profile - Dental Benefits',
-                value: 'protected/profile/dental-benefits',
-              },
-            ]}
-          />
-          <fieldset>
-            <legend className="mb-2 text-xl font-semibold">{t(($) => $.index.raoidc)}</legend>
-            <div className="space-y-6">
-              <InputField id="sid" name="sid" className="w-full" inputMode="text" label={t(($) => $.index.sid)} defaultValue={defaultValues.sid} errorMessage={errors?.sid} />
-              <InputField id="sub" name="sub" className="w-full" inputMode="text" label={t(($) => $.index.sub)} defaultValue={defaultValues.sub} errorMessage={errors?.sub} />
-            </div>
-          </fieldset>
-          <Button variant="primary" id="login-button">
-            {t(($) => $.index.login)}
-          </Button>
-        </fetcher.Form>
-      </ErrorSummaryProvider>
-    </div>
+    <>
+      <AppPageTitle>{t(($) => $.index.pageTitle)}</AppPageTitle>
+      <div className="max-w-prose">
+        <ErrorSummaryProvider actionData={fetcher.data}>
+          <ErrorSummary />
+          <fetcher.Form method="post" noValidate className="space-y-6">
+            <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t(($) => $.index.sin)} required inputMode="numeric" defaultValue={defaultValues.sin} errorMessage={errors?.sin} />
+            <InputSelect
+              id="destination-page"
+              name="destinationRouteId"
+              label={t(($) => $.index.destination)}
+              errorMessage={errors?.destinationRouteId}
+              defaultValue=""
+              required
+              options={[
+                { children: 'Select a destination', value: '', disabled: true, hidden: true },
+                {
+                  children: 'Application',
+                  value: 'protected/application/index',
+                },
+                {
+                  children: 'Documents',
+                  value: 'protected/documents/index',
+                },
+                {
+                  children: 'Letters',
+                  value: 'protected/letters/index',
+                },
+                {
+                  children: 'Member Eligibility',
+                  value: 'protected/profile/eligibility',
+                },
+                {
+                  children: 'Profile - Applicant Information',
+                  value: 'protected/profile/applicant-information',
+                },
+                {
+                  children: 'Profile - Communication Preferences',
+                  value: 'protected/profile/communication-preferences',
+                },
+                {
+                  children: 'Profile - Contact Information',
+                  value: 'protected/profile/contact-information',
+                },
+                {
+                  children: 'Profile - Dental Benefits',
+                  value: 'protected/profile/dental-benefits',
+                },
+              ]}
+            />
+            <fieldset>
+              <legend className="mb-2 text-xl font-semibold">{t(($) => $.index.raoidc)}</legend>
+              <div className="space-y-6">
+                <InputField id="sid" name="sid" className="w-full" inputMode="text" label={t(($) => $.index.sid)} defaultValue={defaultValues.sid} errorMessage={errors?.sid} />
+                <InputField id="sub" name="sub" className="w-full" inputMode="text" label={t(($) => $.index.sub)} defaultValue={defaultValues.sub} errorMessage={errors?.sub} />
+              </div>
+            </fieldset>
+            <Button variant="primary" id="login-button">
+              {t(($) => $.index.login)}
+            </Button>
+          </fetcher.Form>
+        </ErrorSummaryProvider>
+      </div>
+    </>
   );
 }

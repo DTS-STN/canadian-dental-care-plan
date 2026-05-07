@@ -38,11 +38,6 @@ const buildInfoSchema = z
   })
   .readonly();
 
-const i18nKeySchema = z
-  .custom<ParsedKeysByNamespaces>()
-  .refine((val) => typeof val === 'string' && !validator.isEmpty(val))
-  .readonly();
-
 export const i18nNamespacesSchema = z
   .array(z.custom<FlatNamespace>())
   .refine((arr) => Array.isArray(arr) && arr.every((val) => typeof val === 'string' && !validator.isEmpty(val)))
@@ -60,8 +55,6 @@ export type TransformAdobeAnalyticsUrl = (url: string | URL) => URL;
 
 export type PageIdentifier = z.infer<typeof pageIdentifierSchema>;
 
-export type PageTitleI18nKey = z.infer<typeof i18nKeySchema>;
-
 /**
  * Common data returned from a route's handle object.
  */
@@ -70,7 +63,6 @@ export interface RouteHandleData extends Record<string, unknown | undefined> {
   i18nNamespaces?: I18nNamespaces;
   transformAdobeAnalyticsUrl?: TransformAdobeAnalyticsUrl;
   pageIdentifier?: PageIdentifier;
-  pageTitleI18nKey?: PageTitleI18nKey;
 }
 
 export function useBreadcrumbs() {
@@ -112,21 +104,6 @@ export function usePageIdentifier() {
     .map(({ handle }) => handle as RouteHandleData | undefined)
     .map((handle) => pageIdentifierSchema.safeParse(handle?.pageIdentifier))
     .map((result) => (result.success ? result.data : undefined))
-    .reduce(coalesce);
-}
-
-export function usePageTitleI18nKey() {
-  return useMatches()
-    .map(({ handle }) => handle as RouteHandleData | undefined)
-    .map((handle) => i18nKeySchema.safeParse(handle?.pageTitleI18nKey))
-    .map((result) => (result.success ? result.data : undefined))
-    .reduce(coalesce);
-}
-
-export function usePageTitleI18nOptions() {
-  return useMatches()
-    .map(({ loaderData }) => loaderData as { i18nOptions?: { [key: string]: string } } | undefined)
-    .map((data) => data?.i18nOptions)
     .reduce(coalesce);
 }
 
