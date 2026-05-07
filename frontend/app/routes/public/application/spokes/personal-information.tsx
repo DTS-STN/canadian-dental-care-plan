@@ -28,7 +28,6 @@ import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { isValidClientNumberRenewal, renewalCodeInputPatternFormat } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString, parseDateTimeString, toLocaleDateString } from '~/utils/date-utils';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -37,7 +36,7 @@ import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils'
 import { extractDigits, hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('applicationSpokes', 'application', 'gcweb'),
+  i18nNamespaces: ['applicationSpokes', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.spokes.personalInformation,
 } as const satisfies RouteHandleData;
 

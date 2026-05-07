@@ -16,7 +16,6 @@ import { AppPageTitle } from '~/components/app-page-title';
 import { useApplicationFlowStorage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { getCurrentDateString } from '~/utils/date-utils';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -24,7 +23,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { secondsToMilliseconds } from '~/utils/units.utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protectedApplication', 'gcweb'),
+  i18nNamespaces: ['protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.index,
 } as const satisfies RouteHandleData;
 

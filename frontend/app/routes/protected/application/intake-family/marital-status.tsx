@@ -17,14 +17,13 @@ import { StatusTag } from '~/components/status-tag';
 import { useSectionsStatus } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/protected/application/intake-family/progress-stepper';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationIntakeFamily', 'protectedApplication', 'gcweb'),
+  i18nNamespaces: ['protectedApplicationIntakeFamily', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.intakeFamily.maritalStatus,
 } as const satisfies RouteHandleData;
 

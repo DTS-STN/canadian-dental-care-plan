@@ -25,7 +25,6 @@ import { StatusTag } from '~/components/status-tag';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/protected/application/renewal-family/progress-stepper';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -46,7 +45,7 @@ type ClientDentalBenefits = {
 const FORM_ACTION = { DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed' } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationRenewalFamily', 'protectedApplication', 'gcweb', 'common'),
+  i18nNamespaces: ['protectedApplicationRenewalFamily', 'protectedApplication', 'gcweb', 'common'],
   pageIdentifier: pageIds.protected.application.renewalFamily.childApplication,
 } as const satisfies RouteHandleData;
 

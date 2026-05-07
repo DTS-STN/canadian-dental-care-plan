@@ -24,7 +24,6 @@ import { NavigationButtonLink } from '~/components/navigation-buttons';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { ProgressStepper } from '~/routes/protected/application/intake-children/progress-stepper';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -35,7 +34,7 @@ const CHECKBOX_VALUE = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('protectedApplicationIntakeChild', 'protectedApplication', 'gcweb'),
+  i18nNamespaces: ['protectedApplicationIntakeChild', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.intakeChild.submit,
 } as const satisfies RouteHandleData;
 

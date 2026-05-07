@@ -18,14 +18,14 @@ import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
 import { useCurrentLanguage } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getNameByLanguage } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'letters:index.pageTitle' }],
-  i18nNamespaces: getTypedI18nNamespaces('letters', 'gcweb'),
+  i18nNamespaces: ['letters', 'gcweb'],
   pageIdentifier: pageIds.protected.letters.index,
 } as const satisfies RouteHandleData;
 

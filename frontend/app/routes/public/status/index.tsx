@@ -22,7 +22,6 @@ import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useClientEnv, useFeature } from '~/root';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -34,7 +33,7 @@ const CHECK_FOR = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
+  i18nNamespaces: ['status', 'gcweb'],
   pageIdentifier: pageIds.public.status.index,
 } as const satisfies RouteHandleData;
 

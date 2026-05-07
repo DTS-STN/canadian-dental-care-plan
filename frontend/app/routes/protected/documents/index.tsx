@@ -11,13 +11,12 @@ import { ButtonLink } from '~/components/buttons';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/table';
 import { pageIds } from '~/page-ids';
 import { parseDateTimeString, toLocaleDateString } from '~/utils/date-utils';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('documents', 'gcweb'),
+  i18nNamespaces: ['documents', 'gcweb'],
   pageIdentifier: pageIds.protected.documents.index,
 } as const satisfies RouteHandleData;
 

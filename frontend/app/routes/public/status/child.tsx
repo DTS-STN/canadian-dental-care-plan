@@ -32,7 +32,6 @@ import { useClientEnv, useFeature } from '~/root';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -46,7 +45,7 @@ const CHILD_HAS_SIN = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
+  i18nNamespaces: ['status', 'gcweb'],
   pageIdentifier: pageIds.public.status.child,
 } as const satisfies RouteHandleData;
 

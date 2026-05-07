@@ -17,9 +17,9 @@ import { useBrowserCompatiblityBanner, useCurrentLanguage } from '~/hooks';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import type { I18nNamespaces } from '~/utils/route-utils';
 
-export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
+export const i18nNamespaces = ['gcweb'] satisfies I18nNamespaces;
 
 /**
  * GCWeb Application page template.

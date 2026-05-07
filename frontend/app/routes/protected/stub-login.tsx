@@ -17,7 +17,6 @@ import { ErrorSummaryProvider } from '~/components/error-summary-context';
 import { InputField } from '~/components/input-field';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputSelect } from '~/components/input-select';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -25,7 +24,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('stubLogin', 'gcweb'),
+  i18nNamespaces: ['stubLogin', 'gcweb'],
   pageIdentifier: 'CDCP-00XX',
 } as const satisfies RouteHandleData;
 

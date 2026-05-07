@@ -7,11 +7,10 @@ import { getLocale } from '~/.server/utils/locale.utils';
 import { PublicLayout, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { useApiSession } from '~/utils/api-session-utils';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces(...layoutI18nNamespaces),
+  i18nNamespaces: layoutI18nNamespaces,
 } as const satisfies RouteHandleData;
 
 // eslint-disable-next-line @typescript-eslint/require-await

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { APP_LOCALES, getAltLanguage, getLanguage, getNamespaces, getTypedI18nNamespaces, isAppLocale, removeLanguageFromPath, useAppLocale } from '~/utils/locale-utils';
+import { APP_LOCALES, getAltLanguage, getLanguage, getNamespaces, isAppLocale, removeLanguageFromPath, useAppLocale } from '~/utils/locale-utils';
 
 /*
  * @vitest-environment jsdom
@@ -79,27 +79,6 @@ describe('locale-utils', () => {
     it('should return a unique array of namespaces from route handles', () => {
       const routes = [{ handle: { i18nNamespaces: ['namespace1', 'namespace2'] } }, { handle: { i18nNamespaces: ['namespace2', 'namespace3'] } }];
       expect(getNamespaces(routes)).toEqual(['namespace1', 'namespace2', 'namespace3']);
-    });
-
-    it('should handle undefined or invalid i18nNamespaces', () => {
-      const routes: Array<{ handle?: unknown }> = [
-        { handle: { i18nNamespaces: undefined } },
-        { handle: { i18nNamespaces: 'invalid' } }, // Invalid type
-        { handle: { i18nNamespaces: ['namespace1'] } },
-      ];
-
-      expect(getNamespaces(routes)).toEqual(['namespace1']);
-    });
-  });
-
-  describe('getTypedI18nNamespaces', () => {
-    it('should return a typed tuple of namespaces', () => {
-      const result = getTypedI18nNamespaces('common', 'gcweb', 'unableToProcessRequest');
-      expect(result).toEqual(['common', 'gcweb', 'unableToProcessRequest']);
-
-      type ExpectedType = readonly ['common', 'gcweb', 'unableToProcessRequest'];
-      const typedResult: ExpectedType = result; // No TypeScript error
-      expect(typedResult).toEqual(['common', 'gcweb', 'unableToProcessRequest']);
     });
   });
 

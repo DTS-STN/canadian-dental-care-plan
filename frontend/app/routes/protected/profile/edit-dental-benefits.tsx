@@ -21,9 +21,9 @@ import { InputSelect } from '~/components/input-select';
 import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const FORM_ACTION = {
@@ -44,9 +44,9 @@ const HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION = {
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'protectedProfile:editDentalBenefits.breadcrumb', routeId: 'protected/profile/dental-benefits' }],
-  i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
+  i18nNamespaces: ['protectedProfile', 'gcweb'],
   pageIdentifier: pageIds.protected.profile.editDentalBenefits,
-};
+} as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
   return getTitleMetaTags(loaderData.meta.title, loaderData.meta.dcTermsTitle);

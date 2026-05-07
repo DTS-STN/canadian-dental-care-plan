@@ -24,7 +24,6 @@ import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import type { ProfileEmailContext } from '~/routes/protected/profile/email';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -50,7 +49,7 @@ export const handle = {
     { labelI18nKey: 'protectedProfile:contactInformation.pageTitle', routeId: 'protected/profile/contact-information' },
     { labelI18nKey: 'protectedProfile:email.pageTitle', routeId: 'protected/profile/contact/email-address' },
   ],
-  i18nNamespaces: getTypedI18nNamespaces('protectedProfile', 'gcweb'),
+  i18nNamespaces: ['protectedProfile', 'gcweb'],
   pageIdentifier: pageIds.protected.profile.verifyEmail,
 } as const satisfies RouteHandleData;
 
