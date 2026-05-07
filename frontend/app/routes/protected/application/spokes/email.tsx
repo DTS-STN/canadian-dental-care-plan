@@ -155,8 +155,9 @@ export default function ApplicationEmail({ loaderData, params }: Route.Component
           <ErrorSummary />
           <fetcher.Form method="post" noValidate>
             <CsrfTokenInput />
-            <p className="mb-4">{t(($) => $.email.provideEmail)}</p>
-            <p className="mb-8">{t(($) => $.email.verifyEmail)}</p>
+            <p className="mb-4">{t(($) => $.email.emailNotification)}</p>
+            <p className="mb-4">{t(($) => $.email.enterEmail)}</p>
+            <p className="mb-4">{t(($) => $.email.updateCommunicationPreference)}</p>
             <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
             <div className="mb-6">
               <InputField id="email" name="email" type="email" inputMode="email" className="w-full" autoComplete="email" defaultValue={defaultState} errorMessage={errors?.email} label={t(($) => $.email.emailLegend)} maxLength={64} required />

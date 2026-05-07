@@ -349,8 +349,9 @@ const ns = {
   },
   email: {
     pageTitle: "Email address",
-    provideEmail: "Provide the email address you'd like the Government of Canada and Sun Life to use to contact you about your Canadian Dental Care Plan coverage.",
-    verifyEmail: "We will need to confirm your email address.",
+    emailNotification: "Messages from the Government of Canada about your Canadian Dental Care Plan (CDCP) will be delivered through your My Service Canada Account (MSCA). When a new letter is posted in MSCA, we'll send an email notification to this address.",
+    enterEmail: "Enter the email address you want to use to receive notifications about your CDCP account and if you selected email, your communications with Sun Life.",
+    updateCommunicationPreference: "You can update your communication preferences at any time in MSCA.",
     emailLegend: "Email address",
     back: "Back",
     continue: "Continue",
