@@ -61,7 +61,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
   return {
     defaultState: state.email,
-    context: state.context,
     applicationFlow: `${state.context}-${state.typeOfApplication}` as const,
     meta,
   };
@@ -141,7 +140,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplicationEmail({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { defaultState, applicationFlow, context } = loaderData;
+  const { defaultState, applicationFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
