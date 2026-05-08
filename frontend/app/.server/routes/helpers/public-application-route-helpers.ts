@@ -625,10 +625,11 @@ export async function resolvePublicStateHomeAddressValue(
 
 /**
  * Resolves the effective email value for a public application state.
- * The state email (set by the user during the session) takes precedence over the
- * client application email on file.
+ * The state email takes precedence over the client application email on file,
+ * but only if it is a valid email address and has been verified by the user (`emailVerified === true`).
+ * If the state email is absent, invalid, or unverified, the client application email is returned instead.
  *
- * @param state - The public application state containing the optional email and client application contact information.
+ * @param state - The public application state containing the optional email, emailVerified flag, and client application contact information.
  * @returns The resolved email address, or `undefined` if neither is available.
  */
 export function resolvePublicStateEmailValue(state: PickDeep<PublicApplicationState, 'email' | 'emailVerified' | 'clientApplication.contactInformation.email'>): string | undefined {
