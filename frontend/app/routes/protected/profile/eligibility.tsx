@@ -73,20 +73,19 @@ export async function loader({ context: { appContainer, session }, params, reque
   appContainer.get(TYPES.AuditService).createAudit('page-view.profile.eligibility', { userId: idToken.sub });
 
   const currentCoverage = appContainer.get(TYPES.CoverageService).getCurrentCoverage();
-  const showApplyLink = isWithinRenewalPeriod();
 
   return {
     meta,
     SCCH_BASE_URI,
     applicants,
     currentCoverage,
-    showApplyLink,
+    isWithinRenewalPeriod: isWithinRenewalPeriod(),
   };
 }
 
 export default function ProtectedProfileEligibility({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { applicants, SCCH_BASE_URI, currentCoverage, showApplyLink } = loaderData;
+  const { applicants, SCCH_BASE_URI, currentCoverage, isWithinRenewalPeriod } = loaderData;
   const { ELIGIBILITY_STATUS_CODE_ELIGIBLE } = useClientEnv();
 
   return (
@@ -113,29 +112,31 @@ export default function ProtectedProfileEligibility({ loaderData, params }: Rout
             })}
           </DefinitionList>
         </section>
-        <section className="space-y-6">
-          <h2 className="font-lato text-2xl font-bold">{t(($) => $.eligibility.nextYear)}</h2>
-          <p>
-            {t(($) => $.eligibility.benefitYearRange, {
-              start: currentCoverage.startYear + 1,
-              end: currentCoverage.endYear + 1,
-              ns: 'protectedProfile',
-            })}
-          </p>
-          <DefinitionList border>
-            {applicants.map((applicant) => {
-              const taxationYear = currentCoverage.taxationYear + 1;
-              const coverageStartYear = currentCoverage.startYear + 1;
-              const coverageEndYear = currentCoverage.endYear + 1;
-              const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear, isNextYear: true, ELIGIBILITY_STATUS_CODE_ELIGIBLE });
-              return (
-                <DefinitionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
-                  <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={coverageStartYear} coverageEndYear={coverageEndYear} showApplyLink={showApplyLink} />
-                </DefinitionListItem>
-              );
-            })}
-          </DefinitionList>
-        </section>
+        {isWithinRenewalPeriod && (
+          <section className="space-y-6">
+            <h2 className="font-lato text-2xl font-bold">{t(($) => $.eligibility.nextYear)}</h2>
+            <p>
+              {t(($) => $.eligibility.benefitYearRange, {
+                start: currentCoverage.startYear + 1,
+                end: currentCoverage.endYear + 1,
+                ns: 'protectedProfile',
+              })}
+            </p>
+            <DefinitionList border>
+              {applicants.map((applicant) => {
+                const taxationYear = currentCoverage.taxationYear + 1;
+                const coverageStartYear = currentCoverage.startYear + 1;
+                const coverageEndYear = currentCoverage.endYear + 1;
+                const eligibilityStatus = getEligibilityStatus({ applicant, taxationYear, isNextYear: true, ELIGIBILITY_STATUS_CODE_ELIGIBLE });
+                return (
+                  <DefinitionListItem key={applicant.clientId} term={`${applicant.firstName} ${applicant.lastName}`}>
+                    <EligibilityStatusIndicator status={eligibilityStatus} coverageStartYear={coverageStartYear} coverageEndYear={coverageEndYear} />
+                  </DefinitionListItem>
+                );
+              })}
+            </DefinitionList>
+          </section>
+        )}
         <ButtonLink
           variant="primary"
           id="back-button"
@@ -180,10 +181,9 @@ interface EligibilityStatusIndicatorProps {
   status: EligibilityStatus;
   coverageStartYear: number;
   coverageEndYear: number;
-  showApplyLink?: boolean;
 }
 
-export function EligibilityStatusIndicator({ status, coverageStartYear, coverageEndYear, showApplyLink }: EligibilityStatusIndicatorProps) {
+export function EligibilityStatusIndicator({ status, coverageStartYear, coverageEndYear }: EligibilityStatusIndicatorProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const params = useParams();
 
@@ -211,15 +211,13 @@ export function EligibilityStatusIndicator({ status, coverageStartYear, coverage
         <FontAwesomeIcon icon={faExclamationTriangle} className="text-amber-700" />
         <span className="text-nowrap">{t(($) => $.eligibility.notEnrolled)}</span>
       </div>
-      {showApplyLink && (
-        <InlineLink routeId="protected/application/index" params={params}>
-          {t(($) => $.eligibility.apply, {
-            start: coverageStartYear,
-            end: coverageEndYear,
-            ns: 'protectedProfile',
-          })}
-        </InlineLink>
-      )}
+      <InlineLink routeId="protected/application/index" params={params}>
+        {t(($) => $.eligibility.apply, {
+          start: coverageStartYear,
+          end: coverageEndYear,
+          ns: 'protectedProfile',
+        })}
+      </InlineLink>
     </div>
   );
 }
