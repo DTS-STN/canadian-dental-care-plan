@@ -88,7 +88,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     sunLifeCommunicationMethodService,
     gcCommunicationMethodService,
   );
-  const email = resolveProtectedStateEmailValue({ clientApplication: state.clientApplication, email: state.email });
+
   const dentalBenefits = await resolveProtectedStateDentalBenefitsValue({ dentalBenefits: state.dentalBenefits, clientApplication: state.clientApplication }, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
 
   const userInfo = {
@@ -101,7 +101,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     birthday: toLocaleDateString(parseDateString(state.clientApplication.dateOfBirth), locale),
     sin: state.clientApplication.applicantInformation.socialInsuranceNumber,
     maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
-    contactInformationEmail: email,
+    email: resolveProtectedStateEmailValue(state),
     communicationSunLifePreference: communicationPreferences.preferredMethodSunLife,
   };
 
@@ -315,9 +315,9 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
                     <span className="text-nowrap">{userInfo.altPhoneNumber}</span>
                   </DefinitionListItem>
                 )}
-                {userInfo.contactInformationEmail && (
+                {userInfo.email && (
                   <DefinitionListItem term={t(($) => $.confirm.email)}>
-                    <span className="text-nowrap">{userInfo.contactInformationEmail}</span>
+                    <span className="text-nowrap">{userInfo.email}</span>
                   </DefinitionListItem>
                 )}
                 <DefinitionListItem term={t(($) => $.confirm.mailing)}>
@@ -350,7 +350,6 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
               <DefinitionList border>
                 <DefinitionListItem term={t(($) => $.confirm.langPref)}>{userInfo.preferredLanguage.name}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.sunLifeCommPrefTitle)}>{userInfo.communicationSunLifePreference.name}</DefinitionListItem>
-                <DefinitionListItem term={t(($) => $.confirm.email)}>{userInfo.contactInformationEmail}</DefinitionListItem>
               </DefinitionList>
             </section>
 

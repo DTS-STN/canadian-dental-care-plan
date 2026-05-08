@@ -5,6 +5,7 @@ import { UTCDate } from '@date-fns/utc';
 import { invariant } from '@dts-stn/invariant';
 import { differenceInMinutes } from 'date-fns';
 import type { PickDeep, ReadonlyDeep, SetRequired } from 'type-fest';
+import validator from 'validator';
 
 import type {
   ClientApplicationRenewalEligibleDto,
@@ -750,8 +751,9 @@ export async function resolveProtectedStateHomeAddressValue(
  * @param state - The protected application state containing the optional email and client application contact information.
  * @returns The resolved email address, or `undefined` if neither is available.
  */
-export function resolveProtectedStateEmailValue(state: PickDeep<ProtectedApplicationState, 'email' | 'clientApplication.contactInformation.email'>): string | undefined {
-  return state.email ?? state.clientApplication?.contactInformation.email;
+export function resolveProtectedStateEmailValue(state: PickDeep<ProtectedApplicationState, 'email' | 'emailVerified' | 'clientApplication.contactInformation.email'>): string | undefined {
+  const hasValidEmailInState = typeof state.email === 'string' && validator.isEmail(state.email) && state.emailVerified === true;
+  return hasValidEmailInState ? state.email : state.clientApplication?.contactInformation.email;
 }
 
 /**

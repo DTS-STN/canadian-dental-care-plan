@@ -6,7 +6,7 @@ import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationFullFamilyState } from '~/.server/routes/helpers/public-application-full-family-route-helpers';
-import { clearPublicApplicationState, getMemberIdForFullApplication, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { clearPublicApplicationState, getMemberIdForFullApplication, resolvePublicStateEmailValue, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { AppPageTitle } from '~/components/app-page-title';
@@ -84,7 +84,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
-    contactInformationEmail: state.email,
+    email: resolvePublicStateEmailValue(state),
     communicationSunLifePreference: appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale),
     communicationGOCPreference: appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale),
   };
@@ -313,13 +313,8 @@ export default function NewFamilyConfirmation({ loaderData, params }: Route.Comp
                   <span className="text-nowrap">{userInfo.phoneNumber}</span>
                 </DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.altPhoneNumber)}>
-                  <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
+                  <span className="text-nowrap">{userInfo.altPhoneNumber}</span>
                 </DefinitionListItem>
-                {userInfo.contactInformationEmail && (
-                  <DefinitionListItem term={t(($) => $.confirm.email)}>
-                    <span className="text-nowrap">{userInfo.contactInformationEmail} </span>
-                  </DefinitionListItem>
-                )}
                 <DefinitionListItem term={t(($) => $.confirm.mailing)}>
                   <Address
                     address={{
@@ -351,7 +346,7 @@ export default function NewFamilyConfirmation({ loaderData, params }: Route.Comp
                 <DefinitionListItem term={t(($) => $.confirm.langPref)}>{userInfo.preferredLanguage.name}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.sunLifeCommPrefTitle)}>{userInfo.communicationSunLifePreference.name}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.gocCommPrefTitle)}>{userInfo.communicationGOCPreference.name}</DefinitionListItem>
-                <DefinitionListItem term={t(($) => $.confirm.email)}>{userInfo.contactInformationEmail}</DefinitionListItem>
+                {userInfo.email && <DefinitionListItem term={t(($) => $.confirm.email)}>{userInfo.email}</DefinitionListItem>}
               </DefinitionList>
             </section>
 
