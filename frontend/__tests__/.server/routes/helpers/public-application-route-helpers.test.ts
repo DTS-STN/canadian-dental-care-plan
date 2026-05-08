@@ -21,17 +21,17 @@ import type {
   SunLifeCommunicationMethodService,
 } from '~/.server/domain/services';
 import {
-  resolveSimplifiedStateChildDentalBenefitsValue,
-  resolveSimplifiedStateCommunicationPreferencesValue,
-  resolveSimplifiedStateDentalBenefitsValue,
-  resolveSimplifiedStateEmailValue,
-  resolveSimplifiedStateHomeAddressValue,
-  resolveSimplifiedStateMailingAddressValue,
-  resolveSimplifiedStatePhoneNumberValue,
+  resolvePublicStateChildDentalBenefitsValue,
+  resolvePublicStateCommunicationPreferencesValue,
+  resolvePublicStateDentalBenefitsValue,
+  resolvePublicStateEmailValue,
+  resolvePublicStateHomeAddressValue,
+  resolvePublicStateMailingAddressValue,
+  resolvePublicStatePhoneNumberValue,
 } from '~/.server/routes/helpers/public-application-route-helpers';
 
 describe('public-application-route-helpers', () => {
-  describe('resolveSimplifiedStateCommunicationPreferencesValue', () => {
+  describe('resolvePublicStateCommunicationPreferencesValue', () => {
     const mockLanguage: LanguageLocalizedDto = { id: 'lang-1', code: 'en', name: 'English' };
     const mockSunLifeMethod: SunLifeCommunicationMethodLocalizedDto = { id: 'sl-1', code: 'email', name: 'Email' };
     const mockGCMethod: GCCommunicationMethodLocalizedDto = { id: 'gc-1', code: 'mail', name: 'Mail' };
@@ -53,7 +53,7 @@ describe('public-application-route-helpers', () => {
       sunLifeService.getLocalizedSunLifeCommunicationMethodById.mockReturnValue(mockSunLifeMethod);
       gcService.getLocalizedGCCommunicationMethodById.mockReturnValue(mockGCMethod);
 
-      const result = resolveSimplifiedStateCommunicationPreferencesValue(state, 'en', languageService, sunLifeService, gcService);
+      const result = resolvePublicStateCommunicationPreferencesValue(state, 'en', languageService, sunLifeService, gcService);
 
       expect(result).toEqual({ hasChanged: true, preferredLanguage: mockLanguage, preferredMethodSunLife: mockSunLifeMethod, preferredMethodGovernmentOfCanada: mockGCMethod });
       expect(languageService.getLocalizedLanguageById).toHaveBeenCalledWith('lang-1', 'en');
@@ -81,7 +81,7 @@ describe('public-application-route-helpers', () => {
       sunLifeService.getLocalizedSunLifeCommunicationMethodById.mockReturnValue(mockSunLifeMethod);
       gcService.getLocalizedGCCommunicationMethodById.mockReturnValue(mockGCMethod);
 
-      const result = resolveSimplifiedStateCommunicationPreferencesValue(state, 'en', languageService, sunLifeService, gcService);
+      const result = resolvePublicStateCommunicationPreferencesValue(state, 'en', languageService, sunLifeService, gcService);
 
       expect(result).toEqual({ hasChanged: false, preferredLanguage: mockLanguage, preferredMethodSunLife: mockSunLifeMethod, preferredMethodGovernmentOfCanada: mockGCMethod });
       expect(languageService.getLocalizedLanguageById).toHaveBeenCalledWith('lang-2', 'en');
@@ -90,14 +90,14 @@ describe('public-application-route-helpers', () => {
     });
   });
 
-  describe('resolveSimplifiedStatePhoneNumberValue', () => {
+  describe('resolvePublicStatePhoneNumberValue', () => {
     it('returns state phone numbers with hasChanged=true when user changed phone number', () => {
       const state = {
         phoneNumber: { hasChanged: true, value: { primary: '555-1234', alternate: '555-5678' } },
         clientApplication: { contactInformation: { phoneNumber: '555-0000', phoneNumberAlt: '555-0001' } },
       } as const;
 
-      expect(resolveSimplifiedStatePhoneNumberValue(state)).toEqual({ hasChanged: true, primary: '555-1234', alternate: '555-5678' });
+      expect(resolvePublicStatePhoneNumberValue(state)).toEqual({ hasChanged: true, primary: '555-1234', alternate: '555-5678' });
     });
 
     it('returns client application phone numbers with hasChanged=false when user did not change phone number', () => {
@@ -106,7 +106,7 @@ describe('public-application-route-helpers', () => {
         clientApplication: { contactInformation: { phoneNumber: '555-0000', phoneNumberAlt: '555-0001' } },
       } as const;
 
-      expect(resolveSimplifiedStatePhoneNumberValue(state)).toEqual({ hasChanged: false, primary: '555-0000', alternate: '555-0001' });
+      expect(resolvePublicStatePhoneNumberValue(state)).toEqual({ hasChanged: false, primary: '555-0000', alternate: '555-0001' });
     });
 
     it('returns client application phone number without alternate when alt is undefined', () => {
@@ -115,11 +115,11 @@ describe('public-application-route-helpers', () => {
         clientApplication: { contactInformation: { phoneNumber: '555-0000', phoneNumberAlt: undefined } },
       } as const;
 
-      expect(resolveSimplifiedStatePhoneNumberValue(state)).toEqual({ hasChanged: false, primary: '555-0000', alternate: undefined });
+      expect(resolvePublicStatePhoneNumberValue(state)).toEqual({ hasChanged: false, primary: '555-0000', alternate: undefined });
     });
   });
 
-  describe('resolveSimplifiedStateMailingAddressValue', () => {
+  describe('resolvePublicStateMailingAddressValue', () => {
     const mockCountry: CountryLocalizedDto = { id: 'CA', name: 'Canada' };
     const mockProvince: ProvinceTerritoryStateLocalizedDto = { id: 'ON', countryId: 'CA', abbr: 'ON', name: 'Ontario' };
 
@@ -137,7 +137,7 @@ describe('public-application-route-helpers', () => {
       countryService.getLocalizedCountryById.mockResolvedValue(mockCountry);
       provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById.mockResolvedValue(mockProvince);
 
-      const result = await resolveSimplifiedStateMailingAddressValue(state, 'en', countryService, provinceTerritoryStateService);
+      const result = await resolvePublicStateMailingAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
       expect(result).toEqual({ hasChanged: true, address: '123 Main St', city: 'Ottawa', country: mockCountry, postalCode: 'K1A 0A9', province: mockProvince });
     });
@@ -155,7 +155,7 @@ describe('public-application-route-helpers', () => {
       const provinceTerritoryStateService = mock<ProvinceTerritoryStateService>();
       countryService.getLocalizedCountryById.mockResolvedValue(mockCountry);
 
-      const result = await resolveSimplifiedStateMailingAddressValue(state, 'en', countryService, provinceTerritoryStateService);
+      const result = await resolvePublicStateMailingAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
       expect(result).toEqual({ hasChanged: true, address: '123 Main St', city: 'Ottawa', country: mockCountry, postalCode: undefined, province: undefined });
       expect(provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById).not.toHaveBeenCalled();
@@ -174,7 +174,7 @@ describe('public-application-route-helpers', () => {
       countryService.getLocalizedCountryById.mockResolvedValue(mockCountry);
       provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById.mockResolvedValue(mockProvince);
 
-      const result = await resolveSimplifiedStateMailingAddressValue(state, 'en', countryService, provinceTerritoryStateService);
+      const result = await resolvePublicStateMailingAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
       expect(result).toEqual({ hasChanged: false, address: '456 Elm St', city: 'Toronto', country: mockCountry, postalCode: 'M5G 2C8', province: mockProvince });
     });
@@ -191,14 +191,14 @@ describe('public-application-route-helpers', () => {
       const provinceTerritoryStateService = mock<ProvinceTerritoryStateService>();
       countryService.getLocalizedCountryById.mockResolvedValue(mockCountry);
 
-      const result = await resolveSimplifiedStateMailingAddressValue(state, 'en', countryService, provinceTerritoryStateService);
+      const result = await resolvePublicStateMailingAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
       expect(result).toEqual({ hasChanged: false, address: '456 Elm St', city: 'Toronto', country: mockCountry, postalCode: undefined, province: undefined });
       expect(provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById).not.toHaveBeenCalled();
     });
   });
 
-  describe('resolveSimplifiedStateHomeAddressValue', () => {
+  describe('resolvePublicStateHomeAddressValue', () => {
     const mockCountry: CountryLocalizedDto = { id: 'CA', name: 'Canada' };
     const mockProvince: ProvinceTerritoryStateLocalizedDto = { id: 'BC', countryId: 'CA', abbr: 'BC', name: 'British Columbia' };
 
@@ -216,7 +216,7 @@ describe('public-application-route-helpers', () => {
       countryService.getLocalizedCountryById.mockResolvedValue(mockCountry);
       provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById.mockResolvedValue(mockProvince);
 
-      const result = await resolveSimplifiedStateHomeAddressValue(state, 'en', countryService, provinceTerritoryStateService);
+      const result = await resolvePublicStateHomeAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
       expect(result).toEqual({ hasChanged: true, address: '789 Oak Ave', city: 'Vancouver', country: mockCountry, postalCode: 'V6B 1A1', province: mockProvince });
     });
@@ -234,7 +234,7 @@ describe('public-application-route-helpers', () => {
       const provinceTerritoryStateService = mock<ProvinceTerritoryStateService>();
       countryService.getLocalizedCountryById.mockResolvedValue(mockCountry);
 
-      const result = await resolveSimplifiedStateHomeAddressValue(state, 'en', countryService, provinceTerritoryStateService);
+      const result = await resolvePublicStateHomeAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
       expect(result).toEqual({ hasChanged: true, address: '789 Oak Ave', city: 'Vancouver', country: mockCountry, postalCode: undefined, province: undefined });
       expect(provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById).not.toHaveBeenCalled();
@@ -253,7 +253,7 @@ describe('public-application-route-helpers', () => {
       countryService.getLocalizedCountryById.mockResolvedValue(mockCountry);
       provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById.mockResolvedValue(mockProvince);
 
-      const result = await resolveSimplifiedStateHomeAddressValue(state, 'en', countryService, provinceTerritoryStateService);
+      const result = await resolvePublicStateHomeAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
       expect(result).toEqual({ hasChanged: false, address: '321 Pine Rd', city: 'Calgary', country: mockCountry, postalCode: 'T2P 1J9', province: mockProvince });
     });
@@ -270,21 +270,21 @@ describe('public-application-route-helpers', () => {
       const provinceTerritoryStateService = mock<ProvinceTerritoryStateService>();
       countryService.getLocalizedCountryById.mockResolvedValue(mockCountry);
 
-      const result = await resolveSimplifiedStateHomeAddressValue(state, 'en', countryService, provinceTerritoryStateService);
+      const result = await resolvePublicStateHomeAddressValue(state, 'en', countryService, provinceTerritoryStateService);
 
       expect(result).toEqual({ hasChanged: false, address: '321 Pine Rd', city: 'Calgary', country: mockCountry, postalCode: undefined, province: undefined });
       expect(provinceTerritoryStateService.getLocalizedProvinceTerritoryStateById).not.toHaveBeenCalled();
     });
   });
 
-  describe('resolveSimplifiedStateEmailValue', () => {
+  describe('resolvePublicStateEmailValue', () => {
     it('returns state email when it is defined', () => {
       const state = {
         email: 'user@example.com',
         clientApplication: { contactInformation: { email: 'client@example.com' } },
       } as const;
 
-      expect(resolveSimplifiedStateEmailValue(state)).toBe('user@example.com');
+      expect(resolvePublicStateEmailValue(state)).toBe('user@example.com');
     });
 
     it('falls back to client application email when state email is undefined', () => {
@@ -293,7 +293,7 @@ describe('public-application-route-helpers', () => {
         clientApplication: { contactInformation: { email: 'client@example.com' } },
       } as const;
 
-      expect(resolveSimplifiedStateEmailValue(state)).toBe('client@example.com');
+      expect(resolvePublicStateEmailValue(state)).toBe('client@example.com');
     });
 
     it('returns undefined when both state and client application emails are undefined', () => {
@@ -302,11 +302,11 @@ describe('public-application-route-helpers', () => {
         clientApplication: { contactInformation: { email: undefined } },
       } as const;
 
-      expect(resolveSimplifiedStateEmailValue(state)).toBeUndefined();
+      expect(resolvePublicStateEmailValue(state)).toBeUndefined();
     });
   });
 
-  describe('resolveSimplifiedStateDentalBenefitsValue', () => {
+  describe('resolvePublicStateDentalBenefitsValue', () => {
     const mockFederalPlan: FederalGovernmentInsurancePlanLocalizedDto = { id: 'fed-1', name: 'Federal Plan A' };
     const mockProvincialPlan: ProvincialGovernmentInsurancePlanLocalizedDto = { id: 'prov-1', name: 'Provincial Plan B', provinceTerritoryStateId: 'ON' };
 
@@ -324,7 +324,7 @@ describe('public-application-route-helpers', () => {
       federalService.getLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(mockFederalPlan);
       provincialService.getLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(mockProvincialPlan);
 
-      const result = await resolveSimplifiedStateDentalBenefitsValue(state, 'en', federalService, provincialService);
+      const result = await resolvePublicStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
       expect(result).toEqual({ hasChanged: true, federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: mockProvincialPlan });
     });
@@ -341,7 +341,7 @@ describe('public-application-route-helpers', () => {
       const federalService = mock<FederalGovernmentInsurancePlanService>();
       const provincialService = mock<ProvincialGovernmentInsurancePlanService>();
 
-      const result = await resolveSimplifiedStateDentalBenefitsValue(state, 'en', federalService, provincialService);
+      const result = await resolvePublicStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
       expect(result).toEqual({ hasChanged: true, federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: undefined });
       expect(federalService.getLocalizedFederalGovernmentInsurancePlanById).not.toHaveBeenCalled();
@@ -359,7 +359,7 @@ describe('public-application-route-helpers', () => {
       federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(Some(mockFederalPlan));
       provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(None);
 
-      const result = await resolveSimplifiedStateDentalBenefitsValue(state, 'en', federalService, provincialService);
+      const result = await resolvePublicStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
       expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: undefined });
     });
@@ -375,7 +375,7 @@ describe('public-application-route-helpers', () => {
       federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(None);
       provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(Some(mockProvincialPlan));
 
-      const result = await resolveSimplifiedStateDentalBenefitsValue(state, 'en', federalService, provincialService);
+      const result = await resolvePublicStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
       expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: mockProvincialPlan });
     });
@@ -391,7 +391,7 @@ describe('public-application-route-helpers', () => {
       federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(None);
       provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(None);
 
-      const result = await resolveSimplifiedStateDentalBenefitsValue(state, 'en', federalService, provincialService);
+      const result = await resolvePublicStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
       expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: undefined });
     });
@@ -407,13 +407,13 @@ describe('public-application-route-helpers', () => {
       federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValueOnce(Some(mockFederalPlan)).mockResolvedValueOnce(None);
       provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(Some(mockProvincialPlan));
 
-      const result = await resolveSimplifiedStateDentalBenefitsValue(state, 'en', federalService, provincialService);
+      const result = await resolvePublicStateDentalBenefitsValue(state, 'en', federalService, provincialService);
 
       expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: mockProvincialPlan });
     });
   });
 
-  describe('resolveSimplifiedStateChildDentalBenefitsValue', () => {
+  describe('resolvePublicStateChildDentalBenefitsValue', () => {
     const mockFederalPlan: FederalGovernmentInsurancePlanLocalizedDto = { id: 'fed-1', name: 'Federal Plan A' };
     const mockProvincialPlan: ProvincialGovernmentInsurancePlanLocalizedDto = { id: 'prov-1', name: 'Provincial Plan B', provinceTerritoryStateId: 'ON' };
 
@@ -431,7 +431,7 @@ describe('public-application-route-helpers', () => {
       federalService.getLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(mockFederalPlan);
       provincialService.getLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(mockProvincialPlan);
 
-      const result = await resolveSimplifiedStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
+      const result = await resolvePublicStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
 
       expect(result).toEqual({ hasChanged: true, federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: mockProvincialPlan });
     });
@@ -448,7 +448,7 @@ describe('public-application-route-helpers', () => {
       const federalService = mock<FederalGovernmentInsurancePlanService>();
       const provincialService = mock<ProvincialGovernmentInsurancePlanService>();
 
-      const result = await resolveSimplifiedStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
+      const result = await resolvePublicStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
 
       expect(result).toEqual({ hasChanged: true, federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: undefined });
       expect(federalService.getLocalizedFederalGovernmentInsurancePlanById).not.toHaveBeenCalled();
@@ -464,7 +464,7 @@ describe('public-application-route-helpers', () => {
       federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(Some(mockFederalPlan));
       provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(None);
 
-      const result = await resolveSimplifiedStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
+      const result = await resolvePublicStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
 
       expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: undefined });
     });
@@ -478,7 +478,7 @@ describe('public-application-route-helpers', () => {
       federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(None);
       provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(Some(mockProvincialPlan));
 
-      const result = await resolveSimplifiedStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
+      const result = await resolvePublicStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
 
       expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: mockProvincialPlan });
     });
@@ -492,7 +492,7 @@ describe('public-application-route-helpers', () => {
       federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValue(None);
       provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(None);
 
-      const result = await resolveSimplifiedStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
+      const result = await resolvePublicStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
 
       expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: undefined, provincialGovernmentInsurancePlan: undefined });
     });
@@ -506,7 +506,7 @@ describe('public-application-route-helpers', () => {
       federalService.findLocalizedFederalGovernmentInsurancePlanById.mockResolvedValueOnce(Some(mockFederalPlan)).mockResolvedValueOnce(None);
       provincialService.findLocalizedProvincialGovernmentInsurancePlanById.mockResolvedValue(Some(mockProvincialPlan));
 
-      const result = await resolveSimplifiedStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
+      const result = await resolvePublicStateChildDentalBenefitsValue(childState, childClientApplication, 'en', federalService, provincialService);
 
       expect(result).toEqual({ hasChanged: false, federalGovernmentInsurancePlan: mockFederalPlan, provincialGovernmentInsurancePlan: mockProvincialPlan });
     });

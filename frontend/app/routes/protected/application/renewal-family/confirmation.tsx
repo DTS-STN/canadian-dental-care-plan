@@ -10,13 +10,13 @@ import { getEligibilityStatus } from '~/.server/routes/helpers/base-application-
 import { loadProtectedApplicationRenewalFamilyState } from '~/.server/routes/helpers/protected-application-renewal-family-route-helpers';
 import {
   clearProtectedApplicationState,
-  resolveRenewalStateChildDentalBenefitsValue,
-  resolveRenewalStateCommunicationPreferencesValue,
-  resolveRenewalStateDentalBenefitsValue,
-  resolveRenewalStateEmailValue,
-  resolveRenewalStateHomeAddressValue,
-  resolveRenewalStateMailingAddressValue,
-  resolveRenewalStatePhoneNumberValue,
+  resolveProtectedStateChildDentalBenefitsValue,
+  resolveProtectedStateCommunicationPreferencesValue,
+  resolveProtectedStateDentalBenefitsValue,
+  resolveProtectedStateEmailValue,
+  resolveProtectedStateHomeAddressValue,
+  resolveProtectedStateMailingAddressValue,
+  resolveProtectedStatePhoneNumberValue,
   validateApplicationFlow,
 } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
@@ -87,18 +87,18 @@ export async function loader({ context: { appContainer, session }, params, reque
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
   const sunLifeCommunicationMethodService = appContainer.get(TYPES.SunLifeCommunicationMethodService);
 
-  const phoneNumber = resolveRenewalStatePhoneNumberValue({ clientApplication: state.clientApplication, phoneNumber: state.phoneNumber });
-  const mailingAddress = await resolveRenewalStateMailingAddressValue({ clientApplication: state.clientApplication, mailingAddress: state.mailingAddress }, locale, countryService, provinceTerritoryStateService);
-  const homeAddress = await resolveRenewalStateHomeAddressValue({ clientApplication: state.clientApplication, homeAddress: state.homeAddress }, locale, countryService, provinceTerritoryStateService);
-  const communicationPreferences = resolveRenewalStateCommunicationPreferencesValue(
+  const phoneNumber = resolveProtectedStatePhoneNumberValue({ clientApplication: state.clientApplication, phoneNumber: state.phoneNumber });
+  const mailingAddress = await resolveProtectedStateMailingAddressValue({ clientApplication: state.clientApplication, mailingAddress: state.mailingAddress }, locale, countryService, provinceTerritoryStateService);
+  const homeAddress = await resolveProtectedStateHomeAddressValue({ clientApplication: state.clientApplication, homeAddress: state.homeAddress }, locale, countryService, provinceTerritoryStateService);
+  const communicationPreferences = resolveProtectedStateCommunicationPreferencesValue(
     { clientApplication: state.clientApplication, communicationPreferences: state.communicationPreferences },
     locale,
     languageService,
     sunLifeCommunicationMethodService,
     gcCommunicationMethodService,
   );
-  const email = resolveRenewalStateEmailValue({ clientApplication: state.clientApplication, email: state.email });
-  const dentalBenefits = await resolveRenewalStateDentalBenefitsValue({ dentalBenefits: state.dentalBenefits, clientApplication: state.clientApplication }, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
+  const email = resolveProtectedStateEmailValue({ clientApplication: state.clientApplication, email: state.email });
+  const dentalBenefits = await resolveProtectedStateDentalBenefitsValue({ dentalBenefits: state.dentalBenefits, clientApplication: state.clientApplication }, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
 
   const userInfo = {
     memberId: state.applicantInformation.memberId,
@@ -149,7 +149,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       invariant(childApplication?.dentalBenefits, `Expected dental benefits for child with memberId ${childState.information?.memberId}`);
       invariant(childState.dentalInsurance, "Child's dental insurance must be defined");
 
-      const childDentalBenefits = await resolveRenewalStateChildDentalBenefitsValue({ dentalBenefits: childState.dentalBenefits }, childApplication, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
+      const childDentalBenefits = await resolveProtectedStateChildDentalBenefitsValue({ dentalBenefits: childState.dentalBenefits }, childApplication, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
       const eligibility = getEligibilityStatus({
         hasPrivateDentalInsurance: childState.dentalInsurance.hasDentalInsurance,
         privateDentalInsuranceOnRecord: childApplication.privateDentalInsurance,

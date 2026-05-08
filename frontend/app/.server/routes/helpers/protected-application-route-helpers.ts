@@ -4,7 +4,7 @@ import type { Params } from 'react-router';
 import { UTCDate } from '@date-fns/utc';
 import { invariant } from '@dts-stn/invariant';
 import { differenceInMinutes } from 'date-fns';
-import type { PickDeep, ReadonlyDeep } from 'type-fest';
+import type { PickDeep, ReadonlyDeep, SetRequired } from 'type-fest';
 
 import type {
   ClientApplicationRenewalEligibleDto,
@@ -536,19 +536,19 @@ export function shouldSkipNewOrReturningMember(state: PickDeep<ProtectedApplicat
 }
 
 /**
- * Resolves the effective communication preferences value for a renewal application state.
+ * Resolves the effective communication preferences value for a protected application state.
  * If the user has declared a change, the updated values from the state are used;
  * otherwise, the values are sourced from the client application data.
  *
- * @param state - The renewal application state containing communication preferences and client application data.
+ * @param state - The protected application state containing communication preferences and client application data.
  * @param locale - The locale used to retrieve localized values.
  * @param languageService - Service for resolving localized language details.
  * @param sunLifeCommunicationMethodService - Service for resolving localized Sun Life communication methods.
  * @param gcCommunicationMethodService - Service for resolving localized Government of Canada communication methods.
  * @returns The resolved preferred language, Sun Life communication method, and Government of Canada communication method.
  */
-export function resolveRenewalStateCommunicationPreferencesValue(
-  state: Required<PickDeep<ProtectedApplicationState, 'communicationPreferences' | 'clientApplication.communicationPreferences'>>,
+export function resolveProtectedStateCommunicationPreferencesValue(
+  state: SetRequired<PickDeep<ProtectedApplicationState, 'communicationPreferences' | 'clientApplication.communicationPreferences'>, 'communicationPreferences'>,
   locale: AppLocale,
   languageService: LanguageService,
   sunLifeCommunicationMethodService: SunLifeCommunicationMethodService,
@@ -568,9 +568,10 @@ export function resolveRenewalStateCommunicationPreferencesValue(
     };
   }
 
-  // If hash changed is false, client application communication preferences must be defined, as the value would have
+  // If hasChanged is false, client application communication preferences must be defined, as the value would have
   // been set on the state when the user made a change to the communication preferences step, which requires client
   // application communication preferences to be defined.
+  invariant(state.clientApplication, 'Expected clientApplication to be defined when communicationPreferences.hasChanged is false');
   invariant(state.clientApplication.communicationPreferences.preferredLanguage, 'Expected clientApplication.communicationPreferences.preferredLanguage to be defined when communicationPreferences.hasChanged is false');
   invariant(state.clientApplication.communicationPreferences.preferredMethodSunLife, 'Expected clientApplication.communicationPreferences.preferredMethodSunLife to be defined when communicationPreferences.hasChanged is false');
   invariant(state.clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada, 'Expected clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada to be defined when communicationPreferences.hasChanged is false');
@@ -584,14 +585,14 @@ export function resolveRenewalStateCommunicationPreferencesValue(
 }
 
 /**
- * Resolves the effective phone number value for a renewal application state.
+ * Resolves the effective phone number value for a protected application state.
  * If the user has declared a change, the updated values from the state are used;
  * otherwise, the values are sourced from the client application data.
  *
- * @param state - The renewal application state containing phone number and client application contact information.
+ * @param state - The protected application state containing phone number and client application contact information.
  * @returns The resolved primary phone number and optional alternate phone number.
  */
-export function resolveRenewalStatePhoneNumberValue(state: Required<PickDeep<ProtectedApplicationState, 'phoneNumber' | 'clientApplication.contactInformation.phoneNumber' | 'clientApplication.contactInformation.phoneNumberAlt'>>): {
+export function resolveProtectedStatePhoneNumberValue(state: SetRequired<PickDeep<ProtectedApplicationState, 'phoneNumber' | 'clientApplication.contactInformation.phoneNumber' | 'clientApplication.contactInformation.phoneNumberAlt'>, 'phoneNumber'>): {
   hasChanged: boolean;
   primary: string;
   alternate?: string;
@@ -604,9 +605,10 @@ export function resolveRenewalStatePhoneNumberValue(state: Required<PickDeep<Pro
     };
   }
 
-  // If hash changed is false, client application phone number must be defined, as the value would have been set on the
+  // If hasChanged is false, client application phone number must be defined, as the value would have been set on the
   // state when the user made a change to the phone number step, which requires client application phone number to be
   // defined.
+  invariant(state.clientApplication, 'Expected clientApplication to be defined when phoneNumber.hasChanged is false');
   invariant(state.clientApplication.contactInformation.phoneNumber, 'Expected clientApplication.contactInformation.phoneNumber to be defined when phoneNumber.hasChanged is false');
 
   return {
@@ -617,18 +619,18 @@ export function resolveRenewalStatePhoneNumberValue(state: Required<PickDeep<Pro
 }
 
 /**
- * Resolves the effective mailing address value for a renewal application state.
+ * Resolves the effective mailing address value for a protected application state.
  * If the user has declared a change, the updated values from the state are used;
  * otherwise, the values are sourced from the client application data.
  *
- * @param state - The renewal application state containing mailing address and client application contact information.
+ * @param state - The protected application state containing mailing address and client application contact information.
  * @param locale - The locale used to retrieve localized country and province/territory values.
  * @param countryService - Service for resolving localized country details.
  * @param provinceTerritoryStateService - Service for resolving localized province/territory/state details.
  * @returns The resolved mailing address including address, city, country, and optional postal code and province.
  */
-export async function resolveRenewalStateMailingAddressValue(
-  state: Required<
+export async function resolveProtectedStateMailingAddressValue(
+  state: SetRequired<
     PickDeep<
       ProtectedApplicationState,
       | 'mailingAddress'
@@ -637,7 +639,8 @@ export async function resolveRenewalStateMailingAddressValue(
       | 'clientApplication.contactInformation.mailingAddress.country'
       | 'clientApplication.contactInformation.mailingAddress.postalCode'
       | 'clientApplication.contactInformation.mailingAddress.province'
-    >
+    >,
+    'mailingAddress'
   >,
   locale: AppLocale,
   countryService: CountryService,
@@ -661,6 +664,12 @@ export async function resolveRenewalStateMailingAddressValue(
     };
   }
 
+  // If hasChanged is false, client application mailing address fields must be defined, as the value would have
+  // been set on the state when the user made a change to the mailing address step, which requires client
+  // application mailing address to be defined.
+  invariant(state.clientApplication, 'Expected clientApplication to be defined when mailingAddress.hasChanged is false');
+  invariant(state.clientApplication.contactInformation.mailingAddress, 'Expected clientApplication.contactInformation.mailingAddress to be defined when mailingAddress.hasChanged is false');
+
   return {
     hasChanged: false,
     address: state.clientApplication.contactInformation.mailingAddress.address,
@@ -672,18 +681,18 @@ export async function resolveRenewalStateMailingAddressValue(
 }
 
 /**
- * Resolves the effective home address value for a renewal application state.
+ * Resolves the effective home address value for a protected application state.
  * If the user has declared a change, the updated values from the state are used;
  * otherwise, the values are sourced from the client application data.
  *
- * @param state - The renewal application state containing home address and client application contact information.
+ * @param state - The protected application state containing home address and client application contact information.
  * @param locale - The locale used to retrieve localized country and province/territory values.
  * @param countryService - Service for resolving localized country details.
  * @param provinceTerritoryStateService - Service for resolving localized province/territory/state details.
  * @returns The resolved home address including address, city, country, and optional postal code and province.
  */
-export async function resolveRenewalStateHomeAddressValue(
-  state: Required<
+export async function resolveProtectedStateHomeAddressValue(
+  state: SetRequired<
     PickDeep<
       ProtectedApplicationState,
       | 'homeAddress'
@@ -692,7 +701,8 @@ export async function resolveRenewalStateHomeAddressValue(
       | 'clientApplication.contactInformation.homeAddress.country'
       | 'clientApplication.contactInformation.homeAddress.postalCode'
       | 'clientApplication.contactInformation.homeAddress.province'
-    >
+    >,
+    'homeAddress'
   >,
   locale: AppLocale,
   countryService: CountryService,
@@ -716,9 +726,10 @@ export async function resolveRenewalStateHomeAddressValue(
     };
   }
 
-  // If hash changed is false, client application home address fields must be defined, as the value would have
+  // If hasChanged is false, client application home address fields must be defined, as the value would have
   // been set on the state when the user made a change to the home address step, which requires client
   // application home address to be defined.
+  invariant(state.clientApplication, 'Expected clientApplication to be defined when homeAddress.hasChanged is false');
   invariant(state.clientApplication.contactInformation.homeAddress, 'Expected clientApplication.contactInformation.homeAddress to be defined when homeAddress.hasChanged is false');
 
   return {
@@ -732,31 +743,31 @@ export async function resolveRenewalStateHomeAddressValue(
 }
 
 /**
- * Resolves the effective email value for a renewal application state.
+ * Resolves the effective email value for a protected application state.
  * The state email (set by the user during the session) takes precedence over the
  * client application email on file.
  *
- * @param state - The renewal application state containing the optional email and client application contact information.
+ * @param state - The protected application state containing the optional email and client application contact information.
  * @returns The resolved email address, or `undefined` if neither is available.
  */
-export function resolveRenewalStateEmailValue(state: Pick<ProtectedApplicationState, 'email'> & Required<PickDeep<ProtectedApplicationState, 'clientApplication.contactInformation.email'>>): string | undefined {
-  return state.email ?? state.clientApplication.contactInformation.email;
+export function resolveProtectedStateEmailValue(state: PickDeep<ProtectedApplicationState, 'email' | 'clientApplication.contactInformation.email'>): string | undefined {
+  return state.email ?? state.clientApplication?.contactInformation.email;
 }
 
 /**
- * Resolves the effective dental benefits value for a renewal application state.
+ * Resolves the effective dental benefits value for a protected application state.
  * If the user has declared a change, the updated federal and provincial program selections from the state
  * are used; otherwise, the benefit IDs from the client application are matched against both federal
  * and provincial insurance plan services to determine the applicable plans.
  *
- * @param state - The renewal application state containing dental benefits and client application dental benefits.
+ * @param state - The protected application state containing dental benefits and client application dental benefits.
  * @param locale - The locale used to retrieve localized insurance plan details.
  * @param federalGovernmentInsurancePlanService - Service for resolving localized federal government insurance plans.
  * @param provincialGovernmentInsurancePlanService - Service for resolving localized provincial government insurance plans.
  * @returns The resolved federal and provincial government insurance plans, each of which may be `undefined` if not applicable.
  */
-export async function resolveRenewalStateDentalBenefitsValue(
-  state: Required<Pick<ProtectedApplicationState, 'dentalBenefits'>> & Required<PickDeep<ProtectedApplicationState, 'clientApplication.dentalBenefits'>>,
+export async function resolveProtectedStateDentalBenefitsValue(
+  state: SetRequired<PickDeep<ProtectedApplicationState, 'dentalBenefits' | 'clientApplication.dentalBenefits'>, 'dentalBenefits'>,
   locale: AppLocale,
   federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService,
   provincialGovernmentInsurancePlanService: ProvincialGovernmentInsurancePlanService,
@@ -777,6 +788,8 @@ export async function resolveRenewalStateDentalBenefitsValue(
     };
   }
 
+  // If hasChanged is false, client application dental benefits must be defined, as the value would have been set on the state when the user made a change to the dental benefits step, which requires client application dental benefits to be defined.
+  invariant(state.clientApplication, 'Expected clientApplication to be defined when hasChanged is false');
   invariant(state.clientApplication.dentalBenefits, 'Expected clientApplication.dentalBenefits to be defined when hasChanged is false');
 
   let federalGovernmentInsurancePlan: FederalGovernmentInsurancePlanLocalizedDto | undefined;
@@ -803,20 +816,20 @@ export async function resolveRenewalStateDentalBenefitsValue(
 }
 
 /**
- * Resolves the effective child dental benefits value for a renewal application state.
+ * Resolves the effective child dental benefits value for a protected application state.
  * If the user has declared a change, the updated federal and provincial program selections from the state
  * are used; otherwise, the benefit IDs from the client application are matched against both federal
  * and provincial insurance plan services to determine the applicable plans.
  *
- * @param childState - The renewal application state containing child dental benefits and client application child dental benefits.
+ * @param childState - The protected application state containing child dental benefits and client application child dental benefits.
  * @param locale - The locale used to retrieve localized insurance plan details.
  * @param federalGovernmentInsurancePlanService - Service for resolving localized federal government insurance plans.
  * @param provincialGovernmentInsurancePlanService - Service for resolving localized provincial government insurance plans.
  * @returns The resolved federal and provincial government insurance plans, each of which may be `undefined` if not applicable.
  */
-export async function resolveRenewalStateChildDentalBenefitsValue(
+export async function resolveProtectedStateChildDentalBenefitsValue(
   childState: Required<Pick<ProtectedApplicationState['children'][number], 'dentalBenefits'>>,
-  childClientApplication: Pick<NonNullable<ProtectedApplicationState['clientApplication']>['children'][number], 'dentalBenefits'>,
+  childClientApplication: Pick<NonNullable<ProtectedApplicationState['clientApplication']>['children'][number], 'dentalBenefits'> | undefined,
   locale: AppLocale,
   federalGovernmentInsurancePlanService: FederalGovernmentInsurancePlanService,
   provincialGovernmentInsurancePlanService: ProvincialGovernmentInsurancePlanService,
@@ -836,6 +849,11 @@ export async function resolveRenewalStateChildDentalBenefitsValue(
         : undefined,
     };
   }
+
+  // If hasChanged is false, child client application dental benefits must be defined, as the value would have been set
+  // on the state when the user made a change to the child dental benefits step, which requires child client application
+  // dental benefits to be defined.
+  invariant(childClientApplication, 'Expected childClientApplication to be defined when hasChanged is false');
 
   let federalGovernmentInsurancePlan: FederalGovernmentInsurancePlanLocalizedDto | undefined;
   let provincialGovernmentInsurancePlan: ProvincialGovernmentInsurancePlanLocalizedDto | undefined;
