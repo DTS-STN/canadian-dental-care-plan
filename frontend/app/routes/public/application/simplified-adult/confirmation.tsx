@@ -8,12 +8,12 @@ import { TYPES } from '~/.server/constants';
 import { getEligibilityStatus } from '~/.server/routes/helpers/base-application-route-helpers';
 import {
   clearPublicApplicationState,
-  resolveSimplifiedStateCommunicationPreferencesValue,
-  resolveSimplifiedStateDentalBenefitsValue,
-  resolveSimplifiedStateEmailValue,
-  resolveSimplifiedStateHomeAddressValue,
-  resolveSimplifiedStateMailingAddressValue,
-  resolveSimplifiedStatePhoneNumberValue,
+  resolvePublicStateCommunicationPreferencesValue,
+  resolvePublicStateDentalBenefitsValue,
+  resolvePublicStateEmailValue,
+  resolvePublicStateHomeAddressValue,
+  resolvePublicStateMailingAddressValue,
+  resolvePublicStatePhoneNumberValue,
   validateApplicationFlow,
 } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicApplicationSimplifiedAdultState } from '~/.server/routes/helpers/public-application-simplified-adult-route-helpers';
@@ -76,18 +76,18 @@ export async function loader({ context: { appContainer, session }, params, reque
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
   const sunLifeCommunicationMethodService = appContainer.get(TYPES.SunLifeCommunicationMethodService);
 
-  const phoneNumber = resolveSimplifiedStatePhoneNumberValue({ clientApplication: state.clientApplication, phoneNumber: state.phoneNumber });
-  const mailingAddress = await resolveSimplifiedStateMailingAddressValue({ clientApplication: state.clientApplication, mailingAddress: state.mailingAddress }, locale, countryService, provinceTerritoryStateService);
-  const homeAddress = await resolveSimplifiedStateHomeAddressValue({ clientApplication: state.clientApplication, homeAddress: state.homeAddress }, locale, countryService, provinceTerritoryStateService);
-  const communicationPreferences = resolveSimplifiedStateCommunicationPreferencesValue(
+  const phoneNumber = resolvePublicStatePhoneNumberValue({ clientApplication: state.clientApplication, phoneNumber: state.phoneNumber });
+  const mailingAddress = await resolvePublicStateMailingAddressValue({ clientApplication: state.clientApplication, mailingAddress: state.mailingAddress }, locale, countryService, provinceTerritoryStateService);
+  const homeAddress = await resolvePublicStateHomeAddressValue({ clientApplication: state.clientApplication, homeAddress: state.homeAddress }, locale, countryService, provinceTerritoryStateService);
+  const communicationPreferences = resolvePublicStateCommunicationPreferencesValue(
     { clientApplication: state.clientApplication, communicationPreferences: state.communicationPreferences },
     locale,
     languageService,
     sunLifeCommunicationMethodService,
     gcCommunicationMethodService,
   );
-  const email = resolveSimplifiedStateEmailValue({ clientApplication: state.clientApplication, email: state.email });
-  const dentalBenefits = await resolveSimplifiedStateDentalBenefitsValue({ dentalBenefits: state.dentalBenefits, clientApplication: state.clientApplication }, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
+  const email = resolvePublicStateEmailValue({ clientApplication: state.clientApplication, email: state.email });
+  const dentalBenefits = await resolvePublicStateDentalBenefitsValue({ dentalBenefits: state.dentalBenefits, clientApplication: state.clientApplication }, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,

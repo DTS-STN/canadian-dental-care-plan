@@ -9,12 +9,12 @@ import { TYPES } from '~/.server/constants';
 import { getEligibilityStatus } from '~/.server/routes/helpers/base-application-route-helpers';
 import {
   clearPublicApplicationState,
-  resolveSimplifiedStateChildDentalBenefitsValue,
-  resolveSimplifiedStateCommunicationPreferencesValue,
-  resolveSimplifiedStateEmailValue,
-  resolveSimplifiedStateHomeAddressValue,
-  resolveSimplifiedStateMailingAddressValue,
-  resolveSimplifiedStatePhoneNumberValue,
+  resolvePublicStateChildDentalBenefitsValue,
+  resolvePublicStateCommunicationPreferencesValue,
+  resolvePublicStateEmailValue,
+  resolvePublicStateHomeAddressValue,
+  resolvePublicStateMailingAddressValue,
+  resolvePublicStatePhoneNumberValue,
   validateApplicationFlow,
 } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicApplicationSimplifiedChildState } from '~/.server/routes/helpers/public-application-simplified-child-route-helpers';
@@ -76,17 +76,17 @@ export async function loader({ context: { appContainer, session }, params, reque
   const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
   const sunLifeCommunicationMethodService = appContainer.get(TYPES.SunLifeCommunicationMethodService);
 
-  const phoneNumber = resolveSimplifiedStatePhoneNumberValue({ clientApplication: state.clientApplication, phoneNumber: state.phoneNumber });
-  const mailingAddress = await resolveSimplifiedStateMailingAddressValue({ clientApplication: state.clientApplication, mailingAddress: state.mailingAddress }, locale, countryService, provinceTerritoryStateService);
-  const homeAddress = await resolveSimplifiedStateHomeAddressValue({ clientApplication: state.clientApplication, homeAddress: state.homeAddress }, locale, countryService, provinceTerritoryStateService);
-  const communicationPreferences = resolveSimplifiedStateCommunicationPreferencesValue(
+  const phoneNumber = resolvePublicStatePhoneNumberValue({ clientApplication: state.clientApplication, phoneNumber: state.phoneNumber });
+  const mailingAddress = await resolvePublicStateMailingAddressValue({ clientApplication: state.clientApplication, mailingAddress: state.mailingAddress }, locale, countryService, provinceTerritoryStateService);
+  const homeAddress = await resolvePublicStateHomeAddressValue({ clientApplication: state.clientApplication, homeAddress: state.homeAddress }, locale, countryService, provinceTerritoryStateService);
+  const communicationPreferences = resolvePublicStateCommunicationPreferencesValue(
     { clientApplication: state.clientApplication, communicationPreferences: state.communicationPreferences },
     locale,
     languageService,
     sunLifeCommunicationMethodService,
     gcCommunicationMethodService,
   );
-  const email = resolveSimplifiedStateEmailValue({ clientApplication: state.clientApplication, email: state.email });
+  const email = resolvePublicStateEmailValue({ clientApplication: state.clientApplication, email: state.email });
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -136,7 +136,7 @@ export async function loader({ context: { appContainer, session }, params, reque
       invariant(childApplication?.dentalBenefits, `Expected dental benefits for child with memberId ${childState.information?.memberId}`);
       invariant(childState.dentalInsurance, "Child's dental insurance must be defined");
 
-      const childDentalBenefits = await resolveSimplifiedStateChildDentalBenefitsValue({ dentalBenefits: childState.dentalBenefits }, childApplication, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
+      const childDentalBenefits = await resolvePublicStateChildDentalBenefitsValue({ dentalBenefits: childState.dentalBenefits }, childApplication, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
       const eligibility = getEligibilityStatus({
         hasPrivateDentalInsurance: childState.dentalInsurance.hasDentalInsurance,
         privateDentalInsuranceOnRecord: childApplication.privateDentalInsurance,
