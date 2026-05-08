@@ -6,7 +6,7 @@ import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationFullAdultState } from '~/.server/routes/helpers/public-application-full-adult-route-helpers';
-import { clearPublicApplicationState, getMemberIdForFullApplication, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { clearPublicApplicationState, getMemberIdForFullApplication, resolvePublicStateEmailValue, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { AppPageTitle } from '~/components/app-page-title';
@@ -80,7 +80,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
-    email: state.email,
+    email: resolvePublicStateEmailValue(state),
     communicationSunLifePreference: appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale),
     communicationGOCPreference: appContainer.get(TYPES.GCCommunicationMethodService).getLocalizedGCCommunicationMethodById(state.communicationPreferences.value.preferredNotificationMethod, locale),
   };
@@ -273,11 +273,6 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
                 <DefinitionListItem term={t(($) => $.confirm.altPhoneNumber)}>
                   <span className="text-nowrap">{userInfo.altPhoneNumber}</span>
                 </DefinitionListItem>
-                {userInfo.email && (
-                  <DefinitionListItem term={t(($) => $.confirm.email)}>
-                    <span className="text-nowrap">{userInfo.email}</span>
-                  </DefinitionListItem>
-                )}
                 <DefinitionListItem term={t(($) => $.confirm.mailing)}>
                   <Address
                     address={{
@@ -309,7 +304,7 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
                 <DefinitionListItem term={t(($) => $.confirm.langPref)}>{userInfo.preferredLanguage.name}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.sunLifeCommPrefTitle)}>{userInfo.communicationSunLifePreference.name}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.gocCommPrefTitle)}>{userInfo.communicationGOCPreference.name}</DefinitionListItem>
-                <DefinitionListItem term={t(($) => $.confirm.email)}>{userInfo.email}</DefinitionListItem>
+                {userInfo.email && <DefinitionListItem term={t(($) => $.confirm.email)}>{userInfo.email}</DefinitionListItem>}
               </DefinitionList>
             </section>
 

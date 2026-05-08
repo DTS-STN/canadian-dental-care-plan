@@ -312,9 +312,10 @@ describe('protected-application-route-helpers', () => {
   });
 
   describe('resolveProtectedStateEmailValue', () => {
-    it('returns state email when it is defined', () => {
+    it('returns state email when it is a valid email and emailVerified is true', () => {
       const state = {
         email: 'user@example.com',
+        emailVerified: true,
         clientApplication: { contactInformation: { email: 'client@example.com' } },
       } as const;
 
@@ -324,6 +325,27 @@ describe('protected-application-route-helpers', () => {
     it('falls back to client application email when state email is undefined', () => {
       const state = {
         email: undefined,
+        emailVerified: undefined,
+        clientApplication: { contactInformation: { email: 'client@example.com' } },
+      } as const;
+
+      expect(resolveProtectedStateEmailValue(state)).toBe('client@example.com');
+    });
+
+    it('falls back to client application email when state email is invalid', () => {
+      const state = {
+        email: 'not-a-valid-email',
+        emailVerified: true,
+        clientApplication: { contactInformation: { email: 'client@example.com' } },
+      } as const;
+
+      expect(resolveProtectedStateEmailValue(state)).toBe('client@example.com');
+    });
+
+    it('falls back to client application email when emailVerified is false', () => {
+      const state = {
+        email: 'user@example.com',
+        emailVerified: false,
         clientApplication: { contactInformation: { email: 'client@example.com' } },
       } as const;
 
@@ -333,7 +355,18 @@ describe('protected-application-route-helpers', () => {
     it('returns undefined when both state and client application emails are undefined', () => {
       const state = {
         email: undefined,
+        emailVerified: undefined,
         clientApplication: { contactInformation: { email: undefined } },
+      } as const;
+
+      expect(resolveProtectedStateEmailValue(state)).toBeUndefined();
+    });
+
+    it('returns undefined when clientApplication is undefined', () => {
+      const state = {
+        email: undefined,
+        emailVerified: undefined,
+        clientApplication: undefined,
       } as const;
 
       expect(resolveProtectedStateEmailValue(state)).toBeUndefined();
