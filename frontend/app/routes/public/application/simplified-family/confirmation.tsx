@@ -106,7 +106,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     preferredLanguage: communicationPreferences.preferredLanguage,
     communicationSunLifePreference: communicationPreferences.preferredMethodSunLife,
     communicationGOCPreference: communicationPreferences.preferredMethodGovernmentOfCanada,
-    contactInformationEmail: email,
+    email: email,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -355,9 +355,9 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
                 <DefinitionListItem term={t(($) => $.confirm.altPhoneNumber)}>
                   <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.altPhoneNumber : t(($) => $.confirm.noUpdate)}</span>
                 </DefinitionListItem>
-                {userInfo.contactInformationEmail && (
+                {userInfo.email && (
                   <DefinitionListItem term={t(($) => $.confirm.email)}>
-                    <span className="text-nowrap">{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t(($) => $.confirm.noUpdate)} </span>
+                    <span className="text-nowrap">{userInfo.hasCommunicationPreferencesChanged ? userInfo.email : t(($) => $.confirm.noUpdate)} </span>
                   </DefinitionListItem>
                 )}
                 <DefinitionListItem term={t(($) => $.confirm.mailing)}>
@@ -399,7 +399,7 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
                 <DefinitionListItem term={t(($) => $.confirm.langPref)}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.preferredLanguage.name : t(($) => $.confirm.noUpdate)}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.sunLifeCommPrefTitle)}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationSunLifePreference.name : t(($) => $.confirm.noUpdate)}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.gocCommPrefTitle)}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationGOCPreference.name : t(($) => $.confirm.noUpdate)}</DefinitionListItem>
-                <DefinitionListItem term={t(($) => $.confirm.email)}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.contactInformationEmail : t(($) => $.confirm.noUpdate)}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.confirm.email)}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.email : t(($) => $.confirm.noUpdate)}</DefinitionListItem>
               </DefinitionList>
             </section>
 

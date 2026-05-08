@@ -105,7 +105,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
-    contactInformationEmail: email,
+    email: email,
     communicationSunLifePreference: communicationPreferences.preferredMethodSunLife,
     memberId: state.applicantInformation.memberId,
   };
@@ -345,9 +345,9 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
                 <DefinitionListItem term={t(($) => $.confirm.altPhoneNumber)}>
                   <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
                 </DefinitionListItem>
-                {userInfo.contactInformationEmail && (
+                {userInfo.email && (
                   <DefinitionListItem term={t(($) => $.confirm.email)}>
-                    <span className="text-nowrap">{userInfo.contactInformationEmail} </span>
+                    <span className="text-nowrap">{userInfo.email} </span>
                   </DefinitionListItem>
                 )}
                 <DefinitionListItem term={t(($) => $.confirm.mailing)}>
@@ -380,7 +380,7 @@ export default function ProtectedRenewChildrenConfirmation({ loaderData, params 
               <DefinitionList border>
                 <DefinitionListItem term={t(($) => $.confirm.langPref)}>{userInfo.preferredLanguage.name}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.sunLifeCommPrefTitle)}>{userInfo.communicationSunLifePreference.name}</DefinitionListItem>
-                <DefinitionListItem term={t(($) => $.confirm.email)}>{userInfo.contactInformationEmail}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.confirm.email)}>{userInfo.email}</DefinitionListItem>
               </DefinitionList>
             </section>
           </section>
