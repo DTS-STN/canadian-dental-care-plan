@@ -60,6 +60,17 @@ export type TransformAdobeAnalyticsUrl = (url: string | URL) => URL;
 export type PageIdentifier = z.infer<typeof pageIdentifierSchema>;
 
 /**
+ * Options that control how layout components render their structure.
+ * These options are merged from parent to leaf routes, allowing child routes to override parent values.
+ */
+export interface LayoutOptions {
+  /**
+   * Whether the layout should wrap its children with a `<main>` element.
+   */
+  mainWrapper?: boolean;
+}
+
+/**
  * Common data returned from a route's handle object.
  */
 export interface RouteHandleData extends Record<string, unknown | undefined> {
@@ -67,6 +78,11 @@ export interface RouteHandleData extends Record<string, unknown | undefined> {
   i18nNamespaces?: I18nNamespaces;
   transformAdobeAnalyticsUrl?: TransformAdobeAnalyticsUrl;
   pageIdentifier?: PageIdentifier;
+  /**
+   * Layout options merged from parent to leaf routes.
+   * Child route values override parent values; unset properties are inherited from parents.
+   */
+  layoutOptions?: LayoutOptions;
 }
 
 export function useBreadcrumbs() {
@@ -108,6 +124,14 @@ export function usePageIdentifier() {
     .map((handle) => pageIdentifierSchema.safeParse(handle?.pageIdentifier))
     .map((result) => (result.success ? result.data : undefined))
     .reduce(coalesce);
+}
+
+export function useLayoutOptions(): LayoutOptions {
+  return useMatches()
+    .map(({ handle }) => handle as RouteHandleData | undefined)
+    .map((handle) => handle?.layoutOptions)
+    .filter((options) => options !== undefined)
+    .reduce<LayoutOptions>((merged, current) => ({ ...merged, ...current }), {});
 }
 
 export function findRouteById(id: string, routes: I18nRoute[] = i18nRoutes): I18nPageRoute | undefined {

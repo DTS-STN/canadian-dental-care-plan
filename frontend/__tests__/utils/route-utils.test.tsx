@@ -5,7 +5,7 @@ import { Outlet, createRoutesStub } from 'react-router';
 import { describe, expect, it } from 'vitest';
 
 import type { Breadcrumbs, BuildInfo, RouteHandleData } from '~/utils/route-utils';
-import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
+import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, useLayoutOptions, usePageIdentifier, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
 
 /*
  * @vitest-environment jsdom
@@ -264,5 +264,88 @@ describe('usePageIdentifier()', () => {
 
     const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual('"CDCP-0001"');
+  });
+});
+
+describe('useLayoutOptions()', () => {
+  it('expect empty object from useLayoutOptions() if the handles do not provide data', async () => {
+    const RoutesStub = createRoutesStub([
+      {
+        Component: () => <Outlet />,
+        children: [
+          {
+            Component: () => <div data-testid="data">{JSON.stringify(useLayoutOptions())}</div>,
+            path: '/',
+          },
+        ],
+      },
+    ]);
+
+    render(<RoutesStub />);
+
+    const element = await waitFor(async () => await screen.findByTestId('data'));
+    expect(element.textContent).toEqual('{}');
+  });
+
+  it('expect parent layoutOptions when leaf does not provide data', async () => {
+    const RoutesStub = createRoutesStub([
+      {
+        Component: () => <Outlet />,
+        handle: { layoutOptions: { mainWrapper: true } } satisfies RouteHandleData,
+        children: [
+          {
+            Component: () => <div data-testid="data">{JSON.stringify(useLayoutOptions())}</div>,
+            path: '/',
+          },
+        ],
+      },
+    ]);
+
+    render(<RoutesStub />);
+
+    const element = await waitFor(async () => await screen.findByTestId('data'));
+    expect(element.textContent).toEqual('{"mainWrapper":true}');
+  });
+
+  it('expect leaf layoutOptions to override parent layoutOptions', async () => {
+    const RoutesStub = createRoutesStub([
+      {
+        Component: () => <Outlet />,
+        handle: { layoutOptions: { mainWrapper: true } } satisfies RouteHandleData,
+        children: [
+          {
+            Component: () => <div data-testid="data">{JSON.stringify(useLayoutOptions())}</div>,
+            handle: { layoutOptions: { mainWrapper: false } } satisfies RouteHandleData,
+            path: '/',
+          },
+        ],
+      },
+    ]);
+
+    render(<RoutesStub />);
+
+    const element = await waitFor(async () => await screen.findByTestId('data'));
+    expect(element.textContent).toEqual('{"mainWrapper":false}');
+  });
+
+  it('expect merged layoutOptions when leaf provides a subset of properties', async () => {
+    const RoutesStub = createRoutesStub([
+      {
+        Component: () => <Outlet />,
+        handle: { layoutOptions: { mainWrapper: true } } satisfies RouteHandleData,
+        children: [
+          {
+            Component: () => <div data-testid="data">{JSON.stringify(useLayoutOptions())}</div>,
+            handle: { layoutOptions: {} } satisfies RouteHandleData,
+            path: '/',
+          },
+        ],
+      },
+    ]);
+
+    render(<RoutesStub />);
+
+    const element = await waitFor(async () => await screen.findByTestId('data'));
+    expect(element.textContent).toEqual('{"mainWrapper":true}');
   });
 });
