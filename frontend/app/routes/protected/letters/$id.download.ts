@@ -1,6 +1,6 @@
 import { data } from 'react-router';
 
-import contentDisposition from 'content-disposition';
+import { create } from 'content-disposition';
 import { Buffer } from 'node:buffer';
 
 import type { Route } from './+types/$id.download';
@@ -47,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     headers: {
       'Content-Type': 'application/pdf',
       'Content-Length': decodedPdfBytes.length.toString(),
-      'Content-Disposition': contentDisposition(documentName, { type: 'inline' }),
+      'Content-Disposition': create(documentName, { type: 'inline' }),
     },
   });
 }
