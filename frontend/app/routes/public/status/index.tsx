@@ -20,7 +20,7 @@ import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { useClientEnv, useFeature } from '~/root';
+import { useFeature } from '~/root';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -86,8 +86,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function StatusChecker({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const hCaptchaEnabled = useFeature('hcaptcha');
-  const { HCAPTCHA_SITE_KEY } = useClientEnv();
-  const { captchaRef, onLoad } = useHCaptcha();
+  const { captchaRef, onLoad, sitekey } = useHCaptcha();
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const errors = fetcher.data?.errors;
@@ -179,7 +178,7 @@ export default function StatusChecker({ loaderData, params }: Route.ComponentPro
           <ErrorSummary />
           <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
             <CsrfTokenInput />
-            {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} onLoad={onLoad} />}
+            {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={sitekey} ref={captchaRef} onLoad={onLoad} />}
             <InputRadios
               id="status-check-for"
               name="statusCheckFor"
