@@ -6,7 +6,17 @@ import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { loadProtectedApplicationIntakeAdultState } from '~/.server/routes/helpers/protected-application-intake-adult-route-helpers';
-import { clearProtectedApplicationState, resolveProtectedStateEmailValue, shouldSkipNewOrReturningMember, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import {
+  clearProtectedApplicationState,
+  resolveProtectedStateCommunicationPreferencesValue,
+  resolveProtectedStateDentalBenefitsValue,
+  resolveProtectedStateEmailValue,
+  resolveProtectedStateHomeAddressValue,
+  resolveProtectedStateMailingAddressValue,
+  resolveProtectedStatePhoneNumberValue,
+  shouldSkipNewOrReturningMember,
+  validateApplicationFlow,
+} from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { AppPageTitle } from '~/components/app-page-title';
@@ -60,31 +70,32 @@ export async function loader({ context: { appContainer, session }, params, reque
   const env = appContainer.get(TYPES.ClientConfig);
   const surveyLink = locale === 'en' ? env.CDCP_SURVEY_LINK_EN : env.CDCP_SURVEY_LINK_FR;
 
-  const selectedFederalGovernmentInsurancePlan = state.dentalBenefits.value.federalSocialProgram
-    ? await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).getLocalizedFederalGovernmentInsurancePlanById(state.dentalBenefits.value.federalSocialProgram, locale)
-    : undefined;
+  const countryService = appContainer.get(TYPES.CountryService);
+  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
+  const gcCommunicationMethodService = appContainer.get(TYPES.GCCommunicationMethodService);
+  const languageService = appContainer.get(TYPES.LanguageService);
+  const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
+  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
+  const sunLifeCommunicationMethodService = appContainer.get(TYPES.SunLifeCommunicationMethodService);
 
-  const selectedProvincialBenefits = state.dentalBenefits.value.provincialTerritorialSocialProgram
-    ? await appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService).getLocalizedProvincialGovernmentInsurancePlanById(state.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
-    : undefined;
-
-  const mailingProvinceTerritoryStateAbbr = state.mailingAddress.value.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.mailingAddress.value.province) : undefined;
-  const homeProvinceTerritoryStateAbbr = state.homeAddress.value.province ? await appContainer.get(TYPES.ProvinceTerritoryStateService).getProvinceTerritoryStateById(state.homeAddress.value.province) : undefined;
-  const countryMailing = await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.mailingAddress.value.country, locale);
-  const countryHome = await appContainer.get(TYPES.CountryService).getLocalizedCountryById(state.homeAddress.value.country, locale);
+  const phoneNumber = resolveProtectedStatePhoneNumberValue({ phoneNumber: state.phoneNumber });
+  const mailingAddress = await resolveProtectedStateMailingAddressValue({ mailingAddress: state.mailingAddress }, locale, countryService, provinceTerritoryStateService);
+  const homeAddress = await resolveProtectedStateHomeAddressValue({ homeAddress: state.homeAddress }, locale, countryService, provinceTerritoryStateService);
+  const communicationPreferences = resolveProtectedStateCommunicationPreferencesValue({ communicationPreferences: state.communicationPreferences }, locale, languageService, sunLifeCommunicationMethodService, gcCommunicationMethodService);
+  const dentalBenefits = await resolveProtectedStateDentalBenefitsValue({ dentalBenefits: state.dentalBenefits }, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
 
   const userInfo = {
     memberId: shouldSkipNewOrReturningMember(state) ? undefined : state.newOrReturningMember?.memberId,
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
-    phoneNumber: state.phoneNumber.value.primary,
-    altPhoneNumber: state.phoneNumber.value.alternate,
-    preferredLanguage: appContainer.get(TYPES.LanguageService).getLocalizedLanguageById(state.communicationPreferences.value.preferredLanguage, locale),
+    phoneNumber: phoneNumber.primary,
+    altPhoneNumber: phoneNumber.alternate,
+    preferredLanguage: communicationPreferences.preferredLanguage,
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
     email: resolveProtectedStateEmailValue(state),
-    communicationSunLifePreference: appContainer.get(TYPES.SunLifeCommunicationMethodService).getLocalizedSunLifeCommunicationMethodById(state.communicationPreferences.value.preferredMethod, locale),
+    communicationSunLifePreference: communicationPreferences.preferredMethodSunLife,
   };
 
   const spouseInfo = state.partnerInformation && {
@@ -93,25 +104,25 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const mailingAddressInfo = {
-    address: state.mailingAddress.value.address,
-    city: state.mailingAddress.value.city,
-    province: mailingProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.mailingAddress.value.postalCode,
-    country: countryMailing.name,
+    address: mailingAddress.address,
+    city: mailingAddress.city,
+    province: mailingAddress.province?.abbr,
+    postalCode: mailingAddress.postalCode,
+    country: mailingAddress.country.name,
   };
 
   const homeAddressInfo = {
-    address: state.homeAddress.value.address,
-    city: state.homeAddress.value.city,
-    province: homeProvinceTerritoryStateAbbr?.abbr,
-    postalCode: state.homeAddress.value.postalCode,
-    country: countryHome.name,
+    address: homeAddress.address,
+    city: homeAddress.city,
+    province: homeAddress.province?.abbr,
+    postalCode: homeAddress.postalCode,
+    country: homeAddress.country.name,
   };
 
   const dentalInsurance = {
     accessToDentalInsurance: state.dentalInsurance.hasDentalInsurance,
-    selectedFederalBenefits: selectedFederalGovernmentInsurancePlan?.name,
-    selectedProvincialBenefits: selectedProvincialBenefits?.name,
+    selectedFederalBenefits: dentalBenefits.federalGovernmentInsurancePlan?.name,
+    selectedProvincialBenefits: dentalBenefits.provincialGovernmentInsurancePlan?.name,
   };
 
   const meta = {

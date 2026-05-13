@@ -431,7 +431,7 @@ export function isWithinRenewalPeriod(date: Date = new Date()): boolean {
  * @returns The resolved preferred language, Sun Life communication method, and Government of Canada communication method.
  */
 export function resolvePublicStateCommunicationPreferencesValue(
-  state: Required<PickDeep<PublicApplicationState, 'communicationPreferences' | 'clientApplication.communicationPreferences'>>,
+  state: SetRequired<PickDeep<PublicApplicationState, 'communicationPreferences' | 'clientApplication.communicationPreferences'>, 'communicationPreferences'>,
   locale: AppLocale,
   languageService: LanguageService,
   sunLifeCommunicationMethodService: SunLifeCommunicationMethodService,
@@ -454,6 +454,7 @@ export function resolvePublicStateCommunicationPreferencesValue(
   // If hasChanged is false, client application communication preferences must be defined, as the value would have
   // been set on the state when the user made a change to the communication preferences step, which requires client
   // application communication preferences to be defined.
+  invariant(state.clientApplication, 'Expected clientApplication to be defined when communicationPreferences.hasChanged is false');
   invariant(state.clientApplication.communicationPreferences.preferredLanguage, 'Expected clientApplication.communicationPreferences.preferredLanguage to be defined when communicationPreferences.hasChanged is false');
   invariant(state.clientApplication.communicationPreferences.preferredMethodSunLife, 'Expected clientApplication.communicationPreferences.preferredMethodSunLife to be defined when communicationPreferences.hasChanged is false');
   invariant(state.clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada, 'Expected clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada to be defined when communicationPreferences.hasChanged is false');
