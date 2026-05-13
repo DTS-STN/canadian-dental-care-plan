@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import { useParams } from 'react-router';
 import type { To } from 'react-router';
@@ -6,8 +6,11 @@ import type { To } from 'react-router';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
+import type { SetOptional } from 'type-fest';
 
 import { InlineLink } from './inline-link';
+
+import { getClientEnv } from '~/utils/env-utils';
 
 interface BreadcrumbsProps {
   className?: string;
@@ -47,4 +50,49 @@ function Breadcrumb({ children, routeId, to }: { children: ReactNode; routeId?: 
   return routeId === undefined && to === undefined
     ? <span property="name">{children}</span>
     : <InlineLink routeId={routeId} params={params} to={to} property="item" typeof="WebPage"><span property="name">{children}</span></InlineLink>;
+}
+
+export function ProtectedPageBreadcrumbs({ items, ...props }: SetOptional<ComponentProps<typeof Breadcrumbs>, 'items'>) {
+  const { t } = useTranslation('gcweb');
+  const { SCCH_BASE_URI } = getClientEnv();
+
+  return (
+    <Breadcrumbs
+      {...props}
+      items={[
+        {
+          content: t(($) => $.breadcrumbs.dashboard),
+          to: t(($) => $.header.menuDashboardHref, { baseUri: SCCH_BASE_URI }),
+        },
+        ...(items ?? []),
+      ]}
+    />
+  );
+}
+
+export function PublicPageBreadcrumbs(props: OmitStrict<ComponentProps<typeof Breadcrumbs>, 'items'>) {
+  const { t } = useTranslation('gcweb');
+  return (
+    <Breadcrumbs
+      {...props}
+      items={[
+        {
+          content: t(($) => $.breadcrumbs.canadaCa),
+          to: t(($) => $.breadcrumbs.canadaCaUrl),
+        },
+        {
+          content: t(($) => $.breadcrumbs.benefits),
+          to: t(($) => $.breadcrumbs.benefitsUrl),
+        },
+        {
+          content: t(($) => $.breadcrumbs.dentalCoverage),
+          to: t(($) => $.breadcrumbs.dentalCoverageUrl),
+        },
+        {
+          content: t(($) => $.breadcrumbs.canadianDentalCarePlan),
+          to: t(($) => $.breadcrumbs.canadianDentalCarePlanUrl),
+        },
+      ]}
+    />
+  );
 }

@@ -7,7 +7,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Banner } from '../banner';
 
-import { Breadcrumbs } from '~/components/breadcrumbs';
+import { PublicPageBreadcrumbs } from '~/components/breadcrumbs';
 import { InlineLink } from '~/components/inline-link';
 import { PageDetails } from '~/components/page-details';
 import { PageHeaderBrand } from '~/components/page-header-brand';
@@ -17,6 +17,7 @@ import { useBrowserCompatiblityBanner, useCurrentLanguage } from '~/hooks';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
+import { useLayoutOptions } from '~/utils/route-utils';
 import type { I18nNamespaces } from '~/utils/route-utils';
 
 export const i18nNamespaces = ['gcweb'] satisfies I18nNamespaces;
@@ -26,10 +27,12 @@ export const i18nNamespaces = ['gcweb'] satisfies I18nNamespaces;
  * see: https://wet-boew.github.io/GCWeb/templates/application/application-docs-en.html
  */
 export function PublicLayout({ children }: PropsWithChildren) {
+  const { breadcrumbs } = useLayoutOptions();
   return (
     <>
       <PageHeader />
-      <PageBreadcrumbs />
+      {breadcrumbs && <div className="my-4 print:hidden">{breadcrumbs}</div>}
+      <PublicPageBreadcrumbs className="my-4 print:hidden" />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         {children}
         <PageDetails />
@@ -55,33 +58,6 @@ function PageHeader() {
       {useFeature('show-prototype-banner') && <Banner alert={t(($) => $.header.banner.alert)} description={t(($) => $.header.banner.desc)} />}
       <PageHeaderBrand headerLogoUrl={headerLogoUrl} />
     </header>
-  );
-}
-
-function PageBreadcrumbs() {
-  const { t } = useTranslation(i18nNamespaces);
-  return (
-    <Breadcrumbs
-      className="my-4 print:hidden"
-      items={[
-        {
-          content: t(($) => $.breadcrumbs.canadaCa),
-          to: t(($) => $.breadcrumbs.canadaCaUrl),
-        },
-        {
-          content: t(($) => $.breadcrumbs.benefits),
-          to: t(($) => $.breadcrumbs.benefitsUrl),
-        },
-        {
-          content: t(($) => $.breadcrumbs.dentalCoverage),
-          to: t(($) => $.breadcrumbs.dentalCoverageUrl),
-        },
-        {
-          content: t(($) => $.breadcrumbs.canadianDentalCarePlan),
-          to: t(($) => $.breadcrumbs.canadianDentalCarePlanUrl),
-        },
-      ]}
-    />
   );
 }
 
