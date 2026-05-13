@@ -28,18 +28,6 @@ export type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByName
  */
 export const coalesce = <T>(previousValue?: T, currentValue?: T) => currentValue ?? previousValue;
 
-const breadcrumbsSchema = z
-  .array(
-    z
-      .object({
-        labelI18nKey: z.custom<ParsedKeysByNamespaces>(),
-        routeId: z.string().optional(),
-        to: z.string().optional(),
-      })
-      .readonly(),
-  )
-  .readonly();
-
 const buildInfoSchema = z
   .object({
     buildDate: z.string(),
@@ -50,8 +38,6 @@ const buildInfoSchema = z
   .readonly();
 
 const pageIdentifierSchema = z.string().readonly();
-
-export type Breadcrumbs = z.infer<typeof breadcrumbsSchema>;
 
 export type BuildInfo = z.infer<typeof buildInfoSchema>;
 
@@ -82,14 +68,12 @@ export interface LayoutOptions {
 
 const DEFAULT_LAYOUT_OPTIONS: LayoutOptions = {
   mainWrapper: true,
-  breadcrumbs: undefined,
 };
 
 /**
  * Common data returned from a route's handle object.
  */
 export interface RouteHandleData extends Record<string, unknown | undefined> {
-  breadcrumbs?: Breadcrumbs;
   i18nNamespaces?: I18nNamespaces;
   transformAdobeAnalyticsUrl?: TransformAdobeAnalyticsUrl;
   pageIdentifier?: PageIdentifier;
@@ -98,16 +82,6 @@ export interface RouteHandleData extends Record<string, unknown | undefined> {
    * Child route values override parent values; unset properties are inherited from parents.
    */
   layoutOptions?: Partial<LayoutOptions>;
-}
-
-export function useBreadcrumbs() {
-  return (
-    useMatches()
-      .map((route) => route.handle as RouteHandleData | undefined)
-      .map((handle) => breadcrumbsSchema.safeParse(handle?.breadcrumbs))
-      .map((result) => (result.success ? result.data : undefined))
-      .reduce(coalesce) ?? []
-  );
 }
 
 export function useBuildInfo() {

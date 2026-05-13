@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { JSX, ReactNode } from 'react';
 
 import { data, useFetcher, useNavigate } from 'react-router';
 
@@ -14,6 +14,7 @@ import type { ClientApplicationDto } from '~/.server/domain/dtos';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { AppPageTitle } from '~/components/app-page-title';
+import { ProtectedPageBreadcrumbs } from '~/components/breadcrumbs';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
@@ -32,10 +33,24 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'protectedProfile:communicationPreferences.pageTitle', routeId: 'protected/profile/communication-preferences' }],
   i18nNamespaces: ['protectedProfile', 'gcweb'],
+  layoutOptions: { breadcrumbs: <LayoutBreadcrumbs /> },
   pageIdentifier: pageIds.protected.profile.editCommunicationPreferences,
 } as const satisfies RouteHandleData;
+
+function LayoutBreadcrumbs(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return (
+    <ProtectedPageBreadcrumbs
+      items={[
+        {
+          content: t(($) => $.communicationPreferences.pageTitle),
+          routeId: 'protected/profile/communication-preferences',
+        },
+      ]}
+    />
+  );
+}
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 

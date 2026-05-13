@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import type { JSX } from 'react';
 
 import { redirect, useFetcher } from 'react-router';
 
@@ -17,6 +18,7 @@ import type { DocumentUploadService } from '~/.server/domain/services';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { AppPageTitle } from '~/components/app-page-title';
+import { ProtectedPageBreadcrumbs } from '~/components/breadcrumbs';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
@@ -48,10 +50,24 @@ type DocumentUploadSchemaOuput = z.output<DocumentUploadSchema>;
 type DocumentUploadSchemaErrorTree = z.core.$ZodErrorTree<DocumentUploadSchemaOuput>;
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'documents:index.pageTitle', routeId: 'protected/documents/index' }],
   i18nNamespaces: ['documents', 'gcweb'],
+  layoutOptions: { breadcrumbs: <LayoutBreadcrumbs /> },
   pageIdentifier: pageIds.protected.documents.upload,
 } as const satisfies RouteHandleData;
+
+function LayoutBreadcrumbs(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return (
+    <ProtectedPageBreadcrumbs
+      items={[
+        {
+          content: t(($) => $.index.pageTitle),
+          routeId: 'protected/documents/index',
+        },
+      ]}
+    />
+  );
+}
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 

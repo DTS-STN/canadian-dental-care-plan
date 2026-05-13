@@ -11,7 +11,6 @@ import { AppLink } from '../app-link';
 import { Banner } from '../banner';
 import { ButtonLink } from '../buttons';
 
-import { ProtectedPageBreadcrumbs } from '~/components/breadcrumbs';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '~/components/dropdown-menu';
 import { InlineLink } from '~/components/inline-link';
 import { PageDetails } from '~/components/page-details';
@@ -22,8 +21,7 @@ import { useBrowserCompatiblityBanner } from '~/hooks';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
-import { translateFromKey } from '~/utils/locale-utils';
-import { useBreadcrumbs, useLayoutOptions } from '~/utils/route-utils';
+import { useLayoutOptions } from '~/utils/route-utils';
 import type { I18nNamespaces } from '~/utils/route-utils';
 
 export const i18nNamespaces = ['gcweb'] satisfies I18nNamespaces;
@@ -38,7 +36,6 @@ export function ProtectedLayout({ children }: PropsWithChildren) {
     <>
       <PageHeader />
       {breadcrumbs && <div className="my-4">{breadcrumbs}</div>}
-      <PageBreadcrumbs />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         {children}
         <PageDetails />
@@ -153,21 +150,6 @@ function PageHeader() {
         </ButtonLink>
       </div>
     </header>
-  );
-}
-
-function PageBreadcrumbs() {
-  const { i18n } = useTranslation(i18nNamespaces);
-  const breadcrumbs = useBreadcrumbs();
-  return (
-    <ProtectedPageBreadcrumbs
-      className="my-4"
-      items={breadcrumbs.map((item) => ({
-        content: translateFromKey(i18n, item.labelI18nKey),
-        routeId: item.routeId,
-        to: item.to,
-      }))}
-    />
   );
 }
 

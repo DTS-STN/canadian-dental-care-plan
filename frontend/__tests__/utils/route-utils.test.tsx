@@ -4,8 +4,8 @@ import { Outlet, createRoutesStub } from 'react-router';
 
 import { describe, expect, it } from 'vitest';
 
-import type { Breadcrumbs, BuildInfo, RouteHandleData } from '~/utils/route-utils';
-import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, useLayoutOptions, usePageIdentifier, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
+import type { BuildInfo, RouteHandleData } from '~/utils/route-utils';
+import { coalesce, useBuildInfo, useI18nNamespaces, useLayoutOptions, usePageIdentifier, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
 
 /*
  * @vitest-environment jsdom
@@ -26,56 +26,6 @@ describe('coalesce<T> reducer', () => {
 
   it('expect current from previous and current', () => {
     expect(coalesce('previous', 'current')).toBe('current');
-  });
-});
-
-describe('useBreadcrumbs()', () => {
-  it('expect no breadcrumbs from useBreadcrumbs() if the loaders do not provide data', async () => {
-    const RoutesStub = createRoutesStub([
-      {
-        Component: () => <Outlet />,
-        children: [
-          {
-            Component: () => <div data-testid="data">{JSON.stringify(useBreadcrumbs())}</div>,
-            path: '/',
-          },
-        ],
-      },
-    ]);
-
-    render(<RoutesStub />);
-
-    const element = await waitFor(async () => await screen.findByTestId('data'));
-    expect(element.textContent).toEqual('[]');
-  });
-
-  it('expect correctly coalesced breadcrumbs from useBreadcrumbs() if the loaders provide data', async () => {
-    const breadcrumbs: Breadcrumbs = [
-      { labelI18nKey: 'gcweb:breadcrumbs.canadaCa', to: 'canada.ca' },
-      { labelI18nKey: 'gcweb:breadcrumbs.home', to: '/home' },
-      { labelI18nKey: 'gcweb:breadcrumbs.benefits', to: '/benefits' },
-    ];
-
-    const RoutesStub = createRoutesStub([
-      {
-        Component: () => <Outlet />,
-        handle: {
-          breadcrumbs: [{ labelI18nKey: 'gcweb:breadcrumbs.home' }],
-        } satisfies RouteHandleData,
-        children: [
-          {
-            Component: () => <div data-testid="data">{JSON.stringify(useBreadcrumbs())}</div>,
-            handle: { breadcrumbs } satisfies RouteHandleData,
-            path: '/',
-          },
-        ],
-      },
-    ]);
-
-    render(<RoutesStub />);
-
-    const element = await waitFor(async () => await screen.findByTestId('data'));
-    expect(element.textContent).toEqual(JSON.stringify(breadcrumbs));
   });
 });
 

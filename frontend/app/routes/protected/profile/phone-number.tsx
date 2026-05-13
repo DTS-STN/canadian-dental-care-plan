@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 import { data, redirect, useFetcher } from 'react-router';
 
 import { useTranslation } from 'react-i18next';
@@ -10,6 +12,7 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { phoneSchema } from '~/.server/validation/phone-schema';
 import { AppPageTitle } from '~/components/app-page-title';
+import { ProtectedPageBreadcrumbs } from '~/components/breadcrumbs';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
@@ -24,10 +27,24 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'protectedProfile:contactInformation.pageTitle', routeId: 'protected/profile/contact-information' }],
   i18nNamespaces: ['protectedProfile', 'gcweb'],
+  layoutOptions: { breadcrumbs: <LayoutBreadcrumbs /> },
   pageIdentifier: pageIds.protected.profile.phoneNumber,
 } as const satisfies RouteHandleData;
+
+function LayoutBreadcrumbs(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return (
+    <ProtectedPageBreadcrumbs
+      items={[
+        {
+          content: t(($) => $.contactInformation.pageTitle),
+          routeId: 'protected/profile/contact-information',
+        },
+      ]}
+    />
+  );
+}
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 

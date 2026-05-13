@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { JSX } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
@@ -12,6 +13,7 @@ import { TYPES } from '~/.server/constants';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { AppPageTitle } from '~/components/app-page-title';
+import { ProtectedPageBreadcrumbs } from '~/components/breadcrumbs';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
@@ -44,11 +46,25 @@ const HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION = {
 } as const;
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'protectedProfile:editChildDentalBenefits.breadcrumb', routeId: 'protected/profile/dental-benefits' }],
   i18nNamespaces: ['protectedProfile', 'gcweb'],
+  layoutOptions: { breadcrumbs: <LayoutBreadcrumbs /> },
   transformAdobeAnalyticsUrl,
   pageIdentifier: pageIds.protected.profile.editChildDentalBenefits,
 } as const satisfies RouteHandleData;
+
+function LayoutBreadcrumbs(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return (
+    <ProtectedPageBreadcrumbs
+      items={[
+        {
+          content: t(($) => $.editChildDentalBenefits.breadcrumb),
+          routeId: 'protected/profile/dental-benefits',
+        },
+      ]}
+    />
+  );
+}
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {
   return getTitleMetaTags(loaderData.meta.title, loaderData.meta.dcTermsTitle);

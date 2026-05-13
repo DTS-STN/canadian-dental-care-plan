@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import type { JSX } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
@@ -13,6 +14,7 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
 import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 import { AppPageTitle } from '~/components/app-page-title';
+import { ProtectedPageBreadcrumbs } from '~/components/breadcrumbs';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogTrigger } from '~/components/dialog';
@@ -39,10 +41,24 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'protectedProfile:contactInformation.pageTitle', routeId: 'protected/profile/contact-information' }],
   i18nNamespaces: ['protectedProfile', 'gcweb'],
+  layoutOptions: { breadcrumbs: <LayoutBreadcrumbs /> },
   pageIdentifier: pageIds.protected.profile.editHomeAddress,
 } as const satisfies RouteHandleData;
+
+function LayoutBreadcrumbs(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return (
+    <ProtectedPageBreadcrumbs
+      items={[
+        {
+          content: t(($) => $.contactInformation.pageTitle),
+          routeId: 'protected/profile/contact-information',
+        },
+      ]}
+    />
+  );
+}
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 

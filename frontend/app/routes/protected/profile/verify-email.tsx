@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import type { JSX } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
@@ -12,6 +13,7 @@ import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { AppPageTitle } from '~/components/app-page-title';
+import { ProtectedPageBreadcrumbs } from '~/components/breadcrumbs';
 import { Button, ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
@@ -45,13 +47,22 @@ function requireProfileEmailAddressFlowState({ session, params }: { session: Rou
 }
 
 export const handle = {
-  breadcrumbs: [
-    { labelI18nKey: 'protectedProfile:contactInformation.pageTitle', routeId: 'protected/profile/contact-information' },
-    { labelI18nKey: 'protectedProfile:email.pageTitle', routeId: 'protected/profile/contact/email-address' },
-  ],
   i18nNamespaces: ['protectedProfile', 'gcweb'],
+  layoutOptions: { breadcrumbs: <LayoutBreadcrumbs /> },
   pageIdentifier: pageIds.protected.profile.verifyEmail,
 } as const satisfies RouteHandleData;
+
+function LayoutBreadcrumbs(): JSX.Element {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return (
+    <ProtectedPageBreadcrumbs
+      items={[
+        { content: t(($) => $.contactInformation.pageTitle), routeId: 'protected/profile/contact-information' },
+        { content: t(($) => $.email.pageTitle), routeId: 'protected/profile/contact/email-address' },
+      ]}
+    />
+  );
+}
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
