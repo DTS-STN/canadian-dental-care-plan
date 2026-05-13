@@ -1,6 +1,7 @@
 import { data, redirect, useFetcher } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Trans, useTranslation } from 'react-i18next';
 import * as z from 'zod';
 
@@ -8,7 +9,7 @@ import type { Route } from './+types/submit';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationFullChildStateForReview } from '~/.server/routes/helpers/public-application-full-child-route-helpers';
-import { savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { clearPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { AppPageTitle } from '~/components/app-page-title';
@@ -21,8 +22,9 @@ import { InlineLink } from '~/components/inline-link';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { LoadingButton } from '~/components/loading-button';
 import { NavigationButtonLink } from '~/components/navigation-buttons';
-import { useFetcherSubmissionState } from '~/hooks';
+import { useFetcherSubmissionState, useHCaptcha } from '~/hooks';
 import { pageIds } from '~/page-ids';
+import { useFeature } from '~/root';
 import { ProgressStepper } from '~/routes/public/application/full-children/progress-stepper';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -88,6 +90,10 @@ export async function action({ context: { appContainer, session }, request, para
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
+  await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
+    clearPublicApplicationState({ params, session });
+    throw redirect(getPathById('public/unable-to-process-request', params));
+  });
 
   const submitTermsSchema = z.object({
     acknowledgeInfo: z.literal(true, {
@@ -131,6 +137,27 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
 
   const errors = fetcher.data?.errors;
 
+  const hCaptchaEnabled = useFeature('hcaptcha');
+  const { captchaRef, onLoad, sitekey } = useHCaptcha();
+
+  async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    if (hCaptchaEnabled && captchaRef.current) {
+      try {
+        const response = captchaRef.current.getResponse();
+        formData.set('h-captcha-response', response);
+      } catch {
+        /* intentionally ignore and proceed with submission */
+      } finally {
+        captchaRef.current.resetCaptcha();
+      }
+    }
+
+    await fetcher.submit(formData, { method: 'POST' });
+  }
+
   const eligibilityLink = <InlineLink to={t(($) => $.submit.doYouQualifyHref)} className="external-link" newTabIndicator target="_blank" />;
 
   return (
@@ -165,8 +192,9 @@ export default function NewChildrenSubmit({ loaderData, params }: Route.Componen
               <p>
                 <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.applicationFullChild.submit.reviewEligibilityCriteria} components={{ eligibilityLink }} />
               </p>
-              <fetcher.Form method="post" noValidate>
+              <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
                 <CsrfTokenInput />
+                {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={sitekey} ref={captchaRef} onLoad={onLoad} />}
                 <div className="space-y-2">
                   <InputCheckbox id="acknowledge-info" name="acknowledgeInfo" value={CHECKBOX_VALUE.yes} errorMessage={errors?.acknowledgeInfo} required>
                     {t(($) => $.submit.infoIsCorrect)}
