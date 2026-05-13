@@ -234,17 +234,22 @@ describe('useLayoutOptions()', () => {
     render(<RoutesStub />);
 
     const element = await waitFor(async () => await screen.findByTestId('data'));
-    expect(element.textContent).toEqual('{"mainWrapper":true}');
+    expect(element.textContent).toEqual('{}');
   });
 
   it('returns parent layoutOptions from useLayoutOptions() when leaf does not provide data', async () => {
     const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
-        handle: { layoutOptions: { mainWrapper: true } } satisfies RouteHandleData,
+        handle: {
+          layoutOptions: { breadcrumbs: <span>parent breadcrumbs</span> },
+        } satisfies RouteHandleData,
         children: [
           {
-            Component: () => <div data-testid="data">{JSON.stringify(useLayoutOptions())}</div>,
+            Component: () => {
+              const { breadcrumbs } = useLayoutOptions();
+              return <div data-testid="data">{breadcrumbs}</div>;
+            },
             path: '/',
           },
         ],
@@ -253,19 +258,26 @@ describe('useLayoutOptions()', () => {
 
     render(<RoutesStub />);
 
-    const element = await waitFor(async () => await screen.findByTestId('data'));
-    expect(element.textContent).toEqual('{"mainWrapper":true}');
+    await waitFor(async () => await screen.findByTestId('data'));
+    expect(screen.getByText('parent breadcrumbs')).toBeInTheDocument();
   });
 
   it('expect leaf layoutOptions to override parent layoutOptions', async () => {
     const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
-        handle: { layoutOptions: { mainWrapper: true } } satisfies RouteHandleData,
+        handle: {
+          layoutOptions: { breadcrumbs: <span>parent breadcrumbs</span> },
+        } satisfies RouteHandleData,
         children: [
           {
-            Component: () => <div data-testid="data">{JSON.stringify(useLayoutOptions())}</div>,
-            handle: { layoutOptions: { mainWrapper: false } } satisfies RouteHandleData,
+            Component: () => {
+              const { breadcrumbs } = useLayoutOptions();
+              return <div data-testid="data">{breadcrumbs}</div>;
+            },
+            handle: {
+              layoutOptions: { breadcrumbs: <span>child breadcrumbs</span> },
+            } satisfies RouteHandleData,
             path: '/',
           },
         ],
@@ -274,18 +286,24 @@ describe('useLayoutOptions()', () => {
 
     render(<RoutesStub />);
 
-    const element = await waitFor(async () => await screen.findByTestId('data'));
-    expect(element.textContent).toEqual('{"mainWrapper":false}');
+    await waitFor(async () => await screen.findByTestId('data'));
+    expect(screen.queryByText('parent breadcrumbs')).not.toBeInTheDocument();
+    expect(screen.getByText('child breadcrumbs')).toBeInTheDocument();
   });
 
   it('expect merged layoutOptions when leaf provides a subset of properties', async () => {
     const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
-        handle: { layoutOptions: { mainWrapper: true } } satisfies RouteHandleData,
+        handle: {
+          layoutOptions: { breadcrumbs: <span>parent breadcrumbs</span> },
+        } satisfies RouteHandleData,
         children: [
           {
-            Component: () => <div data-testid="data">{JSON.stringify(useLayoutOptions())}</div>,
+            Component: () => {
+              const { breadcrumbs } = useLayoutOptions();
+              return <div data-testid="data">{breadcrumbs}</div>;
+            },
             handle: { layoutOptions: {} } satisfies RouteHandleData,
             path: '/',
           },
@@ -295,8 +313,8 @@ describe('useLayoutOptions()', () => {
 
     render(<RoutesStub />);
 
-    const element = await waitFor(async () => await screen.findByTestId('data'));
-    expect(element.textContent).toEqual('{"mainWrapper":true}');
+    await waitFor(async () => await screen.findByTestId('data'));
+    expect(screen.getByText('parent breadcrumbs')).toBeInTheDocument();
   });
 
   it('returns undefined breadcrumbs from useLayoutOptions() when no handle provides layoutOptions', async () => {
@@ -319,68 +337,5 @@ describe('useLayoutOptions()', () => {
 
     const element = await waitFor(async () => await screen.findByTestId('data'));
     expect(element.textContent).toEqual('no-breadcrumbs');
-  });
-
-  it('renders breadcrumbs ReactNode from useLayoutOptions() when a handle provides it', async () => {
-    const RoutesStub = createRoutesStub([
-      {
-        Component: () => <Outlet />,
-        handle: {
-          layoutOptions: {
-            mainWrapper: true,
-            breadcrumbs: <span>route breadcrumbs</span>,
-          },
-        } satisfies RouteHandleData,
-        children: [
-          {
-            Component: () => {
-              const { breadcrumbs } = useLayoutOptions();
-              return <div data-testid="data">{breadcrumbs}</div>;
-            },
-            path: '/',
-          },
-        ],
-      },
-    ]);
-
-    render(<RoutesStub />);
-
-    await waitFor(async () => await screen.findByTestId('data'));
-    expect(screen.getByText('route breadcrumbs')).toBeInTheDocument();
-  });
-
-  it('leaf breadcrumbs override parent breadcrumbs in useLayoutOptions()', async () => {
-    const RoutesStub = createRoutesStub([
-      {
-        Component: () => <Outlet />,
-        handle: {
-          layoutOptions: {
-            mainWrapper: true,
-            breadcrumbs: <span>parent breadcrumbs</span>,
-          },
-        } satisfies RouteHandleData,
-        children: [
-          {
-            Component: () => {
-              const { breadcrumbs } = useLayoutOptions();
-              return <div data-testid="data">{breadcrumbs}</div>;
-            },
-            handle: {
-              layoutOptions: {
-                mainWrapper: true,
-                breadcrumbs: <span>child breadcrumbs</span>,
-              },
-            } satisfies RouteHandleData,
-            path: '/',
-          },
-        ],
-      },
-    ]);
-
-    render(<RoutesStub />);
-
-    await waitFor(async () => await screen.findByTestId('data'));
-    expect(screen.queryByText('parent breadcrumbs')).not.toBeInTheDocument();
-    expect(screen.getByText('child breadcrumbs')).toBeInTheDocument();
   });
 });

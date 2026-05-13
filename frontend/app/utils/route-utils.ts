@@ -53,12 +53,6 @@ export type PageIdentifier = z.infer<typeof pageIdentifierSchema>;
  */
 export interface LayoutOptions {
   /**
-   * Whether the layout should wrap its children with a `<main>` element.
-   * @default true
-   */
-  mainWrapper: boolean;
-
-  /**
    * Breadcrumbs to render in the layout. Route handles provide a `<Breadcrumbs>` ReactNode here,
    * which the layout renders directly — replacing the previous array-based breadcrumb approach.
    * @default undefined
@@ -66,9 +60,7 @@ export interface LayoutOptions {
   breadcrumbs?: ReactNode;
 }
 
-const DEFAULT_LAYOUT_OPTIONS: LayoutOptions = {
-  mainWrapper: true,
-};
+const DEFAULT_LAYOUT_OPTIONS: LayoutOptions = {};
 
 /**
  * Common data returned from a route's handle object.
