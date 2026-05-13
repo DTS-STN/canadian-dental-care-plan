@@ -1,10 +1,10 @@
-import type { LanguageDetectorModule, TOptions, i18n } from 'i18next';
+import type { LanguageDetectorModule } from 'i18next';
 import { createInstance } from 'i18next';
 import I18NextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
 import { getClientEnv } from '~/utils/env-utils';
-import type { ParsedKeysByNamespaces, RouteHandleData } from '~/utils/route-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
 
 /**
  * A constant array representing the supported application locales.
@@ -173,30 +173,4 @@ export function removeLanguageFromPath(path: string) {
  */
 export function useAppLocale(locale: string): AppLocale {
   return locale === 'fr' ? 'fr' : 'en';
-}
-
-/**
- * Type-safe wrapper around i18next’s `t` function that accepts a namespaced key
- * and resolves its namespace(s) before translation.
- *
- * This helper extracts the base key and namespace(s) from a composed key
- * (e.g. `common:appTitle`) and forwards them to `i18n.t`, preserving strong
- * typing for both the key and the options.
- *
- * @typeParam TOpt - The i18next options type associated with the translation key.
- * @param i18n - The i18next instance to use for translation.
- * @param key - A composed translation key including its namespace (for example: `common:appTitle`).
- * @param options - Optional i18next translation options.
- * @returns The resolved translated string.
- */
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export function translateFromKey<TOpt extends TOptions = {}>(i18n: i18n, key: ParsedKeysByNamespaces<TOpt>, options?: TOpt): string {
-  // @ts-expect-error `translator` and `extractFromKey` are internal i18next APIs
-  // and are not exposed in the public TypeScript typings.
-  // See: https://github.com/i18next/i18next/blob/15ea4575a07378a0cdb0cc66e7ca42de5d5256e5/i18next.js#L491
-  const extractedKey = i18n.translator.extractFromKey(key, i18n.options) as { key: string; namespaces: string[] };
-
-  // @ts-expect-error TypeScript cannot reconcile `i18n.t` overloads when the key
-  // is dynamically derived from `extractFromKey`, even though the runtime call is valid.
-  return i18n.t(($) => $[extractedKey.key], { ...options, ns: extractedKey.namespaces });
 }
