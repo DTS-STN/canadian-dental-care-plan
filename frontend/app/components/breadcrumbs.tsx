@@ -52,7 +52,7 @@ function Breadcrumb({ children, routeId, to }: { children: ReactNode; routeId?: 
     : <InlineLink routeId={routeId} params={params} to={to} property="item" typeof="WebPage"><span property="name">{children}</span></InlineLink>;
 }
 
-export function ProtectedPageBreadcrumbs({ items, ...props }: SetOptional<ComponentProps<typeof Breadcrumbs>, 'items'>) {
+export function ProtectedBreadcrumbs({ items, ...props }: SetOptional<ComponentProps<typeof Breadcrumbs>, 'items'>) {
   const { t } = useTranslation('gcweb');
   const { SCCH_BASE_URI } = getClientEnv();
 
@@ -70,7 +70,7 @@ export function ProtectedPageBreadcrumbs({ items, ...props }: SetOptional<Compon
   );
 }
 
-export function PublicPageBreadcrumbs(props: OmitStrict<ComponentProps<typeof Breadcrumbs>, 'items'>) {
+export function PublicBreadcrumbs(props: OmitStrict<ComponentProps<typeof Breadcrumbs>, 'items'>) {
   const { t } = useTranslation('gcweb');
   return (
     <Breadcrumbs

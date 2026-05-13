@@ -11,6 +11,7 @@ import { AppLink } from '../app-link';
 import { Banner } from '../banner';
 import { ButtonLink } from '../buttons';
 
+import { ProtectedBreadcrumbs } from '~/components/breadcrumbs';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '~/components/dropdown-menu';
 import { InlineLink } from '~/components/inline-link';
 import { PageDetails } from '~/components/page-details';
@@ -35,7 +36,7 @@ export function ProtectedLayout({ children }: PropsWithChildren) {
   return (
     <>
       <PageHeader />
-      {breadcrumbs && <div className="my-4">{breadcrumbs}</div>}
+      <div className="my-4 print:hidden">{breadcrumbs ?? <ProtectedBreadcrumbs />}</div>
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         {children}
         <PageDetails />

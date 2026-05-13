@@ -7,7 +7,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Banner } from '../banner';
 
-import { PublicPageBreadcrumbs } from '~/components/breadcrumbs';
+import { PublicBreadcrumbs } from '~/components/breadcrumbs';
 import { InlineLink } from '~/components/inline-link';
 import { PageDetails } from '~/components/page-details';
 import { PageHeaderBrand } from '~/components/page-header-brand';
@@ -31,8 +31,7 @@ export function PublicLayout({ children }: PropsWithChildren) {
   return (
     <>
       <PageHeader />
-      {breadcrumbs && <div className="my-4 print:hidden">{breadcrumbs}</div>}
-      <PublicPageBreadcrumbs className="my-4 print:hidden" />
+      <div className="my-4 print:hidden">{breadcrumbs ?? <PublicBreadcrumbs />}</div>
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         {children}
         <PageDetails />

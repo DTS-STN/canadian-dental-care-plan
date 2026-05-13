@@ -14,7 +14,7 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { AddressInvalidDialogContent, AddressSuggestionDialogContent } from '~/components/address-validation-dialog';
 import type { AddressInvalidResponse, AddressResponse, AddressSuggestionResponse, CanadianAddress } from '~/components/address-validation-dialog';
 import { AppPageTitle } from '~/components/app-page-title';
-import { ProtectedPageBreadcrumbs } from '~/components/breadcrumbs';
+import { ProtectedBreadcrumbs } from '~/components/breadcrumbs';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogTrigger } from '~/components/dialog';
@@ -49,7 +49,7 @@ export const handle = {
 function LayoutBreadcrumbs(): JSX.Element {
   const { t } = useTranslation(handle.i18nNamespaces);
   return (
-    <ProtectedPageBreadcrumbs
+    <ProtectedBreadcrumbs
       items={[
         {
           content: t(($) => $.contactInformation.pageTitle),

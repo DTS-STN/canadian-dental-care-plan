@@ -8,7 +8,7 @@ import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import type { IdToken } from '~/.server/utils/raoidc.utils';
 import { AppPageTitle } from '~/components/app-page-title';
-import { ProtectedPageBreadcrumbs } from '~/components/breadcrumbs';
+import { ProtectedBreadcrumbs } from '~/components/breadcrumbs';
 import { ButtonLink } from '~/components/buttons';
 import { pageIds } from '~/page-ids';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -24,7 +24,7 @@ export const handle = {
 function LayoutBreadcrumbs(): JSX.Element {
   const { t } = useTranslation(handle.i18nNamespaces);
   return (
-    <ProtectedPageBreadcrumbs
+    <ProtectedBreadcrumbs
       items={[
         {
           content: t(($) => $.index.pageTitle),

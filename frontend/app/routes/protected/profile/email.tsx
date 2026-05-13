@@ -12,7 +12,7 @@ import { TYPES } from '~/.server/constants';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { AppPageTitle } from '~/components/app-page-title';
-import { ProtectedPageBreadcrumbs } from '~/components/breadcrumbs';
+import { ProtectedBreadcrumbs } from '~/components/breadcrumbs';
 import { ButtonLink } from '~/components/buttons';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
@@ -69,7 +69,7 @@ export const handle = {
 function LayoutBreadcrumbs(): JSX.Element {
   const { t } = useTranslation(handle.i18nNamespaces);
   return (
-    <ProtectedPageBreadcrumbs
+    <ProtectedBreadcrumbs
       items={[
         {
           content: t(($) => $.contactInformation.pageTitle),
