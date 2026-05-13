@@ -1,4 +1,5 @@
 import type { LiteralToPrimitiveDeep } from 'type-fest';
+
 import applicationEn from '~/.server/locales/en/application';
 import applicationFullAdultEn from '~/.server/locales/en/application-full-adult';
 import applicationFullChildEn from '~/.server/locales/en/application-full-child';
