@@ -8,3 +8,4 @@ export * from './use-fetcher-submission-state';
 export * from './use-is-client';
 export * from './use-sections-status';
 export * from './use-storage-enabled';
+export * from './use-hcaptcha';

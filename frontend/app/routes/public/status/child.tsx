@@ -26,12 +26,11 @@ import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
-import { useFetcherSubmissionState } from '~/hooks';
+import { useFetcherSubmissionState, useHCaptcha } from '~/hooks';
 import { pageIds } from '~/page-ids';
-import { useClientEnv, useFeature } from '~/root';
+import { useFeature } from '~/root';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
-import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -248,8 +247,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function StatusCheckerChild({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const hCaptchaEnabled = useFeature('hcaptcha');
-  const { HCAPTCHA_SITE_KEY } = useClientEnv();
-  const { captchaRef } = useHCaptcha();
+  const { captchaRef, onLoad, sitekey } = useHCaptcha();
 
   const [childHasSinState, setChildHasSinState] = useState<boolean>();
 
@@ -288,7 +286,7 @@ export default function StatusCheckerChild({ loaderData, params }: Route.Compone
           <ErrorSummary />
           <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
             <CsrfTokenInput />
-            {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={HCAPTCHA_SITE_KEY} ref={captchaRef} />}
+            {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={sitekey} ref={captchaRef} onLoad={onLoad} />}
             <div className="mb-8 space-y-6">
               <InputPatternField
                 id="code"
