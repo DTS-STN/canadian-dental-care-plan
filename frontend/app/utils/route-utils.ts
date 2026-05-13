@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import type { Params } from 'react-router';
 import { generatePath, useMatches } from 'react-router';
 
@@ -66,9 +68,22 @@ export type PageIdentifier = z.infer<typeof pageIdentifierSchema>;
 export interface LayoutOptions {
   /**
    * Whether the layout should wrap its children with a `<main>` element.
+   * @default true
    */
-  mainWrapper?: boolean;
+  mainWrapper: boolean;
+
+  /**
+   * Breadcrumbs to render in the layout. Route handles provide a `<Breadcrumbs>` ReactNode here,
+   * which the layout renders directly — replacing the previous array-based breadcrumb approach.
+   * @default undefined
+   */
+  breadcrumbs?: ReactNode;
 }
+
+const DEFAULT_LAYOUT_OPTIONS: LayoutOptions = {
+  mainWrapper: true,
+  breadcrumbs: undefined,
+};
 
 /**
  * Common data returned from a route's handle object.
@@ -82,7 +97,7 @@ export interface RouteHandleData extends Record<string, unknown | undefined> {
    * Layout options merged from parent to leaf routes.
    * Child route values override parent values; unset properties are inherited from parents.
    */
-  layoutOptions?: LayoutOptions;
+  layoutOptions?: Partial<LayoutOptions>;
 }
 
 export function useBreadcrumbs() {
@@ -131,7 +146,9 @@ export function useLayoutOptions(): LayoutOptions {
     .map(({ handle }) => handle as RouteHandleData | undefined)
     .map((handle) => handle?.layoutOptions)
     .filter((options) => options !== undefined)
-    .reduce<LayoutOptions>((merged, current) => ({ ...merged, ...current }), {});
+    .reduce<LayoutOptions>((merged, current) => {
+      return { ...merged, ...current };
+    }, DEFAULT_LAYOUT_OPTIONS);
 }
 
 export function findRouteById(id: string, routes: I18nRoute[] = i18nRoutes): I18nPageRoute | undefined {
