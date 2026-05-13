@@ -108,7 +108,7 @@
     "@types/compression": "^1.8.1",
     "@types/content-disposition": "^0.5.9",
     "@types/express-session": "^1.19.0",
-    "@types/jsdom": "^28.0.2",
+    "@types/jsdom": "^28.0.3",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.12.4",
     "@types/react": "^19.2.14",
