@@ -220,11 +220,6 @@ const ns = {
       dateOfBirthValid: "Day must be valid for the given month and year",
       dateOfBirthYearNumber: "Year must be a number, for example 1950",
       dateOfBirthYearRequired: "Date of birth must include a year",
-      alert: {
-        heading: "We couldn't find your Canadian Dental Care Plan (CDCP) account with the information you entered.",
-        detail: "Check that your information is correct and try again. If the problem continues, call us at <noWrap>1-833-537-4342</noWrap> to update your information.",
-        applyDate: "<strong>Note:</strong> Only current CDCP members can renew benefits now. If you are not enrolled, you can apply for the upcoming benefit year starting {{startDate}}.",
-      },
     },
   },
   dentalBenefits: {
@@ -567,6 +562,6 @@ const ns = {
       memberIdValid: "Member ID must be 11 digits",
     },
   },
-};
+} as const;
 
 export default ns;

@@ -169,6 +169,6 @@ const ns = {
       button: "Take the survey",
     },
   },
-};
+} as const;
 
 export default ns;

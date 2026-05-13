@@ -133,6 +133,6 @@ const ns = {
       contactServiceCanada: "Contact Service Canada if this issue continues by calling <noWrap>1-833-537-4342</noWrap>.",
     },
   },
-};
+} as const;
 
 export default ns;

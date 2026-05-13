@@ -555,6 +555,6 @@ const ns = {
       memberIdValid: "Le numéro d'identification du membre doit comporter 11 chiffres",
     },
   },
-};
+} as const;
 
 export default ns;

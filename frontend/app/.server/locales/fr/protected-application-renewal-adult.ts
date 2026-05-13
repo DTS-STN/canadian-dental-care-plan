@@ -180,6 +180,6 @@ const ns = {
       button: "Participez au court sondage",
     },
   },
-};
+} as const;
 
 export default ns;

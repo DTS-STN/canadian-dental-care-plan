@@ -11,6 +11,6 @@ const ns = {
   eServiceCanadaLink: "https://eservices.canada.ca/en/service/",
   returnCdcp: "Return to the <cdcpLink>Canadian Dental Care Plan</cdcpLink> home page.",
   cdcpLink: "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html",
-};
+} as const;
 
 export default ns;

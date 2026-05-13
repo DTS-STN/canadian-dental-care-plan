@@ -116,6 +116,6 @@ const ns = {
     exitBtn: "Exit application",
     exitBtnLink: "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html",
   },
-};
+} as const;
 
 export default ns;

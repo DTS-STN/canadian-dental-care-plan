@@ -555,6 +555,6 @@ const ns = {
       memberIdValid: "Member ID must be 11 digits",
     },
   },
-};
+} as const;
 
 export default ns;

@@ -247,6 +247,6 @@ const ns = {
     postalCodeHelp: "Format: A1A 1A1. Letters D, F, I, O, Q, or U cannot be used.",
     postalCodeHelpUs: "Format: 12345 or 12345-6789",
   },
-};
+} as const;
 
 export default ns;

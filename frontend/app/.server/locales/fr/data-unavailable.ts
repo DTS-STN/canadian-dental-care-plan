@@ -6,6 +6,6 @@ const ns = {
   contactUsHref: "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
   serviceDelay: "<contactLink>Communiquez avec nous</contactLink> pour toute autre question ou demande de renseignements.",
   backButton: "Retour au tableau de bord",
-};
+} as const;
 
 export default ns;

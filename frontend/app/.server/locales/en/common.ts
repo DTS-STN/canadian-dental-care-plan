@@ -91,6 +91,6 @@ const ns = {
   },
   sectionsCompleted_one: "{{number}} out of {{count}} section completed",
   sectionsCompleted_other: "{{number}} out of {{count}} sections completed",
-};
+} as const;
 
 export default ns;

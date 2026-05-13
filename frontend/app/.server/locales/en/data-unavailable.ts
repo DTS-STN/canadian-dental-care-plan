@@ -6,6 +6,6 @@ const ns = {
   contactUsHref: "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html",
   serviceDelay: "<contactLink>Contact us</contactLink>, for other questions or enquiries.",
   backButton: "Return to Dashboard",
-};
+} as const;
 
 export default ns;

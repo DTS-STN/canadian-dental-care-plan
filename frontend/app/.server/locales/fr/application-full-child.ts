@@ -181,6 +181,6 @@ const ns = {
     addChild: "Ajouter un enfant",
     removeChild: "Retirer l'enfant",
   },
-};
+} as const;
 
 export default ns;

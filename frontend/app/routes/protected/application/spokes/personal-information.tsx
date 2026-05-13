@@ -15,7 +15,6 @@ import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DatePickerField } from '~/components/date-picker-field';
-import { useErrorAlert } from '~/components/error-alert';
 import { ErrorSummary } from '~/components/error-summary';
 import { ErrorSummaryProvider } from '~/components/error-summary-context';
 import { InputPatternField } from '~/components/input-pattern-field';
@@ -220,27 +219,12 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
-
-  const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
-  const fetcherEligibilityStartDate = typeof fetcher.data === 'object' && 'startDate' in fetcher.data ? fetcher.data.startDate : undefined;
-
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
-
-  const { ErrorAlert } = useErrorAlert(fetcherStatus === 'client-not-found');
 
   return (
     <>
       <AppPageTitle>{t(($) => $.personalInformation.pageTitle)}</AppPageTitle>
       <div className="max-w-prose">
-        <ErrorAlert>
-          <h2 className="mb-2 font-bold">{t(($) => $.personalInformation.errorMessage.alert.heading)}</h2>
-          <p className="mb-2">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.errorMessage.alert.detail} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
-          </p>
-          <p className="mb-2">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.errorMessage.alert.applyDate} values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
-          </p>
-        </ErrorAlert>
         <ErrorSummaryProvider actionData={fetcher.data}>
           <ErrorSummary />
           <p className="mb-4">{t(($) => $.personalInformation.formInstructionsSin)}</p>

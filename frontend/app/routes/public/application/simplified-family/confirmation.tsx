@@ -140,11 +140,12 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const children = await Promise.all(
     state.children.map(async (childState) => {
+      invariant(childState.information, `Expected information for child with id ${childState.id}`);
       invariant(childState.dentalBenefits, `Expected dental benefits for child with id ${childState.id}`);
+      invariant(childState.dentalInsurance, `Expected dental insurance for child with id ${childState.id}`);
 
       const childApplication = state.clientApplication.children.find((childApp) => childApp.information.clientNumber === childState.information?.memberId);
-      invariant(childApplication?.dentalBenefits, `Expected dental benefits for child with memberId ${childState.information?.memberId}`);
-      invariant(childState.dentalInsurance, "Child's dental insurance must be defined");
+      invariant(childApplication?.dentalBenefits, `Expected dental benefits for child with memberId ${childState.information.memberId}`);
 
       const childDentalBenefits = await resolvePublicStateChildDentalBenefitsValue({ dentalBenefits: childState.dentalBenefits }, childApplication, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
       const eligibility = getEligibilityStatus({
@@ -154,12 +155,12 @@ export async function loader({ context: { appContainer, session }, params, reque
 
       return {
         id: childState.id,
-        memberId: childState.information?.memberId,
-        firstName: childState.information?.firstName,
-        lastName: childState.information?.lastName,
-        birthday: childState.information?.dateOfBirth,
-        sin: childState.information?.socialInsuranceNumber,
-        isParent: childState.information?.isParent,
+        memberId: childState.information.memberId,
+        firstName: childState.information.firstName,
+        lastName: childState.information.lastName,
+        birthday: childState.information.dateOfBirth,
+        sin: childState.information.socialInsuranceNumber,
+        isParent: childState.information.isParent,
         dentalInsurance: {
           accessToDentalInsurance: childState.dentalInsurance.hasDentalInsurance,
           hasDentalBenefitsChanged: childDentalBenefits.hasChanged,
@@ -421,7 +422,7 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
 
           <div className="mb-8 space-y-10">
             {children.map((child) => {
-              const dateOfBirth = toLocaleDateString(parseDateString(child.birthday ?? ''), currentLanguage);
+              const dateOfBirth = toLocaleDateString(parseDateString(child.birthday), currentLanguage);
               return (
                 <section key={child.id} className="space-y-10">
                   <h2 className="font-lato text-3xl font-bold">{child.firstName}</h2>

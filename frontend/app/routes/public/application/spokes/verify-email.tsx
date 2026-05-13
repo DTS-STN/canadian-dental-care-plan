@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { Trans, useTranslation } from 'react-i18next';
 import * as z from 'zod';
 
@@ -61,11 +62,14 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family', 'simplified-children']);
 
+  invariant(state.email, 'Expected state.email to be defined');
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.verifyEmail.pageTitle) }),
   };
+
   return {
     defaultState: state.email,
     meta,
@@ -299,11 +303,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
             <DialogHeader>
               <DialogTitle>{t(($) => $.verifyEmail.codeSent.heading)}</DialogTitle>
             </DialogHeader>
-            <DialogDescription>
-              {t(($) => $.verifyEmail.codeSent.detail, {
-                email: defaultState,
-              })}
-            </DialogDescription>
+            <DialogDescription>{t(($) => $.verifyEmail.codeSent.detail, { email: defaultState })}</DialogDescription>
             <DialogFooter>
               <DialogClose asChild>
                 <Button id="modal-continue" disabled={isSubmitting} variant="primary" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Spoke:Modal Continue - Verify email click">

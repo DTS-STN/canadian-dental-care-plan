@@ -268,13 +268,10 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
-
-  const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
-  const fetcherEligibilityStartDate = typeof fetcher.data === 'object' && 'startDate' in fetcher.data ? fetcher.data.startDate : undefined;
-
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+  const fetcherDataWithStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data : undefined;
 
-  const { ErrorAlert } = useErrorAlert(fetcherStatus === 'client-not-found');
+  const { ErrorAlert } = useErrorAlert(fetcherDataWithStatus?.status === 'client-not-found');
 
   return (
     <>
@@ -285,9 +282,11 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
           <p className="mb-2">
             <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.errorMessage.alert.detail} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
           </p>
-          <p className="mb-2">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.errorMessage.alert.applyDate} values={{ startDate: fetcherEligibilityStartDate }} components={{ strong: <strong /> }} />
-          </p>
+          {fetcherDataWithStatus?.startDate !== undefined && (
+            <p className="mb-2">
+              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.errorMessage.alert.applyDate} values={{ startDate: fetcherDataWithStatus.startDate }} components={{ strong: <strong /> }} />
+            </p>
+          )}
         </ErrorAlert>
         <ErrorSummaryProvider actionData={fetcher.data}>
           <ErrorSummary />

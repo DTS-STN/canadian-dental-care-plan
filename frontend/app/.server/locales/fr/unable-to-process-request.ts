@@ -11,6 +11,6 @@ const ns = {
   eServiceCanadaLink: "https://eservices.canada.ca/fr/service/",
   returnCdcp: "Retournez à la page d'accueil du <cdcpLink>Régime canadien de soins dentaires</cdcpLink>.",
   cdcpLink: "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html",
-};
+} as const;
 
 export default ns;

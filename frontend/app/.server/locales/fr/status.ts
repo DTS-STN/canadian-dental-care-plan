@@ -133,6 +133,6 @@ const ns = {
       contactServiceCanada: "Contactez Service Canada si ce problème persiste en appelant au <noWrap>1-833-537-4342</noWrap>.",
     },
   },
-};
+} as const;
 
 export default ns;

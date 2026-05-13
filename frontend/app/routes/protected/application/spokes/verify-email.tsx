@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { Trans, useTranslation } from 'react-i18next';
 import * as z from 'zod';
 
@@ -63,6 +64,8 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const state = getProtectedApplicationState({ params, session });
   validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-family', 'renewal-children']);
+
+  invariant(state.email, 'Expected state.email to be defined');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -241,11 +244,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
           </p>
         </ErrorAlert>
         <ErrorSummaryProvider actionData={fetcher.data}>
-          <p className="mb-4">
-            {t(($) => $.verifyEmail.verificationCode, {
-              email: defaultState,
-            })}
-          </p>
+          <p className="mb-4">{t(($) => $.verifyEmail.verificationCode, { email: defaultState })}</p>
           <p className="mb-4">{t(($) => $.verifyEmail.requestNew)}</p>
           <p className="mb-8">
             <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />

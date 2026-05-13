@@ -1,5 +1,6 @@
 import { redirect, useFetcher } from 'react-router';
 
+import { invariant } from '@dts-stn/invariant';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { Route } from './+types/confirmation';
@@ -101,34 +102,38 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   const children = await Promise.all(
-    state.children.map(async (child) => {
+    state.children.map(async (childState) => {
+      invariant(childState.information, `Expected information for child with id ${childState.id}`);
+      invariant(childState.dentalBenefits, `Expected dental benefits for child with id ${childState.id}`);
+      invariant(childState.dentalInsurance, `Expected dental insurance for child with id ${childState.id}`);
+
       // prettier-ignore
-      const selectFederalGovernmentInsurancePlan = child.dentalBenefits?.value?.federalSocialProgram
-      ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(child.dentalBenefits.value.federalSocialProgram, locale)
+      const selectFederalGovernmentInsurancePlan = childState.dentalBenefits.value?.federalSocialProgram
+      ? await federalGovernmentInsurancePlanService.getLocalizedFederalGovernmentInsurancePlanById(childState.dentalBenefits.value.federalSocialProgram, locale)
       : undefined;
 
       // prettier-ignore
-      const selectedProvincialBenefit = child.dentalBenefits?.value?.provincialTerritorialSocialProgram
-      ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(child.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
+      const selectedProvincialBenefit = childState.dentalBenefits.value?.provincialTerritorialSocialProgram
+      ? await provincialGovernmentInsurancePlanService.getLocalizedProvincialGovernmentInsurancePlanById(childState.dentalBenefits.value.provincialTerritorialSocialProgram, locale)
       : undefined;
 
       return {
-        memberId: child.information?.memberId,
-        id: child.id,
-        firstName: child.information?.firstName,
-        lastName: child.information?.lastName,
-        birthday: child.information?.dateOfBirth,
-        sin: child.information?.socialInsuranceNumber,
-        isParent: child.information?.isParent,
+        memberId: childState.information.memberId,
+        id: childState.id,
+        firstName: childState.information.firstName,
+        lastName: childState.information.lastName,
+        birthday: childState.information.dateOfBirth,
+        sin: childState.information.socialInsuranceNumber,
+        isParent: childState.information.isParent,
         dentalInsurance: {
-          accessToDentalInsurance: child.dentalInsurance?.hasDentalInsurance === true,
+          accessToDentalInsurance: childState.dentalInsurance.hasDentalInsurance === true,
           federalBenefit: {
-            access: child.dentalBenefits?.value?.hasFederalBenefits,
+            access: childState.dentalBenefits.value?.hasFederalBenefits,
             benefit: selectFederalGovernmentInsurancePlan?.name,
           },
           provTerrBenefit: {
-            access: child.dentalBenefits?.value?.hasProvincialTerritorialBenefits,
-            province: child.dentalBenefits?.value?.province,
+            access: childState.dentalBenefits.value?.hasProvincialTerritorialBenefits,
+            province: childState.dentalBenefits.value?.province,
             benefit: selectedProvincialBenefit?.name,
           },
         },
@@ -338,7 +343,7 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
 
           <div className="mb-8 space-y-10">
             {children.map((child) => {
-              const dateOfBirth = toLocaleDateString(parseDateString(child.birthday ?? ''), currentLanguage);
+              const dateOfBirth = toLocaleDateString(parseDateString(child.birthday), currentLanguage);
               return (
                 <section key={child.id} className="space-y-10">
                   <h2 className="font-lato text-3xl font-bold">{child.firstName}</h2>

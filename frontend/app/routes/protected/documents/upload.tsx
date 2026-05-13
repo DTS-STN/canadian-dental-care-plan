@@ -262,7 +262,6 @@ async function scanDocuments({ allowedExtensions, files, service, t, userId }: S
       const invalidTypeError = t(($) => $.upload.errorMessage.invalidFileType, {
         filename: file.name,
         extensions: allowedExtensions.join(', '),
-        ns: 'documents',
       });
 
       const detected = await fileTypeFromBuffer(fileBuffer);
@@ -293,7 +292,7 @@ async function scanDocuments({ allowedExtensions, files, service, t, userId }: S
           id,
           error: t(($) => $.upload.errorMessage.scanFailed, {
             error: scanResponse.Error.ErrorMessage,
-            ns: 'documents',
+            code: scanResponse.Error.ErrorCode,
           }),
         };
       }
@@ -340,7 +339,7 @@ async function uploadDocuments({ clientNumber, files, service, t, userId }: Uplo
             id,
             error: t(($) => $.upload.errorMessage.uploadFailed, {
               error: response.Error.ErrorMessage,
-              ns: 'documents',
+              code: response.Error.ErrorCode,
             }),
           }
         : { id, success: true };
@@ -438,7 +437,6 @@ function createDocumentUploadSchema({ locale, t, allowedExtensions, maxFileSizeI
           message: t(($) => $.upload.errorMessage.invalidFileType, {
             filename: data.file.name,
             extensions: allowedExtensions.join(', '),
-            ns: 'documents',
           }),
           path: ['file'],
         });
@@ -448,7 +446,6 @@ function createDocumentUploadSchema({ locale, t, allowedExtensions, maxFileSizeI
           message: t(($) => $.upload.errorMessage.fileTooLarge, {
             filename: data.file.name,
             filesize: bytesToFilesize(maxFileSizeInBytes, `${locale}-CA`),
-            ns: 'documents',
           }),
           path: ['file'],
         });
@@ -457,7 +454,6 @@ function createDocumentUploadSchema({ locale, t, allowedExtensions, maxFileSizeI
           code: 'custom',
           message: t(($) => $.upload.errorMessage.documentTypeRequired, {
             filename: data.file.name,
-            ns: 'documents',
           }),
           path: ['documentType'],
         });
@@ -477,10 +473,7 @@ function createDocumentUploadSchema({ locale, t, allowedExtensions, maxFileSizeI
       )
       .refine(
         (value) => Object.keys(value).length <= maxFileCount,
-        t(($) => $.upload.errorMessage.tooManyFiles, {
-          count: maxFileCount,
-          ns: 'documents',
-        }),
+        t(($) => $.upload.errorMessage.tooManyFiles, { count: maxFileCount }),
       )
       .superRefine((files, ctx) => {
         const seenFiles = new Set<string>();
@@ -489,10 +482,7 @@ function createDocumentUploadSchema({ locale, t, allowedExtensions, maxFileSizeI
           if (seenFiles.has(fileKey)) {
             ctx.addIssue({
               code: 'custom',
-              message: t(($) => $.upload.errorMessage.duplicateFile, {
-                filename: file.name,
-                ns: 'documents',
-              }),
+              message: t(($) => $.upload.errorMessage.duplicateFile, { filename: file.name }),
               path: [id, 'file'],
             });
           } else {
@@ -588,17 +578,11 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
               <InputSelect id="applicant" name="applicant" label={t(($) => $.upload.whoAreYouUploadingFor)} required className="w-full" options={applicantOptions} defaultValue="" errorMessage={applicantError} />
               <fieldset>
                 <InputLegend className="mb-2">{t(($) => $.upload.uploadDocument)}</InputLegend>
-                <p>
-                  {t(($) => $.upload.maxFiles, {
-                    count: DOCUMENT_UPLOAD_MAX_FILE_COUNT,
-                    ns: 'documents',
-                  })}
-                </p>
+                <p>{t(($) => $.upload.maxFiles, { count: DOCUMENT_UPLOAD_MAX_FILE_COUNT })}</p>
                 <p className="mb-2">
                   {t(($) => $.upload.maxSize, {
                     filesize: bytesToFilesize(megabytesToBytes(env.DOCUMENT_UPLOAD_MAX_FILE_SIZE_MB), `${i18n.language}-CA`),
                     extensions: DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS.join(', '),
-                    ns: 'documents',
                   })}
                 </p>
                 {filesError && <InputError id="files-error" className="mb-2" fieldId="fileUploadTrigger" message={filesError} />}

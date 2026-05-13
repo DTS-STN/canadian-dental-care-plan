@@ -91,6 +91,6 @@ const ns = {
     yes: "Yes",
     no: "No",
   },
-};
+} as const;
 
 export default ns;

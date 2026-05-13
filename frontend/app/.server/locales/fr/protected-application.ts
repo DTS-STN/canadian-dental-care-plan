@@ -116,6 +116,6 @@ const ns = {
     exitBtn: "Quitter la demande",
     exitBtnLink: "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html",
   },
-};
+} as const;
 
 export default ns;

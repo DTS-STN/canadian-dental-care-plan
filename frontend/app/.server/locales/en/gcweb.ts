@@ -155,6 +155,6 @@ const ns = {
     dismiss: "Dismiss",
     title: "Update your browser",
   },
-};
+} as const;
 
 export default ns;

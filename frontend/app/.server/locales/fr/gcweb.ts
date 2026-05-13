@@ -155,6 +155,6 @@ const ns = {
     dismiss: "Fermer",
     title: "Mettez à niveau votre navigateur",
   },
-};
+} as const;
 
 export default ns;

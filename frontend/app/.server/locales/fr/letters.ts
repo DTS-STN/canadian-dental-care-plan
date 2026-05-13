@@ -13,6 +13,6 @@ const ns = {
       back: "Retour",
     },
   },
-};
+} as const;
 
 export default ns;

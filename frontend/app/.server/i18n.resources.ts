@@ -1,3 +1,4 @@
+import type { LiteralToPrimitiveDeep } from 'type-fest';
 import applicationEn from '~/.server/locales/en/application';
 import applicationFullAdultEn from '~/.server/locales/en/application-full-adult';
 import applicationFullChildEn from '~/.server/locales/en/application-full-child';
@@ -48,8 +49,6 @@ import protectedProfileFr from '~/.server/locales/fr/protected-profile';
 import statusFr from '~/.server/locales/fr/status';
 import stubLoginFr from '~/.server/locales/fr/stub-login';
 import unableToProcessRequestFr from '~/.server/locales/fr/unable-to-process-request';
-
-type I18nResources = typeof i18nResourcesEn;
 
 const i18nResourcesEn = {
   application: applicationEn,
@@ -105,7 +104,7 @@ const i18nResourcesFr = {
   status: statusFr,
   stubLogin: stubLoginFr,
   unableToProcessRequest: unableToProcessRequestFr,
-} as const satisfies I18nResources;
+} as const satisfies LiteralToPrimitiveDeep<typeof i18nResourcesEn>;
 
 export const i18nResources = {
   en: i18nResourcesEn,

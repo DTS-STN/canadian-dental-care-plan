@@ -48,6 +48,6 @@ const ns = {
     description: "You do not need to upload any documents at this time.",
     returnButton: "Return to dashboard",
   },
-};
+} as const;
 
 export default ns;

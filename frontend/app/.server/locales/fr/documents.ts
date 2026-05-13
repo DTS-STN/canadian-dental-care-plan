@@ -48,6 +48,6 @@ const ns = {
     description: "Vous n'avez pas besoin de téléverser de documents pour le moment.",
     returnButton: "Retour au tableau de bord",
   },
-};
+} as const;
 
 export default ns;

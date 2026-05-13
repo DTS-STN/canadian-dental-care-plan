@@ -15,6 +15,6 @@ const ns = {
       subRequired: "Enter a sub",
     },
   },
-};
+} as const;
 
 export default ns;
