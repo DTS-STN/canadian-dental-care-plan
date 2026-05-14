@@ -45,7 +45,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   const locale = getLocale(request);
 
   if (
-    state.communicationPreferences === undefined || //
+    state.applicantInformation === undefined || //
+    state.communicationPreferences === undefined ||
     state.dentalBenefits === undefined ||
     state.dentalInsurance === undefined ||
     state.phoneNumber === undefined ||
@@ -71,44 +72,21 @@ export async function loader({ context: { appContainer, session }, params, reque
   const dentalBenefits = await stateResolver.resolveDentalBenefitsValue({ dentalBenefits: state.dentalBenefits, clientApplication: state.clientApplication }, locale);
 
   const userInfo = {
-    memberId: state.clientApplication.applicantInformation.clientNumber,
-    firstName: state.clientApplication.applicantInformation.firstName,
-    lastName: state.clientApplication.applicantInformation.lastName,
-    phoneNumber: phoneNumber.primary,
-    altPhoneNumber: phoneNumber.alternate,
-    preferredLanguage: communicationPreferences.preferredLanguage,
-    birthday: toLocaleDateString(parseDateString(state.clientApplication.dateOfBirth), locale),
-    sin: state.clientApplication.applicantInformation.socialInsuranceNumber,
-    maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
+    memberId: state.applicantInformation.memberId,
+    firstName: state.applicantInformation.firstName,
+    lastName: state.applicantInformation.lastName,
+    communicationPreferences: communicationPreferences,
+    dateOfBirth: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     email: stateResolver.resolveEmailValue(state),
-    communicationSunLifePreference: communicationPreferences.preferredMethodSunLife,
+    maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
+    phoneNumber: phoneNumber,
+    socialInsuranceNumber: state.applicantInformation.socialInsuranceNumber,
   };
 
-  const spouseInfo = state.partnerInformation && {
-    yearOfBirth: state.partnerInformation.yearOfBirth,
-    sin: state.partnerInformation.socialInsuranceNumber,
-  };
-
-  const mailingAddressInfo = {
-    address: mailingAddress.address,
-    city: mailingAddress.city,
-    province: mailingAddress.province?.abbr,
-    postalCode: mailingAddress.postalCode,
-    country: mailingAddress.country.name,
-  };
-
-  const homeAddressInfo = {
-    address: homeAddress.address,
-    city: homeAddress.city,
-    province: homeAddress.province?.abbr,
-    postalCode: homeAddress.postalCode,
-    country: homeAddress.country.name,
-  };
+  const spouseInfo = state.partnerInformation;
 
   const dentalInsurance = {
-    accessToDentalInsurance: state.dentalInsurance.hasDentalInsurance,
-    selectedFederalBenefits: dentalBenefits.federalGovernmentInsurancePlan?.name,
-    selectedProvincialBenefits: dentalBenefits.provincialGovernmentInsurancePlan?.name,
+    hasDentalInsurance: state.dentalInsurance.hasDentalInsurance,
   };
 
   const meta = {
@@ -121,9 +99,10 @@ export async function loader({ context: { appContainer, session }, params, reque
   });
 
   return {
+    dentalBenefits,
     dentalInsurance,
-    homeAddressInfo,
-    mailingAddressInfo,
+    homeAddress,
+    mailingAddress,
     meta,
     spouseInfo,
     submissionInfo: state.submissionInfo,
@@ -155,7 +134,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ProtectedApplicationFlowConfirm({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, surveyLink, eligibility, isSimplifiedRenewal } = loaderData;
+  const { userInfo, spouseInfo, homeAddress, mailingAddress, dentalInsurance, dentalBenefits, submissionInfo, surveyLink, eligibility, isSimplifiedRenewal } = loaderData;
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const mscaLinkAccount = <InlineLink to={t(($) => $.confirm.mscaLinkAccount)} className="external-link" newTabIndicator target="_blank" />;
@@ -260,9 +239,9 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
               <DefinitionList border>
                 {userInfo.memberId && <DefinitionListItem term={t(($) => $.confirm.memberId)}>{formatClientNumber(userInfo.memberId)}</DefinitionListItem>}
                 <DefinitionListItem term={t(($) => $.confirm.fullName)}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
-                <DefinitionListItem term={t(($) => $.confirm.dob)}>{userInfo.birthday}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.confirm.dob)}>{userInfo.dateOfBirth}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.sin)}>
-                  <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
+                  <span className="text-nowrap">{formatSin(userInfo.socialInsuranceNumber)}</span>
                 </DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.maritalStatus)}>{userInfo.maritalStatus}</DefinitionListItem>
               </DefinitionList>
@@ -274,7 +253,7 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
                 <DefinitionList border>
                   <DefinitionListItem term={t(($) => $.confirm.yearBirth)}>{spouseInfo.yearOfBirth}</DefinitionListItem>
                   <DefinitionListItem term={t(($) => $.confirm.sin)}>
-                    <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
+                    <span className="text-nowrap">{formatSin(spouseInfo.socialInsuranceNumber)}</span>
                   </DefinitionListItem>
                   <DefinitionListItem term={t(($) => $.confirm.consent)}>{t(($) => $.confirm.consentAnswer)}</DefinitionListItem>
                 </DefinitionList>
@@ -284,16 +263,12 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
             <section className="space-y-6">
               <h3 className="font-lato text-2xl font-bold">{t(($) => $.confirm.contactInfo)}</h3>
               <DefinitionList border>
-                {userInfo.phoneNumber && (
-                  <DefinitionListItem term={t(($) => $.confirm.phoneNumber)}>
-                    <span className="text-nowrap">{userInfo.phoneNumber}</span>
-                  </DefinitionListItem>
-                )}
-                {userInfo.altPhoneNumber && (
-                  <DefinitionListItem term={t(($) => $.confirm.altPhoneNumber)}>
-                    <span className="text-nowrap">{userInfo.altPhoneNumber}</span>
-                  </DefinitionListItem>
-                )}
+                <DefinitionListItem term={t(($) => $.confirm.phoneNumber)}>
+                  <span className="text-nowrap">{userInfo.phoneNumber.primary}</span>
+                </DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.confirm.altPhoneNumber)}>
+                  <span className="text-nowrap">{userInfo.phoneNumber.alternate}</span>
+                </DefinitionListItem>
                 {userInfo.email && (
                   <DefinitionListItem term={t(($) => $.confirm.email)}>
                     <span className="text-nowrap">{userInfo.email}</span>
@@ -302,22 +277,22 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
                 <DefinitionListItem term={t(($) => $.confirm.mailing)}>
                   <Address
                     address={{
-                      address: mailingAddressInfo.address,
-                      city: mailingAddressInfo.city,
-                      provinceState: mailingAddressInfo.province,
-                      postalZipCode: mailingAddressInfo.postalCode,
-                      country: mailingAddressInfo.country,
+                      address: mailingAddress.address,
+                      city: mailingAddress.city,
+                      provinceState: mailingAddress.province?.abbr,
+                      postalZipCode: mailingAddress.postalCode,
+                      country: mailingAddress.country.name,
                     }}
                   />
                 </DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.home)}>
                   <Address
                     address={{
-                      address: homeAddressInfo.address,
-                      city: homeAddressInfo.city,
-                      provinceState: homeAddressInfo.province,
-                      postalZipCode: homeAddressInfo.postalCode,
-                      country: homeAddressInfo.country,
+                      address: homeAddress.address,
+                      city: homeAddress.city,
+                      provinceState: homeAddress.province?.abbr,
+                      postalZipCode: homeAddress.postalCode,
+                      country: homeAddress.country.name,
                     }}
                   />
                 </DefinitionListItem>
@@ -327,27 +302,27 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
             <section className="space-y-6">
               <h3 className="font-lato text-2xl font-bold">{t(($) => $.confirm.commPref)}</h3>
               <DefinitionList border>
-                <DefinitionListItem term={t(($) => $.confirm.langPref)}>{userInfo.preferredLanguage.name}</DefinitionListItem>
-                <DefinitionListItem term={t(($) => $.confirm.sunLifeCommPrefTitle)}>{userInfo.communicationSunLifePreference.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.confirm.langPref)}>{userInfo.communicationPreferences.preferredLanguage.name}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.confirm.sunLifeCommPrefTitle)}>{userInfo.communicationPreferences.preferredMethodSunLife.name}</DefinitionListItem>
               </DefinitionList>
             </section>
 
             <section className="space-y-6">
               <h3 className="font-lato text-2xl font-bold">{t(($) => $.confirm.dentalInsurance)}</h3>
               <DefinitionList border>
-                <DefinitionListItem term={t(($) => $.confirm.dentalPrivate)}>{dentalInsurance.accessToDentalInsurance ? t(($) => $.confirm.yes) : t(($) => $.confirm.no)}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.confirm.dentalPrivate)}>{dentalInsurance.hasDentalInsurance ? t(($) => $.confirm.yes) : t(($) => $.confirm.no)}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.dentalPublic)}>
-                  {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
+                  {dentalBenefits.federalGovernmentInsurancePlan || dentalBenefits.provincialGovernmentInsurancePlan ? (
                     <div className="space-y-3">
                       <p>{t(($) => $.confirm.yes)}</p>
                       <p>{t(($) => $.confirm.dentalBenefitHasAccess)}</p>
                       <ul className="list-disc space-y-1 pl-7">
-                        {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
-                        {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
+                        {dentalBenefits.federalGovernmentInsurancePlan && <li>{dentalBenefits.federalGovernmentInsurancePlan.name}</li>}
+                        {dentalBenefits.provincialGovernmentInsurancePlan && <li>{dentalBenefits.provincialGovernmentInsurancePlan.name}</li>}
                       </ul>
                     </div>
                   ) : (
-                    <p>{t(($) => $.confirm.no)}</p>
+                    <>{t(($) => $.confirm.no)}</>
                   )}
                 </DefinitionListItem>
               </DefinitionList>
