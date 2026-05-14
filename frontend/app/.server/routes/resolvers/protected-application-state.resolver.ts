@@ -27,6 +27,15 @@ import type { Logger } from '~/.server/logging';
 import type { ProtectedApplicationState } from '~/.server/routes/helpers/protected-application-route-helpers';
 
 export interface ProtectedApplicationStateResolver {
+  /**
+   * Resolves the effective communication preferences value for a protected application state.
+   * If the user has declared a change, the updated values from the state are used;
+   * otherwise, the values are sourced from the client application data.
+   *
+   * @param state - The protected application state containing communication preferences and client application data.
+   * @param locale - The locale used to retrieve localized values.
+   * @returns The resolved preferred language, Sun Life communication method, and Government of Canada communication method.
+   */
   resolveCommunicationPreferencesValue(
     state: SetRequired<PickDeep<ProtectedApplicationState, 'communicationPreferences' | 'clientApplication.communicationPreferences'>, 'communicationPreferences'>,
     locale: AppLocale,
@@ -37,12 +46,29 @@ export interface ProtectedApplicationStateResolver {
     preferredMethodGovernmentOfCanada: GCCommunicationMethodLocalizedDto;
   };
 
+  /**
+   * Resolves the effective phone number value for a protected application state.
+   * If the user has declared a change, the updated values from the state are used;
+   * otherwise, the values are sourced from the client application data.
+   *
+   * @param state - The protected application state containing phone number and client application contact information.
+   * @returns The resolved primary phone number and optional alternate phone number.
+   */
   resolvePhoneNumberValue(state: SetRequired<PickDeep<ProtectedApplicationState, 'phoneNumber' | 'clientApplication.contactInformation.phoneNumber' | 'clientApplication.contactInformation.phoneNumberAlt'>, 'phoneNumber'>): {
     hasChanged: boolean;
     primary: string;
     alternate?: string;
   };
 
+  /**
+   * Resolves the effective mailing address value for a protected application state.
+   * If the user has declared a change, the updated values from the state are used;
+   * otherwise, the values are sourced from the client application data.
+   *
+   * @param state - The protected application state containing mailing address and client application contact information.
+   * @param locale - The locale used to retrieve localized country and province/territory values.
+   * @returns The resolved mailing address including address, city, country, and optional postal code and province.
+   */
   resolveMailingAddressValue(
     state: SetRequired<
       PickDeep<
@@ -66,6 +92,15 @@ export interface ProtectedApplicationStateResolver {
     province?: ProvinceTerritoryStateLocalizedDto;
   }>;
 
+  /**
+   * Resolves the effective home address value for a protected application state.
+   * If the user has declared a change, the updated values from the state are used;
+   * otherwise, the values are sourced from the client application data.
+   *
+   * @param state - The protected application state containing home address and client application contact information.
+   * @param locale - The locale used to retrieve localized country and province/territory values.
+   * @returns The resolved home address including address, city, country, and optional postal code and province.
+   */
   resolveHomeAddressValue(
     state: SetRequired<
       PickDeep<
@@ -89,8 +124,27 @@ export interface ProtectedApplicationStateResolver {
     province?: ProvinceTerritoryStateLocalizedDto;
   }>;
 
+  /**
+   * Resolves the effective email value for a protected application state.
+   * The state email takes precedence over the client application email on file,
+   * but only if it is a valid email address and has been verified by the user (`emailVerified === true`).
+   * If the state email is absent, invalid, or unverified, the client application email is returned instead.
+   *
+   * @param state - The protected application state containing the optional email, emailVerified flag, and client application contact information.
+   * @returns The resolved email address, or `undefined` if neither is available.
+   */
   resolveEmailValue(state: PickDeep<ProtectedApplicationState, 'email' | 'emailVerified' | 'clientApplication.contactInformation.email'>): string | undefined;
 
+  /**
+   * Resolves the effective dental benefits value for a protected application state.
+   * If the user has declared a change, the updated federal and provincial program selections from the state
+   * are used; otherwise, the benefit IDs from the client application are matched against both federal
+   * and provincial insurance plan services to determine the applicable plans.
+   *
+   * @param state - The protected application state containing dental benefits and client application dental benefits.
+   * @param locale - The locale used to retrieve localized insurance plan details.
+   * @returns The resolved federal and provincial government insurance plans, each of which may be `undefined` if not applicable.
+   */
   resolveDentalBenefitsValue(
     state: SetRequired<PickDeep<ProtectedApplicationState, 'dentalBenefits' | 'clientApplication.dentalBenefits'>, 'dentalBenefits'>,
     locale: AppLocale,
@@ -100,6 +154,17 @@ export interface ProtectedApplicationStateResolver {
     provincialGovernmentInsurancePlan?: ProvincialGovernmentInsurancePlanLocalizedDto;
   }>;
 
+  /**
+   * Resolves the effective child dental benefits value for a protected application state.
+   * If the user has declared a change, the updated federal and provincial program selections from the state
+   * are used; otherwise, the benefit IDs from the client application are matched against both federal
+   * and provincial insurance plan services to determine the applicable plans.
+   *
+   * @param childState - The protected application state containing child dental benefits and client application child dental benefits.
+   * @param childClientApplication - The child's client application data containing dental benefit IDs, or `undefined` if not available.
+   * @param locale - The locale used to retrieve localized insurance plan details.
+   * @returns The resolved federal and provincial government insurance plans, each of which may be `undefined` if not applicable.
+   */
   resolveChildDentalBenefitsValue(
     childState: Required<Pick<ProtectedApplicationState['children'][number], 'dentalBenefits'>>,
     childClientApplication: Pick<NonNullable<ProtectedApplicationState['clientApplication']>['children'][number], 'dentalBenefits'> | undefined,
