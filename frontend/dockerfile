@@ -36,7 +36,7 @@ FROM base as deps
 
 WORKDIR /home/node
 COPY --chown=node:node other/patches/ ./other/patches/
-COPY --chown=node:node package.json package-lock.json ./
+COPY --chown=node:node .npmrc package.json package-lock.json ./
 
 USER node
 RUN npm clean-install --include dev
