@@ -19,7 +19,7 @@ import { DefinitionList, DefinitionListItem } from '~/components/definition-list
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { Eligibility } from '~/components/eligibility';
 import { InlineLink } from '~/components/inline-link';
-import { useApplicationFlowStorage, useCurrentLanguage } from '~/hooks';
+import { useApplicationFlowStorage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { formatClientNumber, formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
@@ -69,42 +69,16 @@ export async function loader({ context: { appContainer, session }, params, reque
   const userInfo = {
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
-    birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
-    sin: state.applicantInformation.socialInsuranceNumber,
+    communicationPreferences: communicationPreferences,
+    dateOfBirth: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
+    email: publicApplicationStateResolver.resolveEmailValue(state),
     maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
     memberId: state.applicantInformation.memberId,
-    hasPhoneNumberChanged: phoneNumber.hasChanged,
-    phoneNumber: phoneNumber.primary,
-    altPhoneNumber: phoneNumber.alternate,
-    hasCommunicationPreferencesChanged: communicationPreferences.hasChanged,
-    preferredLanguage: communicationPreferences.preferredLanguage,
-    communicationSunLifePreference: communicationPreferences.preferredMethodSunLife,
-    communicationGOCPreference: communicationPreferences.preferredMethodGovernmentOfCanada,
-    email: publicApplicationStateResolver.resolveEmailValue(state),
+    phoneNumber: phoneNumber,
+    socialInsuranceNumber: state.applicantInformation.socialInsuranceNumber,
   };
 
-  const spouseInfo = state.partnerInformation && {
-    yearOfBirth: state.partnerInformation.yearOfBirth,
-    sin: state.partnerInformation.socialInsuranceNumber,
-  };
-
-  const mailingAddressInfo = {
-    hasMailingAddressChanged: mailingAddress.hasChanged,
-    address: mailingAddress.address,
-    city: mailingAddress.city,
-    province: mailingAddress.province?.abbr,
-    postalCode: mailingAddress.postalCode,
-    country: mailingAddress.country.name,
-  };
-
-  const homeAddressInfo = {
-    hasHomeAddressChanged: homeAddress.hasChanged,
-    address: homeAddress.address,
-    city: homeAddress.city,
-    province: homeAddress.province?.abbr,
-    postalCode: homeAddress.postalCode,
-    country: homeAddress.country.name,
-  };
+  const spouseInfo = state.partnerInformation;
 
   const children = await Promise.all(
     state.children.map(async (childState) => {
@@ -126,21 +100,11 @@ export async function loader({ context: { appContainer, session }, params, reque
         memberId: childState.information.memberId,
         firstName: childState.information.firstName,
         lastName: childState.information.lastName,
-        birthday: childState.information.dateOfBirth,
-        sin: childState.information.socialInsuranceNumber,
+        socialInsuranceNumber: childState.information.socialInsuranceNumber,
         isParent: childState.information.isParent,
-        dentalInsurance: {
-          accessToDentalInsurance: childState.dentalInsurance.hasDentalInsurance,
-          hasDentalBenefitsChanged: childDentalBenefits.hasChanged,
-          federalBenefit: {
-            access: childDentalBenefits.federalGovernmentInsurancePlan !== undefined,
-            benefit: childDentalBenefits.federalGovernmentInsurancePlan?.name,
-          },
-          provTerrBenefit: {
-            access: childDentalBenefits.provincialGovernmentInsurancePlan !== undefined,
-            benefit: childDentalBenefits.provincialGovernmentInsurancePlan?.name,
-          },
-        },
+        dateOfBirth: toLocaleDateString(parseDateString(childState.information.dateOfBirth), locale),
+        dentalBenefits: childDentalBenefits,
+        hasDentalInsurance: childState.dentalInsurance.hasDentalInsurance,
         eligibility,
       };
     }),
@@ -151,8 +115,8 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   return {
-    homeAddressInfo,
-    mailingAddressInfo,
+    homeAddress,
+    mailingAddress,
     meta,
     spouseInfo,
     submissionInfo: state.submissionInfo,
@@ -181,13 +145,11 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function RenewChildrenConfirmation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo, surveyLink, children } = loaderData;
+  const { userInfo, spouseInfo, homeAddress, mailingAddress, submissionInfo, surveyLink, children } = loaderData;
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const mscaLinkAccount = <InlineLink to={t(($) => $.confirm.mscaLinkAccount)} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t(($) => $.confirm.mscaLinkChecker)} className="external-link" newTabIndicator target="_blank" />;
-
-  const { currentLanguage } = useCurrentLanguage();
 
   return (
     <>
@@ -281,9 +243,9 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
               <DefinitionList border>
                 {userInfo.memberId && <DefinitionListItem term={t(($) => $.confirm.memberId)}>{formatClientNumber(userInfo.memberId)}</DefinitionListItem>}
                 <DefinitionListItem term={t(($) => $.confirm.fullName)}>{`${userInfo.firstName} ${userInfo.lastName}`}</DefinitionListItem>
-                <DefinitionListItem term={t(($) => $.confirm.dob)}>{userInfo.birthday}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.confirm.dob)}>{userInfo.dateOfBirth}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.sin)}>
-                  <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
+                  <span className="text-nowrap">{formatSin(userInfo.socialInsuranceNumber)}</span>
                 </DefinitionListItem>
               </DefinitionList>
             </section>
@@ -294,7 +256,7 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
                 <DefinitionList border>
                   <DefinitionListItem term={t(($) => $.confirm.yearBirth)}>{spouseInfo.yearOfBirth}</DefinitionListItem>
                   <DefinitionListItem term={t(($) => $.confirm.sin)}>
-                    <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
+                    <span className="text-nowrap">{formatSin(spouseInfo.socialInsuranceNumber)}</span>
                   </DefinitionListItem>
                   <DefinitionListItem term={t(($) => $.confirm.consent)}>{t(($) => $.confirm.consentAnswer)}</DefinitionListItem>
                 </DefinitionList>
@@ -305,20 +267,20 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
               <h3 className="font-lato text-2xl font-bold">{t(($) => $.confirm.contactInfo)}</h3>
               <DefinitionList border>
                 <DefinitionListItem term={t(($) => $.confirm.phoneNumber)}>
-                  <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.phoneNumber : t(($) => $.confirm.noUpdate)}</span>
+                  <span className="text-nowrap">{userInfo.phoneNumber.hasChanged ? userInfo.phoneNumber.primary : t(($) => $.confirm.noUpdate)}</span>
                 </DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.altPhoneNumber)}>
-                  <span className="text-nowrap">{userInfo.hasPhoneNumberChanged ? userInfo.altPhoneNumber : t(($) => $.confirm.noUpdate)}</span>
+                  <span className="text-nowrap">{userInfo.phoneNumber.hasChanged ? userInfo.phoneNumber.alternate : t(($) => $.confirm.noUpdate)}</span>
                 </DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.mailing)}>
-                  {mailingAddressInfo.hasMailingAddressChanged ? (
+                  {mailingAddress.hasChanged ? (
                     <Address
                       address={{
-                        address: mailingAddressInfo.address,
-                        city: mailingAddressInfo.city,
-                        provinceState: mailingAddressInfo.province,
-                        postalZipCode: mailingAddressInfo.postalCode,
-                        country: mailingAddressInfo.country,
+                        address: mailingAddress.address,
+                        city: mailingAddress.city,
+                        provinceState: mailingAddress.province?.abbr,
+                        postalZipCode: mailingAddress.postalCode,
+                        country: mailingAddress.country.name,
                       }}
                     />
                   ) : (
@@ -326,14 +288,14 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
                   )}
                 </DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.home)}>
-                  {homeAddressInfo.hasHomeAddressChanged ? (
+                  {homeAddress.hasChanged ? (
                     <Address
                       address={{
-                        address: homeAddressInfo.address,
-                        city: homeAddressInfo.city,
-                        provinceState: homeAddressInfo.province,
-                        postalZipCode: homeAddressInfo.postalCode,
-                        country: homeAddressInfo.country,
+                        address: homeAddress.address,
+                        city: homeAddress.city,
+                        provinceState: homeAddress.province?.abbr,
+                        postalZipCode: homeAddress.postalCode,
+                        country: homeAddress.country.name,
                       }}
                     />
                   ) : (
@@ -346,17 +308,16 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
             <section className="space-y-6">
               <h3 className="font-lato text-2xl font-bold">{t(($) => $.confirm.commPref)}</h3>
               <DefinitionList border>
-                <DefinitionListItem term={t(($) => $.confirm.langPref)}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.preferredLanguage.name : t(($) => $.confirm.noUpdate)}</DefinitionListItem>
-                <DefinitionListItem term={t(($) => $.confirm.sunLifeCommPrefTitle)}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationSunLifePreference.name : t(($) => $.confirm.noUpdate)}</DefinitionListItem>
-                <DefinitionListItem term={t(($) => $.confirm.gocCommPrefTitle)}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.communicationGOCPreference.name : t(($) => $.confirm.noUpdate)}</DefinitionListItem>
-                {userInfo.email && <DefinitionListItem term={t(($) => $.confirm.email)}>{userInfo.hasCommunicationPreferencesChanged ? userInfo.email : t(($) => $.confirm.noUpdate)}</DefinitionListItem>}
+                <DefinitionListItem term={t(($) => $.confirm.langPref)}>{userInfo.communicationPreferences.hasChanged ? userInfo.communicationPreferences.preferredLanguage.name : t(($) => $.confirm.noUpdate)}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.confirm.sunLifeCommPrefTitle)}>{userInfo.communicationPreferences.hasChanged ? userInfo.communicationPreferences.preferredMethodSunLife.name : t(($) => $.confirm.noUpdate)}</DefinitionListItem>
+                <DefinitionListItem term={t(($) => $.confirm.gocCommPrefTitle)}>{userInfo.communicationPreferences.hasChanged ? userInfo.communicationPreferences.preferredMethodGovernmentOfCanada.name : t(($) => $.confirm.noUpdate)}</DefinitionListItem>
+                {userInfo.email && <DefinitionListItem term={t(($) => $.confirm.email)}>{userInfo.communicationPreferences.hasChanged ? userInfo.email : t(($) => $.confirm.noUpdate)}</DefinitionListItem>}
               </DefinitionList>
             </section>
           </section>
 
           <div className="mb-8 space-y-10">
             {children.map((child) => {
-              const dateOfBirth = toLocaleDateString(parseDateString(child.birthday), currentLanguage);
               return (
                 <section key={child.id} className="space-y-10">
                   <h2 className="font-lato text-3xl font-bold">{child.firstName}</h2>
@@ -369,8 +330,8 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
                     <DefinitionList border>
                       <DefinitionListItem term={t(($) => $.confirm.memberId)}>{child.memberId}</DefinitionListItem>
                       <DefinitionListItem term={t(($) => $.confirm.fullName)}>{`${child.firstName} ${child.lastName}`}</DefinitionListItem>
-                      <DefinitionListItem term={t(($) => $.confirm.dob)}>{dateOfBirth}</DefinitionListItem>
-                      <DefinitionListItem term={t(($) => $.confirm.sin)}>{child.sin && formatSin(child.sin)}</DefinitionListItem>
+                      <DefinitionListItem term={t(($) => $.confirm.dob)}>{child.dateOfBirth}</DefinitionListItem>
+                      <DefinitionListItem term={t(($) => $.confirm.sin)}>{child.socialInsuranceNumber && formatSin(child.socialInsuranceNumber)}</DefinitionListItem>
                       <DefinitionListItem term={t(($) => $.confirm.isParent)}>{child.isParent ? t(($) => $.confirm.yes) : t(($) => $.confirm.no)}</DefinitionListItem>
                     </DefinitionList>
                   </div>
@@ -381,19 +342,19 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
                       })}
                     </h3>
                     <DefinitionList border>
-                      <DefinitionListItem term={t(($) => $.confirm.dentalPrivate)}>{child.dentalInsurance.accessToDentalInsurance ? t(($) => $.confirm.yes) : t(($) => $.confirm.no)}</DefinitionListItem>
+                      <DefinitionListItem term={t(($) => $.confirm.dentalPrivate)}>{child.hasDentalInsurance ? t(($) => $.confirm.yes) : t(($) => $.confirm.no)}</DefinitionListItem>
                       <DefinitionListItem term={t(($) => $.confirm.dentalPublic)}>
-                        {child.dentalInsurance.hasDentalBenefitsChanged && (child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access) ? (
+                        {child.dentalBenefits.hasChanged && (child.dentalBenefits.federalGovernmentInsurancePlan || child.dentalBenefits.provincialGovernmentInsurancePlan) ? (
                           <div className="space-y-3">
                             <p>{t(($) => $.confirm.yes)}</p>
                             <p>{t(($) => $.confirm.dentalBenefitHasAccess)}</p>
                             <ul className="list-disc space-y-1 pl-7">
-                              {child.dentalInsurance.federalBenefit.access && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
-                              {child.dentalInsurance.provTerrBenefit.access && <li>{child.dentalInsurance.provTerrBenefit.benefit}</li>}
+                              {child.dentalBenefits.federalGovernmentInsurancePlan && <li>{child.dentalBenefits.federalGovernmentInsurancePlan.name}</li>}
+                              {child.dentalBenefits.provincialGovernmentInsurancePlan && <li>{child.dentalBenefits.provincialGovernmentInsurancePlan.name}</li>}
                             </ul>
                           </div>
                         ) : (
-                          <p>{child.dentalInsurance.hasDentalBenefitsChanged ? t(($) => $.confirm.no) : t(($) => $.confirm.noUpdate)}</p>
+                          <>{child.dentalBenefits.hasChanged ? t(($) => $.confirm.no) : t(($) => $.confirm.noUpdate)}</>
                         )}
                       </DefinitionListItem>
                     </DefinitionList>
