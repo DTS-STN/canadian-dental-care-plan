@@ -112,6 +112,7 @@ const ns = {
     keepCopy: "Imprimez ou sauvegardez une copie de votre demande",
     printCopyImportant: "Il est important de conserver une copie de votre demande.",
     printBtn: "Imprimer ou sauvegarder",
+    printUnavailable: "L'impression n'est pas disponible pour le moment. Veuillez prendre note de votre code de confirmation et vérifier les renseignements que vous avez soumis avant de quitter cette page, car ils ne seront plus accessibles.",
     whatsNext: "Confirmez votre admissibilité et votre niveau de couverture",
     beginProcess: "Vérifiez toujours votre admissibilité et votre niveau de couverture avant de recevoir des soins. Vous pouvez confirmer ces renseignements en utilisant le <cdcpLink>Vérificateur de l'état</cdcpLink> ou en vous connectant à <mscaLinkAccount>Mon dossier Service Canada (MDSC)</mscaLinkAccount>.",
     getUpdatesTitle: "Obtenez des mises à jour rapidement et en toute sécurité",

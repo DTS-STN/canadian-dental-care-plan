@@ -118,6 +118,7 @@ const ns = {
     keepCopy: "Imprimez ou sauvegardez une copie de votre demande",
     printCopyImportant: "Il est important de conserver une copie de votre demande.",
     printBtn: "Imprimer ou sauvegarder",
+    printUnavailable: "L'impression n'est pas disponible pour le moment. Veuillez prendre note de votre code de confirmation et vérifier les renseignements que vous avez soumis avant de quitter cette page, car ils ne seront plus accessibles.",
     whatsNext: "Vous recevrez une lettre confirmant votre admissibilité",
     beginProcess: "Nous avons reçu votre demande. Une lettre vous sera envoyée dans un délai de 30 jours civils avec plus d'informations et les prochaines étapes, au besoin.",
     proofOfCoverage: "Si l'un de vos feuillets T4 ou T4A indique que vous avez accès à une assurance ou une couverture dentaire offerte par un employeur ou un régime de pension, vous pourriez devoir fournir une preuve que vous n'êtes pas couvert(e).",

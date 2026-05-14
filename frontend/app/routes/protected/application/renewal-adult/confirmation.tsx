@@ -13,6 +13,7 @@ import { Address } from '~/components/address';
 import { AppPageTitle } from '~/components/app-page-title';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
+import { PrintButton } from '~/components/print-button';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
@@ -165,18 +166,15 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
         <section>
           <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.keepCopy)}</h2>
           <p className="mt-4">{t(($) => $.confirm.printCopyImportant)}</p>
-          <Button
+          <PrintButton
             variant="primary"
             size="lg"
             className="mt-8 print:hidden"
-            onClick={(event) => {
-              event.preventDefault();
-              window.print();
-            }}
+            errorMessage={t(($) => $.confirm.printUnavailable)}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Print top - Application successfully submitted click"
           >
             {t(($) => $.confirm.printBtn)}
-          </Button>
+          </PrintButton>
         </section>
         <ContextualAlert type="comment">
           <div className="space-y-4">
@@ -330,18 +328,15 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
           </section>
         </section>
         <div className="my-6">
-          <Button
+          <PrintButton
             className="px-12 print:hidden"
             size="lg"
             variant="primary"
-            onClick={(event) => {
-              event.preventDefault();
-              window.print();
-            }}
+            errorMessage={t(($) => $.confirm.printUnavailable)}
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Print bottom - Application successfully submitted click"
           >
             {t(($) => $.confirm.printBtn)}
-          </Button>
+          </PrintButton>
         </div>
         <Dialog>
           <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Exit - Application successfully submitted click" asChild>
