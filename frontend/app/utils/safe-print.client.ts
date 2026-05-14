@@ -25,6 +25,7 @@ export function safePrint(onUnavailable?: () => void): void {
 
   const onBeforePrint = () => {
     printDialogOpened = true;
+    listenerRegistered = false;
   };
 
   const cleanupBeforePrintListener = () => {
