@@ -21,23 +21,17 @@ export function safePrint(onUnavailable?: () => void): void {
   }
 
   let printDialogOpened = false;
-  let listenerRegistered = false;
 
   const onBeforePrint = () => {
     printDialogOpened = true;
-    listenerRegistered = false;
   };
 
   const cleanupBeforePrintListener = () => {
-    if (listenerRegistered) {
-      window.removeEventListener('beforeprint', onBeforePrint);
-      listenerRegistered = false;
-    }
+    window.removeEventListener('beforeprint', onBeforePrint);
   };
 
   try {
-    window.addEventListener('beforeprint', onBeforePrint, { once: true });
-    listenerRegistered = true;
+    window.addEventListener('beforeprint', onBeforePrint);
 
     window.print();
 
