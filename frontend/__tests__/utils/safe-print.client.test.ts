@@ -76,11 +76,13 @@ describe('safePrint', () => {
         throw error;
       }),
     });
+    const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener');
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const onUnavailable = vi.fn();
 
     safePrint(onUnavailable);
 
+    expect(removeEventListenerSpy).toHaveBeenCalledTimes(1);
     expect(consoleErrorSpy).toHaveBeenCalledWith('safePrint: window.print() threw an error.', error);
     expect(onUnavailable).toHaveBeenCalledTimes(1);
   });

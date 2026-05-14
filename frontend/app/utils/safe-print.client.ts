@@ -30,20 +30,30 @@ export function safePrint(onUnavailable?: () => void): void {
     window.removeEventListener('beforeprint', onBeforePrint);
   };
 
+  let printThrew = false;
+
+  window.addEventListener('beforeprint', onBeforePrint);
+
   try {
-    window.addEventListener('beforeprint', onBeforePrint);
-
     window.print();
-
-    setTimeout(() => {
-      cleanupBeforePrintListener();
-      if (!printDialogOpened) {
-        onUnavailable?.();
-      }
-    }, 500);
   } catch (error) {
-    cleanupBeforePrintListener();
+    printThrew = true;
     console.error('safePrint: window.print() threw an error.', error);
     onUnavailable?.();
+  } finally {
+    if (printThrew) {
+      cleanupBeforePrintListener();
+    }
   }
+
+  if (printThrew) {
+    return;
+  }
+
+  setTimeout(() => {
+    cleanupBeforePrintListener();
+    if (!printDialogOpened) {
+      onUnavailable?.();
+    }
+  }, 500);
 }

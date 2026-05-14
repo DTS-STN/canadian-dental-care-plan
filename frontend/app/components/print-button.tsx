@@ -15,28 +15,27 @@ type PrintButtonProps = OmitStrict<ComponentProps<typeof Button>, 'onClick'> & {
  * or silently fails (e.g., in-app WebViews).
  *
  * Displays a danger alert with the provided `errorMessage` when printing
- * is not available. The wrapping `<div>` receives the `className` prop
- * so that both the button and the error alert can be hidden together
- * (e.g., using `print:hidden`).
+ * is not available.
  *
  * @example
  * ```tsx
- * <PrintButton
- *   className="px-12 print:hidden"
- *   size="lg"
- *   variant="primary"
- *   errorMessage={t(($) => $.confirm.printUnavailable)}
- *   data-gc-analytics-customclick="..."
- * >
- *   {t(($) => $.confirm.printBtn)}
- * </PrintButton>
+ * <div className="px-12 print:hidden">
+ *   <PrintButton
+ *     size="lg"
+ *     variant="primary"
+ *     errorMessage={t(($) => $.confirm.printUnavailable)}
+ *     data-gc-analytics-customclick="..."
+ *   >
+ *     {t(($) => $.confirm.printBtn)}
+ *   </PrintButton>
+ * </div>
  * ```
  */
-export function PrintButton({ className, children, errorMessage, ...props }: PrintButtonProps) {
+export function PrintButton({ children, errorMessage, ...props }: PrintButtonProps) {
   const [printError, setPrintError] = useState(false);
 
   return (
-    <div className={className}>
+    <>
       <Button
         onClick={() => {
           setPrintError(false);
@@ -51,6 +50,6 @@ export function PrintButton({ className, children, errorMessage, ...props }: Pri
           <p>{errorMessage}</p>
         </ContextualAlert>
       )}
-    </div>
+    </>
   );
 }
