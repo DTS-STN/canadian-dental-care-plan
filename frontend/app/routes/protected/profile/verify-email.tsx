@@ -277,7 +277,7 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
               </p>
               <p className="mb-4">{t(($) => $.verifyEmail.requestNew)}</p>
               <p className="mb-8">
-                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
+                <Trans ns="protectedProfile" i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
               </p>
               <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
               <div className="grid items-end gap-6 md:grid-cols-2">

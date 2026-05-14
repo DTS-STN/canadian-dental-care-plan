@@ -179,14 +179,14 @@ export default function ApplyFlowConfirm({ loaderData, params }: Route.Component
         <section>
           <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.checkStatus)}</h2>
           <p className="mt-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.cdcpChecker} components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
+            <Trans ns="protectedApplicationIntakeAdult" i18nKey={($) => $.confirm.cdcpChecker} components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
           </p>
           <p className="mt-4">{t(($) => $.confirm.useCode)}</p>
         </section>
         <section>
           <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.getUpdatesTitle)}</h2>
           <p className="mt-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.getUpdatesText} components={{ mscaLinkAccount }} />
+            <Trans ns="protectedApplicationIntakeAdult" i18nKey={($) => $.confirm.getUpdatesText} components={{ mscaLinkAccount }} />
           </p>
           <p className="mt-4">{t(($) => $.confirm.getUpdatesInfo)}</p>
           <ul className="list-disc space-y-1 pl-7">

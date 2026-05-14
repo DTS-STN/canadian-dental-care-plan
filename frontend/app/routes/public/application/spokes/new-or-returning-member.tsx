@@ -130,13 +130,13 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
 
   const options: InputRadiosProps['options'] = [
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.newOrReturningMember.yes} components={{ bold: <strong /> }} />,
+      children: <Trans ns="applicationSpokes" i18nKey={($) => $.newOrReturningMember.yes} components={{ bold: <strong /> }} />,
       value: NEW_OR_EXISTING_MEMBER_OPTION.yes,
       defaultChecked: defaultState?.isNewOrReturningMember === true,
       onChange: handleNewOrReturningMemberSelection,
     },
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.newOrReturningMember.no} components={{ bold: <strong /> }} />,
+      children: <Trans ns="applicationSpokes" i18nKey={($) => $.newOrReturningMember.no} components={{ bold: <strong /> }} />,
       value: NEW_OR_EXISTING_MEMBER_OPTION.no,
       defaultChecked: defaultState?.isNewOrReturningMember === false,
       onChange: handleNewOrReturningMemberSelection,

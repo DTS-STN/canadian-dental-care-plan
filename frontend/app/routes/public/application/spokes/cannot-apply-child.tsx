@@ -78,7 +78,7 @@ export default function ApplyForYourself({ loaderData, params }: Route.Component
               : t(($) => $.children.cannotApplyChild.ineligibleToApply.adultApplication)}
           </p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.cannotApplyChild.eligibilityInfo} components={{ noWrap }} />
+            <Trans ns="applicationSpokes" i18nKey={($) => $.children.cannotApplyChild.eligibilityInfo} components={{ noWrap }} />
           </p>
         </div>
         <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">

@@ -51,13 +51,13 @@ export default function DataUnavailable({ loaderData, params }: Route.ComponentP
       <div className="max-w-prose">
         <div className="space-y-4">
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.serviceEligible} components={{ statusCheckerLink }} />
+            <Trans ns="dataUnavailable" i18nKey={($) => $.serviceEligible} components={{ statusCheckerLink }} />
           </p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.otherEnquiry} components={{ cdcpLink }} />
+            <Trans ns="dataUnavailable" i18nKey={($) => $.otherEnquiry} components={{ cdcpLink }} />
           </p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.serviceDelay} components={{ contactLink }} />
+            <Trans ns="dataUnavailable" i18nKey={($) => $.serviceDelay} components={{ contactLink }} />
           </p>
         </div>
         <div className="mt-6 flex flex-wrap items-center gap-3">

@@ -271,7 +271,7 @@ export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, par
                 })}
                 options={[
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.dentalBenefits.federalBenefits.optionYes} />,
+                    children: <Trans ns="applicationSpokes" i18nKey={($) => $.children.dentalBenefits.federalBenefits.optionYes} />,
                     value: HAS_FEDERAL_BENEFITS_OPTION.yes,
                     defaultChecked: hasFederalBenefitValue === true,
                     onChange: handleOnHasFederalBenefitChanged,
@@ -292,7 +292,7 @@ export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, par
                     ),
                   },
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.dentalBenefits.federalBenefits.optionNo} />,
+                    children: <Trans ns="applicationSpokes" i18nKey={($) => $.children.dentalBenefits.federalBenefits.optionNo} />,
                     value: HAS_FEDERAL_BENEFITS_OPTION.no,
                     defaultChecked: hasFederalBenefitValue === false,
                     onChange: handleOnHasFederalBenefitChanged,
@@ -312,7 +312,7 @@ export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, par
                 })}
                 options={[
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.dentalBenefits.provincialTerritorialBenefits.optionYes} />,
+                    children: <Trans ns="applicationSpokes" i18nKey={($) => $.children.dentalBenefits.provincialTerritorialBenefits.optionYes} />,
                     value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes,
                     defaultChecked: defaultState?.hasProvincialTerritorialBenefits === true,
                     onChange: handleOnHasProvincialTerritorialBenefitChanged,
@@ -358,7 +358,7 @@ export default function SpokeChildAccessToDentalDentalBenefits({ loaderData, par
                     ),
                   },
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.dentalBenefits.provincialTerritorialBenefits.optionNo} />,
+                    children: <Trans ns="applicationSpokes" i18nKey={($) => $.children.dentalBenefits.provincialTerritorialBenefits.optionNo} />,
                     value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.no,
                     defaultChecked: defaultState?.hasProvincialTerritorialBenefits === false,
                     onChange: handleOnHasProvincialTerritorialBenefitChanged,

@@ -77,10 +77,10 @@ export default function ApplicationFileYourTaxes({ loaderData, params }: Route.C
           <p>{t(($) => $.fileYourTaxes.taxNotFiled, { taxYear: taxYear })}</p>
           <p>{t(($) => $.fileYourTaxes.unableToAssess)}</p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.fileYourTaxes.taxInfo} components={{ taxInfo }} />
+            <Trans ns="protectedApplication" i18nKey={($) => $.fileYourTaxes.taxInfo} components={{ taxInfo }} />
           </p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.fileYourTaxes.applyAfter} />
+            <Trans ns="protectedApplication" i18nKey={($) => $.fileYourTaxes.applyAfter} />
           </p>
         </div>
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">

@@ -240,9 +240,9 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
     let children: ReactNode = <span className="font-semibold">{method.name}</span>;
 
     if (method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.editCommunicationPreferences.preferredMethodGcDigital} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
+      children = <Trans ns="protectedProfile" i18nKey={($) => $.editCommunicationPreferences.preferredMethodGcDigital} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
     } else if (method.id === COMMUNICATION_METHOD_GC_MAIL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.editCommunicationPreferences.preferredMethodGcMail} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
+      children = <Trans ns="protectedProfile" i18nKey={($) => $.editCommunicationPreferences.preferredMethodGcMail} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
     }
 
     return {

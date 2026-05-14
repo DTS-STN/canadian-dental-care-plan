@@ -182,7 +182,7 @@ export default function ProtectedNewFamilySubmit({ loaderData, params }: Route.C
               <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.submitYourApplication)}</h2>
               <p>{t(($) => $.submit.bySubmitting)}</p>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.submit.reviewEligibilityCriteria} components={{ eligibilityLink }} />
+                <Trans ns="protectedApplicationIntakeFamily" i18nKey={($) => $.submit.reviewEligibilityCriteria} components={{ eligibilityLink }} />
               </p>
               <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
                 <CsrfTokenInput />

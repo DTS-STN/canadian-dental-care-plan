@@ -216,7 +216,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
     let children: ReactNode = <span className="font-semibold">{method.name}</span>;
 
     if (method.id === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.communicationPreferences.byEmail} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
+      children = <Trans ns="applicationSpokes" i18nKey={($) => $.communicationPreferences.byEmail} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
     }
 
     return {
@@ -232,9 +232,9 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
     let children: ReactNode = <span className="font-semibold">{method.name}</span>;
 
     if (method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.communicationPreferences.preferredNotificationMethodMsca} values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />;
+      children = <Trans ns="applicationSpokes" i18nKey={($) => $.communicationPreferences.preferredNotificationMethodMsca} values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />;
     } else if (method.id === COMMUNICATION_METHOD_GC_MAIL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.communicationPreferences.preferredNotificationMethodMail} values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />;
+      children = <Trans ns="applicationSpokes" i18nKey={($) => $.communicationPreferences.preferredNotificationMethodMail} values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />;
     }
 
     return {

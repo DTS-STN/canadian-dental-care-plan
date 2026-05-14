@@ -180,13 +180,13 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
                 legend={t(($) => $.dentalInsurance.legend)}
                 options={[
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.optionYes} />,
+                    children: <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.dentalInsurance.optionYes} />,
                     value: HAS_DENTAL_INSURANCE_OPTION.yes,
                     defaultChecked: defaultState?.hasDentalInsurance === true,
                     onChange: handleOnHasDentalInsuranceChanged,
                   },
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.optionNo} />,
+                    children: <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.dentalInsurance.optionNo} />,
                     value: HAS_DENTAL_INSURANCE_OPTION.no,
                     defaultChecked: defaultState?.hasDentalInsurance === false,
                     onChange: handleOnHasDentalInsuranceChanged,
@@ -221,7 +221,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
               <div className="mb-4 space-y-4">
                 <ContextualAlert type="info" id="dental-insurance-confirmation-no">
                   <h2 className="font-lato mb-2 text-xl font-semibold">{t(($) => $.dentalInsurance.no.alertTitle)}</h2>
-                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.no.alertBody} components={{ t4Href, t4aHref }} />
+                  <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.dentalInsurance.no.alertBody} components={{ t4Href, t4aHref }} />
                 </ContextualAlert>
                 <InputCheckbox
                   id="dental-insurance-eligibility-confirmation-no"

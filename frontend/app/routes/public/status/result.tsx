@@ -126,7 +126,7 @@ function StatusNotFound() {
         <p className="mb-2">{t(($) => $.result.statusNotFound.pleaseReview)}</p>
         <p className="mb-2">{t(($) => $.result.statusNotFound.ifSubmitted)}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.result.statusNotFound.contactServiceCanada} components={{ noWrap }} />
+          <Trans ns="status" i18nKey={($) => $.result.statusNotFound.contactServiceCanada} components={{ noWrap }} />
         </p>
       </ContextualAlert>
     </div>

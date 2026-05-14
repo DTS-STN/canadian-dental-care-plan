@@ -201,7 +201,7 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
             <section>
               <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.checkStatus)}</h2>
               <p className="mt-4">
-                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.cdcpChecker} components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
+                <Trans ns="protectedApplicationRenewalAdult" i18nKey={($) => $.confirm.cdcpChecker} components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
               </p>
               <p className="mt-4">{t(($) => $.confirm.useCode)}</p>
             </section>
@@ -211,7 +211,7 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
           <section>
             <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.simplifiedWhatsNext)}</h2>
             <p className="mt-4">
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.simplifiedBeginProcess} components={{ cdcpLink, mscaLinkAccount }} />
+              <Trans ns="protectedApplicationRenewalAdult" i18nKey={($) => $.confirm.simplifiedBeginProcess} components={{ cdcpLink, mscaLinkAccount }} />
             </p>
           </section>
         )}

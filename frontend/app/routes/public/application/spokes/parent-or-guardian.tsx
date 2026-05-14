@@ -87,7 +87,7 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
       <div className="mb-8 max-w-prose space-y-4">
         <p className="mb-4">{t(($) => $.parentOrGuardian.unableToApply)}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.parentOrGuardian.applyForYourself} components={{ noWrap }} />
+          <Trans ns="applicationSpokes" i18nKey={($) => $.parentOrGuardian.applyForYourself} components={{ noWrap }} />
         </p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">

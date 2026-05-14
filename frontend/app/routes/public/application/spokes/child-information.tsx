@@ -342,7 +342,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
 
   const options: InputRadiosProps['options'] = [
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.information.sinYes} components={{ bold: <strong /> }} />,
+      children: <Trans ns="applicationSpokes" i18nKey={($) => $.children.information.sinYes} components={{ bold: <strong /> }} />,
       value: YES_NO_OPTION.yes,
       defaultChecked: defaultState?.hasSocialInsuranceNumber ?? true,
       append: hasSocialInsuranceNumberValue === true && (
@@ -362,7 +362,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
       onChange: handleSocialInsuranceNumberSelection,
     },
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.information.sinNo} components={{ bold: <strong /> }} />,
+      children: <Trans ns="applicationSpokes" i18nKey={($) => $.children.information.sinNo} components={{ bold: <strong /> }} />,
       value: YES_NO_OPTION.no,
       defaultChecked: defaultState?.hasSocialInsuranceNumber === false,
       onChange: handleSocialInsuranceNumberSelection,
@@ -376,7 +376,7 @@ export default function ApplyFlowChildInformation({ loaderData, params }: Route.
         <ErrorAlert>
           <h2 className="mb-2 font-bold">{t(($) => $.children.information.errorMessage.alert.heading)}</h2>
           <p className="mb-2">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.information.errorMessage.alert.detail} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+            <Trans ns="applicationSpokes" i18nKey={($) => $.children.information.errorMessage.alert.detail} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
           </p>
           <p className="mb-2">{t(($) => $.children.information.errorMessage.alert.detailAdultMustApply)}</p>
           <p className="mb-2">{t(($) => $.children.information.errorMessage.alert.applyDate)}</p>

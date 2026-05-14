@@ -184,13 +184,13 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
         <section>
           <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.whatsNext)}</h2>
           <p className="mt-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.beginProcess} components={{ cdcpLink, mscaLinkAccount }} />
+            <Trans ns="applicationSimplifiedAdult" i18nKey={($) => $.confirm.beginProcess} components={{ cdcpLink, mscaLinkAccount }} />
           </p>
         </section>
         <section>
           <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.getUpdatesTitle)}</h2>
           <p className="my-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.getUpdatesText} components={{ mscaLinkAccount }} />
+            <Trans ns="applicationSimplifiedAdult" i18nKey={($) => $.confirm.getUpdatesText} components={{ mscaLinkAccount }} />
           </p>
           <ul className="list-disc space-y-1 pl-7">
             <li>{t(($) => $.confirm.view)}</li>

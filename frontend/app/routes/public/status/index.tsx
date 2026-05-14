@@ -130,7 +130,7 @@ export default function StatusChecker({ loaderData, params }: Route.ComponentPro
             <h2 className="mb-4 font-bold">{t(($) => $.termsOfUse.heading)}</h2>
             <p>{t(($) => $.termsOfUse.thankYou)}</p>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsOfUse.legalTerms} components={{ canadaTermsConditions }} />
+              <Trans ns="status" i18nKey={($) => $.termsOfUse.legalTerms} components={{ canadaTermsConditions }} />
             </p>
             <p>{t(($) => $.termsOfUse.accessTerms)}</p>
             <p>{t(($) => $.termsOfUse.maintenance)}</p>
@@ -145,10 +145,10 @@ export default function StatusChecker({ loaderData, params }: Route.ComponentPro
               <li>{t(($) => $.termsOfUse.statusChecker.atYourOwnRisk)}</li>
               <li>{t(($) => $.termsOfUse.statusChecker.onlyUse)}</li>
               <li>
-                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsOfUse.statusChecker.msdc} components={{ microsoftServiceAgreement }} />
+                <Trans ns="status" i18nKey={($) => $.termsOfUse.statusChecker.msdc} components={{ microsoftServiceAgreement }} />
               </li>
               <li>
-                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsOfUse.statusChecker.antibot} components={{ hcaptchaTermsOfService }} />
+                <Trans ns="status" i18nKey={($) => $.termsOfUse.statusChecker.antibot} components={{ hcaptchaTermsOfService }} />
               </li>
             </ul>
             <h2 className="font-bold">{t(($) => $.termsOfUse.changesToTheseTermsOfUse.heading)}</h2>
@@ -158,17 +158,17 @@ export default function StatusChecker({ loaderData, params }: Route.ComponentPro
         <Collapsible summary={t(($) => $.privacyNoticeStatement.summary)} className="my-8">
           <div className="space-y-4">
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.collectionOfUse} components={{ cite: <cite /> }} />
+              <Trans ns="status" i18nKey={($) => $.privacyNoticeStatement.collectionOfUse} components={{ cite: <cite /> }} />
             </p>
             <p>{t(($) => $.privacyNoticeStatement.providedInformation)}</p>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.thirdPartyProvider} components={{ microsoftDataPrivacyPolicy }} />
+              <Trans ns="status" i18nKey={($) => $.privacyNoticeStatement.thirdPartyProvider} components={{ microsoftDataPrivacyPolicy }} />
             </p>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.personalInformation} components={{ cite: <cite /> }} />
+              <Trans ns="status" i18nKey={($) => $.privacyNoticeStatement.personalInformation} components={{ cite: <cite /> }} />
             </p>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.privacyNoticeStatement.reportAConcern} components={{ fileacomplaint }} />
+              <Trans ns="status" i18nKey={($) => $.privacyNoticeStatement.reportAConcern} components={{ fileacomplaint }} />
             </p>
           </div>
         </Collapsible>
@@ -184,11 +184,11 @@ export default function StatusChecker({ loaderData, params }: Route.ComponentPro
               legend={t(($) => $.form.radioLegend)}
               options={[
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.form.radioText.myself} />,
+                  children: <Trans ns="status" i18nKey={($) => $.form.radioText.myself} />,
                   value: CHECK_FOR.myself,
                 },
                 {
-                  children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.form.radioText.child} />,
+                  children: <Trans ns="status" i18nKey={($) => $.form.radioText.child} />,
                   value: CHECK_FOR.child,
                 },
               ]}

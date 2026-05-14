@@ -70,10 +70,10 @@ export default function ApplicationDelegate({ loaderData, params }: Route.Compon
       <div className="max-w-prose">
         <div className="mb-8 space-y-4">
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.applicationDelegate.contactRepresentative} components={{ contactServiceCanada, noWrap }} />
+            <Trans ns="applicationSpokes" i18nKey={($) => $.applicationDelegate.contactRepresentative} components={{ contactServiceCanada, noWrap }} />
           </p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.applicationDelegate.prepareToApply} components={{ preparingToApply }} />
+            <Trans ns="applicationSpokes" i18nKey={($) => $.applicationDelegate.prepareToApply} components={{ preparingToApply }} />
           </p>
         </div>
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">

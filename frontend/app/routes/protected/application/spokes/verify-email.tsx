@@ -240,14 +240,14 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
         <ErrorAlert>
           <h2 className="mb-2 font-bold">{t(($) => $.verifyEmail.verificationCodeAlert.heading)}</h2>
           <p className="-mb-3">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.verificationCodeAlert.detail} components={{ requestLink }} />
+            <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.verifyEmail.verificationCodeAlert.detail} components={{ requestLink }} />
           </p>
         </ErrorAlert>
         <ErrorSummaryProvider actionData={fetcher.data}>
           <p className="mb-4">{t(($) => $.verifyEmail.verificationCode, { email: defaultState })}</p>
           <p className="mb-4">{t(($) => $.verifyEmail.requestNew)}</p>
           <p className="mb-8">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
+            <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
           </p>
           <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
           <ErrorSummary />

@@ -48,15 +48,15 @@ export default function UnableToProcessRequest({ loaderData, params }: Route.Com
           <p>{t(($) => $.difficulties)}</p>
           <ul className="list-disc space-y-1 pl-7">
             <li>
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.callCentre} components={{ noWrap }} />
+              <Trans ns="unableToProcessRequest" i18nKey={($) => $.callCentre} components={{ noWrap }} />
             </li>
             <li>{t(($) => $.visitCentre)}</li>
             <li>
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.submitRequest} components={{ eServiceCanadaLink }} />
+              <Trans ns="unableToProcessRequest" i18nKey={($) => $.submitRequest} components={{ eServiceCanadaLink }} />
             </li>
           </ul>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.returnCdcp} components={{ cdcpLink }} />
+            <Trans ns="unableToProcessRequest" i18nKey={($) => $.returnCdcp} components={{ cdcpLink }} />
           </p>
         </div>
       </div>

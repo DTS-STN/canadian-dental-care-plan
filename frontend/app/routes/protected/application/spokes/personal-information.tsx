@@ -261,7 +261,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               </div>
               <Collapsible id="name-instructions" summary={t(($) => $.personalInformation.singleLegalName)}>
                 <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.nameInstructions} />
+                  <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.personalInformation.nameInstructions} />
                 </p>
               </Collapsible>
               <DatePickerField

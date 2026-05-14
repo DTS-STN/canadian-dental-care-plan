@@ -180,10 +180,10 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                   <p>{t(($) => $.phoneNumber.needPhoneNumber)}</p>
                   <ul className="list-disc space-y-1 pl-7">
                     <li>
-                      <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.phoneNumber.serviceCanada} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+                      <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.phoneNumber.serviceCanada} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
                     </li>
                     <li>
-                      <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.phoneNumber.inPerson} components={{ findOffice }} />
+                      <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.phoneNumber.inPerson} components={{ findOffice }} />
                     </li>
                   </ul>
                 </section>

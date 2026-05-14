@@ -67,10 +67,10 @@ export default function RenewalApplicationSubmitted({ loaderData, params }: Rout
         <div className="mb-6 space-y-4">
           <p>{t(($) => $.renewalSubmitted.recordsShowApplicationSubmitted)}</p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.renewalSubmitted.statusCheckerInfo} components={{ statusCheckerLink }} />
+            <Trans ns="applicationSpokes" i18nKey={($) => $.renewalSubmitted.statusCheckerInfo} components={{ statusCheckerLink }} />
           </p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.renewalSubmitted.updateProfileInfo} components={{ mscaLinkAccount, noWrap }} />
+            <Trans ns="applicationSpokes" i18nKey={($) => $.renewalSubmitted.updateProfileInfo} components={{ mscaLinkAccount, noWrap }} />
           </p>
         </div>
         <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
