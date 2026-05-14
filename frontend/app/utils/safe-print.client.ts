@@ -15,34 +15,39 @@
  *   silent no-op.
  */
 export function safePrint(onUnavailable?: () => void): void {
-  try {
-    if (typeof window === 'undefined' || typeof window.print !== 'function') {
-      onUnavailable?.();
-      return;
+  if (typeof window === 'undefined' || typeof window.print !== 'function') {
+    onUnavailable?.();
+    return;
+  }
+
+  let printDialogOpened = false;
+  let listenerRegistered = false;
+
+  const onBeforePrint = () => {
+    printDialogOpened = true;
+  };
+
+  const cleanupBeforePrintListener = () => {
+    if (listenerRegistered) {
+      window.removeEventListener('beforeprint', onBeforePrint);
+      listenerRegistered = false;
     }
+  };
 
-    let printDialogOpened = false;
-
-    const onBeforePrint = () => {
-      printDialogOpened = true;
-    };
-
+  try {
     window.addEventListener('beforeprint', onBeforePrint, { once: true });
+    listenerRegistered = true;
 
     window.print();
 
-    if (printDialogOpened) {
-      window.removeEventListener('beforeprint', onBeforePrint);
-      return;
-    }
-
     setTimeout(() => {
-      window.removeEventListener('beforeprint', onBeforePrint);
+      cleanupBeforePrintListener();
       if (!printDialogOpened) {
         onUnavailable?.();
       }
     }, 500);
   } catch (error) {
+    cleanupBeforePrintListener();
     console.error('safePrint: window.print() threw an error.', error);
     onUnavailable?.();
   }
