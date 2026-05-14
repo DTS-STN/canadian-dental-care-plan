@@ -89,7 +89,7 @@ import type { EvidentiaryDocumentTypeService } from '~/.server/domain/services/e
 import type { HttpClient } from '~/.server/http';
 import type { InstrumentationService } from '~/.server/observability';
 import type { BenefitApplicationStateMapper, BenefitRenewalStateMapper } from '~/.server/routes/mappers';
-import type { ProtectedApplicationStateResolver } from '~/.server/routes/resolvers';
+import type { ProtectedApplicationStateResolver, PublicApplicationStateResolver } from '~/.server/routes/resolvers';
 import type { SecurityHandler } from '~/.server/routes/security';
 import type { AddressValidatorFactory, HomeAddressValidatorFactory, MailingAddressValidatorFactory } from '~/.server/routes/validators';
 import { assignServiceIdentifiers, serviceIdentifier as serviceId } from '~/.server/utils/service-identifier.utils';
@@ -237,6 +237,7 @@ export const TYPES = assignServiceIdentifiers({
   ProvinceTerritoryStateRepository: serviceId<ProvinceTerritoryStateRepository>(),
   ProvinceTerritoryStateService: serviceId<ProvinceTerritoryStateService>(),
   ProtectedApplicationStateResolver: serviceId<ProtectedApplicationStateResolver>(),
+  PublicApplicationStateResolver: serviceId<PublicApplicationStateResolver>(),
   ProvincialGovernmentInsurancePlanDtoMapper: serviceId<ProvincialGovernmentInsurancePlanDtoMapper>(),
   ProvincialGovernmentInsurancePlanService: serviceId<ProvincialGovernmentInsurancePlanService>(),
   RaoidcService: serviceId<RaoidcService>(),

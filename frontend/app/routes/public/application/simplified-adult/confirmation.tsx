@@ -6,16 +6,7 @@ import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { getEligibilityStatus } from '~/.server/routes/helpers/base-application-route-helpers';
-import {
-  clearPublicApplicationState,
-  resolvePublicStateCommunicationPreferencesValue,
-  resolvePublicStateDentalBenefitsValue,
-  resolvePublicStateEmailValue,
-  resolvePublicStateHomeAddressValue,
-  resolvePublicStateMailingAddressValue,
-  resolvePublicStatePhoneNumberValue,
-  validateApplicationFlow,
-} from '~/.server/routes/helpers/public-application-route-helpers';
+import { clearPublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { loadPublicApplicationSimplifiedAdultState } from '~/.server/routes/helpers/public-application-simplified-adult-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
@@ -68,25 +59,13 @@ export async function loader({ context: { appContainer, session }, params, reque
   const env = appContainer.get(TYPES.ClientConfig);
   const surveyLink = locale === 'en' ? env.CDCP_SURVEY_LINK_EN : env.CDCP_SURVEY_LINK_FR;
 
-  const countryService = appContainer.get(TYPES.CountryService);
-  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
-  const gcCommunicationMethodService = appContainer.get(TYPES.GCCommunicationMethodService);
-  const languageService = appContainer.get(TYPES.LanguageService);
-  const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
-  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
-  const sunLifeCommunicationMethodService = appContainer.get(TYPES.SunLifeCommunicationMethodService);
+  const publicApplicationStateResolver = appContainer.get(TYPES.PublicApplicationStateResolver);
 
-  const phoneNumber = resolvePublicStatePhoneNumberValue({ clientApplication: state.clientApplication, phoneNumber: state.phoneNumber });
-  const mailingAddress = await resolvePublicStateMailingAddressValue({ clientApplication: state.clientApplication, mailingAddress: state.mailingAddress }, locale, countryService, provinceTerritoryStateService);
-  const homeAddress = await resolvePublicStateHomeAddressValue({ clientApplication: state.clientApplication, homeAddress: state.homeAddress }, locale, countryService, provinceTerritoryStateService);
-  const communicationPreferences = resolvePublicStateCommunicationPreferencesValue(
-    { clientApplication: state.clientApplication, communicationPreferences: state.communicationPreferences },
-    locale,
-    languageService,
-    sunLifeCommunicationMethodService,
-    gcCommunicationMethodService,
-  );
-  const dentalBenefits = await resolvePublicStateDentalBenefitsValue({ dentalBenefits: state.dentalBenefits, clientApplication: state.clientApplication }, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
+  const phoneNumber = publicApplicationStateResolver.resolvePhoneNumberValue({ clientApplication: state.clientApplication, phoneNumber: state.phoneNumber });
+  const mailingAddress = await publicApplicationStateResolver.resolveMailingAddressValue({ clientApplication: state.clientApplication, mailingAddress: state.mailingAddress }, locale);
+  const homeAddress = await publicApplicationStateResolver.resolveHomeAddressValue({ clientApplication: state.clientApplication, homeAddress: state.homeAddress }, locale);
+  const communicationPreferences = publicApplicationStateResolver.resolveCommunicationPreferencesValue({ clientApplication: state.clientApplication, communicationPreferences: state.communicationPreferences }, locale);
+  const dentalBenefits = await publicApplicationStateResolver.resolveDentalBenefitsValue({ dentalBenefits: state.dentalBenefits, clientApplication: state.clientApplication }, locale);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -101,7 +80,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     preferredLanguage: communicationPreferences.preferredLanguage,
     communicationSunLifePreference: communicationPreferences.preferredMethodSunLife,
     communicationGOCPreference: communicationPreferences.preferredMethodGovernmentOfCanada,
-    email: resolvePublicStateEmailValue(state),
+    email: publicApplicationStateResolver.resolveEmailValue(state),
   };
 
   const spouseInfo = state.partnerInformation && {

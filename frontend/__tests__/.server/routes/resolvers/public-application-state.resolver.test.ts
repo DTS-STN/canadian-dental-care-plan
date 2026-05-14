@@ -591,9 +591,7 @@ describe('DefaultPublicApplicationStateResolver', () => {
       const childState = { dentalBenefits: { hasChanged: false } } as const;
 
       const resolver = buildResolver();
-      await expect(resolver.resolveChildDentalBenefitsValue(childState, undefined, 'en')).rejects.toThrow(
-        'Expected child client application to be defined when child dentalBenefits.hasChanged is false',
-      );
+      await expect(resolver.resolveChildDentalBenefitsValue(childState, undefined, 'en')).rejects.toThrow('Expected child client application to be defined when child dentalBenefits.hasChanged is false');
     });
   });
 });

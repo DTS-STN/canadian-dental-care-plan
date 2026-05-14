@@ -6,17 +6,7 @@ import type { Route } from './+types/confirmation';
 
 import { TYPES } from '~/.server/constants';
 import { loadPublicApplicationFullAdultState } from '~/.server/routes/helpers/public-application-full-adult-route-helpers';
-import {
-  clearPublicApplicationState,
-  getMemberIdForFullApplication,
-  resolvePublicStateCommunicationPreferencesValue,
-  resolvePublicStateDentalBenefitsValue,
-  resolvePublicStateEmailValue,
-  resolvePublicStateHomeAddressValue,
-  resolvePublicStateMailingAddressValue,
-  resolvePublicStatePhoneNumberValue,
-  validateApplicationFlow,
-} from '~/.server/routes/helpers/public-application-route-helpers';
+import { clearPublicApplicationState, getMemberIdForFullApplication, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { Address } from '~/components/address';
 import { AppPageTitle } from '~/components/app-page-title';
@@ -67,20 +57,14 @@ export async function loader({ context: { appContainer, session }, params, reque
   const env = appContainer.get(TYPES.ClientConfig);
   const surveyLink = locale === 'en' ? env.CDCP_SURVEY_LINK_EN : env.CDCP_SURVEY_LINK_FR;
 
-  const countryService = appContainer.get(TYPES.CountryService);
-  const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
-  const gcCommunicationMethodService = appContainer.get(TYPES.GCCommunicationMethodService);
-  const languageService = appContainer.get(TYPES.LanguageService);
-  const provinceTerritoryStateService = appContainer.get(TYPES.ProvinceTerritoryStateService);
-  const provincialGovernmentInsurancePlanService = appContainer.get(TYPES.ProvincialGovernmentInsurancePlanService);
-  const sunLifeCommunicationMethodService = appContainer.get(TYPES.SunLifeCommunicationMethodService);
+  const publicApplicationStateResolver = appContainer.get(TYPES.PublicApplicationStateResolver);
 
-  const phoneNumber = resolvePublicStatePhoneNumberValue({ phoneNumber: state.phoneNumber });
-  const mailingAddress = await resolvePublicStateMailingAddressValue({ mailingAddress: state.mailingAddress }, locale, countryService, provinceTerritoryStateService);
-  const homeAddress = await resolvePublicStateHomeAddressValue({ homeAddress: state.homeAddress }, locale, countryService, provinceTerritoryStateService);
+  const phoneNumber = publicApplicationStateResolver.resolvePhoneNumberValue({ phoneNumber: state.phoneNumber });
+  const mailingAddress = await publicApplicationStateResolver.resolveMailingAddressValue({ mailingAddress: state.mailingAddress }, locale);
+  const homeAddress = await publicApplicationStateResolver.resolveHomeAddressValue({ homeAddress: state.homeAddress }, locale);
 
-  const communicationPreferences = resolvePublicStateCommunicationPreferencesValue({ communicationPreferences: state.communicationPreferences }, locale, languageService, sunLifeCommunicationMethodService, gcCommunicationMethodService);
-  const dentalBenefits = await resolvePublicStateDentalBenefitsValue({ dentalBenefits: state.dentalBenefits }, locale, federalGovernmentInsurancePlanService, provincialGovernmentInsurancePlanService);
+  const communicationPreferences = publicApplicationStateResolver.resolveCommunicationPreferencesValue({ communicationPreferences: state.communicationPreferences }, locale);
+  const dentalBenefits = await publicApplicationStateResolver.resolveDentalBenefitsValue({ dentalBenefits: state.dentalBenefits }, locale);
 
   const userInfo = {
     memberId: getMemberIdForFullApplication(state),
@@ -92,7 +76,7 @@ export async function loader({ context: { appContainer, session }, params, reque
     birthday: toLocaleDateString(parseDateString(state.applicantInformation.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     maritalStatus: state.maritalStatus ? appContainer.get(TYPES.MaritalStatusService).getLocalizedMaritalStatusById(state.maritalStatus, locale).name : '',
-    email: resolvePublicStateEmailValue(state),
+    email: publicApplicationStateResolver.resolveEmailValue(state),
     communicationSunLifePreference: communicationPreferences.preferredMethodSunLife,
     communicationGOCPreference: communicationPreferences.preferredMethodGovernmentOfCanada,
   };
