@@ -8,9 +8,9 @@ updates:
       interval: weekly
       day: monday
     cooldown:
-      default: 3          # Wait 3 days after a new version is published before opening a PR
-      semver-major: 7      # Wait 7 days for major version bumps
-      semver-minor: 5      # Wait 5 days for minor version bumps
+      default-days: 3
+      semver-major-days: 7
+      semver-minor-days: 5
     groups:
       dev-minor-versions:
         dependency-type: development
