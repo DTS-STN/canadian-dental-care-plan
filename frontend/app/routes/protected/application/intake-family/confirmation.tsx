@@ -17,6 +17,7 @@ import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { DefinitionList, DefinitionListItem } from '~/components/definition-list';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
+import { PrintButton } from '~/components/print-button';
 import { useApplicationFlowStorage } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { formatClientNumber, formatSubmissionApplicationCode } from '~/utils/application-code-utils';
@@ -170,18 +171,11 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
         <section>
           <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.keepCopy)}</h2>
           <p className="mt-4">{t(($) => $.confirm.printCopyImportant)}</p>
-          <Button
-            variant="primary"
-            size="lg"
-            className="mt-8 print:hidden"
-            onClick={(event) => {
-              event.preventDefault();
-              window.print();
-            }}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Print top - Application successfully submitted click"
-          >
-            {t(($) => $.confirm.printBtn)}
-          </Button>
+          <div className="mt-8 print:hidden">
+            <PrintButton variant="primary" size="lg" errorMessage={t(($) => $.confirm.printUnavailable)} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Print top - Application successfully submitted click">
+              {t(($) => $.confirm.printBtn)}
+            </PrintButton>
+          </div>
         </section>
         <ContextualAlert type="comment">
           <div className="space-y-4">
@@ -379,18 +373,11 @@ export default function ProtectedNewFamilyConfirmation({ loaderData, params }: R
           </div>
         </section>
         <div className="my-6">
-          <Button
-            className="px-12 print:hidden"
-            size="lg"
-            variant="primary"
-            onClick={(event) => {
-              event.preventDefault();
-              window.print();
-            }}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Print bottom - Application successfully submitted click"
-          >
-            {t(($) => $.confirm.printBtn)}
-          </Button>
+          <div className="px-12 print:hidden">
+            <PrintButton size="lg" variant="primary" errorMessage={t(($) => $.confirm.printUnavailable)} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Print bottom - Application successfully submitted click">
+              {t(($) => $.confirm.printBtn)}
+            </PrintButton>
+          </div>
         </div>
         <Dialog>
           <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Family:Exit - Application successfully submitted click" asChild>

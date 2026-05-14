@@ -145,6 +145,7 @@ const ns = {
     keepCopy: "Print or save a copy of your application",
     printCopyImportant: "It's important to keep a copy of your application.",
     printBtn: "Print or save",
+    printUnavailable: "Printing is not available at this time. Please take note of your application code and review the information you submitted before leaving this page, as it will no longer be accessible.",
     fullWhatsNext: "You will receive a letter confirming eligibility",
     fullBeginProcess: "We have received your application. You will be sent a letter within 30 calendar days to let you know if you are eligible for the plan.",
     simplifiedWhatsNext: "Confirm your eligibility and coverage level",

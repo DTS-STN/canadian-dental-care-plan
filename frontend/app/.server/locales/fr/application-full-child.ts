@@ -74,6 +74,7 @@ const ns = {
     keepCopy: "Imprimez ou sauvegardez une copie de votre demande",
     printCopyImportant: "Il est important de conserver une copie de votre demande.",
     printBtn: "Imprimer ou sauvegarder",
+    printUnavailable: "L'impression n'est pas disponible pour le moment. Veuillez prendre note de votre code de confirmation et vérifier les renseignements que vous avez soumis avant de quitter cette page, car ils ne seront plus accessibles.",
     whatsNext: "Vous recevrez une lettre confirmant votre admissibilité",
     beginProcess: {
       renewal: "Nous avons reçu votre demande. Une lettre vous sera envoyée dans les 30 jours civils pour vous informer de votre admissibilité au régime.",

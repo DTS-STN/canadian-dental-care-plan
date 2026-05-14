@@ -91,6 +91,7 @@ const ns = {
     keepCopy: "Print or save a copy of your application",
     printCopyImportant: "It's important to keep a copy of your application.",
     printBtn: "Print or save",
+    printUnavailable: "Printing is not available at this time. Please take note of your application code and review the information you submitted before leaving this page, as it will no longer be accessible.",
     whatsNext: "Confirm your eligibility and coverage level",
     beginProcess: "Always confirm your eligibility and coverage level prior to receiving care. You can confirm this information by using the <cdcpLink>Status Checker</cdcpLink> or signing in to your <mscaLinkAccount>My Service Canada Account (MSCA)</mscaLinkAccount>.",
     getUpdatesTitle: "Get updates quickly and securely",
