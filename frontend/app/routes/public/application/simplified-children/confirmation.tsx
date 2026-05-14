@@ -177,15 +177,16 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
         <section>
           <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.keepCopy)}</h2>
           <p className="mt-4">{t(($) => $.confirm.printCopyImportant)}</p>
-          <PrintButton
-            variant="primary"
-            size="lg"
-            className="mt-8 print:hidden"
-            errorMessage={t(($) => $.confirm.printUnavailable)}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Print top - Application successfully submitted click"
-          >
-            {t(($) => $.confirm.printBtn)}
-          </PrintButton>
+          <div className="mt-8 print:hidden">
+            <PrintButton
+              variant="primary"
+              size="lg"
+              errorMessage={t(($) => $.confirm.printUnavailable)}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Print top - Application successfully submitted click"
+            >
+              {t(($) => $.confirm.printBtn)}
+            </PrintButton>
+          </div>
         </section>
         <ContextualAlert type="comment">
           <div className="space-y-4">
@@ -363,15 +364,16 @@ export default function RenewChildrenConfirmation({ loaderData, params }: Route.
           </div>
         </section>
         <div className="my-6">
-          <PrintButton
-            className="px-12 print:hidden"
-            size="lg"
-            variant="primary"
-            errorMessage={t(($) => $.confirm.printUnavailable)}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Print bottom - Application successfully submitted click"
-          >
-            {t(($) => $.confirm.printBtn)}
-          </PrintButton>
+          <div className="px-12 print:hidden">
+            <PrintButton
+              size="lg"
+              variant="primary"
+              errorMessage={t(($) => $.confirm.printUnavailable)}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Print bottom - Application successfully submitted click"
+            >
+              {t(($) => $.confirm.printBtn)}
+            </PrintButton>
+          </div>
         </div>
         <Dialog>
           <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Child:Exit - Application successfully submitted click" asChild>
