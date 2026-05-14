@@ -1,6 +1,7 @@
 import { ContainerModule } from 'inversify';
 
 import { TYPES } from '~/.server/constants';
+import { DefaultProtectedApplicationStateResolver } from '~/.server/routes/resolvers';
 import { DefaultSecurityHandler } from '~/.server/routes/security';
 
 /**
@@ -8,6 +9,7 @@ import { DefaultSecurityHandler } from '~/.server/routes/security';
  */
 export function createRoutesContainerModule(): ContainerModule {
   return new ContainerModule((options) => {
+    options.bind(TYPES.ProtectedApplicationStateResolver).to(DefaultProtectedApplicationStateResolver);
     options.bind(TYPES.SecurityHandler).to(DefaultSecurityHandler);
   });
 }
