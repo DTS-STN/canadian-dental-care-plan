@@ -359,11 +359,14 @@ const ns = {
     pageTitle: "Code de vérification",
     verificationCode: "Un courriel contenant un code a été envoyé à {{email}}. Veuillez saisir le code de vérification à 5 chiffres et sélectionner «\u00A0Continuer\u00A0».",
     requestNew: "La réception du courriel peut prendre jusqu'à 60 secondes. Si vous ne le voyez pas, vérifiez votre dossier de courrier indésirable. Si le code ne se trouve pas dans ce dossier, vous pouvez en demander un nouveau.",
-    unableToVerify: "Si vous n'êtes pas en mesure de confirmer votre adresse électronique, cliquez sur «\u00A0Retour\u00A0» pour mettre à jour votre adresse électronique ou <communicationLink>modifier vos préférences de communication</communicationLink>.",
     verificationCodeLabel: "Code de vérification",
     requestNewCode: "Demander un nouveau code",
     back: "Retour",
     continue: "Continuer",
+    cannotValidate: {
+      heading: "Je ne peux pas valider mon adresse courriel",
+      detail: "Vous devez saisir et valider votre adresse courriel pour présenter une demande en ligne. Si vous n’êtes pas en mesure de valider votre adresse courriel, vous pouvez tout de même faire une demande au Régime canadien de soins dentaires en communiquant avec Service Canada au 1\u2011833\u2011537\u20114342",
+    },
     errorMessage: {
       verificationCodeRequired: "Entrez le code de vérification de 5 chiffres",
       verificationCodeMaxAttempts: "Vous avez saisi un code de vérification incorrect plus de 5 fois. Vous devez demander un nouveau code à l'aide du lien «\u00A0Demander un nouveau code de vérification\u00A0» ci-dessous.",
