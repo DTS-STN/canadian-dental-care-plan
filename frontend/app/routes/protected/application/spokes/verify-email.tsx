@@ -15,12 +15,12 @@ import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { AppPageTitle } from '~/components/app-page-title';
 import { Button, ButtonLink } from '~/components/buttons';
+import { Collapsible } from '~/components/collapsible';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
 import { useErrorAlert } from '~/components/error-alert';
 import { ErrorSummary } from '~/components/error-summary';
 import { ErrorSummaryProvider } from '~/components/error-summary-context';
-import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
 import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
@@ -203,8 +203,6 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const { ErrorAlert } = useErrorAlert(fetcherStatus === 'verification-code-mismatch');
 
-  const communicationLink = <InlineLink routeId="protected/application/$id/communication-preferences" params={params} />;
-
   useEffect(() => {
     if (fetcherStatus === 'verification-code-sent') {
       setShowDialog(true);
@@ -246,10 +244,10 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
         <ErrorSummaryProvider actionData={fetcher.data}>
           <p className="mb-4">{t(($) => $.verifyEmail.verificationCode, { email: defaultState })}</p>
           <p className="mb-4">{t(($) => $.verifyEmail.requestNew)}</p>
-          <p className="mb-8">
-            <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
-          </p>
-          <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
+          <Collapsible summary={t(($) => $.verifyEmail.cannotValidate.heading)}>
+            <p>{t(($) => $.verifyEmail.cannotValidate.detail)}</p>
+          </Collapsible>
+          <p className="my-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
           <ErrorSummary />
           <fetcher.Form method="post" noValidate>
             <CsrfTokenInput />
