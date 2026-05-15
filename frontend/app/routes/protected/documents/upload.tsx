@@ -33,6 +33,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { useFetcherSubmissionState } from '~/hooks';
 import { pageIds } from '~/page-ids';
 import { useClientEnv } from '~/root';
+import { expectDefined } from '~/utils/assert-utils';
 import { getClientEnv } from '~/utils/env-utils';
 import { arrayBufferToBase64, getFileExtension, getMimeType } from '~/utils/file.utils';
 import { getLanguage } from '~/utils/locale-utils';
@@ -222,7 +223,7 @@ async function validateUploadForm(
   const files: Record<string, { file: File; fileBuffer: ArrayBuffer; fileHash: string; documentType: string }> = {};
 
   for (const [i, fileId] of fileIds.entries()) {
-    const file = fileObjects[i];
+    const file = expectDefined(fileObjects[i], 'Expected file object at index ' + i);
     const fileBuffer = await file.arrayBuffer();
     const fileHashBuffer = await crypto.subtle.digest('SHA-256', fileBuffer);
     const fileHash = [...new Uint8Array(fileHashBuffer)].map((b) => b.toString(16).padStart(2, '0')).join('');
@@ -396,7 +397,7 @@ interface CreateMetadataArgs {
 
 async function createMetadata({ appContainer, clientId, files, userId }: CreateMetadataArgs) {
   const reasons = await appContainer.get(TYPES.DocumentUploadReasonService).listDocumentUploadReasons();
-  const reasonId = reasons[0].id;
+  const reasonId = expectDefined(reasons[0], 'Expected at least one document upload reason').id;
   const recordSource = Number(appContainer.get(TYPES.ServerConfig).EWDU_RECORD_SOURCE_MSCA);
   const evidentiaryDocumentService = appContainer.get(TYPES.EvidentiaryDocumentService);
   return await evidentiaryDocumentService.createEvidentiaryDocumentMetadata({
@@ -503,8 +504,8 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   const errors = fetcher.data?.errors;
-  const applicantError = errors?.properties?.applicant?.errors.at(0);
-  const filesError = errors?.properties?.files?.errors.at(0);
+  const applicantError = errors?.properties?.applicant?.errors[0];
+  const filesError = errors?.properties?.files?.errors[0];
 
   const [filesWithTypes, setFilesWithTypes] = useState<FileStateWithDocumentType[]>([]);
 
@@ -596,8 +597,8 @@ export default function DocumentsUpload({ loaderData, params }: Route.ComponentP
                   </div>
                   <FileUploadList className="gap-4 sm:gap-6">
                     {filesWithTypes.map(({ id, file, documentType }) => {
-                      const fileError = errors?.properties?.files?.properties?.[id]?.properties?.file?.errors.at(0);
-                      const documentTypeError = errors?.properties?.files?.properties?.[id]?.properties?.documentType?.errors.at(0);
+                      const fileError = errors?.properties?.files?.properties?.[id]?.properties?.file?.errors[0];
+                      const documentTypeError = errors?.properties?.files?.properties?.[id]?.properties?.documentType?.errors[0];
                       return (
                         <FileUploadItem
                           id={`file-upload-item-${id}`}

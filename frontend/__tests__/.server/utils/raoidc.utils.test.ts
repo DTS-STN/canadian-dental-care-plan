@@ -79,10 +79,10 @@ describe('raoidc.utils', () => {
 
       const { jwkSet, serverMetadata } = await fetchServerMetadata('https://auth.example.com', fetchFn);
 
-      expect(jwkSet.keys[0].kid).toEqual('key-id');
-      expect(jwkSet.keys[0].kty).toEqual('RSA');
-      expect(jwkSet.keys[0].n).toEqual('AQAB');
-      expect(jwkSet.keys[0].e).toEqual('AQAB');
+      expect(jwkSet.keys[0]?.kid).toEqual('key-id');
+      expect(jwkSet.keys[0]?.kty).toEqual('RSA');
+      expect(jwkSet.keys[0]?.n).toEqual('AQAB');
+      expect(jwkSet.keys[0]?.e).toEqual('AQAB');
 
       expect(serverMetadata.issuer).toEqual('https://auth.example.com');
       expect(serverMetadata.authorization_endpoint).toEqual('https://auth.example.com/authorize');

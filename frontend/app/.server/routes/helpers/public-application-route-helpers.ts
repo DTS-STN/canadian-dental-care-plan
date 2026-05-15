@@ -369,17 +369,22 @@ export function getSingleChildState({ params, session }: getSingleChildStateArgs
   const log = createLogger('public-application-route-helpers.server/publicApplicationSingleChildState');
   const applicationState = getPublicApplicationState({ params, session });
   const childId = params.childId;
-  const childStateIndex = applicationState.children.findIndex(({ id }) => id === childId);
+  const childState = applicationState.children.find(({ id }) => id === childId);
 
-  if (childStateIndex === -1) {
+  if (!childState) {
     log.warn('Public application single child has not been found; stateId: [%s] childId: [%s]', applicationState.id, childId);
     throw data(null, { status: 404 });
   }
 
-  const childState = applicationState.children[childStateIndex];
+  const childNumber = applicationState.children.indexOf(childState) + 1;
   const isNew = isNewChildState(childState);
 
-  return { ...childState, childNumber: childStateIndex + 1, isNew, context: applicationState.context };
+  return {
+    ...childState,
+    context: applicationState.context,
+    childNumber,
+    isNew,
+  };
 }
 
 /**

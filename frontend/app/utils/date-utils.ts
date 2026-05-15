@@ -14,14 +14,18 @@ import { padWithZero } from './string-utils';
  */
 export function extractDateParts(date: string) {
   const dateParts = date.split('-');
-
   if (dateParts.length !== 3) {
     return {};
   }
 
-  const year = Number.parseInt(dateParts[0]);
-  const month = Number.parseInt(dateParts[1]);
-  const day = Number.parseInt(dateParts[2]);
+  const [yearStr, monthStr, dayStr] = dateParts;
+  if (!yearStr || !monthStr || !dayStr) {
+    return {};
+  }
+
+  const year = Number.parseInt(yearStr);
+  const month = Number.parseInt(monthStr);
+  const day = Number.parseInt(dayStr);
 
   if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day)) {
     return {};

@@ -25,7 +25,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   // Get request lang param
   const { pathname } = new URL(request.url);
-  const lang = pathname.split('/').at(1);
+  const [, lang] = pathname.split('/');
 
   return data({ isAppLocale: isAppLocale(lang), meta }, { status: 404 });
 }

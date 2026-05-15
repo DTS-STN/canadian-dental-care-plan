@@ -78,10 +78,10 @@ describe('Letters Page', () => {
       });
 
       expect(response.letters).toHaveLength(3);
-      expect(response.letters[2].id).toEqual('3');
-      expect(response.letters[2].letterTypeId).toEqual('DEN');
-      expect(response.letters[1].date).toBeDefined();
-      expect(response.letters[2].date).toBeDefined();
+      expect(response.letters[2]?.id).toEqual('3');
+      expect(response.letters[2]?.letterTypeId).toEqual('DEN');
+      expect(response.letters[1]?.date).toBeDefined();
+      expect(response.letters[2]?.date).toBeDefined();
     });
   });
 

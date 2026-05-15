@@ -6,6 +6,7 @@ import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import type { BenefitApplicationDto, ChildDto, ContactInformationDto, PartnerInformationDto, TypeOfApplicationDto } from '~/.server/domain/dtos';
 import type { BenefitApplicationRequestEntity, BenefitApplicationResponseEntity } from '~/.server/domain/entities';
+import { expectDefined } from '~/utils/assert-utils';
 import { parseDateString } from '~/utils/date-utils';
 import { sanitizeSin } from '~/utils/sin-utils';
 
@@ -281,6 +282,7 @@ export class DefaultBenefitApplicationDtoMapper implements BenefitApplicationDto
   }
 
   mapBenefitApplicationResponseEntityToApplicationCode(benefitApplicationResponseEntity: BenefitApplicationResponseEntity): string {
-    return benefitApplicationResponseEntity.BenefitApplication.BenefitApplicationIdentification[0].IdentificationID;
+    const applicationCode = benefitApplicationResponseEntity.BenefitApplication.BenefitApplicationIdentification[0]?.IdentificationID;
+    return expectDefined(applicationCode, 'Expected applicationCode to be defined');
   }
 }

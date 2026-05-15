@@ -8,14 +8,14 @@ import { sanitizeSin } from '~/utils/sin-utils';
 
 export interface ApplicationStatusDtoMapper {
   mapApplicationStatusEntityToApplicationStatusId(applicationStatusEntity: ApplicationStatusEntity): Option<string>;
-  mapApplicationStatusBasicInfoRequestDtoToApplicationStatusBasicInfoRequestEntity(ApplicationStatusBasicInfoRequestDto: ApplicationStatusBasicInfoRequestDto): ApplicationStatusBasicInfoRequestEntity;
-  mapApplicationStatusSinRequestDtoToApplicationStatusSinRequestEntity(ApplicationStatusSinRequestDto: ApplicationStatusSinRequestDto): ApplicationStatusSinRequestEntity;
+  mapApplicationStatusBasicInfoRequestDtoToApplicationStatusBasicInfoRequestEntity(applicationStatusBasicInfoRequestDto: ApplicationStatusBasicInfoRequestDto): ApplicationStatusBasicInfoRequestEntity;
+  mapApplicationStatusSinRequestDtoToApplicationStatusSinRequestEntity(applicationStatusSinRequestDto: ApplicationStatusSinRequestDto): ApplicationStatusSinRequestEntity;
 }
 
 @injectable()
 export class DefaultApplicationStatusDtoMapper implements ApplicationStatusDtoMapper {
   mapApplicationStatusEntityToApplicationStatusId(applicationStatusEntity: ApplicationStatusEntity): Option<string> {
-    const applicationStatusId = applicationStatusEntity.BenefitApplication.BenefitApplicationStatus[0].ReferenceDataID;
+    const applicationStatusId = applicationStatusEntity.BenefitApplication.BenefitApplicationStatus[0]?.ReferenceDataID;
     return applicationStatusId ? Some(applicationStatusId) : None;
   }
 

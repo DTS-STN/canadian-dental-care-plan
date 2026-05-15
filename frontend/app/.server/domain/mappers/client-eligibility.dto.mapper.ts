@@ -29,8 +29,8 @@ export class DefaultClientEligibilityDtoMapper implements ClientEligibilityDtoMa
     return {
       clientId: expectDefined(applicant.ClientIdentification.find(({ IdentificationCategoryText }) => IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Client ID not found'),
       clientNumber: expectDefined(applicant.ClientIdentification.find(({ IdentificationCategoryText }) => IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Client Number not found'),
-      firstName: expectDefined(applicant.PersonName.at(0)?.PersonGivenName.at(0), 'First name not found'),
-      lastName: expectDefined(applicant.PersonName.at(0)?.PersonSurName, 'Last name not found'),
+      firstName: expectDefined(applicant.PersonName[0]?.PersonGivenName[0], 'First name not found'),
+      lastName: expectDefined(applicant.PersonName[0]?.PersonSurName, 'Last name not found'),
       earnings: applicant.ApplicantEarning.map((earning) => this.mapApplicantEarningToClientEligibilityEarning(earning)),
       eligibilityStatusCode: applicant.BenefitEligibilityStatus?.StatusCode?.ReferenceDataID,
       eligibilityStatusCodeNextYear: applicant.BenefitEligibilityNextYearStatus?.StatusCode?.ReferenceDataID,

@@ -235,8 +235,8 @@ describe('MockClientApplicationRepository', () => {
 
       expect(result.BenefitApplication.Applicant.ApplicantDetail.InvitationToApplyIndicator).toBe(true);
       expect(result.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator).toBe(false);
-      expect(result.BenefitApplication.Applicant.PersonName[0].PersonGivenName[0]).toBe('John');
-      expect(result.BenefitApplication.Applicant.PersonName[0].PersonSurName).toBe('Doe');
+      expect(result.BenefitApplication.Applicant.PersonName[0]?.PersonGivenName[0]).toBe('John');
+      expect(result.BenefitApplication.Applicant.PersonName[0]?.PersonSurName).toBe('Doe');
       expect(result.BenefitApplication.Applicant.PersonBirthDate.date).toBe('2000-01-01');
     });
 
@@ -258,8 +258,8 @@ describe('MockClientApplicationRepository', () => {
 
       expect(result.BenefitApplication.Applicant.ApplicantDetail.InvitationToApplyIndicator).toBe(false);
       expect(result.BenefitApplication.Applicant.ApplicantDetail.PreviousTaxesFiledIndicator).toBe(false);
-      expect(result.BenefitApplication.Applicant.PersonName[0].PersonGivenName[0]).toBe('Jane');
-      expect(result.BenefitApplication.Applicant.PersonName[0].PersonSurName).toBe('Smith');
+      expect(result.BenefitApplication.Applicant.PersonName[0]?.PersonGivenName[0]).toBe('Jane');
+      expect(result.BenefitApplication.Applicant.PersonName[0]?.PersonSurName).toBe('Smith');
       expect(result.BenefitApplication.Applicant.PersonBirthDate.date).toBe('1990-01-01');
     });
 

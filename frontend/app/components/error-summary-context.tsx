@@ -133,7 +133,7 @@ function errorSummaryReducer(state: ErrorSummaryState, action: ErrorSummaryActio
 export function areErrorListsEqual(errors: ErrorMessage[], buffer: ErrorMessage[] | null): boolean {
   if (buffer === null) return false;
   if (buffer.length !== errors.length) return false;
-  return buffer.every((b, i) => b.fieldId === errors[i].fieldId && b.message === errors[i].message);
+  return buffer.every((b, i) => b.fieldId === errors[i]?.fieldId && b.message === errors[i].message);
 }
 
 /**

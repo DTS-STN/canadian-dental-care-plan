@@ -121,19 +121,19 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
     const applicantInformation = {
       clientId,
       clientNumber: expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected applicant.ClientIdentification.IdentificationID with Client Number to be defined'),
-      firstName: applicant.PersonName[0].PersonGivenName[0],
-      lastName: applicant.PersonName[0].PersonSurName,
+      firstName: expectDefined(applicant.PersonName[0]?.PersonGivenName[0], 'Expected applicant.PersonName[0].PersonGivenName[0] to be defined'),
+      lastName: expectDefined(applicant.PersonName[0]?.PersonSurName, 'Expected applicant.PersonName[0].PersonSurName to be defined'),
       maritalStatus: applicant.PersonMaritalStatus.StatusCode?.ReferenceDataID,
       socialInsuranceNumber: applicant.PersonSINIdentification.IdentificationID,
     };
 
     const children =
       applicant.RelatedPerson?.filter((person) => person.PersonRelationshipCode.ReferenceDataName === 'Dependant').map((child) => ({
-        dentalBenefits: child.ApplicantDetail.InsurancePlan?.at(0)?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
+        dentalBenefits: child.ApplicantDetail.InsurancePlan?.[0]?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
         privateDentalInsurance: expectDefined(child.ApplicantDetail.PrivateDentalInsuranceIndicator, 'Expected child.ApplicantDetail.PrivateDentalInsuranceIndicator to be defined'),
         information: {
-          firstName: expectDefined(child.PersonName.at(0)?.PersonGivenName.at(0), 'Expected child.PersonName[0].PersonGivenName[0] to be defined'),
-          lastName: expectDefined(child.PersonName.at(0)?.PersonSurName, 'Expected child.PersonName[0].PersonSurName to be defined'),
+          firstName: expectDefined(child.PersonName[0]?.PersonGivenName[0], 'Expected child.PersonName[0].PersonGivenName[0] to be defined'),
+          lastName: expectDefined(child.PersonName[0]?.PersonSurName, 'Expected child.PersonName[0].PersonSurName to be defined'),
           dateOfBirth: expectDefined(child.PersonBirthDate.date, 'Expected child.PersonBirthDate.date to be defined'),
           isParent: expectDefined(child.ApplicantDetail.AttestParentOrGuardianIndicator, 'Expected child.ApplicantDetail.AttestParentOrGuardianIndicator to be defined'),
           clientId: expectDefined(child.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected child.ClientIdentification.IdentificationID with Client ID to be defined'),
@@ -143,13 +143,16 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       })) ?? [];
 
     const communicationPreferences = {
-      preferredLanguage: applicant.PersonLanguage[0].CommunicationCategoryCode.ReferenceDataID,
+      preferredLanguage: expectDefined(applicant.PersonLanguage[0]?.CommunicationCategoryCode.ReferenceDataID, 'Expected applicant.PersonLanguage[0].CommunicationCategoryCode.ReferenceDataID to be defined'),
       preferredMethodSunLife: applicant.PreferredMethodCommunicationCode.ReferenceDataID,
       preferredMethodGovernmentOfCanada: applicant.PreferredMethodCommunicationGCCode.ReferenceDataID,
     };
 
+    const personContactInformation = applicant.PersonContactInformation[0];
+    invariant(personContactInformation, 'Expected applicant.PersonContactInformation[0] to be defined');
+
     // Home address is not guaranteed to be present for all clients, so we need to check if it exists before trying to access its properties
-    const homeAddress = applicant.PersonContactInformation[0].Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Home');
+    const homeAddress = personContactInformation.Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Home');
 
     // Check if all required home address fields are present before including the home address in the response
     const isHomeAddressDefined =
@@ -163,7 +166,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
     }
 
     // Mailing address is not guaranteed to be present for all clients, so we need to check if it exists before trying to access its properties
-    const mailingAddress = applicant.PersonContactInformation[0].Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Mailing');
+    const mailingAddress = personContactInformation.Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Mailing');
 
     const isMailingAddressDefined =
       mailingAddress !== undefined && // Mailing address must exist
@@ -196,9 +199,9 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
         postalCode: mailingAddress.AddressPostalCode,
         province: mailingAddress.AddressProvince.ProvinceCode.ReferenceDataID,
       },
-      phoneNumber: applicant.PersonContactInformation[0].TelephoneNumber?.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary')?.TelephoneNumberCategoryCode.ReferenceDataID,
-      phoneNumberAlt: applicant.PersonContactInformation[0].TelephoneNumber?.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')?.TelephoneNumberCategoryCode.ReferenceDataID,
-      email: applicant.PersonContactInformation[0].EmailAddress?.at(0)?.EmailAddressID,
+      phoneNumber: personContactInformation.TelephoneNumber?.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary')?.TelephoneNumberCategoryCode.ReferenceDataID,
+      phoneNumberAlt: personContactInformation.TelephoneNumber?.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')?.TelephoneNumberCategoryCode.ReferenceDataID,
+      email: personContactInformation.EmailAddress?.[0]?.EmailAddressID,
       emailVerified: applicant.ApplicantDetail.ApplicantEmailVerifiedIndicator,
     };
 
@@ -208,16 +211,16 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
           clientId: expectDefined(partner.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected partner.ClientIdentification.IdentificationID with Client ID to be defined'),
           clientNumber: expectDefined(partner.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected partner.ClientIdentification.IdentificationID with Client Number to be defined'),
           yearOfBirth: expectDefined(partner.PersonBirthDate.YearDate, 'Expected partner.PersonBirthDate.YearDate to be defined'),
-          firstName: partner.PersonName.at(0)?.PersonGivenName.at(0) ?? undefined,
-          lastName: partner.PersonName.at(0)?.PersonSurName ?? undefined,
+          firstName: partner.PersonName[0]?.PersonGivenName[0] ?? undefined,
+          lastName: partner.PersonName[0]?.PersonSurName ?? undefined,
           socialInsuranceNumber: partner.PersonSINIdentification.IdentificationID,
         }
       : undefined;
 
-    const applicationYearId = clientApplicationEntity.BenefitApplication.BenefitApplicationYear.BenefitApplicationYearIdentification.at(0)?.IdentificationID;
+    const applicationYearId = clientApplicationEntity.BenefitApplication.BenefitApplicationYear.BenefitApplicationYearIdentification[0]?.IdentificationID;
     invariant(applicationYearId, 'Expected applicationYearId to be defined');
 
-    const applicantEarning = applicant.ApplicantEarning.at(0);
+    const applicantEarning = applicant.ApplicantEarning[0];
     const coverageCategoryCode = applicantEarning?.Coverage.find((coverage) => coverage.CoverageCategoryCode.ReferenceDataName === this.serverConfig.COVERAGE_CATEGORY_CODE_COPAY_TIER);
     const coverageTierCode = coverageCategoryCode?.CoverageTierCode.ReferenceDataID;
     const coverageCopayTierCode =
@@ -233,7 +236,7 @@ export class DefaultClientApplicationDtoMapper implements ClientApplicationDtoMa
       contactInformation,
       coverageCopayTierCode,
       dateOfBirth: applicant.PersonBirthDate.date,
-      dentalBenefits: applicant.ApplicantDetail.InsurancePlan?.at(0)?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
+      dentalBenefits: applicant.ApplicantDetail.InsurancePlan?.[0]?.InsurancePlanIdentification.map((insurancePlan) => insurancePlan.IdentificationID) ?? [],
       eligibilityStatusCode: applicantEarning?.BenefitEligibilityStatus.StatusCode.ReferenceDataID,
       livingIndependently: applicant.ApplicantDetail.LivingIndependentlyIndicator,
       partnerInformation,
