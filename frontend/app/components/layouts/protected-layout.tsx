@@ -7,11 +7,10 @@ import { faArrowRightFromBracket, faChevronDown, faCircleUser, faEnvelope } from
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { AppLink } from '../app-link';
-import { Banner } from '../banner';
-import { ButtonLink } from '../buttons';
-
+import { AppLink } from '~/components/app-link';
+import { Banner } from '~/components/banner';
 import { ProtectedBreadcrumbs } from '~/components/breadcrumbs';
+import { ButtonLink } from '~/components/buttons';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '~/components/dropdown-menu';
 import { InlineLink } from '~/components/inline-link';
 import { PageDetails } from '~/components/page-details';

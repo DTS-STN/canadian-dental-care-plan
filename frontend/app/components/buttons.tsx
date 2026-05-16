@@ -1,8 +1,7 @@
 import type { ComponentProps } from 'react';
 
-import { ButtonEndIcon, ButtonStartIcon } from './button-icons';
-
 import { AppLink } from '~/components/app-link';
+import { ButtonEndIcon, ButtonStartIcon } from '~/components/button-icons';
 import { cn } from '~/utils/tw-utils';
 
 type ButtonEndIconProps = ComponentProps<typeof ButtonEndIcon>;

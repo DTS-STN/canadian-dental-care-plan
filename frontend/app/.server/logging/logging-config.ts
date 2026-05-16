@@ -1,9 +1,8 @@
 import * as z from 'zod';
 
-import { singleton } from '../utils/instance-registry';
-
 import { logLevels } from '~/.server/logging/log-levels';
 import type { LogLevel } from '~/.server/logging/log-levels';
+import { singleton } from '~/.server/utils/instance-registry';
 
 /**
  * Type definition for the application's logging configuration parameters.

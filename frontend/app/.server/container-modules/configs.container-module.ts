@@ -1,8 +1,7 @@
 import { ContainerModule } from 'inversify';
 
-import { getEnv } from '../utils/env.utils';
-
 import { TYPES } from '~/.server/constants';
+import { getEnv } from '~/.server/utils/env.utils';
 import { getClientEnv } from '~/utils/env-utils';
 
 /**

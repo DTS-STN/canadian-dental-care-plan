@@ -1,10 +1,9 @@
 import type { ComponentProps, ReactNode } from 'react';
 
-import { InputError } from './input-error';
-import { InputHelp } from './input-help';
-import { InputLabel } from './input-label';
-import { InputOption } from './input-option';
-
+import { InputError } from '~/components/input-error';
+import { InputHelp } from '~/components/input-help';
+import { InputLabel } from '~/components/input-label';
+import { InputOption } from '~/components/input-option';
 import { cn } from '~/utils/tw-utils';
 
 interface InputSelectProps extends OmitStrict<ComponentProps<'select'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required'> {

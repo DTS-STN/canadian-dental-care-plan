@@ -1,10 +1,9 @@
 import { inject, injectable } from 'inversify';
 
-import type { ClientEligibilityDto, ClientEligibilityRequestDto } from '../dtos/client-eligibility.dto';
-import type { ClientEligibilityEntity, ClientEligibilityRequestEntity } from '../entities/client-eligibility.entity';
-
 import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
+import type { ClientEligibilityDto, ClientEligibilityRequestDto } from '~/.server/domain/dtos/client-eligibility.dto';
+import type { ClientEligibilityEntity, ClientEligibilityRequestEntity } from '~/.server/domain/entities/client-eligibility.entity';
 import { isValidCoverageCopayTierCode } from '~/.server/utils/coverage.utils';
 import { expectDefined } from '~/utils/assert-utils';
 

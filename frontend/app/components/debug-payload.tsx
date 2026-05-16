@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { faCheck, faClipboard } from '@fortawesome/free-solid-svg-icons';
 
-import { Button } from './buttons';
+import { Button } from '~/components/buttons';
 
 interface DebugPayloadProps {
   data?: unknown;

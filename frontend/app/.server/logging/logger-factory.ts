@@ -1,11 +1,10 @@
 import { invariant } from '@dts-stn/invariant';
 
-import { singleton } from '../utils/instance-registry';
-import { getLoggingConfig } from './logging-config';
-import { createWinstonInstance } from './winston-factory';
-
 import type { Logger } from '~/.server/logging/logger';
 import { DefaultLogger } from '~/.server/logging/logger-default';
+import { getLoggingConfig } from '~/.server/logging/logging-config';
+import { createWinstonInstance } from '~/.server/logging/winston-factory';
+import { singleton } from '~/.server/utils/instance-registry';
 
 /**
  * Creates a contextual logger instance with the specified label.

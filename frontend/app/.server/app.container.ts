@@ -1,9 +1,8 @@
 import { Container } from 'inversify';
 
-import { TYPES } from './constants';
-
 import type { AppContainerProvider } from '~/.server/app-container.provider';
 import { DefaultAppContainerProvider } from '~/.server/app-container.provider';
+import { TYPES } from '~/.server/constants';
 import {
   createAuthContainerModule,
   createConfigsContainerModule,

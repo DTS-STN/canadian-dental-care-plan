@@ -2,9 +2,8 @@ import { DiagLogLevel } from '@opentelemetry/api';
 import { randomUUID } from 'node:crypto';
 import * as z from 'zod';
 
-import { singleton } from './instance-registry';
-
 import { generateCryptoKey } from '~/.server/utils/crypto.utils';
+import { singleton } from '~/.server/utils/instance-registry';
 import type { ClientEnv } from '~/utils/env-utils';
 import { clientEnvSchema } from '~/utils/env-utils';
 
