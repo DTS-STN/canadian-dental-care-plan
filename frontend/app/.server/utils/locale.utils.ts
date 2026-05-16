@@ -13,7 +13,7 @@ import { APP_LOCALES } from '~/utils/locale-utils';
  * Returns a t function that defaults to the language resolved through the request.
  * @see https://www.i18next.com/overview/api#getfixedt
  */
-export async function getFixedT<N extends Namespace>(localeOrRequest: AppLocale | Request, namespaces: N) {
+export async function getFixedT<const N extends Namespace>(localeOrRequest: AppLocale | Request, namespaces: N) {
   const locale = typeof localeOrRequest === 'string' ? localeOrRequest : getLocale(localeOrRequest);
   const i18n = await initI18n(locale, namespaces);
   return i18n.getFixedT(locale, namespaces);
@@ -79,7 +79,7 @@ export function getLocaleFromParams(params: Params): AppLocale {
  * Initializes the server instance of i18next.
  * @see https://www.i18next.com/overview/api#createinstance
  */
-export async function initI18n<N extends Namespace>(locale: string | undefined, namespaces: N) {
+export async function initI18n<const N extends Namespace>(locale: string | undefined, namespaces: N) {
   const log = createLogger('locale-utils.server/initI18n');
   const { I18NEXT_DEBUG } = getEnv();
   const i18n = createInstance();
