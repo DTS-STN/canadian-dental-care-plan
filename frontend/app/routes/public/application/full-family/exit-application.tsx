@@ -20,7 +20,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationFullFamily', 'application', 'gcweb'],
+  i18nNamespaces: ['applicationFullFamily', 'gcweb'],
   pageIdentifier: pageIds.public.application.fullFamily.exitApplication,
 } as const satisfies RouteHandleData;
 

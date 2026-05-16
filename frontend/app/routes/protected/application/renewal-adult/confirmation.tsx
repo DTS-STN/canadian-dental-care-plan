@@ -29,7 +29,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationRenewalAdult', 'protectedApplication', 'gcweb'],
+  i18nNamespaces: ['protectedApplicationRenewalAdult', 'gcweb'],
   pageIdentifier: pageIds.protected.application.renewalAdult.confirmation,
 } as const satisfies RouteHandleData;
 

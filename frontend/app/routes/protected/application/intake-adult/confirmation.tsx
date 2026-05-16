@@ -27,7 +27,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationIntakeAdult', 'protectedApplication', 'gcweb'],
+  i18nNamespaces: ['protectedApplicationIntakeAdult', 'gcweb'],
   pageIdentifier: pageIds.protected.application.intakeAdult.confirmation,
 } as const satisfies RouteHandleData;
 

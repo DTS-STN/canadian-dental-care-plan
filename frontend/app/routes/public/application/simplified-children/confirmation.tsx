@@ -30,7 +30,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationSimplifiedChild', 'application', 'gcweb'],
+  i18nNamespaces: ['applicationSimplifiedChild', 'gcweb'],
   pageIdentifier: pageIds.public.application.simplifiedChild.confirmation,
 } as const satisfies RouteHandleData;
 

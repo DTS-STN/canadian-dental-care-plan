@@ -20,7 +20,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationRenewalChild', 'protectedApplication', 'gcweb'],
+  i18nNamespaces: ['protectedApplicationRenewalChild', 'gcweb'],
   pageIdentifier: pageIds.protected.application.renewalChild.exitApplication,
 } as const satisfies RouteHandleData;
 
