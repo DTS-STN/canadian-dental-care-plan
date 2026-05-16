@@ -12,7 +12,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
-  i18nNamespaces: [...layoutI18nNamespaces],
+  i18nNamespaces: layoutI18nNamespaces,
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {

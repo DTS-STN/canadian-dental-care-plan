@@ -20,7 +20,7 @@ import { getClientEnv } from '~/utils/env-utils';
 import { useLayoutOptions } from '~/utils/route-utils';
 import type { I18nNamespaces } from '~/utils/route-utils';
 
-export const i18nNamespaces = ['gcweb'] satisfies I18nNamespaces;
+export const i18nNamespaces = 'gcweb' satisfies I18nNamespaces;
 
 /**
  * GCWeb Application page template.
@@ -109,8 +109,8 @@ interface BilingualNotFoundErrorProps {
  */
 export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
   const { i18n } = useTranslation();
-  const en = i18n.getFixedT('en', ['gcweb']);
-  const fr = i18n.getFixedT('fr', ['gcweb']);
+  const en = i18n.getFixedT('en', 'gcweb');
+  const fr = i18n.getFixedT('fr', 'gcweb');
 
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {
@@ -147,7 +147,7 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
             <p className="mb-8 text-lg text-gray-500">{en(($) => $.publicNotFound.pageMessage)}</p>
             <ul className="list-disc space-y-2 pl-10">
               <li>
-                <Trans t={en} ns={['gcweb']} i18nKey={($) => $.publicNotFound.returnCdcp} components={{ englishCdcpLink: <InlineLink to={en(($) => $.publicNotFound.cdcpLink)} className="external-link" newTabIndicator target="_blank" /> }} />
+                <Trans t={en} i18nKey={($) => $.publicNotFound.returnCdcp} components={{ englishCdcpLink: <InlineLink to={en(($) => $.publicNotFound.cdcpLink)} className="external-link" newTabIndicator target="_blank" /> }} />
               </li>
             </ul>
           </div>
@@ -159,7 +159,7 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
             <p className="mb-8 text-lg text-gray-500">{fr(($) => $.publicNotFound.pageMessage)}</p>
             <ul className="list-disc space-y-2 pl-10">
               <li>
-                <Trans t={fr} ns={['gcweb']} i18nKey={($) => $.publicNotFound.returnCdcp} components={{ frenchCdcpLink: <InlineLink to={fr(($) => $.publicNotFound.cdcpLink)} className="external-link" newTabIndicator target="_blank" /> }} />
+                <Trans t={fr} i18nKey={($) => $.publicNotFound.returnCdcp} components={{ frenchCdcpLink: <InlineLink to={fr(($) => $.publicNotFound.cdcpLink)} className="external-link" newTabIndicator target="_blank" /> }} />
               </li>
             </ul>
           </div>

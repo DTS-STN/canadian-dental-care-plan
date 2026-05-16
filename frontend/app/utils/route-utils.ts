@@ -41,7 +41,7 @@ const pageIdentifierSchema = z.string().readonly();
 
 export type BuildInfo = z.infer<typeof buildInfoSchema>;
 
-export type I18nNamespaces = $Tuple<FlatNamespace>;
+export type I18nNamespaces = FlatNamespace | $Tuple<FlatNamespace>;
 
 export type TransformAdobeAnalyticsUrl = (url: string | URL) => URL;
 

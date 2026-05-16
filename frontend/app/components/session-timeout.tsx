@@ -10,7 +10,7 @@ import { Button } from '~/components/buttons';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
 import type { I18nNamespaces } from '~/utils/route-utils';
 
-const i18nNamespaces = ['gcweb'] satisfies I18nNamespaces;
+const i18nNamespaces = 'gcweb' satisfies I18nNamespaces;
 
 export interface SessionTimeoutProps extends Required<Pick<IIdleTimerProps, 'promptBeforeIdle' | 'timeout'>> {
   /**

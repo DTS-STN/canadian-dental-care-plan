@@ -11,7 +11,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: [...layoutI18nNamespaces],
+  i18nNamespaces: layoutI18nNamespaces,
   pageIdentifier: pageIds.public.notFound,
 } as const satisfies RouteHandleData;
 

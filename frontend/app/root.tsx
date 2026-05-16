@@ -64,7 +64,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   const dynatraceService = appContainer.get(TYPES.DynatraceService);
   const requestUrl = new URL(request.url);
   const locale = getLocale(request);
-  const t = await getFixedT(request, ['gcweb']);
+  const t = await getFixedT(request, 'gcweb');
 
   const buildInfo = buildInfoService.getBuildInfo();
   const dynatraceRumScript = await dynatraceService.findDynatraceRumScript();
@@ -185,8 +185,8 @@ export function useFeature(feature: FeatureName) {
 export function ErrorBoundary() {
   const { nonce } = useContext(NonceContext);
   const { i18n } = useTranslation();
-  const en = i18n.getFixedT('en', ['gcweb']);
-  const fr = i18n.getFixedT('fr', ['gcweb']);
+  const en = i18n.getFixedT('en', 'gcweb');
+  const fr = i18n.getFixedT('fr', 'gcweb');
 
   return (
     <html lang="en">
@@ -222,7 +222,7 @@ export function ErrorBoundary() {
               <ul className="list-disc space-y-2 pl-10">
                 <li>{en(($) => $.serverError.option01)}</li>
                 <li>
-                  <Trans t={en} ns={['gcweb']} i18nKey={($) => $.serverError.option02} components={{ home: <InlineLink to="/" /> }} />
+                  <Trans t={en} i18nKey={($) => $.serverError.option02} components={{ home: <InlineLink to="/" /> }} />
                 </li>
               </ul>
             </div>
@@ -235,7 +235,7 @@ export function ErrorBoundary() {
               <ul className="list-disc space-y-2 pl-10">
                 <li>{fr(($) => $.serverError.option01)}</li>
                 <li>
-                  <Trans t={fr} ns={['gcweb']} i18nKey={($) => $.serverError.option02} components={{ home: <InlineLink to="/" /> }} />
+                  <Trans t={fr} i18nKey={($) => $.serverError.option02} components={{ home: <InlineLink to="/" /> }} />
                 </li>
               </ul>
             </div>

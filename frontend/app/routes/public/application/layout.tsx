@@ -26,7 +26,7 @@ export const handle = {
   // Declare all i18n namespaces required by this route and its descendants.
   // Preloading them upfront ensures translations are available on initial render.
   i18nNamespaces: [
-    ...layoutI18nNamespaces, //
+    layoutI18nNamespaces, //
     'common',
     'application',
     'applicationFullAdult',

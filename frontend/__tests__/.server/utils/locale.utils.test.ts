@@ -53,7 +53,7 @@ describe('locale.utils', () => {
     it('should return a t function that uses the detected language', async () => {
       vi.mocked(getEnv, { partial: true }).mockReturnValue({ I18NEXT_DEBUG: false });
 
-      const t = await getFixedT(new Request('http://localhost:3000/'), ['gcweb']);
+      const t = await getFixedT(new Request('http://localhost:3000/'), 'gcweb');
 
       // GjB :: not sure how else to test this 🤷
       expect(t).toBeDefined();
@@ -65,7 +65,7 @@ describe('locale.utils', () => {
     it('should initialize i18next with the correct options', async () => {
       vi.mocked(getEnv, { partial: true }).mockReturnValue({ I18NEXT_DEBUG: false });
 
-      const i18n = await initI18n('en', ['gcweb']);
+      const i18n = await initI18n('en', 'gcweb');
 
       // we only care that the init function respects our env and params
       // (ie: no need to test the statically-set values)

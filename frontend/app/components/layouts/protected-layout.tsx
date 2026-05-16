@@ -25,7 +25,7 @@ import { getClientEnv } from '~/utils/env-utils';
 import { useLayoutOptions } from '~/utils/route-utils';
 import type { I18nNamespaces } from '~/utils/route-utils';
 
-export const i18nNamespaces = ['gcweb'] satisfies I18nNamespaces;
+export const i18nNamespaces = 'gcweb' satisfies I18nNamespaces;
 
 /**
  * GCWeb Application page template.

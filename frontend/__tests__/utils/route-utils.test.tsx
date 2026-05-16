@@ -119,7 +119,7 @@ describe('useI18nNamespaces()', () => {
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useI18nNamespaces())}</div>,
-            handle: { i18nNamespaces: ['gcweb'] } satisfies RouteHandleData,
+            handle: { i18nNamespaces: 'gcweb' } satisfies RouteHandleData,
             path: '/',
           },
         ],
