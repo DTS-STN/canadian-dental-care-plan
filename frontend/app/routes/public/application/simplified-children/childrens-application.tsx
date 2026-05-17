@@ -34,7 +34,6 @@ import { formatSin } from '~/utils/sin-utils';
 const FORM_ACTION = { add: 'add', remove: 'remove', DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed' } as const;
 
 export const handle = {
-  i18nNamespaces: ['applicationSimplifiedChild', 'application', 'gcweb', 'common'],
   pageIdentifier: pageIds.public.application.simplifiedChild.childApplication,
 } as const satisfies RouteHandleData;
 
@@ -44,7 +43,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadPublicApplicationSimplifiedChildState({ params, request, session });
   validateApplicationFlow(state, params, ['simplified-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSimplifiedChild', 'gcweb']);
   const locale = getLocale(request);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.childrensApplication.pageTitle) }),
@@ -163,7 +162,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function RenewChildChildrensApplication({ loaderData, params }: Route.ComponentProps) {
   const { currentLanguage } = useCurrentLanguage();
   const { state, childrenSections } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSimplifiedChild', 'application', 'common']);
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 

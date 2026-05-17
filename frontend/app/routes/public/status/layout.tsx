@@ -10,7 +10,9 @@ import { useApiSession } from '~/utils/api-session-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
-  i18nNamespaces: layoutI18nNamespaces,
+  // Declare all i18n namespaces required by this route and its descendants.
+  // Preloading them upfront ensures translations are available on initial render.
+  i18nNamespaces: [layoutI18nNamespaces, 'status'],
 } as const satisfies RouteHandleData;
 
 // eslint-disable-next-line @typescript-eslint/require-await

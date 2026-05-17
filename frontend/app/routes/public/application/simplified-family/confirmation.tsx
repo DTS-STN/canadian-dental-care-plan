@@ -30,7 +30,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationSimplifiedFamily', 'gcweb'],
   pageIdentifier: pageIds.public.application.simplifiedFamily.confirmation,
 } as const satisfies RouteHandleData;
 
@@ -40,7 +39,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadPublicApplicationSimplifiedFamilyState({ params, request, session });
   validateApplicationFlow(state, params, ['simplified-family']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSimplifiedFamily', 'gcweb']);
   const locale = getLocale(request);
 
   // prettier-ignore
@@ -151,7 +150,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSimplifiedFamily');
 
   clearPublicApplicationState({ params, session });
 
@@ -159,7 +158,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function SimplifiedFamilyConfirmation({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('applicationSimplifiedFamily');
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddress, mailingAddress, dentalInsurance, dentalBenefits, submissionInfo, surveyLink, children, eligibility } = loaderData;
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();

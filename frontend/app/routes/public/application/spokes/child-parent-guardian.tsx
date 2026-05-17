@@ -18,7 +18,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationSpokes', 'gcweb'],
   pageIdentifier: pageIds.public.application.spokes.childParentOrGuardian,
 } as const satisfies RouteHandleData;
 
@@ -26,7 +25,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   getPublicApplicationState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSpokes', 'gcweb']);
 
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.children.parentOrGuardian.pageTitle) }),
@@ -43,14 +42,14 @@ export async function action({ context: { appContainer, session }, params, reque
 
   getPublicApplicationState({ params, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSpokes');
 
   clearPublicApplicationState({ params, session });
   return redirect(t(($) => $.children.parentOrGuardian.exitBtnLink));
 }
 
 export default function ParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('applicationSpokes');
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const fetcher = useFetcher<typeof action>();

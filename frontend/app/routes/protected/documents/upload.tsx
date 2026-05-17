@@ -57,7 +57,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 function LayoutBreadcrumbs(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('documents');
   return (
     <ProtectedBreadcrumbs
       items={[
@@ -91,7 +91,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   });
 
   const locale = getLocale(request);
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['documents', 'gcweb']);
 
   const applicants: Array<{ clientId: string; clientNumber: string; name: string }> = [
     {
@@ -127,7 +127,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export async function clientAction({ request, serverAction }: Route.ClientActionArgs) {
   const formData = await request.clone().formData();
   const locale = getLanguage(request);
-  const t = getI18n().getFixedT(locale, handle.i18nNamespaces);
+  const t = getI18n().getFixedT(locale, 'documents');
   const env = getClientEnv();
 
   const validationResult = await validateUploadForm(formData, locale, t, {
@@ -170,7 +170,7 @@ export async function action({ context: { appContainer, session }, params, reque
   ]);
 
   const locale = getLocale(request);
-  const t = await getFixedT(locale, handle.i18nNamespaces);
+  const t = await getFixedT(locale, 'documents');
   const config = appContainer.get(TYPES.ClientConfig);
   const idToken: IdToken = session.get('idToken');
   const allowedExtensions = config.DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS;
@@ -209,7 +209,7 @@ export async function action({ context: { appContainer, session }, params, reque
 async function validateUploadForm(
   formData: FormData,
   locale: string,
-  t: TFunction<typeof handle.i18nNamespaces>,
+  t: TFunction<'documents'>,
   config: { allowedExtensions: readonly string[]; maxSizeMB: number; maxCount: number },
 ): Promise<{ success: true; data: DocumentUploadSchemaOuput } | { success: false; errors: DocumentUploadSchemaErrorTree }> {
   const schema = createDocumentUploadSchema({ locale, t, allowedExtensions: config.allowedExtensions, maxFileSizeInMB: config.maxSizeMB, maxFileCount: config.maxCount });
@@ -252,7 +252,7 @@ interface ScanDocumentsRequestArgs {
   files: DocumentUploadSchemaOuput['files'];
   userId: string;
   service: DocumentUploadService;
-  t: TFunction<typeof handle.i18nNamespaces>;
+  t: TFunction<'documents'>;
 }
 
 async function scanDocuments({ allowedExtensions, files, service, t, userId }: ScanDocumentsRequestArgs): Promise<UploadDocumentsResponseArgs> {
@@ -316,7 +316,7 @@ interface UploadDocumentsRequestArgs {
   files: DocumentUploadSchemaOuput['files'];
   userId: string;
   service: DocumentUploadService;
-  t: TFunction<typeof handle.i18nNamespaces>;
+  t: TFunction<'documents'>;
 }
 
 type UploadDocumentsResponseArgs =
@@ -415,7 +415,7 @@ async function createMetadata({ appContainer, clientId, files, userId }: CreateM
 
 type CreateDocumentUploadSchemaArgs = {
   locale: string;
-  t: TFunction<typeof handle.i18nNamespaces>;
+  t: TFunction<'documents'>;
   allowedExtensions: ReadonlyArray<string>;
   maxFileSizeInMB: number;
   maxFileCount: number;
@@ -495,7 +495,7 @@ function createDocumentUploadSchema({ locale, t, allowedExtensions, maxFileSizeI
 }
 
 export default function DocumentsUpload({ loaderData, params }: Route.ComponentProps) {
-  const { t, i18n } = useTranslation(handle.i18nNamespaces);
+  const { t, i18n } = useTranslation(['documents', 'gcweb']);
   const { applicants, documentTypes, SCCH_BASE_URI } = loaderData;
   const env = useClientEnv();
   const { DOCUMENT_UPLOAD_ALLOWED_FILE_EXTENSIONS, DOCUMENT_UPLOAD_MAX_FILE_COUNT } = env;

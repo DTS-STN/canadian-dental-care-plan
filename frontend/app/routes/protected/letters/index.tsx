@@ -31,7 +31,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 function LayoutBreadcrumbs(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('letters');
   return (
     <ProtectedBreadcrumbs
       items={[
@@ -67,7 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   session.set('letters', letters);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['letters', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.index.pageTitle) }),
   };
@@ -82,7 +82,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 export default function LettersIndex({ loaderData, params }: Route.ComponentProps) {
   const { currentLanguage } = useCurrentLanguage();
   const [, setSearchParams] = useSearchParams();
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['letters', 'gcweb']);
   const { letters, letterTypes, sortOrder, SCCH_BASE_URI } = loaderData;
 
   function handleOnSortOrderChange(e: ChangeEvent<HTMLSelectElement>) {

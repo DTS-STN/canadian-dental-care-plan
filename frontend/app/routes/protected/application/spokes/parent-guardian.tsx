@@ -28,7 +28,6 @@ const YES_NO_OPTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.parentGuardian,
 } as const satisfies RouteHandleData;
 
@@ -42,7 +41,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['intake-children', 'intake-family', 'renewal-children', 'renewal-family']);
   const childState = getSingleChildState({ params, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
 
   const childNumber = t(($) => $.children.childNumber, {
     childNumber: childState.childNumber,
@@ -67,7 +66,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   const parentGuardianSchema = z.object({
     isParent: z.boolean({
@@ -108,7 +107,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ParentGuardian({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationSpokes', 'protectedApplication']);
   const { defaultState, childName, applicationFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();

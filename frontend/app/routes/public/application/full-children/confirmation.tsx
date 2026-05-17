@@ -28,7 +28,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationFullChild', 'gcweb'],
   pageIdentifier: pageIds.public.application.fullChild.confirmation,
 } as const satisfies RouteHandleData;
 
@@ -38,7 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadPublicApplicationFullChildState({ params, request, session });
   validateApplicationFlow(state, params, ['full-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationFullChild', 'gcweb']);
   const locale = getLocale(request);
 
   // prettier-ignore
@@ -127,7 +126,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationFullChild');
 
   clearPublicApplicationState({ params, session });
 
@@ -135,7 +134,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function NewChildrenConfirmation({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('applicationFullChild');
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const fetcher = useFetcher<typeof action>();

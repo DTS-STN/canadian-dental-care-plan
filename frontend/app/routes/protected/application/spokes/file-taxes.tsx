@@ -19,7 +19,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.fileYourTaxes,
 } as const satisfies RouteHandleData;
 
@@ -31,7 +30,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const { applicationYear } = getProtectedApplicationState({ params, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplication', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.fileYourTaxes.pageTitle) }),
   };
@@ -46,14 +45,14 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplication');
 
   clearProtectedApplicationState({ params, session });
   return redirect(t(($) => $.fileYourTaxes.exitBtnLink));
 }
 
 export default function ApplicationFileYourTaxes({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplication');
   const { taxYear } = loaderData;
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 

@@ -29,7 +29,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationSimplifiedAdult', 'gcweb'],
   pageIdentifier: pageIds.public.application.simplifiedAdult.confirmation,
 } as const satisfies RouteHandleData;
 
@@ -39,7 +38,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadPublicApplicationSimplifiedAdultState({ params, request, session });
   validateApplicationFlow(state, params, ['simplified-adult']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSimplifiedAdult', 'gcweb']);
   const locale = getLocale(request);
 
   // prettier-ignore
@@ -117,7 +116,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSimplifiedAdult');
 
   clearPublicApplicationState({ params, session });
 
@@ -125,7 +124,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function RenewAdultConfirm({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('applicationSimplifiedAdult');
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddress, mailingAddress, dentalInsurance, dentalBenefits, submissionInfo, surveyLink, eligibility } = loaderData;
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();

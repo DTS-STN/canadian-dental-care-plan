@@ -19,7 +19,7 @@ export const handle = {
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['unableToProcessRequest', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.pageTitle) }),
   };
@@ -28,7 +28,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function UnableToProcessRequest({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('unableToProcessRequest');
 
   const noWrap = <span className="whitespace-nowrap" />;
   const eServiceCanadaLink = <InlineLink to={t(($) => $.eServiceCanadaLink)} className="external-link" newTabIndicator target="_blank" />;

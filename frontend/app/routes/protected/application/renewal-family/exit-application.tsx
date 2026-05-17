@@ -20,7 +20,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationRenewalFamily', 'gcweb'],
   pageIdentifier: pageIds.protected.application.renewalFamily.exitApplication,
 } as const satisfies RouteHandleData;
 
@@ -33,7 +32,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadProtectedApplicationRenewalFamilyState({ params, request, session });
   validateApplicationFlow(state, params, ['renewal-family']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationRenewalFamily', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.exitApplication.pageTitle) }),
   };
@@ -51,7 +50,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationRenewalFamily');
 
   clearProtectedApplicationState({ params, session });
 
@@ -59,7 +58,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedRenewalFamilyExitApplication({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplicationRenewalFamily');
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);

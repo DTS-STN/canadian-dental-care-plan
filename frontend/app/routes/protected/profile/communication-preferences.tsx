@@ -26,7 +26,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
   const locale = getLocale(request);
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedProfile', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.communicationPreferences.pageTitle) }),
   };
@@ -54,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export default function ViewCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedProfile', 'gcweb']);
   const { preferredLanguage, preferredMethodSunLife, preferredMethodGovernmentOfCanada, SCCH_BASE_URI } = loaderData;
 
   return (
@@ -74,10 +74,7 @@ export default function ViewCommunicationPreferences({ loaderData, params }: Rou
         <ButtonLink
           variant="primary"
           id="back-button"
-          to={t(($) => $.header.menuDashboardHref, {
-            baseUri: SCCH_BASE_URI,
-            ns: 'gcweb',
-          })}
+          to={t(($) => $.header.menuDashboardHref, { ns: 'gcweb', baseUri: SCCH_BASE_URI })}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - My communication preferences return button click"
         >
           {t(($) => $.communicationPreferences.returnButton)}

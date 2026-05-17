@@ -27,7 +27,6 @@ import { cn } from '~/utils/tw-utils';
 const APPLICANT_TYPE = { adult: 'adult', family: 'family', children: 'children' } as const;
 
 export const handle = {
-  i18nNamespaces: ['application', 'gcweb'],
   pageIdentifier: pageIds.public.application.typeOfApplication,
 } as const satisfies RouteHandleData;
 
@@ -35,7 +34,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['application', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.yourApplication.pageTitle) }),
   };
@@ -72,7 +71,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export default function TypeOfApplication({ loaderData, params }: Route.ComponentProps) {
   const { defaultState, isRenewalContext, nextRouteId, sections, showNewOrReturningMemberSection, typeOfApplicationSectionCompletionResult } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('application');
 
   function getTypeOfApplication(typeOfApplication: string) {
     switch (typeOfApplication) {

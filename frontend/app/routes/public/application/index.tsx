@@ -20,14 +20,13 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { secondsToMilliseconds } from '~/utils/units.utils';
 
 export const handle = {
-  i18nNamespaces: ['application', 'gcweb'],
   pageIdentifier: pageIds.public.application.index,
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, request }: Route.LoaderArgs) {
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['application', 'gcweb']);
   const locale = getLocale(request);
 
   const currentDate = getCurrentDateString(locale);
@@ -46,7 +45,7 @@ const NAVIGATION_DELAY_MS = secondsToMilliseconds(1);
 export default function PublicApplicationIndex({ loaderData, params }: Route.ComponentProps) {
   const { id } = loaderData;
 
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('application');
   const navigation = useNavigation();
   const navigate = useNavigate();
   const { set: setApplicationFlowStorageValue } = useApplicationFlowStorage();

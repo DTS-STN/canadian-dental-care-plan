@@ -30,7 +30,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationRenewalChild', 'gcweb'],
   pageIdentifier: pageIds.protected.application.renewalChild.confirmation,
 } as const satisfies RouteHandleData;
 
@@ -43,7 +42,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadProtectedApplicationRenewalChildState({ params, request, session });
   validateApplicationFlow(state, params, ['renewal-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationRenewalChild', 'gcweb']);
   const locale = getLocale(request);
 
   if (
@@ -146,7 +145,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationRenewalChild');
 
   clearProtectedApplicationState({ params, session });
 
@@ -154,7 +153,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedRenewChildrenConfirmation({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplicationRenewalChild');
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddress, mailingAddress, submissionInfo, surveyLink, children, isSimplifiedRenewal } = loaderData;
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();

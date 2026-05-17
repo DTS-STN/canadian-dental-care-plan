@@ -32,7 +32,6 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.renewalSelection,
 } as const satisfies RouteHandleData;
 
@@ -45,7 +44,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getProtectedApplicationState({ params, session });
   validateProtectedApplicationContext(state, params, 'renewal');
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.renewalSelection.pageTitle) }),
   };
@@ -98,7 +97,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   const applicantsSchema = z.object({
     applicants: z.array(z.string().trim()).nonempty(t(($) => $.renewalSelection.errorMessage.renewalSelectionRequired)),
@@ -178,7 +177,7 @@ function getChildren(state: ProtectedApplicationState, selectedClientIds: string
 }
 
 export default function ProtectedSpokesRenewalSelection({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationSpokes', 'protectedApplication']);
   const { state, applicants } = loaderData;
 
   const fetcher = useFetcher<typeof action>();

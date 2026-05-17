@@ -26,7 +26,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationRenewalFamily', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.renewalFamily.maritalStatus,
 } as const satisfies RouteHandleData;
 
@@ -43,7 +42,7 @@ export async function loader({ context: { appContainer, session }, request, para
     throw redirect(getPathById('protected/application/$id/renewal-family/contact-information', params));
   }
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationRenewalFamily', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.maritalStatus.pageTitle) }),
   };
@@ -62,7 +61,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export default function ProtectedNewFamilyMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { state, sections } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication']);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 

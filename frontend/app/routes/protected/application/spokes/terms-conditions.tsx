@@ -43,7 +43,6 @@ type CheckboxId = (typeof CHECKBOX_IDS)[keyof typeof CHECKBOX_IDS];
 const CONSENT_CHECKBOXES = [CHECKBOX_IDS.ACKNOWLEDGE_TERMS, CHECKBOX_IDS.ACKNOWLEDGE_PRIVACY, CHECKBOX_IDS.SHARE_DATA] as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.termsConditions,
 } as const satisfies RouteHandleData;
 
@@ -54,7 +53,7 @@ export async function loader({ context: { appContainer, session }, request, para
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.termsConditions.pageTitle) }),
   };
@@ -65,7 +64,7 @@ export async function action({ context: { appContainer, session }, request, para
   getProtectedApplicationState({ params, session });
 
   const formData = await request.formData();
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
@@ -132,7 +131,7 @@ export async function action({ context: { appContainer, session }, request, para
 }
 
 export default function ApplyIndex({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplicationSpokes');
   const { defaultState } = loaderData;
 
   const fetcher = useFetcher<typeof action>();

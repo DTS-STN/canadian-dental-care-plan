@@ -36,7 +36,6 @@ const CHECKBOX_VALUE = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationIntakeChild', 'gcweb'],
   pageIdentifier: pageIds.protected.application.intakeChild.submit,
 } as const satisfies RouteHandleData;
 
@@ -49,7 +48,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadProtectedApplicationIntakeChildStateForReview({ params, request, session });
   validateApplicationFlow(state, params, ['intake-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationIntakeChild', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.submit.pageTitle) }),
   };
@@ -84,7 +83,7 @@ export async function action({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['intake-children']);
 
   const formData = await request.formData();
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationIntakeChild');
 
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
@@ -120,7 +119,7 @@ export async function action({ context: { appContainer, session }, request, para
 
 export default function ProtectedNewChildrenSubmit({ loaderData, params }: Route.ComponentProps) {
   const { state, payload } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplicationIntakeChild');
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);

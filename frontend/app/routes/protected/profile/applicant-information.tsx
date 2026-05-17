@@ -25,7 +25,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedProfile', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.applicantInformation.pageTitle) }),
   };
@@ -59,7 +59,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedApplicantInformation({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedProfile', 'gcweb']);
   const { primaryApplicant, children, SCCH_BASE_URI } = loaderData;
 
   return (

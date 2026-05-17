@@ -34,7 +34,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('stub-login');
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['stubLogin', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.index.pageTitle) }),
   };
@@ -55,7 +55,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('stub-login');
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'stubLogin');
 
   const stubLoginSchema = z.object({
     sin: z
@@ -144,7 +144,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function StubLogin({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('stubLogin');
   const { defaultValues } = loaderData;
   const fetcher = useFetcher<typeof action>();
   const errors = fetcher.data?.errors;

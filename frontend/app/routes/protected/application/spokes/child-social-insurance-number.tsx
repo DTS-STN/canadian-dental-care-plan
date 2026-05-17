@@ -26,7 +26,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.childSocialInsuranceNumber,
 } as const satisfies RouteHandleData;
 
@@ -40,7 +39,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['intake-children', 'intake-family', 'renewal-children', 'renewal-family']);
   const childState = getSingleChildState({ params, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
 
   const childNumber = t(($) => $.children.childNumber, {
     childNumber: childState.childNumber,
@@ -84,7 +83,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const childState = getSingleChildState({ params, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   const sinSchema = z.object({
     socialInsuranceNumber: z
@@ -144,7 +143,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ChildSocialInsuranceNumber({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationSpokes', 'protectedApplication']);
   const { childSin, applicationFlow, childName } = loaderData;
 
   const fetcher = useFetcher<typeof action>();

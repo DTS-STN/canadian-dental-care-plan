@@ -36,7 +36,6 @@ const CHECKBOX_VALUE = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['applicationFullAdult', 'gcweb'],
   pageIdentifier: pageIds.public.application.fullAdult.submit,
 } as const satisfies RouteHandleData;
 
@@ -46,7 +45,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadPublicApplicationFullAdultStateForReview({ params, request, session });
   validateApplicationFlow(state, params, ['full-adult']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationFullAdult', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.submit.pageTitle) }),
   };
@@ -81,7 +80,7 @@ export async function action({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['full-adult']);
 
   const formData = await request.formData();
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationFullAdult');
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
@@ -125,7 +124,7 @@ export async function action({ context: { appContainer, session }, request, para
 
 export default function NewAdultSubmit({ loaderData, params }: Route.ComponentProps) {
   const { state, payload } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('applicationFullAdult');
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const errors = fetcher.data?.errors;

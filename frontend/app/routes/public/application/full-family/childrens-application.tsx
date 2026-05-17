@@ -33,7 +33,6 @@ import { formatSin } from '~/utils/sin-utils';
 const FORM_ACTION = { add: 'add', remove: 'remove' } as const;
 
 export const handle = {
-  i18nNamespaces: ['applicationFullFamily', 'application', 'gcweb', 'common'],
   pageIdentifier: pageIds.public.application.fullFamily.childApplication,
 } as const satisfies RouteHandleData;
 
@@ -43,7 +42,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadPublicApplicationFullFamilyState({ params, request, session });
   validateApplicationFlow(state, params, ['full-family']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationFullFamily', 'gcweb']);
   const locale = getLocale(request);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.childrensApplication.pageTitle) }),
@@ -141,7 +140,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function NewFamilyChildrensApplication({ loaderData, params }: Route.ComponentProps) {
   const { currentLanguage } = useCurrentLanguage();
   const { state, childrenSections } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationFullFamily', 'application', 'common']);
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 

@@ -24,7 +24,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationFullChild', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.fullChild.parentOrGuardian,
 } as const satisfies RouteHandleData;
 
@@ -34,7 +33,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadPublicApplicationFullChildState({ params, request, session });
   validateApplicationFlow(state, params, ['full-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationFullChild', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.parentOrGuardian.pageTitle) }),
   };
@@ -85,7 +84,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export default function NewChildParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
   const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, sections } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationFullChild', 'application']);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 

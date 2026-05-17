@@ -36,7 +36,6 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationRenewalFamily', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.renewalFamily.contactInformation,
 } as const satisfies RouteHandleData;
 
@@ -49,7 +48,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadProtectedApplicationRenewalFamilyState({ params, request, session });
   validateApplicationFlow(state, params, ['renewal-family']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationRenewalFamily', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.contactInformation.pageTitle) }),
   };
@@ -206,7 +205,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewFamilyContactInformation({ loaderData, params }: Route.ComponentProps) {
   const { sections, shouldSkipMaritalStatusStep } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication']);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 
@@ -331,7 +330,7 @@ export default function ProtectedRenewFamilyContactInformation({ loaderData, par
  * entered or the existing one on their application. If there is no phone number at all, it prompts them to add one.
  */
 function PhoneNumberCardContent(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication']);
   const { state, clientApplication } = useLoaderData<typeof loader>();
 
   if (state.phoneNumber) {
@@ -383,7 +382,7 @@ function PhoneNumberCardContent(): JSX.Element {
  * @returns
  */
 function PhoneNumberCardFooter(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication']);
   const { state, clientApplication, sections } = useLoaderData<typeof loader>();
   const params = useParams();
 
@@ -478,7 +477,7 @@ function PhoneNumberCardFooter(): JSX.Element {
  * prompts them to add one.
  */
 function MailingAndHomeAddressCardContent(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication']);
   const { state, clientApplication } = useLoaderData<typeof loader>();
 
   if (state.mailingAddress && state.homeAddress) {
@@ -572,7 +571,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
  * to add one.
  */
 function MailingAndHomeAddressCardFooter(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication']);
   const { state, clientApplication, sections } = useLoaderData<typeof loader>();
   const params = useParams();
 
@@ -667,7 +666,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
  * it prompts them to add them.
  */
 function CommunicationPreferencesCardContent(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication']);
   const { state, clientApplication } = useLoaderData<typeof loader>();
 
   if (state.communicationPreferences) {
@@ -720,7 +719,7 @@ function CommunicationPreferencesCardContent(): JSX.Element {
  * update it or confirm it's unchanged. If they don't have communication preferences at all, they are prompted to add them.
  */
 function CommunicationPreferencesCardFooter(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication']);
   const { state, clientApplication, sections } = useLoaderData<typeof loader>();
   const params = useParams();
 

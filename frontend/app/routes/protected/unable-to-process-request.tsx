@@ -23,7 +23,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['unableToProcessRequest', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.pageTitle) }),
   };
@@ -35,7 +35,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
 }
 
 export default function ProtectedUnableToProcessRequest({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('unableToProcessRequest');
 
   const noWrap = <span className="whitespace-nowrap" />;
   const eServiceCanadaLink = <InlineLink to={t(($) => $.eServiceCanadaLink)} className="external-link" newTabIndicator target="_blank" />;

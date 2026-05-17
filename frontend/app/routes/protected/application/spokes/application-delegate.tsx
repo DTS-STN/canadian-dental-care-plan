@@ -19,7 +19,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.applicationDelegate,
 } as const satisfies RouteHandleData;
 
@@ -29,7 +28,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.applicationDelegate.pageTitle) }),
   };
@@ -45,7 +44,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   clearProtectedApplicationState({ params, session });
 
@@ -53,7 +52,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplicationDelegate({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplicationSpokes');
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
 
   const fetcher = useFetcher<typeof action>();

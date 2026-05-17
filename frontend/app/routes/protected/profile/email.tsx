@@ -67,7 +67,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 function LayoutBreadcrumbs(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedProfile');
   return (
     <ProtectedBreadcrumbs
       items={[
@@ -88,7 +88,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
   const profileEmailContext = requireProfileEmailContext({ request, params });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedProfile', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.email.pageTitle) }),
   };
@@ -112,7 +112,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
   const profileEmailContext = requireProfileEmailContext({ request, params });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedProfile');
   const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.ServerConfig);
   const idToken = session.get('idToken');
 
@@ -186,7 +186,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedProfileEmailAddress({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedProfile');
   const { defaultState, context } = loaderData;
 
   const fetcher = useFetcher<typeof action>();

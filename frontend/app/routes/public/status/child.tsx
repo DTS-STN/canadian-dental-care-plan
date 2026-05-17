@@ -44,7 +44,6 @@ const CHILD_HAS_SIN = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['status', 'gcweb'],
   pageIdentifier: pageIds.public.status.child,
 } as const satisfies RouteHandleData;
 
@@ -53,7 +52,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateFeatureEnabled('status');
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['status', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.child.pageTitle) }),
   };
@@ -70,7 +69,7 @@ export async function action({ context: { appContainer, session }, params, reque
     throw redirect(getPathById('public/unable-to-process-request', params));
   });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'status');
 
   const codeSchema = z.object({
     code: z
@@ -245,7 +244,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function StatusCheckerChild({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('status');
   const hCaptchaEnabled = useFeature('hcaptcha');
   const { captchaRef, onLoad, sitekey } = useHCaptcha();
 

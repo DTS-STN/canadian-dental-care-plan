@@ -27,7 +27,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationIntakeAdult', 'gcweb'],
   pageIdentifier: pageIds.protected.application.intakeAdult.confirmation,
 } as const satisfies RouteHandleData;
 
@@ -40,7 +39,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadProtectedApplicationIntakeAdultState({ params, request, session });
   validateApplicationFlow(state, params, ['intake-adult']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationIntakeAdult', 'gcweb']);
   const locale = getLocale(request);
 
   // prettier-ignore
@@ -115,7 +114,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationIntakeAdult');
 
   clearProtectedApplicationState({ params, session });
 
@@ -123,7 +122,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyFlowConfirm({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplicationIntakeAdult');
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddress, mailingAddress, dentalInsurance, dentalBenefits, submissionInfo, surveyLink } = loaderData;
   const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();

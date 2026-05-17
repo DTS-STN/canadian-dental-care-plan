@@ -35,7 +35,6 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['applicationSimplifiedChild', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.simplifiedChild.parentOrGuardian,
 } as const satisfies RouteHandleData;
 
@@ -45,7 +44,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadPublicApplicationSimplifiedChildState({ params, request, session });
   validateApplicationFlow(state, params, ['simplified-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSimplifiedChild', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.parentOrGuardian.pageTitle) }),
   };
@@ -166,7 +165,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewChildParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
   const { sections } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSimplifiedChild', 'application']);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 
@@ -256,7 +255,7 @@ export default function RenewChildParentOrGuardian({ loaderData, params }: Route
  * prompted to either add a phone number (if none exists) or update their existing phone number (if one exists).
  */
 function PhoneNumberCardContent(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSimplifiedChild', 'application']);
   const { state, clientApplication } = useLoaderData<typeof loader>();
 
   if (state.phoneNumber) {
@@ -306,7 +305,7 @@ function PhoneNumberCardContent(): JSX.Element {
  * it or confirm it's unchanged. If they don't have a phone number at all, they are prompted to add one.
  */
 function PhoneNumberCardFooter(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSimplifiedChild', 'application']);
   const { state, clientApplication, sections } = useLoaderData<typeof loader>();
   const params = useParams();
 
@@ -402,7 +401,7 @@ function PhoneNumberCardFooter(): JSX.Element {
  * prompted to either add addresses (if none exist) or update their existing addresses (if they exist).
  */
 function MailingAndHomeAddressCardContent(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSimplifiedChild', 'application']);
   const { state, clientApplication } = useLoaderData<typeof loader>();
 
   // Case 1: User has state for addresses
@@ -479,7 +478,7 @@ function MailingAndHomeAddressCardContent(): JSX.Element {
  * or confirm they're unchanged. If they don't have addresses at all, they are prompted to add them.
  */
 function MailingAndHomeAddressCardFooter(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSimplifiedChild', 'application']);
   const { state, clientApplication, sections } = useLoaderData<typeof loader>();
   const params = useParams();
 
@@ -574,7 +573,7 @@ function MailingAndHomeAddressCardFooter(): JSX.Element {
  * prompted to either add preferences (if none exist) or update their existing preferences (if they exist).
  */
 function CommunicationPreferencesCardContent(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSimplifiedChild', 'application']);
   const { state, clientApplication } = useLoaderData<typeof loader>();
 
   // Case 1: User has state for communication preferences
@@ -631,7 +630,7 @@ function CommunicationPreferencesCardContent(): JSX.Element {
  * or confirm they're unchanged. If they don't have preferences at all, they are prompted to add them.
  */
 function CommunicationPreferencesCardFooter(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSimplifiedChild', 'application']);
   const { state, clientApplication, sections } = useLoaderData<typeof loader>();
   const params = useParams();
 

@@ -21,7 +21,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.eligibilityRequirements,
 } as const satisfies RouteHandleData;
 
@@ -38,7 +37,7 @@ export async function loader({ context: { appContainer, session }, request, para
   appContainer.get(TYPES.AuditService).createAudit('page-view.application.entry.eligibility-requirements', { userId: idToken.sub });
 
   const state = getProtectedApplicationState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplication', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.eligibilityRequirements.pageTitle) }),
   };
@@ -58,7 +57,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export default function ProtectedApplicationEligibilityRequirements({ loaderData, params }: Route.ComponentProps) {
   const { state, sections, isIntake } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplication');
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 

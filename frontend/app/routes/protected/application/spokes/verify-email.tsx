@@ -52,7 +52,6 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 }
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.verifyEmail,
 } as const satisfies RouteHandleData;
 
@@ -67,7 +66,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   invariant(state.email, 'Expected state.email to be defined');
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
 
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.verifyEmail.pageTitle) }),
@@ -88,7 +87,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   const applicationFlow: ApplicationFlow = `${state.context}-${state.typeOfApplication}`;
 
@@ -190,7 +189,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplicationVerifyEmail({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationSpokes', 'protectedApplication']);
   const { defaultState } = loaderData;
   const [showDialog, setShowDialog] = useState(false);
   const csrfToken = useCsrfToken();
