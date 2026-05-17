@@ -14,7 +14,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['dataUnavailable', 'gcweb'],
+  i18nPreloadNamespace: ['dataUnavailable', 'gcweb'],
   pageIdentifier: pageIds.protected.dataUnavailable,
 } as const satisfies RouteHandleData;
 

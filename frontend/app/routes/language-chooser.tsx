@@ -6,7 +6,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getDescriptionMetaTags, getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: 'gcweb',
+  i18nPreloadNamespace: 'gcweb',
 } as const satisfies RouteHandleData;
 
 // Meta tags are constructed for a bilingual page.

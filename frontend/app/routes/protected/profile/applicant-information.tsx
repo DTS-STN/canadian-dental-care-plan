@@ -14,7 +14,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedProfile', 'gcweb'],
+  i18nPreloadNamespace: ['protectedProfile', 'gcweb'],
   pageIdentifier: pageIds.protected.profile.applicantInformation,
 } as const satisfies RouteHandleData;
 

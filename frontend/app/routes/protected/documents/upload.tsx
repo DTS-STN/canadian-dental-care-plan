@@ -51,7 +51,7 @@ type DocumentUploadSchemaOuput = z.output<DocumentUploadSchema>;
 type DocumentUploadSchemaErrorTree = z.core.$ZodErrorTree<DocumentUploadSchemaOuput>;
 
 export const handle = {
-  i18nNamespaces: ['documents', 'gcweb'],
+  i18nPreloadNamespace: ['documents', 'gcweb'],
   layoutOptions: { breadcrumbs: <LayoutBreadcrumbs /> },
   pageIdentifier: pageIds.protected.documents.upload,
 } as const satisfies RouteHandleData;

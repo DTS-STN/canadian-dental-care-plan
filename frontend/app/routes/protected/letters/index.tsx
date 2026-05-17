@@ -25,7 +25,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['letters', 'gcweb'],
+  i18nPreloadNamespace: ['letters', 'gcweb'],
   layoutOptions: { breadcrumbs: <LayoutBreadcrumbs /> },
   pageIdentifier: pageIds.protected.letters.index,
 } as const satisfies RouteHandleData;

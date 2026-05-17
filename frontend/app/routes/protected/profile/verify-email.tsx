@@ -47,7 +47,7 @@ function requireProfileEmailAddressFlowState({ session, params }: { session: Rou
 }
 
 export const handle = {
-  i18nNamespaces: ['protectedProfile', 'gcweb'],
+  i18nPreloadNamespace: ['protectedProfile', 'gcweb'],
   layoutOptions: { breadcrumbs: <LayoutBreadcrumbs /> },
   pageIdentifier: pageIds.protected.profile.verifyEmail,
 } as const satisfies RouteHandleData;

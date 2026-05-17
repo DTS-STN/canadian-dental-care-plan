@@ -13,7 +13,7 @@ import { KILLSWITCH_KEY } from '~/.server/domain/services';
 import { getLocale } from '~/.server/utils/locale.utils';
 import { DebugPayload } from '~/components/debug-payload';
 import { KillswitchDialog } from '~/components/killswitch-dialog';
-import { i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/protected-layout';
+import { protectedLayoutI18nNamespace } from '~/components/layouts/protected-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { useApplicationFlowStorage } from '~/hooks';
 import { transformAdobeAnalyticsUrl } from '~/route-helpers/adobe-analytics-route-helpers';
@@ -26,8 +26,8 @@ import { removeTrailingSlash } from '~/utils/url-utils';
 export const handle = {
   // Declare all i18n namespaces required by this route and its descendants.
   // Preloading them upfront ensures translations are available on initial render.
-  i18nNamespaces: [
-    layoutI18nNamespaces,
+  i18nPreloadNamespace: [
+    protectedLayoutI18nNamespace,
     'common',
     'protectedApplication',
     'protectedApplicationIntakeAdult',

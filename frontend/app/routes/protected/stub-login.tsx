@@ -24,7 +24,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['stubLogin', 'gcweb'],
+  i18nPreloadNamespace: ['stubLogin', 'gcweb'],
   pageIdentifier: 'CDCP-00XX',
 } as const satisfies RouteHandleData;
 

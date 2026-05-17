@@ -4,7 +4,7 @@ import type { Route } from './+types/layout';
 
 import { TYPES } from '~/.server/constants';
 import { getLocale } from '~/.server/utils/locale.utils';
-import { PublicLayout, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
+import { PublicLayout, publicLayoutI18nNamespace } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { useApiSession } from '~/utils/api-session-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -12,7 +12,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 export const handle = {
   // Declare all i18n namespaces required by this route and its descendants.
   // Preloading them upfront ensures translations are available on initial render.
-  i18nNamespaces: [layoutI18nNamespaces, 'status'],
+  i18nPreloadNamespace: [publicLayoutI18nNamespace, 'status'],
 } as const satisfies RouteHandleData;
 
 // eslint-disable-next-line @typescript-eslint/require-await

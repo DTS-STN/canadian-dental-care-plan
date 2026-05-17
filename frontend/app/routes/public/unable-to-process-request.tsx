@@ -12,7 +12,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['unableToProcessRequest', 'gcweb'],
+  i18nPreloadNamespace: ['unableToProcessRequest', 'gcweb'],
   pageIdentifier: pageIds.public.unableToProcessRequest,
 } as const satisfies RouteHandleData;
 

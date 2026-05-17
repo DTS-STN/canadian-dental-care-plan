@@ -5,7 +5,7 @@ import { Outlet, createRoutesStub } from 'react-router';
 import { describe, expect, it } from 'vitest';
 
 import type { BuildInfo, RouteHandleData } from '~/utils/route-utils';
-import { coalesce, useBuildInfo, useI18nNamespaces, useLayoutOptions, usePageIdentifier, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
+import { coalesce, useBuildInfo, useI18nPreloadNamespaces, useLayoutOptions, usePageIdentifier, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
 
 /*
  * @vitest-environment jsdom
@@ -91,14 +91,14 @@ describe('useBuildInfo()', () => {
   });
 });
 
-describe('useI18nNamespaces()', () => {
-  it('expect no i18n namespaces from useI18nNamespaces() if the loaders do not provide data', async () => {
+describe('useI18nPreloadNamespaces()', () => {
+  it('expect no i18n namespaces from useI18nPreloadNamespaces() if the loaders do not provide data', async () => {
     const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
         children: [
           {
-            Component: () => <div data-testid="data">{JSON.stringify(useI18nNamespaces())}</div>,
+            Component: () => <div data-testid="data">{JSON.stringify(useI18nPreloadNamespaces())}</div>,
             path: '/',
           },
         ],
@@ -111,15 +111,15 @@ describe('useI18nNamespaces()', () => {
     expect(element.textContent).toEqual('[]');
   });
 
-  it('expect correctly flattened i18n namespaces from useI18nNamespaces() if the loaders provide data', async () => {
+  it('expect correctly flattened i18n namespaces from useI18nPreloadNamespaces() if the loaders provide data', async () => {
     const RoutesStub = createRoutesStub([
       {
         Component: () => <Outlet />,
-        handle: { i18nNamespaces: ['common'] } satisfies RouteHandleData,
+        handle: { i18nPreloadNamespace: ['common'] } satisfies RouteHandleData,
         children: [
           {
-            Component: () => <div data-testid="data">{JSON.stringify(useI18nNamespaces())}</div>,
-            handle: { i18nNamespaces: 'gcweb' } satisfies RouteHandleData,
+            Component: () => <div data-testid="data">{JSON.stringify(useI18nPreloadNamespaces())}</div>,
+            handle: { i18nPreloadNamespace: 'gcweb' } satisfies RouteHandleData,
             path: '/',
           },
         ],

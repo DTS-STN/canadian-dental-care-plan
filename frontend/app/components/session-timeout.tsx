@@ -8,9 +8,6 @@ import { useIdleTimer } from 'react-idle-timer';
 
 import { Button } from '~/components/buttons';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
-import type { I18nNamespaces } from '~/utils/route-utils';
-
-const i18nNamespaces = 'gcweb' satisfies I18nNamespaces;
 
 export interface SessionTimeoutProps extends Required<Pick<IIdleTimerProps, 'promptBeforeIdle' | 'timeout'>> {
   /**
@@ -31,7 +28,7 @@ export interface SessionTimeoutProps extends Required<Pick<IIdleTimerProps, 'pro
  * fetcher submissions, and form submissions.
  */
 const SessionTimeout = ({ promptBeforeIdle, timeout, onSessionEnd, onSessionExtend }: SessionTimeoutProps) => {
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation('gcweb');
   const [timeRemaining, setTimeRemaining] = useState('');
 
   const { activate, isPrompted, getRemainingTime } = useIdleTimer({
