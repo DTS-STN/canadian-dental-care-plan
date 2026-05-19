@@ -258,11 +258,6 @@ export default function ProtectedNewChildrenConfirmation({ loaderData, params }:
                 <DefinitionListItem term={t(($) => $.confirm.altPhoneNumber)}>
                   <span className="text-nowrap">{userInfo.phoneNumber.alternate}</span>
                 </DefinitionListItem>
-                {userInfo.email && (
-                  <DefinitionListItem term={t(($) => $.confirm.email)}>
-                    <span className="text-nowrap">{userInfo.email}</span>
-                  </DefinitionListItem>
-                )}
                 <DefinitionListItem term={t(($) => $.confirm.mailing)}>
                   <Address
                     address={{
@@ -293,6 +288,11 @@ export default function ProtectedNewChildrenConfirmation({ loaderData, params }:
               <DefinitionList border>
                 <DefinitionListItem term={t(($) => $.confirm.langPref)}>{userInfo.communicationPreferences.preferredLanguage.name}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.sunLifeCommPrefTitle)}>{userInfo.communicationPreferences.preferredMethodSunLife.name}</DefinitionListItem>
+                {userInfo.email && (
+                  <DefinitionListItem term={t(($) => $.confirm.email)}>
+                    <span className="text-nowrap">{userInfo.email}</span>
+                  </DefinitionListItem>
+                )}
               </DefinitionList>
             </section>
           </section>
