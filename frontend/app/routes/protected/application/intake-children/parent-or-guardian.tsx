@@ -150,11 +150,7 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
             {state.phoneNumber?.hasChanged ? (
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t(($) => $.parentOrGuardian.phoneNumber)}>{state.phoneNumber.value.primary}</DefinitionListItem>
-                {state.phoneNumber.value.alternate ? (
-                  <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber)}>{state.phoneNumber.value.alternate}</DefinitionListItem>
-                ) : (
-                  <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber)}>{t(($) => $.parentOrGuardian.none)}</DefinitionListItem>
-                )}
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber)}>{state.phoneNumber.value.alternate ?? t(($) => $.parentOrGuardian.none)}</DefinitionListItem>
               </DefinitionList>
             ) : (
               <p>{t(($) => $.parentOrGuardian.phoneNumberHelp)}</p>
