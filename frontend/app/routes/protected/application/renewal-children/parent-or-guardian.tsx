@@ -375,7 +375,7 @@ function PhoneNumberCardContent(): JSX.Element {
       <CardContent>
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t(($) => $.parentOrGuardian.phoneNumber)}>{state.phoneNumber.primary}</DefinitionListItem>
-          {state.phoneNumber.alternate && <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber)}>{state.phoneNumber.alternate}</DefinitionListItem>}
+          <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber)}>{state.phoneNumber.alternate ?? t(($) => $.parentOrGuardian.none)}</DefinitionListItem>
         </DefinitionList>
       </CardContent>
     );
@@ -386,7 +386,7 @@ function PhoneNumberCardContent(): JSX.Element {
       <CardContent>
         <DefinitionList layout="single-column">
           <DefinitionListItem term={t(($) => $.parentOrGuardian.phoneNumber)}>{clientApplication.phoneNumber.primary}</DefinitionListItem>
-          {clientApplication.phoneNumber.alternate && <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber)}>{clientApplication.phoneNumber.alternate}</DefinitionListItem>}
+          <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber)}>{clientApplication.phoneNumber.alternate ?? t(($) => $.parentOrGuardian.none)}</DefinitionListItem>
         </DefinitionList>
       </CardContent>
     );

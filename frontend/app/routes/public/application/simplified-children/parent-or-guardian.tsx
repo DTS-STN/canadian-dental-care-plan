@@ -265,7 +265,7 @@ function PhoneNumberCardContent(): JSX.Element {
         {state.phoneNumber.hasChanged && (
           <DefinitionList layout="single-column">
             <DefinitionListItem term={t(($) => $.parentOrGuardian.phoneNumber)}>{state.phoneNumber.primary}</DefinitionListItem>
-            {state.phoneNumber.alternate && <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber)}>{state.phoneNumber.alternate}</DefinitionListItem>}
+            <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber)}>{state.phoneNumber.alternate ?? t(($) => $.parentOrGuardian.none)}</DefinitionListItem>
           </DefinitionList>
         )}
       </CardContent>

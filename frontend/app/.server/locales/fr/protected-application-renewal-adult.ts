@@ -81,6 +81,7 @@ const ns = {
     updateCommunicationPreferences: "Mettre à jour mes préférences de communication",
     communicationPreferencesUnchanged: "Mes préférences de communication n'ont pas changé",
     noChange: "Pas de mise à jour.",
+    none: "Aucun",
   },
   submit: {
     pageTitle: "Soumettre votre demande",

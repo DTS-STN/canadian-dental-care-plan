@@ -108,7 +108,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
             {state.phoneNumber?.hasChanged ? (
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t(($) => $.contactInformation.phoneNumber)}>{state.phoneNumber.value.primary}</DefinitionListItem>
-                {state.phoneNumber.value.alternate && <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber)}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
+                <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber)}>{state.phoneNumber.value.alternate ?? t(($) => $.contactInformation.none)}</DefinitionListItem>
               </DefinitionList>
             ) : (
               <p>{t(($) => $.contactInformation.phoneNumberHelp)}</p>

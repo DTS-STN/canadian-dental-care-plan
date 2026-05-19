@@ -44,6 +44,7 @@ const ns = {
     nextBtn: "Your access to dental insurance",
     prevBtn: "Your marital status",
     altPhoneNumber: "Alternate phone number",
+    none: "None",
   },
   dentalInsurance: {
     pageTitle: "Your access to dental insurance",
