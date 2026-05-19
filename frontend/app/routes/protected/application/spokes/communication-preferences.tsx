@@ -15,6 +15,7 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
+import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
 import { ErrorSummaryProvider } from '~/components/error-summary-context';
@@ -215,7 +216,10 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
       <AppPageTitle>{t(($) => $.communicationPreferences.pageTitle)}</AppPageTitle>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <div className="max-w-prose">
-          <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
+          <ContextualAlert type="info" id="dental-insurance-confirmation-no">
+            <p>{t(($) => $.communicationPreferences.alert)}</p>
+          </ContextualAlert>
+          <p className="my-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
           <ErrorSummary />
           <fetcher.Form method="post" noValidate>
             <CsrfTokenInput />
