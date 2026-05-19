@@ -336,6 +336,7 @@ const ns = {
     continue: "Continue",
     save: "Save",
     mscaLinkAccount: "https://www.canada.ca/en/employment-social-development/services/my-account.html",
+    alert: "Communications from the Government of Canada will only be available in My Service Canada Account.",
     errorMessage: {
       preferredLanguageRequired: "Select preferred language of communication",
       preferredMethodRequired: "Select preferred method of communication for Sun Life",
