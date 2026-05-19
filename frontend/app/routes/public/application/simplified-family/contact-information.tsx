@@ -265,7 +265,11 @@ function PhoneNumberCardContent(): JSX.Element {
         {state.phoneNumber.hasChanged && (
           <DefinitionList layout="single-column">
             <DefinitionListItem term={t(($) => $.contactInformation.phoneNumber)}>{state.phoneNumber.primary}</DefinitionListItem>
-            {state.phoneNumber.alternate && <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber)}>{state.phoneNumber.alternate}</DefinitionListItem>}
+            {state.phoneNumber.alternate ? (
+              <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber)}>{state.phoneNumber.alternate}</DefinitionListItem>
+            ) : (
+              <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber)}>{t(($) => $.contactInformation.none)}</DefinitionListItem>
+            )}
           </DefinitionList>
         )}
       </CardContent>

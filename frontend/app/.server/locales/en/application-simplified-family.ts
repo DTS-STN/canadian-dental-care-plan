@@ -39,6 +39,7 @@ const ns = {
     prevBtn: "Your application",
     altPhoneNumber: "Alternate phone number",
     noChange: "No update.",
+    none: "None",
   },
   dentalInsurance: {
     pageTitle: "Your access to dental insurance",

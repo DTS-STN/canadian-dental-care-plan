@@ -38,6 +38,7 @@ const ns = {
     communicationPreferencesUnchanged: "My communication preference has not changed",
     altPhoneNumber: "Alternate phone number",
     noChange: "No update.",
+    none: "None",
     maritalStatus: "Marital status",
     selectYourStatus: "Select your marital status",
     spouseSin: "Spouse or common-law partner's Social Insurance Number (SIN)",

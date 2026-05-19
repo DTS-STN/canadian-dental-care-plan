@@ -40,6 +40,7 @@ const ns = {
     yourApplication: "Your application",
     childrensApplication: "Your child(ren)'s application",
     altPhoneNumber: "Alternate phone number",
+    none: "None",
   },
   submit: {
     pageTitle: "Submit your application",
