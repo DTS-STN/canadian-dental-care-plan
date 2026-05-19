@@ -399,12 +399,10 @@ export default function SimplifiedFamilyConfirmation({ loaderData, params }: Rou
             })}
           </div>
         </section>
-        <div className="my-6">
-          <div className="px-12 print:hidden">
-            <PrintButton size="lg" variant="primary" errorMessage={t(($) => $.confirm.printUnavailable)} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Print bottom - Application successfully submitted click">
-              {t(($) => $.confirm.printBtn)}
-            </PrintButton>
-          </div>
+        <div className="my-6 print:hidden">
+          <PrintButton size="lg" variant="primary" errorMessage={t(($) => $.confirm.printUnavailable)} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Print bottom - Application successfully submitted click">
+            {t(($) => $.confirm.printBtn)}
+          </PrintButton>
         </div>
         <Dialog>
           <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Simplified_Family:Exit - Application successfully submitted click" asChild>
