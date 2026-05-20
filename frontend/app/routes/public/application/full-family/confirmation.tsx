@@ -147,7 +147,7 @@ export default function NewFamilyConfirmation({ loaderData, params }: Route.Comp
   const { t } = useTranslation('applicationFullFamily');
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddress, mailingAddress, dentalInsurance, dentalBenefits, submissionInfo, surveyLink, children } = loaderData;
-  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage(params.id);
 
   const mscaLinkAccount = <InlineLink to={t(($) => $.confirm.mscaLinkAccount)} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t(($) => $.confirm.statusCheckerLink)} className="external-link" newTabIndicator target="_blank" />;

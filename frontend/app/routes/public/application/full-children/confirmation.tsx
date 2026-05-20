@@ -135,7 +135,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function NewChildrenConfirmation({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation('applicationFullChild');
-  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage(params.id);
 
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddress, mailingAddress, submissionInfo, surveyLink, children } = loaderData;

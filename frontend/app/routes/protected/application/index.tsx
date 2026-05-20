@@ -80,7 +80,7 @@ export default function ProtectedApplicationIndex({ loaderData, params }: Route.
   const { t } = useTranslation('protectedApplication');
   const navigation = useNavigation();
   const navigate = useNavigate();
-  const { set: setApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { set: setApplicationFlowStorageValue } = useApplicationFlowStorage(id);
 
   const isIdle = navigation.state === 'idle';
   const eligibilityRequirementsPath = getPathById('protected/application/$id/eligibility-requirements', { ...params, id });

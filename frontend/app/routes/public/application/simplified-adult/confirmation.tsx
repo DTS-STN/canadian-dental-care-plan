@@ -127,7 +127,7 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
   const { t } = useTranslation('applicationSimplifiedAdult');
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddress, mailingAddress, dentalInsurance, dentalBenefits, submissionInfo, surveyLink, eligibility } = loaderData;
-  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage(params.id);
 
   const mscaLinkAccount = <InlineLink to={t(($) => $.confirm.mscaLinkAccount)} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t(($) => $.confirm.mscaLinkChecker)} className="external-link" newTabIndicator target="_blank" />;

@@ -57,7 +57,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ChildParentGuardian({ loaderData, params }: Route.ComponentProps) {
   const { isRenewal } = loaderData;
   const { t } = useTranslation('protectedApplicationSpokes');
-  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage(params.id);
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);

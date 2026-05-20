@@ -48,7 +48,7 @@ export default function PublicApplicationIndex({ loaderData, params }: Route.Com
   const { t } = useTranslation('application');
   const navigation = useNavigation();
   const navigate = useNavigate();
-  const { set: setApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { set: setApplicationFlowStorageValue } = useApplicationFlowStorage(id);
 
   const isIdle = navigation.state === 'idle';
   const eligibilityRequirementsPath = getPathById('public/application/$id/eligibility-requirements', { ...params, id });
