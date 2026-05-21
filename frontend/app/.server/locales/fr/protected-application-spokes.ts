@@ -336,7 +336,7 @@ const ns = {
     continue: "Continuer",
     save: "Sauvegarder",
     mscaLinkAccount: "https://www.canada.ca/fr/emploi-developpement-social/services/mon-dossier.html",
-    alert: "Les communications du gouvernement du Canada seront uniquement accessibles dans Mon dossier Service Canada.",
+    alert: "La plupart des communications de Service Canada concernant le Régime canadien de soins dentaires seront offertes uniquement dans votre compte Mon dossier Service Canada.",
     errorMessage: {
       preferredLanguageRequired: "Sélectionnez la langue de communication préférée",
       preferredMethodRequired: "Sélectionnez votre moyen de communication préféré avec la Sun Life",
