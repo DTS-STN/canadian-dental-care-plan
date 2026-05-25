@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
@@ -196,17 +196,20 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const submittedAction = fetcher.formData?.get('_action')?.toString();
 
-  const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data.status : undefined;
+  const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data : undefined;
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
-  const { ErrorAlert } = useErrorAlert(fetcherStatus === 'verification-code-mismatch');
+  const { ErrorAlert } = useErrorAlert(fetcherStatus?.status === 'verification-code-mismatch');
 
   const communicationLink = <InlineLink routeId="public/application/$id/communication-preferences" params={params} />;
 
-  useEffect(() => {
-    if (fetcherStatus === 'verification-code-sent') {
+  // Adjust the state while rendering to ensure the dialog opens when the verification code is sent
+  const [prevFetcherStatus, setPrevFetcherStatus] = useState(fetcherStatus);
+  if (prevFetcherStatus !== fetcherStatus) {
+    setPrevFetcherStatus(fetcherStatus);
+    if (fetcherStatus?.status === 'verification-code-sent') {
       setShowDialog(true);
     }
-  }, [fetcherStatus, fetcher.data]);
+  }
 
   function handleRequestNewCode() {
     const formData = new FormData();

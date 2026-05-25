@@ -18,6 +18,13 @@ export function KillswitchDialog({ timeoutSecs }: KillswitchDialogProps) {
   const [remainingTime, setRemainingTime] = useState(timeoutSecs);
   const { t } = useTranslation('common');
 
+  // resets `remainingTime` if the parent changes the timeout
+  const [prevTimeoutSecs, setPrevTimeoutSecs] = useState(timeoutSecs);
+  if (prevTimeoutSecs !== timeoutSecs) {
+    setPrevTimeoutSecs(timeoutSecs);
+    setRemainingTime(timeoutSecs);
+  }
+
   // the dialog should only activate when `remainingTime` is not zero
   const isDialogActive = remainingTime > 0;
 
@@ -32,11 +39,6 @@ export function KillswitchDialog({ timeoutSecs }: KillswitchDialogProps) {
       return () => globalThis.clearInterval(timeout);
     }
   }, [isDialogActive]);
-
-  //
-  // resets `remainingTime` if the parent changes the timeout
-  //
-  useEffect(() => setRemainingTime(timeoutSecs), [timeoutSecs]);
 
   if (isDialogActive) {
     const { mins, secs } = getTimeComponents(remainingTime);

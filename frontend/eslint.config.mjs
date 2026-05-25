@@ -58,9 +58,10 @@ export default defineConfig(
     files: ['**/*.{ts,tsx}'],
     extends: [
       eslint.configs.recommended, //
-      tseslint.configs.strict,
       importPlugin.flatConfigs.recommended,
       importZod.configs.recommended,
+      reactHooksPlugin.configs.flat['recommended-latest'],
+      tseslint.configs.strict,
     ],
     rules: {
       'no-param-reassign': 'error',
@@ -109,7 +110,6 @@ export default defineConfig(
       'react/no-unknown-property': ['error', { ignore: ['property', 'resource', 'typeof', 'vocab'] }],
       'react/jsx-no-useless-fragment': ['error', { allowExpressions: true }],
       'react/prop-types': 'off',
-      'react-hooks/set-state-in-effect': 'off',
     },
     settings: {
       formComponents: ['Form'],

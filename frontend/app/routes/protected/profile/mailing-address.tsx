@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { JSX } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
@@ -220,10 +220,6 @@ export async function action({ context: { appContainer, session }, params, reque
   return isCopyMailingToHome ? redirect(getPathById('protected/profile/contact-information', params)) : redirect(getPathById('protected/profile/contact/home-address', params));
 }
 
-function isAddressResponse(data: unknown): data is AddressResponse {
-  return typeof data === 'object' && data !== null && 'status' in data && typeof data.status === 'string';
-}
-
 /**
  * Resolves the home address to send to the external service. If the user has chosen to copy the mailing address
  * to home, or if there is no existing home address on file, uses the mailing address. Otherwise, preserves the
@@ -255,28 +251,29 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.country);
-  const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
   const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState.copyMailing === true);
-  const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
+  const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse>();
+  const mailingCountryRegions = useMemo(() => regionList.filter(({ countryId }) => countryId === selectedMailingCountry), [regionList, selectedMailingCountry]);
 
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+  const fetcherAddressResponse = fetcher.data && 'status' in fetcher.data && typeof fetcher.data.status === 'string' ? fetcher.data : undefined;
+
+  // Adjust the state while rendering to ensure the dialog opens when the address response changes
+  const [prevFetcherAddressResponse, setPrevFetcherAddressResponse] = useState(fetcherAddressResponse);
+  if (prevFetcherAddressResponse !== fetcherAddressResponse) {
+    setPrevFetcherAddressResponse(fetcherAddressResponse);
+    if (fetcherAddressResponse) {
+      setAddressDialogContent(fetcherAddressResponse);
+    }
+  }
 
   const checkHandler = () => {
     setCopyAddressChecked((curState) => !curState);
   };
 
-  useEffect(() => {
-    const filteredProvinceTerritoryStates = regionList.filter(({ countryId }) => countryId === selectedMailingCountry);
-    setMailingCountryRegions(filteredProvinceTerritoryStates);
-  }, [selectedMailingCountry, regionList]);
-
-  useEffect(() => {
-    setAddressDialogContent(isAddressResponse(fetcher.data) ? fetcher.data : null);
-  }, [fetcher.data]);
-
   function onDialogOpenChangeHandler(open: boolean) {
     if (!open) {
-      setAddressDialogContent(null);
+      setAddressDialogContent(undefined);
     }
   }
 
@@ -393,7 +390,7 @@ export default function EditMailingAddress({ loaderData, params }: Route.Compone
               </div>
             </fieldset>
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
+              <Dialog open={addressDialogContent !== undefined} onOpenChange={onDialogOpenChangeHandler}>
                 <DialogTrigger asChild>
                   <LoadingButton
                     aria-expanded={undefined}

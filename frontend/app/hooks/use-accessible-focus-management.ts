@@ -69,5 +69,5 @@ export const useAccessibleFocusManagement = (focusableElementRef: RefObject<HTML
     });
 
     return () => window.cancelAnimationFrame(frameId);
-  }, [pathname]);
+  }, [focusableElementRef, pathname]);
 };

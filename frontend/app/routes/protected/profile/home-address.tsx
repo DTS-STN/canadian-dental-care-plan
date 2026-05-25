@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { JSX } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
@@ -228,10 +228,6 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(getPathById('protected/profile/contact-information', params));
 }
 
-function isAddressResponse(data: unknown): data is AddressResponse {
-  return typeof data === 'object' && data !== null && 'status' in data && typeof data.status === 'string';
-}
-
 export default function EditHomeAddress({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, countryList, regionList } = loaderData;
@@ -239,25 +235,25 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
-
   const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.country ?? CANADA_COUNTRY_ID);
-  const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
-  const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
+  const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse>();
+  const homeCountryRegions = useMemo(() => regionList.filter(({ countryId }) => countryId === selectedHomeCountry), [regionList, selectedHomeCountry]);
 
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+  const fetcherAddressResponse = fetcher.data && 'status' in fetcher.data && typeof fetcher.data.status === 'string' ? fetcher.data : undefined;
 
-  useEffect(() => {
-    const filteredProvinceTerritoryStates = regionList.filter(({ countryId }) => countryId === selectedHomeCountry);
-    setHomeCountryRegions(filteredProvinceTerritoryStates);
-  }, [selectedHomeCountry, regionList]);
-
-  useEffect(() => {
-    setAddressDialogContent(isAddressResponse(fetcher.data) ? fetcher.data : null);
-  }, [fetcher.data]);
+  // Adjust the state while rendering to ensure the dialog opens when the address response changes
+  const [prevFetcherAddressResponse, setPrevFetcherAddressResponse] = useState(fetcherAddressResponse);
+  if (prevFetcherAddressResponse !== fetcherAddressResponse) {
+    setPrevFetcherAddressResponse(fetcherAddressResponse);
+    if (fetcherAddressResponse) {
+      setAddressDialogContent(fetcherAddressResponse);
+    }
+  }
 
   function onDialogOpenChangeHandler(open: boolean) {
     if (!open) {
-      setAddressDialogContent(null);
+      setAddressDialogContent(undefined);
     }
   }
 
@@ -371,7 +367,7 @@ export default function EditHomeAddress({ loaderData, params }: Route.ComponentP
               </div>
             </fieldset>
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
+              <Dialog open={addressDialogContent !== undefined} onOpenChange={onDialogOpenChangeHandler}>
                 <DialogTrigger asChild>
                   <LoadingButton
                     aria-expanded={undefined}

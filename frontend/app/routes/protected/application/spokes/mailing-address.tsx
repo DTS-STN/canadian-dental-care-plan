@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { data, redirect, useFetcher } from 'react-router';
 
@@ -229,10 +229,6 @@ export async function action({ context: { appContainer, session }, params, reque
   return redirect(isCopyMailingToHome ? getPathById(getRouteFromApplicationFlow(applicationFlow), params) : getPathById('protected/application/$id/home-address', params));
 }
 
-function isAddressResponse(data: unknown): data is AddressResponse {
-  return typeof data === 'object' && data !== null && 'status' in data && typeof data.status === 'string';
-}
-
 export default function MailingAddress({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { defaultState, countryList, regionList, applicationFlow } = loaderData;
@@ -241,28 +237,29 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.country ?? CANADA_COUNTRY_ID);
-  const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
   const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState.isHomeAddressSameAsMailingAddress === true);
-  const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse | null>(null);
+  const [addressDialogContent, setAddressDialogContent] = useState<AddressResponse>();
+  const mailingCountryRegions = useMemo(() => regionList.filter(({ countryId }) => countryId === selectedMailingCountry), [regionList, selectedMailingCountry]);
 
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+  const fetcherAddressResponse = fetcher.data && 'status' in fetcher.data && typeof fetcher.data.status === 'string' ? fetcher.data : undefined;
+
+  // Adjust the state while rendering to ensure the dialog opens when the address response changes
+  const [prevFetcherAddressResponse, setPrevFetcherAddressResponse] = useState(fetcherAddressResponse);
+  if (prevFetcherAddressResponse !== fetcherAddressResponse) {
+    setPrevFetcherAddressResponse(fetcherAddressResponse);
+    if (fetcherAddressResponse) {
+      setAddressDialogContent(fetcherAddressResponse);
+    }
+  }
 
   const checkHandler = () => {
     setCopyAddressChecked((curState) => !curState);
   };
 
-  useEffect(() => {
-    const filteredProvinceTerritoryStates = regionList.filter(({ countryId }) => countryId === selectedMailingCountry);
-    setMailingCountryRegions(filteredProvinceTerritoryStates);
-  }, [selectedMailingCountry, regionList]);
-
-  useEffect(() => {
-    setAddressDialogContent(isAddressResponse(fetcher.data) ? fetcher.data : null);
-  }, [fetcher.data]);
-
   function onDialogOpenChangeHandler(open: boolean) {
     if (!open) {
-      setAddressDialogContent(null);
+      setAddressDialogContent(undefined);
     }
   }
 
@@ -380,7 +377,7 @@ export default function MailingAddress({ loaderData, params }: Route.ComponentPr
               </div>
             </fieldset>
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Dialog open={addressDialogContent !== null} onOpenChange={onDialogOpenChangeHandler}>
+              <Dialog open={addressDialogContent !== undefined} onOpenChange={onDialogOpenChangeHandler}>
                 <DialogTrigger asChild>
                   <LoadingButton
                     aria-expanded={undefined}
