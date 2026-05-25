@@ -346,7 +346,7 @@ const ns = {
   email: {
     pageTitle: "Adresse courriel",
     emailNotification: "Les messages du gouvernement du Canada concernant votre Régime canadien de soins dentaires (RCSD) seront transmis par l'intermédiaire de votre Mon dossier Service Canada (MDSC). Lorsqu'une nouvelle lettre est publiée dans MDSC, nous vous ferons parvenir une notification par courriel à cette adresse.",
-    enterEmail: "Entrez l'adresse courriel que vous souhaitez utiliser pour recevoir les notifications concernant votre compte du RCSD et, si vous avez choisi le courriel, vos communications avec la Financière Sun Life.",
+    enterEmail: "Entrez l'adresse courriel que vous souhaitez utiliser pour recevoir les notifications concernant votre compte du RCSD et, si vous avez choisi le courriel, vos communications avec la Sun Life.",
     updateCommunicationPreference: "Vous pouvez modifier vos préférences de communication en tout temps dans MDSC.",
     emailLegend: "Adresse courriel",
     back: "Retour",
