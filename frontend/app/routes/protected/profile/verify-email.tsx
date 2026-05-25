@@ -215,8 +215,7 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
   const [showDialog, setShowDialog] = useState(false);
 
   const fetcher = useFetcher<typeof action>();
-  const { isSubmitting } = useFetcherSubmissionState(fetcher);
-  const submittedAction = fetcher.formData?.get('_action')?.toString();
+  const { isSubmitting, submitAction } = useFetcherSubmissionState(fetcher);
 
   const fetcherStatus = typeof fetcher.data === 'object' && 'status' in fetcher.data ? fetcher.data : undefined;
   const errors = typeof fetcher.data === 'object' && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
@@ -260,7 +259,7 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
             variant="link"
             className="text-[17px]"
             disabled={isSubmitting}
-            loading={isSubmitting && submittedAction === FORM_ACTION.request}
+            loading={isSubmitting && submitAction === FORM_ACTION.request}
             value={FORM_ACTION.request}
             onClick={handleRequestNewCode}
           >
@@ -293,7 +292,7 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
                 variant="link"
                 className="no-underline hover:underline"
                 disabled={isSubmitting}
-                loading={isSubmitting && submittedAction === FORM_ACTION.request}
+                loading={isSubmitting && submitAction === FORM_ACTION.request}
                 value={FORM_ACTION.request}
                 onClick={handleRequestNewCode}
               >
@@ -307,7 +306,7 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
                 name="_action"
                 value={FORM_ACTION.submit}
                 disabled={isSubmitting}
-                loading={isSubmitting && submittedAction === FORM_ACTION.submit}
+                loading={isSubmitting && submitAction === FORM_ACTION.submit}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Continue - Verify your email address click"
               >
                 {t(($) => $.verifyEmail.continue)}
