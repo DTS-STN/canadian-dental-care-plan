@@ -110,7 +110,7 @@
     "@types/express-session": "^1.19.0",
     "@types/jsdom": "^28.0.3",
     "@types/morgan": "^1.9.10",
-    "@types/node": "^24.12.4",
+    "@types/node": "^25.9.1",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "@types/source-map-support": "^0.5.10",
@@ -149,7 +149,7 @@
     "vitest-mock-extended": "^4.0.0"
   },
   "engines": {
-    "node": ">=24.13.0",
+    "node": ">=26.0.0",
     "npm": ">=11.10.0"
   }
 }
