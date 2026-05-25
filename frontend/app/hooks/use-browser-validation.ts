@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import Bowser from 'bowser';
 
@@ -34,7 +34,7 @@ type BrowserValidationData = {
 /**
  * Union describing the lifecycle states of the hook.
  *
- * - `loading`: initial state while Bowser parses the user agent.
+ * - `loading`: server-side only; returned when `window` is unavailable (SSR).
  * - `success`: contains `data` with `BrowserValidationData`.
  * - `failure`: contains an `error` describing what went wrong.
  */
@@ -49,10 +49,13 @@ type BrowserValidationResult =
  * React hook that evaluates the current browser (via the user agent) against
  * `DEFAULT_BROWSER_REQUIREMENTS` using Bowser.
  *
+ * The result is computed once via a `useState` lazy initializer and is stable
+ * for the lifetime of the component.
+ *
  * Behavior notes:
- * - This hook uses `useEffect`, so it only runs in the browser and is safe
- *   for server-side rendering: on the server it will remain in `loading`
- *   until hydrated in the browser.
+ * - SSR-safe: when `window` is undefined (server), the hook returns `loading`.
+ *   On the client the result is computed eagerly at initialization time, so
+ *   the `loading` state is never observed in the browser.
  * - On success the hook returns both a boolean `isValidBrowser` and the
  *   parsed `browserInfo` which can be used to customize messaging or UI.
  * - On failure the hook returns a `failure` state with the thrown error.
@@ -60,6 +63,7 @@ type BrowserValidationResult =
  * Example:
  *
  * const result = useBrowserValidation();
+ * // `loading` is server-only; in the browser this branch is never reached.
  * if (result.status === 'loading') return <Spinner />;
  * if (result.status === 'failure') return <ErrorBanner error={result.error} />;
  * if (result.status === 'success' && !result.data.isValidBrowser) {
@@ -69,9 +73,12 @@ type BrowserValidationResult =
  * @returns {BrowserValidationResult} the current validation status and data.
  */
 export function useBrowserValidation(): BrowserValidationResult {
-  const [result, setResult] = useState<BrowserValidationResult>({ status: 'loading' });
+  const [result] = useState<BrowserValidationResult>(() => {
+    // Guard against SSR: if `window` is undefined, return `loading` state.
+    if (typeof window === 'undefined') {
+      return { status: 'loading' };
+    }
 
-  useEffect(() => {
     try {
       const parser = Bowser.getParser(window.navigator.userAgent);
       const browserInfo = parser.getResult();
@@ -79,11 +86,10 @@ export function useBrowserValidation(): BrowserValidationResult {
       // checkTree; fall back to `true` to avoid false negatives for unknown
       // or new browser identifiers.
       const isValidBrowser = parser.satisfies(DEFAULT_BROWSER_REQUIREMENTS) ?? true;
-      setResult({ status: 'success', data: { isValidBrowser, browserInfo } });
+      return { status: 'success', data: { isValidBrowser, browserInfo } };
     } catch (error) {
-      setResult({ status: 'failure', error });
+      return { status: 'failure', error };
     }
-  }, []);
-
+  });
   return result;
 }
