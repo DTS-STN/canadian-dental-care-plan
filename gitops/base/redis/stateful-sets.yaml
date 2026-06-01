@@ -17,7 +17,7 @@ spec:
     spec:
       initContainers:
         - name: init
-          image: docker.io/redis:7
+          image: docker.io/redis:8
           command: [bash, /etc/init.sh]
           envFrom:
             - secretRef:
@@ -40,9 +40,16 @@ spec:
       containers:
         - name: redis
           # Note: image tag should be pinned to a specific version in overlays
-          #       ex: 7.2 in nonprod; 7.2.3 in prod
-          image: docker.io/redis:7
-          args: [/data/redis.conf, --requirepass, $(REDIS_PASSWORD), --masterauth, $(REDIS_PASSWORD)]
+          #       ex: 8.8 in nonprod; 8.8.0 in prod
+          image: docker.io/redis:8
+          args:
+            [
+              /data/redis.conf,
+              --requirepass,
+              $(REDIS_PASSWORD),
+              --masterauth,
+              $(REDIS_PASSWORD),
+            ]
           envFrom:
             - secretRef:
                 name: redis
@@ -51,11 +58,13 @@ spec:
               containerPort: 6379
           livenessProbe:
             exec:
-              command: [/usr/local/bin/redis-cli, --pass, $(REDIS_PASSWORD), ping]
+              command:
+                [/usr/local/bin/redis-cli, --pass, $(REDIS_PASSWORD), ping]
             initialDelaySeconds: 10
           readinessProbe:
             exec:
-              command: [/usr/local/bin/redis-cli, --pass, $(REDIS_PASSWORD), ping]
+              command:
+                [/usr/local/bin/redis-cli, --pass, $(REDIS_PASSWORD), ping]
             initialDelaySeconds: 10
           resources:
             requests:
@@ -72,8 +81,8 @@ spec:
               mountPath: /data
         - name: redis-sentinel
           # Note: image tag should be pinned to a specific version in overlays
-          #       ex: 7.2 in nonprod; 7.2.3 in prod
-          image: docker.io/redis:7
+          #       ex: 8.8 in nonprod; 8.8.0 in prod
+          image: docker.io/redis:8
           args: [/data/sentinel.conf, --sentinel]
           ports:
             - name: sentinel

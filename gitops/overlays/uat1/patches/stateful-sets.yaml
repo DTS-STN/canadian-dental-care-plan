@@ -4,7 +4,7 @@ metadata:
   name: redis
   annotations:
     # reload the pod whenever the secrets change
-    secret.reloader.stakater.com/auto: 'true'
+    secret.reloader.stakater.com/auto: "true"
 spec:
   serviceName: redis-headless
   selector:
@@ -12,14 +12,14 @@ spec:
       app.kubernetes.io/name: redis
   template:
     #
-    # pin all versions to v7.2
+    # pin all versions to v8.8
     #
     spec:
       initContainers:
         - name: init
-          image: docker.io/redis:7.2
+          image: docker.io/redis:8.8
       containers:
         - name: redis
-          image: docker.io/redis:7.2
+          image: docker.io/redis:8.8
         - name: redis-sentinel
-          image: docker.io/redis:7.2
+          image: docker.io/redis:8.8
