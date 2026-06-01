@@ -1,9 +1,9 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import type { FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 
-import { ButtonEndIcon, ButtonStartIcon } from './button-icons';
-import type { ButtonProps } from './buttons';
-import { Button } from './buttons';
+import { ButtonEndIcon, ButtonStartIcon } from '~/components/button-icons';
+import type { ButtonProps } from '~/components/buttons';
+import { Button } from '~/components/buttons';
 
 interface LoadingButtonProps extends ButtonProps {
   loading?: boolean;

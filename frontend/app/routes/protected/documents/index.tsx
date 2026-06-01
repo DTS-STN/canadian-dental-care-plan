@@ -16,7 +16,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['documents', 'gcweb'],
+  i18nPreloadNamespace: ['documents', 'gcweb'],
   pageIdentifier: pageIds.protected.documents.index,
 } as const satisfies RouteHandleData;
 
@@ -36,7 +36,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const evidentiaryDocumentService = appContainer.get(TYPES.EvidentiaryDocumentService);
   const evidentiaryDocuments = await evidentiaryDocumentService.listLocalizedEvidentiaryDocuments({ clientId: applicant.clientId, userId: userInfoToken.sub }, locale);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['documents', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.index.pageTitle) }),
   };
@@ -60,7 +60,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export default function DocumentsIndex({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['documents', 'gcweb']);
   const { documents, SCCH_BASE_URI } = loaderData;
   const hasDocuments = documents.length > 0;
 

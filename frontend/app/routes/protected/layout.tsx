@@ -5,14 +5,14 @@ import { useTranslation } from 'react-i18next';
 import type { Route } from './+types/layout';
 
 import { TYPES } from '~/.server/constants';
-import { NotFoundError, ProtectedLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/protected-layout';
+import { NotFoundError, ProtectedLayout, ServerError, protectedLayoutI18nNamespace } from '~/components/layouts/protected-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { useApiSession } from '~/utils/api-session-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
-  i18nNamespaces: [...layoutI18nNamespaces],
+  i18nPreloadNamespace: protectedLayoutI18nNamespace,
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => {

@@ -36,6 +36,7 @@ const ns = {
     yourApplication: "Votre demande",
     childrensApplication: "La demande de votre/vos enfant(s)",
     altPhoneNumber: "Autre numéro de téléphone",
+    none: "Aucun",
   },
   submit: {
     pageTitle: "Soumettre votre demande",

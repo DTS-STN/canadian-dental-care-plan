@@ -62,6 +62,7 @@ const ns = {
     nextBtn: "Accès à une assurance dentaire",
     prevBtn: "Votre état civil",
     altPhoneNumber: "Autre numéro de téléphone",
+    none: "Aucun",
   },
   submit: {
     pageTitle: "Soumettre votre demande",

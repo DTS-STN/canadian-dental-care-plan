@@ -28,6 +28,7 @@ const ns = {
     addCommunicationPreferences: "Ajouter des préférences de communication",
     editCommunicationPreferences: "Modifier les préférences de communication",
     altPhoneNumber: "Autre numéro de téléphone",
+    none: "Aucun",
     updatePhoneNumberHelp: "Souhaitez-vous mettre à jour votre numéro de téléphone?",
     updatePhoneNumber: "Mettre à jour mon numéro de téléphone",
     phoneNumberUnchanged: "Mon numéro de téléphone n'a pas changé",

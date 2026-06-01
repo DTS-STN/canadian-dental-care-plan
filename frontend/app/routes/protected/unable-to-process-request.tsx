@@ -13,7 +13,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['unableToProcessRequest', 'gcweb'],
+  i18nPreloadNamespace: ['unableToProcessRequest', 'gcweb'],
   pageIdentifier: pageIds.protected.unableToProcessRequest,
 } as const satisfies RouteHandleData;
 
@@ -23,7 +23,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['unableToProcessRequest', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.pageTitle) }),
   };
@@ -35,7 +35,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
 }
 
 export default function ProtectedUnableToProcessRequest({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('unableToProcessRequest');
 
   const noWrap = <span className="whitespace-nowrap" />;
   const eServiceCanadaLink = <InlineLink to={t(($) => $.eServiceCanadaLink)} className="external-link" newTabIndicator target="_blank" />;
@@ -55,15 +55,15 @@ export default function ProtectedUnableToProcessRequest({ loaderData, params }: 
           <p>{t(($) => $.difficulties)}</p>
           <ul className="list-disc space-y-1 pl-7">
             <li>
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.callCentre} components={{ noWrap }} />
+              <Trans ns="unableToProcessRequest" i18nKey={($) => $.callCentre} components={{ noWrap }} />
             </li>
             <li>{t(($) => $.visitCentre)}</li>
             <li>
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.submitRequest} components={{ eServiceCanadaLink }} />
+              <Trans ns="unableToProcessRequest" i18nKey={($) => $.submitRequest} components={{ eServiceCanadaLink }} />
             </li>
           </ul>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.returnCdcp} components={{ cdcpLink }} />
+            <Trans ns="unableToProcessRequest" i18nKey={($) => $.returnCdcp} components={{ cdcpLink }} />
           </p>
         </div>
       </div>

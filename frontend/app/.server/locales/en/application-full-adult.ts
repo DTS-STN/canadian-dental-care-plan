@@ -62,6 +62,7 @@ const ns = {
     nextBtn: "Access to dental insurance",
     prevBtn: "Your marital status",
     altPhoneNumber: "Alternate phone number",
+    none: "None",
   },
   submit: {
     pageTitle: "Submit your application",

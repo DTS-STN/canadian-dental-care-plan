@@ -54,10 +54,10 @@ export class DefaultApplicantDtoMapper implements ApplicantDtoMapper {
   mapApplicantResponseEntityToApplicantDto(applicantResponseEntity: ApplicantResponseEntity): ApplicantDto {
     const applicant = applicantResponseEntity.BenefitApplication.Applicant;
     const clientId = expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected clientId to be defined');
-    const personContactInformation = applicant.PersonContactInformation.at(0);
+    const personContactInformation = applicant.PersonContactInformation[0];
     const primaryPhone = personContactInformation?.TelephoneNumber.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary');
     const alternatePhone = personContactInformation?.TelephoneNumber.find((phone) => phone.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate');
-    const emailAddress = personContactInformation?.EmailAddress.at(0);
+    const emailAddress = personContactInformation?.EmailAddress[0];
 
     // Home address is not guaranteed to be present for all clients, so we need to check if it exists before trying to access its properties
     const homeAddress = personContactInformation?.Address.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Home');
@@ -91,8 +91,8 @@ export class DefaultApplicantDtoMapper implements ApplicantDtoMapper {
       clientId: expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client ID')?.IdentificationID, 'Expected clientId to be defined'),
       clientNumber: expectDefined(applicant.ClientIdentification.find((id) => id.IdentificationCategoryText === 'Client Number')?.IdentificationID, 'Expected clientNumber to be defined'),
       dateOfBirth: applicant.PersonBirthDate.date,
-      firstName: expectDefined(applicant.PersonName.at(0)?.PersonGivenName.at(0), 'Expected applicant.PersonName[0].PersonGivenName[0] to be defined'),
-      lastName: expectDefined(applicant.PersonName.at(0)?.PersonSurName, 'Expected applicant.PersonName[0].PersonSurName to be defined'),
+      firstName: expectDefined(applicant.PersonName[0]?.PersonGivenName[0], 'Expected applicant.PersonName[0].PersonGivenName[0] to be defined'),
+      lastName: expectDefined(applicant.PersonName[0]?.PersonSurName, 'Expected applicant.PersonName[0].PersonSurName to be defined'),
       socialInsuranceNumber: applicant.PersonSINIdentification?.IdentificationID,
       maritalStatus: applicant.PersonMaritalStatus?.StatusCode?.ReferenceDataID,
       contactInformation: {

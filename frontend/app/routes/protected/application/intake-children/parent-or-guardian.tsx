@@ -24,7 +24,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationIntakeChild', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.intakeChild.parentOrGuardian,
 } as const satisfies RouteHandleData;
 
@@ -37,7 +36,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadProtectedApplicationIntakeChildState({ params, request, session });
   validateApplicationFlow(state, params, ['intake-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationIntakeChild', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.parentOrGuardian.pageTitle) }),
   };
@@ -88,7 +87,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export default function ProtectedNewChildParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
   const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, sections } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationIntakeChild', 'protectedApplication']);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 
@@ -151,7 +150,7 @@ export default function ProtectedNewChildParentOrGuardian({ loaderData, params }
             {state.phoneNumber?.hasChanged ? (
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t(($) => $.parentOrGuardian.phoneNumber)}>{state.phoneNumber.value.primary}</DefinitionListItem>
-                {state.phoneNumber.value.alternate && <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber)}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
+                <DefinitionListItem term={t(($) => $.parentOrGuardian.altPhoneNumber)}>{state.phoneNumber.value.alternate ?? t(($) => $.parentOrGuardian.none)}</DefinitionListItem>
               </DefinitionList>
             ) : (
               <p>{t(($) => $.parentOrGuardian.phoneNumberHelp)}</p>

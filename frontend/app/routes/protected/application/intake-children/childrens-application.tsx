@@ -33,7 +33,6 @@ import { formatSin } from '~/utils/sin-utils';
 const FORM_ACTION = { add: 'add', remove: 'remove' } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationIntakeChild', 'protectedApplication', 'gcweb', 'common'],
   pageIdentifier: pageIds.protected.application.intakeChild.childApplication,
 } as const satisfies RouteHandleData;
 
@@ -46,7 +45,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadProtectedApplicationIntakeChildState({ params, request, session });
   validateApplicationFlow(state, params, ['intake-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationIntakeChild', 'gcweb']);
   const locale = getLocale(request);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.childrensApplication.pageTitle) }),
@@ -145,7 +144,7 @@ export async function action({ context: { appContainer, session }, params, reque
 export default function ProtectedNewChildChildrensApplication({ loaderData, params }: Route.ComponentProps) {
   const { currentLanguage } = useCurrentLanguage();
   const { state, childrenSections } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationIntakeChild', 'protectedApplication', 'common']);
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 

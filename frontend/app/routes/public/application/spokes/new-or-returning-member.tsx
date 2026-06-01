@@ -34,7 +34,6 @@ import { extractDigits } from '~/utils/string-utils';
 const NEW_OR_EXISTING_MEMBER_OPTION = { no: 'no', yes: 'yes' } as const;
 
 export const handle = {
-  i18nNamespaces: ['applicationSpokes', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.spokes.newOrReturningMember,
 } as const satisfies RouteHandleData;
 
@@ -42,7 +41,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSpokes', 'gcweb']);
 
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.newOrReturningMember.pageTitle) }),
@@ -60,7 +59,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSpokes');
 
   const newOrExistingMemberSchema = z
     .object({
@@ -116,7 +115,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSpokes', 'application']);
   const { defaultState, userAgeCategory } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
@@ -130,13 +129,13 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
 
   const options: InputRadiosProps['options'] = [
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.newOrReturningMember.yes} components={{ bold: <strong /> }} />,
+      children: <Trans ns="applicationSpokes" i18nKey={($) => $.newOrReturningMember.yes} components={{ bold: <strong /> }} />,
       value: NEW_OR_EXISTING_MEMBER_OPTION.yes,
       defaultChecked: defaultState?.isNewOrReturningMember === true,
       onChange: handleNewOrReturningMemberSelection,
     },
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.newOrReturningMember.no} components={{ bold: <strong /> }} />,
+      children: <Trans ns="applicationSpokes" i18nKey={($) => $.newOrReturningMember.no} components={{ bold: <strong /> }} />,
       value: NEW_OR_EXISTING_MEMBER_OPTION.no,
       defaultChecked: defaultState?.isNewOrReturningMember === false,
       onChange: handleNewOrReturningMemberSelection,

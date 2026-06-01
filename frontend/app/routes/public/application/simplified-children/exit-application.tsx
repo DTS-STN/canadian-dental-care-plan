@@ -20,7 +20,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationSimplifiedChild', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.simplifiedChild.exitApplication,
 } as const satisfies RouteHandleData;
 
@@ -30,7 +29,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadPublicApplicationSimplifiedChildState({ params, request, session });
   validateApplicationFlow(state, params, ['simplified-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSimplifiedChild', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.exitApplication.pageTitle) }),
   };
@@ -46,7 +45,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSimplifiedChild');
 
   clearPublicApplicationState({ params, session });
 
@@ -54,7 +53,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function RenewChildrenExitApplication({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('applicationSimplifiedChild');
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);

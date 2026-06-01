@@ -3,7 +3,7 @@ import type { PropsWithChildren } from 'react';
 import type { MarkdownToJSX } from 'markdown-to-jsx/react';
 import Markdown from 'markdown-to-jsx/react';
 
-import { InlineLink } from './inline-link';
+import { InlineLink } from '~/components/inline-link';
 
 const markdownOptions: MarkdownToJSX.Options = {
   forceWrapper: true,

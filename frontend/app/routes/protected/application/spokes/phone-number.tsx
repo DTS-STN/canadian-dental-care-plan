@@ -42,7 +42,6 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 }
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.phoneNumber,
 } as const satisfies RouteHandleData;
 
@@ -55,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getProtectedApplicationState({ params, session });
   validateApplicationFlow(state, params, ['renewal-adult', 'intake-adult', 'intake-children', 'intake-family', 'renewal-family', 'renewal-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
 
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.phoneNumber.pageTitle) }),
@@ -80,7 +79,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   const applicationFlow: ApplicationFlow = `${state.context}-${state.typeOfApplication}`;
 
@@ -123,7 +122,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function PhoneNumber({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationSpokes', 'protectedApplication']);
   const { defaultState, applicationFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
@@ -180,10 +179,10 @@ export default function PhoneNumber({ loaderData, params }: Route.ComponentProps
                   <p>{t(($) => $.phoneNumber.needPhoneNumber)}</p>
                   <ul className="list-disc space-y-1 pl-7">
                     <li>
-                      <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.phoneNumber.serviceCanada} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+                      <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.phoneNumber.serviceCanada} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
                     </li>
                     <li>
-                      <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.phoneNumber.inPerson} components={{ findOffice }} />
+                      <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.phoneNumber.inPerson} components={{ findOffice }} />
                     </li>
                   </ul>
                 </section>

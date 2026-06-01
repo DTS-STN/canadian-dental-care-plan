@@ -43,7 +43,6 @@ const YES_NO_OPTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.childInformation,
 } as const satisfies RouteHandleData;
 
@@ -59,7 +58,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   validateApplicationFlow(state, params, ['intake-children', 'intake-family', 'renewal-children', 'renewal-family']);
   const childState = getSingleChildState({ params, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
 
   const childNumber = t(($) => $.children.childNumber, {
     childNumber: childState.childNumber,
@@ -104,7 +103,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const childState = getSingleChildState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   // Form action Continue & Save
   // state validation schema
@@ -278,7 +277,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ChildInformation({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationSpokes', 'protectedApplication']);
   const { defaultState, childName, isNew, applicationFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
@@ -297,7 +296,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
 
   const options: InputRadiosProps['options'] = [
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.information.sinYes} components={{ bold: <strong /> }} />,
+      children: <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.children.information.sinYes} components={{ bold: <strong /> }} />,
       value: YES_NO_OPTION.yes,
       defaultChecked: defaultState?.hasSocialInsuranceNumber ?? true,
       append: hasSocialInsuranceNumberValue === true && (
@@ -317,7 +316,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
       onChange: handleSocialInsuranceNumberSelection,
     },
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.information.sinNo} components={{ bold: <strong /> }} />,
+      children: <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.children.information.sinNo} components={{ bold: <strong /> }} />,
       value: YES_NO_OPTION.no,
       defaultChecked: defaultState?.hasSocialInsuranceNumber === false,
       onChange: handleSocialInsuranceNumberSelection,
@@ -335,7 +334,7 @@ export default function ChildInformation({ loaderData, params }: Route.Component
         <ErrorAlert>
           <h2 className="mb-2 font-bold">{t(($) => $.children.information.errorMessage.alert.heading)}</h2>
           <p className="mb-2">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.children.information.errorMessage.alert.detail} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+            <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.children.information.errorMessage.alert.detail} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
           </p>
           <p className="mb-2">{t(($) => $.children.information.errorMessage.alert.detailAdultMustApply)}</p>
           <p className="mb-2">{t(($) => $.children.information.errorMessage.alert.applyDate)}</p>

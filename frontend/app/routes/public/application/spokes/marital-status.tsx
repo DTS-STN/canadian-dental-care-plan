@@ -45,7 +45,6 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 }
 
 export const handle = {
-  i18nNamespaces: ['applicationSpokes', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.spokes.maritalStatus,
 } as const satisfies RouteHandleData;
 
@@ -55,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSpokes', 'gcweb']);
   const locale = getLocale(request);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.maritalStatus.pageTitle) }),
@@ -78,7 +77,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSpokes');
 
   const applicationFlow: ApplicationFlow = `${state.inputModel}-${state.typeOfApplication}`;
 
@@ -181,7 +180,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplicationSpokeMaritalStatus({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSpokes', 'application']);
   const { defaultState, maritalStatuses, applicationFlow } = loaderData;
   const { MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED } = useClientEnv();
   const fetcher = useFetcher<typeof action>();

@@ -36,7 +36,6 @@ const CHECKBOX_VALUE = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationRenewalChild', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.renewalChild.submit,
 } as const satisfies RouteHandleData;
 
@@ -49,7 +48,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadProtectedApplicationRenewalChildStateForReview({ params, request, session });
   validateApplicationFlow(state, params, ['renewal-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationRenewalChild', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.submit.pageTitle) }),
   };
@@ -85,7 +84,7 @@ export async function action({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['renewal-children']);
 
   const formData = await request.formData();
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationRenewalChild');
 
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
@@ -122,7 +121,7 @@ export async function action({ context: { appContainer, session }, request, para
 
 export default function ProtectedRenewChildrenSubmit({ loaderData, params }: Route.ComponentProps) {
   const { state, payload } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplicationRenewalChild');
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
@@ -182,7 +181,7 @@ export default function ProtectedRenewChildrenSubmit({ loaderData, params }: Rou
               <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.submitYourApplication)}</h2>
               <p>{t(($) => $.submit.bySubmitting)}</p>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.protectedApplicationRenewalChild.submit.reviewEligibilityCriteria} components={{ eligibilityLink }} />
+                <Trans ns="protectedApplicationRenewalChild" i18nKey={($) => $.submit.reviewEligibilityCriteria} components={{ eligibilityLink }} />
               </p>
               <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
                 <CsrfTokenInput />

@@ -81,6 +81,7 @@ const ns = {
     },
     altPhoneNumber: "Alternate phone number",
     noChange: "No update.",
+    none: "None",
   },
   submit: {
     pageTitle: "Submit your application",

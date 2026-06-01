@@ -15,6 +15,7 @@ import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { AppPageTitle } from '~/components/app-page-title';
 import { ButtonLink } from '~/components/buttons';
+import { ContextualAlert } from '~/components/contextual-alert';
 import { CsrfTokenInput } from '~/components/csrf-token-input';
 import { ErrorSummary } from '~/components/error-summary';
 import { ErrorSummaryProvider } from '~/components/error-summary-context';
@@ -44,7 +45,6 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 }
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.communicationPreferences,
 } as const satisfies RouteHandleData;
 
@@ -57,7 +57,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getProtectedApplicationState({ params, session });
   validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-family', 'renewal-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
   const locale = getLocale(request);
 
   const meta = {
@@ -93,7 +93,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   const applicationFlow: ApplicationFlow = `${state.context}-${state.typeOfApplication}`;
 
@@ -146,7 +146,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplicationSpokeCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationSpokes', 'protectedApplication']);
   const { defaultState, applicationFlow, sunLifeCommunicationMethods, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID } = loaderData;
 
   const navigate = useNavigate();
@@ -200,7 +200,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
     let children: ReactNode = <span className="font-semibold">{method.name}</span>;
 
     if (method.id === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.communicationPreferences.byEmail} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
+      children = <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.communicationPreferences.byEmail} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
     }
 
     return {
@@ -216,7 +216,10 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
       <AppPageTitle>{t(($) => $.communicationPreferences.pageTitle)}</AppPageTitle>
       <ErrorSummaryProvider actionData={fetcher.data}>
         <div className="max-w-prose">
-          <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
+          <ContextualAlert type="info" id="dental-insurance-confirmation-no">
+            <p>{t(($) => $.communicationPreferences.alert)}</p>
+          </ContextualAlert>
+          <p className="my-4 italic">{t(($) => $.requiredLabel, { ns: 'protectedApplication' })}</p>
           <ErrorSummary />
           <fetcher.Form method="post" noValidate>
             <CsrfTokenInput />

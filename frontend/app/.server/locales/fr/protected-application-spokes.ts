@@ -316,8 +316,8 @@ const ns = {
       country: "Pays",
       province: "Province, territoire, état ou région",
       city: "Ville ou municipalité",
-      postalCode: "Code postal ou de zone",
-      postalCodeOptional: "Code postal ou de zone (facultatif)",
+      postalCode: "Code postal",
+      postalCodeOptional: "Code postal (facultatif)",
       selectOne: "Sélectionnez une option",
       postalCodeHelp: "Format\u00A0: A1A 1A1. Les lettres D, F, I, O, Q ou U ne peuvent pas être utilisées.",
       postalCodeHelpUs: "Format\u00A0: 12345 ou 12345-6789",
@@ -336,6 +336,7 @@ const ns = {
     continue: "Continuer",
     save: "Sauvegarder",
     mscaLinkAccount: "https://www.canada.ca/fr/emploi-developpement-social/services/mon-dossier.html",
+    alert: "La plupart des communications de Service Canada concernant le Régime canadien de soins dentaires seront offertes uniquement dans votre compte Mon dossier Service Canada.",
     errorMessage: {
       preferredLanguageRequired: "Sélectionnez la langue de communication préférée",
       preferredMethodRequired: "Sélectionnez votre moyen de communication préféré avec la Sun Life",
@@ -345,7 +346,7 @@ const ns = {
   email: {
     pageTitle: "Adresse courriel",
     emailNotification: "Les messages du gouvernement du Canada concernant votre Régime canadien de soins dentaires (RCSD) seront transmis par l'intermédiaire de votre Mon dossier Service Canada (MDSC). Lorsqu'une nouvelle lettre est publiée dans MDSC, nous vous ferons parvenir une notification par courriel à cette adresse.",
-    enterEmail: "Entrez l'adresse courriel que vous souhaitez utiliser pour recevoir les notifications concernant votre compte du RCSD et, si vous avez choisi le courriel, vos communications avec la Financière Sun Life.",
+    enterEmail: "Entrez l'adresse courriel que vous souhaitez utiliser pour recevoir les notifications concernant votre compte du RCSD et, si vous avez choisi le courriel, vos communications avec la Sun Life.",
     updateCommunicationPreference: "Vous pouvez modifier vos préférences de communication en tout temps dans MDSC.",
     emailLegend: "Adresse courriel",
     back: "Retour",
@@ -359,11 +360,14 @@ const ns = {
     pageTitle: "Code de vérification",
     verificationCode: "Un courriel contenant un code a été envoyé à {{email}}. Veuillez saisir le code de vérification à 5 chiffres et sélectionner «\u00A0Continuer\u00A0».",
     requestNew: "La réception du courriel peut prendre jusqu'à 60 secondes. Si vous ne le voyez pas, vérifiez votre dossier de courrier indésirable. Si le code ne se trouve pas dans ce dossier, vous pouvez en demander un nouveau.",
-    unableToVerify: "Si vous n'êtes pas en mesure de confirmer votre adresse électronique, cliquez sur «\u00A0Retour\u00A0» pour mettre à jour votre adresse électronique ou <communicationLink>modifier vos préférences de communication</communicationLink>.",
     verificationCodeLabel: "Code de vérification",
     requestNewCode: "Demander un nouveau code",
     back: "Retour",
     continue: "Continuer",
+    cannotValidate: {
+      heading: "Je ne peux pas valider mon adresse courriel",
+      detail: "Vous devez saisir et valider votre adresse courriel pour présenter une demande en ligne. Si vous n’êtes pas en mesure de valider votre adresse courriel, vous pouvez tout de même faire une demande au Régime canadien de soins dentaires en communiquant avec Service Canada au 1\u2011833\u2011537\u20114342",
+    },
     errorMessage: {
       verificationCodeRequired: "Entrez le code de vérification de 5 chiffres",
       verificationCodeMaxAttempts: "Vous avez saisi un code de vérification incorrect plus de 5 fois. Vous devez demander un nouveau code à l'aide du lien «\u00A0Demander un nouveau code de vérification\u00A0» ci-dessous.",

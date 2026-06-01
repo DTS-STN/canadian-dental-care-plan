@@ -16,6 +16,7 @@ import type {
   RenewalTypeOfApplicationDto,
 } from '~/.server/domain/dtos';
 import type { BenefitRenewalRequestEntity, BenefitRenewalResponseEntity } from '~/.server/domain/entities';
+import { expectDefined } from '~/utils/assert-utils';
 import { parseDateString } from '~/utils/date-utils';
 import { sanitizeSin } from '~/utils/sin-utils';
 
@@ -363,6 +364,7 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
   }
 
   mapBenefitRenewalResponseEntityToApplicationCode(benefitRenewalResponseEntity: BenefitRenewalResponseEntity): string {
-    return benefitRenewalResponseEntity.BenefitApplication.BenefitApplicationIdentification[0].IdentificationID;
+    const applicationCode = benefitRenewalResponseEntity.BenefitApplication.BenefitApplicationIdentification[0]?.IdentificationID;
+    return expectDefined(applicationCode, 'Expected applicationCode to be defined');
   }
 }

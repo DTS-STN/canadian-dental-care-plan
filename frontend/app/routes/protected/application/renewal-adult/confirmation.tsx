@@ -29,7 +29,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationRenewalAdult', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.renewalAdult.confirmation,
 } as const satisfies RouteHandleData;
 
@@ -42,7 +41,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadProtectedApplicationRenewalAdultState({ params, request, session });
   validateApplicationFlow(state, params, ['renewal-adult']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationRenewalAdult', 'gcweb']);
   const locale = getLocale(request);
 
   if (
@@ -125,7 +124,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationRenewalAdult');
 
   clearProtectedApplicationState({ params, session });
 
@@ -133,10 +132,10 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedApplicationFlowConfirm({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplicationRenewalAdult');
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddress, mailingAddress, dentalInsurance, dentalBenefits, submissionInfo, surveyLink, eligibility, isSimplifiedRenewal } = loaderData;
-  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage(params.id);
 
   const mscaLinkAccount = <InlineLink to={t(($) => $.confirm.mscaLinkAccount)} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t(($) => $.confirm.statusCheckerLink)} className="external-link" newTabIndicator target="_blank" />;
@@ -201,7 +200,7 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
             <section>
               <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.checkStatus)}</h2>
               <p className="mt-4">
-                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.cdcpChecker} components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
+                <Trans ns="protectedApplicationRenewalAdult" i18nKey={($) => $.confirm.cdcpChecker} components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
               </p>
               <p className="mt-4">{t(($) => $.confirm.useCode)}</p>
             </section>
@@ -211,7 +210,7 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
           <section>
             <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.simplifiedWhatsNext)}</h2>
             <p className="mt-4">
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.simplifiedBeginProcess} components={{ cdcpLink, mscaLinkAccount }} />
+              <Trans ns="protectedApplicationRenewalAdult" i18nKey={($) => $.confirm.simplifiedBeginProcess} components={{ cdcpLink, mscaLinkAccount }} />
             </p>
           </section>
         )}
@@ -263,11 +262,6 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
                 <DefinitionListItem term={t(($) => $.confirm.altPhoneNumber)}>
                   <span className="text-nowrap">{userInfo.phoneNumber.alternate}</span>
                 </DefinitionListItem>
-                {userInfo.email && (
-                  <DefinitionListItem term={t(($) => $.confirm.email)}>
-                    <span className="text-nowrap">{userInfo.email}</span>
-                  </DefinitionListItem>
-                )}
                 <DefinitionListItem term={t(($) => $.confirm.mailing)}>
                   <Address
                     address={{
@@ -298,6 +292,11 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
               <DefinitionList border>
                 <DefinitionListItem term={t(($) => $.confirm.langPref)}>{userInfo.communicationPreferences.preferredLanguage.name}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.sunLifeCommPrefTitle)}>{userInfo.communicationPreferences.preferredMethodSunLife.name}</DefinitionListItem>
+                {userInfo.email && (
+                  <DefinitionListItem term={t(($) => $.confirm.email)}>
+                    <span className="text-nowrap">{userInfo.email}</span>
+                  </DefinitionListItem>
+                )}
               </DefinitionList>
             </section>
 
@@ -323,12 +322,10 @@ export default function ProtectedApplicationFlowConfirm({ loaderData, params }: 
             </section>
           </section>
         </section>
-        <div className="my-6">
-          <div className="px-12 print:hidden">
-            <PrintButton size="lg" variant="primary" errorMessage={t(($) => $.confirm.printUnavailable)} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Print bottom - Application successfully submitted click">
-              {t(($) => $.confirm.printBtn)}
-            </PrintButton>
-          </div>
+        <div className="my-6 print:hidden">
+          <PrintButton size="lg" variant="primary" errorMessage={t(($) => $.confirm.printUnavailable)} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Print bottom - Application successfully submitted click">
+            {t(($) => $.confirm.printBtn)}
+          </PrintButton>
         </div>
         <Dialog>
           <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Renewal_Adult:Exit - Application successfully submitted click" asChild>

@@ -1,113 +1,19 @@
-import { useEffect } from 'react';
-
-import { Outlet, useLocation, useNavigate, useNavigation } from 'react-router';
-
-import { faLaptopCode } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Outlet } from 'react-router';
 
 import type { Route } from './+types/layout';
 
-import { TYPES } from '~/.server/constants';
-import { KILLSWITCH_KEY } from '~/.server/domain/services';
-import { getLocale } from '~/.server/utils/locale.utils';
-import { DebugPayload } from '~/components/debug-payload';
-import { KillswitchDialog } from '~/components/killswitch-dialog';
-import { PublicLayout, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
-import SessionTimeout from '~/components/session-timeout';
-import { useApplicationFlowStorage } from '~/hooks';
-import { transformAdobeAnalyticsUrl } from '~/route-helpers/adobe-analytics-route-helpers';
-import { useApiApplicationState } from '~/utils/api-application-state-utils';
-import { useApiSession } from '~/utils/api-session-utils';
-import type { RouteHandleData } from '~/utils/route-utils';
+import { useApplicationFlowCheck } from '~/hooks/use-application-flow-check';
 import { getPathById } from '~/utils/route-utils';
-import { removeTrailingSlash } from '~/utils/url-utils';
 
-export const handle = {
-  // Declare all i18n namespaces required by this route and its descendants.
-  // Preloading them upfront ensures translations are available on initial render.
-  i18nNamespaces: [
-    ...layoutI18nNamespaces, //
-    'common',
-    'application',
-    'applicationFullAdult',
-    'applicationFullChild',
-    'applicationFullFamily',
-    'applicationSimplifiedAdult',
-    'applicationSimplifiedChild',
-    'applicationSimplifiedFamily',
-    'applicationSpokes',
-  ],
-  transformAdobeAnalyticsUrl,
-} as const satisfies RouteHandleData;
-
-export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
-  const locale = getLocale(request);
-
-  const redisService = appContainer.find(TYPES.RedisService);
-  const killswitchTimeout = (await redisService?.ttl(KILLSWITCH_KEY)) ?? 0;
-
-  // load application state debug data only in development mode
-  const { NODE_ENV } = appContainer.get(TYPES.ServerConfig);
-  const applicationStateDebugData = NODE_ENV === 'development' && params.id ? session.find(`public-application-flow-${params.id}`).unwrapUnchecked() : undefined;
-
-  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = appContainer.get(TYPES.ClientConfig);
-  return { applicationStateDebugData, killswitchTimeout, locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
-}
-
-export default function Layout({ loaderData, params }: Route.ComponentProps) {
-  const { applicationStateDebugData, killswitchTimeout, locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = loaderData;
-
-  const location = useLocation();
-  const navigate = useNavigate();
-  const navigation = useNavigation();
-  const { enabled: applicationFlowStorageEnabled, value: applicationFlowStorageValue } = useApplicationFlowStorage();
-
-  const isIdle = navigation.state === 'idle';
-  const applicationIndexPath = getPathById('public/application/index', params);
-  const isOnIndexPage = removeTrailingSlash(location.pathname) === removeTrailingSlash(applicationIndexPath);
-
-  useEffect(() => {
-    // Only proceed if the app is idle, not already on the index page, storage is enabled, and the storage value is not already 'active'.
-    if (isIdle && !isOnIndexPage && applicationFlowStorageEnabled && applicationFlowStorageValue !== 'active') {
-      void navigate(applicationIndexPath, { replace: true });
-    }
-  }, [applicationFlowStorageEnabled, applicationFlowStorageValue, applicationIndexPath, isIdle, isOnIndexPage, navigate]);
-
-  const apiApplicationState = useApiApplicationState();
-  const apiSession = useApiSession();
-
-  async function handleOnSessionEnd() {
-    await apiSession.submit({ action: 'end', locale, redirectTo: 'cdcp-website-apply' });
-  }
-
-  async function handleOnSessionExtend() {
-    // extends the application state if 'id' param exists
-    const id = params.id;
-    if (typeof id === 'string') {
-      await apiApplicationState.submit({ action: 'extend', id });
-      return;
-    }
-
-    // extends the user's session
-    await apiSession.submit({ action: 'extend' });
-  }
-
-  return (
-    <PublicLayout>
-      <KillswitchDialog timeoutSecs={killswitchTimeout} />
-      <SessionTimeout promptBeforeIdle={SESSION_TIMEOUT_PROMPT_SECONDS * 1000} timeout={SESSION_TIMEOUT_SECONDS * 1000} onSessionEnd={handleOnSessionEnd} onSessionExtend={handleOnSessionExtend} />
-      <Outlet />
-      {applicationStateDebugData && (
-        <>
-          <h2 className="font-lato mt-10 flex items-center gap-2 rounded-t-md border border-orange-400 bg-orange-100 p-4 text-xl font-bold text-orange-600">
-            <FontAwesomeIcon icon={faLaptopCode} />
-            <span>Application State Debug Data</span>
-          </h2>
-          <div className="border border-t-0 border-orange-400">
-            <DebugPayload data={applicationStateDebugData} />
-          </div>
-        </>
-      )}
-    </PublicLayout>
-  );
+/**
+ * This layout component is responsible for enforcing the application flow on all public application routes except the
+ * index page. It uses the `useApplicationFlowCheck` hook to check if the application flow is active and redirects to
+ * the index page if it's not. The `Outlet` component renders the matched child route component.
+ */
+export default function PublicApplicationLayout({ params }: Route.ComponentProps) {
+  useApplicationFlowCheck({
+    id: params.id,
+    indexRoutePath: getPathById('public/application/index', params),
+  });
+  return <Outlet />;
 }

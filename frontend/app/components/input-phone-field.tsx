@@ -1,11 +1,10 @@
 import { useState } from 'react';
 
-import type { E164Number } from 'libphonenumber-js';
 import PhoneInput from 'react-phone-number-input/input';
+import { useDebounceCallback } from 'usehooks-ts';
 
-import { InputError } from './input-error';
-import { InputHelp } from './input-help';
-
+import { InputError } from '~/components/input-error';
+import { InputHelp } from '~/components/input-help';
 import { InputLabel } from '~/components/input-label';
 import { cn } from '~/utils/tw-utils';
 
@@ -25,6 +24,11 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
   const { 'aria-describedby': ariaDescribedby, className, defaultValue, defaultCountry, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, ...restProps } = props;
   const [value, setValue] = useState(defaultValue);
 
+  // Debounce the change handler to reduce re-renders and validation calls while the user is typing.
+  // The handler fires only after the user pauses for 300ms, keeping the UI responsive without unnecessary updates.
+  // See: https://gitlab.com/catamphetamine/react-phone-number-input/-/work_items/226#note_2012566937
+  const debouncedSetValue = useDebounceCallback(setValue, 300);
+
   const inputWrapperId = `input-phone-field-${id}`;
   const inputErrorId = `${inputWrapperId}-error`;
   const inputHelpMessagePrimaryId = `${inputWrapperId}-help-primary`;
@@ -39,10 +43,6 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
     ]
       .filter(Boolean)
       .join(' ') || undefined;
-
-  function handleOnPhoneInputChange(value?: E164Number) {
-    setValue(value);
-  }
 
   return (
     <div id={inputWrapperId}>
@@ -70,7 +70,7 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
           errorMessage && 'border-red-500 focus:border-red-500 focus:ring-red-500',
           className,
         )}
-        onChange={handleOnPhoneInputChange}
+        onChange={debouncedSetValue}
         required={required}
         value={value}
         {...restProps}

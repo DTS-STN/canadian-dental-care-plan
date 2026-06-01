@@ -36,7 +36,6 @@ const CHECKBOX_VALUE = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationIntakeAdult', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.intakeAdult.submit,
 } as const satisfies RouteHandleData;
 
@@ -49,7 +48,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadProtectedApplicationIntakeAdultStateForReview({ params, request, session });
   validateApplicationFlow(state, params, ['intake-adult']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationIntakeAdult', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.submit.pageTitle) }),
   };
@@ -78,7 +77,7 @@ export async function action({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['intake-adult']);
 
   const formData = await request.formData();
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationIntakeAdult');
 
   securityHandler.validateCsrfToken({ formData, session });
   await securityHandler.validateHCaptchaResponse({ formData, request }, () => {
@@ -114,7 +113,7 @@ export async function action({ context: { appContainer, session }, request, para
 
 export default function NewAdultSubmit({ loaderData, params }: Route.ComponentProps) {
   const { state, payload } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplicationIntakeAdult');
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
   const errors = fetcher.data?.errors;
@@ -170,7 +169,7 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
               <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.submitYourApplication)}</h2>
               <p>{t(($) => $.submit.bySubmitting)}</p>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.protectedApplicationIntakeAdult.submit.reviewEligibilityCriteria} components={{ eligibilityLink }} />
+                <Trans ns="protectedApplicationIntakeAdult" i18nKey={($) => $.submit.reviewEligibilityCriteria} components={{ eligibilityLink }} />
               </p>
               <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
                 <CsrfTokenInput />

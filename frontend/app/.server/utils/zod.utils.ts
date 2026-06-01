@@ -29,6 +29,6 @@
  * // Output: { name: "Name is required", age: "Age must be a number" }
  */
 export function transformFlattenedError<T extends { fieldErrors: Record<string, string[]> }>(flattenedError: T): { [K in keyof T['fieldErrors']]: string | undefined } {
-  const transformedEntries = Object.entries(flattenedError.fieldErrors).map(([key, value]) => [key, value.at(0)]);
+  const transformedEntries = Object.entries(flattenedError.fieldErrors).map(([key, value]) => [key, value[0]]);
   return Object.fromEntries(transformedEntries);
 }

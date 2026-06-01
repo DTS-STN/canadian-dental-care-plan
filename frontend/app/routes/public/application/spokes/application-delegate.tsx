@@ -19,14 +19,13 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationSpokes', 'gcweb'],
   pageIdentifier: pageIds.public.application.spokes.applicationDelegate,
 } as const satisfies RouteHandleData;
 
 export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMetaTags(loaderData.meta.title));
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSpokes', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.applicationDelegate.pageTitle) }),
   };
@@ -40,7 +39,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSpokes');
 
   clearPublicApplicationState({ params, session });
 
@@ -48,8 +47,8 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplicationDelegate({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { t } = useTranslation('applicationSpokes');
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage(params.id);
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
@@ -70,10 +69,10 @@ export default function ApplicationDelegate({ loaderData, params }: Route.Compon
       <div className="max-w-prose">
         <div className="mb-8 space-y-4">
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.applicationDelegate.contactRepresentative} components={{ contactServiceCanada, noWrap }} />
+            <Trans ns="applicationSpokes" i18nKey={($) => $.applicationDelegate.contactRepresentative} components={{ contactServiceCanada, noWrap }} />
           </p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.applicationDelegate.prepareToApply} components={{ preparingToApply }} />
+            <Trans ns="applicationSpokes" i18nKey={($) => $.applicationDelegate.prepareToApply} components={{ preparingToApply }} />
           </p>
         </div>
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">

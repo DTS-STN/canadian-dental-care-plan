@@ -89,7 +89,7 @@ function getLanguageFromPathname(pathname: string): AppLocale {
 }
 
 /**
- * Returns all namespaces required by the given routes by examining the route's i18nNamespaces handle property.
+ * Returns all namespaces required by the given routes by examining the route's i18nPreloadNamespace handle property.
  * @see https://remix.run/docs/en/main/route/handle
  */
 export function getNamespaces(routes?: ({ handle?: unknown } | undefined)[]) {
@@ -99,8 +99,8 @@ export function getNamespaces(routes?: ({ handle?: unknown } | undefined)[]) {
 
   const namespaces = routes
     .map((route) => route?.handle as RouteHandleData | undefined)
-    .flatMap((handle) => handle?.i18nNamespaces)
-    .filter((i18nNamespaces) => i18nNamespaces !== undefined);
+    .flatMap((handle) => handle?.i18nPreloadNamespace)
+    .filter((ns) => ns !== undefined);
 
   return [...new Set(namespaces)];
 }

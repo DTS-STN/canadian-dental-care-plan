@@ -18,7 +18,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.dentalInsuranceExitApplication,
 } as const satisfies RouteHandleData;
 
@@ -31,7 +30,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getProtectedApplicationState({ params, session });
   validateApplicationFlow(state, params, ['intake-adult', 'intake-children', 'intake-family', 'renewal-adult', 'renewal-family']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.dentalInsuranceExitApplication.pageTitle) }),
   };
@@ -48,7 +47,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   clearProtectedApplicationState({ params, session });
 
@@ -56,7 +55,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplicationSpokeDentalInsuranceExitApplication({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplicationSpokes');
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);

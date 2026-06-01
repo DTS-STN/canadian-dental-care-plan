@@ -3,10 +3,10 @@ import { useEffect } from 'react';
 
 import { Link } from 'react-router';
 
+import type { Namespace } from 'i18next';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Banner } from '../banner';
-
+import { Banner } from '~/components/banner';
 import { PublicBreadcrumbs } from '~/components/breadcrumbs';
 import { InlineLink } from '~/components/inline-link';
 import { PageDetails } from '~/components/page-details';
@@ -18,10 +18,8 @@ import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
 import { useLayoutOptions } from '~/utils/route-utils';
-import type { I18nNamespaces } from '~/utils/route-utils';
 
-export const i18nNamespaces = ['gcweb'] satisfies I18nNamespaces;
-
+export const publicLayoutI18nNamespace = 'gcweb' satisfies Namespace;
 /**
  * GCWeb Application page template.
  * see: https://wet-boew.github.io/GCWeb/templates/application/application-docs-en.html
@@ -43,7 +41,7 @@ export function PublicLayout({ children }: PropsWithChildren) {
 
 function PageHeader() {
   const { currentLanguage } = useCurrentLanguage();
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(publicLayoutI18nNamespace);
   const { HEADER_LOGO_URL_EN, HEADER_LOGO_URL_FR } = getClientEnv();
   const browserCompatiblityBanner = useBrowserCompatiblityBanner();
 
@@ -109,8 +107,8 @@ interface BilingualNotFoundErrorProps {
  */
 export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
   const { i18n } = useTranslation();
-  const en = i18n.getFixedT('en', ['gcweb']);
-  const fr = i18n.getFixedT('fr', ['gcweb']);
+  const en = i18n.getFixedT('en', 'gcweb');
+  const fr = i18n.getFixedT('fr', 'gcweb');
 
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {
@@ -147,7 +145,7 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
             <p className="mb-8 text-lg text-gray-500">{en(($) => $.publicNotFound.pageMessage)}</p>
             <ul className="list-disc space-y-2 pl-10">
               <li>
-                <Trans t={en} ns={['gcweb']} i18nKey={($) => $.publicNotFound.returnCdcp} components={{ englishCdcpLink: <InlineLink to={en(($) => $.publicNotFound.cdcpLink)} className="external-link" newTabIndicator target="_blank" /> }} />
+                <Trans t={en} i18nKey={($) => $.publicNotFound.returnCdcp} components={{ englishCdcpLink: <InlineLink to={en(($) => $.publicNotFound.cdcpLink)} className="external-link" newTabIndicator target="_blank" /> }} />
               </li>
             </ul>
           </div>
@@ -159,7 +157,7 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
             <p className="mb-8 text-lg text-gray-500">{fr(($) => $.publicNotFound.pageMessage)}</p>
             <ul className="list-disc space-y-2 pl-10">
               <li>
-                <Trans t={fr} ns={['gcweb']} i18nKey={($) => $.publicNotFound.returnCdcp} components={{ frenchCdcpLink: <InlineLink to={fr(($) => $.publicNotFound.cdcpLink)} className="external-link" newTabIndicator target="_blank" /> }} />
+                <Trans t={fr} i18nKey={($) => $.publicNotFound.returnCdcp} components={{ frenchCdcpLink: <InlineLink to={fr(($) => $.publicNotFound.cdcpLink)} className="external-link" newTabIndicator target="_blank" /> }} />
               </li>
             </ul>
           </div>
@@ -186,7 +184,7 @@ interface NotFoundErrorProps {
 }
 
 export function NotFoundError({ error }: NotFoundErrorProps) {
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(publicLayoutI18nNamespace);
   const cdcpLink = <InlineLink to={t(($) => $.publicNotFound.cdcpLink)} className="external-link" newTabIndicator target="_blank" />;
 
   useEffect(() => {
@@ -206,7 +204,7 @@ export function NotFoundError({ error }: NotFoundErrorProps) {
         <p className="mb-8 text-lg text-gray-500">{t(($) => $.publicNotFound.pageMessage)}</p>
         <ul className="list-disc space-y-2 pl-10">
           <li>
-            <Trans ns={i18nNamespaces} i18nKey={($) => $.publicNotFound.unilingualReturnCdcp} components={{ cdcpLink }} />
+            <Trans ns={publicLayoutI18nNamespace} i18nKey={($) => $.publicNotFound.unilingualReturnCdcp} components={{ cdcpLink }} />
           </li>
         </ul>
         <PageDetails />
@@ -221,7 +219,7 @@ interface ServerErrorProps {
 }
 
 export function ServerError({ error }: ServerErrorProps) {
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(publicLayoutI18nNamespace);
   const home = <InlineLink to="/" />;
 
   useEffect(() => {
@@ -246,7 +244,7 @@ export function ServerError({ error }: ServerErrorProps) {
         <ul className="list-disc space-y-2 pl-10">
           <li>{t(($) => $.serverError.option01)}</li>
           <li>
-            <Trans ns={i18nNamespaces} i18nKey={($) => $.serverError.option02} components={{ home }} />
+            <Trans ns={publicLayoutI18nNamespace} i18nKey={($) => $.serverError.option02} components={{ home }} />
           </li>
         </ul>
         <PageDetails />

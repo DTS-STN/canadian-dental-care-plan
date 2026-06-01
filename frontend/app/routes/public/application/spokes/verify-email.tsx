@@ -52,7 +52,6 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 }
 
 export const handle = {
-  i18nNamespaces: ['applicationSpokes', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.spokes.verifyEmail,
 } as const satisfies RouteHandleData;
 
@@ -64,7 +63,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   invariant(state.email, 'Expected state.email to be defined');
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSpokes', 'gcweb']);
 
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.verifyEmail.pageTitle) }),
@@ -85,7 +84,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSpokes');
 
   const applicationFlow: ApplicationFlow = `${state.inputModel}-${state.typeOfApplication}`;
 
@@ -187,7 +186,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplicationVerifyEmail({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSpokes', 'application']);
   const { defaultState } = loaderData;
   const [showDialog, setShowDialog] = useState(false);
   const csrfToken = useCsrfToken();
@@ -239,7 +238,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
         <ErrorAlert>
           <h2 className="mb-2 font-bold">{t(($) => $.verifyEmail.verificationCodeAlert.heading)}</h2>
           <p className="-mb-3">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.verificationCodeAlert.detail} components={{ requestLink }} />
+            <Trans ns="applicationSpokes" i18nKey={($) => $.verifyEmail.verificationCodeAlert.detail} components={{ requestLink }} />
           </p>
         </ErrorAlert>
         <ErrorSummaryProvider actionData={fetcher.data}>
@@ -250,7 +249,7 @@ export default function ApplicationVerifyEmail({ loaderData, params }: Route.Com
           </p>
           <p className="mb-4">{t(($) => $.verifyEmail.requestNew)}</p>
           <p className="mb-8">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
+            <Trans ns="applicationSpokes" i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
           </p>
           <p className="mb-4 italic">{t(($) => $.requiredLabel, { ns: 'application' })}</p>
           <ErrorSummary />

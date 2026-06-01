@@ -336,6 +336,7 @@ const ns = {
     continue: "Continue",
     save: "Save",
     mscaLinkAccount: "https://www.canada.ca/en/employment-social-development/services/my-account.html",
+    alert: "Most communications about the Canadian Dental Care Plan from Service Canada will be available only through My Service Canada Account.",
     errorMessage: {
       preferredLanguageRequired: "Select preferred language of communication",
       preferredMethodRequired: "Select preferred method of communication for Sun Life",
@@ -359,11 +360,14 @@ const ns = {
     pageTitle: "Verification code",
     verificationCode: "An email with a code has been sent to {{email}}. Please enter the 5-digit verification code and select “Continue”.",
     requestNew: "It may take up to 60 seconds for the email to arrive. If you do not see it, check your junk or spam folder. If you still do not have the code, you can request a new one.",
-    unableToVerify: "If you are not able to confirm your email, select “Back” to change the email address or <communicationLink>modify your communication preference</communicationLink>.",
     verificationCodeLabel: "Verification code",
     requestNewCode: "Request new code",
     back: "Back",
     continue: "Continue",
+    cannotValidate: {
+      heading: "I can't validate my email",
+      detail: "You need to enter and validate your email address to apply online. If you can not validate your email address, you can still apply for the Canadian Dental Care Plan by calling Service Canada at 1\u2011833\u2011537\u20114342",
+    },
     errorMessage: {
       verificationCodeRequired: "Enter 5-digit verification code",
       verificationCodeMaxAttempts: "You have entered an incorrect verification code more than 5 times. You must request a new code using the “Request new verification code” link below.",

@@ -38,7 +38,6 @@ const HAS_DENTAL_INSURANCE_OPTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['applicationSpokes', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.spokes.dentalInsurance,
 } as const satisfies RouteHandleData;
 
@@ -48,7 +47,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   validateApplicationFlow(state, params, ['simplified-adult', 'full-adult', 'full-children', 'full-family', 'simplified-family']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSpokes', 'gcweb']);
 
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.dentalInsurance.title) }),
@@ -76,7 +75,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSpokes');
 
   const dentalInsuranceSchema = z
     .object({
@@ -129,7 +128,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplicationSpokeDentalInsurance({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSpokes', 'application']);
   const { defaultState, applicationFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
@@ -176,13 +175,13 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
                 legend={t(($) => $.dentalInsurance.legend)}
                 options={[
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.optionYes} />,
+                    children: <Trans ns="applicationSpokes" i18nKey={($) => $.dentalInsurance.optionYes} />,
                     value: HAS_DENTAL_INSURANCE_OPTION.yes,
                     defaultChecked: defaultState?.hasDentalInsurance === true,
                     onChange: handleOnHasDentalInsuranceChanged,
                   },
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.optionNo} />,
+                    children: <Trans ns="applicationSpokes" i18nKey={($) => $.dentalInsurance.optionNo} />,
                     value: HAS_DENTAL_INSURANCE_OPTION.no,
                     defaultChecked: defaultState?.hasDentalInsurance === false,
                     onChange: handleOnHasDentalInsuranceChanged,
@@ -217,7 +216,7 @@ export default function ApplicationSpokeDentalInsurance({ loaderData, params }: 
               <div className="mb-4 space-y-4">
                 <ContextualAlert type="info" id="dental-insurance-confirmation-no">
                   <h2 className="font-lato mb-2 text-xl font-semibold">{t(($) => $.dentalInsurance.no.alertTitle)}</h2>
-                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.dentalInsurance.no.alertBody} components={{ t4Href, t4aHref }} />
+                  <Trans ns="applicationSpokes" i18nKey={($) => $.dentalInsurance.no.alertBody} components={{ t4Href, t4aHref }} />
                 </ContextualAlert>
                 <InputCheckbox
                   id="dental-insurance-eligibility-confirmation-no"

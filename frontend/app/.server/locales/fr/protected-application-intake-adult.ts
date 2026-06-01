@@ -80,6 +80,7 @@ const ns = {
     addEmail: "Ajouter une adresse courriel",
     editEmail: "Modifier l'adresse courriel",
     emailUnchanged: "Mon adresse courriel n'a pas changé",
+    none: "Aucun",
   },
   submit: {
     pageTitle: "Soumettre votre demande",

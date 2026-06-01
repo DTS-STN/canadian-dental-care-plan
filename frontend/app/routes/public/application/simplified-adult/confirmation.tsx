@@ -29,7 +29,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationSimplifiedAdult', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.simplifiedAdult.confirmation,
 } as const satisfies RouteHandleData;
 
@@ -39,7 +38,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadPublicApplicationSimplifiedAdultState({ params, request, session });
   validateApplicationFlow(state, params, ['simplified-adult']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSimplifiedAdult', 'gcweb']);
   const locale = getLocale(request);
 
   // prettier-ignore
@@ -117,7 +116,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSimplifiedAdult');
 
   clearPublicApplicationState({ params, session });
 
@@ -125,10 +124,10 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function RenewAdultConfirm({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('applicationSimplifiedAdult');
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddress, mailingAddress, dentalInsurance, dentalBenefits, submissionInfo, surveyLink, eligibility } = loaderData;
-  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage(params.id);
 
   const mscaLinkAccount = <InlineLink to={t(($) => $.confirm.mscaLinkAccount)} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t(($) => $.confirm.mscaLinkChecker)} className="external-link" newTabIndicator target="_blank" />;
@@ -184,13 +183,13 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
         <section>
           <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.whatsNext)}</h2>
           <p className="mt-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.beginProcess} components={{ cdcpLink, mscaLinkAccount }} />
+            <Trans ns="applicationSimplifiedAdult" i18nKey={($) => $.confirm.beginProcess} components={{ cdcpLink, mscaLinkAccount }} />
           </p>
         </section>
         <section>
           <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.getUpdatesTitle)}</h2>
           <p className="my-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.getUpdatesText} components={{ mscaLinkAccount }} />
+            <Trans ns="applicationSimplifiedAdult" i18nKey={($) => $.confirm.getUpdatesText} components={{ mscaLinkAccount }} />
           </p>
           <ul className="list-disc space-y-1 pl-7">
             <li>{t(($) => $.confirm.view)}</li>
@@ -310,12 +309,10 @@ export default function RenewAdultConfirm({ loaderData, params }: Route.Componen
             </section>
           </section>
         </section>
-        <div className="my-6">
-          <div className="px-12 print:hidden">
-            <PrintButton size="lg" variant="primary" errorMessage={t(($) => $.confirm.printUnavailable)} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Print bottom - Application successfully submitted click">
-              {t(($) => $.confirm.printBtn)}
-            </PrintButton>
-          </div>
+        <div className="my-6 print:hidden">
+          <PrintButton size="lg" variant="primary" errorMessage={t(($) => $.confirm.printUnavailable)} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Print bottom - Application successfully submitted click">
+            {t(($) => $.confirm.printBtn)}
+          </PrintButton>
         </div>
         <Dialog>
           <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Renewal Form-Adult:Exit - Application successfully submitted click" asChild>

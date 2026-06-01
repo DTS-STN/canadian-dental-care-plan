@@ -20,7 +20,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationFullAdult', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.fullAdult.exitApplication,
 } as const satisfies RouteHandleData;
 
@@ -30,7 +29,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadPublicApplicationFullAdultState({ params, request, session });
   validateApplicationFlow(state, params, ['full-adult']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationFullAdult', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.exitApplication.pageTitle) }),
   };
@@ -46,7 +45,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationFullAdult');
 
   clearPublicApplicationState({ params, session });
 
@@ -54,7 +53,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function NewAdultExitApplication({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('applicationFullAdult');
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);

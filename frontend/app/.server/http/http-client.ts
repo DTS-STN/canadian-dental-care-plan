@@ -178,7 +178,7 @@ export class DefaultHttpClient implements HttpClient {
 
     // Check if the response status is configured to be retried
     const conditions = retryConditions[response.status];
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
     if (!conditions) {
       return response;
     }

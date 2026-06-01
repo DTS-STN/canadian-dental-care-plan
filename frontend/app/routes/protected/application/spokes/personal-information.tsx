@@ -31,7 +31,6 @@ import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils'
 import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.personalInformation,
 } as const satisfies RouteHandleData;
 
@@ -44,7 +43,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getProtectedApplicationState({ params, session });
   validateProtectedApplicationContext(state, params, 'intake');
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.personalInformation.pageTitle) }),
   };
@@ -65,7 +64,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = getProtectedApplicationState({ params, session });
   validateProtectedApplicationContext(state, params, 'intake');
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   const applicantInformationSchema = z
     .object({
@@ -214,7 +213,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplicationPersonalInformation({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationSpokes', 'protectedApplication']);
   const { state } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
@@ -261,7 +260,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               </div>
               <Collapsible id="name-instructions" summary={t(($) => $.personalInformation.singleLegalName)}>
                 <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.nameInstructions} />
+                  <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.personalInformation.nameInstructions} />
                 </p>
               </Collapsible>
               <DatePickerField

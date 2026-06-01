@@ -33,13 +33,13 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedProfile', 'gcweb'],
+  i18nPreloadNamespace: ['protectedProfile', 'gcweb'],
   layoutOptions: { breadcrumbs: <LayoutBreadcrumbs /> },
   pageIdentifier: pageIds.protected.profile.editCommunicationPreferences,
 } as const satisfies RouteHandleData;
 
 function LayoutBreadcrumbs(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedProfile');
   return (
     <ProtectedBreadcrumbs
       items={[
@@ -66,7 +66,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedProfile', 'gcweb']);
   const locale = getLocale(request);
 
   const meta = {
@@ -103,7 +103,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
   const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = appContainer.get(TYPES.ServerConfig);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedProfile');
 
   const formSchema = z.object({
     preferredLanguage: z
@@ -173,7 +173,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function EditCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedProfile');
   const { defaultState, languages, sunLifeCommunicationMethods, gcCommunicationMethods, isClientApplicationEmailAddressVerified } = loaderData;
   const { COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID } = useClientEnv();
 
@@ -240,9 +240,9 @@ export default function EditCommunicationPreferences({ loaderData, params }: Rou
     let children: ReactNode = <span className="font-semibold">{method.name}</span>;
 
     if (method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.editCommunicationPreferences.preferredMethodGcDigital} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
+      children = <Trans ns="protectedProfile" i18nKey={($) => $.editCommunicationPreferences.preferredMethodGcDigital} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
     } else if (method.id === COMMUNICATION_METHOD_GC_MAIL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.editCommunicationPreferences.preferredMethodGcMail} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
+      children = <Trans ns="protectedProfile" i18nKey={($) => $.editCommunicationPreferences.preferredMethodGcMail} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
     }
 
     return {

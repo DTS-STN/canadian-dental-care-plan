@@ -4,24 +4,11 @@ import type { Params } from 'react-router';
 import { generatePath, useMatches } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
-import type { FlatNamespace, KeysByTOptions, Namespace, ParseKeysByNamespaces, TOptions } from 'i18next';
+import type { Namespace } from 'i18next';
 import * as z from 'zod';
 
 import type { I18nPageRoute, I18nRoute, Language } from '~/routes/routes';
 import { i18nRoutes, isI18nLayoutRoute, isI18nPageRoute } from '~/routes/routes';
-
-/**
- * React-i18next internal Helpers
- *
- * A tuple type that requires at least one element of type T, but can contain additional elements of the same type.
- *
- * @template T - The type of the elements in the tuple.
- * @see https://github.com/i18next/react-i18next/blob/5e892a27a78b243b5c2eb3691da76ea1daa41b65/helpers.d.ts#L2
- */
-type $Tuple<T> = readonly [T?, ...T[]];
-
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByNamespaces<Namespace, KeysByTOptions<TOpt>>;
 
 /**
  * A reducer function that coalesces two values, returning the non-null (or non-undefined) value.
@@ -40,8 +27,6 @@ const buildInfoSchema = z
 const pageIdentifierSchema = z.string().readonly();
 
 export type BuildInfo = z.infer<typeof buildInfoSchema>;
-
-export type I18nNamespaces = $Tuple<FlatNamespace>;
 
 export type TransformAdobeAnalyticsUrl = (url: string | URL) => URL;
 
@@ -66,14 +51,33 @@ const DEFAULT_LAYOUT_OPTIONS: LayoutOptions = {};
  * Common data returned from a route's handle object.
  */
 export interface RouteHandleData extends Record<string, unknown | undefined> {
-  i18nNamespaces?: I18nNamespaces;
-  transformAdobeAnalyticsUrl?: TransformAdobeAnalyticsUrl;
+  /**
+   * Namespaces to preload into i18next during server-side initialization.
+   *
+   * React Router collects `i18nPreloadNamespace` from all matched route handles
+   * before the first render, building the complete set of namespaces needed for
+   * the current page. This ensures all translation keys are available before
+   * hydration without additional round-trips.
+   *
+   * - Layout routes declare all namespaces their subtree may need.
+   * - Leaf routes that fall outside a layout's coverage declare their own.
+   * - Routes fully covered by a parent layout may omit this property.
+   */
+  i18nPreloadNamespace?: Namespace;
+
   pageIdentifier?: PageIdentifier;
+
   /**
    * Layout options merged from parent to leaf routes.
    * Child route values override parent values; unset properties are inherited from parents.
    */
   layoutOptions?: Partial<LayoutOptions>;
+
+  /**
+   * Optional function to transform Adobe Analytics URLs. If provided, this function will be used by the
+   * `useTransformAdobeAnalyticsUrl` hook to transform URLs for Adobe Analytics tracking.
+   */
+  transformAdobeAnalyticsUrl?: TransformAdobeAnalyticsUrl;
 }
 
 export function useBuildInfo() {
@@ -91,11 +95,11 @@ export function useTransformAdobeAnalyticsUrl() {
     .reduce(coalesce);
 }
 
-export function useI18nNamespaces() {
+export function useI18nPreloadNamespaces() {
   const namespaces = useMatches()
     .map(({ handle }) => handle as RouteHandleData | undefined)
-    .flatMap((handle) => handle?.i18nNamespaces)
-    .filter((i18nNamespaces) => i18nNamespaces !== undefined);
+    .flatMap((handle) => handle?.i18nPreloadNamespace)
+    .filter((ns) => ns !== undefined);
   return [...new Set(namespaces)];
 }
 

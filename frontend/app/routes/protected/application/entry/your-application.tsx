@@ -26,7 +26,6 @@ import { formatSin } from '~/utils/sin-utils';
 const APPLICANT_TYPE = { adult: 'adult', family: 'family', children: 'children' } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.typeOfApplication,
 } as const satisfies RouteHandleData;
 
@@ -39,7 +38,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = getProtectedApplicationState({ params, session });
   validateProtectedApplicationContext(state, params, 'intake');
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplication', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.yourApplication.pageTitle) }),
   };
@@ -73,7 +72,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export default function TypeOfApplication({ loaderData, params }: Route.ComponentProps) {
   const { defaultState, nextRouteId, sections, showNewOrReturningMemberSection, locale } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplication');
 
   function getTypeOfApplication(typeOfApplication: string) {
     switch (typeOfApplication) {

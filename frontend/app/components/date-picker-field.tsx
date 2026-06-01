@@ -3,12 +3,11 @@ import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { InputError } from './input-error';
-import { InputHelp } from './input-help';
-import { InputLabel } from './input-label';
-import { InputLegend } from './input-legend';
-import { InputOption } from './input-option';
-
+import { InputError } from '~/components/input-error';
+import { InputHelp } from '~/components/input-help';
+import { InputLabel } from '~/components/input-label';
+import { InputLegend } from '~/components/input-legend';
+import { InputOption } from '~/components/input-option';
 import { useCurrentLanguage } from '~/hooks';
 import { extractDateParts, useMonths } from '~/utils/date-utils';
 import { padWithZero } from '~/utils/string-utils';

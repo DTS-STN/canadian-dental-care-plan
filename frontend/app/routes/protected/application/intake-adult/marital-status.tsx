@@ -23,7 +23,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationIntakeAdult', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.intakeAdult.maritalStatus,
 } as const satisfies RouteHandleData;
 
@@ -36,7 +35,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadProtectedApplicationIntakeAdultState({ params, request, session });
   validateApplicationFlow(state, params, ['intake-adult']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationIntakeAdult', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.maritalStatus.pageTitle) }),
   };
@@ -55,7 +54,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export default function NewAdultMaritalStatus({ loaderData, params }: Route.ComponentProps) {
   const { state, sections } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationIntakeAdult', 'protectedApplication']);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 

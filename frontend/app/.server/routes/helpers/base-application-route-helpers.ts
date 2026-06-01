@@ -5,6 +5,7 @@ import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos'
 import type { DeclaredChange } from '~/.server/routes/helpers/declared-change-type';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { EligibilityType } from '~/components/eligibility';
+import { expectDefined } from '~/utils/assert-utils';
 import { getAgeFromDateString } from '~/utils/date-utils';
 
 /**
@@ -225,7 +226,8 @@ export function getAgeCategoryReferenceDate(context: 'intake' | 'renewal'): stri
   if (context === 'intake') {
     // "intake" context age reference date is today's date,
     // as the age is calculated at the time of application submission.
-    return now.toISOString().split('T')[0];
+    const [date] = now.toISOString().split('T');
+    return expectDefined(date, `Expected date to be defined for context [${context}] and current date [${now.toISOString()}]`);
   }
 
   // "renewal" context age reference date is the end of the current coverage year (June 30th)

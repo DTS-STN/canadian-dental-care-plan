@@ -23,7 +23,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { secondsToMilliseconds } from '~/utils/units.utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.index,
 } as const satisfies RouteHandleData;
 
@@ -66,7 +65,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
   const state = startProtectedApplicationState({ session, applicationYear, clientApplication });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplication', 'gcweb']);
   const meta = { title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.index.pageTitle) }) };
 
   return { id: state.id, meta };
@@ -78,10 +77,10 @@ const NAVIGATION_DELAY_MS = secondsToMilliseconds(1);
 export default function ProtectedApplicationIndex({ loaderData, params }: Route.ComponentProps) {
   const { id } = loaderData;
 
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplication');
   const navigation = useNavigation();
   const navigate = useNavigate();
-  const { set: setApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { set: setApplicationFlowStorageValue } = useApplicationFlowStorage(id);
 
   const isIdle = navigation.state === 'idle';
   const eligibilityRequirementsPath = getPathById('protected/application/$id/eligibility-requirements', { ...params, id });

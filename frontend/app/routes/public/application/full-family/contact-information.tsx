@@ -24,7 +24,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationFullFamily', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.fullFamily.contactInformation,
 } as const satisfies RouteHandleData;
 
@@ -34,7 +33,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadPublicApplicationFullFamilyState({ params, request, session });
   validateApplicationFlow(state, params, ['full-family']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationFullFamily', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.contactInformation.pageTitle) }),
   };
@@ -82,7 +81,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export default function NewFamilyContactInformation({ loaderData, params }: Route.ComponentProps) {
   const { state, mailingAddressInfo, homeAddressInfo, preferredLanguage, preferredMethod, preferredNotificationMethod, sections } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationFullFamily', 'application']);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 
@@ -106,7 +105,7 @@ export default function NewFamilyContactInformation({ loaderData, params }: Rout
             {state.phoneNumber?.hasChanged ? (
               <DefinitionList layout="single-column">
                 <DefinitionListItem term={t(($) => $.contactInformation.phoneNumber)}>{state.phoneNumber.value.primary}</DefinitionListItem>
-                {state.phoneNumber.value.alternate && <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber)}>{state.phoneNumber.value.alternate}</DefinitionListItem>}
+                <DefinitionListItem term={t(($) => $.contactInformation.altPhoneNumber)}>{state.phoneNumber.value.alternate ?? t(($) => $.contactInformation.none)}</DefinitionListItem>
               </DefinitionList>
             ) : (
               <p>{t(($) => $.contactInformation.phoneNumberHelp)}</p>

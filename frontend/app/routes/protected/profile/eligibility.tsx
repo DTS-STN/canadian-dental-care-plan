@@ -20,7 +20,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedProfile', 'gcweb'],
+  i18nPreloadNamespace: ['protectedProfile', 'gcweb'],
   pageIdentifier: pageIds.protected.profile.eligibility,
 } as const satisfies RouteHandleData;
 
@@ -63,7 +63,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const applicants = [primaryApplicant, ...children];
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedProfile', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.eligibility.pageTitle) }),
   };
@@ -84,7 +84,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedProfileEligibility({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedProfile', 'gcweb']);
   const { applicants, SCCH_BASE_URI, currentCoverage, isWithinRenewalPeriod } = loaderData;
   const { ELIGIBILITY_STATUS_CODE_ELIGIBLE } = useClientEnv();
 
@@ -184,7 +184,7 @@ interface EligibilityStatusIndicatorProps {
 }
 
 export function EligibilityStatusIndicator({ status, coverageStartYear, coverageEndYear }: EligibilityStatusIndicatorProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedProfile');
   const params = useParams();
 
   if (status === 'eligible') {

@@ -29,7 +29,6 @@ const LIVING_INDEPENDENTLY_OPTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.livingIndependently,
 } as const satisfies RouteHandleData;
 
@@ -40,7 +39,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
 
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.livingIndependently.pageTitle) }),
@@ -56,7 +55,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   const state = getProtectedApplicationState({ params, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   /**
    * Schema for living independently.
@@ -91,7 +90,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyFlowLivingIndependently({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationSpokes', 'protectedApplication']);
   const { defaultState, context } = loaderData;
 
   const fetcher = useFetcher<typeof action>();

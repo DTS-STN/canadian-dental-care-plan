@@ -20,7 +20,6 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.parentOrGuardian,
 } as const satisfies RouteHandleData;
 
@@ -31,7 +30,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
 
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.parentOrGuardian.pageTitle) }),
@@ -58,7 +57,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   clearProtectedApplicationState({ params, session });
 
@@ -66,9 +65,9 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplicationSpokes');
   const { ageCategory, context } = loaderData;
-  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage(params.id);
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
@@ -98,7 +97,7 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
         <div className="mb-8 space-y-4">
           <p className="mb-4">{t(($) => $.parentOrGuardian.unableToApply)}</p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.parentOrGuardian.applyForYourself} components={{ noWrap }} />
+            <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.parentOrGuardian.applyForYourself} components={{ noWrap }} />
           </p>
         </div>
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">

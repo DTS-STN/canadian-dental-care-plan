@@ -1,8 +1,7 @@
 import { useLocation } from 'react-router';
 
-import { normalizeSpaces } from './string-utils';
-
 import { APP_LOCALES, removeLanguageFromPath } from '~/utils/locale-utils';
+import { normalizeSpaces } from '~/utils/string-utils';
 
 /**
  * Custom hook to generate a canonical URL based on the current location and language.

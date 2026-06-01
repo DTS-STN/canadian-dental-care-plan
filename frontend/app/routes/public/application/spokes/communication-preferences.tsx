@@ -45,7 +45,6 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 }
 
 export const handle = {
-  i18nNamespaces: ['applicationSpokes', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.spokes.communicationPreferences,
 } as const satisfies RouteHandleData;
 
@@ -55,7 +54,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getPublicApplicationState({ params, session });
   validateApplicationFlow(state, params, ['full-adult', 'full-children', 'full-family', 'simplified-adult', 'simplified-family', 'simplified-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSpokes', 'gcweb']);
   const locale = getLocale(request);
 
   const meta = {
@@ -89,7 +88,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSpokes');
 
   const applicationFlow: ApplicationFlow = `${state.inputModel}-${state.typeOfApplication}`;
 
@@ -155,7 +154,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplicationSpokeCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSpokes', 'application']);
   const { defaultState, applicationFlow, gcCommunicationMethods, sunLifeCommunicationMethods, COMMUNICATION_METHOD_GC_MAIL_ID, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID } = loaderData;
 
   const [preferredMethod, setPreferredMethod] = useState(defaultState?.preferredMethod ?? COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID);
@@ -216,7 +215,7 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
     let children: ReactNode = <span className="font-semibold">{method.name}</span>;
 
     if (method.id === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.communicationPreferences.byEmail} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
+      children = <Trans ns="applicationSpokes" i18nKey={($) => $.communicationPreferences.byEmail} values={{ name: method.name }} components={{ span: <span className="font-semibold" /> }} />;
     }
 
     return {
@@ -232,9 +231,9 @@ export default function ApplicationSpokeCommunicationPreferences({ loaderData, p
     let children: ReactNode = <span className="font-semibold">{method.name}</span>;
 
     if (method.id === COMMUNICATION_METHOD_GC_DIGITAL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.communicationPreferences.preferredNotificationMethodMsca} values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />;
+      children = <Trans ns="applicationSpokes" i18nKey={($) => $.communicationPreferences.preferredNotificationMethodMsca} values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />;
     } else if (method.id === COMMUNICATION_METHOD_GC_MAIL_ID) {
-      children = <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.communicationPreferences.preferredNotificationMethodMail} values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />;
+      children = <Trans ns="applicationSpokes" i18nKey={($) => $.communicationPreferences.preferredNotificationMethodMail} values={{ name: method.name }} components={{ span: <span className="font-semibold" />, mscaLinkAccount }} />;
     }
 
     return {

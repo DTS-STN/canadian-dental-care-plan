@@ -45,7 +45,6 @@ type ClientDentalBenefits = {
 const FORM_ACTION = { DENTAL_BENEFITS_NOT_CHANGED: 'dental-benefits-not-changed' } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationRenewalFamily', 'protectedApplication', 'gcweb', 'common'],
   pageIdentifier: pageIds.protected.application.renewalFamily.childApplication,
 } as const satisfies RouteHandleData;
 
@@ -58,7 +57,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadProtectedApplicationRenewalFamilyState({ params, request, session });
   validateApplicationFlow(state, params, ['renewal-family']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationRenewalFamily', 'gcweb']);
   const locale = getLocale(request);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.childrensApplication.pageTitle) }),
@@ -189,7 +188,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ProtectedRenewFamilyChildrensApplication({ loaderData, params }: Route.ComponentProps) {
   const { state, childrenSections } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication', 'common']);
 
   const allChildrenCompleted = Object.keys(childrenSections).length > 0 && Object.values(childrenSections).every((sections) => Object.values(sections).every((section) => section.completed));
 
@@ -296,7 +295,7 @@ export default function ProtectedRenewFamilyChildrensApplication({ loaderData, p
  * - If there is no SIN at all, show the help text.
  */
 function ChildSinCardContent({ child }: { child: Route.ComponentProps['loaderData']['state']['children'][0] }): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication', 'common']);
 
   // User-entered SIN takes precedence
   if (child.information?.socialInsuranceNumber) {
@@ -325,7 +324,7 @@ function ChildSinCardContent({ child }: { child: Route.ComponentProps['loaderDat
  * - If there is no SIN at all, show the "Add" button.
  */
 function ChildSinCardFooter({ child, params }: { child: Route.ComponentProps['loaderData']['state']['children'][0]; sectionCompleted: boolean; params: Route.ComponentProps['params'] }): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication', 'common']);
 
   if (child.information?.socialInsuranceNumber !== undefined) {
     return (
@@ -372,7 +371,7 @@ function ChildSinCardFooter({ child, params }: { child: Route.ComponentProps['lo
  * - If there is no parent/guardian status at all, show the help text.
  */
 function ChildParentGuardianCardContent({ child }: { child: Route.ComponentProps['loaderData']['state']['children'][0] }): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication', 'common']);
 
   // User-entered value takes precedence
   if (child.information?.isParent !== undefined) {
@@ -401,7 +400,7 @@ function ChildParentGuardianCardContent({ child }: { child: Route.ComponentProps
  * - If there is no value at all, show the "Add" button.
  */
 function ChildParentGuardianCardFooter({ child, sectionCompleted, params }: { child: Route.ComponentProps['loaderData']['state']['children'][0]; sectionCompleted: boolean; params: Route.ComponentProps['params'] }): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication', 'common']);
 
   if (child.information?.isParent !== undefined || sectionCompleted) {
     return (
@@ -448,7 +447,7 @@ function ChildParentGuardianCardFooter({ child, sectionCompleted, params }: { ch
  * - If the user has not entered dental insurance information, show the help text.
  */
 function ChildDentalInsuranceCardContent({ child }: { child: Route.ComponentProps['loaderData']['state']['children'][0] }): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication', 'common']);
 
   if (child.dentalInsurance !== undefined) {
     return (
@@ -487,7 +486,7 @@ function ChildDentalInsuranceCardFooter({
   sectionCompleted: boolean;
   params: Route.ComponentProps['params'];
 }): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication', 'common']);
 
   if (dentalInsurance !== undefined || sectionCompleted) {
     return (
@@ -541,7 +540,7 @@ function ChildDentalInsuranceCardFooter({
  * - If there are no dental benefits at all, show the help text.
  */
 function ChildDentalBenefitsCardContent({ child }: { child: Route.ComponentProps['loaderData']['state']['children'][0] }): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication', 'common']);
 
   // Helper function to render benefits
   const renderBenefits = (benefits: ClientDentalBenefits) => {
@@ -594,7 +593,7 @@ function ChildDentalBenefitsCardContent({ child }: { child: Route.ComponentProps
  *   show the "Add" button.
  */
 function ChildDentalBenefitsCardFooter({ child, sectionCompleted, params }: { child: Route.ComponentProps['loaderData']['state']['children'][0]; sectionCompleted: boolean; params: Route.ComponentProps['params'] }): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationRenewalFamily', 'protectedApplication', 'common']);
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 

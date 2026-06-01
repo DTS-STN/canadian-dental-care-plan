@@ -36,7 +36,6 @@ const CHECKBOX_VALUE = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['applicationSimplifiedAdult', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.simplifiedAdult.submit,
 } as const satisfies RouteHandleData;
 
@@ -46,7 +45,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadPublicApplicationSimplifiedAdultStateForReview({ params, request, session });
   validateApplicationFlow(state, params, ['simplified-adult']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSimplifiedAdult', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.submit.pageTitle) }),
   };
@@ -73,7 +72,7 @@ export async function action({ context: { appContainer, session }, request, para
   validateApplicationFlow(state, params, ['simplified-adult']);
 
   const formData = await request.formData();
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSimplifiedAdult');
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
@@ -110,7 +109,7 @@ export async function action({ context: { appContainer, session }, request, para
 
 export default function RenewAdultSubmit({ loaderData, params }: Route.ComponentProps) {
   const { state, payload } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('applicationSimplifiedAdult');
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
@@ -168,7 +167,7 @@ export default function RenewAdultSubmit({ loaderData, params }: Route.Component
               <h2 className="font-lato text-3xl leading-none font-bold">{t(($) => $.submit.submitYourApplication)}</h2>
               <p>{t(($) => $.submit.bySubmitting)}</p>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.applicationSimplifiedAdult.submit.reviewEligibilityCriteria} components={{ eligibilityLink }} />
+                <Trans ns="applicationSimplifiedAdult" i18nKey={($) => $.submit.reviewEligibilityCriteria} components={{ eligibilityLink }} />
               </p>
               <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
                 <CsrfTokenInput />

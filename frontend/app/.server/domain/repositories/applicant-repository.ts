@@ -298,9 +298,9 @@ export class MockApplicantRepository implements ApplicantRepository {
   async findApplicantByBasicInfo(request: FindApplicantByBasicInfoRequestEntity): Promise<Option<ApplicantResponseEntity>> {
     this.log.debug('Fetching applicant by basic info [%j]', request);
 
-    const reqClientNumber = request.Applicant.ClientIdentification.at(0)?.IdentificationID;
+    const reqClientNumber = request.Applicant.ClientIdentification[0]?.IdentificationID;
     invariant(reqClientNumber, 'Client number must be defined');
-    const reqFirstName = request.Applicant.PersonName.PersonGivenName.at(0);
+    const reqFirstName = request.Applicant.PersonName.PersonGivenName[0];
     invariant(reqFirstName, 'First name must be defined');
     const reqLastName = request.Applicant.PersonName.PersonSurName;
     const reqBirthDate = request.Applicant.PersonBirthDate.date;

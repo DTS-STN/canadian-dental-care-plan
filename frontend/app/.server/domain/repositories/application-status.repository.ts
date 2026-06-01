@@ -10,6 +10,7 @@ import clientFriendlyStatusDataSource from '~/.server/resources/power-platform/c
 import { HttpStatusCodes } from '~/constants/http-status-codes';
 import { AppError } from '~/errors/app-error';
 import { ErrorCodes } from '~/errors/error-codes';
+import { expectDefined } from '~/utils/assert-utils';
 
 /**
  * A repository that provides access to application status data.
@@ -209,13 +210,15 @@ export class MockApplicationStatusRepository implements ApplicationStatusReposit
   async getApplicationStatusByBasicInfo(applicationStatusBasicInfoRequestEntity: ApplicationStatusBasicInfoRequestEntity): Promise<ApplicationStatusEntity> {
     this.log.debug('Fetching application status for basic info [%j]', applicationStatusBasicInfoRequestEntity);
 
-    const statusCode = this.MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP[applicationStatusBasicInfoRequestEntity.BenefitApplication.Applicant.ClientIdentification[0].IdentificationID];
+    const applicationCode = expectDefined(applicationStatusBasicInfoRequestEntity.BenefitApplication.Applicant.ClientIdentification[0]?.IdentificationID, 'Expected applicationCode to be defined');
+
+    const statusCode = this.MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP[applicationCode];
 
     const applicationStatusEntity: ApplicationStatusEntity = {
       BenefitApplication: {
         BenefitApplicationStatus: [
           {
-            ReferenceDataID: statusCode || 'c23252fe-604e-ee11-be6f-000d3a09d640',
+            ReferenceDataID: statusCode ?? 'c23252fe-604e-ee11-be6f-000d3a09d640',
             ReferenceDataName: 'Dental Status Code',
           },
         ],
@@ -229,13 +232,15 @@ export class MockApplicationStatusRepository implements ApplicationStatusReposit
   async getApplicationStatusBySin(applicationStatusSinRequestEntity: ApplicationStatusSinRequestEntity): Promise<ApplicationStatusEntity> {
     this.log.debug('Fetching application status for sin [%j]', applicationStatusSinRequestEntity);
 
-    const statusCode = this.MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP[applicationStatusSinRequestEntity.BenefitApplication.Applicant.ClientIdentification[0].IdentificationID];
+    const applicationCode = expectDefined(applicationStatusSinRequestEntity.BenefitApplication.Applicant.ClientIdentification[0]?.IdentificationID, 'Expected applicationCode to be defined');
+
+    const statusCode = this.MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP[applicationCode];
 
     const applicationStatusEntity: ApplicationStatusEntity = {
       BenefitApplication: {
         BenefitApplicationStatus: [
           {
-            ReferenceDataID: statusCode || 'c23252fe-604e-ee11-be6f-000d3a09d640',
+            ReferenceDataID: statusCode ?? 'c23252fe-604e-ee11-be6f-000d3a09d640',
             ReferenceDataName: 'Dental Status Code',
           },
         ],

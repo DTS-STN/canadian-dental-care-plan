@@ -394,17 +394,21 @@ export function getSingleChildState({ params, session }: getSingleChildStateArgs
   const log = createLogger('protected-application-route-helpers.server/ProtectedApplicationSingleChildState');
   const applicationState = getProtectedApplicationState({ params, session });
   const childId = params.childId;
-  const childStateIndex = applicationState.children.findIndex(({ id }) => id === childId);
+  const childState = applicationState.children.find(({ id }) => id === childId);
 
-  if (childStateIndex === -1) {
+  if (!childState) {
     log.warn('Protected application single child has not been found; stateId: [%s] childId: [%s]', applicationState.id, childId);
     throw data(null, { status: 404 });
   }
 
-  const childState = applicationState.children[childStateIndex];
+  const childNumber = applicationState.children.indexOf(childState) + 1;
   const isNew = isNewChildState(childState);
 
-  return { ...childState, childNumber: childStateIndex + 1, isNew };
+  return {
+    ...childState,
+    childNumber,
+    isNew,
+  };
 }
 
 /**

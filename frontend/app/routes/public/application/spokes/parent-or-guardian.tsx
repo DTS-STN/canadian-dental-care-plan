@@ -20,7 +20,6 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationSpokes', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.spokes.parentOrGuardian,
 } as const satisfies RouteHandleData;
 
@@ -28,7 +27,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSpokes', 'gcweb']);
 
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.parentOrGuardian.pageTitle) }),
@@ -50,7 +49,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSpokes');
 
   clearPublicApplicationState({ params, session });
 
@@ -58,9 +57,9 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('applicationSpokes');
   const { ageCategory } = loaderData;
-  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage(params.id);
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
@@ -87,7 +86,7 @@ export default function ApplyFlowParentOrGuardian({ loaderData, params }: Route.
       <div className="mb-8 max-w-prose space-y-4">
         <p className="mb-4">{t(($) => $.parentOrGuardian.unableToApply)}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.parentOrGuardian.applyForYourself} components={{ noWrap }} />
+          <Trans ns="applicationSpokes" i18nKey={($) => $.parentOrGuardian.applyForYourself} components={{ noWrap }} />
         </p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">

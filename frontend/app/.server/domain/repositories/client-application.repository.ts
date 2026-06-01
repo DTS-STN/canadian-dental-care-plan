@@ -12,6 +12,7 @@ import clientApplicationJsonDataSource from '~/.server/resources/power-platform/
 import { HttpStatusCodes } from '~/constants/http-status-codes';
 import { AppError } from '~/errors/app-error';
 import { ErrorCodes } from '~/errors/error-codes';
+import { expectDefined } from '~/utils/assert-utils';
 
 /**
  * A repository that provides access to client application data.
@@ -257,8 +258,8 @@ export class MockClientApplicationRepository implements ClientApplicationReposit
   async findClientApplicationByBasicInfo(clientApplicationBasicInfoRequestEntity: ClientApplicationBasicInfoRequestEntity): Promise<Option<ClientApplicationEntity>> {
     this.log.debug('Fetching client application for basic info [%j]', clientApplicationBasicInfoRequestEntity);
 
-    const identificationId = clientApplicationBasicInfoRequestEntity.Applicant.ClientIdentification[0].IdentificationID;
-    const personGivenName = clientApplicationBasicInfoRequestEntity.Applicant.PersonName.PersonGivenName[0];
+    const identificationId = expectDefined(clientApplicationBasicInfoRequestEntity.Applicant.ClientIdentification[0]?.IdentificationID, 'Expected identificationId to be defined');
+    const personGivenName = expectDefined(clientApplicationBasicInfoRequestEntity.Applicant.PersonName.PersonGivenName[0], 'Expected personGivenName to be defined');
     const personSurName = clientApplicationBasicInfoRequestEntity.Applicant.PersonName.PersonSurName;
     const personBirthDate = clientApplicationBasicInfoRequestEntity.Applicant.PersonBirthDate.date;
 

@@ -22,7 +22,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationIntakeFamily', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.intakeFamily.dentalInsurance,
 } as const satisfies RouteHandleData;
 
@@ -35,7 +34,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadProtectedApplicationIntakeFamilyState({ params, request, session });
   validateApplicationFlow(state, params, ['intake-family']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationIntakeFamily', 'gcweb']);
   const locale = getLocale(request);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.dentalInsurance.pageTitle) }),
@@ -76,7 +75,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export default function ProtectedNewFamilyDentalInsurance({ loaderData, params }: Route.ComponentProps) {
   const { state, sections } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationIntakeFamily', 'protectedApplication']);
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 

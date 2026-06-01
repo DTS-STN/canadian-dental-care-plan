@@ -81,7 +81,7 @@ describe('DefaultProvinceTerritoryStateRepository', () => {
     const repository = new DefaultProvinceTerritoryStateRepository(serverConfigMock, httpClientMock);
     const actual = await repository.listAllProvinceTerritoryStates();
 
-    expect(actual).toEqual(responseDataMock.value[0].esdc_ProvinceTerritoryState_Countryid_esd);
+    expect(actual).toEqual(responseDataMock.value[0]?.esdc_ProvinceTerritoryState_Countryid_esd);
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.province-territory-states.gets',
       new URL(
@@ -135,7 +135,7 @@ describe('DefaultProvinceTerritoryStateRepository', () => {
     const repository = new DefaultProvinceTerritoryStateRepository(serverConfigMock, httpClientMock);
     const actual = await repository.findProvinceTerritoryStateById('1');
 
-    expect(actual.unwrap()).toEqual(responseDataMock.value[0].esdc_ProvinceTerritoryState_Countryid_esd[0]);
+    expect(actual.unwrap()).toEqual(responseDataMock.value[0]?.esdc_ProvinceTerritoryState_Countryid_esd[0]);
     expect(httpClientMock.instrumentedFetch).toHaveBeenCalledExactlyOnceWith(
       'http.client.interop-api.province-territory-states.gets',
       new URL(

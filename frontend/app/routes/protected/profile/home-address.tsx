@@ -41,13 +41,13 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedProfile', 'gcweb'],
+  i18nPreloadNamespace: ['protectedProfile', 'gcweb'],
   layoutOptions: { breadcrumbs: <LayoutBreadcrumbs /> },
   pageIdentifier: pageIds.protected.profile.editHomeAddress,
 } as const satisfies RouteHandleData;
 
 function LayoutBreadcrumbs(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedProfile');
   return (
     <ProtectedBreadcrumbs
       items={[
@@ -67,7 +67,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedProfile', 'gcweb']);
   const locale = getLocale(request);
 
   const countryList = await appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
@@ -229,7 +229,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function EditHomeAddress({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedProfile');
   const { defaultState, countryList, regionList } = loaderData;
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useClientEnv();
 

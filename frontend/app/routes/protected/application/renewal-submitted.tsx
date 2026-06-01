@@ -17,7 +17,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.renewalSubmitted,
 } as const satisfies RouteHandleData;
 
@@ -27,7 +26,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplication', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.renewalSubmitted.pageTitle) }),
   };
@@ -42,12 +41,12 @@ export async function action({ context: { appContainer, session }, params, reque
   const formData = await request.formData();
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplication');
   return redirect(t(($) => $.renewalSubmitted.exitBtnLink));
 }
 
 export default function RenewalApplicationSubmitted({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplication');
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
@@ -63,10 +62,10 @@ export default function RenewalApplicationSubmitted({ loaderData, params }: Rout
         <div className="mb-6 space-y-4">
           <p>{t(($) => $.renewalSubmitted.recordsShowApplicationSubmitted)}</p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.renewalSubmitted.statusCheckerInfo} components={{ statusCheckerLink }} />
+            <Trans ns="protectedApplication" i18nKey={($) => $.renewalSubmitted.statusCheckerInfo} components={{ statusCheckerLink }} />
           </p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.renewalSubmitted.updateProfileInfo} components={{ mscaLinkAccount, noWrap }} />
+            <Trans ns="protectedApplication" i18nKey={($) => $.renewalSubmitted.updateProfileInfo} components={{ mscaLinkAccount, noWrap }} />
           </p>
         </div>
         <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">

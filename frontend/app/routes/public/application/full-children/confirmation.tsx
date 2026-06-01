@@ -28,7 +28,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationFullChild', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.fullChild.confirmation,
 } as const satisfies RouteHandleData;
 
@@ -38,7 +37,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadPublicApplicationFullChildState({ params, request, session });
   validateApplicationFlow(state, params, ['full-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationFullChild', 'gcweb']);
   const locale = getLocale(request);
 
   // prettier-ignore
@@ -127,7 +126,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationFullChild');
 
   clearPublicApplicationState({ params, session });
 
@@ -135,8 +134,8 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function NewChildrenConfirmation({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { t } = useTranslation('applicationFullChild');
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage(params.id);
 
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddress, mailingAddress, submissionInfo, surveyLink, children } = loaderData;
@@ -192,14 +191,14 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
         <section>
           <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.checkStatus)}</h2>
           <p className="mt-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.cdcpChecker} components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
+            <Trans ns="applicationFullChild" i18nKey={($) => $.confirm.cdcpChecker} components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
           </p>
           <p className="mt-4">{t(($) => $.confirm.useCode)}</p>
         </section>
         <section>
           <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.getUpdatesTitle)}</h2>
           <p className="mt-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.getUpdatesText} components={{ mscaLinkAccount }} />
+            <Trans ns="applicationFullChild" i18nKey={($) => $.confirm.getUpdatesText} components={{ mscaLinkAccount }} />
           </p>
           <p className="mt-4">{t(($) => $.confirm.getUpdatesInfo)}</p>
           <ul className="list-disc space-y-1 pl-7">
@@ -340,12 +339,10 @@ export default function NewChildrenConfirmation({ loaderData, params }: Route.Co
             })}
           </div>
         </section>
-        <div className="my-6">
-          <div className="px-12 print:hidden">
-            <PrintButton size="lg" variant="primary" errorMessage={t(($) => $.confirm.printUnavailable)} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Print bottom - Application successfully submitted click">
-              {t(($) => $.confirm.printBtn)}
-            </PrintButton>
-          </div>
+        <div className="my-6 print:hidden">
+          <PrintButton size="lg" variant="primary" errorMessage={t(($) => $.confirm.printUnavailable)} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Print bottom - Application successfully submitted click">
+            {t(($) => $.confirm.printBtn)}
+          </PrintButton>
         </div>
         <Dialog>
           <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Full_Child:Exit - Application successfully submitted click" asChild>

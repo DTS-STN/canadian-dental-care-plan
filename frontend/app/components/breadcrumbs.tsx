@@ -8,8 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import type { SetOptional } from 'type-fest';
 
-import { InlineLink } from './inline-link';
-
+import { InlineLink } from '~/components/inline-link';
 import { getClientEnv } from '~/utils/env-utils';
 
 interface BreadcrumbsProps {

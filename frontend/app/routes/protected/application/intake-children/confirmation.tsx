@@ -28,7 +28,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationIntakeChild', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.intakeChild.confirmation,
 } as const satisfies RouteHandleData;
 
@@ -41,7 +40,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = loadProtectedApplicationIntakeChildState({ params, request, session });
   validateApplicationFlow(state, params, ['intake-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationIntakeChild', 'gcweb']);
   const locale = getLocale(request);
 
   // prettier-ignore
@@ -131,7 +130,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationIntakeChild');
 
   clearProtectedApplicationState({ params, session });
 
@@ -139,10 +138,10 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedNewChildrenConfirmation({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedApplicationIntakeChild');
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddress, mailingAddress, submissionInfo, surveyLink, children } = loaderData;
-  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage(params.id);
 
   const mscaLinkAccount = <InlineLink to={t(($) => $.confirm.mscaLinkAccount)} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t(($) => $.confirm.statusCheckerLink)} className="external-link" newTabIndicator target="_blank" />;
@@ -195,14 +194,14 @@ export default function ProtectedNewChildrenConfirmation({ loaderData, params }:
         <section>
           <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.checkStatus)}</h2>
           <p className="mt-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.cdcpChecker} components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
+            <Trans ns="protectedApplicationIntakeChild" i18nKey={($) => $.confirm.cdcpChecker} components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
           </p>
           <p className="mt-4">{t(($) => $.confirm.useCode)}</p>
         </section>
         <section>
           <h2 className="font-lato text-3xl font-bold">{t(($) => $.confirm.getUpdatesTitle)}</h2>
           <p className="mt-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.confirm.getUpdatesText} components={{ mscaLinkAccount }} />
+            <Trans ns="protectedApplicationIntakeChild" i18nKey={($) => $.confirm.getUpdatesText} components={{ mscaLinkAccount }} />
           </p>
           <p className="mt-4">{t(($) => $.confirm.getUpdatesInfo)}</p>
           <ul className="list-disc space-y-1 pl-7">
@@ -259,11 +258,6 @@ export default function ProtectedNewChildrenConfirmation({ loaderData, params }:
                 <DefinitionListItem term={t(($) => $.confirm.altPhoneNumber)}>
                   <span className="text-nowrap">{userInfo.phoneNumber.alternate}</span>
                 </DefinitionListItem>
-                {userInfo.email && (
-                  <DefinitionListItem term={t(($) => $.confirm.email)}>
-                    <span className="text-nowrap">{userInfo.email}</span>
-                  </DefinitionListItem>
-                )}
                 <DefinitionListItem term={t(($) => $.confirm.mailing)}>
                   <Address
                     address={{
@@ -294,6 +288,11 @@ export default function ProtectedNewChildrenConfirmation({ loaderData, params }:
               <DefinitionList border>
                 <DefinitionListItem term={t(($) => $.confirm.langPref)}>{userInfo.communicationPreferences.preferredLanguage.name}</DefinitionListItem>
                 <DefinitionListItem term={t(($) => $.confirm.sunLifeCommPrefTitle)}>{userInfo.communicationPreferences.preferredMethodSunLife.name}</DefinitionListItem>
+                {userInfo.email && (
+                  <DefinitionListItem term={t(($) => $.confirm.email)}>
+                    <span className="text-nowrap">{userInfo.email}</span>
+                  </DefinitionListItem>
+                )}
               </DefinitionList>
             </section>
           </section>
@@ -342,12 +341,10 @@ export default function ProtectedNewChildrenConfirmation({ loaderData, params }:
             })}
           </div>
         </section>
-        <div className="my-6">
-          <div className="px-12 print:hidden">
-            <PrintButton size="lg" variant="primary" errorMessage={t(($) => $.confirm.printUnavailable)} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Print bottom - Application successfully submitted click">
-              {t(($) => $.confirm.printBtn)}
-            </PrintButton>
-          </div>
+        <div className="my-6 print:hidden">
+          <PrintButton size="lg" variant="primary" errorMessage={t(($) => $.confirm.printUnavailable)} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Print bottom - Application successfully submitted click">
+            {t(($) => $.confirm.printBtn)}
+          </PrintButton>
         </div>
         <Dialog>
           <DialogTrigger className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Protected-Intake_Child:Exit - Application successfully submitted click" asChild>

@@ -5,13 +5,13 @@ import { Link } from 'react-router';
 
 import { faArrowRightFromBracket, faChevronDown, faCircleUser, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { Namespace } from 'i18next';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { AppLink } from '../app-link';
-import { Banner } from '../banner';
-import { ButtonLink } from '../buttons';
-
+import { AppLink } from '~/components/app-link';
+import { Banner } from '~/components/banner';
 import { ProtectedBreadcrumbs } from '~/components/breadcrumbs';
+import { ButtonLink } from '~/components/buttons';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '~/components/dropdown-menu';
 import { InlineLink } from '~/components/inline-link';
 import { PageDetails } from '~/components/page-details';
@@ -23,9 +23,8 @@ import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
 import { useLayoutOptions } from '~/utils/route-utils';
-import type { I18nNamespaces } from '~/utils/route-utils';
 
-export const i18nNamespaces = ['gcweb'] satisfies I18nNamespaces;
+export const protectedLayoutI18nNamespace = 'gcweb' satisfies Namespace;
 
 /**
  * GCWeb Application page template.
@@ -47,7 +46,7 @@ export function ProtectedLayout({ children }: PropsWithChildren) {
 }
 
 function NavigationMenu() {
-  const { t, i18n } = useTranslation(i18nNamespaces);
+  const { t, i18n } = useTranslation(protectedLayoutI18nNamespace);
   const { SCCH_BASE_URI } = getClientEnv();
 
   return (
@@ -104,7 +103,7 @@ function NavigationMenu() {
 }
 
 function PageHeader() {
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(protectedLayoutI18nNamespace);
   const { SCCH_BASE_URI } = getClientEnv();
   const browserCompatiblityBanner = useBrowserCompatiblityBanner();
 
@@ -201,7 +200,7 @@ interface NotFoundErrorProps {
 }
 
 export function NotFoundError({ error }: NotFoundErrorProps) {
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(protectedLayoutI18nNamespace);
   const { SCCH_BASE_URI } = getClientEnv();
   const dashboard = <InlineLink to={t(($) => $.header.menuDashboardHref, { baseUri: SCCH_BASE_URI })} />;
 
@@ -222,7 +221,7 @@ export function NotFoundError({ error }: NotFoundErrorProps) {
         <p className="mb-8 text-lg text-gray-500">{t(($) => $.protectedNotFound.pageMessage)}</p>
         <ul className="list-disc space-y-2 pl-10">
           <li>
-            <Trans ns={i18nNamespaces} i18nKey={($) => $.protectedNotFound.pageLink} components={{ dashboard }} />
+            <Trans ns={protectedLayoutI18nNamespace} i18nKey={($) => $.protectedNotFound.pageLink} components={{ dashboard }} />
           </li>
         </ul>
         <PageDetails />
@@ -237,7 +236,7 @@ interface ServerErrorProps {
 }
 
 export function ServerError({ error }: ServerErrorProps) {
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(protectedLayoutI18nNamespace);
   const home = <InlineLink to="/" />;
 
   useEffect(() => {
@@ -264,7 +263,7 @@ export function ServerError({ error }: ServerErrorProps) {
         <ul className="list-disc space-y-2 pl-10">
           <li>{t(($) => $.serverError.option01)}</li>
           <li>
-            <Trans ns={i18nNamespaces} i18nKey={($) => $.serverError.option02} components={{ home }} />
+            <Trans ns={protectedLayoutI18nNamespace} i18nKey={($) => $.serverError.option02} components={{ home }} />
           </li>
         </ul>
         <PageDetails />

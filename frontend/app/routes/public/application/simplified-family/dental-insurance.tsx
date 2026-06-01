@@ -34,7 +34,6 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['applicationSimplifiedFamily', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.simplifiedFamily.dentalInsurance,
 } as const satisfies RouteHandleData;
 
@@ -44,7 +43,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const state = loadPublicApplicationSimplifiedFamilyState({ params, request, session });
   validateApplicationFlow(state, params, ['simplified-family']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSimplifiedFamily', 'gcweb']);
   const locale = getLocale(request);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.dentalInsurance.pageTitle) }),
@@ -136,7 +135,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function RenewFamilyDentalInsurance({ loaderData, params }: Route.ComponentProps) {
   const { sections } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSimplifiedFamily', 'application']);
   const fetcher = useFetcher<typeof action>();
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
@@ -214,7 +213,7 @@ export default function RenewFamilyDentalInsurance({ loaderData, params }: Route
  * so we only show the help text when no selection has been made.
  */
 function DentalInsuranceCardContent(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSimplifiedFamily', 'application']);
   const { state } = useLoaderData<typeof loader>();
 
   if (state.dentalInsurance !== undefined) {
@@ -245,7 +244,7 @@ function DentalInsuranceCardContent(): JSX.Element {
  * Note: There is no existing client application data for this section, so we only have two states.
  */
 function DentalInsuranceCardFooter(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSimplifiedFamily', 'application']);
   const { state, sections } = useLoaderData<typeof loader>();
   const params = useParams();
 
@@ -301,7 +300,7 @@ function DentalInsuranceCardFooter(): JSX.Element {
  *   show the help text.
  */
 function DentalBenefitsCardContent(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSimplifiedFamily', 'application']);
   const { state, clientApplication } = useLoaderData<typeof loader>();
 
   if (state.dentalBenefits?.hasChanged) {
@@ -368,7 +367,7 @@ function DentalBenefitsCardContent(): JSX.Element {
  *   show the "Add" button.
  */
 function DentalBenefitsCardFooter(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSimplifiedFamily', 'application']);
   const { state, sections, clientApplication } = useLoaderData<typeof loader>();
   const params = useParams();
 

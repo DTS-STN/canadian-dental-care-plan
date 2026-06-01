@@ -43,7 +43,6 @@ type CheckboxId = (typeof CHECKBOX_IDS)[keyof typeof CHECKBOX_IDS];
 const CONSENT_CHECKBOXES = [CHECKBOX_IDS.ACKNOWLEDGE_TERMS, CHECKBOX_IDS.ACKNOWLEDGE_PRIVACY, CHECKBOX_IDS.SHARE_DATA] as const;
 
 export const handle = {
-  i18nNamespaces: ['applicationSpokes', 'gcweb'],
   pageIdentifier: pageIds.public.application.spokes.termsConditions,
 } as const satisfies RouteHandleData;
 
@@ -51,7 +50,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSpokes', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.termsConditions.pageTitle) }),
   };
@@ -62,7 +61,7 @@ export async function action({ context: { appContainer, session }, request, para
   getPublicApplicationState({ params, session });
 
   const formData = await request.formData();
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSpokes');
 
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
@@ -128,7 +127,7 @@ export async function action({ context: { appContainer, session }, request, para
 }
 
 export default function ApplyIndex({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('applicationSpokes');
   const { defaultState } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
@@ -195,7 +194,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
           <h2 className="font-bold">{t(($) => $.termsConditions.beforeYouBegin)}</h2>
           <ul className="list-disc space-y-1 pl-7">
             <li>
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.reviewConfirm} components={{ eligibilityRequirements }} />
+              <Trans ns="applicationSpokes" i18nKey={($) => $.termsConditions.reviewConfirm} components={{ eligibilityRequirements }} />
             </li>
             <li>{t(($) => $.termsConditions.resolveActions)}</li>
             <li>{t(($) => $.termsConditions.reviewStatements)}</li>
@@ -204,7 +203,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
             <div className="space-y-6">
               <div className="space-y-4">
                 <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.termsAndConditionsOfUse.onlineApplicationLegalTerms} components={{ canadaTermsConditions }} />
+                  <Trans ns="applicationSpokes" i18nKey={($) => $.termsConditions.termsAndConditionsOfUse.onlineApplicationLegalTerms} components={{ canadaTermsConditions }} />
                 </p>
                 <p>{t(($) => $.termsConditions.termsAndConditionsOfUse.esdcDefinitionClarification)}</p>
               </div>
@@ -217,10 +216,10 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
                   <li>{t(($) => $.termsConditions.termsAndConditionsOfUse.onlineApplication.onBehalfOfSomeoneElse)}</li>
                   <li>{t(($) => $.termsConditions.termsAndConditionsOfUse.onlineApplication.atYourOwnRisk)}</li>
                   <li>
-                    <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.termsAndConditionsOfUse.onlineApplication.msdc} components={{ microsoftDataPrivacyPolicy }} />
+                    <Trans ns="applicationSpokes" i18nKey={($) => $.termsConditions.termsAndConditionsOfUse.onlineApplication.msdc} components={{ microsoftDataPrivacyPolicy }} />
                   </li>
                   <li>
-                    <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.termsAndConditionsOfUse.onlineApplication.antibot} components={{ hcaptchaTermsOfService }} />
+                    <Trans ns="applicationSpokes" i18nKey={($) => $.termsConditions.termsAndConditionsOfUse.onlineApplication.antibot} components={{ hcaptchaTermsOfService }} />
                   </li>
                 </ul>
               </section>
@@ -237,15 +236,15 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
                 <p>{t(($) => $.termsConditions.privacyNoticeStatement.personalInformation.serviceCanadaApplicationAdministration)}</p>
                 <p>{t(($) => $.termsConditions.privacyNoticeStatement.personalInformation.serviceCanadaInformationCollection)}</p>
                 <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.personalInformation.participation} components={{ contactServiceCanada }} />
+                  <Trans ns="applicationSpokes" i18nKey={($) => $.termsConditions.privacyNoticeStatement.personalInformation.participation} components={{ contactServiceCanada }} />
                 </p>
                 <p>{t(($) => $.termsConditions.privacyNoticeStatement.personalInformation.policyAnalysis)}</p>
                 <p>{t(($) => $.termsConditions.privacyNoticeStatement.personalInformation.digitalCommunications)}</p>
                 <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.personalInformation.collectionUse} components={{ cite }} />
+                  <Trans ns="applicationSpokes" i18nKey={($) => $.termsConditions.privacyNoticeStatement.personalInformation.collectionUse} components={{ cite }} />
                 </p>
                 <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.personalInformation.microsoftPolicy} components={{ microsoftDataPrivacyPolicy, cite }} />
+                  <Trans ns="applicationSpokes" i18nKey={($) => $.termsConditions.privacyNoticeStatement.personalInformation.microsoftPolicy} components={{ microsoftDataPrivacyPolicy, cite }} />
                 </p>
               </section>
               <section className="space-y-4">
@@ -253,23 +252,23 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
                 <p>{t(($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationRightsAndAccess)}</p>
                 <ul className="list-disc space-y-1 pl-7">
                   <li>
-                    <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationBanks.hcPpu440} components={{ hcPib }} />
+                    <Trans ns="applicationSpokes" i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationBanks.hcPpu440} components={{ hcPib }} />
                   </li>
                   <li>
-                    <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationBanks.esdcPpu712} components={{ esdcPib }} />
+                    <Trans ns="applicationSpokes" i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationBanks.esdcPpu712} components={{ esdcPib }} />
                   </li>
                 </ul>
                 <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.infoSourceAccess} components={{ infosource }} />
+                  <Trans ns="applicationSpokes" i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.infoSourceAccess} components={{ infosource }} />
                 </p>
                 <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.privacyContact} components={{ contactServiceCanada }} />
+                  <Trans ns="applicationSpokes" i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.privacyContact} components={{ contactServiceCanada }} />
                 </p>
                 <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationHandlingComplaintProcess} components={{ fileacomplaint }} />
+                  <Trans ns="applicationSpokes" i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.personalInformationHandlingComplaintProcess} components={{ fileacomplaint }} />
                 </p>
                 <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.privacyProtection} components={{ cdcpPrivacyPolicy }} />
+                  <Trans ns="applicationSpokes" i18nKey={($) => $.termsConditions.privacyNoticeStatement.howWeProtectYourPrivacy.privacyProtection} components={{ cdcpPrivacyPolicy }} />
                 </p>
               </section>
             </div>
@@ -346,7 +345,7 @@ export default function ApplyIndex({ loaderData, params }: Route.ComponentProps)
               onChange={(e) => handleCheckboxChange(CHECKBOX_IDS.DO_NOT_CONSENT, e.target.checked)}
               errorMessage={errors?.doNotConsent}
             >
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.termsConditions.checkboxes.doNotConsent} />
+              <Trans ns="applicationSpokes" i18nKey={($) => $.termsConditions.checkboxes.doNotConsent} />
             </InputCheckbox>
 
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">

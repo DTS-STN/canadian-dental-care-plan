@@ -62,9 +62,11 @@ describe('DefaultAppContainerProvider', () => {
 
   describe('findAll', () => {
     it('should return all instances of the service if found', () => {
-      const mockServiceInstances = [{ name: 'MockService1' }, { name: 'MockService2' }];
-      container.bind(mockServiceIdentifier).toConstantValue(mockServiceInstances[0]);
-      container.bind(mockServiceIdentifier).toConstantValue(mockServiceInstances[1]);
+      const mockService1 = { name: 'MockService1' };
+      const mockService2 = { name: 'MockService2' };
+      const mockServiceInstances = [mockService1, mockService2];
+      container.bind(mockServiceIdentifier).toConstantValue(mockService1);
+      container.bind(mockServiceIdentifier).toConstantValue(mockService2);
 
       const result = appContainerProvider.findAll(mockServiceIdentifier);
 
@@ -82,9 +84,11 @@ describe('DefaultAppContainerProvider', () => {
 
   describe('getAll', () => {
     it('should return all instances of the service if found', () => {
-      const mockServiceInstances = [{ name: 'MockService1' }, { name: 'MockService2' }];
-      container.bind(mockServiceIdentifier).toConstantValue(mockServiceInstances[0]);
-      container.bind(mockServiceIdentifier).toConstantValue(mockServiceInstances[1]);
+      const mockService1 = { name: 'MockService1' };
+      const mockService2 = { name: 'MockService2' };
+      const mockServiceInstances = [mockService1, mockService2];
+      container.bind(mockServiceIdentifier).toConstantValue(mockService1);
+      container.bind(mockServiceIdentifier).toConstantValue(mockService2);
 
       const result = appContainerProvider.getAll(mockServiceIdentifier);
 

@@ -77,7 +77,7 @@ describe('locale-utils', () => {
     });
 
     it('should return a unique array of namespaces from route handles', () => {
-      const routes = [{ handle: { i18nNamespaces: ['namespace1', 'namespace2'] } }, { handle: { i18nNamespaces: ['namespace2', 'namespace3'] } }];
+      const routes = [{ handle: { i18nPreloadNamespace: ['namespace1', 'namespace2'] } }, { handle: { i18nPreloadNamespace: ['namespace2', 'namespace3'] } }];
       expect(getNamespaces(routes)).toEqual(['namespace1', 'namespace2', 'namespace3']);
     });
   });

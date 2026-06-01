@@ -18,7 +18,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['application', 'gcweb'],
   pageIdentifier: pageIds.public.application.eligibilityRequirements,
 } as const satisfies RouteHandleData;
 
@@ -26,7 +25,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, request, params }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['application', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.eligibilityRequirements.pageTitle) }),
   };
@@ -45,7 +44,7 @@ export async function loader({ context: { appContainer, session }, request, para
 
 export default function ApplyIndex({ loaderData, params }: Route.ComponentProps) {
   const { state, sections } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('application');
 
   const { completedSectionsLabel, allSectionsCompleted } = useSectionsStatus(sections);
 

@@ -19,7 +19,6 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['application', 'gcweb'],
   pageIdentifier: pageIds.public.application.spokes.fileYourTaxes,
 } as const satisfies RouteHandleData;
 
@@ -28,7 +27,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const { applicationYear } = getPublicApplicationState({ params, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['application', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.fileYourTaxes.pageTitle) }),
   };
@@ -42,16 +41,16 @@ export async function action({ context: { appContainer, session }, params, reque
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'application');
 
   clearPublicApplicationState({ params, session });
   return redirect(t(($) => $.fileYourTaxes.exitBtnLink));
 }
 
 export default function ApplicationFileYourTaxes({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('application');
   const { taxYear } = loaderData;
-  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage();
+  const { remove: removeApplicationFlowStorageValue } = useApplicationFlowStorage(params.id);
 
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
@@ -78,10 +77,10 @@ export default function ApplicationFileYourTaxes({ loaderData, params }: Route.C
           </p>
           <p>{t(($) => $.fileYourTaxes.unableToAssess)}</p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.fileYourTaxes.taxInfo} components={{ taxInfo }} />
+            <Trans ns="application" i18nKey={($) => $.fileYourTaxes.taxInfo} components={{ taxInfo }} />
           </p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.fileYourTaxes.applyAfter} />
+            <Trans ns="application" i18nKey={($) => $.fileYourTaxes.applyAfter} />
           </p>
         </div>
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">

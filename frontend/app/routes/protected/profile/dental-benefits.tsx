@@ -14,7 +14,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedProfile', 'gcweb'],
+  i18nPreloadNamespace: ['protectedProfile', 'gcweb'],
   pageIdentifier: pageIds.protected.profile.dentalBenefits,
 } as const satisfies RouteHandleData;
 
@@ -25,7 +25,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedProfile', 'gcweb']);
   const locale = getLocale(request);
 
   const federalGovernmentInsurancePlanService = appContainer.get(TYPES.FederalGovernmentInsurancePlanService);
@@ -70,7 +70,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export default function ViewGovernmentDentalBenefits({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedProfile', 'gcweb']);
   const { clientApplication, clientDentalBenefits, children, SCCH_BASE_URI } = loaderData;
 
   return (
@@ -132,10 +132,7 @@ export default function ViewGovernmentDentalBenefits({ loaderData, params }: Rou
         <ButtonLink
           variant="primary"
           id="back-button"
-          to={t(($) => $.header.menuDashboardHref, {
-            baseUri: SCCH_BASE_URI,
-            ns: 'gcweb',
-          })}
+          to={t(($) => $.header.menuDashboardHref, { ns: 'gcweb', baseUri: SCCH_BASE_URI })}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Applicant Profile-Protected:Return to dashboard - Other government dental benefits return button click"
         >
           {t(($) => $.dentalBenefits.returnButton)}

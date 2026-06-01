@@ -54,7 +54,6 @@ function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
 }
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.homeAddress,
 } as const satisfies RouteHandleData;
 
@@ -67,7 +66,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getProtectedApplicationState({ params, session });
   validateApplicationFlow(state, params, ['renewal-adult', 'intake-adult', 'intake-children', 'intake-family', 'renewal-family', 'renewal-children']);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
   const locale = getLocale(request);
 
   const countryList = await appContainer.get(TYPES.CountryService).listAndSortLocalizedCountries(locale);
@@ -201,7 +200,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function HomeAddress({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationSpokes', 'protectedApplication']);
   const { defaultState, countryList, regionList } = loaderData;
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useClientEnv();
 

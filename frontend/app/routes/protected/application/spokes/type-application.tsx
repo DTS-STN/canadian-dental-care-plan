@@ -26,7 +26,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 const APPLICANT_TYPE = { adult: 'adult', family: 'family', children: 'children', delegate: 'delegate' } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.typeOfApplication,
 } as const satisfies RouteHandleData;
 
@@ -39,7 +38,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   const state = getProtectedApplicationState({ params, session });
   validateProtectedApplicationContext(state, params, 'intake');
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
 
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.typeOfApplication.pageTitle) }),
@@ -58,7 +57,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const state = getProtectedApplicationState({ params, session });
   validateProtectedApplicationContext(state, params, 'intake');
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   /**
    * Schema for application delegate.
@@ -85,7 +84,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplicationTypeOfApplication({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationSpokes', 'protectedApplication']);
   const { defaultState } = loaderData;
 
   const fetcher = useFetcher<typeof action>();

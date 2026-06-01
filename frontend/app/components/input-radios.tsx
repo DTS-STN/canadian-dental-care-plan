@@ -1,10 +1,9 @@
 import type { ComponentProps, ReactNode } from 'react';
 
-import { InputError } from './input-error';
-import { InputHelp } from './input-help';
-import { InputRadio } from './input-radio';
-
+import { InputError } from '~/components/input-error';
+import { InputHelp } from '~/components/input-help';
 import { InputLegend } from '~/components/input-legend';
+import { InputRadio } from '~/components/input-radio';
 
 export interface InputRadiosProps {
   errorMessage?: string;

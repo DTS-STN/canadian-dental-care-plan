@@ -36,7 +36,6 @@ import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils'
 import { extractDigits, hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
 export const handle = {
-  i18nNamespaces: ['applicationSpokes', 'application', 'gcweb'],
   pageIdentifier: pageIds.public.application.spokes.personalInformation,
 } as const satisfies RouteHandleData;
 
@@ -44,7 +43,7 @@ export const meta: Route.MetaFunction = mergeMeta(({ loaderData }) => getTitleMe
 
 export async function loader({ context: { appContainer, session }, params, request }: Route.LoaderArgs) {
   const state = getPublicApplicationState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['applicationSpokes', 'gcweb']);
 
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.personalInformation.pageTitle) }),
@@ -63,7 +62,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
 
   const state = getPublicApplicationState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'applicationSpokes');
   const locale = getLocale(request);
   const { RENEWAL_PERIOD_END_DATE, TIME_ZONE } = appContainer.get(TYPES.ServerConfig);
 
@@ -263,7 +262,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplicationPersonalInformation({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['applicationSpokes', 'application']);
   const { state, isRenewalContext } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
@@ -280,11 +279,11 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
         <ErrorAlert>
           <h2 className="mb-2 font-bold">{t(($) => $.personalInformation.errorMessage.alert.heading)}</h2>
           <p className="mb-2">
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.errorMessage.alert.detail} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+            <Trans ns="applicationSpokes" i18nKey={($) => $.personalInformation.errorMessage.alert.detail} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
           </p>
           {fetcherDataWithStatus?.startDate !== undefined && (
             <p className="mb-2">
-              <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.errorMessage.alert.applyDate} values={{ startDate: fetcherDataWithStatus.startDate }} components={{ strong: <strong /> }} />
+              <Trans ns="applicationSpokes" i18nKey={($) => $.personalInformation.errorMessage.alert.applyDate} values={{ startDate: fetcherDataWithStatus.startDate }} components={{ strong: <strong /> }} />
             </p>
           )}
         </ErrorAlert>
@@ -338,7 +337,7 @@ export default function ApplicationPersonalInformation({ loaderData, params }: R
               </div>
               <Collapsible id="name-instructions" summary={t(($) => $.personalInformation.singleLegalName)}>
                 <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.personalInformation.nameInstructions} />
+                  <Trans ns="applicationSpokes" i18nKey={($) => $.personalInformation.nameInstructions} />
                 </p>
               </Collapsible>
               <DatePickerField

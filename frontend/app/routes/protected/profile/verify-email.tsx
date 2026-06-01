@@ -47,13 +47,13 @@ function requireProfileEmailAddressFlowState({ session, params }: { session: Rou
 }
 
 export const handle = {
-  i18nNamespaces: ['protectedProfile', 'gcweb'],
+  i18nPreloadNamespace: ['protectedProfile', 'gcweb'],
   layoutOptions: { breadcrumbs: <LayoutBreadcrumbs /> },
   pageIdentifier: pageIds.protected.profile.verifyEmail,
 } as const satisfies RouteHandleData;
 
 function LayoutBreadcrumbs(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedProfile');
   return (
     <ProtectedBreadcrumbs
       items={[
@@ -73,7 +73,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const profileEmailAddressFlowState = requireProfileEmailAddressFlowState({ session, params });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedProfile', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.verifyEmail.pageTitle) }),
   };
@@ -114,7 +114,7 @@ export async function action({ context: { appContainer, session }, params, reque
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
   const idToken = session.get('idToken');
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedProfile');
   const { ENGLISH_LANGUAGE_CODE } = appContainer.get(TYPES.ServerConfig);
 
   const verificationCodeService = appContainer.get(TYPES.VerificationCodeService);
@@ -210,7 +210,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedProfileVerifyEmail({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedProfile');
   const { email } = loaderData;
   const [showDialog, setShowDialog] = useState(false);
 
@@ -279,7 +279,7 @@ export default function ProtectedProfileVerifyEmail({ loaderData, params }: Rout
               </p>
               <p className="mb-4">{t(($) => $.verifyEmail.requestNew)}</p>
               <p className="mb-8">
-                <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
+                <Trans ns="protectedProfile" i18nKey={($) => $.verifyEmail.unableToVerify} components={{ communicationLink }} />
               </p>
               <p className="mb-4 italic">{t(($) => $.requiredLabel)}</p>
               <div className="grid items-end gap-6 md:grid-cols-2">

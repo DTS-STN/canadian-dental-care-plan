@@ -39,7 +39,6 @@ const HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.federalProvincialTerritorialBenefits,
 } as const satisfies RouteHandleData;
 
@@ -54,7 +53,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
   const locale = getLocale(request);
 
   const federalSocialPrograms = await appContainer.get(TYPES.FederalGovernmentInsurancePlanService).listAndSortLocalizedFederalGovernmentInsurancePlans(locale);
@@ -85,7 +84,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
@@ -188,7 +187,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplicationSpokeFederalProvincialTerritorialBenefits({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationSpokes', 'protectedApplication']);
   const { federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, defaultState, applicationFlow } = loaderData;
 
   const fetcher = useFetcher<typeof action>();

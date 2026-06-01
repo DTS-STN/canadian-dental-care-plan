@@ -34,7 +34,6 @@ import { extractDigits } from '~/utils/string-utils';
 const NEW_OR_EXISTING_MEMBER_OPTION = { no: 'no', yes: 'yes' } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedApplicationSpokes', 'protectedApplication', 'gcweb'],
   pageIdentifier: pageIds.protected.application.spokes.newOrReturningMember,
 } as const satisfies RouteHandleData;
 
@@ -45,7 +44,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
 
   const state = getProtectedApplicationState({ params, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedApplicationSpokes', 'gcweb']);
 
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.newOrReturningMember.pageTitle) }),
@@ -64,7 +63,7 @@ export async function action({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   securityHandler.validateCsrfToken({ formData, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedApplicationSpokes');
 
   const newOrExistingMemberSchema = z
     .object({
@@ -120,7 +119,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedApplicationSpokes', 'protectedApplication']);
   const { defaultState, userAgeCategory } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
@@ -134,13 +133,13 @@ export default function ApplyFlowNewOrExistingMember({ loaderData, params }: Rou
 
   const options: InputRadiosProps['options'] = [
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.newOrReturningMember.yes} components={{ bold: <strong /> }} />,
+      children: <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.newOrReturningMember.yes} components={{ bold: <strong /> }} />,
       value: NEW_OR_EXISTING_MEMBER_OPTION.yes,
       defaultChecked: defaultState?.isNewOrReturningMember === true,
       onChange: handleNewOrReturningMemberSelection,
     },
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.newOrReturningMember.no} components={{ bold: <strong /> }} />,
+      children: <Trans ns="protectedApplicationSpokes" i18nKey={($) => $.newOrReturningMember.no} components={{ bold: <strong /> }} />,
       value: NEW_OR_EXISTING_MEMBER_OPTION.no,
       defaultChecked: defaultState?.isNewOrReturningMember === false,
       onChange: handleNewOrReturningMemberSelection,

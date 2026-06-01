@@ -28,7 +28,6 @@ const FORM_ACTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['status', 'gcweb'],
   pageIdentifier: pageIds.public.status.result,
 } as const satisfies RouteHandleData;
 
@@ -43,7 +42,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 
   const locale = getLocale(request);
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['status', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.template, { ns: 'gcweb', title: t(($) => $.result.pageTitle) }),
   };
@@ -68,7 +67,7 @@ export async function action({ context: { appContainer, session }, params, reque
   const statusStateId = getStatusStateIdFromUrl(request.url);
   const { id } = loadStatusState({ id: statusStateId, params, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'status');
 
   const formAction = z.enum(FORM_ACTION).parse(formData.get('_action'));
 
@@ -82,7 +81,7 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function StatusCheckerResult({ loaderData, params }: Route.ComponentProps) {
   const { statusResult } = loaderData;
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('status');
   const fetcher = useFetcher<typeof action>();
   const { isSubmitting } = useFetcherSubmissionState(fetcher);
 
@@ -117,7 +116,7 @@ export default function StatusCheckerResult({ loaderData, params }: Route.Compon
 }
 
 function StatusNotFound() {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('status');
   const noWrap = <span className="whitespace-nowrap" />;
   return (
     <div className="mb-4">
@@ -126,7 +125,7 @@ function StatusNotFound() {
         <p className="mb-2">{t(($) => $.result.statusNotFound.pleaseReview)}</p>
         <p className="mb-2">{t(($) => $.result.statusNotFound.ifSubmitted)}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.result.statusNotFound.contactServiceCanada} components={{ noWrap }} />
+          <Trans ns="status" i18nKey={($) => $.result.statusNotFound.contactServiceCanada} components={{ noWrap }} />
         </p>
       </ContextualAlert>
     </div>

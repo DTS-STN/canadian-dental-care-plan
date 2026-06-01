@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { InputError } from './input-error';
-
+import { InputError } from '~/components/input-error';
 import { cn } from '~/utils/tw-utils';
 
 interface InputCheckboxProps extends OmitStrict<React.ComponentProps<'input'>, 'aria-labelledby' | 'children' | 'type'> {

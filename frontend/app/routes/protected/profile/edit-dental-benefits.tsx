@@ -45,13 +45,13 @@ const HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION = {
 } as const;
 
 export const handle = {
-  i18nNamespaces: ['protectedProfile', 'gcweb'],
+  i18nPreloadNamespace: ['protectedProfile', 'gcweb'],
   layoutOptions: { breadcrumbs: <LayoutBreadcrumbs /> },
   pageIdentifier: pageIds.protected.profile.editDentalBenefits,
 } as const satisfies RouteHandleData;
 
 function LayoutBreadcrumbs(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedProfile');
   return (
     <ProtectedBreadcrumbs
       items={[
@@ -73,7 +73,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedProfile', 'gcweb']);
   const locale = getLocale(request);
 
   const { CANADA_COUNTRY_ID } = appContainer.get(TYPES.ClientConfig);
@@ -121,7 +121,7 @@ export async function action({ context: { appContainer, session }, params, reque
   securityHandler.validateCsrfToken({ formData, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, 'protectedProfile');
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
@@ -223,7 +223,7 @@ export async function action({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedAccessToDentalInsuranceQuestion({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('protectedProfile');
   const { federalSocialPrograms, provincialTerritorialSocialPrograms, provinceTerritoryStates, federalProgram, provincialTerritorialProgram, applicantName } = loaderData;
 
   const fetcher = useFetcher<typeof action>();
@@ -280,7 +280,7 @@ export default function ProtectedAccessToDentalInsuranceQuestion({ loaderData, p
                 legend={t(($) => $.editDentalBenefits.federalBenefits.legend)}
                 options={[
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.editDentalBenefits.federalBenefits.optionYes} />,
+                    children: <Trans ns="protectedProfile" i18nKey={($) => $.editDentalBenefits.federalBenefits.optionYes} />,
                     value: HAS_FEDERAL_BENEFITS_OPTION.yes,
                     defaultChecked: hasFederalBenefitValue === true,
                     onChange: handleOnHasFederalBenefitChanged,
@@ -301,7 +301,7 @@ export default function ProtectedAccessToDentalInsuranceQuestion({ loaderData, p
                     ),
                   },
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.editDentalBenefits.federalBenefits.optionNo} />,
+                    children: <Trans ns="protectedProfile" i18nKey={($) => $.editDentalBenefits.federalBenefits.optionNo} />,
                     value: HAS_FEDERAL_BENEFITS_OPTION.no,
                     defaultChecked: hasFederalBenefitValue === false,
                     onChange: handleOnHasFederalBenefitChanged,
@@ -319,7 +319,7 @@ export default function ProtectedAccessToDentalInsuranceQuestion({ loaderData, p
                 legend={t(($) => $.editDentalBenefits.provincialTerritorialBenefits.legend)}
                 options={[
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.editDentalBenefits.provincialTerritorialBenefits.optionYes} />,
+                    children: <Trans ns="protectedProfile" i18nKey={($) => $.editDentalBenefits.provincialTerritorialBenefits.optionYes} />,
                     value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.yes,
                     defaultChecked: provincialTerritorialProgram !== undefined,
                     onChange: handleOnHasProvincialTerritorialBenefitChanged,
@@ -365,7 +365,7 @@ export default function ProtectedAccessToDentalInsuranceQuestion({ loaderData, p
                     ),
                   },
                   {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.editDentalBenefits.provincialTerritorialBenefits.optionNo} />,
+                    children: <Trans ns="protectedProfile" i18nKey={($) => $.editDentalBenefits.provincialTerritorialBenefits.optionNo} />,
                     value: HAS_PROVINCIAL_TERRITORIAL_BENEFITS_OPTION.no,
                     defaultChecked: provincialTerritorialProgram === undefined,
                     onChange: handleOnHasProvincialTerritorialBenefitChanged,

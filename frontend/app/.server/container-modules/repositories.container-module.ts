@@ -1,8 +1,7 @@
 import { ContainerModule } from 'inversify';
 import type { BindingConstraints } from 'inversify';
 
-import type { ServerConfig } from '../configs';
-
+import type { ServerConfig } from '~/.server/configs';
 import { TYPES } from '~/.server/constants';
 import {
   DefaultAddressValidationRepository,

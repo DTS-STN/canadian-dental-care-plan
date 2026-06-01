@@ -14,7 +14,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['dataUnavailable', 'gcweb'],
+  i18nPreloadNamespace: ['dataUnavailable', 'gcweb'],
   pageIdentifier: pageIds.protected.dataUnavailable,
 } as const satisfies RouteHandleData;
 
@@ -24,7 +24,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   const securityHandler = appContainer.get(TYPES.SecurityHandler);
   await securityHandler.validateAuthSession({ request, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['dataUnavailable', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.pageTitle) }),
   };
@@ -38,7 +38,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
 }
 
 export default function DataUnavailable({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['dataUnavailable', 'gcweb']);
   const { SCCH_BASE_URI } = loaderData;
 
   const statusCheckerLink = <InlineLink routeId="public/status/index" className="external-link" newTabIndicator target="_blank" params={params} />;
@@ -51,22 +51,19 @@ export default function DataUnavailable({ loaderData, params }: Route.ComponentP
       <div className="max-w-prose">
         <div className="space-y-4">
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.serviceEligible} components={{ statusCheckerLink }} />
+            <Trans ns="dataUnavailable" i18nKey={($) => $.serviceEligible} components={{ statusCheckerLink }} />
           </p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.otherEnquiry} components={{ cdcpLink }} />
+            <Trans ns="dataUnavailable" i18nKey={($) => $.otherEnquiry} components={{ cdcpLink }} />
           </p>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.serviceDelay} components={{ contactLink }} />
+            <Trans ns="dataUnavailable" i18nKey={($) => $.serviceDelay} components={{ contactLink }} />
           </p>
         </div>
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <ButtonLink
             id="back-button"
-            to={t(($) => $.header.menuDashboardHref, {
-              baseUri: SCCH_BASE_URI,
-              ns: 'gcweb',
-            })}
+            to={t(($) => $.header.menuDashboardHref, { ns: 'gcweb', baseUri: SCCH_BASE_URI })}
             variant="primary"
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Return to dashboard - You have not applied for CDCP click"
           >

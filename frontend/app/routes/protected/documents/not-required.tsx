@@ -16,13 +16,13 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: ['documents', 'gcweb'],
+  i18nPreloadNamespace: ['documents', 'gcweb'],
   layoutOptions: { breadcrumbs: <LayoutBreadcrumbs /> },
   pageIdentifier: pageIds.protected.documents.notRequired,
 } as const satisfies RouteHandleData;
 
 function LayoutBreadcrumbs(): JSX.Element {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation('documents');
   return (
     <ProtectedBreadcrumbs
       items={[
@@ -42,7 +42,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
   securityHandler.validateFeatureEnabled('doc-upload');
   await securityHandler.validateAuthSession({ request, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['documents', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.notRequired.pageTitle) }),
   };
@@ -56,7 +56,7 @@ export async function loader({ context: { appContainer, session }, request }: Ro
 }
 
 export default function NotRequired({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['documents', 'gcweb']);
   const { SCCH_BASE_URI } = loaderData;
 
   return (

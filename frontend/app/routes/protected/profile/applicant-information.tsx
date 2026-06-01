@@ -14,7 +14,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin } from '~/utils/sin-utils';
 
 export const handle = {
-  i18nNamespaces: ['protectedProfile', 'gcweb'],
+  i18nPreloadNamespace: ['protectedProfile', 'gcweb'],
   pageIdentifier: pageIds.protected.profile.applicantInformation,
 } as const satisfies RouteHandleData;
 
@@ -25,7 +25,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   await securityHandler.validateAuthSession({ request, session });
   const clientApplication = await securityHandler.requireClientApplication({ params, request, session });
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const t = await getFixedT(request, ['protectedProfile', 'gcweb']);
   const meta = {
     title: t(($) => $.meta.title.mscaTemplate, { ns: 'gcweb', title: t(($) => $.applicantInformation.pageTitle) }),
   };
@@ -59,7 +59,7 @@ export async function loader({ context: { appContainer, session }, params, reque
 }
 
 export default function ProtectedApplicantInformation({ loaderData, params }: Route.ComponentProps) {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['protectedProfile', 'gcweb']);
   const { primaryApplicant, children, SCCH_BASE_URI } = loaderData;
 
   return (
@@ -67,7 +67,7 @@ export default function ProtectedApplicantInformation({ loaderData, params }: Ro
       <AppPageTitle>{t(($) => $.applicantInformation.pageTitle)}</AppPageTitle>
       <div className="max-w-prose space-y-10">
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey={($) => $.applicantInformation.formInstructions} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
+          <Trans ns="protectedProfile" i18nKey={($) => $.applicantInformation.formInstructions} components={{ noWrap: <span className="whitespace-nowrap" /> }} />
         </p>
         <section className="space-y-6">
           <h2 className="font-lato text-2xl font-bold">{`${primaryApplicant.firstName} ${primaryApplicant.lastName}`}</h2>
