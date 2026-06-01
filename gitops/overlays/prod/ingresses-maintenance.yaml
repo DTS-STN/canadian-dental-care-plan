@@ -58,6 +58,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: frontend
+                name: maintenance
                 port:
                   name: http
