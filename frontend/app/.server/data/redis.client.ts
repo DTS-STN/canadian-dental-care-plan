@@ -128,12 +128,13 @@ function createRedisSentinelClient(config: RedisSentinelClientServerConfig): Red
       username: config.REDIS_SENTINEL_USERNAME,
       password: config.REDIS_SENTINEL_PASSWORD,
     },
+    commandOptions: {
+      timeout: config.REDIS_COMMAND_TIMEOUT_SECONDS * 1000,
+    },
     nodeClientOptions: {
       username: config.REDIS_USERNAME,
       password: config.REDIS_PASSWORD,
-      commandOptions: {
-        timeout: config.REDIS_COMMAND_TIMEOUT_SECONDS * 1000,
-      },
+
       socket: {
         reconnectStrategy: exponentialBackoffReconnectionStrategy,
       },
