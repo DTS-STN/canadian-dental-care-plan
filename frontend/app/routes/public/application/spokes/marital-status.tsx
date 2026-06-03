@@ -9,9 +9,9 @@ import * as z from 'zod';
 import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
-import { maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
+import { isSinReserved, maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationFlow, PublicApplicationPartnerInformationState } from '~/.server/routes/helpers/public-application-route-helpers';
-import { getPublicApplicationState, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
+import { getPublicApplicantSin, getPublicApplicationState, getPublicChildrenSins, savePublicApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { AppPageTitle } from '~/components/app-page-title';
@@ -31,7 +31,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
+import { isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 
 function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
   switch (applicationFlow) {
@@ -128,12 +128,7 @@ export async function action({ context: { appContainer, session }, params, reque
           return;
         }
 
-        // Check if the SIN is already used by the applicant or their children
-        const applicantSin = state.applicantInformation?.socialInsuranceNumber;
-        const childrenSins = state.children.map((child) => child.information?.socialInsuranceNumber);
-        const reservedSins = [applicantSin, ...childrenSins].filter((s) => s !== undefined).map((s) => formatSin(s));
-
-        if (reservedSins.includes(formatSin(sin))) {
+        if (isSinReserved(sin, [getPublicApplicantSin(state), ...getPublicChildrenSins(state)])) {
           ctx.addIssue({ code: 'custom', message: t(($) => $.maritalStatus.errorMessage.sinUnique) });
         }
       }),

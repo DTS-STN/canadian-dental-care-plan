@@ -7,6 +7,7 @@ import { getEnv } from '~/.server/utils/env.utils';
 import type { EligibilityType } from '~/components/eligibility';
 import { expectDefined } from '~/utils/assert-utils';
 import { getAgeFromDateString } from '~/utils/date-utils';
+import { formatSin, isValidSin } from '~/utils/sin-utils';
 
 /**
  * The context of the application, either 'intake' for new applications or 'renewal' for renewal applications.
@@ -365,4 +366,26 @@ export function maritalStatusHasPartner(maritalStatus?: string) {
   if (!maritalStatus) return false;
   const { MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED } = getEnv();
   return [MARITAL_STATUS_CODE_COMMON_LAW, MARITAL_STATUS_CODE_MARRIED].includes(maritalStatus);
+}
+
+/**
+ * Returns true if the given SIN matches any SIN in the reserved list.
+ * `undefined` entries and entries that fail SIN validation in the reserved list are silently skipped.
+ * Both the candidate and each reserved SIN are normalized with `formatSin` before comparison.
+ *
+ * @param sin - The SIN to check. Returns `false` immediately if not a valid SIN.
+ * @param reservedSins - The list of SINs to check against. `undefined` values and invalid SINs are skipped.
+ * @returns `true` if the SIN is reserved, `false` otherwise.
+ */
+export function isSinReserved(sin: string, reservedSins: ReadonlyArray<string | undefined>): boolean {
+  if (!isValidSin(sin)) {
+    return false;
+  }
+
+  const formattedReserved: ReadonlyArray<string> = reservedSins.flatMap((s) => {
+    if (!s || !isValidSin(s)) return [];
+    return [formatSin(s)];
+  });
+
+  return formattedReserved.includes(formatSin(sin));
 }

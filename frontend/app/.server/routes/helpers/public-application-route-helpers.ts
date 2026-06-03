@@ -3,7 +3,7 @@ import type { Params } from 'react-router';
 
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';
-import type { PickDeep, ReadonlyDeep } from 'type-fest';
+import type { ArrayElement, PickDeep, ReadonlyDeep } from 'type-fest';
 
 import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
@@ -441,4 +441,30 @@ export function getMemberIdForFullApplication(state: PickDeep<PublicApplicationS
     return shouldSkipNewOrReturningMember(state) ? undefined : state.newOrReturningMember?.memberId;
   }
   return state.applicantInformation?.memberId;
+}
+
+/**
+ * Returns the applicant's SIN for a public application.
+ *
+ * Public flows are always intake, so the SIN is always read from `state.applicantInformation`.
+ */
+export function getPublicApplicantSin(state: PickDeep<PublicApplicationState, 'applicantInformation.socialInsuranceNumber'>): string | undefined {
+  return state.applicantInformation?.socialInsuranceNumber;
+}
+
+/**
+ * Returns the partner's SIN for a public application,
+ * or `undefined` if no partner information has been captured yet.
+ */
+export function getPublicPartnerSin(state: PickDeep<PublicApplicationState, 'partnerInformation.socialInsuranceNumber'>): string | undefined {
+  return state.partnerInformation?.socialInsuranceNumber;
+}
+
+/**
+ * Returns the SINs of all children in a public application.
+ * Pass `excludeChildId` to omit a specific child (e.g. the child currently being edited).
+ * Entries may be `undefined` for children that have not yet provided a SIN.
+ */
+export function getPublicChildrenSins(state: { readonly children: ReadonlyArray<PickDeep<ArrayElement<PublicApplicationState['children']>, 'id' | 'information.socialInsuranceNumber'>> }, excludeChildId?: string): ReadonlyArray<string | undefined> {
+  return state.children.filter((child) => child.id !== excludeChildId).map((child) => child.information?.socialInsuranceNumber);
 }

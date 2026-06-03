@@ -6,8 +6,17 @@ import * as z from 'zod';
 import type { Route } from './+types/personal-information';
 
 import { TYPES } from '~/.server/constants';
+import { isSinReserved } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ProtectedApplicationApplicantInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getContextualAgeCategoryFromDate, getProtectedApplicationState, isNewOrReturningMember, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
+import {
+  getContextualAgeCategoryFromDate,
+  getProtectedApplicationState,
+  getProtectedChildrenSins,
+  getProtectedPartnerSin,
+  isNewOrReturningMember,
+  saveProtectedApplicationState,
+  validateProtectedApplicationContext,
+} from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { AppPageTitle } from '~/components/app-page-title';
@@ -27,7 +36,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
+import { isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
 export const handle = {
@@ -81,12 +90,7 @@ export async function action({ context: { appContainer, session }, params, reque
             return;
           }
 
-           // Check if the SIN is already used by the partner (if applicable) or any children
-          const partnerSin = state.partnerInformation?.socialInsuranceNumber;
-          const childrenSins = state.children.map((child) => child.information?.socialInsuranceNumber);
-          const reservedSins = [partnerSin, ...childrenSins].filter((s) => s !== undefined).map((s) => formatSin(s));
-
-          if (reservedSins.includes(formatSin(sin))) {
+          if (isSinReserved(sin, [getProtectedPartnerSin(state), ...getProtectedChildrenSins(state)])) {
             ctx.addIssue({ code: 'custom', message: t(($) => $.personalInformation.errorMessage.sinUnique) });
           }
         }),

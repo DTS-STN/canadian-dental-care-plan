@@ -9,9 +9,17 @@ import * as z from 'zod';
 import type { Route } from './+types/child-information';
 
 import { TYPES } from '~/.server/constants';
-import { isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
+import { isChildOrYouth, isSinReserved } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ProtectedApplicationChildInformationState, ProtectedApplicationChildSinState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getProtectedApplicationState, getSingleChildState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import {
+  getProtectedApplicantSin,
+  getProtectedApplicationState,
+  getProtectedChildrenSins,
+  getProtectedPartnerSin,
+  getSingleChildState,
+  saveProtectedApplicationState,
+  validateApplicationFlow,
+} from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { AppPageTitle } from '~/components/app-page-title';
@@ -34,7 +42,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
+import { isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
 const YES_NO_OPTION = {
@@ -209,15 +217,7 @@ export async function action({ context: { appContainer, session }, params, reque
         return;
       }
 
-      // Check if the SIN is already used by the applicant, their partner (if applicable) or their other children
-      // - In intake context the applicant's SIN is captured during the flow (state.applicantInformation).
-      // - In renewal context it comes from the pre-loaded client application record (state.clientApplication).
-      const applicantSin = state.context === 'renewal' ? state.clientApplication?.applicantInformation.socialInsuranceNumber : state.applicantInformation?.socialInsuranceNumber;
-      const partnerSin = state.partnerInformation?.socialInsuranceNumber;
-      const otherChildrenSins = state.children.filter((child) => childState.id !== child.id).map((child) => child.information?.socialInsuranceNumber);
-      const reservedSins = [applicantSin, partnerSin, ...otherChildrenSins].filter((s) => s !== undefined).map((s) => formatSin(s));
-
-      if (reservedSins.includes(formatSin(val.socialInsuranceNumber))) {
+      if (isSinReserved(val.socialInsuranceNumber, [getProtectedApplicantSin(state), getProtectedPartnerSin(state), ...getProtectedChildrenSins(state, childState.id)])) {
         ctx.addIssue({ code: 'custom', message: t(($) => $.children.information.errorMessage.sinUnique), path: ['socialInsuranceNumber'] });
       }
     }) satisfies z.ZodType<ProtectedApplicationChildSinState>;
