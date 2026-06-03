@@ -81,7 +81,7 @@ export async function action({ context: { appContainer, session }, params, reque
             return;
           }
 
-          // Check if the SIN is already used by the applicant or their partner (if applicable)
+           // Check if the SIN is already used by the partner (if applicable) or any children
           const partnerSin = state.partnerInformation?.socialInsuranceNumber;
           const childrenSins = state.children.map((child) => child.information?.socialInsuranceNumber);
           const reservedSins = [partnerSin, ...childrenSins].filter((s) => s !== undefined).map((s) => formatSin(s));
