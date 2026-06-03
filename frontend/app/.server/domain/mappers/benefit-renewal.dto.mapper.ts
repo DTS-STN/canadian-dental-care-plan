@@ -87,8 +87,20 @@ export class DefaultBenefitRenewalDtoMapper implements BenefitRenewalDtoMapper {
   mapBenefitRenewalDtoToBenefitRenewalRequestEntity(benefitRenewalDto: BenefitRenewalDto, applicationChannelCode: 'protected' | 'public'): BenefitRenewalRequestEntity {
     const { BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED, BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC } = this.serverConfig;
     return this.toBenefitRenewalRequestEntity({
-      ...benefitRenewalDto,
+      applicantInformation: benefitRenewalDto.applicantInformation,
+      applicationCategoryCodeName: benefitRenewalDto.applicationCategoryCodeName,
       applicationChannelCode: applicationChannelCode === 'protected' ? BENEFIT_APPLICATION_CHANNEL_CODE_PROTECTED : BENEFIT_APPLICATION_CHANNEL_CODE_PUBLIC,
+      applicationYearId: benefitRenewalDto.applicationYearId,
+      changeIndicators: benefitRenewalDto.changeIndicators,
+      children: benefitRenewalDto.children,
+      communicationPreferences: benefitRenewalDto.communicationPreferences,
+      contactInformation: benefitRenewalDto.contactInformation,
+      dateOfBirth: benefitRenewalDto.dateOfBirth,
+      dentalBenefits: benefitRenewalDto.dentalBenefits,
+      dentalInsurance: benefitRenewalDto.dentalInsurance,
+      livingIndependently: benefitRenewalDto.livingIndependently,
+      partnerInformation: benefitRenewalDto.partnerInformation,
+      typeOfApplication: benefitRenewalDto.typeOfApplication,
     });
   }
 

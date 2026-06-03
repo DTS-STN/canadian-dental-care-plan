@@ -185,7 +185,8 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
     });
 
     return {
-      ...clientApplication,
+      applicationCategoryCodeName: clientApplication.applicationCategoryCodeName,
+      dateOfBirth: clientApplication.dateOfBirth,
       applicantInformation: this.toApplicantInformation({
         existingApplicantInformation: clientApplication.applicantInformation,
         renewedSocialInsuranceNumber: applicantInformation.socialInsuranceNumber,
@@ -213,6 +214,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedDentalBenefits: dentalBenefits,
       }),
       dentalInsurance,
+      livingIndependently: clientApplication.livingIndependently,
       partnerInformation: this.toPartnerInformation({
         effectiveMaritalStatus: maritalStatus ?? clientApplication.applicantInformation.maritalStatus,
         existingPartnerInformation: clientApplication.partnerInformation,
@@ -259,8 +261,11 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       throw new Error('Expected clientApplication to be defined');
     }
 
+    invariant(children.length > 0, 'Expected children to be non-empty for a family renewal');
+
     return {
-      ...clientApplication,
+      applicationCategoryCodeName: clientApplication.applicationCategoryCodeName,
+      dateOfBirth: clientApplication.dateOfBirth,
       applicantInformation: this.toApplicantInformation({
         existingApplicantInformation: clientApplication.applicantInformation,
         renewedSocialInsuranceNumber: applicantInformation.socialInsuranceNumber,
@@ -291,12 +296,13 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
         renewedDentalBenefits: dentalBenefits,
       }),
       dentalInsurance,
+      livingIndependently: clientApplication.livingIndependently,
       partnerInformation: this.toPartnerInformation({
         effectiveMaritalStatus: maritalStatus ?? clientApplication.applicantInformation.maritalStatus,
         existingPartnerInformation: clientApplication.partnerInformation,
         renewedPartnerInformation: partnerInformation,
       }),
-      typeOfApplication: children.length === 0 ? 'adult' : 'adult-child',
+      typeOfApplication: 'adult-child',
       termsAndConditions,
       userId,
       changeIndicators: {
@@ -335,8 +341,11 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       throw new Error('Expected clientApplication to be defined');
     }
 
+    invariant(children.length > 0, 'Expected children to be non-empty for a child renewal');
+
     return {
-      ...clientApplication,
+      applicationCategoryCodeName: clientApplication.applicationCategoryCodeName,
+      dateOfBirth: clientApplication.dateOfBirth,
       applicantInformation: this.toApplicantInformation({
         existingApplicantInformation: clientApplication.applicantInformation,
         renewedSocialInsuranceNumber: applicantInformation.socialInsuranceNumber,
@@ -364,6 +373,7 @@ export class DefaultBenefitRenewalStateMapper implements BenefitRenewalStateMapp
       }),
       dentalBenefits: [],
       dentalInsurance: undefined,
+      livingIndependently: clientApplication.livingIndependently,
       partnerInformation: this.toPartnerInformation({
         effectiveMaritalStatus: maritalStatus ?? clientApplication.applicantInformation.maritalStatus,
         existingPartnerInformation: clientApplication.partnerInformation,
