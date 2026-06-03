@@ -6,8 +6,17 @@ import * as z from 'zod';
 import type { Route } from './+types/personal-information';
 
 import { TYPES } from '~/.server/constants';
+import { isSinReserved } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ProtectedApplicationApplicantInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getContextualAgeCategoryFromDate, getProtectedApplicationState, isNewOrReturningMember, saveProtectedApplicationState, validateProtectedApplicationContext } from '~/.server/routes/helpers/protected-application-route-helpers';
+import {
+  getContextualAgeCategoryFromDate,
+  getProtectedApplicationState,
+  getProtectedChildrenSins,
+  getProtectedPartnerSin,
+  isNewOrReturningMember,
+  saveProtectedApplicationState,
+  validateProtectedApplicationContext,
+} from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { AppPageTitle } from '~/components/app-page-title';
@@ -27,7 +36,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
+import { isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { hasDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 
 export const handle = {
@@ -77,20 +86,12 @@ export async function action({ context: { appContainer, session }, params, reque
         )
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
-            ctx.addIssue({
-              code: 'custom',
-              message: t(($) => $.personalInformation.errorMessage.sinValid),
-            });
-          } else if (
-            [state.partnerInformation?.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
-              .filter((sin) => sin !== undefined)
-              .map((sin) => formatSin(sin))
-              .includes(formatSin(sin))
-          ) {
-            ctx.addIssue({
-              code: 'custom',
-              message: t(($) => $.personalInformation.errorMessage.sinUnique),
-            });
+            ctx.addIssue({ code: 'custom', message: t(($) => $.personalInformation.errorMessage.sinValid) });
+            return;
+          }
+
+          if (isSinReserved(sin, [getProtectedPartnerSin(state), ...getProtectedChildrenSins(state)])) {
+            ctx.addIssue({ code: 'custom', message: t(($) => $.personalInformation.errorMessage.sinUnique) });
           }
         }),
       firstName: z

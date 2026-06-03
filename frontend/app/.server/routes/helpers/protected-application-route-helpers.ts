@@ -4,7 +4,7 @@ import type { Params } from 'react-router';
 import { UTCDate } from '@date-fns/utc';
 import { invariant } from '@dts-stn/invariant';
 import { differenceInMinutes } from 'date-fns';
-import type { PickDeep, ReadonlyDeep } from 'type-fest';
+import type { ArrayElement, PickDeep, ReadonlyDeep } from 'type-fest';
 
 import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import { createLogger } from '~/.server/logging';
@@ -519,4 +519,31 @@ export function isNewOrReturningMember(state: PickDeep<ProtectedApplicationState
 
 export function shouldSkipNewOrReturningMember(state: PickDeep<ProtectedApplicationState, 'context' | 'applicantInformation.dateOfBirth' | 'livingIndependently'>): boolean {
   return !isNewOrReturningMember(state);
+}
+
+/**
+ * Returns the applicant's SIN for a protected application.
+ *
+ * In intake context the SIN is captured during the flow (`state.applicantInformation`).
+ * In renewal context it comes from the pre-loaded client application record (`state.clientApplication`).
+ */
+export function getProtectedApplicantSin(state: PickDeep<ProtectedApplicationState, 'context' | 'applicantInformation.socialInsuranceNumber' | 'clientApplication.applicantInformation.socialInsuranceNumber'>): string | undefined {
+  return state.context === 'renewal' ? state.clientApplication?.applicantInformation.socialInsuranceNumber : state.applicantInformation?.socialInsuranceNumber;
+}
+
+/**
+ * Returns the partner's SIN for a protected application,
+ * or `undefined` if no partner information has been captured yet.
+ */
+export function getProtectedPartnerSin(state: PickDeep<ProtectedApplicationState, 'partnerInformation.socialInsuranceNumber'>): string | undefined {
+  return state.partnerInformation?.socialInsuranceNumber;
+}
+
+/**
+ * Returns the SINs of all children in a protected application.
+ * Pass `excludeChildId` to omit a specific child (e.g. the child currently being edited).
+ * Entries may be `undefined` for children that have not yet provided a SIN.
+ */
+export function getProtectedChildrenSins(state: { readonly children: ReadonlyArray<PickDeep<ArrayElement<ProtectedApplicationState['children']>, 'id' | 'information.socialInsuranceNumber'>> }, excludeChildId?: string): ReadonlyArray<string | undefined> {
+  return state.children.filter((child) => child.id !== excludeChildId).map((child) => child.information?.socialInsuranceNumber);
 }

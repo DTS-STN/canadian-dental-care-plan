@@ -9,9 +9,9 @@ import * as z from 'zod';
 import type { Route } from './+types/marital-status';
 
 import { TYPES } from '~/.server/constants';
-import { maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
+import { isSinReserved, maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationFlow, ProtectedApplicationPartnerInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getProtectedApplicationState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import { getProtectedApplicantSin, getProtectedApplicationState, getProtectedChildrenSins, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT, getLocale } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { AppPageTitle } from '~/components/app-page-title';
@@ -31,7 +31,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
+import { isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 
 function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
   switch (applicationFlow) {
@@ -129,23 +129,14 @@ export async function action({ context: { appContainer, session }, params, reque
         1,
         t(($) => $.maritalStatus.errorMessage.sinRequired),
       )
-
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
-          ctx.addIssue({
-            code: 'custom',
-            message: t(($) => $.maritalStatus.errorMessage.sinValid),
-          });
-        } else if (
-          [state.clientApplication?.applicantInformation.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
-            .filter((sin) => sin !== undefined)
-            .map((sin) => formatSin(sin))
-            .includes(formatSin(sin))
-        ) {
-          ctx.addIssue({
-            code: 'custom',
-            message: t(($) => $.maritalStatus.errorMessage.sinUnique),
-          });
+          ctx.addIssue({ code: 'custom', message: t(($) => $.maritalStatus.errorMessage.sinValid) });
+          return;
+        }
+
+        if (isSinReserved(sin, [getProtectedApplicantSin(state), ...getProtectedChildrenSins(state)])) {
+          ctx.addIssue({ code: 'custom', message: t(($) => $.maritalStatus.errorMessage.sinUnique) });
         }
       }),
   }) satisfies z.ZodType<ProtectedApplicationPartnerInformationState>;

@@ -9,6 +9,7 @@ import {
   getEligibilityStatus,
   isChildClientNumberValid,
   isChildOrYouth,
+  isSinReserved,
   maritalStatusHasPartner,
 } from '~/.server/routes/helpers/base-application-route-helpers';
 
@@ -418,5 +419,49 @@ describe('getAllowedTypeOfApplication', () => {
       expect(maritalStatusHasPartner('DIVORCED')).toBe(false);
       expect(maritalStatusHasPartner('WIDOWED')).toBe(false);
     });
+  });
+});
+
+// 123456782 and 520325317 are fictitious but structurally valid SINs (pass Luhn check).
+// 123456789 is correctly formatted but fails the Luhn check (invalid SIN).
+describe('isSinReserved', () => {
+  it('returns false when the reserved list is empty', () => {
+    expect(isSinReserved('123456782', [])).toBe(false);
+  });
+
+  it('returns false when no reserved SIN matches the candidate', () => {
+    expect(isSinReserved('123456782', ['520325317'])).toBe(false);
+  });
+
+  it('returns true when a reserved SIN matches the candidate', () => {
+    expect(isSinReserved('123456782', ['123456782'])).toBe(true);
+  });
+
+  it('normalizes separators before comparing', () => {
+    expect(isSinReserved('123456782', ['123 456 782'])).toBe(true);
+    expect(isSinReserved('123 456 782', ['123456782'])).toBe(true);
+    expect(isSinReserved('123-456-782', ['123456782'])).toBe(true);
+  });
+
+  it('returns true when the match is among multiple reserved SINs', () => {
+    expect(isSinReserved('123456782', ['520325317', '123456782'])).toBe(true);
+  });
+
+  it('skips undefined entries in the reserved list', () => {
+    expect(isSinReserved('123456782', [undefined])).toBe(false);
+    expect(isSinReserved('123456782', [undefined, '123456782'])).toBe(true);
+  });
+
+  it('returns false when the candidate SIN is invalid', () => {
+    expect(isSinReserved('123456789', ['123456782'])).toBe(false);
+  });
+
+  it('skips invalid SINs in the reserved list', () => {
+    expect(isSinReserved('123456782', ['123456789'])).toBe(false);
+    expect(isSinReserved('123456782', ['123456789', '123456782'])).toBe(true);
+  });
+
+  it('returns false when the reserved list contains only undefined and invalid SINs', () => {
+    expect(isSinReserved('123456782', [undefined, '123456789'])).toBe(false);
   });
 });

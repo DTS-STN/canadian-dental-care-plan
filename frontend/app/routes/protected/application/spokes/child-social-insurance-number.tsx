@@ -6,8 +6,17 @@ import * as z from 'zod';
 import type { Route } from './+types/child-social-insurance-number';
 
 import { TYPES } from '~/.server/constants';
+import { isSinReserved } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ProtectedApplicationChildInformationState } from '~/.server/routes/helpers/protected-application-route-helpers';
-import { getProtectedApplicationState, getSingleChildState, saveProtectedApplicationState, validateApplicationFlow } from '~/.server/routes/helpers/protected-application-route-helpers';
+import {
+  getProtectedApplicantSin,
+  getProtectedApplicationState,
+  getProtectedChildrenSins,
+  getProtectedPartnerSin,
+  getSingleChildState,
+  saveProtectedApplicationState,
+  validateApplicationFlow,
+} from '~/.server/routes/helpers/protected-application-route-helpers';
 import { getFixedT } from '~/.server/utils/locale.utils';
 import { transformFlattenedError } from '~/.server/utils/zod.utils';
 import { AppPageTitle } from '~/components/app-page-title';
@@ -23,7 +32,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
+import { isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 
 export const handle = {
   pageIdentifier: pageIds.protected.application.spokes.childSocialInsuranceNumber,
@@ -92,23 +101,12 @@ export async function action({ context: { appContainer, session }, params, reque
       .optional()
       .superRefine((sin, ctx) => {
         if (sin && !isValidSin(sin)) {
-          ctx.addIssue({
-            code: 'custom',
-            path: ['socialInsuranceNumber'],
-            message: t(($) => $.children.socialInsuranceNumber.sinValid),
-          });
-        } else if (
-          sin &&
-          [state.applicantInformation?.socialInsuranceNumber, state.partnerInformation?.socialInsuranceNumber, ...state.children.filter((child) => child.id !== childState.id).map((child) => child.information?.socialInsuranceNumber)]
-            .filter((sin) => sin !== undefined)
-            .map((sin) => formatSin(sin))
-            .includes(formatSin(sin))
-        ) {
-          ctx.addIssue({
-            code: 'custom',
-            path: ['socialInsuranceNumber'],
-            message: t(($) => $.children.socialInsuranceNumber.sinUnique),
-          });
+          ctx.addIssue({ code: 'custom', path: ['socialInsuranceNumber'], message: t(($) => $.children.socialInsuranceNumber.sinValid) });
+          return;
+        }
+
+        if (sin && isSinReserved(sin, [getProtectedApplicantSin(state), getProtectedPartnerSin(state), ...getProtectedChildrenSins(state, childState.id)])) {
+          ctx.addIssue({ code: 'custom', path: ['socialInsuranceNumber'], message: t(($) => $.children.socialInsuranceNumber.sinUnique) });
         }
       }),
   });
