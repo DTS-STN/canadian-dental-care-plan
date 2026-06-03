@@ -9,6 +9,7 @@ export type BenefitRenewalDto = ReadonlyDeep<{
   dateOfBirth: string;
   dentalBenefits: string[];
   dentalInsurance?: DentalInsuranceDto;
+  livingIndependently?: boolean;
   partnerInformation?: RenewalPartnerInformationDto;
   typeOfApplication: RenewalTypeOfApplicationDto;
   termsAndConditions: TermsAndConditionsDto;
