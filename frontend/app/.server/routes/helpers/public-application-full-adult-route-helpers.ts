@@ -92,7 +92,6 @@ export function validatePublicApplicationFullAdultStateForReview({ params, state
     termsAndConditions,
     inputModel,
     typeOfApplication,
-    children,
     clientApplication,
     newOrReturningMember,
   } = state;
@@ -197,7 +196,6 @@ export function validatePublicApplicationFullAdultStateForReview({ params, state
     termsAndConditions,
     inputModel,
     typeOfApplication,
-    children,
     clientApplication,
     newOrReturningMember,
   };

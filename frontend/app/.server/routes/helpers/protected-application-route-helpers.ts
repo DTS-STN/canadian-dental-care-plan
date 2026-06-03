@@ -305,7 +305,7 @@ type ExtractStateFromApplicationFlow<S extends string> = S extends `${infer I}-$
  * ```
  */
 export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${ProtectedApplicationContextState}-${ProtectedApplicationTypeOfApplicationState}`>>(
-  state: ProtectedApplicationState,
+  state: Pick<ProtectedApplicationState, 'clientApplication' | 'context' | 'typeOfApplication' | 'id'>,
   params: Params,
   allowedFlows: TAllowedFlows,
 ): asserts state is OmitStrict<ProtectedApplicationState, 'context' | 'typeOfApplication'> & ExtractStateFromApplicationFlow<TAllowedFlows[number]> {

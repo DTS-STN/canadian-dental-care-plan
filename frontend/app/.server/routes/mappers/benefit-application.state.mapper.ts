@@ -142,9 +142,24 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
     }
 
     return this.toBenefitApplicationDto({
-      ...applicationAdultState,
-      typeOfApplication: 'adult',
+      applicantInformation: applicationAdultState.applicantInformation,
+      applicationYear: applicationAdultState.applicationYear,
+      communicationPreferences: applicationAdultState.communicationPreferences,
+      context: applicationAdultState.context,
+      dentalBenefits: applicationAdultState.dentalBenefits,
+      dentalInsurance: applicationAdultState.dentalInsurance,
+      email: applicationAdultState.email,
+      emailVerified: applicationAdultState.emailVerified,
+      homeAddress: applicationAdultState.homeAddress,
+      isHomeAddressSameAsMailingAddress: applicationAdultState.isHomeAddressSameAsMailingAddress,
       livingIndependently: ageCategory === 'youth' ? applicationAdultState.livingIndependently : undefined,
+      mailingAddress: applicationAdultState.mailingAddress,
+      maritalStatus: applicationAdultState.maritalStatus,
+      newOrReturningMember: applicationAdultState.newOrReturningMember,
+      partnerInformation: applicationAdultState.partnerInformation,
+      phoneNumber: applicationAdultState.phoneNumber,
+      termsAndConditions: applicationAdultState.termsAndConditions,
+      typeOfApplication: 'adult',
     });
   }
 
@@ -154,16 +169,56 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
       throw new Error('Expected livingIndependently to be defined');
     }
 
+    invariant(applicationFamilyState.children.length > 0, 'Expected children to be non-empty for a family application');
+
     return this.toBenefitApplicationDto({
-      ...applicationFamilyState,
-      typeOfApplication: 'adult-child',
+      applicantInformation: applicationFamilyState.applicantInformation,
+      applicationYear: applicationFamilyState.applicationYear,
+      children: applicationFamilyState.children,
+      communicationPreferences: applicationFamilyState.communicationPreferences,
+      context: applicationFamilyState.context,
+      dentalBenefits: applicationFamilyState.dentalBenefits,
+      dentalInsurance: applicationFamilyState.dentalInsurance,
+      email: applicationFamilyState.email,
+      emailVerified: applicationFamilyState.emailVerified,
+      homeAddress: applicationFamilyState.homeAddress,
+      isHomeAddressSameAsMailingAddress: applicationFamilyState.isHomeAddressSameAsMailingAddress,
       livingIndependently: ageCategory === 'youth' ? applicationFamilyState.livingIndependently : undefined,
+      mailingAddress: applicationFamilyState.mailingAddress,
+      maritalStatus: applicationFamilyState.maritalStatus,
+      newOrReturningMember: applicationFamilyState.newOrReturningMember,
+      partnerInformation: applicationFamilyState.partnerInformation,
+      phoneNumber: applicationFamilyState.phoneNumber,
+      termsAndConditions: applicationFamilyState.termsAndConditions,
+      typeOfApplication: 'adult-child',
     });
   }
 
   mapApplicationChildrenStateToBenefitApplicationDto(applicationChildrenState: ApplicationChildrenState): BenefitApplicationDto {
+    const ageCategory = getContextualAgeCategoryFromDate(applicationChildrenState.applicantInformation.dateOfBirth, applicationChildrenState.context);
+    if (ageCategory === 'youth' && applicationChildrenState.livingIndependently === undefined) {
+      throw new Error('Expected livingIndependently to be defined');
+    }
+
+    invariant(applicationChildrenState.children.length > 0, 'Expected children to be non-empty for a child application');
+
     return this.toBenefitApplicationDto({
-      ...applicationChildrenState,
+      applicantInformation: applicationChildrenState.applicantInformation,
+      applicationYear: applicationChildrenState.applicationYear,
+      children: applicationChildrenState.children,
+      communicationPreferences: applicationChildrenState.communicationPreferences,
+      context: applicationChildrenState.context,
+      email: applicationChildrenState.email,
+      emailVerified: applicationChildrenState.emailVerified,
+      homeAddress: applicationChildrenState.homeAddress,
+      isHomeAddressSameAsMailingAddress: applicationChildrenState.isHomeAddressSameAsMailingAddress,
+      livingIndependently: ageCategory === 'youth' ? applicationChildrenState.livingIndependently : undefined,
+      mailingAddress: applicationChildrenState.mailingAddress,
+      maritalStatus: applicationChildrenState.maritalStatus,
+      newOrReturningMember: applicationChildrenState.newOrReturningMember,
+      partnerInformation: applicationChildrenState.partnerInformation,
+      phoneNumber: applicationChildrenState.phoneNumber,
+      termsAndConditions: applicationChildrenState.termsAndConditions,
       typeOfApplication: 'child',
     });
   }
