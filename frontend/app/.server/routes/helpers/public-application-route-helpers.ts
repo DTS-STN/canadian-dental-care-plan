@@ -279,7 +279,7 @@ type ExtractStateFromApplicationFlow<S extends string> = S extends `${infer I}-$
  * ```
  */
 export function validateApplicationFlow<TAllowedFlows extends ReadonlyArray<`${PublicApplicationInputModelState}-${PublicApplicationTypeOfApplicationState}`>>(
-  state: PublicApplicationState,
+  state: Pick<PublicApplicationState, 'inputModel' | 'typeOfApplication' | 'clientApplication' | 'id'>,
   params: Params,
   allowedFlows: TAllowedFlows,
 ): asserts state is OmitStrict<PublicApplicationState, 'inputModel' | 'typeOfApplication'> & ExtractStateFromApplicationFlow<TAllowedFlows[number]> {
