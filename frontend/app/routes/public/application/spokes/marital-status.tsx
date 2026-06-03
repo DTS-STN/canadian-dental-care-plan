@@ -122,23 +122,19 @@ export async function action({ context: { appContainer, session }, params, reque
         1,
         t(($) => $.maritalStatus.errorMessage.sinRequired),
       )
-
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
-          ctx.addIssue({
-            code: 'custom',
-            message: t(($) => $.maritalStatus.errorMessage.sinValid),
-          });
-        } else if (
-          [state.applicantInformation?.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
-            .filter((sin) => sin !== undefined)
-            .map((sin) => formatSin(sin))
-            .includes(formatSin(sin))
-        ) {
-          ctx.addIssue({
-            code: 'custom',
-            message: t(($) => $.maritalStatus.errorMessage.sinUnique),
-          });
+          ctx.addIssue({ code: 'custom', message: t(($) => $.maritalStatus.errorMessage.sinValid) });
+          return;
+        }
+
+        // Check if the SIN is already used by the applicant or their children
+        const applicantSin = state.applicantInformation?.socialInsuranceNumber;
+        const childrenSins = state.children.map((child) => child.information?.socialInsuranceNumber);
+        const reservedSins = [applicantSin, ...childrenSins].filter((s) => s !== undefined).map((s) => formatSin(s));
+
+        if (reservedSins.includes(formatSin(sin))) {
+          ctx.addIssue({ code: 'custom', message: t(($) => $.maritalStatus.errorMessage.sinUnique) });
         }
       }),
   }) satisfies z.ZodType<PublicApplicationPartnerInformationState>;

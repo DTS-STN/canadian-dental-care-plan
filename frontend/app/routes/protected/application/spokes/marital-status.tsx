@@ -129,23 +129,21 @@ export async function action({ context: { appContainer, session }, params, reque
         1,
         t(($) => $.maritalStatus.errorMessage.sinRequired),
       )
-
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
-          ctx.addIssue({
-            code: 'custom',
-            message: t(($) => $.maritalStatus.errorMessage.sinValid),
-          });
-        } else if (
-          [state.clientApplication?.applicantInformation.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
-            .filter((sin) => sin !== undefined)
-            .map((sin) => formatSin(sin))
-            .includes(formatSin(sin))
-        ) {
-          ctx.addIssue({
-            code: 'custom',
-            message: t(($) => $.maritalStatus.errorMessage.sinUnique),
-          });
+          ctx.addIssue({ code: 'custom', message: t(($) => $.maritalStatus.errorMessage.sinValid) });
+          return;
+        }
+
+        // Check if the sin is already used by the applicant or their children
+        // - In intake context the applicant's SIN is captured during the flow (state.applicantInformation).
+        // - In renewal context it comes from the pre-loaded client application record (state.clientApplication).
+        const applicantSin = state.context === 'renewal' ? state.clientApplication?.applicantInformation.socialInsuranceNumber : state.applicantInformation?.socialInsuranceNumber;
+        const childrenSins = state.children.map((child) => child.information?.socialInsuranceNumber);
+        const reservedSins = [applicantSin, ...childrenSins].filter((s) => s !== undefined).map((s) => formatSin(s));
+
+        if (reservedSins.includes(formatSin(sin))) {
+          ctx.addIssue({ code: 'custom', message: t(($) => $.maritalStatus.errorMessage.sinUnique) });
         }
       }),
   }) satisfies z.ZodType<ProtectedApplicationPartnerInformationState>;

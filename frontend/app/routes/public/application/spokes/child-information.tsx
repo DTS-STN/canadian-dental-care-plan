@@ -222,32 +222,26 @@ export async function action({ context: { appContainer, session }, params, reque
       socialInsuranceNumber: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
-      if (val.hasSocialInsuranceNumber) {
-        if (!val.socialInsuranceNumber) {
-          ctx.addIssue({
-            code: 'custom',
-            message: t(($) => $.children.information.errorMessage.sinRequired),
-            path: ['socialInsuranceNumber'],
-          });
-        } else if (!isValidSin(val.socialInsuranceNumber)) {
-          ctx.addIssue({
-            code: 'custom',
-            message: t(($) => $.children.information.errorMessage.sinValid),
-            path: ['socialInsuranceNumber'],
-          });
-        } else if (
-          val.socialInsuranceNumber &&
-          [state.applicantInformation?.socialInsuranceNumber, state.partnerInformation?.socialInsuranceNumber, ...state.children.filter((child) => childState.id !== child.id).map((child) => child.information?.socialInsuranceNumber)]
-            .filter((sin) => sin !== undefined)
-            .map((sin) => formatSin(sin))
-            .includes(formatSin(val.socialInsuranceNumber))
-        ) {
-          ctx.addIssue({
-            code: 'custom',
-            message: t(($) => $.children.information.errorMessage.sinUnique),
-            path: ['socialInsuranceNumber'],
-          });
-        }
+      if (!val.hasSocialInsuranceNumber) return;
+
+      if (!val.socialInsuranceNumber) {
+        ctx.addIssue({ code: 'custom', message: t(($) => $.children.information.errorMessage.sinRequired), path: ['socialInsuranceNumber'] });
+        return;
+      }
+
+      if (!isValidSin(val.socialInsuranceNumber)) {
+        ctx.addIssue({ code: 'custom', message: t(($) => $.children.information.errorMessage.sinValid), path: ['socialInsuranceNumber'] });
+        return;
+      }
+
+      // Check if the SIN is already used by the applicant, their partner (if applicable) or their other children
+      const applicantSin = state.applicantInformation?.socialInsuranceNumber;
+      const partnerSin = state.partnerInformation?.socialInsuranceNumber;
+      const otherChildrenSins = state.children.filter((child) => childState.id !== child.id).map((child) => child.information?.socialInsuranceNumber);
+      const reservedSins = [applicantSin, partnerSin, ...otherChildrenSins].filter((s) => s !== undefined).map((s) => formatSin(s));
+
+      if (reservedSins.includes(formatSin(val.socialInsuranceNumber))) {
+        ctx.addIssue({ code: 'custom', message: t(($) => $.children.information.errorMessage.sinUnique), path: ['socialInsuranceNumber'] });
       }
     }) satisfies z.ZodType<PublicApplicationChildSinState>;
 

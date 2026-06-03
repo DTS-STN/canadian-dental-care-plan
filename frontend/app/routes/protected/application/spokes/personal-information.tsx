@@ -77,20 +77,17 @@ export async function action({ context: { appContainer, session }, params, reque
         )
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
-            ctx.addIssue({
-              code: 'custom',
-              message: t(($) => $.personalInformation.errorMessage.sinValid),
-            });
-          } else if (
-            [state.partnerInformation?.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
-              .filter((sin) => sin !== undefined)
-              .map((sin) => formatSin(sin))
-              .includes(formatSin(sin))
-          ) {
-            ctx.addIssue({
-              code: 'custom',
-              message: t(($) => $.personalInformation.errorMessage.sinUnique),
-            });
+            ctx.addIssue({ code: 'custom', message: t(($) => $.personalInformation.errorMessage.sinValid) });
+            return;
+          }
+
+          // Check if the SIN is already used by the applicant or their partner (if applicable)
+          const partnerSin = state.partnerInformation?.socialInsuranceNumber;
+          const childrenSins = state.children.map((child) => child.information?.socialInsuranceNumber);
+          const reservedSins = [partnerSin, ...childrenSins].filter((s) => s !== undefined).map((s) => formatSin(s));
+
+          if (reservedSins.includes(formatSin(sin))) {
+            ctx.addIssue({ code: 'custom', message: t(($) => $.personalInformation.errorMessage.sinUnique) });
           }
         }),
       firstName: z
