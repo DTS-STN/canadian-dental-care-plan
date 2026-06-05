@@ -279,10 +279,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
 
     return children.map((child) => {
       invariant(child.information, 'Expected child.information to be defined');
-
-      if (child.dentalInsurance === undefined) {
-        throw new Error('Expected child.dentalInsurance to be defined');
-      }
+      invariant(child.dentalInsurance, 'Expected child.dentalInsurance to be defined');
 
       return {
         ...child,
@@ -332,9 +329,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
   }
 
   private toDentalBenefits(dentalBenefitsState?: BaseApplicationDentalBenefitsDeclaredChangeState) {
-    if (!dentalBenefitsState) {
-      return [];
-    }
+    invariant(dentalBenefitsState, 'Expected dentalBenefitsState.value to be defined');
 
     const dentalBenefits = [];
 
